@@ -1,9 +1,18 @@
 {
-  // Static assets-only Worker: Astro builds to ./dist (fully static, no SSR adapter).
-  // Assets config means no `main` entrypoint is needed.
+  // Script-backed Worker (Astro 6+/adapter v13+ entrypoint).
+  // Astro fills in defaults for anything missing, but `main` + `assets` are
+  // declared explicitly so `wrangler deploy` from CI works deterministically.
   "name": "goatlab-scor-win",
   "compatibility_date": "2026-09-01",
+  "main": "@astrojs/cloudflare/entrypoints/server",
   "assets": {
-    "directory": "dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  // Free *.workers.dev URL, enabled on deploy.
+  "workers_dev": true,
+  // Unlock Workers Logs / Traces in the dashboard.
+  "observability": {
+    "enabled": true
   }
 }

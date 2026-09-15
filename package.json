@@ -9,13 +9,14 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "wrangler dev",
+    "preview": "astro preview",
     "astro": "astro",
     "deploy": "pnpm run build && wrangler deploy",
     "test": "node --test tests/*.test.js",
     "data:update": "node --env-file=.env scripts/update-data.mjs"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.3.1",
     "@fontsource-variable/manrope": "^5.3.0",
     "@fontsource/barlow-condensed": "^5.3.0",
     "astro": "^7.3.2"
