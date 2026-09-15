@@ -4,7 +4,7 @@ import { getFixtures, getLeagueResults, mergeFixtures } from '../src/lib/footbal
 const logger = { warn() {} };
 
 test('fallback is explicitly delayed and does not invent detailed metrics', async () => {
-  const data = await getFixtures({ date: '2026-09-13', logger, env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' }, fetchImpl: async url => url.includes('api-sports')
+  const data = await getFixtures({ date: '2026-09-13', logger, env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' }, now: '2026-09-13', fetchImpl: async url => url.includes('api-sports')
     ? new Response('', { status: 429 })
     : new Response(JSON.stringify({ matches: [{ id: 1, competition: { code: 'PL' }, homeTeam: { name: 'A' }, awayTeam: { name: 'B' }, utcDate: '2026-09-13T15:00:00Z', status: 'IN_PLAY', score: { fullTime: { home: 1, away: 0 } } }] })) });
   assert.equal(data.provider, 'Football-Data.org');
@@ -12,7 +12,7 @@ test('fallback is explicitly delayed and does not invent detailed metrics', asyn
 });
 test('valid empty API-Football schedule is authoritative and spends no fallback request', async () => {
   let fdCalls = 0;
-  const result = await getFixtures({ date: '2026-09-13', env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' }, fetchImpl: async url => {
+  const result = await getFixtures({ date: '2026-09-13', env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' }, now: '2026-09-13', fetchImpl: async url => {
     if (url.includes('api-sports')) return new Response('{"response":[]}');
     fdCalls++;
     return new Response('{"matches":[]}');
@@ -22,7 +22,7 @@ test('valid empty API-Football schedule is authoritative and spends no fallback 
 });
 test('a 7-day window is one football-data request; API-Football only overlays today..tomorrow', async () => {
   const calls = [];
-  const result = await getFixtures({ date: '2026-09-14', days: 7, env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' }, fetchImpl: async url => {
+  const result = await getFixtures({ date: '2026-09-14', days: 7, env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' }, now: '2026-09-14', fetchImpl: async url => {
     calls.push(url);
     if (url.includes('api-sports')) return new Response('{"response":[]}');
     return new Response('{"matches":[]}');

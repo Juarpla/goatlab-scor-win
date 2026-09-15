@@ -38,7 +38,7 @@ test('enrichMatches pairs fixtures by team names and normalizes stats/incidents'
   };
   const enrichments = await enrichMatches(
     [{ id: 'af-1', home: 'Leeds', away: 'Newcastle', kickoff: '2026-09-14T19:00:00Z' }, { id: 'af-2', home: 'Villarreal', away: 'Real Betis', kickoff: '2026-09-14T19:00:00Z' }],
-    { date: '2026-09-14', env: { BZZOIRO_API_TOKEN: 't' }, fetchImpl },
+    { date: '2026-09-14', env: { BZZOIRO_API_TOKEN: 't' }, fetchImpl, logger: { warn() {} } },
   );
   assert.equal(calls.filter(url => url.includes('/stats/') || url.includes('/incidents/')).length, 4); // both matched fixtures attempted; the 9002 pair 404s
   const stats = enrichments['af-1'].statistics;

@@ -63,13 +63,13 @@ export function mergeFixtures(previous, fresh, replacedDates = []) {
  *   of the window. When API-Football already covers the whole window, it is
  *   not called at all.
  */
-export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
+export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500, now = new Date() }) {
   const dates = dateWindow(date, days);
   const errors = [];
   let matches = [];
   let provider = null;
   let delayed = true;
-  const todayUtc = new Date().toISOString().slice(0, 10);
+  const todayUtc = typeof now === 'string' ? now : now.toISOString().slice(0, 10);
   const shift = (day, amount) => {
     const day2 = new Date(`${day}T00:00:00Z`);
     day2.setUTCDate(day2.getUTCDate() + amount);
