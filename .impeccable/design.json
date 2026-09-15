@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-13T11:35:00.000Z",
+  "title": "Design System: GoatLab",
+  "extensions": {
+    "colorMeta": {
+      "deep-carbon": { "role": "neutral", "displayName": "Carbón profundo", "canonical": "#101412", "tonalRamp": ["#101412", "#181e1a", "#222a24"] },
+      "lime-signal": { "role": "primary", "displayName": "Lima señal", "canonical": "#c5ed74", "tonalRamp": ["#c5ed74", "#d7f6a0", "#9ac54e"] },
+      "slate-blue": { "role": "secondary", "displayName": "Azul pizarra", "canonical": "#8ca6bf", "tonalRamp": ["#8ca6bf", "#b2c5d5", "#60778e"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Titular de transmisión", "purpose": "Tesis, partidos y capítulos." },
+      "body": { "displayName": "Lectura clara", "purpose": "Contexto, controles y metodología." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "chapter-settle", "value": "transform 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 240ms ease-out", "purpose": "Cambio de capítulo cuando el lector baja por el análisis." },
+      { "name": "control-state", "value": "background-color 180ms ease-out, color 180ms ease-out", "purpose": "Respuesta breve de las pestañas del escenario." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "760px" },
+      { "name": "compact", "value": "1150px" },
+      { "name": "wide", "value": "1360px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "action-link",
+      "refersTo": "button-primary",
+      "description": "Primary action link for entering a match analysis.",
+      "html": "<a class=\"ds-button-primary\" href=\"/partido/demo-madrid-barcelona/\">Entrar al análisis <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 12h16m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-button-primary { display:flex; align-items:center; justify-content:space-between; gap:28px; min-height:48px; padding:12px 18px; border:0; border-radius:5px; background:#c5ed74; color:#101412; font:700 13px 'Manrope Variable',sans-serif; } .ds-button-primary:hover { background:#d7f6a0; color:#101412; } .ds-button-primary:focus-visible { outline:2px solid #c5ed74; outline-offset:5px; } .ds-button-primary svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }"
+    },
+    {
+      "name": "Filter",
+      "kind": "chip",
+      "refersTo": "button-filter-active",
+      "description": "Competition filter with an explicit selected state.",
+      "html": "<button class=\"ds-filter ds-filter-active\" aria-pressed=\"true\">Todos</button>",
+      "css": ".ds-filter { min-height:40px; padding:9px 12px; border:0; border-radius:6px; background:transparent; color:#a4aea3; font:600 12px 'Manrope Variable',sans-serif; } .ds-filter:hover { background:#222a24; color:#edf0e6; } .ds-filter-active { background:#c5ed74; color:#101412; } .ds-filter:focus-visible { outline:2px solid #c5ed74; outline-offset:5px; }"
+    },
+    {
+      "name": "Analysis Surface",
+      "kind": "card",
+      "refersTo": "matte-surface",
+      "description": "Opaque surface that holds a chart and its source line.",
+      "html": "<section class=\"ds-analysis-surface\"><h3>Cómo llegan al encuentro</h3><p>Fuente · fecha de actualización</p></section>",
+      "css": ".ds-analysis-surface { padding:25px; border-radius:12px; background:#181e1a; color:#edf0e6; border:1px solid #354035; } .ds-analysis-surface h3 { margin:0; font:650 16px/1.3 'Manrope Variable',sans-serif; } .ds-analysis-surface p { margin:18px 0 0; color:#a4aea3; font:400 11px/1.5 'Manrope Variable',sans-serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "La sala de análisis",
+    "overview": "GoatLab se comporta como una estación de análisis de video: la pantalla es mate, los datos tienen escala y cada capítulo deja claro qué se sabe. La interfaz usa una base verde carbón, texto marfil y señales lima o azul pizarra para distinguir equipos y estados.\n\nLa densidad cambia con el relato. Un gráfico grande abre la lectura; tablas y notas breves aterrizan la cifra; una pausa publicitaria ocupa un espacio reservado fuera del área de análisis. El sistema se mantiene legible cuando se reduce a una sola columna en móvil.",
+    "keyCharacteristics": ["Datos comparables con ejes y escalas estables.", "Tipografía condensada para titulares y Manrope para lectura y controles.", "Capas tonales planas, reglas finas y una señal lima escasa.", "Movimiento concentrado en el cambio de capítulo y el scroll del análisis."],
+    "rules": [
+      { "name": "The Signal Rule", "body": "La lima aparece en acciones, selección y una serie de datos; nunca pinta toda una sección.", "section": "colors" },
+      { "name": "The Two Voices Rule", "body": "Barlow Condensed nombra el juego; Manrope explica qué significa. No intercambiarlos para decorar.", "section": "typography" },
+      { "name": "The Matte Surface Rule", "body": "Las superficies permanecen opacas y quietas; el movimiento pertenece al capítulo activo, no a un efecto de cristal.", "section": "elevation" }
+    ],
+    "dos": ["Do etiquetar demostraciones, fuentes, retrasos y fechas de actualización junto al dato.", "Do conservar ejes, escalas y colores de serie al cambiar de capítulo.", "Do mantener la publicidad en espacios reservados fuera del gráfico y del texto que se está leyendo.", "Do diseñar el estado vacío con una siguiente acción clara.", "Do respetar prefers-reduced-motion y el foco visible en teclado."],
+    "donts": ["Don't mostrar porcentajes predictivos sin evaluación histórica publicada.", "Don't usar datos sintéticos como si fueran partidos reales.", "Don't usar gradientes de texto, brillos o sombras de bloque como decoración.", "Don't poner enlaces a casas de apuestas ni llamadas a apostar.", "Don't ocultar una ausencia de datos detrás de una animación o un número inventado."]
+  }
+}

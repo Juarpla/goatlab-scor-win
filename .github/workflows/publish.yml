@@ -1,0 +1,68 @@
+name: Actualizar y publicar GoatLab
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 7 * * *'    # corrida completa: ventana de 7 días, forma, análisis (2 a.m. hora de Perú)
+    - cron: '17 */6 * * *' # refresco de marcadores del día
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: goatlab-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node --test tests/*.test.js
+      - name: Recuperar última publicación de datos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID=$(gh run list --workflow publish.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          if [ -n "$RUN_ID" ]; then
+            gh run download "$RUN_ID" --name goatlab-data --dir public/data || true
+          fi
+      - name: Actualización completa (diaria, 07:00 UTC)
+        if: github.event_name != 'schedule' || github.event.schedule == '0 7 * * *'
+        run: node scripts/update-data.mjs
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
+          BZZOIRO_API_TOKEN: ${{ secrets.BZZOIRO_API_TOKEN }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
+          OPENCODE_GO_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          WORKERS_AI_MODEL: ${{ vars.WORKERS_AI_MODEL }}
+          OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
+      - name: Refresco de marcadores (cada 6 horas)
+        if: github.event.schedule == '17 */6 * * *'
+        run: node scripts/update-data.mjs --refresh
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
+          BZZOIRO_API_TOKEN: ${{ secrets.BZZOIRO_API_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: goatlab-data
+          path: public/data/
+          retention-days: 30
+      - run: pnpm run build
+      - name: Publicar en Cloudflare Pages
+        if: ${{ vars.CLOUDFLARE_PAGES_PROJECT != '' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }}

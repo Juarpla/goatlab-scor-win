@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/AdSlot.astro';
+import Comparison from '../components/Comparison.astro';
+import { competitions } from '../lib/football.js';
+import { heroMatch, teamShort } from '../lib/teams.js';
+import { teamForm } from '../lib/form.js';
+import fixtures from '../../public/data/fixtures.json';
+import results from '../../public/data/results.json';
+
+const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
+const hero = heroMatch(matches);
+const heroForm = hero ? (() => {
+  const homeForm = teamForm(results.results, hero.home);
+  const awayForm = teamForm(results.results, hero.away);
+  return homeForm && awayForm ? { homeForm, awayForm } : null;
+})() : null;
+const rows = matches.filter(match => match !== hero).map(match => ({ ...match, form: teamForm(results.results, match.home) }));
+const competitionName = id => competitions.find(c => c.id === id)?.name ?? id;
+const heroDate = hero ? new Date(hero.kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'long', day: 'numeric', month: 'long' }) : null;
+const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
+---
+<Layout>
+<main id="main" class="wrap">
+ <section class="intro"><div><h1>El fútbol,<br/><span>bajo la lupa.</span></h1><p>El marcador cuenta una parte.<br/>Los datos te ayudan a ver el resto.</p></div></section>
+ <section id="encuentros" aria-labelledby="fixtures-title">
+  <div class="section-heading"><h2 id="fixtures-title">En el radar</h2><span>Próximos siete días</span></div>
+  <div class="filter-row"><div class="competition-filters" role="group" aria-label="Filtrar por competición"><button class="filter active" data-league="all" aria-pressed="true">Todos</button>{competitions.map(c=><button class="filter" data-league={c.id} aria-pressed="false">{c.name}</button>)}</div><label class="search"><Icon name="search" size={18}/><input type="search" id="team-search" placeholder="Buscar equipo" aria-label="Buscar equipo"/></label></div>
+  {matches.length ? <>
+   {hero && <article class="featured" data-fixture data-league-id={hero.competition} data-teams={`${hero.home} ${hero.away}`.toLowerCase()}>
+    <div class="featured-copy"><h2><span>{hero.home}</span><span class="versus">vs.</span><span>{hero.away}</span></h2><div class="match-meta"><span>{competitionName(hero.competition)}</span><span>{heroDate}</span></div><div class="match-caption">La forma se mide<br/>con resultados reales.</div><a class="primary-button" href={`/partido/${hero.id}/`}>Entrar al análisis <Icon/></a><span class="reading-time">Gráficos, estadísticas y contexto</span></div>
+    {heroForm && <Comparison home={hero.home} away={hero.away} shortHome={teamShort(hero.home)} shortAway={teamShort(hero.away)} homeForm={heroForm.homeForm} awayForm={heroForm.awayForm}/>}
+   </article>}
+   <div class="fixture-list">{rows.map(m=><a href={`/partido/${m.id}/`} class="fixture-row" data-fixture data-league-id={m.competition} data-teams={`${m.home} ${m.away}`.toLowerCase()}><span class="row-competition">{competitionName(m.competition)}<small>{new Date(m.kickoff).toLocaleDateString('es-PE',{timeZone:'America/Lima',day:'numeric',month:'short'})} · {new Date(m.kickoff).toLocaleTimeString('es-PE',{timeZone:'America/Lima',hour:'2-digit',minute:'2-digit'})}</small></span><span class="row-teams">{m.home}<span>vs.</span>{m.away}</span><span class="mini-form" aria-label={m.form?`Forma reciente de ${m.home}: ${m.form.form.join(', ')}`:`Sin forma suficiente de ${m.home}`}>{m.form ? m.form.form.map(result=><b class:list={['form-cell',result]}>{result}</b>) : <b class="form-cell E">–</b>}</span><span class="row-action">Ver análisis <Icon size={18}/></span></a>)}</div>
+   <p id="filter-empty" class="empty-message" hidden>No encontramos ese equipo en esta selección. Prueba con otro nombre o competición.</p><p id="filter-count" class="sr-only" aria-live="polite"></p>
+  </> : <section class="real-data"><div><h2>Sin encuentros a la vista</h2><p>No hay partidos de nuestras competiciones en los próximos siete días, o la fuente de datos no respondió en la última actualización{updated ? ` (${updated} hora de Lima)` : ''}.</p></div><div><p>Vuelve más tarde: el calendario se actualiza cada día a las 2:00 a. m. (hora de Perú) y los marcadores cada seis horas.</p></div></section>}
+ </section>
+ <AdSlot/>
+ <section class="manifesto"><h2>No solo mirar.<br/><span>Entender el juego.</span></h2><div><p>Comparamos lo que ocurrió, explicamos lo que significa y distinguimos lo que todavía no sabemos.</p><a class="text-link" href="/metodologia/">Conoce nuestra metodología <Icon size={18}/></a></div></section>
+</main>
+<script>
+ const filters = [...document.querySelectorAll<HTMLButtonElement>('[data-league]')];
+ const cards = [...document.querySelectorAll<HTMLElement>('[data-fixture]')];
+ const search = document.querySelector<HTMLInputElement>('#team-search')!;
+ let league = 'all';
+ const normalize = (text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ function update(){let visible=0; for(const card of cards){const show=(league==='all'||card.dataset.leagueId===league)&&normalize(card.dataset.teams||'').includes(normalize(search.value));card.hidden=!show;if(show)visible++;}document.querySelector<HTMLElement>('#filter-empty')!.hidden=visible>0;document.querySelector('#filter-count')!.textContent=`${visible} encuentros`;}
+ filters.forEach(button=>button.addEventListener('click',()=>{league=button.dataset.league!;filters.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});update();}));search.addEventListener('input',update);
+</script>
+</Layout>

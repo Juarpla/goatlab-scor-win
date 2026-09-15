@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import Comparison from '../../components/Comparison.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
+import { teamShort } from '../../lib/teams.js';
+import { teamForm } from '../../lib/form.js';
+import fixtures from '../../../public/data/fixtures.json';
+import analyses from '../../../public/data/analysis.json';
+import results from '../../../public/data/results.json';
+export function getStaticPaths(){return fixtures.matches.map(match=>({params:{id:match.id},props:{match}}));}
+const {match} = Astro.props;
+const competition = competitions.find(c=>c.id===match.competition)?.name;
+const homeForm = teamForm(results.results, match.home);
+const awayForm = teamForm(results.results, match.away);
+const hasForm = Boolean(homeForm && awayForm);
+const stats = match.statistics;
+const events = match.events;
+const finished = FINISHED_STATUSES.has(match.status);
+const statusLabel = finished ? 'Finalizado' : match.status === 'NS' ? 'Programado' : 'En juego';
+const ai = (analyses as Record<string,{summary:string;limitations:string}>)[match.id];
+const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
+const STAT_ROWS = [
+  ['Posesión', 'possession', v => v == null ? '—' : `${v}%`],
+  ['Tiros', 'shots'],
+  ['Tiros a puerta', 'shotsOnTarget'],
+  ['Goles esperados (xG)', 'xg', v => v == null ? '—' : (Math.round(v * 100) / 100).toString()],
+  ['Córners', 'corners'],
+  ['Faltas', 'fouls'],
+  ['Tarjetas amarillas', 'yellowCards'],
+  ['Tarjetas rojas', 'redCards'],
+  ['Fueras de juego', 'offsides'],
+];
+const statValue = (side, row) => {
+  const [label, key, format] = row;
+  const value = side?.[key];
+  return format ? format(value) : value ?? '—';
+};
+const homeTotals = hasForm ? homeForm.goalsFor.reduce((a:number,b:number)=>a+b,0) : 0;
+const awayTotals = hasForm ? awayForm.goalsFor.reduce((a:number,b:number)=>a+b,0) : 0;
+---
+<Layout title={`${match.home} vs. ${match.away} — GoatLab`}>
+<main id="main" class="wrap">
+ <a class="back-link" href="/#encuentros"><Icon size={16}/> Volver a encuentros</a>
+ <div class="match-title"><div><h1>{match.home}<span>vs.</span>{match.away}</h1><p>{competition} · Datos de {fixtures.provider}{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>
+ <section class="real-data"><div><h2>El encuentro</h2><p><time datetime={match.kickoff}>{new Date(match.kickoff).toLocaleString('es-PE',{timeZone:'America/Lima'})}</time> (Lima)</p><p>{match.homeScore ?? '—'} – {match.awayScore ?? '—'}</p></div><div><p>{fixtures.delayed?'Fuente con retraso':'Datos actualizados periódicamente'}. Última consulta: {fixtures.updatedAt}.</p><p>Todas las cifras provienen de proveedores deportivos. No se sustituyen por datos de ejemplo.</p></div></section>
+ <div class="story">
+  <div class="story-notes">
+   <section class="story-chapter" id="forma" data-chapter="forma"><h2>La forma se ve.<br/>También se compara.</h2><p>Un resultado aislado no cuenta toda la historia. Mira la producción de goles de ambos equipos sobre la misma escala.</p>{hasForm && <div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div>}{hasForm && <table class="data-table"><caption class="sr-only">Resumen de forma reciente con resultados reales</caption><thead><tr><th>Últimos {Math.max(homeForm.played, awayForm.played)} · reales</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody><tr><td>Goles anotados</td><td>{homeTotals}</td><td>{awayTotals}</td></tr><tr><td>Promedio por partido</td><td>{(homeTotals/homeForm.played).toFixed(1)}</td><td>{(awayTotals/awayForm.played).toFixed(1)}</td></tr><tr><td>Victorias</td><td>{homeForm.form.filter((x:string)=>x==='G').length}</td><td>{awayForm.form.filter((x:string)=>x==='G').length}</td></tr></tbody></table>}<span class="chapter-note">{hasForm?'Una muestra corta permite comparar la forma reciente; no demuestra lo que ocurrirá en el siguiente partido.':'Todavía no hay suficientes resultados registrados para comparar la forma de estos equipos.'}</span></section>
+   <section class="story-chapter" id="estadisticas" data-chapter="estadisticas"><h2>El partido,<br/>en números.</h2><p>Cuando la fuente publica estadísticas del encuentro, aparecen aquí: posesión, tiros y goles esperados, siempre atribuidos a su proveedor.</p>{stats?.xgEstimated != null && <p>{stats.xgEstimated ? 'El xG de este partido es una estimación del proveedor, no una medición.' : 'El xG de este partido es una medición del proveedor.'}</p>}<span class="chapter-note">{stats?'Fuente: Bzzoiro. Las cifras pueden corregirse tras el partido.':'Las estadísticas aparecerán cuando el partido esté en juego o termine.'}</span></section>
+   <section class="story-chapter" id="escenarios" data-chapter="escenarios"><h2>Lo posible.<br/>Sin falsa certeza.</h2><p>Las probabilidades necesitan algo más que una cifra convincente: datos suficientes y una evaluación frente a resultados reales.</p><p>GoatLab incorporará escenarios de forma progresiva. Los modelos sin validar no mostrarán porcentajes públicos.</p><a class="text-link" href="/metodologia/">Cómo evaluamos las estimaciones <Icon size={18}/></a></section>
+  </div>
+  <div class="story-stage"><div class="chapter-tabs" role="group" aria-label="Gráfico del análisis"><button data-stage="forma" aria-pressed="true">Forma reciente</button><button data-stage="estadisticas" aria-pressed="false">Estadísticas</button><button data-stage="escenarios" aria-pressed="false">Escenarios</button></div>
+   <div class="stage-pane is-active" data-pane="forma" aria-hidden="false">{hasForm ? <Comparison home={match.home} away={match.away} shortHome={teamShort(match.home)} shortAway={teamShort(match.away)} homeForm={homeForm} awayForm={awayForm}/> : <h3>Sin forma suficiente</h3><p class="chapter-note">Cuando ambos equipos acumulen resultados registrados, la comparación aparecerá aquí.</p>}</div>
+   <div class="stage-pane" data-pane="estadisticas" aria-hidden="true" hidden>{stats ? <><h3>Números del partido</h3><table class="data-table"><caption class="sr-only">Estadísticas del partido</caption><thead><tr><th>Estadística</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{STAT_ROWS.map(row=><tr><td>{row[0]}</td><td>{statValue(stats.home,row)}</td><td>{statValue(stats.away,row)}</td></tr>)}</tbody></table></> : <><h3>Estadísticas en espera</h3><p class="chapter-note">La fuente publica estadísticas cuando el partido comienza. Este espacio se completa en la siguiente actualización programada.</p></>}</div>
+   <div class="stage-pane" data-pane="escenarios" aria-hidden="true" hidden><h3>Escenarios en preparación</h3>{['Resultado del encuentro','Cantidad de goles','Ambos equipos anotan','Primer gol y sus momentos','Córners, tarjetas y jugadores'].map(label=><div class="estimate-status"><span>{label}</span><strong>Sin estimación</strong></div>)}<p style="font-size:11px;margin-top:20px">Se publicarán cuando existan datos y validación suficientes.</p></div>
+   <div class="stage-source">Datos de proveedores deportivos · no es una predicción</div>
+  </div>
+ </div>
+ <AdSlot/>
+ <div class="analysis-end"><section><h2>La lectura de IA</h2>{ai ? <><span class="outline-label">Análisis preparado con IA</span><p>{ai.summary}</p><p>{ai.limitations}</p></> : <><span class="outline-label">Todavía no disponible</span><p>El análisis se preparará con los datos verificados del partido. Si faltan datos o el servicio no responde, podrás seguir consultando las estadísticas disponibles.</p></>}</section><section><h2>Durante el partido</h2>{events?.length ? <table class="data-table"><caption class="sr-only">Eventos del partido en orden cronológico</caption><thead><tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr></thead><tbody>{events.map((event,index)=><tr><td>{event.minute ?? '—'}′</td><td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? match.home : match.away}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td><td>{event.score ? `${event.score.home}–${event.score.away}` : '—'}</td></tr>)}</tbody></table> : <div class="timeline-empty"><h3>Seguimiento no disponible</h3><p>No hay un flujo de eventos disponible para este encuentro. Aquí aparecerán el marcador y los eventos que entregue la fuente, con su hora de actualización.</p></div>}</section></div>
+ <section class="manifesto"><h2>El contexto<br/>también juega.</h2><div><p>Una estadística describe una parte del encuentro. Las fuentes, la muestra y las ausencias completan su lectura.</p><a href="/metodologia/" class="text-link">Consultar fuentes y límites <Icon size={18}/></a></div></section>
+</main>
+<script>
+ const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];
+ const panes=[...document.querySelectorAll<HTMLElement>('[data-pane]')];
+ const chapters=[...document.querySelectorAll<HTMLElement>('[data-chapter]')];
+ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const hideTimers=new WeakMap<HTMLElement,number>();
+ let activeId='forma';
+ let manualUntil=0;
+ function activate(id:string){
+  if(!id)return;
+  buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stage===id)));
+  if(activeId===id)return;
+  activeId=id;
+  panes.forEach(p=>{
+   const isTarget=p.dataset.pane===id;
+   const timer=hideTimers.get(p);
+   if(timer)window.clearTimeout(timer);
+   if(isTarget){
+    p.hidden=false;
+    p.setAttribute('aria-hidden','false');
+    p.classList.remove('is-leaving');
+    requestAnimationFrame(()=>p.classList.add('is-active'));
+   }else{
+    p.setAttribute('aria-hidden','true');
+    p.classList.remove('is-active');
+    p.classList.add('is-leaving');
+    const hide=()=>{if(p.dataset.pane!==activeId){p.classList.remove('is-leaving');p.hidden=true;}};
+    if(reducedMotion)hide();
+    else hideTimers.set(p,window.setTimeout(hide,240));
+   }
+  });
+ }
+ buttons.forEach(button=>button.addEventListener('click',()=>{manualUntil=Date.now()+1500;activate(button.dataset.stage!);document.getElementById(button.dataset.stage!)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}));
+ if(!reducedMotion){let queued=false;const update=()=>{queued=false;if(Date.now()<manualUntil)return;const marker=innerWidth<761?innerHeight*.7:innerHeight*.45;let current=chapters[0];for(const chapter of chapters){if(chapter.getBoundingClientRect().top<marker)current=chapter;}if(current)activate(current.dataset.chapter!);};window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update);}},{passive:true});}
+ document.querySelectorAll<HTMLTimeElement>('time[datetime]').forEach(time=>{const date=new Date(time.dateTime);if(!Number.isNaN(date.getTime())){time.textContent=new Intl.DateTimeFormat('es',{dateStyle:'medium',timeStyle:'short'}).format(date);const sibling=time.nextSibling;if(sibling?.textContent?.includes('(Lima)'))sibling.textContent=' (tu hora local)';}});
+</script>
+</Layout>
