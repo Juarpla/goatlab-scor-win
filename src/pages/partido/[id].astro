@@ -3,15 +3,22 @@ import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
 import Comparison from '../../components/Comparison.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import TeamJersey from '../../components/TeamJersey.astro';
+import PitchScene from '../../components/PitchScene.astro';
+import ProbabilityBar from '../../components/ProbabilityBar.astro';
 import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
 import { teamShort } from '../../lib/teams.js';
 import { teamForm } from '../../lib/form.js';
 import { ensemble } from '../../lib/predictions.js';
+import { locateMatch } from '../../lib/venues.js';
+import { teamColors } from '../../lib/team-colors.js';
 import fixtures from '../../../public/data/fixtures.json';
 import analyses from '../../../public/data/analysis.json';
 import results from '../../../public/data/results.json';
 import history from '../../../public/data/history-stats.json';
 import evaluation from '../../../public/data/evaluation.json';
+import '../../styles/partido.css';
+
 export function getStaticPaths(){return fixtures.matches.map(match=>({params:{id:match.id},props:{match}}));}
 const {match} = Astro.props;
 const competition = competitions.find(c=>c.id===match.competition)?.name;
@@ -43,6 +50,25 @@ const statValue = (side, row) => {
 const homeTotals = hasForm ? homeForm.goalsFor.reduce((a:number,b:number)=>a+b,0) : 0;
 const awayTotals = hasForm ? awayForm.goalsFor.reduce((a:number,b:number)=>a+b,0) : 0;
 
+/* Cabecera: última consulta con la hora del paso de datos; el cliente la reescribe al huso del visitante. */
+const consultUtc = fixtures.updatedAt ? `${fixtures.updatedAt.slice(0,10)} ${fixtures.updatedAt.slice(11,16)} UTC` : '—';
+
+/* Sede y zoom del estadio: si el club no está en el catálogo, el bloque se omite. */
+const location = locateMatch(match);
+
+/* Probabilidades horneadas por el pipeline (un JSON por partido, revisable a mano). */
+const probabilityFiles = import.meta.glob('../../../public/data/match-probabilities/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+const probability: any = probabilityFiles[`../../../public/data/match-probabilities/${match.id}.json`] ?? null;
+const markets = probability?.markets ?? null;
+const race = probability?.firstGoal ?? null;
+const scorerRows = probability?.scorers ?? null;
+const pct = (value: number | null | undefined) => value == null ? '—' : `${Math.round(value * 100)}%`;
+const bandMax = race ? Math.max(...race.bands.map((band: any) => band.p)) : 0;
+const firstSplit = race && (race.firstHome + race.firstAway) > 0 ? race.firstHome / (race.firstHome + race.firstAway) : 0.5;
+const exactScores = markets?.exactScores?.slice(0, 3) ?? [];
+const homeKit = teamColors(match.home);
+const awayKit = teamColors(match.away);
+
 /* Veredicto GoatLab: insumos calculados al construir la página; porcentajes solo si la evaluación histórica pasa. */
 const absentCount = side => (match.lineups?.unavailablePlayers ?? []).filter(player => player.team === side).length;
 const unavailable = match.lineups?.unavailablePlayers?.length ? { home: absentCount('home'), away: absentCount('away') } : null;
@@ -53,21 +79,108 @@ const marketsList = verdict ? [
   { label: 'Más de 2.5 goles', value: verdict.over25 },
   { label: 'Ambos equipos anotan', value: verdict.btts },
 ] : [];
+
+/* Tarjetas por equipo: cada dato declara su muestra; lo que falta no se dibuja. */
+const contextCards = side => {
+  const data = probability?.context?.[side];
+  if (!data) return [];
+  const cards = [];
+  if (data.player?.name) cards.push({ icon: 'star', label: 'Mejor jugador', value: data.player.name, note: [data.player.detail, data.player.source].filter(Boolean).join(' · ') });
+  if (data.season?.gf != null) cards.push({ icon: 'ball', label: 'Goles de temporada', value: String(data.season.gf), note: `${data.season.played ?? '—'} partidos · puesto ${data.season.position ?? '—'}${data.season.ga != null ? ` · ${data.season.ga} en contra` : ''}` });
+  if (data.cleanSheets) cards.push({ icon: 'shield', label: 'Porterías a cero', value: String(data.cleanSheets.value), note: `en los últimos ${data.cleanSheets.sample} partidos registrados` });
+  if (data.unbeaten?.value) cards.push({ icon: 'bolt', label: 'Racha sin perder', value: `${data.unbeaten.value}`, note: 'partidos seguidos en la muestra reciente' });
+  if (data.biggestWin) cards.push({ icon: 'target', label: 'Mayor diferencia', value: `+${data.biggestWin.value}`, note: `en los últimos ${data.biggestWin.sample} partidos` });
+  return cards.slice(0, 5);
+};
 ---
 <Layout title={`${match.home} vs. ${match.away} — GoatLab`}>
 <main id="main" class="wrap">
  <a class="back-link" href="/#encuentros"><Icon size={16}/> Volver a encuentros</a>
- <div class="match-title"><div><h1>{match.home}<span>vs.</span>{match.away}</h1><p>{competition} · Datos de {fixtures.provider}{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>
- <section class="real-data"><div><h2>El encuentro</h2><p><time datetime={match.kickoff}>{new Date(match.kickoff).toLocaleString('es-PE',{timeZone:'America/Lima'})}</time> (Lima)</p><p>{match.homeScore ?? '—'} – {match.awayScore ?? '—'}</p></div><div><p>{fixtures.delayed?'Fuente con retraso':'Datos actualizados periódicamente'}. Última consulta: {fixtures.updatedAt}.</p><p>Todas las cifras provienen de proveedores deportivos. No se sustituyen por datos de ejemplo.</p></div></section>
+ <div class="match-title"><div><h1>{match.home}<span>vs.</span>{match.away}</h1><p>{competition} · Última consulta: <time data-consult data-utc={fixtures.updatedAt}>{consultUtc}</time>{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>
+ <section class="real-data"><div class="encounter">
+   <div class="encounter-head">
+    <div>
+     <h2>El encuentro</h2>
+     <p><time datetime={match.kickoff}>{new Date(match.kickoff).toLocaleString('es-PE',{timeZone:'America/Lima'})}</time> (Lima)</p>
+     <p class={`encounter-score${match.homeScore == null ? ' is-waiting' : ''}`}>{match.homeScore ?? '—'} – {match.awayScore ?? '—'}</p>
+    </div>
+    <div class="jerseys" aria-label={`Camisetas estimadas de ${match.home} y ${match.away}`}>
+     <TeamJersey name={match.home} short={teamShort(match.home)} pattern={homeKit.pattern} side="home"/>
+     <span class="jerseys-vs" aria-hidden="true">vs</span>
+     <TeamJersey name={match.away} short={teamShort(match.away)} pattern={awayKit.pattern} side="away"/>
+    </div>
+   </div>
+   {location?.zoom && <figure class="venue-zoom">
+    <div class="venue-frame">
+     <img src={location.zoom.src} width={location.zoom.width} height={location.zoom.height} loading="lazy" decoding="async" alt={`Recorte de mapa alrededor de ${location.city}`}/>
+     <span class="venue-pin" style={`--x:${location.zoom.pinX}%;--y:${location.zoom.pinY}%`} aria-hidden="true">
+      <svg class="venue-drop" viewBox="0 0 26 38"><path d="M13 1C6.4 1 1 6.4 1 13c0 8.6 12 24 12 24s12-15.4 12-24C25 6.4 19.6 1 13 1Z"/></svg>
+      <span class="venue-pin-mark"><svg viewBox="0 0 40 40"><path d="M10 10v20h22M16 25v-8m7 8V11m7 14V15" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+     </span>
+    </div>
+    <figcaption>{location.stadium ?? location.city} · {location.city}, {location.country}</figcaption>
+   </figure>}
+  </div><div>
+   <p>{fixtures.delayed?'Fuente con retraso':'Datos actualizados periódicamente'}. Última consulta: <time data-consult data-utc={fixtures.updatedAt}>{consultUtc}</time>.</p>
+   <p>Todas las cifras provienen de proveedores deportivos. No se sustituyen por datos de ejemplo.</p>
+  </div></section>
+ <AdSlot variant="rect" slotKey="partidoPrevio"/>
  <div class="story">
   <div class="story-notes">
    <section class="story-chapter" id="forma" data-chapter="forma"><h2>La forma se ve.<br/>También se compara.</h2><p>Un resultado aislado no cuenta toda la historia. Mira la producción de goles de ambos equipos sobre la misma escala.</p>{hasForm && <div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div>}{hasForm && <table class="data-table"><caption class="sr-only">Resumen de forma reciente con resultados reales</caption><thead><tr><th>Últimos {Math.max(homeForm.played, awayForm.played)} · reales</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody><tr><td>Goles anotados</td><td>{homeTotals}</td><td>{awayTotals}</td></tr><tr><td>Promedio por partido</td><td>{(homeTotals/homeForm.played).toFixed(1)}</td><td>{(awayTotals/awayForm.played).toFixed(1)}</td></tr><tr><td>Victorias</td><td>{homeForm.form.filter((x:string)=>x==='G').length}</td><td>{awayForm.form.filter((x:string)=>x==='G').length}</td></tr></tbody></table>}<span class="chapter-note">{hasForm?'Una muestra corta permite comparar la forma reciente; no demuestra lo que ocurrirá en el siguiente partido.':'Todavía no hay suficientes resultados registrados para comparar la forma de estos equipos.'}</span></section>
    <section class="story-chapter" id="estadisticas" data-chapter="estadisticas"><h2>El partido,<br/>en números.</h2><p>Cuando la fuente publica estadísticas del encuentro, aparecen aquí: posesión, tiros y goles esperados, siempre atribuidos a su proveedor.</p>{stats?.xgEstimated != null && <p>{stats.xgEstimated ? 'El xG de este partido es una estimación del proveedor, no una medición.' : 'El xG de este partido es una medición del proveedor.'}</p>}<span class="chapter-note">{stats?'Fuente: Bzzoiro. Las cifras pueden corregirse tras el partido.':'Las estadísticas aparecerán cuando el partido esté en juego o termine.'}</span></section>
+   <section class="story-chapter" id="probabilidades" data-chapter="probabilidades"><h2>El guion probable,<br/>sin cuotas.</h2><p>Qué dicen los números sobre el marcador, los goles y quién puede abrirlo. Son estimaciones estadísticas de GoatLab, no cuotas ni consejos: aquí no hay unidades de apuesta, solo probabilidad.</p>{probability && <table class="data-table"><caption class="sr-only">Insumos del cálculo de probabilidades</caption><thead><tr><th>Insumo</th><th>Muestra</th></tr></thead><tbody><tr><td>Forma reciente</td><td>{probability.inputs?.sample ? `${probability.inputs.sample.home} y ${probability.inputs.sample.away} partidos` : '—'}</td></tr><tr><td>Goles esperados (λ)</td><td>{probability.inputs?.lambdas ? `${probability.inputs.lambdas.home} – ${probability.inputs.lambdas.away}` : '—'}</td></tr><tr><td>Goleadores</td><td>{probability.hasScorers ? 'con líderes de la temporada' : 'sin lista disponible'}</td></tr></tbody></table>}<span class="chapter-note">{probability ? 'Modelo Poisson con corrección de empates, calculado en cada actualización de datos y revisado por el análisis de IA. Los porcentajes se muestran como estimación, con su muestra declarada.' : 'El cálculo necesita al menos tres resultados registrados de cada equipo; cuando existan, este capítulo mostrará la matriz completa.'}</span></section>
    <section class="story-chapter" id="escenarios" data-chapter="escenarios"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p>{verdict && <table class="data-table"><caption class="sr-only">Insumos del veredicto y su peso</caption><thead><tr><th>Insumo</th><th>Peso</th></tr></thead><tbody>{verdict.inputs.map(input=><tr><td><strong>{input.label}</strong>{input.detail && <><br/><small>{input.detail}</small></>}</td><td>{input.weight > 0 ? <span class="weight-bar"><i style={`--w:${input.weight * 100}%`}></i>{Math.round(input.weight * 100)}%</span> : '—'}</td></tr>)}</tbody></table>}<span class="chapter-note">El veredicto es estimación estadística, no una cuota ni un consejo. Sus porcentajes se publican solo cuando la evaluación histórica supera a su baseline.</span><a class="text-link" href="/metodologia/">Cómo se calcula y se evalúa <Icon size={18}/></a></section>
   </div>
-   <div class="story-stage"><div class="chapter-tabs" role="group" aria-label="Gráfico del análisis"><button data-stage="forma" aria-pressed="true">Forma reciente</button><button data-stage="estadisticas" aria-pressed="false">Estadísticas</button><button data-stage="escenarios" aria-pressed="false">El veredicto</button></div>
+   <div class="story-stage"><div class="chapter-tabs" role="group" aria-label="Gráfico del análisis"><button data-stage="forma" aria-pressed="true">Forma reciente</button><button data-stage="estadisticas" aria-pressed="false">Estadísticas</button><button data-stage="probabilidades" aria-pressed="false">Probabilidades</button><button data-stage="escenarios" aria-pressed="false">El veredicto</button></div>
    <div class="stage-pane is-active" data-pane="forma" aria-hidden="false">{hasForm ? <Comparison home={match.home} away={match.away} shortHome={teamShort(match.home)} shortAway={teamShort(match.away)} homeForm={homeForm} awayForm={awayForm}/> : <h3>Sin forma suficiente</h3><p class="chapter-note">Cuando ambos equipos acumulen resultados registrados, la comparación aparecerá aquí.</p>}</div>
    <div class="stage-pane" data-pane="estadisticas" aria-hidden="true" hidden>{stats ? <><h3>Números del partido</h3><table class="data-table"><caption class="sr-only">Estadísticas del partido</caption><thead><tr><th>Estadística</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{STAT_ROWS.map(row=><tr><td>{row[0]}</td><td>{statValue(stats.home,row)}</td><td>{statValue(stats.away,row)}</td></tr>)}</tbody></table></> : <><h3>Estadísticas en espera</h3><p class="chapter-note">La fuente publica estadísticas cuando el partido comienza. Este espacio se completa en la siguiente actualización programada.</p></>}</div>
+   <div class="stage-pane" data-pane="probabilidades" aria-hidden="true" hidden>{markets ? <>
+     <h3>Probabilidades del encuentro</h3>
+     {race && <figure class="prob-hero">
+      <figcaption><span>¿Cuándo se abre el marcador?</span><small>Probabilidad de que el primer gol caiga en cada tramo de 15 minutos</small></figcaption>
+      <svg viewBox="0 0 348 128" role="img" aria-label={`Probabilidad del primer gol por tramos; sin gol en los 90 minutos: ${pct(race.noGoal)}`}>
+       <g class="race-grid" aria-hidden="true"><line x1="10" y1="100" x2="338" y2="100"/><line x1="10" y1="60" x2="338" y2="60"/><line x1="10" y1="20" x2="338" y2="20"/></g>
+       {race.bands.map((band: any, index: number) => {
+         const height = bandMax > 0 ? Math.max(2, (band.p / bandMax) * 74) : 0;
+         const x = 16 + index * 54;
+         const homeHeight = height * firstSplit;
+         return <g class="race-bar">
+          <rect class="race-home" x={x} y={100 - homeHeight} width="42" height={homeHeight} rx="1.5"/>
+          <rect class="race-away" x={x} y={100 - height} width="42" height={height - homeHeight} rx="1.5"/>
+          <text class="race-value" x={x + 21} y={100 - height - 6} text-anchor="middle">{Math.round(band.p * 100)}%</text>
+          <text class="race-label" x={x + 21} y="115" text-anchor="middle">{band.from}–{band.to}′</text>
+         </g>;
+       })}
+      </svg>
+      <p class="race-foot"><span><i class="race-key race-key-home"></i>{teamShort(match.home)} {pct(race.firstHome)}</span><span><i class="race-key race-key-away"></i>{teamShort(match.away)} {pct(race.firstAway)}</span><span class="race-none">Sin goles: {pct(race.noGoal)}</span></p>
+     </figure>}
+     <div class="prob-rows">
+      <ProbabilityBar title="¿Quién gana?" segments={[{label: teamShort(match.home), value: markets.oneX2.home, tone: 'home'}, {label: 'Empate', value: markets.oneX2.draw, tone: 'draw'}, {label: teamShort(match.away), value: markets.oneX2.away, tone: 'away'}]}/>
+      <ProbabilityBar title="Más o menos de 2.5 goles" segments={[{label: 'Más de 2.5', value: markets.totals.over25, tone: 'home'}, {label: 'Menos de 2.5', value: markets.totals.under25, tone: 'mute'}]}/>
+      <ProbabilityBar title="¿Anotan ambos equipos?" segments={[{label: 'Sí', value: markets.btts.yes, tone: 'home'}, {label: 'No', value: markets.btts.no, tone: 'mute'}]}/>
+      <ProbabilityBar variant="rows" title="Doble oportunidad" segments={[{label: `${teamShort(match.home)} o empate`, value: markets.doubleChance['1X'], tone: 'home'}, {label: `${teamShort(match.away)} o empate`, value: markets.doubleChance.X2, tone: 'away'}]} note={`Sin empate: ${teamShort(match.home)} ${pct(markets.dnb.home)} · ${teamShort(match.away)} ${pct(markets.dnb.away)}`}/>
+     </div>
+     <ul class="prob-chips">
+      {exactScores.map((score: any) => <li><Icon name="target" size={16}/><span>Marcador {score.home}–{score.away}</span><strong>{pct(score.p)}</strong></li>)}
+      <li><Icon name="shield" size={16}/><span>Portería a cero {teamShort(match.home)}</span><strong>{pct(markets.cleanSheet.home)}</strong></li>
+      <li><Icon name="shield" size={16}/><span>Portería a cero {teamShort(match.away)}</span><strong>{pct(markets.cleanSheet.away)}</strong></li>
+      <li><Icon name="bolt" size={16}/><span>Más de 1.5 goles</span><strong>{pct(markets.totals.over15)}</strong></li>
+      <li><Icon name="bolt" size={16}/><span>Menos de 3.5 goles</span><strong>{pct(markets.totals.under35)}</strong></li>
+     </ul>
+     {scorerRows && <div class="prob-scorers">
+      {(['home','away'] as const).map(side => scorerRows[side]?.length ? <div class="scorer-column">
+       <h4>{teamShort(side === 'home' ? match.home : match.away)} · gol en cualquier momento</h4>
+       <ul>{scorerRows[side].map((row: any) => <li>
+        <span class="scorer-name">{row.player}</span>
+        <span class="scorer-bar" style={`--share:${row.anytime * 100}%`} aria-hidden="true"></span>
+        <strong>{pct(row.anytime)}</strong>
+        <small>{row.goals} goles de temporada · primer gol {pct(row.first)}</small>
+       </li>)}</ul>
+      </div> : null)}
+     </div>}
+     <span class="chapter-note">Estimaciones del modelo Poisson de GoatLab con la forma reciente y los líderes de temporada como insumos. No son cuotas ni consejos de apuesta; cada cifra declara su muestra en «Insumos».</span>
+    </> : <h3>Probabilidades en preparación</h3>}</div>
    <div class="stage-pane" data-pane="escenarios" aria-hidden="true" hidden>{verdict ? <>
      <h3>El veredicto</h3>
      {published ? <>
@@ -86,9 +199,20 @@ const marketsList = verdict ? [
    <div class="stage-source">Datos de proveedores deportivos · las estimaciones se identifican como tales</div>
   </div>
  </div>
- <AdSlot/>
- <div class="analysis-end"><section><h2>La lectura de IA</h2>{ai ? <><span class="outline-label">Análisis preparado con IA</span><p>{ai.summary}</p><p>{ai.limitations}</p></> : <><span class="outline-label">Todavía no disponible</span><p>El análisis se preparará con los datos verificados del partido. Si faltan datos o el servicio no responde, podrás seguir consultando las estadísticas disponibles.</p></>}</section><section><h2>Durante el partido</h2>{events?.length ? <table class="data-table"><caption class="sr-only">Eventos del partido en orden cronológico</caption><thead><tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr></thead><tbody>{events.map((event,index)=><tr><td>{event.minute ?? '—'}′</td><td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? match.home : match.away}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td><td>{event.score ? `${event.score.home}–${event.score.away}` : '—'}</td></tr>)}</tbody></table> : <div class="timeline-empty"><h3>Seguimiento no disponible</h3><p>No hay un flujo de eventos disponible para este encuentro. Aquí aparecerán el marcador y los eventos que entregue la fuente, con su hora de actualización.</p></div>}</section></div>
- <section class="manifesto"><h2>El contexto<br/>también juega.</h2><div><p>Una estadística describe una parte del encuentro. Las fuentes, la muestra y las ausencias completan su lectura.</p><a href="/metodologia/" class="text-link">Consultar fuentes y límites <Icon size={18}/></a></div></section>
+ <AdSlot variant="rect" slotKey="partidoStory"/>
+ <PitchScene match={match} events={events} ai={ai}/>
+ <AdSlot variant="horizontal" slotKey="partidoCancha"/>
+ <section class="team-context">
+  <div class="team-context-head"><h2>El contexto<br/>también juega.</h2><p>Dos lecturas del mismo encuentro: lo que cada equipo es en la temporada y en su muestra reciente. Cada cifra declara su fuente y su muestra; lo que falta, no se dibuja.</p></div>
+  {probability?.context ? <div class="team-context-grid">
+   {(['home','away'] as const).map(side => <article class="team-panel" data-side={side}>
+    <header><h3>{side === 'home' ? match.home : match.away}</h3><span class="outline-label">{side === 'home' ? 'Local' : 'Visitante'}</span></header>
+    {contextCards(side).length ? <ul class="context-list">{contextCards(side).map(card => <li><span class="context-icon"><Icon name={card.icon} size={18}/></span><div><strong>{card.value}</strong><span class="context-label">{card.label}</span>{card.note && <small>{card.note}</small>}</div></li>)}</ul> : <p class="chapter-note">Sin datos suficientes de este equipo por ahora.</p>}
+   </article>)}
+  </div> : <p class="chapter-note">El contexto por equipo se completa cuando el pipeline registra forma, tabla y goleadores.</p>}
+  <a href="/metodologia/" class="text-link">Consultar fuentes y límites <Icon size={18}/></a>
+ </section>
+ <AdSlot variant="rect" slotKey="partidoCierre"/>
 </main>
 <script>
  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];
@@ -125,5 +249,21 @@ const marketsList = verdict ? [
  buttons.forEach(button=>button.addEventListener('click',()=>{manualUntil=Date.now()+1500;activate(button.dataset.stage!);document.getElementById(button.dataset.stage!)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}));
  if(!reducedMotion){let queued=false;const update=()=>{queued=false;if(Date.now()<manualUntil)return;const marker=innerWidth<761?innerHeight*.7:innerHeight*.45;let current=chapters[0];for(const chapter of chapters){if(chapter.getBoundingClientRect().top<marker)current=chapter;}if(current)activate(current.dataset.chapter!);};window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update);}},{passive:true});}
  document.querySelectorAll<HTMLTimeElement>('time[datetime]').forEach(time=>{const date=new Date(time.dateTime);if(!Number.isNaN(date.getTime())){time.textContent=new Intl.DateTimeFormat('es',{dateStyle:'medium',timeStyle:'short'}).format(date);const sibling=time.nextSibling;if(sibling?.textContent?.includes('(Lima)'))sibling.textContent=' (tu hora local)';}});
+ // La última consulta se escribe en la hora del visitante con formato fijo (todas las apariciones).
+ (()=>{
+  const stamps=[...document.querySelectorAll<HTMLElement>('[data-consult]')];
+  if(!stamps.length)return;
+  let zone='UTC';
+  try{zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';}catch{/* sin zona disponible */}
+  for(const stamp of stamps){
+   const iso=stamp.dataset.utc;
+   if(!iso)continue;
+   const date=new Date(iso);
+   if(Number.isNaN(date.getTime()))continue;
+   const parts=new Intl.DateTimeFormat('sv-SE',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date);
+   const read=(type:string)=>parts.find(part=>part.type===type)?.value??'';
+   stamp.textContent=`${read('year')}-${read('month')}-${read('day')} ${read('hour')}:${read('minute')}`;
+  }
+ })();
 </script>
 </Layout>

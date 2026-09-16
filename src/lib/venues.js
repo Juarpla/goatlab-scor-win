@@ -9,7 +9,7 @@
  */
 import { normalize } from './teams.js';
 
-const CLUBS = [
+export const CLUBS = [
   // Premier League
   { aliases: ['brentford', 'brentford fc'], city: 'Londres', country: 'Inglaterra', stadium: 'Gtech Community Stadium', tz: 'Europe/London', lat: 51.5074, lng: -0.2920, capacity: 17250 },
   { aliases: ['brighton', 'brighton & hove albion', 'brighton hove albion'], city: 'Brighton', country: 'Inglaterra', stadium: 'American Express Stadium', tz: 'Europe/London', lat: 50.8609, lng: -0.0801, capacity: 31876 },
@@ -109,12 +109,55 @@ const CLUBS = [
 
 export const MAP_CROP = { latTop: 78, latBottom: -58, rows: 68 };
 
+/* ---- Zoom por estadio (página de partido) ---- */
+
+/**
+ * Ventana del recorte: un cuadro prudente alrededor del estadio — suficiente
+ * para leer la región, no para distraer del encuentro. La retícula es más fina
+ * que la del mapa de portada y el PNG se genera con scripts/generate-venue-zooms.mjs.
+ */
+export const VENUE_ZOOM = { lngSpan: 20, latSpan: 12.5, step: 0.35, pitch: 9 };
+
+const ZOOM_COLS = Math.round(VENUE_ZOOM.lngSpan / VENUE_ZOOM.step);
+const ZOOM_ROWS = Math.round(VENUE_ZOOM.latSpan / VENUE_ZOOM.step);
+const ZOOM_SPAN_LNG = ZOOM_COLS * VENUE_ZOOM.step;
+const ZOOM_SPAN_LAT = ZOOM_ROWS * VENUE_ZOOM.step;
+
+/** Slug estable por club (suffix numérico solo ante colisión). */
+const CLUB_SLUGS = new Map();
+for (const [index, club] of CLUBS.entries()) {
+  const base = normalize(club.aliases[0]).replace(/ /g, '-');
+  const taken = new Set(CLUB_SLUGS.values());
+  CLUB_SLUGS.set(club, taken.has(base) ? `${base}-${index + 1}` : base);
+}
+
+export function venueZoomSrc(club) {
+  const slug = CLUB_SLUGS.get(club);
+  return slug ? `/img/venue-zoom/${slug}.png` : null;
+}
+
+/** Layout del recorte: archivo, tamaño y pin en % dentro del marco. */
+export function venueZoomLayout(club) {
+  const src = venueZoomSrc(club);
+  if (!src) return null;
+  const left = club.lng - ZOOM_SPAN_LNG / 2;
+  const top = club.lat + ZOOM_SPAN_LAT / 2;
+  return {
+    src,
+    width: ZOOM_COLS * VENUE_ZOOM.pitch,
+    height: ZOOM_ROWS * VENUE_ZOOM.pitch,
+    pinX: ((club.lng - left) / ZOOM_SPAN_LNG) * 100,
+    pinY: ((top - club.lat) / ZOOM_SPAN_LAT) * 100,
+  };
+}
+
 function toLocation(club, match) {
   return {
     city: club.city, country: club.country, tz: club.tz,
     lat: club.lat, lng: club.lng,
     stadium: club.stadium ?? match.venue ?? null,
     capacity: club.capacity ?? null,
+    zoom: venueZoomLayout(club),
   };
 }
 

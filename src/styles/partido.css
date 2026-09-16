@@ -1,0 +1,677 @@
+/* Página de partido: camisetas escaneadas, zoom de sede, cancha animada,
+   probabilidades y tarjetas por equipo. Mismo mundo de la sala de análisis:
+   superficies mate, reglas de 1px, lima señal y pizarra como segunda serie. */
+
+/* ---- Cabecera del encuentro: camisetas ---- */
+.encounter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.encounter-score {
+  font-family: var(--display);
+  font-size: 34px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  margin-top: 4px !important;
+}
+
+.encounter-score.is-waiting {
+  color: var(--muted);
+}
+
+.jerseys {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.jersey {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.jersey-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.jersey svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.jersey figcaption {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.jerseys-vs {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* El escaneo vive dentro del SVG de la camiseta (recortado a la prenda);
+   su animación se define en TeamJery.astro junto al propio rectángulo. */
+
+/* ---- Zoom de la sede ---- */
+.venue-zoom {
+  margin: 26px 0 0;
+  max-width: 430px;
+}
+
+.venue-frame {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.venue-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.venue-pin {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 26px;
+  height: 38px;
+  transform: translate(-50%, -100%);
+}
+
+.venue-drop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.venue-drop path {
+  fill: var(--accent);
+}
+
+.venue-pin-mark {
+  position: absolute;
+  left: 50%;
+  top: 9px;
+  width: 15px;
+  height: 15px;
+  margin-left: -7.5px;
+  color: var(--bg);
+  animation: venue-spin 16s linear infinite;
+}
+
+.venue-pin-mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes venue-spin {
+  to { transform: rotate(360deg); }
+}
+
+.venue-zoom figcaption {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---- Gráficos de probabilidad ---- */
+/* El panel de probabilidades es más alto que la pantalla: scrollea por dentro
+   mientras el escenario queda fijo (solo escritorio, donde el stage es sticky;
+   en mobile el stage fluye con la página y en reduced-motion deja de ser sticky). */
+@media (min-width: 761px) {
+  @media (prefers-reduced-motion: no-preference) {
+    .stage-pane[data-pane="probabilidades"] {
+      max-height: calc(100vh - 90px);
+      overflow-y: auto;
+    }
+  }
+}
+
+.prob-hero {
+  margin: 0 0 24px;
+}
+
+.prob-hero figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.prob-hero figcaption span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.prob-hero figcaption small {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.prob-hero svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.race-grid line {
+  stroke: var(--line);
+  stroke-width: 0.5;
+  stroke-dasharray: 2 3;
+}
+
+.race-home { fill: var(--accent); opacity: 0.9; }
+.race-away { fill: var(--away); opacity: 0.9; }
+
+.race-value {
+  fill: var(--text);
+  font: 600 8px var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+.race-label {
+  fill: var(--muted);
+  font: 500 8px var(--body);
+}
+
+.race-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.race-key {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+
+.race-key-home { background: var(--accent); }
+.race-key-away { background: var(--away); }
+.race-none { margin-left: auto; color: var(--muted); }
+
+.prob-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.prob-bar { margin: 0; }
+
+.prob-bar figcaption {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.prob-track {
+  display: block;
+  width: 100%;
+  height: 12px;
+}
+
+.prob-fill { fill: #55645a; }
+.prob-home { fill: var(--accent); background: var(--accent); }
+.prob-away { fill: var(--away); background: var(--away); }
+.prob-draw { fill: #6f8173; background: #6f8173; }
+.prob-mute { fill: #55645a; background: #55645a; }
+
+.prob-row-track {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin-top: 6px;
+}
+
+.prob-row-bg { fill: #0e120f; }
+
+.prob-row-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.prob-row-head strong { margin-left: auto; }
+
+.prob-legend.prob-legend-rows {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.prob-legend.prob-legend-rows li {
+  display: block;
+}
+
+.prob-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 10px;
+  padding: 0;
+  list-style: none;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.prob-legend li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.prob-legend strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.prob-key {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.prob-note {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.prob-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prob-chips li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.prob-chips li svg { color: var(--accent); }
+
+.prob-chips strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.prob-scorers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.scorer-column h4 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.scorer-column ul {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scorer-column li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  align-items: center;
+}
+
+.scorer-name {
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scorer-column li strong {
+  grid-row: 1;
+  grid-column: 2;
+  font-size: 12px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.scorer-bar {
+  grid-row: 2;
+  grid-column: 1;
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: #0e120f;
+  overflow: hidden;
+}
+
+.scorer-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--share);
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.scorer-column li small {
+  grid-row: 3;
+  grid-column: 1 / -1;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* ---- Cancha animada ---- */
+.pitch-block {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 24px 48px;
+  border-top: 1px solid var(--line);
+  margin-top: 30px;
+  padding-top: 45px;
+}
+
+.pitch-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pitch-head h2 { font-size: 38px; }
+
+.pitch-lead {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+.pitch-score {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--display);
+}
+
+.pitch-score span {
+  font-family: var(--body);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.pitch-score strong {
+  font-size: 32px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.pitch-score strong.is-waiting { color: var(--muted); }
+
+.pitch-stage { min-width: 0; }
+
+.pitch-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.pitch-turf { fill: #151b16; }
+
+.pitch-lines {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.45;
+}
+
+.pitch-spot { fill: var(--line); stroke: none; }
+
+.pitch-ball { fill: var(--accent); }
+
+.pitch-ball.is-idle { animation: ball-idle 2.8s ease-in-out infinite; }
+
+@keyframes ball-idle {
+  50% { opacity: 0.6; }
+}
+
+.pitch-trail { fill: var(--accent); }
+
+.pitch-mark-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 0.5;
+  opacity: 0.7;
+}
+
+.pitch-mark-core { fill: var(--accent); }
+
+.pitch-mark-label {
+  fill: var(--muted);
+  font: 600 3px var(--body);
+}
+
+.pitch-mark-yellow { fill: #e9c46a; }
+.pitch-mark-red { fill: #e9b4a3; }
+.pitch-mark-sub { fill: var(--away); opacity: 0.85; }
+
+.pitch-mark.is-hit .pitch-mark-ring { animation: mark-hit 1.2s ease-out; }
+
+@keyframes mark-hit {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.pitch-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.pitch-foot p {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.pitch-replay {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 11px;
+  min-height: 34px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.pitch-replay:hover { border-color: var(--accent); color: var(--accent); }
+
+.pitch-side { min-width: 0; }
+
+.pitch-side h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.pitch-events { margin-top: 4px; }
+
+.pitch-events td:nth-child(2) { color: var(--text); }
+
+.pitch-reading {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.pitch-reading p {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* ---- Tarjetas por equipo ---- */
+.team-context {
+  border-top: 1px solid var(--line);
+  margin-top: 30px;
+  padding-block: 58px 20px;
+}
+
+.team-context-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: end;
+  margin-bottom: 34px;
+}
+
+.team-context-head h2 { font-size: 58px; }
+.team-context-head p { font-size: 14px; }
+
+.team-context-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.team-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.team-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.team-panel h3 {
+  font-family: var(--display);
+  font-size: 22px;
+}
+
+.context-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.context-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.context-icon {
+  display: inline-flex;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.context-list strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.context-label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.context-list small {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* ---- Adaptación ---- */
+@media (max-width: 1150px) {
+  .pitch-block { grid-template-columns: 1fr; }
+  .pitch-head { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 760px) {
+  .encounter-head { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .jerseys { align-self: center; }
+  .venue-zoom { max-width: none; }
+  .prob-scorers { grid-template-columns: 1fr; }
+  .team-context-head { grid-template-columns: 1fr; gap: 18px; }
+  .team-context-head h2 { font-size: 44px; }
+  .team-context-grid { grid-template-columns: 1fr; }
+  .pitch-head h2 { font-size: 32px; }
+  .pitch-score strong { font-size: 26px; }
+  .race-none { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .venue-pin-mark { animation: none; }
+  .pitch-ball.is-idle { animation: none; }
+  .pitch-mark.is-hit .pitch-mark-ring { animation: none; }
+}

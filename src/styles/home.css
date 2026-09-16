@@ -100,11 +100,14 @@
 .empty-message{padding:26px 0}
 
 /* "Ver más": un solo enlace discreto, no una botonera */
-.wall-more{display:inline-flex;align-items:center;gap:8px;margin-top:6px;color:var(--muted);font-size:12.5px;border-bottom:1px solid var(--line);padding-bottom:3px;transition:color .18s,border-color .18s}
+.wall-more{display:inline-flex;align-items:center;gap:8px;margin-top:6px;color:var(--muted);font-size:12.5px;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0 0 3px;font-family:inherit;transition:color .18s,border-color .18s}
 .wall-more:hover{color:var(--accent);border-color:var(--accent)}
 .wall-more svg{transition:transform .18s}
 .wall-more:hover svg{transform:translateX(3px)}
 .wall-nav{padding-block:2px}
+
+/* "Mostrar más" del muro de /encuentros: hereda el enlace discreto de portada */
+#wall-more{margin-top:10px}
 
 /* ---- Muro de /encuentros: ads reservados a los costados + primera fila de 3 ---- */
 /* La fila de 3 vive solo en escritorio y a ancho completo: la anatomía de la card
@@ -120,8 +123,14 @@
   .wall-body{display:grid;grid-template-columns:300px minmax(0,1fr) 300px;gap:14px;align-items:start}
   .wall--ads .wall-grid{columns:2}
   .ad-rail{display:flex}
-  .ad-rail.ad-vertical{margin-block:0;width:300px;height:600px;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+  /* El riel acompaña el scroll (sticky) y su recorrido termina con la columna
+     de tarjetas: nunca alcanza el anuncio horizontal ni baja más allá. */
+  .ad-rail.ad-vertical{margin-block:0;width:300px;height:600px;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;position:sticky;top:24px}
   .ad-rail.ad-vertical small{white-space:nowrap}
+  /* Filtro con ≤3 resultados: un riel de 600px dominaría una vista casi vacía;
+     los rieles se retiran y el resultado respira a ancho completo. */
+  .wall-body.is-thin{grid-template-columns:minmax(0,1fr)}
+  .wall-body.is-thin .ad-rail{display:none}
 }
 @media(max-width:1149px){
   .ad-rail{display:none}

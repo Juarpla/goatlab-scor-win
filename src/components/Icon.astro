@@ -1,5 +1,5 @@
 ---
 const { name = 'arrow', size = 20 } = Astro.props;
-const paths = { arrow:'M4 12h16m-6-6 6 6-6 6', down:'M12 4v16m-6-6 6 6 6-6', chart:'M4 19V5m0 14h16M8 15v-4m5 4V7m5 8v-6', search:'m20 20-5-5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0', external:'M8 5H5v14h14v-3M12 4h8v8M20 4 10 14', close:'M6 6l12 12M18 6 6 18' };
+const paths = { arrow:'M4 12h16m-6-6 6 6-6 6', down:'M12 4v16m-6-6 6 6 6-6', chart:'M4 19V5m0 14h16M8 15v-4m5 4V7m5 8v-6', search:'m20 20-5-5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0', external:'M8 5H5v14h14v-3M12 4h8v8M20 4 10 14', close:'M6 6l12 12M18 6 6 18', star:'M12 3l2.7 5.7 6.3.8-4.6 4.3 1.2 6.2L12 17l-5.6 3 1.2-6.2L3 9.5l6.3-.8L12 3Z', ball:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4.4 3.9 2.9-1.5 4.6H9.6L8.1 10.3 12 7.4ZM12 3v4.4M4.9 8.6l3.2 1.7m7.8 0 3.2-1.7M8.1 19.2l1.5-4.3m4.8 0 1.5 4.3', shield:'M12 3 5 6v5.2c0 4.8 3.3 8.2 7 9.8 3.7-1.6 7-5 7-9.8V6l-7-3Z', bolt:'M13 3 6 13.2h5L10 21l7-10.2h-5L13 3Z', target:'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-5 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-3.4 0a.6.6 0 1 1-1.2 0 .6.6 0 0 1 1.2 0Z' };
 ---
 <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[name as keyof typeof paths] || paths.arrow}/></svg>

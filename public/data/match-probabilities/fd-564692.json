@@ -1,0 +1,222 @@
+{
+  "id": "fd-564692",
+  "home": "RCD Espanyol de Barcelona",
+  "away": "Elche CF",
+  "competition": "laliga",
+  "kickoff": "2026-09-18T19:00:00Z",
+  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "inputs": {
+    "lambdas": {
+      "home": 2.43,
+      "away": 1.227
+    },
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "RCD Espanyol de Barcelona": {
+        "position": 8,
+        "team": "RCD Espanyol de Barcelona",
+        "played": 6,
+        "won": 2,
+        "drawn": 1,
+        "lost": 3,
+        "goalsFor": 9,
+        "goalsAgainst": 7,
+        "goalDifference": 2,
+        "points": 7,
+        "form": null
+      },
+      "Elche CF": null
+    },
+    "scorers": {
+      "updatedAt": "2026-09-16T11:35:43.994Z",
+      "provider": "Bzzoiro"
+    },
+    "resultsWindowDays": 180
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.631,
+      "draw": 0.199,
+      "away": 0.171
+    },
+    "doubleChance": {
+      "12": 0.801,
+      "1X": 0.829,
+      "X2": 0.369
+    },
+    "dnb": {
+      "home": 0.787,
+      "away": 0.213
+    },
+    "totals": {
+      "over15": 0.887,
+      "under15": 0.113,
+      "over25": 0.707,
+      "under25": 0.293,
+      "over35": 0.496,
+      "under35": 0.504
+    },
+    "btts": {
+      "yes": 0.652,
+      "no": 0.348
+    },
+    "cleanSheet": {
+      "home": 0.293,
+      "away": 0.088
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.094
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.085
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.076
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.076
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.062
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.66,
+    "noGoal": 0.026,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.456
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.248
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.135
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.073
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.04
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.022
+      }
+    ],
+    "firstHome": 0.647,
+    "firstAway": 0.327
+  },
+  "scorers": {
+    "home": null,
+    "away": [
+      {
+        "player": "Fernando Niño",
+        "goals": 3,
+        "matches": 6,
+        "share": 0.6,
+        "rate": 0.74,
+        "anytime": 0.521,
+        "first": 0.201
+      },
+      {
+        "player": "Abiel Osorio",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.2,
+        "rate": 0.25,
+        "anytime": 0.218,
+        "first": 0.067
+      },
+      {
+        "player": "Buba Sangaré",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.2,
+        "rate": 0.25,
+        "anytime": 0.218,
+        "first": 0.067
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-dixoncoles-v1",
+  "context": {
+    "home": {
+      "team": "RCD Espanyol de Barcelona",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 6
+      },
+      "season": {
+        "position": 8,
+        "played": 6,
+        "gf": 9,
+        "ga": 7,
+        "provider": null
+      },
+      "player": null
+    },
+    "away": {
+      "team": "Elche CF",
+      "recentSample": 7,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 7
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 7
+      },
+      "season": null,
+      "player": {
+        "name": "Fernando Niño",
+        "detail": "3 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "Los mercados Poisson usan lambdas de 2,43 y 1,227 (3,66 goles esperados), muy por encima del xG del modelo (1,61-1,16) y del promedio histórico del duelo (2,71). De ahí que over 2,5 suba al 70,7% frente al 49,6% del modelo y la victoria local al 63,1% frente al 50,8%.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-09-16T11:22:11.606Z"
+  }
+}

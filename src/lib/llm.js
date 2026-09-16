@@ -1,8 +1,10 @@
 /** Portable OpenAI-wire client. Environment is injected; secrets never enter client bundles. */
 const runtimeEnv = () => globalThis.process?.env ?? {};
 export const providers = {
-  MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'mistral-small-latest', requires: [], baseUrl: () => 'https://api.mistral.ai/v1' },
-  WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/meta/llama-3.1-8b-instruct', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
+  // baseUrl admite override opcional (MISTRAL_BASE_URL) para servir modelos
+  // de la misma firma OpenAI a través de otra pasarela.
+  MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'mistral-small-latest', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
+  WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/meta/llama-3.1-8b-instruct', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
   OPENCODE_GO: { name: 'OpenCode Go', keyVar: 'OPENCODE_GO_API_KEY', defaultModel: 'glm-5.3-flash', requires: [], baseUrl: () => 'https://opencode.ai/zen/go/v1', extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }) },
 };
 export function resolveChain(env = runtimeEnv(), logger = console) {

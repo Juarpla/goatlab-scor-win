@@ -23,6 +23,14 @@ export const AD_SLOTS = {
   contactoCap2: '',
   /** Contacto · cierre del relato (horizontal) */
   contactoCierre: '',
+  /** Partido · tras la cabecera del encuentro (rectangular) */
+  partidoPrevio: '',
+  /** Partido · tras el relato por capítulos (rectangular) */
+  partidoStory: '',
+  /** Partido · tras la cancha (horizontal) */
+  partidoCancha: '',
+  /** Partido · cierre, antes del pie (rectangular) */
+  partidoCierre: '',
 } as const;
 
 export type AdSlotKey = keyof typeof AD_SLOTS;

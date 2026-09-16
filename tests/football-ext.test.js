@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getStandings } from '../src/lib/football.js';
+import { getFixtures, getStandings, getScorers, fuseScorers } from '../src/lib/football.js';
 
 /** Minimal provider stubs matching the real response shapes of each endpoint. */
 const AF_FIXTURE = {
@@ -57,4 +57,53 @@ test('getStandings returns the TOTAL table with form translated to G/E/P', async
   assert.equal(standings.rows[0].points, 12);
   assert.deepEqual(standings.rows[0].form, ['G', 'G', 'E', 'G']);
   assert.equal(standings.rows[1].form, null); // absent form stays null
+});
+
+test('getStandings stores the full table by default; the client slices the top 10', async () => {
+  const standings = await getStandings({
+    competition: { id: 'laliga', fd: 'PD' }, season: 2026,
+    env: { FOOTBALL_DATA_KEY: 'fd' },
+    fetchImpl: async () => new Response(JSON.stringify({
+      season: { startDate: '2026-07-01' },
+      standings: [{ stage: 'TOTAL', type: 'TOTAL', table: Array.from({ length: 22 }, (_, i) => (
+        { position: i + 1, team: { name: `Equipo ${i + 1}` }, playedGames: 4, won: 1, draw: 1, lost: 2, goalsFor: 5, goalsAgainst: 6, goalDifference: -1, points: 4 }
+      )) }],
+    }), { status: 200 }),
+    paceMs: 0,
+  });
+  assert.equal(standings.rows.length, 20);
+});
+
+test('getScorers maps the football-data top with assists, penalties and matches', async () => {
+  const rows = await getScorers({
+    competition: { id: 'laliga', fd: 'PD' }, season: 2026,
+    env: { FOOTBALL_DATA_KEY: 'fd' },
+    fetchImpl: async () => new Response(JSON.stringify({ scorers: [
+      { player: { name: 'Kylian Mbappé' }, team: { name: 'Real Madrid' }, playedMatches: 8, goals: 9, assists: 2, penalties: 3 },
+    ] }), { status: 200 }),
+    paceMs: 0,
+  });
+  assert.deepEqual(rows, [{ player: 'Kylian Mbappé', team: 'Real Madrid', goals: 9, assists: 2, penalties: 3, playedMatches: 8 }]);
+  assert.deepEqual(await getScorers({ competition: { id: 'europa', fd: null }, season: 2026, env: { FOOTBALL_DATA_KEY: 'fd' }, paceMs: 0 }), []);
+});
+
+test('fuseScorers lets football-data lead on goals while Bzzoiro keeps the ids', () => {
+  const bzzoiro = [
+    { rank: 1, player: 'Kylian Mbappe', playerId: 7, team: 'Real Madrid', teamId: 86, value: 8, matches: 7 },
+    { rank: 2, player: 'Solo Bzzoiro', playerId: 9, team: 'Casa', teamId: 1, value: 5, matches: 7 },
+  ];
+  const fd = [
+    { player: 'Kylian Mbappé', team: 'Real Madrid', goals: 9, assists: 2, penalties: 3, playedMatches: 8 },
+    { player: 'Solo FD', team: 'Visita', goals: 4, assists: 1, penalties: 0, playedMatches: 8 },
+  ];
+  const fused = fuseScorers(bzzoiro, fd);
+  assert.equal(fused[0].value, 9); // FD manda en goles (tildes incluidas en el emparejado)
+  assert.equal(fused[0].playerId, 7); // Bzzoiro conserva el id
+  assert.equal(fused[0].assists, 2);
+  assert.equal(fused[0].matches, 8);
+  assert.equal(fused[1].player, 'Solo Bzzoiro'); // sin pareja: fila intacta
+  const extra = fused.find(row => row.player === 'Solo FD');
+  assert.equal(extra.value, 4);
+  assert.equal(extra.playerId, null); // nunca se inventan ids
+  assert.deepEqual(fuseScorers(bzzoiro, []), bzzoiro);
 });

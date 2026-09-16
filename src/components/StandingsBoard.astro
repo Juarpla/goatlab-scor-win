@@ -14,8 +14,8 @@ const teams = Object.entries(tables).filter(([, table]) => table.rows?.length);
    <table class="standings-table" data-panel={id} hidden={index !== 0}>
     <caption class="sr-only">Top 10 de {NAMES[id] ?? id}, temporada {table.season}</caption>
     <thead class="sr-only"><tr><th>Pos</th><th>Equipo</th><th>PJ</th><th>DG</th><th>PTS</th></tr></thead>
-    <tbody>
-     {table.rows.map(row => (
+     <tbody>
+      {table.rows.slice(0, 10).map(row => (
       <tr>
        <td class="st-pos">{row.position}</td>
        <td class="st-team">{teamDisplay(row.team)}</td>

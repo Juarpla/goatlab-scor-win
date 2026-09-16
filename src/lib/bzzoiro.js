@@ -29,36 +29,71 @@ export function sameTeam(a, b) {
   const abbreviates = (short, long) => [...short].every(token => token.length >= 3 && [...long].some(other => other.startsWith(token)));
   return abbreviates(left, right) || abbreviates(right, left);
 }
+const STAT_KEYS = {
+  possession: ['ball_possession', 'possession'],
+  shots: ['total_shots', 'shots'],
+  shotsOnTarget: ['shots_on_target', 'shots_on_goal'],
+  corners: ['corner_kicks', 'corners'],
+  fouls: ['fouls', 'fouls_committed'],
+  yellowCards: ['yellow_cards'],
+  redCards: ['red_cards'],
+  offsides: ['offsides'],
+  saves: ['saves', 'goalkeeper_saves'],
+  passes: ['passes', 'total_passes'],
+  accuratePasses: ['accurate_passes', 'passes_completed'],
+  tackles: ['tackles'],
+  interceptions: ['interceptions'],
+  clearances: ['clearances'],
+  blocks: ['blocks', 'shots_blocked'],
+  crosses: ['crosses'],
+  dribbles: ['dribbles', 'successful_dribbles'],
+  duelsWon: ['duels_won'],
+  aerialsWon: ['aerials_won'],
+};
+function pickStat(side, names) {
+  for (const name of names) if (side?.[name] != null) return side[name];
+  return null;
+}
 function mapStats(data) {
   const stats = data?.stats;
   if (!stats?.home || !stats?.away) return null;
-  const pick = side => ({
-    possession: side.ball_possession ?? null,
-    shots: side.total_shots ?? null,
-    shotsOnTarget: side.shots_on_target ?? null,
-    corners: side.corner_kicks ?? null,
-    fouls: side.fouls ?? null,
-    yellowCards: side.yellow_cards ?? null,
-    redCards: side.red_cards ?? null,
-    offsides: side.offsides ?? null,
-    xg: side.xg?.actual ?? null,
-  });
+  const pick = side => {
+    const base = {};
+    for (const [key, names] of Object.entries(STAT_KEYS)) base[key] = pickStat(side, names);
+    const xg = side.xg;
+    base.xg = typeof xg === 'object' ? (xg.actual ?? xg.expected ?? null) : (xg ?? null);
+    base.xgOnTarget = typeof xg === 'object' ? (xg.on_target ?? null) : null;
+    return base;
+  };
   const home = pick(stats.home);
   const away = pick(stats.away);
   // Pre-match the feed answers with all-null bags; that is "no statistics yet", not a table of dashes.
   const hasData = [...Object.values(home), ...Object.values(away)].some(value => value != null);
-  return hasData ? { home, away, xgEstimated: data.xg_estimated ?? null, source: 'Bzzoiro' } : null;
+  if (!hasData) return null;
+  const payload = { home, away, xgEstimated: data.xg_estimated ?? null, source: 'Bzzoiro' };
+  for (const [key, names] of [['shotmap', ['shotmap', 'shots_map']], ['momentum', ['momentum']], ['avgPositions', ['avg_positions', 'average_positions']]]) {
+    const value = pickStat(data, names);
+    if (value != null) payload[key] = value;
+  }
+  return payload;
 }
-const INCIDENT_TYPES = { goal: 'goal', card: 'card', substitution: 'sub' };
+const INCIDENT_TYPES = { goal: 'goal', card: 'card', substitution: 'sub', var: 'var' };
 function mapIncidents(data) {
   const incidents = data?.incidents;
   if (!Array.isArray(incidents)) return null;
   const events = incidents.filter(item => INCIDENT_TYPES[item.type]).map(item => ({
     minute: item.minute ?? null,
+    periodSecond: item.period_second ?? null,
     type: INCIDENT_TYPES[item.type],
     team: item.is_home === true ? 'home' : item.is_home === false ? 'away' : null,
     player: item.player ?? item.player_in ?? null,
     playerOut: item.player_out ?? null,
+    assist: item.assist ?? null,
+    goalType: item.goal_type ?? null,
+    cardType: item.card_type ?? null,
+    rescinded: item.rescinded ?? item.rescinded_card ?? null,
+    varReview: item.var ?? item.var_review ?? null,
+    reason: item.reason ?? null,
     detail: item.type === 'card' ? (item.card_type === 'red' ? 'Tarjeta roja' : item.card_type === 'yellow' ? 'Tarjeta amarilla' : item.reason ?? null)
       : item.type === 'goal' && item.goal_type && item.goal_type !== 'regular' ? item.goal_type
       : item.assist ? `Asistencia: ${item.assist}` : null,
@@ -138,11 +173,13 @@ export function mapHalfStats(data) {
   for (const [key, label] of [['first_half', 'first'], ['second_half', 'second']]) {
     const block = data?.stats?.[key];
     if (!block?.home && !block?.away) continue;
-    const pick = side => ({
-      possession: side?.ball_possession ?? null, shots: side?.total_shots ?? null,
-      shotsOnTarget: side?.shots_on_target ?? null, corners: side?.corner_kicks ?? null,
-      fouls: side?.fouls ?? null, xg: side?.xg?.actual ?? null,
-    });
+    const pick = side => {
+      const base = {};
+      for (const [field, names] of Object.entries(STAT_KEYS)) base[field] = pickStat(side, names);
+      const xg = side?.xg;
+      base.xg = typeof xg === 'object' ? (xg.actual ?? xg.expected ?? null) : (xg ?? null);
+      return base;
+    };
     halves[label] = { home: pick(block.home), away: pick(block.away) };
   }
   return Object.keys(halves).length ? halves : null;
@@ -154,6 +191,49 @@ export async function fetchEventStats(eventId, env = {}, fetchImpl = fetch, logg
   const statistics = mapStats(data);
   const halves = mapHalfStats(data);
   return statistics || halves ? { statistics, halves } : null;
+}
+
+/**
+ * Contexto del partido que el resto de endpoints no trae: clima, césped,
+ * asistencia, árbitro, sede, derbi/neutral y viaje. Todo nulleable; lo ausente
+ * es ausencia honesta, nunca se inventa.
+ */
+export function mapEventDetail(data) {
+  if (!data || typeof data !== 'object') return null;
+  const weather = data.weather ?? null;
+  const weatherMapped = weather == null ? null
+    : typeof weather === 'string' ? { temp: null, condition: weather, wind: null, humidity: null }
+    : typeof weather === 'object' ? {
+      temp: weather.temp ?? weather.temperature ?? null,
+      condition: weather.condition ?? weather.description ?? null,
+      wind: weather.wind ?? weather.wind_speed ?? null,
+      humidity: weather.humidity ?? null,
+    } : { raw: weather };
+  const detail = {
+    referee: data.referee ?? data.referee_name ?? null,
+    venue: data.venue ?? data.stadium ?? null,
+    venueCity: data.venue_city ?? data.city ?? null,
+    attendance: data.attendance ?? null,
+    pitch: data.pitch ?? data.pitch_condition ?? null,
+    weather: weatherMapped,
+    derby: data.is_derby ?? data.derby ?? null,
+    neutral: data.is_neutral ?? data.neutral_venue ?? null,
+    travelKm: data.travel_distance_km ?? data.travel_km ?? data.travel ?? null,
+    hasXg: data.has_xg ?? null,
+    round: data.round_name ?? data.round ?? null,
+    group: data.group_name ?? data.group ?? null,
+    kickoff: data.kickoff_time ?? data.kickoff ?? data.date ?? null,
+  };
+  const hasData = Object.values(detail).some(value => {
+    if (value == null || value === false) return false;
+    if (typeof value === 'object') return Object.values(value).some(nested => nested != null);
+    return true;
+  });
+  return hasData ? detail : null;
+}
+
+export async function fetchEventDetail(eventId, env = {}, fetchImpl = fetch) {
+  return mapEventDetail(await request(`${BASE}/events/${eventId}/`, env.BZZOIRO_API_TOKEN, fetchImpl));
 }
 
 export function mapH2H(data, recentLimit = 5) {
@@ -232,6 +312,14 @@ export function mapPlayerStats(data, { homeTeamId, awayTeamId, top = 3 } = {}) {
     player: row.player_id ?? row.id ?? null,
     rating: row.rating ?? row.score ?? null,
     goals: row.goals ?? null, assists: row.assists ?? null,
+    minutes: row.minutes ?? row.minutes_played ?? null,
+    shots: row.shots ?? row.total_shots ?? null,
+    shotsOnTarget: row.shots_on_target ?? null,
+    keyPasses: row.key_passes ?? null,
+    xg: row.xg?.actual ?? row.xg ?? row.expected_goals ?? null,
+    bigChances: row.big_chances ?? null,
+    tackles: row.tackles ?? null,
+    saves: row.saves ?? null,
   });
   const pickTop = sideRows => sideRows.map(entry)
     .sort((a, b) => (Number.isFinite(b.rating) ? b.rating : -1) - (Number.isFinite(a.rating) ? a.rating : -1))
@@ -253,7 +341,9 @@ export function mapPrediction(data) {
   return {
     oneX2: result && result.prob_home != null ? { home: pct(result.prob_home), draw: pct(result.prob_draw), away: pct(result.prob_away), predicted: result.predicted ?? null } : null,
     xg: markets.expected_goals ? { home: markets.expected_goals.home ?? null, away: markets.expected_goals.away ?? null } : null,
+    over15: markets.over_under?.prob_over_15 != null ? pct(markets.over_under.prob_over_15) : null,
     over25: markets.over_under?.prob_over_25 != null ? pct(markets.over_under.prob_over_25) : null,
+    over35: markets.over_under?.prob_over_35 != null ? pct(markets.over_under.prob_over_35) : null,
     btts: markets.btts?.prob_yes != null ? pct(markets.btts.prob_yes) : null,
     score: markets.score?.most_likely ?? null,
     cornersOver95: markets.corners?.prob_over_95 != null ? pct(markets.corners.prob_over_95) : null,
@@ -316,26 +406,57 @@ export function collectTeamIds(events) {
   return map;
 }
 
-export function mapBzzoiroStandings(data, top = 10) {
-  const rows = data?.standings;
-  if (!Array.isArray(rows) || !rows.length) return null; // cup-style groups are skipped, never merged
-  return rows.slice(0, top).map(row => ({
+function standingsRow(row) {
+  return {
     position: row.position ?? null,
     team: row.team_name ?? row.team?.name ?? null,
     teamId: row.team_id ?? row.team?.id ?? null,
     played: row.played ?? row.matches ?? null,
+    won: row.won ?? null,
+    drawn: row.drawn ?? row.draws ?? null,
+    lost: row.lost ?? row.losses ?? null,
+    goalsFor: row.goals_for ?? row.goalsFor ?? row.scored ?? null,
+    goalsAgainst: row.goals_against ?? row.goalsAgainst ?? row.conceded ?? null,
+    goalDifference: row.goals_for != null && row.goals_against != null ? row.goals_for - row.goals_against
+      : row.goal_difference ?? row.goalDifference ?? null,
     points: row.pts ?? row.points ?? null,
+    zone: row.zone ?? null,
     form: Array.isArray(row.form) ? row.form : null,
-  }));
+  };
+}
+
+export function mapBzzoiroStandings(data, top = 20) {
+  // Las copas devuelven grupos por letra; se guardan crudos y las filas se
+  // aplanan para que los consumidores de `rows` no cambien.
+  const groups = Array.isArray(data?.groups) ? data.groups : Array.isArray(data?.standings_groups) ? data.standings_groups : null;
+  if (groups?.length) {
+    const mapped = groups.map(group => ({
+      group: group.group ?? group.group_name ?? group.name ?? null,
+      rows: (Array.isArray(group.standings) ? group.standings : Array.isArray(group.rows) ? group.rows : []).slice(0, top).map(standingsRow),
+    })).filter(group => group.rows.length);
+    if (!mapped.length) return null;
+    return mapped.flatMap(group => group.rows);
+  }
+  const rows = data?.standings;
+  if (!Array.isArray(rows) || !rows.length) return null; // sin tabla plana ni grupos: ausencia honesta
+  return rows.slice(0, top).map(standingsRow);
 }
 /** Current season id + flat table for one resolved league (Europa League path when FD doesn't cover it). */
-export async function fetchBzzoiroStandings(leagueId, { env = {}, fetchImpl = fetch, logger = console, top = 10 } = {}) {
+export async function fetchBzzoiroStandings(leagueId, { env = {}, fetchImpl = fetch, logger = console, top = 20 } = {}) {
   if (!env.BZZOIRO_API_TOKEN || !leagueId) return null;
   try {
     const season = await request(`${BASE}/leagues/${leagueId}/season/`, env.BZZOIRO_API_TOKEN, fetchImpl);
     const table = await request(`${BASE}/leagues/${leagueId}/standings/?season_id=${season.id}`, env.BZZOIRO_API_TOKEN, fetchImpl);
     const rows = mapBzzoiroStandings(table, top);
-    return rows ? { season: season.year ?? season.id ?? null, provider: 'Bzzoiro', updatedAt: new Date().toISOString(), rows } : null;
+    if (!rows) return null;
+    const payload = { season: season.year ?? season.id ?? null, provider: 'Bzzoiro', updatedAt: new Date().toISOString(), rows };
+    const groups = Array.isArray(table?.groups) ? table.groups : Array.isArray(table?.standings_groups) ? table.standings_groups : null;
+    if (groups?.length) payload.groups = groups.map(group => ({
+      group: group.group ?? group.group_name ?? group.name ?? null,
+      rows: (Array.isArray(group.standings) ? group.standings : Array.isArray(group.rows) ? group.rows : []).slice(0, top).map(standingsRow),
+    })).filter(group => group.rows.length);
+    if (table?.zones ?? table?.zone_legend) payload.zones = table.zones ?? table.zone_legend;
+    return payload;
   } catch (error) { logger.warn(`Tabla Bzzoiro (${leagueId}): ${error.message}`); return null; }
 }
 
@@ -348,6 +469,7 @@ export function mapLeaderboard(data, limit = 5) {
     rank: row.rank ?? null,
     player: row.player_name ?? null,
     playerId: row.player_id ?? null,
+    position: row.position ?? null,
     team: row.team_name ?? null,
     teamId: row.team_id ?? null,
     value: row.value ?? null,

@@ -1,0 +1,286 @@
+---
+/**
+ * Cancha ilustrativa: SVG con el recorrido del balón entre eventos reales.
+ * El servidor dibuja anclas y marcadores con una simulación determinista
+ * (src/lib/pitch-path.js); el cliente anima el balón, actualiza el marcador
+ * y consulta /api/live/[id].json cada 60s cuando el partido está en vivo.
+ * Nunca se presenta como seguimiento real de posición: así lo dice la nota.
+ */
+import { teamShort } from '../lib/teams.js';
+import { FINISHED_STATUSES } from '../lib/football.js';
+import { buildBeats } from '../lib/pitch-path.js';
+
+const { match, events = [], ai = null } = Astro.props;
+const beats = buildBeats(match.id, events ?? []);
+const anchors = beats.filter(beat => beat.event);
+const finished = FINISHED_STATUSES.has(match.status);
+const live = !finished && match.status !== 'NS';
+const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
+const isRed = event => /roja|second yellow/i.test(event.detail ?? '');
+const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status === 'NS' ? 'Programado' : 'Sin datos en vivo';
+---
+
+<section class="pitch-block" data-pitch data-match={match.id} data-kickoff={match.kickoff} data-status={match.status} data-home={match.home} data-away={match.away} data-live={match.id.startsWith('af-') ? '1' : '0'} data-beats={JSON.stringify(beats)}>
+  <header class="pitch-head">
+    <div>
+      <h2>{finished ? 'El partido, en la cancha.' : 'Así se mueve el partido.'}</h2>
+      <p class="pitch-lead">Los marcadores son eventos reales; el recorrido entre ellos es una animación ilustrativa, no un seguimiento de posición.</p>
+    </div>
+    <div class="pitch-score" aria-live="polite">
+      <span>{teamShort(match.home)}</span>
+      <strong data-live-score class={match.homeScore == null ? 'is-waiting' : ''}>{match.homeScore ?? '—'} – {match.awayScore ?? '—'}</strong>
+      <span>{teamShort(match.away)}</span>
+    </div>
+  </header>
+  <div class="pitch-stage">
+    <svg class="pitch-svg" viewBox="0 0 105 68" role="img" aria-label="Cancha con el recorrido ilustrativo del balón">
+      <rect class="pitch-turf" x="0" y="0" width="105" height="68" rx="1.5"/>
+      <g class="pitch-lines" aria-hidden="true">
+        <rect x="2" y="2" width="101" height="64"/>
+        <line x1="52.5" y1="2" x2="52.5" y2="66"/>
+        <circle cx="52.5" cy="34" r="9.15"/>
+        <circle cx="52.5" cy="34" r="0.7" class="pitch-spot"/>
+        <circle cx="13" cy="34" r="0.7" class="pitch-spot"/>
+        <circle cx="92" cy="34" r="0.7" class="pitch-spot"/>
+        <rect x="2" y="15.5" width="16.5" height="37"/>
+        <rect x="2" y="25" width="5.5" height="18"/>
+        <rect x="86.5" y="15.5" width="16.5" height="37"/>
+        <rect x="97.5" y="25" width="5.5" height="18"/>
+        <path d="M18.5 25a9.15 9.15 0 0 1 0 18"/>
+        <path d="M86.5 25a9.15 9.15 0 0 0 0 18"/>
+        <path d="M2 4a2 2 0 0 0 2-2" transform="translate(0 0)"/>
+        <path d="M101 2a2 2 0 0 0 2 2"/>
+        <path d="M103 64a2 2 0 0 0-2 2"/>
+        <path d="M4 66a2 2 0 0 0-2-2"/>
+      </g>
+      <g class="pitch-marks" data-pitch-marks>
+        {anchors.map(beat => (
+          <g class="pitch-mark" data-kind={beat.kind} data-minute={beat.minute} transform={`translate(${beat.x} ${beat.y})`}>
+            {beat.kind === 'goal' ? <>
+              <circle class="pitch-mark-ring" r="3.6"/>
+              <circle class="pitch-mark-core" r="1.3"/>
+              <text class="pitch-mark-label" x="4.6" y="1.1">{beat.minute}′</text>
+            </> : beat.kind === 'card' ? (
+              <rect class={isRed(beat.event) ? 'pitch-mark-red' : 'pitch-mark-yellow'} x="-1" y="-1.7" width="2" height="3.4" rx="0.4"/>
+            ) : (
+              <path class="pitch-mark-sub" d="M-1.5 -1.2 L1.5 -1.2 L0 1.5 Z"/>
+            )}
+          </g>
+        ))}
+      </g>
+      {[0, 1, 2].map(index => <circle class="pitch-trail" data-trail={index} r={1.1 - index * 0.25} cx="52.5" cy="34"/>)}
+      <circle class="pitch-ball" cx="52.5" cy="34" r="1.7"/>
+    </svg>
+    <div class="pitch-foot">
+      <span class="outline-label" data-live-state>{statusLabel}</span>
+      <p data-live-clock>{finished ? 'Recorrido completo del encuentro.' : live ? 'Marcador y minuto desde la última consulta.' : 'El recorrido comienza cuando ruede el balón.'}</p>
+      {finished && <button class="pitch-replay" type="button" data-replay>Repetir el recorrido</button>}
+    </div>
+  </div>
+  <div class="pitch-side">
+    <h3>Durante el partido</h3>
+    {events?.length ? (
+      <table class="data-table pitch-events">
+        <caption class="sr-only">Eventos del partido en orden cronológico</caption>
+        <thead><tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr></thead>
+        <tbody data-live-events>
+          {events.map(event => (
+            <tr>
+              <td>{event.minute ?? '—'}′</td>
+              <td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? match.home : match.away}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td>
+              <td>{event.score ? `${event.score.home}–${event.score.away}` : '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <div class="timeline-empty" data-live-events>
+        <h3>Seguimiento en espera</h3>
+        <p>Aquí aparecerán el marcador y los eventos reales que entregue la fuente, con su hora de consulta. Mientras tanto, la cancha queda quieta.</p>
+      </div>
+    )}
+    {ai && <div class="pitch-reading"><h3>La lectura</h3><p>{ai.summary}</p>{ai.limitations && <p class="chapter-note">{ai.limitations}</p>}</div>}
+  </div>
+</section>
+
+<script>
+ import { ballAt, buildBeats, matchMinute } from '../lib/pitch-path.js';
+
+ const root = document.querySelector<HTMLElement>('[data-pitch]');
+ if (root) {
+  type LiveEvent = { minute: number | null; type: string; team: string | null; player?: string | null; playerOut?: string | null; detail?: string | null; score?: { home: number; away: number } | null };
+  type Beat = { minute: number; x: number; y: number; kind: string; event?: LiveEvent };
+  const matchId = root.dataset.match!;
+  const kickoff = Date.parse(root.dataset.kickoff!);
+  const status = root.dataset.status!;
+  const finished = new Set(['FT', 'AET', 'PEN']).has(status);
+  // Cualquier estado dentro de la ventana que no sea programado/cancelado se trata como en juego
+  // (API-Football usa 1H/2H además de HT/ET/BT).
+  const notLive = new Set(['NS', 'TBD', 'PST', 'CANC', 'ABD', 'AWD', 'WO']);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const LIVE_WINDOW_MS = 115 * 60_000;
+  const REPLAY_MS = 24_000;
+
+  const ball = root.querySelector<SVGCircleElement>('.pitch-ball')!;
+  const trails = [...root.querySelectorAll<SVGCircleElement>('.pitch-trail')];
+  const marks = root.querySelector<SVGGElement>('[data-pitch-marks]')!;
+  const scoreNode = root.querySelector<HTMLElement>('[data-live-score]');
+  const clockNode = root.querySelector<HTMLElement>('[data-live-clock]');
+  const stateNode = root.querySelector<HTMLElement>('[data-live-state]');
+  const eventsNode = root.querySelector<HTMLElement>('[data-live-events]');
+  const replayButton = root.querySelector<HTMLButtonElement>('[data-replay]');
+
+  let beats: Beat[] = JSON.parse(root.dataset.beats || '[]');
+  let events: LiveEvent[] = beats.filter((beat: Beat) => beat.event).map((beat: Beat) => beat.event!);
+  let trail: { x: number; y: number }[] = [];
+  let replayStart = 0;
+
+  const inLiveWindow = () => Date.now() >= kickoff && Date.now() < kickoff + LIVE_WINDOW_MS;
+  const mode = () => (finished ? 'replay' : !notLive.has(status) && inLiveWindow() ? 'live' : Date.now() >= kickoff && inLiveWindow() ? 'live' : 'pre');
+
+  const setBall = (x: number, y: number) => {
+   ball.setAttribute('cx', String(x));
+   ball.setAttribute('cy', String(y));
+   trail.unshift({ x, y });
+   trail = trail.slice(0, trails.length + 1);
+   trails.forEach((node, index) => {
+    const point = trail[index + 1];
+    node.setAttribute('cx', String(point?.x ?? x));
+    node.setAttribute('cy', String(point?.y ?? y));
+    node.style.opacity = String(point ? 0.26 - index * 0.07 : 0);
+   });
+  };
+
+  const flash = (minute: number) => {
+   marks.querySelectorAll<SVGGElement>('.pitch-mark[data-kind="goal"]').forEach(node => {
+    if (Math.abs(Number(node.dataset.minute) - minute) < 0.5) node.classList.add('is-hit');
+   });
+  };
+
+  const renderMarks = () => {
+   const svgNS = 'http://www.w3.org/2000/svg';
+   marks.textContent = '';
+   for (const beat of beats.filter((item: any) => item.event)) {
+    const group = document.createElementNS(svgNS, 'g');
+    group.setAttribute('class', 'pitch-mark');
+    group.setAttribute('data-kind', beat.kind);
+    group.setAttribute('data-minute', String(beat.minute));
+    group.setAttribute('transform', `translate(${beat.x} ${beat.y})`);
+    if (beat.kind === 'goal') {
+     group.innerHTML = '<circle class="pitch-mark-ring" r="3.6"/><circle class="pitch-mark-core" r="1.3"/><text class="pitch-mark-label" x="4.6" y="1.1">' + beat.minute + '′</text>';
+    } else if (beat.kind === 'card') {
+     const red = /roja|second yellow/i.test(beat.event.detail ?? '');
+     group.innerHTML = `<rect class="${red ? 'pitch-mark-red' : 'pitch-mark-yellow'}" x="-1" y="-1.7" width="2" height="3.4" rx="0.4"/>`;
+    } else {
+     group.innerHTML = '<path class="pitch-mark-sub" d="M-1.5 -1.2 L1.5 -1.2 L0 1.5 Z"/>';
+    }
+    marks.append(group);
+   }
+  };
+
+  const renderEvents = () => {
+   if (!eventsNode) return;
+   if (!events.length) return;
+   const labels: Record<string, string> = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
+   const table = document.createElement('table');
+   table.className = 'data-table pitch-events';
+   const head = document.createElement('thead');
+   head.innerHTML = '<tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr>';
+   const body = document.createElement('tbody');
+   for (const event of events) {
+    const row = document.createElement('tr');
+    const minute = document.createElement('td');
+    minute.textContent = `${event.minute ?? '—'}′`;
+    const detail = document.createElement('td');
+    const strong = document.createElement('strong');
+    strong.textContent = labels[event.type] ?? event.type;
+    detail.append(strong);
+    if (event.team) detail.append(document.createTextNode(` · ${event.team === 'home' ? root.dataset.home : root.dataset.away}`));
+    if (event.player) detail.append(document.createTextNode(` — ${event.player}`));
+    if (event.playerOut) detail.append(document.createTextNode(` (salió ${event.playerOut})`));
+    if (event.detail) { detail.append(document.createElement('br')); const small = document.createElement('small'); small.textContent = event.detail; detail.append(small); }
+    detail.className = 'pitch-event-cell';
+    const score = document.createElement('td');
+    score.textContent = event.score ? `${event.score.home}–${event.score.away}` : '—';
+    row.append(minute, detail, score);
+    body.append(row);
+   }
+   table.append(head, body);
+   // El nodo servidor puede ser el <tbody> de la tabla o el bloque vacío: se reemplaza la pieza completa.
+   (eventsNode.closest('table') ?? eventsNode).replaceWith(table);
+  };
+
+  const applyPayload = (payload: { homeScore?: number | null; awayScore?: number | null; events?: LiveEvent[] }) => {
+   if (payload?.homeScore != null && scoreNode) {
+    scoreNode.textContent = `${payload.homeScore} – ${payload.awayScore ?? '—'}`;
+    scoreNode.classList.remove('is-waiting');
+   }
+   if (Array.isArray(payload?.events) && payload.events.length) {
+    const next = payload.events;
+    if (JSON.stringify(next) !== JSON.stringify(events)) {
+     events = next;
+     beats = buildBeats(matchId, events);
+     renderMarks();
+     renderEvents();
+    }
+   }
+  };
+
+  const poll = async () => {
+   // Los finalizados se hidratan una sola vez; los vivos, cada 60s dentro de su ventana.
+   if (root.dataset.live !== '1' || document.hidden) return;
+   if (!finished && !inLiveWindow()) return;
+   try {
+    const response = await fetch(`/api/live/${matchId}.json`, { cache: 'no-store' });
+    const payload = await response.json();
+    if (payload?.ok) {
+     applyPayload(payload);
+     if (stateNode) stateNode.textContent = 'En juego · consulta en línea';
+    }
+   } catch { /* la página degrada a los datos horneados */ }
+  };
+
+  const updateClock = (minute: number | null) => {
+   if (!clockNode) return;
+   if (minute == null) { clockNode.textContent = 'El recorrido comienza cuando ruede el balón.'; return; }
+   clockNode.textContent = minute >= 95 ? 'Final del recorrido ilustrativo.' : `Minuto ${Math.floor(Math.min(90, minute))} est. · animación ilustrativa`;
+  };
+
+  if (reduced) {
+   // Movimiento reducido: eventos y marcador presentes, balón quieto en el centro.
+   setBall(52.5, 34);
+   updateClock(finished ? 95 : null);
+   poll();
+   setInterval(poll, 60_000);
+  } else {
+   const frame = () => {
+    const current = mode();
+    let minute: number | null;
+    if (current === 'replay') {
+     if (!replayStart) replayStart = Date.now();
+     minute = Math.min(95, ((Date.now() - replayStart) / REPLAY_MS) * 95);
+     if (minute > 0) flash(minute);
+    } else if (current === 'live') {
+     minute = matchMinute(kickoff, Date.now());
+    } else {
+     minute = null;
+    }
+    if (minute == null) {
+     setBall(52.5 + Math.sin(Date.now() / 1400) * 12, 34 + Math.cos(Date.now() / 1700) * 9);
+     ball.classList.add('is-idle');
+     updateClock(null);
+    } else {
+     ball.classList.remove('is-idle');
+     const point = ballAt(beats, minute);
+     setBall(point.x, point.y);
+     updateClock(minute);
+    }
+    requestAnimationFrame(frame);
+   };
+   requestAnimationFrame(frame);
+   replayButton?.addEventListener('click', () => { replayStart = Date.now(); marks.querySelectorAll('.is-hit').forEach(node => node.classList.remove('is-hit')); });
+   if (finished) { poll(); } else if (mode() === 'live') { poll(); setInterval(poll, 60_000); }
+   document.addEventListener('visibilitychange', () => { if (!document.hidden && mode() === 'live') poll(); });
+  }
+ }
+</script>

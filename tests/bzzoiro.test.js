@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sameTeam, enrichMatches } from '../src/lib/bzzoiro.js';
+import { sameTeam, enrichMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail } from '../src/lib/bzzoiro.js';
 
 test('sameTeam matches full names, accents and abbreviations', () => {
   assert.equal(sameTeam('Manchester City', 'Man City'), true);
@@ -68,4 +68,56 @@ test('all-null pre-match stats collapse to no statistics', async () => {
       : new Response(JSON.stringify({ incidents: [] }), { status: 200 });
   const enrichments = await enrichMatches([{ id: 'af-1', home: 'Leeds', away: 'Newcastle', kickoff: '2026-09-14T19:00:00Z' }], { date: '2026-09-14', env: { BZZOIRO_API_TOKEN: 't' }, fetchImpl });
   assert.equal(enrichments['af-1'].statistics, null);
+});
+
+test('mapBzzoiroStandings keeps won/drawn/lost, goals and zone, full table by default', () => {
+  const table = { standings: Array.from({ length: 22 }, (_, i) => ({
+    position: i + 1, team_name: `Equipo ${i + 1}`, team_id: 100 + i,
+    played: 4, won: 3, drawn: 1, lost: 0, goals_for: 9, goals_against: 2, pts: 10,
+    zone: i === 0 ? 'champions' : null, form: ['W', 'W'],
+  })) };
+  const rows = mapBzzoiroStandings(table);
+  assert.equal(rows.length, 20); // tabla completa, el top-10 queda en el cliente
+  assert.equal(rows[0].won, 3);
+  assert.equal(rows[0].drawn, 1);
+  assert.equal(rows[0].goalsFor, 9);
+  assert.equal(rows[0].goalsAgainst, 2);
+  assert.equal(rows[0].goalDifference, 7);
+  assert.equal(rows[0].zone, 'champions');
+  assert.equal(rows[1].zone, null);
+});
+
+test('mapBzzoiroStandings flattens cup groups instead of dropping them', () => {
+  const rows = mapBzzoiroStandings({ groups: [
+    { group: 'A', standings: [{ position: 1, team_name: 'Líder', team_id: 1, played: 2, won: 2, pts: 6 }] },
+    { group: 'B', rows: [{ position: 1, team_name: 'Otro', team_id: 2, played: 2, drawn: 2, pts: 2 }] },
+  ] });
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].team, 'Líder');
+  assert.equal(mapBzzoiroStandings({ standings: [] }), null);
+});
+
+test('mapLeaderboard keeps the player position', () => {
+  const rows = mapLeaderboard({ leaders: [{ rank: 1, player_name: 'Goleador', player_id: 7, position: 'Forward', team_name: 'Casa', team_id: 3, value: 9, matches: 8 }] });
+  assert.equal(rows[0].position, 'Forward');
+  assert.equal(rows[0].playerId, 7);
+});
+
+test('mapEventDetail captures weather, pitch, attendance, referee and venue', () => {
+  const detail = mapEventDetail({
+    referee: 'Soto Grado', venue: 'Mestalla', venue_city: 'Valencia', attendance: 45000,
+    pitch: 'good', weather: { temp: 21, condition: 'Clear', wind: 12, humidity: 60 },
+    is_derby: false, is_neutral: false, has_xg: true, round_name: 'Jornada 5',
+    kickoff_time: '2026-09-14T19:00:00Z',
+  });
+  assert.equal(detail.referee, 'Soto Grado');
+  assert.equal(detail.venue, 'Mestalla');
+  assert.equal(detail.attendance, 45000);
+  assert.equal(detail.weather.temp, 21);
+  assert.equal(detail.weather.condition, 'Clear');
+  assert.equal(detail.round, 'Jornada 5');
+  const stringWeather = mapEventDetail({ weather: 'Rain', kickoff_time: '2026-09-14T19:00:00Z' });
+  assert.equal(stringWeather.weather.condition, 'Rain');
+  assert.equal(mapEventDetail({}), null);
+  assert.equal(mapEventDetail(null), null);
 });

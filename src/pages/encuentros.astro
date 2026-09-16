@@ -52,13 +52,14 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
   <div class="wall-lead" id="wall-lead"></div>
   <div class="wall-body">
    <AdSlot variant="vertical" class="ad-rail"/>
-   <div class="wall-center">
-    <div class="wall-grid" id="wall-grid">
-     {rows.map(m => <MatchCard {...cardProps(m)}/>)}
-    </div>
-    <p id="filter-empty" class="empty-message" hidden>No hay encuentros con ese filtro. Prueba otra liga, otro día u otro estado, o busca por otro nombre.</p>
-    <p id="filter-count" class="sr-only" aria-live="polite"></p>
+  <div class="wall-center">
+   <div class="wall-grid" id="wall-grid">
+    {rows.map(m => <MatchCard {...cardProps(m)}/>)}
    </div>
+   <p id="filter-empty" class="empty-message" hidden>No hay encuentros con ese filtro. Prueba otra liga, otro día u otro estado, o busca por otro nombre.</p>
+   <p id="filter-count" class="sr-only" aria-live="polite"></p>
+   <button id="wall-more" class="wall-more" type="button" hidden><span>Mostrar más</span><Icon size={16}/></button>
+  </div>
    <AdSlot variant="vertical" class="ad-rail"/>
   </div>
   <AdSlot variant="horizontal"/>
@@ -80,34 +81,64 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  const wide=window.matchMedia('(min-width:1150px)');
  let league='all', status='all';
  const normalize=(text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- function update(stagger=true){
+ // Paginación suave: 9 tarjetas en escritorio (fila de 3 + 3 filas de muro),
+ // 6 en tablet (3 filas de 2) y 6 en mobile (6 filas de 1). Cada clic añade
+ // 3 filas más (6 tarjetas escritorio/tablet, 3 mobile).
+ // Sin JS el muro completo queda visible: la paginación es mejora progresiva.
+ const compact=window.matchMedia('(max-width:760px)');
+ const COLS=()=>compact.matches?1:2;
+ const STEP=()=>3*COLS();
+ const INITIAL=()=>wide.matches?STEP()+3:6;
+ const moreBtn=document.querySelector<HTMLButtonElement>('#wall-more')!;
+ const moreLabel=moreBtn.querySelector('span')!;
+ const wallBody=document.querySelector<HTMLElement>('.wall-body')!;
+ let shown=0;
+ function update(mode:'all'|'new'|'silent', from=0){
   const query=normalize(search.value), day=daySelect.value;
   for(const card of cards){
    const show=(league==='all'||card.dataset.leagueId===league)&&(day==='all'||card.dataset.date===day)&&(status==='all'||card.dataset.stage===status)&&(card.dataset.teams||'').includes(query);
    card.hidden=!show;
   }
   const visible=cards.filter(card=>!card.hidden);
+  const cut=Math.min(shown,visible.length);
+  const batch=visible.slice(0,cut);
   // Escritorio: la primera fila lleva los 3 primeros visibles y el resto fluye al masonry.
   // En tablet/mobile la fila de 3 no existe (la card no cabe tan angosta): todo va al masonry.
   if(wide.matches){
-   lead.replaceChildren(...visible.slice(0,3));
-   grid.replaceChildren(...visible.slice(3),...cards.filter(card=>card.hidden));
+   lead.replaceChildren(...batch.slice(0,3));
+   grid.replaceChildren(...batch.slice(3),...cards.filter(card=>card.hidden));
   }else{
    lead.replaceChildren();
-   grid.replaceChildren(...visible,...cards.filter(card=>card.hidden));
+   grid.replaceChildren(...batch,...cards.filter(card=>card.hidden));
   }
+  const remaining=visible.length-cut;
+  moreBtn.hidden=remaining===0;
+  if(remaining>0)moreLabel.textContent=`Mostrar ${remaining} ${remaining===1?'encuentro':'encuentros'} más`;
   empty.hidden=visible.length>0;
   count.textContent=`${visible.length} ${visible.length===1?'encuentro':'encuentros'}`;
-  if(stagger&&!reduce)visible.forEach((card,index)=>{
+  // Con pocos resultados el riel de 600px dominaría una vista casi vacía:
+  // los rieles se retiran y el resultado ocupa todo el ancho.
+  wallBody.classList.toggle('is-thin',wide.matches&&visible.length<=3);
+  // Filtros: la escalera re-entra completa. "Mostrar más": solo los recién llegados.
+  if(mode!=='silent'&&!reduce)batch.slice(from).forEach((card,index)=>{
    card.style.animation='none';void card.offsetWidth;
-   card.style.animation=`card-in .55s cubic-bezier(.2,.8,.2,1) ${Math.min(index,10)*45}ms both`;
+   card.style.animation=`card-in .55s cubic-bezier(.2,.8,.2,1) ${Math.min(cut-batch.slice(from).length+index,10)*45}ms both`;
   });
  }
- wide.addEventListener('change',()=>update(false));
- filters.forEach(button=>button.addEventListener('click',()=>{league=button.dataset.league!;filters.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});update();}));
- statusFilters.forEach(button=>button.addEventListener('click',()=>{status=button.dataset.status!;statusFilters.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});update();}));
- search.addEventListener('input',()=>update(false));
- daySelect.addEventListener('change',update);
- update();
+ const reset=()=>{shown=INITIAL();update('all');};
+ wide.addEventListener('change',()=>{shown=Math.max(shown,INITIAL());update('silent');});
+ compact.addEventListener('change',()=>{shown=Math.max(shown,INITIAL());update('silent');});
+ filters.forEach(button=>button.addEventListener('click',()=>{league=button.dataset.league!;filters.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});reset();}));
+ statusFilters.forEach(button=>button.addEventListener('click',()=>{status=button.dataset.status!;statusFilters.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});reset();}));
+ search.addEventListener('input',()=>{shown=INITIAL();update('silent');});
+ daySelect.addEventListener('change',reset);
+ moreBtn.addEventListener('click',()=>{
+  const visible=cards.filter(card=>!card.hidden);
+  const from=Math.min(shown,visible.length);
+  shown=Math.min(shown+STEP(),visible.length);
+  update('new',from);
+ });
+ shown=INITIAL();
+ update('all');
 </script>
 </Layout>

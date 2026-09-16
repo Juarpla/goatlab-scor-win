@@ -1,5 +1,5 @@
 /** Common fixture boundary. Provider IDs are namespaced; absent metrics remain null. */
-import { sameClub } from './teams.js';
+import { sameClub, normalize } from './teams.js';
 
 export const competitions = [
   { id: 'champions', name: 'Champions League', api: 2, fd: 'CL' },
@@ -155,7 +155,7 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
  * the current season standings of its competitions). Only the TOTAL table;
  * knockout-style stages are skipped rather than half-rendered.
  */
-export async function getStandings({ competition, season, top = 10, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
+export async function getStandings({ competition, season, top = 20, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
   if (!env.FOOTBALL_DATA_KEY || !competition.fd) return null;
   try {
     const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${competition.fd}/standings?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
@@ -176,6 +176,62 @@ export async function getStandings({ competition, season, top = 10, env = {}, fe
       })),
     };
   } catch (error) { logger.warn(`Tabla (${competition.id}): ${error.message}`); return null; }
+}
+
+/**
+ * Goleadores de la temporada (football-data.org). La v4 devuelve el top de la
+ * competición con goles, asistencias, penaltis y partidos; ausencias honestas
+ * quedan en null. Europa League exceptuada (sin `fd`).
+ */
+export async function getScorers({ competition, season, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
+  if (!env.FOOTBALL_DATA_KEY || !competition.fd) return [];
+  try {
+    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${competition.fd}/scorers?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
+    if (!Array.isArray(data.scorers)) return [];
+    return data.scorers.map(row => ({
+      player: row.player?.name ?? null,
+      team: row.team?.name ?? row.team?.shortName ?? null,
+      goals: row.goals ?? null,
+      assists: row.assists ?? null,
+      penalties: row.penalties ?? null,
+      playedMatches: row.playedMatches ?? null,
+    })).filter(row => row.player);
+  } catch (error) { logger.warn(`Goleadores FD (${competition.id}): ${error.message}`); return []; }
+}
+
+/**
+ * Fusión de goleadores: Football-Data.org manda en goles/asistencias/penaltis/
+ * partidos; Bzzoiro conserva playerId/teamId/rank. Los sin pareja honesta
+ * quedan con nulos, nunca se inventan ids.
+ */
+export function fuseScorers(bzzoiroRows, fdRows) {
+  if (!bzzoiroRows?.length) return bzzoiroRows ?? null;
+  if (!fdRows?.length) return bzzoiroRows;
+  const byPlayer = new Map(fdRows.map(row => [normalize(row.player), row]));
+  const seen = new Set();
+  const fused = bzzoiroRows.map(row => {
+    const fd = byPlayer.get(normalize(row.player));
+    if (!fd) return row;
+    seen.add(normalize(row.player));
+    return {
+      ...row,
+      value: fd.goals ?? row.value,
+      goals: fd.goals ?? row.value,
+      assists: fd.assists ?? null,
+      penalties: fd.penalties ?? null,
+      matches: fd.playedMatches ?? row.matches,
+    };
+  });
+  for (const fd of fdRows) {
+    if (seen.has(normalize(fd.player))) continue;
+    fused.push({
+      rank: null, player: fd.player, playerId: null, position: null,
+      team: fd.team, teamId: null, value: fd.goals,
+      goals: fd.goals, assists: fd.assists, penalties: fd.penalties,
+      matches: fd.playedMatches,
+    });
+  }
+  return fused;
 }
 
 /**
