@@ -85,6 +85,11 @@
 .fuentes.js-anim .f-stage.in-view .f-badge--alt{animation-delay:-1.9s}
 @keyframes f-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.055)}}
 
+/* La ventana de FD marcha: los guiones lime recorren el marco en sentido horario
+   (periodo de guion 10 = 5+5 → loop perfecto con pathLength=100). */
+.fuentes.js-anim .f-stage.in-view .f-march{animation:f-marcha 1.3s linear infinite}
+@keyframes f-marcha{to{stroke-dashoffset:-10}}
+
 /* Dial: el arco sigue al scroll; los ticks y la aguja los pone el script */
 .f-dial-arc{stroke-dashoffset:calc(100 - 100*var(--freq-progress))}
 .f-scene .f-dial-tick{fill:var(--surface);stroke:var(--line);transition:fill 320ms ease-out,stroke 320ms ease-out}
@@ -125,6 +130,6 @@
 /* ---- Movimiento reducido: todo quieto y visible ---- */
 @media(prefers-reduced-motion:reduce){
  .f-stage--pin{position:relative;top:auto}
- .fuentes .pulse,.fuentes .f-badge{animation:none}
+ .fuentes .pulse,.fuentes .f-badge,.fuentes .f-march{animation:none}
  .fuentes .f-flow{display:none}
 }
