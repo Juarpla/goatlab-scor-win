@@ -1,0 +1,16 @@
+---
+const { items = [] } = Astro.props;
+---
+<div class="panel pulse">
+ <div class="chart-heading"><h3>El pulso de la base</h3><span>últimos 180 días · resultados reales</span></div>
+ <ol class="pulse-list">
+  {items.map(item => (
+   <li>
+    <span class="pulse-rank" aria-hidden="true">{items.indexOf(item) + 1}</span>
+    <span class="pulse-fact"><span class="pulse-label">{item.label}</span><strong>{item.fact}</strong></span>
+    <span class="pulse-detail">{item.detail}</span>
+   </li>
+  ))}
+ </ol>
+ <p class="panel-note">Cada fila es un hecho de la base de resultados; nada aquí es estimación.</p>
+</div>

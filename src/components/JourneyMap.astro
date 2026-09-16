@@ -1,0 +1,95 @@
+---
+import Icon from './Icon.astro';
+
+const { pins = [], unlocated = [] } = Astro.props;
+const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const capacity = value => value == null ? null : value.toLocaleString('es-PE');
+---
+<div class="map-block">
+  <div class="map-frame">
+   <img src="/img/world-dots.png" alt="" width={2160} height={816} loading="lazy" decoding="async"/>
+   <div class="map-pins">
+    {pins.map(pin => (
+     <button class="pin" data-pin={pin.id} style={`--x:${pin.x}%;--y:${pin.y}%`} aria-pressed="false" aria-label={`Ver los encuentros en ${pin.city}, ${pin.country}`}>
+      <i aria-hidden="true"></i>
+     </button>
+    ))}
+   </div>
+   {pins.map(pin => (
+    <div class="map-card" data-for={pin.id} hidden tabindex="-1">
+     <header>
+      <div><strong>{pin.city}</strong><small>{pin.country} · {pin.matches.length === 1 ? '1 encuentro' : `${pin.matches.length} encuentros`}</small></div>
+      <button class="map-close" aria-label="Cerrar la ficha de la sede"><Icon name="close" size={14}/></button>
+     </header>
+     <ul>
+      {pin.matches.map(m => (
+       <li>
+        <span class="map-teams">{m.home} <em>vs.</em> {m.away}</span>
+        <span class="map-meta">
+         <time datetime={m.kickoff} data-kickoff={m.kickoff} data-format="datetime">{kickoffLabel(m.kickoff)}</time>
+         {m.stadium && <span> · {m.stadium}</span>}
+         {m.capacity != null && <span> · {capacity(m.capacity)} plazas</span>}
+         <b class="map-min" hidden data-kickoff={m.kickoff}></b>
+        </span>
+       </li>
+      ))}
+     </ul>
+    </div>
+   ))}
+  </div>
+  <footer class="map-foot">
+   <p class="map-legend"><i class="dot dot-pin" aria-hidden="true"></i> sede con encuentros <i class="dot dot-live" aria-hidden="true"></i> en vivo, el punto parpadea <span aria-hidden="true">·</span> horas del visitante</p>
+   {unlocated.length > 0 && <p class="map-lost">Sin sede en el mapa: {unlocated.map((m, index) => (<>{index > 0 && ' · '}<a href={`/partido/${m.id}/`}>{m.home} vs. {m.away}</a></>))}</p>}
+  </footer>
+</div>
+<script>
+ import { initLocalTimes } from '../lib/local-time.js';
+ initLocalTimes();
+
+ // Parpadeo y minuto estimado: se calculan en el cliente sobre los kickoffs
+ // locales a la build. Ventana en vivo acordada: kickoff → +1 h 50 min.
+ const LIVE_WINDOW_MS = 110 * 60_000;
+ const pins = [...document.querySelectorAll<HTMLButtonElement>('.pin')];
+ const cards = new Map([...document.querySelectorAll<HTMLElement>('.map-card')].map(card => [card.dataset.for!, card]));
+ const minuteLabel = (kickoff: number) => {
+  const elapsed = (Date.now() - kickoff) / 60_000;
+  if (elapsed < 0) return null;
+  if (elapsed <= 45) return `min. ${Math.floor(elapsed) + 1} est.`;
+  if (elapsed <= 60) return 'descanso est.';
+  if (elapsed <= 105) return `min. ${Math.floor(elapsed) - 15} est.`;
+  return 'final est.';
+ };
+ const evaluateLive = () => {
+  for (const [id, card] of cards) {
+   const kickoffs = [...card.querySelectorAll('[data-kickoff]')].map(node => Date.parse((node as HTMLElement).dataset.kickoff!));
+   const live = kickoffs.some(kickoff => Date.now() - kickoff >= 0 && Date.now() - kickoff < LIVE_WINDOW_MS);
+   pins.find(pin => pin.dataset.pin === id)?.classList.toggle('live', live);
+   card.querySelectorAll<HTMLElement>('.map-min').forEach((badge, index) => {
+    const label = live ? minuteLabel(kickoffs[index]) : null;
+    badge.textContent = label ?? '';
+    badge.hidden = label == null;
+   });
+  }
+ };
+ evaluateLive();
+ setInterval(evaluateLive, 30_000);
+
+ const open = (pin: HTMLButtonElement) => {
+  for (const [id, card] of cards) {
+   const on = id === pin.dataset.pin;
+   card.hidden = !on;
+   const other = document.querySelector<HTMLButtonElement>(`[data-pin="${id}"]`);
+   other?.setAttribute('aria-pressed', String(on));
+   other?.classList.toggle('active', on);
+  }
+  const card = cards.get(pin.dataset.pin!);
+  card?.focus();
+ };
+ pins.forEach(pin => pin.addEventListener('click', () => open(pin)));
+ const closeAll = () => {
+  document.querySelectorAll('.map-card').forEach(card => (card.hidden = true));
+  pins.forEach(pin => { pin.classList.remove('active'); pin.setAttribute('aria-pressed', 'false'); });
+ };
+ document.querySelectorAll<HTMLElement>('.map-close').forEach(button => button.addEventListener('click', closeAll));
+ document.addEventListener('keydown', event => { if (event.key === 'Escape') closeAll(); });
+</script>

@@ -1,0 +1,11 @@
+---
+interface Props {
+  /** Texto accesible corto de lo que muestra la pantalla */
+  label?: string;
+}
+const { label = 'Vista del producto GoatLab en un teléfono' } = Astro.props;
+---
+<figure class:list={['phone-mockup']} role="img" aria-label={label}>
+ <span class="phone-notch" aria-hidden="true"></span>
+ <div class="phone-screen"><slot/></div>
+</figure>

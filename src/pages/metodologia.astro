@@ -1,4 +1,136 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/AdSlot.astro';
+import MethodStage from '../components/MethodStage.astro';
+import PhoneMockup from '../components/PhoneMockup.astro';
+import '../styles/metodologia.css';
+import evaluation from '../../public/data/evaluation.json';
+const poisson = evaluation.poisson?.oneX2;
+const ensembleSample = evaluation.ensemble?.oneX2?.sampleSize;
+const gateLine = poisson
+ ? `${poisson.sampleSize} partidos en el backtest Poisson${ensembleSample ? `, ${ensembleSample} evaluados para el ensemble` : '; el ensemble todavía no acumula capturas evaluadas'}`
+ : `${poisson?.sampleSize ?? 0} partidos en el backtest Poisson`;
+const gateTail = evaluation.published ? ', con el gate de publicación superado' : ', con el gate de publicación todavía sin superar';
+const evaluatedAt = new Intl.DateTimeFormat('es', { dateStyle: 'long' }).format(new Date(evaluation.evaluatedAt));
 ---
-<Layout title="Fuentes y metodología — GoatLab"><main id="main" class="wrap prose"><a class="back-link" href="/">Volver a GoatLab</a><h1>Los datos necesitan contexto.</h1><p>GoatLab distingue hechos históricos, estimaciones estadísticas y explicaciones generadas con IA. Ninguna de estas capas sustituye a las otras.</p><h2>Qué estás viendo</h2><p>Todos los encuentros provienen de proveedores deportivos: calendario, marcadores, forma reciente y estadísticas. No publicamos cifras inventadas; cuando un dato no está disponible, lo decimos.</p><h2>Fuentes deportivas</h2><p><a href="https://www.api-football.com/">API-Football</a> aporta los marcadores del día con actualización frecuente. <a href="https://www.football-data.org/">Football-Data.org</a> completa la ventana de próximos días y el historial de resultados que alimenta las gráficas de forma. <a href="https://sports.bzzoiro.com/">Bzzoiro Sports Data</a> aporta estadísticas con goles esperados y la cronología de eventos de cada partido. El plan gratuito de cada fuente tiene límites; cuando una falla, la publicación identifica qué sirvió cada una.</p><p>Las consultas se comparten entre visitantes. La versión inicial prepara datos periódicamente; no ofrece posiciones del balón ni seguimiento continuo. Cada publicación de datos identifica su fuente y actualización.</p><h2>Frecuencia no significa probabilidad</h2><p>«Anotó en 7 de 10 partidos» describe una muestra histórica. No equivale a una probabilidad del 70% para el siguiente encuentro. El rival, el periodo y la disponibilidad de jugadores pueden cambiar el contexto.</p><h2>Predicciones, de forma progresiva</h2><p>El primer motor experimental utiliza una distribución Poisson para explorar resultados y goles a partir de tasas esperadas. Supone independencia entre goles de ambos equipos y no representa por sí solo todas las dinámicas del fútbol.</p><p>No hay modelos validados publicados todavía. Antes de mostrar porcentajes reales se necesita una evaluación temporal con partidos no utilizados en el ajuste, comparación con una referencia sencilla y revisión de calibración. Si no existe evidencia suficiente, no se muestra una estimación.</p><h2>El papel de la IA</h2><p>La IA prepara explicaciones con los datos proporcionados. No es una fuente de resultados en vivo ni un mecanismo validado de probabilidades. Sus textos pueden contener errores; se identificarán como generados con IA y señalarán las limitaciones de los datos disponibles.</p><h2>Publicidad y lectura</h2><p>Los espacios publicitarios están separados del análisis. En esta versión no hay anuncios activos. GoatLab no enlaza a casas de apuestas ni invita a apostar.</p></main></Layout>
+<Layout title="Metodología — GoatLab" description="Cómo construye GoatLab su análisis: datos históricos, estimaciones estadísticas evaluadas y explicaciones con IA. Fuentes declaradas, sin fuga temporal y sin casas de apuestas.">
+<main id="main" class="wrap method">
+ <a class="back-link" href="/">Volver a GoatLab</a>
+ <header class="method-hero">
+  <div class="method-hero-copy">
+   <h1>Los datos<br/>necesitan <span>contexto.</span></h1>
+   <p>GoatLab distingue tres capas: hechos históricos, estimaciones estadísticas y explicaciones generadas con IA. Ninguna sustituye a las otras. Esta guía recorre las tres; los proveedores que las alimentan están en <a href="/fuentes/">Fuentes</a>.</p>
+  </div>
+  <svg class="method-layers" viewBox="0 0 300 224" aria-hidden="true">
+   <path class="layers-rail draw" pathLength="1" d="M20 23 V179"/>
+   <circle class="layers-dot is-first" cx="20" cy="23" r="4"/>
+   <circle class="layers-dot" cx="20" cy="101" r="4"/>
+   <circle class="layers-dot" cx="20" cy="179" r="4"/>
+   <rect class="layer-plate fade" x="44" y="4" width="252" height="38" rx="10" style="--d:.15s"/>
+   <rect class="layer-plate fade" x="44" y="82" width="252" height="38" rx="10" style="--d:.30s"/>
+   <rect class="layer-plate fade" x="44" y="160" width="252" height="38" rx="10" style="--d:.45s"/>
+   <text class="layer-text fade" x="62" y="29" style="--d:.20s"><tspan class="layer-num">1</tspan> · Datos históricos</text>
+   <text class="layer-text fade" x="62" y="107" style="--d:.35s"><tspan class="layer-num">2</tspan> · Análisis con IA</text>
+   <text class="layer-text fade" x="62" y="185" style="--d:.50s"><tspan class="layer-num">3</tspan> · Criterio del editor</text>
+  </svg>
+ </header>
+
+ <div class="story method-story">
+  <div class="story-notes">
+   <section class="story-chapter is-active" id="datos-historicos" data-chapter="datos">
+    <h2><span class="chapter-num">1.</span> Datos históricos</h2>
+    <p>Todos los encuentros provienen de proveedores deportivos: calendario, marcadores, forma reciente, estadísticas completas, historial cara a cara y alineaciones. No publicamos cifras inventadas; cuando un dato no está disponible, lo decimos.</p>
+    <h3>Frecuencia no significa probabilidad</h3>
+    <p>«Anotó en 7 de 10 partidos» describe una muestra histórica. No equivale a una probabilidad del 70% para el siguiente encuentro: el rival, el periodo y la disponibilidad de jugadores pueden cambiar el contexto.</p>
+    <h3>Predicciones, de forma progresiva</h3>
+    <p>El veredicto GoatLab combina una distribución Poisson calculada con las tasas de goles recientes de cada equipo, el modelo CatBoost de Bzzoiro capturado antes del partido y señales de rendimiento — racha y forma, un índice multi-métrica (tiros a puerta, posesión, córners, faltas, tarjetas y goles esperados de la base histórica) y el historial cara a cara cuando hay tres cruces o más. La localía y las ausencias confirmadas entran como contexto cualitativo: acompañan la lectura, no mueven el número.</p>
+    <p>Cada insumo declara su peso en la página del partido; lo que falta, se dice.</p>
+    <p>Los porcentajes solo se publican cuando la evaluación histórica independiente supera su referencia. La evaluación compara cada estimación con los resultados reales usando únicamente datos anteriores a cada partido (sin fuga temporal) y contra la distribución empírica de la muestra. Hoy: {gateLine}{gateTail}.</p>
+    <p>El motor experimental incluye una Poisson independiente para explorar resultados y goles a partir de tasas esperadas. Supone independencia entre los goles de ambos equipos y no representa por sí solo todas las dinámicas del fútbol. Si no existe evidencia suficiente, no se muestra una estimación.</p>
+    <span class="chapter-note">Proveedores y cobertura de cada dato: Fuentes.</span>
+   </section>
+   <AdSlot variant="horizontal" slotKey="metoCap1"/>
+   <section class="story-chapter" id="analisis-ia" data-chapter="ia">
+    <h2><span class="chapter-num">2.</span> Análisis con IA</h2>
+    <p>La IA prepara explicaciones con los datos proporcionados. No es una fuente de resultados en vivo ni un mecanismo validado de probabilidades.</p>
+    <p>Sus textos pueden contener errores: se identifican como generados con IA y señalan las limitaciones de los datos disponibles.</p>
+    <span class="chapter-note">Los análisis se preparan por partido y se comparten entre lectores.</span>
+   </section>
+   <AdSlot variant="rect" slotKey="metoCap2"/>
+   <section class="story-chapter" id="criterio-editor" data-chapter="editor">
+    <h2><span class="chapter-num">3.</span> Criterio del editor</h2>
+    <p>Las consultas se comparten entre visitantes. La versión inicial prepara datos de forma periódica: no ofrece posiciones del balón ni seguimiento continuo. Cada publicación identifica su fuente y su actualización.</p>
+    <p>Los espacios publicitarios están separados del análisis. En esta versión no hay anuncios activos: los espacios están reservados. GoatLab no enlaza a casas de apuestas ni invita a apostar.</p>
+    <span class="chapter-note">Los escudos provienen de Bzzoiro y se usan solo para identificar equipos y competiciones. GoatLab no está afiliado a ninguna marca, proveedor o casa de apuestas.</span>
+   </section>
+   <AdSlot variant="horizontal" slotKey="metoCierre"/>
+  </div>
+  <div class="story-stage">
+   <div class="chapter-tabs" role="group" aria-label="Ilustración del capítulo">
+    <button data-stage="datos" aria-pressed="true">Poisson y pesos</button>
+    <button data-stage="ia" aria-pressed="false">IA y límites</button>
+    <button data-stage="editor" aria-pressed="false">Criterio</button>
+   </div>
+   <MethodStage published={Boolean(evaluation.published)}/>
+   <div class="stage-source">Evaluación del {evaluatedAt} · sin fuga temporal · fuentes declaradas junto al dato</div>
+  </div>
+ </div>
+
+ <section class="method-close">
+  <div>
+   <h2>Mira los cruces<br/>con contexto.</h2>
+   <p>El muro de encuentros aplica esta metodología a los partidos de la semana: forma comparable, estadísticas del partido y veredicto con sus límites a la vista.</p>
+   <a class="primary-button" href="/encuentros/">Ver encuentros <Icon size={18}/></a>
+  </div>
+  <PhoneMockup label="Muro de encuentros de GoatLab mostrado en la pantalla de un teléfono">
+   <div class="phone-app">
+    <header class="phone-app-head"><span>Los cruces de la semana</span><i class="ia-live is-solid"></i></header>
+    <p class="phone-app-copy">Partidos de la ventana con hora local, forma G/E/P de ambos equipos y enlace al análisis completo.</p>
+    <div class="phone-skeleton" aria-hidden="true"><i></i><i></i><i></i></div>
+    <small class="phone-caption">Vista ilustrativa · sin datos reales</small>
+   </div>
+  </PhoneMockup>
+ </section>
+</main>
+<script>
+ const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];
+ const panes=[...document.querySelectorAll<HTMLElement>('[data-pane]')];
+ const chapters=[...document.querySelectorAll<HTMLElement>('[data-chapter]')];
+ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const hideTimers=new WeakMap<HTMLElement,number>();
+ let activeId='datos';
+ let manualUntil=0;
+ function activate(id:string){
+  if(!id)return;
+  buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stage===id)));
+  chapters.forEach(c=>c.classList.toggle('is-active',c.dataset.chapter===id));
+  if(activeId===id)return;
+  activeId=id;
+  panes.forEach(p=>{
+   const isTarget=p.dataset.pane===id;
+   const timer=hideTimers.get(p);
+   if(timer)window.clearTimeout(timer);
+   if(isTarget){
+    p.hidden=false;
+    p.setAttribute('aria-hidden','false');
+    p.classList.remove('is-leaving');
+    requestAnimationFrame(()=>p.classList.add('is-active'));
+   }else{
+    p.setAttribute('aria-hidden','true');
+    p.classList.remove('is-active');
+    p.classList.add('is-leaving');
+    const hide=()=>{if(p.dataset.pane!==activeId){p.classList.remove('is-leaving');p.hidden=true;}};
+    if(reducedMotion)hide();
+    else hideTimers.set(p,window.setTimeout(hide,240));
+   }
+  });
+ }
+ buttons.forEach(button=>button.addEventListener('click',()=>{manualUntil=Date.now()+1500;activate(button.dataset.stage!);document.getElementById(button.dataset.stage!)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}));
+ if(!reducedMotion){let queued=false;const update=()=>{queued=false;if(Date.now()<manualUntil)return;const marker=innerWidth<761?innerHeight*.7:innerHeight*.45;let current=chapters[0];for(const chapter of chapters){if(chapter.getBoundingClientRect().top<marker)current=chapter;}if(current)activate(current.dataset.chapter!);};window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update);}},{passive:true});}
+ const hashStageRaw=location.hash.replace('#','');
+ const hashMap={ 'datos-historicos':'datos','analisis-ia':'ia','criterio-editor':'editor' } as Record<string,string>;
+ const hashStage=hashMap[hashStageRaw]??hashStageRaw;
+ if(hashStage&&buttons.some(b=>b.dataset.stage===hashStage))activate(hashStage);
+</script>
+</Layout>

@@ -1,0 +1,9 @@
+---
+const { slides = [] } = Astro.props;
+---
+{slides.length > 0 && <div class="panel journey-band">
+ <div class="chart-heading"><h3>El termómetro</h3><span>de la base histórica</span></div>
+ <div class="band-rotor" role="group" aria-label="Cifras de la base histórica">
+  {slides.map(slide => <div class="band-slide"><span class="band-figure band-figure-sm">{slide.figure}</span><span class="band-line">{slide.line}</span></div>)}
+ </div>
+</div>}

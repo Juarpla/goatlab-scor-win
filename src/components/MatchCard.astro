@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import TeamLogo from './TeamLogo.astro';
+
+const { match, competitionCode, competitionName, kickoffLabel, formHome = null, formAway = null } = Astro.props;
+const LIVE = new Set(['LIVE', 'HT', 'ET', 'BT', 'P', 'SUSP', 'INT']);
+const isLive = LIVE.has(match.status);
+const isFinished = match.status === 'FT' || match.status === 'AET' || match.status === 'PEN';
+const statusLabel = isLive ? `EN VIVO${match.minute ? ` · ${match.minute}'` : ''}` : isFinished ? 'FINAL' : null;
+const sides = [
+  { name: match.home, teamId: match.teamIds?.home ?? null, form: formHome },
+  { name: match.away, teamId: match.teamIds?.away ?? null, form: formAway },
+];
+---
+<a href={`/partido/${match.id}/`} class="match-card" data-fixture data-league-id={match.competition} data-date={match.kickoff.slice(0, 10)} data-stage={isLive ? 'live' : isFinished ? 'finished' : 'upcoming'} data-teams={`${match.home} ${match.away} ${match.venue ?? ''}`.toLowerCase()}>
+  <span class="card-top">
+    <span class="card-league">{competitionCode}</span>
+    {statusLabel && <span class:list={['card-status', { live: isLive }]}>{isLive && <i class="live-dot" aria-hidden="true"></i>}{statusLabel}</span>}
+    <time datetime={match.kickoff} class="card-kickoff" data-kickoff={match.kickoff} data-format="datetime" data-venue-tz={match.venueTz ?? undefined}>{kickoffLabel}</time>
+  </span>
+  <span class="card-teams">
+    {sides.map(side => (
+      <span class="card-team">
+        <TeamLogo name={side.name} teamId={side.teamId} size={28}/>
+        <span class="card-team-name">{side.name}</span>
+        <span class="card-form" aria-label={side.form ? `Forma reciente de ${side.name}: ${side.form.form.map(l => l === 'G' ? 'ganó' : l === 'E' ? 'empató' : 'perdió').join(', ')}` : `Sin forma suficiente de ${side.name}`}>{side.form ? side.form.form.map(l => <b class:list={['form-cell', l]} title={l === 'G' ? 'Ganó' : l === 'E' ? 'Empató' : 'Perdió'}>{l}</b>) : <b class="form-cell E" title="Sin forma suficiente">–</b>}</span>
+      </span>
+    ))}
+  </span>
+  <span class="card-footer"><span class="card-where">{match.venue ?? competitionName}</span><span class="card-cta">Ver análisis <Icon size={16}/></span></span>
+</a>

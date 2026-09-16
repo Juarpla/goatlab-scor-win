@@ -1,0 +1,115 @@
+---
+import PhoneMockup from './PhoneMockup.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  published: boolean;
+}
+
+const { published } = Astro.props;
+
+const inputs = [
+  ['Poisson', 'tasas de goles recientes de cada equipo'],
+  ['CatBoost · Bzzoiro', 'capturado antes del partido'],
+  ['Señales de rendimiento', 'racha y forma · índice multi-métrica · H2H desde 3 cruces'],
+] as const;
+
+const editorItems = [
+  'Fuente declarada en cada publicación',
+  'Actualización identificada junto al dato',
+  'Publicidad en espacios separados del análisis',
+  'Sin enlaces a casas de apuestas ni invitaciones a apostar',
+] as const;
+---
+<div class="stage-pane is-active" data-pane="datos" aria-hidden="false">
+ <div class="stage-cast">
+  <span>Anotó en 7 de 10 partidos</span>
+  <Icon name="arrow" size={16}/>
+  <strong>No es 70%: el contexto decide</strong>
+ </div>
+ <svg class="poisson-fig" viewBox="0 0 420 290" aria-hidden="true">
+  <line class="fig-grid" x1="44" y1="88" x2="400" y2="88"/>
+  <line class="fig-grid" x1="44" y1="134" x2="400" y2="134"/>
+  <line class="fig-grid" x1="44" y1="180" x2="400" y2="180"/>
+  <line class="fig-axis" x1="44" y1="38" x2="44" y2="242"/>
+  <line class="fig-axis" x1="44" y1="242" x2="400" y2="242"/>
+  <rect class="fig-bar grow" x="62" y="201" width="34" height="41" style="--d:0.10s"/>
+  <rect class="fig-bar grow" x="108" y="131" width="34" height="111" style="--d:0.16s"/>
+  <rect class="fig-bar is-peak grow" x="154" y="92" width="34" height="150" style="--d:0.22s"/>
+  <rect class="fig-bar grow" x="200" y="107" width="34" height="135" style="--d:0.28s"/>
+  <rect class="fig-bar grow" x="246" y="150" width="34" height="92" style="--d:0.34s"/>
+  <rect class="fig-bar grow" x="292" y="192" width="34" height="50" style="--d:0.40s"/>
+  <rect class="fig-bar grow" x="338" y="220" width="34" height="22" style="--d:0.46s"/>
+  <path class="fig-curve draw" pathLength="1" d="M40 236 C 66 216, 92 158, 124 116 S 158 74, 184 82 S 222 126, 256 168 S 298 214, 334 224 S 384 234, 400 236"/>
+  <text class="fig-label" x="36" y="34">P(k)</text>
+  <text class="fig-label" x="79" y="262">0</text>
+  <text class="fig-label" x="125" y="262">1</text>
+  <text class="fig-label" x="171" y="262">2</text>
+  <text class="fig-label" x="217" y="262">3</text>
+  <text class="fig-label" x="263" y="262">4</text>
+  <text class="fig-label" x="309" y="262">5</text>
+  <text class="fig-label" x="355" y="262">6</text>
+  <text class="fig-caption" x="400" y="284" text-anchor="end">k = goles por partido</text>
+ </svg>
+ <ul class="input-list">
+  {inputs.map(([name, detail]) => <li><i class="input-dot"></i><div><strong>{name}</strong><small>{detail}</small></div></li>)}
+ </ul>
+ <p class="stage-note">Sin cifras inventadas: cuando un insumo falta, se declara.</p>
+</div>
+<div class="stage-pane" data-pane="ia" aria-hidden="true" hidden>
+ <div class="ia-flow">
+  <svg class="pipe-fig" viewBox="0 0 340 300" aria-hidden="true">
+   <path class="pipe-rail" d="M30 34 V262"/>
+   <circle class="pipe-dot" cx="30" cy="34" r="4"/>
+   <circle class="pipe-dot" cx="30" cy="110" r="4"/>
+   <circle class="pipe-dot is-gate" cx="30" cy="186" r="4"/>
+   <circle class="pipe-dot is-waiting" cx="30" cy="262" r="4"/>
+   <g class="pipe-node">
+    <rect x="52" y="8" width="262" height="52" rx="12"/>
+    <text class="pipe-title" x="70" y="30">Datos</text>
+    <text class="pipe-sub" x="70" y="47">calendario · marcadores · estadísticas</text>
+   </g>
+   <g class="pipe-node">
+    <rect x="52" y="84" width="262" height="52" rx="12"/>
+    <text class="pipe-title" x="70" y="106">Modelos</text>
+    <text class="pipe-sub" x="70" y="123">Poisson · CatBoost · señales</text>
+   </g>
+   <g class="pipe-node is-gate">
+    <rect x="52" y="160" width="262" height="52" rx="12"/>
+    <text class="pipe-title" x="70" y="182">Gate de publicación</text>
+    <text class="pipe-sub" x="70" y="199">evaluación sin fuga temporal</text>
+   </g>
+   <g class="pipe-node is-waiting">
+    <rect x="52" y="236" width="262" height="52" rx="12"/>
+    <text class="pipe-title" x="70" y="258">Publicación de porcentajes</text>
+    <text class="pipe-sub" x="70" y="275">{published ? 'gate superado · evaluación publicada' : 'en espera del gate'}</text>
+   </g>
+  </svg>
+  <PhoneMockup label="Análisis con IA mostrado en la pantalla de un teléfono">
+   <div class="phone-app">
+    <header class="phone-app-head"><span>Análisis con IA</span><i class="ia-live"></i></header>
+    <p class="phone-app-copy">Explicación del partido preparada con los datos verificados: qué pesó, qué faltó y qué limita la lectura.</p>
+    <div class="ia-chips"><span>Generado con IA</span><span>Puede contener errores</span></div>
+   </div>
+  </PhoneMockup>
+ </div>
+ <p class="stage-note">La IA no es fuente de resultados en vivo ni de probabilidades validadas: acompaña la lectura con los datos disponibles.</p>
+</div>
+<div class="stage-pane" data-pane="editor" aria-hidden="true" hidden>
+ <div class="editor-flow">
+  <svg class="seal-fig" viewBox="0 0 150 150" aria-hidden="true">
+   <circle cx="75" cy="75" r="66"/>
+   <circle class="seal-ring draw" cx="75" cy="75" r="52" pathLength="1"/>
+   <path class="seal-check draw" pathLength="1" d="M52 76 L69 93 L100 56"/>
+  </svg>
+  <ul class="editor-list">
+   {editorItems.map(item => <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>{item}</li>)}
+  </ul>
+ </div>
+ <div class="ad-split" aria-hidden="true">
+  <span class="split-analysis"><i></i>Análisis</span>
+  <span class="split-rule"></span>
+  <span class="split-ads">Publicidad</span>
+ </div>
+ <p class="stage-note">El bloque publicitario queda fuera de la lectura y del gráfico, y se etiqueta siempre.</p>
+</div>

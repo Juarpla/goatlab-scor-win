@@ -1,0 +1,287 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/AdSlot.astro';
+import '../styles/fuentes.css';
+---
+<Layout title="Fuentes — GoatLab" description="Las tres fuentes de datos de GoatLab —marcadores, ventana e historial, estadísticas avanzadas— y la cadencia con que se actualizan.">
+<main id="main" class="wrap fuentes">
+ <a class="back-link" href="/"><Icon size={16}/> Volver a GoatLab</a>
+
+ <section class="f-hero">
+  <div class="f-hero-copy">
+   <h1>De dónde salen<br/><span>los datos.</span></h1>
+   <p>Cada cifra publicada identifica su fuente y su fecha de consulta. GoatLab trabaja con planes gratuitos de proveedores deportivos; cuando una fuente falla, la publicación indica qué sirvió cada una.</p>
+   <p>Tres proveedores alimentan el tablero: marcadores, ventana e historial, y estadísticas avanzadas.</p>
+   <p class="f-hero-links"><a href="#marcadores">Ver las tres fuentes</a><a href="/metodologia/">Metodología</a></p>
+  </div>
+  <div class="f-stage f-stage--hero" aria-hidden="true">
+   <svg class="f-scene" viewBox="0 0 560 340" focusable="false">
+    <g class="pop" style="--d:0ms">
+     <rect x="18" y="34" width="92" height="50" rx="8" class="s-plate"/>
+     <text x="64" y="66" text-anchor="middle" class="t-disp t-mono">AF</text>
+     <text x="64" y="106" text-anchor="middle" class="t-name">API-FOOTBALL</text>
+    </g>
+    <g class="pop" style="--d:110ms">
+     <rect x="18" y="145" width="92" height="50" rx="8" class="s-plate"/>
+     <text x="64" y="177" text-anchor="middle" class="t-disp t-mono">FD</text>
+     <text x="64" y="217" text-anchor="middle" class="t-name">FOOTBALL-DATA.ORG</text>
+    </g>
+    <g class="pop" style="--d:220ms">
+     <rect x="18" y="256" width="92" height="50" rx="8" class="s-plate"/>
+     <text x="64" y="288" text-anchor="middle" class="t-disp t-mono">BZ</text>
+     <text x="64" y="328" text-anchor="middle" class="t-name">BZZOIRO</text>
+    </g>
+    <path d="M110 59 C190 59 208 170 295 170" class="s-rule draw" style="--d:300ms" pathLength="100" stroke-width="1.5"/>
+    <path d="M110 170 H295" class="s-rule draw" style="--d:240ms" pathLength="100" stroke-width="1.5"/>
+    <path d="M110 281 C190 281 208 170 295 170" class="s-rule draw" style="--d:360ms" pathLength="100" stroke-width="1.5"/>
+    <circle cx="310" cy="170" r="15" class="s-rule pop" style="--d:420ms" stroke-width="1.5"/>
+    <circle cx="310" cy="170" r="7" class="s-dot-signal pop" style="--d:480ms"/>
+    <path d="M325 170 H372" class="s-ink draw" style="--d:520ms" pathLength="100" stroke-width="2"/>
+    <g class="pop" style="--d:560ms">
+     <rect x="372" y="98" width="168" height="144" rx="12" class="s-panel"/>
+     <text x="388" y="120" class="t-label">MARCADORES DEL DÍA</text>
+     <path d="M388 132 H524" class="s-rule"/>
+     <rect x="388" y="146" width="56" height="34" rx="6" class="s-fill"/>
+     <rect x="484" y="146" width="56" height="34" rx="6" class="s-fill"/>
+     <text x="464" y="172" text-anchor="middle" class="t-score" style="fill:var(--muted)">:</text>
+     <circle cx="400" cy="206" r="3.5" class="s-dot-signal pulse"/>
+     <text x="410" y="210" class="t-label">EN VIVO</text>
+     <path d="M388 224 H500" class="s-rule"/>
+     <path d="M388 236 H464" class="s-rule"/>
+    </g>
+   </svg>
+  </div>
+ </section>
+
+ <section class="f-chapter" id="marcadores">
+  <div class="f-copy">
+   <h2><a href="https://www.api-football.com/">API-Football</a></h2>
+   <p>Aporta los marcadores del día con actualización frecuente.</p>
+  </div>
+  <div class="f-stage">
+   <svg class="f-scene" viewBox="0 0 480 300" role="img" aria-label="Esquema del marcador del día: dos equipos, hora local y lista de encuentros" focusable="false">
+    <g class="pop" style="--d:0ms">
+     <rect x="0" y="0" width="44" height="30" rx="6" class="s-fill"/>
+     <text x="22" y="20" text-anchor="middle" class="t-disp t-mono-s">AF</text>
+    </g>
+    <text x="60" y="20" class="t-label">MARCADORES DEL DÍA</text>
+    <circle cx="412" cy="16" r="3.5" class="s-dot-signal pulse"/>
+    <text x="476" y="20" text-anchor="end" class="t-label">EN VIVO</text>
+    <path d="M0 40 H480" class="s-rule"/>
+    <g class="pop" style="--d:140ms">
+     <circle cx="110" cy="130" r="26" class="s-fill"/>
+     <circle cx="110" cy="130" r="10" class="s-rule"/>
+    </g>
+    <text x="240" y="146" text-anchor="middle" class="t-score pop" style="--d:280ms">:</text>
+    <g class="pop" style="--d:200ms">
+     <circle cx="370" cy="130" r="26" class="s-fill"/>
+     <circle cx="370" cy="130" r="10" class="s-rule"/>
+    </g>
+    <g class="pop" style="--d:380ms">
+     <rect x="188" y="178" width="104" height="28" rx="14" class="s-rule"/>
+     <text x="240" y="196" text-anchor="middle" class="t-label">HORA LOCAL</text>
+    </g>
+    <g class="pop" style="--d:460ms">
+     <circle cx="52" cy="236" r="3" class="s-dot-signal"/>
+     <path d="M64 236 H420" class="s-rule"/>
+    </g>
+    <g class="pop" style="--d:520ms">
+     <circle cx="52" cy="258" r="3" class="s-dot-idle"/>
+     <path d="M64 258 H420" class="s-rule"/>
+    </g>
+    <g class="pop" style="--d:580ms">
+     <circle cx="52" cy="280" r="3" class="s-dot-idle"/>
+     <path d="M64 280 H380" class="s-rule"/>
+    </g>
+   </svg>
+   <p class="f-note pop" style="--d:620ms">api-football.com · plan gratuito · marcadores del día</p>
+  </div>
+ </section>
+
+ <section class="f-chapter f-chapter--flip" id="ventana">
+  <div class="f-copy">
+   <h2><a href="https://www.football-data.org/">Football-Data.org</a></h2>
+   <p>Completa la ventana de próximos días, el historial de resultados y las tablas de posición que alimentan las gráficas de forma.</p>
+  </div>
+  <div class="f-stage">
+   <svg class="f-scene" viewBox="0 0 480 300" role="img" aria-label="Calendario de próximos días con una ventana resaltada, más historial y tablas" focusable="false">
+    <g class="pop" style="--d:0ms">
+     <rect x="0" y="0" width="44" height="30" rx="6" class="s-fill"/>
+     <text x="22" y="20" text-anchor="middle" class="t-disp t-mono-s">FD</text>
+    </g>
+    <text x="60" y="20" class="t-label">VENTANA DE PRÓXIMOS DÍAS</text>
+    {[0,1,2].map(r => [0,1,2,3,4,5,6].map(i => {
+     const filled = (r === 0 && (i === 2 || i === 4)) || (r === 1 && (i === 1 || i === 3 || i === 5)) || (r === 2 && i === 2);
+     const x = 28 + i * 62; const y = 58 + r * 54;
+     return <rect x={x} y={y} width="52" height="44" rx="6" class={filled ? 's-fill pop' : 's-rule pop'} style={`--d:${(r * 7 + i) * 26}ms`}/>;
+    }))}
+    <circle cx="240" cy="134" r="4" class="s-dot-signal pop" style="--d:600ms"/>
+    <rect x="84" y="106" width="312" height="56" rx="8" class="s-signal pop" style="--d:640ms;stroke-dasharray:5 5" pathLength="100"/>
+    <text x="404" y="138" class="t-label" style="fill:var(--accent)">VENTANA</text>
+    <g class="pop" style="--d:700ms">
+     <path d="M28 246 H452" class="s-rule"/>
+     <text x="28" y="272" class="t-label">HISTORIAL · TABLAS DE POSICIÓN</text>
+    </g>
+   </svg>
+   <p class="f-note pop" style="--d:720ms">football-data.org · plan gratuito · ventana, historial y tablas</p>
+  </div>
+ </section>
+
+ <section class="f-chapter" id="avanzadas">
+  <div class="f-copy">
+   <h2><a href="https://sports.bzzoiro.com/">Bzzoiro Sports Data</a></h2>
+   <p>Estadísticas con goles esperados (incluidas las cifras por cada mitad), la cronología de eventos, el historial cara a cara, las alineaciones publicadas y el modelo de predicción CatBoost.</p>
+  </div>
+  <div class="f-stage">
+   <svg class="f-scene" viewBox="0 0 480 300" role="img" aria-label="Curva escalonada de goles y goles esperados dividida por mitades, junto al nodo del modelo" focusable="false">
+    <g class="pop" style="--d:0ms">
+     <rect x="0" y="0" width="44" height="30" rx="6" class="s-fill"/>
+     <text x="22" y="20" text-anchor="middle" class="t-disp t-mono-s">BZ</text>
+    </g>
+    <text x="60" y="20" class="t-label">GOLES ESPERADOS POR MITAD</text>
+    <g class="pop" style="--d:120ms">
+     <rect x="350" y="4" width="130" height="30" rx="6" class="s-fill"/>
+     <circle cx="368" cy="19" r="3.5" class="s-second"/>
+     <circle cx="388" cy="11" r="3.5" class="s-second"/>
+     <circle cx="388" cy="27" r="3.5" class="s-second"/>
+     <path d="M372 19 L384.5 11" class="s-second" stroke-width="1.2"/>
+     <path d="M372 19 L384.5 27" class="s-second" stroke-width="1.2"/>
+     <text x="470" y="23" text-anchor="end" class="t-label">MODELO</text>
+    </g>
+    <path d="M36 52 V252" class="s-rule draw" style="--d:160ms" pathLength="100"/>
+    <path d="M36 252 H444" class="s-rule draw" style="--d:200ms" pathLength="100"/>
+    <text x="30" y="44" class="t-label">xG</text>
+    <path d="M240 52 V252" class="s-dash"/>
+    <text x="138" y="68" text-anchor="middle" class="t-label">1T</text>
+    <text x="342" y="68" text-anchor="middle" class="t-label">2T</text>
+    <path d="M60 206 H96 V180 H132 V196 H168 V160 H204 V178 H240 V152 H276 V170 H312 V142 H348 V156 H384 V128 H420 V140 H440" class="s-second draw" style="--d:280ms" pathLength="100" stroke-width="2"/>
+    <path d="M60 198 H96 V184 H132 V176 H168 V170 H204 V162 H240 V156 H276 V148 H312 V144 H348 V136 H384 V132 H420 V124 H440" class="s-signal draw" style="--d:380ms" pathLength="100" stroke-width="2"/>
+    {[60,96,132,168,204,240,276,312,348,384].map((x, i) => {
+     const y = [198,184,176,170,162,156,148,144,136,132][i];
+     return <circle cx={x} cy={y} r="3" class="s-dot-xg pop" style={`--d:${460 + i * 30}ms`}/>;
+    })}
+    <circle cx="420" cy="124" r="4.5" class="s-dot-signal pop" style="--d:760ms"/>
+   </svg>
+   <p class="f-note pop" style="--d:780ms">sports.bzzoiro.com · xG por mitad · eventos · H2H · alineaciones · modelo CatBoost</p>
+  </div>
+ </section>
+
+ <AdSlot/>
+
+ <section class="f-freq" id="frecuencia">
+  <div class="f-freq-copy">
+   <h2>Con qué frecuencia</h2>
+   <div class="f-freq-note">
+    <h3>El calendario</h3>
+    <p>Se prepara cada día a las 2:00 a. m. (hora de Perú).</p>
+   </div>
+   <div class="f-freq-note">
+    <h3>Los marcadores</h3>
+    <p>Se refrescan cada seis horas.</p>
+   </div>
+   <div class="f-freq-note">
+    <h3>Las consultas</h3>
+    <p>Se comparten entre visitantes. La versión inicial prepara datos periódicamente; no ofrece posiciones del balón ni seguimiento continuo.</p>
+   </div>
+  </div>
+  <div class="f-stage f-stage--pin">
+   <svg class="f-scene" viewBox="0 0 420 420" role="img" aria-label="Dial de 24 horas: el calendario se actualiza a las 2:00 a. m., hora de Perú, y los marcadores cada seis horas" focusable="false">
+    <circle cx="210" cy="210" r="120" class="s-rule draw" stroke-width="1.5" pathLength="100"/>
+    <circle cx="210" cy="210" r="120" class="s-signal f-dial-arc" stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="100" transform="rotate(-90 210 210)"/>
+    <g class="f-dial-needle">
+     <path d="M210 210 V96" class="s-signal" stroke-width="2"/>
+     <circle cx="210" cy="96" r="3" class="s-dot-signal"/>
+    </g>
+    <path d="M210 82 V70" class="s-rule" stroke-width="1.5"/>
+    <path d="M338 210 H350" class="s-rule" stroke-width="1.5"/>
+    <path d="M210 338 V350" class="s-rule" stroke-width="1.5"/>
+    <path d="M82 210 H70" class="s-rule" stroke-width="1.5"/>
+    <text x="210" y="52" text-anchor="middle" class="t-hour">00</text>
+    <text x="372" y="214" text-anchor="middle" class="t-hour">06</text>
+    <text x="210" y="376" text-anchor="middle" class="t-hour">12</text>
+    <text x="48" y="214" text-anchor="middle" class="t-hour">18</text>
+    <circle cx="210" cy="90" r="4.5" class="f-dial-tick" stroke-width="1.5"/>
+    <circle cx="330" cy="210" r="4.5" class="f-dial-tick" stroke-width="1.5"/>
+    <circle cx="210" cy="330" r="4.5" class="f-dial-tick" stroke-width="1.5"/>
+    <circle cx="90" cy="210" r="4.5" class="f-dial-tick" stroke-width="1.5"/>
+    <path d="M265 115 L276 96" class="s-signal pop" style="--d:300ms" stroke-width="3" stroke-linecap="round"/>
+    <text x="288" y="84" class="t-clock t-disp pop" style="--d:340ms">2:00</text>
+    <text x="210" y="208" text-anchor="middle" class="t-disp t-figure pop" style="--d:200ms">6 h</text>
+    <text x="210" y="234" text-anchor="middle" class="t-label pop" style="--d:260ms;letter-spacing:.12em">MARCADORES</text>
+   </svg>
+   <p class="f-note pop" style="--d:420ms">calendario 2:00 a. m. (Lima) · marcadores cada 6 h · consultas compartidas</p>
+  </div>
+ </section>
+
+ <AdSlot/>
+
+ <section class="f-chapter" id="marcas">
+  <div class="f-copy">
+   <h2>Escudos y nombres</h2>
+   <p>Los escudos y nombres de clubes se muestran únicamente para identificar equipos. Pertenecen a sus respectivos dueños; GoatLab no es un sitio oficial de liga o club alguno.</p>
+  </div>
+  <div class="f-stage f-stage--quiet">
+   <svg class="f-scene" viewBox="0 0 300 210" role="img" aria-label="Escudo genérico: las insignias identifican equipos y pertenecen a sus dueños" focusable="false">
+    <path d="M150 18 L252 50 V118 C252 162 208 186 150 196 C92 186 48 162 48 118 V50 Z" class="s-ink draw" stroke-width="2" pathLength="100"/>
+    <path d="M150 34 L236 62 V117 C236 151 200 171 150 180 C100 171 64 151 64 117 V62 Z" class="s-dash"/>
+    <path d="M78 104 H222" class="s-rule"/>
+   </svg>
+   <p class="f-note pop" style="--d:200ms">escudos vía Bzzoiro · solo para identificación · sin afiliación</p>
+  </div>
+ </section>
+
+ <AdSlot/>
+
+ <div class="f-end">
+  <p>Para leer cómo se interpretan esos datos, pasa por <a href="/metodologia/">la metodología</a>; los límites de privacidad están en <a href="/privacidad/">Privacidad</a>.</p>
+ </div>
+</main>
+<script>
+ const main = document.querySelector<HTMLElement>('.fuentes');
+ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if (main && !reduced && 'IntersectionObserver' in window) {
+  main.classList.add('js-anim');
+  const stages = [...document.querySelectorAll<HTMLElement>('.f-stage')];
+  const observer = new IntersectionObserver(entries => {
+   entries.forEach(entry => {
+    if (entry.isIntersecting) {
+     entry.target.classList.add('in-view');
+     observer.unobserve(entry.target);
+    }
+   });
+  }, { threshold: .18 });
+  stages.forEach(stage => observer.observe(stage));
+
+  // Dial de frecuencia: progreso continuo ligado al scroll del bloque
+  const freq = document.querySelector<HTMLElement>('.f-freq');
+  const needle = document.querySelector<SVGGElement>('.f-dial-needle');
+  const ticks = [...document.querySelectorAll<SVGElement>('.f-dial-tick')];
+  const notes = [...document.querySelectorAll<HTMLElement>('.f-freq-note')];
+  if (freq && needle) {
+   // La variable vive en la propia sección: `.f-freq{--freq-progress:1}`
+   // ensombrecería cualquier valor heredado de un ancestro.
+   freq.style.setProperty('--freq-progress', '0');
+   const apply = (p: number) => {
+    freq!.style.setProperty('--freq-progress', String(p));
+    needle.setAttribute('transform', `rotate(${p * 360} 210 210)`);
+    ticks.forEach((tick, k) => tick.classList.toggle('is-lit', p >= .01 + k * .25));
+    notes.forEach((note, i) => note.classList.toggle('is-active', p * 3 > i + .45));
+   };
+   apply(0);
+   let queued = false;
+   const update = () => {
+    queued = false;
+    const r = freq.getBoundingClientRect();
+    const span = r.height - innerHeight * .15;
+    const p = Math.min(1, Math.max(0, (innerHeight * .62 - r.top) / span));
+    apply(p);
+   };
+   window.addEventListener('scroll', () => {
+    if (!queued) { queued = true; requestAnimationFrame(update); }
+   }, { passive: true });
+   update();
+  }
+ }
+</script>
+</Layout>

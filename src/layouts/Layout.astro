@@ -5,14 +5,17 @@ import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import '../styles/detail-motion.css';
 import Icon from '../components/Icon.astro';
+import { AD_CLIENT, ADS_ACTIVE } from '../config/ads';
 const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.' } = Astro.props;
 ---
 <!doctype html>
 <html lang="es">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#101412"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><title>{title}</title></head>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#101412"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><title>{title}</title>
+{ADS_ACTIVE && <script is:inline async crossorigin="anonymous" src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}></script>}
+</head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
-<header class="site-header"><div class="header-inner"><a href="/" class="brand" aria-label="GoatLab, inicio"><span class="brand-symbol"><Icon name="chart" size={25}/></span>GOAT<span>LAB</span><span class="brand-dot"></span></a><nav aria-label="Navegación principal"><a href="/#encuentros">Encuentros</a><a href="/metodologia/">Cómo leemos el juego</a><a href="/contacto/">Contacto</a></nav><span class="header-note">FÚTBOL. CON PERSPECTIVA.</span></div></header>
+<header class="site-header"><div class="header-inner"><a href="/" class="brand" aria-label="GoatLab, inicio"><span class="brand-symbol"><Icon name="chart" size={25}/></span>GOAT<span>LAB</span><span class="brand-dot"></span></a><nav aria-label="Navegación principal"><a href="/encuentros/">Encuentros</a><a href="/metodologia/">Metodología</a><a href="/fuentes/">Fuentes</a><a href="/contacto/">Contacto</a></nav><span class="header-note">FÚTBOL. CON PERSPECTIVA.</span></div></header>
 <slot/>
-<footer class="site-footer wrap"><a class="brand" href="/">GOAT<span>LAB</span></a><p>Más contexto. Otra forma de ver el fútbol.</p><div><a href="/metodologia/">Fuentes y metodología</a><a href="/privacidad/">Privacidad</a><a href="/contacto/">Contacto</a></div><small>GoatLab · Versión inicial. Sin enlaces a casas de apuestas.</small></footer>
+<footer class="site-footer wrap"><a class="brand" href="/">GOAT<span>LAB</span></a><p>Más contexto. Otra forma de ver el fútbol.</p><div><a href="/encuentros/">Encuentros</a><a href="/metodologia/">Metodología</a><a href="/fuentes/">Fuentes</a><a href="/privacidad/">Privacidad</a><a href="/contacto/">Contacto</a></div><small>GoatLab · Versión inicial. Sin enlaces a casas de apuestas.</small></footer>
 </body></html>

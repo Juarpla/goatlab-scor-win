@@ -1,0 +1,16 @@
+---
+const { items = [] } = Astro.props;
+---
+<div class="panel pulse">
+ <div class="chart-heading"><h3>Los nombres que marcan.</h3><span>Bzzoiro · líderes de las ligas cubiertas</span></div>
+ <ol class="pulse-list">
+  {items.map(item => (
+   <li>
+    <span class="pulse-rank" aria-hidden="true">{items.indexOf(item) + 1}</span>
+    <span class="pulse-fact"><span class="pulse-label">{item.label}</span><strong>{item.fact}</strong></span>
+    <span class="pulse-detail">{item.detail}</span>
+   </li>
+  ))}
+ </ol>
+ <p class="panel-note">Tops reales de goles y asistencias de la fuente; el club y la competición acompañan cada nombre.</p>
+</div>

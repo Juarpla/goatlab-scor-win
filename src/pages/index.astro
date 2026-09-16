@@ -2,50 +2,150 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import AdSlot from '../components/AdSlot.astro';
-import Comparison from '../components/Comparison.astro';
+import FormChips from '../components/FormChips.astro';
+import TeamLogo from '../components/TeamLogo.astro';
+import MatchCard from '../components/MatchCard.astro';
+import JourneyMap from '../components/JourneyMap.astro';
+import MatchPulse from '../components/MatchPulse.astro';
+import PlayerPulse from '../components/PlayerPulse.astro';
+import StandingsBoard from '../components/StandingsBoard.astro';
+import JornadaBand from '../components/JornadaBand.astro';
 import { competitions } from '../lib/football.js';
 import { heroMatch, teamShort } from '../lib/teams.js';
-import { teamForm } from '../lib/form.js';
+import { matchForm, teamForm } from '../lib/form.js';
+import { buildMapData, computePulse, computeCuriosities, computePlayerPulse } from '../lib/journey.js';
 import fixtures from '../../public/data/fixtures.json';
 import results from '../../public/data/results.json';
+import standings from '../../public/data/standings.json';
+import scorers from '../../public/data/scorers.json';
+import '../styles/home.css';
 
 const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
+const FINISHED = new Set(['FT', 'AET', 'PEN']);
+const upcoming = matches.filter(match => !FINISHED.has(match.status));
 const hero = heroMatch(matches);
-const heroForm = hero ? (() => {
-  const homeForm = teamForm(results.results, hero.home);
-  const awayForm = teamForm(results.results, hero.away);
-  return homeForm && awayForm ? { homeForm, awayForm } : null;
-})() : null;
-const rows = matches.filter(match => match !== hero).map(match => ({ ...match, form: teamForm(results.results, match.home) }));
-const competitionName = id => competitions.find(c => c.id === id)?.name ?? id;
+const heroForm = hero ? matchForm(results.results, hero.home, hero.away) : null;
 const heroDate = hero ? new Date(hero.kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'long', day: 'numeric', month: 'long' }) : null;
+const heroTime = hero ? new Date(hero.kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) : null;
+const competitionById = id => competitions.find(c => c.id === id) ?? null;
+const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL' };
+const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+// Muro: solo próximos, sin el destacado, capados a los 9 más cercanos por kickoff.
+const wallRows = upcoming.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
+const hasMore = hero ? upcoming.length - 1 > wallRows.length : upcoming.length > wallRows.length;
+const heroFormOnly = hero ? teamForm(results.results, hero.home) : null;
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
----
+
+// Cifras reales para la banda del hero; las históricas sirven de respaldo evergreen
+// para que la banda nunca quede vacía.
+const resultsCount = results.results.length;
+const last30 = (() => {
+  const cutoff = new Date();
+  cutoff.setUTCDate(cutoff.getUTCDate() - 30);
+  return results.results.filter(row => row.date >= cutoff.toISOString().slice(0, 10)).length;
+})();
+const competitionsCount = new Set(results.results.map(row => row.competition)).size;
+const h2hCount = upcoming.filter(match => match.h2h?.totalMatches).length;
+const realSlides = [
+  { figure: resultsCount, line: `${resultsCount === 1 ? 'resultado' : 'resultados'} reales en la base de forma.` },
+  { figure: upcoming.length, line: `${upcoming.length === 1 ? 'partido' : 'partidos'} de nuestras competiciones en los próximos siete días.` },
+  { figure: h2hCount, line: `encuentros con historial cara a cara verificado.` },
+].filter(slide => slide.figure > 0);
+const evergreenSlides = [
+  { figure: last30, line: `resultados reales de los últimos 30 días.` },
+  { figure: competitionsCount, line: `${competitionsCount === 1 ? 'competición' : 'competiciones'} cubiertas por la base histórica.` },
+].filter(slide => slide.figure > 0 && !realSlides.some(real => real.figure === slide.figure && real.line === slide.line));
+const slides = [...realSlides, ...evergreenSlides].slice(0, 3);
+// Región de jornada: mapa de sedes, pulso de la base, tablas y termómetro.
+// Cada bloque se omite solo cuando su fuente no entregó datos.
+const journeyData = buildMapData(upcoming);
+const pulse = computePulse(results.results);
+const curiosities = computeCuriosities(results.results);
+const players = computePlayerPulse(scorers);
+const tables = Object.fromEntries(Object.entries(standings).filter(([, table]) => table.rows?.length));
+const hasLeft = pulse.length > 0 || players.length > 0;
+const hasRight = Object.keys(tables).length > 0 || curiosities.length > 0;
+const hasJourney = journeyData.pins.length > 0 || hasLeft || hasRight;
+const tickerItems = upcoming.slice(0, 12).map(match => ({
+  home: match.home, away: match.away,
+  homeId: match.teamIds?.home ?? null, awayId: match.teamIds?.away ?? null,
+  text: `${match.home} vs. ${match.away}`,
+  time: new Date(match.kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }),
+  kickoff: match.kickoff,
+  full: kickoffLabel(match.kickoff),
+}));---
 <Layout>
-<main id="main" class="wrap">
- <section class="intro"><div><h1>El fútbol,<br/><span>bajo la lupa.</span></h1><p>El marcador cuenta una parte.<br/>Los datos te ayudan a ver el resto.</p></div></section>
- <section id="encuentros" aria-labelledby="fixtures-title">
-  <div class="section-heading"><h2 id="fixtures-title">En el radar</h2><span>Próximos siete días</span></div>
-  <div class="filter-row"><div class="competition-filters" role="group" aria-label="Filtrar por competición"><button class="filter active" data-league="all" aria-pressed="true">Todos</button>{competitions.map(c=><button class="filter" data-league={c.id} aria-pressed="false">{c.name}</button>)}</div><label class="search"><Icon name="search" size={18}/><input type="search" id="team-search" placeholder="Buscar equipo" aria-label="Buscar equipo"/></label></div>
-  {matches.length ? <>
-   {hero && <article class="featured" data-fixture data-league-id={hero.competition} data-teams={`${hero.home} ${hero.away}`.toLowerCase()}>
-    <div class="featured-copy"><h2><span>{hero.home}</span><span class="versus">vs.</span><span>{hero.away}</span></h2><div class="match-meta"><span>{competitionName(hero.competition)}</span><span>{heroDate}</span></div><div class="match-caption">La forma se mide<br/>con resultados reales.</div><a class="primary-button" href={`/partido/${hero.id}/`}>Entrar al análisis <Icon/></a><span class="reading-time">Gráficos, estadísticas y contexto</span></div>
-    {heroForm && <Comparison home={hero.home} away={hero.away} shortHome={teamShort(hero.home)} shortAway={teamShort(hero.away)} homeForm={heroForm.homeForm} awayForm={heroForm.awayForm}/>}
-   </article>}
-   <div class="fixture-list">{rows.map(m=><a href={`/partido/${m.id}/`} class="fixture-row" data-fixture data-league-id={m.competition} data-teams={`${m.home} ${m.away}`.toLowerCase()}><span class="row-competition">{competitionName(m.competition)}<small>{new Date(m.kickoff).toLocaleDateString('es-PE',{timeZone:'America/Lima',day:'numeric',month:'short'})} · {new Date(m.kickoff).toLocaleTimeString('es-PE',{timeZone:'America/Lima',hour:'2-digit',minute:'2-digit'})}</small></span><span class="row-teams">{m.home}<span>vs.</span>{m.away}</span><span class="mini-form" aria-label={m.form?`Forma reciente de ${m.home}: ${m.form.form.join(', ')}`:`Sin forma suficiente de ${m.home}`}>{m.form ? m.form.form.map(result=><b class:list={['form-cell',result]}>{result}</b>) : <b class="form-cell E">–</b>}</span><span class="row-action">Ver análisis <Icon size={18}/></span></a>)}</div>
-   <p id="filter-empty" class="empty-message" hidden>No encontramos ese equipo en esta selección. Prueba con otro nombre o competición.</p><p id="filter-count" class="sr-only" aria-live="polite"></p>
-  </> : <section class="real-data"><div><h2>Sin encuentros a la vista</h2><p>No hay partidos de nuestras competiciones en los próximos siete días, o la fuente de datos no respondió en la última actualización{updated ? ` (${updated} hora de Lima)` : ''}.</p></div><div><p>Vuelve más tarde: el calendario se actualiza cada día a las 2:00 a. m. (hora de Perú) y los marcadores cada seis horas.</p></div></section>}
+<main id="main" class="wrap home">
+ <section class="hero">
+  <div class="hero-copy"><h1>El fútbol,<br/><span>bajo la lupa.</span></h1><p>El marcador cuenta una parte del partido. Los datos te ayudan a ver el resto: forma real, números por mitades y lo que todavía no sabemos.</p></div>
+  {slides.length > 0 && <div class="hero-band" role="group" aria-label="Datos de la base de análisis">
+   {slides.map(slide => <div class="band-slide"><span class="band-figure">{slide.figure}</span><span class="band-line">{slide.line}</span></div>)}
+  </div>}
+ </section>
+ {tickerItems.length > 0 && <div class="ticker" aria-hidden="true"><div class="ticker-track">{[0, 1].map(copy => <span class:list={['ticker-set', { 'ticker-copy': copy === 1 }]}>{tickerItems.map(item => <span class="ticker-item"><TeamLogo name={item.home} teamId={item.homeId} size={18}/><strong>{item.text}</strong><small title={item.full} data-kickoff={item.kickoff} data-format="time" data-label="off">{item.time}</small><TeamLogo name={item.away} teamId={item.awayId} size={18}/></span>)}</span>)}</div></div>}
+ {hero ? <>
+ <section id="forma" class="forma" aria-labelledby="forma-title">
+  <div class="section-heading"><h2 id="forma-title">La forma, con resultados reales.</h2><span>Actualizado {updated} (Lima)</span></div>
+  <div class="forma-panel">
+   <div class="forma-copy">
+    <div class="forma-meta"><span class="chip-league">{competitionById(hero.competition)?.name}</span><span data-kickoff={hero.kickoff} data-format="date">{heroDate}</span><span data-kickoff={hero.kickoff} data-format="time">{heroTime} (Lima)</span></div>
+    <h3>{hero.home}<br/><span>vs.</span><br/>{hero.away}</h3>
+    {hero.venue && <p>Estadio: {hero.venue}</p>}
+    <div class="forma-actions">
+     <a class="primary-button" href={`/partido/${hero.id}/`}>Entrar al análisis <Icon/></a>
+     <span class="reading-time">Gráficos, estadísticas y contexto</span>
+    </div>
+   </div>
+   {heroForm && <FormChips home={hero.home} away={hero.away} homeForm={heroForm.homeForm} awayForm={heroForm.awayForm} teamIds={hero.teamIds ?? null}/>}
+  </div>
+ </section>
+ <section id="escenarios" class="guia" aria-labelledby="guia-title">
+  <div class="section-heading"><h2 id="guia-title">Cómo analizamos cada partido.</h2><span>Guía del sitio, sin depender de un encuentro</span></div>
+  <div class="guia-path">
+   <div class="guia-step"><span class="guia-number" aria-hidden="true">1</span><h3>Datos históricos</h3><p>Resultados reales y forma reciente de cada club, medidos sobre la misma escala.</p><a class="guia-link" href="/metodologia/#datos-historicos">Ver cómo se leen <Icon size={15}/></a></div>
+   <span class="guia-join" aria-hidden="true">/</span>
+   <div class="guia-step"><span class="guia-number" aria-hidden="true">2</span><h3>Análisis con IA</h3><p>Textos generados a partir de datos verificados; siempre marcan sus límites.</p><a class="guia-link" href="/metodologia/#analisis-ia">Leer el papel de la IA <Icon size={15}/></a></div>
+   <span class="guia-join" aria-hidden="true">/</span>
+   <div class="guia-step"><span class="guia-number" aria-hidden="true">3</span><h3>Criterio del editor</h3><p>Qué se publica, cuándo se estima y qué queda fuera de la página.</p><a class="guia-link" href="/metodologia/#criterio-editor">Leer el criterio <Icon size={15}/></a></div>
+  </div>
+ </section>
+ </> : <section id="forma" class="real-data"><div><h2>Sin encuentros a la vista</h2><p>No hay partidos de nuestras competiciones en los próximos siete días, o la fuente de datos no respondió en la última actualización{updated ? ` (${updated} hora de Lima)` : ''}.</p></div><div><p>Vuelve más tarde: el calendario se actualiza cada día a las 2:00 a. m. (hora de Perú) y los marcadores cada seis horas.</p></div></section>}
+ <AdSlot/>
+ <section id="encuentros" class="wall" aria-labelledby="wall-title">
+  <div class="section-heading"><h2 id="wall-title">El muro de encuentros</h2><span>Los 9 más próximos</span></div>
+  <div class="wall-grid">
+   {(hero ? wallRows : upcoming.slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }))).map(m => <MatchCard match={m} competitionCode={CODES[m.competition] ?? 'FUT'} competitionName={competitionById(m.competition)?.name ?? ''} kickoffLabel={kickoffLabel(m.kickoff)} formHome={m.form?.homeForm ?? null} formAway={m.form?.awayForm ?? null}/>)}
+  </div>
+  {hasMore && <nav class="wall-nav" aria-label="Más encuentros"><a class="wall-more" href="/encuentros/">Ver más encuentros <Icon size={16}/></a></nav>}
  </section>
  <AdSlot/>
- <section class="manifesto"><h2>No solo mirar.<br/><span>Entender el juego.</span></h2><div><p>Comparamos lo que ocurrió, explicamos lo que significa y distinguimos lo que todavía no sabemos.</p><a class="text-link" href="/metodologia/">Conoce nuestra metodología <Icon size={18}/></a></div></section>
+ {hasJourney && <section class="journey" aria-labelledby="journey-title">
+  <div class="section-heading"><h2 id="journey-title">Donde ocurre la jornada.</h2><span>Mapa de sedes · pulso de la base · tablas</span></div>
+  {journeyData.pins.length > 0 && <JourneyMap pins={journeyData.pins} unlocated={journeyData.unlocated}/>}
+  {(hasLeft || hasRight) && <div class={hasLeft && hasRight ? 'journey-grid' : 'journey-col'}>
+   {hasLeft && <div class="journey-col">
+    {pulse.length > 0 && <MatchPulse items={pulse}/>}
+    {players.length > 0 && <PlayerPulse items={players}/>}
+   </div>}
+   {hasRight && <div class="journey-col">
+    {Object.keys(tables).length > 0 && <StandingsBoard tables={tables}/>}
+    {curiosities.length > 0 && <JornadaBand slides={curiosities}/>}
+   </div>}
+  </div>}
+ </section>}
+ <!-- Fase 2: los experimentos (pulso, tabla, banda, mapa) van entre este anuncio y el cierre -->
+ <AdSlot/>
 </main>
 <script>
- const filters = [...document.querySelectorAll<HTMLButtonElement>('[data-league]')];
- const cards = [...document.querySelectorAll<HTMLElement>('[data-fixture]')];
- const search = document.querySelector<HTMLInputElement>('#team-search')!;
- let league = 'all';
- const normalize = (text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- function update(){let visible=0; for(const card of cards){const show=(league==='all'||card.dataset.leagueId===league)&&normalize(card.dataset.teams||'').includes(normalize(search.value));card.hidden=!show;if(show)visible++;}document.querySelector<HTMLElement>('#filter-empty')!.hidden=visible>0;document.querySelector('#filter-count')!.textContent=`${visible} encuentros`;}
- filters.forEach(button=>button.addEventListener('click',()=>{league=button.dataset.league!;filters.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});update();}));search.addEventListener('input',update);
+ import { initLocalTimes } from '../lib/local-time.js';
+ initLocalTimes();
+ // El revelado de chips ocurre aunque el panel sea más alto que el viewport
+ // (umbral bajo en vez del 35% que nunca llegaba a dispararse).
+ const panels=[...document.querySelectorAll<HTMLElement>('.forma-panel')];
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  panels.forEach(panel=>panel.classList.add('js-anim'));
+  const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');observer.unobserve(entry.target);}});},{threshold:.1});
+  panels.forEach(panel=>observer.observe(panel));
+ }
 </script>
 </Layout>

@@ -62,7 +62,9 @@ Proveedores elegidos posteriormente:
 - [API-Football](https://www.api-football.com/pricing): la documentación consultada confirma 100 peticiones diarias y restricciones de temporadas en el plan gratuito. No asumir disponibilidad de cualquier temporada o métrica por el alcance general del catálogo.
 - [Football-Data.org](https://www.football-data.org/pricing): la documentación consultada confirma 12 competiciones, 10 peticiones por minuto y resultados con retraso en el plan gratuito. No presentarlos como seguimiento instantáneo.
 
-No hay porcentajes predictivos validados, resultados de evaluación, credenciales confirmadas, cuenta AdSense aprobada ni permisos de uso de marcas o activos aportados. No inventar estas evidencias.
+No hay porcentajes predictivos validados, resultados de evaluación, credenciales confirmadas, cuenta AdSense aprobada. No inventar estas evidencias.
+
+Licencia de Bzzoiro (investigada, v4.0, docs consultadas en 2026-09): los escudos y fotos son de sus respectivos dueños, no cubren la licencia de datos, y el proveedor los permite expresamente «para identificar equipos, jugadores, competiciones y sedes dentro de la aplicación»; hotlink permitido sin autenticación; un activo puede retirarse en cualquier momento ante petición del titular (el endpoint responde 204). Uso aprobado por el usuario: hotlink de escudos solo para identificación en el muro y la página de partido, con monograma de respaldo y nota de no afiliación en privacidad y metodología. No usar escudos en material promocional.
 
 ## Product Principles
 

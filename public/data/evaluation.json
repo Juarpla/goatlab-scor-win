@@ -1,0 +1,51 @@
+{
+  "modelVersion": "goatlab-ensemble-v1",
+  "published": false,
+  "gate": {
+    "poissonOk": false,
+    "reasons": [
+      "Poisson no supera al baseline empírico de la muestra."
+    ]
+  },
+  "poisson": {
+    "oneX2": {
+      "sampleSize": 99,
+      "accuracy": 0.3939393939393939,
+      "brierScore": 0.659,
+      "baselineBrierScore": 0.659,
+      "baseline": {
+        "home": 0.404,
+        "draw": 0.293,
+        "away": 0.303
+      }
+    },
+    "over25": {
+      "sampleSize": 99,
+      "accuracy": 0.566,
+      "brierScore": 0.246,
+      "baselineBrierScore": 0.244,
+      "baseline": 0.424
+    },
+    "btts": {
+      "sampleSize": 99,
+      "accuracy": 0.455,
+      "brierScore": 0.271,
+      "baselineBrierScore": 0.25,
+      "baseline": 0.495
+    }
+  },
+  "ensemble": {
+    "oneX2": null,
+    "over25": null,
+    "btts": null,
+    "captures": 0,
+    "note": "El blend se evalúa con capturas pre-partido acumuladas en corridas programadas."
+  },
+  "methodology": {
+    "source": "results.json (resultados reales de proveedores) y predictions.json (capturas pre-partido).",
+    "leakPolicy": "Para cada partido se usan únicamente resultados anteriores a su fecha.",
+    "baselines": "Distribución empírica de la muestra evaluada.",
+    "thresholds": "1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado."
+  },
+  "evaluatedAt": "2026-09-15T17:00:38.852Z"
+}

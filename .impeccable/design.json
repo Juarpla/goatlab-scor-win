@@ -1,12 +1,15 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-13T11:35:00.000Z",
+  "generatedAt": "2026-09-15T16:10:00.000Z",
   "title": "Design System: GoatLab",
   "extensions": {
     "colorMeta": {
       "deep-carbon": { "role": "neutral", "displayName": "Carbón profundo", "canonical": "#101412", "tonalRamp": ["#101412", "#181e1a", "#222a24"] },
       "lime-signal": { "role": "primary", "displayName": "Lima señal", "canonical": "#c5ed74", "tonalRamp": ["#c5ed74", "#d7f6a0", "#9ac54e"] },
-      "slate-blue": { "role": "secondary", "displayName": "Azul pizarra", "canonical": "#8ca6bf", "tonalRamp": ["#8ca6bf", "#b2c5d5", "#60778e"] }
+      "slate-blue": { "role": "secondary", "displayName": "Azul pizarra", "canonical": "#8ca6bf", "tonalRamp": ["#8ca6bf", "#b2c5d5", "#60778e"] },
+      "verde-forma": { "role": "tertiary", "displayName": "Verde forma (G)", "canonical": "#29351d", "tonalRamp": ["#29351d", "#3c4a2a", "#d2eea7"] },
+      "gris-forma": { "role": "tertiary", "displayName": "Gris forma (E)", "canonical": "#303732", "tonalRamp": ["#303732", "#454e49", "#c7cfc6"] },
+      "rojo-forma": { "role": "tertiary", "displayName": "Rojo forma (P)", "canonical": "#3b2824", "tonalRamp": ["#3b2824", "#553832", "#e9b4a3"] }
     },
     "typographyMeta": {
       "display": { "displayName": "Titular de transmisión", "purpose": "Tesis, partidos y capítulos." },
@@ -47,6 +50,22 @@
       "description": "Opaque surface that holds a chart and its source line.",
       "html": "<section class=\"ds-analysis-surface\"><h3>Cómo llegan al encuentro</h3><p>Fuente · fecha de actualización</p></section>",
       "css": ".ds-analysis-surface { padding:25px; border-radius:12px; background:#181e1a; color:#edf0e6; border:1px solid #354035; } .ds-analysis-surface h3 { margin:0; font:650 16px/1.3 'Manrope Variable',sans-serif; } .ds-analysis-surface p { margin:18px 0 0; color:#a4aea3; font:400 11px/1.5 'Manrope Variable',sans-serif; }"
+    },
+    {
+      "name": "Form Chip",
+      "kind": "chip",
+      "refersTo": "form-chip",
+      "description": "One recent result per chip: score from the team's perspective, tinted by outcome, rival legible below.",
+      "html": "<div class=\"ds-form-chips\"><span class=\"ds-form-chip ds-form-chip-g\"><strong>3-1</strong><small>Sevilla FC</small></span><span class=\"ds-form-chip ds-form-chip-e\"><strong>1-1</strong><small>Racing</small></span><span class=\"ds-form-chip ds-form-chip-p\"><strong>0-2</strong><small>Real Betis</small></span></div>",
+      "css": ".ds-form-chips { display:flex; gap:6px; font-family:'Manrope Variable',sans-serif; } .ds-form-chip { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; padding:8px 8px 7px; border-radius:6px; } .ds-form-chip strong { font:700 13px/1.1 'Manrope Variable',sans-serif; font-variant-numeric:tabular-nums; } .ds-form-chip small { color:#a4aea3; font-size:9.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-form-chip-g { background:#29351d; } .ds-form-chip-g strong { color:#d2eea7; } .ds-form-chip-e { background:#303732; } .ds-form-chip-e strong { color:#c7cfc6; } .ds-form-chip-p { background:#3b2824; } .ds-form-chip-p strong { color:#e9b4a3; }"
+    },
+    {
+      "name": "Map Card",
+      "kind": "custom",
+      "refersTo": "map-pin",
+      "description": "Venue popup of the journey map: city headline, count, per-match rows with stadium and capacity.",
+      "html": "<div class=\"ds-map-card\"><header><div><strong>Madrid</strong><small>España · 3 encuentros</small></div><button class=\"ds-map-close\" aria-label=\"Cerrar\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 6l12 12M18 6 6 18\"/></svg></button></header><ul><li><span class=\"ds-map-teams\">Real Madrid <em>vs.</em> Barcelona</span><span class=\"ds-map-meta\">14 sept · 21:00 (tu hora) · Santiago Bernabéu · 83.186 plazas</span></li></ul></div>",
+      "css": ".ds-map-card { width:330px; padding:15px 16px; border-radius:10px; background:#222a24; border:1px solid #354035; font-family:'Manrope Variable',sans-serif; } .ds-map-card header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; } .ds-map-card strong { font:600 21px/1.05 'Barlow Condensed',sans-serif; color:#edf0e6; } .ds-map-card small { display:block; color:#a4aea3; font-size:10.5px; margin-top:2px; } .ds-map-close { background:none; border:0; color:#a4aea3; padding:4px; display:inline-flex; cursor:pointer; } .ds-map-close:hover { color:#edf0e6; } .ds-map-card ul { list-style:none; margin:12px 0 0; padding:0; } .ds-map-card li { display:flex; flex-direction:column; gap:2px; padding-block:9px; border-top:1px solid #354035; } .ds-map-teams { font:600 16.5px 'Barlow Condensed',sans-serif; color:#edf0e6; } .ds-map-teams em { font-style:normal; color:#a4aea3; font-weight:500; } .ds-map-meta { font-size:10.5px; color:#a4aea3; } .ds-map-close svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; }"
     }
   ],
   "narrative": {
@@ -55,8 +74,10 @@
     "keyCharacteristics": ["Datos comparables con ejes y escalas estables.", "Tipografía condensada para titulares y Manrope para lectura y controles.", "Capas tonales planas, reglas finas y una señal lima escasa.", "Movimiento concentrado en el cambio de capítulo y el scroll del análisis."],
     "rules": [
       { "name": "The Signal Rule", "body": "La lima aparece en acciones, selección y una serie de datos; nunca pinta toda una sección.", "section": "colors" },
+      { "name": "The Verdict Tint Rule", "body": "Los resultados G/E/P usan tres tintas dedicadas (verde #29351d, gris #303732, rojo #3b2824) en tarjetas y chips; jamás sustituyen a las señales primarias ni pintan superficies completas.", "section": "colors" },
       { "name": "The Two Voices Rule", "body": "Barlow Condensed nombra el juego; Manrope explica qué significa. No intercambiarlos para decorar.", "section": "typography" },
-      { "name": "The Matte Surface Rule", "body": "Las superficies permanecen opacas y quietas; el movimiento pertenece al capítulo activo, no a un efecto de cristal.", "section": "elevation" }
+      { "name": "The Matte Surface Rule", "body": "Las superficies permanecen opacas y quietas; el movimiento pertenece al capítulo activo, no a un efecto de cristal.", "section": "elevation" },
+      { "name": "The Micro-Label Ramp Rule", "body": "Las etiquetas y metadatos usan una escala fina de 9–13px en Manrope con numeración tabular; Barlow Condensed queda reservado para nombres y cifras de 16px hacia arriba.", "section": "typography" }
     ],
     "dos": ["Do etiquetar demostraciones, fuentes, retrasos y fechas de actualización junto al dato.", "Do conservar ejes, escalas y colores de serie al cambiar de capítulo.", "Do mantener la publicidad en espacios reservados fuera del gráfico y del texto que se está leyendo.", "Do diseñar el estado vacío con una siguiente acción clara.", "Do respetar prefers-reduced-motion y el foco visible en teclado."],
     "donts": ["Don't mostrar porcentajes predictivos sin evaluación histórica publicada.", "Don't usar datos sintéticos como si fueran partidos reales.", "Don't usar gradientes de texto, brillos o sombras de bloque como decoración.", "Don't poner enlaces a casas de apuestas ni llamadas a apostar.", "Don't ocultar una ausencia de datos detrás de una animación o un número inventado."]

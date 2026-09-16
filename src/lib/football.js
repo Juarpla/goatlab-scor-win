@@ -10,6 +10,15 @@ export const competitions = [
 ];
 /** Statuses that mean the match is played and its final score is authoritative. */
 export const FINISHED_STATUSES = new Set(['FT', 'AET', 'PEN']);
+/**
+ * Wall freshness boundary: 90' of play + 15' break + 10' fixed buffer.
+ * No league schedules hydration breaks, so none are counted.
+ */
+export const ESTIMATED_DURATION_MS = 115 * 60_000;
+/** True once the estimated end of the match has passed (regardless of status). */
+export function isMatchExpired(match, now = Date.now()) {
+  return Date.parse(match.kickoff) + ESTIMATED_DURATION_MS <= now;
+}
 async function request(url, headers, fetchImpl) {
   const res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(12_000) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -87,7 +96,17 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
         if (!Array.isArray(data.response)) throw new Error('Formato inválido');
         afMatches.push(...data.response.flatMap(item => {
           const league = competitions.find(c => c.api === item.league.id);
-          return league ? [{ id: `af-${item.fixture.id}`, providerId: item.fixture.id, competition: league.id, home: item.teams.home.name, away: item.teams.away.name, kickoff: item.fixture.date, status: item.fixture.status.short, minute: item.fixture.status.elapsed, homeScore: item.goals.home, awayScore: item.goals.away, events: null, statistics: null }] : [];
+          return league ? [{
+            id: `af-${item.fixture.id}`, providerId: item.fixture.id, competition: league.id,
+            home: item.teams.home.name, away: item.teams.away.name, kickoff: item.fixture.date,
+            status: item.fixture.status.short, minute: item.fixture.status.elapsed,
+            homeScore: item.goals.home, awayScore: item.goals.away,
+            halfTime: item.score?.halftime?.home != null ? { home: item.score.halftime.home, away: item.score.halftime.away } : null,
+            round: item.league.round ?? null,
+            venue: item.fixture.venue?.name ?? null,
+            venueCity: item.fixture.venue?.city ?? null,
+            events: null, statistics: null,
+          }] : [];
         }));
       }
       matches = afMatches;
@@ -107,7 +126,18 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
       const FD_STATUS = { SCHEDULED: 'NS', TIMED: 'NS', IN_PLAY: 'LIVE', PAUSED: 'HT', FINISHED: 'FT', SUSPENDED: 'SUSP', POSTPONED: 'PST', CANCELLED: 'CANC', AWARDED: 'FT' };
       const fdMatches = data.matches.flatMap(item => {
         const league = competitions.find(c => c.fd && c.fd === item.competition.code);
-        return league ? [{ id: `fd-${item.id}`, providerId: item.id, competition: league.id, home: item.homeTeam.name, away: item.awayTeam.name, kickoff: item.utcDate, status: FD_STATUS[item.status] ?? item.status, minute: null, homeScore: item.score.fullTime.home, awayScore: item.score.fullTime.away, events: null, statistics: null }] : [];
+        return league ? [{
+          id: `fd-${item.id}`, providerId: item.id, competition: league.id,
+          home: item.homeTeam.name, away: item.awayTeam.name, kickoff: item.utcDate,
+          status: FD_STATUS[item.status] ?? item.status, minute: null,
+          homeScore: item.score.fullTime.home, awayScore: item.score.fullTime.away,
+          halfTime: item.score.halfTime?.home != null ? { home: item.score.halfTime.home, away: item.score.halfTime.away } : null,
+          round: item.matchday ?? null,
+          stage: item.stage ?? null,
+          venue: item.venue ?? null,
+          venueCity: null,
+          events: null, statistics: null,
+        }] : [];
       });
       matches = afDone ? mergeFixtures(matches, fdMatches) : fdMatches;
       provider = provider ? 'API-Football + Football-Data.org' : 'Football-Data.org';
@@ -120,6 +150,34 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
   // An empty valid schedule is authoritative, not an outage.
   return { matches, provider, delayed, updatedAt: new Date().toISOString(), errors };
 }
+/**
+ * League table for the current season (football-data.org; the free plan serves
+ * the current season standings of its competitions). Only the TOTAL table;
+ * knockout-style stages are skipped rather than half-rendered.
+ */
+export async function getStandings({ competition, season, top = 10, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
+  if (!env.FOOTBALL_DATA_KEY || !competition.fd) return null;
+  try {
+    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${competition.fd}/standings?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
+    // La v4 de football-data.org nombra la fase de liga «REGULAR_SEASON»; las
+    // respuestas antiguas usaban «TOTAL». Aceptamos ambas, solo la tabla TOTAL.
+    const total = data.standings?.find(entry => entry.type === 'TOTAL' && (entry.stage === 'TOTAL' || entry.stage === 'REGULAR_SEASON'));
+    if (!Array.isArray(total?.table)) return null;
+    const FORM = { W: 'G', D: 'E', L: 'P' };
+    return {
+      season: String(data.season?.startDate?.slice(0, 4) ?? season),
+      provider: 'Football-Data.org',
+      updatedAt: new Date().toISOString(),
+      rows: total.table.slice(0, top).map(row => ({
+        position: row.position, team: row.team.name,
+        played: row.playedGames, won: row.won, drawn: row.draw, lost: row.lost,
+        goalsFor: row.goalsFor, goalsAgainst: row.goalsAgainst, goalDifference: row.goalDifference, points: row.points,
+        form: Array.isArray(row.form) ? row.form.map(letter => FORM[letter] ?? null).filter(Boolean) : null,
+      })),
+    };
+  } catch (error) { logger.warn(`Tabla (${competition.id}): ${error.message}`); return null; }
+}
+
 /**
  * Season results for the local results base. The free API-Football plan only
  * serves seasons 2022–2024, so the backfill runs on football-data.org, which
@@ -134,7 +192,13 @@ export async function getLeagueResults({ competition, season, env = {}, fetchImp
     return data.matches.flatMap(item => {
       const league = competitions.find(c => c.id === competition.id && c.fd && c.fd === item.competition.code);
       if (!league || item.status !== 'FINISHED' || item.score.fullTime.home == null) return [];
-      return [{ id: `fd-${item.id}`, date: item.utcDate.slice(0, 10), competition: league.id, home: item.homeTeam.name, away: item.awayTeam.name, homeScore: item.score.fullTime.home, awayScore: item.score.fullTime.away }];
+      return [{
+        id: `fd-${item.id}`, date: item.utcDate.slice(0, 10), competition: league.id,
+        home: item.homeTeam.name, away: item.awayTeam.name,
+        homeScore: item.score.fullTime.home, awayScore: item.score.fullTime.away,
+        halfTime: item.score.halfTime?.home != null ? { home: item.score.halfTime.home, away: item.score.halfTime.away } : null,
+        matchday: item.matchday ?? null,
+      }];
     });
   } catch (error) { logger.warn(`Resultados (${competition.id}): ${error.message}`); return []; }
 }

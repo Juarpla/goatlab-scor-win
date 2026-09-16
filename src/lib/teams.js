@@ -27,18 +27,34 @@ export function teamShort(name) {
   const letters = key.replace(/ /g, '').slice(0, 3).toUpperCase();
   return letters || '???';
 }
+/** Nombre limpio para leer: quita los prefijos/sufijos legales que firman los proveedores («FC Barcelona» → «Barcelona»). */
+export function teamDisplay(name) {
+  return String(name ?? '')
+    .replace(/^(?:FC|CF|CD|CA|SC|CR|RC|CS|AFC|RCD|Club)\s+/i, '')
+    .replace(/\s+(?:FC|CF|AFC|SC|EC|CD|Balompié)$/i, '');
+}
 export function priorityIndex(name) {
   const key = normalize(name);
   const index = PRIORITY_TEAMS.findIndex(team => normalize(team) === key);
   return index === -1 ? PRIORITY_TEAMS.length : index;
 }
-/** The featured match: highest priority (best-ranked team involved), then earliest kickoff. Finished matches excluded. */
+/**
+ * The featured match, scored in layers (acordado en planificación):
+ * la lista de prioridades manda como base (×100); encima van dos bonus —
+ * ambos equipos prioritarios (+10) y proximidad del kickoff (el más
+ * temprano gana el desempate, con paso pequeño para no pisar los bonus).
+ * Los partidos terminados quedan fuera. Determinista: no usa el reloj.
+ */
 export function heroMatch(matches) {
   const candidates = (matches ?? []).filter(match => !FINISHED.has(match.status));
   if (!candidates.length) return null;
-  return [...candidates].sort((a, b) => {
-    const priority = Math.min(priorityIndex(a.home), priorityIndex(a.away)) - Math.min(priorityIndex(b.home), priorityIndex(b.away));
-    if (priority !== 0) return priority;
-    return a.kickoff < b.kickoff ? -1 : a.kickoff > b.kickoff ? 1 : 0;
-  })[0];
+  const score = match => {
+    const home = priorityIndex(match.home);
+    const away = priorityIndex(match.away);
+    const base = (PRIORITY_TEAMS.length - Math.min(home, away)) * 100;
+    const bothPriority = home < PRIORITY_TEAMS.length && away < PRIORITY_TEAMS.length ? 10 : 0;
+    const proximity = -Date.parse(match.kickoff) / 1e11;
+    return base + bothPriority + proximity;
+  };
+  return [...candidates].sort((a, b) => score(b) - score(a))[0];
 }

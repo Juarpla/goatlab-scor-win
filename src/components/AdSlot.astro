@@ -1,6 +1,28 @@
 ---
-const { compact = false } = Astro.props;
+import { AD_CLIENT, AD_SLOTS, ADS_ACTIVE } from '../config/ads';
+
+interface Props {
+  compact?: boolean;
+  /** Orientación del bloque: horizontal, vertical o rectangular */
+  variant?: 'horizontal' | 'vertical' | 'rect';
+  /** Clave de AD_SLOTS (src/config/ads.ts) o ID numérico directo del bloque */
+  slotKey?: string;
+  /** Texto del marcador cuando no hay anuncio activo */
+  note?: string;
+}
+
+const { compact = false, variant, slotKey, note, class: className } = Astro.props;
+const slotId = slotKey ? AD_SLOTS[slotKey as keyof typeof AD_SLOTS] || slotKey : '';
+const live = ADS_ACTIVE && Boolean(slotId);
+const variantClass = variant === 'horizontal' ? 'ad-horizontal' : variant === 'vertical' ? 'ad-vertical' : variant === 'rect' ? 'ad-rect' : undefined;
+const adFormat = variant === 'vertical' ? 'vertical' : variant === 'rect' ? 'rectangle' : 'auto';
 ---
-<aside class:list={['ad-slot', { compact }]} aria-label="Espacio publicitario reservado">
- <span>PUBLICIDAD</span><div>Una pausa fuera del juego.</div><small>Espacio reservado · sin anuncios activos</small>
+<aside class:list={['ad-slot', variantClass, { compact }, className]} aria-label={live ? 'Publicidad' : 'Espacio publicitario reservado'}>
+ <span>PUBLICIDAD</span>
+ {live ? (
+  <ins class="adsbygoogle" style="display:block" data-ad-client={AD_CLIENT} data-ad-slot={slotId} data-ad-format={adFormat} data-full-width-responsive="true"></ins>
+ ) : (
+  <><div>{note ?? 'Una pausa fuera del juego.'}</div><small>Espacio reservado · sin anuncios activos</small></>
+ )}
 </aside>
+{live && <script is:inline>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>}

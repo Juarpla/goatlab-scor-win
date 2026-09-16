@@ -1,0 +1,141 @@
+/* Metodología — scrollytelling editorial.
+   Reusa el sistema .story de global.css (grid, sticky stage, tabs, panes).
+   Solo añade la capa del hero, las ilustraciones SVG y el cierre. */
+
+/* ---- Hero: tesis + capas ---- */
+.method{padding-block:0 80px}
+.method-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center;padding-block:18px 30px}
+.method-hero h1{font-size:clamp(44px,6vw,64px)}
+.method-hero h1 span{color:var(--accent)}
+.method-hero p{margin-top:18px;font-size:15px;max-width:52ch}
+.method-layers{width:100%;max-width:330px;justify-self:end}
+.layers-rail{stroke:var(--line);stroke-width:1.5;fill:none}
+.layers-dot{fill:var(--line)}
+.layers-dot.is-first{fill:var(--accent)}
+.layer-plate{fill:var(--raised);stroke:var(--line)}
+.layer-text{font-family:var(--body);font-size:13px;font-weight:650;fill:var(--text)}
+.layer-num{fill:var(--accent);font-family:var(--display);font-size:15px;font-weight:700}
+
+/* ---- Pacing del relato ---- */
+.method-story .story-chapter{min-height:620px}
+.method-story .story-chapter h2{color:var(--muted);transition:color .35s ease}
+.method-story .story-chapter.is-active h2{color:var(--text)}
+.chapter-num{color:var(--accent)}
+.method-story .ad-slot{margin-block:6px}
+
+/* ---- Animaciones: un vocabulario (dibujar, crecer, aparecer) ---- */
+@keyframes fig-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes fig-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes fig-fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pipe-flow{to{stroke-dashoffset:-48}}
+@keyframes dot-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.draw{stroke-dasharray:1;animation:fig-draw .9s var(--d,0s) cubic-bezier(.2,.7,.2,1) both}
+.grow{transform-box:fill-box;transform-origin:50% 100%;animation:fig-grow .7s var(--d,0s) cubic-bezier(.2,.7,.2,1) both}
+.fade{animation:fig-fade .6s var(--d,0s) ease-out both}
+.stage-pane.is-active .draw{animation:fig-draw .9s var(--d,0s) cubic-bezier(.2,.7,.2,1) both}
+.stage-pane.is-active .grow{animation:fig-grow .7s var(--d,0s) cubic-bezier(.2,.7,.2,1) both}
+.stage-pane.is-active .fade{animation:fig-fade .6s var(--d,0s) ease-out both}
+.stage-pane.is-active .pipe-rail{animation:pipe-flow 1.6s linear infinite}
+.stage-pane.is-active .ia-live{animation:dot-pulse 2.2s ease-in-out infinite}
+
+/* ---- Capítulo 1: Poisson y pesos ---- */
+.stage-cast{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin-bottom:16px}
+.stage-cast svg{color:var(--accent);flex-shrink:0}
+.stage-cast strong{color:var(--text);font-weight:600}
+.poisson-fig{display:block;width:100%;max-width:420px}
+.fig-grid{stroke:var(--line);stroke-dasharray:2 5;opacity:.6}
+.fig-axis{stroke:var(--line)}
+.fig-bar{fill:var(--accent);opacity:.22}
+.fig-bar.is-peak{opacity:.45}
+.fig-curve{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round}
+.fig-label{font-family:var(--body);font-size:10px;fill:var(--muted)}
+.fig-caption{font-family:var(--body);font-size:10px;fill:var(--muted);letter-spacing:.04em}
+.input-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.input-list li{display:flex;align-items:flex-start;gap:10px}
+.input-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px}
+.input-list strong{display:block;font-size:12px;font-weight:650;color:var(--text)}
+.input-list small{display:block;font-size:10px;color:var(--muted)}
+.stage-note{font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:18px}
+
+/* ---- Capítulo 2: pipeline IA + teléfono ---- */
+.ia-flow{display:grid;grid-template-columns:1fr 186px;gap:24px;align-items:center}
+.pipe-fig{display:block;width:100%;max-width:340px}
+.pipe-rail{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:5 7}
+.pipe-dot{fill:var(--muted)}
+.pipe-dot.is-gate{fill:var(--accent)}
+.pipe-dot.is-waiting{fill:var(--line)}
+.pipe-node rect{fill:var(--raised);stroke:var(--line)}
+.pipe-node.is-gate rect{fill:transparent;stroke:var(--accent);stroke-dasharray:4 4}
+.pipe-node.is-waiting rect{fill:var(--surface)}
+.pipe-title{font-family:var(--body);font-size:12px;font-weight:650;fill:var(--text)}
+.pipe-sub{font-family:var(--body);font-size:9px;fill:var(--muted)}
+.phone-mockup{position:relative;width:186px;aspect-ratio:9/19;background:var(--raised);border:1px solid var(--line);border-radius:30px;padding:8px;margin:0}
+.phone-notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:52px;height:13px;border-radius:7px;background:var(--raised);border:1px solid var(--line);z-index:2}
+.phone-screen{position:absolute;inset:8px;border-radius:23px;background:var(--surface);overflow:hidden}
+.phone-app{display:flex;flex-direction:column;gap:10px;padding:38px 14px 14px;height:100%}
+.phone-app-head{display:flex;align-items:center;justify-content:space-between}
+.phone-app-head span{font-family:var(--body);font-size:12px;font-weight:650;color:var(--text)}
+.ia-live{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.ia-live.is-solid{opacity:1;animation:none}
+.phone-app-copy{font-size:10.5px;line-height:1.5;color:var(--muted);margin:0}
+.ia-chips{display:flex;gap:6px;flex-wrap:wrap}
+.ia-chips span{font-size:9px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:3px 7px}
+.phone-skeleton{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.phone-skeleton i{height:24px;border-radius:6px;background:var(--raised)}
+.phone-skeleton i:nth-child(2){height:18px;width:72%}
+.phone-skeleton i:nth-child(3){height:18px;width:52%}
+.phone-caption{font-size:9px;color:var(--muted);margin-top:auto}
+
+/* ---- Capítulo 3: criterio editorial ---- */
+.editor-flow{display:grid;grid-template-columns:150px 1fr;gap:24px;align-items:center;margin-bottom:6px}
+.seal-fig{display:block;width:150px}
+.seal-fig circle:first-child{fill:none;stroke:var(--line)}
+.seal-ring{fill:none;stroke:var(--accent);stroke-width:2}
+.seal-check{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.editor-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.editor-list li{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--text)}
+.editor-list svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ad-split{display:flex;align-items:stretch;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:18px}
+.split-analysis{display:flex;align-items:center;gap:8px;flex:1;padding:12px 16px;background:var(--surface);color:var(--text);font-size:11px;font-weight:650}
+.split-analysis i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.split-rule{width:1px;background:var(--line)}
+.split-ads{display:grid;place-items:center;padding:12px 16px;color:var(--muted);font-size:10px;letter-spacing:.1em}
+
+/* ---- Cierre con el producto en el teléfono ---- */
+.method-close{display:grid;grid-template-columns:1fr auto;gap:55px;align-items:center;border-top:1px solid var(--line);margin-top:12px;padding-block:55px 20px}
+.method-close h2{font-size:clamp(38px,4vw,52px);margin-bottom:16px}
+.method-close p{font-size:13.5px;max-width:52ch}
+.method-close .primary-button{margin-top:24px}
+.method-close .phone-mockup{width:200px}
+
+/* ---- Responsive ---- */
+@media(max-width:1150px){
+ .method-hero{gap:32px}
+ .method-close{gap:32px}
+}
+@media(max-width:760px){
+ .method{padding-bottom:60px}
+ .method-hero{grid-template-columns:1fr;gap:24px;padding-block:10px 20px}
+ .method-layers{max-width:300px;justify-self:start}
+ /* El stage baja a bloque en flujo (no sticky): con el teléfono visible
+    el pane supera el alto de la ventana y el sticky taparía la lectura. */
+ .method-story .story-stage{position:relative;top:auto;z-index:auto;margin-inline:-22px;border-bottom:1px solid var(--line)}
+ .method-story .story-chapter{min-height:0;padding-block:44px;scroll-margin-top:24px}
+ .method-story .story-chapter h2{color:var(--text)}
+ .poisson-fig{max-width:340px}
+ .ia-flow{grid-template-columns:1fr}
+ .ia-flow .pipe-fig{max-width:300px}
+ .ia-flow .phone-mockup{display:block;width:160px;margin-inline:auto}
+ .pipe-fig{max-width:340px}
+ .editor-flow{grid-template-columns:1fr;gap:18px}
+ .seal-fig{width:110px}
+ .method-close{grid-template-columns:1fr;gap:32px;padding-block:40px 10px}
+ .method-close .phone-mockup{width:180px;margin-inline:auto}
+}
+
+/* ---- Movimiento reducido: todo en su estado final ---- */
+@media(prefers-reduced-motion:reduce){
+ .draw,.grow,.fade,.stage-pane .draw,.stage-pane .grow,.stage-pane .fade{animation:none}
+ .stage-pane .pipe-rail{animation:none}
+ .stage-pane .ia-live{animation:none}
+}

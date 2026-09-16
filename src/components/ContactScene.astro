@@ -1,0 +1,41 @@
+---
+const { name = 'reportar' } = Astro.props;
+---
+
+{name === 'reportar' && <svg class="ct-scene" viewBox="0 8 320 216" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path class="cs-rule ct-draw" pathLength="1" d="M40 88H262" stroke-width="1.7"/>
+  <path class="cs-rule ct-fade ct-f1" d="M64 88v6M112 88v6M208 88v6" stroke-width="1.7"/>
+  <path class="cs-away ct-draw" pathLength="1" d="M64 88V62" stroke-width="7"/>
+  <path class="cs-away ct-draw ct-d1" pathLength="1" d="M112 88V50" stroke-width="7"/>
+  <path class="cs-signal ct-draw ct-d2" pathLength="1" d="M160 88V30" stroke-width="7"/>
+  <path class="cs-away ct-draw ct-d3" pathLength="1" d="M208 88V56" stroke-width="7"/>
+  <circle class="cs-signal ct-draw ct-d3" pathLength="1" cx="160" cy="30" r="17" stroke-width="1.7"/>
+  <path class="cs-rule ct-draw ct-d4" pathLength="1" d="M179 26C232 16 242 76 238 146" stroke-width="1.7"/>
+  <path class="cs-rule ct-draw ct-d4" pathLength="1" d="M229 139l9 7 8-9" stroke-width="1.7"/>
+  <path class="cs-ink ct-draw ct-d4" pathLength="1" d="M203 152H293a7 7 0 0 1 7 7v48a7 7 0 0 1-7 7H203a7 7 0 0 1-7-7v-48a7 7 0 0 1 7-7Z"/>
+  <path class="cs-ink ct-fade ct-f2" d="M196 156L248 192L300 156" stroke-width="1.7"/>
+</svg>}
+
+{name === 'analisis' && <svg class="ct-scene" viewBox="0 8 320 216" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path class="cs-rule ct-draw" pathLength="1" d="M40 56V210H272" stroke-width="1.7"/>
+  <path class="cs-rule ct-fade ct-f1" d="M36 176h8M36 142h8M36 108h8" stroke-width="1.7"/>
+  <path class="cs-away ct-draw" pathLength="1" d="M80 210V174" stroke-width="7"/>
+  <path class="cs-away ct-draw ct-d1" pathLength="1" d="M124 210V152" stroke-width="7"/>
+  <path class="cs-signal ct-fade ct-f1" d="M168 210V118" stroke-width="7" stroke-dasharray="10 8"/>
+  <path class="cs-signal ct-draw ct-d2" pathLength="1" d="M212 210V166" stroke-width="7"/>
+  <path class="cs-away ct-draw ct-d2" pathLength="1" d="M256 210V140" stroke-width="7"/>
+  <circle class="cs-fill ct-fade ct-f2" cx="168" cy="128" r="34"/>
+  <path class="cs-signal ct-fade ct-f3" d="M168 118V162" stroke-width="7" stroke-dasharray="10 8"/>
+  <circle class="cs-ink ct-draw ct-d3" pathLength="1" cx="168" cy="128" r="34" stroke-width="1.7"/>
+  <path class="cs-ink ct-draw ct-d3" pathLength="1" d="M191 151l27 27" stroke-width="2.5"/>
+</svg>}
+
+{name === 'fuera' && <svg class="ct-scene" viewBox="0 8 320 216" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <g transform="rotate(-6 160 146)">
+    <path class="cs-away ct-draw" pathLength="1" d="M113 104H207a9 9 0 0 1 9 9v66a9 9 0 0 1-9 9H113a9 9 0 0 1-9-9v-66a9 9 0 0 1 9-9Z"/>
+    <path class="cs-rule ct-fade ct-f1" d="M186 114V178" stroke-width="1.7" stroke-dasharray="3 7"/>
+    <path class="cs-rule ct-fade ct-f1" d="M120 126h28M120 146h40M120 166h22" stroke-width="3.5"/>
+  </g>
+  <circle class="cs-signal ct-draw ct-d1" pathLength="1" cx="160" cy="140" r="54" stroke-width="2.5"/>
+  <path class="cs-signal ct-draw ct-d2" pathLength="1" d="M122 102l76 76" stroke-width="2.5"/>
+</svg>}

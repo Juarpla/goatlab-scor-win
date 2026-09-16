@@ -6,9 +6,12 @@ import AdSlot from '../../components/AdSlot.astro';
 import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
 import { teamShort } from '../../lib/teams.js';
 import { teamForm } from '../../lib/form.js';
+import { ensemble } from '../../lib/predictions.js';
 import fixtures from '../../../public/data/fixtures.json';
 import analyses from '../../../public/data/analysis.json';
 import results from '../../../public/data/results.json';
+import history from '../../../public/data/history-stats.json';
+import evaluation from '../../../public/data/evaluation.json';
 export function getStaticPaths(){return fixtures.matches.map(match=>({params:{id:match.id},props:{match}}));}
 const {match} = Astro.props;
 const competition = competitions.find(c=>c.id===match.competition)?.name;
@@ -39,6 +42,17 @@ const statValue = (side, row) => {
 };
 const homeTotals = hasForm ? homeForm.goalsFor.reduce((a:number,b:number)=>a+b,0) : 0;
 const awayTotals = hasForm ? awayForm.goalsFor.reduce((a:number,b:number)=>a+b,0) : 0;
+
+/* Veredicto GoatLab: insumos calculados al construir la página; porcentajes solo si la evaluación histórica pasa. */
+const absentCount = side => (match.lineups?.unavailablePlayers ?? []).filter(player => player.team === side).length;
+const unavailable = match.lineups?.unavailablePlayers?.length ? { home: absentCount('home'), away: absentCount('away') } : null;
+const verdict = ensemble({ results: results.results, history: history.rows, h2h: match.h2h ?? null, catboost: match.modelPrediction ?? null, home: match.home, away: match.away, homeForm, awayForm, unavailable });
+const published = Boolean(evaluation?.published) && Boolean(verdict);
+const direction = verdict ? (verdict.oneX2.home >= verdict.oneX2.draw && verdict.oneX2.home >= verdict.oneX2.away ? match.home : verdict.oneX2.away > verdict.oneX2.draw ? match.away : null) : null;
+const marketsList = verdict ? [
+  { label: 'Más de 2.5 goles', value: verdict.over25 },
+  { label: 'Ambos equipos anotan', value: verdict.btts },
+] : [];
 ---
 <Layout title={`${match.home} vs. ${match.away} — GoatLab`}>
 <main id="main" class="wrap">
@@ -49,13 +63,27 @@ const awayTotals = hasForm ? awayForm.goalsFor.reduce((a:number,b:number)=>a+b,0
   <div class="story-notes">
    <section class="story-chapter" id="forma" data-chapter="forma"><h2>La forma se ve.<br/>También se compara.</h2><p>Un resultado aislado no cuenta toda la historia. Mira la producción de goles de ambos equipos sobre la misma escala.</p>{hasForm && <div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div>}{hasForm && <table class="data-table"><caption class="sr-only">Resumen de forma reciente con resultados reales</caption><thead><tr><th>Últimos {Math.max(homeForm.played, awayForm.played)} · reales</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody><tr><td>Goles anotados</td><td>{homeTotals}</td><td>{awayTotals}</td></tr><tr><td>Promedio por partido</td><td>{(homeTotals/homeForm.played).toFixed(1)}</td><td>{(awayTotals/awayForm.played).toFixed(1)}</td></tr><tr><td>Victorias</td><td>{homeForm.form.filter((x:string)=>x==='G').length}</td><td>{awayForm.form.filter((x:string)=>x==='G').length}</td></tr></tbody></table>}<span class="chapter-note">{hasForm?'Una muestra corta permite comparar la forma reciente; no demuestra lo que ocurrirá en el siguiente partido.':'Todavía no hay suficientes resultados registrados para comparar la forma de estos equipos.'}</span></section>
    <section class="story-chapter" id="estadisticas" data-chapter="estadisticas"><h2>El partido,<br/>en números.</h2><p>Cuando la fuente publica estadísticas del encuentro, aparecen aquí: posesión, tiros y goles esperados, siempre atribuidos a su proveedor.</p>{stats?.xgEstimated != null && <p>{stats.xgEstimated ? 'El xG de este partido es una estimación del proveedor, no una medición.' : 'El xG de este partido es una medición del proveedor.'}</p>}<span class="chapter-note">{stats?'Fuente: Bzzoiro. Las cifras pueden corregirse tras el partido.':'Las estadísticas aparecerán cuando el partido esté en juego o termine.'}</span></section>
-   <section class="story-chapter" id="escenarios" data-chapter="escenarios"><h2>Lo posible.<br/>Sin falsa certeza.</h2><p>Las probabilidades necesitan algo más que una cifra convincente: datos suficientes y una evaluación frente a resultados reales.</p><p>GoatLab incorporará escenarios de forma progresiva. Los modelos sin validar no mostrarán porcentajes públicos.</p><a class="text-link" href="/metodologia/">Cómo evaluamos las estimaciones <Icon size={18}/></a></section>
+   <section class="story-chapter" id="escenarios" data-chapter="escenarios"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p>{verdict && <table class="data-table"><caption class="sr-only">Insumos del veredicto y su peso</caption><thead><tr><th>Insumo</th><th>Peso</th></tr></thead><tbody>{verdict.inputs.map(input=><tr><td><strong>{input.label}</strong>{input.detail && <><br/><small>{input.detail}</small></>}</td><td>{input.weight > 0 ? <span class="weight-bar"><i style={`--w:${input.weight * 100}%`}></i>{Math.round(input.weight * 100)}%</span> : '—'}</td></tr>)}</tbody></table>}<span class="chapter-note">El veredicto es estimación estadística, no una cuota ni un consejo. Sus porcentajes se publican solo cuando la evaluación histórica supera a su baseline.</span><a class="text-link" href="/metodologia/">Cómo se calcula y se evalúa <Icon size={18}/></a></section>
   </div>
-  <div class="story-stage"><div class="chapter-tabs" role="group" aria-label="Gráfico del análisis"><button data-stage="forma" aria-pressed="true">Forma reciente</button><button data-stage="estadisticas" aria-pressed="false">Estadísticas</button><button data-stage="escenarios" aria-pressed="false">Escenarios</button></div>
+   <div class="story-stage"><div class="chapter-tabs" role="group" aria-label="Gráfico del análisis"><button data-stage="forma" aria-pressed="true">Forma reciente</button><button data-stage="estadisticas" aria-pressed="false">Estadísticas</button><button data-stage="escenarios" aria-pressed="false">El veredicto</button></div>
    <div class="stage-pane is-active" data-pane="forma" aria-hidden="false">{hasForm ? <Comparison home={match.home} away={match.away} shortHome={teamShort(match.home)} shortAway={teamShort(match.away)} homeForm={homeForm} awayForm={awayForm}/> : <h3>Sin forma suficiente</h3><p class="chapter-note">Cuando ambos equipos acumulen resultados registrados, la comparación aparecerá aquí.</p>}</div>
    <div class="stage-pane" data-pane="estadisticas" aria-hidden="true" hidden>{stats ? <><h3>Números del partido</h3><table class="data-table"><caption class="sr-only">Estadísticas del partido</caption><thead><tr><th>Estadística</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{STAT_ROWS.map(row=><tr><td>{row[0]}</td><td>{statValue(stats.home,row)}</td><td>{statValue(stats.away,row)}</td></tr>)}</tbody></table></> : <><h3>Estadísticas en espera</h3><p class="chapter-note">La fuente publica estadísticas cuando el partido comienza. Este espacio se completa en la siguiente actualización programada.</p></>}</div>
-   <div class="stage-pane" data-pane="escenarios" aria-hidden="true" hidden><h3>Escenarios en preparación</h3>{['Resultado del encuentro','Cantidad de goles','Ambos equipos anotan','Primer gol y sus momentos','Córners, tarjetas y jugadores'].map(label=><div class="estimate-status"><span>{label}</span><strong>Sin estimación</strong></div>)}<p style="font-size:11px;margin-top:20px">Se publicarán cuando existan datos y validación suficientes.</p></div>
-   <div class="stage-source">Datos de proveedores deportivos · no es una predicción</div>
+   <div class="stage-pane" data-pane="escenarios" aria-hidden="true" hidden>{verdict ? <>
+     <h3>El veredicto</h3>
+     {published ? <>
+      <div class="verdict-bars">
+       {(['home','draw','away'] as const).map(side => <div class="verdict-row"><span class="verdict-label">{side === 'home' ? teamShort(match.home) : side === 'away' ? teamShort(match.away) : 'Empate'}</span><div class="verdict-track"><i style={`--p:${verdict.oneX2[side] * 100}%`}></i></div><span class="verdict-value">{Math.round(verdict.oneX2[side] * 100)}%</span></div>)}
+      </div>
+      {marketsList.map(market => market.value != null && <div class="verdict-market"><span>{market.label}</span><strong>{Math.round(market.value * 100)}%</strong></div>)}
+      <span class="chapter-note">Evaluación histórica publicada sobre {evaluation.ensemble?.oneX2?.sampleSize ?? 0} partidos evaluados. No es una cuota ni un consejo de apuesta.</span>
+     </> : <>
+      <span class="outline-label">Evaluación en curso</span>
+      <p>El veredicto combina los insumos de arriba; los porcentajes aparecen cuando la evaluación histórica supere a su baseline. Hoy hay {evaluation.poisson?.oneX2?.sampleSize ?? 0} partidos evaluados en la base.</p>
+      <p class="verdict-direction">Con estos insumos, la lectura apunta a <strong>{direction ?? 'el empate'}</strong> — con la reserva de siempre: la muestra corta no demuestra el futuro.</p>
+     </>}
+     <span class="chapter-note">Fuente de los porcentajes del proveedor: Bzzoiro (modelo CatBoost). La combinación es de GoatLab y se evalúa contra resultados reales.</span>
+    </> : <h3>Escenarios en preparación</h3><p class="chapter-note">Cuando existan suficientes datos de forma para ambos equipos, el veredicto aparecerá aquí con sus insumos y pesos declarados.</p>}</div>
+   <div class="stage-source">Datos de proveedores deportivos · las estimaciones se identifican como tales</div>
   </div>
  </div>
  <AdSlot/>

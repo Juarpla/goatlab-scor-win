@@ -1,0 +1,44 @@
+---
+import TeamLogo from './TeamLogo.astro';
+const { home, away, homeForm, awayForm, teamIds = null } = Astro.props;
+// Un chip por partido: marcador desde la óptica del equipo, color por resultado
+// y el rival escrito completo (nada de siglas). El más reciente queda a la derecha.
+const sides = [
+  { name: home, form: homeForm, teamId: teamIds?.home ?? null },
+  { name: away, form: awayForm, teamId: teamIds?.away ?? null },
+];
+const rows = sides.map(side => {
+  const games = side.form.goalsFor.map((scored, index) => ({
+    letter: side.form.form[index],
+    scored, conceded: side.form.goalsAgainst[index],
+    rival: side.form.rivals[index],
+    date: side.form.dates[index],
+  })).reverse(); // más antiguo a la izquierda, el último a la derecha
+  return {
+    name: side.name, teamId: side.teamId, games,
+    wins: side.form.form.filter(letter => letter === 'G').length,
+    total: side.form.goalsFor.reduce((sum, value) => sum + value, 0),
+  };
+});
+---
+<div class="comparison form-chips">
+  <div class="chart-heading"><h3>Cómo llegan al encuentro</h3><span>Últimos {Math.max(homeForm.played, awayForm.played)} partidos · resultados reales</span></div>
+  {rows.map(row => (
+    <div class="form-row">
+      <div class="form-row-head">
+        <TeamLogo name={row.name} teamId={row.teamId} size={26}/>
+        <span class="form-row-name">{row.name}</span>
+        <span class="form-row-total">{row.wins}G · {row.total} <small>goles</small></span>
+      </div>
+      <div class="form-chip-row">
+        {row.games.map(game => (
+          <span class:list={['form-chip', game.letter]} title={`${game.scored}-${game.conceded} vs. ${game.rival} (${game.date})`}>
+            <strong>{game.scored}-{game.conceded}</strong>
+            <small>{game.rival}</small>
+          </span>
+        ))}
+      </div>
+    </div>
+  ))}
+  <p class="form-chips-note">Marcador desde la óptica de cada equipo: verde ganó, gris empató, rojo perdió.</p>
+</div>

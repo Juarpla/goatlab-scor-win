@@ -1,0 +1,248 @@
+/* Portada GoatLab — sala de análisis. Un solo archivo: todo lo nuevo de index.astro. */
+
+/* ---- Hero: tesis + banda rotativa de cifras reales ---- */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:end;padding-block:clamp(28px,5vh,64px) clamp(22px,3.5vh,44px)}
+.hero h1{font-size:clamp(54px,6vw,82px);line-height:.95}
+.hero h1 span{color:var(--accent)}
+.hero-copy p{margin-top:18px;font-size:15px}
+.hero-band{background:var(--surface);border-radius:12px;position:relative;min-height:172px;overflow:hidden}
+.band-slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:28px 32px;opacity:0;animation:band-cycle 12s infinite}
+.band-slide:nth-child(2){animation-delay:4s}
+.band-slide:nth-child(3){animation-delay:8s}
+.band-figure{font-family:var(--display);font-weight:700;font-size:clamp(44px,3.6vw,58px);line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.band-line{color:var(--muted);font-size:13px;max-width:34ch}
+@keyframes band-cycle{0%{opacity:1}30%{opacity:1}33%{opacity:0}97%{opacity:0}100%{opacity:1}}
+
+/* ---- Ticker de la ventana: nombres legibles + escudo pequeño ---- */
+.ticker{border-block:1px solid var(--line);padding-block:11px;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:ticker-run 46s linear infinite;will-change:transform}
+.ticker-set{display:inline-flex}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding-inline:18px;border-right:1px solid var(--line);font-size:12.5px}
+.ticker-item strong{max-width:26ch;overflow:hidden;text-overflow:ellipsis}
+.ticker-item small{color:var(--muted);font-size:11px;flex-shrink:0}
+@keyframes ticker-run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---- Forma: encuentro destacado con chips de resultados reales ---- */
+.forma{padding-block:clamp(30px,5vh,58px) 0}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin-bottom:18px}
+.section-heading h2{font-size:clamp(30px,3vw,44px)}
+.section-heading>span{color:var(--muted);font-size:11px;letter-spacing:.08em}
+.forma-panel{display:grid;grid-template-columns:.9fr 1.1fr;background:var(--surface);border-radius:12px;overflow:hidden}
+.forma-copy{padding:clamp(20px,2.5vh,30px) clamp(22px,2.2vw,34px);display:flex;flex-direction:column;justify-content:center;gap:16px;min-width:0}
+.forma-copy h3{font-family:var(--display);font-size:clamp(26px,2.4vw,36px);font-weight:600;line-height:1.05;margin:0}
+.forma-copy h3 span{color:var(--muted)}
+.forma-meta{display:flex;flex-wrap:wrap;gap:8px 16px;color:var(--muted);font-size:11px;letter-spacing:.05em}
+.forma-meta .chip-league{background:var(--raised);color:var(--text);border-radius:6px;padding:4px 9px;font-weight:600}
+.forma-panel .comparison{border-left:1px solid var(--line)}
+.forma-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+/* Chips de forma: marcador + rival completo; color por resultado (paleta de form-cell). */
+.form-chips{display:flex;flex-direction:column;gap:16px}
+.form-row{display:flex;flex-direction:column;gap:9px;min-width:0}
+.form-row-head{display:flex;align-items:center;gap:10px}
+.form-row-name{font-family:var(--display);font-size:17px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.form-row-total{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.form-row-total small{font-size:9px}
+.form-chip-row{display:flex;gap:6px}
+.form-chip{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;padding:8px 8px 7px;border-radius:6px;min-height:52px}
+.form-chip strong{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.form-chip small{font-size:9.5px;line-height:1.25;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.form-chip.G{background:#29351d}.form-chip.G strong{color:#d2eea7}
+.form-chip.E{background:#303732}.form-chip.E strong{color:#c7cfc6}
+.form-chip.P{background:#3b2824}.form-chip.P strong{color:#e9b4a3}
+.form-chips-note{font-size:10px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+/* El revelado de chips es opt-in desde JS (mejora progresiva): sin JS, visibles. */
+.forma-panel.js-anim .form-chip{clip-path:inset(0 0 100% 0);transition:clip-path .9s cubic-bezier(.2,.8,.2,1)}
+.forma-panel.js-anim.in-view .form-chip{clip-path:inset(0 0 0 0)}
+
+/* ---- Guía de análisis (tres paradas del método, sin partido fijo) ---- */
+.guia{padding-block:clamp(34px,5.5vh,62px) 0;border-top:1px solid var(--line);margin-top:clamp(30px,5vh,58px)}
+.guia-path{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:start}
+.guia-step{display:flex;flex-direction:column;gap:7px}
+.guia-number{font-family:var(--display);font-weight:700;font-size:30px;color:var(--accent);line-height:1}
+.guia-step h3{font-size:15px;font-weight:650;margin:0}
+.guia-step p{font-size:12.5px;max-width:30ch}
+.guia-link{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;margin-top:3px;transition:color .18s}
+.guia-link:hover{color:var(--accent)}
+.guia-join{align-self:center;color:var(--line);font-family:var(--display);font-size:22px;padding-inline:2px;user-select:none}
+
+/* ---- Muro de encuentros ---- */
+.wall{padding-block:clamp(34px,5.5vh,62px) 0;border-top:1px solid var(--line);margin-top:clamp(34px,5.5vh,62px)}
+.filter-row{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+.filter-row-side{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.day-select{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px 11px;font-size:12px;font-weight:600}
+.competition-filters{display:flex;flex-wrap:wrap;gap:6px;margin-inline:-5px}
+.filter{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:9px 13px;font-size:12px;font-weight:600;transition:color .18s,border-color .18s,background .18s}
+.filter:hover{color:var(--text)}
+.filter.active{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.search{display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--line);padding:10px 0;color:var(--muted);min-width:210px;transition:border-color .18s}
+.search input{background:transparent;border:0;color:var(--text);outline:none;width:100%}
+.search input:focus{outline:none}
+.search:focus-within{border-color:var(--accent)}
+.wall-grid{columns:3;column-gap:14px}
+.match-card{display:flex;flex-direction:column;gap:13px;background:var(--surface);border-radius:12px;padding:18px 20px;break-inside:avoid;margin-bottom:14px;transition:background .18s}
+.match-card:hover{background:var(--raised)}
+.match-card:hover .card-cta{color:var(--accent)}
+.match-card:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.card-league{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.07em;color:var(--bg);background:var(--muted);border-radius:5px;padding:3px 8px;line-height:1.4}
+.card-status{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.card-status.live{display:inline-flex;align-items:center;gap:7px;color:var(--accent)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:pin-pulse 1.8s ease-out infinite}
+.card-kickoff{color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.card-teams{display:flex;flex-direction:column;gap:9px}
+.card-team{display:flex;align-items:center;gap:11px;min-width:0}
+.card-team-name{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.01em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-form{display:inline-flex;gap:4px;flex-shrink:0}
+.card-form .form-cell{font-size:10px}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:11px}
+.card-cta{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;transition:color .18s}
+.empty-message{padding:26px 0}
+
+/* "Ver más": un solo enlace discreto, no una botonera */
+.wall-more{display:inline-flex;align-items:center;gap:8px;margin-top:6px;color:var(--muted);font-size:12.5px;border-bottom:1px solid var(--line);padding-bottom:3px;transition:color .18s,border-color .18s}
+.wall-more:hover{color:var(--accent);border-color:var(--accent)}
+.wall-more svg{transition:transform .18s}
+.wall-more:hover svg{transform:translateX(3px)}
+.wall-nav{padding-block:2px}
+
+/* ---- Muro de /encuentros: ads reservados a los costados + primera fila de 3 ---- */
+/* La fila de 3 vive solo en escritorio y a ancho completo: la anatomía de la card
+   (código, nombre, escudo y 5 chips) no cabe en pistas de ~200px. */
+.wall-lead{display:none}
+.wall-body{display:block}
+.ad-rail{display:none}
+.ad-under-filters{display:none}
+@keyframes card-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(min-width:1150px){
+  .wall-lead{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+  .wall-lead .match-card{margin-bottom:0}
+  .wall-body{display:grid;grid-template-columns:300px minmax(0,1fr) 300px;gap:14px;align-items:start}
+  .wall--ads .wall-grid{columns:2}
+  .ad-rail{display:flex}
+  .ad-rail.ad-vertical{margin-block:0;width:300px;height:600px;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+  .ad-rail.ad-vertical small{white-space:nowrap}
+}
+@media(max-width:1149px){
+  .ad-rail{display:none}
+}
+@media(max-width:760px){
+  .ad-under-filters{display:flex;margin-block:0 26px}
+  .wall--ads .wall-grid{columns:1}
+}
+
+/* ---- Región de jornada: mapa de sedes, pulso, tabla y termómetro ---- */
+.journey{padding-block:clamp(34px,5.5vh,62px) 0;border-top:1px solid var(--line);margin-top:clamp(34px,5.5vh,62px)}
+.panel{background:var(--surface);border-radius:12px;padding:clamp(18px,2.2vw,26px)}
+.panel-note{font-size:10px;color:var(--muted);margin-top:14px}
+.journey-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:14px}
+.journey-col{display:flex;flex-direction:column;gap:14px}
+
+/* Mapa: retícula de puntos Natural Earth con pines de sede y ficha por sede */
+.map-block{margin-top:4px}
+.map-frame{position:relative;background:var(--surface);border-radius:12px;overflow:hidden}
+.map-frame>img{display:block;width:100%;height:auto}
+.map-pins{position:absolute;inset:0}
+.pin{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:30px;height:30px;display:grid;place-items:center;background:none;border:0;padding:0}
+.pin i{width:9px;height:9px;border-radius:50%;background:var(--away);box-shadow:0 0 0 2px var(--surface);transition:transform .18s,background .18s}
+.pin:hover i,.pin:focus-visible i{transform:scale(1.3)}
+.pin.active i{background:var(--accent)}
+.pin.live i{animation:pin-pulse 1.8s ease-out infinite}
+@keyframes pin-pulse{0%{box-shadow:0 0 0 2px var(--surface),0 0 0 2px rgba(197,237,116,.6)}70%{box-shadow:0 0 0 2px var(--surface),0 0 0 11px rgba(197,237,116,0)}100%{box-shadow:0 0 0 2px var(--surface),0 0 0 0 rgba(197,237,116,0)}}
+.map-card{position:absolute;left:14px;bottom:14px;z-index:2;width:min(370px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto;background:var(--raised);border:1px solid var(--line);border-radius:10px;padding:15px 16px}
+.map-card header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.map-card strong{font-family:var(--display);font-size:21px;font-weight:600;line-height:1.05}
+.map-card small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px}
+.map-close{background:none;border:0;color:var(--muted);padding:4px;display:inline-flex;transition:color .18s}
+.map-close:hover{color:var(--text)}
+.map-card ul{list-style:none;margin:12px 0 0;padding:0}
+.map-card li{display:flex;flex-direction:column;gap:2px;padding-block:9px;border-top:1px solid var(--line)}
+.map-card li:first-child{border-top:0}
+.map-teams{font-family:var(--display);font-size:16.5px;font-weight:600;letter-spacing:-.01em}
+.map-teams em{font-style:normal;color:var(--muted);font-weight:500}
+.map-meta{display:flex;flex-wrap:wrap;gap:0 4px;font-size:10.5px;color:var(--muted)}
+.map-min{color:var(--accent);font-weight:600;font-style:normal}
+.map-foot{display:flex;flex-direction:column;gap:5px;padding:12px 4px 0;font-size:11px;color:var(--muted)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;vertical-align:baseline;margin-inline:2px}
+.dot-pin{background:var(--away)}
+.dot-live{background:var(--accent)}
+.map-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.map-legend>span{color:var(--line)}
+.map-lost{font-size:10.5px}
+.map-lost a{color:var(--muted);border-bottom:1px solid var(--line);transition:color .18s,border-color .18s}
+.map-lost a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* Pulso: ledger de hitos reales, no tarjetas de cifra */
+.pulse-list{list-style:none;margin:6px 0 0;padding:0}
+.pulse-list li{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:baseline;padding-block:12px;border-top:1px solid var(--line)}
+.pulse-list li:first-child{border-top:0;padding-top:8px}
+.pulse-rank{font-family:var(--display);font-weight:700;font-size:21px;color:var(--accent);min-width:16px;font-variant-numeric:tabular-nums}
+.pulse-fact{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pulse-label{font-size:10px;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.pulse-fact strong{font-family:var(--display);font-size:19px;font-weight:600;line-height:1.15;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pulse-detail{font-size:11.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+
+/* Tabla viva: pestañas de competición + top 10 */
+.standings-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.standings-table{width:100%;border-collapse:collapse}
+.standings-table td{padding:7.5px 0;border-top:1px solid var(--line)}
+.standings-table tbody tr:first-child td{border-top:0}
+.st-pos{font-family:var(--display);font-weight:600;color:var(--muted);width:30px;font-variant-numeric:tabular-nums}
+.st-team{font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.01em;max-width:0;width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-num{font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;width:38px}
+.st-pts{color:var(--accent);font-weight:700;text-align:right;width:44px;font-variant-numeric:tabular-nums}
+.standings-empty{font-size:13px;margin-top:12px}
+
+/* Termómetro: la banda del hero, en versión panel */
+.band-rotor{position:relative;min-height:128px;margin-top:8px}
+.band-rotor .band-slide{padding:0}
+.band-figure-sm{font-size:clamp(30px,2.6vw,42px)}
+
+/* ---- Responsive: mismo orden de escritorio ---- */
+@media(max-width:1150px){
+  .hero{grid-template-columns:1fr;gap:26px}
+  .wall-grid{columns:2}
+  .guia-path{gap:22px}
+  .journey-grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .hero{padding-block:26px 18px}
+  .intro{flex-direction:column;align-items:stretch;gap:12px}
+  .hero h1{font-size:clamp(44px,12.5vw,66px)}
+  .hero-copy p{margin-top:12px;font-size:13px}
+  .hero-band{min-height:150px}
+  .band-slide{padding:22px 24px}
+  .ticker-item{padding-inline:13px}
+  .ticker-item strong{max-width:16ch}
+  .section-heading{flex-direction:column;align-items:flex-start;gap:4px}
+  .section-heading h2{font-size:30px}
+  .forma-panel{grid-template-columns:1fr}
+  .forma-panel .comparison{border-left:0;border-top:1px solid var(--line)}
+  .forma-copy{padding:20px}
+  .form-chip-row{flex-wrap:wrap}
+  .form-chip{flex:1 1 30%}
+  .guia-path{grid-template-columns:1fr;gap:20px}
+  .guia-join{display:none}
+  .wall-grid{columns:1}
+  .filter-row{flex-direction:column;align-items:stretch;gap:10px}
+  .search{min-width:0}
+  .match-card{padding:16px}
+  .pin{width:34px;height:34px}
+  .map-card{left:10px;right:10px;width:auto}
+  .map-foot{flex-direction:column}
+  .pulse-list li{grid-template-columns:auto 1fr;gap:10px}
+  .pulse-detail{grid-column:2;text-align:left}
+  .st-team{width:auto;max-width:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .band-slide{animation:none;opacity:0}
+  .band-slide:first-child{opacity:1}
+  .ticker-track{animation:none}
+  .ticker-track>.ticker-copy{display:none}
+  .forma-panel.js-anim .form-chip{clip-path:none;transition:none}
+  .wall-more svg{transition:none}
+  .pin.live i{animation:none;background:var(--accent)}
+  .pin i{transition:none}
+  .live-dot{animation:none}
+  .match-card{animation:none!important}
+}

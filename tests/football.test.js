@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getLeagueResults, mergeFixtures } from '../src/lib/football.js';
+import { getFixtures, getLeagueResults, mergeFixtures, isMatchExpired } from '../src/lib/football.js';
 const logger = { warn() {} };
 
 test('fallback is explicitly delayed and does not invent detailed metrics', async () => {
@@ -65,7 +65,13 @@ test('league results come from football-data, finished matches only', async () =
     { id: 11, utcDate: '2026-09-11T14:00:00Z', status: 'SCHEDULED', competition: { code: 'PL' }, homeTeam: { name: 'C' }, awayTeam: { name: 'D' }, score: { fullTime: { home: null, away: null } } },
     { id: 12, utcDate: '2026-09-12T14:00:00Z', status: 'FINISHED', competition: { code: 'CL' }, homeTeam: { name: 'E' }, awayTeam: { name: 'F' }, score: { fullTime: { home: 1, away: 1 } } },
   ] })), paceMs: 0 });
-  assert.deepEqual(rows, [{ id: 'fd-10', date: '2026-09-10', competition: 'premier', home: 'Arsenal', away: 'Newcastle United', homeScore: 2, awayScore: 1 }]);
+  assert.deepEqual(rows, [{ id: 'fd-10', date: '2026-09-10', competition: 'premier', home: 'Arsenal', away: 'Newcastle United', homeScore: 2, awayScore: 1, halfTime: null, matchday: null }]);
+});
+test('a match expires 115 minutes after kickoff, even without a final status', () => {
+  const match = { kickoff: '2026-09-14T19:00:00Z' };
+  assert.equal(isMatchExpired(match, Date.parse('2026-09-14T20:54:59Z')), false); // 114' in
+  assert.equal(isMatchExpired(match, Date.parse('2026-09-14T20:55:00Z')), true);  // 115' in
+  assert.equal(isMatchExpired(match, Date.parse('2026-09-15T12:00:00Z')), true);  // the stale Leeds–Newcastle case
 });
 test('fallback statuses are normalized to the API-Football vocabulary', async () => {
   const data = await getFixtures({ date: '2026-09-13', logger, env: { FOOTBALL_DATA_KEY: 'b' }, fetchImpl: async () => new Response(JSON.stringify({ matches: [

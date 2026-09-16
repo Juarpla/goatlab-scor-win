@@ -1,4 +1,110 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ContactScene from '../components/ContactScene.astro';
+import PromoSlide from '../components/PromoSlide.astro';
+import AdSlot from '../components/AdSlot.astro';
+import '../styles/contacto.css';
 ---
-<Layout title="Contacto — GoatLab"><main id="main" class="wrap prose"><a class="back-link" href="/">Volver a GoatLab</a><h1>Contacto.</h1><p>¿Encontraste un error en los datos, una cifra mal atribuida o una fuente que no cuadra? Escríbenos: las correcciones se revisan antes de la siguiente actualización programada.</p><p>Correo de contacto: <a href="mailto:contacto@scor.win">contacto@scor.win</a></p><h2>Sobre los análisis</h2><p>Los resúmenes preparados con IA indican siempre sus limitaciones junto al texto. Si un análisis parece inventar un dato que la fuente no entregó, es exactamente el tipo de reporte que nos interesa recibir.</p><h2>Temas que no atendemos</h2><p>No publicamos ni comentamos cuotas de apuestas, no enlazamos casas de apuestas y no ofrecemos recomendaciones de apuesta. Esas consultas quedan fuera del alcance del proyecto.</p></main></Layout>
+<Layout title="Contacto — GoatLab">
+<main id="main" class="wrap">
+  <a class="back-link" href="/">Volver a GoatLab</a>
+  <div class="contact-head">
+    <h1>Contacto.</h1>
+    <p>Este proyecto se corrige en público: si algo no cuadra, el correo es la línea directa.</p>
+  </div>
+  <div class="story contact-story">
+    <div class="story-notes">
+      <section class="story-chapter" id="reportar" data-chapter="reportar">
+        <div class="ct-inline" aria-hidden="true"><ContactScene name="reportar"/></div>
+        <h2>Reporta lo que<br/>no cuadra.</h2>
+        <p>¿Una cifra mal atribuida, un dato que la fuente no entregó, un resumen que se adelanta? Escríbenos: las correcciones se revisan antes de la siguiente actualización programada.</p>
+        <a class="ct-mail" href="mailto:contacto@scor.win">contacto@scor.win</a>
+      </section>
+      <section class="story-chapter" id="analisis" data-chapter="analisis">
+        <div class="ct-inline" aria-hidden="true"><ContactScene name="analisis"/></div>
+        <h2>La IA declara<br/>sus límites.</h2>
+        <p>Los resúmenes preparados con IA indican siempre sus limitaciones junto al texto. Si un análisis afirma un dato que la fuente no entregó, ese es exactamente el reporte que nos interesa recibir.</p>
+        <a class="text-link" href="/metodologia/#analisis-ia">Cómo se controla la IA <Icon size={18}/></a>
+        <span class="chapter-note">Cada texto se prepara a partir de datos verificados; sus límites viajan pegados al párrafo.</span>
+      </section>
+      <AdSlot variant="rect" slotKey="contactoCap2"/>
+      <section class="story-chapter" id="fuera" data-chapter="fuera">
+        <div class="ct-inline" aria-hidden="true"><ContactScene name="fuera"/></div>
+        <h2>Lo que queda<br/>fuera.</h2>
+        <p>No publicamos ni comentamos cuotas de apuestas, no enlazamos casas de apuestas y no ofrecemos recomendaciones de apuesta. Esas consultas quedan fuera del alcance del proyecto.</p>
+        <span class="chapter-note">Es un criterio editorial permanente, no una limitación temporal.</span>
+      </section>
+      <AdSlot variant="horizontal" slotKey="contactoCierre"/>
+    </div>
+    <div class="story-stage ct-stage">
+      <div class="stage-pane is-active" data-pane="reportar" aria-hidden="false"><ContactScene name="reportar"/></div>
+      <div class="stage-pane" data-pane="analisis" aria-hidden="true" hidden><ContactScene name="analisis"/></div>
+      <div class="stage-pane" data-pane="fuera" aria-hidden="true" hidden><ContactScene name="fuera"/></div>
+      <div class="stage-source">Escenas del método · geometría declarativa, sin datos de ejemplo</div>
+    </div>
+  </div>
+  <PromoSlide/>
+</main>
+<script>
+  const layers = [...document.querySelectorAll<HTMLElement>('.ct-stage [data-pane]')];
+  const chapters = [...document.querySelectorAll<HTMLElement>('.contact-story [data-chapter]')];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hideTimers = new WeakMap<HTMLElement, number>();
+  let activeId = 'reportar';
+
+  function activate(id: string) {
+    if (!id || activeId === id) return;
+    activeId = id;
+    layers.forEach(layer => {
+      const isTarget = layer.dataset.pane === id;
+      const timer = hideTimers.get(layer);
+      if (timer) window.clearTimeout(timer);
+      if (isTarget) {
+        layer.hidden = false;
+        layer.setAttribute('aria-hidden', 'false');
+        layer.classList.remove('is-leaving');
+        requestAnimationFrame(() => layer.classList.add('is-active'));
+      } else {
+        layer.setAttribute('aria-hidden', 'true');
+        layer.classList.remove('is-active');
+        layer.classList.add('is-leaving');
+        const hide = () => { if (layer.dataset.pane !== activeId) { layer.classList.remove('is-leaving'); layer.hidden = true; } };
+        if (reducedMotion) hide();
+        else hideTimers.set(layer, window.setTimeout(hide, 240));
+      }
+    });
+  }
+
+  // El marcador de partido elige el capítulo visible; con movimiento reducido
+  // el cruce de capas es instantáneo porque CSS anula las transiciones.
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const marker = innerWidth < 761 ? innerHeight * 0.7 : innerHeight * 0.45;
+    let current = chapters[0];
+    for (const chapter of chapters) {
+      if (chapter.getBoundingClientRect().top < marker) current = chapter;
+    }
+    if (current) activate(current.dataset.chapter!);
+  };
+  window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+
+  // La barra de veredicto del teléfono se llena una vez al entrar en vista.
+  const promo = document.querySelector<HTMLElement>('.promo-slide');
+  if (promo && !reducedMotion) {
+    if (!('IntersectionObserver' in window)) {
+      promo.classList.add('in-view');
+    } else {
+      promo.classList.add('js-anim');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('in-view'); observer.unobserve(entry.target); }
+        });
+      }, { threshold: 0.25 });
+      observer.observe(promo);
+    }
+  }
+</script>
+</Layout>
