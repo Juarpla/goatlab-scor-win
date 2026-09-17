@@ -4,7 +4,8 @@
   "away": "Ipswich Town FC",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 2.025,
@@ -43,14 +44,17 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T14:00:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -167,6 +171,15 @@
         "rate": 0.41,
         "anytime": 0.333,
         "first": 0.127
+      },
+      {
+        "player": "James Tarkowski",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.2,
+        "rate": 0.41,
+        "anytime": 0.333,
+        "first": 0.127
       }
     ],
     "away": [
@@ -201,92 +214,26 @@
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Everton FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 2,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 2,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 4,
-        "sample": 4
-      },
-      "season": {
-        "position": 9,
-        "played": 4,
-        "gf": 5,
-        "ga": 3,
-        "provider": null
-      },
-      "player": {
-        "name": "Ainsley Maitland-Niles",
-        "detail": "1 goles en 2 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Ipswich Town FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 1,
-        "sample": 4
-      },
-      "season": {
-        "position": 10,
-        "played": 4,
-        "gf": 7,
-        "ga": 10,
-        "provider": null
-      },
-      "player": {
-        "name": "Emersonn",
-        "detail": "2 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "Incoherencia interna: las lambdas del mercado (Everton 2,03; Ipswich 1,15) contradicen el xG del propio modelo (1,39 y 1,44), que da más xG al Ipswich. El 56,6% de victoria local y el 2-1 como segundo marcador probable parecen inflados respecto a esa referencia.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:24:03.599Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
       "home": 0.535,
-      "draw": 0.249,
-      "away": 0.215,
+      "draw": 0.251,
+      "away": 0.214,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.39,
-      "away": 1.44
+      "home": 1.38,
+      "away": 1.41
     },
-    "over15": null,
-    "over25": 0.55,
-    "over35": null,
-    "btts": 0.5579999999999999,
+    "over15": 0.759,
+    "over25": 0.5479999999999999,
+    "over35": 0.331,
+    "btts": 0.5589999999999999,
     "score": "1-1",
-    "cornersOver95": 0.46299999999999997,
-    "confidence": 0.5354,
+    "cornersOver95": 0.45799999999999996,
+    "confidence": 0.5353,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:06.218Z",
+    "capturedAt": "2026-09-17T05:58:58.718Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -362,7 +309,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -382,10 +329,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
+      "wind": 17.9,
       "condition": null,
-      "sampledAt": null,
-      "source": null
+      "sampledAt": "2026-09-19T14:00:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Hill Dickinson Stadium",
@@ -404,5 +351,64 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Everton FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 4,
+        "sample": 4
+      },
+      "season": {
+        "position": 9,
+        "played": 4,
+        "gf": 5,
+        "ga": 3,
+        "provider": null
+      },
+      "player": {
+        "name": "Ainsley Maitland-Niles",
+        "detail": "1 goles en 2 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Ipswich Town FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 4
+      },
+      "season": {
+        "position": 10,
+        "played": 4,
+        "gf": 7,
+        "ga": 10,
+        "provider": null
+      },
+      "player": {
+        "name": "Emersonn",
+        "detail": "2 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

@@ -4,7 +4,8 @@
   "away": "Arsenal FC",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 2.052,
@@ -43,14 +44,17 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T14:00:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -219,92 +223,26 @@
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Brighton & Hove Albion FC",
-      "recentSample": 5,
-      "cleanSheets": {
-        "value": 3,
-        "sample": 5
-      },
-      "biggestWin": {
-        "value": 5,
-        "sample": 5
-      },
-      "unbeaten": {
-        "value": 3,
-        "sample": 5
-      },
-      "season": {
-        "position": 5,
-        "played": 4,
-        "gf": 13,
-        "ga": 5,
-        "provider": null
-      },
-      "player": {
-        "name": "Jack Hinshelwood",
-        "detail": "2 goles en 1 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Arsenal FC",
-      "recentSample": 5,
-      "cleanSheets": {
-        "value": 4,
-        "sample": 5
-      },
-      "biggestWin": {
-        "value": 3,
-        "sample": 5
-      },
-      "unbeaten": {
-        "value": 5,
-        "sample": 5
-      },
-      "season": {
-        "position": 1,
-        "played": 4,
-        "gf": 8,
-        "ga": 1,
-        "provider": null
-      },
-      "player": {
-        "name": "Bukayo Saka",
-        "detail": "3 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "Contradicción interna: los mercados Poisson favorecen al Brighton (54,1%) con lambdas 2,052-1,288, mientras modelPrediction da 20% local y 55,7% Arsenal con xG 1,11-1,51 (invertidos). El 1X2 parece desviado respecto al xG y al H2H (11 victorias del Arsenal en 22).",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:45:13.371Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.2,
-      "draw": 0.242,
-      "away": 0.557,
+      "home": 0.207,
+      "draw": 0.244,
+      "away": 0.5489999999999999,
       "predicted": "A"
     },
     "xg": {
-      "home": 1.11,
-      "away": 1.51
+      "home": 1.12,
+      "away": 1.52
     },
-    "over15": null,
-    "over25": 0.536,
-    "over35": null,
-    "btts": 0.535,
+    "over15": 0.75,
+    "over25": 0.539,
+    "over35": 0.311,
+    "btts": 0.5429999999999999,
     "score": "1-1",
-    "cornersOver95": 0.446,
-    "confidence": 0.5574,
+    "cornersOver95": 0.44,
+    "confidence": 0.549,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:06.049Z",
+    "capturedAt": "2026-09-17T05:58:58.127Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -380,7 +318,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -400,10 +338,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
+      "wind": 10.2,
       "condition": null,
-      "sampledAt": null,
-      "source": null
+      "sampledAt": "2026-09-19T14:00:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "American Express Stadium",
@@ -422,5 +360,64 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Brighton & Hove Albion FC",
+      "recentSample": 5,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 5,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 5
+      },
+      "season": {
+        "position": 5,
+        "played": 4,
+        "gf": 13,
+        "ga": 5,
+        "provider": null
+      },
+      "player": {
+        "name": "Jack Hinshelwood",
+        "detail": "2 goles en 1 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Arsenal FC",
+      "recentSample": 5,
+      "cleanSheets": {
+        "value": 4,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 1,
+        "played": 4,
+        "gf": 8,
+        "ga": 1,
+        "provider": null
+      },
+      "player": {
+        "name": "Bukayo Saka",
+        "detail": "3 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

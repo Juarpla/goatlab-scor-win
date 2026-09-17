@@ -4,7 +4,8 @@
   "away": "Aston Villa FC",
   "competition": "premier",
   "kickoff": "2026-09-19T11:30:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 0.972,
@@ -15,18 +16,45 @@
       "away": 5
     },
     "standings": {
-      "Tottenham Hotspur FC": null,
-      "Aston Villa FC": null
+      "Tottenham Hotspur FC": {
+        "position": 17,
+        "team": "Tottenham Hotspur FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 2,
+        "lost": 2,
+        "goalsFor": 0,
+        "goalsAgainst": 5,
+        "goalDifference": -5,
+        "points": 2,
+        "form": null
+      },
+      "Aston Villa FC": {
+        "position": 19,
+        "team": "Aston Villa FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 1,
+        "lost": 3,
+        "goalsFor": 1,
+        "goalsAgainst": 7,
+        "goalDifference": -6,
+        "points": 1,
+        "form": null
+      }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T11:30:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -149,67 +177,26 @@
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Tottenham Hotspur FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 2,
-        "sample": 4
-      },
-      "biggestWin": null,
-      "unbeaten": {
-        "value": 2,
-        "sample": 4
-      },
-      "season": null,
-      "player": null
-    },
-    "away": {
-      "team": "Aston Villa FC",
-      "recentSample": 5,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 5
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 5
-      },
-      "unbeaten": {
-        "value": 0,
-        "sample": 5
-      },
-      "season": null,
-      "player": {
-        "name": "Alysson",
-        "detail": "1 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": null,
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.474,
-      "draw": 0.262,
+      "home": 0.473,
+      "draw": 0.263,
       "away": 0.264,
       "predicted": "H"
     },
     "xg": {
       "home": 1.38,
-      "away": 1.39
+      "away": 1.4
     },
-    "over15": null,
+    "over15": 0.758,
     "over25": 0.534,
-    "over35": null,
-    "btts": 0.5670000000000001,
+    "over35": 0.321,
+    "btts": 0.568,
     "score": "1-1",
-    "cornersOver95": 0.508,
-    "confidence": 0.4741,
+    "cornersOver95": 0.507,
+    "confidence": 0.4732,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:05.854Z",
+    "capturedAt": "2026-09-17T05:58:57.445Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -285,7 +272,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -305,10 +292,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 7.5,
+      "condition": "unknown",
+      "sampledAt": "2026-09-19T11:30:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Tottenham Hotspur Stadium",
@@ -327,5 +314,57 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Tottenham Hotspur FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 4
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 2,
+        "sample": 4
+      },
+      "season": {
+        "position": 17,
+        "played": 4,
+        "gf": 0,
+        "ga": 5,
+        "provider": null
+      },
+      "player": null
+    },
+    "away": {
+      "team": "Aston Villa FC",
+      "recentSample": 5,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 19,
+        "played": 4,
+        "gf": 1,
+        "ga": 7,
+        "provider": null
+      },
+      "player": {
+        "name": "Alysson",
+        "detail": "1 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

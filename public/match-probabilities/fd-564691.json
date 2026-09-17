@@ -4,7 +4,8 @@
   "away": "Deportivo Alavés",
   "competition": "laliga",
   "kickoff": "2026-09-19T14:15:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 1.296,
@@ -29,7 +30,7 @@
         "form": null
       },
       "Deportivo Alavés": {
-        "position": 4,
+        "position": 6,
         "team": "Deportivo Alavés",
         "played": 6,
         "won": 3,
@@ -43,14 +44,17 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:43.994Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T14:00",
+      "source": "open-meteo-forecast"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:52.441Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -210,92 +214,26 @@
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Athletic Club",
-      "recentSample": 5,
-      "cleanSheets": {
-        "value": 2,
-        "sample": 5
-      },
-      "biggestWin": {
-        "value": 3,
-        "sample": 5
-      },
-      "unbeaten": {
-        "value": 3,
-        "sample": 5
-      },
-      "season": {
-        "position": 9,
-        "played": 5,
-        "gf": 7,
-        "ga": 6,
-        "provider": null
-      },
-      "player": {
-        "name": "Robert Navarro",
-        "detail": "2 goles en 5 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Deportivo Alavés",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 2,
-        "sample": 6
-      },
-      "biggestWin": {
-        "value": 3,
-        "sample": 6
-      },
-      "unbeaten": {
-        "value": 0,
-        "sample": 6
-      },
-      "season": {
-        "position": 4,
-        "played": 6,
-        "gf": 11,
-        "ga": 6,
-        "provider": null
-      },
-      "player": {
-        "name": "Lucas Boyé",
-        "detail": "4 goles en 5 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "Divergencia clara entre salidas: modelPrediction da 56,7% al Athletic y 18,3% al Alavés (xG 1,45-1,11), mientras el Poisson de markets invierte el favoritismo (33,6%-38,1%) con lambdas 1,296-1,395. El xG local alto no se refleja en los lambdas usados.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:47:17.604Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.5670000000000001,
-      "draw": 0.25,
-      "away": 0.183,
+      "home": 0.57,
+      "draw": 0.249,
+      "away": 0.18100000000000002,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.45,
+      "home": 1.47,
       "away": 1.11
     },
-    "over15": null,
-    "over25": 0.474,
-    "over35": null,
-    "btts": 0.49,
+    "over15": 0.715,
+    "over25": 0.475,
+    "over35": 0.27,
+    "btts": 0.489,
     "score": "1-1",
-    "cornersOver95": 0.5489999999999999,
-    "confidence": 0.567,
+    "cornersOver95": 0.552,
+    "confidence": 0.5696,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:06.411Z",
+    "capturedAt": "2026-09-17T05:58:58.427Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -371,7 +309,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -388,13 +326,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": null,
+      "temp": 25,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 14,
       "condition": null,
-      "sampledAt": null,
-      "source": null
+      "sampledAt": "2026-09-19T14:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "San Mamés",
@@ -413,5 +351,64 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Athletic Club",
+      "recentSample": 5,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 5
+      },
+      "season": {
+        "position": 9,
+        "played": 5,
+        "gf": 7,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Robert Navarro",
+        "detail": "2 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Deportivo Alavés",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 6
+      },
+      "season": {
+        "position": 6,
+        "played": 6,
+        "gf": 11,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Lucas Boyé",
+        "detail": "4 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

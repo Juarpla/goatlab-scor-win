@@ -4,30 +4,45 @@
   "away": "Lech Poznan",
   "competition": "europa",
   "kickoff": "2026-09-17T19:00:00+00:00",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": null,
     "sample": null,
     "standings": {
       "Crystal Palace": {
-        "position": 10,
+        "position": 15,
         "team": "Crystal Palace",
         "teamId": 14,
         "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
         "points": 0,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
         "form": null
       },
       "Lech Poznan": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:33.043Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-17T19:00:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:40.723Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -42,74 +57,26 @@
   "scorers": null,
   "hasScorers": false,
   "method": null,
-  "context": {
-    "home": {
-      "team": "Crystal Palace",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 0,
-        "sample": 4
-      },
-      "season": {
-        "position": 10,
-        "played": 0,
-        "provider": null
-      },
-      "player": null
-    },
-    "away": {
-      "team": "Lech Poznan",
-      "recentSample": 0,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 0
-      },
-      "biggestWin": null,
-      "unbeaten": null,
-      "season": null,
-      "player": {
-        "name": "Patrik Wålemark",
-        "detail": "4 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "Inconsistencia interna: el marcador más probable es 1-1 y los goles esperados son casi idénticos (1,45 vs 1,46), lo que no encaja con un 67% de victoria local. El modelo da clara ventaja al Palace pese a plantear un duelo parejo.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:40:27.058Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
       "home": 0.67,
-      "draw": 0.198,
-      "away": 0.132,
+      "draw": 0.19699999999999998,
+      "away": 0.133,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.45,
+      "home": 1.44,
       "away": 1.46
     },
-    "over15": null,
-    "over25": 0.5820000000000001,
-    "over35": null,
-    "btts": 0.516,
+    "over15": 0.8,
+    "over25": 0.5920000000000001,
+    "over35": 0.36,
+    "btts": 0.52,
     "score": "1-1",
-    "cornersOver95": 0.449,
-    "confidence": 0.6705,
+    "cornersOver95": 0.46,
+    "confidence": 0.6702,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:05.076Z",
+    "capturedAt": "2026-09-17T05:58:55.517Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -134,7 +101,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -154,10 +121,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 3.2,
+      "condition": "unknown",
+      "sampledAt": "2026-09-17T19:00:00+00:00",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Selhurst Park",
@@ -176,5 +143,54 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Crystal Palace",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": {
+        "position": 15,
+        "played": 0,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": null
+    },
+    "away": {
+      "team": "Lech Poznan",
+      "recentSample": 0,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 0
+      },
+      "biggestWin": null,
+      "unbeaten": null,
+      "season": {
+        "position": 19,
+        "played": 0,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Patrik Wålemark",
+        "detail": "4 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

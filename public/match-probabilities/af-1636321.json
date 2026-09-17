@@ -4,30 +4,45 @@
   "away": "Bournemouth",
   "competition": "europa",
   "kickoff": "2026-09-17T19:00:00+00:00",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": null,
     "sample": null,
     "standings": {
       "Real Sociedad": null,
       "Bournemouth": {
-        "position": 7,
+        "position": 13,
         "team": "Bournemouth",
         "teamId": 2,
         "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
         "points": 0,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
         "form": null
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:33.043Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-17T19:00:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:40.723Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -42,6 +57,93 @@
   "scorers": null,
   "hasScorers": false,
   "method": null,
+  "provider": {
+    "oneX2": {
+      "home": 0.33,
+      "draw": 0.264,
+      "away": 0.406,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.6,
+      "away": 1.38
+    },
+    "over15": 0.78,
+    "over25": 0.5579999999999999,
+    "over35": 0.33899999999999997,
+    "btts": 0.595,
+    "score": "1-1",
+    "cornersOver95": 0.534,
+    "confidence": 0.4061,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-09-17T05:58:56.397Z",
+    "source": "Bzzoiro"
+  },
+  "h2h": {
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
+  },
+  "discipline": {
+    "method": "poisson-cards-v0",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "setPieces": {
+    "method": "poisson-corners-v0",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 6.8,
+      "condition": null,
+      "sampledAt": "2026-09-17T19:00:00+00:00",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Reale Arena",
+      "city": "San Sebastián",
+      "capacity": 39500,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
   "context": {
     "home": {
       "team": "Real Sociedad",
@@ -71,106 +173,20 @@
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 7,
+        "position": 13,
         "played": 0,
+        "gf": null,
+        "ga": null,
         "provider": null
       },
       "player": null
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": null,
+    "flag": true,
+    "note": "El 40,6% a favor del Bournemouth choca con unos goles esperados que favorecen a la Real Sociedad (1,6 frente a 1,38). La tabla del Bournemouth (13º, 0 puntos, 0 partidos) no encaja con una temporada avanzada y hay una fila de forma duplicada.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:40:52.506Z"
-  },
-  "schemaVersion": 2,
-  "provider": {
-    "oneX2": {
-      "home": 0.33399999999999996,
-      "draw": 0.266,
-      "away": 0.4,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.61,
-      "away": 1.38
-    },
-    "over15": null,
-    "over25": 0.552,
-    "over35": null,
-    "btts": 0.5920000000000001,
-    "score": "1-1",
-    "cornersOver95": 0.522,
-    "confidence": 0.3999,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:05.172Z",
-    "source": "Bzzoiro"
-  },
-  "h2h": {
-    "totalMatches": null,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": null,
-    "source": null
-  },
-  "discipline": {
-    "method": "poisson-cards-v0",
-    "home": {
-      "yellowOver35": null,
-      "redAnytime": null,
-      "foulsAvg": null
-    },
-    "away": {
-      "yellowOver35": null,
-      "redAnytime": null,
-      "foulsAvg": null
-    },
-    "sample": {
-      "scorers": 5,
-      "historyRows": 0
-    },
-    "source": null
-  },
-  "setPieces": {
-    "method": "poisson-corners-v0",
-    "cornersOver95": null,
-    "shots": null,
-    "xgTotal": null,
-    "sample": {
-      "historyRows": 0
-    },
-    "source": null
-  },
-  "weatherVenue": {
-    "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
-    },
-    "venue": {
-      "stadium": "Reale Arena",
-      "city": "San Sebastián",
-      "capacity": 39500,
-      "tz": "Europe/Madrid"
-    },
-    "referee": null,
-    "pitch": null,
-    "attendance": null,
-    "derby": null,
-    "neutral": null,
-    "travelKm": null
-  },
-  "availability": {
-    "status": null,
-    "unavailablePlayers": null,
-    "source": null
+    "generatedAt": "2026-09-17T06:03:45.216Z"
   }
 }

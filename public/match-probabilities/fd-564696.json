@@ -4,7 +4,8 @@
   "away": "Levante UD",
   "competition": "laliga",
   "kickoff": "2026-09-20T16:30:00Z",
-  "updatedAt": "2026-09-17T04:57:46.297Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 1.98,
@@ -15,18 +16,45 @@
       "away": 6
     },
     "standings": {
-      "Villarreal CF": null,
-      "Levante UD": null
+      "Villarreal CF": {
+        "position": 19,
+        "team": "Villarreal CF",
+        "played": 5,
+        "won": 0,
+        "drawn": 2,
+        "lost": 3,
+        "goalsFor": 7,
+        "goalsAgainst": 10,
+        "goalDifference": -3,
+        "points": 2,
+        "form": null
+      },
+      "Levante UD": {
+        "position": 14,
+        "team": "Levante UD",
+        "played": 5,
+        "won": 1,
+        "drawn": 2,
+        "lost": 2,
+        "goalsFor": 7,
+        "goalsAgainst": 9,
+        "goalDifference": -2,
+        "points": 5,
+        "form": null
+      }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T12:16:52.441Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-20T16:30:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:52.441Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -134,68 +162,78 @@
     "firstAway": 0.448
   },
   "scorers": {
-    "home": null,
-    "away": null
+    "home": [
+      {
+        "player": "Gerard Moreno",
+        "goals": 2,
+        "matches": 5,
+        "share": 0.286,
+        "rate": 0.57,
+        "anytime": 0.432,
+        "first": 0.154
+      },
+      {
+        "player": "Nicolas Pépé",
+        "goals": 2,
+        "matches": 5,
+        "share": 0.286,
+        "rate": 0.57,
+        "anytime": 0.432,
+        "first": 0.154
+      }
+    ],
+    "away": [
+      {
+        "player": "Roger Brugué",
+        "goals": 3,
+        "matches": 4,
+        "share": 0.429,
+        "rate": 0.72,
+        "anytime": 0.515,
+        "first": 0.197
+      },
+      {
+        "player": "Adrián de la Fuente",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.143,
+        "rate": 0.24,
+        "anytime": 0.214,
+        "first": 0.066
+      },
+      {
+        "player": "Enzo Bardeli",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.143,
+        "rate": 0.24,
+        "anytime": 0.214,
+        "first": 0.066
+      }
+    ]
   },
-  "hasScorers": false,
+  "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Villarreal CF",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 6
-      },
-      "biggestWin": null,
-      "unbeaten": {
-        "value": 0,
-        "sample": 6
-      },
-      "season": null,
-      "player": null
-    },
-    "away": {
-      "team": "Levante UD",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 2,
-        "sample": 6
-      },
-      "biggestWin": {
-        "value": 3,
-        "sample": 6
-      },
-      "unbeaten": {
-        "value": 0,
-        "sample": 6
-      },
-      "season": null,
-      "player": null
-    }
-  },
-  "llmReview": null,
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.56,
-      "draw": 0.218,
-      "away": 0.222,
+      "home": 0.599,
+      "draw": 0.21899999999999997,
+      "away": 0.182,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.97,
+      "home": 1.99,
       "away": 1.24
     },
-    "over15": null,
-    "over25": 0.609,
-    "over35": null,
-    "btts": 0.585,
+    "over15": 0.815,
+    "over25": 0.617,
+    "over35": 0.401,
+    "btts": 0.586,
     "score": "1-1",
-    "cornersOver95": 0.531,
-    "confidence": 0.5597,
+    "cornersOver95": 0.5329999999999999,
+    "confidence": 0.5985,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:07.272Z",
+    "capturedAt": "2026-09-17T05:59:01.134Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -271,7 +309,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -291,10 +329,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 12,
+      "condition": "unknown",
+      "sampledAt": "2026-09-20T16:30:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Estadio de la Cerámica",
@@ -313,5 +351,61 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Villarreal CF",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 6
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 6
+      },
+      "season": {
+        "position": 19,
+        "played": 5,
+        "gf": 7,
+        "ga": 10,
+        "provider": null
+      },
+      "player": {
+        "name": "Gerard Moreno",
+        "detail": "2 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Levante UD",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 6
+      },
+      "season": {
+        "position": 14,
+        "played": 5,
+        "gf": 7,
+        "ga": 9,
+        "provider": null
+      },
+      "player": {
+        "name": "Roger Brugué",
+        "detail": "3 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

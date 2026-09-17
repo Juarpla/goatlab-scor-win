@@ -4,7 +4,8 @@
   "away": "Getafe",
   "competition": "laliga",
   "kickoff": "2026-09-17T17:00:00+00:00",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 1.53,
@@ -19,14 +20,17 @@
       "Getafe": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:43.994Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-17T17:00:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:52.441Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -143,88 +147,51 @@
         "rate": 0.44,
         "anytime": 0.354,
         "first": 0.179
+      },
+      {
+        "player": "Cucho Hernández",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.143,
+        "rate": 0.22,
+        "anytime": 0.197,
+        "first": 0.089
       }
     ],
-    "away": null
+    "away": [
+      {
+        "player": "Enes Ünal",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.333,
+        "rate": 0.31,
+        "anytime": 0.264,
+        "first": 0.125
+      }
+    ]
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Real Betis",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 3,
-        "sample": 6
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 6
-      },
-      "unbeaten": {
-        "value": 3,
-        "sample": 6
-      },
-      "season": {
-        "position": 3,
-        "played": 5,
-        "gf": 7,
-        "ga": 6,
-        "provider": null
-      },
-      "player": {
-        "name": "Rodrigo Riquelme",
-        "detail": "2 goles en 5 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Getafe",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 6
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 6
-      },
-      "unbeaten": {
-        "value": 3,
-        "sample": 6
-      },
-      "season": null,
-      "player": null
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "El modelo Poisson otorga al Betis un 50,3% de victoria, mientras que modelPrediction registra un 55,9% para el mismo escenario (xg 1,6-0,9 frente a lambdas 1,53-0,92). La diferencia de casi 6 puntos entre ambas fuentes conviene revisarla.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:40:02.920Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.5589999999999999,
-      "draw": 0.261,
-      "away": 0.18,
+      "home": 0.564,
+      "draw": 0.257,
+      "away": 0.179,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.6,
-      "away": 0.9
+      "home": 1.61,
+      "away": 0.89
     },
-    "over15": null,
-    "over25": 0.431,
-    "over35": null,
-    "btts": 0.451,
+    "over15": 0.684,
+    "over25": 0.43700000000000006,
+    "over35": 0.23800000000000002,
+    "btts": 0.455,
     "score": "1-0",
-    "cornersOver95": 0.46299999999999997,
-    "confidence": 0.5592,
+    "cornersOver95": 0.46399999999999997,
+    "confidence": 0.5639,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:04.556Z",
+    "capturedAt": "2026-09-17T05:58:55.187Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -300,7 +267,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -320,10 +287,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 22.7,
+      "condition": "unknown",
+      "sampledAt": "2026-09-17T17:00:00+00:00",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Benito Villamarín",
@@ -342,5 +309,64 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Real Betis",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": {
+        "position": 5,
+        "played": 5,
+        "gf": 7,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Rodrigo Riquelme",
+        "detail": "2 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Getafe",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": {
+        "position": 15,
+        "played": 5,
+        "gf": 3,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Enes Ünal",
+        "detail": "1 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

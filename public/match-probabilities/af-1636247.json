@@ -4,30 +4,42 @@
   "away": "Ferencvarosi TC",
   "competition": "europa",
   "kickoff": "2026-09-17T19:00:00+00:00",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": null,
     "sample": null,
     "standings": {
       "Celtic": {
-        "position": 9,
+        "position": 14,
         "team": "Celtic",
         "teamId": 132,
         "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
         "points": 0,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
         "form": null
       },
       "Ferencvarosi TC": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:33.043Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
     "weather": null,
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:40.723Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -39,44 +51,6 @@
   "scorers": null,
   "hasScorers": false,
   "method": null,
-  "context": {
-    "home": {
-      "team": "Celtic",
-      "recentSample": 0,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 0
-      },
-      "biggestWin": null,
-      "unbeaten": null,
-      "season": {
-        "position": 9,
-        "played": 0,
-        "provider": null
-      },
-      "player": null
-    },
-    "away": {
-      "team": "Ferencvarosi TC",
-      "recentSample": 0,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 0
-      },
-      "biggestWin": null,
-      "unbeaten": null,
-      "season": null,
-      "player": null
-    }
-  },
-  "llmReview": {
-    "flag": false,
-    "note": null,
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:18:50.555Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": null,
     "xg": null,
@@ -113,7 +87,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -155,5 +129,44 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Celtic",
+      "recentSample": 0,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 0
+      },
+      "biggestWin": null,
+      "unbeaten": null,
+      "season": {
+        "position": 14,
+        "played": 0,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": null
+    },
+    "away": {
+      "team": "Ferencvarosi TC",
+      "recentSample": 0,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 0
+      },
+      "biggestWin": null,
+      "unbeaten": null,
+      "season": null,
+      "player": null
+    }
+  },
+  "llmReview": {
+    "flag": false,
+    "note": "No se detectan porcentajes ni datos de modelos que puedan desviarse; la auditoría queda sin incidencias.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-09-17T06:02:04.843Z"
   }
 }

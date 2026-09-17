@@ -4,7 +4,8 @@
   "away": "Málaga CF",
   "competition": "laliga",
   "kickoff": "2026-09-20T12:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 1.17,
@@ -15,18 +16,45 @@
       "away": 6
     },
     "standings": {
-      "Getafe CF": null,
-      "Málaga CF": null
+      "Getafe CF": {
+        "position": 15,
+        "team": "Getafe CF",
+        "played": 5,
+        "won": 1,
+        "drawn": 2,
+        "lost": 2,
+        "goalsFor": 3,
+        "goalsAgainst": 6,
+        "goalDifference": -3,
+        "points": 5,
+        "form": null
+      },
+      "Málaga CF": {
+        "position": 18,
+        "team": "Málaga CF",
+        "played": 5,
+        "won": 0,
+        "drawn": 3,
+        "lost": 2,
+        "goalsFor": 2,
+        "goalsAgainst": 8,
+        "goalDifference": -6,
+        "points": 3,
+        "form": null
+      }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:43.994Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-20T12:00:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:52.441Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:35.873Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -134,88 +162,60 @@
     "firstAway": 0.339
   },
   "scorers": {
-    "home": null,
+    "home": [
+      {
+        "player": "Enes Ünal",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.333,
+        "rate": 0.39,
+        "anytime": 0.323,
+        "first": 0.201
+      }
+    ],
     "away": [
       {
         "player": "Adrián Niño",
         "goals": 1,
         "matches": 1,
-        "share": 0.9,
-        "rate": 0.69,
-        "anytime": 0.499,
-        "first": 0.356
+        "share": 0.5,
+        "rate": 0.38,
+        "anytime": 0.319,
+        "first": 0.198
+      },
+      {
+        "player": "Chupete",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.5,
+        "rate": 0.38,
+        "anytime": 0.319,
+        "first": 0.198
       }
     ]
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Getafe CF",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 6
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 6
-      },
-      "unbeaten": {
-        "value": 3,
-        "sample": 6
-      },
-      "season": null,
-      "player": null
-    },
-    "away": {
-      "team": "Málaga CF",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 6
-      },
-      "biggestWin": null,
-      "unbeaten": {
-        "value": 3,
-        "sample": 6
-      },
-      "season": null,
-      "player": {
-        "name": "Adrián Niño",
-        "detail": "1 goles en 1 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "Desviación clara entre los dos modelos del propio JSON: el Poisson da 22,8% al Málaga y 0,77 goles esperados, mientras el modelo predictivo le asigna 35,1% y 1,18 xG. También difieren el over 2,5 (30,6% vs 43,2%) y el ambos anotan (38,2% vs 49,1%). Muestra de solo 6 partidos.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:27:23.966Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.355,
-      "draw": 0.294,
-      "away": 0.35100000000000003,
+      "home": 0.442,
+      "draw": 0.309,
+      "away": 0.249,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.2,
+      "home": 1.22,
       "away": 1.18
     },
-    "over15": null,
-    "over25": 0.43200000000000005,
-    "over35": null,
-    "btts": 0.491,
+    "over15": 0.614,
+    "over25": 0.35600000000000004,
+    "over35": 0.185,
+    "btts": 0.433,
     "score": "1-1",
-    "cornersOver95": 0.45,
-    "confidence": 0.3555,
+    "cornersOver95": 0.451,
+    "confidence": 0.4425,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:06.764Z",
+    "capturedAt": "2026-09-17T05:58:59.717Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -291,7 +291,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -311,10 +311,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 5.4,
+      "condition": "unknown",
+      "sampledAt": "2026-09-20T12:00:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Coliseum",
@@ -333,5 +333,61 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Getafe CF",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": {
+        "position": 15,
+        "played": 5,
+        "gf": 3,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Enes Ünal",
+        "detail": "1 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Málaga CF",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": {
+        "position": 18,
+        "played": 5,
+        "gf": 2,
+        "ga": 8,
+        "provider": null
+      },
+      "player": {
+        "name": "Adrián Niño",
+        "detail": "1 goles en 1 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

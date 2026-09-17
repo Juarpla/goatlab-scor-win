@@ -1,10 +1,11 @@
 {
-  "id": "fd-560591",
-  "home": "Brentford FC",
-  "away": "Chelsea FC",
+  "id": "af-1557408",
+  "home": "Brentford",
+  "away": "Chelsea",
   "competition": "premier",
-  "kickoff": "2026-09-18T19:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "kickoff": "2026-09-18T19:00:00+00:00",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 2.16,
@@ -15,42 +16,21 @@
       "away": 4
     },
     "standings": {
-      "Brentford FC": {
-        "position": 7,
-        "team": "Brentford FC",
-        "played": 4,
-        "won": 1,
-        "drawn": 3,
-        "lost": 0,
-        "goalsFor": 7,
-        "goalsAgainst": 4,
-        "goalDifference": 3,
-        "points": 6,
-        "form": null
-      },
-      "Chelsea FC": {
-        "position": 6,
-        "team": "Chelsea FC",
-        "played": 4,
-        "won": 2,
-        "drawn": 1,
-        "lost": 1,
-        "goalsFor": 10,
-        "goalsAgainst": 9,
-        "goalDifference": 1,
-        "points": 7,
-        "form": null
-      }
+      "Brentford": null,
+      "Chelsea": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-18T19:00:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -210,92 +190,26 @@
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Brentford FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 3,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 4,
-        "sample": 4
-      },
-      "season": {
-        "position": 7,
-        "played": 4,
-        "gf": 7,
-        "ga": 4,
-        "provider": null
-      },
-      "player": {
-        "name": "Kevin Schade",
-        "detail": "3 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Chelsea FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 1,
-        "sample": 4
-      },
-      "season": {
-        "position": 6,
-        "played": 4,
-        "gf": 10,
-        "ga": 9,
-        "provider": null
-      },
-      "player": {
-        "name": "João Pedro",
-        "detail": "3 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "Discrepancia clara entre modelos: markets (lambdas 2,16-1,61; total 3,77) da favorito al Brentford con 49,6% y 28,1% al Chelsea, mientras dc-blend-v1 (xG 1,58-1,50) apunta lo contrario: 33,4% local y 41,6% visitante. Conviene revisar la mezcla antes de publicar.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:42:29.637Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.33399999999999996,
+      "home": 0.33799999999999997,
       "draw": 0.25,
-      "away": 0.41600000000000004,
+      "away": 0.41200000000000003,
       "predicted": "A"
     },
     "xg": {
       "home": 1.58,
       "away": 1.5
     },
-    "over15": null,
+    "over15": 0.8290000000000001,
     "over25": 0.638,
-    "over35": null,
+    "over35": 0.409,
     "btts": 0.654,
     "score": "1-1",
     "cornersOver95": 0.494,
-    "confidence": 0.4165,
+    "confidence": 0.4118,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:05.693Z",
+    "capturedAt": "2026-09-17T05:58:57.129Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -371,7 +285,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -391,10 +305,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 5.6,
+      "condition": "rain",
+      "sampledAt": "2026-09-18T19:00:00+00:00",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Gtech Community Stadium",
@@ -413,5 +327,64 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Brentford",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 4,
+        "sample": 4
+      },
+      "season": {
+        "position": 7,
+        "played": 4,
+        "gf": 7,
+        "ga": 4,
+        "provider": null
+      },
+      "player": {
+        "name": "Kevin Schade",
+        "detail": "3 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Chelsea",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 4
+      },
+      "season": {
+        "position": 6,
+        "played": 4,
+        "gf": 10,
+        "ga": 9,
+        "provider": null
+      },
+      "player": {
+        "name": "João Pedro",
+        "detail": "3 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

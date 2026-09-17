@@ -4,7 +4,8 @@
   "away": "Hull City AFC",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 1.215,
@@ -15,7 +16,19 @@
       "away": 4
     },
     "standings": {
-      "Newcastle United FC": null,
+      "Newcastle United FC": {
+        "position": 12,
+        "team": "Newcastle United FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 2,
+        "lost": 1,
+        "goalsFor": 7,
+        "goalsAgainst": 8,
+        "goalDifference": -1,
+        "points": 5,
+        "form": null
+      },
       "Hull City AFC": {
         "position": 4,
         "team": "Hull City AFC",
@@ -31,14 +44,17 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T14:00:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -151,19 +167,28 @@
         "player": "Anthony Elanga",
         "goals": 2,
         "matches": 3,
-        "share": 0.667,
-        "rate": 0.81,
-        "anytime": 0.555,
-        "first": 0.299
+        "share": 0.286,
+        "rate": 0.35,
+        "anytime": 0.294,
+        "first": 0.128
       },
       {
         "player": "Bazoumana Touré",
         "goals": 1,
         "matches": 4,
-        "share": 0.333,
-        "rate": 0.4,
-        "anytime": 0.333,
-        "first": 0.149
+        "share": 0.143,
+        "rate": 0.17,
+        "anytime": 0.159,
+        "first": 0.064
+      },
+      {
+        "player": "Harvey Barnes",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.143,
+        "rate": 0.17,
+        "anytime": 0.159,
+        "first": 0.064
       }
     ],
     "away": [
@@ -180,86 +205,26 @@
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Newcastle United FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 2,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 0,
-        "sample": 4
-      },
-      "season": null,
-      "player": {
-        "name": "Anthony Elanga",
-        "detail": "2 goles en 3 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Hull City AFC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 3,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 2,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 4,
-        "sample": 4
-      },
-      "season": {
-        "position": 4,
-        "played": 4,
-        "gf": 5,
-        "ga": 2,
-        "provider": null
-      },
-      "player": {
-        "name": "Mohamed Belloumi",
-        "detail": "2 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": {
-    "flag": true,
-    "note": "modelPrediction da local 59.4% y xG 1.8-1.24; markets Poisson da visitante 42.5% y lambdas 1.215-1.495: favorito y signo invertidos. Posible inconsistencia entre modelos.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:45:55.098Z"
-  },
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
       "home": 0.594,
       "draw": 0.223,
-      "away": 0.183,
+      "away": 0.184,
       "predicted": "H"
     },
     "xg": {
       "home": 1.8,
       "away": 1.24
     },
-    "over15": null,
-    "over25": 0.5820000000000001,
-    "over35": null,
-    "btts": 0.561,
+    "over15": 0.7909999999999999,
+    "over25": 0.584,
+    "over35": 0.366,
+    "btts": 0.56,
     "score": "1-1",
-    "cornersOver95": 0.556,
-    "confidence": 0.5941,
+    "cornersOver95": 0.555,
+    "confidence": 0.5937,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:06.131Z",
+    "capturedAt": "2026-09-17T05:58:58.396Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -335,7 +300,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -355,10 +320,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
+      "wind": 22.5,
       "condition": null,
-      "sampledAt": null,
-      "source": null
+      "sampledAt": "2026-09-19T14:00:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "St. James' Park",
@@ -377,5 +342,64 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Newcastle United FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": {
+        "position": 12,
+        "played": 4,
+        "gf": 7,
+        "ga": 8,
+        "provider": null
+      },
+      "player": {
+        "name": "Anthony Elanga",
+        "detail": "2 goles en 3 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Hull City AFC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 4,
+        "sample": 4
+      },
+      "season": {
+        "position": 4,
+        "played": 4,
+        "gf": 5,
+        "ga": 2,
+        "provider": null
+      },
+      "player": {
+        "name": "Mohamed Belloumi",
+        "detail": "2 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

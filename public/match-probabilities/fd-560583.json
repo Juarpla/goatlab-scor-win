@@ -4,7 +4,8 @@
   "away": "Manchester United FC",
   "competition": "premier",
   "kickoff": "2026-09-20T15:30:00Z",
-  "updatedAt": "2026-09-17T04:57:46.297Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 1.26,
@@ -15,18 +16,45 @@
       "away": 6
     },
     "standings": {
-      "Fulham FC": null,
-      "Manchester United FC": null
+      "Fulham FC": {
+        "position": 18,
+        "team": "Fulham FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 1,
+        "lost": 3,
+        "goalsFor": 4,
+        "goalsAgainst": 7,
+        "goalDifference": -3,
+        "points": 1,
+        "form": null
+      },
+      "Manchester United FC": {
+        "position": 13,
+        "team": "Manchester United FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 1,
+        "lost": 2,
+        "goalsFor": 7,
+        "goalsAgainst": 7,
+        "goalDifference": 0,
+        "points": 4,
+        "form": null
+      }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-20T15:30:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -134,82 +162,87 @@
     "firstAway": 0.536
   },
   "scorers": {
-    "home": null,
+    "home": [
+      {
+        "player": "Joshua King",
+        "goals": 2,
+        "matches": 4,
+        "share": 0.5,
+        "rate": 0.63,
+        "anytime": 0.467,
+        "first": 0.216
+      },
+      {
+        "player": "César Palacios",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.25,
+        "rate": 0.32,
+        "anytime": 0.27,
+        "first": 0.108
+      },
+      {
+        "player": "Gonzalo García",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.25,
+        "rate": 0.32,
+        "anytime": 0.27,
+        "first": 0.108
+      }
+    ],
     "away": [
       {
         "player": "Bruno Fernandes",
         "goals": 3,
         "matches": 4,
-        "share": 0.9,
-        "rate": 1.48,
-        "anytime": 0.773,
-        "first": 0.51
+        "share": 0.429,
+        "rate": 0.71,
+        "anytime": 0.507,
+        "first": 0.243
+      },
+      {
+        "player": "Bryan Mbeumo",
+        "goals": 2,
+        "matches": 4,
+        "share": 0.286,
+        "rate": 0.47,
+        "anytime": 0.376,
+        "first": 0.162
+      },
+      {
+        "player": "Benjamin Šeško",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.143,
+        "rate": 0.24,
+        "anytime": 0.21,
+        "first": 0.081
       }
     ]
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Fulham FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 4
-      },
-      "biggestWin": null,
-      "unbeaten": {
-        "value": 1,
-        "sample": 4
-      },
-      "season": null,
-      "player": null
-    },
-    "away": {
-      "team": "Manchester United FC",
-      "recentSample": 6,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 6
-      },
-      "biggestWin": {
-        "value": 4,
-        "sample": 6
-      },
-      "unbeaten": {
-        "value": 0,
-        "sample": 6
-      },
-      "season": null,
-      "player": {
-        "name": "Bruno Fernandes",
-        "detail": "3 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": null,
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.35200000000000004,
-      "draw": 0.256,
-      "away": 0.392,
+      "home": 0.278,
+      "draw": 0.252,
+      "away": 0.47,
       "predicted": "A"
     },
     "xg": {
-      "home": 1.41,
-      "away": 1.48
+      "home": 1.44,
+      "away": 1.47
     },
-    "over15": null,
-    "over25": 0.544,
-    "over35": null,
-    "btts": 0.564,
+    "over15": 0.809,
+    "over25": 0.601,
+    "over35": 0.376,
+    "btts": 0.618,
     "score": "1-1",
-    "cornersOver95": 0.515,
-    "confidence": 0.3918,
+    "cornersOver95": 0.508,
+    "confidence": 0.4696,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:07.272Z",
+    "capturedAt": "2026-09-17T05:59:00.801Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -285,7 +318,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -305,10 +338,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 8.3,
+      "condition": "unknown",
+      "sampledAt": "2026-09-20T15:30:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Craven Cottage",
@@ -327,5 +360,61 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Fulham FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 1,
+        "sample": 4
+      },
+      "season": {
+        "position": 18,
+        "played": 4,
+        "gf": 4,
+        "ga": 7,
+        "provider": null
+      },
+      "player": {
+        "name": "Joshua King",
+        "detail": "2 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Manchester United FC",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 4,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 6
+      },
+      "season": {
+        "position": 13,
+        "played": 4,
+        "gf": 7,
+        "ga": 7,
+        "provider": null
+      },
+      "player": {
+        "name": "Bruno Fernandes",
+        "detail": "3 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
 }

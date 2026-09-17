@@ -4,7 +4,8 @@
   "away": "Coventry City FC",
   "competition": "premier",
   "kickoff": "2026-09-19T16:30:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "schemaVersion": 2,
   "inputs": {
     "lambdas": {
       "home": 2.16,
@@ -15,18 +16,45 @@
       "away": 5
     },
     "standings": {
-      "Nottingham Forest FC": null,
-      "Coventry City FC": null
+      "Nottingham Forest FC": {
+        "position": 11,
+        "team": "Nottingham Forest FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 2,
+        "lost": 1,
+        "goalsFor": 4,
+        "goalsAgainst": 4,
+        "goalDifference": 0,
+        "points": 5,
+        "form": null
+      },
+      "Coventry City FC": {
+        "position": 20,
+        "team": "Coventry City FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 0,
+        "lost": 4,
+        "goalsFor": 0,
+        "goalsAgainst": 10,
+        "goalDifference": -10,
+        "points": 0,
+        "form": null
+      }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T16:30:00Z",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-09-16T12:16:58.990Z",
-      "provider": "Bzzoiro"
+      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
       "rows": 0
@@ -139,77 +167,45 @@
         "player": "Dan Ndoye",
         "goals": 1,
         "matches": 4,
-        "share": 0.9,
-        "rate": 1.94,
-        "anytime": 0.857,
-        "first": 0.742
+        "share": 0.25,
+        "rate": 0.54,
+        "anytime": 0.417,
+        "first": 0.206
+      },
+      {
+        "player": "Igor Jesus",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.25,
+        "rate": 0.54,
+        "anytime": 0.417,
+        "first": 0.206
       }
     ],
     "away": null
   },
   "hasScorers": true,
   "method": "poisson-dixoncoles-v1",
-  "context": {
-    "home": {
-      "team": "Nottingham Forest FC",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 1,
-        "sample": 4
-      },
-      "biggestWin": {
-        "value": 1,
-        "sample": 4
-      },
-      "unbeaten": {
-        "value": 3,
-        "sample": 4
-      },
-      "season": null,
-      "player": {
-        "name": "Dan Ndoye",
-        "detail": "1 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    },
-    "away": {
-      "team": "Coventry City FC",
-      "recentSample": 5,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 5
-      },
-      "biggestWin": null,
-      "unbeaten": {
-        "value": 0,
-        "sample": 5
-      },
-      "season": null,
-      "player": null
-    }
-  },
-  "llmReview": null,
-  "schemaVersion": 2,
   "provider": {
     "oneX2": {
-      "home": 0.5660000000000001,
-      "draw": 0.242,
-      "away": 0.192,
+      "home": 0.5720000000000001,
+      "draw": 0.239,
+      "away": 0.18899999999999997,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.41,
-      "away": 1.51
+      "home": 1.44,
+      "away": 1.49
     },
-    "over15": null,
-    "over25": 0.537,
-    "over35": null,
+    "over15": 0.7509999999999999,
+    "over25": 0.54,
+    "over35": 0.32799999999999996,
     "btts": 0.54,
     "score": "1-1",
-    "cornersOver95": 0.434,
-    "confidence": 0.5659,
+    "cornersOver95": 0.43700000000000006,
+    "confidence": 0.5716,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-16T12:17:06.500Z",
+    "capturedAt": "2026-09-17T05:58:59.477Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -285,7 +281,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 5,
+      "scorers": 50,
       "historyRows": 0
     },
     "source": null
@@ -305,10 +301,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 11.5,
+      "condition": "rain",
+      "sampledAt": "2026-09-19T16:30:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "The City Ground",
@@ -327,5 +323,57 @@
     "status": null,
     "unavailablePlayers": null,
     "source": null
-  }
+  },
+  "context": {
+    "home": {
+      "team": "Nottingham Forest FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 4
+      },
+      "season": {
+        "position": 11,
+        "played": 4,
+        "gf": 4,
+        "ga": 4,
+        "provider": null
+      },
+      "player": {
+        "name": "Dan Ndoye",
+        "detail": "1 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Coventry City FC",
+      "recentSample": 5,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 20,
+        "played": 4,
+        "gf": 0,
+        "ga": 10,
+        "provider": null
+      },
+      "player": null
+    }
+  },
+  "llmReview": null
 }
