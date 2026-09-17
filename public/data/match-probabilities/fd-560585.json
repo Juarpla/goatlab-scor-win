@@ -4,7 +4,7 @@
   "away": "Crystal Palace FC",
   "competition": "premier",
   "kickoff": "2026-09-20T13:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T04:57:46.297Z",
   "inputs": {
     "lambdas": {
       "home": 2.43,
@@ -31,7 +31,7 @@
       "Crystal Palace FC": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:47.204Z",
+      "updatedAt": "2026-09-16T12:16:58.990Z",
       "provider": "Bzzoiro"
     },
     "resultsWindowDays": 180
@@ -134,66 +134,10 @@
     "firstAway": 0.289
   },
   "scorers": {
-    "home": [
-      {
-        "player": "Dominic Calvert-Lewin",
-        "goals": 2,
-        "matches": 4,
-        "share": 0.286,
-        "rate": 0.69,
-        "anytime": 0.501,
-        "first": 0.2
-      },
-      {
-        "player": "Jayden Bogle",
-        "goals": 2,
-        "matches": 4,
-        "share": 0.286,
-        "rate": 0.69,
-        "anytime": 0.501,
-        "first": 0.2
-      },
-      {
-        "player": "Anton Stach",
-        "goals": 1,
-        "matches": 4,
-        "share": 0.143,
-        "rate": 0.35,
-        "anytime": 0.294,
-        "first": 0.1
-      }
-    ],
-    "away": [
-      {
-        "player": "Tyrick Mitchell",
-        "goals": 2,
-        "matches": 4,
-        "share": 0.5,
-        "rate": 0.52,
-        "anytime": 0.404,
-        "first": 0.149
-      },
-      {
-        "player": "Anan Khalaili",
-        "goals": 1,
-        "matches": 4,
-        "share": 0.25,
-        "rate": 0.26,
-        "anytime": 0.228,
-        "first": 0.075
-      },
-      {
-        "player": "Ben Chilwell",
-        "goals": 1,
-        "matches": 2,
-        "share": 0.25,
-        "rate": 0.26,
-        "anytime": 0.228,
-        "first": 0.075
-      }
-    ]
+    "home": null,
+    "away": null
   },
-  "hasScorers": true,
+  "hasScorers": false,
   "method": "poisson-dixoncoles-v1",
   "context": {
     "home": {
@@ -218,11 +162,7 @@
         "ga": 3,
         "provider": null
       },
-      "player": {
-        "name": "Dominic Calvert-Lewin",
-        "detail": "2 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     },
     "away": {
       "team": "Crystal Palace FC",
@@ -240,18 +180,8 @@
         "sample": 4
       },
       "season": null,
-      "player": {
-        "name": "Tyrick Mitchell",
-        "detail": "2 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     }
   },
-  "llmReview": {
-    "flag": true,
-    "note": "Desviación clara: el modelo Poisson usa una lambda local de 2,43 goles, muy por encima del xG de 1,69 del propio modeloPrediction, y eleva la victoria del Leeds al 67,3% frente al 48,1% de oneX2. Esa diferencia entre ambos bloques conviene revisarla antes de tomar las cifras como referencia.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:50:20.947Z"
-  }
+  "llmReview": null
 }

@@ -4,7 +4,7 @@
   "away": "Málaga CF",
   "competition": "laliga",
   "kickoff": "2026-09-20T12:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T04:57:46.297Z",
   "inputs": {
     "lambdas": {
       "home": 1.17,
@@ -19,7 +19,7 @@
       "Málaga CF": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:43.994Z",
+      "updatedAt": "2026-09-16T12:16:52.441Z",
       "provider": "Bzzoiro"
     },
     "resultsWindowDays": 180
@@ -123,19 +123,9 @@
   },
   "scorers": {
     "home": null,
-    "away": [
-      {
-        "player": "Adrián Niño",
-        "goals": 1,
-        "matches": 1,
-        "share": 0.9,
-        "rate": 0.69,
-        "anytime": 0.499,
-        "first": 0.356
-      }
-    ]
+    "away": null
   },
-  "hasScorers": true,
+  "hasScorers": false,
   "method": "poisson-dixoncoles-v1",
   "context": {
     "home": {
@@ -169,18 +159,8 @@
         "sample": 6
       },
       "season": null,
-      "player": {
-        "name": "Adrián Niño",
-        "detail": "1 goles en 1 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     }
   },
-  "llmReview": {
-    "flag": true,
-    "note": "Desviación clara entre los dos modelos del propio JSON: el Poisson da 22,8% al Málaga y 0,77 goles esperados, mientras el modelo predictivo le asigna 35,1% y 1,18 xG. También difieren el over 2,5 (30,6% vs 43,2%) y el ambos anotan (38,2% vs 49,1%). Muestra de solo 6 partidos.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:27:23.966Z"
-  }
+  "llmReview": null
 }

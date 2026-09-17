@@ -4,7 +4,7 @@
   "away": "Real Sociedad de Fútbol",
   "competition": "laliga",
   "kickoff": "2026-09-20T19:00:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T04:57:46.297Z",
   "inputs": {
     "lambdas": {
       "home": 1.44,
@@ -19,7 +19,7 @@
       "Real Sociedad de Fútbol": null
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:43.994Z",
+      "updatedAt": "2026-09-16T12:16:52.441Z",
       "provider": "Bzzoiro"
     },
     "resultsWindowDays": 180
@@ -123,28 +123,9 @@
   },
   "scorers": {
     "home": null,
-    "away": [
-      {
-        "player": "Luka Sučić",
-        "goals": 2,
-        "matches": 6,
-        "share": 0.667,
-        "rate": 0.82,
-        "anytime": 0.559,
-        "first": 0.307
-      },
-      {
-        "player": "Ander Barrenetxea",
-        "goals": 1,
-        "matches": 6,
-        "share": 0.333,
-        "rate": 0.41,
-        "anytime": 0.335,
-        "first": 0.153
-      }
-    ]
+    "away": null
   },
-  "hasScorers": true,
+  "hasScorers": false,
   "method": "poisson-dixoncoles-v1",
   "context": {
     "home": {
@@ -181,18 +162,8 @@
         "sample": 7
       },
       "season": null,
-      "player": {
-        "name": "Luka Sučić",
-        "detail": "2 goles en 6 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     }
   },
-  "llmReview": {
-    "flag": true,
-    "note": "Inconsistencia interna: el marcador más probable y el score del modelo es 1-1 (13,5%), pero el signo predicho es 'H' (victoria local). Conviene revisar cuál de las dos salidas refleja la estimación final.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:32:03.670Z"
-  }
+  "llmReview": null
 }

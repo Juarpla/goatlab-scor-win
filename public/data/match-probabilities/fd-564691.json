@@ -4,7 +4,7 @@
   "away": "Deportivo Alavés",
   "competition": "laliga",
   "kickoff": "2026-09-19T14:15:00Z",
-  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "updatedAt": "2026-09-17T04:57:46.297Z",
   "inputs": {
     "lambdas": {
       "home": 1.296,
@@ -43,7 +43,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-16T11:35:43.994Z",
+      "updatedAt": "2026-09-16T12:16:52.441Z",
       "provider": "Bzzoiro"
     },
     "resultsWindowDays": 180
@@ -146,57 +146,10 @@
     "firstAway": 0.483
   },
   "scorers": {
-    "home": [
-      {
-        "player": "Robert Navarro",
-        "goals": 2,
-        "matches": 5,
-        "share": 0.286,
-        "rate": 0.37,
-        "anytime": 0.31,
-        "first": 0.138
-      },
-      {
-        "player": "Aitor Paredes",
-        "goals": 1,
-        "matches": 5,
-        "share": 0.143,
-        "rate": 0.19,
-        "anytime": 0.169,
-        "first": 0.069
-      },
-      {
-        "player": "Álex Berenguer",
-        "goals": 1,
-        "matches": 5,
-        "share": 0.143,
-        "rate": 0.19,
-        "anytime": 0.169,
-        "first": 0.069
-      }
-    ],
-    "away": [
-      {
-        "player": "Lucas Boyé",
-        "goals": 4,
-        "matches": 5,
-        "share": 0.364,
-        "rate": 0.51,
-        "anytime": 0.398,
-        "first": 0.189
-      },
-      {
-        "player": "Mariano Díaz",
-        "goals": 3,
-        "matches": 6,
-        "share": 0.273,
-        "rate": 0.38,
-        "anytime": 0.317,
-        "first": 0.142
-      }
-    ]
+    "home": null,
+    "away": null
   },
-  "hasScorers": true,
+  "hasScorers": false,
   "method": "poisson-dixoncoles-v1",
   "context": {
     "home": {
@@ -221,11 +174,7 @@
         "ga": 6,
         "provider": null
       },
-      "player": {
-        "name": "Robert Navarro",
-        "detail": "2 goles en 5 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     },
     "away": {
       "team": "Deportivo Alavés",
@@ -249,18 +198,8 @@
         "ga": 6,
         "provider": null
       },
-      "player": {
-        "name": "Lucas Boyé",
-        "detail": "4 goles en 5 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     }
   },
-  "llmReview": {
-    "flag": true,
-    "note": "Divergencia clara entre salidas: modelPrediction da 56,7% al Athletic y 18,3% al Alavés (xG 1,45-1,11), mientras el Poisson de markets invierte el favoritismo (33,6%-38,1%) con lambdas 1,296-1,395. El xG local alto no se refleja en los lambdas usados.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-16T11:47:17.604Z"
-  }
+  "llmReview": null
 }
