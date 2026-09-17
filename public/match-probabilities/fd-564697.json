@@ -1,0 +1,337 @@
+{
+  "id": "fd-564697",
+  "home": "Getafe CF",
+  "away": "Málaga CF",
+  "competition": "laliga",
+  "kickoff": "2026-09-20T12:00:00Z",
+  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "inputs": {
+    "lambdas": {
+      "home": 1.17,
+      "away": 0.767
+    },
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Getafe CF": null,
+      "Málaga CF": null
+    },
+    "scorers": {
+      "updatedAt": "2026-09-16T11:35:43.994Z",
+      "provider": "Bzzoiro"
+    },
+    "resultsWindowDays": 180,
+    "weather": null,
+    "discipline": {
+      "updatedAt": "2026-09-16T12:16:52.441Z",
+      "provider": "Bzzoiro"
+    },
+    "history": {
+      "rows": 0
+    },
+    "venue": {
+      "city": "Getafe",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.44,
+      "draw": 0.331,
+      "away": 0.228
+    },
+    "doubleChance": {
+      "12": 0.669,
+      "1X": 0.772,
+      "X2": 0.56
+    },
+    "dnb": {
+      "home": 0.659,
+      "away": 0.341
+    },
+    "totals": {
+      "over15": 0.59,
+      "under15": 0.41,
+      "over25": 0.306,
+      "under25": 0.694,
+      "over35": 0.132,
+      "under35": 0.868
+    },
+    "btts": {
+      "yes": 0.382,
+      "no": 0.618
+    },
+    "cleanSheet": {
+      "home": 0.464,
+      "away": 0.31
+    },
+    "exactScores": [
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.157
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.156
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.142
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.099
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.098
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 1.94,
+    "noGoal": 0.144,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.276
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.2
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.145
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.105
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.076
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.055
+      }
+    ],
+    "firstHome": 0.517,
+    "firstAway": 0.339
+  },
+  "scorers": {
+    "home": null,
+    "away": [
+      {
+        "player": "Adrián Niño",
+        "goals": 1,
+        "matches": 1,
+        "share": 0.9,
+        "rate": 0.69,
+        "anytime": 0.499,
+        "first": 0.356
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-dixoncoles-v1",
+  "context": {
+    "home": {
+      "team": "Getafe CF",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": null,
+      "player": null
+    },
+    "away": {
+      "team": "Málaga CF",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": null,
+      "player": {
+        "name": "Adrián Niño",
+        "detail": "1 goles en 1 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "Desviación clara entre los dos modelos del propio JSON: el Poisson da 22,8% al Málaga y 0,77 goles esperados, mientras el modelo predictivo le asigna 35,1% y 1,18 xG. También difieren el over 2,5 (30,6% vs 43,2%) y el ambos anotan (38,2% vs 49,1%). Muestra de solo 6 partidos.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-09-16T11:27:23.966Z"
+  },
+  "schemaVersion": 2,
+  "provider": {
+    "oneX2": {
+      "home": 0.355,
+      "draw": 0.294,
+      "away": 0.35100000000000003,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.2,
+      "away": 1.18
+    },
+    "over15": null,
+    "over25": 0.43200000000000005,
+    "over35": null,
+    "btts": 0.491,
+    "score": "1-1",
+    "cornersOver95": 0.45,
+    "confidence": 0.3555,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-09-16T12:17:06.764Z",
+    "source": "Bzzoiro"
+  },
+  "h2h": {
+    "totalMatches": 26,
+    "homeWins": 11,
+    "draws": 3,
+    "awayWins": 12,
+    "avgTotalGoals": 2.6153846153846154,
+    "recent": [
+      {
+        "eventId": 347242,
+        "date": "2018-05-19T16:30:00+00:00",
+        "home": "Málaga CF",
+        "away": "Getafe",
+        "homeTeamId": 1259,
+        "awayTeamId": 50,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 347050,
+        "date": "2018-01-12T20:00:00+00:00",
+        "home": "Getafe",
+        "away": "Málaga CF",
+        "homeTeamId": 50,
+        "awayTeamId": 1259,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 381238,
+        "date": "2016-02-05T19:30:00+00:00",
+        "home": "Málaga CF",
+        "away": "Getafe",
+        "homeTeamId": 1259,
+        "awayTeamId": 50,
+        "homeScore": 3,
+        "awayScore": 0
+      },
+      {
+        "eventId": 381047,
+        "date": "2015-09-18T18:30:00+00:00",
+        "home": "Getafe",
+        "away": "Málaga CF",
+        "homeTeamId": 50,
+        "awayTeamId": 1259,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 396354,
+        "date": "2015-02-28T21:00:00+00:00",
+        "home": "Málaga CF",
+        "away": "Getafe",
+        "homeTeamId": 1259,
+        "awayTeamId": 50,
+        "homeScore": 3,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "poisson-cards-v0",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 5,
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "setPieces": {
+    "method": "poisson-corners-v0",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": null,
+      "condition": null,
+      "sampledAt": null,
+      "source": null
+    },
+    "venue": {
+      "stadium": "Coliseum",
+      "city": "Getafe",
+      "capacity": 17393,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  }
+}

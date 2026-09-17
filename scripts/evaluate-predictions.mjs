@@ -4,7 +4,7 @@
  *   anteriores; se compara contra el baseline empírico de la muestra.
  * - Ensemble: se evalúan las capturas pre-partido guardadas en predictions.json
  *   (catboost del proveedor + veredicto GoatLab calculado al momento).
- * Escribe public/data/evaluation.json. El gate de publicación vive en
+ * Escribe public/data/evaluation-report.json. El gate de publicación vive en
  * predictions.js (evaluationGate): ninguna corrida publica porcentajes por sí sola.
  */
 import { writeFile } from 'node:fs/promises';
@@ -106,5 +106,5 @@ const evaluation = {
   },
   evaluatedAt,
 };
-await writeFile('public/data/evaluation.json', JSON.stringify(evaluation, null, 2));
+await writeFile('public/data/evaluation-report.json', JSON.stringify(evaluation, null, 2));
 console.log(`evaluation: Poisson 1X2 n=${poissonOneX2?.sampleSize ?? 0} · ensemble n=${ensembleOneX2?.sampleSize ?? 0} · published=${evaluation.published}`);

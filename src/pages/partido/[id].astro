@@ -6,6 +6,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import TeamJersey from '../../components/TeamJersey.astro';
 import PitchScene from '../../components/PitchScene.astro';
 import ProbabilityBar from '../../components/ProbabilityBar.astro';
+import ExtraMarkets from '../../components/ExtraMarkets.astro';
 import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
 import { teamShort } from '../../lib/teams.js';
 import { teamForm } from '../../lib/form.js';
@@ -13,10 +14,10 @@ import { ensemble } from '../../lib/predictions.js';
 import { locateMatch } from '../../lib/venues.js';
 import { teamColors } from '../../lib/team-colors.js';
 import fixtures from '../../../public/data/fixtures.json';
-import analyses from '../../../public/data/analysis.json';
+import analyses from '../../../public/data/llm-analysis.json';
 import results from '../../../public/data/results.json';
 import history from '../../../public/data/history-stats.json';
-import evaluation from '../../../public/data/evaluation.json';
+import evaluation from '../../../public/data/evaluation-report.json';
 import '../../styles/partido.css';
 
 export function getStaticPaths(){return fixtures.matches.map(match=>({params:{id:match.id},props:{match}}));}
@@ -29,7 +30,9 @@ const stats = match.statistics;
 const events = match.events;
 const finished = FINISHED_STATUSES.has(match.status);
 const statusLabel = finished ? 'Finalizado' : match.status === 'NS' ? 'Programado' : 'En juego';
-const ai = (analyses as Record<string,{summary:string;limitations:string}>)[match.id];
+type AiSection = { title: string; bullets: string[] };
+type AiLimit = { label: string; detail: string };
+const ai = (analyses as Record<string,{summary:string|AiSection[];limitations:string|AiLimit[]} | undefined>)[match.id];
 const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
 const STAT_ROWS = [
   ['Posesión', 'possession', v => v == null ? '—' : `${v}%`],
@@ -57,8 +60,8 @@ const consultUtc = fixtures.updatedAt ? `${fixtures.updatedAt.slice(0,10)} ${fix
 const location = locateMatch(match);
 
 /* Probabilidades horneadas por el pipeline (un JSON por partido, revisable a mano). */
-const probabilityFiles = import.meta.glob('../../../public/data/match-probabilities/*.json', { eager: true, import: 'default' }) as Record<string, any>;
-const probability: any = probabilityFiles[`../../../public/data/match-probabilities/${match.id}.json`] ?? null;
+const probabilityFiles = import.meta.glob('../../../public/match-probabilities/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+const probability: any = probabilityFiles[`../../../public/match-probabilities/${match.id}.json`] ?? null;
 const markets = probability?.markets ?? null;
 const race = probability?.firstGoal ?? null;
 const scorerRows = probability?.scorers ?? null;
@@ -178,8 +181,9 @@ const contextCards = side => {
         <small>{row.goals} goles de temporada · primer gol {pct(row.first)}</small>
        </li>)}</ul>
       </div> : null)}
-     </div>}
-     <span class="chapter-note">Estimaciones del modelo Poisson de GoatLab con la forma reciente y los líderes de temporada como insumos. No son cuotas ni consejos de apuesta; cada cifra declara su muestra en «Insumos».</span>
+      </div>}
+      <ExtraMarkets provider={probability?.provider} h2h={probability?.h2h} discipline={probability?.discipline} setPieces={probability?.setPieces} weatherVenue={probability?.weatherVenue} availability={probability?.availability} shortHome={teamShort(match.home)} shortAway={teamShort(match.away)} />
+      <span class="chapter-note">Estimaciones del modelo Poisson de GoatLab con la forma reciente y los líderes de temporada como insumos. No son cuotas ni consejos de apuesta; cada cifra declara su muestra en «Insumos».</span>
     </> : <h3>Probabilidades en preparación</h3>}</div>
    <div class="stage-pane" data-pane="escenarios" aria-hidden="true" hidden>{verdict ? <>
      <h3>El veredicto</h3>

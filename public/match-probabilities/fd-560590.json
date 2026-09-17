@@ -1,0 +1,367 @@
+{
+  "id": "fd-560590",
+  "home": "Manchester City FC",
+  "away": "Sunderland AFC",
+  "competition": "premier",
+  "kickoff": "2026-09-20T13:00:00Z",
+  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "inputs": {
+    "lambdas": {
+      "home": 1.665,
+      "away": 0.498
+    },
+    "sample": {
+      "home": 6,
+      "away": 4
+    },
+    "standings": {
+      "Manchester City FC": {
+        "position": 2,
+        "team": "Manchester City FC",
+        "played": 4,
+        "won": 4,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": 8,
+        "goalsAgainst": 2,
+        "goalDifference": 6,
+        "points": 12,
+        "form": null
+      },
+      "Sunderland AFC": null
+    },
+    "scorers": {
+      "updatedAt": "2026-09-16T11:35:47.204Z",
+      "provider": "Bzzoiro"
+    },
+    "resultsWindowDays": 180,
+    "weather": null,
+    "discipline": {
+      "updatedAt": "2026-09-16T12:16:58.990Z",
+      "provider": "Bzzoiro"
+    },
+    "history": {
+      "rows": 0
+    },
+    "venue": {
+      "city": "Mánchester",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.652,
+      "draw": 0.251,
+      "away": 0.097
+    },
+    "doubleChance": {
+      "12": 0.749,
+      "1X": 0.903,
+      "X2": 0.348
+    },
+    "dnb": {
+      "home": 0.871,
+      "away": 0.129
+    },
+    "totals": {
+      "over15": 0.646,
+      "under15": 0.354,
+      "over25": 0.367,
+      "under25": 0.633,
+      "over35": 0.173,
+      "under35": 0.827
+    },
+    "btts": {
+      "yes": 0.328,
+      "no": 0.672
+    },
+    "cleanSheet": {
+      "home": 0.608,
+      "away": 0.189
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.182
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.159
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.125
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.105
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.088
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.16,
+    "noGoal": 0.115,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.303
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.211
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.147
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.103
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.072
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.05
+      }
+    ],
+    "firstHome": 0.681,
+    "firstAway": 0.204
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Erling Haaland",
+        "goals": 4,
+        "matches": 4,
+        "share": 0.5,
+        "rate": 0.83,
+        "anytime": 0.565,
+        "first": 0.385
+      },
+      {
+        "player": "Rayan Cherki",
+        "goals": 2,
+        "matches": 4,
+        "share": 0.25,
+        "rate": 0.42,
+        "anytime": 0.34,
+        "first": 0.193
+      }
+    ],
+    "away": null
+  },
+  "hasScorers": true,
+  "method": "poisson-dixoncoles-v1",
+  "context": {
+    "home": {
+      "team": "Manchester City FC",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 4,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 6,
+        "sample": 6
+      },
+      "season": {
+        "position": 2,
+        "played": 4,
+        "gf": 8,
+        "ga": 2,
+        "provider": null
+      },
+      "player": {
+        "name": "Erling Haaland",
+        "detail": "4 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Sunderland AFC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": null,
+      "player": null
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "Divergencia entre los dos modelos del JSON: sobre 2,5 goles 50,7% frente a 36,7% y ambos anotan 48% frente a 32,8%, con totales esperados de 2,71 y 2,16 goles. Cada cifra es coherente con su propio modelo, pero la muestra es mínima (6 y 4 partidos).",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-09-16T11:27:37.923Z"
+  },
+  "schemaVersion": 2,
+  "provider": {
+    "oneX2": {
+      "home": 0.66,
+      "draw": 0.212,
+      "away": 0.128,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.91,
+      "away": 0.8
+    },
+    "over15": null,
+    "over25": 0.507,
+    "over35": null,
+    "btts": 0.48,
+    "score": "1-0",
+    "cornersOver95": 0.511,
+    "confidence": 0.6603,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-09-16T12:17:06.908Z",
+    "source": "Bzzoiro"
+  },
+  "h2h": {
+    "totalMatches": 30,
+    "homeWins": 21,
+    "draws": 4,
+    "awayWins": 5,
+    "avgTotalGoals": 3.033333333333333,
+    "recent": [
+      {
+        "eventId": 190,
+        "date": "2026-01-01T20:00:00+00:00",
+        "home": "Sunderland",
+        "away": "Manchester City",
+        "homeTeamId": 7,
+        "awayTeamId": 12,
+        "homeScore": 0,
+        "awayScore": 0
+      },
+      {
+        "eventId": 144,
+        "date": "2025-12-06T15:00:00+00:00",
+        "home": "Manchester City",
+        "away": "Sunderland",
+        "homeTeamId": 12,
+        "awayTeamId": 7,
+        "homeScore": 3,
+        "awayScore": 0
+      },
+      {
+        "eventId": 367064,
+        "date": "2017-03-05T16:00:00+00:00",
+        "home": "Sunderland",
+        "away": "Manchester City",
+        "homeTeamId": 7,
+        "awayTeamId": 12,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 366800,
+        "date": "2016-08-13T16:30:00+00:00",
+        "home": "Manchester City",
+        "away": "Sunderland",
+        "homeTeamId": 12,
+        "awayTeamId": 7,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 386276,
+        "date": "2016-02-02T19:45:00+00:00",
+        "home": "Sunderland",
+        "away": "Manchester City",
+        "homeTeamId": 7,
+        "awayTeamId": 12,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "poisson-cards-v0",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 5,
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "setPieces": {
+    "method": "poisson-corners-v0",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": null,
+      "condition": null,
+      "sampledAt": null,
+      "source": null
+    },
+    "venue": {
+      "stadium": "Etihad Stadium",
+      "city": "Mánchester",
+      "capacity": 53400,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  }
+}

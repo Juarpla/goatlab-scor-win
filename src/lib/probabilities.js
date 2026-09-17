@@ -200,5 +200,107 @@ export function teamContext(resultsBase, standingsByLeague, scorersByLeague, mat
   };
 }
 
+/* ---- Bloques extendidos (eco del proveedor + stubs null-honestos) ---- */
+
+/**
+ * Eco directo de `match.modelPrediction` (Bzzoiro): sin cálculo propio.
+ * Siempre objeto estable; `source:null` cuando no hay captura.
+ */
+export function buildProviderEcho(match) {
+  const raw = match?.modelPrediction ?? null;
+  return {
+    oneX2: raw?.oneX2 ?? null,
+    xg: raw?.xg ?? null,
+    over15: raw?.over15 ?? null,
+    over25: raw?.over25 ?? null,
+    over35: raw?.over35 ?? null,
+    btts: raw?.btts ?? null,
+    score: raw?.score ?? null,
+    cornersOver95: raw?.cornersOver95 ?? null,
+    confidence: raw?.confidence ?? null,
+    model: raw?.model ?? null,
+    capturedAt: raw?.capturedAt ?? null,
+    source: raw ? (raw.source ?? 'Bzzoiro') : null,
+  };
+}
+
+/** Eco directo de `match.h2h` (Bzzoiro); `recent` acotado a 5. */
+export function buildH2hEcho(match) {
+  const raw = match?.h2h ?? null;
+  return {
+    totalMatches: raw?.totalMatches ?? null,
+    homeWins: raw?.homeWins ?? null,
+    draws: raw?.draws ?? null,
+    awayWins: raw?.awayWins ?? null,
+    avgTotalGoals: raw?.avgTotalGoals ?? null,
+    recent: Array.isArray(raw?.recent) ? raw.recent.slice(0, 5) : null,
+    source: raw ? (raw.source ?? 'Bzzoiro') : null,
+  };
+}
+
+/** Stub de disciplina: el modelo Poisson de tarjetas vive aquí cuando se evalúe. */
+export function buildDisciplineStub({ scorers = null, historyRows = 0 } = {}) {
+  const side = () => ({ yellowOver35: null, redAnytime: null, foulsAvg: null });
+  return {
+    method: 'poisson-cards-v0',
+    home: side(),
+    away: side(),
+    sample: { scorers: Array.isArray(scorers) ? scorers.length : 0, historyRows },
+    source: null,
+  };
+}
+
+/** Stub de balón parado: el modelo propio de córners/tiros/xG vive aquí. */
+export function buildSetPiecesStub({ historyRows = 0 } = {}) {
+  return {
+    method: 'poisson-corners-v0',
+    cornersOver95: null,
+    shots: null,
+    xgTotal: null,
+    sample: { historyRows },
+    source: null,
+  };
+}
+
+/**
+ * Clima + sede por partido. `weatherEntry` es el sidecar `weather.json[id]`;
+ * `venue` es `locateMatch(match)` resuelto por el pipeline (evita importar venues aquí).
+ */
+export function buildWeatherVenue({ match, weatherEntry = null, venue = null } = {}) {
+  return {
+    weather: {
+      temp: weatherEntry?.temp ?? null,
+      precipitation: weatherEntry?.precipitation ?? null,
+      weathercode: weatherEntry?.weathercode ?? null,
+      wind: weatherEntry?.wind ?? null,
+      condition: weatherEntry?.condition ?? null,
+      sampledAt: weatherEntry?.sampledAt ?? null,
+      source: weatherEntry?.source ?? null,
+    },
+    venue: {
+      stadium: venue?.stadium ?? match?.venue ?? null,
+      city: venue?.city ?? match?.venueCity ?? null,
+      capacity: venue?.capacity ?? null,
+      tz: venue?.tz ?? null,
+    },
+    referee: null,
+    pitch: null,
+    attendance: null,
+    derby: null,
+    neutral: null,
+    travelKm: null,
+  };
+}
+
+/** Disponibilidad desde `match.lineups` (Bzzoiro); ausencias confirmadas, nunca estimadas. */
+export function buildAvailability(match) {
+  const raw = match?.lineups ?? null;
+  return {
+    status: raw?.status ?? null,
+    unavailablePlayers: raw?.unavailablePlayers ?? null,
+    source: raw ? (raw.source ?? 'Bzzoiro') : null,
+  };
+}
+
 // Re-exportations used by scripts and tests.
 export { estimateLambdas, normalize };

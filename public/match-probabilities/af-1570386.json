@@ -1,0 +1,346 @@
+{
+  "id": "af-1570386",
+  "home": "Real Betis",
+  "away": "Getafe",
+  "competition": "laliga",
+  "kickoff": "2026-09-17T17:00:00+00:00",
+  "updatedAt": "2026-09-16T11:36:01.939Z",
+  "inputs": {
+    "lambdas": {
+      "home": 1.53,
+      "away": 0.92
+    },
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Real Betis": null,
+      "Getafe": null
+    },
+    "scorers": {
+      "updatedAt": "2026-09-16T11:35:43.994Z",
+      "provider": "Bzzoiro"
+    },
+    "resultsWindowDays": 180,
+    "weather": null,
+    "discipline": {
+      "updatedAt": "2026-09-16T12:16:52.441Z",
+      "provider": "Bzzoiro"
+    },
+    "history": {
+      "rows": 0
+    },
+    "venue": {
+      "city": "Sevilla",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.503,
+      "draw": 0.282,
+      "away": 0.215
+    },
+    "doubleChance": {
+      "12": 0.718,
+      "1X": 0.785,
+      "X2": 0.497
+    },
+    "dnb": {
+      "home": 0.701,
+      "away": 0.299
+    },
+    "totals": {
+      "over15": 0.714,
+      "under15": 0.286,
+      "over25": 0.443,
+      "under25": 0.557,
+      "over35": 0.232,
+      "under35": 0.768
+    },
+    "btts": {
+      "yes": 0.483,
+      "no": 0.517
+    },
+    "cleanSheet": {
+      "home": 0.399,
+      "away": 0.217
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.134
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.12
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.101
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.098
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.093
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.45,
+    "noGoal": 0.086,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.335
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.223
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.098
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.065
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.044
+      }
+    ],
+    "firstHome": 0.571,
+    "firstAway": 0.343
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Rodrigo Riquelme",
+        "goals": 2,
+        "matches": 5,
+        "share": 0.286,
+        "rate": 0.44,
+        "anytime": 0.354,
+        "first": 0.179
+      }
+    ],
+    "away": null
+  },
+  "hasScorers": true,
+  "method": "poisson-dixoncoles-v1",
+  "context": {
+    "home": {
+      "team": "Real Betis",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": {
+        "position": 3,
+        "played": 5,
+        "gf": 7,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Rodrigo Riquelme",
+        "detail": "2 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Getafe",
+      "recentSample": 6,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 6
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 6
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 6
+      },
+      "season": null,
+      "player": null
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "El modelo Poisson otorga al Betis un 50,3% de victoria, mientras que modelPrediction registra un 55,9% para el mismo escenario (xg 1,6-0,9 frente a lambdas 1,53-0,92). La diferencia de casi 6 puntos entre ambas fuentes conviene revisarla.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-09-16T11:40:02.920Z"
+  },
+  "schemaVersion": 2,
+  "provider": {
+    "oneX2": {
+      "home": 0.5589999999999999,
+      "draw": 0.261,
+      "away": 0.18,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.6,
+      "away": 0.9
+    },
+    "over15": null,
+    "over25": 0.431,
+    "over35": null,
+    "btts": 0.451,
+    "score": "1-0",
+    "cornersOver95": 0.46299999999999997,
+    "confidence": 0.5592,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-09-16T12:17:04.556Z",
+    "source": "Bzzoiro"
+  },
+  "h2h": {
+    "totalMatches": 38,
+    "homeWins": 14,
+    "draws": 12,
+    "awayWins": 12,
+    "avgTotalGoals": 2.263157894736842,
+    "recent": [
+      {
+        "eventId": 955,
+        "date": "2026-03-08T15:15:00+00:00",
+        "home": "Getafe",
+        "away": "Real Betis",
+        "homeTeamId": 50,
+        "awayTeamId": 56,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 859,
+        "date": "2025-12-21T20:00:00+00:00",
+        "home": "Real Betis",
+        "away": "Getafe",
+        "homeTeamId": 56,
+        "awayTeamId": 50,
+        "homeScore": 4,
+        "awayScore": 0
+      },
+      {
+        "eventId": 305601,
+        "date": "2025-02-23T17:30:00+00:00",
+        "home": "Getafe",
+        "away": "Real Betis",
+        "homeTeamId": 50,
+        "awayTeamId": 56,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 305380,
+        "date": "2024-09-18T17:00:00+00:00",
+        "home": "Real Betis",
+        "away": "Getafe",
+        "homeTeamId": 56,
+        "awayTeamId": 50,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 311045,
+        "date": "2024-02-04T17:30:00+00:00",
+        "home": "Real Betis",
+        "away": "Getafe",
+        "homeTeamId": 56,
+        "awayTeamId": 50,
+        "homeScore": 1,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "poisson-cards-v0",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 5,
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "setPieces": {
+    "method": "poisson-corners-v0",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 0
+    },
+    "source": null
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": null,
+      "condition": null,
+      "sampledAt": null,
+      "source": null
+    },
+    "venue": {
+      "stadium": "Benito Villamarín",
+      "city": "Sevilla",
+      "capacity": 60721,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  }
+}
