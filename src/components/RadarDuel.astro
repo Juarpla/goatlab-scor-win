@@ -1,0 +1,66 @@
+---
+/**
+ * Duelo de dominancia en radar SVG dinámico: un polígono por equipo sobre los
+ * mismos ejes (repartos 0–1 por eje). Todo sale de `axes`; sin ejes no hay
+ * dibujo. Lima = local, pizarra = visita. Florece con `.pt-fade` al activarse
+ * el pane y queda estático con movimiento reducido.
+ */
+interface Axis { label: string; home: number | null; away: number | null }
+interface Props {
+  axes?: Axis[];
+  homeShort?: string;
+  awayShort?: string;
+  summary?: string;
+}
+
+const { axes = [], homeShort = 'Local', awayShort = 'Visita', summary = 'Comparativa de ritmos esperados' } = Astro.props;
+const usable = axes.filter(axis => axis.home != null && axis.away != null && axis.home + axis.away > 0);
+const n = usable.length;
+const CX = 180, CY = 166, R = 108, LR = 142;
+const angle = (index: number) => (Math.PI * 2 * index) / n - Math.PI / 2;
+const point = (index: number, value: number) => {
+  const a = angle(index);
+  return [CX + R * value * Math.cos(a), CY + R * value * Math.sin(a)];
+};
+const poly = (pick: (axis: Axis) => number) => usable.map((axis, i) => point(i, Math.min(1, Math.max(0, pick(axis)))).join(',')).join(' ');
+const rings = [0.25, 0.5, 0.75, 1];
+const ringPoly = (f: number) => usable.map((_, i) => point(i, f).join(',')).join(' ');
+const labelPos = (index: number) => {
+  const a = angle(index);
+  return [CX + LR * Math.cos(a), CY + LR * Math.sin(a)];
+};
+const anchor = (index: number) => {
+  const c = Math.cos(angle(index));
+  return Math.abs(c) < 0.35 ? 'middle' : c > 0 ? 'start' : 'end';
+};
+const pct = (value: number) => `${Math.round(value * 100)}%`;
+---
+{usable.length >= 3 ? (
+  <figure class="duel">
+    <svg viewBox="0 0 360 336" role="img" aria-label={summary}>
+      {rings.map(f => <polygon class="duel-grid" points={ringPoly(f)} />)}
+      {usable.map((_, i) => {
+        const [x, y] = point(i, 1);
+        return <line class="duel-spoke" x1={CX} y1={CY} x2={x} y2={y} />;
+      })}
+      <text class="duel-tick" x={CX} y={CY - R * 0.25 - 4} text-anchor="middle">25</text>
+      <text class="duel-tick" x={CX} y={CY - R * 0.5 - 4} text-anchor="middle">50</text>
+      <text class="duel-tick" x={CX} y={CY - R * 0.75 - 4} text-anchor="middle">75</text>
+      <polygon class="duel-poly duel-away pt-fade" style="--d:0.2s" points={poly(axis => axis.away as number)} />
+      <polygon class="duel-poly duel-home pt-fade" style="--d:0.05s" points={poly(axis => axis.home as number)} />
+      {usable.map((axis, i) => {
+        const [hx, hy] = point(i, Math.min(1, Math.max(0, axis.home as number)));
+        const [ax, ay] = point(i, Math.min(1, Math.max(0, axis.away as number)));
+        return <g><circle class="duel-dot duel-dot-home" cx={hx} cy={hy} r="3" /><circle class="duel-dot duel-dot-away" cx={ax} cy={ay} r="3" /></g>;
+      })}
+      {usable.map((axis, i) => {
+        const [x, y] = labelPos(i);
+        return <text class="duel-label" x={x} y={y} text-anchor={anchor(i)}>{axis.label}<tspan class="duel-value" x={x} dy="13"><tspan class="duel-vhome">{pct(axis.home as number)}</tspan>{' · '}<tspan class="duel-vaway">{pct(axis.away as number)}</tspan></tspan></text>;
+      })}
+    </svg>
+    <div class="legend" aria-hidden="true"><span><i class="home-dot"></i>{homeShort}</span><span><i class="away-dot"></i>{awayShort}</span></div>
+    <table class="sr-only"><caption>{summary}</caption><thead><tr><th>Eje</th><th>{homeShort}</th><th>{awayShort}</th></tr></thead><tbody>{usable.map(axis => <tr><td>{axis.label}</td><td>{pct(axis.home as number)}</td><td>{pct(axis.away as number)}</td></tr>)}</tbody></table>
+  </figure>
+) : (
+  <p class="chapter-note">Sin duelos suficientes: el radar necesita al menos tres ejes con muestra de ambos equipos.</p>
+)}

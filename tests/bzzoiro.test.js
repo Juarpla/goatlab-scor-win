@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sameTeam, enrichMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail } from '../src/lib/bzzoiro.js';
+import { sameTeam, enrichMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast } from '../src/lib/bzzoiro.js';
 
 test('sameTeam matches full names, accents and abbreviations', () => {
   assert.equal(sameTeam('Manchester City', 'Man City'), true);
@@ -120,4 +120,58 @@ test('mapEventDetail captures weather, pitch, attendance, referee and venue', ()
   assert.equal(stringWeather.weather.condition, 'Rain');
   assert.equal(mapEventDetail({}), null);
   assert.equal(mapEventDetail(null), null);
+});
+
+test('mapH2H distinguishes confirmed zero meetings from missing data', () => {
+  const zero = mapH2H({ total_matches: 0 });
+  assert.equal(zero.totalMatches, 0);
+  assert.deepEqual(zero.recent, []);
+  assert.equal(zero.source, 'Bzzoiro');
+  assert.equal(mapH2H({}), null);
+  assert.equal(mapH2H(null), null);
+  const some = mapH2H({ total_matches: 2, home_wins: 0, draws: 0, away_wins: 2, recent_matches: [] });
+  assert.equal(some.totalMatches, 2);
+});
+
+test('hasH2HHistory gates the head-to-head display at three recorded meetings', () => {
+  assert.equal(hasH2HHistory({ totalMatches: 3, recent: [] }), true);
+  assert.equal(hasH2HHistory({ totalMatches: 12, recent: [] }), true);
+  assert.equal(hasH2HHistory({ totalMatches: 2, recent: [] }), false);
+  assert.equal(hasH2HHistory({ totalMatches: 0, recent: [] }), false);
+  assert.equal(hasH2HHistory(null), false);
+  assert.equal(hasH2HHistory({}), false);
+  assert.equal(hasH2HHistory({ totalMatches: 3 }, 4), false);
+});
+
+test('mapTeamLast keeps finished matches strictly before the fixture, newest first', () => {
+  const rows = [
+    { id: 3, status: 'finished', event_date: '2026-09-13T18:45:00+00:00', home_team: 'Sassuolo', away_team: 'Juventus', home_team_id: 61, away_team_id: 73, home_score: 3, away_score: 2 },
+    { id: 2, status: 'finished', event_date: '2026-09-13T19:00:00+00:00', home_team: 'Otro', away_team: 'Rival', home_team_id: 1, away_team_id: 2, home_score: null, away_score: null },
+    { id: 1, status: 'finished', event_date: '2026-09-20T18:45:00+00:00', home_team: 'Juventus', away_team: 'Inter', home_team_id: 73, away_team_id: 60, home_score: 1, away_score: 1 },
+    { id: 0, status: 'scheduled', event_date: '2026-09-10T18:45:00+00:00', home_team: 'Juventus', away_team: 'Milan', home_team_id: 73, away_team_id: 59, home_score: 2, away_score: 0 },
+  ];
+  const last = mapTeamLast(rows, { before: '2026-09-17T19:00:00+00:00', limit: 5 });
+  assert.equal(last.length, 1); // scoreless, future and scheduled rows are out
+  assert.deepEqual(last[0], {
+    eventId: 3, date: '2026-09-13T18:45:00+00:00', home: 'Sassuolo', away: 'Juventus',
+    homeTeamId: 61, awayTeamId: 73, homeScore: 3, awayScore: 2,
+  });
+  assert.deepEqual(mapTeamLast(rows, { before: '2026-09-01T00:00:00+00:00' }), []);
+  assert.deepEqual(mapTeamLast(null), []);
+});
+
+test('fetchTeamLast queries finished events by team and maps them', async () => {
+  const calls = [];
+  const fetchImpl = async url => {
+    calls.push(url);
+    return new Response(JSON.stringify({ results: [
+      { id: 3, status: 'finished', event_date: '2026-09-13T18:45:00+00:00', home_team: 'Sassuolo', away_team: 'Juventus', home_team_id: 61, away_team_id: 73, home_score: 3, away_score: 2 },
+    ] }), { status: 200 });
+  };
+  const last = await fetchTeamLast(73, { before: '2026-09-17T19:00:00+00:00', env: { BZZOIRO_API_TOKEN: 't' }, fetchImpl });
+  assert.ok(calls[0].includes('team_id=73') && calls[0].includes('status=finished'));
+  assert.equal(last.length, 1);
+  assert.equal(last[0].away, 'Juventus');
+  assert.equal(await fetchTeamLast(null, { env: { BZZOIRO_API_TOKEN: 't' }, fetchImpl }), null);
+  assert.equal(await fetchTeamLast(73, { env: {}, fetchImpl }), null);
 });

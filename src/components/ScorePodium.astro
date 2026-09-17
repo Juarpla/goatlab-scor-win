@@ -1,0 +1,32 @@
+---
+/**
+ * ScorePodium.astro — los marcadores que más repite el cálculo.
+ * Tres columnas que crecen al activarse (.grow con escalonado --d):
+ * el podio cuenta la historia, el resto acompaña en una línea discreta.
+ */
+interface Score { home: number; away: number; p: number }
+interface Props { title: string; scores: Score[]; rest?: string | null; summary: string }
+
+const { title, scores, rest, summary } = Astro.props;
+const pct = (value: number) => `${Math.round(value * 100)}%`;
+const BASE = 132;
+const top = Math.max(...scores.map(score => score.p), 0.01);
+const colX = [8, 118, 228];
+---
+<figure class="podium">
+  <figcaption>{title}</figcaption>
+  <svg viewBox="0 0 320 168" role="img" aria-label={summary}>
+    <line class="ladder-step" x1="0" y1={BASE} x2="320" y2={BASE} aria-hidden="true"/>
+    {scores.map((score, index) => {
+      const height = 34 + (score.p / top) * 62;
+      return (
+        <g>
+          <text class="podium-score" x={colX[index] + 42} y={BASE - height - 26} text-anchor="middle">{score.home}–{score.away}</text>
+          <text class="podium-pct" x={colX[index] + 42} y={BASE - height - 10} text-anchor="middle">{pct(score.p)}</text>
+          <rect class={`pod-${index + 1} pt-grow`} style={`--d:${(index * 0.14).toFixed(2)}s`} x={colX[index]} y={BASE - height} width="84" height={height} rx="4"/>
+        </g>
+      );
+    })}
+  </svg>
+  {rest && <p class="podium-rest">{rest}</p>}
+</figure>

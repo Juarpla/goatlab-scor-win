@@ -5,7 +5,7 @@
   "competition": "laliga",
   "kickoff": "2026-09-17T19:30:00+00:00",
   "updatedAt": "2026-09-17T05:59:05.572Z",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 1.44,
@@ -371,5 +371,110 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": null,
+  "statsForecast": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "shots": 13.61,
+      "shotsOnTarget": 4.16,
+      "xg": 1.43,
+      "corners": 5.07,
+      "fouls": 12.1,
+      "yellowCards": 2.14,
+      "redCards": null,
+      "offsides": 2.06,
+      "possession": 48.21
+    },
+    "away": {
+      "shots": 14.02,
+      "shotsOnTarget": 5.4,
+      "xg": 1.58,
+      "corners": 5.54,
+      "fouls": 11.44,
+      "yellowCards": 1.93,
+      "redCards": null,
+      "offsides": 2.51,
+      "possession": 51.79
+    },
+    "sample": {
+      "home": 4,
+      "away": 5
+    },
+    "coverage": {
+      "home": {
+        "possession": 4,
+        "shots": 4,
+        "shotsOnTarget": 4,
+        "xg": 4,
+        "corners": 4,
+        "fouls": 4,
+        "yellowCards": 4,
+        "redCards": 0,
+        "offsides": 4
+      },
+      "away": {
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 1,
+        "offsides": 5
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.19,
+      "shotsOnTarget": 4.75,
+      "xg": 1.52,
+      "corners": 4.98,
+      "fouls": 12.18,
+      "yellowCards": 2.13,
+      "redCards": 0.55,
+      "offsides": 2.17
+    },
+    "source": "GoatLab"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.382,
+      "draw": 0.123,
+      "away": 0.495
+    },
+    "cardsDuel": {
+      "home": 0.438,
+      "draw": 0.204,
+      "away": 0.358
+    },
+    "lastGoal": {
+      "home": 0.48,
+      "away": 0.46,
+      "noGoal": 0.06
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.459,
+        "away": 0.541
+      },
+      "5": {
+        "home": 0.446,
+        "away": 0.554
+      },
+      "7": {
+        "home": 0.435,
+        "away": 0.565
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.178,
+      "home12": 0.204,
+      "level": 0.123,
+      "away12": 0.232,
+      "away3plus": 0.263
+    },
+    "source": "GoatLab"
+  }
 }

@@ -1,74 +1,46 @@
 ---
 /**
- * Lectura extendida del encuentro: eco del proveedor (Bzzoiro) + contexto
- * de sede, clima y disponibilidad. Mismo mundo de la sala de análisis:
- * superficies mate, regla de 1px, fichas con ícono y notas quietas.
- * Todo bloque ausente se omite; nunca se inventa una cifra.
+ * Contexto pendiente del encuentro: sede, clima y disponibilidad.
+ * La lectura del proveedor (Bzzoiro) vive como marcador lateral dentro de
+ * los capítulos de resultado y goles; el historial cara a cara no se muestra.
+ * Mismo mundo de la sala de análisis: superficies mate, regla de 1px,
+ * fichas con ícono y notas quietas. Todo bloque ausente se omite.
  */
 import Icon from './Icon.astro';
-import ProbabilityBar from './ProbabilityBar.astro';
 
 interface Props {
-  provider?: any;
-  h2h?: any;
   discipline?: any;
   setPieces?: any;
   weatherVenue?: any;
   availability?: any;
-  shortHome?: string;
-  shortAway?: string;
 }
 
-const { provider, h2h, discipline, setPieces, weatherVenue, availability, shortHome = 'Local', shortAway = 'Visita' } = Astro.props;
-const pct = (value: number | null | undefined) => value == null ? '—' : `${Math.round(value * 100)}%`;
+const { discipline, setPieces, weatherVenue, availability } = Astro.props;
 const num = (value: number | null | undefined, digits = 1) => value == null ? '—' : Number(value).toFixed(digits);
-
-const hasProvider = Boolean(provider && (provider.xg || provider.cornersOver95 != null || provider.score || provider.confidence != null || provider.oneX2));
-const hasH2h = Boolean(h2h && h2h.totalMatches != null);
-const hasWeather = Boolean(weatherVenue && (weatherVenue.weather?.temp != null || weatherVenue.weather?.condition || weatherVenue.weather?.wind != null || weatherVenue.venue?.stadium));
 const hasAvailability = Boolean(availability && (availability.unavailablePlayers?.length || availability.status));
 const hasModels = Boolean((discipline && discipline.source) || (setPieces && setPieces.source));
-const allEmpty = !hasProvider && !hasH2h && !hasWeather && !hasAvailability && !hasModels;
 
-const h2hBalance = hasH2h ? `${h2h.homeWins ?? '—'}V · ${h2h.draws ?? '—'}E · ${h2h.awayWins ?? '—'}D` : null;
-const weatherLabel = weatherVenue?.weather?.temp != null
-  ? `${num(weatherVenue.weather.temp, 0)}° · viento ${num(weatherVenue.weather.wind, 0)}`
-  : weatherVenue?.weather?.condition ?? null;
+const condition = weatherVenue?.weather?.condition;
+const validCondition = condition && !['unknown', 'desconocido', 'n/a'].includes(String(condition).toLowerCase()) ? condition : null;
+const weatherBits = [
+  weatherVenue?.weather?.temp != null ? `${num(weatherVenue.weather.temp, 0)}°` : null,
+  weatherVenue?.weather?.wind != null ? `viento ${num(weatherVenue.weather.wind, 0)}` : null,
+  validCondition,
+].filter(Boolean);
+const weatherLabel = weatherBits.length ? weatherBits.join(' · ') : null;
+const hasWeather = Boolean(weatherVenue && (weatherLabel || weatherVenue.venue?.stadium));
+const allEmpty = !hasWeather && !hasAvailability && !hasModels;
 const venueLabel = weatherVenue?.venue?.stadium
   ? `${weatherVenue.venue.stadium}${weatherVenue.venue.city ? ` · ${weatherVenue.venue.city}` : ''}`
   : null;
 const absentRows = availability?.unavailablePlayers ?? [];
 ---
 {allEmpty ? (
-  <p class="chapter-note">Del proveedor y del contexto, en preparación: cuando haya captura del modelo, clima o historial, aparecerá aquí con su fuente.</p>
+  <p class="chapter-note">Del contexto del encuentro, en preparación: cuando haya clima, árbitro o bajas confirmadas, aparecerán aquí con su fuente.</p>
 ) : (
   <div class="extra-markets">
-    {hasProvider && (
-      <div class="prob-rows">
-        {(provider.over25 != null || provider.btts != null || provider.cornersOver95 != null) && (
-          <ProbabilityBar
-            title="Lo que ve el proveedor"
-            variant="rows"
-            segments={[
-              ...(provider.over25 != null ? [{ label: 'Más de 2.5 (prov.)', value: provider.over25, tone: 'home' as const }] : []),
-              ...(provider.btts != null ? [{ label: 'Ambos anotan (prov.)', value: provider.btts, tone: 'away' as const }] : []),
-              ...(provider.cornersOver95 != null ? [{ label: 'Más de 9.5 córners (prov.)', value: provider.cornersOver95, tone: 'draw' as const }] : []),
-            ]}
-            note={provider.model ? `Modelo ${provider.model}${provider.confidence != null ? ` · confianza ${pct(provider.confidence)}` : ''} · Fuente: Bzzoiro` : 'Fuente: Bzzoiro'}
-          />
-        )}
-      </div>
+    {(hasWeather || hasAvailability) && (
       <ul class="prob-chips">
-        {provider.xg && <li><Icon name="target" size={16} /><span>xG {shortHome}–{shortAway}</span><strong>{num(provider.xg.home)} – {num(provider.xg.away)}</strong></li>}
-        {provider.score && <li><Icon name="ball" size={16} /><span>Marcador probable</span><strong>{provider.score}</strong></li>}
-        {provider.over15 != null && <li><Icon name="bolt" size={16} /><span>Más de 1.5 (prov.)</span><strong>{pct(provider.over15)}</strong></li>}
-        {provider.over35 != null && <li><Icon name="bolt" size={16} /><span>Más de 3.5 (prov.)</span><strong>{pct(provider.over35)}</strong></li>}
-      </ul>
-    )}
-    {(hasH2h || hasWeather || hasAvailability) && (
-      <ul class="prob-chips">
-        {hasH2h && <li><Icon name="chart" size={16} /><span>Cara a cara ({h2h.totalMatches})</span><strong>{h2hBalance}</strong></li>}
-        {hasH2h && h2h.avgTotalGoals != null && <li><Icon name="ball" size={16} /><span>Promedio de goles H2H</span><strong>{num(h2h.avgTotalGoals, 2)}</strong></li>}
         {weatherLabel && <li><Icon name="bolt" size={16} /><span>Clima al saque</span><strong>{weatherLabel}</strong></li>}
         {venueLabel && <li><Icon name="shield" size={16} /><span>Sede</span><strong>{venueLabel}</strong></li>}
         {hasAvailability && absentRows.length > 0 && <li><Icon name="star" size={16} /><span>Bajas confirmadas</span><strong>{absentRows.length}</strong></li>}

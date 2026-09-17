@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { teamForm, matchForm } from '../src/lib/form.js';
+import { teamForm, matchForm, bakedForm } from '../src/lib/form.js';
 
 const results = [
   { id: '1', date: '2026-09-01', competition: 'premier', home: 'Arsenal', away: 'Chelsea', homeScore: 2, awayScore: 0 },
@@ -38,4 +38,20 @@ test('matchForm returns both sides or null when one lacks data', () => {
   assert.equal(both.homeForm.played, 5);
   assert.equal(both.awayForm.played, 3);
   assert.equal(matchForm(results, 'Arsenal', 'Leeds'), null);
+});
+
+test('bakedForm keeps the teamForm shape with no minimum sample', () => {
+  const rows = [
+    { eventId: 1, date: '2026-09-13T18:45:00+00:00', home: 'Sassuolo', away: 'Juventus', homeTeamId: 61, awayTeamId: 73, homeScore: 3, awayScore: 2 },
+    { eventId: 2, date: '2026-09-06T18:45:00+00:00', home: 'Juventus', away: 'Inter', homeTeamId: 73, awayTeamId: 60, homeScore: 1, awayScore: 1 },
+  ];
+  const form = bakedForm(rows, 'Juventus');
+  assert.equal(form.played, 2); // two matches are enough here (no 3-match floor)
+  assert.deepEqual(form.form, ['P', 'E']); // newest first
+  assert.deepEqual(form.goalsFor, [2, 1]);
+  assert.deepEqual(form.goalsAgainst, [3, 1]);
+  assert.deepEqual(form.rivals, ['Sassuolo', 'Inter']);
+  assert.equal(bakedForm(rows, 'Barcelona'), null);
+  assert.equal(bakedForm([], 'Juventus'), null);
+  assert.equal(bakedForm(null, 'Juventus'), null);
 });

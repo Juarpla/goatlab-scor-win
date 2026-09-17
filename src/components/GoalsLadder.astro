@@ -1,0 +1,36 @@
+---
+/**
+ * GoalsLadder.astro — la escalera del total de goles.
+ * Tres peldaños (1.5 / 2.5 / 3.5): cada uno pregunta si el partido pasa
+ * esa línea, con la barra del "sí" creciendo al activarse (.pt-grow-x).
+ * El "no" acompaña como texto: la historia es si hay fiesta o candado.
+ */
+interface Rung { line: string; over: number | null; under: number | null }
+interface Props { title: string; rungs: Rung[]; summary: string }
+
+const { title, rungs, summary } = Astro.props;
+const pct = (value: number | null | undefined) => value == null ? '—' : `${Math.round(value * 100)}%`;
+const TRACK = 170;
+const barX = (index: number) => 130 - index * 30;
+const barY = (index: number) => 6 + index * 50;
+---
+<figure class="ladder">
+  <figcaption>{title}</figcaption>
+  <svg viewBox="0 0 340 152" role="img" aria-label={summary}>
+    <polyline
+      class="ladder-step"
+      points={rungs.map((_, index) => `${barX(index)},${barY(index) + 26}`).join(' ')}
+      aria-hidden="true"/>
+    {rungs.map((rung, index) => (
+      <g>
+        <text class="ladder-line" x="4" y={barY(index) + 12}>Más de {rung.line}</text>
+        <rect class="prob-row-bg" x={barX(index)} y={barY(index) + 18} width={TRACK} height="10" rx="3"/>
+        {(rung.over ?? 0) > 0 && (
+          <rect class="prob-home pt-grow-x" style={`--d:${(0.15 + index * 0.18).toFixed(2)}s`} x={barX(index)} y={barY(index) + 18} width={Math.max(1, (rung.over ?? 0) * TRACK)} height="10" rx="3"/>
+        )}
+        <text class="ladder-value" x={barX(index) + TRACK + 8} y={barY(index) + 27}>{pct(rung.over)}</text>
+        <text class="ladder-sub" x="4" y={barY(index) + 42}>Menos de {rung.line}: {pct(rung.under)}</text>
+      </g>
+    ))}
+  </svg>
+</figure>

@@ -1,0 +1,42 @@
+---
+/**
+ * WaffleResult.astro — el resultado final contado en 100 cuadritos.
+ * "Si este partido se jugara 100 veces…": cada cuadrito es un partido.
+ * Los cuadritos florecen en escalera (.pt-fade + --d) al activarse el pane;
+ * con movimiento reducido quedan fijos. Reusa los tonos de ProbabilityBar.
+ */
+interface Segment { label: string; value: number; tone: 'home' | 'away' | 'draw' | 'mute' }
+interface Props { title: string; segments: Segment[]; summary: string; note?: string }
+
+const { title, segments, summary, note } = Astro.props;
+const counts = (() => {
+  const raw = segments.map(segment => Math.round((segment.value ?? 0) * 100));
+  const drift = 100 - raw.reduce((a, b) => a + b, 0);
+  if (drift !== 0 && raw.length) {
+    let peak = 0;
+    raw.forEach((count, index) => { if (count > raw[peak]) peak = index; });
+    raw[peak] += drift;
+  }
+  return raw;
+})();
+const cells: { tone: string; delay: string }[] = [];
+counts.forEach((count, index) => {
+  for (let i = 0; i < count; i++) cells.push({ tone: segments[index].tone, delay: `${(cells.length * 0.006).toFixed(3)}s` });
+});
+---
+<figure class="waffle">
+  <figcaption>{title}</figcaption>
+  <svg viewBox="0 0 200 200" role="img" aria-label={summary}>
+    {cells.map((cell, index) => {
+      const x = (index % 10) * 20 + 1;
+      const y = Math.floor(index / 10) * 20 + 1;
+      return <rect class={`waffle-cell prob-${cell.tone} pt-fade`} style={`--d:${cell.delay}`} x={x} y={y} width="18" height="18" rx="4"/>;
+    })}
+  </svg>
+  <ul class="prob-legend">
+    {segments.map((segment, index) => (
+      <li><i class={`prob-key prob-${segment.tone}`} aria-hidden="true"></i><span>{segment.label}</span><strong>{counts[index]} de 100</strong></li>
+    ))}
+  </ul>
+  {note && <p class="prob-note">{note}</p>}
+</figure>

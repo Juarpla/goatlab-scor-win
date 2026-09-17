@@ -1,6 +1,7 @@
-/* Página de partido: camisetas escaneadas, zoom de sede, cancha animada,
-   probabilidades y tarjetas por equipo. Mismo mundo de la sala de análisis:
-   superficies mate, reglas de 1px, lima señal y pizarra como segunda serie. */
+/* Página de partido: camisetas escaneadas, zoom de sede, cancha animada y
+   relato por capítulos con escenas SVG vivas (waffle, escalera, podio).
+   Mismo mundo de la sala de análisis: superficies mate, reglas de 1px,
+   lima señal y pizarra como segunda serie. */
 
 /* ---- Cabecera del encuentro: camisetas ---- */
 .encounter-head {
@@ -139,12 +140,15 @@
 }
 
 /* ---- Gráficos de probabilidad ---- */
-/* El panel de probabilidades es más alto que la pantalla: scrollea por dentro
-   mientras el escenario queda fijo (solo escritorio, donde el stage es sticky;
-   en mobile el stage fluye con la página y en reduced-motion deja de ser sticky). */
+/* Los paneles largos scrollean por dentro mientras el escenario queda fijo
+   (solo escritorio, donde el stage es sticky; en mobile el stage fluye con
+   la página y en reduced-motion deja de ser sticky). */
 @media (min-width: 761px) {
   @media (prefers-reduced-motion: no-preference) {
-    .stage-pane[data-pane="probabilidades"] {
+    .stage-pane[data-pane="estadisticas"],
+    .stage-pane[data-pane="resultado"],
+    .stage-pane[data-pane="goles"],
+    .stage-pane[data-pane="primer-gol"] {
       max-height: calc(100vh - 90px);
       overflow-y: auto;
     }
@@ -411,6 +415,181 @@
   color: var(--muted);
 }
 
+/* ---- Vocabulario de entrada: crecer, llenar, aparecer ----
+   Un solo momento autoral por escena, disparado por .is-active del pane
+   (mismo contrato que metodología/contacto). Sin movimiento: estado final. */
+@keyframes pt-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes pt-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pt-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.stage-pane.is-active .pt-grow {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pt-grow 0.7s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.stage-pane.is-active .pt-grow-x {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: pt-grow-x 0.8s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.stage-pane.is-active .pt-fade {
+  animation: pt-fade 0.5s var(--d, 0s) ease-out both;
+}
+
+/* ---- Diccionario inline: "¿qué significa esto?" ---- */
+.meaning {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.meaning summary {
+  cursor: pointer;
+  font-weight: 650;
+  color: var(--text);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.meaning p { margin-top: 8px; }
+.meaning strong { color: var(--text); }
+
+/* ---- Capítulo 1: señales por equipo (reusa .team-panel/.context-list) ---- */
+.signal-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.signals-lead {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+/* ---- Capítulo 2: banda de goles esperados ---- */
+.lambda-band {
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.lambda-band p {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.lambda-band p strong { color: var(--text); }
+.lambda-band p span { display: block; margin-top: 2px; font-size: 10px; }
+
+.lambda-gauges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lambda-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+}
+
+.lambda-name {
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.lambda-row strong {
+  font-size: 12px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ---- Segunda lectura del proveedor: marcador lateral ---- */
+.second-reading {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---- Escenas SVG: waffle, escalera, podio ---- */
+.waffle, .ladder, .podium { margin: 0 0 22px; }
+
+.waffle figcaption, .ladder figcaption, .podium figcaption {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.waffle svg, .ladder svg, .podium svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.waffle svg { max-width: 300px; }
+.waffle-cell { stroke: var(--surface); stroke-width: 1; }
+
+.ladder-line {
+  fill: var(--text);
+  font: 650 11px var(--body);
+}
+
+.ladder-value {
+  fill: var(--text);
+  font: 700 12px var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+.ladder-sub {
+  fill: var(--muted);
+  font: 500 9.5px var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+.ladder-step {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.pod-1 { fill: var(--accent); }
+.pod-2 { fill: #6f8173; }
+.pod-3 { fill: #55645a; }
+
+.podium-score {
+  fill: var(--text);
+  font: 700 21px var(--display);
+  font-variant-numeric: tabular-nums;
+}
+
+.podium-pct {
+  fill: var(--muted);
+  font: 600 11px var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+.podium-rest {
+  margin-top: 10px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
 /* ---- Cancha animada ---- */
 .pitch-block {
   display: grid;
@@ -582,30 +761,7 @@
   margin-top: 12px;
 }
 
-/* ---- Tarjetas por equipo ---- */
-.team-context {
-  border-top: 1px solid var(--line);
-  margin-top: 30px;
-  padding-block: 58px 20px;
-}
-
-.team-context-head {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: end;
-  margin-bottom: 34px;
-}
-
-.team-context-head h2 { font-size: 58px; }
-.team-context-head p { font-size: 14px; }
-
-.team-context-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-}
-
+/* ---- Paneles por equipo (capítulo 1: señales) ---- */
 .team-panel {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -669,6 +825,206 @@
   color: var(--muted);
 }
 
+/* ---- Duelo de dominancia (radar SVG dinámico) ----
+   Lima = local, pizarra = visita; retícula de 1px sobre superficie mate.
+   Entra con .pt-fade al activarse el pane; quieto con movimiento reducido. */
+.duel {
+  margin: 0 0 24px;
+}
+
+.duel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.duel-grid {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.duel-spoke {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.duel-tick {
+  fill: var(--muted);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+
+.duel-poly {
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.duel-home {
+  fill: var(--accent);
+  fill-opacity: 0.14;
+  stroke: var(--accent);
+}
+
+.duel-away {
+  fill: var(--away);
+  fill-opacity: 0.14;
+  stroke: var(--away);
+}
+
+.duel-dot-home { fill: var(--accent); }
+.duel-dot-away { fill: var(--away); }
+
+.duel-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.duel-value {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.duel-vhome { fill: var(--accent); }
+.duel-vaway { fill: var(--away); }
+
+.duel .legend {
+  margin-top: 14px;
+}
+
+/* ---- El marco del partido (debajo del último anuncio) ----
+   Lo que rodea al juego con el lenguaje de team-panel: superficies mate,
+   reglas de 1px, cifras tabulares. Sin JS todo visible; con JS, .is-in
+   dispara una sola pasada de entrada. */
+.trends {
+  margin-top: 44px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+
+.trends-head h2 {
+  font-family: var(--display);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.trends-head p {
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+.trends-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+/* Barras del árbitro: una métrica por fila, cada una en su escala. */
+.ref-bars {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ref-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ref-row-head strong {
+  font-family: var(--display);
+  font-size: 20px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.ref-track {
+  display: block;
+  margin-top: 6px;
+  background: var(--line);
+  background: color-mix(in srgb, var(--line) 55%, transparent);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ref-track b {
+  display: block;
+  height: 8px;
+  width: var(--w, 0%);
+  background: var(--accent);
+  border-radius: 4px;
+  transform-origin: left center;
+}
+
+/* Bajas confirmadas, agrupadas por lado. */
+.absence-list {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.absence-group > ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.absence-side {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.absence-list small { color: var(--muted); }
+
+.trends-extra {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.trends-block h3 { font-size: 14px; margin-bottom: 10px; }
+
+.trends-block ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.trends-block small { color: var(--muted); }
+
+.trends-block a { color: var(--text); text-underline-offset: 3px; }
+.trends-block a:hover { color: var(--accent); }
+.trends-block a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.trends .second-reading { margin-top: 20px; }
+
+/* Una sola pasada de entrada al aparecer en vista. */
+.trends.is-in .td-grow-r { animation: pt-grow-x 0.8s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
 /* ---- Adaptación ---- */
 @media (max-width: 1150px) {
   .pitch-block { grid-template-columns: 1fr; }
@@ -680,9 +1036,8 @@
   .jerseys { align-self: center; }
   .venue-zoom { max-width: none; }
   .prob-scorers { grid-template-columns: 1fr; }
-  .team-context-head { grid-template-columns: 1fr; gap: 18px; }
-  .team-context-head h2 { font-size: 44px; }
-  .team-context-grid { grid-template-columns: 1fr; }
+  .trends-grid { grid-template-columns: 1fr; }
+  .trends-extra { grid-template-columns: 1fr; }
   .pitch-head h2 { font-size: 32px; }
   .pitch-score strong { font-size: 26px; }
   .race-none { margin-left: 0; }
@@ -692,4 +1047,8 @@
   .venue-pin-mark { animation: none; }
   .pitch-ball.is-idle { animation: none; }
   .pitch-mark.is-hit .pitch-mark-ring { animation: none; }
+  .stage-pane.is-active .pt-grow,
+  .stage-pane.is-active .pt-grow-x,
+  .stage-pane.is-active .pt-fade { animation: none; }
+  .trends.is-in .td-grow-r { animation: none; }
 }

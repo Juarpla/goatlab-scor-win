@@ -7,6 +7,28 @@ export function teamForm(results, team, count = 5) {
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
     .slice(0, count);
   if (played.length < 3) return null;
+  return buildForm(played, team);
+}
+/** Both sides' form for one fixture, or null when either team lacks enough data. */
+export function matchForm(results, home, away) {
+  const homeForm = teamForm(results, home);
+  const awayForm = teamForm(results, away);
+  return homeForm && awayForm ? { homeForm, awayForm } : null;
+}
+/**
+ * Recent form from pipeline-baked rows (`match.lastMatches`, Bzzoiro): same
+ * shape as `teamForm`, but no minimum sample. Returns null only with no
+ * matches at all, so the chapter can show "lo que ya jugaron" even for
+ * clubs the local results base does not cover.
+ */
+export function bakedForm(rows, team) {
+  const played = (rows ?? [])
+    .filter(row => row.homeScore != null && row.awayScore != null && (sameClub(row.home, team) || sameClub(row.away, team)))
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  if (!played.length) return null;
+  return buildForm(played, team);
+}
+function buildForm(played, team) {
   const goalsFor = [];
   const goalsAgainst = [];
   const form = [];
@@ -23,10 +45,4 @@ export function teamForm(results, team, count = 5) {
     dates.push(row.date);
   }
   return { played: played.length, goalsFor, goalsAgainst, form, rivals, dates };
-}
-/** Both sides' form for one fixture, or null when either team lacks enough data. */
-export function matchForm(results, home, away) {
-  const homeForm = teamForm(results, home);
-  const awayForm = teamForm(results, away);
-  return homeForm && awayForm ? { homeForm, awayForm } : null;
 }

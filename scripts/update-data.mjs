@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired } from '../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
-  fetchEventPlayerStats, fetchEventPrediction, collectTeamIds, resolveLeagues,
+  fetchEventPlayerStats, fetchEventPrediction, fetchEventBroadcasts, fetchEventSocial, fetchEventReferee, fetchTeamLast, collectTeamIds, resolveLeagues,
   fetchBzzoiroStandings, fetchLeaderboard, sameTeam,
 } from '../src/lib/bzzoiro.js';
 import { locateMatch } from '../src/lib/venues.js';
@@ -13,6 +13,7 @@ import { withFailover, extractJson } from '../src/lib/llm.js';
 import { toCompactInput } from '../src/lib/compact.js';
 import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../src/lib/predictions.js';
 import { computeMatchMarkets, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildWeatherVenue, buildAvailability } from '../src/lib/probabilities.js';
+import { forecastStats, forecastDominance } from '../src/lib/stats-forecast.js';
 
 const today = new Date().toISOString().slice(0, 10);
 const refresh = process.argv.includes('--refresh');
@@ -110,6 +111,15 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
     const markets = computeMatchMarkets({ match, results, scorers: scorers?.[match.competition] ?? null, standings });
     const entry = analyses?.[match.id] ?? null;
     const historyRows = Array.isArray(history) ? history : (history?.rows ?? []);
+    /* Pronóstico de estadísticas + duelos: ritmos propios con ajuste rival; null-honesto sin muestra. */
+    const statsForecast = forecastStats(historyRows, match.home, match.away, { competition: match.competition });
+    const dominance = forecastDominance({
+      corners: statsForecast?.home?.corners != null && statsForecast?.away?.corners != null
+        ? { home: statsForecast.home.corners, away: statsForecast.away.corners } : null,
+      yellows: statsForecast?.home?.yellowCards != null && statsForecast?.away?.yellowCards != null
+        ? { home: statsForecast.home.yellowCards, away: statsForecast.away.yellowCards } : null,
+      goalLambdas: markets?.lambdas ?? null,
+    });
     const payload = {
       id: match.id,
       home: match.home,
@@ -117,7 +127,7 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
       competition: match.competition,
       kickoff: match.kickoff,
       updatedAt: now,
-      schemaVersion: 2,
+      schemaVersion: 3,
       inputs: {
         lambdas: markets?.lambdas ?? null,
         sample: markets?.sample ?? null,
@@ -138,11 +148,13 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
       h2h: buildH2hEcho(match),
       discipline: buildDisciplineStub({ scorers: scorers?.[match.competition]?.scorers ?? null, historyRows: historyRows.length ?? 0 }),
       setPieces: buildSetPiecesStub({ historyRows: historyRows.length ?? 0 }),
+      statsForecast,
+      dominance,
       weatherVenue: buildWeatherVenue({ match, weatherEntry: weather?.[match.id] ?? null, venue: locateMatch(match) }),
       availability: buildAvailability(match),
       context: {
-        home: teamContext(results, standings, scorers?.[match.competition] ?? null, match, 'home'),
-        away: teamContext(results, standings, scorers?.[match.competition] ?? null, match, 'away'),
+        home: teamContext(results, standings, scorers ?? null, match, 'home'),
+        away: teamContext(results, standings, scorers ?? null, match, 'away'),
       },
       llmReview: entry?.review ? { ...entry.review, provider: entry.provider ?? null, model: entry.model ?? null, generatedAt: entry.generatedAt ?? null } : null,
     };
@@ -164,6 +176,36 @@ async function patchLlmReviews(matches) {
     current.llmReview = { ...entry.review, provider: entry.provider ?? null, model: entry.model ?? null, generatedAt: entry.generatedAt ?? null };
     await writeJson(path, current);
   }
+}
+
+/* ---- Extra de tendencias (retransmisiones Latam + social, mínimo posible) ---- */
+
+/**
+ * Una llamada de broadcasts + una de social + resolución de árbitro por
+ * partido con eventId, tope TRENDS_EXTRA_MAX (defecto 32 → ≤96 req/día,
+ * ~1,3% de la cuota). Sin token escribe vacío; sin dato por partido no
+ * guarda entrada. El componente degrada a lo disponible cuando falta
+ * el archivo o la entrada.
+ */
+async function updateTrendsExtra(windowMatches) {
+  const targets = windowMatches.filter(match => match.eventId != null && !isFinished(match));
+  const budget = Number(process.env.TRENDS_EXTRA_MAX ?? 32);
+  const jobs = targets.slice(0, Math.max(0, budget));
+  const out = {};
+  if (process.env.BZZOIRO_API_TOKEN && jobs.length) {
+    const rows = await mapPool(jobs, CONCURRENCY, async match => {
+      const [broadcasts, social, referee] = await Promise.all([
+        fetchEventBroadcasts(match.eventId, process.env).catch(() => null),
+        fetchEventSocial(match.eventId, process.env).catch(() => null),
+        fetchEventReferee(match.eventId, process.env).catch(() => null),
+      ]);
+      if (!broadcasts && !social && !referee) return null;
+      return { eventId: match.eventId, broadcasts, social, referee, updatedAt: new Date().toISOString() };
+    });
+    jobs.forEach((match, index) => { if (rows[index]) out[match.id] = rows[index]; });
+  }
+  await writeJson('public/data/trends-extra.json', out);
+  console.log(`trends-extra: ${Object.keys(out).length} partidos con extra.`);
 }
 
 /* ---- Base de resultados (forma) ---- */
@@ -231,7 +273,7 @@ async function updateHistory(results) {
     if (!byDate.has(row.date)) byDate.set(row.date, []);
     byDate.get(row.date).push(row);
   }
-  const eventDay = event => (event.kickoff_time ?? event.kickoff ?? event.date ?? '').slice(0, 10);
+  const eventDay = event => (event.event_date ?? event.kickoff_time ?? event.kickoff ?? event.date ?? '').slice(0, 10);
   const pairsAll = [];
   for (const event of events) {
     if (event.id == null) continue;
@@ -314,6 +356,48 @@ async function updateCatalog(teamIds) {
 
 /* ---- Enriquecimiento de la ventana: ids, h2h, alineaciones, jugadores, captura ---- */
 
+/**
+ * Id de equipo Bzzoiro desde el catálogo para partidos sin evento emparejado;
+ * null si no se resuelve (ese lado cae a la base local o a ausencia honesta).
+ */
+function catalogTeamId(catalog, name) {
+  const key = normalize(name);
+  if (catalog?.[key]?.id != null) return catalog[key].id;
+  for (const entry of Object.values(catalog ?? {})) {
+    if (entry?.id != null && entry?.name && sameTeam(entry.name, name)) return entry.id;
+  }
+  return null;
+}
+
+/**
+ * Últimos 5 terminados por equipo antes del kickoff (`match.lastMatches`):
+ * el fallback de "lo que ya jugaron" para clubes que la base local no cubre.
+ * Solo suma; si la llamada falla, el lado queda sin hornear y la página usa
+ * la base local. Presupuesto: 2 llamadas por partido no finalizado.
+ */
+async function enrichTeamLast(matches) {
+  const catalog = (await readJson('public/data/team-ids.json'))?.teams ?? null;
+  const jobs = [];
+  for (const match of matches) {
+    if (isFinished(match) || match.kickoff == null) continue;
+    for (const side of ['home', 'away']) {
+      const teamId = match.teamIds?.[side] ?? catalogTeamId(catalog, match[side]);
+      if (teamId == null) continue;
+      jobs.push({ match, side, teamId });
+    }
+  }
+  const rows = await mapPool(jobs, CONCURRENCY, job =>
+    fetchTeamLast(job.teamId, { before: job.match.kickoff, limit: 5, env: process.env }).catch(() => null));
+  const stamped = new Date().toISOString();
+  jobs.forEach((job, index) => {
+    const last = rows[index];
+    if (!last?.length) return;
+    job.match.lastMatches = job.match.lastMatches ?? { source: 'Bzzoiro', capturedAt: stamped };
+    job.match.lastMatches[job.side] = last;
+  });
+  return matches;
+}
+
 async function enrichWindow(matches) {
   const dates = [...new Set(matches.map(match => match.kickoff.slice(0, 10)))].sort();
   if (!dates.length) return matches;
@@ -348,6 +432,7 @@ async function enrichWindow(matches) {
     if (detail.playerStats) item.match.playerStats = detail.playerStats;
     if (detail.prediction) item.match.modelPrediction = detail.prediction;
   });
+  await enrichTeamLast(enriched);
   return enriched;
 }
 
@@ -494,6 +579,8 @@ async function full() {
   // Clima sidecar de la ventana (Bzzoiro primero, Open-Meteo fallback por sede).
   const weather = await updateWeather(windowMatches);
   const historyBase = await readJson('public/data/history-stats.json') ?? { rows: [] };
+  // Extra de tendencias: retransmisiones Latam + social (mínimo posible, con token).
+  await updateTrendsExtra(windowMatches);
 
   // Probabilidades supervisables + análisis LLM (narrativa + auditoría) sobre los mismos números.
   const aliveWindow = windowMatches.filter(alive);
@@ -579,6 +666,7 @@ async function refreshScores() {
   const matches = merged.filter(alive);
   await writeJson('public/data/fixtures.json', { matches, provider: result.provider, delayed: result.delayed, updatedAt: result.updatedAt });
   await pruneAnalysis(matches);
+  await updateTrendsExtra(matches);
   const [scorersBase, standingsBase, analyses, weatherBase, historyBase] = await Promise.all([
     readJson('public/data/scorers.json'),
     readJson('public/data/standings.json'),

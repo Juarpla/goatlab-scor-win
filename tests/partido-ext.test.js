@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreMatrix, matrixMarkets, firstGoalRace, scorerShares, scorerMarkets, computeMatchMarkets, teamContext } from '../src/lib/probabilities.js';
+import { scoreMatrix, matrixMarkets, firstGoalRace, scorerShares, scorerMarkets, computeMatchMarkets, teamContext, domesticLeague } from '../src/lib/probabilities.js';
 import { buildBeats, ballAt, matchMinute, hashSeed } from '../src/lib/pitch-path.js';
 import { teamColors, NEUTRAL_KIT } from '../src/lib/team-colors.js';
 import { locateMatch, venueZoomLayout, VENUE_ZOOM } from '../src/lib/venues.js';
@@ -72,14 +72,51 @@ test('computeMatchMarkets devuelve null sin muestra suficiente y mercados con mu
 
 test('teamContext deriva porterías a cero y racha de la base real', () => {
   const results = [
-    { date: '2026-09-01', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
-    { date: '2026-09-08', away: 'Local', home: 'Otro', homeScore: 0, awayScore: 1 },
-    { date: '2026-09-10', home: 'Local', away: 'Otro', homeScore: 3, awayScore: 0 },
+    { date: '2026-09-01', competition: 'premier', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
+    { date: '2026-09-08', competition: 'premier', away: 'Local', home: 'Otro', homeScore: 0, awayScore: 1 },
+    { date: '2026-09-10', competition: 'premier', home: 'Local', away: 'Otro', homeScore: 3, awayScore: 0 },
   ];
   const context = teamContext(results, {}, {}, { home: 'Local', away: 'Visitante', competition: 'premier' }, 'home');
   assert.equal(context.cleanSheets.value, 3);
   assert.equal(context.unbeaten.value, 3);
   assert.equal(context.biggestWin.value, 3);
+});
+
+test('domesticLeague resuelve la liga del equipo e ignora las copas', () => {
+  const standings = {
+    champions: { rows: [{ team: 'Local', position: 3 }] },
+    premier: { rows: [{ team: 'Local', position: 5, played: 4, goalsFor: 9, goalsAgainst: 2 }] },
+  };
+  assert.equal(domesticLeague(standings, 'Local'), 'premier');
+  assert.equal(domesticLeague(standings, 'Ausente'), null);
+  assert.equal(domesticLeague({}, 'Local'), null);
+});
+
+test('teamContext filtra la muestra a la liga doméstica del equipo', () => {
+  const results = [
+    { date: '2026-09-01', competition: 'premier', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
+    { date: '2026-09-08', competition: 'champions', home: 'Local', away: 'Otro', homeScore: 5, awayScore: 0 },
+    { date: '2026-09-10', competition: 'premier', home: 'Otro', away: 'Local', homeScore: 1, awayScore: 1 },
+    { date: '2026-09-11', home: 'Local', away: 'Otro', homeScore: 4, awayScore: 0 }, // sin competición: no cuenta
+  ];
+  const standings = { premier: { provider: 'FD', rows: [{ team: 'Local', position: 5, played: 4, goalsFor: 9, goalsAgainst: 2 }] } };
+  const scorers = { premier: { scorers: [{ player: 'Goleador', team: 'Local', value: 4, matches: 4 }] } };
+  const match = { home: 'Local', away: 'Visitante', competition: 'champions' };
+  const context = teamContext(results, standings, scorers, match, 'home');
+  assert.equal(context.recentSample, 2); // solo liga: la goleada de champions y la fila sin competición quedan fuera
+  assert.equal(context.cleanSheets.value, 1);
+  assert.equal(context.unbeaten.value, 2);
+  assert.equal(context.season.position, 5); // tabla doméstica, no la del partido
+  assert.equal(context.player.name, 'Goleador'); // líder de la liga, no de la champions
+});
+
+test('teamContext sin liga resuelta usa la competición del partido', () => {
+  const results = [
+    { date: '2026-09-01', competition: 'libertadores', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
+  ];
+  const context = teamContext(results, {}, {}, { home: 'Local', away: 'Visitante', competition: 'libertadores' }, 'home');
+  assert.equal(context.recentSample, 1);
+  assert.equal(context.cleanSheets.value, 1);
 });
 
 /* ---- pitch-path ---- */

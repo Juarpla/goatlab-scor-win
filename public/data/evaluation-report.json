@@ -41,11 +41,71 @@
     "captures": 12,
     "note": "El blend se evalúa con capturas pre-partido acumuladas en corridas programadas."
   },
+  "stats": {
+    "method": "stats-ratings-v1",
+    "metrics": {
+      "possession": {
+        "sampleSize": 18,
+        "mae": 8.389,
+        "baselineMae": 8.778,
+        "published": false
+      },
+      "shots": {
+        "sampleSize": 36,
+        "mae": 4.431,
+        "baselineMae": 4.867,
+        "published": true
+      },
+      "shotsOnTarget": {
+        "sampleSize": 36,
+        "mae": 2.042,
+        "baselineMae": 2.201,
+        "published": true
+      },
+      "xg": {
+        "sampleSize": 36,
+        "mae": 0.719,
+        "baselineMae": 0.783,
+        "published": true
+      },
+      "corners": {
+        "sampleSize": 36,
+        "mae": 2.426,
+        "baselineMae": 2.575,
+        "published": true
+      },
+      "fouls": {
+        "sampleSize": 36,
+        "mae": 2.898,
+        "baselineMae": 3.065,
+        "published": true
+      },
+      "yellowCards": {
+        "sampleSize": 36,
+        "mae": 0.996,
+        "baselineMae": 0.962,
+        "published": false
+      },
+      "redCards": {
+        "sampleSize": 0,
+        "mae": null,
+        "baselineMae": null,
+        "published": false
+      },
+      "offsides": {
+        "sampleSize": 28,
+        "mae": 1.231,
+        "baselineMae": 1.251,
+        "published": false
+      }
+    },
+    "note": "Cada métrica se publica solo con muestra ≥ 30 y MAE mejor que la media de su competición."
+  },
   "methodology": {
     "source": "results.json (resultados reales de proveedores) y predictions.json (capturas pre-partido).",
     "leakPolicy": "Para cada partido se usan únicamente resultados anteriores a su fecha.",
     "baselines": "Distribución empírica de la muestra evaluada.",
-    "thresholds": "1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado."
+    "thresholds": "1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado. Stats: muestra ≥ 30 y MAE < media de la competición."
   },
-  "evaluatedAt": "2026-09-17T05:59:05.689Z"
+  "evaluatedAt": "2026-09-17T20:31:25.440Z"
 }

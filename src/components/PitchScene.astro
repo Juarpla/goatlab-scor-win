@@ -10,7 +10,7 @@ import { teamShort } from '../lib/teams.js';
 import { FINISHED_STATUSES } from '../lib/football.js';
 import { buildBeats } from '../lib/pitch-path.js';
 
-const { match, events = [], ai = null } = Astro.props;
+const { match, events = [] } = Astro.props;
 const beats = buildBeats(match.id, events ?? []);
 const anchors = beats.filter(beat => beat.event);
 const finished = FINISHED_STATUSES.has(match.status);
@@ -18,13 +18,6 @@ const live = !finished && match.status !== 'NS';
 const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
 const isRed = event => /roja|second yellow/i.test(event.detail ?? '');
 const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status === 'NS' ? 'Programado' : 'Sin datos en vivo';
-/* Lectura IA v2 (secciones) con fallback a párrafo legacy. */
-const aiSections = Array.isArray(ai?.summary)
-  ? ai.summary.filter(s => s && typeof s.title === 'string' && Array.isArray(s.bullets))
-  : typeof ai?.summary === 'string' && ai.summary.trim() ? [{ title: '', bullets: [ai.summary] }] : [];
-const aiLimits = Array.isArray(ai?.limitations)
-  ? ai.limitations.filter(l => l && typeof l.label === 'string' && typeof l.detail === 'string')
-  : typeof ai?.limitations === 'string' && ai.limitations.trim() ? [{ label: 'Nota', detail: ai.limitations }] : [];
 ---
 
 <section class="pitch-block" data-pitch data-match={match.id} data-kickoff={match.kickoff} data-status={match.status} data-home={match.home} data-away={match.away} data-live={match.id.startsWith('af-') ? '1' : '0'} data-beats={JSON.stringify(beats)}>
@@ -106,7 +99,6 @@ const aiLimits = Array.isArray(ai?.limitations)
         <p>Aquí aparecerán el marcador y los eventos reales que entregue la fuente, con su hora de consulta. Mientras tanto, la cancha queda quieta.</p>
       </div>
     )}
-    {ai && (aiSections.length > 0 || aiLimits.length > 0) && <div class="pitch-reading"><h3>La lectura</h3>{aiSections.map(section => <div class="reading-section">{section.title && <h4>{section.title}</h4>}<ul>{section.bullets.map(bullet => <li>{bullet}</li>)}</ul></div>)}{aiLimits.length > 0 && <ul class="reading-limits chapter-note">{aiLimits.map(limit => <li><strong>{limit.label}:</strong> {limit.detail}</li>)}</ul>}</div>}
   </div>
 </section>
 

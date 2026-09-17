@@ -14,6 +14,7 @@ import {
   oneX2Outcome, evaluationGate,
 } from '../src/lib/predictions.js';
 import { sameClub } from '../src/lib/teams.js';
+import { STAT_METRICS, forecastStats, leagueAverage } from '../src/lib/stats-forecast.js';
 
 async function readJson(path) {
   try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; }
@@ -65,6 +66,47 @@ for (const entry of Object.values(captured?.captures ?? {})) {
   if (probabilities?.btts != null) ensembleBtts.push({ predicted: probabilities.btts, happened: entry.finalScore.home > 0 && entry.finalScore.away > 0 ? 1 : 0 });
 }
 
+/* ---- Backtest del pronóstico de estadísticas (rodante, sin fuga) ---- */
+
+const statRows = ((await readJson('public/data/history-stats.json'))?.rows ?? [])
+  .filter(row => row?.statistics)
+  .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+const statErrors = Object.fromEntries(STAT_METRICS.map(metric => [metric, { sum: 0, base: 0, n: 0 }]));
+for (let index = 0; index < statRows.length; index++) {
+  const row = statRows[index];
+  const prior = statRows.slice(0, index).filter(candidate => candidate.date < row.date);
+  if (!prior.length) continue;
+  const forecast = forecastStats(prior, row.home, row.away, { competition: row.competition });
+  if (!forecast) continue;
+  for (const metric of STAT_METRICS) {
+    for (const side of ['home', 'away']) {
+      const predicted = forecast[side]?.[metric];
+      const actual = row.statistics?.[side]?.[metric];
+      if (predicted == null || actual == null) continue;
+      // Posesión se evalúa como reparto: el error de un lado duplica al otro.
+      if (metric === 'possession' && side === 'away') continue;
+      const baseline = leagueAverage(prior, row.competition, metric) ?? leagueAverage(prior, null, metric);
+      if (baseline == null) continue;
+      const bucket = statErrors[metric];
+      bucket.sum += Math.abs(predicted - actual);
+      bucket.base += Math.abs(baseline - actual);
+      bucket.n += 1;
+    }
+  }
+}
+const STAT_MIN_SAMPLE = 30;
+const statsMetrics = Object.fromEntries(Object.entries(statErrors).map(([metric, bucket]) => {
+  if (!bucket.n) return [metric, { sampleSize: 0, mae: null, baselineMae: null, published: false }];
+  const mae = bucket.sum / bucket.n;
+  const baselineMae = bucket.base / bucket.n;
+  return [metric, {
+    sampleSize: bucket.n,
+    mae: Math.round(mae * 1000) / 1000,
+    baselineMae: Math.round(baselineMae * 1000) / 1000,
+    published: bucket.n >= STAT_MIN_SAMPLE && mae < baselineMae,
+  }];
+}));
+
 /* ---- Métricas y gate de publicación ---- */
 
 const poissonOneX2 = evaluateOneX2(poisson1x2);
@@ -98,11 +140,16 @@ const evaluation = {
     captures: ensembleCaptures,
     note: 'El blend se evalúa con capturas pre-partido acumuladas en corridas programadas.',
   },
+  stats: {
+    method: 'stats-ratings-v1',
+    metrics: statsMetrics,
+    note: 'Cada métrica se publica solo con muestra ≥ 30 y MAE mejor que la media de su competición.',
+  },
   methodology: {
     source: 'results.json (resultados reales de proveedores) y predictions.json (capturas pre-partido).',
     leakPolicy: 'Para cada partido se usan únicamente resultados anteriores a su fecha.',
     baselines: 'Distribución empírica de la muestra evaluada.',
-    thresholds: '1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado.',
+    thresholds: '1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado. Stats: muestra ≥ 30 y MAE < media de la competición.',
   },
   evaluatedAt,
 };

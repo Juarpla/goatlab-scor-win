@@ -152,13 +152,13 @@ export async function mapPool(items, limit, worker) {
   return results;
 }
 
-/** Pages the event list (max 200/page) inside an inclusive date window. */
-export async function listEvents({ dateFrom, dateTo, status, env = {}, fetchImpl = fetch, logger = console, maxRows = 600 }) {
+/** Pages the event list (max 200/page) inside an inclusive date window, optionally for one team. */
+export async function listEvents({ dateFrom, dateTo, status, teamId = null, env = {}, fetchImpl = fetch, logger = console, maxRows = 600 }) {
   if (!env.BZZOIRO_API_TOKEN) return [];
   const rows = [];
   for (let offset = 0; offset < maxRows; offset += 200) {
     try {
-      const page = await request(`${BASE}/events/?date_from=${encodeURIComponent(dateFrom)}&date_to=${encodeURIComponent(dateTo)}${status ? `&status=${status}` : ''}&limit=200&offset=${offset}`, env.BZZOIRO_API_TOKEN, fetchImpl);
+      const page = await request(`${BASE}/events/?date_from=${encodeURIComponent(dateFrom)}&date_to=${encodeURIComponent(dateTo)}${status ? `&status=${status}` : ''}${teamId != null ? `&team_id=${encodeURIComponent(teamId)}` : ''}&limit=200&offset=${offset}`, env.BZZOIRO_API_TOKEN, fetchImpl);
       const results = Array.isArray(page?.results) ? page.results : [];
       rows.push(...results);
       if (results.length < 200) break;
@@ -237,7 +237,11 @@ export async function fetchEventDetail(eventId, env = {}, fetchImpl = fetch) {
 }
 
 export function mapH2H(data, recentLimit = 5) {
-  if (!data || typeof data.total_matches !== 'number' || data.total_matches === 0) return null;
+  if (!data || typeof data.total_matches !== 'number') return null;
+  // Cero confirmado no es ausencia: se distingue para no disfrazar un fallo.
+  if (data.total_matches === 0) {
+    return { totalMatches: 0, homeWins: null, draws: null, awayWins: null, homeGoals: null, awayGoals: null, avgTotalGoals: null, recent: [], source: 'Bzzoiro' };
+  }
   return {
     totalMatches: data.total_matches,
     homeWins: data.home_wins ?? null, draws: data.draws ?? null, awayWins: data.away_wins ?? null,
@@ -254,6 +258,110 @@ export function mapH2H(data, recentLimit = 5) {
 
 export async function fetchEventH2H(eventId, env = {}, fetchImpl = fetch) {
   return mapH2H(await request(`${BASE}/events/${eventId}/h2h/`, env.BZZOIRO_API_TOKEN, fetchImpl));
+}
+
+/**
+ * Retransmisiones y social con presupuesto mínimo: una llamada por
+ * concepto y partido. Los mapeadores son defensivos (claves alternativas)
+ * porque el payload varía por mercado; lo irreconocible se descarta.
+ */
+export const LATAM_COUNTRIES = ['AR', 'MX', 'CO', 'PE', 'CL', 'UY', 'EC', 'BO', 'PY', 'VE', 'BR', 'CR', 'PA', 'DO', 'GT', 'HN', 'SV', 'NI'];
+export function mapBroadcasts(data, countries = LATAM_COUNTRIES, limit = 4) {
+  const rows = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : Array.isArray(data?.broadcasts) ? data.broadcasts : [];
+  return rows.map(row => ({
+    channel: row?.channel_name ?? row?.channel?.name ?? row?.name ?? null,
+    country: row?.country_code ?? row?.country?.code ?? row?.country ?? null,
+  })).filter(item => item.channel && (!item.country || countries.includes(item.country))).slice(0, Math.max(0, limit));
+}
+export async function fetchEventBroadcasts(eventId, env = {}, fetchImpl = fetch) {
+  if (eventId == null || !env.BZZOIRO_API_TOKEN) return null;
+  const data = await request(`${BASE}/events/${eventId}/broadcasts/?limit=50`, env.BZZOIRO_API_TOKEN, fetchImpl);
+  const rows = mapBroadcasts(data);
+  return rows.length ? rows : null;
+}
+export function mapSocial(data, limit = 3) {
+  const rows = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : Array.isArray(data?.social) ? data.social : [];
+  return rows.map(row => ({
+    account: row?.account ?? row?.author ?? row?.username ?? row?.handle ?? null,
+    text: row?.text ?? row?.title ?? row?.content ?? null,
+    url: row?.url ?? row?.link ?? null,
+    published: row?.published_at ?? row?.created_at ?? row?.date ?? null,
+  })).filter(item => item.text && item.url).slice(0, Math.max(0, limit));
+}
+export async function fetchEventSocial(eventId, env = {}, fetchImpl = fetch) {
+  if (eventId == null || !env.BZZOIRO_API_TOKEN) return null;
+  const data = await request(`${BASE}/events/${eventId}/social/?limit=10`, env.BZZOIRO_API_TOKEN, fetchImpl);
+  const rows = mapSocial(data);
+  return rows.length ? rows : null;
+}
+
+/**
+ * Árbitro del encuentro con sus promedios por partido. Resuelve el
+ * `referee_id` del evento y pide su ficha; sin id o sin promedios,
+ * null honesto (el bloque no se dibuja).
+ */
+export function mapReferee(data) {
+  if (!data || typeof data !== 'object') return null;
+  const num = value => (typeof value === 'number' && Number.isFinite(value) ? value : null);
+  const referee = {
+    name: data.name ?? data.referee_name ?? data.full_name ?? null,
+    avgYellow: num(data.avg_yellow_cards ?? data.avg_yellow ?? data.yellow_cards_avg),
+    avgRed: num(data.avg_red_cards ?? data.avg_red ?? data.red_cards_avg),
+    avgFouls: num(data.avg_fouls ?? data.fouls_avg),
+    matches: Number.isInteger(data.matches) ? data.matches : Number.isInteger(data.games) ? data.games : null,
+  };
+  if (!referee.name || (referee.avgYellow == null && referee.avgRed == null && referee.avgFouls == null)) return null;
+  return referee;
+}
+export async function fetchEventReferee(eventId, env = {}, fetchImpl = fetch) {
+  if (eventId == null || !env.BZZOIRO_API_TOKEN) return null;
+  const event = await request(`${BASE}/events/${eventId}/`, env.BZZOIRO_API_TOKEN, fetchImpl);
+  const refereeId = event?.referee_id ?? event?.referee?.id ?? null;
+  if (refereeId == null) return null;
+  const data = await request(`${BASE}/referees/${refereeId}/`, env.BZZOIRO_API_TOKEN, fetchImpl);
+  return mapReferee(data);
+}
+
+/**
+ * True cuando el historial cara a cara puede mostrarse: al menos `min`
+ * cruces registrados (el mismo umbral que usa el veredicto para el tilt).
+ */
+export function hasH2HHistory(h2h, min = 3) {
+  return Boolean(h2h && Number.isInteger(h2h.totalMatches) && h2h.totalMatches >= min);
+}
+
+/**
+ * Últimos partidos terminados de un equipo antes de una fecha: el fallback de
+ * "lo que ya jugaron" cuando la base local no cubre al club. La lista del
+ * proveedor llega de más reciente a más antigua; se reordena por fecha en
+ * cliente y se filtra estrictamente antes de `before`, así el propio
+ * encuentro nunca entra. Misma forma de fila que `h2h.recent`.
+ */
+export function mapTeamLast(rows, { before = null, limit = 5 } = {}) {
+  const finished = (Array.isArray(rows) ? rows : [])
+    .filter(row => row && row.status === 'finished' && row.home_score != null && row.away_score != null
+      && (before == null || (row.event_date ?? '') < before))
+    .sort((a, b) => ((a.event_date ?? '') < (b.event_date ?? '') ? 1 : (a.event_date ?? '') > (b.event_date ?? '') ? -1 : 0))
+    .slice(0, Math.max(0, limit));
+  return finished.map(row => ({
+    eventId: row.id ?? null,
+    date: row.event_date ?? null,
+    home: row.home_team ?? null,
+    away: row.away_team ?? null,
+    homeTeamId: row.home_team_id ?? null,
+    awayTeamId: row.away_team_id ?? null,
+    homeScore: row.home_score ?? null,
+    awayScore: row.away_score ?? null,
+  }));
+}
+
+export async function fetchTeamLast(teamId, { before = null, limit = 5, env = {}, fetchImpl = fetch } = {}) {
+  if (!env.BZZOIRO_API_TOKEN || teamId == null) return null;
+  const data = await request(
+    `${BASE}/events/?team_id=${encodeURIComponent(teamId)}&status=finished&limit=${Math.max(limit * 2, 10)}`,
+    env.BZZOIRO_API_TOKEN, fetchImpl);
+  const rows = mapTeamLast(Array.isArray(data?.results) ? data.results : [], { before, limit });
+  return rows.length ? rows : null;
 }
 
 function playerEntry(player) {

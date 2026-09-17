@@ -169,10 +169,30 @@ function standingsRow(standings, competitionId, team) {
 
 const RECENT = 10;
 
+/** Competiciones coperas o internacionales: nunca son "su campeonato". */
+const CUP_COMPETITIONS = new Set(['champions', 'europa', 'libertadores']);
+
+/**
+ * Liga doméstica del equipo: primera competición de tablas que lo contiene y
+ * no es copa. Null cuando no se resuelve (el equipo queda fuera de cobertura).
+ */
+export function domesticLeague(standingsByLeague, team) {
+  for (const [competitionId, table] of Object.entries(standingsByLeague ?? {})) {
+    if (CUP_COMPETITIONS.has(competitionId)) continue;
+    const rows = table?.rows;
+    if (Array.isArray(rows) && rows.some(row => sameClub(row.team, team))) return competitionId;
+  }
+  return null;
+}
+
 /** Datos "rebuscados" pero reales de la base de resultados y la tabla. */
 export function teamContext(resultsBase, standingsByLeague, scorersByLeague, match, side) {
   const team = side === 'home' ? match.home : match.away;
-  const recent = (resultsBase ?? []).filter(row => row.homeScore != null && (sameClub(row.home, team) || sameClub(row.away, team)))
+  // "Su campeonato": la liga doméstica cuando se resuelve; si no, la
+  // competición del partido (comportamiento anterior). Las filas sin
+  // competición declarada no cuentan: el rótulo no admite dudas.
+  const league = domesticLeague(standingsByLeague, team) ?? match.competition;
+  const recent = (resultsBase ?? []).filter(row => row.homeScore != null && row.competition === league && (sameClub(row.home, team) || sameClub(row.away, team)))
     .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10);
   const scored = row => sameClub(row.home, team) ? row.homeScore : row.awayScore;
   const conceded = row => sameClub(row.home, team) ? row.awayScore : row.homeScore;
@@ -182,8 +202,8 @@ export function teamContext(resultsBase, standingsByLeague, scorersByLeague, mat
   for (const row of recent) {
     if (scored(row) === conceded(row) || scored(row) > conceded(row)) unbeaten += 1; else break;
   }
-  const standings = standingsRow(standingsByLeague, match.competition, team);
-  const scorer = (scorersByLeague?.scorers ?? []).filter(row => sameClub(row.team, team)).sort((a, b) => b.value - a.value)[0] ?? null;
+  const standings = standingsRow(standingsByLeague, league, team);
+  const scorer = (scorersByLeague?.[league]?.scorers ?? scorersByLeague?.scorers ?? []).filter(row => sameClub(row.team, team)).sort((a, b) => b.value - a.value)[0] ?? null;
   const matchPlayer = (match.playerStats?.[side] ?? [])[0] ?? null;
   return {
     team,
