@@ -1,467 +1,117 @@
 {
-  "fd-560587": {
-    "summary": "Tottenham Hotspur FC se enfrentará a Aston Villa FC en Premier el 19 de septiembre de 2026 a las 11:30 UTC. El partido figura con estado NS y no hay minuto, marcador, eventos ni estadísticas disponibles.",
-    "limitations": "Solo se dispone de información de calendario; no hay suficientes estadísticas para analizar fortalezas, forma reciente, alineaciones ni resultados.",
-    "provider": "WORKERS_AI",
-    "model": "@cf/qwen/qwen3.8-27b",
-    "generatedAt": "2026-09-14T10:04:20.821Z",
-    "inputKey": "{\"id\":\"fd-560587\",\"providerId\":560587,\"competition\":\"premier\",\"home\":\"Tottenham Hotspur FC\",\"away\":\"Aston Villa FC\",\"kickoff\":\"2026-09-19T11:30:00Z\",\"status\":\"NS\",\"minute\":null,\"homeScore\":null,\"awayScore\":null,\"events\":null,\"statistics\":null}"
-  },
-  "fd-564693": {
-    "summary": [
-      {
-        "title": "Osasuna recibe al Rayo en LaLiga",
-        "bullets": [
-          "CA Osasuna vs Rayo Vallecano de Madrid, LaLiga, partido programado para el 19 de septiembre de 2026 a las 12:00 UTC, aún sin comenzar.",
-          "Osasuna llega como local al Sadar buscando reencontrarse con la victoria tras una racha complicada.",
-          "El Rayo visita Pamplona con Sergio Camello como su referencia goleadora del curso."
-        ]
-      },
-      {
-        "title": "Los modelos no se ponen de acuerdo",
-        "bullets": [
-          "El modelo Poisson GoatLab reparte las opciones así: 36.8% para Osasuna, 24.2% para el empate y 39% para el Rayo, con goles esperados de 1.71 locales y 1.763 visitantes.",
-          "El modelo CatBoost Bzzoiro inclina la balanza hacia el conjunto rojillo: 41.8% local, 28.8% empate y 29.4% visitante.",
-          "CatBoost señala el 1-1 como marcador más probable del cruce."
-        ]
-      },
-      {
-        "title": "Historial con guiño rojillo",
-        "bullets": [
-          "En 30 enfrentamientos previos: 13 victorias de Osasuna, 7 empates y 10 del Rayo, con una media de 2.2 goles por partido.",
-          "En los últimos cinco duelos directos, Osasuna ganó 1-3 en Vallecas en enero de 2026 y 2-0 en El Sadar en septiembre de 2025.",
-          "El Rayo ganó los dos precedentes anteriores en su casa: 3-1 en 2024 y 2-1 en abril de 2024."
-        ]
-      },
-      {
-        "title": "Tabla y goleadores",
-        "bullets": [
-          "Osasuna ocupa la 13ª posición con un registro de 6 victorias, 7 empates y 5 derrotas; el Rayo es 11º con 6 victorias, 7 empates y 10 derrotas.",
-          "Sergio Camello lidera al Rayo con 6 goles en 6 partidos; Álvaro García suma 2 en 6 y Adrià Pedrosa 1 en 4.",
-          "Osasuna no aparece con goleadores destacados en el bloque de artilleros de este cruce."
-        ]
-      },
-      {
-        "title": "Forma reciente: ambos tambaleantes",
-        "bullets": [
-          "Osasuna encadena tres derrotas seguidas: 2-5 en Alavés, 0-2 con el Espanyol y 0-4 en el Metropolitano ante el Atlético.",
-          "Antes de ese bache, los rojillos habían sumado dos triunfos: 2-1 en Balaídos y 1-0 al Getafe.",
-          "El Rayo alterna: derrota 2-5 en Barcelona, victoria 3-2 ante el Racing, caída 1-4 en Bernabéu, tropiezo con el Espanyol y triunfo 2-1 sobre el mismo Espanyol el 15 de septiembre."
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Campo ambiguo en tabla",
-        "detail": "El último dígito de los bloques T (12 para Osasuna, 15 para Rayo) no se corresponde con los puntos que derivan del registro indicado, por lo que no se interpreta."
-      },
-      {
-        "label": "Fila duplicada",
-        "detail": "El bloque R incluye dos veces el Rayo Vallecano-Espanyol del 15 de septiembre con el mismo resultado 2-1; se cuenta como un único partido."
-      },
-      {
-        "label": "Campos sin etiqueta",
-        "detail": "Algunos valores de los bloques P y B (0.674, 0.688, 1.46, 1.27, 0.46, 0.514, 0.495) llegan sin definición explícita y se han usado con cautela."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Los dos modelos divergen de forma clara en la probabilidad de victoria visitante: Poisson da 39% al Rayo mientras CatBoost se queda en 29.4%, una diferencia de casi diez puntos. CatBoost encaja mejor con el historial reciente (Osasuna ganó los dos últimos duelos, incluido uno en Vallecas), pero conv"
-    },
-    "provider": "OPENCODE_GO",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:24:31.542Z",
-    "inputKey": "v2|M|fd-564693|CA Osasuna|Rayo Vallecano de Madrid|laliga|2026-09-19T12:00:00Z|NS\nP|1.71|1.763|0.368|0.242|0.39|0.674|0.688\nB|0.418|0.288|0.294|1.46|1.27|0.46|0.514|1-1|0.495\nH|30|13|7|10|2.2\nT|13|CA Osasuna|6|7|5|12\nT|11|Rayo Vallecano de Madrid|6|7|10|15\nS|Sergio Camello|Rayo Vallecano de Madrid|6|6\nS|Álvaro García|Rayo Vallecano de Madrid|2|6\nS|Adrià Pedrosa|Rayo Vallecano de Madrid|1|4\nR|2026-08-20|Rayo Vallecano de Madrid|Deportivo Alavés|1|1\nR|2026-08-24|CA Osasuna|Levante UD|0|0\nR|2026-08-27|RC Celta de Vigo|CA Osasuna|1|2\nR|2026-08-31|CA Osasuna|Getafe CF|1|0\nR|2026-08-31|FC Barcelona|Rayo Vallecano de Madrid|5|2\nR|2026-09-05|Rayo Vallecano de Madrid|Real Racing Club de Santander|3|2\nR|2026-09-06|Deportivo Alavés|CA Osasuna|5|2\nR|2026-09-12|CA Osasuna|RCD Espanyol de Barcelona|0|2\nR|2026-09-12|Real Madrid CF|Rayo Vallecano de Madrid|4|1\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-15|Rayo Vallecano|Espanyol|2|1\nR|2026-09-16|Club Atlético de Madrid|CA Osasuna|4|0\nHR|2026-01-24|Rayo Vallecano|Osasuna|1|3\nHR|2025-09-14|Osasuna|Rayo Vallecano|2|0\nHR|2025-01-19|Osasuna|Rayo Vallecano|1|1\nHR|2024-09-16|Rayo Vallecano|Osasuna|3|1\nHR|2024-04-20|Rayo Vallecano|Osasuna|2|1"
-  },
-  "fd-560586": {
-    "summary": [
-      {
-        "title": "Brighton vs Arsenal: duelo por la fecha del 19 de septiembre",
-        "bullets": [
-          "Partido de Premier League programado para el 19 de septiembre de 2026, 14:00 UTC, en casa de Brighton, aún sin resultado (NS).",
-          "El historial reciente favorece a Arsenal: en los últimos cinco enfrentamientos directos sumó tres victorias y dos empates, con Brighton sin ganar en esa serie.",
-          "Ambos llegan en buen momento: Arsenal encadena victorias ante Chelsea, Napoli y Sunderland; Brighton goleó 5-0 a Coventry en su última salida."
-        ]
-      }
-    ],
-    "sections": [
-      {
-        "title": "El partido",
-        "bullets": [
-          "Brighton & Hove Albion recibe a Arsenal FC el 19 de septiembre de 2026 a las 14:00 UTC, por Premier League.",
-          "El encuentro figura como no started, es decir, pendiente de disputarse.",
-          "Para Brighton será un examen exigente en casa frente al líder de la tabla."
-        ],
-        "pct": null
-      },
-      {
-        "title": "Modelos GoatLab y Bzzoiro",
-        "bullets": [
-          "El modelo Poisson GoatLab reparte 54,1% para el conjunto local, 23,1% para el empate y 22,8% para la visita, con 64,8% y 64% en sus dos indicadores adicionales.",
-          "El modelo CatBoost Bzzoiro marca un reparto muy distinto: 20,3% local, 24,2% empate y 55,5% visitante, con 1-1 como marcador más probable (44%) y expectativas de goles de 1,12 y 1,52.",
-          "La brecha entre ambos modelos en el favorito es notable y se detalla en la auditoría."
-        ],
-        "pct": "54,1% / 23,1% / 22,8% (Poisson GoatLab) y 20,3% / 24,2% / 55,5% (CatBoost Bzzoiro)"
-      },
-      {
-        "title": "Historial entre ambos",
-        "bullets": [
-          "En 22 enfrentamientos registrados: 6 triunfos de Brighton, 5 empates y 11 de Arsenal, con una media de 2,68 goles por partido.",
-          "Últimos cruces: 0-1 en Brighton (marzo 2026), 2-1 y 2-0 para Arsenal en casa (2025), más empates 1-1 en 2025 y 2024.",
-          "Brighton no le gana a Arsenal en los últimos cinco duelos directos."
-        ],
-        "pct": null
-      },
-      {
-        "title": "Tabla y goleadores",
-        "bullets": [
-          "Arsenal lidera la tabla (puesto 1) con registro 4-12-8-1; Brighton aparece 5º con 4-7-13-5, según el formato condensado del input.",
-          "En goleadores, Bukayo Saka encabeza a Arsenal con 3 tantos y 4 asistencias; Kai Havertz y Martin Ødegaard suman 2 goles cada uno.",
-          "Por Brighton, Jack Hinshelwood tiene 2 goles y 1 asistencia; Malick Yalcouyé y Pascal Groß registran 2 goles y 4 asistencias cada uno."
-        ],
-        "pct": null
-      },
-      {
-        "title": "Forma reciente",
-        "bullets": [
-          "Arsenal: victorias 3-0 sobre Coventry, 1-0 en casa de Aston Villa, 2-1 ante Chelsea, 1-0 en Napoli y 2-0 en Sunderland; cinco triunfos seguidos.",
-          "Brighton: 4-0 a Aston Villa, derrota 4-3 en casa de Chelsea, empate 1-1 con Leeds y goleada 5-0 a Coventry; tres victorias, un empate y una caída.",
-          "Ambos llegan con ataque productivo, aunque Brighton mostró fragilidad defensiva ante Chelsea."
-        ],
-        "pct": null
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Formato condensado",
-        "detail": "El input es telegráfico; algunas columnas (por ejemplo, las cifras de la tabla 4-7-13-5 y 4-12-8-1) no tienen etiquetas explícitas y se reportan tal cual."
-      },
-      {
-        "label": "Campos del modelo P",
-        "detail": "Los dos últimos valores de Poisson (0,648 y 0,64) no especifican el mercado o indicador al que corresponden; se citan sin interpretarlos."
-      },
-      {
-        "label": "Duplicado en forma",
-        "detail": "La fila de Coventry 0-5 Brighton aparece dos veces (una abreviada); se contó una sola vez para el análisis."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Discrepancia marcada: Poisson GoatLab da 54,1% al local mientras CatBoost Bzzoiro le asigna solo 20,3% y 55,5% a Arsenal, favorito según historial (11 de 22), tabla (líder) y forma (cinco victorias seguidas). El reparto de Poisson se desvía claramente del resto de los datos y conviene verificarlo. A"
-    },
-    "provider": "OPENCODE_GO",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:26:39.238Z",
-    "inputKey": "v2|M|fd-560586|Brighton & Hove Albion FC|Arsenal FC|premier|2026-09-19T14:00:00Z|NS\nP|2.052|1.288|0.541|0.231|0.228|0.648|0.64\nB|0.203|0.242|0.555|1.12|1.52|0.538|0.54|1-1|0.44\nH|22|6|5|11|2.68\nT|5|Brighton & Hove Albion FC|4|7|13|5\nT|1|Arsenal FC|4|12|8|1\nS|Jack Hinshelwood|Brighton & Hove Albion FC|2|1\nS|Malick Yalcouyé|Brighton & Hove Albion FC|2|4\nS|Pascal Groß|Brighton & Hove Albion FC|2|4\nS|Bukayo Saka|Arsenal FC|3|4\nS|Kai Havertz|Arsenal FC|2|4\nS|Martin Ødegaard|Arsenal FC|2|4\nR|2026-08-21|Arsenal FC|Coventry City FC|3|0\nR|2026-08-23|Brighton & Hove Albion FC|Aston Villa FC|4|0\nR|2026-08-30|Chelsea FC|Brighton & Hove Albion FC|4|3\nR|2026-08-31|Aston Villa FC|Arsenal FC|0|1\nR|2026-09-05|Brighton & Hove Albion FC|Leeds United FC|1|1\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-09-12|Sunderland AFC|Arsenal FC|0|2\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-13|Coventry|Brighton|0|5\nHR|2026-03-04|Brighton & Hove Albion|Arsenal|0|1\nHR|2025-12-27|Arsenal|Brighton & Hove Albion|2|1\nHR|2025-10-29|Arsenal|Brighton & Hove Albion|2|0\nHR|2025-01-04|Brighton & Hove Albion|Arsenal|1|1\nHR|2024-08-31|Arsenal|Brighton & Hove Albion|1|1"
-  },
-  "fd-560584": {
-    "summary": [
-      {
-        "title": "Everton recibe al Ipswich en la Premier",
-        "bullets": [
-          "Partido de la Premier League entre Everton FC e Ipswich Town FC, programado para el 19 de septiembre de 2026 a las 14:00 UTC, aún sin comenzar.",
-          "El Everton llega noveno con 6 puntos en 4 jornadas (5 goles a favor, 3 en contra); el Ipswich es décimo, también con 6 puntos pero con 7 goles a favor y 10 en contra.",
-          "Ambos vienen de la jornada del 12 de septiembre: el Everton empató 0-0 en campo del Tottenham y el Ipswich ganó 3-2 en casa del Crystal Palace."
-        ]
-      },
-      {
-        "title": "Los modelos apuntan a un Everton ligeramente favorito",
-        "bullets": [
-          "El modelo Poisson de GoatLab da 56.6% de victoria local, 23.2% de empate y 20.2% de victoria visitante, con goles esperados de 2.025 para el Everton y 1.15 para el Ipswich.",
-          "Ese mismo modelo marca 61.5% para más de 2.5 goles y 60.3% para que ambos equipos marquen.",
-          "El CatBoost Bzzoiro reparte 53.4% al Everton, 24.9% al empate y 21.7% al Ipswich, con goles esperados de 1.38 y 1.41, 54.6% para más de 2.5 goles y 55.9% para que ambos marquen.",
-          "Bzzoiro señala el 1-1 como marcador más probable con un 45.8%."
-        ]
-      },
-      {
-        "title": "Historial reciente entre ambos",
-        "bullets": [
-          "En 12 cruces registrados, el Everton ganó 5, hubo 3 empates y el Ipswich ganó 4, con una media de 2.17 goles por partido.",
-          "Los dos enfrentamientos más recientes: 2-2 en Goodison Park en mayo de 2025 y victoria del Everton 0-2 en Ipswich en octubre de 2024.",
-          "Los antecedentes más antiguos datan de 2001-2002, con un triunfo del Ipswich 2-0, un 0-0 y una victoria del Everton 1-2 en Ipswich."
-        ]
-      },
-      {
-        "title": "Forma reciente: Everton sólido, Ipswich irregular",
-        "bullets": [
-          "El Everton encadena cuatro jornadas sin perder: 2-0 al Crystal Palace, 1-1 en Bournemouth, 2-2 con el Manchester United y 0-0 en el Tottenham.",
-          "El Ipswich alternó resultados: 2-1 al Sunderland, dura derrota 5-2 en Old Trafford, 0-2 ante el Liverpool y remontada 3-2 en el campo del Crystal Palace.",
-          "La defensa es el contraste: el Everton solo ha encajado 3 goles en 4 partidos, mientras el Ipswich lleva 10 en contra."
-        ]
-      },
-      {
-        "title": "Referencias ofensivas de cada equipo",
-        "bullets": [
-          "Por el Everton, Ainsley Maitland-Niles suma 1 gol y 2 asistencias, y James Tarkowski registra 1 gol y 4 asistencias según el registro.",
-          "En el Ipswich, Emersonn y Leif Davis lideran con 2 goles y 4 asistencias cada uno, y Chuba Akpom aporta 1 gol y 3 asistencias."
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Sin alineaciones",
-        "detail": "No hay datos de bajas, alineaciones probables ni sanciones para ninguno de los dos equipos."
-      },
-      {
-        "label": "Muestra corta",
-        "detail": "La tabla y la forma reciente cubren solo 4 jornadas de liga, poco volumen para tendencias firmes."
-      },
-      {
-        "label": "Historial antiguo",
-        "detail": "El cara a cara incluye partidos de 2001 y 2002, poco representativos de las plantillas actuales."
-      },
-      {
-        "label": "Métrica ambigua",
-        "detail": "El 45.8% asociado al 1-1 en Bzzoiro no queda claro si es probabilidad exacta del marcador u otra métrica del modelo."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Desviaciones entre modelos: GoatLab estima 2.025 goles esperados del Everton frente a 1.38 de Bzzoiro, y el 1-1 como marcador más probable con 45.8% en Bzzoiro encaja mal con su propio 53.4% de victoria local y 54.6% de más de 2.5 goles. Conviene revisar el campo del marcador más probable antes de p"
-    },
-    "provider": "OPENCODE_GO",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:26:13.404Z",
-    "inputKey": "v2|M|fd-560584|Everton FC|Ipswich Town FC|premier|2026-09-19T14:00:00Z|NS\nP|2.025|1.15|0.566|0.232|0.202|0.615|0.603\nB|0.534|0.249|0.217|1.38|1.41|0.546|0.559|1-1|0.458\nH|12|5|3|4|2.17\nT|9|Everton FC|4|6|5|3\nT|10|Ipswich Town FC|4|6|7|10\nS|Ainsley Maitland-Niles|Everton FC|1|2\nS|James Tarkowski|Everton FC|1|4\nS|Emersonn|Ipswich Town FC|2|4\nS|Leif Davis|Ipswich Town FC|2|4\nS|Chuba Akpom|Ipswich Town FC|1|3\nR|2026-08-22|Everton FC|Crystal Palace FC|2|0\nR|2026-08-22|Ipswich Town FC|Sunderland AFC|2|1\nR|2026-08-29|AFC Bournemouth|Everton FC|1|1\nR|2026-08-30|Manchester United FC|Ipswich Town FC|5|2\nR|2026-09-04|Ipswich Town FC|Liverpool FC|0|2\nR|2026-09-06|Everton FC|Manchester United FC|2|2\nR|2026-09-12|Tottenham Hotspur FC|Everton FC|0|0\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nHR|2025-05-03|Everton|Ipswich Town|2|2\nHR|2024-10-19|Ipswich Town|Everton|0|2\nHR|2002-02-02|Everton|Ipswich Town|1|2\nHR|2001-10-13|Ipswich Town|Everton|0|0\nHR|2001-02-24|Ipswich Town|Everton|2|0"
-  },
-  "fd-564691": {
-    "summary": [
-      {
-        "title": "Athletic Club vs Deportivo Alavés: duelo vasco en LaLiga",
-        "bullets": [
-          "Partido de LaLiga programado para el 19 de septiembre de 2026 a las 14:15 UTC, aún sin jugar.",
-          "El Athletic llega 9º con 6 puntos en 5 jornadas (7 goles a favor, 7 en contra).",
-          "El Alavés es 6º con 6 puntos en 6 jornadas, con 10 goles a favor y 11 en contra."
-        ]
-      },
-      {
-        "title": "Los modelos no coinciden: Poisson y CatBoost en discordancia",
-        "bullets": [
-          "El modelo Poisson GoatLab da 33,6% al Athletic, 28,3% al empate y 38,1% al Alavés, con 50,4% para más de 2,5 goles y 55,9% para que marquen ambos.",
-          "El modelo CatBoost Bzzoiro da 57,1% al Athletic, 25% al empate y 17,9% al Alavés, con 48% de más de 2,5 goles y 48,9% de que ambos marquen.",
-          "CatBoost señala el 1-1 como marcador más probable; los goles esperados también difieren: Poisson 1,296-1,395 a favor del Alavés, CatBoost 1,47-1,11 a favor del Athletic."
-        ]
-      },
-      {
-        "title": "Goleadores: Boyé enciende la alerta roja",
-        "bullets": [
-          "Lucas Boyé es el máximo referente del Alavés con 4 goles en 5 partidos; Mariano Díaz suma 3 en 6.",
-          "En el Athletic, Robert Navarro lidera con 2 goles en 5, seguido de Aitor Paredes y Álex Berenguer con 1 cada uno.",
-          "La diferencia de pegada actual favorece claramente al ataque alavesista."
-        ]
-      },
-      {
-        "title": "Forma reciente: rachas opuestas",
-        "bullets": [
-          "El Alavés ganó 3 de sus últimos 6 (3-0 al Getafe, 1-0 al Villarreal, 5-2 al Osasuna), pero encadena dos derrotas ante Racing (1-2) y Valencia (0-1).",
-          "El Athletic alternó derrotas ante Sevilla (1-3) y Barcelona (0-2) con victorias contundentes sobre Celta (2-0) y Atlético (3-0), y un empate con Elche (1-1).",
-          "Ambos llegan con dudas: dos jornadas sin ganar cada uno."
-        ]
-      },
-      {
-        "title": "Historial: dominio rojiblanco en el cara a cara",
-        "bullets": [
-          "En 31 enfrentamientos previos, el Athletic ganó 17, empató 7 y perdió 7, con una media de 2,23 goles por partido.",
-          "Los últimos cinco cruces: 2-4 en Mendizorroza, 0-1 alavesista en San Mamés, 1-0 rojiblanco, 1-1 y 2-0.",
-          "El Alavés ganó en San Mamés en la 2025-26, un antecedente que rompe la lógica de localía."
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Formato telegráfico",
-        "detail": "El input condensa los datos sin etiquetas explícitas; la interpretación de posiciones, goles y puntos de la tabla se deduce del contexto de jornadas jugadas."
-      },
-      {
-        "label": "Sin alineaciones",
-        "detail": "No hay información de bajas, alineaciones ni sanciones para ninguno de los dos equipos."
-      },
-      {
-        "label": "Campos del CatBoost",
-        "detail": "Algunos valores del bloque B (1,47 y 1,11) se interpretan como goles esperados; el significado exacto de 0,552 no está etiquetado."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Los dos modelos discrepan de forma notable: Poisson da favorito al Alavés (38,1% vs 33,6%) con goles esperados 1,296-1,395, mientras CatBoost da favorito claro al Athletic (57,1% vs 17,9%) con goles esperados 1,47-1,11. La dirección del favorito y la de los goles esperados se invierten entre ambos m"
-    },
-    "provider": "OPENCODE_GO",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:27:00.998Z",
-    "inputKey": "v2|M|fd-564691|Athletic Club|Deportivo Alavés|laliga|2026-09-19T14:15:00Z|NS\nP|1.296|1.395|0.336|0.283|0.381|0.504|0.559\nB|0.571|0.25|0.179|1.47|1.11|0.48|0.489|1-1|0.552\nH|31|17|7|7|2.23\nT|9|Athletic Club|5|7|7|6\nT|6|Deportivo Alavés|6|10|11|6\nS|Robert Navarro|Athletic Club|2|5\nS|Aitor Paredes|Athletic Club|1|5\nS|Álex Berenguer|Athletic Club|1|5\nS|Lucas Boyé|Deportivo Alavés|4|5\nS|Mariano Díaz|Deportivo Alavés|3|6\nR|2026-08-15|Deportivo Alavés|Getafe CF|3|0\nR|2026-08-20|Rayo Vallecano de Madrid|Deportivo Alavés|1|1\nR|2026-08-22|Athletic Club|Sevilla FC|1|3\nR|2026-08-27|FC Barcelona|Athletic Club|2|0\nR|2026-08-28|Deportivo Alavés|Villarreal CF|1|0\nR|2026-08-30|RC Celta de Vigo|Athletic Club|0|2\nR|2026-09-05|Athletic Club|Club Atlético de Madrid|3|0\nR|2026-09-06|Deportivo Alavés|CA Osasuna|5|2\nR|2026-09-12|Athletic Club|Elche CF|1|1\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nHR|2026-05-02|Deportivo Alavés|Athletic Club|2|4\nHR|2025-09-13|Athletic Club|Deportivo Alavés|0|1\nHR|2025-05-11|Athletic Club|Deportivo Alavés|1|0\nHR|2024-12-15|Deportivo Alavés|Athletic Club|1|1\nHR|2024-03-16|Athletic Club|Deportivo Alavés|2|0"
-  },
-  "fd-560589": {
-    "summary": "Partido de la competición Premier entre Nottingham Forest FC y Coventry City FC, programado para el 19 de septiembre de 2026 a las 16:30 UTC. El estado del encuentro es TIMED, por lo que aún no hay marcador, eventos ni estadísticas disponibles. Por ahora, la información se limita al contexto de calendario: equipos, competición y horario previsto.",
-    "limitations": "No hay datos estadísticos, alineaciones, historial reciente, forma de los equipos ni eventos del partido. Con esta única información de calendario no es posible analizar fortalezas, debilidades ni probabilidades, ni realizar una valoración deportiva más allá de confirmar el cruce y su programación.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-14T09:53:53.319Z",
-    "inputKey": "{\"id\":\"fd-560589\",\"providerId\":560589,\"competition\":\"premier\",\"home\":\"Nottingham Forest FC\",\"away\":\"Coventry City FC\",\"kickoff\":\"2026-09-19T16:30:00Z\",\"status\":\"TIMED\",\"minute\":null,\"homeScore\":null,\"awayScore\":null,\"events\":null,\"statistics\":null}"
-  },
-  "fd-564690": {
-    "summary": "Sevilla FC recibe a FC Barcelona en LaLiga el 19 de septiembre de 2026 a las 19:00 UTC. El partido está marcado como no iniciado y no hay marcador, eventos ni estadísticas disponibles.",
-    "limitations": "Con la información proporcionada solo se puede dar contexto de calendario; no hay suficientes estadísticas, eventos ni datos de rendimiento para analizar fortalezas, debilidades ni resultados.",
-    "provider": "WORKERS_AI",
-    "model": "@cf/qwen/qwen3.8-27b",
-    "generatedAt": "2026-09-14T10:06:54.490Z",
-    "inputKey": "{\"id\":\"fd-564690\",\"providerId\":564690,\"competition\":\"laliga\",\"home\":\"Sevilla FC\",\"away\":\"FC Barcelona\",\"kickoff\":\"2026-09-19T19:00:00Z\",\"status\":\"NS\",\"minute\":null,\"homeScore\":null,\"awayScore\":null,\"events\":null,\"statistics\":null}"
-  },
-  "fd-560588": {
-    "summary": "Partido de la Premier League entre Newcastle United FC (local) y Hull City AFC (visitante), programado para el 19 de septiembre de 2026 a las 14:00 UTC. El encuentro figura como no iniciado (NS), por lo que a la fecha de los datos no hay marcador, eventos ni estadísticas registradas. Se trata únicamente de contexto de calendario: un duelo de liga aún por disputarse en el campo del Newcastle United FC.",
-    "limitations": "No hay estadísticas del partido, eventos, alineaciones, marcador ni datos de forma reciente de ninguno de los dos equipos. Con esta información no es posible analizar fortalezas, debilidades, rendimiento ofensivo o defensivo, ni establecer comparaciones deportivas entre Newcastle United FC y Hull City AFC. Cualquier valoración sobre el desarrollo del encuentro requeriría datos adicionales no incluidos en el JSON.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-14T10:05:03.527Z",
-    "inputKey": "{\"id\":\"fd-560588\",\"providerId\":560588,\"competition\":\"premier\",\"home\":\"Newcastle United FC\",\"away\":\"Hull City AFC\",\"kickoff\":\"2026-09-19T14:00:00Z\",\"status\":\"NS\",\"minute\":null,\"homeScore\":null,\"awayScore\":null,\"events\":null,\"statistics\":null}"
-  },
-  "fd-564694": {
-    "summary": "Partido de LaLiga programado entre RC Celta de Vigo (local) y Real Racing Club de Santander (visitante) para el 19 de septiembre de 2026 a las 16:30 UTC. El estado es NS (no iniciado), sin marcador ni eventos registrados.",
-    "limitations": "No hay estadísticas, eventos, alineaciones, marcador ni datos de rendimiento disponibles; por tanto, no es posible analizar fortalezas, forma reciente ni probabilidades. Solo se dispone de información de calendario.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-14T10:06:29.730Z",
-    "inputKey": "{\"id\":\"fd-564694\",\"providerId\":564694,\"competition\":\"laliga\",\"home\":\"RC Celta de Vigo\",\"away\":\"Real Racing Club de Santander\",\"kickoff\":\"2026-09-19T16:30:00Z\",\"status\":\"NS\",\"minute\":null,\"homeScore\":null,\"awayScore\":null,\"events\":null,\"statistics\":null}"
-  },
   "af-1557408": {
     "summary": [
       {
-        "title": "Brentford vs Chelsea: cita del viernes en Premier",
+        "title": "Brentford vs Chelsea: vista previa del partido",
         "bullets": [
-          "Brentford recibe a Chelsea el 18 de septiembre de 2026 a las 19:00 UTC en partido de Premier League aún sin comenzar.",
-          "El historial reciente entre ambos suma 14 enfrentamientos con 2.64 goles de media por partido.",
-          "Los antecedentes cercanos prometen partido igualado: tres empates en los últimos cinco cruces."
+          "Premier League, 18 de septiembre de 2026 a las 19:00 UTC en el Gtech Community Stadium, con lluvia prevista y temperatura de 6 grados.",
+          "El modelo Poisson GoatLab da 49,6% a la victoria de Brentford, 22,3% al empate y 28,1% a la de Chelsea; 72,6% a más de 2,5 goles y 71,6% a que ambos marquen.",
+          "El modelo CatBoost Bzzoiro es más repartido: 35,3% Brentford, 25,4% empate y 39,4% Chelsea, con 1-1 como marcador más probable (49,4%).",
+          "El mercado interpreta un claro favoritismo visitante: 72% para Chelsea frente a 16% para Brentford y 12% al empate."
         ]
       },
       {
-        "title": "Los modelos no se ponen de acuerdo",
+        "title": "Forma reciente y goleadores",
         "bullets": [
-          "El modelo Poisson GoatLab da 49.6% al triunfo local, 22.3% al empate y 28.1% a la visita, con 2.16 y 1.61 goles esperados.",
-          "CatBoost Bzzoiro reparte 34.6% local, 25.1% empate y 40.3% visitante, con 1.58 y 1.50 goles esperados.",
-          "Ambos coinciden en partidos con goles: over 2.5 en 72.6% y 63.8%, y ambos marcan en 71.6% y 65.7%.",
-          "CatBoost señala el 1-1 como marcador más probable."
+          "Brentford llega sin derrotas en liga: 3-0 a Tottenham, empates con Leeds (1-1), Sunderland (1-1) y Bournemouth (2-2).",
+          "Chelsea suma dos victorias (3-2 en Fulham, 4-3 a Brighton) y dos empates (2-2 con Hull, derrota 2-1 ante Arsenal).",
+          "Kevin Schade y Vitaly Janelt lideran a Brentford con 3 y 2 goles; en Chelsea, João Pedro y Morgan Rogers tienen 3 goles y Cole Palmer 2, todos en 4 partidos."
         ]
       },
       {
-        "title": "Historial: Chelsea sin perder en los últimos cinco",
+        "title": "Historial y tabla",
         "bullets": [
-          "De 14 cruces previos: 3 victorias de Brentford, 5 empates y 6 de Chelsea.",
-          "Últimos cinco: 2-0 para Chelsea, 2-2, 0-0, 2-1 para Chelsea y 2-2.",
-          "Brentford no le gana a Chelsea en sus últimos cinco enfrentamientos, con tres empates seguidos en casa."
-        ]
-      },
-      {
-        "title": "Tabla y referencias ofensivas",
-        "bullets": [
-          "En la tabla, Brentford aparece 7º y Chelsea 6º, posiciones vecinas en la zona alta-media.",
-          "Kevin Schade lidera a Brentford con 3 goles en 4 partidos; Vitaly Janelt suma 2 en 4.",
-          "En Chelsea, João Pedro y Morgan Rogers tienen 3 goles en 4, y Cole Palmer 2 en 4."
-        ]
-      },
-      {
-        "title": "Forma reciente: empates locales y Chelsea goleador",
-        "bullets": [
-          "Brentford llega con 3-0 a Tottenham, luego tres empates seguidos: 1-1 con Leeds, 1-1 con Sunderland y 2-2 con Bournemouth.",
-          "Chelsea suma 3-2 a Fulham y 4-3 a Brighton, cae 1-2 con Arsenal y empata 2-2 con Hull.",
-          "Los partidos de Chelsea han sido abiertos: 15 goles en sus últimos cuatro compromisos."
+          "En los últimos 5 cruces, Chelsea ganó 3 y hubo 2 empates; en Gtech, dos empates (2-2 y 0-0) y una victoria visitante 2-1.",
+          "En la tabla, Chelsea es 6º con 10 puntos y Brentford 7º con 7, ambos con 4 partidos jugados.",
+          "El historial general ponderado favorece ligeramente a Chelsea (2,64) sobre Brentford."
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Tabla condensada",
-        "detail": "Las filas de tabla llegan en formato telegráfico sin etiquetas de columna; solo se usan las posiciones 7 y 6 de forma fiable."
+        "label": "Bajas",
+        "detail": "No se recibieron bajas confirmadas (L vacío), por lo que no se pueden mencionar ausencias."
       },
       {
-        "label": "Jugador y club",
-        "detail": "Morgan Rogers figura asociado a Chelsea en el input de goleadores; se reporta tal cual sin verificar."
+        "label": "Mercado",
+        "detail": "El bloque M2 es una lectura interpretativa en porcentajes, no una probabilidad de los modelos P o B."
       },
       {
-        "label": "Sin alineaciones",
-        "detail": "No hay datos de bajas, once titular ni sanciones; el análisis se limita a lo proporcionado."
-      },
-      {
-        "label": "Modelos divergentes",
-        "detail": "Poisson y CatBoost difieren de forma notable en el ganador; se presentan ambos sin decidir cuál es correcto."
+        "label": "Datos incompletos",
+        "detail": "El bloque W no incluía todos los campos de sede/clima; se reportan solo lluvia, 6 grados y estadio."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Desviación clara entre modelos en la probabilidad local: Poisson da 49.6% y CatBoost 34.6%, una brecha de 15 puntos. Además, CatBoost asigna 0.494 al marcador 1-1, valor inusualmente alto para un resultado exacto. Se recomienda revisar los parámetros de ambos modelos antes de publicar."
+      "note": "El mercado (72% Chelsea) se desvía claramente de los modelos: Poisson da favorito a Brentford (49,6%) y CatBoost ve ventaja visitante más moderada (39,4%). Se marca la discrepancia sin resolverla."
     },
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:22:19.724Z",
-    "inputKey": "v2|M|af-1557408|Brentford|Chelsea|premier|2026-09-18T19:00:00+00:0|NS\nP|2.16|1.61|0.496|0.223|0.281|0.726|0.716\nB|0.346|0.251|0.403|1.58|1.5|0.638|0.657|1-1|0.494\nH|14|3|5|6|2.64\nT|7|Brentford|4|6|7|4\nT|6|Chelsea|4|7|10|9\nS|Kevin Schade|Brentford|3|4\nS|Vitaly Janelt|Brentford|2|4\nS|João Pedro|Chelsea|3|4\nS|Morgan Rogers|Chelsea|3|4\nS|Cole Palmer|Chelsea|2|4\nR|2026-08-22|Brentford FC|Tottenham Hotspur FC|3|0\nR|2026-08-24|Fulham FC|Chelsea FC|2|3\nR|2026-08-30|Leeds United FC|Brentford FC|1|1\nR|2026-08-30|Chelsea FC|Brighton & Hove Albion FC|4|3\nR|2026-09-05|Brentford FC|Sunderland AFC|1|1\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nHR|2026-01-17|Chelsea|Brentford|2|0\nHR|2025-09-13|Brentford|Chelsea|2|2\nHR|2025-04-06|Brentford|Chelsea|0|0\nHR|2024-12-15|Chelsea|Brentford|2|1\nHR|2024-03-02|Brentford|Chelsea|2|2"
+    "generatedAt": "2026-09-18T11:57:37.884Z",
+    "inputKey": "v2|M|af-1557408|Brentford|Chelsea|premier|2026-09-18T19:00:00+00:0|NS\nP|2.16|1.61|0.496|0.223|0.281|0.726|0.716\nB|0.353|0.254|0.394|1.58|1.5|0.638|0.658|1-1|0.494\nH|14|3|5|6|2.64\nW||rain|6|Gtech Community Stadium\nT|7|Brentford|4|6|7|4\nT|6|Chelsea|4|7|10|9\nS|Kevin Schade|Brentford|3|4\nS|Vitaly Janelt|Brentford|2|4\nS|João Pedro|Chelsea|3|4\nS|Morgan Rogers|Chelsea|3|4\nS|Cole Palmer|Chelsea|2|4\nR|2026-08-22|Brentford FC|Tottenham Hotspur FC|3|0\nR|2026-08-24|Fulham FC|Chelsea FC|2|3\nR|2026-08-30|Leeds United FC|Brentford FC|1|1\nR|2026-08-30|Chelsea FC|Brighton & Hove Albion FC|4|3\nR|2026-09-05|Brentford FC|Sunderland AFC|1|1\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nHR|2026-01-17|Chelsea|Brentford|2|0\nHR|2025-09-13|Brentford|Chelsea|2|2\nHR|2025-04-06|Brentford|Chelsea|0|0\nHR|2024-12-15|Chelsea|Brentford|2|1\nHR|2024-03-02|Brentford|Chelsea|2|2"
   },
   "af-1570397": {
     "summary": [
       {
-        "title": "Espanyol vs Elche: viernes en LaLiga",
+        "title": "El partido: Espanyol recibe al Elche en el RCDE Stadium",
         "bullets": [
-          "Partido de LaLiga entre Espanyol y Elche, programado para el viernes 18 de septiembre de 2026 a las 19:00 UTC, aún sin comenzar.",
-          "Elche llega como visitante tras un arranque de liga muy complicado, mientras Espanyol busca reponerse de su última derrota.",
-          "Los antecedentes favorecen claramente al Espanyol en el historial reciente del enfrentamiento."
+          "Espanyol vs Elche, LaLiga, viernes 18 de septiembre de 2026 a las 19:00 UTC, aún sin empezar.",
+          "Se juega en el RCDE Stadium, con previsión de cielo nublado y unos 14 grados.",
+          "No hay bajas confirmadas ni datos de mercado en el input, así que el parte se limita a lo deportivo."
         ]
       },
       {
-        "title": "Modelo CatBoost Bzzoiro",
+        "title": "Modelos: ligera ventaja local con partido abierto",
         "bullets": [
-          "El modelo da 51,2% a la victoria del Espanyol, 26,8% al empate y 22,0% a la victoria del Elche.",
-          "Expectativa de goles: 1,63 para Espanyol y 1,16 para Elche, con índices adicionales de 0,521 y 0,547.",
-          "El marcador más probable según el modelo es el 1-1, con un valor asociado de 0,426."
+          "El modelo Poisson GoatLab da 46,9% al Espanyol, 26,9% al empate y 26,2% al Elche, con xG de 1,63 contra 1,17.",
+          "CatBoost Bzzoiro va en la misma línea: 51,8% local, 26,5% empate y 21,8% visitante, con el 1-1 como marcador más probable (42,6%).",
+          "Ambos modelos ven más probable que no el partido con goles: más de 2,5 goles rondando el 53% y ambos marcan cerca del 55-57%."
         ]
       },
       {
-        "title": "Historial del enfrentamiento",
+        "title": "Historial: el Espanyol manda en el cara a cara",
         "bullets": [
-          "En 28 cruces previos: 12 triunfos del Espanyol, 10 empates y 6 del Elche, con una media de 2,71 goles por partido.",
-          "Últimos cinco precedentes: 2-2 en Elche (2026), 1-0 en Espanyol (2025), 2-2 en Elche (2024), 2-0 en Espanyol (2023) y 0-1 para Espanyol en Elche (2023).",
-          "El Espanyol no pierde ante el Elche en los cinco últimos duelos registrados: tres victorias y dos empates."
+          "En 28 enfrentamientos previos: 12 victorias del Espanyol, 10 empates y solo 6 del Elche, con 2,71 goles de media.",
+          "Los últimos cinco cruces dan 3 triunfos pericos y 2 empates: 2-2 y 0-1 en 2023, 2-2 en 2024, 1-0 en 2025 y 2-2 en marzo de 2026.",
+          "El Elche no gana al Espanyol en toda la serie reciente del historial."
         ]
       },
       {
-        "title": "Tabla y forma reciente",
+        "title": "Forma y goleadores: el Elche, en apuros",
         "bullets": [
-          "Elche figura en el puesto 20 con 6 puntos en 8 jornadas, 2 victorias y 16 goles en contra.",
-          "Racha del Elche: derrota 0-5 con Barcelona, 2-3 en Racing, 2-3 con Real Sociedad, empate 1-1 en Athletic y 2-3 con Real Madrid.",
-          "Espanyol viene de caer 2-1 en su visita al Rayo Vallecano el 15 de septiembre."
-        ]
-      },
-      {
-        "title": "Goleadores",
-        "bullets": [
-          "Roberto Fernández lidera al Espanyol con 6 goles en 6 partidos; Álex Calatrava suma 1 en 6.",
-          "En el Elche, Fernando Niño es el referente con 3 tantos en 6 jornadas.",
-          "Abiel Osorio (1 gol en 4 partidos) y Buba Sangaré (1 en 6) completan la producción ofensiva delcheña."
+          "El Elche llega 20º en la tabla según el bloque T, con 6 partidos disputados, 2 victorias, 8 goles a favor y 16 en contra.",
+          "Su forma reciente es dura: 0-5 con el Barcelona, 2-3 en Racing, 2-3 con la Real Sociedad, 1-1 con el Athletic y 2-3 con el Real Madrid el 15/09.",
+          "El Espanyol también cayó en su último choque conocido, 2-1 en campo del Rayo Vallecano ese mismo día.",
+          "En goleadores, Roberto Fernández (Espanyol) lidera con 6 tantos en 6 jornadas; por el Elche, Fernando Niño lleva 3, y Osorio y Sangaré 1 cada uno."
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Campos del modelo",
-        "detail": "Los valores 0,521, 0,547 y 0,426 del bloque B llegan sin etiqueta; se interpretan como índices adicionales y probabilidad asociada al marcador 1-1."
+        "label": "Sin bajas",
+        "detail": "No se recibió bloque L, así que no hay información de lesionados ni sancionados para ninguno de los dos equipos."
+      },
+      {
+        "label": "Sin mercado",
+        "detail": "No llegó bloque M2, por lo que no hay lectura de porcentajes de mercado que contrastar con los modelos."
       },
       {
         "label": "Tabla incompleta",
-        "detail": "La fila T no especifica el significado de cada cifra; la lectura de 16 como goles en contra es la más coherente con el contexto."
+        "detail": "El bloque T solo aporta datos del Elche; no hay posición ni números de liga del Espanyol."
       },
       {
-        "label": "Fila duplicada",
-        "detail": "El partido Elche 2-3 Real Madrid del 15-09 aparece dos veces en el bloque R; se contabilizó una sola vez."
-      },
-      {
-        "label": "Sin Poisson",
-        "detail": "No se recibió bloque P del modelo Poisson GoatLab, por lo que la lectura probabilística se limita a CatBoost Bzzoiro."
+        "label": "Dato duplicado",
+        "detail": "El resultado Elche 2-3 Real Madrid del 15/09 aparece dos veces en el bloque R con nombres ligeramente distintos; se ha contado una sola vez."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Inconsistencia interna en el bloque B: el 1-1 figura como marcador más probable con 0,426, pero ese valor supera la probabilidad de empate del modelo (26,8%). Un marcador exacto de empate no puede tener más probabilidad que el resultado de empate completo. Se recomienda verificar si 0,426 correspond"
+      "note": "Dos avisos de auditoría: el bloque T atribuye al Elche 2 victorias en 6 jornadas, pero los cinco resultados del bloque R no muestran ninguna victoria reciente, una tensión que conviene verificar. Además, los modelos P y B difieren de forma notable en la probabilidad visitante (26,2% frente a 21,8%),"
     },
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:22:41.462Z",
-    "inputKey": "v2|M|af-1570397|Espanyol|Elche|laliga|2026-09-18T19:00:00+00:0|NS\nB|0.512|0.268|0.22|1.63|1.16|0.521|0.547|1-1|0.426\nH|28|12|10|6|2.71\nT|20|Elche|6|2|8|16\nS|Roberto Fernández|Espanyol|6|6\nS|Álex Calatrava|Espanyol|1|6\nS|Fernando Niño|Elche|3|6\nS|Abiel Osorio|Elche|1|4\nS|Buba Sangaré|Elche|1|6\nR|2026-08-23|Elche CF|FC Barcelona|0|5\nR|2026-08-28|Real Racing Club de Santander|Elche CF|3|2\nR|2026-09-07|Elche CF|Real Sociedad de Fútbol|2|3\nR|2026-09-12|Athletic Club|Elche CF|1|1\nR|2026-09-15|Rayo Vallecano|Espanyol|2|1\nR|2026-09-15|Elche CF|Real Madrid CF|2|3\nR|2026-09-15|Elche|Real Madrid|2|3\nHR|2026-03-01|Elche|Espanyol|2|2\nHR|2025-10-25|Espanyol|Elche|1|0\nHR|2024-04-27|Elche|Espanyol|2|2\nHR|2023-11-18|Espanyol|Elche|2|0\nHR|2023-02-19|Elche|Espanyol|0|1"
+    "generatedAt": "2026-09-18T11:58:05.160Z",
+    "inputKey": "v2|M|af-1570397|Espanyol|Elche|laliga|2026-09-18T19:00:00+00:0|NS\nP|1.63|1.17|0.469|0.269|0.262|0.531|0.566\nB|0.518|0.265|0.218|1.63|1.17|0.526|0.551|1-1|0.426\nH|28|12|10|6|2.71\nW||cloudy|14|RCDE Stadium\nT|20|Elche|6|2|8|16\nS|Roberto Fernández|Espanyol|6|6\nS|Álex Calatrava|Espanyol|1|6\nS|Fernando Niño|Elche|3|6\nS|Abiel Osorio|Elche|1|4\nS|Buba Sangaré|Elche|1|6\nR|2026-08-23|Elche CF|FC Barcelona|0|5\nR|2026-08-28|Real Racing Club de Santander|Elche CF|3|2\nR|2026-09-07|Elche CF|Real Sociedad de Fútbol|2|3\nR|2026-09-12|Athletic Club|Elche CF|1|1\nR|2026-09-15|Rayo Vallecano|Espanyol|2|1\nR|2026-09-15|Elche CF|Real Madrid CF|2|3\nR|2026-09-15|Elche|Real Madrid|2|3\nHR|2026-03-01|Elche|Espanyol|2|2\nHR|2025-10-25|Espanyol|Elche|1|0\nHR|2024-04-27|Elche|Espanyol|2|2\nHR|2023-11-18|Espanyol|Elche|2|0\nHR|2023-02-19|Elche|Espanyol|0|1"
   },
   "fd-564697": {
     "summary": [
@@ -539,74 +189,67 @@
   "fd-560585": {
     "summary": [
       {
-        "title": "Leeds United vs Crystal Palace: duelo en Elland Road",
+        "title": "Leeds recibe a Crystal Palace en Elland Road",
         "bullets": [
           "Partido de Premier League programado para el 20 de septiembre de 2026 a las 13:00 UTC, aún sin jugar.",
-          "Leeds llega 3º con 8 puntos en 4 jornadas (7 goles a favor, 3 en contra), invicto con dos victorias y dos empates.",
-          "Crystal Palace es 16º con 3 puntos en 4 fechas, con la peor defensa del tramo: 11 goles recibidos y tres derrotas.",
-          "En el historial reciente entre ambos, Leeds ganó 4-1 en casa en diciembre de 2025 y el último cruce en marzo de 2026 terminó 0-0."
+          "Leeds llega 3º con 8 puntos en 4 jornadas (7 goles a favor, 3 en contra).",
+          "Crystal Palace es 16º con 3 puntos en 4 partidos, con 6 goles a favor y 11 en contra.",
+          "El clima marca 14 grados; el dato de sede no viene informado en el input."
         ]
       },
       {
-        "title": "Poisson GoatLab: claro favorito local",
+        "title": "Modelos: Poisson y CatBoost apuntan a Leeds",
         "bullets": [
-          "El modelo Poisson da al Leeds un 67.3% de victoria, un 19.2% de empate y un 13.6% de triunfo visitante.",
-          "Proyecta 2.43 goles esperados para Leeds y 1.035 para Crystal Palace.",
-          "Marca un 67.2% de probabilidad de que ambos equipos marquen y un 59.6% de más de 2.5 goles."
+          "Poisson GoatLab estima 2.133 goles esperados para Leeds y 1.265 para Palace, con 56.3% local, 22.4% empate y 21.2% visitante.",
+          "CatBoost Bzzoiro da 53.1% al Leeds, 25.1% al empate y 21.8% a Palace, con xG de 1.67 contra 1.27.",
+          "Ambos modelos coinciden en el favoritismo local y en una probabilidad visitante cercana al 21-22%.",
+          "Poisson proyecta 66% de partidos con más de 2.5 goles y 64.2% con ambos equipos marcando."
         ]
       },
       {
-        "title": "CatBoost Bzzoiro: ventaja local más moderada",
+        "title": "Historial cara a cara favorable a Leeds",
         "bullets": [
-          "El modelo CatBoost reparte 52.5% para Leeds, 25.1% para el empate y 22.3% para Crystal Palace.",
-          "Sus goles esperados son 1.69 para el local y 1.26 para el visitante, con 54.1% de que ambos marquen y 55.7% de más de 2.5 goles.",
-          "Su resultado más probable es un empate 1-1, con un 45.1% asociado a esa línea de marcador."
+          "En 21 enfrentamientos registrados, Leeds ganó 10, Palace 6 y empataron 5, con media de 2.67 goles.",
+          "Los dos últimos cruces terminaron 4-1 para Leeds en diciembre de 2025 y 0-0 en marzo de 2026.",
+          "Palace sí ganó en Leeds por 1-5 en abril de 2023, antecedente a tener en cuenta."
         ]
       },
       {
-        "title": "Forma reciente y tabla al día",
+        "title": "Forma reciente: Leeds firme, Palace irregular",
         "bullets": [
-          "Leeds: victoria 1-0 en Nottingham Forest, empates 1-1 con Brentford y en Brighton, y contundente 4-1 ante Newcastle en su última salida.",
-          "Crystal Palace: derrotas 0-2 con Everton y 1-4 ante Manchester City, triunfo 3-2 en Fulham y caída 2-3 en casa frente a Ipswich.",
-          "En la tabla, Leeds escolta la zona alta (3º, 8 pts) mientras Palace arranca mal el curso (16º, 3 pts).",
-          "Dominic Calvert-Lewin y Jayden Bogle lideran a Leeds con 2 goles cada uno; Tyrick Mitchell aporta los mismos 2 tantos por el lado visitante."
-        ]
-      },
-      {
-        "title": "Historial cara a cara y referencias anotadoras",
-        "bullets": [
-          "En 21 enfrentamientos previos: 10 triunfos de Leeds, 5 empates y 6 de Crystal Palace, con 2.67 goles de media por partido.",
-          "Últimos cruces: 0-0 (marzo 2026), 4-1 para Leeds (diciembre 2025), 1-5 para Palace (abril 2023), 2-1 para Palace (octubre 2022) y 0-0 (abril 2022).",
-          "Anton Stach suma 1 gol en 4 partidos por Leeds; por Palace anotan Anan Khalaili (1 en 4) y Ben Chilwell (1 en 2)."
+          "Leeds suma en liga victoria 1-0 en Nottingham, empates 1-1 con Brentford y Brighton, y un contundente 4-1 a Newcastle.",
+          "Palace encadena en liga derrotas ante Everton (0-2), City (1-4) e Ipswich (2-3), con única victoria 3-2 en Fulham.",
+          "Palace sí goleó 4-0 a Lech Poznan el 17 de septiembre en competición europea.",
+          "Calvert-Lewin y Bogle lideran a Leeds con 2 goles; Mitchell es el máximo artillero de Palace con 2."
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Solo datos del input",
-        "detail": "No hay información de alineaciones, bajas ni árbitro; el análisis se limita a los bloques recibidos."
+        "label": "Sin bajas",
+        "detail": "No hay bloque L en el input, por lo que no se pueden confirmar lesiones ni sanciones para ninguno de los dos equipos."
+      },
+      {
+        "label": "Sin mercado",
+        "detail": "No consta bloque M2, así que no hay lectura de porcentajes de mercado que contrastar con los modelos."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "El bloque W solo aporta temperatura de 14 grados; faltan condiciones y dato de sede."
       },
       {
         "label": "Muestra corta",
-        "detail": "La tabla y la forma cubren solo 4 jornadas, un volumen pequeño para conclusiones de temporada."
-      },
-      {
-        "label": "H2H desactualizado",
-        "detail": "El historial incluye cruces de 2022 y 2023, con plantillas presumiblemente distintas a las actuales."
-      },
-      {
-        "label": "Goleadores parciales",
-        "detail": "Las estadísticas de anotadores cubren 4 partidos (2 en el caso de Chilwell), no la campaña completa."
+        "detail": "La tabla refleja solo 4 jornadas de liga, una base pequeña para valorar forma de forma definitiva."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Los dos modelos coinciden en favoritismo local pero divergen en magnitud: Poisson da 67.3% a Leeds frente al 52.5% de CatBoost, una brecha de casi 15 puntos, y el empate 1-1 de CatBoost (45.1%) choca con el 19.2% de empate de Poisson. Además, el 2.43 de goles esperados de Leeds supera su media real "
+      "note": "El bloque B marca 1-1 como resultado más probable con 45.5%, una cifra inusualmente alta para un marcador exacto y en tensión con su propio 53.1% de victoria local y con el 2.133 de xG local de Poisson. Además, el xG de B (1.67-1.27) queda claramente por debajo del de P (2.133-1.265). Se recomienda "
     },
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:33:27.987Z",
-    "inputKey": "v2|M|fd-560585|Leeds United FC|Crystal Palace FC|premier|2026-09-20T13:00:00Z|NS\nP|2.43|1.035|0.673|0.192|0.136|0.672|0.596\nB|0.525|0.251|0.223|1.69|1.26|0.541|0.557|1-1|0.451\nH|21|10|5|6|2.67\nT|3|Leeds United FC|4|8|7|3\nT|16|Crystal Palace FC|4|3|6|11\nS|Dominic Calvert-Lewin|Leeds United FC|2|4\nS|Jayden Bogle|Leeds United FC|2|4\nS|Anton Stach|Leeds United FC|1|4\nS|Tyrick Mitchell|Crystal Palace FC|2|4\nS|Anan Khalaili|Crystal Palace FC|1|4\nS|Ben Chilwell|Crystal Palace FC|1|2\nR|2026-08-22|Nottingham Forest FC|Leeds United FC|0|1\nR|2026-08-22|Everton FC|Crystal Palace FC|2|0\nR|2026-08-28|Crystal Palace FC|Manchester City FC|1|4\nR|2026-08-30|Leeds United FC|Brentford FC|1|1\nR|2026-09-05|Brighton & Hove Albion FC|Leeds United FC|1|1\nR|2026-09-05|Fulham FC|Crystal Palace FC|2|3\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-14|Leeds United FC|Newcastle United FC|4|1\nHR|2026-03-15|Crystal Palace|Leeds United|0|0\nHR|2025-12-20|Leeds United|Crystal Palace|4|1\nHR|2023-04-09|Leeds United|Crystal Palace|1|5\nHR|2022-10-09|Crystal Palace|Leeds United|2|1\nHR|2022-04-25|Crystal Palace|Leeds United|0|0"
+    "generatedAt": "2026-09-18T12:06:10.972Z",
+    "inputKey": "v2|M|fd-560585|Leeds United FC|Crystal Palace FC|premier|2026-09-20T13:00:00Z|NS\nP|2.133|1.265|0.563|0.224|0.212|0.66|0.642\nB|0.531|0.251|0.218|1.67|1.27|0.545|0.557|1-1|0.455\nH|21|10|5|6|2.67\nW|||14|\nT|3|Leeds United FC|4|8|7|3\nT|16|Crystal Palace FC|4|3|6|11\nS|Dominic Calvert-Lewin|Leeds United FC|2|4\nS|Jayden Bogle|Leeds United FC|2|4\nS|Anton Stach|Leeds United FC|1|4\nS|Tyrick Mitchell|Crystal Palace FC|2|4\nS|Anan Khalaili|Crystal Palace FC|1|4\nS|Ben Chilwell|Crystal Palace FC|1|2\nR|2026-08-22|Nottingham Forest FC|Leeds United FC|0|1\nR|2026-08-22|Everton FC|Crystal Palace FC|2|0\nR|2026-08-28|Crystal Palace FC|Manchester City FC|1|4\nR|2026-08-30|Leeds United FC|Brentford FC|1|1\nR|2026-09-05|Brighton & Hove Albion FC|Leeds United FC|1|1\nR|2026-09-05|Fulham FC|Crystal Palace FC|2|3\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-14|Leeds United FC|Newcastle United FC|4|1\nR|2026-09-17|Crystal Palace|Lech Poznan|4|0\nHR|2026-03-15|Crystal Palace|Leeds United|0|0\nHR|2025-12-20|Leeds United|Crystal Palace|4|1\nHR|2023-04-09|Leeds United|Crystal Palace|1|5\nHR|2022-10-09|Crystal Palace|Leeds United|2|1\nHR|2022-04-25|Crystal Palace|Leeds United|0|0"
   },
   "fd-560582": {
     "summary": [
@@ -752,135 +395,143 @@
   "fd-564688": {
     "summary": [
       {
-        "title": "Derbi madrileño en LaLiga: Atlético recibe al Real Madrid",
+        "title": "Derbi madrileño en el Cívitas: contexto del partido",
         "bullets": [
-          "Partido de LaLiga entre Club Atlético de Madrid y Real Madrid CF, programado para el 20 de septiembre de 2026 a las 14:15 UTC, aún sin comenzar.",
-          "El Atlético juega en casa y llega en tercera posición; el Real Madrid es segundo, con ambos equipos empatados a 6 puntos tras 6 jornadas.",
-          "El historial reciente del derbi es muy igualado: en los últimos cinco enfrentamientos hay dos victorias rojiblancas, dos blancas y un empate."
+          "LaLiga: Club Atlético de Madrid recibe al Real Madrid CF el 20 de septiembre de 2026, 14:15 UTC. Partido aún sin comenzar.",
+          "Tras 6 jornadas, el Real Madrid es 2º con 15 puntos (17 goles a favor, 6 en contra) y el Atlético es 4º con 13 puntos (14 a favor, 6 en contra).",
+          "Diferencia mínima en la tabla: solo 2 puntos separan a ambos de cara al derbi."
         ]
       },
       {
-        "title": "Modelos: Poisson y CatBoost no coinciden en el favorito",
+        "title": "Lectura Poisson GoatLab",
         "bullets": [
-          "El modelo Poisson GoatLab reparte un derbi muy parejo: 37,4% para el Atlético, 23,5% para el empate y 39% para el Real Madrid.",
-          "Poisson ve partido con goles: 70,4% de probabilidad de más de 2,5 goles y 71,1% de que ambos marquen, con expectativas de 1,8 goles por equipo.",
-          "CatBoost Bzzoiro inclina la balanza hacia el Real Madrid: 51,1% visitante, frente a 24,5% local y 24,4% al empate, con 1,58 goles esperados por bando.",
-          "CatBoost señala el 1-1 como marcador más probable con un 58,4%, y da 64,6% al over 2,5 y 64,5% a que ambos equipos anoten."
+          "Goles esperados muy igualados: 1.8 para el Atlético y 1.84 para el Real Madrid.",
+          "Victoria local 37.4%, empate 23.5%, victoria visitante 39%: escenario casi a la par, con leve inclinación hacia el Madrid.",
+          "Partido con ritmo ofensivo según el modelo: más de 2.5 goles en 70.4% de los casos y ambos marcan en 71.1%."
         ]
       },
       {
-        "title": "Tabla ajustada y Mbappé como referencia goleadora",
+        "title": "Lectura CatBoost Bzzoiro",
         "bullets": [
-          "El Real Madrid es segundo con 6 partidos, 15 goles a favor y 17 en contra; el Atlético tercero con 6 partidos, 13 a favor y 14 en contra, ambos con 6 puntos.",
-          "Kylian Mbappé lidera la tabla de goleadores del Real Madrid con 7 tantos en 6 partidos.",
-          "Jude Bellingham suma 3 goles y Carlos Espí 2, ambos en 6 partidos, completando la lista de artilleros blancos del bloque."
+          "Aquí el Madrid sí aparece como favorito claro: 48.2% visitante frente a 26.9% local y 24.9% de empate.",
+          "Goles esperados más ajustados que en Poisson: 1.58-1.59, con más de 2.5 goles en 64.9% y ambos marcan en 64.9%.",
+          "Marcador más probable según el modelo: 1-1, con un valor asociado de 0.584."
         ]
       },
       {
-        "title": "Forma reciente: rachas alternas antes del derbi",
+        "title": "Forma reciente y goleadores",
         "bullets": [
-          "El Atlético llega con altibajos: victoria 3-1 en Sevilla, caídas ante Athletic (0-3) y Liverpool (1-2), y dos goleadas recientes: 3-0 en Real Sociedad y 4-0 a Osasuna.",
-          "El Real Madrid encadena buenas actuaciones ofensivas: 4-0 al Málaga, 2-1 al Inter, 4-1 al Rayo y remontada 3-2 en Elche, con la derrota en Betis (1-0) como mancha.",
-          "El empate 2-2 ante el Villarreal en la jornada inicial es el único punto perdido tempranero del Atlético en liga."
+          "El Atlético llega en racha: 4-0 al Osasuna, 3-0 en Anoeta, 3-1 en Sevilla, con tropiezos ante Athletic (0-3) y Liverpool (1-2).",
+          "El Madrid también llega enchufado: 4-1 al Rayo, 3-2 remontado en Elche, 4-1 al Rayo y 2-1 al Inter, con única caída en Betis (0-1).",
+          "Mbappé es el referente goleador con 7 tantos en 6 partidos; Bellingham suma 3 y Carlos Espí 2."
         ]
       },
       {
-        "title": "Historial del derbi: 128 precedentes con ventaja blanca",
+        "title": "Historial del derbi",
         "bullets": [
-          "Se han jugado 128 derbis entre ambos, con 66 victorias del Real Madrid, 26 del Atlético y 36 empates.",
-          "La media goleadora histórica del enfrentamiento es de 2,83 goles por partido.",
-          "En los cinco cruces más recientes el derbi fue intenso: 5-2 del Atlético en septiembre de 2025, 3-2 del Real Madrid en marzo de 2026 y el 1-1 de febrero de 2025 como resultado más cerrado."
+          "Historial amplio: 128 enfrentamientos con 66 victorias del Madrid, 36 empates y 26 del Atlético, 2.83 goles de media.",
+          "Últimos cinco cruces: 3-2 en casa blanca (marzo 2026), 5-2 del Atlético en septiembre 2025, 1-0 rojiblanco y 2-1 blanco en marzo 2025, y 1-1 en febrero 2025.",
+          "Tendencia reciente: el equipo local ha ganado 3 de los últimos 5 derbis, dato a vigilar siendo el Atlético el anfitrión."
         ]
       }
     ],
     "limitations": [
       {
+        "label": "Clima no disponible",
+        "detail": "El bloque W llega sin datos de clima y con sede marcada como unknown, así que no hay lectura de condiciones."
+      },
+      {
+        "label": "Sin mercado",
+        "detail": "No hay bloque M2 en el input, por lo que no se incluye lectura del mercado en porcentajes."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No hay bloque L, así que no se pueden confirmar lesiones ni sanciones para el derbi."
+      },
+      {
         "label": "Fila duplicada",
-        "detail": "El input incluye dos veces el resultado Elche 2-3 Real Madrid del 15-09-2026 con denominaciones distintas; se contabilizó una sola vez."
-      },
-      {
-        "label": "Tabla incompleta",
-        "detail": "La tabla solo aporta posición, partidos, goles y puntos de ambos equipos; no incluye datos de rivales ni contexto completo de la clasificación."
-      },
-      {
-        "label": "Modelos divergentes",
-        "detail": "Poisson y CatBoost difieren claramente en el favorito (39% vs 51,1% al Real Madrid); se presentan ambos sin arbitrar entre ellos."
-      },
-      {
-        "label": "Sin alineaciones",
-        "detail": "No hay información de bajas, alineaciones ni sanciones para el derbi; el análisis se limita a los datos aportados."
+        "detail": "El partido Elche 2-3 Real Madrid del 15/09 aparece dos veces en el bloque R; se cuenta una sola vez."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Dos señales a revisar: (1) los modelos discrepan en el favorito, Poisson da 39% al Real Madrid y CatBoost 51,1%, una brecha de más de 12 puntos; (2) el 58,4% de CatBoost para el marcador exacto 1-1 es un valor inusualmente alto para un resultado concreto y conviene verificar su definición antes de p"
+      "note": "Dos avisos de auditoría: (1) P y B divergen en el favorito: Poisson ve el derbi casi igualado (39% visitante vs 37.4% local) mientras CatBoost da ventaja clara al Madrid (48.2% vs 26.9%). (2) El valor 0.584 asociado al 1-1 en B es difícil de cuadrar con el empate general de 24.9% del mismo modelo; c"
     },
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:34:32.452Z",
-    "inputKey": "v2|M|fd-564688|Club Atlético de Madrid|Real Madrid CF|laliga|2026-09-20T14:15:00Z|NS\nP|1.8|1.84|0.374|0.235|0.39|0.704|0.711\nB|0.245|0.244|0.511|1.58|1.58|0.646|0.645|1-1|0.584\nH|128|26|36|66|2.83\nT|3|Club Atlético de Madrid|6|13|14|6\nT|2|Real Madrid CF|6|15|17|6\nS|Kylian Mbappé|Real Madrid CF|7|6\nS|Jude Bellingham|Real Madrid CF|3|6\nS|Carlos Espí|Real Madrid CF|2|6\nR|2026-08-23|Club Atlético de Madrid|Villarreal CF|2|2\nR|2026-08-29|Sevilla FC|Club Atlético de Madrid|1|3\nR|2026-08-30|Real Madrid CF|Málaga CF|4|0\nR|2026-09-04|Real Betis Balompié|Real Madrid CF|1|0\nR|2026-09-05|Athletic Club|Club Atlético de Madrid|3|0\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-09|Liverpool FC|Club Atlético de Madrid|2|1\nR|2026-09-12|Real Madrid CF|Rayo Vallecano de Madrid|4|1\nR|2026-09-13|Real Sociedad de Fútbol|Club Atlético de Madrid|0|3\nR|2026-09-15|Elche CF|Real Madrid CF|2|3\nR|2026-09-15|Elche|Real Madrid|2|3\nR|2026-09-16|Club Atlético de Madrid|CA Osasuna|4|0\nHR|2026-03-22|Real Madrid|Atlético Madrid|3|2\nHR|2025-09-27|Atlético Madrid|Real Madrid|5|2\nHR|2025-03-12|Atlético Madrid|Real Madrid|1|0\nHR|2025-03-04|Real Madrid|Atlético Madrid|2|1\nHR|2025-02-08|Real Madrid|Atlético Madrid|1|1"
+    "generatedAt": "2026-09-18T12:08:54.297Z",
+    "inputKey": "v2|M|fd-564688|Club Atlético de Madrid|Real Madrid CF|laliga|2026-09-20T14:15:00Z|NS\nP|1.8|1.84|0.374|0.235|0.39|0.704|0.711\nB|0.269|0.249|0.482|1.58|1.59|0.649|0.649|1-1|0.584\nH|128|26|36|66|2.83\nW||unknown|6|\nT|4|Club Atlético de Madrid|6|13|14|6\nT|2|Real Madrid CF|6|15|17|6\nS|Kylian Mbappé|Real Madrid CF|7|6\nS|Jude Bellingham|Real Madrid CF|3|6\nS|Carlos Espí|Real Madrid CF|2|6\nR|2026-08-23|Club Atlético de Madrid|Villarreal CF|2|2\nR|2026-08-29|Sevilla FC|Club Atlético de Madrid|1|3\nR|2026-08-30|Real Madrid CF|Málaga CF|4|0\nR|2026-09-04|Real Betis Balompié|Real Madrid CF|1|0\nR|2026-09-05|Athletic Club|Club Atlético de Madrid|3|0\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-09|Liverpool FC|Club Atlético de Madrid|2|1\nR|2026-09-12|Real Madrid CF|Rayo Vallecano de Madrid|4|1\nR|2026-09-13|Real Sociedad de Fútbol|Club Atlético de Madrid|0|3\nR|2026-09-15|Elche CF|Real Madrid CF|2|3\nR|2026-09-15|Elche|Real Madrid|2|3\nR|2026-09-16|Club Atlético de Madrid|CA Osasuna|4|0\nHR|2026-03-22|Real Madrid|Atlético Madrid|3|2\nHR|2025-09-27|Atlético Madrid|Real Madrid|5|2\nHR|2025-03-12|Atlético Madrid|Real Madrid|1|0\nHR|2025-03-04|Real Madrid|Atlético Madrid|2|1\nHR|2025-02-08|Real Madrid|Atlético Madrid|1|1"
   },
   "fd-560583": {
     "summary": [
       {
-        "title": "Fulham vs Manchester United: duelo del 20 de septiembre",
+        "title": "Fulham recibe al Manchester United en la Premier",
         "bullets": [
-          "Partido de Premier League programado para el 20 de septiembre de 2026 a las 15:30 UTC en Craven Cottage, aún sin jugar.",
-          "La tabla muestra al Fulham en el puesto 18 con registro de 4 victorias, 1 empate y 4 derrotas, y al United en el 13 con 4 victorias, 4 empates y 7 derrotas; ambos con 7 goles en contra.",
-          "El modelo Poisson GoatLab inclina el partido hacia el United: 45.4% visitante, 28.2% local y 26.5% empate."
+          "Partido de la Premier League programado para el 20 de septiembre de 2026 a las 15:30 UTC, aún sin comenzar.",
+          "El duelo se juega en casa de Fulham, que llega como local ante un United en mejor momento estadístico.",
+          "No constan bajas confirmadas en el input para ninguno de los dos equipos."
         ]
       },
       {
-        "title": "Poisson GoatLab vs CatBoost Bzzoiro",
+        "title": "Modelos: ventaja visitante moderada",
         "bullets": [
-          "Poisson GoatLab estima 1.26 goles esperados para el Fulham y 1.648 para el United, con 55.6% para más de 2.5 goles y 59% para que ambos marquen.",
-          "CatBoost Bzzoiro reparte 27.8% local, 25.2% empate y 47% visitante, con 60.1% para más de 2.5 goles y 61.8% para que ambos anoten.",
-          "Ambos modelos coinciden en un partido parejo con leve ventaja del United y tendencia a ver goles en ambas porterías; Bzzoiro señala el 1-1 como marcador más probable."
+          "El modelo Poisson GoatLab da 28,2% para Fulham, 26,5% al empate y 45,4% para el United, con goles esperados de 1,26 contra 1,648.",
+          "CatBoost Bzzoiro va en la misma línea: 27,8% local, 25,4% empate y 46,8% visitante, con 1,44 y 1,47 goles esperados.",
+          "Ambos modelos coinciden en partidos con goles: over 2,5 en 55,6% (Poisson) y 60,1% (Bzzoiro), y ambos marcan en 59% y 61,8%.",
+          "Bzzoiro señala el 1-1 como marcador más probable."
         ]
       },
       {
-        "title": "Forma reciente: Fulham en caída, United irregular",
+        "title": "Historial favorable al United",
         "bullets": [
-          "El Fulham llega con tres derrotas seguidas en liga: 2-3 con Chelsea, 0-1 en Sunderland y 2-3 con Crystal Palace, aunque rescató un 0-0 en Liverpool.",
-          "El United alternó resultados: derrota 2-0 en Hull, goleada 5-2 al Ipswich, empates con Everton (2-2) y derrota 0-1 en el derbi ante el City, además de un 4-0 copero al Sabah FK.",
-          "Ninguno de los dos llega en racha estable, pero el Fulham acumula peor dinámica en las últimas jornadas."
+          "En 42 enfrentamientos previos: 30 victorias del United, 8 empates y solo 4 de Fulham, con media de 3,17 goles por partido.",
+          "En los últimos 5 cruces el United no pierde: 3-2 y 1-0 en Old Trafford, y tres empates (1-1, 1-1 y el 1-1 de agosto de 2025 en Londres).",
+          "Fulham no le gana al United en los últimos cinco antecedentes registrados."
         ]
       },
       {
-        "title": "Historial y goleadores",
+        "title": "Forma reciente: Fulham frágil, United irregular",
         "bullets": [
-          "En los últimos cinco cruces, el United no pierde: 3-2 y 1-0 en casa, y tres empates (1-1, 1-1 y 1-1), con el 3-2 de febrero de 2026 como antecedente más cercano.",
-          "El historial amplio registra 42 duelos con dominio del United: 30 triunfos, 8 empates y 4 victorias del Fulham, con 3.17 goles de media por partido.",
-          "Bruno Fernandes es el máximo referente ofensivo del United con 3 goles en 4 partidos; por el Fulham, Joshua King suma 2 tantos, con Palacios y Gonzalo García con 1 cada uno."
+          "Fulham encadena malos resultados: derrotas 2-3 con Chelsea y Crystal Palace, caída 1-0 en Sunderland, y empates 0-0 con Liverpool.",
+          "El United alterna: goleada 5-2 al Ipswich y 4-0 al Sabah FK, pero derrota 2-0 en Hull, empate 2-2 en Everton y 0-1 ante el City en el derbi.",
+          "En la tabla, Fulham es 18º con 4 puntos (1 victoria, 4 goles a favor y 7 en contra); el United es 13º con 13 puntos (4 victorias, 7 a favor y 7 en contra)."
+        ]
+      },
+      {
+        "title": "Goleadores a seguir",
+        "bullets": [
+          "Bruno Fernandes lidera al United con 3 goles en 4 partidos, seguido de Mbeumo (2) y Šeško (1).",
+          "En Fulham, Joshua King es el referente con 2 tantos en 4 jornadas; Palacios y Gonzalo García suman 1 cada uno.",
+          "La producción ofensiva del United (7 goles de sus tres máximos anotadores) supera a la del conjunto londinense (4 en total)."
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Formato de tabla",
-        "detail": "La fila T no especifica el significado exacto de cada columna; se interpretó como posición, victorias, empates, derrotas y goles en contra."
+        "label": "Clima y sede",
+        "detail": "El bloque W llega sin datos de clima (campo vacío y unknown), por lo que no hay lectura de condiciones ni sede confirmada más allá de la localía de Fulham."
       },
       {
-        "label": "Campo ambiguo",
-        "detail": "El valor 0.508 junto al marcador 1-1 en CatBoost Bzzoiro no está etiquetado y no se asignó a una métrica concreta."
+        "label": "Sin mercado ni bajas",
+        "detail": "El input no incluye bloque M2 de mercado ni bloque L de bajas confirmadas, así que no hay lectura de mercado ni ausencias que comentar."
       },
       {
-        "label": "Fila duplicada",
-        "detail": "El input repite el partido Manchester United 0-1 Manchester City del 13-09-2026; se contó una sola vez."
+        "label": "Tabla incompleta",
+        "detail": "La tabla solo muestra la posición de Fulham y United; no hay contexto del resto de la clasificación ni de jornadas disputadas exactas."
       },
       {
-        "label": "Contexto de plantillas",
-        "detail": "No hay datos de alineaciones, bajas ni árbitro, por lo que el análisis se limita a los números aportados."
+        "label": "Duplicado en forma",
+        "detail": "La fila del derbi United 0-1 City del 13-09-2026 aparece duplicada en el bloque R; se contó una sola vez."
       }
     ],
     "review": {
-      "flag": false,
-      "note": "Los porcentajes de Poisson y CatBoost son coherentes entre sí (ventaja visitante en torno al 45-47%, empate 25-27%, local 28%). La única cifra sin verificación posible es el 0.508 asociado al 1-1 por falta de etiqueta en el formato."
+      "flag": true,
+      "note": "Inconsistencia en el bloque B: Bzzoiro da el 1-1 como marcador más probable con 0,508, pero su probabilidad total de empate es 0,254; un marcador exacto no puede superar a la suma de su categoría. Ese 0,508 podría corresponder a otra métrica mal etiquetada. Además, la probabilidad de over 2,5 difier"
     },
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
-    "generatedAt": "2026-09-17T12:35:00.285Z",
-    "inputKey": "v2|M|fd-560583|Fulham FC|Manchester United FC|premier|2026-09-20T15:30:00Z|NS\nP|1.26|1.648|0.282|0.265|0.454|0.556|0.59\nB|0.278|0.252|0.47|1.44|1.47|0.601|0.618|1-1|0.508\nH|42|4|8|30|3.17\nT|18|Fulham FC|4|1|4|7\nT|13|Manchester United FC|4|4|7|7\nS|Joshua King|Fulham FC|2|4\nS|César Palacios|Fulham FC|1|4\nS|Gonzalo García|Fulham FC|1|4\nS|Bruno Fernandes|Manchester United FC|3|4\nS|Bryan Mbeumo|Manchester United FC|2|4\nS|Benjamin Šeško|Manchester United FC|1|4\nR|2026-08-22|Hull City AFC|Manchester United FC|2|0\nR|2026-08-24|Fulham FC|Chelsea FC|2|3\nR|2026-08-30|Sunderland AFC|Fulham FC|1|0\nR|2026-08-30|Manchester United FC|Ipswich Town FC|5|2\nR|2026-09-05|Fulham FC|Crystal Palace FC|2|3\nR|2026-09-06|Everton FC|Manchester United FC|2|2\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-09-12|Liverpool FC|Fulham FC|0|0\nR|2026-09-13|Manchester United FC|Manchester City FC|0|1\nR|2026-09-13|Manchester United|Manchester City|0|1\nHR|2026-02-01|Manchester United|Fulham|3|2\nHR|2025-08-24|Fulham|Manchester United|1|1\nHR|2025-03-02|Manchester United|Fulham|1|1\nHR|2025-01-26|Fulham|Manchester United|0|1\nHR|2024-08-16|Manchester United|Fulham|1|0"
+    "generatedAt": "2026-09-18T12:09:22.003Z",
+    "inputKey": "v2|M|fd-560583|Fulham FC|Manchester United FC|premier|2026-09-20T15:30:00Z|NS\nP|1.26|1.648|0.282|0.265|0.454|0.556|0.59\nB|0.278|0.254|0.468|1.44|1.47|0.601|0.618|1-1|0.508\nH|42|4|8|30|3.17\nW||unknown|8|\nT|18|Fulham FC|4|1|4|7\nT|13|Manchester United FC|4|4|7|7\nS|Joshua King|Fulham FC|2|4\nS|César Palacios|Fulham FC|1|4\nS|Gonzalo García|Fulham FC|1|4\nS|Bruno Fernandes|Manchester United FC|3|4\nS|Bryan Mbeumo|Manchester United FC|2|4\nS|Benjamin Šeško|Manchester United FC|1|4\nR|2026-08-22|Hull City AFC|Manchester United FC|2|0\nR|2026-08-24|Fulham FC|Chelsea FC|2|3\nR|2026-08-30|Sunderland AFC|Fulham FC|1|0\nR|2026-08-30|Manchester United FC|Ipswich Town FC|5|2\nR|2026-09-05|Fulham FC|Crystal Palace FC|2|3\nR|2026-09-06|Everton FC|Manchester United FC|2|2\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-09-12|Liverpool FC|Fulham FC|0|0\nR|2026-09-13|Manchester United FC|Manchester City FC|0|1\nR|2026-09-13|Manchester United|Manchester City|0|1\nHR|2026-02-01|Manchester United|Fulham|3|2\nHR|2025-08-24|Fulham|Manchester United|1|1\nHR|2025-03-02|Manchester United|Fulham|1|1\nHR|2025-01-26|Fulham|Manchester United|0|1\nHR|2024-08-16|Manchester United|Fulham|1|0"
   },
   "fd-564696": {
     "summary": [
@@ -952,5 +603,655 @@
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:35:25.044Z",
     "inputKey": "v2|M|fd-564696|Villarreal CF|Levante UD|laliga|2026-09-20T16:30:00Z|NS\nP|1.98|1.687|0.443|0.232|0.325|0.709|0.711\nB|0.599|0.219|0.182|1.99|1.24|0.617|0.586|1-1|0.533\nH|30|20|2|8|2.63\nT|19|Villarreal CF|5|2|7|10\nT|14|Levante UD|5|5|7|9\nS|Gerard Moreno|Villarreal CF|2|5\nS|Nicolas Pépé|Villarreal CF|2|5\nS|Roger Brugué|Levante UD|3|4\nS|Adrián de la Fuente|Levante UD|1|5\nS|Enzo Bardeli|Levante UD|1|5\nR|2026-08-16|Real Racing Club de Santander|Villarreal CF|2|2\nR|2026-08-16|RCD Espanyol de Barcelona|Levante UD|3|0\nR|2026-08-23|Club Atlético de Madrid|Villarreal CF|2|2\nR|2026-08-24|CA Osasuna|Levante UD|0|0\nR|2026-08-28|Deportivo Alavés|Villarreal CF|1|0\nR|2026-08-29|Levante UD|Real Betis Balompié|5|2\nR|2026-09-05|Villarreal CF|RC Deportivo La Coruña|2|3\nR|2026-09-06|Málaga CF|Levante UD|0|0\nR|2026-09-08|Borussia Dortmund|Villarreal CF|3|2\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-13|Levante|Barcelona|2|4\nR|2026-09-14|Villarreal CF|Real Betis Balompié|1|2\nHR|2026-08-05|Villarreal|Levante UD|1|0\nHR|2026-05-02|Villarreal|Levante UD|5|1\nHR|2026-02-18|Levante UD|Villarreal|0|1\nHR|2022-04-02|Levante UD|Villarreal|2|0\nHR|2022-01-03|Villarreal|Levante UD|5|0"
+  },
+  "af-1570399": {
+    "summary": [
+      {
+        "title": "Osasuna - Rayo Vallecano: LaLiga, 19/09/2026 12:00 UTC",
+        "bullets": [
+          "Partido de LaLiga en El Sadar con estado NS, aún sin comenzar.",
+          "El duelo enfrenta al conjunto navarro en casa contra un Rayo que llega con calendario exigente reciente.",
+          "Sede confirmada: Estadio El Sadar, con temperatura registrada de 26 grados y clima sin dato disponible."
+        ]
+      },
+      {
+        "title": "Modelos P y B: ventaja local ajustada",
+        "bullets": [
+          "El modelo Poisson GoatLab da 40,1% al triunfo de Osasuna, 28% al empate y 31,9% al Rayo, con 1,45 y 1,27 de goles esperados.",
+          "CatBoost Bzzoiro coincide: 39,9% local, 28,7% empate y 31,4% visitante, con 1,45 y 1,27 de xG.",
+          "Ambos modelos ven un partido con goles: over 51,1% (P) y 47% (B), y ambos marcan en 56,3% y 52,4%.",
+          "Bzzoiro señala el 1-1 como marcador más probable del cruce."
+        ]
+      },
+      {
+        "title": "Historial y forma reciente",
+        "bullets": [
+          "En los últimos cinco cruces directos, Osasuna ganó tres y Rayo dos, sin empates desde enero de 2025 (1-1).",
+          "El Rayo llega con altibajos: empate 1-1 con Alavés, derrota 5-2 en Barcelona, victoria 3-2 sobre Racing, 4-1 en contra en Madrid y 2-1 a Espanyol.",
+          "Osasuna viene de caer 4-0 ante el Atlético de Madrid el 16 de septiembre.",
+          "El registro agregado del historial muestra 30 partidos con 13-7-10 y media de 2,2 goles."
+        ]
+      },
+      {
+        "title": "Goleadores a seguir",
+        "bullets": [
+          "Sergio Camello es el referente ofensivo del Rayo con 6 goles en 6 partidos.",
+          "Ante Budimir lidera a Osasuna con 4 tantos en 6 encuentros.",
+          "Álvaro García suma 2 goles en 6 y Adrià Pedrosa 1 en 4 para el conjunto franjirrojo."
+        ]
+      },
+      {
+        "title": "Tabla, sede y contexto",
+        "bullets": [
+          "El Rayo Vallecano figura 11º en la clasificación con 15 puntos según la fila de tabla.",
+          "El partido se disputa en El Sadar, factor de campo para Osasuna.",
+          "No hay fila de bajas confirmadas ni lectura de mercado en el input."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin bajas",
+        "detail": "No se recibió bloque L, por lo que no hay bajas ni alineaciones confirmadas para ninguno de los dos equipos."
+      },
+      {
+        "label": "Clima sin dato",
+        "detail": "El bloque W marca el clima como unknown; solo consta temperatura de 26 grados y la sede El Sadar."
+      },
+      {
+        "label": "Tabla ambigua",
+        "detail": "La fila T no etiqueta sus campos; se interpreta posición 11 y 15 puntos para el Rayo, pero el desglose de victorias, empates y derrotas no es inequívoco."
+      },
+      {
+        "label": "Historial agregado",
+        "detail": "La fila H (30 partidos, 13-7-10, 2,2 goles) no especifica a qué equipo o contexto corresponde el registro."
+      },
+      {
+        "label": "Fila duplicada",
+        "detail": "El bloque R incluye dos filas del mismo partido Rayo-Espanyol del 15/09/2026 (2-1); se contó una sola vez."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:00:35.868Z",
+    "inputKey": "v2|M|af-1570399|Osasuna|Rayo Vallecano|laliga|2026-09-19T12:00:00+00:0|NS\nP|1.45|1.27|0.401|0.28|0.319|0.511|0.563\nB|0.399|0.287|0.314|1.45|1.27|0.47|0.524|1-1|0.494\nH|30|13|7|10|2.2\nW||unknown|26|Estadio El Sadar\nT|11|Rayo Vallecano|6|7|10|15\nS|Ante Budimir|Osasuna|4|6\nS|Sergio Camello|Rayo Vallecano|6|6\nS|Álvaro García|Rayo Vallecano|2|6\nS|Adrià Pedrosa|Rayo Vallecano|1|4\nR|2026-08-20|Rayo Vallecano de Madrid|Deportivo Alavés|1|1\nR|2026-08-31|FC Barcelona|Rayo Vallecano de Madrid|5|2\nR|2026-09-05|Rayo Vallecano de Madrid|Real Racing Club de Santander|3|2\nR|2026-09-12|Real Madrid CF|Rayo Vallecano de Madrid|4|1\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-15|Rayo Vallecano|Espanyol|2|1\nR|2026-09-16|Atletico Madrid|Osasuna|4|0\nHR|2026-01-24|Rayo Vallecano|Osasuna|1|3\nHR|2025-09-14|Osasuna|Rayo Vallecano|2|0\nHR|2025-01-19|Osasuna|Rayo Vallecano|1|1\nHR|2024-09-16|Rayo Vallecano|Osasuna|3|1\nHR|2024-04-20|Rayo Vallecano|Osasuna|2|1"
+  },
+  "af-1557409": {
+    "summary": [
+      {
+        "title": "Brighton recibe al líder Arsenal en el Amex",
+        "bullets": [
+          "Partido de Premier League el 19 de septiembre de 2026, 14:00 UTC, en el American Express Stadium, aún sin jugar.",
+          "El clima no tiene dato registrado; solo consta una temperatura de 10 grados en sede.",
+          "Duelo entre el 5º clasificado y el líder de la competición."
+        ]
+      },
+      {
+        "title": "Arsenal perfecto, Brighton goleador pero irregular",
+        "bullets": [
+          "Arsenal lidera con 12 puntos de 12 posibles, 8 goles a favor y solo 1 en contra en 4 jornadas.",
+          "Brighton es 5º con 7 puntos en 4 partidos, 13 goles a favor y 5 en contra.",
+          "Forma reciente: Arsenal encadena victorias ante Coventry (3-0), Villa (1-0), Chelsea (2-1), Napoli (1-0) y Sunderland (2-0).",
+          "Brighton goleó 4-0 y 5-0 a Villa y Coventry, pero perdió 3-4 en Chelsea y empató 1-1 con Leeds."
+        ]
+      },
+      {
+        "title": "Modelos en desacuerdo: P tira local, B visitante",
+        "bullets": [
+          "Poisson GoatLab da 54.1% a Brighton, 23.1% al empate y 22.8% a Arsenal, con goles esperados 2.052 contra 1.288.",
+          "P estima 64.8% para más de 2.5 goles y 64% para que ambos marquen.",
+          "CatBoost Bzzoiro da 56% a Arsenal, 24.1% al empate y 20% a Brighton, con más de 2.5 en 54.4% y ambos marcan en 54.9%.",
+          "B señala 1-1 como marcador más probable y registra valores de goles 1.12 y 1.52."
+        ]
+      },
+      {
+        "title": "Historial claro a favor de Arsenal",
+        "bullets": [
+          "En 22 duelos previos: 11 victorias de Arsenal, 6 de Brighton y 5 empates, con 2.68 goles de media por partido.",
+          "Últimos 5 enfrentamientos: Arsenal no pierde, con 3 victorias (1-0, 2-1, 2-0) y 2 empates (1-1, 1-1).",
+          "El último antecedente es la victoria de Arsenal 0-1 en casa de Brighton en marzo de 2026."
+        ]
+      },
+      {
+        "title": "Saka lidera el capítulo de goleadores",
+        "bullets": [
+          "Bukayo Saka es el máximo referente con 3 goles y 4 asistencias.",
+          "Havertz y Ødegaard acumulan 2 goles y 4 asistencias cada uno.",
+          "En Brighton, Hinshelwood suma 2 goles y 1 asistencia; Yalcouyé y Groß, 2 goles y 4 asistencias cada uno."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Clima sin dato",
+        "detail": "El bloque W no incluye condiciones meteorológicas, solo temperatura de 10 grados y sede."
+      },
+      {
+        "label": "Sin mercado M2",
+        "detail": "No hay bloque M2 en el input, por lo que no se puede ofrecer lectura de mercado."
+      },
+      {
+        "label": "Campos de B ambiguos",
+        "detail": "Los valores 1.12 y 1.52 del bloque B se interpretan como goles esperados; el formato telegráfico no lo especifica."
+      },
+      {
+        "label": "Fila duplicada en R",
+        "detail": "El resultado Coventry 0-5 Brighton del 13-09-2026 aparece dos veces con denominaciones distintas del rival."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Desviación clara entre modelos: P otorga 54.1% de victoria a Brighton mientras B da 56% a Arsenal. Además, la tabla (Arsenal líder con 12 de 12 y solo 1 gol encajado) y el historial reciente (Arsenal invicto en los últimos 5 duelos directos) apuntan al visitante, por lo que el porcentaje local de P "
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:01:47.523Z",
+    "inputKey": "v2|M|af-1557409|Brighton|Arsenal|premier|2026-09-19T14:00:00+00:0|NS\nP|2.052|1.288|0.541|0.231|0.228|0.648|0.64\nB|0.2|0.241|0.56|1.12|1.52|0.544|0.549|1-1|0.44\nH|22|6|5|11|2.68\nW|||10|American Express Stadium\nT|5|Brighton|4|7|13|5\nT|1|Arsenal|4|12|8|1\nS|Jack Hinshelwood|Brighton|2|1\nS|Malick Yalcouyé|Brighton|2|4\nS|Pascal Groß|Brighton|2|4\nS|Bukayo Saka|Arsenal|3|4\nS|Kai Havertz|Arsenal|2|4\nS|Martin Ødegaard|Arsenal|2|4\nR|2026-08-21|Arsenal FC|Coventry City FC|3|0\nR|2026-08-23|Brighton & Hove Albion FC|Aston Villa FC|4|0\nR|2026-08-30|Chelsea FC|Brighton & Hove Albion FC|4|3\nR|2026-08-31|Aston Villa FC|Arsenal FC|0|1\nR|2026-09-05|Brighton & Hove Albion FC|Leeds United FC|1|1\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-09-12|Sunderland AFC|Arsenal FC|0|2\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-13|Coventry|Brighton|0|5\nHR|2026-03-04|Brighton & Hove Albion|Arsenal|0|1\nHR|2025-12-27|Arsenal|Brighton & Hove Albion|2|1\nHR|2025-10-29|Arsenal|Brighton & Hove Albion|2|0\nHR|2025-01-04|Brighton & Hove Albion|Arsenal|1|1\nHR|2024-08-31|Arsenal|Brighton & Hove Albion|1|1"
+  },
+  "af-1557410": {
+    "summary": [
+      {
+        "title": "Everton recibe al Ipswich en Hill Dickinson Stadium",
+        "bullets": [
+          "Partido de Premier League programado para el 19 de septiembre de 2026, 14:00 UTC, en el Hill Dickinson Stadium, con 18 grados registrados en el clima.",
+          "Everton llega 9º con 6 puntos en 4 jornadas (5 goles a favor, 3 en contra); Ipswich es 10º con los mismos 6 puntos pero 7 goles a favor y 10 en contra.",
+          "Sin bajas confirmadas reportadas para ninguno de los dos equipos en el input."
+        ]
+      },
+      {
+        "title": "Modelos P y B apuntan a favor local",
+        "bullets": [
+          "Poisson GoatLab: 56,6% victoria de Everton, 23,2% empate y 20,2% victoria del Ipswich, con goles esperados de 2,025 locales y 1,15 visitantes.",
+          "CatBoost Bzzoiro coincide: 53,8% local, 24,6% empate y 21,6% visitante, con el 1-1 como marcador más probable.",
+          "En goles, P da 61,5% al over 2,5 y 60,3% a que ambos marquen; B es algo más comedido con 54,6% y 56% respectivamente."
+        ]
+      },
+      {
+        "title": "Forma reciente: Everton sólido, Ipswich irregular",
+        "bullets": [
+          "Everton encadena cuatro partidos sin perder: 2-0 al Crystal Palace, 1-1 con Bournemouth, 2-2 con el United y 0-0 en casa del Tottenham.",
+          "Ipswich alterna resultados: ganó 2-1 al Sunderland y 3-2 en campo del Crystal Palace, pero cayó 2-5 ante el United y 0-2 contra el Liverpool.",
+          "Enfrentamientos directos: 12 precedentes con 5 triunfos de Everton, 4 del Ipswich y 3 empates, con media de 2,17 goles; el más reciente, un 2-2 en mayo de 2025."
+        ]
+      },
+      {
+        "title": "Goleadores y referencias ofensivas",
+        "bullets": [
+          "En el Everton, Tarkowski suma 1 gol y 4 asistencias, y Maitland-Niles 1 gol y 2 asistencias.",
+          "En el Ipswich, Emersonn y Leif Davis aportan 2 goles y 4 asistencias cada uno, y Akpom 1 gol y 3 asistencias.",
+          "Los laterales y centrales concentran la producción ofensiva de ambos equipos según los datos de goleadores."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin mercado",
+        "detail": "El input no incluye bloque M2, por lo que no hay lectura de porcentajes de mercado que contrastar con los modelos."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No hay bloque L, así que no se pueden confirmar ni descartar lesiones o sanciones para el once de cada equipo."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "El bloque W solo aporta temperatura (18) y sede; faltan viento, lluvia y estado del césped."
+      },
+      {
+        "label": "Goleadores ambiguos",
+        "detail": "El formato de goleadores se interpreta como goles y asistencias; el input no lo especifica de forma explícita."
+      },
+      {
+        "label": "Media H2H",
+        "detail": "El 2,17 del historial se interpreta como media de goles por enfrentamiento directo; el input no define la métrica."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los modelos coinciden en el 1X2, pero B propone 1-1 como marcador más probable mientras P proyecta 3,17 goles totales esperados y 61,5% al over 2,5; además, el over 2,5 difiere 7 puntos entre ambos (61,5% vs 54,6%). No es una contradicción clara, pero conviene revisar la coherencia interna de B."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:02:24.473Z",
+    "inputKey": "v2|M|af-1557410|Everton|Ipswich|premier|2026-09-19T14:00:00+00:0|NS\nP|2.025|1.15|0.566|0.232|0.202|0.615|0.603\nB|0.538|0.246|0.216|1.38|1.41|0.546|0.56|1-1|0.458\nH|12|5|3|4|2.17\nW|||18|Hill Dickinson Stadium\nT|9|Everton|4|6|5|3\nT|10|Ipswich|4|6|7|10\nS|Ainsley Maitland-Niles|Everton|1|2\nS|James Tarkowski|Everton|1|4\nS|Emersonn|Ipswich|2|4\nS|Leif Davis|Ipswich|2|4\nS|Chuba Akpom|Ipswich|1|3\nR|2026-08-22|Everton FC|Crystal Palace FC|2|0\nR|2026-08-22|Ipswich Town FC|Sunderland AFC|2|1\nR|2026-08-29|AFC Bournemouth|Everton FC|1|1\nR|2026-08-30|Manchester United FC|Ipswich Town FC|5|2\nR|2026-09-04|Ipswich Town FC|Liverpool FC|0|2\nR|2026-09-06|Everton FC|Manchester United FC|2|2\nR|2026-09-12|Tottenham Hotspur FC|Everton FC|0|0\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nHR|2025-05-03|Everton|Ipswich Town|2|2\nHR|2024-10-19|Ipswich Town|Everton|0|2\nHR|2002-02-02|Everton|Ipswich Town|1|2\nHR|2001-10-13|Ipswich Town|Everton|0|0\nHR|2001-02-24|Ipswich Town|Everton|2|0"
+  },
+  "af-1557414": {
+    "summary": [
+      {
+        "title": "Newcastle vs Hull City: duelo de Premier League",
+        "bullets": [
+          "Partido af-1557414 en St James' Park el 19 de septiembre de 2026 a las 14:00 UTC, aún sin jugar (NS).",
+          "Newcastle llega 12º con 4 victorias, 5 empates y 7 derrotas; Hull City es 4º con 4 triunfos, 8 empates y 5 caídas.",
+          "El historial reciente entre ambos favorece claramente a Newcastle: 2 victorias, 2 empates y 1 derrota en los últimos cinco cruces."
+        ]
+      },
+      {
+        "title": "Poisson GoatLab: ventaja local marcada",
+        "bullets": [
+          "Probabilidad de victoria de Newcastle estimada en 42,5%, empate 27,9% y triunfo de Hull City 29,6%.",
+          "Goles esperados: 1,495 para Newcastle y 1,215 para Hull City, con over 2,5 en 50,9% y BTTS en 55,8%.",
+          "El modelo Poisson ve un partido parejo en goles, con ligera inclinación hacia el conjunto local."
+        ]
+      },
+      {
+        "title": "CatBoost Bzzoiro: lectura más conservadora",
+        "bullets": [
+          "El modelo CatBoost da a Newcastle un 59,4% de probabilidad de no perder, con 22,1% de victoria visitante y 18,5% de empate.",
+          "Goles esperados de 1,8 a 1,24, marcador más probable 1-1 (18,5%) y BTTS en 56,3%.",
+          "Ambos modelos coinciden en un duelo cerrado con goles en ambas porterías como escenario plausible."
+        ]
+      },
+      {
+        "title": "Forma reciente y goleadores",
+        "bullets": [
+          "Newcastle viene de caer 4-1 ante Leeds tras empatar con Bournemouth (2-2) y vencer a Tottenham (0-2).",
+          "Hull City suma ronda sólida: 2-0 a Manchester United, 0-0 con Aston Villa y 2-2 con Chelsea.",
+          "Anthony Elanga lidera el ataque local con 2 goles y 3 asistencias; Mohamed Belloumi es la referencia de Hull con 2 goles y 4 asistencias."
+        ]
+      },
+      {
+        "title": "Historial y condiciones del partido",
+        "bullets": [
+          "En los últimos cinco enfrentamientos, Newcastle ganó dos (3-0 y 4-1 en Hull), empató dos y perdió uno (2-3 en casa en 2013).",
+          "El último cruce fue un 1-1 en el campo de Hull City en noviembre de 2016.",
+          "Se jugará en St James' Park con temperatura estimada de 23 grados; no constan bajas confirmadas ni datos de mercado en el input."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin bajas ni mercado",
+        "detail": "No hay datos de bajas confirmadas (L) ni de mercado interpretativo (M2), por lo que no se puede valorar ausencias ni lectura de cuotas implícitas."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "El bloque W solo aporta temperatura (23) y sede; faltan datos de precipitación o viento."
+      },
+      {
+        "label": "Tabla sin puntos",
+        "detail": "La tabla muestra posiciones y W-D-L pero no puntos ni diferencia de goles, lo que limita la comparación fina entre ambos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los porcentajes de P y B son consistentes entre sí y con la forma reciente: ambos modelos ven partido cerrado con BTTS cercano al 56%. La posición de tabla (Newcastle 12º, Hull 4º) contrasta con la ventaja local de los modelos, pero es coherente con el historial favorable a Newcastle. Sin desviacion"
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:03:07.191Z",
+    "inputKey": "v2|M|af-1557414|Newcastle|Hull City|premier|2026-09-19T14:00:00+00:0|NS\nP|1.215|1.495|0.296|0.279|0.425|0.509|0.558\nB|0.594|0.221|0.185|1.8|1.24|0.589|0.563|1-1|0.556\nH|9|2|4|3|2.78\nW|||23|St James' Park\nT|12|Newcastle|4|5|7|8\nT|4|Hull City|4|8|5|2\nS|Anthony Elanga|Newcastle|2|3\nS|Bazoumana Touré|Newcastle|1|4\nS|Harvey Barnes|Newcastle|1|4\nS|Mohamed Belloumi|Hull City|2|4\nR|2026-08-22|Hull City AFC|Manchester United FC|2|0\nR|2026-08-23|Newcastle United FC|Liverpool FC|2|2\nR|2026-08-29|Tottenham Hotspur FC|Newcastle United FC|0|2\nR|2026-08-29|Coventry City FC|Hull City AFC|0|1\nR|2026-09-05|Newcastle United FC|AFC Bournemouth|2|2\nR|2026-09-05|Hull City AFC|Aston Villa FC|0|0\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-14|Leeds United FC|Newcastle United FC|4|1\nHR|2016-11-29|Hull City|Newcastle United|1|1\nHR|2015-01-31|Hull City|Newcastle United|0|3\nHR|2014-09-20|Newcastle United|Hull City|2|2\nHR|2014-03-01|Hull City|Newcastle United|1|4\nHR|2013-09-21|Newcastle United|Hull City|2|3"
+  },
+  "af-1570393": {
+    "summary": [
+      {
+        "title": "Athletic Club - Alavés, LaLiga",
+        "bullets": [
+          "Partido de LaLiga el 19 de septiembre de 2026 a las 14:15 UTC en San Mamés Stadium, aún sin comenzar.",
+          "Clima previsto: 25 grados y viento de 9, condiciones normales para jugar en Bilbao.",
+          "Athletic llega 9º en la tabla con 5 victorias, 7 empates y 7 derrotas según el dato de clasificación."
+        ]
+      },
+      {
+        "title": "Lectura de los modelos",
+        "bullets": [
+          "Poisson GoatLab: victoria local 43.9%, empate 28.6%, victoria visitante 27.5%; más de 2.5 goles 47.4% y ambos marcan 52.7%. Goles esperados 1.46-1.11.",
+          "CatBoost Bzzoiro: victoria local 57.2%, empate 24.4%, victoria visitante 18.4%; más de 2.5 goles 49.6%, ambos marcan 49.9% y resultado más probable 1-1 con 55.1%.",
+          "Ambos modelos coinciden en un partido ajustado con ligero favoritismo local y goles esperados idénticos, 1.46 contra 1.11."
+        ]
+      },
+      {
+        "title": "Forma reciente",
+        "bullets": [
+          "Athletic: derrota 1-3 con Sevilla, derrota 0-2 en Barcelona, victoria 2-0 en Celta, victoria 3-0 ante Atlético y empate 1-1 con Elche.",
+          "Alavés perdió 0-1 en casa contra Valencia el 15 de septiembre, su último partido registrado.",
+          "Athletic muestra alternancia de resultados pero con dos victorias contundentes en sus últimos cuatro compromisos."
+        ]
+      },
+      {
+        "title": "Historial y cara a cara",
+        "bullets": [
+          "Historial agregado: 31 partidos con 17 triunfos, 7 empates y 7 derrotas, promedio de 2.23 puntos por partido.",
+          "Últimos cinco duelos: 2-4 para Athletic en casa de Alavés, 0-1 para Alavés en San Mamés, 1-0 para Athletic, 1-1 fuera y 2-0 para Athletic.",
+          "Athletic domina el historial reciente con tres victorias, un empate y una derrota en los últimos cinco cruces."
+        ]
+      },
+      {
+        "title": "Goleadores",
+        "bullets": [
+          "Robert Navarro es el máximo referente ofensivo del Athletic con 2 goles en 5 partidos.",
+          "Aitor Paredes y Álex Berenguer han anotado 1 gol cada uno en 5 partidos.",
+          "No hay datos de goleadores del Alavés en el bloque recibido."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Tabla incompleta",
+        "detail": "La fila de clasificación aporta posición 9, 5 victorias, 7 empates y 7 derrotas, pero el último campo (6) no tiene etiqueta clara y no se interpreta."
+      },
+      {
+        "label": "Clima parcial",
+        "detail": "El bloque de clima tiene un campo vacío entre temperatura y viento, por lo que solo se reportan 25 grados, viento 9 y sede San Mamés."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No se recibió bloque de bajas confirmadas ni alineaciones, así que no se puede comentar el estado de plantillas."
+      },
+      {
+        "label": "Historial sin etiqueta",
+        "detail": "La fila de historial agregado (31-17-7-7-2.23) no especifica de qué equipo o periodo se trata; se presenta tal cual."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los dos modelos divergen de forma clara en el 1X2: Poisson da 43.9% al Athletic y 27.5% al Alavés, mientras CatBoost sube al local a 57.2% y baja al visitante a 18.4%, una brecha de más de 13 puntos en la victoria local. Además, el marcador más probable de CatBoost (1-1 con 55.1%) convive de forma p"
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:03:30.183Z",
+    "inputKey": "v2|M|af-1570393|Athletic Club|Alaves|laliga|2026-09-19T14:15:00+00:0|NS\nP|1.46|1.11|0.439|0.286|0.275|0.474|0.527\nB|0.572|0.244|0.184|1.46|1.11|0.496|0.499|1-1|0.551\nH|31|17|7|7|2.23\nW|25||9|San Mamés Stadium\nT|9|Athletic Club|5|7|7|6\nS|Robert Navarro|Athletic Club|2|5\nS|Aitor Paredes|Athletic Club|1|5\nS|Álex Berenguer|Athletic Club|1|5\nR|2026-08-22|Athletic Club|Sevilla FC|1|3\nR|2026-08-27|FC Barcelona|Athletic Club|2|0\nR|2026-08-30|RC Celta de Vigo|Athletic Club|0|2\nR|2026-09-05|Athletic Club|Club Atlético de Madrid|3|0\nR|2026-09-12|Athletic Club|Elche CF|1|1\nR|2026-09-15|Alaves|Valencia|0|1\nHR|2026-05-02|Deportivo Alavés|Athletic Club|2|4\nHR|2025-09-13|Athletic Club|Deportivo Alavés|0|1\nHR|2025-05-11|Athletic Club|Deportivo Alavés|1|0\nHR|2024-12-15|Deportivo Alavés|Athletic Club|1|1\nHR|2024-03-16|Athletic Club|Deportivo Alavés|2|0"
+  },
+  "af-1557415": {
+    "summary": [
+      {
+        "title": "El partido: Forest recibe a un Coventry en crisis",
+        "bullets": [
+          "Nottingham Forest vs Coventry, Premier League, sábado 19 de septiembre de 2026, 16:30 UTC en City Ground. Aún sin jugar (NS).",
+          "Clima: lluvia y 12 grados, típica tarde inglesa que puede pesar en el ritmo del juego.",
+          "Duelo entre el 11º clasificado y el colista: el contexto ya marca una diferencia clara de nivel en la tabla."
+        ]
+      },
+      {
+        "title": "Modelos: Poisson y CatBoost no terminan de coincidir",
+        "bullets": [
+          "Poisson GoatLab da 0.762 a la victoria local, 0.18 al empate y 0.058 a la visita, con 0.486 para más de 2.5 goles y 0.333 para que ambos marquen.",
+          "CatBoost Bzzoiro es más comedido: 0.588 local, 0.233 empate y 0.178 visitante, con 0.538 en más de 2.5 y 0.533 en que marquen ambos.",
+          "Bzzoiro señala el 1-1 como marcador más probable (0.437), con goles esperados de 1.44 y 1.49, bastante más repartidos que los 2.16 y 0.46 del Poisson."
+        ]
+      },
+      {
+        "title": "Tabla y forma: dos realidades opuestas",
+        "bullets": [
+          "Forest es 11º con 4 victorias, 5 empates y 4 derrotas; Coventry es 20º con 4 triunfos, 0 empates y 10 derrotas.",
+          "Forest llega alternando: derrota 0-1 con Leeds, empates 2-2 en Anfield y 0-0 con Tottenham, y victoria 2-1 en casa del Aston Villa en la última jornada.",
+          "Coventry encadena malos resultados: caídas ante Arsenal (0-3), Hull (0-1), Manchester City (0-1) y una goleada 0-5 en casa contra Brighton."
+        ]
+      },
+      {
+        "title": "Historial: el City Ground pesa",
+        "bullets": [
+          "En 24 enfrentamientos previos: 13 victorias de Forest, 5 empates y 6 de Coventry, con media de 2.04 goles por partido.",
+          "Los últimos cinco cruces son claramente favorables a Forest: 2-0, 2-1, 2-0 a su favor y una victoria 2-1 a domicilio en Coventry; solo cayó 2-1 en 2021."
+        ]
+      },
+      {
+        "title": "Goleadores: reparto discreto en Forest",
+        "bullets": [
+          "Dan Ndoye e Igor Jesus lideran internamente con 1 gol en 4 partidos cada uno.",
+          "Ningún referente destacado en cifra goleadora, coherente con un equipo que suma pocos goles en sus últimos compromisos."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin mercado",
+        "detail": "No hay bloque M2 en el input, por lo que no se puede ofrecer lectura del mercado para este partido."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No consta bloque L: no hay información de lesionados ni sancionados confirmados."
+      },
+      {
+        "label": "Dato duplicado",
+        "detail": "El resultado Coventry 0-5 Brighton del 13/09 aparece dos veces en el bloque R; se ha contado una sola vez."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "El bloque W tiene un campo vacío además de lluvia y 12 grados; falta un dato de contexto de sede."
+      },
+      {
+        "label": "Goleadores corto",
+        "detail": "Solo se listan dos goleadores de Forest; no hay datos de artilleros de Coventry."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Desviación notable entre modelos: Poisson da 0.762 al triunfo local frente a 0.588 de CatBoost, y en la visita 0.058 contra 0.178. Dada la forma irregular de Forest (una victoria en sus últimos cuatro) y el 1-1 como marcador más probable según Bzzoiro, la estimación del Poisson parece optimista resp"
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:04:10.077Z",
+    "inputKey": "v2|M|af-1557415|Nottingham Forest|Coventry|premier|2026-09-19T16:30:00+00:0|NS\nP|2.16|0.46|0.762|0.18|0.058|0.486|0.333\nB|0.588|0.233|0.178|1.44|1.49|0.538|0.533|1-1|0.437\nH|24|13|5|6|2.04\nW||rain|12|City Ground\nT|11|Nottingham Forest|4|5|4|4\nT|20|Coventry|4|0|0|10\nS|Dan Ndoye|Nottingham Forest|1|4\nS|Igor Jesus|Nottingham Forest|1|4\nR|2026-08-21|Arsenal FC|Coventry City FC|3|0\nR|2026-08-22|Nottingham Forest FC|Leeds United FC|0|1\nR|2026-08-29|Liverpool FC|Nottingham Forest FC|2|2\nR|2026-08-29|Coventry City FC|Hull City AFC|0|1\nR|2026-09-05|Nottingham Forest FC|Tottenham Hotspur FC|0|0\nR|2026-09-05|Manchester City FC|Coventry City FC|1|0\nR|2026-09-12|Aston Villa FC|Nottingham Forest FC|1|2\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-13|Coventry|Brighton|0|5\nHR|2022-04-06|Nottingham Forest|Coventry City|2|0\nHR|2021-08-08|Coventry City|Nottingham Forest|2|1\nHR|2021-02-02|Coventry City|Nottingham Forest|1|2\nHR|2020-11-04|Nottingham Forest|Coventry City|2|1\nHR|2012-02-18|Nottingham Forest|Coventry City|2|0"
+  },
+  "af-1570395": {
+    "summary": [
+      {
+        "title": "Celta Vigo vs Racing Santander: contexto del partido",
+        "bullets": [
+          "Partido de LaLiga programado para el 19 de septiembre de 2026 a las 16:30 UTC, aún sin comenzar.",
+          "Se juega en el Municipal de Balaídos, con el Celta como local.",
+          "Condiciones registradas: 25 grados y dato de viento de 6 en la sede."
+        ]
+      },
+      {
+        "title": "Modelo Poisson GoatLab: partido muy igualado",
+        "bullets": [
+          "Goles esperados idénticos para ambos equipos: 1.45 por lado.",
+          "Probabilidades 1X2: 36.5% victoria del Celta, 27.1% empate y 36.5% victoria del Racing.",
+          "Mercado de goles según el modelo: 55.4% para más de 2.5 goles y 59.7% para que ambos equipos marquen."
+        ]
+      },
+      {
+        "title": "Forma reciente y referencia de goleadores",
+        "bullets": [
+          "Celta: empate 1-1 ante Málaga el 13 de septiembre y derrota 1-0 en su visita a Omonia Nicosia el 16 de septiembre.",
+          "Racing: derrota contundente 7-2 frente al Barcelona el 16 de septiembre en su último antecedente.",
+          "Carl Starfelt aparece como referente ofensivo del Celta con 1 gol registrado."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin CatBoost",
+        "detail": "No hay datos del modelo B de CatBoost Bzzoiro, por lo que el análisis predictivo se limita al Poisson GoatLab."
+      },
+      {
+        "label": "Sin historial H2H",
+        "detail": "No se recibieron bloques H/HR de enfrentamientos directos entre ambos equipos."
+      },
+      {
+        "label": "Sin tabla ni bajas",
+        "detail": "No llegaron datos de clasificación (T) ni de bajas confirmadas (L) para ninguno de los dos equipos."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "El bloque W tiene un campo vacío y el valor 6 sin etiqueta clara, por lo que la lectura meteorológica es parcial."
+      },
+      {
+        "label": "Sin mercado M2",
+        "detail": "No se recibieron porcentajes interpretativos del mercado, así que no hay lectura de mercado que contrastar con el modelo."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:04:20.723Z",
+    "inputKey": "v2|M|af-1570395|Celta Vigo|Racing Santander|laliga|2026-09-19T16:30:00+00:0|NS\nP|1.45|1.45|0.365|0.271|0.365|0.554|0.597\nW|25||6|Municipal de Balaídos\nS|Carl Starfelt|Celta Vigo|1|6\nR|2026-09-13|Celta Vigo|Malaga|1|1\nR|2026-09-16|Omonia Nicosia|Celta Vigo|1|0\nR|2026-09-16|Barcelona|Racing Santander|7|2"
+  },
+  "af-1570400": {
+    "summary": [
+      {
+        "title": "Sevilla - Barcelona: domingo 19 de septiembre en la Pizjuán",
+        "bullets": [
+          "LaLiga, jornada del 19/09/2026 a las 19:00 UTC en el Estadio Ramón Sánchez-Pizjuán, partido aún sin empezar.",
+          "Cielo despejado y unos 10 grados: noche fresca y seca, sin factor clima relevante.",
+          "El Sevilla llega quinto con 13 puntos en 6 jornadas, 9 goles a favor y 6 en contra."
+        ]
+      },
+      {
+        "title": "Modelos en desacuerdo: Poisson tira local, Bzzoiro visitante",
+        "bullets": [
+          "Poisson GoatLab: 46,4% Sevilla, 25% empate, 28,5% Barcelona, con 1,8 xG local y 1,38 visitante.",
+          "CatBoost Bzzoiro: 78,6% Barcelona, 13% empate, solo 8,3% Sevilla, con 1,1-2,08 de goles esperados.",
+          "Bzzoiro señala el 1-2 como marcador más probable (47,9%), con over 2,5 en 73% y ambos marcan en 56,5%.",
+          "Poisson da 61,6% al over 2,5 y 63,5% a que ambos equipos marquen."
+        ]
+      },
+      {
+        "title": "Historial: el Barça domina, pero la Pizjuán avisa",
+        "bullets": [
+          "En 111 enfrentamientos: 65 victorias del Barcelona, 25 empates y 21 del Sevilla, con 3,01 goles de media.",
+          "Últimos cinco cruces: 5-2 y 5-1 para el Barça, 4-1 y 1-2 para el Sevilla en casa, y un 1-4 culé en 2025.",
+          "El Sevilla ha ganado dos de los últimos tres como local ante el Barcelona según el historial reciente."
+        ]
+      },
+      {
+        "title": "Forma y goleadores: ambos llegan enchufados",
+        "bullets": [
+          "Sevilla: triunfos ante Athletic (3-1), Valencia (1-0) y Deportivo (1-0), empate en Espanyol y derrota con el Atlético (1-3).",
+          "Barcelona: goleadas en Levante (4-2) y en casa ante Racing (7-2) en sus últimos compromisos de liga.",
+          "Miguel Sierra es el referente sevillista con 2 goles en 6 jornadas; Ejuke suma 1."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin mercado",
+        "detail": "No hay bloque M2 en el input, por lo que no se incluye lectura del mercado en porcentajes."
+      },
+      {
+        "label": "Ruido en forma",
+        "detail": "Cuatro filas de forma corresponden a Barcelona SC de Ecuador (Boca, Cruzeiro), no al FC Barcelona; se excluyen del análisis."
+      },
+      {
+        "label": "Dato B ambiguo",
+        "detail": "El 47,9% se interpreta como probabilidad asociada al marcador 1-2 según el orden de campos del bloque B."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Divergencia clara entre modelos: Poisson da favorito al Sevilla (46,4%) mientras Bzzoiro da 78,6% al Barcelona y solo 8,3% local. La brecha de 38 puntos en el 1 sugiere revisar supuestos de localía o xG antes de publicar."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:04:35.110Z",
+    "inputKey": "v2|M|af-1570400|Sevilla|Barcelona|laliga|2026-09-19T19:00:00+00:0|NS\nP|1.8|1.38|0.464|0.25|0.285|0.616|0.635\nB|0.083|0.13|0.786|1.1|2.08|0.73|0.565|1-2|0.479\nH|111|21|25|65|3.01\nW||clear|10|Estadio Ramón Sánchez-Pizjuán\nT|5|Sevilla|6|13|9|6\nS|Miguel Sierra|Sevilla|2|6\nS|Chidera Ejuke|Sevilla|1|6\nR|2026-04-30|Barcelona SC|CD Universidad Católica|1|2\nR|2026-05-06|Barcelona SC|CA Boca Juniors|1|0\nR|2026-05-22|CD Universidad Católica|Barcelona SC|2|0\nR|2026-05-29|Cruzeiro EC|Barcelona SC|4|0\nR|2026-08-22|Athletic Club|Sevilla FC|1|3\nR|2026-08-29|Sevilla FC|Club Atlético de Madrid|1|3\nR|2026-09-06|RCD Espanyol de Barcelona|Sevilla FC|1|1\nR|2026-09-11|Sevilla FC|Valencia CF|1|0\nR|2026-09-13|Levante|Barcelona|2|4\nR|2026-09-16|RC Deportivo La Coruña|Sevilla FC|0|1\nR|2026-09-16|Deportivo La Coruna|Sevilla|0|1\nR|2026-09-16|Barcelona|Racing Santander|7|2\nHR|2026-03-15|FC Barcelona|Sevilla|5|2\nHR|2025-10-05|Sevilla|FC Barcelona|4|1\nHR|2025-02-09|Sevilla|FC Barcelona|1|4\nHR|2024-10-20|FC Barcelona|Sevilla|5|1\nHR|2024-05-26|Sevilla|FC Barcelona|1|2"
+  },
+  "fd-564695": {
+    "summary": [
+      {
+        "title": "Deportivo – Betis: duelo de forma alta",
+        "bullets": [
+          "Partido de LaLiga el 20 de septiembre de 2026, 16:30 UTC, en Riazor, aún sin resultado (NS).",
+          "El Deportivo llega invicto en liga según su forma reciente: tres empates y dos victorias en sus últimos seis compromisos, con la única derrota ante el Sevilla en el derbi.",
+          "El Betis encadena cuatro victorias seguidas tras caer 2-5 ante el Levante en la jornada inicial, incluyendo triunfos ante Real Madrid, Villarreal, Lille y Getafe.",
+          "Ambos equipos llegan en zona alta de la tabla, con el Betis tercero y el Deportivo séptimo según los datos de clasificación."
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Modelo Poisson",
+        "detail": "Los porcentajes del bloque P no vienen etiquetados por campo; la lectura de favoritismo local y mercados de goles es interpretativa y puede no coincidir con el mapeo original."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "El bloque W solo aporta 27 grados y un valor de 6 sin unidades ni condición definida; no se puede describir lluvia, viento o sede con certeza."
+      },
+      {
+        "label": "Sin bajas ni mercado",
+        "detail": "No hay bloques L ni M2 en el input, por lo que no se pueden reportar lesionados ni lectura del mercado."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Inconsistencias detectadas: la tabla (T) asigna al Betis 6 puntos, pero sus resultados en R suman 12 (4 victorias y 1 derrota en liga); el Deportivo figura con 7 puntos cuando sus resultados suman 9 (2 victorias y 3 empates). Además, la fila del 17/09 Betis-Getafe aparece duplicada y los campos del "
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:12:05.067Z",
+    "inputKey": "v2|M|fd-564695|RC Deportivo La Coruña|Real Betis Balompié|laliga|2026-09-20T16:30:00Z|NS\nP|1.53|1.303|0.415|0.273|0.313|0.538|0.582\nW|27||6|\nT|7|RC Deportivo La Coruña|6|9|9|7\nT|3|Real Betis Balompié|6|15|8|6\nS|Rodrigo Riquelme|Real Betis Balompié|2|6\nS|Abdessamad Ezzalzouli|Real Betis Balompié|1|3\nS|Cucho Hernández|Real Betis Balompié|1|6\nR|2026-08-17|RC Deportivo La Coruña|Elche CF|1|1\nR|2026-08-24|Málaga CF|RC Deportivo La Coruña|1|1\nR|2026-08-29|Levante UD|Real Betis Balompié|5|2\nR|2026-08-30|RC Deportivo La Coruña|Valencia CF|3|1\nR|2026-09-04|Real Betis Balompié|Real Madrid CF|1|0\nR|2026-09-05|Villarreal CF|RC Deportivo La Coruña|2|3\nR|2026-09-08|Lille OSC|Real Betis Balompié|2|3\nR|2026-09-13|Getafe CF|RC Deportivo La Coruña|1|1\nR|2026-09-14|Villarreal CF|Real Betis Balompié|1|2\nR|2026-09-16|RC Deportivo La Coruña|Sevilla FC|0|1\nR|2026-09-17|Real Betis Balompié|Getafe CF|1|0\nR|2026-09-17|Real Betis|Getafe|1|0"
+  },
+  "fd-564689": {
+    "summary": [
+      {
+        "title": "Valencia CF vs Real Sociedad: duelo de necesidad",
+        "bullets": [
+          "Partido de LaLiga el 20 de septiembre de 2026 a las 19:00 UTC, aún sin resultado (NS).",
+          "La Real Sociedad llega 12ª con 7 puntos (2V-1E-4D, 6 GF/11 GC); el Valencia es 18º con 4 puntos (1V-1E-4D, 6 GF/10 GC).",
+          "Ambos vienen de rachas irregulares: el Valencia perdió tres de sus últimos cuatro, la Real encadena dos derrotas seguidas."
+        ],
+        "order": 1
+      },
+      {
+        "title": "Lectura de modelos: P y B muy alineados",
+        "bullets": [
+          "Poisson GoatLab (P): victoria local 36%, empate 29,7%, victoria visitante 34,4%.",
+          "CatBoost Bzzoiro (B): 34,9% local, 28% empate, 37,1% visitante.",
+          "Ambos modelos ven un partido muy parejo, con leve ventaja a la Real Sociedad en B y casi empate técnico en P.",
+          "B marca marcador más probable 1-1 (0,495) y línea de goles total 1,5 con over a 0,546."
+        ],
+        "order": 2
+      },
+      {
+        "title": "Historial reciente: ventaja visitante",
+        "bullets": [
+          "Últimos cinco cruces: la Real ganó tres (3-0, 1-0, 3-4), un empate 1-1 y una victoria valencianista 1-0.",
+          "En Mestalla, el Valencia no gana a la Real desde enero de 2025 (1-0); el último duelo allí fue empate 1-1.",
+          "Promedio de 2,48 goles por partido en el historial reciente."
+        ],
+        "order": 3
+      },
+      {
+        "title": "Forma reciente: dos equipos en crisis de resultados",
+        "bullets": [
+          "Valencia: derrotas ante Betis (0-1), Deportivo (1-3), Barcelona (0-5) y Sevilla (0-1); única victoria en Alavés (1-0).",
+          "Real Sociedad: victoria ante Espanyol (2-1) y Elche (3-2), empate con Celta (0-0), y derrotas ante Atlético (0-3) y Bournemouth (1-2).",
+          "Ninguno de los dos llega con dinámica clara de victorias; el Valencia encajó 10 goles en sus últimas cuatro derrotas."
+        ],
+        "order": 4
+      },
+      {
+        "title": "Tabla, goleadores y condiciones",
+        "bullets": [
+          "Clasificación: Valencia 18º (4 pts, diferencia -4), Real Sociedad 12ª (7 pts, diferencia -5).",
+          "Goleadores: Luka Sučić lidera a la Real con 2 goles en 6 partidos; Ander Barrenetxea suma 1 en 6.",
+          "Clima/sede sin datos confirmados (unknown); no constan bajas confirmadas ni lectura de mercado M2 en el input."
+        ],
+        "order": 5
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Clima sin datos",
+        "detail": "El bloque W no aporta condiciones meteorológicas ni estado del campo; solo indica sede sin detalles."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No hay bloque L en el input, por lo que no se pueden confirmar lesionados ni sancionados."
+      },
+      {
+        "label": "Sin lectura de mercado",
+        "detail": "No aparece bloque M2, así que no hay porcentajes interpretativos de mercado que contrastar con P y B."
+      },
+      {
+        "label": "Filas duplicadas",
+        "detail": "El input repite algunos resultados de forma reciente y de historial (Atlético 0-3 y Alavés 0-1); se han contado una sola vez."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los porcentajes de P y B son consistentes entre sí (diferencias menores a 2 puntos en cada resultado) y coherentes con la tabla y la forma reciente: partido cerrado entre dos equipos en mitad-baja de tabla. No se detectan desviaciones claras."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-18T12:12:55.813Z",
+    "inputKey": "v2|M|fd-564689|Valencia CF|Real Sociedad de Fútbol|laliga|2026-09-20T19:00:00Z|NS\nP|1.26|1.227|0.36|0.297|0.344|0.453|0.519\nB|0.349|0.28|0.371|1.5|1.24|0.496|0.546|1-1|0.495\nH|106|39|28|39|2.48\nW||unknown|8|\nT|18|Valencia CF|6|4|2|10\nT|12|Real Sociedad de Fútbol|6|7|6|11\nS|Luka Sučić|Real Sociedad de Fútbol|2|6\nS|Ander Barrenetxea|Real Sociedad de Fútbol|1|6\nR|2026-08-25|Valencia CF|Real Betis Balompié|0|1\nR|2026-08-29|Real Sociedad de Fútbol|RCD Espanyol de Barcelona|2|1\nR|2026-08-30|RC Deportivo La Coruña|Valencia CF|3|1\nR|2026-09-03|Real Sociedad de Fútbol|RC Celta de Vigo|0|0\nR|2026-09-06|Valencia CF|FC Barcelona|0|5\nR|2026-09-07|Elche CF|Real Sociedad de Fútbol|2|3\nR|2026-09-11|Sevilla FC|Valencia CF|1|0\nR|2026-09-13|Real Sociedad de Fútbol|Club Atlético de Madrid|0|3\nR|2026-09-13|Real Sociedad|Atletico Madrid|0|3\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-15|Alaves|Valencia|0|1\nR|2026-09-17|Real Sociedad|Bournemouth|1|2\nHR|2026-05-17|Real Sociedad|Valencia|3|4\nHR|2025-08-16|Valencia|Real Sociedad|1|1\nHR|2025-01-19|Valencia|Real Sociedad|1|0\nHR|2024-09-28|Real Sociedad|Valencia|3|0\nHR|2024-05-16|Real Sociedad|Valencia|1|0"
   }
 }
