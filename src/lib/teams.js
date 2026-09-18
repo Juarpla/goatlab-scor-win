@@ -21,6 +21,30 @@ export function sameClub(a, b) {
   if (!left || !right) return false;
   return left === right || left.startsWith(right) || right.startsWith(left);
 }
+/**
+ * Diccionario canónico: clave normalize(nombre) → {display, af, fd, bzzoiro, aliases}.
+ * El pipeline resuelve por ID antes que por nombre; el nombre queda como último recurso.
+ * Fuente: team-ids.json (Bzzoiro) + providerId de fixtures (af-/fd-) + standings.
+ */
+export function resolveCanonical(catalog, name) {
+  const key = normalize(name);
+  if (!key) return null;
+  const teams = catalog?.teams ?? catalog ?? {};
+  if (teams[key]) return { key, ...teams[key] };
+  for (const [k, entry] of Object.entries(teams)) {
+    if (entry?.name && sameClub(entry.name, name)) return { key: k, ...entry };
+    if (Array.isArray(entry?.aliases) && entry.aliases.some(a => sameClub(a, name))) return { key: k, ...entry };
+  }
+  return null;
+}
+export function providerTeamId(catalog, name, provider) {
+  const hit = resolveCanonical(catalog, name);
+  if (!hit) return null;
+  if (provider === 'bzzoiro') return hit.id ?? hit.bzzoiro?.id ?? hit.bzzoiro ?? null;
+  if (provider === 'af') return hit.af?.id ?? (typeof hit.af === 'number' ? hit.af : null);
+  if (provider === 'fd') return hit.fd?.id ?? (typeof hit.fd === 'number' ? hit.fd : null);
+  return hit.id ?? null;
+}
 export function teamShort(name) {
   const key = normalize(name);
   if (SHORTS[key]) return SHORTS[key];

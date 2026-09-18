@@ -18,7 +18,11 @@ interface Props {
 const { discipline, setPieces, weatherVenue, availability } = Astro.props;
 const num = (value: number | null | undefined, digits = 1) => value == null ? '—' : Number(value).toFixed(digits);
 const hasAvailability = Boolean(availability && (availability.unavailablePlayers?.length || availability.status));
-const hasModels = Boolean((discipline && discipline.source) || (setPieces && setPieces.source));
+const expectedCards = discipline?.expectedTotal ?? null;
+const expectedCorners = setPieces?.expectedTotal ?? null;
+const cardsSource = discipline?.source ?? null;
+const cornersSource = setPieces?.source ?? null;
+const hasModels = Boolean(expectedCards != null || expectedCorners != null || (discipline && discipline.source) || (setPieces && setPieces.source));
 
 const condition = weatherVenue?.weather?.condition;
 const validCondition = condition && !['unknown', 'desconocido', 'n/a'].includes(String(condition).toLowerCase()) ? condition : null;
@@ -46,8 +50,14 @@ const absentRows = availability?.unavailablePlayers ?? [];
         {hasAvailability && absentRows.length > 0 && <li><Icon name="star" size={16} /><span>Bajas confirmadas</span><strong>{absentRows.length}</strong></li>}
       </ul>
     )}
+    {(expectedCards != null || expectedCorners != null) && (
+      <ul class="prob-chips">
+        {expectedCards != null && <li><Icon name="star" size={16} /><span>Amarillas esperadas</span><strong>~{num(expectedCards)}</strong><small>Procedencia: {cardsSource ?? 'Estimación'}</small></li>}
+        {expectedCorners != null && <li><Icon name="bolt" size={16} /><span>Córners esperados</span><strong>~{num(expectedCorners)}</strong><small>Procedencia: {cornersSource ?? 'Estimación'}</small></li>}
+      </ul>
+    )}
     {!hasModels && (
-      <p class="chapter-note">Tarjetas y córners propios en preparación: sin modelo evaluado aún, no se publican porcentajes.</p>
+      <p class="chapter-note">Tarjetas y córners en estimación: sin modelo evaluado aún, se muestran como esperados con su procedencia.</p>
     )}
   </div>
 )}

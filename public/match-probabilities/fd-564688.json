@@ -4,7 +4,7 @@
   "away": "Real Madrid CF",
   "competition": "laliga",
   "kickoff": "2026-09-20T14:15:00Z",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T06:21:41.421Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
@@ -62,7 +62,8 @@
     "venue": {
       "city": "Madrid",
       "tz": "Europe/Madrid"
-    }
+    },
+    "lambdaSource": "Poisson"
   },
   "markets": {
     "oneX2": {
@@ -278,7 +279,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -293,17 +294,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 4.1
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 10.4
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

@@ -129,6 +129,7 @@ export function scorerMarkets(shares, teamLambda, lambdaTotal) {
 /**
  * Mercados completos de un encuentro a partir de los datos ya horneados.
  * Cada grupo declara `enough` para que la interfaz omita lo débil.
+ * Null-honesto: sin 3 resultados previos por lado no hay Poisson local.
  */
 export function computeMatchMarkets({ match, results = [], scorers = null, standings = null } = {}) {
   const lambdas = estimateLambdas(results, match.home, match.away);
@@ -156,7 +157,85 @@ export function computeMatchMarkets({ match, results = [], scorers = null, stand
       away: teamRates(results, match.away)?.played ?? 0,
     },
     hasScorers: Boolean(scorersMarkets.home?.length || scorersMarkets.away?.length),
+    lambdaSource: 'Poisson',
   };
+}
+
+/* ---- Cascada siempre-emite (tolerancia cero en las 5 secciones) ---- */
+
+const LEAGUE_AVG_LAMBDA = { home: 1.45, away: 1.45 };
+const clipLambda = v => Math.min(4.5, Math.max(0.15, Math.round(v * 1000) / 1000));
+
+/**
+ * λ con procedencia declarada: Poisson local → xG Bzzoiro → media de liga.
+ * Nunca null cuando hay nombres de equipos; el caller etiqueta la fuente.
+ */
+export function resolveLambdas({ match, results = [] } = {}) {
+  const local = estimateLambdas(results, match?.home, match?.away);
+  if (local) return { ...local, source: 'Poisson' };
+  const xg = match?.modelPrediction?.xg;
+  if (Number.isFinite(xg?.home) && Number.isFinite(xg?.away) && xg.home > 0 && xg.away > 0) {
+    return { home: clipLambda(xg.home), away: clipLambda(xg.away), source: 'Bzzoiro-xG' };
+  }
+  return { ...LEAGUE_AVG_LAMBDA, source: 'Media-liga' };
+}
+
+/** Mismo cálculo que computeMatchMarkets pero con λ de la cascada: nunca null por falta de muestra. */
+export function resolveMatchMarkets({ match, results = [], scorers = null, standings = null } = {}) {
+  const direct = computeMatchMarkets({ match, results, scorers, standings });
+  if (direct) return direct;
+  if (!match?.home || !match?.away) return null;
+  const lambdas = resolveLambdas({ match, results });
+  const matrix = scoreMatrix(lambdas.home, lambdas.away);
+  const markets = matrixMarkets(matrix);
+  const race = firstGoalRace(lambdas.home, lambdas.away);
+  if (!markets || !race) return null;
+  return {
+    method: lambdas.source === 'Poisson' ? 'poisson-dixoncoles-v1' : 'poisson-fallback-v1',
+    lambdas: { home: lambdas.home, away: lambdas.away },
+    lambdaSource: lambdas.source,
+    markets,
+    firstGoal: race,
+    scorers: { home: null, away: null },
+    sample: { home: 0, away: 0 },
+    hasScorers: false,
+  };
+}
+
+/**
+ * Disciplina estimada: ritmos propios cuando hay muestra; si no,
+ * el mercado Over 3.5 amarillas se traduce a "se esperan ~X".
+ * Nunca inventa %: sin insumo devuelve el stub null-honesto.
+ */
+export function buildDisciplineEstimate({ statsForecast = null, marketCards = null, scorers = null, historyRows = 0 } = {}) {
+  const base = buildDisciplineStub({ scorers, historyRows });
+  const yh = statsForecast?.home?.yellowCards;
+  const ya = statsForecast?.away?.yellowCards;
+  if (yh != null && ya != null) {
+    const total = Math.round((yh + ya) * 10) / 10;
+    return { ...base, method: 'stats-ratings-v1', expectedTotal: total, source: 'GoatLab' };
+  }
+  if (marketCards?.over35 != null) {
+    // Conversión interpretativa: a mayor % de pasar 3.5, mayor esperado (2.5–5.5).
+    const expected = Math.round((2.5 + marketCards.over35 * 3) * 10) / 10;
+    return { ...base, method: 'mercado-estimado-v1', expectedTotal: expected, over35: marketCards.over35, source: 'Mercado' };
+  }
+  return base;
+}
+
+/** Córners estimados con la misma regla: ritmos → mercado Over 9.5. */
+export function buildSetPiecesEstimate({ statsForecast = null, marketCorners = null, historyRows = 0 } = {}) {
+  const base = buildSetPiecesStub({ historyRows });
+  const ch = statsForecast?.home?.corners;
+  const ca = statsForecast?.away?.corners;
+  if (ch != null && ca != null) {
+    return { ...base, method: 'stats-ratings-v1', expectedTotal: Math.round((ch + ca) * 10) / 10, source: 'GoatLab' };
+  }
+  if (marketCorners?.over95 != null) {
+    const expected = Math.round((7 + marketCorners.over95 * 5) * 10) / 10;
+    return { ...base, method: 'mercado-estimado-v1', expectedTotal: expected, over95: marketCorners.over95, source: 'Mercado' };
+  }
+  return base;
 }
 
 function standingsRow(standings, competitionId, team) {

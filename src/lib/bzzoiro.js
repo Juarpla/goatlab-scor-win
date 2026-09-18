@@ -465,6 +465,48 @@ export async function fetchEventPrediction(eventId, env = {}, fetchImpl = fetch)
   return mapPrediction(await request(`${BASE}/events/${eventId}/prediction/`, env.BZZOIRO_API_TOKEN, fetchImpl));
 }
 
+/* ---- Lectura del mercado (consenso FT, sin casas ni cuotas en la vista) ---- */
+
+/**
+ * Consenso de cuotas tiempo completo (11 claves FT en plan free).
+ * Devuelve el payload crudo; la conversión a % vive en `src/lib/odds.js`.
+ * Null honesto ante cualquier forma irreconocible o fallo HTTP.
+ */
+export function mapOdds(data) {
+  if (!data || typeof data !== 'object') return null;
+  const odds = data.odds ?? data.consensus ?? data.markets ?? data;
+  if (!odds || typeof odds !== 'object') return null;
+  const pick = (...keys) => {
+    for (const k of keys) if (odds[k] != null) return odds[k];
+    return null;
+  };
+  const oneX2 = pick('match_result', 'oneX2', '1x2', 'fulltime_result', 'ft_result')
+    ?? ((odds.home ?? odds.draw ?? odds.away) ? { home: odds.home, draw: odds.draw, away: odds.away } : null);
+  const out = {
+    oneX2: oneX2 ?? null,
+    over25: pick('over_25', 'over25', 'total_25', 'ou_25') ?? null,
+    over25Odds: pick('over25_odds', 'ou25_odds') ?? null,
+    btts: pick('btts', 'both_teams_to_score', 'gg_ng') ?? null,
+    bttsOdds: pick('btts_odds', 'gg_ng_odds') ?? null,
+    cornersOver95: pick('corners_over_95', 'cornersOver95', 'over95_corners') ?? null,
+    source: 'Bzzoiro-odds',
+  };
+  if (!out.oneX2 && out.over25 == null && out.btts == null) return null;
+  return out;
+}
+export async function fetchEventOdds(eventId, env = {}, fetchImpl = fetch) {
+  if (eventId == null || !env.BZZOIRO_API_TOKEN) return null;
+  try {
+    return mapOdds(await request(`${BASE}/events/${eventId}/odds/`, env.BZZOIRO_API_TOKEN, fetchImpl));
+  } catch { return null; }
+}
+export async function fetchOddsComparison(eventId, env = {}, fetchImpl = fetch) {
+  if (eventId == null || !env.BZZOIRO_API_TOKEN) return null;
+  try {
+    return mapOdds(await request(`${BASE}/odds/comparison/?event_id=${encodeURIComponent(eventId)}`, env.BZZOIRO_API_TOKEN, fetchImpl));
+  } catch { return null; }
+}
+
 /* ---- Resolución de ligas e ids de equipo ---- */
 
 /** Distinctive token sets per competition; exclusions keep second divisions and women's leagues out. */

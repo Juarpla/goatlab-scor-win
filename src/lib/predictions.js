@@ -118,12 +118,14 @@ function signalDistribution(tilt, base) {
  * Cada insumo declara su peso en el digest; lo ausente aporta 0 y se dice. Los factores
  * cualitativos (sede, ausencias) no mueven números: solo acompañan la lectura.
  */
-export function ensemble({ results = [], history = [], h2h = null, catboost = null, home, away, homeForm = null, awayForm = null, unavailable = null } = {}) {
+export function ensemble({ results = [], history = [], h2h = null, catboost = null, market = null, home, away, homeForm = null, awayForm = null, unavailable = null } = {}) {
   if (!home || !away) return null;
   const lambdas = estimateLambdas(results, home, away);
   const poisson = lambdas ? predictGoals(lambdas.home, lambdas.away) : null;
   const cbRaw = catboost?.oneX2;
   const cb = cbRaw && cbRaw.home != null && cbRaw.draw != null && cbRaw.away != null ? normalize1x2(cbRaw) : null;
+  const mkRaw = market?.oneX2;
+  const mk = mkRaw && mkRaw.home != null && mkRaw.draw != null && mkRaw.away != null ? normalize1x2(mkRaw) : null;
   const signals = [
     { label: 'Racha y forma', tilt: formTilt(homeForm, awayForm), weight: 0.45 },
     { label: 'Índice de rendimiento', tilt: performanceIndex(history, home, away).advantage, weight: 0.35 },
@@ -133,20 +135,32 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
   const activeWeight = active.reduce((sum, signal) => sum + signal.weight, 0);
   const parts = [];
   const inputs = [];
+  // Con mercado: 0.40 CatBoost + 0.25 Poisson + 0.20 Mercado + 0.15 señales.
+  // Sin mercado: reparto histórico 0.5 / 0.3-0.8 / 0.2 (tests y metodología).
+  const wCb = mk ? 0.4 : 0.5;
+  const wPoisson = mk ? 0.25 : cb ? 0.3 : 0.8;
+  const wMarket = mk ? 0.2 : 0;
+  const wSignals = mk ? 0.15 : 0.2;
   if (cb) {
-    parts.push({ weight: 0.5, dist: cb });
-    inputs.push({ label: 'CatBoost (Bzzoiro)', weight: 0.5, detail: `confianza del proveedor ${catboost.confidence ?? '—'}` });
+    parts.push({ weight: wCb, dist: cb });
+    inputs.push({ label: 'CatBoost (Bzzoiro)', weight: wCb, detail: `confianza del proveedor ${catboost.confidence ?? '—'}` });
   } else {
     inputs.push({ label: 'CatBoost (Bzzoiro)', weight: 0, detail: 'sin captura del proveedor para este encuentro' });
   }
   if (poisson) {
-    parts.push({ weight: cb ? 0.3 : 0.8, dist: { home: poisson.homeWin, draw: poisson.draw, away: poisson.awayWin } });
-    inputs.push({ label: 'Poisson (GoatLab)', weight: cb ? 0.3 : 0.8, detail: `λ ${lambdas.home} – ${lambdas.away} (tasas de goles recientes)` });
+    parts.push({ weight: wPoisson, dist: { home: poisson.homeWin, draw: poisson.draw, away: poisson.awayWin } });
+    inputs.push({ label: 'Poisson (GoatLab)', weight: wPoisson, detail: `λ ${lambdas.home} – ${lambdas.away} (tasas de goles recientes)` });
   } else {
     inputs.push({ label: 'Poisson (GoatLab)', weight: 0, detail: 'sin muestra suficiente de ambos equipos' });
   }
+  if (mk) {
+    parts.push({ weight: wMarket, dist: mk });
+    inputs.push({ label: 'Mercado (consenso)', weight: wMarket, detail: 'lectura del mercado en porcentajes, sin cuotas ni casas' });
+  } else {
+    inputs.push({ label: 'Mercado (consenso)', weight: 0, detail: 'sin lectura del mercado para este encuentro' });
+  }
   for (const signal of active) {
-    const weight = 0.2 * signal.weight / activeWeight;
+    const weight = wSignals * signal.weight / activeWeight;
     parts.push({ weight, dist: signalDistribution(signal.tilt, drawBase(results)) });
     inputs.push({ label: signal.label, weight: round3(weight), detail: `señal ${signal.tilt > 0 ? 'a favor del local' : signal.tilt < 0 ? 'a favor del visitante' : 'equilibrada'} (${signal.tilt})` });
   }
@@ -163,11 +177,15 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
     draw: round3(parts.reduce((sum, part) => sum + part.weight * part.dist.draw, 0) / totalWeight),
     away: round3(parts.reduce((sum, part) => sum + part.weight * part.dist.away, 0) / totalWeight),
   };
-  const market = (poissonValue, cbValue) => (poissonValue != null && cbValue != null ? round3(0.5 * poissonValue + 0.5 * cbValue) : poissonValue ?? cbValue ?? null);
+  const blend = (poissonValue, cbValue, mkValue) => {
+    const vals = [poissonValue, cbValue, mkValue].filter(v => v != null);
+    if (!vals.length) return null;
+    return round3(vals.reduce((a, b) => a + b, 0) / vals.length);
+  };
   return {
     oneX2,
-    over25: market(poisson?.threeOrMoreGoals ?? null, catboost?.over25 ?? null),
-    btts: market(poisson?.bothScore ?? null, catboost?.btts ?? null),
+    over25: blend(poisson?.threeOrMoreGoals ?? null, catboost?.over25 ?? null, market?.over25 ?? null),
+    btts: blend(poisson?.bothScore ?? null, catboost?.btts ?? null, market?.btts ?? null),
     inputs,
     method: 'goatlab-ensemble-v1',
   };

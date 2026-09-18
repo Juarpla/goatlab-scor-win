@@ -40,8 +40,10 @@ const topScorers = (scorers, competition, team, n = 3) =>
 /**
  * Construye el input telegráfico de un partido. Orden = prioridad de
  * truncado: lo esencial (M/P/B) primero; lo recortable (S/R/HR) al final.
+ * Bloques extra (nunca recortan lo esencial): W clima+sede, L bajas,
+ * M2 mercado en % ya normalizado. El LLM narra y audita, nunca calcula.
  */
-export function toCompactInput(match, markets = null, { results = [], standings = null, scorers = null } = {}) {
+export function toCompactInput(match, markets = null, { results = [], standings = null, scorers = null, weather = null, market = null } = {}) {
   const lines = [];
   lines.push(
     `M|${clean(match.id, 24)}|${clean(match.home)}|${clean(match.away)}|${clean(match.competition, 16)}|${clean(match.kickoff, 24)}|${clean(match.status, 8)}`,
@@ -61,6 +63,27 @@ export function toCompactInput(match, markets = null, { results = [], standings 
   if (match.h2h?.totalMatches) {
     const h = match.h2h;
     lines.push(`H|${h.totalMatches}|${h.homeWins ?? ''}|${h.draws ?? ''}|${h.awayWins ?? ''}|${num(h.avgTotalGoals, 2)}`);
+  }
+  // Clima + sede (sidecar weather.json + venue del catálogo).
+  const w = weather?.[match.id] ?? match.weatherEntry ?? null;
+  const venueName = match.venue ?? null;
+  if (w && (w.temp != null || w.condition != null || w.wind != null || venueName)) {
+    lines.push(`W|${num(w.temp, 0)}|${clean(w.condition, 24)}|${num(w.wind, 0)}|${clean(venueName, 40)}`);
+  }
+  // Bajas confirmadas (Bzzoiro lineups); nunca estimadas.
+  const unavailable = match.lineups?.unavailablePlayers ?? match.availability?.unavailablePlayers ?? null;
+  if (Array.isArray(unavailable) && unavailable.length) {
+    const homeOut = unavailable.filter(p => p.team === 'home').length;
+    const awayOut = unavailable.filter(p => p.team === 'away').length;
+    const names = unavailable.slice(0, 3).map(p => clean(p.name, 24)).join(',');
+    lines.push(`L|${homeOut}|${awayOut}|${names}`);
+  }
+  // Mercado en % interpretativo (ya sin margen ni cuotas). M2 nunca trae decimales de cuota.
+  const m2 = market ?? match.marketConsensus ?? null;
+  if (m2?.oneX2 || m2?.over25 != null || m2?.btts != null) {
+    lines.push(
+      `M2|${num(m2.oneX2?.home)}|${num(m2.oneX2?.draw)}|${num(m2.oneX2?.away)}|${num(m2.over25)}|${num(m2.btts)}`,
+    );
   }
   for (const team of [match.home, match.away]) {
     const row = standingsRow(standings, match.competition, team);
