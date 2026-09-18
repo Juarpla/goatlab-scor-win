@@ -4,7 +4,7 @@
   "away": "Liverpool FC",
   "competition": "premier",
   "kickoff": "2026-09-20T13:00:00Z",
-  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "updatedAt": "2026-09-18T00:45:20.786Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
@@ -44,7 +44,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "updatedAt": "2026-09-18T00:44:39.329Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -53,11 +53,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-17T05:58:48.866Z",
+      "updatedAt": "2026-09-18T00:44:39.329Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 0
+      "rows": 130
     },
     "venue": {
       "city": "Bournemouth",
@@ -197,9 +197,9 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.312,
-      "draw": 0.251,
-      "away": 0.43700000000000006,
+      "home": 0.311,
+      "draw": 0.25,
+      "away": 0.439,
       "predicted": "A"
     },
     "xg": {
@@ -209,12 +209,12 @@
     "over15": 0.828,
     "over25": 0.635,
     "over35": 0.409,
-    "btts": 0.6509999999999999,
+    "btts": 0.65,
     "score": "1-1",
-    "cornersOver95": 0.537,
-    "confidence": 0.4372,
+    "cornersOver95": 0.542,
+    "confidence": 0.439,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-17T05:59:00.326Z",
+    "capturedAt": "2026-09-18T00:44:48.266Z",
     "source": "Bzzoiro"
   },
   "h2h": {
@@ -291,7 +291,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 0
+      "historyRows": 130
     },
     "source": null
   },
@@ -301,90 +301,10 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 0
+      "historyRows": 130
     },
     "source": null
   },
-  "weatherVenue": {
-    "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 34.5,
-      "condition": null,
-      "sampledAt": "2026-09-20T13:00:00Z",
-      "source": "bzzoiro"
-    },
-    "venue": {
-      "stadium": "Vitality Stadium",
-      "city": "Bournemouth",
-      "capacity": 11364,
-      "tz": "Europe/London"
-    },
-    "referee": null,
-    "pitch": null,
-    "attendance": null,
-    "derby": null,
-    "neutral": null,
-    "travelKm": null
-  },
-  "availability": {
-    "status": null,
-    "unavailablePlayers": null,
-    "source": null
-  },
-  "context": {
-    "home": {
-      "team": "AFC Bournemouth",
-      "recentSample": 4,
-      "cleanSheets": {
-        "value": 0,
-        "sample": 4
-      },
-      "biggestWin": null,
-      "unbeaten": {
-        "value": 3,
-        "sample": 4
-      },
-      "season": {
-        "position": 15,
-        "played": 4,
-        "gf": 6,
-        "ga": 7,
-        "provider": null
-      },
-      "player": null
-    },
-    "away": {
-      "team": "Liverpool FC",
-      "recentSample": 5,
-      "cleanSheets": {
-        "value": 2,
-        "sample": 5
-      },
-      "biggestWin": {
-        "value": 2,
-        "sample": 5
-      },
-      "unbeaten": {
-        "value": 5,
-        "sample": 5
-      },
-      "season": {
-        "position": 8,
-        "played": 4,
-        "gf": 6,
-        "ga": 4,
-        "provider": null
-      },
-      "player": {
-        "name": "Alexander Isak",
-        "detail": "3 goles en 4 partidos",
-        "source": "líder del equipo en la temporada"
-      }
-    }
-  },
-  "llmReview": null,
   "statsForecast": {
     "method": "stats-ratings-v1",
     "home": {
@@ -489,5 +409,91 @@
       "away3plus": 0.211
     },
     "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 34.5,
+      "condition": null,
+      "sampledAt": "2026-09-20T13:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Vitality Stadium",
+      "city": "Bournemouth",
+      "capacity": 11364,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "AFC Bournemouth",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 3,
+        "sample": 4
+      },
+      "season": {
+        "position": 15,
+        "played": 4,
+        "gf": 6,
+        "ga": 7,
+        "provider": null
+      },
+      "player": null
+    },
+    "away": {
+      "team": "Liverpool FC",
+      "recentSample": 4,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 4,
+        "sample": 4
+      },
+      "season": {
+        "position": 8,
+        "played": 4,
+        "gf": 6,
+        "ga": 4,
+        "provider": null
+      },
+      "player": {
+        "name": "Alexander Isak",
+        "detail": "3 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": false,
+    "note": null,
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-17T12:33:51.948Z"
   }
 }

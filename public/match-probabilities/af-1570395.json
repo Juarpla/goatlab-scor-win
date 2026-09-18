@@ -1,32 +1,38 @@
 {
-  "id": "af-1636287",
-  "home": "Lillestrom",
-  "away": "Torreense",
-  "competition": "europa",
-  "kickoff": "2026-09-17T19:00:00+00:00",
-  "updatedAt": "2026-09-17T05:59:05.572Z",
+  "id": "af-1570395",
+  "home": "Celta Vigo",
+  "away": "Racing Santander",
+  "competition": "laliga",
+  "kickoff": "2026-09-19T16:30:00+00:00",
+  "updatedAt": "2026-09-18T00:45:20.786Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": null,
     "sample": null,
     "standings": {
-      "Lillestrom": null,
-      "Torreense": null
+      "Celta Vigo": null,
+      "Racing Santander": null
     },
     "scorers": {
-      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "updatedAt": "2026-09-18T00:44:26.490Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-19T16:00",
+      "source": "open-meteo-forecast"
+    },
     "discipline": {
-      "updatedAt": "2026-09-17T05:58:07.889Z",
+      "updatedAt": "2026-09-18T00:44:26.490Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 0
+      "rows": 130
     },
-    "venue": null
+    "venue": {
+      "city": "Vigo",
+      "tz": "Europe/Madrid"
+    }
   },
   "markets": null,
   "firstGoal": null,
@@ -70,7 +76,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 0
+      "historyRows": 130
     },
     "source": null
   },
@@ -80,25 +86,27 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 0
+      "historyRows": 130
     },
     "source": null
   },
+  "statsForecast": null,
+  "dominance": null,
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": null,
+      "temp": 25,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 6.5,
       "condition": null,
-      "sampledAt": null,
-      "source": null
+      "sampledAt": "2026-09-19T16:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
-      "stadium": null,
-      "city": null,
-      "capacity": null,
-      "tz": null
+      "stadium": "Abanca Balaídos",
+      "city": "Vigo",
+      "capacity": 29000,
+      "tz": "Europe/Madrid"
     },
     "referee": null,
     "pitch": null,
@@ -114,37 +122,39 @@
   },
   "context": {
     "home": {
-      "team": "Lillestrom",
-      "recentSample": 0,
+      "team": "Celta Vigo",
+      "recentSample": 1,
       "cleanSheets": {
         "value": 0,
-        "sample": 0
+        "sample": 1
       },
       "biggestWin": null,
-      "unbeaten": null,
+      "unbeaten": {
+        "value": 1,
+        "sample": 1
+      },
       "season": null,
-      "player": null
+      "player": {
+        "name": "Carl Starfelt",
+        "detail": "1 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
     },
     "away": {
-      "team": "Torreense",
-      "recentSample": 0,
+      "team": "Racing Santander",
+      "recentSample": 1,
       "cleanSheets": {
         "value": 0,
-        "sample": 0
+        "sample": 1
       },
       "biggestWin": null,
-      "unbeaten": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 1
+      },
       "season": null,
       "player": null
     }
   },
-  "llmReview": {
-    "flag": false,
-    "note": "No hay porcentajes ni datos numéricos que auditar en este input.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-09-17T06:03:19.323Z"
-  },
-  "statsForecast": null,
-  "dominance": null
+  "llmReview": null
 }
