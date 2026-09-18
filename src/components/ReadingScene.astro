@@ -1,0 +1,74 @@
+---
+/**
+ * Escenas de la pizarra del analista: geometría declarativa de fútbol, una
+ * por tipo de sección. Trazos planos sobre la superficie mate, sin cifras ni
+ * resultados: los números viven en la cinta de figuras y en el texto.
+ * El trazo se dibuja una vez al entrar el bloque (ver `partido.css`).
+ */
+const { kind = 'panorama' } = Astro.props;
+const scene = ['panorama', 'modelos', 'historial', 'tabla', 'goleadores', 'forma', 'claves'].includes(kind) ? kind : 'panorama';
+/* Casillas de la cinta de forma: cinco recientes y la siguiente en trazo señal. */
+const chambers = [118, 162, 206, 250, 294];
+const chamberPath = x => `M${x + 5} 48h28a5 5 0 0 1 5 5v28a5 5 0 0 1-5 5h-28a5 5 0 0 1-5-5V53a5 5 0 0 1 5-5Z`;
+---
+
+<svg class="reading-scene" viewBox="0 0 520 132" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {scene === 'panorama' && <>
+    <path class="rs-rule rs-draw" pathLength="1" d="M36 14H484M36 118H484"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M260 14V118"/>
+    <circle class="rs-rule rs-draw rs-s1" pathLength="1" cx="260" cy="66" r="38"/>
+    <circle class="rs-dot rs-fade rs-s2" cx="74" cy="66" r="3"/>
+    <circle class="rs-dot rs-fade rs-s2" cx="446" cy="66" r="3"/>
+    <g class="rs-fade rs-s3"><circle class="rs-ball" cx="260" cy="66" r="6"/></g>
+  </>}
+
+  {scene === 'modelos' && <>
+    <path class="rs-rule rs-draw" pathLength="1" d="M112 40H58V96H112"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M408 40H462V96H408"/>
+    <path class="rs-rule rs-fade rs-s2" d="M76 40V96M94 40V96M426 40V96M444 40V96"/>
+    <path class="rs-rule rs-draw rs-s2" pathLength="1" d="M112 66H408"/>
+    <path class="rs-rule rs-fade" stroke-dasharray="3 7" d="M260 18V114"/>
+    <path class="rs-rule rs-fade rs-s3" d="M52 104H118M402 104H468"/>
+    <g class="rs-fade rs-s3"><circle class="rs-ball rs-ball-cross" cx="260" cy="66" r="6"/></g>
+  </>}
+
+  {scene === 'historial' && <>
+    <path class="rs-alt rs-draw" pathLength="1" d="M60 40H448"/>
+    <path class="rs-alt rs-draw rs-s1" pathLength="1" d="M436 32l12 8-12 8"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M460 96H72"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M84 88l-12 8 12 8"/>
+    <path class="rs-rule rs-fade rs-s2" stroke-dasharray="3 7" d="M260 16V116"/>
+    <g class="rs-fade rs-s3"><circle class="rs-ball" cx="260" cy="68" r="6"/></g>
+  </>}
+
+  {scene === 'tabla' && <>
+    <path class="rs-rule rs-draw" pathLength="1" d="M130 14H410M130 39H410M130 64H410M130 89H410M130 114H410"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M130 14V114M172 14V114M410 14V114"/>
+    <g class="rs-fade rs-s3"><circle class="rs-ball" cx="151" cy="55" r="6"/></g>
+  </>}
+
+  {scene === 'goleadores' && <>
+    <path class="rs-rule rs-draw" pathLength="1" d="M64 110H456"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M118 80h76v30h-76"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M222 54h76v56h-76"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M326 84h76v26h-76"/>
+    <path class="rs-rule rs-fade rs-s2" d="M64 110v6M456 110v6"/>
+    <g class="rs-fade rs-s3"><circle class="rs-ball" cx="260" cy="47" r="6"/></g>
+  </>}
+
+  {scene === 'forma' && <>
+    {chambers.map((x, index) => <path class={`rs-rule rs-draw rs-s${Math.min(index, 3)}`} pathLength="1" d={chamberPath(x)}/>)}
+    <path class="rs-rule rs-fade rs-s2" d="M118 96H394"/>
+    {chambers.map(x => <path class="rs-rule rs-fade rs-s2" d={`M${x + 19} 96v6`}/>)}
+    <path class="rs-rule rs-fade rs-s3" stroke-dasharray="4 5" d="M332 67h18"/>
+    <path class="rs-signal rs-fade rs-flow rs-s3" stroke-dasharray="4 5" d={chamberPath(356)}/>
+  </>}
+
+  {scene === 'claves' && <>
+    <path class="rs-rule rs-draw" pathLength="1" d="M100 104H420"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M392 104A28 28 0 0 1 420 76"/>
+    <path class="rs-rule rs-draw rs-s1" pathLength="1" d="M420 104V32"/>
+    <path class="rs-rule rs-fade rs-s2" d="M132 104v6M180 104v6M228 104v6"/>
+    <path class="rs-flag rs-fade rs-s3" d="M420 32L472 44L420 56Z"/>
+  </>}
+</svg>

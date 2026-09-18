@@ -13,7 +13,8 @@
     "astro": "astro",
     "deploy": "pnpm run build && wrangler deploy",
     "test": "node --test tests/*.test.js",
-    "data:update": "node --env-file=.env scripts/update-data.mjs"
+    "data:update": "node --env-file=.env scripts/update-data.mjs",
+    "data:teams": "node --env-file=.env scripts/build-teams.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",

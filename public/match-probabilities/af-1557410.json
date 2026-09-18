@@ -4,13 +4,14 @@
   "away": "Ipswich",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 2.025,
       "away": 1.15
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
@@ -20,7 +21,7 @@
       "Ipswich": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -192,8 +193,8 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.534,
-      "draw": 0.251,
+      "home": 0.5379999999999999,
+      "draw": 0.24600000000000002,
       "away": 0.21600000000000003,
       "predicted": "H"
     },
@@ -204,14 +205,34 @@
     "over15": 0.762,
     "over25": 0.546,
     "over35": 0.32899999999999996,
-    "btts": 0.5589999999999999,
+    "btts": 0.56,
     "score": "1-1",
     "cornersOver95": 0.45799999999999996,
-    "confidence": 0.5337,
+    "recommendations": null,
+    "confidence": 0.5378,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:46.095Z",
+    "capturedAt": "2026-09-18T10:13:43.786Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Everton",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": "+1.5",
+    "goals": {
+      "home": "-3.5",
+      "away": "-2.5"
+    },
+    "advice": "Combo Double chance : Everton or draw and +1.5 goals",
+    "percent": {
+      "home": 0.45,
+      "draw": 0.45,
+      "away": 0.1
+    },
+    "capturedAt": "2026-09-18T16:01:49.503Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 12,
     "homeWins": 5,
@@ -273,7 +294,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -288,17 +309,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 3.8
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 9.2
   },
   "statsForecast": {
     "method": "stats-ratings-v1",
@@ -491,5 +514,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Desviaciones entre modelos: GoatLab estima 2.025 goles esperados del Everton frente a 1.38 de Bzzoiro, y el 1-1 como marcador más probable con 45.8% en Bzzoiro encaja mal con su propio 53.4% de victoria local y 54.6% de más de 2.5 goles. Conviene revisar el campo del marcador más probable antes de p",
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-17T12:26:13.404Z"
+  }
 }

@@ -3,12 +3,18 @@
    Mismo mundo de la sala de análisis: superficies mate, reglas de 1px,
    lima señal y pizarra como segunda serie. */
 
-/* ---- Cabecera del encuentro: camisetas ---- */
-.encounter-head {
+/* ---- Sede y camisetas del encuentro: el mapa manda, las camisetas lo
+   acompañan al costado (debajo y centradas en móvil). ---- */
+.encounter-venue {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 28px;
+  gap: 24px;
+  margin-top: 26px;
+}
+
+.encounter-venue .venue-zoom {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .encounter-score {
@@ -74,7 +80,7 @@
 
 /* ---- Zoom de la sede ---- */
 .venue-zoom {
-  margin: 26px 0 0;
+  margin: 0;
   max-width: 430px;
 }
 
@@ -140,21 +146,6 @@
 }
 
 /* ---- Gráficos de probabilidad ---- */
-/* Los paneles largos scrollean por dentro mientras el escenario queda fijo
-   (solo escritorio, donde el stage es sticky; en mobile el stage fluye con
-   la página y en reduced-motion deja de ser sticky). */
-@media (min-width: 761px) {
-  @media (prefers-reduced-motion: no-preference) {
-    .stage-pane[data-pane="estadisticas"],
-    .stage-pane[data-pane="resultado"],
-    .stage-pane[data-pane="goles"],
-    .stage-pane[data-pane="primer-gol"] {
-      max-height: calc(100vh - 90px);
-      overflow-y: auto;
-    }
-  }
-}
-
 .prob-hero {
   margin: 0 0 24px;
 }
@@ -435,6 +426,45 @@
 }
 
 .stage-pane.is-active .pt-fade {
+  animation: pt-fade 0.5s var(--d, 0s) ease-out both;
+}
+
+/* ---- Gráficos secundarios en la columna de notas ----
+   El escenario guarda un protagonista por capítulo; el resto de la
+   evidencia baja aquí, bajo el texto, y entra una sola vez en vista. */
+.notes-visuals {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.notes-visuals .prob-rows { gap: 20px; }
+.notes-visuals .prob-chips { margin-top: 0; }
+.notes-visuals .second-reading { margin-top: 0; }
+.notes-visuals .lambda-band { margin-bottom: 0; }
+.notes-visuals .waffle,
+.notes-visuals .ladder,
+.notes-visuals .podium { margin-bottom: 0; }
+.notes-visuals .prob-scorers { margin-top: 0; padding-top: 0; border-top: 0; }
+.notes-visuals > .verdict-market:first-child { border-top: 0; padding-top: 0; }
+.notes-visuals > .extra-markets:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+
+.notes-visuals.is-in .pt-grow {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pt-grow 0.7s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.notes-visuals.is-in .pt-grow-x {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: pt-grow-x 0.8s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.notes-visuals.is-in .pt-fade {
   animation: pt-fade 0.5s var(--d, 0s) ease-out both;
 }
 
@@ -732,33 +762,252 @@
 
 .pitch-events td:nth-child(2) { color: var(--text); }
 
-.pitch-reading {
-  margin-top: 24px;
-  padding-top: 18px;
+/* ---- La lectura: pizarra del analista ----
+   Fichas con escena por tipo de sección (kind) y cifras protagonistas
+   (stats). La cifra grande solo repite lo que el texto de su sección dice;
+   una sola señal lima por ficha. El trazo de la escena se dibuja al entrar. */
+.reading {
+  margin-top: 30px;
+  padding-block: 45px 60px;
   border-top: 1px solid var(--line);
 }
 
-.pitch-reading p {
-  margin-top: 10px;
-  font-size: 13px;
-}
-
-.pitch-reading h4 {
-  margin: 16px 0 6px;
-  font-size: 14px;
-}
-
-.pitch-reading ul {
-  margin: 6px 0 0;
-  padding-left: 18px;
+.reading-head {
   display: grid;
-  gap: 4px;
-  font-size: 13px;
+  gap: 12px;
+}
+
+.reading-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reading-heading h3 {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.reading-note {
+  font-size: 12px;
+  max-width: 72ch;
+}
+
+.reading-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.reading-card {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px 26px 26px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.reading-card.is-lead {
+  grid-column: 1 / -1;
+  padding: 30px 34px 32px;
+}
+
+.reading-scene {
+  display: block;
+  width: 100%;
+  height: 112px;
+}
+
+.reading-card.is-lead .reading-scene { height: 148px; }
+
+.reading-body { min-width: 0; }
+
+.reading-card h4 {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.reading-card.is-lead h4 { font-size: 32px; }
+
+.reading-figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  border-block: 1px solid var(--line);
+  margin-top: 14px;
+  padding-block: 12px;
+}
+
+.reading-figure + .reading-figure {
+  margin-left: 22px;
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+}
+
+.reading-figure strong {
+  display: block;
+  font-family: var(--display);
+  font-size: clamp(30px, 3vw, 38px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.reading-figure.is-lead strong { color: var(--accent); }
+
+.reading-figure span {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
   color: var(--muted);
 }
 
-.reading-limits {
-  margin-top: 12px;
+.reading-points {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.reading-points li,
+.reading-lead {
+  position: relative;
+  padding-left: 17px;
+  font-size: 13.5px;
+  color: var(--muted);
+  max-width: 72ch;
+}
+
+.reading-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.reading-lead {
+  margin-top: 14px;
+  padding-left: 0;
+}
+
+.reading-mark {
+  color: var(--text);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Escenas: geometría plana sobre la superficie; una señal lima por escena. */
+.rs-rule { stroke: var(--line); }
+.rs-alt { stroke: var(--away); }
+.rs-signal { stroke: var(--accent); }
+.rs-dot { fill: var(--line); stroke: none; }
+.rs-flag { fill: var(--accent); stroke: none; }
+
+/* El balón de la pizarra flota despacio, arriba y abajo. */
+.rs-ball {
+  fill: var(--accent);
+  stroke: none;
+  animation: rs-ball-float 4.5s ease-in-out infinite;
+}
+
+@keyframes rs-ball-float {
+  50% { transform: translateY(-10px); }
+}
+
+/* En el duelo de arcos el balón cruza lento de derecha a izquierda y vuelve
+   a entrar por la derecha fundido en los extremos (sin salto visible). */
+.rs-ball.rs-ball-cross {
+  animation: rs-ball-cross 7s linear infinite;
+}
+
+@keyframes rs-ball-cross {
+  0% { transform: translateX(140px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(-140px); opacity: 0; }
+}
+
+/* La casilla que viene fluye: el trazo discontinuo se desplaza sin costura
+   (un ciclo completo del patrón `4 5`). */
+.rs-flow {
+  animation: rs-flow 3.2s linear infinite;
+}
+
+@keyframes rs-flow {
+  to { stroke-dashoffset: -9; }
+}
+
+.rs-draw {
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--d, 0s) + var(--sd, 0s));
+}
+
+.rs-fade {
+  transition: opacity 0.6s ease-out;
+  transition-delay: calc(var(--d, 0s) + var(--sd, 0s));
+}
+
+.rs-s1 { --sd: 0.1s; }
+.rs-s2 { --sd: 0.2s; }
+.rs-s3 { --sd: 0.3s; }
+
+[data-reading].is-armed .reading-scene .rs-draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+[data-reading].is-in .reading-scene .rs-draw { stroke-dashoffset: 0; }
+[data-reading].is-armed .reading-scene .rs-fade { opacity: 0; }
+[data-reading].is-in .reading-scene .rs-fade { opacity: 1; }
+
+[data-reading].is-armed .reading-figure { opacity: 0; transform: translateY(8px); }
+
+[data-reading].is-in .reading-figure {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.45s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0s);
+}
+
+@media (max-width: 1150px) {
+  .pitch-block { grid-template-columns: 1fr; }
+  .pitch-head { flex-direction: column; align-items: flex-start; }
+  .story-notes .prob-scorers { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .reading { padding-block: 35px 40px; }
+  .reading-heading h3 { font-size: 30px; }
+  .reading-grid { gap: 14px; margin-top: 22px; }
+  .reading-card,
+  .reading-card.is-lead { padding: 20px 20px 22px; }
+  .reading-scene,
+  .reading-card.is-lead .reading-scene { height: 104px; }
+  .reading-card h4,
+  .reading-card.is-lead h4 { font-size: 24px; }
+  .reading-figure + .reading-figure { margin-left: 16px; padding-left: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rs-draw,
+  .rs-fade { transition: none; }
+  .rs-ball,
+  .rs-ball.rs-ball-cross,
+  .rs-flow { animation: none; }
 }
 
 /* ---- Paneles por equipo (capítulo 1: señales) ---- */
@@ -915,6 +1164,29 @@
   color: var(--muted);
 }
 
+/* Llave del marco: cada pieza presente con su icono; lo ausente no se dibuja. */
+.trends-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trends-key li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.trends-key svg { color: var(--accent); }
+
 .trends-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1002,12 +1274,35 @@
 
 .trends-block h3 { font-size: 14px; margin-bottom: 10px; }
 
+.trends-panel h3,
+.trends-block h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.trends-panel h3 svg,
+.trends-block h3 svg { color: var(--accent); }
+
 .trends-block ul {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 0;
+  list-style: none;
   display: grid;
   gap: 6px;
   font-size: 13px;
+}
+
+.trends-block li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.trends-item-icon {
+  display: inline-flex;
+  margin-top: 3px;
+  color: var(--muted);
 }
 
 .trends-block small { color: var(--muted); }
@@ -1029,11 +1324,13 @@
 @media (max-width: 1150px) {
   .pitch-block { grid-template-columns: 1fr; }
   .pitch-head { flex-direction: column; align-items: flex-start; }
+  /* La columna se estrecha: las camisetas bajan debajo del mapa. */
+  .encounter-venue { flex-direction: column; align-items: stretch; }
+  .jerseys { align-self: center; }
 }
 
 @media (max-width: 760px) {
-  .encounter-head { flex-direction: column; align-items: flex-start; gap: 18px; }
-  .jerseys { align-self: center; }
+  .encounter-venue { gap: 18px; }
   .venue-zoom { max-width: none; }
   .prob-scorers { grid-template-columns: 1fr; }
   .trends-grid { grid-template-columns: 1fr; }
@@ -1050,6 +1347,9 @@
   .stage-pane.is-active .pt-grow,
   .stage-pane.is-active .pt-grow-x,
   .stage-pane.is-active .pt-fade { animation: none; }
+  .notes-visuals.is-in .pt-grow,
+  .notes-visuals.is-in .pt-grow-x,
+  .notes-visuals.is-in .pt-fade { animation: none; }
   .trends.is-in .td-grow-r { animation: none; }
 }
 

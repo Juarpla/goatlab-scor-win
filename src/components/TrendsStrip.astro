@@ -4,8 +4,11 @@
  * Solo lo que NO está en el resto de la página: árbitro, bajas con nombre,
  * dónde ver en Latam y lo que circula. Hechos con fuente; lo ausente se
  * omite, nunca se inventa. Extra (TV/social/árbitro) solo si el pipeline
- * lo trae en trends-extra.json.
+ * lo trae en trends-extra.json. Los iconos siguen el trazo 1.7 del sistema
+ * y la lima queda para la señal de cada bloque.
  */
+import Icon from './Icon.astro';
+
 interface Absence { name?: string | null; reason?: string | null; team?: string | null }
 interface Referee { name?: string | null; avgYellow?: number | null; avgRed?: number | null; avgFouls?: number | null; matches?: number | null }
 interface Extra {
@@ -41,6 +44,13 @@ const showAbsences = rows.length > 0;
 const broadcasts = (extra?.broadcasts ?? []).filter(b => b.channel).slice(0, 4);
 const posts = (extra?.social ?? []).filter(p => p.text && p.url).slice(0, 3);
 const render = Boolean(showReferee || showAbsences || broadcasts.length || posts.length);
+
+/* Llave del marco: una pieza por bloque presente, cada una con su icono. */
+const keys: { icon: string; label: string }[] = [];
+if (showReferee) keys.push({ icon: 'whistle', label: 'Quién pita' });
+if (showAbsences) keys.push({ icon: 'medical', label: 'Quién falta' });
+if (broadcasts.length) keys.push({ icon: 'tv', label: 'Dónde verlo' });
+if (posts.length) keys.push({ icon: 'chat', label: 'Lo que circula' });
 ---
 
 {render && (
@@ -48,13 +58,18 @@ const render = Boolean(showReferee || showAbsences || broadcasts.length || posts
   <div class="trends-head">
     <h2 id="trends-title">El marco<br />del partido.</h2>
     <p>Todo lo que rodea al juego y no está en los capítulos: quién pita, quién falta, dónde verlo y lo que circula. Cada bloque cita su fuente; lo que falta, no se dibuja.</p>
+    {keys.length > 0 && (
+      <ul class="trends-key">
+        {keys.map(key => <li><Icon name={key.icon} size={15} /><span>{key.label}</span></li>)}
+      </ul>
+    )}
   </div>
 
   {(showReferee || showAbsences) && (
     <div class="trends-grid">
       {showReferee && (
         <article class="team-panel trends-panel">
-          <header><h3>{referee?.name}</h3><span class="outline-label">Arbitraje</span></header>
+          <header><h3><Icon name="whistle" size={18} />{referee?.name}</h3><span class="outline-label">Arbitraje</span></header>
           <ul class="ref-bars" role="img" aria-label={`${referee?.name}: ${refBars.map(b => `${b.label.toLowerCase()} ${dec1(b.value as number)}`).join(', ')} por partido${referee?.matches ? ` en ${referee.matches} dirigidos` : ''}`}>
             {refBars.map((bar, i) => (
               <li>
@@ -68,7 +83,7 @@ const render = Boolean(showReferee || showAbsences || broadcasts.length || posts
       )}
       {showAbsences && (
         <article class="team-panel trends-panel">
-          <header><h3>Bajas confirmadas</h3><span class="outline-label">{rows.length}</span></header>
+          <header><h3><Icon name="medical" size={18} />Bajas confirmadas</h3><span class="outline-label">{rows.length}</span></header>
           <ul class="absence-list">
             {[
               { tag: homeShort, items: homeRows },
@@ -95,15 +110,15 @@ const render = Boolean(showReferee || showAbsences || broadcasts.length || posts
     <div class="trends-extra">
       {broadcasts.length > 0 && (
         <div class="trends-block">
-          <h3>Dónde ver en Latam</h3>
-          <ul>{broadcasts.map(b => <li><strong>{b.channel}</strong>{b.country && <small> · {b.country}</small>}</li>)}</ul>
+          <h3><Icon name="tv" size={18} />Dónde ver en Latam</h3>
+          <ul>{broadcasts.map(b => <li><span class="trends-item-icon"><Icon name="tv" size={14} /></span><span><strong>{b.channel}</strong>{b.country && <small> · {b.country}</small>}</span></li>)}</ul>
           <p class="chapter-note">Parrilla publicada ~1 semana antes del partido; si falta un país, aún no hay canal asignado.</p>
         </div>
       )}
       {posts.length > 0 && (
         <div class="trends-block">
-          <h3>Lo que circula</h3>
-          <ul>{posts.map(p => <li><a href={p.url} target="_blank" rel="nofollow noopener">{p.text}</a>{p.account && <small> · {p.account}</small>}</li>)}</ul>
+          <h3><Icon name="chat" size={18} />Lo que circula</h3>
+          <ul>{posts.map(p => <li><span class="trends-item-icon"><Icon name="external" size={14} /></span><span><a href={p.url} target="_blank" rel="nofollow noopener">{p.text}</a>{p.account && <small> · {p.account}</small>}</span></li>)}</ul>
           <p class="chapter-note">Contenido externo, no verificado por GoatLab.</p>
         </div>
       )}

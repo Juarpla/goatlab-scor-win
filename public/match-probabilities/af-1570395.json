@@ -4,13 +4,14 @@
   "away": "Racing Santander",
   "competition": "laliga",
   "kickoff": "2026-09-19T16:30:00+00:00",
-  "updatedAt": "2026-09-18T06:21:49.895Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 1.45,
       "away": 1.45
     },
+    "lambdaSource": "Media-liga",
     "sample": {
       "home": 0,
       "away": 0
@@ -20,7 +21,7 @@
       "Racing Santander": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -38,8 +39,7 @@
     "venue": {
       "city": "Vigo",
       "tz": "Europe/Madrid"
-    },
-    "lambdaSource": "Media-liga"
+    }
   },
   "markets": {
     "oneX2": {
@@ -138,7 +138,10 @@
     "firstHome": 0.472,
     "firstAway": 0.472
   },
-  "scorers": null,
+  "scorers": {
+    "home": null,
+    "away": null
+  },
   "hasScorers": false,
   "method": "poisson-fallback-v1",
   "provider": {
@@ -150,11 +153,31 @@
     "btts": null,
     "score": null,
     "cornersOver95": null,
+    "recommendations": null,
     "confidence": null,
     "model": null,
     "capturedAt": null,
     "source": null
   },
+  "afPrediction": {
+    "winner": "Celta Vigo",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-2.5",
+      "away": "-2.5"
+    },
+    "advice": "Double chance : Celta Vigo or draw",
+    "percent": {
+      "home": 0.45,
+      "draw": 0.45,
+      "away": 0.1
+    },
+    "capturedAt": "2026-09-18T16:11:47.152Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": null,
     "homeWins": null,
@@ -177,7 +200,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 0,
+      "scorers": 50,
       "historyRows": 130
     },
     "source": null
@@ -193,13 +216,25 @@
     "source": null
   },
   "statsForecast": null,
-  "dominance": null,
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": null,
+    "cardsDuel": null,
+    "lastGoal": {
+      "home": 0.472,
+      "away": 0.472,
+      "noGoal": 0.055
+    },
+    "cornerRace": null,
+    "cornerMargin": null,
+    "source": "GoatLab"
+  },
   "weatherVenue": {
     "weather": {
-      "temp": 25,
+      "temp": 25.3,
       "precipitation": 0,
       "weathercode": 0,
-      "wind": 6.5,
+      "wind": 5.8,
       "condition": null,
       "sampledAt": "2026-09-19T16:00",
       "source": "open-meteo-forecast"

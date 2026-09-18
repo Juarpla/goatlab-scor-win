@@ -4,13 +4,14 @@
   "away": "Arsenal",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 2.052,
       "away": 1.288
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 5,
       "away": 5
@@ -20,7 +21,7 @@
       "Arsenal": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -201,26 +202,46 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.204,
-      "draw": 0.243,
-      "away": 0.5529999999999999,
+      "home": 0.2,
+      "draw": 0.24100000000000002,
+      "away": 0.56,
       "predicted": "A"
     },
     "xg": {
       "home": 1.12,
       "away": 1.52
     },
-    "over15": 0.7559999999999999,
-    "over25": 0.5379999999999999,
-    "over35": 0.312,
-    "btts": 0.54,
+    "over15": 0.759,
+    "over25": 0.544,
+    "over35": 0.315,
+    "btts": 0.5489999999999999,
     "score": "1-1",
     "cornersOver95": 0.44,
-    "confidence": 0.5531,
+    "recommendations": null,
+    "confidence": 0.5595,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:45.772Z",
+    "capturedAt": "2026-09-18T10:13:43.698Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Arsenal",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-4.5",
+      "away": "-2.5"
+    },
+    "advice": "Double chance : draw or Arsenal",
+    "percent": {
+      "home": 0.1,
+      "draw": 0.45,
+      "away": 0.45
+    },
+    "capturedAt": "2026-09-18T16:01:42.985Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 22,
     "homeWins": 6,
@@ -300,14 +321,15 @@
     "source": null
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 8.6
   },
   "statsForecast": {
     "method": "stats-ratings-v1",
@@ -496,5 +518,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Discrepancia marcada: Poisson GoatLab da 54,1% al local mientras CatBoost Bzzoiro le asigna solo 20,3% y 55,5% a Arsenal, favorito según historial (11 de 22), tabla (líder) y forma (cinco victorias seguidas). El reparto de Poisson se desvía claramente del resto de los datos y conviene verificarlo. A",
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-17T12:26:39.238Z"
+  }
 }

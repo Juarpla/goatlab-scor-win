@@ -92,7 +92,7 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
     <h3>{hero.home}<br/><span>vs.</span><br/>{hero.away}</h3>
     {hero.venue && <p>Estadio: {hero.venue}</p>}
     <div class="forma-actions">
-     <a class="primary-button" href={`/partido/${hero.id}/`}>Entrar al análisis <Icon/></a>
+      <a class="primary-button" href={`/partido/${hero.webId ?? hero.id}/`}>Entrar al análisis <Icon/></a>
      <span class="reading-time">Gráficos, estadísticas y contexto</span>
     </div>
    </div>

@@ -22,9 +22,10 @@ export function sameClub(a, b) {
   return left === right || left.startsWith(right) || right.startsWith(left);
 }
 /**
- * Diccionario canónico: clave normalize(nombre) → {display, af, fd, bzzoiro, aliases}.
- * El pipeline resuelve por ID antes que por nombre; el nombre queda como último recurso.
- * Fuente: team-ids.json (Bzzoiro) + providerId de fixtures (af-/fd-) + standings.
+ * Diccionario canónico: clave slug estable → {display, leagues, web, id
+ * (Bzzoiro, compat), bzzoiro/af/fd, aliases, frozen}.
+ * Fuente: teams.json (scripts/build-teams.mjs). El pipeline resuelve por ID
+ * antes que por nombre; el nombre queda como último recurso.
  */
 export function resolveCanonical(catalog, name) {
   const key = normalize(name);
@@ -44,6 +45,21 @@ export function providerTeamId(catalog, name, provider) {
   if (provider === 'af') return hit.af?.id ?? (typeof hit.af === 'number' ? hit.af : null);
   if (provider === 'fd') return hit.fd?.id ?? (typeof hit.fd === 'number' ? hit.fd : null);
   return hit.id ?? null;
+}
+/** Slug web estable de un equipo (`real-madrid`); null si no está en el diccionario. */
+export function webSlug(catalog, name) {
+  const hit = resolveCanonical(catalog, name);
+  return hit?.web ?? hit?.key ?? null;
+}
+/** ID web de un encuentro: home-vs-away-fecha (`real-madrid-vs-barcelona-2026-10-26`). */
+export function webMatchId(catalog, home, away, kickoff) {
+  const homeSlug = webSlug(catalog, home) ?? slugify(home);
+  const awaySlug = webSlug(catalog, away) ?? slugify(away);
+  const date = String(kickoff ?? '').slice(0, 10);
+  return `${homeSlug}-vs-${awaySlug}-${date}`;
+}
+export function slugify(name) {
+  return normalize(name).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'equipo';
 }
 export function teamShort(name) {
   const key = normalize(name);

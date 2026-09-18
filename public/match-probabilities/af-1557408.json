@@ -4,13 +4,14 @@
   "away": "Chelsea",
   "competition": "premier",
   "kickoff": "2026-09-18T19:00:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 2.16,
       "away": 1.61
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
@@ -20,7 +21,7 @@
       "Chelsea": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -192,9 +193,9 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.341,
-      "draw": 0.251,
-      "away": 0.408,
+      "home": 0.353,
+      "draw": 0.254,
+      "away": 0.39399999999999996,
       "predicted": "A"
     },
     "xg": {
@@ -202,16 +203,36 @@
       "away": 1.5
     },
     "over15": 0.83,
-    "over25": 0.639,
-    "over35": 0.409,
-    "btts": 0.653,
+    "over25": 0.638,
+    "over35": 0.41100000000000003,
+    "btts": 0.6579999999999999,
     "score": "1-1",
     "cornersOver95": 0.494,
-    "confidence": 0.4082,
+    "recommendations": null,
+    "confidence": 0.3937,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:44.763Z",
+    "capturedAt": "2026-09-18T10:13:42.361Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Chelsea",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-3.5",
+      "away": "-2.5"
+    },
+    "advice": "Double chance : draw or Chelsea",
+    "percent": {
+      "home": 0.1,
+      "draw": 0.45,
+      "away": 0.45
+    },
+    "capturedAt": "2026-09-18T16:01:17.150Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 14,
     "homeWins": 3,
@@ -273,7 +294,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -288,17 +309,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 4.3
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 9.2
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

@@ -4,17 +4,24 @@
   "away": "Elche",
   "competition": "laliga",
   "kickoff": "2026-09-18T19:00:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
-    "lambdas": null,
-    "sample": null,
+    "lambdas": {
+      "home": 1.63,
+      "away": 1.17
+    },
+    "lambdaSource": "Bzzoiro-xG",
+    "sample": {
+      "home": 0,
+      "away": 0
+    },
     "standings": {
       "Espanyol": null,
       "Elche": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -23,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -34,33 +41,151 @@
       "tz": "Europe/Madrid"
     }
   },
-  "markets": null,
-  "firstGoal": null,
-  "scorers": null,
+  "markets": {
+    "oneX2": {
+      "home": 0.469,
+      "draw": 0.269,
+      "away": 0.262
+    },
+    "doubleChance": {
+      "12": 0.731,
+      "1X": 0.738,
+      "X2": 0.531
+    },
+    "dnb": {
+      "home": 0.641,
+      "away": 0.359
+    },
+    "totals": {
+      "over15": 0.781,
+      "under15": 0.219,
+      "over25": 0.531,
+      "under25": 0.469,
+      "over35": 0.308,
+      "under35": 0.692
+    },
+    "btts": {
+      "yes": 0.566,
+      "no": 0.434
+    },
+    "cleanSheet": {
+      "home": 0.31,
+      "away": 0.196
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.128
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.095
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.088
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.081
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.072
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.8,
+    "noGoal": 0.061,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.373
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.234
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.147
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.092
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.058
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.036
+      }
+    ],
+    "firstHome": 0.547,
+    "firstAway": 0.392
+  },
+  "scorers": {
+    "home": null,
+    "away": null
+  },
   "hasScorers": false,
-  "method": null,
+  "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.51,
-      "draw": 0.267,
-      "away": 0.223,
+      "home": 0.518,
+      "draw": 0.265,
+      "away": 0.218,
       "predicted": "H"
     },
     "xg": {
       "home": 1.63,
       "away": 1.17
     },
-    "over15": 0.7509999999999999,
-    "over25": 0.522,
-    "over35": 0.308,
-    "btts": 0.5479999999999999,
+    "over15": 0.752,
+    "over25": 0.526,
+    "over35": 0.312,
+    "btts": 0.551,
     "score": "1-1",
     "cornersOver95": 0.426,
-    "confidence": 0.5101,
+    "recommendations": null,
+    "confidence": 0.5176,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:45.072Z",
+    "capturedAt": "2026-09-18T10:13:42.338Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Espanyol",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-2.5",
+      "away": "-2.5"
+    },
+    "advice": "Double chance : Espanyol or draw",
+    "percent": {
+      "home": 0.45,
+      "draw": 0.45,
+      "away": 0.1
+    },
+    "capturedAt": "2026-09-18T16:01:23.533Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 28,
     "homeWins": 12,
@@ -140,14 +265,16 @@
     "source": null
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "mercado-estimado-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "Mercado",
+    "expectedTotal": 9.1,
+    "over95": 0.426
   },
   "statsForecast": {
     "method": "stats-ratings-v1",
@@ -214,7 +341,19 @@
     },
     "source": "GoatLab"
   },
-  "dominance": null,
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": null,
+    "cardsDuel": null,
+    "lastGoal": {
+      "home": 0.547,
+      "away": 0.392,
+      "noGoal": 0.061
+    },
+    "cornerRace": null,
+    "cornerMargin": null,
+    "source": "GoatLab"
+  },
   "weatherVenue": {
     "weather": {
       "temp": null,

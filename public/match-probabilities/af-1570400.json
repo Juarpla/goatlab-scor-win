@@ -4,13 +4,14 @@
   "away": "Barcelona",
   "competition": "laliga",
   "kickoff": "2026-09-19T19:00:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 1.8,
       "away": 1.38
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -20,7 +21,7 @@
       "Barcelona": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -164,9 +165,9 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.08199999999999999,
+      "home": 0.083,
       "draw": 0.13,
-      "away": 0.7879999999999999,
+      "away": 0.7859999999999999,
       "predicted": "A"
     },
     "xg": {
@@ -179,11 +180,31 @@
     "btts": 0.565,
     "score": "1-2",
     "cornersOver95": 0.479,
-    "confidence": 0.7885,
+    "recommendations": null,
+    "confidence": 0.7865,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:47.719Z",
+    "capturedAt": "2026-09-18T10:13:45.368Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Barcelona",
+    "winnerComment": null,
+    "winOrDraw": false,
+    "underOver": "+1.5",
+    "goals": {
+      "home": "-1.5",
+      "away": "-5.5"
+    },
+    "advice": "Combo Winner : Barcelona and +1.5 goals",
+    "percent": {
+      "home": 0.1,
+      "draw": 0.45,
+      "away": 0.45
+    },
+    "capturedAt": "2026-09-18T16:11:53.666Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 111,
     "homeWins": 21,
@@ -263,14 +284,16 @@
     "source": null
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "mercado-estimado-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "Mercado",
+    "expectedTotal": 9.4,
+    "over95": 0.479
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

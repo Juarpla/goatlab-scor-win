@@ -4,17 +4,24 @@
   "away": "Rayo Vallecano",
   "competition": "laliga",
   "kickoff": "2026-09-19T12:00:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
-    "lambdas": null,
-    "sample": null,
+    "lambdas": {
+      "home": 1.45,
+      "away": 1.27
+    },
+    "lambdaSource": "Bzzoiro-xG",
+    "sample": {
+      "home": 0,
+      "away": 0
+    },
     "standings": {
       "Osasuna": null,
       "Rayo Vallecano": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -23,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -34,16 +41,114 @@
       "tz": "Europe/Madrid"
     }
   },
-  "markets": null,
-  "firstGoal": null,
-  "scorers": null,
-  "hasScorers": false,
-  "method": null,
-  "provider": {
+  "markets": {
     "oneX2": {
       "home": 0.401,
+      "draw": 0.28,
+      "away": 0.319
+    },
+    "doubleChance": {
+      "12": 0.72,
+      "1X": 0.681,
+      "X2": 0.599
+    },
+    "dnb": {
+      "home": 0.557,
+      "away": 0.443
+    },
+    "totals": {
+      "over15": 0.767,
+      "under15": 0.233,
+      "over25": 0.511,
+      "under25": 0.489,
+      "over35": 0.29,
+      "under35": 0.71
+    },
+    "btts": {
+      "yes": 0.563,
+      "no": 0.437
+    },
+    "cleanSheet": {
+      "home": 0.281,
+      "away": 0.235
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.133
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.088
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.083
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.078
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.077
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.72,
+    "noGoal": 0.066,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.364
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.232
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.147
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.094
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.059
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.038
+      }
+    ],
+    "firstHome": 0.498,
+    "firstAway": 0.436
+  },
+  "scorers": {
+    "home": null,
+    "away": null
+  },
+  "hasScorers": false,
+  "method": "poisson-fallback-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.39899999999999997,
       "draw": 0.287,
-      "away": 0.312,
+      "away": 0.314,
       "predicted": "H"
     },
     "xg": {
@@ -56,11 +161,31 @@
     "btts": 0.524,
     "score": "1-1",
     "cornersOver95": 0.494,
-    "confidence": 0.4011,
+    "recommendations": null,
+    "confidence": 0.399,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:45.759Z",
+    "capturedAt": "2026-09-18T10:13:42.785Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Rayo Vallecano",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-1.5",
+      "away": "-2.5"
+    },
+    "advice": "Double chance : draw or Rayo Vallecano",
+    "percent": {
+      "home": 0.1,
+      "draw": 0.45,
+      "away": 0.45
+    },
+    "capturedAt": "2026-09-18T16:01:36.469Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 30,
     "homeWins": 13,
@@ -140,14 +265,16 @@
     "source": null
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "mercado-estimado-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "Mercado",
+    "expectedTotal": 9.5,
+    "over95": 0.494
   },
   "statsForecast": {
     "method": "stats-ratings-v1",
@@ -214,7 +341,19 @@
     },
     "source": "GoatLab"
   },
-  "dominance": null,
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": null,
+    "cardsDuel": null,
+    "lastGoal": {
+      "home": 0.498,
+      "away": 0.436,
+      "noGoal": 0.066
+    },
+    "cornerRace": null,
+    "cornerMargin": null,
+    "source": "GoatLab"
+  },
   "weatherVenue": {
     "weather": {
       "temp": null,
@@ -292,5 +431,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Los dos modelos divergen de forma clara en la probabilidad de victoria visitante: Poisson da 39% al Rayo mientras CatBoost se queda en 29.4%, una diferencia de casi diez puntos. CatBoost encaja mejor con el historial reciente (Osasuna ganó los dos últimos duelos, incluido uno en Vallecas), pero conv",
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-17T12:24:31.542Z"
+  }
 }

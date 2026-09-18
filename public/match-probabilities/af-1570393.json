@@ -4,11 +4,18 @@
   "away": "Alaves",
   "competition": "laliga",
   "kickoff": "2026-09-19T14:15:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
-    "lambdas": null,
-    "sample": null,
+    "lambdas": {
+      "home": 1.46,
+      "away": 1.11
+    },
+    "lambdaSource": "Bzzoiro-xG",
+    "sample": {
+      "home": 0,
+      "away": 0
+    },
     "standings": {
       "Athletic Club": {
         "position": 9,
@@ -26,7 +33,7 @@
       "Alaves": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -35,7 +42,7 @@
       "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -46,33 +53,151 @@
       "tz": "Europe/Madrid"
     }
   },
-  "markets": null,
-  "firstGoal": null,
-  "scorers": null,
+  "markets": {
+    "oneX2": {
+      "home": 0.439,
+      "draw": 0.286,
+      "away": 0.275
+    },
+    "doubleChance": {
+      "12": 0.714,
+      "1X": 0.725,
+      "X2": 0.561
+    },
+    "dnb": {
+      "home": 0.615,
+      "away": 0.385
+    },
+    "totals": {
+      "over15": 0.739,
+      "under15": 0.261,
+      "over25": 0.474,
+      "under25": 0.526,
+      "over35": 0.257,
+      "under35": 0.743
+    },
+    "btts": {
+      "yes": 0.527,
+      "no": 0.473
+    },
+    "cleanSheet": {
+      "home": 0.33,
+      "away": 0.232
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.136
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.099
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.091
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.089
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.082
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.57,
+    "noGoal": 0.077,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.348
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.227
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.096
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.063
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.041
+      }
+    ],
+    "firstHome": 0.525,
+    "firstAway": 0.399
+  },
+  "scorers": {
+    "home": null,
+    "away": null
+  },
   "hasScorers": false,
-  "method": null,
+  "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.5710000000000001,
-      "draw": 0.25,
-      "away": 0.179,
+      "home": 0.5720000000000001,
+      "draw": 0.244,
+      "away": 0.184,
       "predicted": "H"
     },
     "xg": {
       "home": 1.46,
       "away": 1.11
     },
-    "over15": 0.7190000000000001,
-    "over25": 0.48,
-    "over35": 0.273,
-    "btts": 0.489,
+    "over15": 0.728,
+    "over25": 0.496,
+    "over35": 0.28,
+    "btts": 0.499,
     "score": "1-1",
     "cornersOver95": 0.551,
-    "confidence": 0.5708,
+    "recommendations": null,
+    "confidence": 0.5719,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:47.339Z",
+    "capturedAt": "2026-09-18T10:13:44.297Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Athletic Club",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-2.5",
+      "away": "-2.5"
+    },
+    "advice": "Double chance : Athletic Club or draw",
+    "percent": {
+      "home": 0.45,
+      "draw": 0.45,
+      "away": 0.1
+    },
+    "capturedAt": "2026-09-18T16:02:02.554Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 31,
     "homeWins": 17,
@@ -152,14 +277,16 @@
     "source": null
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "mercado-estimado-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "Mercado",
+    "expectedTotal": 9.8,
+    "over95": 0.551
   },
   "statsForecast": {
     "method": "stats-ratings-v1",
@@ -226,7 +353,19 @@
     },
     "source": "GoatLab"
   },
-  "dominance": null,
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": null,
+    "cardsDuel": null,
+    "lastGoal": {
+      "home": 0.525,
+      "away": 0.399,
+      "noGoal": 0.077
+    },
+    "cornerRace": null,
+    "cornerMargin": null,
+    "source": "GoatLab"
+  },
   "weatherVenue": {
     "weather": {
       "temp": 24.9,
@@ -300,5 +439,11 @@
       "player": null
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Los dos modelos discrepan de forma notable: Poisson da favorito al Alavés (38,1% vs 33,6%) con goles esperados 1,296-1,395, mientras CatBoost da favorito claro al Athletic (57,1% vs 17,9%) con goles esperados 1,47-1,11. La dirección del favorito y la de los goles esperados se invierten entre ambos m",
+    "provider": "OPENCODE_GO",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-09-17T12:27:00.998Z"
+  }
 }

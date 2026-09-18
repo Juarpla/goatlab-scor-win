@@ -36,3 +36,24 @@ test('sin mercados ni predicción omite bloques P/B sin romper', () => {
   assert.ok(out.startsWith('M|'));
   assert.ok(!out.includes('\nP|') && !out.includes('\nB|'));
 });
+
+test('B2 y A viajan cuando el proveedor trae picks y predicción', () => {
+  const withProviders = {
+    ...match,
+    modelPrediction: {
+      ...match.modelPrediction,
+      recommendations: { favorite: 'home', favoriteProb: 0.357, over25: false, btts: true },
+    },
+    afPrediction: {
+      winner: 'Chelsea', winOrDraw: true, underOver: '-3.5',
+      goals: { home: '-3.5', away: '-2.5' },
+      advice: 'Double chance : draw or Chelsea',
+      percent: { home: 0.1, draw: 0.45, away: 0.45 },
+    },
+  };
+  const out = toCompactInput(withProviders, markets, { results: [], standings, scorers });
+  assert.ok(out.includes('\nB2|home|0.357|no|si'));
+  assert.ok(out.includes('\nA|0.1|0.45|0.45|Chelsea|si|-3.5|-3.5|-2.5|Double chance : draw or Chelsea'));
+  const lean = toCompactInput({ ...match, modelPrediction: null }, markets, { results: [], standings: null, scorers: null });
+  assert.ok(!lean.includes('\nB2|') && !lean.includes('\nA|'));
+});

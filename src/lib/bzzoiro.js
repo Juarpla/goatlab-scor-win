@@ -445,7 +445,9 @@ export function mapPrediction(data) {
   const markets = data?.markets;
   if (!markets) return null;
   const pct = value => (typeof value === 'number' && Number.isFinite(value) ? value / 100 : null);
+  const pct3 = value => { const p = pct(value); return p == null ? null : Math.round(p * 1000) / 1000; };
   const result = markets.match_result;
+  const rec = data.recommendations ?? null;
   return {
     oneX2: result && result.prob_home != null ? { home: pct(result.prob_home), draw: pct(result.prob_draw), away: pct(result.prob_away), predicted: result.predicted ?? null } : null,
     xg: markets.expected_goals ? { home: markets.expected_goals.home ?? null, away: markets.expected_goals.away ?? null } : null,
@@ -455,6 +457,13 @@ export function mapPrediction(data) {
     btts: markets.btts?.prob_yes != null ? pct(markets.btts.prob_yes) : null,
     score: markets.score?.most_likely ?? null,
     cornersOver95: markets.corners?.prob_over_95 != null ? pct(markets.corners.prob_over_95) : null,
+    // Picks del modelo del proveedor (favorite_prob viene 0–100 como los mercados).
+    recommendations: rec ? {
+      favorite: rec.favorite ?? null,
+      favoriteProb: pct3(rec.favorite_prob),
+      over25: typeof rec.over_25 === 'boolean' ? rec.over_25 : null,
+      btts: typeof rec.btts === 'boolean' ? rec.btts : null,
+    } : null,
     confidence: data.model?.confidence ?? null,
     model: data.model?.version ?? null,
     capturedAt: new Date().toISOString(),
@@ -577,8 +586,13 @@ function standingsRow(row) {
 
 export function mapBzzoiroStandings(data, top = 20) {
   // Las copas devuelven grupos por letra; se guardan crudos y las filas se
-  // aplanan para que los consumidores de `rows` no cambien.
-  const groups = Array.isArray(data?.groups) ? data.groups : Array.isArray(data?.standings_groups) ? data.standings_groups : null;
+  // aplanan para que los consumidores de `rows` no cambien. Algunos endpoints
+  // (Libertadores) devuelven `groups` como objeto {nombre: filas}.
+  const rawGroups = data?.groups ?? data?.standings_groups ?? null;
+  const groups = Array.isArray(rawGroups) ? rawGroups
+    : rawGroups && typeof rawGroups === 'object'
+      ? Object.entries(rawGroups).map(([group, rows]) => ({ group, standings: rows }))
+      : null;
   if (groups?.length) {
     const mapped = groups.map(group => ({
       group: group.group ?? group.group_name ?? group.name ?? null,
@@ -600,7 +614,11 @@ export async function fetchBzzoiroStandings(leagueId, { env = {}, fetchImpl = fe
     const rows = mapBzzoiroStandings(table, top);
     if (!rows) return null;
     const payload = { season: season.year ?? season.id ?? null, provider: 'Bzzoiro', updatedAt: new Date().toISOString(), rows };
-    const groups = Array.isArray(table?.groups) ? table.groups : Array.isArray(table?.standings_groups) ? table.standings_groups : null;
+    const rawGroups = Array.isArray(table?.groups) ? table.groups : Array.isArray(table?.standings_groups) ? table.standings_groups
+      : table?.groups && typeof table.groups === 'object' ? Object.entries(table.groups).map(([group, rows]) => ({ group, standings: rows }))
+      : table?.standings_groups && typeof table.standings_groups === 'object' ? Object.entries(table.standings_groups).map(([group, rows]) => ({ group, standings: rows }))
+      : null;
+    const groups = rawGroups;
     if (groups?.length) payload.groups = groups.map(group => ({
       group: group.group ?? group.group_name ?? group.name ?? null,
       rows: (Array.isArray(group.standings) ? group.standings : Array.isArray(group.rows) ? group.rows : []).slice(0, top).map(standingsRow),

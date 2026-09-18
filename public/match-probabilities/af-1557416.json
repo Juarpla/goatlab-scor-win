@@ -4,13 +4,14 @@
   "away": "Aston Villa",
   "competition": "premier",
   "kickoff": "2026-09-19T11:30:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 0.972,
       "away": 0.943
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 5
@@ -20,7 +21,7 @@
       "Aston Villa": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -155,26 +156,46 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.47100000000000003,
+      "home": 0.469,
       "draw": 0.265,
-      "away": 0.264,
+      "away": 0.267,
       "predicted": "H"
     },
     "xg": {
       "home": 1.37,
       "away": 1.4
     },
-    "over15": 0.755,
+    "over15": 0.757,
     "over25": 0.523,
-    "over35": 0.315,
-    "btts": 0.562,
+    "over35": 0.317,
+    "btts": 0.564,
     "score": "1-1",
-    "cornersOver95": 0.508,
-    "confidence": 0.4712,
+    "cornersOver95": 0.507,
+    "recommendations": null,
+    "confidence": 0.4686,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:45.071Z",
+    "capturedAt": "2026-09-18T10:13:42.595Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Aston Villa",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": "-3.5",
+    "goals": {
+      "home": null,
+      "away": "-1.5"
+    },
+    "advice": "Combo Double chance : draw or Aston Villa and -3.5 goals",
+    "percent": {
+      "home": 0.1,
+      "draw": 0.45,
+      "away": 0.45
+    },
+    "capturedAt": "2026-09-18T16:01:30.035Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 66,
     "homeWins": 29,
@@ -236,7 +257,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -251,17 +272,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 3.8
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 9.3
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

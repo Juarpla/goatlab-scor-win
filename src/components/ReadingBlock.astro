@@ -1,0 +1,59 @@
+---
+/**
+ * La lectura: interpretación de IA en fichas con pizarra. Cada sección trae
+ * su escena (kind) y sus cifras protagonistas (stats); el texto nunca se
+ * reescribe, solo se resaltan las cifras que la sección declara. La auditoría
+ * del LLM (limitations) no se imprime: vive solo en el JSON.
+ */
+import ReadingScene from './ReadingScene.astro';
+import { normalizeReading, matchFigures, formatFigure } from '../lib/reading.js';
+
+const { entry } = Astro.props;
+const reading = normalizeReading(entry);
+const points = section => section.bullets.map(bullet => matchFigures(bullet, section.stats));
+/* La nota no promete cifras cuando ninguna sección las declara (párrafo legacy). */
+const hasFigures = Boolean(reading?.sections.some(section => section.stats.length > 0));
+---
+
+{reading && <section class="reading" id="lectura" data-reading>
+  <header class="reading-head">
+    <div class="reading-heading">
+      <h3>La sabidurIA</h3>
+      <span class="outline-label">Interpretación de IA</span>
+    </div>
+    <p class="reading-note">{hasFigures ? 'Análisis preparado con IA a partir de los datos del partido. Las cifras grandes son las que la propia lectura cita; confróntalas con los capítulos de arriba.' : 'Análisis preparado con IA a partir de los datos del partido. Esta lectura aún no declara cifras protagonistas.'}</p>
+  </header>
+  <div class="reading-grid">
+    {reading.sections.map((section, index) => <article class={`reading-card${index === 0 ? ' is-lead' : ''}`} style={`--d:${(index * 0.12).toFixed(2)}s`}>
+      <ReadingScene kind={section.kind}/>
+      <div class="reading-body">
+        {section.title && <h4>{section.title}</h4>}
+        {section.stats.length > 0 && <div class="reading-figures">
+          {section.stats.map((stat, statIndex) => <div class={`reading-figure${statIndex === 0 ? ' is-lead' : ''}`}>
+            <strong>{formatFigure(stat.value)}</strong>
+            <span>{stat.label}</span>
+          </div>)}
+        </div>}
+        {section.title === '' && section.bullets.length === 1
+          ? <p class="reading-lead">{points(section)[0].map(part => part.figure ? <strong class="reading-mark">{part.text}</strong> : part.text)}</p>
+          : <ul class="reading-points">
+            {points(section).map(bullet => <li>{bullet.map(part => part.figure ? <strong class="reading-mark">{part.text}</strong> : part.text)}</li>)}
+          </ul>}
+      </div>
+    </article>)}
+  </div>
+</section>}
+
+<script>
+ const block = document.querySelector<HTMLElement>('[data-reading]');
+ if (block && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+  block.classList.add('is-armed');
+  const io = new IntersectionObserver(entries => {
+   if (entries.some(entry => entry.isIntersecting)) {
+    block.classList.add('is-in');
+    io.disconnect();
+   }
+  }, { threshold: 0.05 });
+  io.observe(block);
+ }
+</script>

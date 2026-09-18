@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { scoreMatrix, matrixMarkets, firstGoalRace, scorerShares, scorerMarkets, computeMatchMarkets, teamContext, domesticLeague } from '../src/lib/probabilities.js';
 import { buildBeats, ballAt, matchMinute, hashSeed } from '../src/lib/pitch-path.js';
 import { teamColors, NEUTRAL_KIT } from '../src/lib/team-colors.js';
-import { locateMatch, venueZoomLayout, VENUE_ZOOM } from '../src/lib/venues.js';
+import { locateMatch, venueZoomLayout, VENUE_ZOOM, europeMapLayout, EUROPE_MAP } from '../src/lib/venues.js';
 
 const close = (a, b, epsilon = 0.002) => Math.abs(a - b) <= epsilon;
 
@@ -178,4 +178,13 @@ test('el zoom de sede proyecta el pin dentro del marco', () => {
 
 test('locateMatch devuelve null para clubes fuera del catálogo', () => {
   assert.equal(locateMatch({ home: 'Club Inexistente' }), null);
+});
+
+test('el mapa de referencia de Europa declara su recorte y no lleva pin', () => {
+  const map = europeMapLayout();
+  assert.equal(map.src, '/img/venue-zoom/europa.png');
+  assert.equal(map.width, Math.round((EUROPE_MAP.lngMax - EUROPE_MAP.lngMin) / EUROPE_MAP.step) * EUROPE_MAP.pitch);
+  assert.equal(map.height, Math.round((EUROPE_MAP.latMax - EUROPE_MAP.latMin) / EUROPE_MAP.step) * EUROPE_MAP.pitch);
+  assert.equal(map.pinX, undefined);
+  assert.equal(map.pinY, undefined);
 });

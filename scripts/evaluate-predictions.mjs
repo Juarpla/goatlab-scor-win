@@ -66,6 +66,62 @@ for (const entry of Object.values(captured?.captures ?? {})) {
   if (probabilities?.btts != null) ensembleBtts.push({ predicted: probabilities.btts, happened: entry.finalScore.home > 0 && entry.finalScore.away > 0 ? 1 : 0 });
 }
 
+/* ---- Muestra de proveedores: API-Football y picks de Bzzoiro ---- */
+
+let afCaptures = 0;
+let recCaptures = 0;
+const af1x2 = [];
+const afLineHits = { hits: 0, total: 0 };
+const afWinOrDraw = { hits: 0, total: 0 };
+const recFavorite = { hits: 0, total: 0 };
+const recOver25 = [];
+const recBtts = [];
+const sideOf = (entry, name) => (sameClub(name, entry.home) ? 'home' : sameClub(name, entry.away) ? 'away' : null);
+/** Línea de API-Football: negativa = máximo de goles, positiva = mínimo. Null si no es numérica. */
+const lineHappened = (line, totalGoals) => {
+  const value = typeof line === 'string' ? Number(line.replace('+', '')) : NaN;
+  if (!Number.isFinite(value)) return null;
+  return value < 0 ? (totalGoals <= Math.abs(value) - 0.5 ? 1 : 0) : (totalGoals >= value + 0.5 ? 1 : 0);
+};
+for (const entry of Object.values(captured?.captures ?? {})) {
+  if (!entry?.finalScore || !entry?.captures?.length) continue;
+  const preKick = entry.captures
+    .filter(capture => capture.capturedAt && entry.kickoff && capture.capturedAt <= entry.kickoff)
+    .sort((a, b) => (a.capturedAt < b.capturedAt ? -1 : 1));
+  const capture = preKick[preKick.length - 1];
+  if (!capture) continue;
+  const outcome = oneX2Outcome(entry.finalScore.home, entry.finalScore.away);
+  const totalGoals = entry.finalScore.home + entry.finalScore.away;
+  const af = capture.apiFootball;
+  if (af) {
+    afCaptures += 1;
+    if (outcome && af.percent?.home != null && af.percent.draw != null && af.percent.away != null) {
+      af1x2.push({ predicted: { home: af.percent.home, draw: af.percent.draw, away: af.percent.away }, outcome });
+    }
+    const lineHit = lineHappened(af.underOver, totalGoals);
+    if (lineHit != null) { afLineHits.total += 1; afLineHits.hits += lineHit; }
+    if (outcome && af.winner && typeof af.winOrDraw === 'boolean') {
+      const side = sideOf(entry, af.winner);
+      if (side) {
+        const hit = af.winOrDraw ? outcome === side || outcome === 'draw' : outcome === side;
+        afWinOrDraw.total += 1;
+        if (hit) afWinOrDraw.hits += 1;
+      }
+    }
+  }
+  const rec = capture.catboost?.recommendations;
+  if (rec) {
+    recCaptures += 1;
+    if (outcome && rec.favorite) {
+      const side = ['home', 'draw', 'away'].includes(rec.favorite) ? rec.favorite : sideOf(entry, rec.favorite);
+      if (side) { recFavorite.total += 1; if (outcome === side) recFavorite.hits += 1; }
+    }
+    if (rec.over25 != null) recOver25.push({ predicted: rec.over25 ? 1 : 0, happened: totalGoals >= 3 ? 1 : 0 });
+    if (rec.btts != null) recBtts.push({ predicted: rec.btts ? 1 : 0, happened: entry.finalScore.home > 0 && entry.finalScore.away > 0 ? 1 : 0 });
+  }
+}
+const rate = bucket => ({ hits: bucket.hits, total: bucket.total, accuracy: bucket.total ? Math.round((bucket.hits / bucket.total) * 1000) / 1000 : null });
+
 /* ---- Backtest del pronóstico de estadísticas (rodante, sin fuga) ---- */
 
 const statRows = ((await readJson('public/data/history-stats.json'))?.rows ?? [])
@@ -140,6 +196,20 @@ const evaluation = {
     captures: ensembleCaptures,
     note: 'El blend se evalúa con capturas pre-partido acumuladas en corridas programadas.',
   },
+  apiFootball: {
+    oneX2: evaluateOneX2(af1x2),
+    lineHits: rate(afLineHits),
+    winOrDraw: rate(afWinOrDraw),
+    captures: afCaptures,
+    note: 'Lectura del proveedor API-Football capturada antes del kickoff; el Brier 1X2 exige muestra ≥ 30.',
+  },
+  providerRecommendations: {
+    favorite: rate(recFavorite),
+    over25: evaluateBinary(recOver25),
+    btts: evaluateBinary(recBtts),
+    captures: recCaptures,
+    note: 'Picks del modelo Bzzoiro (favorite/over25/btts) sin gate de publicación: solo reporte.',
+  },
   stats: {
     method: 'stats-ratings-v1',
     metrics: statsMetrics,
@@ -154,4 +224,4 @@ const evaluation = {
   evaluatedAt,
 };
 await writeFile('public/data/evaluation-report.json', JSON.stringify(evaluation, null, 2));
-console.log(`evaluation: Poisson 1X2 n=${poissonOneX2?.sampleSize ?? 0} · ensemble n=${ensembleOneX2?.sampleSize ?? 0} · published=${evaluation.published}`);
+console.log(`evaluation: Poisson 1X2 n=${poissonOneX2?.sampleSize ?? 0} · ensemble n=${ensembleOneX2?.sampleSize ?? 0} · AF n=${afCaptures} · rec n=${recCaptures} · published=${evaluation.published}`);

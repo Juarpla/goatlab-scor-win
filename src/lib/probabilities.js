@@ -316,6 +316,7 @@ export function buildProviderEcho(match) {
     btts: raw?.btts ?? null,
     score: raw?.score ?? null,
     cornersOver95: raw?.cornersOver95 ?? null,
+    recommendations: raw?.recommendations ?? null,
     confidence: raw?.confidence ?? null,
     model: raw?.model ?? null,
     capturedAt: raw?.capturedAt ?? null,

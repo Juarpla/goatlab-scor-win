@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getStandings, getScorers, fuseScorers } from '../src/lib/football.js';
+import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction } from '../src/lib/football.js';
 
 /** Minimal provider stubs matching the real response shapes of each endpoint. */
 const AF_FIXTURE = {
@@ -106,4 +106,39 @@ test('fuseScorers lets football-data lead on goals while Bzzoiro keeps the ids',
   assert.equal(extra.value, 4);
   assert.equal(extra.playerId, null); // nunca se inventan ids
   assert.deepEqual(fuseScorers(bzzoiro, []), bzzoiro);
+});
+
+test('mapProviderPrediction mapea la lectura de API-Football y descarta lo irreconocible', () => {
+  const mapped = mapProviderPrediction({ response: [{ predictions: {
+    winner: { id: 49, name: 'Chelsea', comment: 'Win or draw' },
+    win_or_draw: true, under_over: null,
+    goals: { home: '-3.5', away: '-2.5' },
+    advice: 'Double chance : draw or Chelsea',
+    percent: { home: '10%', draw: '45%', away: '45%' },
+  } }] });
+  assert.equal(mapped.winner, 'Chelsea');
+  assert.equal(mapped.winOrDraw, true);
+  assert.deepEqual(mapped.percent, { home: 0.1, draw: 0.45, away: 0.45 });
+  assert.equal(mapped.advice, 'Double chance : draw or Chelsea');
+  assert.equal(mapped.source, 'API-Football');
+  assert.equal(mapProviderPrediction({ response: [] }), null);
+  assert.equal(mapProviderPrediction({ response: [{ predictions: {} }] }), null);
+  assert.equal(mapProviderPrediction(null), null);
+});
+
+test('fetchProviderPrediction gasta una llamada y degrada a null sin clave, sin id o con error', async () => {
+  let calls = 0;
+  const mapped = await fetchProviderPrediction(1557408, {
+    env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0,
+    fetchImpl: async url => {
+      calls += 1;
+      assert.ok(url.includes('/predictions?fixture=1557408'));
+      return new Response(JSON.stringify({ response: [{ predictions: { winner: { name: 'Chelsea' }, percent: { home: '10%', draw: '45%', away: '45%' } } }] }), { status: 200 });
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(mapped.winner, 'Chelsea');
+  assert.equal(await fetchProviderPrediction(1557408, { env: {}, paceMs: 0 }), null);
+  assert.equal(await fetchProviderPrediction(null, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0 }), null);
+  assert.equal(await fetchProviderPrediction(1557408, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
 });

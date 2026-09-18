@@ -4,13 +4,14 @@
   "away": "Crystal Palace FC",
   "competition": "premier",
   "kickoff": "2026-09-20T13:00:00Z",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 2.133,
       "away": 1.265
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 5
@@ -44,7 +45,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -53,7 +54,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -225,26 +226,29 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.527,
+      "home": 0.531,
       "draw": 0.251,
-      "away": 0.222,
+      "away": 0.218,
       "predicted": "H"
     },
     "xg": {
       "home": 1.67,
       "away": 1.27
     },
-    "over15": 0.757,
-    "over25": 0.541,
-    "over35": 0.33299999999999996,
-    "btts": 0.5579999999999999,
+    "over15": 0.76,
+    "over25": 0.545,
+    "over35": 0.331,
+    "btts": 0.557,
     "score": "1-1",
     "cornersOver95": 0.455,
-    "confidence": 0.5267,
+    "recommendations": null,
+    "confidence": 0.5306,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:48.606Z",
+    "capturedAt": "2026-09-18T10:13:46.381Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": null,
+  "market": null,
   "h2h": {
     "totalMatches": 21,
     "homeWins": 10,
@@ -306,7 +310,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -321,17 +325,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 3.6
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 8.7
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

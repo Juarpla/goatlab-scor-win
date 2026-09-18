@@ -161,6 +161,28 @@ function toLocation(club, match) {
   };
 }
 
+/* ---- Mapa de referencia (Europa) ---- */
+
+/**
+ * Ventana del mapa de Europa que sustituye al zoom de sede cuando el club no
+ * está en el catálogo: de Portugal a Turquía y del norte de África a
+ * Escandinavia. Sin pin: la ubicación se desconoce, el mapa solo ubica el
+ * continente. La retícula y el PNG los produce scripts/generate-venue-zooms.mjs.
+ */
+export const EUROPE_MAP = { lngMin: -12, lngMax: 42, latMin: 34, latMax: 62, step: 0.5, pitch: 9 };
+
+const EUROPE_COLS = Math.round((EUROPE_MAP.lngMax - EUROPE_MAP.lngMin) / EUROPE_MAP.step);
+const EUROPE_ROWS = Math.round((EUROPE_MAP.latMax - EUROPE_MAP.latMin) / EUROPE_MAP.step);
+
+/** Archivo y tamaño del mapa de referencia. */
+export function europeMapLayout() {
+  return {
+    src: '/img/venue-zoom/europa.png',
+    width: EUROPE_COLS * EUROPE_MAP.pitch,
+    height: EUROPE_ROWS * EUROPE_MAP.pitch,
+  };
+}
+
 /** Sede de localía de un encuentro, por alias tolerante del club local. */
 export function locateMatch(match) {
   const norm = normalize(match?.home);

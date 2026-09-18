@@ -6,11 +6,11 @@ import '../styles/global.css';
 import '../styles/detail-motion.css';
 import Icon from '../components/Icon.astro';
 import { AD_CLIENT, ADS_ACTIVE } from '../config/ads';
-const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.' } = Astro.props;
+const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.', canonical = null } = Astro.props;
 ---
 <!doctype html>
 <html lang="es">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#101412"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><title>{title}</title>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#101412"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/>{canonical && <link rel="canonical" href={canonical}/>}<title>{title}</title>
 {ADS_ACTIVE && <script is:inline async crossorigin="anonymous" src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}></script>}
 </head>
 <body>

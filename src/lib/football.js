@@ -1,13 +1,9 @@
 /** Common fixture boundary. Provider IDs are namespaced; absent metrics remain null. */
 import { sameClub, normalize } from './teams.js';
+import { leagues, leagueByProviderId, providerLeagueId } from './leagues.js';
 
-export const competitions = [
-  { id: 'champions', name: 'Champions League', api: 2, fd: 'CL' },
-  { id: 'europa', name: 'Europa League', api: 3, fd: null },
-  { id: 'libertadores', name: 'Libertadores', api: 13, fd: 'CLI' },
-  { id: 'laliga', name: 'LaLiga', api: 140, fd: 'PD' },
-  { id: 'premier', name: 'Premier League', api: 39, fd: 'PL' },
-];
+/** Vista de conveniencia del catálogo único (`public/data/leagues.json`). */
+export const competitions = Object.values(leagues).map(({ id, name, providers }) => ({ id, name, api: providers.api, fd: providers.fd }));
 /** Statuses that mean the match is played and its final score is authoritative. */
 export const FINISHED_STATUSES = new Set(['FT', 'AET', 'PEN']);
 /**
@@ -95,7 +91,7 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
         const data = await pacedRequest(`https://v3.football.api-sports.io/fixtures?date=${encodeURIComponent(day)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
         if (!Array.isArray(data.response)) throw new Error('Formato inválido');
         afMatches.push(...data.response.flatMap(item => {
-          const league = competitions.find(c => c.api === item.league.id);
+          const league = leagueByProviderId('api', item.league.id);
           return league ? [{
             id: `af-${item.fixture.id}`, providerId: item.fixture.id, competition: league.id,
             home: item.teams.home.name, away: item.teams.away.name, kickoff: item.fixture.date,
@@ -125,7 +121,7 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
       // Normalize statuses to the API-Football vocabulary the rest of the site speaks.
       const FD_STATUS = { SCHEDULED: 'NS', TIMED: 'NS', IN_PLAY: 'LIVE', PAUSED: 'HT', FINISHED: 'FT', SUSPENDED: 'SUSP', POSTPONED: 'PST', CANCELLED: 'CANC', AWARDED: 'FT' };
       const fdMatches = data.matches.flatMap(item => {
-        const league = competitions.find(c => c.fd && c.fd === item.competition.code);
+        const league = leagueByProviderId('fd', item.competition.code);
         return league ? [{
           id: `fd-${item.id}`, providerId: item.id, competition: league.id,
           home: item.homeTeam.name, away: item.awayTeam.name, kickoff: item.utcDate,
@@ -156,9 +152,10 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
  * knockout-style stages are skipped rather than half-rendered.
  */
 export async function getStandings({ competition, season, top = 20, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
-  if (!env.FOOTBALL_DATA_KEY || !competition.fd) return null;
+  const fd = providerLeagueId(competition.id, 'fd');
+  if (!env.FOOTBALL_DATA_KEY || !fd) return null;
   try {
-    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${competition.fd}/standings?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
+    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${fd}/standings?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
     // La v4 de football-data.org nombra la fase de liga «REGULAR_SEASON»; las
     // respuestas antiguas usaban «TOTAL». Aceptamos ambas, solo la tabla TOTAL.
     const total = data.standings?.find(entry => entry.type === 'TOTAL' && (entry.stage === 'TOTAL' || entry.stage === 'REGULAR_SEASON'));
@@ -184,9 +181,10 @@ export async function getStandings({ competition, season, top = 20, env = {}, fe
  * quedan en null. Europa League exceptuada (sin `fd`).
  */
 export async function getScorers({ competition, season, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
-  if (!env.FOOTBALL_DATA_KEY || !competition.fd) return [];
+  const fd = providerLeagueId(competition.id, 'fd');
+  if (!env.FOOTBALL_DATA_KEY || !fd) return [];
   try {
-    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${competition.fd}/scorers?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
+    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${fd}/scorers?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
     if (!Array.isArray(data.scorers)) return [];
     return data.scorers.map(row => ({
       player: row.player?.name ?? null,
@@ -241,13 +239,14 @@ export function fuseScorers(bzzoiroRows, fdRows) {
  * One request per competition; finished matches only.
  */
 export async function getLeagueResults({ competition, season, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
-  if (!env.FOOTBALL_DATA_KEY || !competition.fd) return [];
+  const fd = providerLeagueId(competition.id, 'fd');
+  if (!env.FOOTBALL_DATA_KEY || !fd) return [];
   try {
-    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${competition.fd}/matches?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
+    const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${fd}/matches?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
     if (!Array.isArray(data.matches)) throw new Error('Formato inválido');
     return data.matches.flatMap(item => {
-      const league = competitions.find(c => c.id === competition.id && c.fd && c.fd === item.competition.code);
-      if (!league || item.status !== 'FINISHED' || item.score.fullTime.home == null) return [];
+      const league = leagueByProviderId('fd', item.competition.code);
+      if (!league || league.id !== competition.id || item.status !== 'FINISHED' || item.score.fullTime.home == null) return [];
       return [{
         id: `fd-${item.id}`, date: item.utcDate.slice(0, 10), competition: league.id,
         home: item.homeTeam.name, away: item.awayTeam.name,
@@ -257,4 +256,49 @@ export async function getLeagueResults({ competition, season, env = {}, fetchImp
       }];
     });
   } catch (error) { logger.warn(`Resultados (${competition.id}): ${error.message}`); return []; }
+}
+
+/* ---- Predicciones de API-Football (contexto del narrador; nunca cuotas) ---- */
+
+const pctFromString = value => {
+  const match = typeof value === 'string' ? value.match(/(\d+(?:\.\d+)?)\s*%/) : null;
+  if (!match) return null;
+  const number = Number(match[1]);
+  return Number.isFinite(number) ? Math.round(number * 10) / 1000 : null;
+};
+
+/**
+ * Payload de `/predictions?fixture=` → lectura del proveedor en campos
+ * estables. `advice` viaja como texto crudo para que el prompt lo reformule
+ * sin lenguaje de apuesta. Null honesto si no hay nada reconocible.
+ */
+export function mapProviderPrediction(data) {
+  const predictions = Array.isArray(data?.response) ? data.response[0]?.predictions : null;
+  if (!predictions) return null;
+  const percent = predictions.percent ? {
+    home: pctFromString(predictions.percent.home),
+    draw: pctFromString(predictions.percent.draw),
+    away: pctFromString(predictions.percent.away),
+  } : null;
+  if (!predictions.winner?.name && !predictions.advice && !percent?.home && !percent?.draw && !percent?.away) return null;
+  return {
+    winner: predictions.winner?.name ?? null,
+    winnerComment: predictions.winner?.comment ?? null,
+    winOrDraw: typeof predictions.win_or_draw === 'boolean' ? predictions.win_or_draw : null,
+    underOver: predictions.under_over ?? null,
+    goals: { home: predictions.goals?.home ?? null, away: predictions.goals?.away ?? null },
+    advice: typeof predictions.advice === 'string' ? predictions.advice.slice(0, 160) : null,
+    percent,
+    capturedAt: new Date().toISOString(),
+    source: 'API-Football',
+  };
+}
+
+/** 1 request por partido; sin id o sin clave responde null sin llamar. */
+export async function fetchProviderPrediction(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/predictions?fixture=${encodeURIComponent(fixtureId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    return mapProviderPrediction(data);
+  } catch { return null; }
 }

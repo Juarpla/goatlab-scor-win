@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sameTeam, enrichMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast } from '../src/lib/bzzoiro.js';
+import { sameTeam, enrichMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast, mapPrediction } from '../src/lib/bzzoiro.js';
+
+test('mapPrediction conserva los picks del modelo (recommendations) sin inventar lo ausente', () => {
+  const mapped = mapPrediction({
+    markets: { match_result: { prob_home: 42, prob_draw: 28, prob_away: 30, predicted: 'home' }, over_under: { prob_over_25: 46 }, btts: { prob_yes: 51 } },
+    recommendations: { favorite: 'away', favorite_prob: 35.7, over_25: false, btts: true },
+    model: { confidence: 0.62, version: 'v1' },
+  });
+  assert.deepEqual(mapped.recommendations, { favorite: 'away', favoriteProb: 0.357, over25: false, btts: true });
+  assert.equal(mapped.oneX2.home, 0.42);
+  const without = mapPrediction({ markets: { match_result: { prob_home: 42, prob_draw: 28, prob_away: 30 } } });
+  assert.equal(without.recommendations, null);
+});
 
 test('sameTeam matches full names, accents and abbreviations', () => {
   assert.equal(sameTeam('Manchester City', 'Man City'), true);
@@ -95,6 +107,16 @@ test('mapBzzoiroStandings flattens cup groups instead of dropping them', () => {
   assert.equal(rows.length, 2);
   assert.equal(rows[0].team, 'Líder');
   assert.equal(mapBzzoiroStandings({ standings: [] }), null);
+});
+
+test('mapBzzoiroStandings flattens object-form groups (Libertadores)', () => {
+  const rows = mapBzzoiroStandings({ groups: {
+    'Group A': [{ position: 1, team_name: 'Flamengo', team_id: 160, played: 6, won: 5, pts: 15 }],
+    'Group B': [{ position: 1, team_name: 'Palmeiras', team_id: 161, played: 6, won: 4, pts: 13 }],
+  } });
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].teamId, 160);
+  assert.equal(rows[1].team, 'Palmeiras');
 });
 
 test('mapLeaderboard keeps the player position', () => {

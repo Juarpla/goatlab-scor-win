@@ -1,5 +1,26 @@
 /** Portable OpenAI-wire client. Environment is injected; secrets never enter client bundles. */
 const runtimeEnv = () => globalThis.process?.env ?? {};
+
+/** Fallo de red/HTTP/timeout/vacío: reintentar puede ayudar. */
+export class LlmTransportError extends Error {
+  constructor(message, { provider = null } = {}) {
+    super(message);
+    this.name = 'LlmTransportError';
+    this.kind = 'transport';
+    this.provider = provider;
+  }
+}
+
+/** Respuesta llegó pero no pasó la validación (JSON/esquema): reintentar igual no ayuda. */
+export class LlmValidationError extends Error {
+  constructor(message, { provider = null } = {}) {
+    super(message);
+    this.name = 'LlmValidationError';
+    this.kind = 'validation';
+    this.provider = provider;
+  }
+}
+
 export const providers = {
   // baseUrl admite override opcional (MISTRAL_BASE_URL) para servir modelos
   // de la misma firma OpenAI a través de otra pasarela.
@@ -22,33 +43,51 @@ export function resolveChain(env = runtimeEnv(), logger = console) {
   });
 }
 export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 60_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
-  const res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
-    method: 'POST', signal: AbortSignal.timeout(timeoutMs),
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
-    body: JSON.stringify({ model: provider.model, temperature: 0, messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
-  });
+  let res;
+  try {
+    res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST', signal: AbortSignal.timeout(timeoutMs),
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
+      body: JSON.stringify({ model: provider.model, temperature: 0, messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
+    });
+  } catch (error) {
+    throw new LlmTransportError(error?.message ?? 'Error de red', { provider: provider.id });
+  }
   // Do not copy provider response bodies into logs: they may echo prompts or credentials.
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new LlmTransportError(`HTTP ${res.status}`, { provider: provider.id });
   const content = (await res.json())?.choices?.[0]?.message?.content;
-  if (typeof content !== 'string' || !content.trim()) throw new Error('Respuesta vacía o inválida');
+  if (typeof content !== 'string' || !content.trim()) throw new LlmTransportError('Respuesta vacía o inválida', { provider: provider.id });
   return content.trim();
+}
+export function hasTransportFailure(error) {
+  return Array.isArray(error?.details) && error.details.some(detail => detail?.kind === 'transport');
 }
 export async function withFailover(messages, options = {}) {
   const env = options.env ?? runtimeEnv();
   const chain = resolveChain(env, options.logger ?? console);
   const failures = [];
+  const details = [];
   const sessionId = crypto.randomUUID();
   for (const provider of chain) {
     try {
       const content = await callProvider(provider, messages, { ...options, env, sessionId });
-      const value = options.validate ? await options.validate(content) : content;
-      if (value === false || value === undefined || value === null) throw new Error('Validación rechazada');
+      let value;
+      try {
+        value = options.validate ? await options.validate(content) : content;
+      } catch (error) {
+        throw new LlmValidationError(error?.message ?? 'Validación rechazada', { provider: provider.id });
+      }
+      if (value === false || value === undefined || value === null) throw new LlmValidationError('Validación rechazada', { provider: provider.id });
       return { value, provider: provider.id, model: provider.model };
     } catch (error) {
+      const kind = error instanceof LlmTransportError ? 'transport' : error instanceof LlmValidationError ? 'validation' : 'unknown';
       failures.push(new Error(`${provider.name}/${provider.model}: ${error.message}`));
+      details.push({ provider: provider.id, model: provider.model, kind, reason: String(error?.message ?? error) });
     }
   }
-  throw new AggregateError(failures, failures.length ? failures.map(e => e.message).join('; ') : 'No hay proveedores LLM configurados');
+  const aggregate = new AggregateError(failures, failures.length ? failures.map(e => e.message).join('; ') : 'No hay proveedores LLM configurados');
+  aggregate.details = details;
+  throw aggregate;
 }
 export function extractJson(content) {
   const text = content.replace(/<think\b[^>]*>[\s\S]*?<\/think>/gi, '').replace(/```(?:json)?/gi, '').trim();

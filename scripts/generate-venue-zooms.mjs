@@ -8,13 +8,14 @@
  *
  * Uso: node scripts/generate-venue-zooms.mjs [land-110m.json]
  * Si falta el TopoJSON se descarga una vez desde jsdelivr y queda en .cache/.
- * Salida: public/img/venue-zoom/{slug}.png (un archivo por club del catálogo).
+ * Salida: public/img/venue-zoom/{slug}.png (un archivo por club del catálogo)
+ * y europa.png (mapa de referencia cuando la sede no está en el catálogo).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CLUBS, VENUE_ZOOM } from '../src/lib/venues.js';
+import { CLUBS, VENUE_ZOOM, EUROPE_MAP } from '../src/lib/venues.js';
 import { normalize } from '../src/lib/teams.js';
 
 const SEA = [24, 30, 26];
@@ -106,6 +107,29 @@ function encodePng(pixels, width, height) {
   ]);
 }
 
+/** Pinta un recorte equirectangular: esquina superior izquierda en (left, top). */
+function renderCrop({ left, top, cols, rows, step, pitch }) {
+  const w = cols * pitch;
+  const h = rows * pitch;
+  const pixels = Buffer.alloc(w * h * 3);
+  for (let i = 0; i < w * h; i++) pixels.set(SEA, i * 3);
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const lon = left + (col + 0.5) * step;
+      const lat = top - (row + 0.5) * step;
+      if (lat < -90 || lat > 90) continue;
+      if (!inside(lon, lat)) continue;
+      const cx = (col + 0.5) * pitch, cy = (row + 0.5) * pitch;
+      const minX = Math.max(0, Math.floor(cx - RADIUS)), maxX = Math.min(w - 1, Math.ceil(cx + RADIUS));
+      const minY = Math.max(0, Math.floor(cy - RADIUS)), maxY = Math.min(h - 1, Math.ceil(cy + RADIUS));
+      for (let y = minY; y <= maxY; y++) for (let x = minX; x <= maxX; x++) {
+        if ((x - cx) ** 2 + (y - cy) ** 2 <= RADIUS * RADIUS) pixels.set(LAND, (y * w + x) * 3);
+      }
+    }
+  }
+  return encodePng(pixels, w, h);
+}
+
 const outDir = 'public/img/venue-zoom';
 mkdirSync(outDir, { recursive: true });
 const used = new Set();
@@ -114,26 +138,20 @@ CLUBS.forEach((club, index) => {
   const base = normalize(club.aliases[0]).replace(/ /g, '-');
   const slug = used.has(base) ? `${base}-${index + 1}` : base;
   used.add(slug);
-  const left = club.lng - COLS * VENUE_ZOOM.step / 2;
-  const top = club.lat + ROWS * VENUE_ZOOM.step / 2;
-  const pixels = Buffer.alloc(W * H * 3);
-  for (let i = 0; i < W * H; i++) pixels.set(SEA, i * 3);
-  for (let row = 0; row < ROWS; row++) {
-    for (let col = 0; col < COLS; col++) {
-      const lon = left + (col + 0.5) * VENUE_ZOOM.step;
-      const lat = top - (row + 0.5) * VENUE_ZOOM.step;
-      if (lat < -90 || lat > 90) continue;
-      if (!inside(lon, lat)) continue;
-      const cx = (col + 0.5) * VENUE_ZOOM.pitch, cy = (row + 0.5) * VENUE_ZOOM.pitch;
-      const minX = Math.max(0, Math.floor(cx - RADIUS)), maxX = Math.min(W - 1, Math.ceil(cx + RADIUS));
-      const minY = Math.max(0, Math.floor(cy - RADIUS)), maxY = Math.min(H - 1, Math.ceil(cy + RADIUS));
-      for (let y = minY; y <= maxY; y++) for (let x = minX; x <= maxX; x++) {
-        if ((x - cx) ** 2 + (y - cy) ** 2 <= RADIUS * RADIUS) pixels.set(LAND, (y * W + x) * 3);
-      }
-    }
-  }
-  const png = encodePng(pixels, W, H);
+  const png = renderCrop({
+    left: club.lng - COLS * VENUE_ZOOM.step / 2,
+    top: club.lat + ROWS * VENUE_ZOOM.step / 2,
+    cols: COLS, rows: ROWS, step: VENUE_ZOOM.step, pitch: VENUE_ZOOM.pitch,
+  });
   writeFileSync(path.join(outDir, `${slug}.png`), png);
   bytes += png.length;
 });
-console.log(`venue-zoom: ${CLUBS.length} recortes ${W}×${H} px · ${(bytes / 1024).toFixed(0)} KB totales`);
+/* Mapa de referencia sin sede resuelta: el mismo lenguaje de puntos sobre Europa. */
+const europeCols = Math.round((EUROPE_MAP.lngMax - EUROPE_MAP.lngMin) / EUROPE_MAP.step);
+const europeRows = Math.round((EUROPE_MAP.latMax - EUROPE_MAP.latMin) / EUROPE_MAP.step);
+const europe = renderCrop({
+  left: EUROPE_MAP.lngMin, top: EUROPE_MAP.latMax,
+  cols: europeCols, rows: europeRows, step: EUROPE_MAP.step, pitch: EUROPE_MAP.pitch,
+});
+writeFileSync(path.join(outDir, 'europa.png'), europe);
+console.log(`venue-zoom: ${CLUBS.length} recortes ${W}×${H} px + europa.png ${europeCols * EUROPE_MAP.pitch}×${europeRows * EUROPE_MAP.pitch} px · ${((bytes + europe.length) / 1024).toFixed(0)} KB totales`);

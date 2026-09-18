@@ -4,13 +4,14 @@
   "away": "Coventry",
   "competition": "premier",
   "kickoff": "2026-09-19T16:30:00+00:00",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 2.16,
       "away": 0.46
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 5
@@ -20,7 +21,7 @@
       "Coventry": null
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -29,7 +30,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -164,9 +165,9 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.5820000000000001,
-      "draw": 0.237,
-      "away": 0.18100000000000002,
+      "home": 0.588,
+      "draw": 0.233,
+      "away": 0.17800000000000002,
       "predicted": "H"
     },
     "xg": {
@@ -174,16 +175,36 @@
       "away": 1.49
     },
     "over15": 0.7559999999999999,
-    "over25": 0.54,
+    "over25": 0.5379999999999999,
     "over35": 0.324,
-    "btts": 0.536,
+    "btts": 0.5329999999999999,
     "score": "1-1",
-    "cornersOver95": 0.43799999999999994,
-    "confidence": 0.5821,
+    "cornersOver95": 0.43700000000000006,
+    "recommendations": null,
+    "confidence": 0.5883,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:46.778Z",
+    "capturedAt": "2026-09-18T10:13:45.057Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": {
+    "winner": "Nottingham Forest",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": "-1.5",
+      "away": null
+    },
+    "advice": "Double chance : Nottingham Forest or draw",
+    "percent": {
+      "home": 0.45,
+      "draw": 0.45,
+      "away": 0.1
+    },
+    "capturedAt": "2026-09-18T16:11:40.753Z",
+    "source": "API-Football"
+  },
+  "market": null,
   "h2h": {
     "totalMatches": 24,
     "homeWins": 13,
@@ -263,14 +284,15 @@
     "source": null
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 8.4
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

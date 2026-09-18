@@ -4,13 +4,14 @@
   "away": "Manchester United FC",
   "competition": "premier",
   "kickoff": "2026-09-20T15:30:00Z",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 1.26,
       "away": 1.648
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 6
@@ -44,7 +45,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -53,7 +54,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:39.329Z",
+      "updatedAt": "2026-09-18T10:13:37.764Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -234,17 +235,20 @@
       "home": 1.44,
       "away": 1.47
     },
-    "over15": 0.809,
+    "over15": 0.81,
     "over25": 0.601,
     "over35": 0.376,
     "btts": 0.618,
     "score": "1-1",
-    "cornersOver95": 0.507,
-    "confidence": 0.4681,
+    "cornersOver95": 0.508,
+    "recommendations": null,
+    "confidence": 0.4679,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:49.077Z",
+    "capturedAt": "2026-09-18T10:13:47.307Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": null,
+  "market": null,
   "h2h": {
     "totalMatches": 42,
     "homeWins": 4,
@@ -306,7 +310,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -321,17 +325,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 3.7
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 9.4
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

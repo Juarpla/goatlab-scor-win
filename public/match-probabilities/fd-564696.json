@@ -4,13 +4,14 @@
   "away": "Levante UD",
   "competition": "laliga",
   "kickoff": "2026-09-20T16:30:00Z",
-  "updatedAt": "2026-09-18T00:45:20.786Z",
+  "updatedAt": "2026-09-18T16:52:46.210Z",
   "schemaVersion": 3,
   "inputs": {
     "lambdas": {
       "home": 2.16,
       "away": 1.533
     },
+    "lambdaSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -44,7 +45,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "resultsWindowDays": 180,
@@ -53,7 +54,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-18T00:44:26.490Z",
+      "updatedAt": "2026-09-18T10:13:24.655Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -216,26 +217,29 @@
   "method": "poisson-dixoncoles-v1",
   "provider": {
     "oneX2": {
-      "home": 0.597,
-      "draw": 0.218,
-      "away": 0.185,
+      "home": 0.608,
+      "draw": 0.212,
+      "away": 0.18100000000000002,
       "predicted": "H"
     },
     "xg": {
       "home": 2.03,
       "away": 1.23
     },
-    "over15": 0.82,
-    "over25": 0.619,
-    "over35": 0.40299999999999997,
-    "btts": 0.586,
+    "over15": 0.8270000000000001,
+    "over25": 0.633,
+    "over35": 0.415,
+    "btts": 0.5920000000000001,
     "score": "1-1",
     "cornersOver95": 0.54,
-    "confidence": 0.5973,
+    "recommendations": null,
+    "confidence": 0.6078,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-18T00:44:49.512Z",
+    "capturedAt": "2026-09-18T10:13:47.826Z",
     "source": "Bzzoiro"
   },
+  "afPrediction": null,
+  "market": null,
   "h2h": {
     "totalMatches": 30,
     "homeWins": 20,
@@ -297,7 +301,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -312,17 +316,19 @@
       "scorers": 50,
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 4
   },
   "setPieces": {
-    "method": "poisson-corners-v0",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 130
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 10.5
   },
   "statsForecast": {
     "method": "stats-ratings-v1",

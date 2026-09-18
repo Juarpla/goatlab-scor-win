@@ -37,7 +37,7 @@ const pct = (value: number) => `${Math.round(value * 100)}%`;
 ---
 {usable.length >= 3 ? (
   <figure class="duel">
-    <svg viewBox="0 0 360 336" role="img" aria-label={summary}>
+    <svg viewBox="-20 0 400 336" role="img" aria-label={summary}>
       {rings.map(f => <polygon class="duel-grid" points={ringPoly(f)} />)}
       {usable.map((_, i) => {
         const [x, y] = point(i, 1);

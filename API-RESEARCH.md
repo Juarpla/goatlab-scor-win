@@ -53,6 +53,7 @@ Fuera del alcance: cuotas de casas de apuestas, Polymarket, escribir código o t
   - `GET /fixtures?league=39&date=2026-09-16` → exige `season` → bloqueado en práctica para temporada actual.
 - Temporada 2022–2024: stats y eventos por `fixture` funcionan (867947: córners 4/4, amarillas 2/0) ✅ VERIFICADO (live).
 - `/injuries`: disponible pero solo en la ventana 2022–2024 (`team=33&season=2023` → 346 registros) ✅ VERIFICADO (live) → **inservible para bajas actuales**.
+- `GET /predictions?fixture=` **sí sirve la temporada en curso con la clave free** ✅ VERIFICADO (live 2026-09-18, fixture 1557408 Brentford–Chelsea): `winner`, `win_or_draw`, `under_over`, `goals` por equipo, `advice` y `percent` (`45%` strings). 1 request por partido; único parámetro `fixture`; actualización horaria, recomendado 1/día. La cuota diaria se comparte con el endpoint en vivo (`/api/live/[id].json`), de ahí el tope `AF_PREDICTIONS_MAX`.
 
 ### Football-Data.org v4
 - Free €0: 12 competiciones (incluye **Champions League**, id 2001, código CL), 10/min, marcadores con retraso, calendario y tablas.

@@ -20,6 +20,8 @@ const num = (value, digits = 3) => {
   return String(Math.round(n * 10 ** digits) / 10 ** digits);
 };
 
+const yesNo = value => (value == null ? '' : value ? 'si' : 'no');
+
 /** Últimos N resultados de un equipo, más recientes primero. */
 export function lastResults(results, team, n = 6) {
   return (results ?? [])
@@ -41,7 +43,9 @@ const topScorers = (scorers, competition, team, n = 3) =>
  * Construye el input telegráfico de un partido. Orden = prioridad de
  * truncado: lo esencial (M/P/B) primero; lo recortable (S/R/HR) al final.
  * Bloques extra (nunca recortan lo esencial): W clima+sede, L bajas,
- * M2 mercado en % ya normalizado. El LLM narra y audita, nunca calcula.
+ * M2 mercado en % ya normalizado, B2 picks del modelo Bzzoiro, A lectura de
+ * API-Football (con su consejo crudo, que el prompt reformula). El LLM narra
+ * y audita, nunca calcula.
  */
 export function toCompactInput(match, markets = null, { results = [], standings = null, scorers = null, weather = null, market = null } = {}) {
   const lines = [];
@@ -59,6 +63,15 @@ export function toCompactInput(match, markets = null, { results = [], standings 
     lines.push(
       `B|${num(cb.oneX2?.home)}|${num(cb.oneX2?.draw)}|${num(cb.oneX2?.away)}|${num(cb.xg?.home, 2)}|${num(cb.xg?.away, 2)}|${num(cb.over25)}|${num(cb.btts)}|${clean(cb.score, 12)}|${num(cb.cornersOver95)}`,
     );
+  }
+  // Picks del modelo Bzzoiro (booleans + favorito); acompañan, no son números GoatLab.
+  if (cb?.recommendations) {
+    lines.push(`B2|${clean(cb.recommendations.favorite, 16)}|${num(cb.recommendations.favoriteProb)}|${yesNo(cb.recommendations.over25)}|${yesNo(cb.recommendations.btts)}`);
+  }
+  // Lectura de API-Football: porcentajes, ganador, línea de goles y su consejo crudo.
+  const af = match.afPrediction;
+  if (af) {
+    lines.push(`A|${num(af.percent?.home)}|${num(af.percent?.draw)}|${num(af.percent?.away)}|${clean(af.winner, 40)}|${yesNo(af.winOrDraw)}|${clean(af.underOver, 8)}|${clean(af.goals?.home, 8)}|${clean(af.goals?.away, 8)}|${clean(af.advice, 120)}`);
   }
   if (match.h2h?.totalMatches) {
     const h = match.h2h;
