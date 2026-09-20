@@ -35,10 +35,20 @@
     }
   },
   "ensemble": {
-    "oneX2": null,
+    "oneX2": {
+      "sampleSize": 30,
+      "accuracy": 0.5666666666666667,
+      "brierScore": 0.547,
+      "baselineBrierScore": 0.604,
+      "baseline": {
+        "home": 0.533,
+        "draw": 0.2,
+        "away": 0.267
+      }
+    },
     "over25": null,
     "btts": null,
-    "captures": 35,
+    "captures": 39,
     "note": "El blend se evalúa con capturas pre-partido acumuladas en corridas programadas."
   },
   "apiFootball": {
@@ -49,22 +59,22 @@
       "accuracy": 0.333
     },
     "winOrDraw": {
-      "hits": 9,
-      "total": 12,
-      "accuracy": 0.75
+      "hits": 13,
+      "total": 16,
+      "accuracy": 0.813
     },
-    "captures": 12,
+    "captures": 16,
     "note": "Lectura del proveedor API-Football capturada antes del kickoff; el Brier 1X2 exige muestra ≥ 30."
   },
   "providerRecommendations": {
     "favorite": {
-      "hits": 0,
-      "total": 2,
-      "accuracy": 0
+      "hits": 1,
+      "total": 3,
+      "accuracy": 0.333
     },
     "over25": null,
     "btts": null,
-    "captures": 11,
+    "captures": 15,
     "note": "Picks del modelo Bzzoiro (favorite/over25/btts) sin gate de publicación: solo reporte."
   },
   "stats": {
@@ -133,5 +143,5 @@
     "baselines": "Distribución empírica de la muestra evaluada.",
     "thresholds": "1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado. Stats: muestra ≥ 30 y MAE < media de la competición."
   },
-  "evaluatedAt": "2026-09-20T16:12:36.999Z"
+  "evaluatedAt": "2026-09-20T20:53:34.297Z"
 }
