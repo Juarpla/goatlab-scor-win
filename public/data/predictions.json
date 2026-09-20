@@ -26257,7 +26257,11 @@
           }
         }
       ],
-      "finalScore": null
+      "finalScore": {
+        "home": 1,
+        "away": 0,
+        "recordedAt": "2026-09-20T16:12:32.174Z"
+      }
     },
     "af-1557407": {
       "kickoff": "2026-09-20T13:00:00+00:00",
@@ -26889,7 +26893,11 @@
           }
         }
       ],
-      "finalScore": null
+      "finalScore": {
+        "home": 0,
+        "away": 1,
+        "recordedAt": "2026-09-20T16:12:32.174Z"
+      }
     },
     "af-1557412": {
       "kickoff": "2026-09-20T13:00:00+00:00",
@@ -27539,7 +27547,11 @@
           }
         }
       ],
-      "finalScore": null
+      "finalScore": {
+        "home": 0,
+        "away": 0,
+        "recordedAt": "2026-09-20T16:12:32.174Z"
+      }
     },
     "af-1557413": {
       "kickoff": "2026-09-20T13:00:00+00:00",
@@ -28189,7 +28201,11 @@
           }
         }
       ],
-      "finalScore": null
+      "finalScore": {
+        "home": 5,
+        "away": 3,
+        "recordedAt": "2026-09-20T16:12:32.174Z"
+      }
     },
     "af-1570394": {
       "kickoff": "2026-09-20T14:15:00+00:00",
@@ -28774,6 +28790,110 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4805"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Mercado (consenso)",
+                "weight": 0,
+                "detail": "sin lectura del mercado para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.312)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 6
+            },
+            "drawBase": 0.2354948805460751
+          }
+        },
+        {
+          "capturedAt": "2026-09-20T16:12:21.372Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.275,
+              "draw": 0.251,
+              "away": 0.474,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.57,
+              "away": 1.59
+            },
+            "over15": 0.833,
+            "over25": 0.638,
+            "over35": 0.42,
+            "btts": 0.639,
+            "score": "1-1",
+            "cornersOver95": 0.578,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.474,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4742,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": {
+            "winner": "Atletico Madrid",
+            "winnerComment": "Win or draw",
+            "winOrDraw": true,
+            "underOver": null,
+            "goals": {
+              "home": "-3.5",
+              "away": "-2.5"
+            },
+            "percent": {
+              "home": 0.35,
+              "draw": 0.35,
+              "away": 0.3
+            },
+            "advice": "Double chance : Atletico Madrid or draw",
+            "capturedAt": "2026-09-20T11:31:14.338Z"
+          },
+          "goatlab": {
+            "oneX2": {
+              "home": 0.273,
+              "draw": 0.247,
+              "away": 0.481
+            },
+            "over25": 0.638,
+            "btts": 0.639,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4742"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -29469,6 +29589,113 @@
             },
             "drawBase": 0.2354948805460751
           }
+        },
+        {
+          "capturedAt": "2026-09-20T16:12:21.388Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.276,
+              "draw": 0.253,
+              "away": 0.47100000000000003,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.44,
+              "away": 1.47
+            },
+            "over15": 0.82,
+            "over25": 0.609,
+            "over35": 0.384,
+            "btts": 0.627,
+            "score": "1-1",
+            "cornersOver95": 0.511,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.471,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4711,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": {
+            "winner": "Manchester United",
+            "winnerComment": "Win or draw",
+            "winOrDraw": true,
+            "underOver": null,
+            "goals": {
+              "home": "-2.5",
+              "away": "-2.5"
+            },
+            "percent": {
+              "home": 0.1,
+              "draw": 0.45,
+              "away": 0.45
+            },
+            "advice": "Double chance : draw or Manchester United",
+            "capturedAt": "2026-09-20T11:31:20.830Z"
+          },
+          "goatlab": {
+            "oneX2": {
+              "home": 0.26,
+              "draw": 0.246,
+              "away": 0.493
+            },
+            "over25": 0.582,
+            "btts": 0.603,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4711"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0.3,
+                "detail": "λ 1.26 – 1.648 (tasas de goles recientes)"
+              },
+              {
+                "label": "Mercado (consenso)",
+                "weight": 0,
+                "detail": "sin lectura del mercado para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.619)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": {
+              "home": 1.26,
+              "away": 1.648
+            },
+            "sample": {
+              "home": 4,
+              "away": 6
+            },
+            "drawBase": 0.2354948805460751
+          }
         }
       ],
       "finalScore": null
@@ -30056,6 +30283,110 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4668"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Mercado (consenso)",
+                "weight": 0,
+                "detail": "sin lectura del mercado para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.119)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 6
+            },
+            "drawBase": 0.2354948805460751
+          }
+        },
+        {
+          "capturedAt": "2026-09-20T16:12:21.489Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.27399999999999997,
+              "draw": 0.265,
+              "away": 0.461,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.57,
+              "away": 1.26
+            },
+            "over15": 0.758,
+            "over25": 0.528,
+            "over35": 0.316,
+            "btts": 0.5710000000000001,
+            "score": "1-1",
+            "cornersOver95": 0.489,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.461,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.461,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": {
+            "winner": "Real Betis",
+            "winnerComment": "Win or draw",
+            "winOrDraw": true,
+            "underOver": null,
+            "goals": {
+              "home": "-2.5",
+              "away": "-2.5"
+            },
+            "percent": {
+              "home": 0.1,
+              "draw": 0.45,
+              "away": 0.45
+            },
+            "advice": "Double chance : draw or Real Betis",
+            "capturedAt": "2026-09-20T11:31:27.440Z"
+          },
+          "goatlab": {
+            "oneX2": {
+              "home": 0.318,
+              "draw": 0.257,
+              "away": 0.426
+            },
+            "over25": 0.528,
+            "btts": 0.571,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.461"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -30751,6 +31082,113 @@
             },
             "drawBase": 0.2354948805460751
           }
+        },
+        {
+          "capturedAt": "2026-09-20T16:12:22.983Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.626,
+              "draw": 0.205,
+              "away": 0.16899999999999998,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 2.02,
+              "away": 1.23
+            },
+            "over15": 0.835,
+            "over25": 0.645,
+            "over35": 0.42100000000000004,
+            "btts": 0.598,
+            "score": "1-1",
+            "cornersOver95": 0.535,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.626,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6264,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": {
+            "winner": "Villarreal",
+            "winnerComment": "Win or draw",
+            "winOrDraw": true,
+            "underOver": null,
+            "goals": {
+              "home": "-2.5",
+              "away": "-2.5"
+            },
+            "percent": {
+              "home": 0.45,
+              "draw": 0.45,
+              "away": 0.1
+            },
+            "advice": "Double chance : Villarreal or draw",
+            "capturedAt": "2026-09-20T11:31:33.818Z"
+          },
+          "goatlab": {
+            "oneX2": {
+              "home": 0.575,
+              "draw": 0.212,
+              "away": 0.214
+            },
+            "over25": 0.679,
+            "btts": 0.646,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6264"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0.3,
+                "detail": "λ 2.16 – 1.533 (tasas de goles recientes)"
+              },
+              {
+                "label": "Mercado (consenso)",
+                "weight": 0,
+                "detail": "sin lectura del mercado para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.4)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": {
+              "home": 2.16,
+              "away": 1.533
+            },
+            "sample": {
+              "home": 6,
+              "away": 6
+            },
+            "drawBase": 0.2354948805460751
+          }
         }
       ],
       "finalScore": null
@@ -31385,10 +31823,117 @@
             },
             "drawBase": 0.2354948805460751
           }
+        },
+        {
+          "capturedAt": "2026-09-20T16:12:22.422Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.34600000000000003,
+              "draw": 0.28300000000000003,
+              "away": 0.37200000000000005,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.5,
+              "away": 1.24
+            },
+            "over15": 0.727,
+            "over25": 0.496,
+            "over35": 0.292,
+            "btts": 0.5489999999999999,
+            "score": "1-1",
+            "cornersOver95": 0.49,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.372,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3716,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": {
+            "winner": "Real Sociedad",
+            "winnerComment": "Win or draw",
+            "winOrDraw": true,
+            "underOver": null,
+            "goals": {
+              "home": "-1.5",
+              "away": "-2.5"
+            },
+            "percent": {
+              "home": 0.1,
+              "draw": 0.45,
+              "away": 0.45
+            },
+            "advice": "Double chance : draw or Real Sociedad",
+            "capturedAt": "2026-09-20T16:12:32.146Z"
+          },
+          "goatlab": {
+            "oneX2": {
+              "home": 0.361,
+              "draw": 0.27,
+              "away": 0.369
+            },
+            "over25": 0.474,
+            "btts": 0.528,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3716"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0.3,
+                "detail": "λ 1.26 – 1.227 (tasas de goles recientes)"
+              },
+              {
+                "label": "Mercado (consenso)",
+                "weight": 0,
+                "detail": "sin lectura del mercado para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": {
+              "home": 1.26,
+              "away": 1.227
+            },
+            "sample": {
+              "home": 6,
+              "away": 6
+            },
+            "drawBase": 0.2354948805460751
+          }
         }
       ],
       "finalScore": null
     }
   },
-  "updatedAt": "2026-09-20T11:54:46.168Z"
+  "updatedAt": "2026-09-20T16:12:32.175Z"
 }
