@@ -355,6 +355,6 @@ test('el mapa de referencia de Europa declara su recorte y no lleva pin', () => 
   assert.equal(map.src, '/img/venue-zoom/europa.png');
   assert.equal(map.width, Math.round((EUROPE_MAP.lngMax - EUROPE_MAP.lngMin) / EUROPE_MAP.step) * EUROPE_MAP.pitch);
   assert.equal(map.height, Math.round((EUROPE_MAP.latMax - EUROPE_MAP.latMin) / EUROPE_MAP.step) * EUROPE_MAP.pitch);
-  assert.equal(map.pinX, undefined);
-  assert.equal(map.pinY, undefined);
+  assert.equal(map.pinX, null);
+  assert.equal(map.pinY, null);
 });
