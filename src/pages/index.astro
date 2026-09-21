@@ -28,7 +28,7 @@ const heroForm = hero ? matchForm(results.results, hero.home, hero.away) : null;
 const heroDate = hero ? new Date(hero.kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'long', day: 'numeric', month: 'long' }) : null;
 const heroTime = hero ? new Date(hero.kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) : null;
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
-const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL' };
+const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 // Muro: solo próximos, sin el destacado, capados a los 9 más cercanos por kickoff.
 const wallRows = upcoming.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
@@ -62,7 +62,8 @@ const journeyData = buildMapData(upcoming);
 const pulse = computePulse(results.results);
 const curiosities = computeCuriosities(results.results);
 const players = computePlayerPulse(scorers);
-const tables = Object.fromEntries(Object.entries(standings).filter(([, table]) => table.rows?.length));
+// Nations League es fase de grupos: su tabla plana no entra al widget (vista por grupos pendiente).
+const tables = Object.fromEntries(Object.entries(standings).filter(([id, table]) => id !== 'nations' && table.rows?.length));
 const hasLeft = pulse.length > 0 || players.length > 0;
 const hasRight = Object.keys(tables).length > 0 || curiosities.length > 0;
 const hasJourney = journeyData.pins.length > 0 || hasLeft || hasRight;

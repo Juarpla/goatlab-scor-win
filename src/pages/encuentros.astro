@@ -10,7 +10,7 @@ import results from '../../public/data/results.json';
 import '../styles/home.css';
 
 const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
-const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL' };
+const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const dayLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'short', day: 'numeric', month: 'short' });
@@ -19,7 +19,7 @@ const rows = matches.filter(match => !FINISHED_STATUSES.has(match.status) && !is
 const days = [...new Set(rows.map(match => match.kickoff.slice(0, 10)))];
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 // Orden del muro, distinto del array global: LaLiga y Premier primero.
-const wallCompetitions = ['laliga', 'premier', 'champions', 'europa', 'libertadores'].map(id => competitions.find(c => c.id === id)).filter(Boolean);
+const wallCompetitions = ['laliga', 'premier', 'champions', 'europa', 'libertadores', 'nations'].map(id => competitions.find(c => c.id === id)).filter(Boolean);
 const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FUT', competitionName: competitionById(m.competition)?.name ?? '', kickoffLabel: kickoffLabel(m.kickoff), formHome: m.form?.homeForm ?? null, formAway: m.form?.awayForm ?? null });
 ---
 <Layout title="Encuentros — GoatLab" description="La ventana completa de siete días: filtra por liga, día o estado y busca por equipo o estadio.">

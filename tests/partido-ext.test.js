@@ -228,6 +228,7 @@ test('teamContext deriva porterías a cero y racha de la base real', () => {
 test('domesticLeague resuelve la liga del equipo e ignora las copas', () => {
   const standings = {
     champions: { rows: [{ team: 'Local', position: 3 }] },
+    nations: { rows: [{ team: 'Local', position: 1 }] },
     premier: { rows: [{ team: 'Local', position: 5, played: 4, goalsFor: 9, goalsAgainst: 2 }] },
   };
   assert.equal(domesticLeague(standings, 'Local'), 'premier');

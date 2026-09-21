@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sameTeam, enrichMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast, mapPrediction } from '../src/lib/bzzoiro.js';
+import { sameTeam, enrichMatches, leagueNameMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast, mapPrediction } from '../src/lib/bzzoiro.js';
 
 test('mapPrediction conserva los picks del modelo (recommendations) sin inventar lo ausente', () => {
   const mapped = mapPrediction({
@@ -12,6 +12,12 @@ test('mapPrediction conserva los picks del modelo (recommendations) sin inventar
   assert.equal(mapped.oneX2.home, 0.42);
   const without = mapPrediction({ markets: { match_result: { prob_home: 42, prob_draw: 28, prob_away: 30 } } });
   assert.equal(without.recommendations, null);
+});
+
+test('leagueNameMatches resuelve Nations League sin morder la femenina', () => {
+  assert.equal(leagueNameMatches('UEFA Nations League', 'nations'), true);
+  assert.equal(leagueNameMatches("UEFA Women's Nations League", 'nations'), false);
+  assert.equal(leagueNameMatches('Premier League', 'nations'), false);
 });
 
 test('sameTeam matches full names, accents and abbreviations', () => {

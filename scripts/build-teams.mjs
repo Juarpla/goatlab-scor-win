@@ -68,7 +68,7 @@ async function main() {
   for (const comp of competitions) {
     const leagueId = providerLeagueId(comp.id, 'bzzoiro') ?? legacyLeagues?.[comp.id]?.id;
     if (!leagueId || !env.BZZOIRO_API_TOKEN) continue;
-    const table = await fetchBzzoiroStandings(leagueId, { env, top: 50 }).catch(error => {
+    const table = await fetchBzzoiroStandings(leagueId, { env, top: 60 }).catch(error => {
       console.warn(`Bzzoiro ${comp.id}: ${error.message}`);
       return null;
     });

@@ -332,7 +332,7 @@ function standingsRow(standings, competitionId, team) {
 const RECENT = 5;
 
 /** Competiciones coperas o internacionales: nunca son "su campeonato". */
-const CUP_COMPETITIONS = new Set(['champions', 'europa', 'libertadores']);
+const CUP_COMPETITIONS = new Set(['champions', 'europa', 'libertadores', 'nations']);
 
 /**
  * Liga doméstica del equipo: primera competición de tablas que lo contiene y

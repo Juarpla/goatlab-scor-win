@@ -91,6 +91,21 @@ export const CLUBS = [
   { aliases: ['universidad central de venezuela', 'universidad central'], city: 'Caracas', country: 'Venezuela', stadium: 'Olímpico de la UCV', tz: 'America/Caracas', lat: 10.4980, lng: -66.8870, capacity: null },
   { aliases: ['deportivo la guaira', 'deportivo la guaira fc'], city: 'Caracas', country: 'Venezuela', stadium: 'Olímpico de la UCV', tz: 'America/Caracas', lat: 10.4980, lng: -66.8870, capacity: null },
   { aliases: ['coquimbo unido', 'cd coquimbo unido'], city: 'Coquimbo', country: 'Chile', stadium: 'Francisco Sánchez Rumoroso', tz: 'America/Santiago', lat: -29.9530, lng: -71.3390, capacity: null },
+  // UEFA Nations League, Liga A 2026/27 (Etapa 1): solo sedes principales
+  // estables. Las selecciones rotativas (España, Alemania, Portugal, Turquía)
+  // quedan al fallback de Europa y a la captura observada (venue-candidates).
+  { aliases: ['france', 'francia'], city: 'Saint-Denis', country: 'Francia', stadium: 'Stade de France', tz: 'Europe/Paris', lat: 48.9244, lng: 2.3602, capacity: 81338 },
+  { aliases: ['italy', 'italia'], city: 'Roma', country: 'Italia', stadium: 'Stadio Olimpico', tz: 'Europe/Rome', lat: 41.9341, lng: 12.4547, capacity: null },
+  { aliases: ['belgium', 'belgica', 'bélgica'], city: 'Bruselas', country: 'Bélgica', stadium: 'King Baudouin Stadium', tz: 'Europe/Brussels', lat: 50.8956, lng: 4.3296, capacity: 50093 },
+  { aliases: ['netherlands', 'holanda', 'paises bajos', 'países bajos'], city: 'Ámsterdam', country: 'Países Bajos', stadium: 'Johan Cruijff ArenA', tz: 'Europe/Amsterdam', lat: 52.3142, lng: 4.9410, capacity: 55500 },
+  { aliases: ['serbia'], city: 'Belgrado', country: 'Serbia', stadium: 'Rajko Mitic', tz: 'Europe/Belgrade', lat: 44.7833, lng: 20.3986, capacity: 51936 },
+  { aliases: ['greece', 'grecia'], city: 'El Pireo', country: 'Grecia', stadium: 'Karaiskakis Stadium', tz: 'Europe/Athens', lat: 37.9465, lng: 23.6643, capacity: 33334 },
+  { aliases: ['croatia', 'croacia'], city: 'Zagreb', country: 'Croacia', stadium: 'Maksimir', tz: 'Europe/Zagreb', lat: 45.8189, lng: 16.0194, capacity: 35123 },
+  { aliases: ['england', 'inglaterra'], city: 'Londres', country: 'Inglaterra', stadium: 'Wembley Stadium', tz: 'Europe/London', lat: 51.5559, lng: -0.2796, capacity: 90000 },
+  { aliases: ['czechia', 'czech republic', 'czech', 'chequia'], city: 'Praga', country: 'Chequia', stadium: 'Fortuna Arena', tz: 'Europe/Prague', lat: 50.0675, lng: 14.4713, capacity: 19370 },
+  { aliases: ['denmark', 'dinamarca'], city: 'Copenhague', country: 'Dinamarca', stadium: 'Parken', tz: 'Europe/Copenhagen', lat: 55.7022, lng: 12.5727, capacity: 38065 },
+  { aliases: ['norway', 'noruega'], city: 'Oslo', country: 'Noruega', stadium: 'Ullevaal Stadion', tz: 'Europe/Oslo', lat: 59.9482, lng: 10.7337, capacity: 28454 },
+  { aliases: ['wales', 'gales'], city: 'Cardiff', country: 'Gales', stadium: 'Cardiff City Stadium', tz: 'Europe/London', lat: 51.4728, lng: -3.2040, capacity: 33280 },
   // Champions y Europa (clubes recurrentes; los demás caen a la fila «sin sede»)
   { aliases: ['paris saint germain', 'paris saint-germain'], city: 'París', country: 'Francia', stadium: 'Parc des Princes', tz: 'Europe/Paris', lat: 48.8414, lng: 2.2530, capacity: 47929 },
   { aliases: ['borussia dortmund'], city: 'Dortmund', country: 'Alemania', stadium: 'Signal Iduna Park', tz: 'Europe/Berlin', lat: 51.4926, lng: 7.4461, capacity: 81365 },

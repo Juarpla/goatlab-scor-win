@@ -525,6 +525,7 @@ const LEAGUE_MATCHERS = {
   champions: { any: [['champions', 'league']], exclude: ['women', 'femenina', 'youth', 'juvenile', 'u19', 'conmebol', 'caf', 'afc', 'africa', 'asia'] },
   europa: { any: [['europa', 'league']], exclude: ['conference', 'women', 'femenina', 'youth'] },
   libertadores: { any: [['libertadores']], exclude: ['femenina', 'women', 'sub', 'sub20', 'sub17'] },
+  nations: { any: [['nations', 'league']], exclude: ['women', 'femenina', 'femenino', 'u21', 'u19', 'u17', 'youth', 'juvenile'] },
 };
 /** True when a league name carries all tokens of one candidate and none of the exclusions. */
 export function leagueNameMatches(name, competitionId) {

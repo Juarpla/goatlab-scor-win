@@ -16,6 +16,15 @@ test('el catálogo interno resuelve ids por proveedor y vuelta atrás', () => {
   assert.equal(leagueByProviderId('bzzoiro', 3)?.id, 'laliga');
 });
 
+test('nations resuelve Nations League (api 5, sin fd, bzzoiro 64)', () => {
+  assert.equal(league('nations')?.name, 'UEFA Nations League');
+  assert.equal(providerLeagueId('nations', 'api'), 5);
+  assert.equal(providerLeagueId('nations', 'fd'), null);
+  assert.equal(providerLeagueId('nations', 'bzzoiro'), 64);
+  assert.equal(leagueByProviderId('api', 5)?.id, 'nations');
+  assert.equal(leagueByProviderId('bzzoiro', 64)?.id, 'nations');
+});
+
 test('lo desconocido queda en null honesto, nunca inventado', () => {
   assert.equal(league('inexistente'), null);
   assert.equal(leagueName('inexistente'), null);
