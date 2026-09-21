@@ -9,29 +9,29 @@
   },
   "poisson": {
     "oneX2": {
-      "sampleSize": 134,
-      "accuracy": 0.417910447761194,
-      "brierScore": 0.649,
+      "sampleSize": 149,
+      "accuracy": 0.4228187919463087,
+      "brierScore": 0.643,
       "baselineBrierScore": 0.652,
       "baseline": {
-        "home": 0.418,
-        "draw": 0.246,
-        "away": 0.336
+        "home": 0.423,
+        "draw": 0.255,
+        "away": 0.322
       }
     },
     "over25": {
-      "sampleSize": 134,
-      "accuracy": 0.604,
-      "brierScore": 0.236,
+      "sampleSize": 149,
+      "accuracy": 0.577,
+      "brierScore": 0.24,
       "baselineBrierScore": 0.25,
-      "baseline": 0.485
+      "baseline": 0.483
     },
     "btts": {
-      "sampleSize": 134,
-      "accuracy": 0.507,
-      "brierScore": 0.261,
-      "baselineBrierScore": 0.25,
-      "baseline": 0.507
+      "sampleSize": 149,
+      "accuracy": 0.523,
+      "brierScore": 0.259,
+      "baselineBrierScore": 0.249,
+      "baseline": 0.523
     }
   },
   "ensemble": {
@@ -81,44 +81,44 @@
     "method": "stats-ratings-v1",
     "metrics": {
       "possession": {
-        "sampleSize": 28,
-        "mae": 9.101,
-        "baselineMae": 9.464,
-        "published": false
+        "sampleSize": 34,
+        "mae": 8.221,
+        "baselineMae": 8.853,
+        "published": true
       },
       "shots": {
-        "sampleSize": 56,
-        "mae": 4.225,
-        "baselineMae": 4.659,
+        "sampleSize": 68,
+        "mae": 4.425,
+        "baselineMae": 4.8,
         "published": true
       },
       "shotsOnTarget": {
-        "sampleSize": 56,
-        "mae": 1.969,
-        "baselineMae": 2.08,
+        "sampleSize": 68,
+        "mae": 1.957,
+        "baselineMae": 2.047,
         "published": true
       },
       "xg": {
-        "sampleSize": 56,
-        "mae": 0.661,
-        "baselineMae": 0.703,
+        "sampleSize": 68,
+        "mae": 0.711,
+        "baselineMae": 0.749,
         "published": true
       },
       "corners": {
-        "sampleSize": 56,
-        "mae": 2.346,
-        "baselineMae": 2.412,
+        "sampleSize": 68,
+        "mae": 2.314,
+        "baselineMae": 2.38,
         "published": true
       },
       "fouls": {
-        "sampleSize": 56,
-        "mae": 2.933,
-        "baselineMae": 3.056,
+        "sampleSize": 68,
+        "mae": 2.817,
+        "baselineMae": 2.998,
         "published": true
       },
       "yellowCards": {
-        "sampleSize": 52,
-        "mae": 1.049,
+        "sampleSize": 64,
+        "mae": 1.052,
         "baselineMae": 1.023,
         "published": false
       },
@@ -129,9 +129,9 @@
         "published": false
       },
       "offsides": {
-        "sampleSize": 46,
-        "mae": 1.072,
-        "baselineMae": 1.124,
+        "sampleSize": 56,
+        "mae": 1.023,
+        "baselineMae": 1.077,
         "published": true
       }
     },
@@ -143,5 +143,5 @@
     "baselines": "Distribución empírica de la muestra evaluada.",
     "thresholds": "1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado. Stats: muestra ≥ 30 y MAE < media de la competición."
   },
-  "evaluatedAt": "2026-09-21T05:02:35.452Z"
+  "evaluatedAt": "2026-09-21T13:27:07.246Z"
 }
