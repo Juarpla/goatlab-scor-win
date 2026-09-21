@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction } from '../src/lib/football.js';
+import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction, mapAfOdds, fetchAfOdds } from '../src/lib/football.js';
 
 /** Minimal provider stubs matching the real response shapes of each endpoint. */
 const AF_FIXTURE = {
@@ -141,4 +141,58 @@ test('fetchProviderPrediction gasta una llamada y degrada a null sin clave, sin 
   assert.equal(await fetchProviderPrediction(1557408, { env: {}, paceMs: 0 }), null);
   assert.equal(await fetchProviderPrediction(null, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0 }), null);
   assert.equal(await fetchProviderPrediction(1557408, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
+});
+
+/** Dos casas con 1X2, over 2.5 y BTTS: promedia y quita el margen. */
+const AF_ODDS = bookmakers => ({ response: [{ bookmakers }] });
+const AF_BOOK = (winner, over, btts) => ({
+  bets: [
+    { id: 1, name: 'Match Winner', values: [{ value: 'Home', odd: winner[0] }, { value: 'Draw', odd: winner[1] }, { value: 'Away', odd: winner[2] }] },
+    { id: 5, name: 'Goals Over/Under', values: [{ value: 'Over 2.5', odd: over[0] }, { value: 'Under 2.5', odd: over[1] }] },
+    { id: 8, name: 'Both Teams Score', values: [{ value: 'Yes', odd: btts[0] }, { value: 'No', odd: btts[1] }] },
+  ],
+});
+
+test('mapAfOdds convierte cuotas a % justos y suma 1 por mercado', () => {
+  const mapped = mapAfOdds(AF_ODDS([
+    AF_BOOK(['2.10', '3.40', '3.60'], ['1.95', '1.90'], ['1.80', '2.05']),
+    AF_BOOK(['2.00', '3.50', '3.80'], ['1.90', '1.95'], ['1.85', '2.00']),
+  ]));
+  assert.equal(mapped.source, 'API-Football');
+  assert.equal(mapped.bookmakers, 2);
+  const sum = rows => Math.abs(rows.reduce((a, b) => a + b, 0) - 1) < 0.002;
+  assert.ok(sum([mapped.oneX2.home, mapped.oneX2.draw, mapped.oneX2.away]));
+  assert.ok(mapped.over25 > 0 && mapped.over25 < 1);
+  assert.ok(mapped.btts > 0 && mapped.btts < 1);
+  // El favorito en cuotas (local ~2.05) queda favorito en %.
+  assert.ok(mapped.oneX2.home > mapped.oneX2.away);
+});
+
+test('mapAfOdds null-honesto sin casas, sin apuestas o con cuotas inválidas', () => {
+  assert.equal(mapAfOdds({ response: [] }), null);
+  assert.equal(mapAfOdds({ response: [{ bookmakers: [] }] }), null);
+  assert.equal(mapAfOdds({ response: [{ bookmakers: [{ bets: [] }] }] }), null);
+  assert.equal(mapAfOdds(null), null);
+  // Solo BTTS válido: rescata ese mercado.
+  const partial = mapAfOdds(AF_ODDS([{ bets: [{ id: 8, name: 'Both Teams Score', values: [{ value: 'Yes', odd: '1.80' }, { value: 'No', odd: '2.05' }] }] }]));
+  assert.equal(partial.oneX2, null);
+  assert.equal(partial.over25, null);
+  assert.ok(partial.btts > 0 && partial.btts < 1);
+});
+
+test('fetchAfOdds gasta una llamada y degrada a null sin clave, sin id o con error', async () => {
+  let calls = 0;
+  const mapped = await fetchAfOdds(1570400, {
+    env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0,
+    fetchImpl: async url => {
+      calls += 1;
+      assert.ok(url.includes('/odds?fixture=1570400'));
+      return new Response(JSON.stringify(AF_ODDS([AF_BOOK(['2.10', '3.40', '3.60'], ['1.95', '1.90'], ['1.80', '2.05'])])), { status: 200 });
+    },
+  });
+  assert.equal(calls, 1);
+  assert.ok(mapped.over25 > 0 && mapped.over25 < 1);
+  assert.equal(await fetchAfOdds(1570400, { env: {}, paceMs: 0 }), null);
+  assert.equal(await fetchAfOdds(null, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0 }), null);
+  assert.equal(await fetchAfOdds(1570400, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
 });

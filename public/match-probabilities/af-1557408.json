@@ -4,8 +4,8 @@
   "away": "Chelsea",
   "competition": "premier",
   "kickoff": "2026-09-18T19:00:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.741Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
       "home": 2.16,
@@ -17,8 +17,32 @@
       "away": 4
     },
     "standings": {
-      "Brentford": null,
-      "Chelsea": null
+      "Brentford": {
+        "position": 7,
+        "team": "Brentford FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 3,
+        "lost": 0,
+        "goalsFor": 7,
+        "goalsAgainst": 4,
+        "goalDifference": 3,
+        "points": 6,
+        "form": null
+      },
+      "Chelsea": {
+        "position": 6,
+        "team": "Chelsea FC",
+        "played": 4,
+        "won": 2,
+        "drawn": 1,
+        "lost": 1,
+        "goalsFor": 10,
+        "goalsAgainst": 9,
+        "goalDifference": 1,
+        "points": 7,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:37.764Z",
@@ -39,7 +63,12 @@
     "venue": {
       "city": "Londres",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.87,
+      "away": 1.555
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
@@ -101,42 +130,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.77,
-    "noGoal": 0.023,
+    "lambdaTotal": 3.43,
+    "noGoal": 0.033,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.467
+        "p": 0.435
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.249
+        "p": 0.246
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.133
+        "p": 0.139
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.071
+        "p": 0.078
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.038
+        "p": 0.044
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.02
+        "p": 0.025
       }
     ],
-    "firstHome": 0.56,
-    "firstAway": 0.417
+    "firstHome": 0.528,
+    "firstAway": 0.439
   },
   "scorers": {
     "home": [
@@ -145,18 +174,18 @@
         "goals": 3,
         "matches": 4,
         "share": 0.429,
-        "rate": 0.93,
-        "anytime": 0.604,
-        "first": 0.246
+        "rate": 0.8,
+        "anytime": 0.552,
+        "first": 0.234
       },
       {
         "player": "Vitaly Janelt",
         "goals": 2,
         "matches": 4,
         "share": 0.286,
-        "rate": 0.62,
-        "anytime": 0.461,
-        "first": 0.164
+        "rate": 0.53,
+        "anytime": 0.414,
+        "first": 0.156
       }
     ],
     "away": [
@@ -165,32 +194,32 @@
         "goals": 3,
         "matches": 4,
         "share": 0.3,
-        "rate": 0.48,
-        "anytime": 0.383,
-        "first": 0.128
+        "rate": 0.47,
+        "anytime": 0.373,
+        "first": 0.136
       },
       {
         "player": "Morgan Rogers",
         "goals": 3,
         "matches": 4,
         "share": 0.3,
-        "rate": 0.48,
-        "anytime": 0.383,
-        "first": 0.128
+        "rate": 0.47,
+        "anytime": 0.373,
+        "first": 0.136
       },
       {
         "player": "Cole Palmer",
         "goals": 2,
         "matches": 4,
         "share": 0.2,
-        "rate": 0.32,
-        "anytime": 0.275,
-        "first": 0.085
+        "rate": 0.31,
+        "anytime": 0.267,
+        "first": 0.091
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.353,
@@ -401,9 +430,9 @@
       "away": 0.371
     },
     "lastGoal": {
-      "home": 0.56,
-      "away": 0.417,
-      "noGoal": 0.023
+      "home": 0.528,
+      "away": 0.439,
+      "noGoal": 0.033
     },
     "cornerRace": {
       "3": {
@@ -460,6 +489,7 @@
     "home": {
       "team": "Brentford",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
         "sample": 4
@@ -488,6 +518,7 @@
     "away": {
       "team": "Chelsea",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 4
@@ -520,5 +551,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:22:19.724Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.387,
+      "draw": 0.261,
+      "away": 0.352
+    },
+    "doubleChance": {
+      "12": 0.739,
+      "1X": 0.648,
+      "X2": 0.613
+    },
+    "dnb": {
+      "home": 0.524,
+      "away": 0.476
+    },
+    "totals": {
+      "over15": 0.823,
+      "under15": 0.177,
+      "over25": 0.594,
+      "under25": 0.406,
+      "over35": 0.371,
+      "under35": 0.629
+    },
+    "btts": {
+      "yes": 0.628,
+      "no": 0.372
+    },
+    "cleanSheet": {
+      "home": 0.223,
+      "away": 0.206
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.107,
+        "share": 0.2661691542288557
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.086,
+        "share": 0.21393034825870644
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.082,
+        "share": 0.20398009950248755
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.065,
+        "share": 0.1616915422885572
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.062,
+        "share": 0.15422885572139303
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

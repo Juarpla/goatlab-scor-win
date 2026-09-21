@@ -3,8 +3,9 @@
    Mismo mundo de la sala de análisis: superficies mate, reglas de 1px,
    lima señal y pizarra como segunda serie. */
 
-/* ---- Sede y camisetas del encuentro: el mapa manda, las camisetas lo
-   acompañan al costado (debajo y centradas en móvil). ---- */
+/* ---- Sede y camisetas del encuentro: el mapa manda, las camisetas viven en
+    la columna contigua, centradas y un poco más anchas para ordenarse con
+    el encuentro (centradas también en móvil). ---- */
 .encounter-venue {
   display: flex;
   align-items: center;
@@ -33,7 +34,16 @@
 .jerseys {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* La columna contigua centra las camisetas frente al encuentro. */
+.real-data > .encounter + div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .jersey {
@@ -46,8 +56,8 @@
 
 .jersey-wrap {
   position: relative;
-  width: 88px;
-  height: 88px;
+  width: 160px;
+  height: 160px;
   padding: 5px;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -66,6 +76,9 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--muted);
+  text-align: center;
+  max-width: 170px;
+  line-height: 1.35;
 }
 
 .jerseys-vs {
@@ -331,6 +344,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Fichas de goles: cifras protagonistas con aire respecto al podio. */
+.notes-visuals .goal-facts { margin-top: 16px; }
+.goal-facts li strong { font-size: 13px; }
+
 .prob-scorers {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -404,6 +421,82 @@
   grid-column: 1 / -1;
   font-size: 10px;
   color: var(--muted);
+}
+
+/* Ranking único de goleadores: una sola fila de ambos equipos ordenada por
+   quién abre el marcador. La barra lleva el tono de su equipo (lima local,
+   pizarra visita); el cero y el resto van en tinta quieta. */
+.prob-scorers.is-unified {
+  grid-template-columns: 1fr;
+  max-width: 520px;
+}
+
+.scorer-column.is-ranking ol {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scorer-column.is-ranking li {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  gap: 4px 10px;
+  align-items: center;
+}
+
+.scorer-rank {
+  grid-row: 1;
+  grid-column: 1;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.scorer-column.is-ranking .scorer-name {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.scorer-column.is-ranking .scorer-name em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.scorer-column.is-ranking li strong {
+  grid-row: 1;
+  grid-column: 3;
+}
+
+.scorer-column.is-ranking .scorer-bar {
+  grid-row: 2;
+  grid-column: 2 / 4;
+}
+
+.scorer-column.is-ranking li[data-side="away"] .scorer-bar::after {
+  background: var(--away);
+}
+
+.scorer-column.is-ranking li small {
+  grid-row: 3;
+  grid-column: 2 / 4;
+}
+
+.scorer-note {
+  margin-top: 12px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 62ch;
 }
 
 /* ---- Vocabulario de entrada: crecer, llenar, aparecer ----
@@ -573,6 +666,61 @@
 
 .waffle svg { max-width: 300px; }
 .waffle-cell { stroke: var(--surface); stroke-width: 1; }
+
+/* ---- Rematador al costado del waffle: medio tono en lima, solo con aire ----
+   Oculto por defecto; aparece únicamente en escritorio ancho para no
+   apretar el gráfico cuadrado ni romper el sticky del escenario. */
+.waffle-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.waffle-row .waffle {
+  flex: 0 1 300px;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.waffle-kicker {
+  display: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 200px;
+  margin: 0 auto 22px;
+  opacity: 1;
+}
+
+.waffle-kicker svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.waffle-kicker .wk-land { fill: #3a453c; }
+.waffle-kicker .wk-rim { fill: #55645a; }
+
+.wk-ball {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (min-width: 1250px) {
+  .stage-pane[data-pane="resultado"] .waffle-kicker { display: block; }
+}
+
+/* Un solo momento de movimiento: el balón respira hacia el pie;
+   la silueta queda quieta. Misma curva del relato. */
+@keyframes wk-kick {
+  50% { transform: translate(4px, -4px); }
+}
+
+.stage-pane.is-active .wk-ball {
+  animation: wk-kick 2.8s ease-in-out infinite;
+}
 
 .ladder-line {
   fill: var(--text);
@@ -1141,12 +1289,13 @@
   margin-top: 14px;
 }
 
-/* ---- El marco del partido (debajo del último anuncio) ----
+/* ---- El partido en los medios (debajo del último anuncio) ----
    Lo que rodea al juego con el lenguaje de team-panel: superficies mate,
    reglas de 1px, cifras tabulares. Sin JS todo visible; con JS, .is-in
    dispara una sola pasada de entrada. */
 .trends {
   margin-top: 44px;
+  margin-bottom: 56px;
   padding-top: 30px;
   border-top: 1px solid var(--line);
 }
@@ -1269,7 +1418,6 @@
   gap: 22px;
   margin-top: 26px;
   padding-top: 20px;
-  border-top: 1px solid var(--line);
 }
 
 .trends-block h3 { font-size: 14px; margin-bottom: 10px; }
@@ -1331,6 +1479,9 @@
 
 @media (max-width: 760px) {
   .encounter-venue { gap: 18px; }
+  .jerseys { gap: 12px; }
+  .jersey-wrap { width: 128px; height: 128px; }
+  .jersey figcaption { max-width: 140px; }
   .venue-zoom { max-width: none; }
   .prob-scorers { grid-template-columns: 1fr; }
   .trends-grid { grid-template-columns: 1fr; }
@@ -1344,6 +1495,7 @@
   .venue-pin-mark { animation: none; }
   .pitch-ball.is-idle { animation: none; }
   .pitch-mark.is-hit .pitch-mark-ring { animation: none; }
+  .stage-pane.is-active .wk-ball { animation: none; }
   .stage-pane.is-active .pt-grow,
   .stage-pane.is-active .pt-grow-x,
   .stage-pane.is-active .pt-fade { animation: none; }

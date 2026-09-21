@@ -4,17 +4,17 @@
   "away": "Manchester United FC",
   "competition": "premier",
   "kickoff": "2026-09-20T15:30:00Z",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.750Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
-      "home": 1.26,
-      "away": 1.648
+      "home": 1.296,
+      "away": 1.817
     },
     "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
-      "away": 6
+      "away": 5
     },
     "standings": {
       "Fulham FC": {
@@ -63,104 +63,109 @@
     "venue": {
       "city": "Londres",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.368,
+      "away": 1.644
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
-      "home": 0.282,
-      "draw": 0.265,
-      "away": 0.454
+      "home": 0.263,
+      "draw": 0.251,
+      "away": 0.486
     },
     "doubleChance": {
-      "12": 0.735,
-      "1X": 0.546,
-      "X2": 0.718
+      "12": 0.749,
+      "1X": 0.514,
+      "X2": 0.737
     },
     "dnb": {
-      "home": 0.383,
-      "away": 0.617
+      "home": 0.351,
+      "away": 0.649
     },
     "totals": {
-      "over15": 0.798,
-      "under15": 0.202,
-      "over25": 0.556,
-      "under25": 0.444,
-      "over35": 0.332,
-      "under35": 0.668
+      "over15": 0.828,
+      "under15": 0.172,
+      "over25": 0.602,
+      "under25": 0.398,
+      "over35": 0.378,
+      "under35": 0.622
     },
     "btts": {
-      "yes": 0.59,
-      "no": 0.41
+      "yes": 0.619,
+      "no": 0.381
     },
     "cleanSheet": {
-      "home": 0.192,
-      "away": 0.284
+      "home": 0.163,
+      "away": 0.274
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.125
+        "p": 0.115
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.093
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.079
+        "p": 0.095
       },
       {
         "home": 0,
         "away": 2,
-        "p": 0.074
+        "p": 0.073
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.07
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.071
+        "p": 0.068
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.91,
-    "noGoal": 0.055,
+    "lambdaTotal": 3.01,
+    "noGoal": 0.049,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.384
+        "p": 0.395
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.237
+        "p": 0.239
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.09
+        "p": 0.088
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.055
+        "p": 0.053
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.034
+        "p": 0.032
       }
     ],
-    "firstHome": 0.41,
-    "firstAway": 0.536
+    "firstHome": 0.432,
+    "firstAway": 0.519
   },
   "scorers": {
     "home": [
@@ -169,27 +174,27 @@
         "goals": 2,
         "matches": 4,
         "share": 0.5,
-        "rate": 0.63,
-        "anytime": 0.467,
-        "first": 0.216
+        "rate": 0.68,
+        "anytime": 0.495,
+        "first": 0.227
       },
       {
         "player": "César Palacios",
         "goals": 1,
         "matches": 4,
         "share": 0.25,
-        "rate": 0.32,
-        "anytime": 0.27,
-        "first": 0.108
+        "rate": 0.34,
+        "anytime": 0.29,
+        "first": 0.114
       },
       {
         "player": "Gonzalo García",
         "goals": 1,
         "matches": 4,
         "share": 0.25,
-        "rate": 0.32,
-        "anytime": 0.27,
-        "first": 0.108
+        "rate": 0.34,
+        "anytime": 0.29,
+        "first": 0.114
       }
     ],
     "away": [
@@ -199,8 +204,8 @@
         "matches": 4,
         "share": 0.429,
         "rate": 0.71,
-        "anytime": 0.507,
-        "first": 0.243
+        "anytime": 0.506,
+        "first": 0.234
       },
       {
         "player": "Bryan Mbeumo",
@@ -208,8 +213,8 @@
         "matches": 4,
         "share": 0.286,
         "rate": 0.47,
-        "anytime": 0.376,
-        "first": 0.162
+        "anytime": 0.375,
+        "first": 0.156
       },
       {
         "player": "Benjamin Šeško",
@@ -218,12 +223,12 @@
         "share": 0.143,
         "rate": 0.24,
         "anytime": 0.21,
-        "first": 0.081
+        "first": 0.078
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.278,
@@ -417,9 +422,9 @@
       "away": 0.33
     },
     "lastGoal": {
-      "home": 0.41,
-      "away": 0.536,
-      "noGoal": 0.055
+      "home": 0.432,
+      "away": 0.519,
+      "noGoal": 0.049
     },
     "cornerRace": {
       "3": {
@@ -476,6 +481,7 @@
     "home": {
       "team": "Fulham FC",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
         "sample": 4
@@ -501,6 +507,7 @@
     "away": {
       "team": "Manchester United FC",
       "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 5
@@ -533,5 +540,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:35:00.285Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.358,
+      "draw": 0.27,
+      "away": 0.372
+    },
+    "doubleChance": {
+      "12": 0.73,
+      "1X": 0.628,
+      "X2": 0.642
+    },
+    "dnb": {
+      "home": 0.491,
+      "away": 0.509
+    },
+    "totals": {
+      "over15": 0.799,
+      "under15": 0.201,
+      "over25": 0.556,
+      "under25": 0.444,
+      "over35": 0.333,
+      "under35": 0.667
+    },
+    "btts": {
+      "yes": 0.599,
+      "no": 0.401
+    },
+    "cleanSheet": {
+      "home": 0.23,
+      "away": 0.237
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.106,
+        "share": 0.2585365853658536
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.085,
+        "share": 0.2073170731707317
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.083,
+        "share": 0.2024390243902439
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.069,
+        "share": 0.16829268292682928
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.067,
+        "share": 0.16341463414634147
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

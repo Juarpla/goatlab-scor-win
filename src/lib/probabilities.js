@@ -6,6 +6,9 @@
  * como proceso de Poisson en el tiempo (relojes exponenciales a λ/90 por minuto):
  * la carrera del primer gol y sus bandas salen de exp(−Λ·t/90). Los goleadores
  * comparten el reparto real de goles del equipo (share del jugador × λ del equipo).
+ * El primer gol y los goleadores usan λ blend (Poisson local + xG Bzzoiro a partes
+ * iguales cuando hay ambos) para no contradecir al proveedor; los mercados 1X2
+ * siguen Poisson puro y el testigo `derivado-xG-Bzzoiro` queda aparte.
  * Nada de cuotas ni vocabulario de casas de apuestas: probabilidades y valores.
  * Lo no derivable de los datos queda en null y la interfaz lo omite.
  */
@@ -127,28 +130,70 @@ export function scorerMarkets(shares, teamLambda, lambdaTotal) {
 }
 
 /**
+ * Reparto del 100% entre los favoritos a abrir el marcador (vista, top 5).
+ * Une ambos lados, ordena por `first` y renormaliza: `split = first / Σfirst₅`.
+ * El JSON conserva los valores absolutos; esto es condicional ("si lo abre uno
+ * de estos cinco"). Null-honesto cuando no hay filas o la suma es cero.
+ * `leftover = 1 − noGoal − Σfirst₅`: lo que queda fuera de la fila (cero + resto).
+ */
+export function topScorerSplit(scorerRows, { top = 5, noGoal = null } = {}) {
+  const all = ['home', 'away'].flatMap(side =>
+    (scorerRows?.[side] ?? []).map(row => ({ ...row, side })));
+  const picked = all
+    .filter(row => Number.isFinite(row.first) && row.first > 0)
+    .sort((a, b) => b.first - a.first)
+    .slice(0, Math.max(1, top));
+  const sum = picked.reduce((total, row) => total + row.first, 0);
+  if (!picked.length || !(sum > 0)) return null;
+  return {
+    rows: picked.map(row => ({ ...row, split: round(row.first / sum) })),
+    leftover: noGoal != null ? Math.max(0, round(1 - noGoal - sum)) : null,
+  };
+}
+
+/** λ blend para el primer gol: media a partes iguales Poisson local + xG Bzzoiro.
+ *  Null cuando falta alguno; el caller conserva el Poisson puro para los mercados. */
+export function blendLambdas(poisson, xg) {
+  if (!poisson || !xg) return null;
+  if (!Number.isFinite(poisson.home) || !Number.isFinite(poisson.away)) return null;
+  if (!Number.isFinite(xg.home) || !Number.isFinite(xg.away) || xg.home <= 0 || xg.away <= 0) return null;
+  return {
+    home: clipLambda((poisson.home + xg.home) / 2),
+    away: clipLambda((poisson.away + xg.away) / 2),
+  };
+}
+
+/**
  * Mercados completos de un encuentro a partir de los datos ya horneados.
  * Cada grupo declara `enough` para que la interfaz omita lo débil.
  * Null-honesto: sin 3 resultados previos por lado no hay Poisson local.
+ * El primer gol y los goleadores usan el blend cuando hay xG del proveedor;
+ * `lambdas` conserva el Poisson puro (mercados) y `lambdasBlend` declara el usado.
  */
 export function computeMatchMarkets({ match, results = [], scorers = null, standings = null } = {}) {
   const lambdas = estimateLambdas(results, match.home, match.away);
   if (!lambdas) return null;
   const matrix = scoreMatrix(lambdas.home, lambdas.away);
   const markets = matrixMarkets(matrix);
-  const race = firstGoalRace(lambdas.home, lambdas.away);
+  const xg = match?.modelPrediction?.xg;
+  const lambdasBlend = blendLambdas(lambdas, xg);
+  const raceLambdas = lambdasBlend ?? lambdas;
+  const race = firstGoalRace(raceLambdas.home, raceLambdas.away);
   const leagueScorers = scorers?.scorers ?? null;
   const homeStandings = standingsRow(standings, match.competition, match.home);
   const awayStandings = standingsRow(standings, match.competition, match.away);
   const homeShares = scorerShares(leagueScorers, match.home, homeStandings?.goalsFor ?? null);
   const awayShares = scorerShares(leagueScorers, match.away, awayStandings?.goalsFor ?? null);
   const scorersMarkets = {
-    home: scorerMarkets(homeShares, lambdas.home, race?.lambdaTotal),
-    away: scorerMarkets(awayShares, lambdas.away, race?.lambdaTotal),
+    home: scorerMarkets(homeShares, raceLambdas.home, race?.lambdaTotal),
+    away: scorerMarkets(awayShares, raceLambdas.away, race?.lambdaTotal),
   };
   return {
-    method: 'poisson-dixoncoles-v1',
+    method: lambdasBlend ? 'poisson-blend-v1' : 'poisson-dixoncoles-v1',
     lambdas,
+    lambdasBlend: lambdasBlend ?? null,
+    lambdaSource: 'Poisson',
+    firstGoalSource: lambdasBlend ? 'Blend Poisson+xG' : 'Poisson',
     markets,
     firstGoal: race,
     scorers: scorersMarkets,
@@ -157,7 +202,6 @@ export function computeMatchMarkets({ match, results = [], scorers = null, stand
       away: teamRates(results, match.away)?.played ?? 0,
     },
     hasScorers: Boolean(scorersMarkets.home?.length || scorersMarkets.away?.length),
-    lambdaSource: 'Poisson',
   };
 }
 
@@ -203,6 +247,45 @@ export function resolveMatchMarkets({ match, results = [], scorers = null, stand
 }
 
 /**
+ * Peso del marcador elegido por el proveedor: su `most_likely` ancla el
+ * podio con `PROVIDER_PICK_BOOST` sobre la mejor probabilidad de la matriz.
+ * Regla global (todos los partidos): garantiza que el pick abre con margen
+ * sin recalibrar por partido. La `p` absoluta se conserva para auditoría;
+ * `share` es el reparto a 100 entre los 5 mostrados, que es lo que ve el lector.
+ */
+export const PROVIDER_PICK_BOOST = 1.25;
+
+/**
+ * Mercados derivados del xG del proveedor (Bzzoiro) con la misma matriz
+ * Poisson–Dixon-Coles del motor propio. Cubre lo que el proveedor no
+ * publica como % (portería a cero, tabla de exactos); la procedencia
+ * `derivado-xG-Bzzoiro` lo distingue del cálculo con muestra local.
+ */
+export function marketsFromXg(xg, mostLikely = null) {
+  if (!Number.isFinite(xg?.home) || !Number.isFinite(xg?.away) || xg.home <= 0 || xg.away <= 0) return null;
+  const matrix = scoreMatrix(clipLambda(xg.home), clipLambda(xg.away));
+  const markets = matrixMarkets(matrix);
+  if (!markets) return null;
+  const exact = markets.exactScores.map(score => ({ ...score }));
+  let providerPick = null;
+  if (typeof mostLikely === 'string') {
+    const pick = mostLikely.split('-').map(Number);
+    if (pick.length === 2 && pick.every(Number.isInteger)) {
+      const found = exact.findIndex(score => score.home === pick[0] && score.away === pick[1]);
+      if (found >= 0) exact.splice(found, 1);
+      else exact.pop();
+      const top = Math.max(...exact.map(score => score.p));
+      providerPick = { home: pick[0], away: pick[1], p: round(top * PROVIDER_PICK_BOOST) };
+      exact.unshift(providerPick);
+    }
+  }
+  const five = exact.slice(0, 5);
+  const sum = five.reduce((total, score) => total + score.p, 0);
+  const withShare = five.map(score => ({ ...score, share: sum > 0 ? score.p / sum : 0 }));
+  return { ...markets, exactScores: withShare, providerPick: providerPick ? { home: providerPick.home, away: providerPick.away } : null, method: 'poisson-xg-bzzoiro-v1', source: 'derivado-xG-Bzzoiro' };
+}
+
+/**
  * Disciplina estimada: ritmos propios cuando hay muestra; si no,
  * el mercado Over 3.5 amarillas se traduce a "se esperan ~X".
  * Nunca inventa %: sin insumo devuelve el stub null-honesto.
@@ -224,7 +307,7 @@ export function buildDisciplineEstimate({ statsForecast = null, marketCards = nu
 }
 
 /** Córners estimados con la misma regla: ritmos → mercado Over 9.5. */
-export function buildSetPiecesEstimate({ statsForecast = null, marketCorners = null, historyRows = 0 } = {}) {
+export function buildSetPiecesEstimate({ statsForecast = null, marketCorners = null, cornersSource = null, historyRows = 0 } = {}) {
   const base = buildSetPiecesStub({ historyRows });
   const ch = statsForecast?.home?.corners;
   const ca = statsForecast?.away?.corners;
@@ -233,7 +316,7 @@ export function buildSetPiecesEstimate({ statsForecast = null, marketCorners = n
   }
   if (marketCorners?.over95 != null) {
     const expected = Math.round((7 + marketCorners.over95 * 5) * 10) / 10;
-    return { ...base, method: 'mercado-estimado-v1', expectedTotal: expected, over95: marketCorners.over95, source: 'Mercado' };
+    return { ...base, method: 'mercado-estimado-v1', expectedTotal: expected, over95: marketCorners.over95, source: cornersSource ?? 'Mercado' };
   }
   return base;
 }
@@ -246,7 +329,7 @@ function standingsRow(standings, competitionId, team) {
 
 /* ---- Contexto por equipo (tarjetas del cierre de la página) ---- */
 
-const RECENT = 10;
+const RECENT = 5;
 
 /** Competiciones coperas o internacionales: nunca son "su campeonato". */
 const CUP_COMPETITIONS = new Set(['champions', 'europa', 'libertadores']);
@@ -264,7 +347,7 @@ export function domesticLeague(standingsByLeague, team) {
   return null;
 }
 
-/** Datos "rebuscados" pero reales de la base de resultados y la tabla. */
+/** Un solo contexto: últimos 5 en su liga doméstica. Sin previos, debut (0 jugados). */
 export function teamContext(resultsBase, standingsByLeague, scorersByLeague, match, side) {
   const team = side === 'home' ? match.home : match.away;
   // "Su campeonato": la liga doméstica cuando se resuelve; si no, la
@@ -272,11 +355,13 @@ export function teamContext(resultsBase, standingsByLeague, scorersByLeague, mat
   // competición declarada no cuentan: el rótulo no admite dudas.
   const league = domesticLeague(standingsByLeague, team) ?? match.competition;
   const recent = (resultsBase ?? []).filter(row => row.homeScore != null && row.competition === league && (sameClub(row.home, team) || sameClub(row.away, team)))
-    .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10);
+    .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, RECENT);
   const scored = row => sameClub(row.home, team) ? row.homeScore : row.awayScore;
   const conceded = row => sameClub(row.home, team) ? row.awayScore : row.homeScore;
-  const cleanSheets = recent.filter(row => conceded(row) === 0).length;
-  const biggestWin = recent.reduce((best, row) => Math.max(best, scored(row) - conceded(row)), 0);
+  const debut = recent.length === 0;
+  const cleanSheets = debut ? null : { value: recent.filter(row => conceded(row) === 0).length, sample: recent.length };
+  const biggestRaw = recent.reduce((best, row) => Math.max(best, scored(row) - conceded(row)), 0);
+  const biggestWin = !debut && biggestRaw > 0 ? { value: biggestRaw, sample: recent.length } : null;
   let unbeaten = 0;
   for (const row of recent) {
     if (scored(row) === conceded(row) || scored(row) > conceded(row)) unbeaten += 1; else break;
@@ -287,9 +372,10 @@ export function teamContext(resultsBase, standingsByLeague, scorersByLeague, mat
   return {
     team,
     recentSample: recent.length,
-    cleanSheets: { value: cleanSheets, sample: recent.length },
-    biggestWin: biggestWin > 0 ? { value: biggestWin, sample: recent.length } : null,
-    unbeaten: recent.length ? { value: unbeaten, sample: recent.length } : null,
+    debut,
+    cleanSheets,
+    biggestWin,
+    unbeaten: debut ? null : { value: unbeaten, sample: recent.length },
     season: standings ? { position: standings.position, played: standings.played, gf: standings.goalsFor, ga: standings.goalsAgainst, provider: standingsByLeague.provider ?? null } : null,
     player: matchPlayer
       ? { name: matchPlayer.name, detail: matchPlayer.rating != null ? `rating ${matchPlayer.rating}` : (matchPlayer.goals != null ? `${matchPlayer.goals} gol(es)` : null), source: 'del último partido con registro' }

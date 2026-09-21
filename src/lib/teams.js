@@ -14,12 +14,42 @@ const SHORTS = {
 export function normalize(name) {
   return String(name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
-/** Providers spell clubs differently ("Newcastle" vs "Newcastle United"); compare on the normalized key. */
+/** Prefijos legales de proveedor que no distinguen club («FC Barcelona» = «Barcelona»). */
+const CLUB_PREFIXES = new Set(['fc', 'cf', 'cd', 'ca', 'cr', 'rc', 'cs', 'afc', 'rcd', 'club']);
+/** Sufijos genéricos que sí pueden omitirse («Sevilla FC» = «Sevilla», «Levante UD» = «Levante»).
+ *  «sc»/«ec» NO se omiten: distinguen (Barcelona ≠ Barcelona SC). */
+const IGNORABLE_SUFFIXES = new Set(['fc', 'cf', 'afc', 'ud', 'cd']);
+/** Clave canónica para dedup y comparación: sin prefijos legales ni sufijos genéricos. */
+export function canonicalClubKey(name) {
+  const tokens = normalize(name).split(' ').filter(Boolean);
+  let start = 0;
+  while (start < tokens.length && CLUB_PREFIXES.has(tokens[start])) start += 1;
+  let end = tokens.length;
+  while (end > start + 1 && IGNORABLE_SUFFIXES.has(tokens[end - 1])) end -= 1;
+  return tokens.slice(start, end).join(' ');
+}
+/** Providers spell clubs differently ("Newcastle" vs "Newcastle United"); compare on the normalized key.
+ *  El prefijo legal se ignora («FC Barcelona» = «Barcelona») y el resto vale
+ *  por prefijo de cadena («Brighton» = «Brighton Hove Albion»), salvo marca
+ *  de club que distingue: extra de un solo token «sc»/«ec» no iguala
+ *  («Barcelona» != «Barcelona SC»). */
 export function sameClub(a, b) {
-  const left = normalize(a);
-  const right = normalize(b);
+  const left = canonicalClubKey(a);
+  const right = canonicalClubKey(b);
   if (!left || !right) return false;
-  return left === right || left.startsWith(right) || right.startsWith(left);
+  if (left === right) return true;
+  const extraOf = (full, base) => {
+    if (!full.startsWith(`${base} `)) return null;
+    return full.slice(base.length + 1);
+  };
+  for (const [full, base] of [[left, right], [right, left]]) {
+    const extra = extraOf(full, base);
+    if (extra == null) continue;
+    // Un solo «sc»/«ec» distingue clubes homónimos (Barcelona SC, Cruzeiro EC).
+    if (extra === 'sc' || extra === 'ec') return false;
+    return true;
+  }
+  return false;
 }
 /**
  * Diccionario canónico: clave slug estable → {display, leagues, web, id
@@ -66,6 +96,21 @@ export function teamShort(name) {
   if (SHORTS[key]) return SHORTS[key];
   const letters = key.replace(/ /g, '').slice(0, 3).toUpperCase();
   return letters || '???';
+}
+/**
+ * Etiqueta compacta para las camisetas: última palabra del nombre visible
+ * con la inicial de la anterior («Real Madrid» → «R. Madrid»,
+ * «Rayo Vallecano» → «R. Vallecano»; una sola palabra queda intacta).
+ * Salta conectores («de», «la», «del»…) al buscar la inicial.
+ */
+const SKIP = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'al', 'en', 'a', 'the', 'of', 'da', 'do', 'das', 'dos', 'di', 'du', 'von', 'van']);
+export function teamCompact(name) {
+  const words = teamDisplay(name).split(/\s+/).filter(Boolean);
+  if (!words.length) return '???';
+  if (words.length === 1) return words[0];
+  const last = words[words.length - 1];
+  const prev = [...words.slice(0, -1)].reverse().find(w => !SKIP.has(normalize(w))) ?? words[words.length - 2];
+  return `${prev.charAt(0).toUpperCase()}. ${last}`;
 }
 /** Nombre limpio para leer: quita los prefijos/sufijos legales que firman los proveedores («FC Barcelona» → «Barcelona»). */
 export function teamDisplay(name) {

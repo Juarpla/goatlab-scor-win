@@ -4,8 +4,8 @@
   "away": "Hull City",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.745Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
       "home": 1.215,
@@ -17,8 +17,32 @@
       "away": 4
     },
     "standings": {
-      "Newcastle": null,
-      "Hull City": null
+      "Newcastle": {
+        "position": 12,
+        "team": "Newcastle United FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 2,
+        "lost": 1,
+        "goalsFor": 7,
+        "goalsAgainst": 8,
+        "goalDifference": -1,
+        "points": 5,
+        "form": null
+      },
+      "Hull City": {
+        "position": 4,
+        "team": "Hull City AFC",
+        "played": 4,
+        "won": 2,
+        "drawn": 2,
+        "lost": 0,
+        "goalsFor": 5,
+        "goalsAgainst": 2,
+        "goalDifference": 3,
+        "points": 8,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:37.764Z",
@@ -39,7 +63,12 @@
     "venue": {
       "city": "Newcastle upon Tyne",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.508,
+      "away": 1.368
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
@@ -101,42 +130,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.71,
-    "noGoal": 0.067,
+    "lambdaTotal": 2.88,
+    "noGoal": 0.056,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.363
+        "p": 0.381
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.231
+        "p": 0.236
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.147
+        "p": 0.146
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.094
+        "p": 0.09
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.06
+        "p": 0.056
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.038
+        "p": 0.035
       }
     ],
-    "firstHome": 0.419,
-    "firstAway": 0.515
+    "firstHome": 0.495,
+    "firstAway": 0.449
   },
   "scorers": {
     "home": [
@@ -145,27 +174,27 @@
         "goals": 2,
         "matches": 3,
         "share": 0.286,
-        "rate": 0.35,
-        "anytime": 0.294,
-        "first": 0.128
+        "rate": 0.43,
+        "anytime": 0.35,
+        "first": 0.15
       },
       {
         "player": "Bazoumana Touré",
         "goals": 1,
         "matches": 4,
         "share": 0.143,
-        "rate": 0.17,
-        "anytime": 0.159,
-        "first": 0.064
+        "rate": 0.22,
+        "anytime": 0.194,
+        "first": 0.075
       },
       {
         "player": "Harvey Barnes",
         "goals": 1,
         "matches": 4,
         "share": 0.143,
-        "rate": 0.17,
-        "anytime": 0.159,
-        "first": 0.064
+        "rate": 0.22,
+        "anytime": 0.194,
+        "first": 0.075
       }
     ],
     "away": [
@@ -174,14 +203,14 @@
         "goals": 2,
         "matches": 4,
         "share": 0.4,
-        "rate": 0.6,
-        "anytime": 0.45,
-        "first": 0.221
+        "rate": 0.55,
+        "anytime": 0.421,
+        "first": 0.19
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.594,
@@ -392,9 +421,9 @@
       "away": 0.447
     },
     "lastGoal": {
-      "home": 0.419,
-      "away": 0.515,
-      "noGoal": 0.067
+      "home": 0.495,
+      "away": 0.449,
+      "noGoal": 0.056
     },
     "cornerRace": {
       "3": {
@@ -451,6 +480,7 @@
     "home": {
       "team": "Newcastle",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
         "sample": 4
@@ -479,6 +509,7 @@
     "away": {
       "team": "Hull City",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 3,
         "sample": 4
@@ -505,5 +536,76 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.495,
+      "draw": 0.253,
+      "away": 0.253
+    },
+    "doubleChance": {
+      "12": 0.747,
+      "1X": 0.747,
+      "X2": 0.505
+    },
+    "dnb": {
+      "home": 0.662,
+      "away": 0.338
+    },
+    "totals": {
+      "over15": 0.817,
+      "under15": 0.183,
+      "over25": 0.586,
+      "under25": 0.414,
+      "over35": 0.362,
+      "under35": 0.638
+    },
+    "btts": {
+      "yes": 0.604,
+      "no": 0.396
+    },
+    "cleanSheet": {
+      "home": 0.289,
+      "away": 0.165
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12,
+        "share": 0.27649769585253453
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.096,
+        "share": 0.22119815668202766
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.077,
+        "share": 0.1774193548387097
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.075,
+        "share": 0.1728110599078341
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.066,
+        "share": 0.15207373271889402
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

@@ -1,5 +1,5 @@
 /** Independent Poisson baseline. Estimates are withheld until an external historical evaluation passes. */
-import { sameClub } from './teams.js';
+import { sameClub, canonicalClubKey } from './teams.js';
 export function goalDistribution(lambda, max = 20) {
   if (!Number.isFinite(lambda) || lambda < 0 || lambda > 8) throw new Error('Media de goles fuera de rango');
   const probabilities = [Math.exp(-lambda)];
@@ -31,10 +31,25 @@ const HOME_BOOST = 1.08, AWAY_PENALTY = 0.92;
 const clip = (value, min, max) => Math.min(max, Math.max(min, value));
 const round3 = value => Math.round(value * 1000) / 1000;
 
-/** Rolling goals profile of one team from the results base, most recent first. */
+/** Rolling goals profile of one team from the results base, most recent first.
+ *  Dedup por fecha+rival canónico: el mismo partido capturado por AF y FD
+ *  (nombres corto/largo) cuenta una sola vez. */
 export function teamRates(results, team, count = 6) {
-  const played = (results ?? []).filter(row => row.homeScore != null && row.awayScore != null && (sameClub(row.home, team) || sameClub(row.away, team)))
-    .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, count);
+  const seen = new Set();
+  const played = [];
+  const sorted = (results ?? []).filter(row => row.homeScore != null && row.awayScore != null && (sameClub(row.home, team) || sameClub(row.away, team)))
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+  for (const row of sorted) {
+    const rival = sameClub(row.home, team) ? row.away : row.home;
+    // Rival suelto por primer token: AF acorta («Brighton») y FD alarga
+    // («Brighton Hove Albion»); mismo día + mismo marcador = mismo partido.
+    const rivalLoose = canonicalClubKey(rival).split(' ')[0] || canonicalClubKey(rival);
+    const key = `${row.date}|${rivalLoose}|${row.homeScore}-${row.awayScore}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    played.push(row);
+    if (played.length >= count) break;
+  }
   if (played.length < 3) return null;
   const sum = key => played.reduce((total, row) => total + (sameClub(row.home, team) ? row[key] : key === 'homeScore' ? row.awayScore : row.homeScore), 0);
   return { played: played.length, gf: sum('homeScore') / played.length, ga: sum('awayScore') / played.length };

@@ -17,6 +17,19 @@ interface Props {
 
 const { discipline, setPieces, weatherVenue, availability } = Astro.props;
 const num = (value: number | null | undefined, digits = 1) => value == null ? '—' : Number(value).toFixed(digits);
+/* Condición en español: el proveedor la sirve en inglés (`clear`) u Open-Meteo
+   con código WMO; el viento se muestra en km/h y la temperatura en °C. */
+const CONDITION_ES: Record<string, string> = {
+  clear: 'despejado', sunny: 'soleado', cloudy: 'nublado', overcast: 'cubierto',
+  'partly cloudy': 'parcialmente nublado', fog: 'niebla', drizzle: 'llovizna',
+  rain: 'lluvia', snow: 'nieve', thunderstorm: 'tormenta', showers: 'chubascos',
+};
+const WMO_ES: Record<number, string> = {
+  0: 'despejado', 1: 'casi despejado', 2: 'parcialmente nublado', 3: 'cubierto',
+  45: 'niebla', 48: 'niebla', 51: 'llovizna', 53: 'llovizna', 55: 'llovizna',
+  61: 'lluvia', 63: 'lluvia', 65: 'lluvia fuerte', 71: 'nieve', 73: 'nieve',
+  75: 'nieve fuerte', 80: 'chubascos', 81: 'chubascos', 82: 'chubascos fuertes', 95: 'tormenta',
+};
 const hasAvailability = Boolean(availability && (availability.unavailablePlayers?.length || availability.status));
 const expectedCards = discipline?.expectedTotal ?? null;
 const expectedCorners = setPieces?.expectedTotal ?? null;
@@ -24,12 +37,15 @@ const cardsSource = discipline?.source ?? null;
 const cornersSource = setPieces?.source ?? null;
 const hasModels = Boolean(expectedCards != null || expectedCorners != null || (discipline && discipline.source) || (setPieces && setPieces.source));
 
-const condition = weatherVenue?.weather?.condition;
-const validCondition = condition && !['unknown', 'desconocido', 'n/a'].includes(String(condition).toLowerCase()) ? condition : null;
+const rawCondition = weatherVenue?.weather?.condition;
+const rawCode = weatherVenue?.weather?.weathercode;
+const conditionEs = (typeof rawCondition === 'string' && CONDITION_ES[rawCondition.toLowerCase()])
+  ?? (typeof rawCode === 'number' ? WMO_ES[rawCode] ?? null : null)
+  ?? (typeof rawCondition === 'string' && !['unknown', 'desconocido', 'n/a'].includes(rawCondition.toLowerCase()) ? rawCondition : null);
 const weatherBits = [
-  weatherVenue?.weather?.temp != null ? `${num(weatherVenue.weather.temp, 0)}°` : null,
-  weatherVenue?.weather?.wind != null ? `viento ${num(weatherVenue.weather.wind, 0)}` : null,
-  validCondition,
+  weatherVenue?.weather?.temp != null ? `${num(weatherVenue.weather.temp, 0)} °C` : null,
+  weatherVenue?.weather?.wind != null ? `viento ${num(weatherVenue.weather.wind, 0)} km/h` : null,
+  conditionEs,
 ].filter(Boolean);
 const weatherLabel = weatherBits.length ? weatherBits.join(' · ') : null;
 const hasWeather = Boolean(weatherVenue && (weatherLabel || weatherVenue.venue?.stadium));

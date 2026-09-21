@@ -22,15 +22,15 @@ const uid = `jersey-${side}`;
       <defs>
         <clipPath id={`${uid}-clip`}><path d={BODY}/></clipPath>
         <pattern id={`${uid}-grid`} width="7" height="7" patternUnits="userSpaceOnUse">
-          <path d="M7 0H0v7" fill="none" stroke="rgba(197,237,116,.32)" stroke-width="0.8"/>
+          <path d="M7 0H0v7" fill="none" stroke="#c5ed74" stroke-opacity="0.95" stroke-width="1.1"/>
         </pattern>
         <linearGradient id={`${uid}-band`} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-          <stop offset="0.42" stop-color="#fff"/>
-          <stop offset="0.58" stop-color="#fff"/>
+          <stop offset="0.18" stop-color="#fff"/>
+          <stop offset="0.82" stop-color="#fff"/>
           <stop offset="1" stop-color="#fff" stop-opacity="0"/>
         </linearGradient>
-        <mask id={`${uid}-mask`}><rect x="-48" y="-10" width="56" height="140" fill={`url(#${uid}-band)`}/></mask>
+        <mask id={`${uid}-mask`}><rect x="-48" y="-10" width="60" height="140" fill={`url(#${uid}-band)`}/></mask>
       </defs>
       <path d={BODY} fill={colors.primary}/>
       <g clip-path={`url(#${uid}-clip)`}>
@@ -40,7 +40,9 @@ const uid = `jersey-${side}`;
           <rect x="86" y="-6" width="14" height="128" fill={colors.secondary} transform="rotate(-4 93 58)"/>
         </>}
         {sash && <path d="M14 22 96 116h16L24 16Z" fill={colors.secondary}/>}
-        <rect class="scan-band" x="-48" y="-10" width="56" height="140" fill={`url(#${uid}-grid)`} mask={`url(#${uid}-mask)`}/>
+        <rect class="scan-band" x="-48" y="-10" width="60" height="140" fill="rgba(16,20,18,0.38)" mask={`url(#${uid}-mask)`}/>
+        <rect class="scan-band" x="-48" y="-10" width="60" height="140" fill={`url(#${uid}-grid)`} mask={`url(#${uid}-mask)`}/>
+        <rect class="scan-band scan-edge" x="4" y="-10" width="3" height="140" fill="#c5ed74" stroke="#101412" stroke-width="0.6" mask={`url(#${uid}-mask)`}/>
       </g>
       <path d="M48 2c4 8 20 8 24 0" fill="none" stroke={colors.secondary} stroke-width="5"/>
       <path d={BODY} fill="none" stroke="rgba(16,20,18,.35)" stroke-width="2"/>
@@ -52,7 +54,8 @@ const uid = `jersey-${side}`;
 
 <style is:global>
   .scan-band { animation: jersey-scan 5.8s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
-  .jerseys .jersey:nth-child(3) .scan-band { animation-delay: 1.5s; }
+  .jerseys .jersey:first-child .scan-band { animation-delay: 0s; }
+  .jerseys .jersey:last-child .scan-band { animation-delay: 2.9s; }
   @keyframes jersey-scan {
     0% { transform: translateX(0); }
     14% { opacity: 1; }
@@ -61,6 +64,6 @@ const uid = `jersey-${side}`;
   }
   .scan-band { opacity: 0; }
   @media (prefers-reduced-motion: reduce) {
-    .scan-band { animation: none; transform: translateX(20px); opacity: 0.45; }
+    .scan-band { animation: none; transform: translateX(20px); opacity: 0.85; }
   }
 </style>

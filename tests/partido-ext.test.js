@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreMatrix, matrixMarkets, firstGoalRace, scorerShares, scorerMarkets, computeMatchMarkets, teamContext, domesticLeague } from '../src/lib/probabilities.js';
+import { scoreMatrix, matrixMarkets, firstGoalRace, scorerShares, scorerMarkets, topScorerSplit, computeMatchMarkets, teamContext, domesticLeague, marketsFromXg, buildSetPiecesEstimate, blendLambdas } from '../src/lib/probabilities.js';
+import { sameClub, canonicalClubKey } from '../src/lib/teams.js';
+import { teamRates, estimateLambdas } from '../src/lib/predictions.js';
 import { buildBeats, ballAt, matchMinute, hashSeed } from '../src/lib/pitch-path.js';
 import { teamColors, NEUTRAL_KIT } from '../src/lib/team-colors.js';
 import { locateMatch, venueZoomLayout, VENUE_ZOOM, europeMapLayout, EUROPE_MAP } from '../src/lib/venues.js';
@@ -11,6 +13,53 @@ test('la matriz de marcadores normalizada suma 1', () => {
   const markets = matrixMarkets(scoreMatrix(1.4, 1.1));
   const sum = markets.oneX2.home + markets.oneX2.draw + markets.oneX2.away;
   assert.equal(Math.round(sum * 1000), 1000);
+});
+
+// Sevilla vs Barcelona 2026-09-19: xG Bzzoiro 1.10–2.08.
+test('marketsFromXg deriva cleanSheet y exactos del xG del proveedor', () => {
+  const derived = marketsFromXg({ home: 1.1, away: 2.08 });
+  assert.equal(derived.source, 'derivado-xG-Bzzoiro');
+  assert.ok(close(derived.cleanSheet.home, 0.125));
+  assert.ok(close(derived.cleanSheet.away, 0.333));
+  assert.deepEqual([derived.exactScores[0].home, derived.exactScores[0].away], [1, 1]);
+  assert.ok(derived.exactScores.length === 5);
+  const shareSum = derived.exactScores.reduce((total, score) => total + score.share, 0);
+  assert.ok(close(shareSum, 1));
+});
+
+test('el pick del proveedor abre el podio con margen en todos los partidos', () => {
+  const derived = marketsFromXg({ home: 1.1, away: 2.08 }, '1-2');
+  assert.deepEqual([derived.exactScores[0].home, derived.exactScores[0].away], [1, 2]);
+  assert.deepEqual(derived.providerPick, { home: 1, away: 2 });
+  const [first, second] = derived.exactScores;
+  assert.ok(first.share > second.share + 0.04);
+  const shareSum = derived.exactScores.reduce((total, score) => total + score.share, 0);
+  assert.ok(close(shareSum, 1));
+  // Sin pick no hay boost ni providerPick: manda la matriz.
+  const plain = marketsFromXg({ home: 1.1, away: 2.08 });
+  assert.equal(plain.providerPick, null);
+  assert.deepEqual([plain.exactScores[0].home, plain.exactScores[0].away], [1, 1]);
+  // Pick fuera del top-5 entra igual al podio.
+  const outsider = marketsFromXg({ home: 0.6, away: 0.6 }, '0-3');
+  assert.deepEqual([outsider.exactScores[0].home, outsider.exactScores[0].away], [0, 3]);
+  assert.ok(outsider.exactScores.length === 5);
+});
+
+test('marketsFromXg null-honesto sin xG válido', () => {
+  assert.equal(marketsFromXg(null), null);
+  assert.equal(marketsFromXg({ home: null, away: 2 }), null);
+  assert.equal(marketsFromXg({ home: 0, away: 1.5 }), null);
+  assert.equal(marketsFromXg({ home: -1, away: 1.5 }), null);
+});
+
+test('los córners heredan la procedencia: Bzzoiro cuando el insumo es del proveedor', () => {
+  const fromProvider = buildSetPiecesEstimate({ marketCorners: { over95: 0.479 }, cornersSource: 'Bzzoiro', historyRows: 130 });
+  assert.equal(fromProvider.source, 'Bzzoiro');
+  assert.equal(fromProvider.over95, 0.479);
+  const fromMarket = buildSetPiecesEstimate({ marketCorners: { over95: 0.6 }, cornersSource: 'Mercado', historyRows: 10 });
+  assert.equal(fromMarket.source, 'Mercado');
+  const empty = buildSetPiecesEstimate({ historyRows: 0 });
+  assert.equal(empty.source, null);
 });
 
 test('los mercados derivados son coherentes entre sí', () => {
@@ -31,6 +80,100 @@ test('la doble oportunidad 12 equivale a 1 menos el empate', () => {
 test('el empate no válida suma 100%', () => {
   const markets = matrixMarkets(scoreMatrix(1.8, 0.9));
   assert.equal(Math.round((markets.dnb.home + markets.dnb.away) * 100), 100);
+});
+
+/* ---- Identidad de clubes: Sevilla vs Barcelona 2026-09-19 ---- */
+
+test('sameClub ignora prefijos legales pero distingue Barcelona SC', () => {
+  assert.equal(sameClub('Barcelona', 'FC Barcelona'), true);
+  assert.equal(sameClub('Sevilla', 'Sevilla FC'), true);
+  assert.equal(sameClub('Barcelona', 'Barcelona SC'), false);
+  assert.equal(sameClub('Newcastle', 'Newcastle United'), true);
+  assert.equal(canonicalClubKey('FC Barcelona'), 'barcelona');
+  assert.equal(canonicalClubKey('Sevilla FC'), 'sevilla');
+});
+
+test('teamRates no mezcla Barcelona SC y deduplica AF+FD', () => {
+  const results = [
+    { date: '2026-09-16', home: 'Barcelona', away: 'Racing Santander', homeScore: 7, awayScore: 2 },
+    { date: '2026-09-13', home: 'Levante', away: 'Barcelona', homeScore: 2, awayScore: 4 },
+    { date: '2026-08-31', home: 'FC Barcelona', away: 'Rayo Vallecano de Madrid', homeScore: 5, awayScore: 2 },
+    { date: '2026-05-29', home: 'Cruzeiro EC', away: 'Barcelona SC', homeScore: 4, awayScore: 0 },
+    { date: '2026-05-22', home: 'CD Universidad Católica', away: 'Barcelona SC', homeScore: 2, awayScore: 0 },
+    // Duplicado cross-proveedor del mismo partido con nombre largo/corto.
+    { date: '2026-09-16', home: 'RC Deportivo La Coruña', away: 'Sevilla FC', homeScore: 0, awayScore: 1 },
+    { date: '2026-09-16', home: 'Deportivo La Coruna', away: 'Sevilla', homeScore: 0, awayScore: 1 },
+    { date: '2026-09-11', home: 'Sevilla FC', away: 'Valencia CF', homeScore: 1, awayScore: 0 },
+    { date: '2026-08-22', home: 'Athletic Club', away: 'Sevilla FC', homeScore: 1, awayScore: 3 },
+  ];
+  const barca = teamRates(results, 'Barcelona');
+  assert.equal(barca.played, 3); // 2 propios + 1 FC Barcelona; Quito fuera
+  assert.ok(barca.gf > 4); // 7+4+5 entre 3: sin contaminación 2.16
+  const sevilla = teamRates(results, 'Sevilla');
+  assert.equal(sevilla.played, 3); // el Depor duplicado cuenta una vez
+});
+
+/* ---- Blend Poisson + xG para el primer gol ---- */
+
+test('blendLambdas promedia a partes iguales y es null-honesto', () => {
+  assert.deepEqual(blendLambdas({ home: 1.8, away: 1.38 }, { home: 1.1, away: 2.08 }), { home: 1.45, away: 1.73 });
+  assert.equal(blendLambdas(null, { home: 1, away: 1 }), null);
+  assert.equal(blendLambdas({ home: 1, away: 1 }, null), null);
+  assert.equal(blendLambdas({ home: 1, away: 1 }, { home: 0, away: 1 }), null);
+});
+
+test('computeMatchMarkets usa el blend para la carrera cuando hay xG', () => {
+  const results = [
+    ...Array.from({ length: 4 }, (_, i) => ({ date: `2026-08-0${i + 1}`, home: 'Sevilla', away: 'Otro', homeScore: 2, awayScore: 1 })),
+    ...Array.from({ length: 4 }, (_, i) => ({ date: `2026-08-0${i + 1}`, home: 'FC Barcelona', away: 'Otro', homeScore: 4, awayScore: 1 })),
+  ];
+  const plain = computeMatchMarkets({ match: { home: 'Sevilla', away: 'Barcelona', competition: 'laliga' }, results });
+  const blended = computeMatchMarkets({ match: { home: 'Sevilla', away: 'Barcelona', competition: 'laliga', modelPrediction: { xg: { home: 1.1, away: 2.08 } } }, results });
+  assert.equal(plain.firstGoalSource, 'Poisson');
+  assert.equal(blended.firstGoalSource, 'Blend Poisson+xG');
+  assert.equal(blended.method, 'poisson-blend-v1');
+  assert.ok(blended.lambdasBlend);
+  // El blend tira el primer gol hacia el visitante (dirección Bzzoiro 1-2).
+  assert.ok(blended.firstGoal.firstAway > plain.firstGoal.firstAway);
+  const total = blended.firstGoal.bands.reduce((s, b) => s + b.p, 0) + blended.firstGoal.noGoal;
+  assert.equal(Math.round(total * 100), 100);
+});
+
+/* ---- Reparto top-5 de favoritos a abrir el marcador ---- */
+
+test('topScorerSplit reparte el 100% entre los 5 primeros', () => {
+  // Sevilla vs Barcelona 2026-09-19: firsts reales del JSON (blend 1.36–2.535).
+  const rows = {
+    home: [
+      { player: 'Miguel Sierra', goals: 2, first: 0.077, anytime: 0.26 },
+      { player: 'Chidera Ejuke', goals: 1, first: 0.039, anytime: 0.14 },
+    ],
+    away: [
+      { player: 'Raphinha', goals: 9, first: 0.209, anytime: 0.56 },
+      { player: 'Lamine Yamal', goals: 7, first: 0.163, anytime: 0.47 },
+      { player: 'Fermín López', goals: 4, first: 0.093, anytime: 0.3 },
+    ],
+  };
+  const split = topScorerSplit(rows, { noGoal: 0.02 });
+  assert.equal(split.rows.length, 5);
+  assert.equal(split.rows[0].player, 'Raphinha');
+  assert.ok(close(split.rows[0].split, 0.36, 0.005));
+  const sum = split.rows.reduce((s, r) => s + r.split, 0);
+  assert.equal(Math.round(sum * 100), 100);
+  assert.ok(close(split.leftover, 0.399, 0.005)); // cero + resto fuera de la fila
+});
+
+test('topScorerSplit corta a 5 y es null-honesto sin filas', () => {
+  const many = {
+    home: Array.from({ length: 4 }, (_, i) => ({ player: `H${i}`, first: 0.1 - i * 0.01 })),
+    away: Array.from({ length: 4 }, (_, i) => ({ player: `A${i}`, first: 0.09 - i * 0.01 })),
+  };
+  const split = topScorerSplit(many, {});
+  assert.equal(split.rows.length, 5);
+  assert.equal(split.leftover, null);
+  assert.equal(topScorerSplit({ home: [], away: [] }, {}), null);
+  assert.equal(topScorerSplit(null, {}), null);
+  assert.equal(topScorerSplit({ home: [{ player: 'X', first: 0 }], away: [] }, {}), null);
 });
 
 test('las bandas del primer gol más el partido sin goles suman 1', () => {
@@ -117,6 +260,33 @@ test('teamContext sin liga resuelta usa la competición del partido', () => {
   const context = teamContext(results, {}, {}, { home: 'Local', away: 'Visitante', competition: 'libertadores' }, 'home');
   assert.equal(context.recentSample, 1);
   assert.equal(context.cleanSheets.value, 1);
+});
+
+test('teamContext usa un solo contexto: últimos 5 en su liga', () => {
+  const results = Array.from({ length: 7 }, (_, index) => ({
+    date: `2026-08-${String(index + 1).padStart(2, '0')}`,
+    competition: 'premier',
+    home: 'Local',
+    away: 'Otro',
+    homeScore: index < 2 ? 0 : 1, // los 2 más viejos son derrotas 0-1, los 5 recientes son 1-0
+    awayScore: index < 2 ? 1 : 0,
+  }));
+  const context = teamContext(results, {}, {}, { home: 'Local', away: 'Visitante', competition: 'premier' }, 'home');
+  assert.equal(context.recentSample, 5);
+  assert.equal(context.debut, false);
+  assert.equal(context.cleanSheets.value, 5);
+  assert.equal(context.cleanSheets.sample, 5);
+  assert.equal(context.unbeaten.value, 5);
+  assert.equal(context.biggestWin.value, 1);
+});
+
+test('teamContext debuta con 0 partidos jugados solo sin previos en su liga', () => {
+  const context = teamContext([], {}, {}, { home: 'Local', away: 'Visitante', competition: 'premier' }, 'home');
+  assert.equal(context.recentSample, 0);
+  assert.equal(context.debut, true);
+  assert.equal(context.cleanSheets, null);
+  assert.equal(context.biggestWin, null);
+  assert.equal(context.unbeaten, null);
 });
 
 /* ---- pitch-path ---- */

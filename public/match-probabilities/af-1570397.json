@@ -4,21 +4,45 @@
   "away": "Elche",
   "competition": "laliga",
   "kickoff": "2026-09-18T19:00:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.748Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
-      "home": 1.63,
-      "away": 1.17
+      "home": 2.25,
+      "away": 1.15
     },
-    "lambdaSource": "Bzzoiro-xG",
+    "lambdaSource": "Poisson",
     "sample": {
-      "home": 0,
-      "away": 0
+      "home": 6,
+      "away": 6
     },
     "standings": {
-      "Espanyol": null,
-      "Elche": null
+      "Espanyol": {
+        "position": 8,
+        "team": "RCD Espanyol de Barcelona",
+        "played": 6,
+        "won": 2,
+        "drawn": 1,
+        "lost": 3,
+        "goalsFor": 9,
+        "goalsAgainst": 7,
+        "goalDifference": 2,
+        "points": 7,
+        "form": null
+      },
+      "Elche": {
+        "position": 20,
+        "team": "Elche CF",
+        "played": 6,
+        "won": 0,
+        "drawn": 2,
+        "lost": 4,
+        "goalsFor": 8,
+        "goalsAgainst": 16,
+        "goalDifference": -8,
+        "points": 2,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:24.655Z",
@@ -39,111 +63,163 @@
     "venue": {
       "city": "Cornellà de Llobregat",
       "tz": "Europe/Madrid"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.94,
+      "away": 1.16
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
-      "home": 0.469,
-      "draw": 0.269,
-      "away": 0.262
+      "home": 0.613,
+      "draw": 0.212,
+      "away": 0.175
     },
     "doubleChance": {
-      "12": 0.731,
-      "1X": 0.738,
-      "X2": 0.531
+      "12": 0.788,
+      "1X": 0.825,
+      "X2": 0.387
     },
     "dnb": {
-      "home": 0.641,
-      "away": 0.359
+      "home": 0.778,
+      "away": 0.222
     },
     "totals": {
-      "over15": 0.781,
-      "under15": 0.219,
-      "over25": 0.531,
-      "under25": 0.469,
-      "over35": 0.308,
-      "under35": 0.692
+      "over15": 0.862,
+      "under15": 0.138,
+      "over25": 0.66,
+      "under25": 0.34,
+      "over35": 0.441,
+      "under35": 0.559
     },
     "btts": {
-      "yes": 0.566,
-      "no": 0.434
+      "yes": 0.62,
+      "no": 0.38
     },
     "cleanSheet": {
-      "home": 0.31,
-      "away": 0.196
+      "home": 0.317,
+      "away": 0.105
     },
     "exactScores": [
       {
-        "home": 1,
+        "home": 2,
         "away": 1,
-        "p": 0.128
+        "p": 0.097
       },
       {
-        "home": 2,
+        "home": 1,
         "away": 1,
         "p": 0.095
       },
       {
-        "home": 1,
-        "away": 0,
-        "p": 0.088
-      },
-      {
         "home": 2,
         "away": 0,
-        "p": 0.081
+        "p": 0.084
       },
       {
-        "home": 0,
+        "home": 3,
+        "away": 1,
+        "p": 0.073
+      },
+      {
+        "home": 1,
         "away": 0,
-        "p": 0.072
+        "p": 0.066
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.8,
-    "noGoal": 0.061,
+    "lambdaTotal": 3.1,
+    "noGoal": 0.045,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.373
+        "p": 0.403
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.234
+        "p": 0.241
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.147
+        "p": 0.144
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.092
+        "p": 0.086
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.058
+        "p": 0.051
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.036
+        "p": 0.03
       }
     ],
-    "firstHome": 0.547,
-    "firstAway": 0.392
+    "firstHome": 0.598,
+    "firstAway": 0.357
   },
   "scorers": {
-    "home": null,
-    "away": null
+    "home": [
+      {
+        "player": "Roberto Fernández",
+        "goals": 6,
+        "matches": 6,
+        "share": 0.667,
+        "rate": 1.29,
+        "anytime": 0.726,
+        "first": 0.417
+      },
+      {
+        "player": "Álex Calatrava",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.111,
+        "rate": 0.22,
+        "anytime": 0.194,
+        "first": 0.069
+      }
+    ],
+    "away": [
+      {
+        "player": "Fernando Niño",
+        "goals": 3,
+        "matches": 6,
+        "share": 0.375,
+        "rate": 0.43,
+        "anytime": 0.353,
+        "first": 0.14
+      },
+      {
+        "player": "Abiel Osorio",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.125,
+        "rate": 0.14,
+        "anytime": 0.135,
+        "first": 0.047
+      },
+      {
+        "player": "Buba Sangaré",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.125,
+        "rate": 0.14,
+        "anytime": 0.135,
+        "first": 0.047
+      }
+    ]
   },
-  "hasScorers": false,
-  "method": "poisson-fallback-v1",
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.518,
@@ -272,7 +348,7 @@
     "sample": {
       "historyRows": 130
     },
-    "source": "Mercado",
+    "source": "Bzzoiro",
     "expectedTotal": 9.1,
     "over95": 0.426
   },
@@ -346,9 +422,9 @@
     "cornersDuel": null,
     "cardsDuel": null,
     "lastGoal": {
-      "home": 0.547,
-      "away": 0.392,
-      "noGoal": 0.061
+      "home": 0.598,
+      "away": 0.357,
+      "noGoal": 0.045
     },
     "cornerRace": null,
     "cornerMargin": null,
@@ -386,6 +462,7 @@
     "home": {
       "team": "Espanyol",
       "recentSample": 1,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 1
@@ -404,15 +481,16 @@
     },
     "away": {
       "team": "Elche",
-      "recentSample": 7,
+      "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
-        "sample": 7
+        "sample": 5
       },
       "biggestWin": null,
       "unbeaten": {
         "value": 0,
-        "sample": 7
+        "sample": 5
       },
       "season": {
         "position": 20,
@@ -434,5 +512,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:22:41.462Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.469,
+      "draw": 0.269,
+      "away": 0.262
+    },
+    "doubleChance": {
+      "12": 0.731,
+      "1X": 0.738,
+      "X2": 0.531
+    },
+    "dnb": {
+      "home": 0.641,
+      "away": 0.359
+    },
+    "totals": {
+      "over15": 0.781,
+      "under15": 0.219,
+      "over25": 0.531,
+      "under25": 0.469,
+      "over35": 0.308,
+      "under35": 0.692
+    },
+    "btts": {
+      "yes": 0.566,
+      "no": 0.434
+    },
+    "cleanSheet": {
+      "home": 0.31,
+      "away": 0.196
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.119,
+        "share": 0.2615384615384615
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.095,
+        "share": 0.2087912087912088
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.088,
+        "share": 0.19340659340659339
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.081,
+        "share": 0.17802197802197803
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.072,
+        "share": 0.15824175824175823
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

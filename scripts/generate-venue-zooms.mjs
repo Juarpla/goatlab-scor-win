@@ -9,13 +9,13 @@
  * Uso: node scripts/generate-venue-zooms.mjs [land-110m.json]
  * Si falta el TopoJSON se descarga una vez desde jsdelivr y queda en .cache/.
  * Salida: public/img/venue-zoom/{slug}.png (un archivo por club del catálogo)
- * y europa.png (mapa de referencia cuando la sede no está en el catálogo).
+ * y un PNG por región de reserva (src/lib/venues.js · REGION_MAPS).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CLUBS, VENUE_ZOOM, EUROPE_MAP } from '../src/lib/venues.js';
+import { CLUBS, VENUE_ZOOM, REGION_MAPS } from '../src/lib/venues.js';
 import { normalize } from '../src/lib/teams.js';
 
 const SEA = [24, 30, 26];
@@ -146,12 +146,17 @@ CLUBS.forEach((club, index) => {
   writeFileSync(path.join(outDir, `${slug}.png`), png);
   bytes += png.length;
 });
-/* Mapa de referencia sin sede resuelta: el mismo lenguaje de puntos sobre Europa. */
-const europeCols = Math.round((EUROPE_MAP.lngMax - EUROPE_MAP.lngMin) / EUROPE_MAP.step);
-const europeRows = Math.round((EUROPE_MAP.latMax - EUROPE_MAP.latMin) / EUROPE_MAP.step);
-const europe = renderCrop({
-  left: EUROPE_MAP.lngMin, top: EUROPE_MAP.latMax,
-  cols: europeCols, rows: europeRows, step: EUROPE_MAP.step, pitch: EUROPE_MAP.pitch,
-});
-writeFileSync(path.join(outDir, 'europa.png'), europe);
-console.log(`venue-zoom: ${CLUBS.length} recortes ${W}×${H} px + europa.png ${europeCols * EUROPE_MAP.pitch}×${europeRows * EUROPE_MAP.pitch} px · ${((bytes + europe.length) / 1024).toFixed(0)} KB totales`);
+/* Mapas de reserva por competición cuando la sede no está en el catálogo:
+   el mismo lenguaje de puntos sobre cada región. */
+let regionBytes = 0;
+for (const region of Object.values(REGION_MAPS)) {
+  const cols = Math.round((region.lngMax - region.lngMin) / region.step);
+  const rows = Math.round((region.latMax - region.latMin) / region.step);
+  const png = renderCrop({
+    left: region.lngMin, top: region.latMax,
+    cols, rows, step: region.step, pitch: region.pitch,
+  });
+  writeFileSync(path.join(outDir, region.file), png);
+  regionBytes += png.length;
+}
+console.log(`venue-zoom: ${CLUBS.length} recortes ${W}×${H} px + ${Object.keys(REGION_MAPS).length} regiones · ${((bytes + regionBytes) / 1024).toFixed(0)} KB totales`);

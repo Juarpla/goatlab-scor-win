@@ -4,16 +4,16 @@
   "away": "Liverpool FC",
   "competition": "premier",
   "kickoff": "2026-09-20T13:00:00Z",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.749Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
-      "home": 1.35,
-      "away": 1.541
+      "home": 1.404,
+      "away": 1.472
     },
     "lambdaSource": "Poisson",
     "sample": {
-      "home": 4,
+      "home": 5,
       "away": 5
     },
     "standings": {
@@ -63,95 +63,100 @@
     "venue": {
       "city": "Bournemouth",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.427,
+      "away": 1.506
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
-      "home": 0.322,
-      "draw": 0.27,
-      "away": 0.408
+      "home": 0.349,
+      "draw": 0.272,
+      "away": 0.379
     },
     "doubleChance": {
-      "12": 0.73,
-      "1X": 0.592,
-      "X2": 0.678
+      "12": 0.728,
+      "1X": 0.621,
+      "X2": 0.651
     },
     "dnb": {
-      "home": 0.442,
-      "away": 0.558
+      "home": 0.479,
+      "away": 0.521
     },
     "totals": {
-      "over15": 0.796,
-      "under15": 0.204,
-      "over25": 0.552,
-      "under25": 0.448,
-      "over35": 0.328,
-      "under35": 0.672
+      "over15": 0.793,
+      "under15": 0.207,
+      "over25": 0.548,
+      "under25": 0.452,
+      "over35": 0.325,
+      "under35": 0.675
     },
     "btts": {
-      "yes": 0.594,
-      "no": 0.406
+      "yes": 0.593,
+      "no": 0.407
     },
     "cleanSheet": {
-      "home": 0.214,
-      "away": 0.259
+      "home": 0.229,
+      "away": 0.246
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.127
+        "p": 0.128
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.089
+        "p": 0.086
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.078
+        "p": 0.082
       },
       {
         "home": 0,
         "away": 1,
-        "p": 0.074
+        "p": 0.071
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.067
+        "p": 0.068
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.89,
-    "noGoal": 0.056,
+    "lambdaTotal": 2.93,
+    "noGoal": 0.053,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.382
+        "p": 0.387
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.236
+        "p": 0.237
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.09
+        "p": 0.089
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.056
+        "p": 0.055
       },
       {
         "from": 75,
@@ -159,43 +164,62 @@
         "p": 0.034
       }
     ],
-    "firstHome": 0.441,
-    "firstAway": 0.503
+    "firstHome": 0.461,
+    "firstAway": 0.486
   },
   "scorers": {
-    "home": null,
+    "home": [
+      {
+        "player": "Marcus Tavernier",
+        "goals": 3,
+        "matches": 4,
+        "share": 0.5,
+        "rate": 0.71,
+        "anytime": 0.51,
+        "first": 0.244
+      },
+      {
+        "player": "Alex Scott",
+        "goals": 1,
+        "matches": 4,
+        "share": 0.167,
+        "rate": 0.24,
+        "anytime": 0.212,
+        "first": 0.081
+      }
+    ],
     "away": [
       {
         "player": "Alexander Isak",
         "goals": 3,
         "matches": 4,
         "share": 0.5,
-        "rate": 0.77,
-        "anytime": 0.537,
-        "first": 0.267
+        "rate": 0.75,
+        "anytime": 0.529,
+        "first": 0.257
       },
       {
         "player": "Cody Gakpo",
         "goals": 1,
         "matches": 4,
         "share": 0.167,
-        "rate": 0.26,
-        "anytime": 0.227,
-        "first": 0.089
+        "rate": 0.25,
+        "anytime": 0.222,
+        "first": 0.086
       },
       {
         "player": "Dominik Szoboszlai",
         "goals": 1,
         "matches": 4,
         "share": 0.167,
-        "rate": 0.26,
-        "anytime": 0.227,
-        "first": 0.089
+        "rate": 0.25,
+        "anytime": 0.222,
+        "first": 0.086
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.313,
@@ -389,9 +413,9 @@
       "away": 0.329
     },
     "lastGoal": {
-      "home": 0.441,
-      "away": 0.503,
-      "noGoal": 0.056
+      "home": 0.461,
+      "away": 0.486,
+      "noGoal": 0.053
     },
     "cornerRace": {
       "3": {
@@ -448,6 +472,7 @@
     "home": {
       "team": "AFC Bournemouth",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 4
@@ -469,6 +494,7 @@
     "away": {
       "team": "Liverpool FC",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 2,
         "sample": 4
@@ -501,5 +527,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:33:51.948Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.347,
+      "draw": 0.266,
+      "away": 0.387
+    },
+    "doubleChance": {
+      "12": 0.734,
+      "1X": 0.613,
+      "X2": 0.653
+    },
+    "dnb": {
+      "home": 0.473,
+      "away": 0.527
+    },
+    "totals": {
+      "over15": 0.811,
+      "under15": 0.189,
+      "over25": 0.575,
+      "under25": 0.425,
+      "over35": 0.35,
+      "under35": 0.65
+    },
+    "btts": {
+      "yes": 0.613,
+      "no": 0.387
+    },
+    "cleanSheet": {
+      "home": 0.214,
+      "away": 0.235
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.107,
+        "share": 0.2655086848635235
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.086,
+        "share": 0.21339950372208433
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.081,
+        "share": 0.2009925558312655
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.066,
+        "share": 0.16377171215880892
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.063,
+        "share": 0.15632754342431762
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

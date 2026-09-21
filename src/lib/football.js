@@ -1,5 +1,6 @@
 /** Common fixture boundary. Provider IDs are namespaced; absent metrics remain null. */
 import { sameClub, normalize } from './teams.js';
+import { fairProbs } from './odds.js';
 import { leagues, leagueByProviderId, providerLeagueId } from './leagues.js';
 
 /** Vista de conveniencia del catálogo único (`public/data/leagues.json`). */
@@ -300,5 +301,69 @@ export async function fetchProviderPrediction(fixtureId, { env = {}, fetchImpl =
   try {
     const data = await pacedRequest(`https://v3.football.api-sports.io/predictions?fixture=${encodeURIComponent(fixtureId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
     return mapProviderPrediction(data);
+  } catch { return null; }
+}
+
+/* ---- Odds pre-partido de API-Football (solo % interpretativos, nunca cuotas) ---- */
+
+const numOdd = value => {
+  const number = typeof value === 'string' ? Number(value) : value;
+  return typeof number === 'number' && Number.isFinite(number) && number > 1 ? number : null;
+};
+const meanOdds = rows => {
+  const valid = (rows ?? []).filter(row => Array.isArray(row) && row.every(numOdd));
+  if (!valid.length) return null;
+  return valid[0].map((_, index) => valid.reduce((sum, row) => sum + row[index], 0) / valid.length);
+};
+
+/**
+ * Payload de `/odds?fixture=` → % justos (sin margen) de 1X2, over 2.5 y BTTS.
+ * Apuestas: id 1 (ganador), 5 (más/menos goles, línea 2.5), 8 (marcan los dos).
+ * Promedia cuotas entre casas y quita el margen; lo irreconocible es null.
+ */
+export function mapAfOdds(data) {
+  const bookmakers = Array.isArray(data?.response?.[0]?.bookmakers) ? data.response[0].bookmakers : null;
+  if (!bookmakers?.length) return null;
+  const betsOf = bookmaker => Array.isArray(bookmaker?.bets) ? bookmaker.bets : [];
+  const findBet = (bets, ids, nameMatch) => bets.find(bet => ids.includes(bet?.id) || (typeof bet?.name === 'string' && nameMatch.test(bet.name))) ?? null;
+  const oddOf = (bet, labelMatch) => numOdd(bet?.values?.find(item => typeof item?.value === 'string' && labelMatch.test(item.value))?.odd);
+  const winnerRows = [];
+  const overRows = [];
+  const bttsRows = [];
+  for (const bookmaker of bookmakers) {
+    const bets = betsOf(bookmaker);
+    const winner = findBet(bets, [1], /match winner/i);
+    if (winner) {
+      const row = [oddOf(winner, /^home$/i), oddOf(winner, /^draw$/i), oddOf(winner, /^away$/i)];
+      if (row.every(numOdd)) winnerRows.push(row);
+    }
+    const totals = findBet(bets, [5], /over\/under|goals over\/under/i);
+    if (totals) {
+      const row = [oddOf(totals, /^over 2\.5$/i), oddOf(totals, /^under 2\.5$/i)];
+      if (row.every(numOdd)) overRows.push(row);
+    }
+    const btts = findBet(bets, [8], /both teams/i);
+    if (btts) {
+      const row = [oddOf(btts, /^yes$/i), oddOf(btts, /^no$/i)];
+      if (row.every(numOdd)) bttsRows.push(row);
+    }
+  }
+  const fair = rows => fairProbs(meanOdds(rows)) ?? null;
+  const oneX2Fair = winnerRows.length ? fair(winnerRows) : null;
+  const overFair = overRows.length ? fair(overRows) : null;
+  const bttsFair = bttsRows.length ? fair(bttsRows) : null;
+  const oneX2 = oneX2Fair ? { home: oneX2Fair[0], draw: oneX2Fair[1], away: oneX2Fair[2] } : null;
+  const over25 = overFair ? overFair[0] : null;
+  const btts = bttsFair ? bttsFair[0] : null;
+  if (!oneX2 && over25 == null && btts == null) return null;
+  return { oneX2, over25, btts, bookmakers: bookmakers.length, capturedAt: new Date().toISOString(), source: 'API-Football' };
+}
+
+/** 1 request por partido; sin id o sin clave responde null sin llamar. */
+export async function fetchAfOdds(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/odds?fixture=${encodeURIComponent(fixtureId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    return mapAfOdds(data);
   } catch { return null; }
 }

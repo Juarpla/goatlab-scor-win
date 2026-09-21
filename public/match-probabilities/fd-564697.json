@@ -4,11 +4,11 @@
   "away": "Málaga CF",
   "competition": "laliga",
   "kickoff": "2026-09-20T12:00:00Z",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.753Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
-      "home": 1.35,
+      "home": 1.26,
       "away": 0.767
     },
     "lambdaSource": "Poisson",
@@ -63,104 +63,109 @@
     "venue": {
       "city": "Getafe",
       "tz": "Europe/Madrid"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.25,
+      "away": 0.968
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
-      "home": 0.494,
-      "draw": 0.306,
-      "away": 0.2
+      "home": 0.468,
+      "draw": 0.319,
+      "away": 0.214
     },
     "doubleChance": {
-      "12": 0.694,
-      "1X": 0.8,
-      "X2": 0.506
+      "12": 0.681,
+      "1X": 0.786,
+      "X2": 0.532
     },
     "dnb": {
-      "home": 0.711,
-      "away": 0.289
+      "home": 0.686,
+      "away": 0.314
     },
     "totals": {
-      "over15": 0.637,
-      "under15": 0.363,
-      "over25": 0.355,
-      "under25": 0.645,
-      "over35": 0.165,
-      "under35": 0.835
+      "over15": 0.614,
+      "under15": 0.386,
+      "over25": 0.331,
+      "under25": 0.669,
+      "over35": 0.148,
+      "under35": 0.852
     },
     "btts": {
-      "yes": 0.409,
-      "no": 0.591
+      "yes": 0.396,
+      "no": 0.604
     },
     "cleanSheet": {
       "home": 0.464,
-      "away": 0.259
+      "away": 0.284
     },
     "exactScores": [
       {
         "home": 1,
         "away": 0,
-        "p": 0.15
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.137
+        "p": 0.153
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.133
+        "p": 0.144
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.14
       },
       {
         "home": 2,
         "away": 0,
-        "p": 0.11
+        "p": 0.105
       },
       {
-        "home": 2,
+        "home": 0,
         "away": 1,
-        "p": 0.084
+        "p": 0.088
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.12,
-    "noGoal": 0.12,
+    "lambdaTotal": 2.22,
+    "noGoal": 0.109,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.297
+        "p": 0.309
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.209
+        "p": 0.214
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.147
+        "p": 0.148
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.103
+        "p": 0.102
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.072
+        "p": 0.07
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.051
+        "p": 0.049
       }
     ],
-    "firstHome": 0.561,
-    "firstAway": 0.319
+    "firstHome": 0.502,
+    "firstAway": 0.389
   },
   "scorers": {
     "home": null,
@@ -170,32 +175,32 @@
         "goals": 1,
         "matches": 2,
         "share": 0.333,
-        "rate": 0.26,
-        "anytime": 0.225,
-        "first": 0.12
+        "rate": 0.32,
+        "anytime": 0.276,
+        "first": 0.145
       },
       {
         "player": "Carlos Dotor",
         "goals": 1,
         "matches": 5,
         "share": 0.333,
-        "rate": 0.26,
-        "anytime": 0.225,
-        "first": 0.12
+        "rate": 0.32,
+        "anytime": 0.276,
+        "first": 0.145
       },
       {
         "player": "Chupete",
         "goals": 1,
         "matches": 6,
         "share": 0.333,
-        "rate": 0.26,
-        "anytime": 0.225,
-        "first": 0.12
+        "rate": 0.32,
+        "anytime": 0.276,
+        "first": 0.145
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.44,
@@ -389,9 +394,9 @@
       "away": 0.477
     },
     "lastGoal": {
-      "home": 0.561,
-      "away": 0.319,
-      "noGoal": 0.12
+      "home": 0.502,
+      "away": 0.389,
+      "noGoal": 0.109
     },
     "cornerRace": {
       "3": {
@@ -447,18 +452,16 @@
   "context": {
     "home": {
       "team": "Getafe CF",
-      "recentSample": 8,
+      "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
-        "value": 1,
-        "sample": 8
+        "value": 0,
+        "sample": 5
       },
-      "biggestWin": {
-        "value": 1,
-        "sample": 8
-      },
+      "biggestWin": null,
       "unbeaten": {
         "value": 0,
-        "sample": 8
+        "sample": 5
       },
       "season": {
         "position": 16,
@@ -471,15 +474,16 @@
     },
     "away": {
       "team": "Málaga CF",
-      "recentSample": 8,
+      "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
-        "sample": 8
+        "sample": 5
       },
       "biggestWin": null,
       "unbeaten": {
         "value": 0,
-        "sample": 8
+        "sample": 5
       },
       "season": {
         "position": 19,
@@ -501,5 +505,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:33:08.898Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.366,
+      "draw": 0.302,
+      "away": 0.332
+    },
+    "doubleChance": {
+      "12": 0.698,
+      "1X": 0.668,
+      "X2": 0.634
+    },
+    "dnb": {
+      "home": 0.524,
+      "away": 0.476
+    },
+    "totals": {
+      "over15": 0.707,
+      "under15": 0.293,
+      "over25": 0.433,
+      "under25": 0.567,
+      "over35": 0.223,
+      "under35": 0.777
+    },
+    "btts": {
+      "yes": 0.503,
+      "no": 0.497
+    },
+    "cleanSheet": {
+      "home": 0.31,
+      "away": 0.289
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.129,
+        "share": 0.2564612326043738
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.103,
+        "share": 0.20477137176938373
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.098,
+        "share": 0.19483101391650104
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.092,
+        "share": 0.18290258449304178
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.081,
+        "share": 0.16103379721669983
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

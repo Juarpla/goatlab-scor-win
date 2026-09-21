@@ -4,21 +4,45 @@
   "away": "Coventry",
   "competition": "premier",
   "kickoff": "2026-09-19T16:30:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.745Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
-      "home": 2.16,
+      "home": 1.89,
       "away": 0.46
     },
     "lambdaSource": "Poisson",
     "sample": {
       "home": 4,
-      "away": 5
+      "away": 4
     },
     "standings": {
-      "Nottingham Forest": null,
-      "Coventry": null
+      "Nottingham Forest": {
+        "position": 11,
+        "team": "Nottingham Forest FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 2,
+        "lost": 1,
+        "goalsFor": 4,
+        "goalsAgainst": 4,
+        "goalDifference": 0,
+        "points": 5,
+        "form": null
+      },
+      "Coventry": {
+        "position": 20,
+        "team": "Coventry City FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 0,
+        "lost": 4,
+        "goalsFor": 0,
+        "goalsAgainst": 10,
+        "goalDifference": -10,
+        "points": 0,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:37.764Z",
@@ -39,75 +63,80 @@
     "venue": {
       "city": "Nottingham",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.665,
+      "away": 0.975
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
-      "home": 0.762,
-      "draw": 0.18,
-      "away": 0.058
+      "home": 0.712,
+      "draw": 0.215,
+      "away": 0.073
     },
     "doubleChance": {
-      "12": 0.82,
-      "1X": 0.942,
-      "X2": 0.238
+      "12": 0.785,
+      "1X": 0.927,
+      "X2": 0.288
     },
     "dnb": {
-      "home": 0.929,
-      "away": 0.071
+      "home": 0.907,
+      "away": 0.093
     },
     "totals": {
-      "over15": 0.744,
-      "under15": 0.256,
-      "over25": 0.486,
-      "under25": 0.514,
-      "over35": 0.268,
-      "under35": 0.732
+      "over15": 0.689,
+      "under15": 0.311,
+      "over25": 0.417,
+      "under25": 0.583,
+      "over35": 0.211,
+      "under35": 0.789
     },
     "btts": {
-      "yes": 0.333,
-      "no": 0.667
+      "yes": 0.321,
+      "no": 0.679
     },
     "cleanSheet": {
       "home": 0.631,
-      "away": 0.115
+      "away": 0.151
     },
     "exactScores": [
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.172
+      },
       {
         "home": 2,
         "away": 0,
         "p": 0.17
       },
       {
-        "home": 1,
-        "away": 0,
-        "p": 0.15
-      },
-      {
         "home": 3,
         "away": 0,
-        "p": 0.122
+        "p": 0.107
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.08
+        "p": 0.104
       },
       {
         "home": 1,
         "away": 1,
-        "p": 0.08
+        "p": 0.091
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.62,
-    "noGoal": 0.073,
+    "lambdaTotal": 2.64,
+    "noGoal": 0.071,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.354
+        "p": 0.356
       },
       {
         "from": 15,
@@ -127,16 +156,16 @@
       {
         "from": 60,
         "to": 75,
-        "p": 0.062
+        "p": 0.061
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.04
+        "p": 0.039
       }
     ],
-    "firstHome": 0.764,
-    "firstAway": 0.163
+    "firstHome": 0.586,
+    "firstAway": 0.343
   },
   "scorers": {
     "home": [
@@ -145,24 +174,24 @@
         "goals": 1,
         "matches": 4,
         "share": 0.25,
-        "rate": 0.54,
-        "anytime": 0.417,
-        "first": 0.206
+        "rate": 0.42,
+        "anytime": 0.34,
+        "first": 0.158
       },
       {
         "player": "Igor Jesus",
         "goals": 1,
         "matches": 4,
         "share": 0.25,
-        "rate": 0.54,
-        "anytime": 0.417,
-        "first": 0.206
+        "rate": 0.42,
+        "anytime": 0.34,
+        "first": 0.158
       }
     ],
     "away": null
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.588,
@@ -368,9 +397,9 @@
     },
     "cardsDuel": null,
     "lastGoal": {
-      "home": 0.764,
-      "away": 0.163,
-      "noGoal": 0.073
+      "home": 0.586,
+      "away": 0.343,
+      "noGoal": 0.071
     },
     "cornerRace": {
       "3": {
@@ -427,6 +456,7 @@
     "home": {
       "team": "Nottingham Forest",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
         "sample": 4
@@ -455,6 +485,7 @@
     "away": {
       "team": "Coventry",
       "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 5
@@ -474,5 +505,76 @@
       "player": null
     }
   },
-  "llmReview": null
+  "llmReview": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.354,
+      "draw": 0.269,
+      "away": 0.377
+    },
+    "doubleChance": {
+      "12": 0.731,
+      "1X": 0.623,
+      "X2": 0.646
+    },
+    "dnb": {
+      "home": 0.485,
+      "away": 0.515
+    },
+    "totals": {
+      "over15": 0.802,
+      "under15": 0.198,
+      "over25": 0.561,
+      "under25": 0.439,
+      "over35": 0.337,
+      "under35": 0.663
+    },
+    "btts": {
+      "yes": 0.603,
+      "no": 0.397
+    },
+    "cleanSheet": {
+      "home": 0.225,
+      "away": 0.237
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.106,
+        "share": 0.2610837438423645
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.085,
+        "share": 0.20935960591133004
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.082,
+        "share": 0.2019704433497537
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.068,
+        "share": 0.16748768472906403
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.065,
+        "share": 0.16009852216748768
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

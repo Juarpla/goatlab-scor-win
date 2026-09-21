@@ -4,8 +4,8 @@
   "away": "Aston Villa",
   "competition": "premier",
   "kickoff": "2026-09-19T11:30:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.746Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
       "home": 0.972,
@@ -17,8 +17,32 @@
       "away": 5
     },
     "standings": {
-      "Tottenham": null,
-      "Aston Villa": null
+      "Tottenham": {
+        "position": 17,
+        "team": "Tottenham Hotspur FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 2,
+        "lost": 2,
+        "goalsFor": 0,
+        "goalsAgainst": 5,
+        "goalDifference": -5,
+        "points": 2,
+        "form": null
+      },
+      "Aston Villa": {
+        "position": 19,
+        "team": "Aston Villa FC",
+        "played": 4,
+        "won": 0,
+        "drawn": 1,
+        "lost": 3,
+        "goalsFor": 1,
+        "goalsAgainst": 7,
+        "goalDifference": -6,
+        "points": 1,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:37.764Z",
@@ -39,7 +63,12 @@
     "venue": {
       "city": "Londres",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.171,
+      "away": 1.172
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
@@ -101,42 +130,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 1.92,
-    "noGoal": 0.147,
+    "lambdaTotal": 2.34,
+    "noGoal": 0.096,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.273
+        "p": 0.323
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.199
+        "p": 0.219
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.144
+        "p": 0.148
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.105
+        "p": 0.1
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.076
+        "p": 0.068
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.055
+        "p": 0.046
       }
     ],
-    "firstHome": 0.433,
-    "firstAway": 0.42
+    "firstHome": 0.452,
+    "firstAway": 0.452
   },
   "scorers": {
     "home": null,
@@ -146,14 +175,14 @@
         "goals": 1,
         "matches": 4,
         "share": 0.9,
-        "rate": 0.85,
-        "anytime": 0.572,
-        "first": 0.442
+        "rate": 1.05,
+        "anytime": 0.652,
+        "first": 0.451
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.469,
@@ -364,9 +393,9 @@
       "away": 0.42
     },
     "lastGoal": {
-      "home": 0.433,
-      "away": 0.42,
-      "noGoal": 0.147
+      "home": 0.452,
+      "away": 0.452,
+      "noGoal": 0.096
     },
     "cornerRace": {
       "3": {
@@ -423,6 +452,7 @@
     "home": {
       "team": "Tottenham",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 2,
         "sample": 4
@@ -444,6 +474,7 @@
     "away": {
       "team": "Aston Villa",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
         "sample": 4
@@ -467,5 +498,76 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.354,
+      "draw": 0.278,
+      "away": 0.368
+    },
+    "doubleChance": {
+      "12": 0.722,
+      "1X": 0.632,
+      "X2": 0.646
+    },
+    "dnb": {
+      "home": 0.491,
+      "away": 0.509
+    },
+    "totals": {
+      "over15": 0.776,
+      "under15": 0.224,
+      "over25": 0.523,
+      "under25": 0.477,
+      "over35": 0.301,
+      "under35": 0.699
+    },
+    "btts": {
+      "yes": 0.574,
+      "no": 0.426
+    },
+    "cleanSheet": {
+      "home": 0.247,
+      "away": 0.254
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.105,
+        "share": 0.2488151658767772
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.084,
+        "share": 0.1990521327014218
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.082,
+        "share": 0.19431279620853079
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.076,
+        "share": 0.1800947867298578
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.075,
+        "share": 0.1777251184834123
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

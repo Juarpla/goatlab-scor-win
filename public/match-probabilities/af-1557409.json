@@ -4,21 +4,45 @@
   "away": "Arsenal",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.743Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
-      "home": 2.052,
-      "away": 1.288
+      "home": 1.863,
+      "away": 1.403
     },
     "lambdaSource": "Poisson",
     "sample": {
-      "home": 5,
+      "home": 4,
       "away": 5
     },
     "standings": {
-      "Brighton": null,
-      "Arsenal": null
+      "Brighton": {
+        "position": 5,
+        "team": "Brighton & Hove Albion FC",
+        "played": 4,
+        "won": 2,
+        "drawn": 1,
+        "lost": 1,
+        "goalsFor": 13,
+        "goalsAgainst": 5,
+        "goalDifference": 8,
+        "points": 7,
+        "form": null
+      },
+      "Arsenal": {
+        "position": 1,
+        "team": "Arsenal FC",
+        "played": 4,
+        "won": 4,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": 8,
+        "goalsAgainst": 1,
+        "goalDifference": 7,
+        "points": 12,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:37.764Z",
@@ -39,104 +63,109 @@
     "venue": {
       "city": "Brighton",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.492,
+      "away": 1.462
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
-      "home": 0.541,
-      "draw": 0.231,
-      "away": 0.228
+      "home": 0.474,
+      "draw": 0.245,
+      "away": 0.281
     },
     "doubleChance": {
-      "12": 0.769,
-      "1X": 0.772,
-      "X2": 0.459
+      "12": 0.755,
+      "1X": 0.719,
+      "X2": 0.526
     },
     "dnb": {
-      "home": 0.704,
-      "away": 0.296
+      "home": 0.628,
+      "away": 0.372
     },
     "totals": {
-      "over15": 0.856,
-      "under15": 0.144,
-      "over25": 0.648,
-      "under25": 0.352,
-      "over35": 0.428,
-      "under35": 0.572
+      "over15": 0.847,
+      "under15": 0.153,
+      "over25": 0.634,
+      "under25": 0.366,
+      "over35": 0.412,
+      "under35": 0.588
     },
     "btts": {
-      "yes": 0.64,
-      "no": 0.36
+      "yes": 0.647,
+      "no": 0.353
     },
     "cleanSheet": {
-      "home": 0.276,
-      "away": 0.129
+      "home": 0.246,
+      "away": 0.155
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.103
+        "p": 0.11
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.096
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.075
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.066
+        "p": 0.093
       },
       {
         "home": 1,
+        "away": 2,
+        "p": 0.07
+      },
+      {
+        "home": 2,
         "away": 0,
-        "p": 0.063
+        "p": 0.066
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.065
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.34,
-    "noGoal": 0.035,
+    "lambdaTotal": 2.95,
+    "noGoal": 0.052,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.427
+        "p": 0.389
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.245
+        "p": 0.238
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.14
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.08
+        "p": 0.089
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.046
+        "p": 0.054
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.026
+        "p": 0.033
       }
     ],
-    "firstHome": 0.593,
-    "firstAway": 0.372
+    "firstHome": 0.479,
+    "firstAway": 0.469
   },
   "scorers": {
     "home": [
@@ -145,27 +174,27 @@
         "goals": 2,
         "matches": 1,
         "share": 0.154,
-        "rate": 0.32,
-        "anytime": 0.271,
-        "first": 0.095
+        "rate": 0.23,
+        "anytime": 0.205,
+        "first": 0.078
       },
       {
         "player": "Malick Yalcouyé",
         "goals": 2,
         "matches": 4,
         "share": 0.154,
-        "rate": 0.32,
-        "anytime": 0.271,
-        "first": 0.095
+        "rate": 0.23,
+        "anytime": 0.205,
+        "first": 0.078
       },
       {
         "player": "Pascal Groß",
         "goals": 2,
         "matches": 4,
         "share": 0.154,
-        "rate": 0.32,
-        "anytime": 0.271,
-        "first": 0.095
+        "rate": 0.23,
+        "anytime": 0.205,
+        "first": 0.078
       }
     ],
     "away": [
@@ -174,32 +203,32 @@
         "goals": 3,
         "matches": 4,
         "share": 0.375,
-        "rate": 0.48,
-        "anytime": 0.383,
-        "first": 0.145
+        "rate": 0.55,
+        "anytime": 0.422,
+        "first": 0.186
       },
       {
         "player": "Kai Havertz",
         "goals": 2,
         "matches": 4,
         "share": 0.25,
-        "rate": 0.32,
-        "anytime": 0.275,
-        "first": 0.096
+        "rate": 0.37,
+        "anytime": 0.306,
+        "first": 0.124
       },
       {
         "player": "Martin Ødegaard",
         "goals": 2,
         "matches": 4,
         "share": 0.25,
-        "rate": 0.32,
-        "anytime": 0.275,
-        "first": 0.096
+        "rate": 0.37,
+        "anytime": 0.306,
+        "first": 0.124
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.2,
@@ -405,9 +434,9 @@
     },
     "cardsDuel": null,
     "lastGoal": {
-      "home": 0.593,
-      "away": 0.372,
-      "noGoal": 0.035
+      "home": 0.479,
+      "away": 0.469,
+      "noGoal": 0.052
     },
     "cornerRace": {
       "3": {
@@ -464,6 +493,7 @@
     "home": {
       "team": "Brighton",
       "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
         "value": 3,
         "sample": 5
@@ -492,6 +522,7 @@
     "away": {
       "team": "Arsenal",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 3,
         "sample": 4
@@ -524,5 +555,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:26:39.238Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.268,
+      "draw": 0.28,
+      "away": 0.453
+    },
+    "doubleChance": {
+      "12": 0.72,
+      "1X": 0.547,
+      "X2": 0.732
+    },
+    "dnb": {
+      "home": 0.372,
+      "away": 0.628
+    },
+    "totals": {
+      "over15": 0.752,
+      "under15": 0.248,
+      "over25": 0.492,
+      "under25": 0.508,
+      "over35": 0.273,
+      "under35": 0.727
+    },
+    "btts": {
+      "yes": 0.539,
+      "no": 0.461
+    },
+    "cleanSheet": {
+      "home": 0.219,
+      "away": 0.326
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12,
+        "share": 0.2531645569620253
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.096,
+        "share": 0.20253164556962025
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.092,
+        "share": 0.1940928270042194
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.084,
+        "share": 0.17721518987341772
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.082,
+        "share": 0.1729957805907173
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

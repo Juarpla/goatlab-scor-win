@@ -4,8 +4,8 @@
   "away": "Crystal Palace FC",
   "competition": "premier",
   "kickoff": "2026-09-20T13:00:00Z",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.750Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
       "home": 2.133,
@@ -63,7 +63,12 @@
     "venue": {
       "city": "Leeds",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.902,
+      "away": 1.268
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
@@ -125,42 +130,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.4,
-    "noGoal": 0.033,
+    "lambdaTotal": 3.17,
+    "noGoal": 0.042,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.432
+        "p": 0.41
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.245
+        "p": 0.242
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.139
+        "p": 0.143
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.079
+        "p": 0.084
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.045
+        "p": 0.05
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.025
+        "p": 0.029
       }
     ],
-    "firstHome": 0.607,
-    "firstAway": 0.36
+    "firstHome": 0.575,
+    "firstAway": 0.383
   },
   "scorers": {
     "home": [
@@ -169,27 +174,27 @@
         "goals": 2,
         "matches": 4,
         "share": 0.286,
-        "rate": 0.61,
-        "anytime": 0.457,
-        "first": 0.179
+        "rate": 0.54,
+        "anytime": 0.42,
+        "first": 0.172
       },
       {
         "player": "Jayden Bogle",
         "goals": 2,
         "matches": 4,
         "share": 0.286,
-        "rate": 0.61,
-        "anytime": 0.457,
-        "first": 0.179
+        "rate": 0.54,
+        "anytime": 0.42,
+        "first": 0.172
       },
       {
         "player": "Anton Stach",
         "goals": 1,
         "matches": 4,
         "share": 0.143,
-        "rate": 0.31,
-        "anytime": 0.263,
-        "first": 0.09
+        "rate": 0.27,
+        "anytime": 0.238,
+        "first": 0.086
       }
     ],
     "away": [
@@ -200,7 +205,7 @@
         "share": 0.333,
         "rate": 0.42,
         "anytime": 0.344,
-        "first": 0.124
+        "first": 0.133
       },
       {
         "player": "Anan Khalaili",
@@ -208,8 +213,8 @@
         "matches": 4,
         "share": 0.167,
         "rate": 0.21,
-        "anytime": 0.19,
-        "first": 0.062
+        "anytime": 0.191,
+        "first": 0.067
       },
       {
         "player": "Ben Chilwell",
@@ -217,13 +222,13 @@
         "matches": 2,
         "share": 0.167,
         "rate": 0.21,
-        "anytime": 0.19,
-        "first": 0.062
+        "anytime": 0.191,
+        "first": 0.067
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.531,
@@ -417,9 +422,9 @@
       "away": 0.433
     },
     "lastGoal": {
-      "home": 0.607,
-      "away": 0.36,
-      "noGoal": 0.033
+      "home": 0.575,
+      "away": 0.383,
+      "noGoal": 0.042
     },
     "cornerRace": {
       "3": {
@@ -476,6 +481,7 @@
     "home": {
       "team": "Leeds United FC",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 1,
         "sample": 4
@@ -504,6 +510,7 @@
     "away": {
       "team": "Crystal Palace FC",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 4
@@ -536,5 +543,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:33:27.987Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.457,
+      "draw": 0.263,
+      "away": 0.28
+    },
+    "doubleChance": {
+      "12": 0.737,
+      "1X": 0.72,
+      "X2": 0.543
+    },
+    "dnb": {
+      "home": 0.62,
+      "away": 0.38
+    },
+    "totals": {
+      "over15": 0.803,
+      "under15": 0.197,
+      "over25": 0.563,
+      "under25": 0.437,
+      "over35": 0.339,
+      "under35": 0.661
+    },
+    "btts": {
+      "yes": 0.595,
+      "no": 0.405
+    },
+    "cleanSheet": {
+      "home": 0.281,
+      "away": 0.188
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.118,
+        "share": 0.271889400921659
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.094,
+        "share": 0.21658986175115208
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.077,
+        "share": 0.1774193548387097
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.074,
+        "share": 0.1705069124423963
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.071,
+        "share": 0.16359447004608293
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

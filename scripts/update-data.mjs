@@ -1,6 +1,6 @@
 import { writeFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction } from '../src/lib/football.js';
+import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction, fetchAfOdds } from '../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
   fetchEventPlayerStats, fetchEventPrediction, fetchEventOdds, fetchEventBroadcasts, fetchEventSocial, fetchEventReferee, fetchTeamLast, collectTeamIds, resolveLeagues,
@@ -8,14 +8,14 @@ import {
 } from '../src/lib/bzzoiro.js';
 import { locateMatch } from '../src/lib/venues.js';
 import { fetchKickoffWeather } from '../src/lib/weather.js';
-import { normalize, resolveCanonical, webMatchId } from '../src/lib/teams.js';
+import { normalize, resolveCanonical, webMatchId, canonicalClubKey, sameClub } from '../src/lib/teams.js';
 import { mapMarketProbs } from '../src/lib/odds.js';
 import { withFailover, extractJson, hasTransportFailure } from '../src/lib/llm.js';
 import { adoptAnalyses, findAnalysis } from '../src/lib/analysis.js';
 import { mergeResolvedLeagues } from '../src/lib/leagues.js';
 import { toCompactInput } from '../src/lib/compact.js';
 import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../src/lib/predictions.js';
-import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability } from '../src/lib/probabilities.js';
+import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability, marketsFromXg } from '../src/lib/probabilities.js';
 import { forecastStats, forecastDominance } from '../src/lib/stats-forecast.js';
 
 const today = new Date().toISOString().slice(0, 10);
@@ -171,7 +171,7 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
         ? { home: statsForecast.home.corners, away: statsForecast.away.corners } : null,
       yellows: statsForecast?.home?.yellowCards != null && statsForecast?.away?.yellowCards != null
         ? { home: statsForecast.home.yellowCards, away: statsForecast.away.yellowCards } : null,
-      goalLambdas: markets?.lambdas ?? null,
+      goalLambdas: markets?.lambdasBlend ?? markets?.lambdas ?? null,
     });
     const market = match.marketConsensus ?? null;
     const payload = {
@@ -181,12 +181,14 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
       competition: match.competition,
       kickoff: match.kickoff,
       updatedAt: now,
-      schemaVersion: 3,
+      schemaVersion: 5,
       inputs: {
         lambdas: markets?.lambdas ?? null,
         lambdaSource: markets?.lambdaSource ?? null,
+        lambdasBlend: markets?.lambdasBlend ?? null,
+        firstGoalSource: markets?.firstGoalSource ?? null,
         sample: markets?.sample ?? null,
-        standings: { [match.home]: standings?.[match.competition]?.rows?.find(row => row.team === match.home) ?? null, [match.away]: standings?.[match.competition]?.rows?.find(row => row.team === match.away) ?? null },
+        standings: { [match.home]: standings?.[match.competition]?.rows?.find(row => sameClub(row.team, match.home)) ?? null, [match.away]: standings?.[match.competition]?.rows?.find(row => sameClub(row.team, match.away)) ?? null },
         scorers: scorers?.[match.competition] ? { updatedAt: scorers[match.competition].updatedAt, provider: scorers[match.competition].provider } : null,
         resultsWindowDays: 180,
         weather: weather?.[match.id] ? { sampledAt: weather[match.id].sampledAt ?? null, source: weather[match.id].source ?? null } : null,
@@ -201,10 +203,12 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
       method: markets?.method ?? null,
       provider: buildProviderEcho(match),
       afPrediction: match.afPrediction ?? null,
+      afOdds: match.afOdds ?? null,
+      xgMarkets: marketsFromXg(match.modelPrediction?.xg, match.modelPrediction?.score),
       market,
       h2h: buildH2hEcho(match),
       discipline: buildDisciplineEstimate({ statsForecast, marketCards: market ? { over35: null } : null, scorers: scorers?.[match.competition]?.scorers ?? null, historyRows: historyRows.length ?? 0 }),
-      setPieces: buildSetPiecesEstimate({ statsForecast, marketCorners: market?.cornersOver95 != null || match.modelPrediction?.cornersOver95 != null ? { over95: market?.cornersOver95 ?? match.modelPrediction.cornersOver95 } : null, historyRows: historyRows.length ?? 0 }),
+      setPieces: buildSetPiecesEstimate({ statsForecast, marketCorners: market?.cornersOver95 != null || match.modelPrediction?.cornersOver95 != null ? { over95: market?.cornersOver95 ?? match.modelPrediction.cornersOver95 } : null, cornersSource: market?.cornersOver95 != null ? 'Mercado' : 'Bzzoiro', historyRows: historyRows.length ?? 0 }),
       statsForecast,
       dominance,
       weatherVenue: buildWeatherVenue({ match, weatherEntry: weather?.[match.id] ?? null, venue: locateMatch(match) }),
@@ -342,12 +346,51 @@ async function captureProviderPredictions(matches) {
   return captured;
 }
 
+/* ---- Odds pre-partido de API-Football (% justos 1X2/over25/BTTS, nunca cuotas) ---- */
+
+const AF_ODDS_FILE = 'public/data/odds-af.json';
+const AF_ODDS_TTL_MS = 20 * 3600_000;
+
+/**
+ * Sidecar keyed por `match.id` con la lectura de `/odds?fixture=` (1 request
+ * por partido con id `af-`, tope AF_ODDS_MAX por corrida). Misma ventana y
+ * ritmo que las predicciones: comparte la cuota de 100 req/día.
+ */
+async function captureAfOdds(matches) {
+  const cache = await readJson(AF_ODDS_FILE) ?? {};
+  const budget = Number(process.env.AF_ODDS_MAX ?? 8);
+  const now = Date.now();
+  const targets = matches
+    .filter(match => !isFinished(match) && match.id?.startsWith('af-') && match.providerId != null)
+    .sort(byKickoff)
+    .filter(match => {
+      const cached = cache[match.id];
+      return !cached?.capturedAt || now - Date.parse(cached.capturedAt) > AF_ODDS_TTL_MS;
+    })
+    .slice(0, Math.max(0, budget));
+  let captured = 0;
+  for (const match of targets) {
+    const odds = await fetchAfOdds(match.providerId, { env: process.env });
+    if (odds) {
+      cache[match.id] = odds;
+      captured += 1;
+    }
+  }
+  for (const match of matches) if (cache[match.id]) match.afOdds = cache[match.id];
+  const keep = new Set(matches.map(match => match.id));
+  for (const key of Object.keys(cache)) if (!keep.has(key)) delete cache[key];
+  await writeJson(AF_ODDS_FILE, cache);
+  if (targets.length) console.log(`api-football odds: ${captured}/${targets.length} nuevas (${Object.keys(cache).length} en caché).`);
+  return captured;
+}
+
 /* ---- Base de resultados (forma) ---- */
 
 async function updateResults() {
   const base = await readJson('public/data/results.json') ?? { results: [] };
-  const collected = new Map(base.results.map(row => [`${row.date}|${normalize(row.home)}|${normalize(row.away)}`, row]));
-  const put = row => { if (row.homeScore != null) collected.set(`${row.date}|${normalize(row.home)}|${normalize(row.away)}`, row); };
+  const keyOf = row => `${row.date}|${canonicalClubKey(row.home)}|${canonicalClubKey(row.away)}`;
+  const collected = new Map(base.results.map(row => [keyOf(row), row]));
+  const put = row => { if (row.homeScore != null) collected.set(keyOf(row), row); };
   const yesterday = new Date(`${today}T00:00:00Z`);
   yesterday.setUTCDate(yesterday.getUTCDate() - 1);
   const dayResult = await getFixtures({ date: yesterday.toISOString().slice(0, 10), env: process.env });
@@ -804,6 +847,8 @@ async function full() {
   const windowMatches = (await enrichWindow(result.matches.map(match => ({ ...match, ...(enrichments[match.id] ?? {}) })))).sort(byKickoff);
   // Predicciones de API-Football: contexto del narrador y dataset de evaluación.
   await captureProviderPredictions(windowMatches);
+  // Odds AF pre-partido: % justos para la escalera/BTTS cuando Bzzoiro no alcanza.
+  await captureAfOdds(windowMatches);
   // El muro solo guarda partidos vivos; la ventana completa sigue alimentando predicciones y análisis.
   await writeJson('public/data/fixtures.json', { matches: windowMatches.filter(alive), provider: result.provider, delayed: result.delayed, updatedAt: result.updatedAt });
 
@@ -861,6 +906,7 @@ async function analysisOnly() {
     readJson('public/data/history-stats.json') ?? { rows: [] },
   ]);
   await captureProviderPredictions(aliveWindow);
+  await captureAfOdds(aliveWindow);
   const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersBase, weather: weatherBase });
   await updateMatchProbabilities(aliveWindow, { results, scorers: scorersBase, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [] });
   const previous = analyses;
@@ -906,6 +952,7 @@ async function refreshScores() {
   ]);
   // Re-clava lecturas huérfanas antes de podar: el churn de ids no debe borrar narrativa.
   await captureProviderPredictions(merged);
+  await captureAfOdds(merged);
   const analyses = await migrateAnalyses(merged, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersBase, weather: weatherBase });
   // El marcador final se registra antes de podar: el dataset de evaluación necesita los finalizados.
   await capturePredictions(merged, resultsBase?.results ?? []);

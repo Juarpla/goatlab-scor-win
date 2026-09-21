@@ -4,8 +4,8 @@
   "away": "Ipswich",
   "competition": "premier",
   "kickoff": "2026-09-19T14:00:00+00:00",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.744Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
       "home": 2.025,
@@ -17,8 +17,32 @@
       "away": 4
     },
     "standings": {
-      "Everton": null,
-      "Ipswich": null
+      "Everton": {
+        "position": 9,
+        "team": "Everton FC",
+        "played": 4,
+        "won": 1,
+        "drawn": 3,
+        "lost": 0,
+        "goalsFor": 5,
+        "goalsAgainst": 3,
+        "goalDifference": 2,
+        "points": 6,
+        "form": null
+      },
+      "Ipswich": {
+        "position": 10,
+        "team": "Ipswich Town FC",
+        "played": 4,
+        "won": 2,
+        "drawn": 0,
+        "lost": 2,
+        "goalsFor": 7,
+        "goalsAgainst": 10,
+        "goalDifference": -3,
+        "points": 6,
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-09-18T10:13:37.764Z",
@@ -39,7 +63,12 @@
     "venue": {
       "city": "Liverpool",
       "tz": "Europe/London"
-    }
+    },
+    "lambdasBlend": {
+      "home": 1.703,
+      "away": 1.28
+    },
+    "firstGoalSource": "Blend Poisson+xG"
   },
   "markets": {
     "oneX2": {
@@ -101,42 +130,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.18,
-    "noGoal": 0.042,
+    "lambdaTotal": 2.98,
+    "noGoal": 0.051,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.411
+        "p": 0.392
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.242
+        "p": 0.238
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.143
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.084
+        "p": 0.088
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.049
+        "p": 0.054
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.029
+        "p": 0.033
       }
     ],
-    "firstHome": 0.611,
-    "firstAway": 0.347
+    "firstHome": 0.542,
+    "firstAway": 0.407
   },
   "scorers": {
     "home": [
@@ -145,18 +174,18 @@
         "goals": 1,
         "matches": 2,
         "share": 0.2,
-        "rate": 0.41,
-        "anytime": 0.333,
-        "first": 0.127
+        "rate": 0.34,
+        "anytime": 0.289,
+        "first": 0.114
       },
       {
         "player": "James Tarkowski",
         "goals": 1,
         "matches": 4,
         "share": 0.2,
-        "rate": 0.41,
-        "anytime": 0.333,
-        "first": 0.127
+        "rate": 0.34,
+        "anytime": 0.289,
+        "first": 0.114
       }
     ],
     "away": [
@@ -165,32 +194,32 @@
         "goals": 2,
         "matches": 4,
         "share": 0.286,
-        "rate": 0.33,
-        "anytime": 0.28,
-        "first": 0.103
+        "rate": 0.37,
+        "anytime": 0.307,
+        "first": 0.123
       },
       {
         "player": "Leif Davis",
         "goals": 2,
         "matches": 4,
         "share": 0.286,
-        "rate": 0.33,
-        "anytime": 0.28,
-        "first": 0.103
+        "rate": 0.37,
+        "anytime": 0.307,
+        "first": 0.123
       },
       {
         "player": "Chuba Akpom",
         "goals": 1,
         "matches": 3,
         "share": 0.143,
-        "rate": 0.16,
-        "anytime": 0.152,
-        "first": 0.052
+        "rate": 0.18,
+        "anytime": 0.167,
+        "first": 0.061
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.5379999999999999,
@@ -401,9 +430,9 @@
       "away": 0.38
     },
     "lastGoal": {
-      "home": 0.611,
-      "away": 0.347,
-      "noGoal": 0.042
+      "home": 0.542,
+      "away": 0.407,
+      "noGoal": 0.051
     },
     "cornerRace": {
       "3": {
@@ -460,6 +489,7 @@
     "home": {
       "team": "Everton",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 2,
         "sample": 4
@@ -488,6 +518,7 @@
     "away": {
       "team": "Ipswich",
       "recentSample": 4,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
         "sample": 4
@@ -520,5 +551,76 @@
     "provider": "OPENCODE_GO",
     "model": "glm-5.3-flash",
     "generatedAt": "2026-09-17T12:26:13.404Z"
-  }
+  },
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.355,
+      "draw": 0.277,
+      "away": 0.368
+    },
+    "doubleChance": {
+      "12": 0.723,
+      "1X": 0.632,
+      "X2": 0.645
+    },
+    "dnb": {
+      "home": 0.491,
+      "away": 0.509
+    },
+    "totals": {
+      "over15": 0.779,
+      "under15": 0.221,
+      "over25": 0.528,
+      "under25": 0.472,
+      "over35": 0.306,
+      "under35": 0.694
+    },
+    "btts": {
+      "yes": 0.578,
+      "no": 0.422
+    },
+    "cleanSheet": {
+      "home": 0.244,
+      "away": 0.252
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.105,
+        "share": 0.25059665871121717
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.084,
+        "share": 0.20047732696897375
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.082,
+        "share": 0.19570405727923626
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.075,
+        "share": 0.1789976133651551
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.073,
+        "share": 0.17422434367541764
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "afOdds": null
 }

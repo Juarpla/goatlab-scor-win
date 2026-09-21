@@ -4,8 +4,8 @@
   "away": "Real Betis Balompié",
   "competition": "laliga",
   "kickoff": "2026-09-20T16:30:00Z",
-  "updatedAt": "2026-09-18T16:52:46.210Z",
-  "schemaVersion": 3,
+  "updatedAt": "2026-09-21T10:28:10.752Z",
+  "schemaVersion": 4,
   "inputs": {
     "lambdas": {
       "home": 1.53,
@@ -63,7 +63,9 @@
     "venue": {
       "city": "A Coruña",
       "tz": "Europe/Madrid"
-    }
+    },
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson"
   },
   "markets": {
     "oneX2": {
@@ -295,18 +297,19 @@
   "context": {
     "home": {
       "team": "RC Deportivo La Coruña",
-      "recentSample": 6,
+      "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
         "value": 0,
-        "sample": 6
+        "sample": 5
       },
       "biggestWin": {
         "value": 2,
-        "sample": 6
+        "sample": 5
       },
       "unbeaten": {
         "value": 0,
-        "sample": 6
+        "sample": 5
       },
       "season": {
         "position": 7,
@@ -319,18 +322,19 @@
     },
     "away": {
       "team": "Real Betis Balompié",
-      "recentSample": 7,
+      "recentSample": 5,
+      "debut": false,
       "cleanSheets": {
-        "value": 5,
-        "sample": 7
+        "value": 3,
+        "sample": 5
       },
       "biggestWin": {
         "value": 1,
-        "sample": 7
+        "sample": 5
       },
       "unbeaten": {
         "value": 4,
-        "sample": 7
+        "sample": 5
       },
       "season": {
         "position": 3,
@@ -346,5 +350,7 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": null,
+  "xgMarkets": null,
+  "afOdds": null
 }

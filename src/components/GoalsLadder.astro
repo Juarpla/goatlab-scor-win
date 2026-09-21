@@ -10,13 +10,13 @@ interface Props { title: string; rungs: Rung[]; summary: string }
 
 const { title, rungs, summary } = Astro.props;
 const pct = (value: number | null | undefined) => value == null ? '—' : `${Math.round(value * 100)}%`;
-const TRACK = 170;
-const barX = (index: number) => 130 - index * 30;
-const barY = (index: number) => 6 + index * 50;
+const TRACK = 150;
+const barX = (index: number) => 160 - index * 18;
+const barY = (index: number) => 8 + index * 56;
 ---
 <figure class="ladder">
   <figcaption>{title}</figcaption>
-  <svg viewBox="0 0 340 152" role="img" aria-label={summary}>
+  <svg viewBox="0 0 352 176" role="img" aria-label={summary}>
     <polyline
       class="ladder-step"
       points={rungs.map((_, index) => `${barX(index)},${barY(index) + 26}`).join(' ')}
@@ -29,7 +29,7 @@ const barY = (index: number) => 6 + index * 50;
           <rect class="prob-home pt-grow-x" style={`--d:${(0.15 + index * 0.18).toFixed(2)}s`} x={barX(index)} y={barY(index) + 18} width={Math.max(1, (rung.over ?? 0) * TRACK)} height="10" rx="3"/>
         )}
         <text class="ladder-value" x={barX(index) + TRACK + 8} y={barY(index) + 27}>{pct(rung.over)}</text>
-        <text class="ladder-sub" x="4" y={barY(index) + 42}>Menos de {rung.line}: {pct(rung.under)}</text>
+        <text class="ladder-sub" x="4" y={barY(index) + 44}>Menos de {rung.line}: {pct(rung.under)}</text>
       </g>
     ))}
   </svg>

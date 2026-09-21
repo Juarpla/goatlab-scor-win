@@ -171,15 +171,52 @@ function toLocation(club, match) {
  */
 export const EUROPE_MAP = { lngMin: -12, lngMax: 42, latMin: 34, latMax: 62, step: 0.5, pitch: 9 };
 
-const EUROPE_COLS = Math.round((EUROPE_MAP.lngMax - EUROPE_MAP.lngMin) / EUROPE_MAP.step);
-const EUROPE_ROWS = Math.round((EUROPE_MAP.latMax - EUROPE_MAP.latMin) / EUROPE_MAP.step);
-
 /** Archivo y tamaño del mapa de referencia. */
 export function europeMapLayout() {
+  return fallbackRegionLayout('europe');
+}
+
+/* ---- Regiones de reserva por competición (sin sede resuelta) ---- */
+
+/**
+ * Cuando el club local no está en el catálogo la sede se desconoce y no se
+ * inventa: el mapa cae a la región de la competición. Las ligas nacionales
+ * apuntan a su país con pin al centro; las continentales muestran el
+ * continente sin pin. La retícula y los PNG los produce
+ * scripts/generate-venue-zooms.mjs.
+ */
+export const REGION_MAPS = {
+  uk: { label: 'Reino Unido', file: 'reino-unido.png', lngMin: -6, lngMax: 2, latMin: 49.5, latMax: 59, step: 0.25, pitch: 9, pin: true },
+  spain: { label: 'España', file: 'espana.png', lngMin: -10, lngMax: 4.5, latMin: 35.5, latMax: 44, step: 0.25, pitch: 9, pin: true },
+  southamerica: { label: 'Sudamérica', file: 'sudamerica.png', lngMin: -82, lngMax: -34, latMin: -56, latMax: 13, step: 0.6, pitch: 8, pin: false },
+  europe: { label: 'Europa', file: 'europa.png', ...EUROPE_MAP, pin: false },
+};
+
+const COMPETITION_REGION = {
+  premier: 'uk',
+  laliga: 'spain',
+  libertadores: 'southamerica',
+  champions: 'europe',
+  europa: 'europe',
+};
+
+/** Región de reserva para una competición; Europa ante lo desconocido. */
+export function competitionFallback(competition) {
+  return COMPETITION_REGION[competition] ?? 'europe';
+}
+
+/** Archivo, tamaño, pie y pin (al centro, solo nacionales) de la región. */
+export function fallbackRegionLayout(key) {
+  const region = REGION_MAPS[key] ?? REGION_MAPS.europe;
+  const cols = Math.round((region.lngMax - region.lngMin) / region.step);
+  const rows = Math.round((region.latMax - region.latMin) / region.step);
   return {
-    src: '/img/venue-zoom/europa.png',
-    width: EUROPE_COLS * EUROPE_MAP.pitch,
-    height: EUROPE_ROWS * EUROPE_MAP.pitch,
+    src: `/img/venue-zoom/${region.file}`,
+    width: cols * region.pitch,
+    height: rows * region.pitch,
+    label: region.label,
+    pinX: region.pin ? 50 : null,
+    pinY: region.pin ? 50 : null,
   };
 }
 

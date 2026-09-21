@@ -4,7 +4,7 @@
  * Lo no curado cae en una camiseta neutra: nunca se inventa un color.
  * primary = color dominante del torso · secondary = cuello, puños y detalles.
  */
-import { normalize, sameClub } from './teams.js';
+import { normalize, sameClub, teamDisplay } from './teams.js';
 
 const COLORS = {
   // Premier League
@@ -50,6 +50,14 @@ const COLORS = {
   malaga: { primary: '#0066b2', secondary: '#ffffff' },
   'rc deportivo la coruna': { primary: '#0060a9', secondary: '#ffffff', pattern: 'stripes' },
   'real sociedad': { primary: '#0067b1', secondary: '#ffffff', pattern: 'stripes' },
+  'atletico madrid': { primary: '#cb3524', secondary: '#ffffff', pattern: 'stripes' },
+  'deportivo alaves': { primary: '#0761af', secondary: '#ffffff', pattern: 'stripes' },
+  'deportivo la coruna': { primary: '#0060a9', secondary: '#ffffff', pattern: 'stripes' },
+  'deportivo de a coruna': { primary: '#0060a9', secondary: '#ffffff', pattern: 'stripes' },
+  'racing santander': { primary: '#f5f6f7', secondary: '#0a7a3d' },
+  'real racing club': { primary: '#f5f6f7', secondary: '#0a7a3d' },
+  'real racing club de santander': { primary: '#f5f6f7', secondary: '#0a7a3d' },
+  santander: { primary: '#f5f6f7', secondary: '#0a7a3d' },
   // Libertadores
   flamengo: { primary: '#e5261f', secondary: '#231f20', pattern: 'stripes' },
   fluminense: { primary: '#7a1e33', secondary: '#006437', pattern: 'stripes' },
@@ -88,6 +96,17 @@ const COLORS = {
   'universidad central de venezuela': { primary: '#1b458f', secondary: '#ffffff' },
   'deportivo la guaira': { primary: '#f47b20', secondary: '#ffffff' },
   'coquimbo unido': { primary: '#f5a100', secondary: '#231f20' },
+  'atletico penarol': { primary: '#f5d000', secondary: '#231f20', pattern: 'stripes' },
+  'atletico platense': { primary: '#5b3a29', secondary: '#ffffff' },
+  'atletico nacional': { primary: '#0a7a3d', secondary: '#ffffff' },
+  'deportes tolima': { primary: '#9e1b32', secondary: '#ffffff' },
+  'independiente santa fe': { primary: '#e30613', secondary: '#ffffff' },
+  cristal: { primary: '#5ec3e8', secondary: '#ffffff' },
+  'nacional potosi': { primary: '#f5f6f7', secondary: '#e30613', pattern: 'sash' },
+  'nac potosi': { primary: '#f5f6f7', secondary: '#e30613', pattern: 'sash' },
+  'la guaira': { primary: '#f47b20', secondary: '#ffffff' },
+  'univ catolica': { primary: '#c8102e', secondary: '#4fa3d1' },
+  rivadavia: { primary: '#0f8a4c', secondary: '#ffffff' },
   // Champions / Europa
   'paris saint germain': { primary: '#004170', secondary: '#e30613' },
   'borussia dortmund': { primary: '#fde100', secondary: '#231f20' },
@@ -102,16 +121,103 @@ const COLORS = {
   ajax: { primary: '#d2122e', secondary: '#ffffff' },
   psv: { primary: '#ed1c24', secondary: '#f5f6f7' },
   galatasaray: { primary: '#fdb912', secondary: '#a32638' },
+  // Europa: resto de Champions y ligas (claves cortas + alias de proveedor)
+  '1899 hoffenheim': { primary: '#1c63b7', secondary: '#ffffff' },
+  'tsg hoffenheim': { primary: '#1c63b7', secondary: '#ffffff' },
+  'ac milan': { primary: '#231f20', secondary: '#e30613', pattern: 'stripes' },
+  'ac sparta praha': { primary: '#e30613', secondary: '#231f20' },
+  'sparta praha': { primary: '#e30613', secondary: '#231f20' },
+  'aek athens': { primary: '#ffd100', secondary: '#231f20' },
+  'pae aek': { primary: '#ffd100', secondary: '#231f20' },
+  'as roma': { primary: '#8e1f2f', secondary: '#f0bc42' },
+  'az alkmaar': { primary: '#e30613', secondary: '#ffffff' },
+  anderlecht: { primary: '#4a2d82', secondary: '#ffffff' },
+  'rsc anderlecht': { primary: '#4a2d82', secondary: '#ffffff' },
+  barca: { primary: '#a50044', secondary: '#004d98' },
+  'bayer 04 leverkusen': { primary: '#e32219', secondary: '#231f20' },
+  'bayern munchen': { primary: '#dc052d', secondary: '#0066b2' },
+  besiktas: { primary: '#231f20', secondary: '#ffffff' },
+  'bod glimt': { primary: '#ffd100', secondary: '#231f20' },
+  'bodo glimt': { primary: '#ffd100', secondary: '#231f20' },
+  'fk bod glimt': { primary: '#ffd100', secondary: '#231f20' },
+  'brugge kv': { primary: '#005ca9', secondary: '#231f20' },
+  celje: { primary: '#12305e', secondary: '#6fc3e8' },
+  'nk celje': { primary: '#12305e', secondary: '#6fc3e8' },
+  celtic: { primary: '#0a7a3d', secondary: '#ffffff', pattern: 'stripes' },
+  'como 1907': { primary: '#0f4aa8', secondary: '#ffffff' },
+  'coventry city': { primary: '#6cabdd', secondary: '#ffffff' },
+  'dinamo zagreb': { primary: '#1b4fa0', secondary: '#ffffff' },
+  'gnk dinamo zagreb': { primary: '#1b4fa0', secondary: '#ffffff' },
+  feyenoord: { primary: '#e30613', secondary: '#ffffff' },
+  fenerbahce: { primary: '#ffed00', secondary: '#002d62' },
+  'ferencvaros tc': { primary: '#0a7a3d', secondary: '#ffffff' },
+  'ferencvarosi tc': { primary: '#0a7a3d', secondary: '#ffffff' },
+  'hapoel be er sheva': { primary: '#e30613', secondary: '#ffffff' },
+  'hapoel beer sheva': { primary: '#e30613', secondary: '#ffffff' },
+  'hull city': { primary: '#f26522', secondary: '#231f20' },
+  ipswich: { primary: '#0a4da6', secondary: '#ffffff' },
+  jagiellonia: { primary: '#ffd100', secondary: '#e30613' },
+  lask: { primary: '#231f20', secondary: '#ffffff' },
+  'lech poznan': { primary: '#0a4da6', secondary: '#ffffff' },
+  lens: { primary: '#e30613', secondary: '#ffd100' },
+  'levski sofia': { primary: '#0a4da6', secondary: '#ffffff' },
+  lille: { primary: '#e01f26', secondary: '#0a1e46' },
+  lillestrom: { primary: '#ffd100', secondary: '#231f20' },
+  'lillestr m sk': { primary: '#ffd100', secondary: '#231f20' },
+  lyon: { primary: '#f5f6f7', secondary: '#004494' },
+  'olympique lyonnais': { primary: '#f5f6f7', secondary: '#004494' },
+  'man city': { primary: '#6cabdd', secondary: '#1c2c5b' },
+  'man united': { primary: '#da291c', secondary: '#fbe122' },
+  marseille: { primary: '#f5f6f7', secondary: '#2faee0' },
+  'olympique de marseille': { primary: '#f5f6f7', secondary: '#2faee0' },
+  'nec nijmegen': { primary: '#e30613', secondary: '#0a7a3d' },
+  ofi: { primary: '#231f20', secondary: '#ffffff' },
+  olympiacos: { primary: '#e30613', secondary: '#ffffff', pattern: 'stripes' },
+  'olympiakos piraeus': { primary: '#e30613', secondary: '#ffffff', pattern: 'stripes' },
+  'omonia nicosia': { primary: '#0a7a3d', secondary: '#ffffff' },
+  plzen: { primary: '#e30613', secondary: '#005ca9' },
+  'viktoria plzen': { primary: '#e30613', secondary: '#005ca9' },
+  'rb leipzig': { primary: '#f5f6f7', secondary: '#e30613' },
+  'red bull salzburg': { primary: '#f5f6f7', secondary: '#e30613' },
+  rennes: { primary: '#e30613', secondary: '#231f20' },
+  'stade rennais': { primary: '#e30613', secondary: '#231f20' },
+  'royale union saint gilloise': { primary: '#ffd100', secondary: '#005ca9' },
+  'union st gilloise': { primary: '#ffd100', secondary: '#005ca9' },
+  'sk slavia praha': { primary: '#e30613', secondary: '#ffffff' },
+  'slavia praha': { primary: '#e30613', secondary: '#ffffff' },
+  'sk sturm graz': { primary: '#231f20', secondary: '#ffffff' },
+  'sturm graz': { primary: '#231f20', secondary: '#ffffff' },
+  'ssc napoli': { primary: '#12a0d7', secondary: '#ffffff' },
+  'sabah fk': { primary: '#231f20', secondary: '#e75480' },
+  shaktar: { primary: '#f26522', secondary: '#231f20' },
+  'shakhtar donetsk': { primary: '#f26522', secondary: '#231f20' },
+  'fk shakhtar donetsk': { primary: '#f26522', secondary: '#231f20' },
+  'slovan bratislava': { primary: '#7ab5e6', secondary: '#ffffff' },
+  'sk slovan bratislava': { primary: '#7ab5e6', secondary: '#ffffff' },
+  'sl bratislava': { primary: '#7ab5e6', secondary: '#ffffff' },
+  'sporting clube de portugal': { primary: '#008057', secondary: '#ffffff' },
+  torreense: { primary: '#123e8f', secondary: '#7a1e33' },
+  'vfb stuttgart': { primary: '#f5f6f7', secondary: '#e30613' },
+  'viking fk': { primary: '#0a2342', secondary: '#ffffff' },
 };
 
 export const NEUTRAL_KIT = { primary: '#3a453c', secondary: '#a4aea3' };
 
-/** Camiseta de un equipo por nombre tolerante; neutral si no está curado. */
+/**
+ * Camiseta de un equipo por nombre tolerante; neutral si no está curado.
+ * Ignora los prefijos legales de los proveedores («FC», «CA», «CD», «Club»…)
+ * vía teamDisplay, así «FC Barcelona» y «Barcelona» caen en la misma ficha.
+ */
+const EXTRA_PREFIX = /^(?:CAR|CDP|SE)\s+/i;
 export function teamColors(name) {
-  const key = normalize(name);
-  if (COLORS[key]) return COLORS[key];
-  for (const [candidate, value] of Object.entries(COLORS)) {
-    if (sameClub(candidate, name)) return value;
+  const raw = String(name ?? '');
+  const keys = [normalize(teamDisplay(raw.replace(EXTRA_PREFIX, ''))), normalize(raw)];
+  for (const key of keys) {
+    if (!key) continue;
+    if (COLORS[key]) return COLORS[key];
+    for (const [candidate, value] of Object.entries(COLORS)) {
+      if (sameClub(candidate, key)) return value;
+    }
   }
   return NEUTRAL_KIT;
 }
