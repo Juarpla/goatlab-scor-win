@@ -9,81 +9,117 @@
   },
   "poisson": {
     "oneX2": {
-      "sampleSize": 115,
-      "accuracy": 0.41739130434782606,
-      "brierScore": 0.644,
-      "baselineBrierScore": 0.656,
+      "sampleSize": 149,
+      "accuracy": 0.4228187919463087,
+      "brierScore": 0.643,
+      "baselineBrierScore": 0.652,
       "baseline": {
-        "home": 0.409,
-        "draw": 0.261,
-        "away": 0.33
+        "home": 0.423,
+        "draw": 0.255,
+        "away": 0.322
       }
     },
     "over25": {
-      "sampleSize": 115,
-      "accuracy": 0.6,
-      "brierScore": 0.236,
-      "baselineBrierScore": 0.248,
-      "baseline": 0.461
+      "sampleSize": 149,
+      "accuracy": 0.577,
+      "brierScore": 0.24,
+      "baselineBrierScore": 0.25,
+      "baseline": 0.483
     },
     "btts": {
-      "sampleSize": 115,
-      "accuracy": 0.513,
-      "brierScore": 0.258,
-      "baselineBrierScore": 0.25,
-      "baseline": 0.513
+      "sampleSize": 149,
+      "accuracy": 0.523,
+      "brierScore": 0.259,
+      "baselineBrierScore": 0.249,
+      "baseline": 0.523
     }
   },
   "ensemble": {
-    "oneX2": null,
+    "oneX2": {
+      "sampleSize": 30,
+      "accuracy": 0.5666666666666667,
+      "brierScore": 0.547,
+      "baselineBrierScore": 0.604,
+      "baseline": {
+        "home": 0.533,
+        "draw": 0.2,
+        "away": 0.267
+      }
+    },
     "over25": null,
     "btts": null,
-    "captures": 23,
+    "captures": 39,
     "note": "El blend se evalúa con capturas pre-partido acumuladas en corridas programadas."
+  },
+  "apiFootball": {
+    "oneX2": null,
+    "lineHits": {
+      "hits": 1,
+      "total": 3,
+      "accuracy": 0.333
+    },
+    "winOrDraw": {
+      "hits": 13,
+      "total": 16,
+      "accuracy": 0.813
+    },
+    "captures": 16,
+    "note": "Lectura del proveedor API-Football capturada antes del kickoff; el Brier 1X2 exige muestra ≥ 30."
+  },
+  "providerRecommendations": {
+    "favorite": {
+      "hits": 1,
+      "total": 3,
+      "accuracy": 0.333
+    },
+    "over25": null,
+    "btts": null,
+    "captures": 15,
+    "note": "Picks del modelo Bzzoiro (favorite/over25/btts) sin gate de publicación: solo reporte."
   },
   "stats": {
     "method": "stats-ratings-v1",
     "metrics": {
       "possession": {
-        "sampleSize": 21,
-        "mae": 9.19,
-        "baselineMae": 9.619,
-        "published": false
+        "sampleSize": 34,
+        "mae": 8.221,
+        "baselineMae": 8.853,
+        "published": true
       },
       "shots": {
-        "sampleSize": 42,
-        "mae": 4.538,
-        "baselineMae": 5.009,
+        "sampleSize": 68,
+        "mae": 4.425,
+        "baselineMae": 4.8,
         "published": true
       },
       "shotsOnTarget": {
-        "sampleSize": 42,
-        "mae": 2.05,
-        "baselineMae": 2.238,
+        "sampleSize": 68,
+        "mae": 1.957,
+        "baselineMae": 2.047,
         "published": true
       },
       "xg": {
-        "sampleSize": 42,
-        "mae": 0.728,
-        "baselineMae": 0.783,
+        "sampleSize": 68,
+        "mae": 0.711,
+        "baselineMae": 0.749,
         "published": true
       },
       "corners": {
-        "sampleSize": 42,
-        "mae": 2.301,
-        "baselineMae": 2.457,
+        "sampleSize": 68,
+        "mae": 2.314,
+        "baselineMae": 2.38,
         "published": true
       },
       "fouls": {
-        "sampleSize": 42,
-        "mae": 3.217,
-        "baselineMae": 3.357,
+        "sampleSize": 68,
+        "mae": 2.817,
+        "baselineMae": 2.998,
         "published": true
       },
       "yellowCards": {
-        "sampleSize": 42,
-        "mae": 1.06,
-        "baselineMae": 1.027,
+        "sampleSize": 64,
+        "mae": 1.052,
+        "baselineMae": 1.023,
         "published": false
       },
       "redCards": {
@@ -93,9 +129,9 @@
         "published": false
       },
       "offsides": {
-        "sampleSize": 34,
-        "mae": 1.209,
-        "baselineMae": 1.24,
+        "sampleSize": 56,
+        "mae": 1.023,
+        "baselineMae": 1.077,
         "published": true
       }
     },
@@ -107,5 +143,5 @@
     "baselines": "Distribución empírica de la muestra evaluada.",
     "thresholds": "1X2: muestra ≥ 200 y Brier < baseline. Ensemble: muestra ≥ 100 por mercado. Stats: muestra ≥ 30 y MAE < media de la competición."
   },
-  "evaluatedAt": "2026-09-18T10:13:59.720Z"
+  "evaluatedAt": "2026-09-21T13:27:07.246Z"
 }
