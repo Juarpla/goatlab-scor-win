@@ -1,7 +1,7 @@
 /**
  * Google AdSense — configuración central.
  *
- * Sitio en revisión: https://goatlab.scor.win
+ * Sitio en revisión: https://goatlab.win
  * Publisher ID: pub-1972487168739114
  *
  * Flujo de revisión (solo Publisher ID, sin slots):

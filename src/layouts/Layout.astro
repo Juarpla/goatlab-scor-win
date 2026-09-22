@@ -8,7 +8,7 @@ import Icon from '../components/Icon.astro';
 import { AD_CLIENT, ADS_VERIFICATION } from '../config/ads';
 const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.', canonical = null } = Astro.props;
 const canonicalUrl = canonical
-  ? (canonical.startsWith('http') ? canonical : new URL(canonical, Astro.site ?? 'https://goatlab.scor.win').href)
+  ? (canonical.startsWith('http') ? canonical : new URL(canonical, Astro.site ?? 'https://goatlab.win').href)
   : null;
 ---
 <!doctype html>

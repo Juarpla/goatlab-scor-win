@@ -23,12 +23,12 @@ test('ads.txt contiene la línea DIRECT del publisher', () => {
 });
 
 test('robots.txt expone el sitemap del dominio de revisión', () => {
-  assert.ok(read('public/robots.txt').includes('Sitemap: https://goatlab.scor.win/sitemap-index.xml'));
+  assert.ok(read('public/robots.txt').includes('Sitemap: https://goatlab.win/sitemap-index.xml'));
 });
 
 test('astro.config declara site + sitemap', () => {
   const config = read('astro.config.mjs');
-  assert.ok(config.includes("site: 'https://goatlab.scor.win'"));
+  assert.ok(config.includes("site: 'https://goatlab.win'"));
   assert.ok(config.includes('sitemap'));
 });
 

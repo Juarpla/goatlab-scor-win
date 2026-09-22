@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://goatlab.scor.win',
+  site: 'https://goatlab.win',
   adapter: cloudflare({ prerenderEnvironment: 'node' }),
   integrations: [sitemap()],
   // This site is fully static (data is baked in at build time) — no sessions,
