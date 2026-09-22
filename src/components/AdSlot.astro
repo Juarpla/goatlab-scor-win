@@ -17,8 +17,8 @@ const live = ADS_ACTIVE && Boolean(slotId);
 const variantClass = variant === 'horizontal' ? 'ad-horizontal' : variant === 'vertical' ? 'ad-vertical' : variant === 'rect' ? 'ad-rect' : undefined;
 const adFormat = variant === 'vertical' ? 'vertical' : variant === 'rect' ? 'rectangle' : 'auto';
 ---
-<aside class:list={['ad-slot', variantClass, { compact }, className]} aria-label={live ? 'Publicidad' : 'Espacio publicitario reservado'}>
- <span>PUBLICIDAD</span>
+<aside class:list={[live ? 'ad-slot' : 'house-slot', variantClass, { compact }, className]} aria-label={live ? 'Publicidad' : 'Espacio reservado'}>
+ <span>{live ? 'PUBLICIDAD' : 'GOATLAB'}</span>
  {live ? (
   <ins class="adsbygoogle" style="display:block" data-ad-client={AD_CLIENT} data-ad-slot={slotId} data-ad-format={adFormat} data-full-width-responsive="true"></ins>
  ) : (

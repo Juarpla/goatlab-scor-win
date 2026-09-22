@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 
-const { pins = [], unlocated = [] } = Astro.props;
+const { pins = [] } = Astro.props;
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const capacity = value => value == null ? null : value.toLocaleString('es-PE');
 ---
@@ -37,10 +37,9 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
     </div>
    ))}
   </div>
-  <footer class="map-foot">
-   <p class="map-legend"><i class="dot dot-pin" aria-hidden="true"></i> sede con encuentros <i class="dot dot-live" aria-hidden="true"></i> en vivo, el punto parpadea <span aria-hidden="true">·</span> horas del visitante</p>
-   {unlocated.length > 0 && <p class="map-lost">Sin sede en el mapa: {unlocated.map((m, index) => (<>{index > 0 && ' · '}<a href={`/partido/${m.webId ?? m.id}/`}>{m.home} vs. {m.away}</a></>))}</p>}
-  </footer>
+   <footer class="map-foot">
+    <p class="map-legend"><i class="dot dot-pin" aria-hidden="true"></i> sede con encuentros <i class="dot dot-live" aria-hidden="true"></i> en vivo, el punto parpadea <span aria-hidden="true">·</span> horas del visitante</p>
+   </footer>
 </div>
 <script>
  import { initLocalTimes } from '../lib/local-time.js';

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveChain, withFailover, extractJson, hasTransportFailure } from '../src/lib/llm.js';
+import { resolveChain, withFailover, extractJson, hasTransportFailure, hasTruncatedFailure, createProviderBreaker, parseRetryAfter } from '../src/lib/llm.js';
 const logger = { warn() {} };
 const env = { MISTRAL_API_KEY: 'test-a', OPENCODE_GO_API_KEY: 'test-b' };
 const response = content => new Response(JSON.stringify({ choices: [{ message: { content } }] }));
@@ -40,4 +40,66 @@ test('el proveedor que revive corta la cadena y reporta su modelo', async () => 
 test('thinking, nested data, arrays and braces in strings parse correctly', () => {
   assert.deepEqual(extractJson('<think>{ignore}</think>```json\n{"items":[{"label":"a } b"}]}\n```'), { items: [{ label: 'a } b' }] });
   assert.deepEqual(extractJson('Resultado: [1, {"a": 2}] fin'), [1, { a: 2 }]);
+});
+test('el truncado por techo de tokens se clasifica como transporte reintentable', async () => {
+  const capped = () => new Response(JSON.stringify({ choices: [{ message: { content: '{"ok":true}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 800, completion_tokens: 3000 } }));
+  const error = await withFailover([], { env, logger, fetchImpl: async () => capped(), maxTokens: 3000, validate: extractJson }).catch(e => e);
+  assert.equal(hasTransportFailure(error), true);
+  assert.equal(hasTruncatedFailure(error), true);
+  assert.deepEqual(error.details.map(d => d.kind), ['transport', 'transport']);
+  assert.ok(error.details.every(d => d.truncated === true));
+  assert.deepEqual(error.details[0].usage, { inputTokens: 800, outputTokens: 3000 });
+});
+test('finish_reason length marca truncado aunque el uso no cuadre', async () => {
+  const error = await withFailover([], { env, logger, fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: '{"ok":true}' }, finish_reason: 'length' }] })), maxTokens: 3000, validate: extractJson }).catch(e => e);
+  assert.equal(hasTruncatedFailure(error), true);
+});
+test('el éxito propaga usage, finishReason y callId', async () => {
+  const result = await withFailover([], { env, logger, fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: '{"ok":true}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 5, completion_tokens: 7 } })), validate: extractJson });
+  assert.deepEqual(result.usage, { inputTokens: 5, outputTokens: 7 });
+  assert.equal(result.finishReason, 'stop');
+  assert.ok(result.callId);
+});
+test('el fusible excluye tras 3 transportes seguidos y perdona al que responde', () => {
+  const breaker = createProviderBreaker({ maxConsecutiveFailures: 3 });
+  assert.deepEqual(breaker.excluded(), []);
+  breaker.note('MISTRAL', { kind: 'transport' });
+  breaker.note('MISTRAL', { kind: 'transport' });
+  assert.deepEqual(breaker.excluded(), []);
+  breaker.note('MISTRAL', { kind: 'transport' });
+  assert.deepEqual(breaker.excluded(), ['MISTRAL']);
+  breaker.note('MISTRAL', { kind: 'validation' });
+  assert.deepEqual(breaker.excluded(), []);
+  breaker.note('MISTRAL', { kind: 'transport' });
+  breaker.note('MISTRAL', { kind: 'transport', retryAfterMs: 60_000 });
+  assert.ok(breaker.excluded().includes('MISTRAL'));
+});
+test('withFailover salta excluidos y registra skipped sin quemar intentos', async () => {
+  let calls = 0;
+  const result = await withFailover([], { env, logger, excludeProviders: ['MISTRAL'], fetchImpl: async () => { calls += 1; return response('{"ok":true}'); }, validate: extractJson });
+  assert.equal(calls, 1);
+  assert.equal(result.provider, 'OPENCODE_GO');
+});
+test('fusible integrado: tras la racha el proveedor deja de intentarse', async () => {
+  const breaker = createProviderBreaker({ maxConsecutiveFailures: 1 });
+  let mistralCalls = 0;
+  const fetchImpl = async (url, init) => {
+    if (JSON.parse(init.body).model === 'mistral-small-latest') { mistralCalls += 1; return new Response('', { status: 429 }); }
+    return response('{"ok":true}');
+  };
+  await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
+  assert.equal(mistralCalls, 1);
+  const again = await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
+  assert.equal(mistralCalls, 1);
+  assert.equal(again.provider, 'OPENCODE_GO');
+});
+test('Retry-After del 429 queda en details para el fusible', async () => {
+  const error = await withFailover([], { env: { OPENCODE_GO_API_KEY: 'x' }, logger, fetchImpl: async () => new Response('', { status: 429, headers: { 'retry-after': '5' } }) }).catch(e => e);
+  assert.ok(error.details.every(d => d.retryAfterMs === 5000));
+});
+test('parseRetryAfter acepta segundos y fechas, ignora basura', () => {
+  assert.equal(parseRetryAfter('5'), 5000);
+  assert.equal(parseRetryAfter(null), 0);
+  assert.equal(parseRetryAfter('basura'), 0);
+  assert.ok(parseRetryAfter(new Date(Date.now() + 30_000).toUTCString()) > 0);
 });

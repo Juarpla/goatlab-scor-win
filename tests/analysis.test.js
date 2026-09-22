@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { matchIdentity, entryIdentity, sameFixture, findAnalysis, adoptAnalyses } from '../src/lib/analysis.js';
+import { matchIdentity, entryIdentity, sameFixture, findAnalysis, adoptAnalyses, buildAnalysisKey, parseBatchAnalyses } from '../src/lib/analysis.js';
 
 const v2Key = (id, home, away, kickoff) => `v2|M|${id}|${home}|${away}|laliga|${kickoff}|NS\nP|1.7|1.1|0.5|0.3|0.2|0.4|0.5`;
 const entry = overrides => ({ summary: [{ title: 't', bullets: ['a', 'b'] }], limitations: [{ label: 'l', detail: 'd' }], ...overrides });
@@ -67,4 +67,32 @@ test('adoptAnalyses no inventa gemelos entre cruces distintos ni duplica adopcio
   assert.equal(adopted.length, 1);
   assert.equal(Object.keys(next).length, 1);
   assert.ok(next['af-1570399']);
+});
+
+test('buildAnalysisKey sella v3 y es estable: generar == comparar (el full salta sin gastar)', () => {
+  const match = { id: 'af-1', home: 'Osasuna', away: 'Rayo Vallecano', competition: 'laliga', kickoff: '2026-09-19T12:00:00Z', status: 'NS' };
+  const a = buildAnalysisKey(match, null, {});
+  const b = buildAnalysisKey(match, null, {});
+  assert.equal(a, b);
+  assert.ok(a.startsWith('v3|M|af-1|'));
+  // La clave estampada al generar es la misma que el full compara: round-trip sin regenerar.
+  const stored = { inputKey: a };
+  const markets = { lambdas: { home: 1.6, away: 1.1 }, markets: { oneX2: { home: 0.5, draw: 0.25, away: 0.25 } } };
+  assert.notEqual(buildAnalysisKey(match, markets, {}), stored.inputKey); // cambió el input → sí regenera
+  assert.equal(buildAnalysisKey(match, null, {}), stored.inputKey); // mismo input → se salta
+});
+
+test('parseBatchAnalyses reparte por matchId y reporta faltantes e inesperados', () => {
+  const parsed = { analyses: [{ matchId: 'a', summary: [] }, { matchId: 'b', summary: [] }] };
+  const { entries, issues } = parseBatchAnalyses(parsed, ['a', 'b']);
+  assert.deepEqual(entries.map(e => e.matchId), ['a', 'b']);
+  assert.deepEqual(issues, []);
+  const partial = parseBatchAnalyses({ analyses: [{ matchId: 'a', summary: [] }, { matchId: 'zzz', summary: [] }] }, ['a', 'b']);
+  assert.deepEqual(partial.entries.map(e => e.matchId), ['a']);
+  assert.deepEqual(partial.issues.map(i => i.matchId), ['zzz', 'b']);
+  const dup = parseBatchAnalyses({ analyses: [{ matchId: 'a' }, { matchId: 'a' }] }, ['a']);
+  assert.equal(dup.entries.length, 1);
+  assert.ok(dup.issues.some(i => i.reason === 'matchId duplicado'));
+  assert.throws(() => parseBatchAnalyses({ summary: [] }, ['a']), /sin arreglo analyses/);
+  assert.throws(() => parseBatchAnalyses(null, ['a']), /sin arreglo analyses/);
 });

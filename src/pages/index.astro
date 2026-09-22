@@ -122,7 +122,7 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
  <AdSlot/>
  {hasJourney && <section class="journey" aria-labelledby="journey-title">
   <div class="section-heading"><h2 id="journey-title">Donde ocurre la jornada.</h2><span>Mapa de sedes · pulso de la base · tablas</span></div>
-  {journeyData.pins.length > 0 && <JourneyMap pins={journeyData.pins} unlocated={journeyData.unlocated}/>}
+  {journeyData.pins.length > 0 && <JourneyMap pins={journeyData.pins}/>}
   {(hasLeft || hasRight) && <div class={hasLeft && hasRight ? 'journey-grid' : 'journey-col'}>
    {hasLeft && <div class="journey-col">
     {pulse.length > 0 && <MatchPulse items={pulse}/>}

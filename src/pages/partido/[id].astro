@@ -222,19 +222,6 @@ const dominance = probability?.dominance ?? null;
 const hasForecast = Boolean(forecast && (forecast.home || forecast.away));
 const forecastFallback = !hasForecast && lambdas ? { home: { corners: null, shots: null, shotsOnTarget: null, xg: lambdas.home, yellowCards: null }, away: { corners: null, shots: null, shotsOnTarget: null, xg: lambdas.away, yellowCards: null } } : null;
 const forecastTable = forecast ?? forecastFallback;
-/* Procedencia de la tabla: Bzzoiro manda, AF rellena huecos, la media sostiene el resto. */
-const forecastBits: string[] = [];
-if (forecast) {
-  const origins = Array.isArray((forecast as any).origins) ? (forecast as any).origins : [];
-  if (origins.includes('Bzzoiro')) forecastBits.push('ritmos Bzzoiro por equipo');
-  if (origins.includes('AF')) forecastBits.push('huecos con API-Football');
-  if (origins.includes('media')) forecastBits.push('resto con media de la competición');
-  if (origins.includes('regla')) forecastBits.push('roja por muchas amarillas');
-  if ((forecast as any).xgSource === 'Bzzoiro') forecastBits.push('xG del modelo Bzzoiro');
-}
-const forecastNote = forecastBits.length
-  ? `${forecastBits.join(' · ')}.${(forecast as any)?.shortSample ? ' Muestra corta: el cálculo se ancla a la media.' : ''}`
-  : null;
 const statEval = evaluation?.stats?.metrics ?? {};
 const statOk = (key: string) => statEval[key]?.published === true;
 /* Duelos derivados: solo con ritmos propios del equipo en esa métrica.
@@ -397,7 +384,7 @@ const crumbsFor = side => {
        </div>
        </div>}
       </div></section>}
-    <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · pronóstico</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{forecastNote && <p class="chapter-note">{forecastNote}</p>}{(hasProbRows || duelAxes.length > 0) && (<div class="notes-visuals">
+    <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · pronóstico</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{(hasProbRows || duelAxes.length > 0) && (<div class="notes-visuals">
       <div class="prob-rows">
       {cornersDuel && <ProbabilityBar title={storyTerm('cornersDuel').term} segments={[{label: teamShort(match.home), value: cornersDuel.home, tone: 'home'}, {label: 'Empate', value: cornersDuel.draw, tone: 'draw'}, {label: teamShort(match.away), value: cornersDuel.away, tone: 'away'}]}/>}
       {raceTargets.map(target => <ProbabilityBar title={`Primero a ${target} córners`} segments={[{label: teamShort(match.home), value: cornerRace[target].home, tone: 'home'}, {label: teamShort(match.away), value: cornerRace[target].away, tone: 'away'}]}/>)}

@@ -5,8 +5,49 @@
  * encuentra ese gemelo por equipos + fecha y se re-clava al id vigente.
  */
 import { sameTeam } from './bzzoiro.js';
+import { toCompactInput } from './compact.js';
 
 const text = value => String(value ?? '').trim();
+
+/**
+ * Clave del input que sella cada lectura (v3: suma kind y stats para la
+ * pizarra). Generar y comparar usan esta misma función: si coincide, el
+ * pipeline salta el partido sin gastar llamadas.
+ */
+export function buildAnalysisKey(match, markets = null, ctx = {}) {
+  return `v3|${toCompactInput(match, markets, ctx)}`;
+}
+
+/**
+ * Parte la respuesta batch en valores por partido, sin validar el contenido
+ * (eso lo hace validateAnalysis por ítem en el pipeline). Pura y testeable:
+ * devuelve `{ entries: [{ matchId, value }], issues: [{ matchId, reason }] }`.
+ */
+export function parseBatchAnalyses(parsed, expectedIds) {
+  const ids = [...(expectedIds ?? [])];
+  const list = parsed && typeof parsed === 'object' && Array.isArray(parsed.analyses) ? parsed.analyses : null;
+  if (!list) throw new Error('Batch sin arreglo analyses');
+  const entries = [];
+  const issues = [];
+  const seen = new Set();
+  for (const item of list) {
+    const matchId = item?.matchId;
+    if (typeof matchId !== 'string' || !ids.includes(matchId)) {
+      issues.push({ matchId: typeof matchId === 'string' ? matchId : null, reason: 'matchId inesperado' });
+      continue;
+    }
+    if (seen.has(matchId)) {
+      issues.push({ matchId, reason: 'matchId duplicado' });
+      continue;
+    }
+    seen.add(matchId);
+    entries.push({ matchId, value: item });
+  }
+  for (const id of ids) {
+    if (!seen.has(id)) issues.push({ matchId: id, reason: 'sin lectura en el batch' });
+  }
+  return { entries, issues };
+}
 
 /** Identidad de un partido del calendario. */
 export function matchIdentity(match) {
