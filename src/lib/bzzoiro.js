@@ -324,7 +324,7 @@ export async function fetchEventReferee(eventId, env = {}, fetchImpl = fetch) {
 
 /**
  * True cuando el historial cara a cara puede mostrarse: al menos `min`
- * cruces registrados (el mismo umbral que usa el veredicto para el tilt).
+ * cruces registrados (el mismo umbral que usa la síntesis para el tilt).
  */
 export function hasH2HHistory(h2h, min = 3) {
   return Boolean(h2h && Number.isInteger(h2h.totalMatches) && h2h.totalMatches >= min);

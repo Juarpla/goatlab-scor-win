@@ -2,7 +2,7 @@
 /**
  * Barra de probabilidad en SVG. Dos variantes:
  * - 'stack' (por defecto): una pista con segmentos que suman 100%.
- * - 'rows': una barra por segmento, para pares que se solapan (doble oportunidad).
+ * - 'rows': una barra por segmento, para pares que se solapan (dos resultados combinados).
  */
 interface Segment { label: string; value: number | null; tone?: 'home' | 'away' | 'draw' | 'mute' }
 interface Props { title: string; segments: Segment[]; note?: string; variant?: 'stack' | 'rows' }
@@ -49,5 +49,5 @@ const hasValues = segments.some(segment => Number.isFinite(segment.value));
       </>
     )}
     {note && <p class="prob-note">{note}</p>}
-  </> : <p class="prob-note">Sin datos suficientes para este mercado.</p>}
+  </> : <p class="prob-note">Sin datos suficientes para este apartado.</p>}
 </figure>

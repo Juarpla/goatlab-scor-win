@@ -126,10 +126,10 @@ function signalDistribution(tilt, base) {
   return { home, draw: base, away };
 }
 
-/* ---- Veredicto GoatLab: ensemble de insumos declarados ---- */
+/* ---- Síntesis GoatLab: ensemble de insumos declarados ---- */
 
 /**
- * Combina Poisson propio, CatBoost (Bzzoiro) y señales de rendimiento en un veredicto 1X2.
+ * Combina Poisson propio, CatBoost (Bzzoiro) y señales de rendimiento en una síntesis de resultado.
  * Cada insumo declara su peso en el digest; lo ausente aporta 0 y se dice. Los factores
  * cualitativos (sede, ausencias) no mueven números: solo acompañan la lectura.
  */
@@ -150,8 +150,8 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
   const activeWeight = active.reduce((sum, signal) => sum + signal.weight, 0);
   const parts = [];
   const inputs = [];
-  // Con mercado: 0.40 CatBoost + 0.25 Poisson + 0.20 Mercado + 0.15 señales.
-  // Sin mercado: reparto histórico 0.5 / 0.3-0.8 / 0.2 (tests y metodología).
+  // Con consenso externo: 0.40 CatBoost + 0.25 Poisson + 0.20 consenso + 0.15 señales.
+  // Sin consenso: reparto histórico 0.5 / 0.3-0.8 / 0.2 (tests y metodología).
   const wCb = mk ? 0.4 : 0.5;
   const wPoisson = mk ? 0.25 : cb ? 0.3 : 0.8;
   const wMarket = mk ? 0.2 : 0;
@@ -170,9 +170,9 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
   }
   if (mk) {
     parts.push({ weight: wMarket, dist: mk });
-    inputs.push({ label: 'Mercado (consenso)', weight: wMarket, detail: 'lectura del mercado en porcentajes, sin cuotas ni casas' });
+    inputs.push({ label: 'Consenso externo', weight: wMarket, detail: 'expectativa agregada en porcentajes, sin cuotas ni casas' });
   } else {
-    inputs.push({ label: 'Mercado (consenso)', weight: 0, detail: 'sin lectura del mercado para este encuentro' });
+    inputs.push({ label: 'Consenso externo', weight: 0, detail: 'sin consenso externo para este encuentro' });
   }
   for (const signal of active) {
     const weight = wSignals * signal.weight / activeWeight;
@@ -206,7 +206,7 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
   };
 }
 
-/** El veredicto se publica con porcentajes solo cuando la evaluación histórica independiente pasa. */
+/** La síntesis se publica con porcentajes solo cuando la evaluación histórica independiente pasa. */
 export function publishableVerdict(verdict, evaluation) {
   if (!verdict || !evaluation || evaluation.modelVersion !== 'goatlab-ensemble-v1' || evaluation.published !== true) return { ...verdict, published: false, evaluation: evaluation ?? null };
   return { ...verdict, published: true, evaluation };
@@ -250,7 +250,7 @@ export function evaluationGate({ poissonOneX2, ensembleOneX2 = null, ensembleOve
   const passes = metrics => metrics && metrics.sampleSize >= 200 && metrics.brierScore < metrics.baselineBrierScore;
   const ensemblePasses = metrics => Boolean(metrics && metrics.sampleSize >= 100 && metrics.brierScore < metrics.baselineBrierScore);
   const poissonOk = passes(poissonOneX2);
-  // El veredicto publicado es el ensemble completo: sin muestra pre-partido no se publica nada.
+  // La síntesis publicada es el ensemble completo: sin muestra pre-partido no se publica nada.
   const published = poissonOk
     && ensemblePasses(ensembleOneX2)
     && (!ensembleOver25 || ensemblePasses(ensembleOver25))

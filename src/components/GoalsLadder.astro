@@ -1,9 +1,9 @@
 ---
 /**
- * GoalsLadder.astro — la escalera del total de goles.
- * Tres peldaños (1.5 / 2.5 / 3.5): cada uno pregunta si el partido pasa
- * esa línea, con la barra del "sí" creciendo al activarse (.pt-grow-x).
- * El "no" acompaña como texto: la historia es si hay fiesta o candado.
+ * GoalsLadder.astro — umbrales de goles totales.
+ * Tres umbrales (1.5 / 2.5 / 3.5): cada uno estima si el total supera
+ * ese umbral, con la barra del "sí" creciendo al activarse (.pt-grow-x).
+ * El "no" acompaña como texto: la historia es cuántos goles caen en total.
  */
 interface Rung { line: string; over: number | null; under: number | null }
 interface Props { title: string; rungs: Rung[]; summary: string }

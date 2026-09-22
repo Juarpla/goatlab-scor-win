@@ -1,8 +1,8 @@
 /**
- * Lectura del mercado como señal estadística, nunca como cuota.
- * Las cuotas decimales se convierten a probabilidad justa quitando el
+ * Consenso externo como señal estadística, nunca como cuota.
+ * Las cuotas decimales de los proveedores se convierten a probabilidad justa quitando el
  * margen (overround): fair = (1/cuota) / Σ(1/cuotas). Solo se publican
- * porcentajes interpretativos ("de cada 100 partidos"), sin casas,
+ * porcentajes interpretativos ("de cada 100 escenarios"), sin casas,
  * sin enlaces y sin valores decimales de cuota en la vista.
  */
 
@@ -34,7 +34,7 @@ export function meanConsensus(list) {
 }
 
 /**
- * Mapea un payload defensivo de cuotas a mercados en 0-1.
+ * Mapea un payload defensivo del proveedor a escenarios en 0-1.
  * Acepta consenso Bzzoiro ({home,draw,away} decimales o prob_* 0-100)
  * y filas API-Football ({home,draw,away} decimales por bookmaker).
  * Todo lo irreconocible → null honesto, nunca lanza.

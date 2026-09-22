@@ -119,7 +119,7 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
   // Con pocos resultados el riel de 600px dominaría una vista casi vacía:
   // los rieles se retiran y el resultado ocupa todo el ancho.
   wallBody.classList.toggle('is-thin',wide.matches&&visible.length<=3);
-  // Filtros: la escalera re-entra completa. "Mostrar más": solo los recién llegados.
+  // Filtros: la cascada re-entra completa. "Mostrar más": solo los recién llegados.
   if(mode!=='silent'&&!reduce)batch.slice(from).forEach((card,index)=>{
    card.style.animation='none';void card.offsetWidth;
    card.style.animation=`card-in .55s cubic-bezier(.2,.8,.2,1) ${Math.min(cut-batch.slice(from).length+index,10)*45}ms both`;

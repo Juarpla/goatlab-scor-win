@@ -432,7 +432,7 @@ export function cornerMargin(homeLambda, awayLambda, { max = 20 } = {}) {
 
 /**
  * Bloque de dominancia para hornear: duelos y carreras derivados de los
- * ritmos pronosticados (córners, amarillas) y de los λ de gol. Cada pieza
+ * ritmos estimados (córners, amarillas) y de los λ de gol. Cada pieza
  * nula por separado cuando su insumo falta.
  */
 export function forecastDominance({ corners = null, yellows = null, goalLambdas = null } = {}) {

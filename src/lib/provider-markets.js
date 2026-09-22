@@ -1,8 +1,9 @@
 /**
- * Mercados derivados de los proveedores (vista, sin modelo propio).
+ * Escenarios derivados de los proveedores (vista, sin modelo propio).
  * Bzzoiro trae `oneX2` y API-Football trae `percent`; ninguno trae
- * doble oportunidad ni DNB: se derivan del 1X2 con las identidades
- * 1X = home+draw, X2 = draw+away, DNB.home = home/(home+away).
+ * combinadas de dos resultados ni resultado-sin-empate: se derivan del
+ * resultado con las identidades 1X = home+draw, X2 = draw+away,
+ * sin-empate.home = home/(home+away).
  * Todo lo irreconocible → null honesto, nunca lanza.
  */
 
@@ -21,7 +22,7 @@ export function normalizeOneX2(raw) {
   return { home: round3(home / sum), draw: round3(draw / sum), away: round3(away / sum) };
 }
 
-/** Doble oportunidad derivada de un 1X2 normalizado. */
+/** Dos resultados combinados derivados de un resultado normalizado. */
 export function deriveDoubleChance(oneX2) {
   if (!oneX2 || oneX2.home == null || oneX2.draw == null || oneX2.away == null) return null;
   return {
@@ -31,7 +32,7 @@ export function deriveDoubleChance(oneX2) {
   };
 }
 
-/** Gana sin contar el empate (DNB) derivado de un 1X2 normalizado. */
+/** Resultado sin empate derivado de un resultado normalizado. */
 export function deriveDnb(oneX2) {
   if (!oneX2 || oneX2.home == null || oneX2.away == null) return null;
   const total = oneX2.home + oneX2.away;

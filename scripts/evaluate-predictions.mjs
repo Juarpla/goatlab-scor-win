@@ -66,7 +66,7 @@ for (const entry of Object.values(captured?.captures ?? {})) {
   if (probabilities?.btts != null) ensembleBtts.push({ predicted: probabilities.btts, happened: entry.finalScore.home > 0 && entry.finalScore.away > 0 ? 1 : 0 });
 }
 
-/* ---- Muestra de proveedores: API-Football y picks de Bzzoiro ---- */
+/* ---- Muestra de proveedores: API-Football y estimaciones de Bzzoiro ---- */
 
 let afCaptures = 0;
 let recCaptures = 0;

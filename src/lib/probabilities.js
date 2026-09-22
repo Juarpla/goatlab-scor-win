@@ -1,14 +1,14 @@
 /**
- * Motor de mercados de probabilidad (build time, sin LLM).
+ * Motor de escenarios de probabilidad (build time, sin LLM).
  *
  * Poisson independiente + corrección Dixon-Coles sobre una matriz de marcadores;
- * de la misma matriz salen todos los mercados derivables. El "cuándo" se modela
+ * de la misma matriz salen todos los escenarios derivables. El "cuándo" se modela
  * como proceso de Poisson en el tiempo (relojes exponenciales a λ/90 por minuto):
  * la carrera del primer gol y sus bandas salen de exp(−Λ·t/90). Los goleadores
  * comparten el reparto real de goles del equipo (share del jugador × λ del equipo).
  * El primer gol y los goleadores usan λ blend (Poisson local + xG Bzzoiro a partes
- * iguales cuando hay ambos) para no contradecir al proveedor; los mercados 1X2
- * siguen Poisson puro y el testigo `derivado-xG-Bzzoiro` queda aparte.
+ * iguales cuando hay ambos) para no contradecir al proveedor; el resultado
+ * sigue Poisson puro y el testigo `derivado-xG-Bzzoiro` queda aparte.
  * Nada de cuotas ni vocabulario de casas de apuestas: probabilidades y valores.
  * Lo no derivable de los datos queda en null y la interfaz lo omite.
  */

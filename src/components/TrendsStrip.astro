@@ -190,7 +190,7 @@ if (posts.length) keys.push({ icon: 'chat', label: 'Lo que circula' });
             <li class="absence-group">
               <ul>
                 {afAdvice && <li>{afAdvice}</li>}
-                {!afAdvice && afPrediction?.winner && <li>Ve ganador a {afPrediction.winner}</li>}
+                {!afAdvice && afPrediction?.winner && <li>Mayor probabilidad estimada: {afPrediction.winner}, según el modelo del proveedor</li>}
               </ul>
             </li>
           </ul>

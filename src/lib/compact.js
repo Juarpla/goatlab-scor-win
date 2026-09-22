@@ -43,8 +43,8 @@ const topScorers = (scorers, competition, team, n = 3) =>
  * Construye el input telegráfico de un partido. Orden = prioridad de
  * truncado: lo esencial (M/P/B) primero; lo recortable (S/R/HR) al final.
  * Bloques extra (nunca recortan lo esencial): W clima+sede, L bajas,
- * M2 mercado en % ya normalizado, B2 picks del modelo Bzzoiro, A lectura de
- * API-Football (con su consejo crudo, que el prompt reformula). El LLM narra
+ * M2 consenso externo en % ya normalizado, B2 estimaciones del modelo Bzzoiro, A lectura de
+ * API-Football (con su lectura cruda, que el prompt reformula). El LLM narra
  * y audita, nunca calcula.
  */
 export function toCompactInput(match, markets = null, { results = [], standings = null, scorers = null, weather = null, market = null } = {}) {
@@ -64,11 +64,11 @@ export function toCompactInput(match, markets = null, { results = [], standings 
       `B|${num(cb.oneX2?.home)}|${num(cb.oneX2?.draw)}|${num(cb.oneX2?.away)}|${num(cb.xg?.home, 2)}|${num(cb.xg?.away, 2)}|${num(cb.over25)}|${num(cb.btts)}|${clean(cb.score, 12)}|${num(cb.cornersOver95)}`,
     );
   }
-  // Picks del modelo Bzzoiro (booleans + favorito); acompañan, no son números GoatLab.
+  // Estimaciones del modelo Bzzoiro (booleans + mayor probabilidad); acompañan, no son números GoatLab.
   if (cb?.recommendations) {
     lines.push(`B2|${clean(cb.recommendations.favorite, 16)}|${num(cb.recommendations.favoriteProb)}|${yesNo(cb.recommendations.over25)}|${yesNo(cb.recommendations.btts)}`);
   }
-  // Lectura de API-Football: porcentajes, ganador, línea de goles y su consejo crudo.
+  // Lectura de API-Football: distribución, mayor probabilidad, umbral de goles y su lectura cruda.
   const af = match.afPrediction;
   if (af) {
     lines.push(`A|${num(af.percent?.home)}|${num(af.percent?.draw)}|${num(af.percent?.away)}|${clean(af.winner, 40)}|${yesNo(af.winOrDraw)}|${clean(af.underOver, 8)}|${clean(af.goals?.home, 8)}|${clean(af.goals?.away, 8)}|${clean(af.advice, 120)}`);
@@ -91,7 +91,7 @@ export function toCompactInput(match, markets = null, { results = [], standings 
     const names = unavailable.slice(0, 3).map(p => clean(p.name, 24)).join(',');
     lines.push(`L|${homeOut}|${awayOut}|${names}`);
   }
-  // Mercado en % interpretativo (ya sin margen ni cuotas). M2 nunca trae decimales de cuota.
+  // Consenso externo en % interpretativo (ya sin margen ni cuotas). M2 nunca trae decimales de cuota.
   const m2 = market ?? match.marketConsensus ?? null;
   if (m2?.oneX2 || m2?.over25 != null || m2?.btts != null) {
     lines.push(

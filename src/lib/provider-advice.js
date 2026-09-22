@@ -50,7 +50,7 @@ export function neutralGoals(token) {
 
 const cap = text => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text);
 
-/** Mitad izquierda del advice (`X or draw`, `Winner: X`) → español neutro. */
+/** Mitad izquierda del advice (`X or draw`, `Winner: X`) → español neutro y descriptivo. */
 function neutralHead(fragment) {
   const text = String(fragment ?? '').trim().replace(/^combo\s+/i, '');
   if (!text) return null;
@@ -69,8 +69,8 @@ function neutralHead(fragment) {
 }
 
 /**
- * Advice crudo de API-Football → español neutro.
- * Ej: `Combo Double chance : draw or Aston Villa and -3.5 goals` →
+ * Advice crudo de API-Football → español neutro y descriptivo.
+ * Ej: `Combo Double chance : draw or Aston Villa and -3.5 goals` (crudo del proveedor, nunca visible) →
  * `Aston Villa sin perder y menos de 4 goles`.
  */
 export function adviceToNeutral(advice) {
@@ -97,7 +97,7 @@ export function buildProviderAdvice({ provider = null, afPrediction = null, home
     const fav = favoriteName(rec.favorite, home, away);
     if (fav) {
       const prob = pct(rec.favoriteProb);
-      bz.push({ label: 'Favorito', text: prob ? `${fav} (${prob})` : fav });
+      bz.push({ label: 'Mayor probabilidad estimada', text: prob ? `${fav} (${prob}, según el modelo)` : `${fav}, según el modelo` });
     }
   }
   // Las probabilidades mandan sobre el booleano: el `No` tajante contradecía
@@ -116,8 +116,8 @@ export function buildProviderAdvice({ provider = null, afPrediction = null, home
   }
   const af = [];
   const neutral = adviceToNeutral(afPrediction?.advice);
-  if (neutral) af.push({ label: 'Lectura', text: neutral });
-  else if (afPrediction?.winner) af.push({ label: 'Lectura', text: `Ve ganador a ${afPrediction.winner}` });
+  if (neutral) af.push({ label: 'Lectura del proveedor', text: neutral });
+  else if (afPrediction?.winner) af.push({ label: 'Lectura del proveedor', text: `Mayor probabilidad estimada: ${afPrediction.winner}, según el modelo` });
   if (!bz.length && !af.length) return null;
   return { bz, af };
 }

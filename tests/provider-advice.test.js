@@ -48,7 +48,7 @@ test('buildProviderAdvice combina Bzzoiro + AF y es null-honesto', () => {
     away: 'Malta',
   });
   assert.deepEqual(advice.bz.map(line => line.text), [
-    'Malta (39%)', '53% que haya 3 o más goles, según el modelo', '52% que sí, según el modelo',
+    'Malta (39%, según el modelo)', '53% que haya 3 o más goles, según el modelo', '52% que sí, según el modelo',
   ]);
   assert.deepEqual(advice.af.map(line => line.text), ['Chelsea sin perder']);
   assert.equal(buildProviderAdvice({ provider: null, afPrediction: null }), null);
@@ -65,7 +65,7 @@ test('buildProviderAdvice usa el booleano solo sin probabilidad', () => {
     away: 'Malta',
   });
   assert.deepEqual(fallback.bz.map(line => line.text), [
-    'Andorra', 'El modelo espera menos de 3 goles', 'No, según el modelo',
+    'Andorra, según el modelo', 'El modelo espera menos de 3 goles', 'No, según el modelo',
   ]);
   // La probabilidad emite aun sin recommendations.
   const onlyProb = buildProviderAdvice({ provider: { over25: 0.6, btts: 0.4 } });
