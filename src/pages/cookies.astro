@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Cookies — GoatLab" description="Qué cookies usa GoatLab: solo las publicitarias y de consentimiento de Google AdSense y Funding Choices. Cómo aceptarlas, rechazarlas o cambiar tu decisión.">
+<main id="main" class="wrap prose">
+<a class="back-link" href="/">Volver a GoatLab</a>
+<h1>Cookies.</h1>
+<p>GoatLab no instala cookies propias de seguimiento. Solo se usan las cookies necesarias para mostrar publicidad de Google AdSense y recordar tu decisión de consentimiento. Sin tu consentimiento, la publicidad es no personalizada.</p>
+<h2>Qué se instala</h2>
+<p><strong>Consentimiento (Funding Choices / Google).</strong> Recuerda si aceptaste o rechazaste la publicidad personalizada. Sin esta memoria, el aviso aparecería en cada visita.</p>
+<p><strong>Publicidad (Google AdSense).</strong> Sirven, miden y —solo con tu consentimiento— personalizan los anuncios. Google puede tratar la dirección IP y el identificador de cookie con esa finalidad. Detalle oficial: <a href="https://policies.google.com/technologies/cookies" rel="noopener">uso de cookies de Google</a>.</p>
+<h2>Cambiar tu decisión</h2>
+<p>Si estás en una región con mensaje de consentimiento, puedes reabrirlo aquí mismo:</p>
+<p><button type="button" id="revoke-consent" class="primary-button">Revisar mi consentimiento</button></p>
+<p id="revoke-fallback" hidden>Tu navegador no cargó el mensaje de consentimiento (puede ser un bloqueador). Puedes gestionarlo en <a href="https://myadcenter.google.com/" rel="noopener">Mi centro de anuncios de Google</a>.</p>
+<h2>Borrar cookies en tu navegador</h2>
+<p>También puedes borrar o bloquear cookies desde los ajustes de tu navegador. Si bloqueas las publicitarias, verás anuncios menos relevantes o el aviso de consentimiento de nuevo.</p>
+<h2>Contacto</h2>
+<p>Dudas sobre cookies y privacidad: <a href="mailto:contacto@scor.win">contacto@scor.win</a>. Más contexto en <a href="/privacidad/">Privacidad</a>.</p>
+</main>
+<script>
+  var btn = document.getElementById('revoke-consent');
+  var fallback = document.getElementById('revoke-fallback');
+  if (btn) btn.addEventListener('click', function () {
+    try {
+      if (window.googlefc && window.googlefc.showRevocationMessage) window.googlefc.showRevocationMessage();
+      else if (fallback) fallback.hidden = false;
+    } catch (e) { if (fallback) fallback.hidden = false; }
+  });
+</script>
+</Layout>

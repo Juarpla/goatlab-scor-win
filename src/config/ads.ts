@@ -1,16 +1,20 @@
 /**
  * Google AdSense — configuración central.
  *
- * Para activar anuncios en todo el sitio:
- * 1. Pega tu ID de publisher en AD_CLIENT (formato: ca-pub-XXXXXXXXXXXXXXXX).
- * 2. Pega el ID de cada bloque (data-ad-slot de tu cuenta) en AD_SLOTS.
- * 3. Publica tu archivo ads.txt real en public/ads.txt.
+ * Sitio en revisión: https://goatlab.scor.win
+ * Publisher ID: pub-1972487168739114
  *
- * Sin credenciales, cada espacio muestra el marcador reservado y el script
- * de AdSense nunca se carga: el sitio no queda bloqueado ni envía peticiones
- * a Google hasta que la cuenta esté aprobada y configurada.
+ * Flujo de revisión (solo Publisher ID, sin slots):
+ * 1. AD_CLIENT activa la verificación (script adsbygoogle.js en <head>).
+ * 2. Auto Ads se activa desde el panel de AdSense, sin data-ad-slot.
+ * 3. public/ads.txt debe contener la línea DIRECT del publisher.
+ *
+ * Tras la aprobación:
+ * 1. Crea las unidades en AdSense y pega cada data-ad-slot en AD_SLOTS.
+ * 2. ADS_ACTIVE se enciende solo cuando hay al menos un slot con ID.
+ * 3. Cada <AdSlot/> sin slot sigue mostrando el marcador reservado.
  */
-export const AD_CLIENT = '';
+export const AD_CLIENT = 'ca-pub-1972487168739114';
 
 export const AD_SLOTS = {
   /** Metodología · tras el capítulo 1 (horizontal) */
@@ -35,4 +39,15 @@ export const AD_SLOTS = {
 
 export type AdSlotKey = keyof typeof AD_SLOTS;
 
-export const ADS_ACTIVE = Boolean(AD_CLIENT);
+/**
+ * Verificación para revisión: basta el Publisher ID.
+ * Carga adsbygoogle.js en <head> en todas las páginas.
+ */
+export const ADS_VERIFICATION = Boolean(AD_CLIENT);
+
+/**
+ * Anuncios manuales: solo cuando hay al menos un slot con ID real.
+ * Durante la revisión (solo Publisher ID + Auto Ads) es false a propósito:
+ * los <AdSlot/> muestran el marcador reservado y no hacen push() vacío.
+ */
+export const ADS_ACTIVE = Object.values(AD_SLOTS).some(Boolean);
