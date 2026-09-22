@@ -2,19 +2,30 @@
  * Google AdSense — configuración central.
  *
  * Sitio en revisión: https://goatlab.win
- * Publisher ID: pub-1972487168739114
+ * Fuente única del Publisher ID: variable de entorno
+ * PUBLIC_ADSENSE_PUBLISHER_ID en crudo (pub-XXXXXXXXXXXXXXXX, sin prefijos).
+ * Si viene con prefijo ca- o con basura, se normaliza; sin variable,
+ * se usa el ID literal (no es secreto: viaja en el HTML y en ads.txt).
+ *
+ * Dónde va cada formato:
+ * - PUBLISHER_ID (pub-...) → ads.txt y Funding Choices. Nada delante.
+ * - AD_CLIENT (ca-pub-...) → script adsbygoogle.js y data-ad-slot. Solo ahí.
  *
  * Flujo de revisión (solo Publisher ID, sin slots):
- * 1. AD_CLIENT activa la verificación (script adsbygoogle.js en <head>).
+ * 1. ADS_VERIFICATION activa el script en <head>.
  * 2. Auto Ads se activa desde el panel de AdSense, sin data-ad-slot.
- * 3. public/ads.txt debe contener la línea DIRECT del publisher.
+ * 3. scripts/write-ads-txt.mjs genera public/ads.txt desde esta misma fuente.
  *
  * Tras la aprobación:
  * 1. Crea las unidades en AdSense y pega cada data-ad-slot en AD_SLOTS.
  * 2. ADS_ACTIVE se enciende solo cuando hay al menos un slot con ID.
  * 3. Cada <AdSlot/> sin slot sigue mostrando el marcador reservado.
  */
-export const AD_CLIENT = 'ca-pub-1972487168739114';
+const cleaned = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID ?? '').trim().replace(/^ca-/i, '');
+
+export const PUBLISHER_ID = /^pub-\d+$/.test(cleaned) ? cleaned : 'pub-1972487168739114';
+
+export const AD_CLIENT = `ca-${PUBLISHER_ID}`;
 
 export const AD_SLOTS = {
   /** Metodología · tras el capítulo 1 (horizontal) */

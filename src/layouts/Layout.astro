@@ -5,7 +5,7 @@ import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import '../styles/detail-motion.css';
 import Icon from '../components/Icon.astro';
-import { AD_CLIENT, ADS_VERIFICATION } from '../config/ads';
+import { AD_CLIENT, ADS_VERIFICATION, PUBLISHER_ID } from '../config/ads';
 const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.', canonical = null } = Astro.props;
 const canonicalUrl = canonical
   ? (canonical.startsWith('http') ? canonical : new URL(canonical, Astro.site ?? 'https://goatlab.win').href)
@@ -14,7 +14,7 @@ const canonicalUrl = canonical
 <!doctype html>
 <html lang="es">
 <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#101412"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/>{canonicalUrl && <link rel="canonical" href={canonicalUrl}/>}<title>{title}</title>
-{ADS_VERIFICATION && <script is:inline async src="https://fundingchoicesmessages.google.com/i/pub-1972487168739114?ers=1"></script>}
+{ADS_VERIFICATION && <script is:inline async src={`https://fundingchoicesmessages.google.com/i/${PUBLISHER_ID}?ers=1`}></script>}
 {ADS_VERIFICATION && <script is:inline>{`(function(){function signalGooglefcPresent(){if(!window.frames['googlefcPresent']){if(document.body){var iframe=document.createElement('iframe');iframe.style='width:0;height:0;border:none;z-index:-1000;left:-1000px;top:-1000px;';iframe.style.display='none';iframe.name='googlefcPresent';document.body.appendChild(iframe);}else{setTimeout(signalGooglefcPresent,0);}}}signalGooglefcPresent();})();`}</script>}
 {ADS_VERIFICATION && <script is:inline async crossorigin="anonymous" src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}></script>}
 </head>

@@ -5,16 +5,20 @@ import { readFileSync, existsSync } from 'node:fs';
 const root = new URL('../', import.meta.url);
 const read = (rel) => readFileSync(new URL(rel, root), 'utf8');
 
-test('AdSense usa el Publisher ID de revisión', () => {
+test('Publisher ID viene de env en crudo y ca- solo se deriva', () => {
   const ads = read('src/config/ads.ts');
-  assert.ok(ads.includes("AD_CLIENT = 'ca-pub-1972487168739114'"));
-  assert.ok(ads.includes('ADS_VERIFICATION'));
+  assert.ok(ads.includes('PUBLIC_ADSENSE_PUBLISHER_ID'));
+  assert.ok(ads.includes('PUBLISHER_ID'));
+  assert.ok(ads.includes('AD_CLIENT = `ca-${PUBLISHER_ID}`'));
+  assert.ok(ads.includes("'pub-1972487168739114'"));
+  assert.ok(!ads.includes("'ca-pub-"));
 });
 
 test('durante la revisión no hay slots manuales activos', () => {
   const ads = read('src/config/ads.ts');
   assert.ok(ads.includes('Object.values(AD_SLOTS).some(Boolean)'));
-  const slots = [...ads.matchAll(/:\s*'([^']*)'/g)].map((m) => m[1]).filter(Boolean);
+  const block = ads.slice(ads.indexOf('AD_SLOTS = {'), ads.indexOf('} as const'));
+  const slots = [...block.matchAll(/:\s*'([^']*)'/g)].map((m) => m[1]).filter(Boolean);
   assert.deepEqual(slots, []);
 });
 
@@ -35,9 +39,17 @@ test('astro.config declara site + sitemap', () => {
 test('Layout carga verificación + CMP y enlaza a cookies', () => {
   const layout = read('src/layouts/Layout.astro');
   assert.ok(layout.includes('ADS_VERIFICATION'));
+  assert.ok(layout.includes('PUBLISHER_ID'));
   assert.ok(layout.includes('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'));
-  assert.ok(layout.includes('fundingchoicesmessages.google.com/i/pub-1972487168739114'));
+  assert.ok(layout.includes('fundingchoicesmessages.google.com/i/${PUBLISHER_ID}'));
   assert.ok(layout.includes('/cookies/'));
+});
+
+test('ads.txt se genera en build desde el ID en crudo', () => {
+  const script = read('scripts/write-ads-txt.mjs');
+  assert.ok(script.includes('PUBLIC_ADSENSE_PUBLISHER_ID'));
+  assert.ok(script.includes('DIRECT, f08c47fec0942fa0'));
+  assert.ok(!script.includes('ca-${'));
 });
 
 test('páginas legales existen y usan el contacto genérico', () => {
