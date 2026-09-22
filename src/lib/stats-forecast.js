@@ -26,6 +26,41 @@ const RED_FLOOR = 1;
 const round2 = value => Math.round(value * 100) / 100;
 const round3 = value => Math.round(value * 1000) / 1000;
 const mean = list => list.reduce((sum, value) => sum + value, 0) / list.length;
+/** Amistoso pesa la mitad: informa menos del ritmo competitivo. Sin señal, oficial. */
+export const FRIENDLY_WEIGHT = 0.5;
+export function isFriendlyRow(row) {
+  if (!row || typeof row !== 'object') return false;
+  if (row.friendly === true || row.is_friendly === true) return true;
+  const fields = [
+    row.round, row.round_name, row.competition, row.competition_name,
+    row.league, row.league_name, row.tournament, row.tournament_name, row.stage,
+  ];
+  return fields.some(value => typeof value === 'string' && /friendly|amistoso/i.test(value));
+}
+export function rowWeight(row) {
+  const explicit = row?.weight;
+  if (typeof explicit === 'number' && Number.isFinite(explicit) && explicit > 0) return explicit;
+  return isFriendlyRow(row) ? FRIENDLY_WEIGHT : 1;
+}
+const weightedMean = (values, weights) => {
+  let sum = 0, total = 0;
+  for (let index = 0; index < values.length; index++) {
+    const weight = weights?.[index] ?? 1;
+    sum += values[index] * weight;
+    total += weight;
+  }
+  return total > 0 ? sum / total : null;
+};
+/** Peso amistoso sobre el total: con mayoría amistosa se encoge más a la media. */
+const friendlyShareOf = rows => {
+  let friendly = 0, total = 0;
+  for (const row of rows ?? []) {
+    const weight = rowWeight(row);
+    total += weight;
+    if (isFriendlyRow(row)) friendly += weight;
+  }
+  return total > 0 ? friendly / total : 0;
+};
 
 /** Filas del histórico donde juega el equipo, más recientes primero. */
 export function teamStatRows(history, team, count = 10) {
@@ -41,6 +76,27 @@ const ownValues = (rows, team, metric) => rows
 const concededValues = (rows, team, metric) => rows
   .map(row => (sameClub(row.home, team) ? row.statistics.away : row.statistics.home)?.[metric])
   .filter(value => value != null);
+/** Valores con su peso (amistoso 0.5, oficial 1): misma selección, cualquier competición. */
+const ownWeighted = (rows, team, metric) => {
+  const values = [], weights = [];
+  for (const row of rows ?? []) {
+    const value = (sameClub(row.home, team) ? row.statistics.home : row.statistics.away)?.[metric];
+    if (value == null) continue;
+    values.push(value);
+    weights.push(rowWeight(row));
+  }
+  return { values, weights };
+};
+const concededWeighted = (rows, team, metric) => {
+  const values = [], weights = [];
+  for (const row of rows ?? []) {
+    const value = (sameClub(row.home, team) ? row.statistics.away : row.statistics.home)?.[metric];
+    if (value == null) continue;
+    values.push(value);
+    weights.push(rowWeight(row));
+  }
+  return { values, weights };
+};
 
 /** Media de la competición por partido y equipo; null sin filas con dato. */
 export function leagueAverage(history, competition, metric) {
@@ -58,11 +114,16 @@ export function leagueAverage(history, competition, metric) {
 /**
  * Valor esperado de una métrica de conteo para un equipo en un partido.
  * (propio + lo que concede el rival) / 2, encogido a la media de la liga.
+ * Con pesos (`ownWeights`/`oppWeights`) la media es ponderada: el amistoso
+ * pesa la mitad y el mínimo sigue pidiendo partidos con dato.
  */
-export function forecastCount({ ownRows, oppRows, leagueAvg, min = 3, shrink = 4, max = Infinity }) {
+export function forecastCount({ ownRows, oppRows, ownWeights = null, oppWeights = null, leagueAvg, min = 3, shrink = 4, max = Infinity }) {
   const n = Math.min(ownRows.length, oppRows.length);
   if (n < min || ownRows.length < min || oppRows.length < min) return null;
-  const raw = (mean(ownRows) + mean(oppRows)) / 2;
+  const ownMean = weightedMean(ownRows, ownWeights);
+  const oppMean = weightedMean(oppRows, oppWeights);
+  if (ownMean == null || oppMean == null) return null;
+  const raw = (ownMean + oppMean) / 2;
   const base = leagueAvg ?? raw;
   const weight = n / (n + shrink);
   return round2(Math.min(max, Math.max(0, weight * raw + (1 - weight) * base)));
@@ -144,7 +205,8 @@ function afAverage(bags, metric) {
 /**
  * Pronóstico de las 9 métricas con cascada por celda para tabla siempre llena:
  * 1) ritmos Bzzoiro (propio + lo que concede el rival, desde 1 partido,
- * encogido fuerte a la media); 2) promedio AF del equipo mezclado con la
+ * encogido fuerte a la media; misma selección aunque no sea entre ellas,
+ * amistoso pesa la mitad); 2) promedio AF del equipo mezclado con la
  * media; 3) media de la competición y luego global.
  * `providerXg` ancla la columna xG al xG del modelo Bzzoiro para no
  * contradecir su resultado esperado. Coherencia mínima: a puerta ≤ tiros;
@@ -169,10 +231,15 @@ export function forecastStatsFull(history, home, away, { extraRows = [], af = nu
   const origins = new Set();
   const sources = { home: {}, away: {} };
   const takeCount = (side, team, teamRows, oppRows, metric) => {
+    const own = ownWeighted(teamRows, team, metric);
+    const opp = concededWeighted(oppRows, team === home ? away : home, metric);
+    // Mayoría amistosa: el ritmo propio informa menos, más ancla a la media.
+    const friendlyShare = friendlyShareOf([...teamRows, ...oppRows]);
+    const shrinkEff = friendlyShare > 0.5 ? shrink + 2 : shrink;
     const value = forecastCount({
-      ownRows: ownValues(teamRows, team, metric),
-      oppRows: concededValues(oppRows, team === home ? away : home, metric),
-      leagueAvg: league[metric], min: 1, shrink, max: MAX_VALUE[metric] ?? Infinity,
+      ownRows: own.values, oppRows: opp.values,
+      ownWeights: own.weights, oppWeights: opp.weights,
+      leagueAvg: league[metric], min: 1, shrink: shrinkEff, max: MAX_VALUE[metric] ?? Infinity,
     });
     if (value != null) { sources[side][metric] = 'Bzzoiro'; origins.add('Bzzoiro'); return value; }
     const afAvg = afAverage(af?.[side], metric);
@@ -186,13 +253,15 @@ export function forecastStatsFull(history, home, away, { extraRows = [], af = nu
     return null;
   };
   const possessionOf = (side, team, teamRows) => {
-    const own = ownValues(teamRows, team, 'possession');
+    const own = ownWeighted(teamRows, team, 'possession');
     const afAvg = afAverage(af?.[side], 'possession');
-    const all = afAvg != null ? [...own, afAvg] : own;
+    const all = afAvg != null ? [...own.values, afAvg] : own.values;
+    const weights = afAvg != null ? [...own.weights, 1] : own.weights;
     if (!all.length) return null;
     const base = league.possession ?? 50;
-    const weight = all.length / (all.length + shrink);
-    return { value: weight * mean(all) + (1 - weight) * base, fromAf: !own.length };
+    const shrinkEff = friendlyShareOf(teamRows) > 0.5 ? shrink + 2 : shrink;
+    const weight = all.length / (all.length + shrinkEff);
+    return { value: weight * weightedMean(all, weights) + (1 - weight) * base, fromAf: !own.values.length };
   };
   const homePoss = possessionOf('home', home, homeRows);
   const awayPoss = possessionOf('away', away, awayRows);

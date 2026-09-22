@@ -1084,7 +1084,36 @@
 .pitch-last:hover { border-color: var(--accent); color: var(--accent); }
 .pitch-last:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-.timeline-empty { padding: 16px 18px 20px; }
+.timeline-empty {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 16px 18px 20px;
+}
+
+.timeline-empty h3 {
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.timeline-empty p {
+  font-size: 13px;
+  max-width: 62ch;
+}
+
+/* Estado vacío: sin riel, sin scroll ni fundidos; el texto respira
+   dentro de la tarjeta exterior, no en una tarjeta anidada. */
+.pitch-side.is-empty .pitch-rail { display: none; }
+
+.pitch-side.is-empty .pitch-timeline {
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.pitch-side.is-empty .pitch-timeline-inner { padding: 0; }
 
 /* ---- La lectura: pizarra del analista ----
    Fichas con escena por tipo de sección (kind) y cifras protagonistas

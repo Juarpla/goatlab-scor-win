@@ -42,13 +42,13 @@ test('adviceToNeutral reformula el advice AF en español neutro', () => {
 
 test('buildProviderAdvice combina Bzzoiro + AF y es null-honesto', () => {
   const advice = buildProviderAdvice({
-    provider: { score: '1-1', recommendations: { favorite: 'A', favoriteProb: 0.391, over25: false, btts: false } },
+    provider: { score: '1-1', over25: 0.528, btts: 0.517, recommendations: { favorite: 'A', favoriteProb: 0.391, over25: false, btts: false } },
     afPrediction: { advice: 'Double chance : draw or Chelsea' },
     home: 'Andorra',
     away: 'Malta',
   });
   assert.deepEqual(advice.bz.map(line => line.text), [
-    'Malta (39%)', 'El modelo espera menos de 3 goles', 'No, según el modelo', '1–1',
+    'Malta (39%)', '53% que haya 3 o más goles, según el modelo', '52% que sí, según el modelo',
   ]);
   assert.deepEqual(advice.af.map(line => line.text), ['Chelsea sin perder']);
   assert.equal(buildProviderAdvice({ provider: null, afPrediction: null }), null);
@@ -56,4 +56,20 @@ test('buildProviderAdvice combina Bzzoiro + AF y es null-honesto', () => {
   const onlyAf = buildProviderAdvice({ afPrediction: { advice: 'Double chance : Leeds or draw' } });
   assert.equal(onlyAf.bz.length, 0);
   assert.deepEqual(onlyAf.af.map(line => line.text), ['Leeds sin perder']);
+});
+
+test('buildProviderAdvice usa el booleano solo sin probabilidad', () => {
+  const fallback = buildProviderAdvice({
+    provider: { score: '2-0', recommendations: { favorite: 'home', over25: false, btts: false } },
+    home: 'Andorra',
+    away: 'Malta',
+  });
+  assert.deepEqual(fallback.bz.map(line => line.text), [
+    'Andorra', 'El modelo espera menos de 3 goles', 'No, según el modelo',
+  ]);
+  // La probabilidad emite aun sin recommendations.
+  const onlyProb = buildProviderAdvice({ provider: { over25: 0.6, btts: 0.4 } });
+  assert.deepEqual(onlyProb.bz.map(line => line.text), [
+    '60% que haya 3 o más goles, según el modelo', '40% que sí, según el modelo',
+  ]);
 });

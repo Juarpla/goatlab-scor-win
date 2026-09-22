@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   STAT_METRICS, teamStatRows, leagueAverage, forecastCount, forecastStats, forecastStatsFull,
   threeWay, lastGoal, raceTo, cornerMargin, forecastDominance,
+  rowWeight, isFriendlyRow,
 } from '../src/lib/stats-forecast.js';
 
 const stats = values => ({ home: values[0], away: values[1] });
@@ -216,4 +217,41 @@ test('amarillas normales sin dato de rojas quedan en null honesto', () => {
   const forecast = forecastStatsFull(history, 'Portugal', 'Wales', { competition: 'nations' });
   assert.ok(forecast.home.yellowCards < 3.5);
   assert.equal(forecast.home.redCards, null);
+});
+
+test('el amistoso pesa la mitad: tira menos que el oficial', () => {
+  assert.equal(rowWeight({ friendly: true }), 0.5);
+  assert.equal(rowWeight({ round_name: 'International Friendly' }), 0.5);
+  assert.equal(rowWeight({}), 1);
+  assert.equal(rowWeight(null), 1);
+  assert.equal(isFriendlyRow({ competition: 'Amistoso' }), true);
+  assert.equal(isFriendlyRow({ round_name: 'Jornada 5' }), false);
+  const base = { ownRows: [20, 10], oppRows: [20, 10], leagueAvg: 10, min: 1, shrink: 4 };
+  const plain = forecastCount(base);
+  const weighted = forecastCount({ ...base, ownWeights: [1, 0.5], oppWeights: [1, 0.5] });
+  assert.ok(weighted > plain);
+});
+
+test('misma selección aunque no sea entre ellas: ritmos propios por equipo', () => {
+  const portugalAttack = { ...full, corners: 8, yellowCards: 3 };
+  const walesAttack = { ...thin, corners: 3, yellowCards: 1 };
+  const history = [
+    row('2026-09-01', 'Portugal', 'Spain', portugalAttack, thin, 'mundial'),
+    row('2026-09-02', 'Wales', 'Ghana', walesAttack, full, 'nations'),
+  ];
+  const forecast = forecastStatsFull(history, 'Portugal', 'Wales', { competition: 'nations' });
+  assert.ok(forecast.origins.includes('Bzzoiro'));
+  assert.ok(forecast.home.corners > forecast.away.corners);
+  assert.ok(forecast.home.yellowCards > forecast.away.yellowCards);
+});
+
+test('un solo amistoso por lado igual da ritmo (encogido a la media)', () => {
+  const friendlyHome = row => ({ ...row, friendly: true });
+  const history = [
+    friendlyHome(row('2026-09-01', 'Portugal', 'Spain', full, thin, 'amistoso')),
+    friendlyHome(row('2026-09-02', 'Wales', 'Ghana', thin, full, 'amistoso')),
+  ];
+  const forecast = forecastStatsFull(history, 'Portugal', 'Wales', { competition: 'nations' });
+  assert.equal(forecast.sources.home.corners, 'Bzzoiro');
+  assert.ok(forecast.home.corners != null && forecast.away.corners != null);
 });

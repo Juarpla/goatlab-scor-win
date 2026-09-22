@@ -463,7 +463,12 @@ export async function fetchAfFixturesByDate(date, { env = {}, fetchImpl = fetch,
     const data = await pacedRequest(`https://v3.football.api-sports.io/fixtures?date=${encodeURIComponent(date)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
     if (!Array.isArray(data?.response)) return [];
     return data.response
-      .map(item => ({ fixtureId: item?.fixture?.id ?? null, home: item?.teams?.home?.name ?? null, away: item?.teams?.away?.name ?? null, date }))
+      .map(item => ({
+        fixtureId: item?.fixture?.id ?? null,
+        home: item?.teams?.home?.name ?? null, away: item?.teams?.away?.name ?? null,
+        homeId: item?.teams?.home?.id ?? null, awayId: item?.teams?.away?.id ?? null,
+        date,
+      }))
       .filter(row => row.fixtureId != null && row.home && row.away);
   } catch { return []; }
 }
@@ -503,5 +508,66 @@ export async function fetchAfTopScorers(leagueId, season, { env = {}, fetchImpl 
   try {
     const data = await pacedRequest(`https://v3.football.api-sports.io/players/topscorers?league=${encodeURIComponent(leagueId)}&season=${encodeURIComponent(season)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
     return mapAfTopScorers(data);
+  } catch { return null; }
+}
+
+/* ---- Bajas y plantillas de API-Football (fallback de TrendsStrip) ---- */
+
+/**
+ * Payload de `/injuries?fixture=` → filas `{player, team, type, reason}`.
+ * `type`: Injury|Suspension (tal cual del proveedor); `reason`: detalle
+ * ("Knee Injury", "Suspended 3 matches"). Null honesto si no hay nada
+ * reconocible (incluido plan free sin cobertura para la temporada).
+ */
+export function mapAfInjuries(data, { limit = 12 } = {}) {
+  const rows = Array.isArray(data?.response) ? data.response : null;
+  if (!rows?.length) return null;
+  const mapped = rows.map(entry => ({
+    player: entry?.player?.name ?? null,
+    team: entry?.team?.name ?? null,
+    type: entry?.player?.type ?? entry?.type ?? null,
+    reason: entry?.player?.reason ?? entry?.reason ?? null,
+  })).filter(row => row.player && row.team)
+    .slice(0, Math.max(1, limit));
+  return mapped.length ? mapped : null;
+}
+
+/** 1 request por fixture; sin id o sin clave responde null sin llamar. */
+export async function fetchAfInjuries(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/injuries?fixture=${encodeURIComponent(fixtureId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    return mapAfInjuries(data);
+  } catch { return null; }
+}
+
+/**
+ * Payload de `/players/squads?team=` → filas `{id, name, age, number,
+ * position, photo}`. Sin estadísticas de temporada (el endpoint no las
+ * trae); la vista muestra una muestra honesta, nunca un ranking inventado.
+ * Null honesto si no hay nada reconocible.
+ */
+export function mapAfSquad(data, { limit = 30 } = {}) {
+  const rows = Array.isArray(data?.response?.[0]?.players) ? data.response[0].players
+    : Array.isArray(data?.response) ? data.response : null;
+  if (!rows?.length) return null;
+  const mapped = rows.map(entry => ({
+    id: entry?.id ?? null,
+    name: entry?.name ?? null,
+    age: Number.isFinite(entry?.age) ? entry.age : null,
+    number: Number.isFinite(entry?.number) ? entry.number : null,
+    position: entry?.position ?? null,
+    photo: entry?.photo ?? null,
+  })).filter(row => row.name)
+    .slice(0, Math.max(1, limit));
+  return mapped.length ? mapped : null;
+}
+
+/** 1 request por equipo; sin id o sin clave responde null sin llamar. */
+export async function fetchAfSquad(teamId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (teamId == null || !env.API_FOOTBALL_KEY) return null;
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/players/squads?team=${encodeURIComponent(teamId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    return mapAfSquad(data);
   } catch { return null; }
 }

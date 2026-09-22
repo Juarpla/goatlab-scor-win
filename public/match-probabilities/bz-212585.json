@@ -4,7 +4,7 @@
   "away": "Switzerland",
   "competition": "nations",
   "kickoff": "2026-09-26T18:45:00+00:00",
-  "updatedAt": "2026-09-21T18:43:13.222Z",
+  "updatedAt": "2026-09-22T05:05:21.061Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,7 +13,7 @@
     },
     "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
-    "firstGoalSource": null,
+    "firstGoalSource": "Bzzoiro-xG",
     "sample": {
       "home": 0,
       "away": 0
@@ -273,7 +273,7 @@
     "source": "Bzzoiro"
   },
   "discipline": {
-    "method": "poisson-cards-v0",
+    "method": "stats-ratings-v1",
     "home": {
       "yellowOver35": null,
       "redAnytime": null,
@@ -288,32 +288,152 @@
       "scorers": 0,
       "historyRows": 150
     },
-    "source": null
+    "source": "GoatLab",
+    "expectedTotal": 4.1
   },
   "setPieces": {
-    "method": "mercado-estimado-v1",
+    "method": "stats-ratings-v1",
     "cornersOver95": null,
     "shots": null,
     "xgTotal": null,
     "sample": {
       "historyRows": 150
     },
-    "source": "Bzzoiro",
-    "expectedTotal": 9.3,
-    "over95": 0.469
+    "source": "GoatLab",
+    "expectedTotal": 9.6
   },
-  "statsForecast": null,
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.57,
+      "shotsOnTarget": 4.56,
+      "xg": 1.1,
+      "corners": 4.79,
+      "fouls": 12.05,
+      "yellowCards": 2.05,
+      "redCards": 0.52,
+      "offsides": 1.97,
+      "possession": 50
+    },
+    "away": {
+      "shots": 13.57,
+      "shotsOnTarget": 4.56,
+      "xg": 1.43,
+      "corners": 4.79,
+      "fouls": 12.05,
+      "yellowCards": 2.05,
+      "redCards": 0.52,
+      "offsides": 1.97,
+      "possession": 50
+    },
+    "sample": {
+      "home": 0,
+      "away": 0
+    },
+    "coverage": {
+      "home": {
+        "possession": 0,
+        "shots": 0,
+        "shotsOnTarget": 0,
+        "xg": 0,
+        "corners": 0,
+        "fouls": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "offsides": 0
+      },
+      "away": {
+        "possession": 0,
+        "shots": 0,
+        "shotsOnTarget": 0,
+        "xg": 0,
+        "corners": 0,
+        "fouls": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "offsides": 0
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.57,
+      "shotsOnTarget": 4.56,
+      "xg": 1.44,
+      "corners": 4.79,
+      "fouls": 12.05,
+      "yellowCards": 2.05,
+      "redCards": 0.52,
+      "offsides": 1.97
+    },
+    "sources": {
+      "home": {
+        "shots": "media",
+        "shotsOnTarget": "media",
+        "xg": "Bzzoiro",
+        "corners": "media",
+        "fouls": "media",
+        "yellowCards": "media",
+        "redCards": "media",
+        "offsides": "media",
+        "possession": "media"
+      },
+      "away": {
+        "shots": "media",
+        "shotsOnTarget": "media",
+        "xg": "Bzzoiro",
+        "corners": "media",
+        "fouls": "media",
+        "yellowCards": "media",
+        "redCards": "media",
+        "offsides": "media",
+        "possession": "media"
+      }
+    },
+    "origins": [
+      "media"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": true,
+    "source": "media"
+  },
   "dominance": {
     "method": "dominance-v1",
-    "cornersDuel": null,
-    "cardsDuel": null,
+    "cornersDuel": {
+      "home": 0.435,
+      "draw": 0.131,
+      "away": 0.435
+    },
+    "cardsDuel": {
+      "home": 0.398,
+      "draw": 0.204,
+      "away": 0.398
+    },
     "lastGoal": {
       "home": 0.4,
       "away": 0.52,
       "noGoal": 0.08
     },
-    "cornerRace": null,
-    "cornerMargin": null,
+    "cornerRace": {
+      "3": {
+        "home": 0.5,
+        "away": 0.5
+      },
+      "5": {
+        "home": 0.5,
+        "away": 0.5
+      },
+      "7": {
+        "home": 0.5,
+        "away": 0.5
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.206,
+      "home12": 0.229,
+      "level": 0.131,
+      "away12": 0.229,
+      "away3plus": 0.206
+    },
     "source": "GoatLab"
   },
   "weatherVenue": {

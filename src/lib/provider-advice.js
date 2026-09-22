@@ -1,7 +1,7 @@
 /**
  * Fallback de la SabidurIA cuando el LLM no entregó lectura: reformula en
  * español neutro las lecturas declaradas de los proveedores (Bzzoiro
- * `recommendations` + `advice` de API-Football). Sin jerga de apuesta, sin
+ * probabilidades + `recommendations` como reserva, `advice` de API-Football). Sin jerga de apuesta, sin
  * cuotas, siempre atribuido al proveedor. Plantillas deterministas y
  * testeables; lo irreconocible se omite, nunca se imprime en crudo.
  */
@@ -25,6 +25,12 @@ export function favoriteName(favorite, home, away) {
 }
 
 const pct = value => (value == null ? null : `${Math.round(value * 100)}%`);
+
+/** Probabilidad 0–1 del proveedor → entero 0–100; null ante lo ausente. */
+const pct100 = value =>
+  (typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1
+    ? Math.round(value * 100)
+    : null);
 
 const pluralGoals = n => (n === 1 ? 'gol' : 'goles');
 
@@ -91,20 +97,27 @@ export function buildProviderAdvice({ provider = null, afPrediction = null, home
     const fav = favoriteName(rec.favorite, home, away);
     if (fav) {
       const prob = pct(rec.favoriteProb);
-      bz.push({ label: 'Favorito Bzzoiro', text: prob ? `${fav} (${prob})` : fav });
-    }
-    if (typeof rec.over25 === 'boolean') {
-      bz.push({ label: 'Goles en total', text: rec.over25 ? 'El modelo espera 3 o más goles' : 'El modelo espera menos de 3 goles' });
-    }
-    if (typeof rec.btts === 'boolean') {
-      bz.push({ label: 'Marcan los dos', text: rec.btts ? 'Sí, según el modelo' : 'No, según el modelo' });
+      bz.push({ label: 'Favorito', text: prob ? `${fav} (${prob})` : fav });
     }
   }
-  if (provider?.score) bz.push({ label: 'Marcador esperado', text: String(provider.score).replace('-', '–') });
+  // Las probabilidades mandan sobre el booleano: el `No` tajante contradecía
+  // el marcador (ej. BTTS `false` + `1-1`); el `%` matiza y mantiene coherencia.
+  const over25p = pct100(provider?.over25);
+  if (over25p != null) {
+    bz.push({ label: 'Goles en total', text: `${over25p}% que haya 3 o más goles, según el modelo` });
+  } else if (typeof rec?.over25 === 'boolean') {
+    bz.push({ label: 'Goles en total', text: rec.over25 ? 'El modelo espera 3 o más goles' : 'El modelo espera menos de 3 goles' });
+  }
+  const bttsP = pct100(provider?.btts);
+  if (bttsP != null) {
+    bz.push({ label: 'Marcan los dos', text: `${bttsP}% que sí, según el modelo` });
+  } else if (typeof rec?.btts === 'boolean') {
+    bz.push({ label: 'Marcan los dos', text: rec.btts ? 'Sí, según el modelo' : 'No, según el modelo' });
+  }
   const af = [];
   const neutral = adviceToNeutral(afPrediction?.advice);
-  if (neutral) af.push({ label: 'Lectura API-Football', text: neutral });
-  else if (afPrediction?.winner) af.push({ label: 'Lectura API-Football', text: `Ve ganador a ${afPrediction.winner}` });
+  if (neutral) af.push({ label: 'Lectura', text: neutral });
+  else if (afPrediction?.winner) af.push({ label: 'Lectura', text: `Ve ganador a ${afPrediction.winner}` });
   if (!bz.length && !af.length) return null;
   return { bz, af };
 }

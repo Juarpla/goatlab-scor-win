@@ -1,10 +1,10 @@
 import { writeFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture } from '../src/lib/football.js';
+import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
   fetchEventPlayerStats, fetchEventPrediction, fetchEventOdds, fetchEventBroadcasts, fetchEventSocial, fetchEventReferee, fetchTeamLast, collectTeamIds, resolveLeagues,
-  fetchBzzoiroStandings, fetchLeaderboard, fetchTeamSquad, mapSquadScorers, sameTeam,
+  fetchBzzoiroStandings, fetchLeaderboard, fetchTeamSquad, mapSquadScorers, sameTeam, isFriendlyEvent,
 } from '../src/lib/bzzoiro.js';
 import { locateMatch } from '../src/lib/venues.js';
 import { fetchKickoffWeather } from '../src/lib/weather.js';
@@ -284,11 +284,15 @@ async function catchUpAnalyses(matches, analyses, { results, standings, scorers,
 /* ---- Extra de tendencias (retransmisiones Latam + social, mínimo posible) ---- */
 
 /**
- * Una llamada de broadcasts + una de social + resolución de árbitro por
- * partido con eventId, tope TRENDS_EXTRA_MAX (defecto 32 → ≤96 req/día,
- * ~1,3% de la cuota). Sin token escribe vacío; sin dato por partido no
- * guarda entrada. El componente degrada a lo disponible cuando falta
- * el archivo o la entrada.
+ * Bzzoiro al frente (broadcasts + social + árbitro por partido con eventId,
+ * tope TRENDS_EXTRA_MAX, defecto 32 → ≤96 req/día, ~1,3% de la cuota) y
+ * fallback API-Football (injuries por fixture + plantillas por equipo,
+ * tope AF_TRENDS_FALLBACK_MAX, defecto 8) para los partidos que se quedan
+ * sin extra —incluidos los `af-` sin eventId y los `bz-` resueltos a su
+ * gemelo AF por fecha (caché de 1 request por día)—. Sin token escribe
+ * vacío; sin dato por partido no guarda entrada. El componente degrada a
+ * lo disponible cuando falta el archivo o la entrada, y se oculta si no
+ * hay nada que mostrar.
  */
 async function updateTrendsExtra(windowMatches) {
   const targets = windowMatches.filter(match => match.eventId != null && !isFinished(match));
@@ -307,8 +311,90 @@ async function updateTrendsExtra(windowMatches) {
     });
     jobs.forEach((match, index) => { if (rows[index]) out[match.id] = rows[index]; });
   }
+  await updateTrendsAfFallback(windowMatches, out);
   await writeJson('public/data/trends-extra.json', out);
   console.log(`trends-extra: ${Object.keys(out).length} partidos con extra.`);
+}
+
+const AF_TRENDS_FALLBACK_TTL_MS = 20 * 3600_000;
+const AF_FIXTURES_BY_DATE_FILE = 'public/data/af-fixtures-by-date.json';
+
+/**
+ * Fallback AF para los partidos vivos sin extra Bzzoiro: `/injuries?fixture=`
+ * (1 request) + `/players/squads?team=` por equipo con id resuelto (hasta 2).
+ * El fixture AF sale directo del namespace `af-` o del gemelo por fecha
+ * (`/fixtures?date=`, 1 request por día cacheado en `af-fixtures-by-date.json`,
+ * la misma caché que usa `updateTeamStats`). Con TTL de 20h se reutiliza lo
+ * fresco de `trends-extra.json` sin gastar cuota. Plan free: injuries puede
+ * venir vacío en la temporada en curso (cobertura limitada) → null honesto.
+ */
+async function updateTrendsAfFallback(windowMatches, out) {
+  if (!process.env.API_FOOTBALL_KEY) return 0;
+  const previous = await readJson('public/data/trends-extra.json') ?? {};
+  const budget = Number(process.env.AF_TRENDS_FALLBACK_MAX ?? 8);
+  const now = Date.now();
+  const needsFallback = match => !isFinished(match) && !out[match.id]
+    && !(previous[match.id]?.broadcasts?.length || previous[match.id]?.social?.length || previous[match.id]?.referee);
+  const candidates = windowMatches.filter(needsFallback);
+  const jobs = candidates.slice(0, Math.max(0, budget)).filter(match => {
+    const cached = previous[match.id]?.af;
+    return !cached?.capturedAt || now - Date.parse(cached.capturedAt) > AF_TRENDS_FALLBACK_TTL_MS;
+  });
+  if (!jobs.length) {
+    for (const match of candidates) if (previous[match.id]?.af && !out[match.id]) out[match.id] = previous[match.id];
+    return 0;
+  }
+  const dateCache = await readJson(AF_FIXTURES_BY_DATE_FILE) ?? {};
+  const resolveAfTwin = async match => {
+    if (match.id?.startsWith('af-') && match.providerId != null) {
+      const day = String(match.kickoff ?? '').slice(0, 10);
+      const twin = { fixtureId: match.providerId, homeId: null, awayId: null };
+      if (day) {
+        let list = dateCache[day]?.fixtures;
+        if (!list || !dateCache[day]?.fetchedAt || now - Date.parse(dateCache[day].fetchedAt) > AF_TRENDS_FALLBACK_TTL_MS) {
+          list = await fetchAfFixturesByDate(day, { env: process.env });
+          dateCache[day] = { fixtures: list, fetchedAt: new Date().toISOString() };
+        }
+        const row = (list ?? []).find(entry => entry.fixtureId === match.providerId) ?? findAfFixture(list, match.home, match.away);
+        if (row) { twin.homeId = row.homeId ?? null; twin.awayId = row.awayId ?? null; }
+      }
+      return twin;
+    }
+    const day = String(match.kickoff ?? '').slice(0, 10);
+    if (!day) return null;
+    let list = dateCache[day]?.fixtures;
+    if (!list || !dateCache[day]?.fetchedAt || now - Date.parse(dateCache[day].fetchedAt) > AF_TRENDS_FALLBACK_TTL_MS) {
+      list = await fetchAfFixturesByDate(day, { env: process.env });
+      dateCache[day] = { fixtures: list, fetchedAt: new Date().toISOString() };
+    }
+    return findAfFixture(list, match.home, match.away);
+  };
+  let filled = 0;
+  for (const match of jobs) {
+    const twin = await resolveAfTwin(match).catch(() => null);
+    if (!twin?.fixtureId) continue;
+    const injuries = await fetchAfInjuries(twin.fixtureId, { env: process.env }).catch(() => null);
+    const [squadHome, squadAway] = await Promise.all([
+      twin.homeId != null ? fetchAfSquad(twin.homeId, { env: process.env }).catch(() => null) : null,
+      twin.awayId != null ? fetchAfSquad(twin.awayId, { env: process.env }).catch(() => null) : null,
+    ]);
+    if (!injuries && !squadHome && !squadAway) continue;
+    out[match.id] = {
+      eventId: match.eventId ?? null,
+      broadcasts: null, social: null, referee: null,
+      af: {
+        fixtureId: twin.fixtureId,
+        injuries, squadHome, squadAway,
+        capturedAt: new Date().toISOString(), source: 'API-Football',
+      },
+      updatedAt: new Date().toISOString(),
+    };
+    filled += 1;
+  }
+  for (const match of candidates) if (!out[match.id] && previous[match.id]?.af) out[match.id] = previous[match.id];
+  await writeJson(AF_FIXTURES_BY_DATE_FILE, dateCache);
+  if (jobs.length) console.log(`trends-extra AF fallback: ${filled}/${jobs.length} partidos con bajas/plantilla.`);
+  return filled;
 }
 
 /* ---- Predicciones de API-Football (contexto del narrador + dataset) ---- */
@@ -738,14 +824,17 @@ async function enrichTeamLast(matches) {
 
 const TEAM_STATS_FILE = 'public/data/team-stats.json';
 const AF_STATS_FILE = 'public/data/af-stats.json';
-const AF_FIXTURES_BY_DATE_FILE = 'public/data/af-fixtures-by-date.json';
 const AF_STATS_TTL_MS = 20 * 3600_000;
 
 /**
  * Ritmos por equipo para `forecastStatsFull`, keyed por `match.id`:
  * `{ rows, af }`. `rows` sale de los últimos de cada equipo
  * (`lastMatches` + stats por evento Bzzoiro, cacheadas por eventId:
- * un terminado es inmutable). `af` promedia bolsas AF de esos mismos
+ * un terminado es inmutable). Misma selección aunque no sea entre ellas:
+ * si los `lastMatches` no dan stats, se completa por `team_id` con los
+ * últimos 10 terminados (tope de 10 partidos por corrida y resto del
+ * presupuesto `BZ_TEAM_STATS_MAX`). Amistoso pesa la mitad (`weight 0.5`).
+ * `af` promedia bolsas AF de esos mismos
  * recientes y solo se busca cuando Bzzoiro deja huecos, con tope
  * AF_STATS_MAX por corrida (comparte la cuota de 100 req/día).
  * Con `fetch:false` solo usa caché (corrida --analysis-only).
@@ -753,9 +842,27 @@ const AF_STATS_TTL_MS = 20 * 3600_000;
 async function updateTeamStats(matches, { historyRows = [], fetch = true } = {}) {
   const cache = await readJson(TEAM_STATS_FILE) ?? {};
   const aliveMatches = matches.filter(match => !isFinished(match) && match.lastMatches);
+  const budget = Number(process.env.BZ_TEAM_STATS_MAX ?? 240);
+  let spent = 0;
+  const rowWeightOf = row => {
+    if (typeof row?.weight === 'number' && Number.isFinite(row.weight) && row.weight > 0) return row.weight;
+    if (row?.friendly === true) return 0.5;
+    try { return isFriendlyEvent(row) ? 0.5 : 1; } catch { return 1; }
+  };
   if (fetch) {
+    // Prioridad a los partidos sin ritmos: los 0/0 (ej. nations) piden primero.
+    const cachedCount = match => {
+      let found = 0;
+      for (const side of ['home', 'away']) {
+        for (const row of match.lastMatches?.[side] ?? []) {
+          if (row?.eventId != null && cache[String(row.eventId)]?.statistics) found += 1;
+        }
+      }
+      return found;
+    };
+    const ordered = [...aliveMatches].sort((a, b) => cachedCount(a) - cachedCount(b));
     const needed = new Map();
-    for (const match of aliveMatches) {
+    for (const match of ordered) {
       for (const side of ['home', 'away']) {
         for (const row of match.lastMatches?.[side] ?? []) {
           const key = row?.eventId != null ? String(row.eventId) : null;
@@ -763,19 +870,74 @@ async function updateTeamStats(matches, { historyRows = [], fetch = true } = {})
         }
       }
     }
-    const budget = Number(process.env.BZ_TEAM_STATS_MAX ?? 240);
     const queue = [...needed.keys()].slice(0, Math.max(0, budget));
     const fetched = await mapPool(queue, CONCURRENCY, eventId => fetchEventStats(eventId, process.env).catch(() => null));
     const stamped = new Date().toISOString();
     fetched.forEach((stats, index) => {
       if (stats?.statistics) cache[queue[index]] = { statistics: stats.statistics, halves: stats.halves ?? null, fetchedAt: stamped };
     });
+    spent = queue.length;
+  }
+  // Fallback por selección (misma selección, aunque no sea entre ellas):
+  // si los `lastMatches` no dieron stats, se completa por `team_id` con los
+  // últimos 10 terminados. Tope de 10 partidos por corrida y resto del
+  // presupuesto `BZ_TEAM_STATS_MAX`; con `fetch:false` no hay red.
+  const fallbackByMatch = new Map();
+  if (fetch && spent < budget) {
+    const empty = aliveMatches.filter(match => {
+      let found = 0;
+      for (const side of ['home', 'away']) {
+        for (const row of match.lastMatches?.[side] ?? []) {
+          if (row?.eventId != null && cache[String(row.eventId)]?.statistics) found += 1;
+        }
+      }
+      return found === 0;
+    }).slice(0, 10);
+    const jobs = [];
+    for (const match of empty) {
+      for (const side of ['home', 'away']) {
+        const teamId = match.teamIds?.[side];
+        if (teamId == null) continue;
+        jobs.push({ match, side, teamId });
+      }
+    }
+    if (jobs.length) {
+      const lists = await mapPool(jobs, CONCURRENCY, job =>
+        fetchTeamLast(job.teamId, { before: job.match.kickoff, limit: 10, env: process.env }));
+      const extraNeeded = new Map();
+      jobs.forEach((job, index) => {
+        const known = new Set([...(job.match.lastMatches?.home ?? []), ...(job.match.lastMatches?.away ?? [])]
+          .map(row => row?.eventId));
+        for (const cand of lists[index] ?? []) {
+          if (spent + extraNeeded.size >= budget) break;
+          const key = cand?.eventId != null ? String(cand.eventId) : null;
+          if (!key || known.has(cand.eventId) || cache[key]?.statistics || extraNeeded.has(key)) continue;
+          known.add(cand.eventId);
+          extraNeeded.set(key, { ...cand, _matchId: job.match.id, _side: job.side });
+        }
+      });
+      if (extraNeeded.size) {
+        const queue2 = [...extraNeeded.keys()];
+        const fetched2 = await mapPool(queue2, CONCURRENCY, eventId => fetchEventStats(eventId, process.env).catch(() => null));
+        const stamped2 = new Date().toISOString();
+        fetched2.forEach((stats, index) => {
+          if (stats?.statistics) cache[queue2[index]] = { statistics: stats.statistics, halves: stats.halves ?? null, fetchedAt: stamped2 };
+        });
+        spent += queue2.length;
+        for (const [key, cand] of extraNeeded) {
+          if (!cache[key]?.statistics) continue;
+          if (!fallbackByMatch.has(cand._matchId)) fallbackByMatch.set(cand._matchId, []);
+          fallbackByMatch.get(cand._matchId).push(cand);
+        }
+      }
+    }
   }
   const keep = new Set();
   for (const match of matches) {
     for (const side of ['home', 'away']) {
       for (const row of match.lastMatches?.[side] ?? []) if (row?.eventId != null) keep.add(String(row.eventId));
     }
+    for (const row of fallbackByMatch.get(match.id) ?? []) if (row?.eventId != null) keep.add(String(row.eventId));
   }
   for (const key of Object.keys(cache)) if (!keep.has(key)) delete cache[key];
   if (fetch) await writeJson(TEAM_STATS_FILE, cache);
@@ -824,18 +986,28 @@ async function updateTeamStats(matches, { historyRows = [], fetch = true } = {})
   const byMatch = new Map();
   for (const match of aliveMatches) {
     const rows = [];
+    const pushRow = (row, stats) => {
+      rows.push({
+        date: row.date, competition: match.competition ?? null,
+        home: row.home, away: row.away,
+        homeScore: row.homeScore ?? null, awayScore: row.awayScore ?? null,
+        eventId: row.eventId, statistics: stats.statistics, halves: stats.halves ?? null,
+        round: row.round ?? null, friendly: row.friendly === true ? true : rowWeightOf(row) < 1,
+        weight: rowWeightOf(row),
+        source: 'Bzzoiro',
+      });
+    };
     for (const side of ['home', 'away']) {
       for (const row of match.lastMatches?.[side] ?? []) {
         const stats = row?.eventId != null ? cache[String(row.eventId)] : null;
         if (!stats?.statistics) continue;
-        rows.push({
-          date: row.date, competition: match.competition ?? null,
-          home: row.home, away: row.away,
-          homeScore: row.homeScore ?? null, awayScore: row.awayScore ?? null,
-          eventId: row.eventId, statistics: stats.statistics, halves: stats.halves ?? null,
-          source: 'Bzzoiro',
-        });
+        pushRow(row, stats);
       }
+    }
+    for (const row of fallbackByMatch.get(match.id) ?? []) {
+      const stats = row?.eventId != null ? cache[String(row.eventId)] : null;
+      if (!stats?.statistics) continue;
+      pushRow(row, stats);
     }
     let af = null;
     const probe = forecastStatsFull(historyRows, match.home, match.away, { extraRows: rows, competition: match.competition });

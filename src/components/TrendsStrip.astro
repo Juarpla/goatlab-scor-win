@@ -1,29 +1,46 @@
 ---
 /**
  * TrendsStrip.astro — el partido en los medios, debajo del último anuncio.
- * Solo lo que NO está en el resto de la página: árbitro, bajas con nombre,
- * dónde ver en Latam y lo que circula. Hechos con fuente; lo ausente se
- * omite, nunca se inventa. Extra (TV/social/árbitro) solo si el pipeline
- * lo trae en trends-extra.json. Los iconos siguen el trazo 1.7 del sistema
- * y la lima queda para la señal de cada bloque.
+ * Bzzoiro al frente (árbitro, bajas con nombre, dónde ver en Latam y lo que
+ * circula); fallback API-Football cuando Bzzoiro no cubre el hueco (bajas
+ * publicadas si no hay bajas confirmadas, lectura del proveedor si no hay
+ * social, muestra del plantel registrado). Hechos con fuente; lo ausente se
+ * omite y sin nada que mostrar la sección no se dibuja, nunca se inventa.
+ * Extra (TV/social/árbitro/AF) solo si el pipeline lo trae en
+ * trends-extra.json (+ afPrediction del JSON del partido). Los iconos siguen
+ * el trazo 1.7 del sistema y la lima queda para la señal de cada bloque.
  */
 import Icon from './Icon.astro';
+import { adviceToNeutral } from '../lib/provider-advice.js';
 
 interface Absence { name?: string | null; reason?: string | null; team?: string | null }
 interface Referee { name?: string | null; avgYellow?: number | null; avgRed?: number | null; avgFouls?: number | null; matches?: number | null }
+interface AfInjury { player?: string | null; team?: string | null; type?: string | null; reason?: string | null }
+interface AfPlayer { id?: number | null; name?: string | null; age?: number | null; number?: number | null; position?: string | null; photo?: string | null }
+interface AfFallback {
+  fixtureId?: number | null;
+  injuries?: AfInjury[] | null;
+  squadHome?: AfPlayer[] | null;
+  squadAway?: AfPlayer[] | null;
+  capturedAt?: string | null;
+  source?: string | null;
+}
+interface AfPrediction { winner?: string | null; advice?: string | null; underOver?: string | null; goals?: { home?: string | null; away?: string | null } | null }
 interface Extra {
   broadcasts?: { channel?: string | null; country?: string | null }[] | null;
   social?: { account?: string | null; text?: string | null; url?: string | null; published?: string | null }[] | null;
   referee?: Referee | null;
+  af?: AfFallback | null;
 }
 interface Props {
   home: string; away: string;
   homeShort?: string; awayShort?: string;
   unavailable?: Absence[] | null;
   extra?: Extra | null;
+  afPrediction?: AfPrediction | null;
 }
 
-const { home, away, homeShort = home, awayShort = away, unavailable = null, extra = null } = Astro.props;
+const { home, away, homeShort = home, awayShort = away, unavailable = null, extra = null, afPrediction = null } = Astro.props;
 const dec1 = (v: number) => v.toFixed(1).replace('.', ',');
 
 const referee = extra?.referee?.name ? extra.referee : null;
@@ -43,12 +60,37 @@ const showAbsences = rows.length > 0;
 
 const broadcasts = (extra?.broadcasts ?? []).filter(b => b.channel).slice(0, 4);
 const posts = (extra?.social ?? []).filter(p => p.text && p.url).slice(0, 3);
-const render = Boolean(showReferee || showAbsences || broadcasts.length || posts.length);
+
+/* Fallback API-Football: solo cuando Bzzoiro no cubre ese hueco.
+   Bajas AF si no hay bajas Bzzoiro; lectura AF si no hay social;
+   plantel AF (muestra honesta, sin ranking) siempre que llegue. */
+const afInjuries = (extra?.af?.injuries ?? []).filter(p => p.player && p.team).slice(0, 6);
+const showAfInjuries = !showAbsences && afInjuries.length > 0;
+const afInjuryGroups = (() => {
+  const order: string[] = [];
+  const byTeam = new Map<string, AfInjury[]>();
+  for (const row of afInjuries) {
+    const team = String(row.team);
+    if (!byTeam.has(team)) { byTeam.set(team, []); order.push(team); }
+    byTeam.get(team)!.push(row);
+  }
+  return order.map(team => ({ team, items: byTeam.get(team)! }));
+})();
+const squadHome = (extra?.af?.squadHome ?? []).filter(p => p.name).slice(0, 4);
+const squadAway = (extra?.af?.squadAway ?? []).filter(p => p.name).slice(0, 4);
+const showAfSquad = squadHome.length > 0 || squadAway.length > 0;
+const squadLine = (p: AfPlayer) => [p.position, p.number != null ? `nº ${p.number}` : null, p.age != null ? `${p.age} años` : null].filter(Boolean).join(' · ');
+const afAdvice = adviceToNeutral(afPrediction?.advice);
+const showAfPrediction = posts.length === 0 && Boolean(afAdvice || afPrediction?.winner);
+const render = Boolean(showReferee || showAbsences || broadcasts.length || posts.length || showAfInjuries || showAfSquad || showAfPrediction);
 
 /* Llave del marco: una pieza por bloque presente, cada una con su icono. */
 const keys: { icon: string; label: string }[] = [];
 if (showReferee) keys.push({ icon: 'whistle', label: 'Quién pita' });
 if (showAbsences) keys.push({ icon: 'medical', label: 'Quién falta' });
+else if (showAfInjuries) keys.push({ icon: 'medical', label: 'Quién falta' });
+if (showAfSquad) keys.push({ icon: 'star', label: 'Plantel' });
+if (showAfPrediction) keys.push({ icon: 'chart', label: 'Lectura del proveedor' });
 if (posts.length) keys.push({ icon: 'chat', label: 'Lo que circula' });
 ---
 
@@ -64,7 +106,7 @@ if (posts.length) keys.push({ icon: 'chat', label: 'Lo que circula' });
     )}
   </div>
 
-  {(showReferee || showAbsences) && (
+  {(showReferee || showAbsences || showAfInjuries || showAfSquad || showAfPrediction) && (
     <div class="trends-grid">
       {showReferee && (
         <article class="team-panel trends-panel">
@@ -100,6 +142,59 @@ if (posts.length) keys.push({ icon: 'chat', label: 'Lo que circula' });
             ))}
           </ul>
           <p class="chapter-note">Ausencias confirmadas, nunca estimadas · fuente Bzzoiro.</p>
+        </article>
+      )}
+      {showAfInjuries && (
+        <article class="team-panel trends-panel">
+          <header><h3><Icon name="medical" size={18} />Bajas publicadas</h3><span class="outline-label">{afInjuries.length}</span></header>
+          <ul class="absence-list">
+            {afInjuryGroups.map(group => (
+              <li class="absence-group">
+                <strong class="absence-side">{group.team}</strong>
+                <ul>
+                  {group.items.map(player => (
+                    <li>{player.player}{[player.type, player.reason].filter(Boolean).length > 0 && <small> · {[player.type, player.reason].filter(Boolean).join(' · ')}</small>}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <p class="chapter-note">Ausencias publicadas por API-Football · se actualiza cada 4 horas.</p>
+        </article>
+      )}
+      {showAfSquad && (
+        <article class="team-panel trends-panel">
+          <header><h3><Icon name="star" size={18} />Plantel registrado</h3><span class="outline-label">API-Football</span></header>
+          <ul class="absence-list">
+            {[
+              { tag: homeShort, items: squadHome },
+              { tag: awayShort, items: squadAway },
+            ].filter(group => group.items.length).map(group => (
+              <li class="absence-group">
+                {group.tag && <strong class="absence-side">{group.tag}</strong>}
+                <ul>
+                  {group.items.map(player => (
+                    <li>{player.name}{squadLine(player) && <small> · {squadLine(player)}</small>}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <p class="chapter-note">Muestra del plantel registrado, sin orden de mérito · fuente API-Football.</p>
+        </article>
+      )}
+      {showAfPrediction && (
+        <article class="team-panel trends-panel">
+          <header><h3><Icon name="chart" size={18} />Lectura del proveedor</h3><span class="outline-label">API-Football</span></header>
+          <ul class="absence-list">
+            <li class="absence-group">
+              <ul>
+                {afAdvice && <li>{afAdvice}</li>}
+                {!afAdvice && afPrediction?.winner && <li>Ve ganador a {afPrediction.winner}</li>}
+              </ul>
+            </li>
+          </ul>
+          <p class="chapter-note">Modelo del proveedor, no de GoatLab · se actualiza cada hora.</p>
         </article>
       )}
     </div>

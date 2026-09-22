@@ -331,6 +331,22 @@ export function hasH2HHistory(h2h, min = 3) {
 }
 
 /**
+ * Amistoso u oficial: los amistosos informan menos del ritmo competitivo
+ * (rotaciones, intensidad) y pesan la mitad en los ritmos por equipo.
+ * Detección tolerante sobre los campos que trae el evento; sin señal,
+ * se asume oficial para no castigar por defecto.
+ */
+export function isFriendlyEvent(row) {
+  if (row?.friendly === true) return true;
+  if (row?.is_friendly === true) return true;
+  const haystack = [
+    row?.round, row?.round_name, row?.competition, row?.competition_name,
+    row?.league, row?.league_name, row?.tournament, row?.tournament_name, row?.stage,
+  ].filter(value => typeof value === 'string' && value.trim());
+  return haystack.some(value => /friendly|amistoso/i.test(value));
+}
+
+/**
  * Últimos partidos terminados de un equipo antes de una fecha: el fallback de
  * "lo que ya jugaron" cuando la base local no cubre al club. La lista del
  * proveedor llega de más reciente a más antigua; se reordena por fecha en
@@ -352,6 +368,9 @@ export function mapTeamLast(rows, { before = null, limit = 5 } = {}) {
     awayTeamId: row.away_team_id ?? null,
     homeScore: row.home_score ?? null,
     awayScore: row.away_score ?? null,
+    round: row.round_name ?? row.round ?? null,
+    competition: row.competition ?? row.league_name ?? row.tournament ?? row.tournament_name ?? null,
+    friendly: isFriendlyEvent(row),
   }));
 }
 

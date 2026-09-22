@@ -77,7 +77,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
       {finished && <button class="pitch-replay" type="button" data-replay>Repetir el recorrido</button>}
     </div>
   </div>
-  <div class="pitch-side" data-timeline-block>
+  <div class:list={["pitch-side", !events?.length && "is-empty"]} data-timeline-block>
     <div class="pitch-side-head">
       <h3>Durante el partido</h3>
       {events?.length ? (
@@ -86,9 +86,9 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
         <span class="pitch-count" data-timeline-count>Sin hechos aún</span>
       )}
     </div>
-    <div class="pitch-timeline" data-timeline tabindex="0" role="region" aria-label="Minuto a minuto: usa las flechas para recorrer los hechos">
+    <div class="pitch-timeline" data-timeline tabindex={events?.length ? 0 : undefined} role={events?.length ? "region" : undefined} aria-label={events?.length ? "Minuto a minuto: usa las flechas para recorrer los hechos" : undefined}>
       <div class="pitch-timeline-inner">
-        <span class="pitch-rail" aria-hidden="true"></span>
+        {events?.length ? <span class="pitch-rail" aria-hidden="true"></span> : null}
         {events?.length ? (
           <table class="data-table pitch-events">
             <caption class="sr-only">Eventos del partido en orden cronológico</caption>
@@ -264,6 +264,18 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
    for (const event of events) body.append(buildRow(event));
    table.append(head, body);
    (previous ?? inner.querySelector('[data-live-events]'))?.replaceWith(table);
+   if (!inner.querySelector('.pitch-rail')) {
+    const rail = document.createElement('span');
+    rail.className = 'pitch-rail';
+    rail.setAttribute('aria-hidden', 'true');
+    inner.prepend(rail);
+   }
+   timelineBlock?.classList.remove('is-empty');
+   if (timeline) {
+    timeline.setAttribute('tabindex', '0');
+    timeline.setAttribute('role', 'region');
+    timeline.setAttribute('aria-label', 'Minuto a minuto: usa las flechas para recorrer los hechos');
+   }
    updateCount();
    syncHeight();
    updateChrome();

@@ -237,11 +237,15 @@ const forecastNote = forecastBits.length
   : null;
 const statEval = evaluation?.stats?.metrics ?? {};
 const statOk = (key: string) => statEval[key]?.published === true;
-const cornersOk = hasForecast && statOk('corners');
+/* Duelos derivados: solo con ritmos propios del equipo en esa métrica.
+   Con relleno de media, el Poisson degenera en moneda al aire. */
+const srcOf = (side: string, metric: string) => (forecast as any)?.sources?.[side]?.[metric] ?? null;
+const teamSourced = (metric: string) => ['Bzzoiro', 'AF'].includes(srcOf('home', metric)) && ['Bzzoiro', 'AF'].includes(srcOf('away', metric));
+const cornersOk = hasForecast && teamSourced('corners') && statOk('corners');
 const cornersDuel = cornersOk ? dominance?.cornersDuel ?? null : null;
 const cornerRace = cornersOk ? dominance?.cornerRace ?? null : null;
 const cornerMargin = cornersOk ? dominance?.cornerMargin ?? null : null;
-const cardsDuel = hasForecast && statOk('yellowCards') ? dominance?.cardsDuel ?? null : null;
+const cardsDuel = hasForecast && teamSourced('yellowCards') && statOk('yellowCards') ? dominance?.cardsDuel ?? null : null;
 const lastTrio = hasForecast && evaluation?.gate?.poissonOk ? dominance?.lastGoal ?? null : null;
 /* Reparto 0–1 entre ambos para el radar; nulo cuando falta un lado. */
 const share = (home: number | null | undefined, away: number | null | undefined) =>
@@ -250,12 +254,12 @@ const mkAxis = (label: string, home: number | null | undefined, away: number | n
   const s = share(home, away);
   return s == null ? null : { label, home: s, away: 1 - s };
 };
-/* Radar desde Esperados · pronóstico: reparto directo, sin gate. */
+/* Radar desde Esperados · pronóstico: solo ejes con ritmos propios. */
 const duelAxes = hasForecast ? [
-  mkAxis('A puerta', forecast.home.shotsOnTarget, forecast.away.shotsOnTarget),
-  mkAxis('Faltas', forecast.home.fouls, forecast.away.fouls),
-  mkAxis('Fueras de juego', forecast.home.offsides, forecast.away.offsides),
-  mkAxis('Posesión', forecast.home.possession, forecast.away.possession),
+  teamSourced('shotsOnTarget') ? mkAxis('A puerta', forecast.home.shotsOnTarget, forecast.away.shotsOnTarget) : null,
+  teamSourced('fouls') ? mkAxis('Faltas', forecast.home.fouls, forecast.away.fouls) : null,
+  teamSourced('offsides') ? mkAxis('Fueras de juego', forecast.home.offsides, forecast.away.offsides) : null,
+  teamSourced('possession') ? mkAxis('Posesión', forecast.home.possession, forecast.away.possession) : null,
 ].filter(Boolean) : [];
 const raceTargets = [3, 5, 7].filter(target => cornerRace?.[target]?.home != null);
 const marginBands = cornerMargin ? [
@@ -265,6 +269,7 @@ const marginBands = cornerMargin ? [
   { label: `${teamShort(match.away)} por 1–2`, value: cornerMargin.away12, tone: 'away' as const },
   { label: `${teamShort(match.away)} por 3 o más`, value: cornerMargin.away3plus, tone: 'away' as const },
 ] : [];
+const hasProbRows = Boolean(cornersDuel || raceTargets.length > 0 || marginBands.length > 0 || cardsDuel || lastTrio);
 
 /* Veredicto GoatLab: combina modelo propio, CatBoost, mercado y señales; los pesos siempre a la vista. */
 const absentCount = side => (match.lineups?.unavailablePlayers ?? []).filter(player => player.team === side).length;
@@ -392,19 +397,19 @@ const crumbsFor = side => {
        </div>
        </div>}
       </div></section>}
-    <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · pronóstico</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{forecastNote && <p class="chapter-note">{forecastNote}</p>}<div class="notes-visuals">
-     <div class="prob-rows">
+    <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · pronóstico</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{forecastNote && <p class="chapter-note">{forecastNote}</p>}{(hasProbRows || duelAxes.length > 0) && (<div class="notes-visuals">
+      <div class="prob-rows">
       {cornersDuel && <ProbabilityBar title={storyTerm('cornersDuel').term} segments={[{label: teamShort(match.home), value: cornersDuel.home, tone: 'home'}, {label: 'Empate', value: cornersDuel.draw, tone: 'draw'}, {label: teamShort(match.away), value: cornersDuel.away, tone: 'away'}]}/>}
       {raceTargets.map(target => <ProbabilityBar title={`Primero a ${target} córners`} segments={[{label: teamShort(match.home), value: cornerRace[target].home, tone: 'home'}, {label: teamShort(match.away), value: cornerRace[target].away, tone: 'away'}]}/>)}
       {marginBands.length > 0 && <ProbabilityBar title={storyTerm('cornerMargin').term} segments={marginBands}/>}
       {cardsDuel && <ProbabilityBar title={storyTerm('cardsDuel').term} segments={[{label: teamShort(match.home), value: cardsDuel.home, tone: 'home'}, {label: 'Empate', value: cardsDuel.draw, tone: 'draw'}, {label: teamShort(match.away), value: cardsDuel.away, tone: 'away'}]}/>}
       {lastTrio && <ProbabilityBar title={storyTerm('lastGoalTeam').term} segments={[{label: teamShort(match.home), value: lastTrio.home, tone: 'home'}, {label: 'Se queda en cero', value: lastTrio.noGoal, tone: 'mute'}, {label: teamShort(match.away), value: lastTrio.away, tone: 'away'}]}/>}
-     </div>
-      <h3>Frente a frente</h3>
-      <RadarDuel axes={duelAxes} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} summary={`Dominancia esperada entre ${match.home} y ${match.away}: reparto de tiros a puerta, faltas, fueras de juego y posesión`}/>
-     </div><div class="notes-visuals">
-     {published && <span class="chapter-note">Evaluación histórica publicada sobre {evaluation.ensemble?.oneX2?.sampleSize ?? 0} partidos evaluados. No es una cuota ni un consejo de apuesta.</span>}
-    </div><a class="text-link" href="/metodologia/">Cómo se calcula y se evalúa <Icon size={18}/></a></section>
+      </div>
+       {duelAxes.length > 0 && <h3>Frente a frente</h3>}
+      {duelAxes.length > 0 && <RadarDuel axes={duelAxes} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} summary={`Dominancia esperada entre ${match.home} y ${match.away}: reparto de tiros a puerta, faltas, fueras de juego y posesión`}/>}
+      </div>)}{published && (<div class="notes-visuals">
+     <span class="chapter-note">Evaluación histórica publicada sobre {evaluation.ensemble?.oneX2?.sampleSize ?? 0} partidos evaluados. No es una cuota ni un consejo de apuesta.</span>
+        </div>)}<a class="text-link" href="/metodologia/">Cómo se calcula y se evalúa <Icon size={18}/></a></section>
   </div>
    <div class="story-stage"><div class="chapter-tabs" role="group" aria-label="Gráfico del análisis"><button data-stage="llegada" aria-pressed="true">Cómo llegan</button>{true && <button data-stage="resultado" aria-pressed="false">Quién se lo lleva</button>}{true && <button data-stage="goles" aria-pressed="false">Cuántos goles</button>}{true && <button data-stage="primer-gol" aria-pressed="false">El primer gol</button>}<button data-stage="veredicto" aria-pressed="false">El veredicto</button></div>
     <div class="stage-pane is-active" data-pane="llegada" aria-hidden="false">{hasRecent ? <FormStrip home={match.home} away={match.away} homeForm={homeRecent} awayForm={awayRecent} homeCrumbs={crumbsFor('home')} awayCrumbs={crumbsFor('away')}/> : <FormStrip home={match.home} away={match.away} homeForm={null} awayForm={null} homeCrumbs={crumbsFor('home')} awayCrumbs={crumbsFor('away')}/>}</div>
@@ -453,7 +458,7 @@ const crumbsFor = side => {
    <ReadingBlock entry={ai}/>
    {!hasReading && <ProviderAdvice provider={prov} afPrediction={afPred} home={match.home} away={match.away}/>}
     <AdSlot variant="rect" slotKey="partidoCierre"/>
-  <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} />
+  <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} afPrediction={afPred} />
 </main>
 <script>
  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction, mapAfOdds, fetchAfOdds, mapAfFixtureStatistics, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture } from '../src/lib/football.js';
+import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction, mapAfOdds, fetchAfOdds, mapAfFixtureStatistics, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, mapAfInjuries, fetchAfInjuries, mapAfSquad, fetchAfSquad } from '../src/lib/football.js';
 
 /** Minimal provider stubs matching the real response shapes of each endpoint. */
 const AF_FIXTURE = {
@@ -243,7 +243,7 @@ test('fetchAfFixtureStats y fetchAfFixturesByDate gastan una llamada y degradan 
     if (url.includes('/fixtures/statistics?fixture=7')) return new Response(JSON.stringify(AF_STATS), { status: 200 });
     if (url.includes('/fixtures?date=2026-06-01')) {
       return new Response(JSON.stringify({ response: [{
-        fixture: { id: 7 }, teams: { home: { name: 'Portugal' }, away: { name: 'Wales' } },
+        fixture: { id: 7 }, teams: { home: { id: 11, name: 'Portugal' }, away: { id: 22, name: 'Wales' } },
       }] }), { status: 200 });
     }
     return new Response('', { status: 404 });
@@ -252,7 +252,69 @@ test('fetchAfFixtureStats y fetchAfFixturesByDate gastan una llamada y degradan 
   assert.equal(stats.home.stats.shots, 14);
   const list = await fetchAfFixturesByDate('2026-06-01', { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl });
   assert.equal(list[0].fixtureId, 7);
+  assert.equal(list[0].homeId, 11);
+  assert.equal(list[0].awayId, 22);
   assert.equal(calls, 2);
   assert.equal(await fetchAfFixtureStats(7, { env: {}, paceMs: 0 }), null);
   assert.deepEqual(await fetchAfFixturesByDate('2026-06-01', { env: {}, paceMs: 0 }), []);
+});
+
+test('mapAfInjuries mapea bajas por fixture y descarta lo irreconocible', () => {
+  const mapped = mapAfInjuries({ response: [
+    { player: { id: 1, name: 'J. Lesionado', type: 'Injury', reason: 'Knee Injury' }, team: { id: 11, name: 'Portugal' }, fixture: { id: 7 } },
+    { player: { id: 2, name: 'S. Suspendido', type: 'Suspension', reason: 'Suspended 3 matches' }, team: { id: 22, name: 'Wales' }, fixture: { id: 7 } },
+    { player: { id: 3, name: null }, team: { id: 22, name: 'Wales' } },
+  ] });
+  assert.equal(mapped.length, 2);
+  assert.deepEqual(mapped[0], { player: 'J. Lesionado', team: 'Portugal', type: 'Injury', reason: 'Knee Injury' });
+  assert.equal(mapAfInjuries({ response: [] }), null);
+  assert.equal(mapAfInjuries(null), null);
+});
+
+test('fetchAfInjuries gasta una llamada y degrada a null sin clave, sin id o con error', async () => {
+  let calls = 0;
+  const mapped = await fetchAfInjuries(7, {
+    env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0,
+    fetchImpl: async url => {
+      calls += 1;
+      assert.ok(url.includes('/injuries?fixture=7'));
+      return new Response(JSON.stringify({ response: [
+        { player: { name: 'J. Lesionado', type: 'Injury', reason: 'Hamstring' }, team: { name: 'Portugal' } },
+      ] }), { status: 200 });
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(mapped[0].player, 'J. Lesionado');
+  assert.equal(await fetchAfInjuries(7, { env: {}, paceMs: 0 }), null);
+  assert.equal(await fetchAfInjuries(null, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0 }), null);
+  assert.equal(await fetchAfInjuries(7, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
+});
+
+test('mapAfSquad mapea el plantel registrado sin inventar ranking', () => {
+  const mapped = mapAfSquad({ response: [{ team: { id: 11, name: 'Portugal' }, players: [
+    { id: 1, name: 'Portero Uno', age: 30, number: 1, position: 'Goalkeeper', photo: 'https://x/1.png' },
+    { id: 2, name: 'Delantero Dos', age: 25, number: 9, position: 'Attacker', photo: 'https://x/2.png' },
+    { id: 3, name: null },
+  ] }] });
+  assert.equal(mapped.length, 2);
+  assert.deepEqual(mapped[0], { id: 1, name: 'Portero Uno', age: 30, number: 1, position: 'Goalkeeper', photo: 'https://x/1.png' });
+  assert.equal(mapAfSquad({ response: [] }), null);
+  assert.equal(mapAfSquad(null), null);
+});
+
+test('fetchAfSquad gasta una llamada y degrada a null sin clave, sin id o con error', async () => {
+  let calls = 0;
+  const mapped = await fetchAfSquad(11, {
+    env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0,
+    fetchImpl: async url => {
+      calls += 1;
+      assert.ok(url.includes('/players/squads?team=11'));
+      return new Response(JSON.stringify({ response: [{ players: [{ id: 1, name: 'Portero Uno', age: 30, number: 1, position: 'Goalkeeper' }] }] }), { status: 200 });
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(mapped[0].name, 'Portero Uno');
+  assert.equal(await fetchAfSquad(11, { env: {}, paceMs: 0 }), null);
+  assert.equal(await fetchAfSquad(null, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0 }), null);
+  assert.equal(await fetchAfSquad(11, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
 });

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sameTeam, enrichMatches, leagueNameMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast, mapPrediction } from '../src/lib/bzzoiro.js';
+import { sameTeam, enrichMatches, leagueNameMatches, mapBzzoiroStandings, mapLeaderboard, mapEventDetail, mapH2H, hasH2HHistory, mapTeamLast, fetchTeamLast, mapPrediction, isFriendlyEvent } from '../src/lib/bzzoiro.js';
 
 test('mapPrediction conserva los picks del modelo (recommendations) sin inventar lo ausente', () => {
   const mapped = mapPrediction({
@@ -183,6 +183,7 @@ test('mapTeamLast keeps finished matches strictly before the fixture, newest fir
   assert.deepEqual(last[0], {
     eventId: 3, date: '2026-09-13T18:45:00+00:00', home: 'Sassuolo', away: 'Juventus',
     homeTeamId: 61, awayTeamId: 73, homeScore: 3, awayScore: 2,
+    round: null, competition: null, friendly: false,
   });
   assert.deepEqual(mapTeamLast(rows, { before: '2026-09-01T00:00:00+00:00' }), []);
   assert.deepEqual(mapTeamLast(null), []);
@@ -202,4 +203,13 @@ test('fetchTeamLast queries finished events by team and maps them', async () => 
   assert.equal(last[0].away, 'Juventus');
   assert.equal(await fetchTeamLast(null, { env: { BZZOIRO_API_TOKEN: 't' }, fetchImpl }), null);
   assert.equal(await fetchTeamLast(73, { env: {}, fetchImpl }), null);
+});
+
+test('isFriendlyEvent marca amistosos y oficial por defecto', () => {
+  assert.equal(isFriendlyEvent({ round_name: 'International Friendly' }), true);
+  assert.equal(isFriendlyEvent({ competition: 'Amistoso Internacional' }), true);
+  assert.equal(isFriendlyEvent({ friendly: true }), true);
+  assert.equal(isFriendlyEvent({ round_name: 'Jornada 5' }), false);
+  assert.equal(isFriendlyEvent({}), false);
+  assert.equal(isFriendlyEvent(null), false);
 });
