@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { heroMatch, teamShort, priorityIndex } from '../src/lib/teams.js';
+import { heroMatch, teamShort, priorityIndex, nationsPriorityIndex } from '../src/lib/teams.js';
 
 const match = (id, home, away, kickoff, status = 'NS') => ({ id, home, away, kickoff, status });
 
@@ -11,6 +11,38 @@ test('heroMatch prefers the priority list over kickoff time', () => {
     match('top', 'Getafe', 'Real Madrid', '2026-09-14T23:00:00Z'),
   ]);
   assert.equal(hero.id, 'top');
+});
+
+test('heroMatch prefers nations ranking over earliest kickoff', () => {
+  const hero = heroMatch([
+    match('early', 'Andorra', 'Malta', '2026-09-24T16:00:00Z'),
+    match('late', 'Netherlands', 'Germany', '2026-09-24T18:45:00Z'),
+  ]);
+  assert.equal(hero.id, 'late');
+});
+
+test('heroMatch prefers England-Spain over Portugal-Wales', () => {
+  const hero = heroMatch([
+    match('por-wal', 'Portugal', 'Wales', '2026-09-24T18:45:00Z'),
+    match('eng-esp', 'England', 'Spain', '2026-09-26T18:45:00Z'),
+  ]);
+  assert.equal(hero.id, 'eng-esp');
+});
+
+test('heroMatch prefers clubs over nations', () => {
+  const hero = heroMatch([
+    match('por-wal', 'Portugal', 'Wales', '2026-09-24T18:45:00Z'),
+    match('eng-esp', 'England', 'Spain', '2026-09-26T18:45:00Z'),
+    match('bar-mal', 'Barcelona', 'Málaga', '2026-09-27T18:45:00Z'),
+  ]);
+  assert.equal(hero.id, 'bar-mal');
+});
+
+test('nationsPriorityIndex ranks top nations above minnows', () => {
+  assert.ok(nationsPriorityIndex('Spain') < nationsPriorityIndex('Portugal'));
+  assert.ok(nationsPriorityIndex('Portugal') < nationsPriorityIndex('Andorra'));
+  assert.equal(nationsPriorityIndex('Andorra'), nationsPriorityIndex('Malta'));
+  assert.equal(nationsPriorityIndex('Turkey'), nationsPriorityIndex('Türkiye'));
 });
 
 test('heroMatch breaks priority ties by earliest kickoff', () => {

@@ -1,0 +1,46 @@
+---
+/**
+ * Fallback de la SabidurIA: cuando el LLM no entregó lectura, se muestran
+ * las lecturas declaradas de los proveedores en español neutro. Siempre
+ * atribuido, nunca como recomendación de GoatLab. No se renderiza nada si
+ * ningún proveedor aporta dato usable.
+ */
+import { buildProviderAdvice } from '../lib/provider-advice.js';
+
+interface Props {
+  provider?: any;
+  afPrediction?: any;
+  home?: string;
+  away?: string;
+}
+
+const { provider = null, afPrediction = null, home = '', away = '' } = Astro.props;
+const advice = buildProviderAdvice({ provider, afPrediction, home, away });
+---
+{advice && <section class="reading" id="lectura-proveedores" data-reading>
+  <header class="reading-head">
+    <div class="reading-heading">
+      <h3>Lo que dicen los proveedores</h3>
+      <span class="outline-label">Lectura de proveedores</span>
+    </div>
+    <p class="reading-note">La interpretación de IA no estuvo disponible para este partido. Esto es lo que declaran los modelos de los proveedores, en lenguaje neutro y sin recomendaciones de GoatLab.</p>
+  </header>
+  <div class="reading-grid">
+    {advice.bz.length > 0 && <article class="reading-card">
+      <div class="reading-body">
+        <h4>Bzzoiro</h4>
+        <ul class="reading-points">
+          {advice.bz.map(line => <li><strong>{line.label}:</strong> {line.text}</li>)}
+        </ul>
+      </div>
+    </article>}
+    {advice.af.length > 0 && <article class="reading-card">
+      <div class="reading-body">
+        <h4>API-Football</h4>
+        <ul class="reading-points">
+          {advice.af.map(line => <li><strong>{line.label}:</strong> {line.text}</li>)}
+        </ul>
+      </div>
+    </article>}
+  </div>
+</section>}

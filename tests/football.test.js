@@ -81,3 +81,45 @@ test('fallback statuses are normalized to the API-Football vocabulary', async ()
   assert.equal(data.matches[0].status, 'FT');
   assert.equal(data.matches[1].status, 'LIVE');
 });
+test('Bzzoiro discovers nations/europa/libertadores past tomorrow in one range request', async () => {
+  const calls = [];
+  const events = [
+    { id: 212590, league_id: 64, home_team_id: 2212, home_team: 'Liechtenstein', away_team_id: 674, away_team: 'Lithuania', event_date: '2026-09-24T18:45:00+00:00', status: 'notstarted', round_label: 'Group 2 · Matchday 1', home_score: null, away_score: null, home_score_ht: null, away_score_ht: null },
+    { id: 999, league_id: 7, home_team_id: 1, home_team: 'Real Madrid', away_team_id: 2, away_team: 'Man City', event_date: '2026-09-24T19:00:00Z', status: 'notstarted' },
+  ];
+  const result = await getFixtures({ date: '2026-09-21', days: 7, now: '2026-09-21',
+    env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b', BZZOIRO_API_TOKEN: 'c' },
+    fetchImpl: async url => {
+      calls.push(url);
+      if (url.includes('api-sports')) return new Response('{"response":[]}');
+      if (url.includes('football-data')) return new Response('{"matches":[]}');
+      return new Response(JSON.stringify({ results: events }));
+    }, paceMs: 0 });
+  const bzCalls = calls.filter(url => url.includes('sports.bzzoiro.com'));
+  assert.equal(bzCalls.length, 1);
+  assert.equal(new URL(bzCalls[0]).searchParams.get('date_from'), '2026-09-23'); // complement only
+  assert.equal(new URL(bzCalls[0]).searchParams.get('date_to'), '2026-09-27');
+  const match = result.matches.find(entry => entry.id === 'bz-212590');
+  assert.ok(match);
+  assert.equal(match.competition, 'nations');
+  assert.equal(match.home, 'Liechtenstein'); assert.equal(match.away, 'Lithuania');
+  assert.equal(match.status, 'NS');
+  assert.equal(match.round, 'Group 2 · Matchday 1');
+  assert.equal(match.eventId, 212590);
+  assert.deepEqual(match.teamIds, { home: 2212, away: 674 });
+  assert.equal(match.events, null); // no invented metrics
+  assert.ok(!result.matches.some(entry => entry.id === 'bz-999')); // champions stays with FD
+  assert.ok(result.provider.includes('Bzzoiro'));
+});
+test('sin token Bzzoiro no hay descubrimiento ni llamadas extra', async () => {
+  const calls = [];
+  const result = await getFixtures({ date: '2026-09-21', days: 7, now: '2026-09-21',
+    env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b' },
+    fetchImpl: async url => {
+      calls.push(url);
+      if (url.includes('api-sports')) return new Response('{"response":[]}');
+      return new Response('{"matches":[]}');
+    }, paceMs: 0 });
+  assert.ok(calls.every(url => !url.includes('bzzoiro')));
+  assert.equal(result.provider, 'API-Football + Football-Data.org');
+});

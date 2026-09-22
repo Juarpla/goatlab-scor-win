@@ -25,8 +25,8 @@ export const providers = {
   // baseUrl admite override opcional (MISTRAL_BASE_URL) para servir modelos
   // de la misma firma OpenAI a través de otra pasarela.
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'mistral-small-latest', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
-  WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/meta/llama-3.1-8b-instruct', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
-  OPENCODE_GO: { name: 'OpenCode Go', keyVar: 'OPENCODE_GO_API_KEY', defaultModel: 'glm-5.3-flash', requires: [], baseUrl: () => 'https://opencode.ai/zen/go/v1', extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }) },
+  WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
+  OPENCODE_GO: { name: 'OpenCode Go', keyVar: 'OPENCODE_GO_API_KEY', defaultModel: 'deepseek-v4-flash', requires: [], baseUrl: () => 'https://opencode.ai/zen/go/v1', extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }) },
 };
 export function resolveChain(env = runtimeEnv(), logger = console) {
   const order = env.LLM_PROVIDER_ORDER ?? 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL';
@@ -42,7 +42,7 @@ export function resolveChain(env = runtimeEnv(), logger = console) {
     return [{ ...provider, id, model: env[`${id}_MODEL`]?.trim() || provider.defaultModel }];
   });
 }
-export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 60_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
+export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 120_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
   let res;
   try {
     res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {

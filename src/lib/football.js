@@ -1,10 +1,13 @@
 /** Common fixture boundary. Provider IDs are namespaced; absent metrics remain null. */
 import { sameClub, normalize } from './teams.js';
+import { listEvents } from './bzzoiro.js';
 import { fairProbs } from './odds.js';
 import { leagues, leagueByProviderId, providerLeagueId } from './leagues.js';
 
 /** Vista de conveniencia del catálogo único (`public/data/leagues.json`). */
 export const competitions = Object.values(leagues).map(({ id, name, providers }) => ({ id, name, api: providers.api, fd: providers.fd }));
+/** Leagues the FD free plan does not serve; Bzzoiro discovers them past tomorrow. */
+const BZ_DISCOVERY = new Set(['nations', 'europa', 'libertadores']);
 /** Statuses that mean the match is played and its final score is authoritative. */
 export const FINISHED_STATUSES = new Set(['FT', 'AET', 'PEN']);
 /**
@@ -62,12 +65,16 @@ export function mergeFixtures(previous, fresh, replacedDates = []) {
   return merged.sort(byKickoff);
 }
 /**
- * The fixture window. Two free providers, one boundary:
+ * The fixture window. Three free providers, one boundary:
  * - API-Football is fresher (minute-by-minute score) but its free plan only
  *   serves yesterday..tomorrow; it is authoritative for those dates.
  * - Football-Data.org serves any date range in one request and fills the rest
  *   of the window. When API-Football already covers the whole window, it is
  *   not called at all.
+ * - Bzzoiro discovers the leagues the FD free plan does not serve (nations,
+ *   europa, libertadores) on the days API-Football cannot reach, in a single
+ *   range request. Events arrive with canonical team ids, so enrichment pairs
+ *   them without name guessing.
  */
 export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500, now = new Date() }) {
   const dates = dateWindow(date, days);
@@ -139,6 +146,31 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
       matches = afDone ? mergeFixtures(matches, fdMatches) : fdMatches;
       provider = provider ? 'API-Football + Football-Data.org' : 'Football-Data.org';
     } catch (error) { errors.push(`Football-Data.org: ${error.message}`); }
+  }
+  if (env.BZZOIRO_API_TOKEN && complement.length) {
+    try {
+      const events = await listEvents({ dateFrom: complement[0], dateTo: complement[complement.length - 1], env, fetchImpl });
+      const BZ_STATUS = { notstarted: 'NS', finished: 'FT' };
+      const discovered = events.flatMap(event => {
+        const league = leagueByProviderId('bzzoiro', event?.league_id);
+        if (!league || !BZ_DISCOVERY.has(league.id) || !event?.home_team || !event?.away_team || !event?.event_date) return [];
+        return [{
+          id: `bz-${event.id}`, providerId: event.id, competition: league.id,
+          home: event.home_team, away: event.away_team, kickoff: event.event_date,
+          status: BZ_STATUS[event.status] ?? 'NS', minute: null,
+          homeScore: event.home_score ?? null, awayScore: event.away_score ?? null,
+          halfTime: event.home_score_ht != null && event.away_score_ht != null ? { home: event.home_score_ht, away: event.away_score_ht } : null,
+          round: event.round_label ?? null,
+          venue: null, venueCity: null,
+          events: null, statistics: null,
+          eventId: event.id, teamIds: { home: event.home_team_id ?? null, away: event.away_team_id ?? null },
+        }];
+      });
+      if (discovered.length) {
+        matches = mergeFixtures(matches, discovered);
+        provider = provider ? `${provider} + Bzzoiro` : 'Bzzoiro';
+      }
+    } catch (error) { errors.push(`Bzzoiro: ${error.message}`); }
   }
   if (!provider) {
     errors.forEach(error => logger.warn(error));
@@ -365,5 +397,111 @@ export async function fetchAfOdds(fixtureId, { env = {}, fetchImpl = fetch, pace
   try {
     const data = await pacedRequest(`https://v3.football.api-sports.io/odds?fixture=${encodeURIComponent(fixtureId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
     return mapAfOdds(data);
+  } catch { return null; }
+}
+
+/* ---- Estadísticas por equipo de API-Football (relleno de la tabla de esperados) ---- */
+
+const AF_STAT_TYPES = {
+  'Ball Possession': 'possession',
+  'Total Shots': 'shots',
+  'Shots on Goal': 'shotsOnTarget',
+  'Corner Kicks': 'corners',
+  'Fouls': 'fouls',
+  'Yellow Cards': 'yellowCards',
+  'Red Cards': 'redCards',
+  'Offsides': 'offsides',
+};
+const afStatNumber = (type, value) => {
+  if (value == null || value === '-') return null;
+  if (type === 'Ball Possession') {
+    const match = String(value).match(/(\d+(?:\.\d+)?)\s*%/);
+    return match ? Number(match[1]) : null;
+  }
+  const number = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(number) && number >= 0 ? number : null;
+};
+
+/**
+ * Payload de `/fixtures/statistics?fixture=` → bolsas por equipo con las
+ * claves de STAT_METRICS (sin xG: AF no publica goles esperados). Null
+ * honesto si ningún lado trae nada reconocible.
+ */
+export function mapAfFixtureStatistics(data) {
+  const rows = Array.isArray(data?.response) ? data.response : null;
+  if (!rows?.length) return null;
+  const bag = entry => {
+    const out = {};
+    for (const stat of entry?.statistics ?? []) {
+      const key = AF_STAT_TYPES[stat?.type];
+      if (!key || out[key] != null) continue;
+      out[key] = afStatNumber(stat.type, stat.value);
+    }
+    return out;
+  };
+  const sides = rows.slice(0, 2).map(entry => ({ team: entry?.team?.name ?? null, stats: bag(entry) }));
+  if (!sides.some(side => Object.values(side.stats).some(value => value != null))) return null;
+  return { home: sides[0], away: sides[1], source: 'API-Football' };
+}
+
+/** 1 request por fixture; sin id o sin clave responde null sin llamar. */
+export async function fetchAfFixtureStats(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${encodeURIComponent(fixtureId)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    return mapAfFixtureStatistics(data);
+  } catch { return null; }
+}
+
+/**
+ * `fixtures?date=` normalizado para emparejar recientes Bzzoiro con su
+ * fixture AF (1 request por fecha; el pipeline lo cachea por día).
+ */
+export async function fetchAfFixturesByDate(date, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (!date || !env.API_FOOTBALL_KEY) return [];
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/fixtures?date=${encodeURIComponent(date)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    if (!Array.isArray(data?.response)) return [];
+    return data.response
+      .map(item => ({ fixtureId: item?.fixture?.id ?? null, home: item?.teams?.home?.name ?? null, away: item?.teams?.away?.name ?? null, date }))
+      .filter(row => row.fixtureId != null && row.home && row.away);
+  } catch { return []; }
+}
+
+/** Gemelo AF de un reciente Bzzoiro por nombres tolerantes; null sin pareja honesta. */
+export function findAfFixture(list, home, away) {
+  return (list ?? []).find(row => sameClub(row.home, home) && sameClub(row.away, away)) ?? null;
+}
+
+/* ---- Goleadores de API-Football (fallback Nivel 3, tras flag AF_TOPSCORERS) ---- */
+
+/**
+ * Payload de `/players/topscorers?league=&season=` → filas `{player, team,
+ * value, matches}` compatibles con `scorerShares`. Null honesto si no hay
+ * nada reconocible. Contrato a verificar con clave en mano (plan free).
+ */
+export function mapAfTopScorers(data, { limit = 50 } = {}) {
+  const rows = Array.isArray(data?.response) ? data.response : null;
+  if (!rows?.length) return null;
+  const mapped = rows.map(entry => {
+    const stats = Array.isArray(entry?.statistics) ? entry.statistics[0] : null;
+    return {
+      player: entry?.player?.name ?? null,
+      team: stats?.team?.name ?? null,
+      value: stats?.goals?.total ?? null,
+      matches: stats?.games?.appearences ?? stats?.games?.played ?? null,
+    };
+  }).filter(row => row.player && row.team && Number.isFinite(row.value) && row.value > 0)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, Math.max(1, limit));
+  return mapped.length ? mapped : null;
+}
+
+/** 1 request por liga/temporada; sin clave responde null sin llamar. */
+export async function fetchAfTopScorers(leagueId, season, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
+  if (leagueId == null || season == null || !env.API_FOOTBALL_KEY) return null;
+  try {
+    const data = await pacedRequest(`https://v3.football.api-sports.io/players/topscorers?league=${encodeURIComponent(leagueId)}&season=${encodeURIComponent(season)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
+    return mapAfTopScorers(data);
   } catch { return null; }
 }

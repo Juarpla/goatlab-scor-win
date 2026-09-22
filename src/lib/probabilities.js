@@ -164,6 +164,47 @@ export function blendLambdas(poisson, xg) {
 }
 
 /**
+ * Bloque de goleadores reutilizable: del leaderboard (o su fallback) a
+ * mercados por equipo. Devuelve `{ scorers, hasScorers }`; null-honesto
+ * cuando no hay filas ni lambdas para repartir.
+ */
+export function buildScorerMarkets({ match, scorers = null, standings = null, raceLambdas = null, lambdaTotal = null } = {}) {
+  const empty = { scorers: { home: null, away: null }, hasScorers: false };
+  if (!match?.home || !match?.away || !raceLambdas || !lambdaTotal) return empty;
+  const leagueScorers = scorers?.scorers ?? null;
+  const homeStandings = standingsRow(standings, match.competition, match.home);
+  const awayStandings = standingsRow(standings, match.competition, match.away);
+  const homeShares = scorerShares(leagueScorers, match.home, homeStandings?.goalsFor ?? null);
+  const awayShares = scorerShares(leagueScorers, match.away, awayStandings?.goalsFor ?? null);
+  const markets = {
+    home: scorerMarkets(homeShares, raceLambdas.home, lambdaTotal),
+    away: scorerMarkets(awayShares, raceLambdas.away, lambdaTotal),
+  };
+  return { scorers: markets, hasScorers: Boolean(markets.home?.length || markets.away?.length) };
+}
+
+/**
+ * Fusiona el leaderboard de la liga con el fallback por plantilla: el
+ * leaderboard manda por equipo; solo los equipos sin filas toman las del
+ * fallback (plantilla Bzzoiro / topscorers AF). Nunca mezcla ambos para el
+ * mismo equipo.
+ */
+export function mergeScorerFallback(base, fallback) {
+  const baseRows = base?.scorers ?? [];
+  const fallbackRows = fallback?.scorers ?? [];
+  if (!fallbackRows.length) return base;
+  const covered = new Set(baseRows.map(row => normalize(row.team)));
+  const extra = fallbackRows.filter(row => row?.team && !covered.has(normalize(row.team)));
+  if (!extra.length) return base;
+  return { ...base, scorers: [...baseRows, ...extra], fallbackSource: fallback.provider ?? 'Bzzoiro-squad' };
+}
+
+/** Aplica `mergeScorerFallback` por competición; sin fallback devuelve la base intacta. */
+export function withScorerFallback(scorersBase = {}, scorerFallback = {}) {
+  const comps = new Set([...Object.keys(scorersBase ?? {}), ...Object.keys(scorerFallback ?? {})]);
+  return Object.fromEntries([...comps].map(comp => [comp, mergeScorerFallback(scorersBase?.[comp] ?? null, scorerFallback?.[comp] ?? null)]));
+}
+/**
  * Mercados completos de un encuentro a partir de los datos ya horneados.
  * Cada grupo declara `enough` para que la interfaz omita lo débil.
  * Null-honesto: sin 3 resultados previos por lado no hay Poisson local.
@@ -179,15 +220,7 @@ export function computeMatchMarkets({ match, results = [], scorers = null, stand
   const lambdasBlend = blendLambdas(lambdas, xg);
   const raceLambdas = lambdasBlend ?? lambdas;
   const race = firstGoalRace(raceLambdas.home, raceLambdas.away);
-  const leagueScorers = scorers?.scorers ?? null;
-  const homeStandings = standingsRow(standings, match.competition, match.home);
-  const awayStandings = standingsRow(standings, match.competition, match.away);
-  const homeShares = scorerShares(leagueScorers, match.home, homeStandings?.goalsFor ?? null);
-  const awayShares = scorerShares(leagueScorers, match.away, awayStandings?.goalsFor ?? null);
-  const scorersMarkets = {
-    home: scorerMarkets(homeShares, raceLambdas.home, race?.lambdaTotal),
-    away: scorerMarkets(awayShares, raceLambdas.away, race?.lambdaTotal),
-  };
+  const { scorers: scorersMarkets, hasScorers } = buildScorerMarkets({ match, scorers, standings, raceLambdas, lambdaTotal: race?.lambdaTotal });
   return {
     method: lambdasBlend ? 'poisson-blend-v1' : 'poisson-dixoncoles-v1',
     lambdas,
@@ -197,11 +230,12 @@ export function computeMatchMarkets({ match, results = [], scorers = null, stand
     markets,
     firstGoal: race,
     scorers: scorersMarkets,
+    scorerSource: hasScorers ? (scorers?.fallbackSource ? `fallback-${scorers.fallbackSource}` : 'leaderboard') : null,
     sample: {
       home: teamRates(results, match.home)?.played ?? 0,
       away: teamRates(results, match.away)?.played ?? 0,
     },
-    hasScorers: Boolean(scorersMarkets.home?.length || scorersMarkets.away?.length),
+    hasScorers,
   };
 }
 
@@ -224,7 +258,9 @@ export function resolveLambdas({ match, results = [] } = {}) {
   return { ...LEAGUE_AVG_LAMBDA, source: 'Media-liga' };
 }
 
-/** Mismo cálculo que computeMatchMarkets pero con λ de la cascada: nunca null por falta de muestra. */
+/** Mismo cálculo que computeMatchMarkets pero con λ de la cascada: nunca null por falta de muestra.
+ *  Los goleadores también se intentan (leaderboard o su fallback por plantilla);
+ *  sin filas, la vista cae al reparto por equipo (Nivel 4, Poisson local). */
 export function resolveMatchMarkets({ match, results = [], scorers = null, standings = null } = {}) {
   const direct = computeMatchMarkets({ match, results, scorers, standings });
   if (direct) return direct;
@@ -234,15 +270,22 @@ export function resolveMatchMarkets({ match, results = [], scorers = null, stand
   const markets = matrixMarkets(matrix);
   const race = firstGoalRace(lambdas.home, lambdas.away);
   if (!markets || !race) return null;
+  const { scorers: scorersMarkets, hasScorers } = buildScorerMarkets({
+    match, scorers, standings,
+    raceLambdas: { home: lambdas.home, away: lambdas.away },
+    lambdaTotal: race.lambdaTotal,
+  });
   return {
     method: lambdas.source === 'Poisson' ? 'poisson-dixoncoles-v1' : 'poisson-fallback-v1',
     lambdas: { home: lambdas.home, away: lambdas.away },
     lambdaSource: lambdas.source,
+    firstGoalSource: lambdas.source === 'Poisson' ? 'Poisson' : lambdas.source === 'Bzzoiro-xG' ? 'Bzzoiro-xG' : 'Media-liga',
     markets,
     firstGoal: race,
-    scorers: { home: null, away: null },
+    scorers: scorersMarkets,
+    scorerSource: hasScorers ? (scorers?.fallbackSource ? `fallback-${scorers.fallbackSource}` : 'leaderboard') : null,
     sample: { home: 0, away: 0 },
-    hasScorers: false,
+    hasScorers,
   };
 }
 

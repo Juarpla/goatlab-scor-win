@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction, mapAfOdds, fetchAfOdds } from '../src/lib/football.js';
+import { getFixtures, getStandings, getScorers, fuseScorers, mapProviderPrediction, fetchProviderPrediction, mapAfOdds, fetchAfOdds, mapAfFixtureStatistics, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture } from '../src/lib/football.js';
 
 /** Minimal provider stubs matching the real response shapes of each endpoint. */
 const AF_FIXTURE = {
@@ -195,4 +195,64 @@ test('fetchAfOdds gasta una llamada y degrada a null sin clave, sin id o con err
   assert.equal(await fetchAfOdds(1570400, { env: {}, paceMs: 0 }), null);
   assert.equal(await fetchAfOdds(null, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0 }), null);
   assert.equal(await fetchAfOdds(1570400, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
+});
+
+/** Estadísticas AF por equipo: tipos a claves del acta, posesión en % y '-' como null. */
+const AF_STATS_SIDE = (team, stats) => ({ team: { name: team }, statistics: stats });
+const stat = (type, value) => ({ type, value });
+const AF_STATS = { response: [
+  AF_STATS_SIDE('Portugal', [
+    stat('Ball Possession', '57%'), stat('Total Shots', 14), stat('Shots on Goal', 5),
+    stat('Corner Kicks', 6), stat('Fouls', 10), stat('Yellow Cards', 2),
+    stat('Red Cards', '-'), stat('Offsides', null), stat('Shots off Goal', 9),
+  ]),
+  AF_STATS_SIDE('Wales', [
+    stat('Ball Possession', '43%'), stat('Total Shots', 9), stat('Shots on Goal', 3),
+    stat('Corner Kicks', 4), stat('Fouls', 12), stat('Yellow Cards', 1),
+    stat('Red Cards', 0), stat('Offsides', 1), stat('Goalkeeper Saves', 4),
+  ]),
+] };
+
+test('mapAfFixtureStatistics traduce tipos AF a claves del acta (sin xG)', () => {
+  const mapped = mapAfFixtureStatistics(AF_STATS);
+  assert.equal(mapped.source, 'API-Football');
+  assert.equal(mapped.home.team, 'Portugal');
+  assert.deepEqual(mapped.home.stats, {
+    possession: 57, shots: 14, shotsOnTarget: 5, corners: 6,
+    fouls: 10, yellowCards: 2, redCards: null, offsides: null,
+  });
+  assert.equal(mapped.away.stats.possession, 43);
+  assert.equal(mapped.away.stats.redCards, 0);
+  assert.equal(mapped.home.stats.xg, undefined);
+  assert.equal(mapAfFixtureStatistics({ response: [] }), null);
+  assert.equal(mapAfFixtureStatistics(null), null);
+  assert.equal(mapAfFixtureStatistics({ response: [{ team: { name: 'X' }, statistics: [{ type: 'Shots off Goal', value: 3 }] }] }), null);
+});
+
+test('findAfFixture empareja por nombres tolerantes', () => {
+  const list = [{ fixtureId: 7, home: 'Portugal', away: 'Wales', date: '2026-06-01' }];
+  assert.equal(findAfFixture(list, 'portugal', 'wales').fixtureId, 7);
+  assert.equal(findAfFixture(list, 'Portugal', 'Spain'), null);
+  assert.equal(findAfFixture([], 'Portugal', 'Wales'), null);
+});
+
+test('fetchAfFixtureStats y fetchAfFixturesByDate gastan una llamada y degradan sin clave', async () => {
+  let calls = 0;
+  const fetchImpl = async url => {
+    calls += 1;
+    if (url.includes('/fixtures/statistics?fixture=7')) return new Response(JSON.stringify(AF_STATS), { status: 200 });
+    if (url.includes('/fixtures?date=2026-06-01')) {
+      return new Response(JSON.stringify({ response: [{
+        fixture: { id: 7 }, teams: { home: { name: 'Portugal' }, away: { name: 'Wales' } },
+      }] }), { status: 200 });
+    }
+    return new Response('', { status: 404 });
+  };
+  const stats = await fetchAfFixtureStats(7, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl });
+  assert.equal(stats.home.stats.shots, 14);
+  const list = await fetchAfFixturesByDate('2026-06-01', { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl });
+  assert.equal(list[0].fixtureId, 7);
+  assert.equal(calls, 2);
+  assert.equal(await fetchAfFixtureStats(7, { env: {}, paceMs: 0 }), null);
+  assert.deepEqual(await fetchAfFixturesByDate('2026-06-01', { env: {}, paceMs: 0 }), []);
 });

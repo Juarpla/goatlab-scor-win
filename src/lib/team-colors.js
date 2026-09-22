@@ -121,6 +121,14 @@ const COLORS = {
   ajax: { primary: '#d2122e', secondary: '#ffffff' },
   psv: { primary: '#ed1c24', secondary: '#f5f6f7' },
   galatasaray: { primary: '#fdb912', secondary: '#a32638' },
+  // Selecciones UEFA Nations League (estimación visual de la primera equipación)
+  spain: { primary: '#c60b1e', secondary: '#ffc400' },
+  england: { primary: '#f5f6f7', secondary: '#00247d' },
+  france: { primary: '#002395', secondary: '#ffffff' },
+  portugal: { primary: '#da291c', secondary: '#046a38' },
+  germany: { primary: '#f5f6f7', secondary: '#231f20' },
+  netherlands: { primary: '#ff5a00', secondary: '#21468b' },
+  italy: { primary: '#0064aa', secondary: '#ffffff' },
   // Europa: resto de Champions y ligas (claves cortas + alias de proveedor)
   '1899 hoffenheim': { primary: '#1c63b7', secondary: '#ffffff' },
   'tsg hoffenheim': { primary: '#1c63b7', secondary: '#ffffff' },

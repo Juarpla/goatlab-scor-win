@@ -5,6 +5,9 @@
  * de cada equipo sale de su promedio propio + lo que el rival concede,
  * encogido a la media de la competición con muestra corta. Sin muestra
  * suficiente la métrica queda en null y la vista la omite: nunca se inventa.
+ * `forecastStatsFull` es la variante de tabla siempre llena: misma fórmula con
+ * mínimo de 1 partido, relleno AF por métrica y media como sostén; la columna
+ * xG se ancla al xG del modelo Bzzoiro.
  * Las comparativas (duelos 1X2, último gol, carrera a córners, margen) se
  * derivan de los mismos ritmos con Poisson independiente.
  */
@@ -15,6 +18,10 @@ export const STAT_METRICS = ['possession', 'shots', 'shotsOnTarget', 'xg', 'corn
 const COUNT_METRICS = STAT_METRICS.filter(metric => metric !== 'possession');
 /** Techo honesto por métrica: fuera de rango es error de datos, no récord. */
 const MAX_VALUE = { shots: 40, shotsOnTarget: 20, xg: 8, corners: 25, fouls: 30, yellowCards: 8, redCards: 2, offsides: 10 };
+/** Amarillas esperadas que disparan el criterio disciplinario (ver abajo). */
+const MANY_YELLOWS = 3.5;
+/** Suelo de rojas cuando aplica el criterio: al menos una. */
+const RED_FLOOR = 1;
 
 const round2 = value => Math.round(value * 100) / 100;
 const round3 = value => Math.round(value * 1000) / 1000;
@@ -115,6 +122,161 @@ export function forecastStats(history, home, away, { competition = null, count =
     coverage,
     league: Object.fromEntries(STAT_METRICS.map(metric => [metric, league[metric] == null ? null : round2(league[metric])])),
     source: 'GoatLab',
+  };
+}
+
+/* ---- Cascada siempre-llena (Bzzoiro → AF → media) ---- */
+
+const clampMetric = (metric, value) => {
+  if (value == null) return null;
+  return Math.min(MAX_VALUE[metric] ?? Infinity, Math.max(0, value));
+};
+
+/** Promedio de bolsas AF propias (`bag` o lista de bolsas); null sin dato. */
+function afAverage(bags, metric) {
+  if (bags == null) return null;
+  const list = Array.isArray(bags) ? bags : [bags];
+  const values = list.map(bag => bag?.[metric]).filter(value => typeof value === 'number' && Number.isFinite(value));
+  if (!values.length) return null;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+/**
+ * Pronóstico de las 9 métricas con cascada por celda para tabla siempre llena:
+ * 1) ritmos Bzzoiro (propio + lo que concede el rival, desde 1 partido,
+ * encogido fuerte a la media); 2) promedio AF del equipo mezclado con la
+ * media; 3) media de la competición y luego global.
+ * `providerXg` ancla la columna xG al xG del modelo Bzzoiro para no
+ * contradecir su resultado esperado. Coherencia mínima: a puerta ≤ tiros;
+ * con muchas amarillas (≥3.5) y sin dato de rojas de ningún proveedor,
+ * al menos una roja. Cada celda declara su procedencia en `sources` (`Bzzoiro`|`AF`|`media`);
+ * `shortSample` avisa muestra corta o relleno. Null entero solo en vacío
+ * total (sin filas, sin AF y sin medias): nunca se inventa de la nada.
+ */
+export function forecastStatsFull(history, home, away, { extraRows = [], af = null, providerXg = null, competition = null, count = 10, shrink = 6 } = {}) {
+  const seen = new Set();
+  const pool = [...(extraRows ?? []), ...(history ?? [])].filter(row => {
+    if (!row?.statistics) return false;
+    const key = row.eventId ?? `${row.date}|${row.home}|${row.away}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  const homeRows = teamStatRows(pool, home, count);
+  const awayRows = teamStatRows(pool, away, count);
+  const league = {};
+  for (const metric of STAT_METRICS) league[metric] = leagueAverage(pool, competition, metric) ?? leagueAverage(pool, null, metric);
+  const origins = new Set();
+  const sources = { home: {}, away: {} };
+  const takeCount = (side, team, teamRows, oppRows, metric) => {
+    const value = forecastCount({
+      ownRows: ownValues(teamRows, team, metric),
+      oppRows: concededValues(oppRows, team === home ? away : home, metric),
+      leagueAvg: league[metric], min: 1, shrink, max: MAX_VALUE[metric] ?? Infinity,
+    });
+    if (value != null) { sources[side][metric] = 'Bzzoiro'; origins.add('Bzzoiro'); return value; }
+    const afAvg = afAverage(af?.[side], metric);
+    if (afAvg != null) {
+      const blended = league[metric] != null ? (afAvg + league[metric]) / 2 : afAvg;
+      sources[side][metric] = 'AF'; origins.add('AF');
+      return round2(clampMetric(metric, blended));
+    }
+    if (league[metric] != null) { sources[side][metric] = 'media'; origins.add('media'); return round2(league[metric]); }
+    sources[side][metric] = null;
+    return null;
+  };
+  const possessionOf = (side, team, teamRows) => {
+    const own = ownValues(teamRows, team, 'possession');
+    const afAvg = afAverage(af?.[side], 'possession');
+    const all = afAvg != null ? [...own, afAvg] : own;
+    if (!all.length) return null;
+    const base = league.possession ?? 50;
+    const weight = all.length / (all.length + shrink);
+    return { value: weight * mean(all) + (1 - weight) * base, fromAf: !own.length };
+  };
+  const homePoss = possessionOf('home', home, homeRows);
+  const awayPoss = possessionOf('away', away, awayRows);
+  const homeOut = {}, awayOut = {};
+  for (const metric of COUNT_METRICS) {
+    homeOut[metric] = takeCount('home', home, homeRows, awayRows, metric);
+    awayOut[metric] = takeCount('away', away, awayRows, homeRows, metric);
+  }
+  if (homePoss && awayPoss && homePoss.value + awayPoss.value > 0) {
+    homeOut.possession = round2(Math.min(95, Math.max(5, (homePoss.value / (homePoss.value + awayPoss.value)) * 100)));
+    awayOut.possession = round2(Math.min(95, Math.max(5, (awayPoss.value / (homePoss.value + awayPoss.value)) * 100)));
+    sources.home.possession = homePoss.fromAf ? 'AF' : 'Bzzoiro';
+    sources.away.possession = awayPoss.fromAf ? 'AF' : 'Bzzoiro';
+    origins.add(homePoss.fromAf || awayPoss.fromAf ? 'AF' : 'Bzzoiro');
+  } else if (homePoss || awayPoss) {
+    const known = homePoss ?? awayPoss;
+    const knownSide = homePoss ? 'home' : 'away';
+    const otherSide = homePoss ? 'away' : 'home';
+    const kept = round2(Math.min(95, Math.max(5, known.value)));
+    if (knownSide === 'home') { homeOut.possession = kept; awayOut.possession = round2(100 - kept); }
+    else { awayOut.possession = kept; homeOut.possession = round2(100 - kept); }
+    sources[knownSide].possession = known.fromAf ? 'AF' : 'Bzzoiro';
+    sources[otherSide].possession = 'media';
+    origins.add(known.fromAf ? 'AF' : 'Bzzoiro');
+    origins.add('media');
+  } else if (league.possession != null) {
+    homeOut.possession = round2(league.possession);
+    awayOut.possession = round2(100 - league.possession);
+    sources.home.possession = 'media';
+    sources.away.possession = 'media';
+    origins.add('media');
+  } else {
+    homeOut.possession = null;
+    awayOut.possession = null;
+    sources.home.possession = null;
+    sources.away.possession = null;
+  }
+  // Ancla xG al modelo del proveedor cuando lo trae (coherencia con su esperado).
+  let xgSource = null;
+  for (const [side, out] of [['home', homeOut], ['away', awayOut]]) {
+    const anchored = providerXg?.[side];
+    if (typeof anchored === 'number' && Number.isFinite(anchored) && anchored > 0) {
+      out.xg = round2(clampMetric('xg', anchored));
+      sources[side].xg = 'Bzzoiro';
+      xgSource = 'Bzzoiro';
+    }
+  }
+  if (!xgSource) xgSource = sources.home.xg === sources.away.xg ? sources.home.xg : [sources.home.xg, sources.away.xg].filter(Boolean).join('+') || null;
+  // Coherencia mínima: los tiros a puerta no superan los tiros.
+  for (const out of [homeOut, awayOut]) {
+    if (out.shotsOnTarget != null && out.shots != null) out.shotsOnTarget = Math.min(out.shotsOnTarget, out.shots);
+  }
+  // Criterio disciplinario: muchas amarillas esperadas sin dato de rojas
+  // (ni Bzzoiro ni AF) → al menos una (segunda amarilla): la media subestima
+  // esos casos. Nunca pisa una medición real de ningún proveedor.
+  for (const [side, out] of [['home', homeOut], ['away', awayOut]]) {
+    if (afAverage(af?.[side], 'redCards') != null) continue;
+    if (sources[side].redCards === 'Bzzoiro') continue;
+    if (out.yellowCards != null && out.yellowCards >= MANY_YELLOWS) {
+      out.redCards = Math.max(out.redCards ?? 0, RED_FLOOR);
+      sources[side].redCards = 'regla';
+      origins.add('regla');
+    }
+  }
+  const cells = [...Object.values(homeOut), ...Object.values(awayOut)];
+  if (!cells.length || cells.every(value => value == null)) return null;
+  const coverage = {};
+  for (const [key, team, teamRows] of [['home', home, homeRows], ['away', away, awayRows]]) {
+    coverage[key] = {};
+    for (const metric of STAT_METRICS) coverage[key][metric] = ownValues(teamRows, team, metric).length;
+  }
+  const shortSample = homeRows.length < 3 || awayRows.length < 3
+    || STAT_METRICS.some(metric => sources.home[metric] !== 'Bzzoiro' || sources.away[metric] !== 'Bzzoiro');
+  return {
+    method: 'stats-ratings-v2',
+    home: homeOut, away: awayOut,
+    sample: { home: homeRows.length, away: awayRows.length },
+    coverage,
+    league: Object.fromEntries(STAT_METRICS.map(metric => [metric, league[metric] == null ? null : round2(league[metric])])),
+    sources,
+    origins: [...origins],
+    xgSource,
+    shortSample,
+    source: origins.size === 1 ? [...origins][0] : [...origins].join('+') || null,
   };
 }
 

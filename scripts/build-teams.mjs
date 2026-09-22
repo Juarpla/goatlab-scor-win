@@ -12,9 +12,12 @@
  *   respuestas traen teams.home/away.id reales; `bridged:false`).
  *
  * La lista la manda Bzzoiro 2026 (alcance: solo vigentes). Los ids AF/FD se
- * emparejan por nombre tolerante (sameClub/sameTeam); sin pareja honesta el
- * campo queda null, nunca se inventa. Los slugs congelados (`frozen:true`)
- * se conservan entre corridas.
+ * emparejan por nombre: primero igualdad exacta, luego tolerante
+ * (sameClub/sameTeam) con desambiguación — un candidato tolerante cuyo
+ * nombre es el nombre exacto de OTRA fila Bzzoiro de la liga (p. ej.
+ * "Northern Ireland" frente a "Ireland") no puentea ids; sin pareja
+ * honesta el campo queda null, nunca se inventa. Los slugs congelados
+ * (`frozen:true`) se conservan entre corridas.
  *
  * Uso: node --env-file=.env scripts/build-teams.mjs
  */
@@ -45,11 +48,15 @@ export function slugify(name) {
   return normalize(name).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'equipo';
 }
 
-function matchIn(name, candidates) {
+export function matchIn(name, candidates, claimed = null) {
   const sameLeague = candidates.filter(c => c.league === name.league);
   const pools = name.league ? [sameLeague, candidates] : [candidates];
   for (const pool of pools) {
-    const hit = pool.find(c => sameClub(c.name, name.name) || sameTeam(c.name, name.name));
+    const exact = pool.find(c => normalize(c.name) === normalize(name.name));
+    if (exact) return exact;
+    // El puente tolerante no roba nombres exactos de otra fila de la liga.
+    const hit = pool.find(c => (sameClub(c.name, name.name) || sameTeam(c.name, name.name))
+      && !(claimed?.has(`${name.league}|${normalize(c.name)}`) && normalize(c.name) !== normalize(name.name)));
     if (hit) return hit;
   }
   return null;
@@ -77,6 +84,9 @@ async function main() {
     }
   }
   if (!bzRows.length) throw new Error('Sin filas Bzzoiro; revisa BZZOIRO_API_TOKEN');
+  // Nombres exactos por liga según Bzzoiro: el puente tolerante no puede
+  // reclamar el de otra fila (Irlanda frente a Irlanda del Norte).
+  const claimed = new Set(bzRows.map(row => `${row.league}|${normalize(row.name)}`));
 
   // API-Football: roster 2024 + cosecha 2026 via fixtures?date= (team ids reales).
   const afRoster = [];
@@ -172,15 +182,14 @@ async function main() {
     // Cosecha 2026 solo misma liga y primero igualdad exacta: el pool global
     // trae todo el mundo (p. ej. "Barcelona SC") y el match tolerante morderia.
     const harvestPool = [...afHarvest.values()].filter(h => h.league === bz.league);
-    const harvest = harvestPool.find(h => normalize(h.name) === normalize(bz.name))
-      ?? harvestPool.find(h => sameClub(h.name, bz.name) || sameTeam(h.name, bz.name));
-    const roster = harvest ?? matchIn({ league: bz.league, name: bz.name }, afRoster);
+    const harvest = matchIn({ league: bz.league, name: bz.name }, harvestPool, claimed);
+    const roster = harvest ?? matchIn({ league: bz.league, name: bz.name }, afRoster, claimed);
     if (roster && entry.af == null) {
       entry.af = { id: roster.id, season: roster.season, bridged: roster.bridged };
       addAlias(roster.name);
       if (roster.code) addAlias(roster.code);
     }
-    const fd = matchIn({ league: bz.league, name: bz.name }, fdRows);
+    const fd = matchIn({ league: bz.league, name: bz.name }, fdRows, claimed);
     if (fd && entry.fd == null) {
       entry.fd = { id: fd.id };
       addAlias(fd.name);
@@ -205,4 +214,4 @@ async function main() {
   }
 }
 
-await main();
+if (process.argv[1]?.endsWith('build-teams.mjs')) await main();

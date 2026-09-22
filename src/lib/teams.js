@@ -2,8 +2,11 @@
  * Team helpers: hero priority for the front page and short labels for charts.
  * Priority order decided in planning: Barcelona, Real Madrid, PSG, the six
  * traditional English clubs, everyone else; ties broken by earliest kickoff.
+ * Parón de selecciones: cuando no hay clubes prioritarios, manda el ranking
+ * de selecciones (España, Inglaterra, Francia… primero) antes que el kickoff.
  */
 const PRIORITY_TEAMS = ['Barcelona', 'Real Madrid', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Manchester City', 'Manchester United', 'Chelsea', 'Tottenham'];
+const NATIONS_PRIORITY = ['Spain', 'England', 'France', 'Portugal', 'Germany', 'Netherlands', 'Italy', 'Belgium', 'Croatia', 'Denmark', 'Norway', 'Türkiye', 'Switzerland', 'Austria', 'Serbia', 'Sweden', 'Poland', 'Wales', 'Scotland', 'Greece', 'Ukraine', 'Hungary', 'Czechia'];
 const FINISHED = new Set(['FT', 'AET', 'PEN']);
 const SHORTS = {
   barcelona: 'BAR', 'real madrid': 'RMA', 'paris saint germain': 'PSG', arsenal: 'ARS', liverpool: 'LIV',
@@ -123,21 +126,39 @@ export function priorityIndex(name) {
   const index = PRIORITY_TEAMS.findIndex(team => normalize(team) === key);
   return index === -1 ? PRIORITY_TEAMS.length : index;
 }
+/** Ranking de selecciones para el hero en parón internacional. No rankeadas = al fondo. */
+export function nationsPriorityIndex(name) {
+  let key = normalize(name);
+  if (key === 'turkey') key = 'turkiye';
+  if (key === 'czech republic') key = 'czechia';
+  const index = NATIONS_PRIORITY.findIndex(team => normalize(team) === key);
+  return index === -1 ? NATIONS_PRIORITY.length : index;
+}
 /**
  * The featured match, scored in layers (acordado en planificación):
- * la lista de prioridades manda como base (×100); encima van dos bonus —
- * ambos equipos prioritarios (+10) y proximidad del kickoff (el más
- * temprano gana el desempate, con paso pequeño para no pisar los bonus).
+ * la lista de clubes manda primero (×100); si no hay ningún club
+ * prioritario, manda el ranking de selecciones (×100) en vez del kickoff.
+ * En ambos casos: ambos equipos rankeados (+10) y proximidad del kickoff
+ * (el más temprano gana el desempate, con paso pequeño para no pisar bonus).
  * Los partidos terminados quedan fuera. Determinista: no usa el reloj.
  */
 export function heroMatch(matches) {
   const candidates = (matches ?? []).filter(match => !FINISHED.has(match.status));
   if (!candidates.length) return null;
+  const hasClub = candidates.some(match => priorityIndex(match.home) < PRIORITY_TEAMS.length || priorityIndex(match.away) < PRIORITY_TEAMS.length);
   const score = match => {
-    const home = priorityIndex(match.home);
-    const away = priorityIndex(match.away);
-    const base = (PRIORITY_TEAMS.length - Math.min(home, away)) * 100;
-    const bothPriority = home < PRIORITY_TEAMS.length && away < PRIORITY_TEAMS.length ? 10 : 0;
+    if (hasClub) {
+      const home = priorityIndex(match.home);
+      const away = priorityIndex(match.away);
+      const base = (PRIORITY_TEAMS.length - Math.min(home, away)) * 100;
+      const bothPriority = home < PRIORITY_TEAMS.length && away < PRIORITY_TEAMS.length ? 10 : 0;
+      const proximity = -Date.parse(match.kickoff) / 1e11;
+      return base + bothPriority + proximity;
+    }
+    const home = nationsPriorityIndex(match.home);
+    const away = nationsPriorityIndex(match.away);
+    const base = (NATIONS_PRIORITY.length - Math.min(home, away)) * 100;
+    const bothPriority = home < NATIONS_PRIORITY.length && away < NATIONS_PRIORITY.length ? 10 : 0;
     const proximity = -Date.parse(match.kickoff) / 1e11;
     return base + bothPriority + proximity;
   };

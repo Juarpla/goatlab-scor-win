@@ -28,7 +28,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
     </div>
     <div class="pitch-score" aria-live="polite">
       <span>{teamShort(match.home)}</span>
-      <strong data-live-score class={match.homeScore == null ? 'is-waiting' : ''}>{match.homeScore ?? '—'} – {match.awayScore ?? '—'}</strong>
+      <strong data-live-score class={match.homeScore == null ? 'is-waiting' : ''}>{match.homeScore == null || match.awayScore == null ? (match.status === 'NS' ? 'Por disputarse' : '— – —') : `${match.homeScore} – ${match.awayScore}`}</strong>
       <span>{teamShort(match.away)}</span>
     </div>
   </header>
@@ -77,28 +77,41 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
       {finished && <button class="pitch-replay" type="button" data-replay>Repetir el recorrido</button>}
     </div>
   </div>
-  <div class="pitch-side">
-    <h3>Durante el partido</h3>
-    {events?.length ? (
-      <table class="data-table pitch-events">
-        <caption class="sr-only">Eventos del partido en orden cronológico</caption>
-        <thead><tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr></thead>
-        <tbody data-live-events>
-          {events.map(event => (
-            <tr>
-              <td>{event.minute ?? '—'}′</td>
-              <td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? match.home : match.away}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td>
-              <td>{event.score ? `${event.score.home}–${event.score.away}` : '—'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    ) : (
-      <div class="timeline-empty" data-live-events>
-        <h3>Seguimiento en espera</h3>
-        <p>Aquí aparecerán el marcador y los eventos reales que entregue la fuente, con su hora de consulta. Mientras tanto, la cancha queda quieta.</p>
+  <div class="pitch-side" data-timeline-block>
+    <div class="pitch-side-head">
+      <h3>Durante el partido</h3>
+      {events?.length ? (
+        <span class="pitch-count" data-timeline-count>{events.length} {events.length === 1 ? 'hecho' : 'hechos'} · hasta {Math.max(...events.map(event => event.minute ?? 0))}′</span>
+      ) : (
+        <span class="pitch-count" data-timeline-count>Sin hechos aún</span>
+      )}
+    </div>
+    <div class="pitch-timeline" data-timeline tabindex="0" role="region" aria-label="Minuto a minuto: usa las flechas para recorrer los hechos">
+      <div class="pitch-timeline-inner">
+        <span class="pitch-rail" aria-hidden="true"></span>
+        {events?.length ? (
+          <table class="data-table pitch-events">
+            <caption class="sr-only">Eventos del partido en orden cronológico</caption>
+            <thead><tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr></thead>
+            <tbody data-live-events>
+              {events.map(event => (
+                <tr data-type={event.type} data-minute={event.minute ?? ''} data-card={event.type === 'card' ? (isRed(event) ? 'red' : 'yellow') : undefined}>
+                  <td>{event.minute ?? '—'}′</td>
+                  <td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? match.home : match.away}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td>
+                  <td>{event.score ? `${event.score.home}–${event.score.away}` : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div class="timeline-empty" data-live-events>
+            <h3>Seguimiento en espera</h3>
+            <p>Aquí aparecerán el marcador y los eventos reales que entregue la fuente, con su hora de consulta. Mientras tanto, la cancha queda quieta.</p>
+          </div>
+        )}
       </div>
-    )}
+    </div>
+    <button class="pitch-last" type="button" data-timeline-last hidden>Ir al último hecho</button>
   </div>
 </section>
 
@@ -128,6 +141,41 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
   const stateNode = root.querySelector<HTMLElement>('[data-live-state]');
   const eventsNode = root.querySelector<HTMLElement>('[data-live-events]');
   const replayButton = root.querySelector<HTMLButtonElement>('[data-replay]');
+  const timelineBlock = root.querySelector<HTMLElement>('[data-timeline-block]');
+  const timeline = root.querySelector<HTMLElement>('[data-timeline]');
+  const countNode = root.querySelector<HTMLElement>('[data-timeline-count]');
+  const lastButton = root.querySelector<HTMLButtonElement>('[data-timeline-last]');
+  const stage = root.querySelector<HTMLElement>('.pitch-stage');
+
+  const eventKey = (event: LiveEvent) => `${event.minute ?? '—'}|${event.type}|${event.team ?? ''}|${event.player ?? ''}|${event.playerOut ?? ''}`;
+  const isNearBottom = () => {
+   if (!timeline) return true;
+   return timeline.scrollHeight - timeline.scrollTop - timeline.clientHeight < 48;
+  };
+
+  const updateChrome = () => {
+   if (!timeline || !timelineBlock) return;
+   const range = timeline.scrollHeight - timeline.clientHeight;
+   const progress = range > 0 ? Math.min(1, Math.max(0, timeline.scrollTop / range)) : 0;
+   timelineBlock.style.setProperty('--scroll-p', String(progress));
+   timelineBlock.classList.toggle('is-top', timeline.scrollTop <= 4);
+   timelineBlock.classList.toggle('is-bottom', range <= 4 || timeline.scrollTop >= range - 4);
+   if (lastButton) lastButton.hidden = range <= 4 || isNearBottom();
+  };
+
+  const syncHeight = () => {
+   if (!timelineBlock || !stage) return;
+   if (window.innerWidth <= 1150) { timelineBlock.style.maxHeight = ''; return; }
+   const height = stage.offsetHeight;
+   if (height > 320) timelineBlock.style.maxHeight = `${height}px`;
+  };
+
+  const updateCount = () => {
+   if (!countNode) return;
+   if (!events.length) { countNode.textContent = 'Sin hechos aún'; return; }
+   const top = Math.max(...events.map(event => event.minute ?? 0));
+   countNode.textContent = `${events.length} ${events.length === 1 ? 'hecho' : 'hechos'} · hasta ${top}′`;
+  };
 
   let beats: Beat[] = JSON.parse(root.dataset.beats || '[]');
   let events: LiveEvent[] = beats.filter((beat: Beat) => beat.event).map((beat: Beat) => beat.event!);
@@ -177,36 +225,59 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
    }
   };
 
-  const renderEvents = () => {
-   if (!eventsNode) return;
-   if (!events.length) return;
+  const buildRow = (event: LiveEvent) => {
    const labels: Record<string, string> = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
+   const row = document.createElement('tr');
+   row.setAttribute('data-type', event.type);
+   row.setAttribute('data-minute', String(event.minute ?? ''));
+   if (event.type === 'card') {
+    const red = /roja|second yellow/i.test(event.detail ?? '');
+    row.setAttribute('data-card', red ? 'red' : 'yellow');
+   }
+   const minute = document.createElement('td');
+   minute.textContent = `${event.minute ?? '—'}′`;
+   const detail = document.createElement('td');
+   const strong = document.createElement('strong');
+   strong.textContent = labels[event.type] ?? event.type;
+   detail.append(strong);
+   if (event.team) detail.append(document.createTextNode(` · ${event.team === 'home' ? root.dataset.home : root.dataset.away}`));
+   if (event.player) detail.append(document.createTextNode(` — ${event.player}`));
+   if (event.playerOut) detail.append(document.createTextNode(` (salió ${event.playerOut})`));
+   if (event.detail) { detail.append(document.createElement('br')); const small = document.createElement('small'); small.textContent = event.detail; detail.append(small); }
+   detail.className = 'pitch-event-cell';
+   const score = document.createElement('td');
+   score.textContent = event.score ? `${event.score.home}–${event.score.away}` : '—';
+   row.append(minute, detail, score);
+   return row;
+  };
+
+  const renderEvents = (scrollToGoal = false) => {
+   const inner = timeline?.querySelector('.pitch-timeline-inner');
+   if (!inner) return;
+   const previous = inner.querySelector('table');
    const table = document.createElement('table');
    table.className = 'data-table pitch-events';
    const head = document.createElement('thead');
    head.innerHTML = '<tr><th>Minuto</th><th>Evento</th><th>Marcador</th></tr>';
    const body = document.createElement('tbody');
-   for (const event of events) {
-    const row = document.createElement('tr');
-    const minute = document.createElement('td');
-    minute.textContent = `${event.minute ?? '—'}′`;
-    const detail = document.createElement('td');
-    const strong = document.createElement('strong');
-    strong.textContent = labels[event.type] ?? event.type;
-    detail.append(strong);
-    if (event.team) detail.append(document.createTextNode(` · ${event.team === 'home' ? root.dataset.home : root.dataset.away}`));
-    if (event.player) detail.append(document.createTextNode(` — ${event.player}`));
-    if (event.playerOut) detail.append(document.createTextNode(` (salió ${event.playerOut})`));
-    if (event.detail) { detail.append(document.createElement('br')); const small = document.createElement('small'); small.textContent = event.detail; detail.append(small); }
-    detail.className = 'pitch-event-cell';
-    const score = document.createElement('td');
-    score.textContent = event.score ? `${event.score.home}–${event.score.away}` : '—';
-    row.append(minute, detail, score);
-    body.append(row);
-   }
+   body.setAttribute('data-live-events', '');
+   for (const event of events) body.append(buildRow(event));
    table.append(head, body);
-   // El nodo servidor puede ser el <tbody> de la tabla o el bloque vacío: se reemplaza la pieza completa.
-   (eventsNode.closest('table') ?? eventsNode).replaceWith(table);
+   (previous ?? inner.querySelector('[data-live-events]'))?.replaceWith(table);
+   updateCount();
+   syncHeight();
+   updateChrome();
+   if (scrollToGoal && timeline) {
+    const goals = [...body.querySelectorAll<HTMLElement>('tr[data-type="goal"]')];
+    const target = goals[goals.length - 1] ?? body.lastElementChild;
+    if (target instanceof HTMLElement) {
+     target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+     if (target instanceof HTMLTableRowElement) {
+      target.classList.add('is-fresh');
+      window.setTimeout(() => target.classList.remove('is-fresh'), 1800);
+     }
+    }
+   }
   };
 
   const applyPayload = (payload: { homeScore?: number | null; awayScore?: number | null; events?: LiveEvent[] }) => {
@@ -217,10 +288,12 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
    if (Array.isArray(payload?.events) && payload.events.length) {
     const next = payload.events;
     if (JSON.stringify(next) !== JSON.stringify(events)) {
+     const previousKeys = new Set(events.map(eventKey));
+     const hasNewGoal = next.some(event => event.type === 'goal' && !previousKeys.has(eventKey(event)));
      events = next;
      beats = buildBeats(matchId, events);
      renderMarks();
-     renderEvents();
+     renderEvents(hasNewGoal);
     }
    }
   };
@@ -244,6 +317,31 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
    if (minute == null) { clockNode.textContent = 'El recorrido comienza cuando ruede el balón.'; return; }
    clockNode.textContent = minute >= 95 ? 'Final del recorrido ilustrativo.' : `Minuto ${Math.floor(Math.min(90, minute))} est. · animación ilustrativa`;
   };
+
+  // Timeline contenida: altura sincronizada a la cancha, progreso y atajos.
+  updateCount();
+  syncHeight();
+  updateChrome();
+  let scrollQueued = false;
+  timeline?.addEventListener('scroll', () => {
+   if (scrollQueued) return;
+   scrollQueued = true;
+   requestAnimationFrame(() => { scrollQueued = false; updateChrome(); });
+  }, { passive: true });
+  lastButton?.addEventListener('click', () => {
+   timeline?.scrollTo({ top: timeline.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
+  });
+  let resizeQueued = false;
+  window.addEventListener('resize', () => {
+   if (resizeQueued) return;
+   resizeQueued = true;
+   requestAnimationFrame(() => { resizeQueued = false; syncHeight(); updateChrome(); });
+  }, { passive: true });
+  if ('ResizeObserver' in window && stage) {
+   const observer = new ResizeObserver(() => { syncHeight(); updateChrome(); });
+   observer.observe(stage);
+  }
+  window.addEventListener('load', () => { syncHeight(); updateChrome(); });
 
   if (reduced) {
    // Movimiento reducido: eventos y marcador presentes, balón quieto en el centro.

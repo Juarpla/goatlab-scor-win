@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import {
   resolveCanonical, providerTeamId, webSlug, webMatchId, slugify,
 } from '../src/lib/teams.js';
+import { matchIn } from '../scripts/build-teams.mjs';
 
 const catalog = JSON.parse(await readFile(new URL('../public/data/teams.json', import.meta.url), 'utf8')).teams;
 
@@ -46,4 +47,26 @@ test('ninguna entrada conserva fixture IDs contaminados', () => {
       if (id != null) assert.ok(id < 30000, `${slug}.${provider}=${id} parece fixture ID`);
     }
   }
+});
+
+test('matchIn no puentea ids entre Irlanda e Irlanda del Norte', () => {
+  const roster = [
+    { league: 'nations', name: 'Northern Ireland', id: 771 },
+    { league: 'nations', name: 'Rep. Of Ireland', id: 776 },
+  ];
+  const claimed = new Set(['nations|ireland', 'nations|northern ireland']);
+  assert.equal(matchIn({ league: 'nations', name: 'Northern Ireland' }, roster, claimed)?.id, 771);
+  // "Ireland" empareja tolerante con "Rep. Of Ireland" (776), nunca con
+  // "Northern Ireland" (771): ese nombre es de otra fila de la liga.
+  assert.equal(matchIn({ league: 'nations', name: 'Ireland' }, roster, claimed)?.id, 776);
+});
+
+test('Irlanda e Irlanda del Norte quedan en entradas separadas con su AF', () => {
+  const ireland = catalog.ireland;
+  const northern = catalog['northern-ireland'];
+  assert.equal(ireland?.bzzoiro?.id, 729);
+  assert.equal(northern?.bzzoiro?.id, 728);
+  assert.equal(ireland?.af?.id, 776);
+  assert.equal(northern?.af?.id, 771);
+  assert.ok(!(ireland?.aliases ?? []).some(a => /northern/i.test(a)));
 });

@@ -652,3 +652,35 @@ export async function fetchLeaderboard(leagueId, stat, { env = {}, fetchImpl = f
     return mapLeaderboard(data, limit);
   } catch (error) { logger.warn(`Goleadores Bzzoiro (${leagueId}/${stat}): ${error.message}`); return null; }
 }
+
+/* ---- Fallback de goleadores por plantilla (Nivel 2) ---- */
+
+/**
+ * Plantilla de un equipo → filas de goleadores `{player, team, value, matches}`.
+ * Acepta varias formas de payload (`squad`, `players` o arreglo plano) y de
+ * conteo de goles; sin goles por jugador devuelve null honesto (nunca inventa).
+ */
+export function mapSquadScorers(data, { team = null, limit = 5 } = {}) {
+  const rows = Array.isArray(data) ? data : Array.isArray(data?.squad) ? data.squad : Array.isArray(data?.players) ? data.players : null;
+  if (!rows?.length) return null;
+  const goalsOf = row => row?.goals ?? row?.goals_scored ?? row?.scored ?? row?.season_goals ?? null;
+  const mapped = rows
+    .map(row => ({
+      player: row?.name ?? row?.player_name ?? null,
+      team: team ?? row?.team_name ?? row?.team ?? null,
+      value: goalsOf(row),
+      matches: row?.matches ?? row?.appearances ?? row?.played ?? null,
+    }))
+    .filter(row => row.player && row.team && Number.isFinite(row.value) && row.value > 0)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, Math.max(1, limit));
+  return mapped.length ? mapped : null;
+}
+
+/** 1 request por equipo; sin id o sin clave responde null sin llamar. */
+export async function fetchTeamSquad(teamId, { env = {}, fetchImpl = fetch } = {}) {
+  if (teamId == null || !env.BZZOIRO_API_TOKEN) return null;
+  try {
+    return await request(`${BASE}/teams/${encodeURIComponent(teamId)}/squad/`, env.BZZOIRO_API_TOKEN, fetchImpl);
+  } catch { return null; }
+}

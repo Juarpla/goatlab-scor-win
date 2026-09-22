@@ -6,6 +6,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import TeamJersey from '../../components/TeamJersey.astro';
 import PitchScene from '../../components/PitchScene.astro';
 import ReadingBlock from '../../components/ReadingBlock.astro';
+import ProviderAdvice from '../../components/ProviderAdvice.astro';
 import ProbabilityBar from '../../components/ProbabilityBar.astro';
 import ExtraMarkets from '../../components/ExtraMarkets.astro';
 import WaffleResult from '../../components/WaffleResult.astro';
@@ -15,6 +16,7 @@ import ScorePodium from '../../components/ScorePodium.astro';
 import RadarDuel from '../../components/RadarDuel.astro';
 import TrendsStrip from '../../components/TrendsStrip.astro';
 import { storyTerm } from '../../lib/story-dictionary.js';
+import { normalizeReading } from '../../lib/reading.js';
 import { findAnalysis } from '../../lib/analysis.js';
 import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
 import { teamShort, teamCompact } from '../../lib/teams.js';
@@ -59,6 +61,9 @@ const events = match.events;
 const finished = FINISHED_STATUSES.has(match.status);
 const statusLabel = finished ? 'Finalizado' : match.status === 'NS' ? 'Programado' : 'En juego';
 const ai = findAnalysis(analyses as Record<string, {summary:unknown;limitations:unknown}>, match)?.entry;
+/* Sin lectura LLM (fallo de proveedores o presupuesto), la vista cae al
+   fallback de proveedores; `normalizeReading` decide lo mostrable. */
+const hasReading = Boolean(normalizeReading(ai));
 const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
 /* Tabla del pronóstico: valores esperados con coma latina; lo nulo se pinta '—'. */
 const count1 = v => v == null ? '—' : Number(v).toFixed(1).replace('.', ',');
@@ -169,6 +174,14 @@ const scorerUnified = scorerSplit?.rows ?? [];
 const scorerLeftover = scorerSplit?.leftover ?? null;
 const scorerMissingSide = hasScorerData && (!scorerRows.home?.length || !scorerRows.away?.length)
   ? (!scorerRows.home?.length ? match.home : match.away) : null;
+/* Nivel 4 (Poisson local): sin nombres por equipo, el reparto va por equipos
+   con la misma λ de la carrera; nunca se inventan goleadores. */
+const teamSplit = !scorerUnified.length && race && (race.firstHome + race.firstAway) > 0
+  ? [
+      { side: 'home', name: match.home, split: race.firstHome / (race.firstHome + race.firstAway) },
+      { side: 'away', name: match.away, split: race.firstAway / (race.firstHome + race.firstAway) },
+    ].sort((a, b) => b.split - a.split)
+  : null;
 /* Cuántos goles con Bzzoiro al frente, AF odds en medio y Poisson al
    cierre; ningún peldaño queda vacío mientras haya cálculo propio. */
 const round3 = (value: number) => Math.round(value * 1000) / 1000;
@@ -209,6 +222,19 @@ const dominance = probability?.dominance ?? null;
 const hasForecast = Boolean(forecast && (forecast.home || forecast.away));
 const forecastFallback = !hasForecast && lambdas ? { home: { corners: null, shots: null, shotsOnTarget: null, xg: lambdas.home, yellowCards: null }, away: { corners: null, shots: null, shotsOnTarget: null, xg: lambdas.away, yellowCards: null } } : null;
 const forecastTable = forecast ?? forecastFallback;
+/* Procedencia de la tabla: Bzzoiro manda, AF rellena huecos, la media sostiene el resto. */
+const forecastBits: string[] = [];
+if (forecast) {
+  const origins = Array.isArray((forecast as any).origins) ? (forecast as any).origins : [];
+  if (origins.includes('Bzzoiro')) forecastBits.push('ritmos Bzzoiro por equipo');
+  if (origins.includes('AF')) forecastBits.push('huecos con API-Football');
+  if (origins.includes('media')) forecastBits.push('resto con media de la competición');
+  if (origins.includes('regla')) forecastBits.push('roja por muchas amarillas');
+  if ((forecast as any).xgSource === 'Bzzoiro') forecastBits.push('xG del modelo Bzzoiro');
+}
+const forecastNote = forecastBits.length
+  ? `${forecastBits.join(' · ')}.${(forecast as any)?.shortSample ? ' Muestra corta: el cálculo se ancla a la media.' : ''}`
+  : null;
 const statEval = evaluation?.stats?.metrics ?? {};
 const statOk = (key: string) => statEval[key]?.published === true;
 const cornersOk = hasForecast && statOk('corners');
@@ -289,7 +315,7 @@ const crumbsFor = side => {
   <section class="real-data"><div class="encounter">
    <h2>El encuentro</h2>
    <p><time datetime={match.kickoff}>{new Date(match.kickoff).toLocaleString('es-PE',{timeZone:'America/Lima'})}</time> (Lima)</p>
-   <p class={`encounter-score${match.homeScore == null ? ' is-waiting' : ''}`}>{match.homeScore ?? '—'} – {match.awayScore ?? '—'}</p>
+    <p class={`encounter-score${match.homeScore == null ? ' is-waiting' : ''}`}>{match.homeScore == null || match.awayScore == null ? (match.status === 'NS' ? 'Por disputarse' : '— – —') : `${match.homeScore} – ${match.awayScore}`}</p>
    <div class="encounter-venue">
     <figure class="venue-zoom">
      <div class="venue-frame">
@@ -336,7 +362,7 @@ const crumbsFor = side => {
       </ul>}
       <ExtraMarkets discipline={probability?.discipline} setPieces={probability?.setPieces} weatherVenue={probability?.weatherVenue} availability={probability?.availability} />
      </div></section>}
-    {true && <section class="story-chapter" id="primer-gol" data-chapter="primer-gol"><h2>El primer gol.<br/>Cuándo cae y quién lo mete.</h2><p>La espera del primer gol, tramo a tramo, y el reparto entre los 5 favoritos a abrirlo.</p><div class="notes-visuals">
+    {true && <section class="story-chapter" id="primer-gol" data-chapter="primer-gol"><h2>El primer gol.<br/>Cuándo cae y quién lo mete.</h2><p>{scorerUnified.length > 0 ? 'La espera del primer gol, tramo a tramo, y el reparto entre los 5 favoritos a abrirlo.' : 'La espera del primer gol, tramo a tramo, y qué equipo la abre según el cálculo local.'}</p><div class="notes-visuals">
       {scorerUnified.length > 0 && <div class="prob-scorers is-unified">
        <div class="scorer-column is-ranking">
         <h4>{storyTerm('firstScorer').term} · los 5 favoritos</h4>
@@ -351,8 +377,22 @@ const crumbsFor = side => {
         <p class="scorer-note">Si el primer gol lo hace uno de estos cinco, así se reparten las chances.{scorerLeftover != null && scorerLeftover > 0.005 ? ` Fuera de esta fila queda un ${pct(scorerLeftover)} (se queda en cero + resto de plantilla).` : ''}{scorerMissingSide ? ` Sin dato de goleadores de ${scorerMissingSide} por ahora.` : ''}</p>
        </div>
        </div>}
+      {scorerUnified.length === 0 && teamSplit && <div class="prob-scorers is-unified">
+       <div class="scorer-column is-ranking">
+        <h4>{storyTerm('firstScorer').term} · por equipo</h4>
+        <ol>{teamSplit.map((row: any, index: number) => <li data-side={row.side}>
+         <span class="scorer-rank" aria-hidden="true">{index + 1}</span>
+         <span class="scorer-name">{row.name} <em>{row.side === 'home' ? 'Local' : 'Visitante'}</em></span>
+         <span class="scorer-bar" style={`--share:${Math.round(row.split * 1000) / 10}%`} aria-hidden="true"></span>
+         <strong>{pct(row.split)}</strong>
+         <small>cálculo local · Poisson</small>
+        </li>)}
+        </ol>
+        <p class="scorer-note">Sin dato de goleadores por equipo por ahora: el cálculo local reparte la apertura entre los dos equipos con la misma Poisson del partido.</p>
+       </div>
+       </div>}
       </div></section>}
-    <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · pronóstico</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table><div class="notes-visuals">
+    <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>El veredicto.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · pronóstico</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{forecastNote && <p class="chapter-note">{forecastNote}</p>}<div class="notes-visuals">
      <div class="prob-rows">
       {cornersDuel && <ProbabilityBar title={storyTerm('cornersDuel').term} segments={[{label: teamShort(match.home), value: cornersDuel.home, tone: 'home'}, {label: 'Empate', value: cornersDuel.draw, tone: 'draw'}, {label: teamShort(match.away), value: cornersDuel.away, tone: 'away'}]}/>}
       {raceTargets.map(target => <ProbabilityBar title={`Primero a ${target} córners`} segments={[{label: teamShort(match.home), value: cornerRace[target].home, tone: 'home'}, {label: teamShort(match.away), value: cornerRace[target].away, tone: 'away'}]}/>)}
@@ -411,6 +451,7 @@ const crumbsFor = side => {
   <PitchScene match={match} events={events}/>
   <AdSlot variant="horizontal" slotKey="partidoCancha"/>
    <ReadingBlock entry={ai}/>
+   {!hasReading && <ProviderAdvice provider={prov} afPrediction={afPred} home={match.home} away={match.away}/>}
     <AdSlot variant="rect" slotKey="partidoCierre"/>
   <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} />
 </main>

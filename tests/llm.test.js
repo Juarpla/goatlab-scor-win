@@ -35,7 +35,7 @@ test('el proveedor que revive corta la cadena y reporta su modelo', async () => 
     ? new Response('', { status: 500 })
     : response('{"ok":true}'), validate: extractJson });
   assert.equal(result.provider, 'OPENCODE_GO');
-  assert.equal(result.model, 'glm-5.3-flash');
+  assert.equal(result.model, 'deepseek-v4-flash');
 });
 test('thinking, nested data, arrays and braces in strings parse correctly', () => {
   assert.deepEqual(extractJson('<think>{ignore}</think>```json\n{"items":[{"label":"a } b"}]}\n```'), { items: [{ label: 'a } b' }] });

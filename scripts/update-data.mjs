@@ -1,10 +1,10 @@
 import { writeFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction, fetchAfOdds } from '../src/lib/football.js';
+import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture } from '../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
   fetchEventPlayerStats, fetchEventPrediction, fetchEventOdds, fetchEventBroadcasts, fetchEventSocial, fetchEventReferee, fetchTeamLast, collectTeamIds, resolveLeagues,
-  fetchBzzoiroStandings, fetchLeaderboard, sameTeam,
+  fetchBzzoiroStandings, fetchLeaderboard, fetchTeamSquad, mapSquadScorers, sameTeam,
 } from '../src/lib/bzzoiro.js';
 import { locateMatch } from '../src/lib/venues.js';
 import { fetchKickoffWeather } from '../src/lib/weather.js';
@@ -12,11 +12,11 @@ import { normalize, resolveCanonical, webMatchId, canonicalClubKey, sameClub } f
 import { mapMarketProbs } from '../src/lib/odds.js';
 import { withFailover, extractJson, hasTransportFailure } from '../src/lib/llm.js';
 import { adoptAnalyses, findAnalysis } from '../src/lib/analysis.js';
-import { mergeResolvedLeagues } from '../src/lib/leagues.js';
+import { mergeResolvedLeagues, providerLeagueId } from '../src/lib/leagues.js';
 import { toCompactInput } from '../src/lib/compact.js';
 import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../src/lib/predictions.js';
-import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability, marketsFromXg } from '../src/lib/probabilities.js';
-import { forecastStats, forecastDominance } from '../src/lib/stats-forecast.js';
+import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability, marketsFromXg, withScorerFallback } from '../src/lib/probabilities.js';
+import { forecastStatsFull, forecastDominance } from '../src/lib/stats-forecast.js';
 
 const today = new Date().toISOString().slice(0, 10);
 const refresh = process.argv.includes('--refresh');
@@ -151,7 +151,7 @@ const PROB_DIR = 'public/match-probabilities';
  * se nutren en cada corrida: eco donde hay dato, stub null-honesto donde no.
  * `afPrediction` y `provider.recommendations` quedan además para auditoría y dataset.
  */
-async function updateMatchProbabilities(matches, { results = [], scorers = null, standings = null, analyses = null, weather = null, history = null } = {}) {
+async function updateMatchProbabilities(matches, { results = [], scorers = null, standings = null, analyses = null, weather = null, history = null, teamCtx = null } = {}) {
   await mkdir(PROB_DIR, { recursive: true });
   const now = new Date().toISOString();
   const keep = new Set(matches.map(match => match.id));
@@ -164,8 +164,12 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
     const markets = resolveMatchMarkets({ match, results, scorers: scorers?.[match.competition] ?? null, standings });
     const entry = analyses?.[match.id] ?? null;
     const historyRows = Array.isArray(history) ? history : (history?.rows ?? []);
-    /* Pronóstico de estadísticas + duelos: ritmos propios con ajuste rival; null-honesto sin muestra. */
-    const statsForecast = forecastStats(historyRows, match.home, match.away, { competition: match.competition });
+    /* Pronóstico de estadísticas + duelos: cascada Bzzoiro → AF → media con xG del proveedor como ancla. */
+    const teamExtra = teamCtx?.get(match.id) ?? null;
+    const statsForecast = forecastStatsFull(historyRows, match.home, match.away, {
+      extraRows: teamExtra?.rows ?? [], af: teamExtra?.af ?? null,
+      providerXg: match.modelPrediction?.xg ?? null, competition: match.competition,
+    });
     const dominance = forecastDominance({
       corners: statsForecast?.home?.corners != null && statsForecast?.away?.corners != null
         ? { home: statsForecast.home.corners, away: statsForecast.away.corners } : null,
@@ -189,7 +193,7 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
         firstGoalSource: markets?.firstGoalSource ?? null,
         sample: markets?.sample ?? null,
         standings: { [match.home]: standings?.[match.competition]?.rows?.find(row => sameClub(row.team, match.home)) ?? null, [match.away]: standings?.[match.competition]?.rows?.find(row => sameClub(row.team, match.away)) ?? null },
-        scorers: scorers?.[match.competition] ? { updatedAt: scorers[match.competition].updatedAt, provider: scorers[match.competition].provider } : null,
+        scorers: scorers?.[match.competition] ? { updatedAt: scorers[match.competition].updatedAt, provider: scorers[match.competition].provider, fallbackSource: scorers[match.competition].fallbackSource ?? null, scorerSource: markets?.scorerSource ?? null } : null,
         resultsWindowDays: 180,
         weather: weather?.[match.id] ? { sampledAt: weather[match.id].sampledAt ?? null, source: weather[match.id].source ?? null } : null,
         discipline: scorers?.[match.competition] ? { updatedAt: scorers[match.competition].updatedAt ?? null, provider: scorers[match.competition].provider ?? null } : null,
@@ -533,6 +537,103 @@ async function updateLeagues() {
   await writeJson('public/data/scorers.json', scorers);
 }
 
+/* ---- Fallback de goleadores por plantilla (Nivel 2) + AF topscorers (Nivel 3) ---- */
+
+const SCORER_FALLBACK_FILE = 'public/data/scorer-fallback.json';
+const SCORER_FALLBACK_TTL_MS = 20 * 3600_000;
+
+/** Id Bzzoiro del equipo: directo en el namespace `bz-`, catálogo en el resto. */
+function resolveSquadTeamId(match, side, catalog = {}) {
+  if (match.id?.startsWith('bz-') && Number.isInteger(match.teamIds?.[side])) return match.teamIds[side];
+  const name = side === 'home' ? match.home : match.away;
+  return resolveCanonical(catalog, name)?.bzzoiro?.id ?? null;
+}
+
+/**
+ * Plantillas Bzzoiro para los equipos sin filas en el leaderboard (1 request
+ * por equipo, tope SCORER_FALLBACK_MAX por corrida, TTL como predicciones).
+ * Sidecar por competición con filas `{player, team, value, matches}` que
+ * `mergeScorerFallback` fusiona dando prioridad al leaderboard por equipo.
+ */
+async function captureSquadScorers(matches, { scorersBase = {}, catalog = {} } = {}) {
+  const cache = await readJson(SCORER_FALLBACK_FILE) ?? {};
+  const budget = Number(process.env.SCORER_FALLBACK_MAX ?? 10);
+  const now = Date.now();
+  const wanted = new Map();
+  for (const match of matches) {
+    if (isFinished(match)) continue;
+    for (const side of ['home', 'away']) {
+      const team = side === 'home' ? match.home : match.away;
+      const baseRows = scorersBase?.[match.competition]?.scorers ?? [];
+      if (baseRows.some(row => sameClub(row.team, team))) continue;
+      const key = `${match.competition}|${team}`;
+      if (wanted.has(key)) continue;
+      const cached = cache[match.competition];
+      const fresh = cached?.updatedAt && now - Date.parse(cached.updatedAt) < SCORER_FALLBACK_TTL_MS
+        && (cached.scorers ?? []).some(row => sameClub(row.team, team));
+      if (fresh) continue;
+      const teamId = resolveSquadTeamId(match, side, catalog);
+      if (teamId == null) continue;
+      wanted.set(key, { competition: match.competition, team, teamId });
+    }
+  }
+  const jobs = [...wanted.values()].slice(0, Math.max(0, budget));
+  if (process.env.BZZOIRO_API_TOKEN && jobs.length) {
+    const rows = await mapPool(jobs, CONCURRENCY, async job =>
+      mapSquadScorers(await fetchTeamSquad(job.teamId, { env: process.env }), { team: job.team }));
+    let stored = 0;
+    jobs.forEach((job, index) => {
+      if (!rows[index]?.length) return;
+      const entry = cache[job.competition] ?? { updatedAt: new Date().toISOString(), provider: 'Bzzoiro-squad', scorers: [] };
+      entry.scorers = [...entry.scorers.filter(row => !sameClub(row.team, job.team)), ...rows[index]];
+      entry.updatedAt = new Date().toISOString();
+      if (!entry.provider?.includes('Bzzoiro-squad')) entry.provider = 'Bzzoiro-squad';
+      cache[job.competition] = entry;
+      stored += 1;
+    });
+    if (jobs.length) console.log(`scorer-fallback: ${stored}/${jobs.length} plantillas con goles.`);
+  }
+  const keep = new Set(matches.map(match => match.competition));
+  for (const key of Object.keys(cache)) if (!keep.has(key)) delete cache[key];
+  await writeJson(SCORER_FALLBACK_FILE, cache);
+  return cache;
+}
+
+/**
+ * Topscorers de API-Football por liga (1 request por competición, tras flag
+ * `AF_TOPSCORERS=1`, tope AF_TOPSCORERS_MAX). Solo aporta equipos aún sin
+ * cubrir en el sidecar; el leaderboard sigue mandando vía `mergeScorerFallback`.
+ */
+async function captureAfTopScorers(matches, { cache = {} } = {}) {
+  if (process.env.AF_TOPSCORERS !== '1') return cache;
+  const budget = Number(process.env.AF_TOPSCORERS_MAX ?? 4);
+  const comps = [...new Set(matches.filter(match => !isFinished(match)).map(match => match.competition))];
+  let spent = 0;
+  for (const competition of comps) {
+    if (spent >= budget) break;
+    const entry = cache[competition] ?? { scorers: [] };
+    const stale = !cache[competition]?.updatedAt || Date.now() - Date.parse(cache[competition].updatedAt) > SCORER_FALLBACK_TTL_MS;
+    if (!stale) continue;
+    const leagueId = providerLeagueId(competition, 'api');
+    if (leagueId == null) continue;
+    const rows = await fetchAfTopScorers(leagueId, seasonOf(today, competition), { env: process.env });
+    spent += 1;
+    if (!rows?.length) continue;
+    for (const row of rows) {
+      if (entry.scorers.some(existing => sameClub(existing.team, row.team))) continue;
+      entry.scorers.push(row);
+    }
+    entry.updatedAt = new Date().toISOString();
+    entry.provider = entry.provider ? `${entry.provider} + API-Football` : 'API-Football';
+    cache[competition] = entry;
+  }
+  if (spent) {
+    console.log(`af-topscorers: ${spent} ligas consultadas.`);
+    await writeJson(SCORER_FALLBACK_FILE, cache);
+  }
+  return cache;
+}
+
 /* ---- Diccionario de equipos (slugs web) y mapa de ligas persistente ---- */
 
 /**
@@ -631,6 +732,129 @@ async function enrichTeamLast(matches) {
     job.match.lastMatches[job.side] = last;
   });
   return matches;
+}
+
+/* ---- Ritmos por equipo para la tabla de esperados (Bzzoiro primero, AF rellena) ---- */
+
+const TEAM_STATS_FILE = 'public/data/team-stats.json';
+const AF_STATS_FILE = 'public/data/af-stats.json';
+const AF_FIXTURES_BY_DATE_FILE = 'public/data/af-fixtures-by-date.json';
+const AF_STATS_TTL_MS = 20 * 3600_000;
+
+/**
+ * Ritmos por equipo para `forecastStatsFull`, keyed por `match.id`:
+ * `{ rows, af }`. `rows` sale de los últimos de cada equipo
+ * (`lastMatches` + stats por evento Bzzoiro, cacheadas por eventId:
+ * un terminado es inmutable). `af` promedia bolsas AF de esos mismos
+ * recientes y solo se busca cuando Bzzoiro deja huecos, con tope
+ * AF_STATS_MAX por corrida (comparte la cuota de 100 req/día).
+ * Con `fetch:false` solo usa caché (corrida --analysis-only).
+ */
+async function updateTeamStats(matches, { historyRows = [], fetch = true } = {}) {
+  const cache = await readJson(TEAM_STATS_FILE) ?? {};
+  const aliveMatches = matches.filter(match => !isFinished(match) && match.lastMatches);
+  if (fetch) {
+    const needed = new Map();
+    for (const match of aliveMatches) {
+      for (const side of ['home', 'away']) {
+        for (const row of match.lastMatches?.[side] ?? []) {
+          const key = row?.eventId != null ? String(row.eventId) : null;
+          if (key && !cache[key]?.statistics) needed.set(key, row);
+        }
+      }
+    }
+    const budget = Number(process.env.BZ_TEAM_STATS_MAX ?? 240);
+    const queue = [...needed.keys()].slice(0, Math.max(0, budget));
+    const fetched = await mapPool(queue, CONCURRENCY, eventId => fetchEventStats(eventId, process.env).catch(() => null));
+    const stamped = new Date().toISOString();
+    fetched.forEach((stats, index) => {
+      if (stats?.statistics) cache[queue[index]] = { statistics: stats.statistics, halves: stats.halves ?? null, fetchedAt: stamped };
+    });
+  }
+  const keep = new Set();
+  for (const match of matches) {
+    for (const side of ['home', 'away']) {
+      for (const row of match.lastMatches?.[side] ?? []) if (row?.eventId != null) keep.add(String(row.eventId));
+    }
+  }
+  for (const key of Object.keys(cache)) if (!keep.has(key)) delete cache[key];
+  if (fetch) await writeJson(TEAM_STATS_FILE, cache);
+
+  const afCache = await readJson(AF_STATS_FILE) ?? {};
+  const dateCache = await readJson(AF_FIXTURES_BY_DATE_FILE) ?? {};
+  const afBudget = Number(process.env.AF_STATS_MAX ?? 16);
+  let afSpent = 0;
+  const now = Date.now();
+  const usedFixtures = new Set();
+  const usedDays = new Set();
+  const resolveAfFixture = async row => {
+    const day = String(row?.date ?? '').slice(0, 10);
+    if (!day || !process.env.API_FOOTBALL_KEY) return null;
+    usedDays.add(day);
+    const entry = dateCache[day];
+    let list = entry?.fixtures;
+    if (!list || !entry?.fetchedAt || now - Date.parse(entry.fetchedAt) > AF_STATS_TTL_MS) {
+      if (!fetch) return null;
+      list = await fetchAfFixturesByDate(day, { env: process.env });
+      dateCache[day] = { fixtures: list, fetchedAt: new Date().toISOString() };
+    }
+    return findAfFixture(list, row.home, row.away);
+  };
+  const afBagsFor = async (match, team) => {
+    const bags = [];
+    const recents = [...(match.lastMatches?.home ?? []), ...(match.lastMatches?.away ?? [])];
+    for (const row of recents) {
+      if (afSpent >= afBudget || bags.length >= 5) break;
+      const twin = await resolveAfFixture(row);
+      if (!twin || usedFixtures.has(twin.fixtureId)) continue;
+      usedFixtures.add(twin.fixtureId);
+      let mapped = afCache[twin.fixtureId]?.mapped ?? null;
+      if (!mapped && fetch) {
+        afSpent += 1;
+        mapped = await fetchAfFixtureStats(twin.fixtureId, { env: process.env });
+        if (mapped) afCache[twin.fixtureId] = { mapped, fetchedAt: new Date().toISOString() };
+      }
+      if (!mapped) continue;
+      const mine = sameClub(mapped.home.team, team) ? mapped.home.stats
+        : sameClub(mapped.away.team, team) ? mapped.away.stats : null;
+      if (mine && Object.values(mine).some(value => value != null)) bags.push(mine);
+    }
+    return bags;
+  };
+  const byMatch = new Map();
+  for (const match of aliveMatches) {
+    const rows = [];
+    for (const side of ['home', 'away']) {
+      for (const row of match.lastMatches?.[side] ?? []) {
+        const stats = row?.eventId != null ? cache[String(row.eventId)] : null;
+        if (!stats?.statistics) continue;
+        rows.push({
+          date: row.date, competition: match.competition ?? null,
+          home: row.home, away: row.away,
+          homeScore: row.homeScore ?? null, awayScore: row.awayScore ?? null,
+          eventId: row.eventId, statistics: stats.statistics, halves: stats.halves ?? null,
+          source: 'Bzzoiro',
+        });
+      }
+    }
+    let af = null;
+    const probe = forecastStatsFull(historyRows, match.home, match.away, { extraRows: rows, competition: match.competition });
+    if ((!probe || [...Object.values(probe.home), ...Object.values(probe.away)].some(value => value == null)) && afSpent < afBudget) {
+      const homeBags = await afBagsFor(match, match.home);
+      const awayBags = await afBagsFor(match, match.away);
+      if (homeBags.length || awayBags.length) af = { home: homeBags, away: awayBags };
+    }
+    byMatch.set(match.id, { rows, af });
+  }
+  if (fetch) {
+    for (const key of Object.keys(afCache)) if (!usedFixtures.has(Number(key))) delete afCache[key];
+    for (const day of Object.keys(dateCache)) if (!usedDays.has(day)) delete dateCache[day];
+    await writeJson(AF_STATS_FILE, afCache);
+    await writeJson(AF_FIXTURES_BY_DATE_FILE, dateCache);
+  }
+  const withRows = [...byMatch.values()].filter(value => value.rows.length).length;
+  console.log(`team-stats: ${withRows}/${aliveMatches.length} partidos con ritmos por equipo${afSpent ? ` (+${afSpent} stats AF)` : ''}.`);
+  return byMatch;
 }
 
 async function enrichWindow(matches) {
@@ -864,8 +1088,14 @@ async function full() {
     readJson('public/data/scorers.json'),
     readJson('public/data/standings.json'),
   ]);
-  const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersBase, weather });
-  await updateMatchProbabilities(aliveWindow, { results, scorers: scorersBase, standings: standingsBase, analyses, weather, history: historyBase.rows ?? [] });
+  // Goleadores sin leaderboard: plantilla Bzzoiro (Nivel 2) + AF topscorers (Nivel 3, tras flag).
+  const teamsCatalog = (await readJson('public/data/teams.json'))?.teams ?? {};
+  const scorerFallback = await captureSquadScorers(aliveWindow, { scorersBase, catalog: teamsCatalog });
+  await captureAfTopScorers(aliveWindow, { cache: scorerFallback });
+  const scorersMerged = withScorerFallback(scorersBase, scorerFallback);
+  const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersMerged, weather });
+  const teamCtx = await updateTeamStats(aliveWindow, { historyRows: historyBase.rows ?? [] });
+  await updateMatchProbabilities(aliveWindow, { results, scorers: scorersMerged, standings: standingsBase, analyses, weather, history: historyBase.rows ?? [], teamCtx });
 
   await capturePredictions(windowMatches, results);
   try { await import('./evaluate-predictions.mjs'); } catch (error) { console.warn(`Evaluación no completada: ${error.message}`); }
@@ -874,9 +1104,9 @@ async function full() {
   // El mapa vive en memoria y se persiste al final: pruneAnalysis relee el disco
   // y descartaría lo recién generado.
   const previous = analyses;
-  const ctx = { results, standings: standingsBase, scorers: scorersBase, weather };
+  const ctx = { results, standings: standingsBase, scorers: scorersMerged, weather };
   for (const match of aliveWindow) {
-    const markets = resolveMatchMarkets({ match, results, scorers: scorersBase?.[match.competition] ?? null, standings: standingsBase });
+    const markets = resolveMatchMarkets({ match, results, scorers: scorersMerged?.[match.competition] ?? null, standings: standingsBase });
     const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
     if (previous[match.id]?.inputKey === buildAnalysisKey(match, markets, fullCtx)) continue;
     const entry = await generateAnalysis(match, markets, fullCtx);
@@ -907,12 +1137,17 @@ async function analysisOnly() {
   ]);
   await captureProviderPredictions(aliveWindow);
   await captureAfOdds(aliveWindow);
-  const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersBase, weather: weatherBase });
-  await updateMatchProbabilities(aliveWindow, { results, scorers: scorersBase, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [] });
+  const teamsCatalogOnly = (await readJson('public/data/teams.json'))?.teams ?? {};
+  const scorerFallbackOnly = await captureSquadScorers(aliveWindow, { scorersBase, catalog: teamsCatalogOnly });
+  await captureAfTopScorers(aliveWindow, { cache: scorerFallbackOnly });
+  const scorersMergedOnly = withScorerFallback(scorersBase, scorerFallbackOnly);
+  const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersMergedOnly, weather: weatherBase });
+  const teamCtxOnly = await updateTeamStats(aliveWindow, { historyRows: historyBase.rows ?? [], fetch: false });
+  await updateMatchProbabilities(aliveWindow, { results, scorers: scorersMergedOnly, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxOnly });
   const previous = analyses;
-  const ctx = { results, standings: standingsBase, scorers: scorersBase, weather: weatherBase };
+  const ctx = { results, standings: standingsBase, scorers: scorersMergedOnly, weather: weatherBase };
   for (const match of aliveWindow) {
-    const markets = resolveMatchMarkets({ match, results, scorers: scorersBase?.[match.competition] ?? null, standings: standingsBase });
+    const markets = resolveMatchMarkets({ match, results, scorers: scorersMergedOnly?.[match.competition] ?? null, standings: standingsBase });
     const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
     if (previous[match.id]?.inputKey === buildAnalysisKey(match, markets, fullCtx)) continue;
     const entry = await generateAnalysis(match, markets, fullCtx);
@@ -953,7 +1188,11 @@ async function refreshScores() {
   // Re-clava lecturas huérfanas antes de podar: el churn de ids no debe borrar narrativa.
   await captureProviderPredictions(merged);
   await captureAfOdds(merged);
-  const analyses = await migrateAnalyses(merged, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersBase, weather: weatherBase });
+  const teamsCatalogRefresh = (await readJson('public/data/teams.json'))?.teams ?? {};
+  const scorerFallbackRefresh = await captureSquadScorers(merged, { scorersBase, catalog: teamsCatalogRefresh });
+  await captureAfTopScorers(merged, { cache: scorerFallbackRefresh });
+  const scorersMergedRefresh = withScorerFallback(scorersBase, scorerFallbackRefresh);
+  const analyses = await migrateAnalyses(merged, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersMergedRefresh, weather: weatherBase });
   // El marcador final se registra antes de podar: el dataset de evaluación necesita los finalizados.
   await capturePredictions(merged, resultsBase?.results ?? []);
   const matches = merged.filter(alive);
@@ -962,10 +1201,11 @@ async function refreshScores() {
   await updateTrendsExtra(matches);
   // Catch-up acotado: las lecturas que fallaron en la corrida completa se reintentan sin bloquear el refresco.
   const catchUpBudget = Math.max(0, Number(process.env.ANALYSIS_CATCHUP_MAX ?? 3));
-  await catchUpAnalyses(matches, analyses, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersBase, weather: weatherBase, budget: catchUpBudget });
+  await catchUpAnalyses(matches, analyses, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersMergedRefresh, weather: weatherBase, budget: catchUpBudget });
   const validIds = new Set(matches.map(match => match.id));
   await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(analyses).filter(([id]) => validIds.has(id))));
-  await updateMatchProbabilities(matches, { results: resultsBase?.results ?? [], scorers: scorersBase, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [] });
+  const teamCtxRefresh = await updateTeamStats(matches, { historyRows: historyBase.rows ?? [] });
+  await updateMatchProbabilities(matches, { results: resultsBase?.results ?? [], scorers: scorersMergedRefresh, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxRefresh });
   await patchLlmReviews(matches);
   try { await import('./evaluate-predictions.mjs'); } catch (error) { console.warn(`Evaluación no completada: ${error.message}`); }
   await writeLlmHealth();
