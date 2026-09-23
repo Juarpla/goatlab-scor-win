@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T11:44:52.340Z",
+  "updatedAt": "2026-09-23T12:42:39.706Z",
   "runs": [
     {
       "at": "2026-09-19T04:42:32.191Z",
@@ -2973,6 +2973,665 @@
       "truncated": false,
       "maxTokens": 3000,
       "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:32:42.486Z",
+      "matchId": "af-1528862",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 225
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 959,
+            "outputTokens": 3000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 56332
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 997,
+            "outputTokens": 3000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13162
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 451
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 959,
+            "outputTokens": 5000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 133924
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 5000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 997,
+            "outputTokens": 5000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 19895
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 997,
+        "outputTokens": 5000
+      },
+      "truncated": true,
+      "maxTokens": 5000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:32:50.415Z",
+      "matchId": "af-1545601",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "WORKERS_AI",
+        "model": "@cf/zai-org/glm-4.7-flash"
+      },
+      "usage": {
+        "inputTokens": 1314,
+        "outputTokens": 4915
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": "a02e4b9a-cebb-43a8-b36f-acf940b7af21"
+    },
+    {
+      "at": "2026-09-23T12:32:50.415Z",
+      "matchId": "af-1528862",
+      "attempts": 1,
+      "failures": [],
+      "ok": null,
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": "a02e4b9a-cebb-43a8-b36f-acf940b7af21"
+    },
+    {
+      "at": "2026-09-23T12:39:05.864Z",
+      "matchId": "af-1528863",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 906,
+            "outputTokens": 3000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 69760
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 942,
+            "outputTokens": 3000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13895
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 5000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 906,
+            "outputTokens": 5000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 136396
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 906,
+        "outputTokens": 5000
+      },
+      "truncated": true,
+      "maxTokens": 5000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:08.228Z",
+      "matchId": "af-1528864",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 3000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 886,
+            "outputTokens": 3000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 82891
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 886,
+        "outputTokens": 3000
+      },
+      "truncated": true,
+      "maxTokens": 5000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:14.432Z",
+      "matchId": "af-1528863",
+      "attempts": 1,
+      "failures": [],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1205,
+        "outputTokens": 4695
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": "2cdf6b70-cecf-4db0-9db2-566ac538cf66"
+    },
+    {
+      "at": "2026-09-23T12:41:14.432Z",
+      "matchId": "af-1528864",
+      "attempts": 1,
+      "failures": [],
+      "ok": null,
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": "2cdf6b70-cecf-4db0-9db2-566ac538cf66"
+    },
+    {
+      "at": "2026-09-23T12:41:27.083Z",
+      "matchId": "af-1528865",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "truncated": false,
+      "maxTokens": 3000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:27.083Z",
+      "matchId": "af-1528865",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:33.905Z",
+      "matchId": "af-1528878",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "truncated": false,
+      "maxTokens": 3000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:33.905Z",
+      "matchId": "af-1528878",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:51.280Z",
+      "matchId": "af-1528879",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "truncated": false,
+      "maxTokens": 3000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:51.280Z",
+      "matchId": "af-1528879",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:57.454Z",
+      "matchId": "af-1528880",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "truncated": false,
+      "maxTokens": 3000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:41:57.454Z",
+      "matchId": "af-1528880",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:42:15.727Z",
+      "matchId": "bz-212592",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "truncated": false,
+      "maxTokens": 3000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:42:15.727Z",
+      "matchId": "bz-212592",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:42:21.300Z",
+      "matchId": "bz-212591",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "truncated": false,
+      "maxTokens": 3000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-09-23T12:42:21.300Z",
+      "matchId": "bz-212591",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "MISTRAL",
+          "model": "mistral-small-latest",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        }
+      ],
+      "ok": null,
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 6000,
+      "batchSize": 2,
       "callId": null
     }
   ]
