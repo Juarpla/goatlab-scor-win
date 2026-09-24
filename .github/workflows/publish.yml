@@ -21,6 +21,8 @@ jobs:
       PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # historial completo: el commit del bot hace rebase antes del push
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -74,5 +76,19 @@ jobs:
             echo "Sin cambios de datos que commitear"
           else
             git commit -m "chore: update data"
-            git push
+            # main pudo avanzar (push manual) mientras corría el workflow:
+            # rebase + reintentos en vez de fallar con "fetch first".
+            for i in 1 2 3; do
+              git fetch origin
+              if ! git rebase origin/main; then
+                git rebase --abort
+                echo "Conflicto con main: revisar a mano"
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                break
+              fi
+              echo "Push rechazado, reintento $i/3"
+              sleep 10
+            done
           fi
