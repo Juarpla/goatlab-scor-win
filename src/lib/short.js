@@ -59,20 +59,20 @@ export function textPng(opts) {
 }
 
 // Un segmento por foto: zoom in en pares, zoom out en impares (determinista).
-export function segmentPlan(asset, i) {
-  const frames = SEG_SECONDS * SHORT_FPS;
+export function segmentPlan(asset, i, segSeconds = SEG_SECONDS) {
+  const frames = Math.round(segSeconds * SHORT_FPS);
   const direction = i % 2 === 0 ? 'in' : 'out';
   const zoom =
     direction === 'in' ? `1.0+0.5*on/${frames}` : `max(1.0,1.5-0.5*on/${frames})`;
-  return { asset, index: i, seconds: SEG_SECONDS, frames, direction, zoom };
+  return { asset, index: i, seconds: segSeconds, frames, direction, zoom };
 }
 
-export function buildShortPlan({ script, media, variant = 0 }) {
+export function buildShortPlan({ script, media, variant = 0, segSeconds = SEG_SECONDS }) {
   const v = script.scripts[variant] ?? script.scripts[0];
-  const segments = media.assets.map((a, i) => segmentPlan(a, i));
-  const photosSeconds = segments.length * SEG_SECONDS - (segments.length - 1) * XFADE_SECONDS;
+  const segments = media.assets.map((a, i) => segmentPlan(a, i, segSeconds));
+  const photosSeconds = segments.length * segSeconds - (segments.length - 1) * XFADE_SECONDS;
   const totalSeconds = photosSeconds + ENDCARD_SECONDS - XFADE_SECONDS;
-  const step = SEG_SECONDS - XFADE_SECONDS;
+  const step = segSeconds - XFADE_SECONDS;
   return {
     matchId: script.matchId,
     variant,

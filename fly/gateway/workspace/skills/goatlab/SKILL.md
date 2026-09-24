@@ -28,6 +28,17 @@ Todo en el mismo chat de Telegram. Los guiones viven en
    (si es otro, pide el número).
 5. **Avanza**: tras confirmar, envía el siguiente guion pendiente con sus
    botones. Si era el último: `Serie completa 🎉` + resumen.
+6. **🎬 Render**: al cerrar (`⏹ Basta` o serie completa) ofrece
+   *"¿renderizo los N videos con tus audios? 🎬"*. Si acepta, o si pide
+   `video`/`render` en cualquier momento, por cada guion con audio haz con
+   `exec`: `curl -s -X POST "$WORKER_URL/render"`
+   `-H "Authorization: Bearer $RENDER_SECRET"` con JSON
+   `{chatId, matchId, variant, matchLabel, hook, audioFileId, photos}`
+   (`chatId` = el chat actual; `matchLabel/hook/photos` del JSON del partido;
+   `WORKER_URL=https://goatlab-render.fly.dev`, `RENDER_SECRET` del entorno).
+   Responde `202 {jobId}`: sondea `GET $WORKER_URL/jobs/<id>` cada ~60s hasta
+   `done` (el MP4 llega solo al chat por `sendVideo`) o `error` (muestra el
+   mensaje). Un render a la vez: encola de uno en uno.
 
 ## Botones y comandos (misma acción)
 
@@ -65,4 +76,3 @@ Nada se pierde en silencio. Equivale al comando nativo `/new`.
 - Sin reset automático de sesión (decisión del usuario: control manual con
   📄 Nueva sesión; las series a medias se conservan).
 - Cero cuotas, cero garantías de resultado, CTA siempre a `goatlab.win`.
-- El render del video llega en F6: no prometas MP4 todavía.
