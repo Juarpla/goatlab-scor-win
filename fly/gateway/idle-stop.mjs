@@ -1,5 +1,6 @@
 // Supervisor de apagado elegante para goatlab-gateway (F5b).
-// Triple señal de ocupado: /data/.busy + sessions.list + uptime mínimo.
+// Ventana ÚNICA de 10 min: apaga cuando la sesión más reciente lleva >10 min
+// quieta, sin .busy, sin turno activo y con uptime ≥10 min.
 // Pre-apagado: setWebhook (re-registrar por si OpenClaw lo limpia) +
 // POST /machines/<id>/stop vía Fly Machines API.
 import { execFile } from 'node:child_process';
@@ -9,7 +10,7 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 const CHECK_MS = 60_000;
 const MIN_UPTIME_MS = 10 * 60_000;
-const IDLE_MS = 15 * 60_000;
+const IDLE_MS = 10 * 60_000; // 10 min quieta la sesión más reciente
 const BUSY_FILE = '/data/.busy';
 const BOT = process.env.TELEGRAM_BOT_TOKEN;
 const FLY_TOKEN = process.env.FLY_API_TOKEN;
@@ -19,22 +20,23 @@ const WEBHOOK_URL = 'https://goatlab-gateway.fly.dev/telegram-webhook';
 const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET;
 
 const start = Date.now();
-let lastActivity = Date.now();
 
 async function busyReason() {
+  if (Date.now() - start < MIN_UPTIME_MS) return 'uptime mínimo (10min) no cumplido';
   if (existsSync(BUSY_FILE)) return '/data/.busy presente (render en vuelo)';
   try {
     const { stdout } = await run('openclaw', ['sessions', '--json', '--limit', '5'], { timeout: 15_000 });
     const data = JSON.parse(stdout);
+    let newest = 0;
     for (const s of data.sessions ?? []) {
       if (s.status === 'active' || s.status === 'running') return `sesión ${s.key} en estado ${s.status}`;
-      if (s.updatedAt && Date.now() - s.updatedAt < IDLE_MS)
-        return `sesión ${s.key} actualizada hace ${Math.round((Date.now() - s.updatedAt) / 60000)}min`;
+      if (s.updatedAt && s.updatedAt > newest) newest = s.updatedAt;
     }
+    if (newest && Date.now() - newest < IDLE_MS)
+      return `sesión más reciente actualizada hace ${Math.round((Date.now() - newest) / 60000)}min`;
   } catch (e) {
     return `sessions.list falló: ${String(e.message ?? e).slice(0, 120)}`;
   }
-  if (Date.now() - start < MIN_UPTIME_MS) return 'uptime mínimo (10min) no cumplido';
   return null;
 }
 
@@ -69,28 +71,17 @@ async function check() {
   checks++;
   const reason = await busyReason();
   if (reason) {
-    lastActivity = Date.now();
     if (checks % 5 === 1) console.log(`idle-stop: ocupado (${reason})`);
     return;
   }
-  if (Date.now() - lastActivity < IDLE_MS) return;
-  console.log('idle-stop: 15 min sin actividad, apagando…');
+  console.log('idle-stop: 10 min sin actividad, apagando…');
   try {
     await setWebhook();
     if (!(await verifyWebhook())) throw new Error('webhook no verificado tras setWebhook');
-    // Gate final: algo pudo llegar durante el setWebhook (~5-10s). Si hay
-    // actividad nueva, abortar el apagado en vez de cortar trabajo entrante.
-    const late = await busyReason();
-    if (late) {
-      console.log(`idle-stop: apagado abortado (${late})`);
-      lastActivity = Date.now();
-      return;
-    }
     await stopMachine();
     console.log('idle-stop: máquina apagada');
   } catch (e) {
     console.error(`idle-stop: ${e.message}`);
-    lastActivity = Date.now();
   }
 }
 
