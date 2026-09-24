@@ -1,7 +1,8 @@
 /**
  * Compliance GoatLab Shorts: vocabulario y reglas bloqueantes pre-render.
- * Semilla: COMPLIANCE.md. Sin dependencias; corre en Node y workerd.
+ * Semilla: COMPLIANCE.md. Sin dependencias npm; corre en Node y workerd.
  */
+import { ALLOWED_SOURCES, BANNED_PHOTO_DOMAINS } from './media.js';
 export const DISCLAIMER =
   'Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.';
 
@@ -78,5 +79,38 @@ export function checkDescription(description, { matchId = null } = {}) {
   if (!value.includes(DISCLAIMER)) errors.push('falta el disclaimer fijo');
   const scannable = value.replaceAll(DISCLAIMER, '');
   for (const hit of checkText(scannable)) errors.push(`vocabulario prohibido: ${hit}`);
+  return errors;
+}
+
+/**
+ * Valida un manifiesto de media-pack: fuentes permitidas, URLs https sin
+ * dominios prohibidos, fotógrafo y atribución registrados.
+ */
+export function checkMediaManifest(data, { matchId = null } = {}) {
+  const errors = [];
+  if (!data || typeof data !== 'object') return ['manifiesto vacío'];
+  if (matchId && data.matchId !== matchId) errors.push(`matchId ${data.matchId} no coincide con ${matchId}`);
+  const assets = Array.isArray(data.assets) ? data.assets : [];
+  if (!assets.length) errors.push('sin assets: el partido no tiene fotos');
+  for (const [i, asset] of assets.entries()) {
+    if (!asset || typeof asset !== 'object') {
+      errors.push(`asset ${i} vacío`);
+      continue;
+    }
+    if (!ALLOWED_SOURCES.includes(asset.source)) errors.push(`asset ${i}: fuente no permitida (${asset.source})`);
+    if (!asset.id) errors.push(`asset ${i}: sin id`);
+    for (const field of ['url', 'page', 'photographer']) {
+      if (!asset[field] || !String(asset[field]).trim()) errors.push(`asset ${i}: sin ${field}`);
+    }
+    for (const field of ['url', 'page', 'photographerUrl']) {
+      const value = String(asset[field] ?? '');
+      if (!value) continue;
+      if (!/^https:\/\//.test(value)) errors.push(`asset ${i}: ${field} no es https`);
+      for (const banned of BANNED_PHOTO_DOMAINS) {
+        if (banned.test(value)) errors.push(`asset ${i}: dominio prohibido en ${field}`);
+      }
+    }
+  }
+  if (!String(data.attribution ?? '').trim()) errors.push('falta la atribución de fotos');
   return errors;
 }

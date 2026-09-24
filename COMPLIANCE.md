@@ -24,4 +24,4 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 
 ## Fotos
 
-Commons/Flickr CC con atribución > retratos `media.api-sports.io/players` solo tarjeta ID (ToS API-Football) > Pexels/Pixabay relleno. Prohibido: Getty/AP/Reuters/Instagram/scraping Google.
+Relleno genérico (estadio, hinchada, balón), sin portada por partido, nada que parezca footage. Fuentes: Pexels → Pixabay vía API (keys en `PEXELS_API_KEY` / `PIXABAY_API_KEY`, solo secrets/entorno, jamás en git) > Commons/Flickr CC con atribución. Cada manifiesto `media-pack/<webId>.json` registra fuente, id, url https, fotógrafo y atribución. Prohibido: Getty/AP/Reuters/Shutterstock/Alamy/Instagram/scraping Google.

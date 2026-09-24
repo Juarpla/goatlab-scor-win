@@ -49,6 +49,12 @@ jobs:
       - name: Guiones de Shorts (ventana vigente + lint bloqueante)
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
         run: node scripts/generate-youtube-scripts.mjs && node scripts/check-compliance.mjs
+      - name: Media-pack de Shorts (fotos con licencia)
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && secrets.PEXELS_API_KEY != ''
+        run: node scripts/generate-media-pack.mjs
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
       - uses: actions/upload-artifact@v4
         with:
           name: goatlab-data

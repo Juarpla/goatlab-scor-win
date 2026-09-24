@@ -1,7 +1,7 @@
-/** Lint bloqueante pre-render: valida los guiones de Shorts contra COMPLIANCE.md. */
+/** Lint bloqueante pre-render: valida guiones y media-pack contra COMPLIANCE.md. */
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { checkScript, checkDescription } from '../src/lib/compliance.js';
+import { checkScript, checkDescription, checkMediaManifest } from '../src/lib/compliance.js';
 
 const dir = 'public/data/youtube-scripts';
 let files = [];
@@ -29,4 +29,22 @@ for (const file of files) {
   }
 }
 console.log(`lint:shorts: ${files.length} archivos, ${failures} fallos (published=${published})`);
-process.exit(failures ? 1 : 0);
+
+const mediaDir = 'public/data/media-pack';
+let mediaFiles = [];
+try {
+  mediaFiles = (await readdir(mediaDir)).filter(f => f.endsWith('.json'));
+} catch {
+  console.log('lint:shorts: sin media-pack todavía, ok');
+  process.exit(failures ? 1 : 0);
+}
+let mediaFailures = 0;
+for (const file of mediaFiles) {
+  const data = JSON.parse(await readFile(join(mediaDir, file), 'utf8'));
+  for (const error of checkMediaManifest(data, { matchId: file.replace(/\.json$/, '') })) {
+    console.error(`${file}: ${error}`);
+    mediaFailures += 1;
+  }
+}
+console.log(`lint:shorts: media-pack ${mediaFiles.length} archivos, ${mediaFailures} fallos`);
+process.exit(failures || mediaFailures ? 1 : 0);
