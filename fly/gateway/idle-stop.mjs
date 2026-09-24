@@ -78,6 +78,14 @@ async function check() {
   try {
     await setWebhook();
     if (!(await verifyWebhook())) throw new Error('webhook no verificado tras setWebhook');
+    // Gate final: algo pudo llegar durante el setWebhook (~5-10s). Si hay
+    // actividad nueva, abortar el apagado en vez de cortar trabajo entrante.
+    const late = await busyReason();
+    if (late) {
+      console.log(`idle-stop: apagado abortado (${late})`);
+      lastActivity = Date.now();
+      return;
+    }
     await stopMachine();
     console.log('idle-stop: máquina apagada');
   } catch (e) {
