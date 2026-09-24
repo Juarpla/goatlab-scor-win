@@ -16,6 +16,9 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      # Disponible en los `if` (el contexto `secrets` no está permitido ahí).
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -50,7 +53,7 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
         run: node scripts/generate-youtube-scripts.mjs && node scripts/check-compliance.mjs
       - name: Media-pack de Shorts (fotos con licencia)
-        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && secrets.PEXELS_API_KEY != ''
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && env.PEXELS_API_KEY != ''
         run: node scripts/generate-media-pack.mjs
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
