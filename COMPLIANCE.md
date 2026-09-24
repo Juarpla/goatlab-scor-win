@@ -20,7 +20,7 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 - Beat con CTA web (`goatlab.win`) dentro del guion.
 - Descripción con: hook + análisis + `🔗 Más data: https://goatlab.win/partido/<id>` + `#goatlab` + disclaimer fijo:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
-- Guion ≤ 110 palabras (~50s). Fotos con licencia + atribución registrada en `media-pack`.
+- Guion en texto corrido ≤ 110 palabras (~50s), listo para leer en voz alta: hook + datos entrelazados + cierre + CTA hablada a `goatlab.win`. Fotos con licencia + atribución registrada en `media-pack`.
 
 ## Fotos
 

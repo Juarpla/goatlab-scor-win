@@ -22,27 +22,31 @@ const match = {
   },
 };
 
-test('genera 10 guiones que pasan compliance con gate cerrado', () => {
+test('genera 10 guiones corridos que pasan compliance con gate cerrado', () => {
   const out = buildYoutubeScripts(match);
   assert.equal(out.scripts.length, 10);
   assert.equal(out.matchId, match.webId);
-  for (const script of out.scripts) {
+  for (const [i, script] of out.scripts.entries()) {
+    assert.equal(script.n, i + 1);
+    assert.ok(script.hook.length >= 10);
+    assert.ok(script.narration.startsWith(script.hook));
+    assert.ok(script.narration.includes('goatlab.win'));
+    assert.equal(script.words, script.narration.split(/\s+/).filter(Boolean).length);
     assert.deepEqual(checkScript(script, { published: false, matchId: out.matchId }), []);
-    assert.ok(!/%/.test(`${script.hook} ${script.beats.join(' ')}`));
+    assert.ok(!/%/.test(script.narration));
   }
   assert.deepEqual(checkDescription(out.description, { matchId: out.matchId }), []);
 });
 
-test('guiones bajo 50s y con CTA web', () => {
+test('guiones bajo 50s y con CTA hablada', () => {
   const out = buildYoutubeScripts(match);
   for (const script of out.scripts) {
-    const words = `${script.hook} ${script.beats.join(' ')}`.split(/\s+/).length;
-    assert.ok(words <= 110, `${words} palabras`);
-    assert.ok(script.beats.some(b => /goatlab\.win/.test(b)));
+    assert.ok(script.words <= 110, `${script.words} palabras`);
+    assert.ok(/goatlab\.win/.test(script.narration));
   }
 });
 
-test('sin datos igual entrega 10 guiones honestos', () => {
+test('sin datos igual entrega 10 narraciones honestas', () => {
   const out = buildYoutubeScripts({ id: 'bz-x', home: 'A', away: 'B', competition: 'nations' });
   assert.equal(out.scripts.length, 10);
   for (const script of out.scripts) {

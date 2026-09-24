@@ -1,12 +1,19 @@
 /**
  * Guiones de Shorts: 10 variantes deterministas por partido (<50s cada una).
- * Cero tokens LLM: plantillas + métricas reales del JSON. Sin porcentajes
- * mientras el gate de publicación siga cerrado (ver COMPLIANCE.md).
+ * Texto corrido listo para leer en voz alta: hook + datos entrelazados +
+ * cierre + CTA hablada. Cero tokens LLM: plantillas + métricas reales del
+ * JSON. Sin porcentajes mientras el gate de publicación siga cerrado
+ * (ver COMPLIANCE.md).
  */
 import { DISCLAIMER } from './compliance.js';
 import { sameClub } from './teams.js';
 
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
+
+/** Pluralización para lectura en voz alta ("1 empate", "3 locales"). */
+function pl(n, one, many) {
+  return Number(n) === 1 ? one : many;
+}
 
 function formLine(rows, team, count = 5) {
   const played = (rows ?? [])
@@ -39,16 +46,29 @@ const HOOKS = [
   (m) => `Últimos duelos, forma y goles: ${m.home} contra ${m.away}.`,
 ];
 
-const CTAS = [
-  '🔗 Más data en goatlab.win: el análisis completo del cruce.',
-  '🔗 Todo el análisis está en goatlab.win, partido por partido.',
-  '🔗 En goatlab.win tienes tablas, forma y el veredicto completo.',
+const CONNECTORS = [
+  'Mira este dato:',
+  'Y ojo:',
+  'Pero hay más:',
+  'El dato clave:',
+  'Ahora compara:',
+  'Y esto pesa:',
+  'Suma esto:',
+  'La otra cara:',
+  'Y atención:',
+  'Para completar:',
 ];
 
-const CLOSINGS = [
-  'Cierre: la forma actual contra el historial, eso define el partido.',
-  'Cierre: goles recientes contra cruces previos, ahí está la lectura.',
-  'Cierre: lo que ya jugaron manda más que el nombre.',
+const SPOKEN_CTAS = [
+  'Todo el análisis, partido por partido, en goatlab.win.',
+  'Tablas, forma y el veredicto completo en goatlab.win.',
+  'Más data del cruce en goatlab.win.',
+];
+
+const CLOSERS = [
+  'La forma actual contra el historial: ahí está la lectura.',
+  'Goles recientes contra cruces previos: esa es la lectura.',
+  'Lo que ya jugaron manda más que el nombre.',
 ];
 
 function metricBeats(match) {
@@ -58,16 +78,46 @@ function metricBeats(match) {
   if (home) beats.push(`El ${match.home} ganó ${home.wins} de sus últimos ${home.n}, con ${home.gf} goles a favor.`);
   if (away) beats.push(`El ${match.away} ganó ${away.wins} de sus últimos ${away.n}, con ${away.gf} goles a favor.`);
   if (home?.clean || away?.clean) {
+    const clean = Math.max(home?.clean ?? 0, away?.clean ?? 0);
     const side = (home?.clean ?? 0) >= (away?.clean ?? 0) ? match.home : match.away;
-    beats.push(`El arco en cero apareció ${Math.max(home?.clean ?? 0, away?.clean ?? 0)} veces: ${side} defiende bien.`);
+    beats.push(`El arco en cero apareció ${clean} ${pl(clean, 'vez', 'veces')}: ${side} defiende bien.`);
   }
   const h2h = match.h2h;
   if (h2h?.totalMatches) {
-    beats.push(`El cara a cara suma ${h2h.totalMatches} duelos: ${h2h.homeWins} locales, ${h2h.draws} empates.`);
+    beats.push(`El cara a cara suma ${h2h.totalMatches} duelos: ${h2h.homeWins} ${pl(h2h.homeWins, 'local', 'locales')}, ${h2h.draws} ${pl(h2h.draws, 'empate', 'empates')}.`);
     if (h2h.avgTotalGoals != null) beats.push(`Esos duelos promedian ${String(h2h.avgTotalGoals).replace('.', ',')} goles por partido.`);
   }
   if (!beats.length) beats.push('Sin serie registrada: la muestra aún es corta y se declara.');
   return beats;
+}
+
+/** Métricas distintas rotando desde i (hasta 4 para el texto corrido). */
+function distinctMetrics(metrics, i, count = 4) {
+  const out = [];
+  for (let k = 0; k < metrics.length && out.length < count; k += 1) {
+    const m = metrics[(i + k) % metrics.length];
+    if (!out.includes(m)) out.push(m);
+  }
+  return out;
+}
+
+export function countWords(text) {
+  return String(text ?? '').split(/\s+/).filter(Boolean).length;
+}
+
+/** Narración corrida lista para leer: hook + datos + cierre + CTA hablada. */
+export function buildNarration(match, metrics, i) {
+  const hook = HOOKS[i % HOOKS.length](match);
+  const data = distinctMetrics(metrics, i);
+  const parts = [hook];
+  if (data[0]) parts.push(data[0]);
+  if (data[1]) parts.push(`${CONNECTORS[i % CONNECTORS.length]} ${data[1]}`);
+  if (data[2]) parts.push(`${CONNECTORS[(i + 3) % CONNECTORS.length]} ${data[2]}`);
+  if (data[3]) parts.push(`${CONNECTORS[(i + 6) % CONNECTORS.length]} ${data[3]}`);
+  parts.push(CLOSERS[i % CLOSERS.length]);
+  parts.push(SPOKEN_CTAS[i % SPOKEN_CTAS.length]);
+  const narration = parts.join(' ');
+  return { hook, narration, words: countWords(narration) };
 }
 
 /** Selección de la corrida: todos los NS de la ventana (fixtures.json ya es 7 días). */
@@ -95,19 +145,14 @@ export function sameCore(prev, next) {
 export function buildYoutubeScripts(match) {
   const webId = match.webId ?? match.id;
   const metrics = metricBeats(match);
-  const scripts = HOOKS.map((hookFn, i) => {
-    const beats = [
-      metrics[i % metrics.length],
-      metrics[(i + 2) % metrics.length],
-      CTAS[i % CTAS.length],
-      CLOSINGS[i % CLOSINGS.length],
-    ].filter((b, idx, arr) => arr.indexOf(b) === idx);
-    return { hook: hookFn(match), beats };
+  const scripts = Array.from({ length: HOOKS.length }, (_, i) => {
+    const { hook, narration, words } = buildNarration(match, metrics, i);
+    return { n: i + 1, hook, narration, words };
   });
   const tag = `#${String(match.competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
   const description = [
     `${match.home} contra ${match.away}: forma, goles y cara a cara en menos de un minuto.`,
-    `${scripts[0].beats[0]} ${scripts[0].beats[1]}`,
+    metrics[0] ?? '',
     `🔗 Más data: https://goatlab.win/partido/${webId}`,
     `#goatlab #futbol ${tag}`,
     DISCLAIMER,

@@ -26,14 +26,12 @@ const title = `${data.home} contra ${data.away}: guiones del Short | GoatLab`;
     <p>Diez guiones de menos de 50 segundos y la descripción lista para YouTube, con enlace a esta web.</p>
     <h2>Descripción para YouTube</h2>
     <pre>{data.description}</pre>
-    <h2>Guiones</h2>
+    <h2>Guiones para leer en voz alta</h2>
     <ol>
       {data.scripts.map((script) => (
         <li>
-          <p><strong>{script.hook}</strong></p>
-          <ul>
-            {script.beats.map((beat) => (<li>{beat}</li>))}
-          </ul>
+          <p>{script.narration}</p>
+          <p><small>Guion {script.n} · {script.words} palabras (~{Math.round(script.words / 2.5)}s) · gancho: {script.hook}</small></p>
         </li>
       ))}
     </ol>

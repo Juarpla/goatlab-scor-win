@@ -48,22 +48,25 @@ export function checkText(text) {
 }
 
 /**
- * Valida un guion. `published` = evaluation-report.json → published.
- * Con gate cerrado: cero porcentajes (slot de probabilidades apagado).
+ * Valida un guion (texto corrido listo para leer). `published` =
+ * evaluation-report.json → published. Con gate cerrado: cero porcentajes
+ * (slot de probabilidades apagado).
  */
 export function checkScript(script, { published = false, matchId = null } = {}) {
   const errors = [];
   if (!script || typeof script !== 'object') return ['guion vacío'];
   if (!script.hook || String(script.hook).trim().length < 10) errors.push('hook ausente o muy corto');
-  const beats = Array.isArray(script.beats) ? script.beats : [];
-  if (beats.length < 3 || beats.length > 4) errors.push('el guion necesita 3-4 beats (2-3 métricas + CTA web + cierre)');
-  const words = `${script.hook} ${beats.join(' ')}`.split(/\s+/).filter(Boolean).length;
-  if (words > 110) errors.push(`guion de ${words} palabras supera el techo de 50s (~110)`);
-  const full = `${script.hook} ${beats.join(' ')} ${script.description ?? ''}`.replaceAll(DISCLAIMER, '');
+  const narration = String(script.narration ?? '').trim();
+  if (!narration) {
+    errors.push('narración ausente');
+  } else {
+    const words = narration.split(/\s+/).filter(Boolean).length;
+    if (words > 110) errors.push(`guion de ${words} palabras supera el techo de 50s (~110)`);
+    if (!/goatlab\.win/i.test(narration)) errors.push('falta la CTA a goatlab.win en la narración');
+  }
+  const full = `${script.hook} ${narration} ${script.description ?? ''}`.replaceAll(DISCLAIMER, '');
   for (const hit of checkText(full)) errors.push(`vocabulario prohibido: ${hit}`);
   if (!published && /%/.test(full)) errors.push('porcentajes bloqueados: evaluation.published es false');
-  const cta = beats.find(b => /goatlab\.win/i.test(b));
-  if (!cta) errors.push('falta el beat con CTA a goatlab.win');
   return errors;
 }
 
