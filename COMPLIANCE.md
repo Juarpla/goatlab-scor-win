@@ -25,3 +25,7 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 ## Fotos
 
 Relleno genérico (estadio, hinchada, balón), sin portada por partido, nada que parezca footage. Fuentes: Pexels → Pixabay vía API (keys en `PEXELS_API_KEY` / `PIXABAY_API_KEY`, solo secrets/entorno, jamás en git) > Commons/Flickr CC con atribución. Cada manifiesto `media-pack/<webId>.json` registra fuente, id, url https, fotógrafo y atribución. Prohibido: Getty/AP/Reuters/Shutterstock/Alamy/Instagram/scraping Google.
+
+## Video
+
+`pnpm short -- --match=<webId>`: MP4 1080x1920 30fps ~42s (3 fotos Ken Burns + dissolves + web-card propia + end card `goatlab.win`), sin audio salvo `--audio`. Renders en `public/shorts/` (gitignorados, se regeneran).
