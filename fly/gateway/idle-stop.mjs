@@ -21,20 +21,21 @@ const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET;
 const start = Date.now();
 let lastActivity = Date.now();
 
-async function isBusy() {
-  if (existsSync(BUSY_FILE)) return true;
+async function busyReason() {
+  if (existsSync(BUSY_FILE)) return '/data/.busy presente (render en vuelo)';
   try {
     const { stdout } = await run('openclaw', ['sessions', '--json', '--limit', '5'], { timeout: 15_000 });
     const data = JSON.parse(stdout);
     for (const s of data.sessions ?? []) {
-      if (s.status === 'active' || s.status === 'running') return true;
-      if (s.updatedAt && Date.now() - s.updatedAt < IDLE_MS) return true;
+      if (s.status === 'active' || s.status === 'running') return `sesión ${s.key} en estado ${s.status}`;
+      if (s.updatedAt && Date.now() - s.updatedAt < IDLE_MS)
+        return `sesión ${s.key} actualizada hace ${Math.round((Date.now() - s.updatedAt) / 60000)}min`;
     }
-  } catch {
-    return true;
+  } catch (e) {
+    return `sessions.list falló: ${String(e.message ?? e).slice(0, 120)}`;
   }
-  if (Date.now() - start < MIN_UPTIME_MS) return true;
-  return false;
+  if (Date.now() - start < MIN_UPTIME_MS) return 'uptime mínimo (10min) no cumplido';
+  return null;
 }
 
 async function setWebhook() {
@@ -62,9 +63,14 @@ async function stopMachine() {
   if (!r.ok) throw new Error(`machines stop: ${r.status} ${await r.text()}`);
 }
 
+let checks = 0;
+
 async function check() {
-  if (await isBusy()) {
+  checks++;
+  const reason = await busyReason();
+  if (reason) {
     lastActivity = Date.now();
+    if (checks % 5 === 1) console.log(`idle-stop: ocupado (${reason})`);
     return;
   }
   if (Date.now() - lastActivity < IDLE_MS) return;
