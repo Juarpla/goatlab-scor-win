@@ -2,7 +2,7 @@
   "laliga": {
     "season": "2026",
     "provider": "Football-Data.org",
-    "updatedAt": "2026-09-22T12:10:54.461Z",
+    "updatedAt": "2026-09-23T12:23:52.887Z",
     "rows": [
       {
         "position": 1,
@@ -269,7 +269,7 @@
   "premier": {
     "season": "2026",
     "provider": "Football-Data.org",
-    "updatedAt": "2026-09-22T12:11:07.441Z",
+    "updatedAt": "2026-09-23T12:24:05.880Z",
     "rows": [
       {
         "position": 1,
@@ -536,7 +536,7 @@
   "champions": {
     "season": null,
     "provider": "Bzzoiro",
-    "updatedAt": "2026-09-22T12:10:29.101Z",
+    "updatedAt": "2026-09-23T12:23:27.467Z",
     "rows": [
       {
         "position": 1,
@@ -935,7 +935,7 @@
   "europa": {
     "season": null,
     "provider": "Bzzoiro",
-    "updatedAt": "2026-09-22T12:10:35.712Z",
+    "updatedAt": "2026-09-23T12:23:34.093Z",
     "rows": [
       {
         "position": 1,
@@ -1338,7 +1338,7 @@
   "libertadores": {
     "season": null,
     "provider": "Bzzoiro",
-    "updatedAt": "2026-09-22T12:10:42.062Z",
+    "updatedAt": "2026-09-23T12:23:40.571Z",
     "rows": [
       {
         "position": 1,
@@ -2669,7 +2669,7 @@
   "nations": {
     "season": null,
     "provider": "Bzzoiro",
-    "updatedAt": "2026-09-22T12:11:14.685Z",
+    "updatedAt": "2026-09-23T12:24:13.170Z",
     "rows": [
       {
         "position": 1,
@@ -2925,9 +2925,9 @@
         "goalDifference": null,
         "points": 0,
         "zone": {
-          "key": "playoff",
-          "label": "Playoffs",
-          "type": "playoff"
+          "key": "promo",
+          "label": "Promotion",
+          "type": "promotion"
         },
         "form": null
       },
@@ -3166,9 +3166,9 @@
         "goalDifference": null,
         "points": 0,
         "zone": {
-          "key": "promo",
-          "label": "Promotion",
-          "type": "promotion"
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
         },
         "form": null
       },
@@ -3186,8 +3186,8 @@
         "points": 0,
         "zone": {
           "key": "playoff",
-          "label": "Playoffs",
-          "type": "playoff"
+          "label": "Promotion Playoffs",
+          "type": "promotion"
         },
         "form": null
       },
@@ -3362,9 +3362,9 @@
         "goalDifference": null,
         "points": 0,
         "zone": {
-          "key": "promo",
-          "label": "Promotion",
-          "type": "promotion"
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
         },
         "form": null
       },
@@ -3382,8 +3382,8 @@
         "points": 0,
         "zone": {
           "key": "playoff",
-          "label": "Playoffs",
-          "type": "playoff"
+          "label": "Promotion Playoffs",
+          "type": "promotion"
         },
         "form": null
       },
@@ -3809,9 +3809,9 @@
             "goalDifference": null,
             "points": 0,
             "zone": {
-              "key": "playoff",
-              "label": "Playoffs",
-              "type": "playoff"
+              "key": "promo",
+              "label": "Promotion",
+              "type": "promotion"
             },
             "form": null
           },
@@ -4055,9 +4055,9 @@
             "goalDifference": null,
             "points": 0,
             "zone": {
-              "key": "promo",
-              "label": "Promotion",
-              "type": "promotion"
+              "key": "playoff",
+              "label": "Playoffs",
+              "type": "playoff"
             },
             "form": null
           },
@@ -4075,8 +4075,8 @@
             "points": 0,
             "zone": {
               "key": "playoff",
-              "label": "Playoffs",
-              "type": "playoff"
+              "label": "Promotion Playoffs",
+              "type": "promotion"
             },
             "form": null
           },
@@ -4256,9 +4256,9 @@
             "goalDifference": null,
             "points": 0,
             "zone": {
-              "key": "promo",
-              "label": "Promotion",
-              "type": "promotion"
+              "key": "playoff",
+              "label": "Playoffs",
+              "type": "playoff"
             },
             "form": null
           },
@@ -4276,8 +4276,8 @@
             "points": 0,
             "zone": {
               "key": "playoff",
-              "label": "Playoffs",
-              "type": "playoff"
+              "label": "Promotion Playoffs",
+              "type": "promotion"
             },
             "form": null
           },
@@ -4475,6 +4475,36 @@
       ],
       "Group 2": [
         {
+          "key": "promo",
+          "label": "Promotion",
+          "type": "promotion",
+          "from": 1,
+          "to": 1
+        },
+        {
+          "key": "playoff",
+          "label": "Promotion Playoffs",
+          "type": "promotion",
+          "from": 2,
+          "to": 2
+        },
+        {
+          "key": "relq",
+          "label": "Relegation Playoffs",
+          "type": "relegation",
+          "from": 3,
+          "to": 3
+        },
+        {
+          "key": "rel",
+          "label": "Relegation",
+          "type": "relegation",
+          "from": 4,
+          "to": 4
+        }
+      ],
+      "Group 3": [
+        {
           "key": "playoff",
           "label": "Playoffs",
           "type": "playoff",
@@ -4503,48 +4533,18 @@
           "to": 4
         }
       ],
-      "Group 3": [
-        {
-          "key": "promo",
-          "label": "Promotion",
-          "type": "promotion",
-          "from": 1,
-          "to": 1
-        },
-        {
-          "key": "playoff",
-          "label": "Playoffs",
-          "type": "playoff",
-          "from": 2,
-          "to": 2
-        },
-        {
-          "key": "relq",
-          "label": "Relegation Playoffs",
-          "type": "relegation",
-          "from": 3,
-          "to": 3
-        },
-        {
-          "key": "rel",
-          "label": "Relegation",
-          "type": "relegation",
-          "from": 4,
-          "to": 4
-        }
-      ],
       "Group 4": [
         {
-          "key": "promo",
-          "label": "Promotion",
-          "type": "promotion",
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff",
           "from": 1,
           "to": 1
         },
         {
           "key": "playoff",
-          "label": "Playoffs",
-          "type": "playoff",
+          "label": "Promotion Playoffs",
+          "type": "promotion",
           "from": 2,
           "to": 2
         },
