@@ -46,6 +46,9 @@ jobs:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           BZZOIRO_API_TOKEN: ${{ secrets.BZZOIRO_API_TOKEN }}
+      - name: Guiones de Shorts (ventana vigente + lint bloqueante)
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+        run: node scripts/generate-youtube-scripts.mjs && node scripts/check-compliance.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: goatlab-data

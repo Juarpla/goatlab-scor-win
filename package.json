@@ -13,6 +13,8 @@
     "astro": "astro",
     "deploy": "pnpm run build && wrangler deploy",
     "test": "node --test tests/*.test.js",
+    "lint:shorts": "node scripts/check-compliance.mjs",
+    "shorts": "node scripts/generate-youtube-scripts.mjs",
     "data:update": "node --env-file=.env scripts/update-data.mjs",
     "data:teams": "node --env-file=.env scripts/build-teams.mjs"
   },
