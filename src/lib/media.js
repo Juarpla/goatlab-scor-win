@@ -4,6 +4,7 @@
  * que parezca footage y cero logos. Fuentes: Pexels → Pixabay (APIs con key).
  * Puro y testeable: la red vive en scripts/generate-media-pack.mjs.
  */
+import { esName } from './teams.js';
 
 /** Pool de búsquedas genéricas; se rota por hash del webId (determinista). */
 export const QUERY_POOL = [
@@ -101,7 +102,7 @@ export function buildManifest({ match, assets }) {
   const list = (assets ?? []).filter(Boolean);
   return {
     matchId: match.webId ?? match.id,
-    match: `${match.home} vs ${match.away}`,
+    match: `${esName(match.home)} vs ${esName(match.away)}`,
     competition: match.competition ?? null,
     kickoff: match.kickoff ?? null,
     queries: [...new Set(list.map(a => a.query))],

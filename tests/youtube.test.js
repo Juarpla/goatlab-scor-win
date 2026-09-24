@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildYoutubeScripts, selectMatches, staleScripts, sameCore } from '../src/lib/youtube.js';
+import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
 const match = {
@@ -52,6 +53,27 @@ test('sin datos igual entrega 10 narraciones honestas', () => {
   for (const script of out.scripts) {
     assert.deepEqual(checkScript(script, { published: false }), []);
   }
+});
+
+test('nombres de países en español y passthrough de desconocidos', () => {
+  assert.equal(esName('England'), 'Inglaterra');
+  assert.equal(esName('Spain'), 'España');
+  assert.equal(esName('Rep. Of Ireland'), 'República de Irlanda');
+  assert.equal(esName('Türkiye'), 'Turquía');
+  assert.equal(esName('Equipo X'), 'Equipo X');
+  const out = buildYoutubeScripts({ ...match, home: 'England', away: 'Spain' });
+  const badArticle = /(^|\s)(el|al|del|este) (inglaterra|españa)\b/i;
+  for (const script of out.scripts) {
+    assert.ok(script.narration.includes('Inglaterra'));
+    assert.ok(!script.narration.includes('England'));
+    assert.ok(!script.narration.includes('Spain'));
+    assert.ok(!badArticle.test(script.narration), `artículo con género: ${script.narration}`);
+    assert.deepEqual(checkScript(script, { published: false }), []);
+  }
+  assert.ok(out.description.includes('Inglaterra contra España'));
+  const one = buildYoutubeScripts({ id: 'z', home: 'Italy', away: 'France', competition: 'nations',
+    lastMatches: { home: [{ date: '2026-09-01', home: 'Italy', away: 'Malta', homeScore: 1, awayScore: 0 }], away: [] } });
+  assert.ok(one.scripts[0].narration.includes('con 1 gol a favor'));
 });
 
 test('selectMatches: todos los NS ordenados; --match y --limit recortan', () => {

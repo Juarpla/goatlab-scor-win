@@ -6,7 +6,7 @@
  * (ver COMPLIANCE.md).
  */
 import { DISCLAIMER } from './compliance.js';
-import { sameClub } from './teams.js';
+import { sameClub, esName } from './teams.js';
 
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 
@@ -35,14 +35,14 @@ function formLine(rows, team, count = 5) {
 
 const HOOKS = [
   (m) => `${m.home} contra ${m.away}: los números cuentan otra historia.`,
-  (m) => `Nadie mira este ${m.home} contra ${m.away}, y debería.`,
-  (m) => `El ${m.home} contra ${m.away} engaña: mira la forma.`,
-  (m) => `¿Pocos goles en el ${m.home} contra ${m.away}? Los datos responden.`,
-  (m) => `El historial del ${m.home} contra ${m.away} pesa más de lo que crees.`,
-  (m) => `Tres datos antes del ${m.home} contra ${m.away}.`,
-  (m) => `El ${m.away} visita al ${m.home} con la historia en contra.`,
-  (m) => `Arco en cero: la clave del ${m.home} contra ${m.away}.`,
-  (m) => `Lo que ya jugaron dice mucho de este ${m.home} contra ${m.away}.`,
+  (m) => `${m.home} contra ${m.away}: nadie lo mira, y debería.`,
+  (m) => `${m.home} contra ${m.away} engaña: mira la forma.`,
+  (m) => `¿Pocos goles en ${m.home} contra ${m.away}? Los datos responden.`,
+  (m) => `El historial entre ${m.home} y ${m.away} pesa más de lo que crees.`,
+  (m) => `Tres datos: ${m.home} contra ${m.away}.`,
+  (m) => `${m.away} visita a ${m.home} con la historia en contra.`,
+  (m) => `Arco en cero, la clave: ${m.home} contra ${m.away}.`,
+  (m) => `Lo que ya jugaron dice mucho de este cruce: ${m.home} contra ${m.away}.`,
   (m) => `Últimos duelos, forma y goles: ${m.home} contra ${m.away}.`,
 ];
 
@@ -73,19 +73,22 @@ const CLOSERS = [
 
 function metricBeats(match) {
   const beats = [];
+  // Lógica con nombres crudos (sameClub); impresión en español (esName).
+  const H = esName(match.home);
+  const A = esName(match.away);
   const home = formLine(match.lastMatches?.home, match.home);
   const away = formLine(match.lastMatches?.away, match.away);
-  if (home) beats.push(`El ${match.home} ganó ${home.wins} de sus últimos ${home.n}, con ${home.gf} goles a favor.`);
-  if (away) beats.push(`El ${match.away} ganó ${away.wins} de sus últimos ${away.n}, con ${away.gf} goles a favor.`);
+  if (home) beats.push(`${H} ganó ${home.wins} de sus últimos ${home.n}, con ${home.gf} ${pl(home.gf, 'gol', 'goles')} a favor.`);
+  if (away) beats.push(`${A} ganó ${away.wins} de sus últimos ${away.n}, con ${away.gf} ${pl(away.gf, 'gol', 'goles')} a favor.`);
   if (home?.clean || away?.clean) {
     const clean = Math.max(home?.clean ?? 0, away?.clean ?? 0);
-    const side = (home?.clean ?? 0) >= (away?.clean ?? 0) ? match.home : match.away;
+    const side = (home?.clean ?? 0) >= (away?.clean ?? 0) ? H : A;
     beats.push(`El arco en cero apareció ${clean} ${pl(clean, 'vez', 'veces')}: ${side} defiende bien.`);
   }
   const h2h = match.h2h;
   if (h2h?.totalMatches) {
     beats.push(`El cara a cara suma ${h2h.totalMatches} duelos: ${h2h.homeWins} ${pl(h2h.homeWins, 'local', 'locales')}, ${h2h.draws} ${pl(h2h.draws, 'empate', 'empates')}.`);
-    if (h2h.avgTotalGoals != null) beats.push(`Esos duelos promedian ${String(h2h.avgTotalGoals).replace('.', ',')} goles por partido.`);
+    if (h2h.avgTotalGoals != null) beats.push(`Esos duelos promedian ${Number(h2h.avgTotalGoals).toFixed(2).replace('.', ',')} goles por partido.`);
   }
   if (!beats.length) beats.push('Sin serie registrada: la muestra aún es corta y se declara.');
   return beats;
@@ -141,17 +144,18 @@ export function sameCore(prev, next) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-/** Diez guiones + descripción lista para YouTube. */
+/** Diez guiones + descripción lista para YouTube (nombres en español). */
 export function buildYoutubeScripts(match) {
   const webId = match.webId ?? match.id;
   const metrics = metricBeats(match);
+  const names = { ...match, home: esName(match.home), away: esName(match.away) };
   const scripts = Array.from({ length: HOOKS.length }, (_, i) => {
-    const { hook, narration, words } = buildNarration(match, metrics, i);
+    const { hook, narration, words } = buildNarration(names, metrics, i);
     return { n: i + 1, hook, narration, words };
   });
   const tag = `#${String(match.competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
   const description = [
-    `${match.home} contra ${match.away}: forma, goles y cara a cara en menos de un minuto.`,
+    `${names.home} contra ${names.away}: forma, goles y cara a cara en menos de un minuto.`,
     metrics[0] ?? '',
     `🔗 Más data: https://goatlab.win/partido/${webId}`,
     `#goatlab #futbol ${tag}`,

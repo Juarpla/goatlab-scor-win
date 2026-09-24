@@ -17,6 +17,30 @@ const SHORTS = {
 export function normalize(name) {
   return String(name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
+/** Nombre en español para lectura en voz alta (los guiones son en español).
+ *  Sin entrada → se devuelve el original (no rompe equipos futuros). */
+const COUNTRY_ES = {
+  Albania: 'Albania', Andorra: 'Andorra', Armenia: 'Armenia', Austria: 'Austria',
+  Azerbaijan: 'Azerbaiyán', Belarus: 'Bielorrusia', Belgium: 'Bélgica',
+  'Bosnia & Herzegovina': 'Bosnia y Herzegovina', Bulgaria: 'Bulgaria', Croatia: 'Croacia',
+  Cyprus: 'Chipre', Czechia: 'Chequia', Denmark: 'Dinamarca', England: 'Inglaterra',
+  Estonia: 'Estonia', 'Faroe Islands': 'Islas Feroe', Finland: 'Finlandia', France: 'Francia',
+  Georgia: 'Georgia', Germany: 'Alemania', Gibraltar: 'Gibraltar', Greece: 'Grecia',
+  Hungary: 'Hungría', Iceland: 'Islandia', Ireland: 'Irlanda', Israel: 'Israel',
+  Italy: 'Italia', Kazakhstan: 'Kazajistán', Kosovo: 'Kosovo', Latvia: 'Letonia',
+  Liechtenstein: 'Liechtenstein', Lithuania: 'Lituania', Luxembourg: 'Luxemburgo', Malta: 'Malta',
+  Moldova: 'Moldavia', Montenegro: 'Montenegro', Netherlands: 'Países Bajos',
+  'North Macedonia': 'Macedonia del Norte', 'Northern Ireland': 'Irlanda del Norte', Norway: 'Noruega',
+  Poland: 'Polonia', Portugal: 'Portugal', 'Rep. Of Ireland': 'República de Irlanda',
+  'Republic of Ireland': 'República de Irlanda', Romania: 'Rumanía', 'San Marino': 'San Marino',
+  Scotland: 'Escocia', Serbia: 'Serbia', Slovakia: 'Eslovaquia', Slovenia: 'Eslovenia',
+  Spain: 'España', Sweden: 'Suecia', Switzerland: 'Suiza', Türkiye: 'Turquía',
+  Turkey: 'Turquía', Ukraine: 'Ucrania', Wales: 'Gales',
+};
+export function esName(name) {
+  const key = String(name ?? '').trim();
+  return COUNTRY_ES[key] ?? key;
+}
 /** Prefijos legales de proveedor que no distinguen club («FC Barcelona» = «Barcelona»). */
 const CLUB_PREFIXES = new Set(['fc', 'cf', 'cd', 'ca', 'cr', 'rc', 'cs', 'afc', 'rcd', 'club']);
 /** Sufijos genéricos que sí pueden omitirse («Sevilla FC» = «Sevilla», «Levante UD» = «Levante»).

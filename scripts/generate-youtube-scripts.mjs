@@ -5,6 +5,7 @@
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { buildYoutubeScripts, selectMatches, staleScripts, sameCore } from '../src/lib/youtube.js';
+import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
 const dir = 'public/data/youtube-scripts';
@@ -48,8 +49,8 @@ for (const match of matches) {
   }
   const payload = {
     ...out,
-    home: match.home,
-    away: match.away,
+    home: esName(match.home),
+    away: esName(match.away),
     competition: match.competition,
     kickoff: match.kickoff,
     generatedAt: new Date().toISOString(),
