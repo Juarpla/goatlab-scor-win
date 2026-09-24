@@ -11,6 +11,14 @@ Todo en el mismo chat de Telegram. Los guiones viven en
 
 ## Flujo
 
+0. **`/start` (puerta de entrada)**: al recibir `/start`, descarta todo estado
+   de serie (`matchId`, `audios`, `pendientes`) — borrado total, incluso a
+   mitad de serie y sin confirmar — y responde la bienvenida con la botonera
+   de flujos: `⚽ Goatlab` (equivale a `/goatlab`, arranca en el paso 1).
+   Cualquier otro texto tras `/start` sigue el flujo libre normal.
+   (Nota: OpenClaw no permite mapear `/start` a `/new` por config, así que el
+   reseteo es lógico: se ignora todo lo anterior; la compactación lo purga.)
+
 1. **Lista vigentes**: muestra la lista numerada con `match`, `competition` y
    `kickoff` (como hasta ahora). Si no hay archivos, dilo y termina.
 2. **Elige número**: el usuario responde con el número. Confirma el partido
@@ -62,22 +70,11 @@ Cada mensaje del bot lleva la botonera completa: no hay nada que memorizar.
 | 🔁 Otra toma | `otra toma` | Descarta el último audio, espera regrabación |
 | 📦 Todos | `todos` | Vuelca los restantes de golpe |
 | 📊 Estado | `estado` | Recibidos vs pendientes de la serie |
-| 📄 Nueva sesión | `nueva sesión` | Cierra lo actual y empieza de cero (ver tabla) |
 | ⏹ Basta | `basta` | Cierra la serie con resumen |
 | ✅ Sí / ❌ Es otro | `sí` / `es otro` | Confirma o corrige el match del audio |
 
 Los botones se mandan como `presentation.blocks[type=buttons]` del message
 tool (callbacks). Los comandos escritos son el fallback.
-
-## 📄 Nueva sesión (comportamiento)
-
-| Situación | Respuesta |
-|---|---|
-| Sin serie activa | "Nada que resetear: no hay serie en curso." No cambia nada |
-| Serie a medias | Cierra con resumen (recibidos vs pendientes, quedan guardados) y resetea |
-| Serie terminada | Resetea directo, listo para la próxima tanda |
-
-Nada se pierde en silencio. Equivale al comando nativo `/new`.
 
 ## Reglas
 
@@ -85,5 +82,6 @@ Nada se pierde en silencio. Equivale al comando nativo `/new`.
 - Audio sin serie activa → pide `/goatlab` primero.
 - Número a mitad de serie → no cambia de partido; recuerda en qué guion estás.
 - Sin reset automático de sesión (decisión del usuario: control manual con
-  📄 Nueva sesión; las series a medias se conservan).
+  `/start`, que hace borrado total; las series a medias se conservan mientras
+  no se pida `/start`).
 - Cero cuotas, cero garantías de resultado, CTA siempre a `goatlab.win`.
