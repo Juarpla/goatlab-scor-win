@@ -1,0 +1,37 @@
+// Gateway GoatLab en Fly (app goatlab-gateway).
+// Sin secrets: todo lo sensible vive en ${VAR} inyectadas como Fly secrets.
+// Ver fly/gateway/fly.toml y `fly secrets set`.
+{
+  gateway: {
+    mode: "local",
+    port: 3000,
+    bind: "lan",
+    auth: { token: "${OPENCLAW_GATEWAY_TOKEN}" },
+    controlUi: { allowedOrigins: ["https://goatlab-gateway.fly.dev"] },
+  },
+  agents: {
+    defaults: {
+      workspace: "/home/node/.openclaw/workspace",
+      model: { primary: "opencode-go/mimo-v2.6-flash" },
+    },
+  },
+  models: {
+    mode: "merge",
+    providers: {
+      "opencode-go": {
+        baseUrl: "https://opencode.ai/zen/go/v1",
+        apiKey: "${OPENCODE_GO_API_KEY}",
+        api: "openai-completions",
+        models: [{ id: "mimo-v2.6-flash", name: "Mimo 2.6 Flash (Go)" }],
+      },
+    },
+  },
+  channels: {
+    telegram: {
+      enabled: true,
+      botToken: "${TELEGRAM_BOT_TOKEN}",
+      dmPolicy: "allowlist",
+      allowFrom: ["1295170307"],
+    },
+  },
+}
