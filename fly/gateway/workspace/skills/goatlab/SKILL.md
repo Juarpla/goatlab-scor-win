@@ -30,15 +30,26 @@ Todo en el mismo chat de Telegram. Los guiones viven en
    botones. Si era el último: `Serie completa 🎉` + resumen.
 6. **🎬 Render**: al cerrar (`⏹ Basta` o serie completa) ofrece
    *"¿renderizo los N videos con tus audios? 🎬"*. Si acepta, o si pide
-   `video`/`render` en cualquier momento, por cada guion con audio haz con
-   `exec`: `curl -s -X POST "$WORKER_URL/render"`
-   `-H "Authorization: Bearer $RENDER_SECRET"` con JSON
-   `{chatId, matchId, variant, matchLabel, hook, audioFileId, photos}`
-   (`chatId` = el chat actual; `matchLabel/hook/photos` del JSON del partido;
-   `WORKER_URL=https://goatlab-render.fly.dev`, `RENDER_SECRET` del entorno).
-   Responde `202 {jobId}`: sondea `GET $WORKER_URL/jobs/<id>` cada ~60s hasta
-   `done` (el MP4 llega solo al chat por `sendVideo`) o `error` (muestra el
-   mensaje). Un render a la vez: encola de uno en uno.
+   `video`/`render` en cualquier momento, por cada guion con audio:
+   1. Crea el heartbeat: `touch /data/.busy` (vía `exec`). Esto impide que el
+      supervisor apague la máquina durante el render.
+   2. Haz con `exec`: `curl -s -X POST "$WORKER_URL/render"`
+      `-H "Authorization: Bearer $RENDER_SECRET"` con JSON
+      `{chatId, matchId, variant, matchLabel, hook, audioFileId, photos}`
+      (`chatId` = el chat actual; `matchLabel/hook/photos` del JSON del partido;
+      `WORKER_URL=https://goatlab-render.fly.dev`, `RENDER_SECRET` del entorno).
+   3. Responde `202 {jobId}`: sondea `GET $WORKER_URL/jobs/<id>` cada ~60s hasta
+      `done` (el MP4 llega solo al chat por `sendVideo`) o `error` (muestra el
+      mensaje). Un render a la vez: encola de uno en uno.
+   4. Al terminar **todos** los renders: `rm /data/.busy` (vía `exec`).
+
+## Retomada tras horas
+
+Si el usuario vuelve después de un rato largo (la máquina puede haberse
+apagado sola), no hace nada especial: el gateway despierta solo y la sesión
+se restaura del volumen. Simplemente responde con el `📊 Estado` de la serie
+en curso y continúa desde donde quedaron. Los `file_id` de los audios siguen
+válidos (viven en Telegram, no en disco).
 
 ## Botones y comandos (misma acción)
 
