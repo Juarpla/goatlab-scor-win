@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveChain, withFailover, extractJson, hasTransportFailure, hasTruncatedFailure, createProviderBreaker, parseRetryAfter } from '../src/lib/llm.js';
+import { resolveChain, withFailover, extractJson, hasTransportFailure, hasPermanentFailure, hasTruncatedFailure, createProviderBreaker, parseRetryAfter } from '../src/lib/llm.js';
 const logger = { warn() {} };
 const env = { MISTRAL_API_KEY: 'test-a', OPENCODE_GO_API_KEY: 'test-b' };
 const response = content => new Response(JSON.stringify({ choices: [{ message: { content } }] }));
@@ -102,4 +102,35 @@ test('parseRetryAfter acepta segundos y fechas, ignora basura', () => {
   assert.equal(parseRetryAfter(null), 0);
   assert.equal(parseRetryAfter('basura'), 0);
   assert.ok(parseRetryAfter(new Date(Date.now() + 30_000).toUTCString()) > 0);
+});
+test('el 400 es permanente y no reintentable como transporte', async () => {
+  const error = await withFailover([], { env, logger, fetchImpl: async () => new Response('', { status: 400 }) }).catch(e => e);
+  assert.equal(hasTransportFailure(error), false);
+  assert.equal(hasPermanentFailure(error), true);
+  assert.deepEqual(error.details.map(d => d.kind), ['permanent', 'permanent']);
+});
+test('mimo omite temperature para evitar 400 en thinking mode', async () => {
+  const calls = [];
+  const mimoEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'mimo-v2.6-flash' };
+  const result = await withFailover([], { env: mimoEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].model, 'mimo-v2.6-flash');
+  assert.ok(!('temperature' in calls[0]));
+  assert.equal(result.model, 'mimo-v2.6-flash');
+});
+test('workers AI construye URL con account id y usa glm-4.7-flash', async () => {
+  const calls = [];
+  const wEnv = { WORKERS_AI_API_KEY: 'x', CLOUDFLARE_ACCOUNT_ID: 'abc123', LLM_PROVIDER_ORDER: 'WORKERS_AI_MODEL', WORKERS_AI_MODEL: '@cf/zai-org/glm-4.7-flash' };
+  const chain = resolveChain(wEnv, logger);
+  assert.equal(chain[0].id, 'WORKERS_AI');
+  assert.equal(chain[0].model, '@cf/zai-org/glm-4.7-flash');
+  await withFailover([], { env: wEnv, logger, fetchImpl: async (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return response('{"ok":true}'); }, validate: extractJson });
+  assert.ok(calls[0].url === 'https://api.cloudflare.com/client/v4/accounts/abc123/ai/v1/chat/completions');
+  assert.equal(calls[0].body.temperature, 0);
+});
+test('opencode go construye URL zen/go sin duplicar chat/completions', async () => {
+  const calls = [];
+  const oEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'mimo-v2.6-flash' };
+  await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
+  assert.ok(calls[0] === 'https://opencode.ai/zen/go/v1/chat/completions');
 });

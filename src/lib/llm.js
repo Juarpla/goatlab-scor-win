@@ -14,6 +14,17 @@ export class LlmTransportError extends Error {
   }
 }
 
+/** Fallo permanente 4xx (modelo/params/auth): reintentar no ayuda. */
+export class LlmPermanentError extends Error {
+  constructor(message, { provider = null, usage = null } = {}) {
+    super(message);
+    this.name = 'LlmPermanentError';
+    this.kind = 'permanent';
+    this.provider = provider;
+    this.usage = usage;
+  }
+}
+
 export const providers = {
   // baseUrl admite override opcional (MISTRAL_BASE_URL) para servir modelos
   // de la misma firma OpenAI a través de otra pasarela.
@@ -37,17 +48,22 @@ export function resolveChain(env = runtimeEnv(), logger = console) {
 }
 export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
   let res;
+  // Mimo en thinking mode no acepta temperature custom (fuerza 1.0/0.95): omitir evita HTTP 400.
+  const omitTemperature = String(provider.model ?? '').toLowerCase().startsWith('mimo-');
   try {
     res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
       method: 'POST', signal: AbortSignal.timeout(timeoutMs),
       headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
-      body: JSON.stringify({ model: provider.model, temperature: 0, messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
+      body: JSON.stringify({ model: provider.model, ...(omitTemperature ? {} : { temperature: 0 }), messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
     });
   } catch (error) {
     throw new LlmTransportError(error?.message ?? 'Error de red', { provider: provider.id });
   }
   // Do not copy provider response bodies into logs: they may echo prompts or credentials.
-  if (!res.ok) throw new LlmTransportError(`HTTP ${res.status}`, { provider: provider.id, retryAfterMs: parseRetryAfter(res.headers?.get?.('retry-after')) });
+  if (!res.ok) {
+    if ([400, 401, 403, 404, 422].includes(res.status)) throw new LlmPermanentError(`HTTP ${res.status}`, { provider: provider.id });
+    throw new LlmTransportError(`HTTP ${res.status}`, { provider: provider.id, retryAfterMs: parseRetryAfter(res.headers?.get?.('retry-after')) });
+  }
   const body = await res.json();
   const content = body?.choices?.[0]?.message?.content;
   const usage = normalizeUsage(body?.usage);
@@ -78,6 +94,9 @@ function normalizeUsage(raw) {
 }
 export function hasTransportFailure(error) {
   return Array.isArray(error?.details) && error.details.some(detail => detail?.kind === 'transport');
+}
+export function hasPermanentFailure(error) {
+  return Array.isArray(error?.details) && error.details.some(detail => detail?.kind === 'permanent');
 }
 export function hasTruncatedFailure(error) {
   return Array.isArray(error?.details) && error.details.some(detail => detail?.truncated === true);
@@ -124,10 +143,11 @@ export async function withFailover(messages, options = {}) {
       call = await callProvider(provider, messages, { ...options, env, sessionId });
     } catch (error) {
       const transport = error instanceof LlmTransportError;
-      const kind = transport ? 'transport' : 'unknown';
+      const permanent = error instanceof LlmPermanentError;
+      const kind = transport ? 'transport' : permanent ? 'permanent' : 'unknown';
       breaker?.note(provider.id, { kind, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0 });
       failures.push(new Error(`${provider.name}/${provider.model}: ${error.message}`));
-      details.push({ provider: provider.id, model: provider.model, kind, reason: String(error?.message ?? error), truncated: transport ? Boolean(error.truncated) : false, usage: transport ? error.usage ?? null : null, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0, latencyMs: Date.now() - started });
+      details.push({ provider: provider.id, model: provider.model, kind, reason: String(error?.message ?? error), truncated: transport ? Boolean(error.truncated) : false, usage: error.usage ?? null, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0, latencyMs: Date.now() - started });
       continue;
     }
     let value;
