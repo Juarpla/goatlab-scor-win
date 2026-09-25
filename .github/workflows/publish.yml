@@ -71,7 +71,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data
+          git add public/data public/match-probabilities public/ads.txt
           if git diff --cached --quiet; then
             echo "Sin cambios de datos que commitear"
           else
@@ -80,8 +80,8 @@ jobs:
             # rebase + reintentos en vez de fallar con "fetch first".
             for i in 1 2 3; do
               git fetch origin
-              if ! git rebase origin/main; then
-                git rebase --abort
+              if ! git rebase --autostash origin/main; then
+                git rebase --abort || true
                 echo "Conflicto con main: revisar a mano"
                 exit 1
               fi
