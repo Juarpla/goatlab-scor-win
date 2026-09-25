@@ -92,6 +92,20 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  const moreBtn=document.querySelector<HTMLButtonElement>('#wall-more')!;
  const moreLabel=moreBtn.querySelector('span')!;
  const wallBody=document.querySelector<HTMLElement>('.wall-body')!;
+ const rails=[...wallBody.querySelectorAll<HTMLElement>('.ad-rail')];
+ // Ad-blocker: los filtros cosméticos ocultan los rieles con display:none pero
+ // el grid mantendría los tracks de 300px. Solo se colapsa cuando el riel está
+ // oculto; la caja PUBLICIDAD vacía (aside visible) se conserva intacta.
+ function updateAdsVisibility(){
+  if(!wide.matches){wallBody.classList.remove('no-ads');return;}
+  const hidden=(el:HTMLElement)=>{
+   const cs=getComputedStyle(el);
+   if(cs.display==='none'||cs.visibility==='hidden')return true;
+   const rect=el.getBoundingClientRect();
+   return rect.width===0&&rect.height===0;
+  };
+  wallBody.classList.toggle('no-ads',rails.length>0&&rails.every(hidden));
+ }
  let shown=0;
  function update(mode:'all'|'new'|'silent', from=0){
   const query=normalize(search.value), day=daySelect.value;
@@ -119,6 +133,7 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
   // Con pocos resultados el riel de 600px dominaría una vista casi vacía:
   // los rieles se retiran y el resultado ocupa todo el ancho.
   wallBody.classList.toggle('is-thin',wide.matches&&visible.length<=3);
+  updateAdsVisibility();
   // Filtros: la cascada re-entra completa. "Mostrar más": solo los recién llegados.
   if(mode!=='silent'&&!reduce)batch.slice(from).forEach((card,index)=>{
    card.style.animation='none';void card.offsetWidth;
@@ -140,5 +155,8 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  });
  shown=INITIAL();
  update('all');
+ // Los estilos cosméticos del blocker aplican async: re-chequear tras el primer frame y con retardo.
+ requestAnimationFrame(()=>updateAdsVisibility());
+ setTimeout(updateAdsVisibility,1500);
 </script>
 </Layout>

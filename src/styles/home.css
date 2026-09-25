@@ -121,6 +121,9 @@
   .wall-lead{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
   .wall-lead .match-card{margin-bottom:0}
   .wall-body{display:grid;grid-template-columns:300px minmax(0,1fr) 300px;gap:14px;align-items:start}
+  /* El centro vive siempre en la pista central: si un ad-blocker oculta los
+     rieles (display:none por filtros cosméticos), el muro no colapsa al track de 300px. */
+  .wall-center{grid-column:2;min-width:0}
   .wall--ads .wall-grid{columns:2}
   .ad-rail{display:flex}
   /* El riel acompaña el scroll (sticky) y su recorrido termina con la columna
@@ -130,7 +133,14 @@
   /* Filtro con ≤3 resultados: un riel de 600px dominaría una vista casi vacía;
      los rieles se retiran y el resultado respira a ancho completo. */
   .wall-body.is-thin{grid-template-columns:minmax(0,1fr)}
+  .wall-body.is-thin .wall-center{grid-column:1}
   .wall-body.is-thin .ad-rail{display:none}
+  /* Ad-blocker: ambos rieles ocultos por filtros cosméticos. Se retiran los
+     tracks laterales vacíos y el muro respira a ancho completo con 3 columnas.
+     La caja PUBLICIDAD vacía (ins bloqueado pero aside visible) se conserva. */
+  .wall-body.no-ads{grid-template-columns:minmax(0,1fr)}
+  .wall-body.no-ads .wall-center{grid-column:1}
+  .wall-body.no-ads .wall-grid{columns:3}
 }
 @media(max-width:1149px){
   .ad-rail{display:none}
