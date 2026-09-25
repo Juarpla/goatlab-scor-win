@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -85,6 +85,51 @@ test('selectMatches: todos los NS ordenados; --match y --limit recortan', () => 
   assert.deepEqual(selectMatches(rows).map(m => m.id), ['a', 'c']);
   assert.deepEqual(selectMatches(rows, { onlyMatch: 'c' }).map(m => m.id), ['c']);
   assert.deepEqual(selectMatches(rows, { limit: 1 }).map(m => m.id), ['a']);
+});
+
+test('scriptFacts no lleva porcentajes y missingScripts solo pide los que faltan', () => {
+  const facts = scriptFacts(match);
+  assert.equal(facts.home, 'Andorra');
+  assert.equal(facts.away, 'Malta');
+  assert.equal(facts.homeForm.gf, 1);
+  assert.equal(facts.homeForm.ga, 4);
+  assert.equal(facts.h2h.total, 4);
+  assert.equal(facts.h2h.avgTotalGoals, 1.25);
+  assert.equal(JSON.stringify(facts).includes('%'), false);
+  assert.equal(JSON.stringify(youtubeUserPayload({ published: false, facts })).includes('oneX2'), false);
+  assert.deepEqual(
+    missingScripts(
+      [{ webId: 'a' }, { webId: 'b' }],
+      ['a.json'],
+    ).map(m => m.webId),
+    ['b'],
+  );
+});
+
+test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artículo', () => {
+  const facts = {
+    home: 'Andorra',
+    away: 'Malta',
+    homeForm: { n: 5, wins: 1, draws: 2, losses: 2, gf: 2, ga: 4, clean: 2 },
+    awayForm: null,
+    h2h: { total: 4, homeWins: 0, awayWins: 2, draws: 2, avgTotalGoals: 1.25, last: null },
+  };
+  const angles = ['forma', 'historial', 'goles', 'arco', 'visita', 'cruce', 'defensa', 'empates', 'contraste', 'pitazo'];
+  const scripts = angles.map((angle) => {
+    const hook = `Andorra y Malta abren la lectura de ${angle} con la muestra encima.`;
+    return {
+      hook,
+      narration: `${hook} Andorra ganó 1 de sus últimos 5, con 2 goles a favor. El cara a cara suma 4 duelos y promedia 1,25 goles. La pregunta sigue abierta. El análisis está en goatlab.win.`,
+    };
+  });
+  const lede = 'Andorra recibe a Malta con 4 duelos ya jugados y la forma reciente de Andorra en 5 partidos.';
+  assert.deepEqual(acceptYoutubeDraft({ scripts, lede }, { facts, published: false }), []);
+  const invented = structuredClone(scripts);
+  invented[0] = { ...invented[0], narration: `${invented[0].hook} Andorra marcaría 99 goles. El análisis está en goatlab.win.` };
+  assert.ok(acceptYoutubeDraft({ scripts: invented, lede }, { facts, published: false }).some(e => /cifra 99/.test(e)));
+  const articled = structuredClone(scripts);
+  articled[0] = { ...articled[0], hook: 'El Andorra llega entero frente a Malta hoy.', narration: 'El Andorra llega entero frente a Malta hoy. Andorra ganó 1 de sus últimos 5. El análisis está en goatlab.win.' };
+  assert.ok(acceptYoutubeDraft({ scripts: articled, lede }, { facts, published: false }).some(e => /artículo/.test(e)));
 });
 
 test('staleScripts detecta rancios y sameCore ignora generatedAt', () => {

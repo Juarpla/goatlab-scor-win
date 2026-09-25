@@ -54,6 +54,14 @@ jobs:
       - name: Guiones de Shorts (ventana vigente + lint bloqueante)
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
         run: node scripts/generate-youtube-scripts.mjs && node scripts/check-compliance.mjs
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
+          OPENCODE_GO_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          WORKERS_AI_MODEL: ${{ vars.WORKERS_AI_MODEL }}
+          OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
       - name: Media-pack de Shorts (fotos con licencia)
         if: (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && env.PEXELS_API_KEY != ''
         run: node scripts/generate-media-pack.mjs

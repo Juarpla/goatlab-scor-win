@@ -1,11 +1,11 @@
 /**
- * Guiones de Shorts: 10 variantes deterministas por partido (<50s cada una).
- * Texto corrido listo para leer en voz alta: hook + datos entrelazados +
- * cierre + CTA hablada. Cero tokens LLM: plantillas + métricas reales del
- * JSON. Sin porcentajes mientras el gate de publicación siga cerrado
+ * Guiones de Shorts (<50s). La acción no reescribe un JSON ya existente:
+ * los faltantes los redacta el modelo de turno con el skill
+ * redactar-guiones-shorts. buildYoutubeScripts queda como plantilla de
+ * prueba. Sin porcentajes mientras el gate de publicación siga cerrado
  * (ver COMPLIANCE.md).
  */
-import { DISCLAIMER } from './compliance.js';
+import { DISCLAIMER, checkScript, checkText } from './compliance.js';
 import { sameClub, esName } from './teams.js';
 
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
@@ -21,16 +21,17 @@ function formLine(rows, team, count = 5) {
     .sort(byDateDesc)
     .slice(0, count);
   if (!played.length) return null;
-  let wins = 0, draws = 0, gf = 0, clean = 0;
+  let wins = 0, draws = 0, gf = 0, ga = 0, clean = 0;
   for (const r of played) {
     const mine = sameClub(r.home, team) ? r.homeScore : r.awayScore;
     const theirs = sameClub(r.home, team) ? r.awayScore : r.homeScore;
     gf += mine;
+    ga += theirs;
     if (mine > theirs) wins += 1;
     else if (mine === theirs) draws += 1;
     if (theirs === 0) clean += 1;
   }
-  return { n: played.length, wins, draws, losses: played.length - wins - draws, gf, clean };
+  return { n: played.length, wins, draws, losses: played.length - wins - draws, gf, ga, clean };
 }
 
 const HOOKS = [
@@ -142,6 +143,142 @@ export function sameCore(prev, next) {
   const { generatedAt: _a, ...a } = prev ?? {};
   const { generatedAt: _b, ...b } = next ?? {};
   return JSON.stringify(a) === JSON.stringify(b);
+}
+
+/** Hechos que el modelo puede decir. Sin porcentajes ni lectura de apuesta. */
+export function scriptFacts(match) {
+  const home = esName(match.home);
+  const away = esName(match.away);
+  const homeForm = formLine(match.lastMatches?.home, match.home);
+  const awayForm = formLine(match.lastMatches?.away, match.away);
+  let h2h = null;
+  if (match.h2h?.totalMatches) {
+    const recent = [...(match.h2h.recent ?? [])]
+      .filter(r => r.homeScore != null && r.awayScore != null)
+      .sort(byDateDesc)[0] ?? null;
+    h2h = {
+      total: match.h2h.totalMatches,
+      homeWins: match.h2h.homeWins ?? 0,
+      awayWins: match.h2h.awayWins ?? 0,
+      draws: match.h2h.draws ?? 0,
+      avgTotalGoals: match.h2h.avgTotalGoals == null ? null : Number(Number(match.h2h.avgTotalGoals).toFixed(2)),
+      last: recent ? {
+        home: esName(recent.home),
+        away: esName(recent.away),
+        homeScore: recent.homeScore,
+        awayScore: recent.awayScore,
+      } : null,
+    };
+  }
+  return { home, away, homeForm, awayForm, h2h };
+}
+
+/** Partidos de la corrida que todavía no tienen un JSON con 10 guiones. */
+export function missingScripts(matches, files) {
+  const have = new Set((files ?? []).filter(f => String(f).endsWith('.json')).map(f => f.replace(/\.json$/, '')));
+  return (matches ?? []).filter(m => !have.has(m.webId ?? m.id));
+}
+
+export function youtubeUserPayload({ published, facts }) {
+  return { published: published === true, facts };
+}
+
+function walkNumbers(value, into) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    into.add(Number.isInteger(value) ? value : Number(value.toFixed(2)));
+    return;
+  }
+  if (!value || typeof value !== 'object') return;
+  for (const item of Object.values(value)) walkNumbers(item, into);
+}
+
+export function allowedNumbers(facts) {
+  const into = new Set();
+  walkNumbers(facts, into);
+  return into;
+}
+
+export function numbersInText(text) {
+  return [...String(text ?? '').matchAll(/\d+(?:[.,]\d+)?/g)]
+    .map(m => Number(m[0].replace(',', '.')))
+    .filter(n => Number.isFinite(n));
+}
+
+function numberAllowed(n, allowed) {
+  for (const candidate of allowed) {
+    if (Math.abs(candidate - n) < 0.001) return true;
+  }
+  return false;
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+export function cleanLede(lede) {
+  return String(lede ?? '')
+    .replaceAll(DISCLAIMER, '')
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/#\S+/g, '')
+    .replace(/🔗/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function competitionTag(competition) {
+  return `#${String(competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+}
+
+export function buildDescription({ lede, matchId, competition }) {
+  return [
+    cleanLede(lede),
+    `🔗 Más data: https://goatlab.win/partido/${matchId}`,
+    `#goatlab #futbol ${competitionTag(competition)}`,
+    DISCLAIMER,
+  ].join('\n');
+}
+
+/**
+ * Rechaza un borrador del modelo si no se puede leer en voz alta,
+ * inventa cifras o rompe el gate. Devuelve la lista de fallos.
+ */
+export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
+  const errors = [];
+  const scripts = draft?.scripts;
+  if (!Array.isArray(scripts) || scripts.length !== 10) errors.push('hacen falta 10 guiones');
+  const allowed = allowedNumbers(facts);
+  const names = [facts?.home, facts?.away].filter(Boolean);
+  const hooks = new Set();
+  for (const [i, script] of (scripts ?? []).entries()) {
+    const hook = String(script?.hook ?? '').trim();
+    const narration = String(script?.narration ?? '').trim();
+    const label = `guion ${i + 1}`;
+    if (hooks.has(hook)) errors.push(`${label}: gancho repetido`);
+    if (hook) hooks.add(hook);
+    if (hook && narration && !narration.startsWith(hook)) errors.push(`${label}: la narración no abre con el gancho`);
+    for (const name of names) {
+      if (!narration.includes(name)) errors.push(`${label}: falta ${name}`);
+      const article = new RegExp(`(?:^|\\s)(?:el|al|del|este|la|los|las)\\s+${escapeRegExp(name)}\\b`, 'i');
+      if (article.test(narration)) errors.push(`${label}: artículo delante de ${name}`);
+    }
+    for (const n of numbersInText(`${hook} ${narration}`)) {
+      if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);
+    }
+    for (const error of checkScript({ hook, narration }, { published })) errors.push(`${label}: ${error}`);
+  }
+  const lede = cleanLede(draft?.lede);
+  if (!lede) errors.push('falta la entrada de la descripción');
+  else {
+    for (const name of names) {
+      if (!lede.includes(name)) errors.push(`descripción: falta ${name}`);
+    }
+    for (const n of numbersInText(lede)) {
+      if (!numberAllowed(n, allowed)) errors.push(`descripción: cifra ${n} no está en los hechos`);
+    }
+    for (const hit of checkText(lede)) errors.push(`descripción: vocabulario prohibido: ${hit}`);
+    if (!published && /%/.test(lede)) errors.push('descripción: porcentajes bloqueados');
+  }
+  return errors;
 }
 
 /** Diez guiones + descripción lista para YouTube (nombres en español). */
