@@ -1,15 +1,15 @@
 {
-  "id": "bz-212585",
-  "home": "North Macedonia",
-  "away": "Switzerland",
+  "id": "bz-212619",
+  "home": "Belgium",
+  "away": "France",
   "competition": "nations",
-  "kickoff": "2026-09-26T18:45:00+00:00",
+  "kickoff": "2026-09-28T18:45:00+00:00",
   "updatedAt": "2026-09-25T21:42:18.164Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.1,
-      "away": 1.43
+      "home": 2.1,
+      "away": 1.22
     },
     "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
@@ -19,10 +19,10 @@
       "away": 0
     },
     "standings": {
-      "North Macedonia": {
-        "position": 10,
-        "team": "North Macedonia",
-        "teamId": 730,
+      "Belgium": {
+        "position": 4,
+        "team": "Belgium",
+        "teamId": 477,
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -31,13 +31,17 @@
         "goalsAgainst": null,
         "goalDifference": null,
         "points": 0,
-        "zone": null,
+        "zone": {
+          "key": "rel",
+          "label": "Relegation",
+          "type": "relegation"
+        },
         "form": null
       },
-      "Switzerland": {
-        "position": 14,
-        "team": "Switzerland",
-        "teamId": 462,
+      "France": {
+        "position": 6,
+        "team": "France",
+        "teamId": 485,
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -52,109 +56,115 @@
     },
     "scorers": null,
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-28T18:00",
+      "source": "open-meteo-forecast"
+    },
     "discipline": null,
     "history": {
       "rows": 150
     },
-    "venue": null
+    "venue": {
+      "city": "Bruselas",
+      "tz": "Europe/Brussels"
+    }
   },
   "markets": {
     "oneX2": {
-      "home": 0.278,
-      "draw": 0.289,
-      "away": 0.433
+      "home": 0.566,
+      "draw": 0.227,
+      "away": 0.207
     },
     "doubleChance": {
-      "12": 0.711,
-      "1X": 0.567,
-      "X2": 0.722
+      "12": 0.773,
+      "1X": 0.793,
+      "X2": 0.434
     },
     "dnb": {
-      "home": 0.391,
-      "away": 0.609
+      "home": 0.732,
+      "away": 0.268
     },
     "totals": {
-      "over15": 0.731,
-      "under15": 0.269,
-      "over25": 0.464,
-      "under25": 0.536,
-      "over35": 0.249,
-      "under35": 0.751
+      "over15": 0.853,
+      "under15": 0.147,
+      "over25": 0.644,
+      "under25": 0.356,
+      "over35": 0.424,
+      "under35": 0.576
     },
     "btts": {
-      "yes": 0.52,
-      "no": 0.48
+      "yes": 0.628,
+      "no": 0.372
     },
     "cleanSheet": {
-      "home": 0.239,
-      "away": 0.333
+      "home": 0.295,
+      "away": 0.122
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.138
+        "p": 0.102
       },
       {
-        "home": 0,
+        "home": 2,
         "away": 1,
-        "p": 0.101
+        "p": 0.097
       },
       {
-        "home": 0,
+        "home": 2,
         "away": 0,
-        "p": 0.092
+        "p": 0.08
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.068
       },
       {
         "home": 1,
-        "away": 2,
-        "p": 0.09
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "p": 0.081
+        "away": 0,
+        "p": 0.067
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.53,
-    "noGoal": 0.08,
+    "lambdaTotal": 3.32,
+    "noGoal": 0.036,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.344
+        "p": 0.425
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.226
+        "p": 0.244
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.148
+        "p": 0.141
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.097
+        "p": 0.081
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.064
+        "p": 0.046
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.042
+        "p": 0.027
       }
     ],
-    "firstHome": 0.4,
-    "firstAway": 0.52
+    "firstHome": 0.61,
+    "firstAway": 0.354
   },
   "scorers": {
     "home": null,
@@ -164,99 +174,99 @@
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.127,
-      "draw": 0.198,
-      "away": 0.675,
-      "predicted": "A"
+      "home": 0.596,
+      "draw": 0.205,
+      "away": 0.19899999999999998,
+      "predicted": "H"
     },
     "xg": {
-      "home": 1.1,
-      "away": 1.43
+      "home": 2.1,
+      "away": 1.22
     },
-    "over15": 0.763,
-    "over25": 0.539,
-    "over35": 0.31,
-    "btts": 0.475,
-    "score": "1-1",
-    "cornersOver95": 0.47,
+    "over15": 0.828,
+    "over25": 0.629,
+    "over35": 0.408,
+    "btts": 0.59,
+    "score": "2-1",
+    "cornersOver95": 0.46,
     "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.675,
+      "favorite": "H",
+      "favoriteProb": 0.596,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6749,
+    "confidence": 0.5963,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-23T12:24:19.457Z",
+    "capturedAt": "2026-09-23T12:24:20.917Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.278,
-      "draw": 0.289,
-      "away": 0.433
+      "home": 0.566,
+      "draw": 0.227,
+      "away": 0.207
     },
     "doubleChance": {
-      "12": 0.711,
-      "1X": 0.567,
-      "X2": 0.722
+      "12": 0.773,
+      "1X": 0.793,
+      "X2": 0.434
     },
     "dnb": {
-      "home": 0.391,
-      "away": 0.609
+      "home": 0.732,
+      "away": 0.268
     },
     "totals": {
-      "over15": 0.731,
-      "under15": 0.269,
-      "over25": 0.464,
-      "under25": 0.536,
-      "over35": 0.249,
-      "under35": 0.751
+      "over15": 0.853,
+      "under15": 0.147,
+      "over25": 0.644,
+      "under25": 0.356,
+      "over35": 0.424,
+      "under35": 0.576
     },
     "btts": {
-      "yes": 0.52,
-      "no": 0.48
+      "yes": 0.628,
+      "no": 0.372
     },
     "cleanSheet": {
-      "home": 0.239,
-      "away": 0.333
+      "home": 0.295,
+      "away": 0.122
     },
     "exactScores": [
       {
+        "home": 2,
+        "away": 1,
+        "p": 0.128,
+        "share": 0.2876404494382023
+      },
+      {
         "home": 1,
         "away": 1,
-        "p": 0.126,
-        "share": 0.2571428571428571
+        "p": 0.102,
+        "share": 0.2292134831460674
       },
       {
-        "home": 0,
-        "away": 1,
-        "p": 0.101,
-        "share": 0.20612244897959184
-      },
-      {
-        "home": 0,
+        "home": 2,
         "away": 0,
-        "p": 0.092,
-        "share": 0.1877551020408163
+        "p": 0.08,
+        "share": 0.1797752808988764
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.068,
+        "share": 0.15280898876404495
       },
       {
         "home": 1,
-        "away": 2,
-        "p": 0.09,
-        "share": 0.18367346938775508
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "p": 0.081,
-        "share": 0.16530612244897958
+        "away": 0,
+        "p": 0.067,
+        "share": 0.150561797752809
       }
     ],
     "providerPick": {
-      "home": 1,
+      "home": 2,
       "away": 1
     },
     "method": "poisson-xg-bzzoiro-v1",
@@ -264,12 +274,63 @@
   },
   "market": null,
   "h2h": {
-    "totalMatches": 0,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": [],
+    "totalMatches": 11,
+    "homeWins": 1,
+    "draws": 2,
+    "awayWins": 8,
+    "avgTotalGoals": 3.090909090909091,
+    "recent": [
+      {
+        "eventId": 208981,
+        "date": "2024-10-14T18:45:00+00:00",
+        "home": "Belgium",
+        "away": "France",
+        "homeTeamId": 477,
+        "awayTeamId": 485,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 208929,
+        "date": "2024-09-09T18:45:00+00:00",
+        "home": "France",
+        "away": "Belgium",
+        "homeTeamId": 485,
+        "awayTeamId": 477,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 209235,
+        "date": "2024-07-01T16:00:00+00:00",
+        "home": "France",
+        "away": "Belgium",
+        "homeTeamId": 485,
+        "awayTeamId": 477,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 284957,
+        "date": "2021-10-07T18:45:00+00:00",
+        "home": "Belgium",
+        "away": "France",
+        "homeTeamId": 477,
+        "awayTeamId": 485,
+        "homeScore": 2,
+        "awayScore": 3
+      },
+      {
+        "eventId": 339598,
+        "date": "2018-07-10T18:00:00+00:00",
+        "home": "France",
+        "away": "Belgium",
+        "homeTeamId": 485,
+        "awayTeamId": 477,
+        "homeScore": 1,
+        "awayScore": 0
+      }
+    ],
     "source": "Bzzoiro"
   },
   "discipline": {
@@ -289,7 +350,7 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 2.6
+    "expectedTotal": 2.4
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -300,31 +361,31 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 8.8
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 9.69,
-      "shotsOnTarget": 3.58,
-      "xg": 1.1,
-      "corners": 4.21,
-      "fouls": 13.34,
-      "yellowCards": 1.57,
+      "shots": 14.48,
+      "shotsOnTarget": 5.05,
+      "xg": 2.1,
+      "corners": 3.99,
+      "fouls": 11.79,
+      "yellowCards": 1.04,
       "redCards": 0.5,
-      "offsides": 1.88,
-      "possession": 46.23
+      "offsides": 2.31,
+      "possession": 48.76
     },
     "away": {
-      "shots": 12.01,
-      "shotsOnTarget": 4.72,
-      "xg": 1.43,
-      "corners": 5.39,
-      "fouls": 12.56,
-      "yellowCards": 1.03,
+      "shots": 14.62,
+      "shotsOnTarget": 5.45,
+      "xg": 1.22,
+      "corners": 4.81,
+      "fouls": 11.61,
+      "yellowCards": 1.34,
       "redCards": 0.5,
-      "offsides": 2.3,
-      "possession": 53.77
+      "offsides": 2.43,
+      "possession": 51.24
     },
     "sample": {
       "home": 5,
@@ -335,12 +396,12 @@
         "possession": 5,
         "shots": 5,
         "shotsOnTarget": 5,
-        "xg": 4,
+        "xg": 5,
         "corners": 5,
         "fouls": 5,
         "yellowCards": 5,
-        "redCards": 0,
-        "offsides": 4
+        "redCards": 1,
+        "offsides": 5
       },
       "away": {
         "possession": 5,
@@ -349,21 +410,21 @@
         "xg": 5,
         "corners": 5,
         "fouls": 5,
-        "yellowCards": 5,
-        "redCards": 2,
-        "offsides": 5
+        "yellowCards": 3,
+        "redCards": 0,
+        "offsides": 3
       }
     },
     "league": {
       "possession": 50,
-      "shots": 10.85,
-      "shotsOnTarget": 4.15,
-      "xg": 1.31,
-      "corners": 4.8,
-      "fouls": 12.95,
-      "yellowCards": 1.3,
+      "shots": 14.55,
+      "shotsOnTarget": 5.25,
+      "xg": 1.67,
+      "corners": 4.4,
+      "fouls": 11.7,
+      "yellowCards": 1.19,
       "redCards": 0.5,
-      "offsides": 2.11
+      "offsides": 2.31
     },
     "sources": {
       "home": {
@@ -400,58 +461,58 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.292,
-      "draw": 0.122,
-      "away": 0.586
+      "home": 0.327,
+      "draw": 0.132,
+      "away": 0.542
     },
     "cardsDuel": {
-      "home": 0.499,
-      "draw": 0.253,
-      "away": 0.249
+      "home": 0.29,
+      "draw": 0.274,
+      "away": 0.436
     },
     "lastGoal": {
-      "home": 0.4,
-      "away": 0.52,
-      "noGoal": 0.08
+      "home": 0.61,
+      "away": 0.354,
+      "noGoal": 0.036
     },
     "cornerRace": {
       "3": {
-        "home": 0.386,
-        "away": 0.614
+        "home": 0.413,
+        "away": 0.587
       },
       "5": {
-        "home": 0.352,
-        "away": 0.648
+        "home": 0.387,
+        "away": 0.613
       },
       "7": {
-        "home": 0.325,
-        "away": 0.675
+        "home": 0.366,
+        "away": 0.634
       }
     },
     "cornerMargin": {
-      "home3plus": 0.114,
-      "home12": 0.178,
-      "level": 0.122,
-      "away12": 0.255,
-      "away3plus": 0.33
+      "home3plus": 0.128,
+      "home12": 0.199,
+      "level": 0.132,
+      "away12": 0.261,
+      "away3plus": 0.281
     },
     "source": "GoatLab"
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": null,
+      "temp": 15,
+      "precipitation": 0.3,
+      "weathercode": 51,
+      "wind": 5.1,
       "condition": null,
-      "sampledAt": null,
-      "source": null
+      "sampledAt": "2026-09-28T18:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
-      "stadium": null,
-      "city": null,
-      "capacity": null,
-      "tz": null
+      "stadium": "King Baudouin Stadium",
+      "city": "Bruselas",
+      "capacity": 50093,
+      "tz": "Europe/Brussels"
     },
     "referee": null,
     "pitch": null,
@@ -467,14 +528,14 @@
   },
   "context": {
     "home": {
-      "team": "North Macedonia",
+      "team": "Belgium",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 10,
+        "position": 4,
         "played": 0,
         "gf": null,
         "ga": null,
@@ -483,14 +544,14 @@
       "player": null
     },
     "away": {
-      "team": "Switzerland",
+      "team": "France",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 14,
+        "position": 6,
         "played": 0,
         "gf": null,
         "ga": null,

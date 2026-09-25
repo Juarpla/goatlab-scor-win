@@ -1,15 +1,15 @@
 {
-  "id": "bz-212585",
-  "home": "North Macedonia",
-  "away": "Switzerland",
+  "id": "bz-212625",
+  "home": "Czechia",
+  "away": "England",
   "competition": "nations",
-  "kickoff": "2026-09-26T18:45:00+00:00",
+  "kickoff": "2026-09-29T18:45:00+00:00",
   "updatedAt": "2026-09-25T21:42:18.164Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.1,
-      "away": 1.43
+      "home": 1.25,
+      "away": 1.63
     },
     "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
@@ -19,10 +19,10 @@
       "away": 0
     },
     "standings": {
-      "North Macedonia": {
-        "position": 10,
-        "team": "North Macedonia",
-        "teamId": 730,
+      "Czechia": {
+        "position": 3,
+        "team": "Czechia",
+        "teamId": 930,
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -31,13 +31,17 @@
         "goalsAgainst": null,
         "goalDifference": null,
         "points": 0,
-        "zone": null,
+        "zone": {
+          "key": "relq",
+          "label": "Relegation Playoffs",
+          "type": "relegation"
+        },
         "form": null
       },
-      "Switzerland": {
-        "position": 14,
-        "team": "Switzerland",
-        "teamId": 462,
+      "England": {
+        "position": 4,
+        "team": "England",
+        "teamId": 493,
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -46,115 +50,125 @@
         "goalsAgainst": null,
         "goalDifference": null,
         "points": 0,
-        "zone": null,
+        "zone": {
+          "key": "rel",
+          "label": "Relegation",
+          "type": "relegation"
+        },
         "form": null
       }
     },
     "scorers": null,
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-09-29T18:45:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": null,
     "history": {
       "rows": 150
     },
-    "venue": null
+    "venue": {
+      "city": "Praga",
+      "tz": "Europe/Prague"
+    }
   },
   "markets": {
     "oneX2": {
-      "home": 0.278,
-      "draw": 0.289,
-      "away": 0.433
+      "home": 0.282,
+      "draw": 0.267,
+      "away": 0.451
     },
     "doubleChance": {
-      "12": 0.711,
-      "1X": 0.567,
-      "X2": 0.722
+      "12": 0.733,
+      "1X": 0.549,
+      "X2": 0.718
     },
     "dnb": {
-      "home": 0.391,
-      "away": 0.609
+      "home": 0.385,
+      "away": 0.615
     },
     "totals": {
-      "over15": 0.731,
-      "under15": 0.269,
-      "over25": 0.464,
-      "under25": 0.536,
-      "over35": 0.249,
-      "under35": 0.751
+      "over15": 0.794,
+      "under15": 0.206,
+      "over25": 0.549,
+      "under25": 0.451,
+      "over35": 0.326,
+      "under35": 0.674
     },
     "btts": {
-      "yes": 0.52,
-      "no": 0.48
+      "yes": 0.585,
+      "no": 0.415
     },
     "cleanSheet": {
-      "home": 0.239,
-      "away": 0.333
+      "home": 0.196,
+      "away": 0.287
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.138
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.101
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.092
+        "p": 0.126
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.09
+        "p": 0.093
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.08
       },
       {
         "home": 0,
         "away": 2,
-        "p": 0.081
+        "p": 0.075
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.071
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.53,
-    "noGoal": 0.08,
+    "lambdaTotal": 2.88,
+    "noGoal": 0.056,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.344
+        "p": 0.381
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.226
+        "p": 0.236
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.148
+        "p": 0.146
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.097
+        "p": 0.09
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.064
+        "p": 0.056
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.042
+        "p": 0.035
       }
     ],
-    "firstHome": 0.4,
-    "firstAway": 0.52
+    "firstHome": 0.41,
+    "firstAway": 0.534
   },
   "scorers": {
     "home": null,
@@ -164,95 +178,95 @@
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.127,
-      "draw": 0.198,
-      "away": 0.675,
+      "home": 0.276,
+      "draw": 0.25,
+      "away": 0.475,
       "predicted": "A"
     },
     "xg": {
-      "home": 1.1,
-      "away": 1.43
+      "home": 1.25,
+      "away": 1.63
     },
-    "over15": 0.763,
-    "over25": 0.539,
-    "over35": 0.31,
-    "btts": 0.475,
+    "over15": 0.7709999999999999,
+    "over25": 0.5429999999999999,
+    "over35": 0.317,
+    "btts": 0.556,
     "score": "1-1",
-    "cornersOver95": 0.47,
+    "cornersOver95": 0.483,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.675,
+      "favoriteProb": 0.475,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6749,
+    "confidence": 0.4746,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-23T12:24:19.457Z",
+    "capturedAt": "2026-09-23T12:24:21.591Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.278,
-      "draw": 0.289,
-      "away": 0.433
+      "home": 0.282,
+      "draw": 0.267,
+      "away": 0.451
     },
     "doubleChance": {
-      "12": 0.711,
-      "1X": 0.567,
-      "X2": 0.722
+      "12": 0.733,
+      "1X": 0.549,
+      "X2": 0.718
     },
     "dnb": {
-      "home": 0.391,
-      "away": 0.609
+      "home": 0.385,
+      "away": 0.615
     },
     "totals": {
-      "over15": 0.731,
-      "under15": 0.269,
-      "over25": 0.464,
-      "under25": 0.536,
-      "over35": 0.249,
-      "under35": 0.751
+      "over15": 0.794,
+      "under15": 0.206,
+      "over25": 0.549,
+      "under25": 0.451,
+      "over35": 0.326,
+      "under35": 0.674
     },
     "btts": {
-      "yes": 0.52,
-      "no": 0.48
+      "yes": 0.585,
+      "no": 0.415
     },
     "cleanSheet": {
-      "home": 0.239,
-      "away": 0.333
+      "home": 0.196,
+      "away": 0.287
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.126,
-        "share": 0.2571428571428571
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.101,
-        "share": 0.20612244897959184
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.092,
-        "share": 0.1877551020408163
+        "p": 0.116,
+        "share": 0.26666666666666666
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.09,
-        "share": 0.18367346938775508
+        "p": 0.093,
+        "share": 0.21379310344827585
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.08,
+        "share": 0.18390804597701146
       },
       {
         "home": 0,
         "away": 2,
-        "p": 0.081,
-        "share": 0.16530612244897958
+        "p": 0.075,
+        "share": 0.17241379310344826
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.071,
+        "share": 0.16321839080459766
       }
     ],
     "providerPick": {
@@ -264,12 +278,33 @@
   },
   "market": null,
   "h2h": {
-    "totalMatches": 0,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": [],
+    "totalMatches": 2,
+    "homeWins": 0,
+    "draws": 1,
+    "awayWins": 1,
+    "avgTotalGoals": 2.5,
+    "recent": [
+      {
+        "eventId": 274838,
+        "date": "2021-06-22T19:00:00+00:00",
+        "home": "Czechia",
+        "away": "England",
+        "homeTeamId": 930,
+        "awayTeamId": 493,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 476943,
+        "date": "2008-08-20T19:00:00+00:00",
+        "home": "England",
+        "away": "Czechia",
+        "homeTeamId": 493,
+        "awayTeamId": 930,
+        "homeScore": 2,
+        "awayScore": 2
+      }
+    ],
     "source": "Bzzoiro"
   },
   "discipline": {
@@ -289,7 +324,7 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 2.6
+    "expectedTotal": 2.5
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -300,47 +335,47 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 9
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 9.69,
-      "shotsOnTarget": 3.58,
-      "xg": 1.1,
-      "corners": 4.21,
-      "fouls": 13.34,
-      "yellowCards": 1.57,
+      "shots": 13.15,
+      "shotsOnTarget": 4.65,
+      "xg": 1.25,
+      "corners": 4.87,
+      "fouls": 11.64,
+      "yellowCards": 1.2,
       "redCards": 0.5,
-      "offsides": 1.88,
-      "possession": 46.23
+      "offsides": 1.97,
+      "possession": 49.44
     },
     "away": {
-      "shots": 12.01,
-      "shotsOnTarget": 4.72,
-      "xg": 1.43,
-      "corners": 5.39,
-      "fouls": 12.56,
-      "yellowCards": 1.03,
+      "shots": 13.18,
+      "shotsOnTarget": 5.31,
+      "xg": 1.63,
+      "corners": 4.09,
+      "fouls": 10.66,
+      "yellowCards": 1.33,
       "redCards": 0.5,
-      "offsides": 2.3,
-      "possession": 53.77
+      "offsides": 1.87,
+      "possession": 50.56
     },
     "sample": {
-      "home": 5,
+      "home": 3,
       "away": 5
     },
     "coverage": {
       "home": {
-        "possession": 5,
-        "shots": 5,
-        "shotsOnTarget": 5,
-        "xg": 4,
-        "corners": 5,
-        "fouls": 5,
-        "yellowCards": 5,
+        "possession": 3,
+        "shots": 3,
+        "shotsOnTarget": 3,
+        "xg": 3,
+        "corners": 3,
+        "fouls": 3,
+        "yellowCards": 3,
         "redCards": 0,
-        "offsides": 4
+        "offsides": 3
       },
       "away": {
         "possession": 5,
@@ -349,21 +384,21 @@
         "xg": 5,
         "corners": 5,
         "fouls": 5,
-        "yellowCards": 5,
-        "redCards": 2,
+        "yellowCards": 4,
+        "redCards": 1,
         "offsides": 5
       }
     },
     "league": {
       "possession": 50,
-      "shots": 10.85,
-      "shotsOnTarget": 4.15,
-      "xg": 1.31,
-      "corners": 4.8,
-      "fouls": 12.95,
-      "yellowCards": 1.3,
+      "shots": 13.19,
+      "shotsOnTarget": 5.06,
+      "xg": 1.47,
+      "corners": 4.5,
+      "fouls": 11.13,
+      "yellowCards": 1.29,
       "redCards": 0.5,
-      "offsides": 2.11
+      "offsides": 1.94
     },
     "sources": {
       "home": {
@@ -400,40 +435,40 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.292,
-      "draw": 0.122,
-      "away": 0.586
+      "home": 0.536,
+      "draw": 0.131,
+      "away": 0.333
     },
     "cardsDuel": {
-      "home": 0.499,
-      "draw": 0.253,
-      "away": 0.249
+      "home": 0.335,
+      "draw": 0.267,
+      "away": 0.397
     },
     "lastGoal": {
-      "home": 0.4,
-      "away": 0.52,
-      "noGoal": 0.08
+      "home": 0.41,
+      "away": 0.534,
+      "noGoal": 0.056
     },
     "cornerRace": {
       "3": {
-        "home": 0.386,
-        "away": 0.614
+        "home": 0.581,
+        "away": 0.419
       },
       "5": {
-        "home": 0.352,
-        "away": 0.648
+        "home": 0.606,
+        "away": 0.394
       },
       "7": {
-        "home": 0.325,
-        "away": 0.675
+        "home": 0.626,
+        "away": 0.374
       }
     },
     "cornerMargin": {
-      "home3plus": 0.114,
-      "home12": 0.178,
-      "level": 0.122,
-      "away12": 0.255,
-      "away3plus": 0.33
+      "home3plus": 0.278,
+      "home12": 0.258,
+      "level": 0.131,
+      "away12": 0.2,
+      "away3plus": 0.133
     },
     "source": "GoatLab"
   },
@@ -442,16 +477,16 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 4.8,
+      "condition": "unknown",
+      "sampledAt": "2026-09-29T18:45:00+00:00",
+      "source": "bzzoiro"
     },
     "venue": {
-      "stadium": null,
-      "city": null,
-      "capacity": null,
-      "tz": null
+      "stadium": "Fortuna Arena",
+      "city": "Praga",
+      "capacity": 19370,
+      "tz": "Europe/Prague"
     },
     "referee": null,
     "pitch": null,
@@ -467,14 +502,14 @@
   },
   "context": {
     "home": {
-      "team": "North Macedonia",
+      "team": "Czechia",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 10,
+        "position": 3,
         "played": 0,
         "gf": null,
         "ga": null,
@@ -483,14 +518,14 @@
       "player": null
     },
     "away": {
-      "team": "Switzerland",
+      "team": "England",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 14,
+        "position": 4,
         "played": 0,
         "gf": null,
         "ga": null,

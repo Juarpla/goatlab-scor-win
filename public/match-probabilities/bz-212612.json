@@ -4,7 +4,7 @@
   "away": "Kosovo",
   "competition": "nations",
   "kickoff": "2026-09-27T16:00:00+00:00",
-  "updatedAt": "2026-09-22T05:05:21.061Z",
+  "updatedAt": "2026-09-25T21:42:18.164Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -32,9 +32,9 @@
         "goalDifference": null,
         "points": 0,
         "zone": {
-          "key": "promo",
-          "label": "Promotion",
-          "type": "promotion"
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
         },
         "form": null
       },
@@ -168,30 +168,30 @@
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.48100000000000004,
-      "draw": 0.257,
-      "away": 0.262,
+      "home": 0.612,
+      "draw": 0.222,
+      "away": 0.166,
       "predicted": "H"
     },
     "xg": {
       "home": 1.59,
       "away": 1.16
     },
-    "over15": 0.7509999999999999,
-    "over25": 0.514,
-    "over35": 0.289,
-    "btts": 0.535,
+    "over15": 0.758,
+    "over25": 0.529,
+    "over35": 0.313,
+    "btts": 0.505,
     "score": "1-1",
     "cornersOver95": 0.408,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.481,
+      "favoriteProb": 0.612,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4808,
+    "confidence": 0.612,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-21T17:43:16.849Z",
+    "capturedAt": "2026-09-23T12:24:19.787Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -293,7 +293,7 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 4.1
+    "expectedTotal": 3.3
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -304,113 +304,114 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 6
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.57,
-      "shotsOnTarget": 4.56,
+      "shots": 11.16,
+      "shotsOnTarget": 3.8,
       "xg": 1.59,
-      "corners": 4.79,
-      "fouls": 12.05,
-      "yellowCards": 2.05,
-      "redCards": 0.52,
-      "offsides": 1.97,
-      "possession": 50
+      "corners": 2.96,
+      "fouls": 10.97,
+      "yellowCards": 1.66,
+      "redCards": 0.5,
+      "offsides": 1.69,
+      "possession": 50.52
     },
     "away": {
-      "shots": 13.57,
-      "shotsOnTarget": 4.56,
+      "shots": 11.75,
+      "shotsOnTarget": 4.1,
       "xg": 1.16,
-      "corners": 4.79,
-      "fouls": 12.05,
-      "yellowCards": 2.05,
-      "redCards": 0.52,
-      "offsides": 1.97,
-      "possession": 50
+      "corners": 3.07,
+      "fouls": 10.66,
+      "yellowCards": 1.59,
+      "redCards": 0.5,
+      "offsides": 1.61,
+      "possession": 49.48
     },
     "sample": {
-      "home": 0,
-      "away": 0
+      "home": 5,
+      "away": 3
     },
     "coverage": {
       "home": {
-        "possession": 0,
-        "shots": 0,
-        "shotsOnTarget": 0,
-        "xg": 0,
-        "corners": 0,
-        "fouls": 0,
-        "yellowCards": 0,
-        "redCards": 0,
-        "offsides": 0
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 1,
+        "offsides": 5
       },
       "away": {
-        "possession": 0,
-        "shots": 0,
-        "shotsOnTarget": 0,
-        "xg": 0,
-        "corners": 0,
-        "fouls": 0,
-        "yellowCards": 0,
+        "possession": 3,
+        "shots": 3,
+        "shotsOnTarget": 3,
+        "xg": 3,
+        "corners": 3,
+        "fouls": 3,
+        "yellowCards": 3,
         "redCards": 0,
-        "offsides": 0
+        "offsides": 3
       }
     },
     "league": {
       "possession": 50,
-      "shots": 13.57,
-      "shotsOnTarget": 4.56,
-      "xg": 1.44,
-      "corners": 4.79,
-      "fouls": 12.05,
-      "yellowCards": 2.05,
-      "redCards": 0.52,
-      "offsides": 1.97
+      "shots": 11.44,
+      "shotsOnTarget": 3.94,
+      "xg": 1.31,
+      "corners": 3,
+      "fouls": 10.75,
+      "yellowCards": 1.56,
+      "redCards": 0.5,
+      "offsides": 1.69
     },
     "sources": {
       "home": {
-        "shots": "media",
-        "shotsOnTarget": "media",
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
         "xg": "Bzzoiro",
-        "corners": "media",
-        "fouls": "media",
-        "yellowCards": "media",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
         "redCards": "media",
-        "offsides": "media",
-        "possession": "media"
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
       },
       "away": {
-        "shots": "media",
-        "shotsOnTarget": "media",
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
         "xg": "Bzzoiro",
-        "corners": "media",
-        "fouls": "media",
-        "yellowCards": "media",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
         "redCards": "media",
-        "offsides": "media",
-        "possession": "media"
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
       }
     },
     "origins": [
+      "Bzzoiro",
       "media"
     ],
     "xgSource": "Bzzoiro",
     "shortSample": true,
-    "source": "media"
+    "source": "Bzzoiro+media"
   },
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.435,
-      "draw": 0.131,
-      "away": 0.435
+      "home": 0.399,
+      "draw": 0.166,
+      "away": 0.434
     },
     "cardsDuel": {
-      "home": 0.398,
-      "draw": 0.204,
-      "away": 0.398
+      "home": 0.399,
+      "draw": 0.232,
+      "away": 0.369
     },
     "lastGoal": {
       "home": 0.541,
@@ -419,24 +420,24 @@
     },
     "cornerRace": {
       "3": {
-        "home": 0.5,
-        "away": 0.5
+        "home": 0.483,
+        "away": 0.517
       },
       "5": {
-        "home": 0.5,
-        "away": 0.5
+        "home": 0.478,
+        "away": 0.522
       },
       "7": {
-        "home": 0.5,
-        "away": 0.5
+        "home": 0.473,
+        "away": 0.527
       }
     },
     "cornerMargin": {
-      "home3plus": 0.206,
-      "home12": 0.229,
-      "level": 0.131,
-      "away12": 0.229,
-      "away3plus": 0.206
+      "home3plus": 0.139,
+      "home12": 0.26,
+      "level": 0.166,
+      "away12": 0.274,
+      "away3plus": 0.16
     },
     "source": "GoatLab"
   },
