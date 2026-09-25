@@ -6,7 +6,7 @@
  * y consulta /api/live/[id].json cada 60s cuando el partido está en vivo.
  * Nunca se presenta como seguimiento real de posición: así lo dice la nota.
  */
-import { teamShort } from '../lib/teams.js';
+import { teamShort, teamEsDisplay } from '../lib/teams.js';
 import { FINISHED_STATUSES } from '../lib/football.js';
 import { buildBeats } from '../lib/pitch-path.js';
 
@@ -20,7 +20,7 @@ const isRed = event => /roja|second yellow/i.test(event.detail ?? '');
 const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status === 'NS' ? 'Programado' : 'Sin datos en vivo';
 ---
 
-<section class="pitch-block" data-pitch data-match={match.id} data-kickoff={match.kickoff} data-status={match.status} data-home={match.home} data-away={match.away} data-live={match.id.startsWith('af-') ? '1' : '0'} data-beats={JSON.stringify(beats)}>
+<section class="pitch-block" data-pitch data-match={match.id} data-kickoff={match.kickoff} data-status={match.status} data-home={teamEsDisplay(match.home)} data-away={teamEsDisplay(match.away)} data-live={match.id.startsWith('af-') ? '1' : '0'} data-beats={JSON.stringify(beats)}>
   <header class="pitch-head">
     <div>
       <h2>{finished ? 'El partido, en la cancha.' : 'Así se mueve el partido.'}</h2>
@@ -97,7 +97,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
               {events.map(event => (
                 <tr data-type={event.type} data-minute={event.minute ?? ''} data-card={event.type === 'card' ? (isRed(event) ? 'red' : 'yellow') : undefined}>
                   <td>{event.minute ?? '—'}′</td>
-                  <td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? match.home : match.away}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td>
+                  <td><strong>{EVENT_LABELS[event.type] ?? event.type}</strong>{event.team ? ` · ${event.team === 'home' ? teamEsDisplay(match.home) : teamEsDisplay(match.away)}` : ''}{event.player ? ` — ${event.player}` : ''}{event.playerOut ? ` (salió ${event.playerOut})` : ''}{event.detail && <><br/><small>{event.detail}</small></>}</td>
                   <td>{event.score ? `${event.score.home}–${event.score.away}` : '—'}</td>
                 </tr>
               ))}

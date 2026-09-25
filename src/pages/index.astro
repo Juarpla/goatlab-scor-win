@@ -11,7 +11,7 @@ import PlayerPulse from '../components/PlayerPulse.astro';
 import StandingsBoard from '../components/StandingsBoard.astro';
 import JornadaBand from '../components/JornadaBand.astro';
 import { competitions } from '../lib/football.js';
-import { heroMatch, teamShort } from '../lib/teams.js';
+import { heroMatch, teamShort, teamEsDisplay } from '../lib/teams.js';
 import { matchForm, teamForm } from '../lib/form.js';
 import { buildMapData, computePulse, computeCuriosities, computePlayerPulse } from '../lib/journey.js';
 import fixtures from '../../public/data/fixtures.json';
@@ -68,9 +68,9 @@ const hasLeft = pulse.length > 0 || players.length > 0;
 const hasRight = Object.keys(tables).length > 0 || curiosities.length > 0;
 const hasJourney = journeyData.pins.length > 0 || hasLeft || hasRight;
 const tickerItems = upcoming.slice(0, 12).map(match => ({
-  home: match.home, away: match.away,
+  home: teamEsDisplay(match.home), away: teamEsDisplay(match.away),
   homeId: match.teamIds?.home ?? null, awayId: match.teamIds?.away ?? null,
-  text: `${match.home} vs. ${match.away}`,
+  text: `${teamEsDisplay(match.home)} vs. ${teamEsDisplay(match.away)}`,
   time: new Date(match.kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }),
   kickoff: match.kickoff,
   full: kickoffLabel(match.kickoff),
@@ -90,7 +90,7 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
   <div class="forma-panel">
    <div class="forma-copy">
     <div class="forma-meta"><span class="chip-league">{competitionById(hero.competition)?.name}</span><span data-kickoff={hero.kickoff} data-format="date">{heroDate}</span><span data-kickoff={hero.kickoff} data-format="time">{heroTime} (Lima)</span></div>
-    <h3>{hero.home}<br/><span>vs.</span><br/>{hero.away}</h3>
+     <h3>{teamEsDisplay(hero.home)}<br/><span>vs.</span><br/>{teamEsDisplay(hero.away)}</h3>
     {hero.venue && <p>Estadio: {hero.venue}</p>}
     <div class="forma-actions">
       <a class="primary-button" href={`/partido/${hero.webId ?? hero.id}/`}>Entrar al análisis <Icon/></a>

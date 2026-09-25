@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { teamEsDisplay } from '../lib/teams.js';
 
 const { pins = [] } = Astro.props;
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
@@ -24,7 +25,7 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
      <ul>
       {pin.matches.map(m => (
        <li>
-        <span class="map-teams">{m.home} <em>vs.</em> {m.away}</span>
+        <span class="map-teams">{teamEsDisplay(m.home)} <em>vs.</em> {teamEsDisplay(m.away)}</span>
         <span class="map-meta">
          <time datetime={m.kickoff} data-kickoff={m.kickoff} data-format="datetime">{kickoffLabel(m.kickoff)}</time>
          {m.stadium && <span> · {m.stadium}</span>}

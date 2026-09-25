@@ -1,5 +1,5 @@
 ---
-import { teamDisplay } from '../lib/teams.js';
+import { teamEsDisplay } from '../lib/teams.js';
 const { tables = {} } = Astro.props;
 const NAMES = { premier: 'Premier League', laliga: 'LaLiga', champions: 'Champions League', libertadores: 'Libertadores', europa: 'Europa League' };
 const teams = Object.entries(tables).filter(([, table]) => table.rows?.length);
@@ -18,7 +18,7 @@ const teams = Object.entries(tables).filter(([, table]) => table.rows?.length);
       {table.rows.slice(0, 10).map(row => (
       <tr>
        <td class="st-pos">{row.position}</td>
-       <td class="st-team">{teamDisplay(row.team)}</td>
+        <td class="st-team">{teamEsDisplay(row.team)}</td>
        <td class="st-num">{row.played}</td>
        <td class="st-num">{row.goalDifference > 0 ? `+${row.goalDifference}` : row.goalDifference}</td>
        <td class="st-pts">{row.points}</td>

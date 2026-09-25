@@ -19,7 +19,7 @@ import { storyTerm } from '../../lib/story-dictionary.js';
 import { normalizeReading } from '../../lib/reading.js';
 import { findAnalysis } from '../../lib/analysis.js';
 import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
-import { teamShort, teamCompact } from '../../lib/teams.js';
+import { teamShort, teamCompact, teamEsDisplay } from '../../lib/teams.js';
 import { teamForm, bakedForm } from '../../lib/form.js';
 import { roundFecha, findStandingRow, topScorerFor } from '../../lib/series-crumbs.js';
 import { ensemble } from '../../lib/predictions.js';
@@ -48,6 +48,8 @@ export function getStaticPaths() {
 }
 const {match} = Astro.props;
 const competition = competitions.find(c=>c.id===match.competition)?.name;
+const homeEs = teamEsDisplay(match.home);
+const awayEs = teamEsDisplay(match.away);
 const homeForm = teamForm(results.results, match.home);
 const awayForm = teamForm(results.results, match.away);
 /* Lo que ya jugaron: siempre últimos 5 por equipo (horneado del pipeline
@@ -178,8 +180,8 @@ const scorerMissingSide = hasScorerData && (!scorerRows.home?.length || !scorerR
    con la misma λ de la carrera; nunca se inventan goleadores. */
 const teamSplit = !scorerUnified.length && race && (race.firstHome + race.firstAway) > 0
   ? [
-      { side: 'home', name: match.home, split: race.firstHome / (race.firstHome + race.firstAway) },
-      { side: 'away', name: match.away, split: race.firstAway / (race.firstHome + race.firstAway) },
+      { side: 'home', name: homeEs, split: race.firstHome / (race.firstHome + race.firstAway) },
+      { side: 'away', name: awayEs, split: race.firstAway / (race.firstHome + race.firstAway) },
     ].sort((a, b) => b.split - a.split)
   : null;
 /* Goles totales con Bzzoiro al frente, AF en medio y Poisson al
@@ -300,10 +302,10 @@ const crumbsFor = side => {
   return crumbs;
 };
 ---
-<Layout title={`${match.home} vs. ${match.away} — GoatLab`} canonical={`/partido/${match.webId ?? match.id}/`}>
+<Layout title={`${homeEs} vs. ${awayEs} — GoatLab`} canonical={`/partido/${match.webId ?? match.id}/`}>
 <main id="main" class="wrap">
  <a class="back-link" href="/#encuentros"><Icon size={16}/> Volver a encuentros</a>
- <div class="match-title"><div><h1>{match.home}<span>vs.</span>{match.away}</h1><p>{competition} · Última consulta: <time data-consult data-utc={fixtures.updatedAt}>{consultUtc}</time>{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>
+ <div class="match-title"><div><h1>{homeEs}<span>vs.</span>{awayEs}</h1><p>{competition} · Última consulta: <time data-consult data-utc={fixtures.updatedAt}>{consultUtc}</time>{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>
   <section class="real-data"><div class="encounter">
    <h2>El encuentro</h2>
    <p><time datetime={match.kickoff}>{new Date(match.kickoff).toLocaleString('es-PE',{timeZone:'America/Lima'})}</time> (Lima)</p>
@@ -321,7 +323,7 @@ const crumbsFor = side => {
      </figure>
     </div>
    </div><div>
-    <div class="jerseys" aria-label={`Camisetas estimadas de ${match.home} y ${match.away}`}>
+    <div class="jerseys" aria-label={`Camisetas estimadas de ${homeEs} y ${awayEs}`}>
       <TeamJersey name={match.home} short={teamCompact(match.home)} pattern={homeKit.pattern} side="home"/>
       <span class="jerseys-vs" aria-hidden="true">vs</span>
        <TeamJersey name={match.away} short={teamCompact(match.away)} pattern={awayKit.pattern} side="away"/>
@@ -330,7 +332,7 @@ const crumbsFor = side => {
  <AdSlot variant="rect" slotKey="partidoPrevio"/>
  <div class="story">
   <div class="story-notes">
-   <section class="story-chapter" id="llegada" data-chapter="llegada"><h2>Así llegan.<br/>Lo que ya jugaron.</h2><p>Lo único que nadie discute es lo que ya pasó en la cancha. Estos son los hechos: goles reales, medidos con la misma vara para los dos.</p>{recentMax > 0 && <div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div>}{recentMax > 0 && <table class="data-table"><caption class="sr-only">Resumen de forma reciente con resultados reales</caption><thead><tr><th>{`Últimos ${recentMax} · reales`}</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody><tr><td>Goles anotados</td><td>{tableHome ? homeTotals : '—'}</td><td>{tableAway ? awayTotals : '—'}</td></tr><tr><td>Promedio por partido</td><td>{recentAvg(homeTotals, tableHome)}</td><td>{recentAvg(awayTotals, tableAway)}</td></tr><tr><td>Victorias</td><td>{tableHome ? homeWins : '—'}</td><td>{tableAway ? awayWins : '—'}</td></tr></tbody></table>}{probability?.context && <div class="signal-panels"><p class="signals-lead">Últimos 5 en su campeonato:</p>{(['home','away'] as const).map(side => <article class="team-panel" data-side={side}><header><h3>{side === 'home' ? match.home : match.away}</h3><span class="outline-label">{side === 'home' ? 'Local' : 'Visitante'}</span></header>{cardsBySide[side].length ? <ul class="context-list">{cardsBySide[side].map(card => <li><span class="context-icon"><Icon name={card.icon} size={18}/></span><div><strong>{card.value}</strong><span class="context-label">{card.label}</span>{card.note && <small>{card.note}</small>}</div></li>)}</ul> : <p class="chapter-note">Sin datos suficientes de este equipo por ahora.</p>}</article>)}</div>}</section>
+   <section class="story-chapter" id="llegada" data-chapter="llegada"><h2>Así llegan.<br/>Lo que ya jugaron.</h2><p>Lo único que nadie discute es lo que ya pasó en la cancha. Estos son los hechos: goles reales, medidos con la misma vara para los dos.</p>{recentMax > 0 && <div class="legend"><span><i class="home-dot"></i>{homeEs}</span><span><i class="away-dot"></i>{awayEs}</span></div>}{recentMax > 0 && <table class="data-table"><caption class="sr-only">Resumen de forma reciente con resultados reales</caption><thead><tr><th>{`Últimos ${recentMax} · reales`}</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody><tr><td>Goles anotados</td><td>{tableHome ? homeTotals : '—'}</td><td>{tableAway ? awayTotals : '—'}</td></tr><tr><td>Promedio por partido</td><td>{recentAvg(homeTotals, tableHome)}</td><td>{recentAvg(awayTotals, tableAway)}</td></tr><tr><td>Victorias</td><td>{tableHome ? homeWins : '—'}</td><td>{tableAway ? awayWins : '—'}</td></tr></tbody></table>}{probability?.context && <div class="signal-panels"><p class="signals-lead">Últimos 5 en su campeonato:</p>{(['home','away'] as const).map(side => <article class="team-panel" data-side={side}><header><h3>{side === 'home' ? homeEs : awayEs}</h3><span class="outline-label">{side === 'home' ? 'Local' : 'Visitante'}</span></header>{cardsBySide[side].length ? <ul class="context-list">{cardsBySide[side].map(card => <li><span class="context-icon"><Icon name={card.icon} size={18}/></span><div><strong>{card.value}</strong><span class="context-label">{card.label}</span>{card.note && <small>{card.note}</small>}</div></li>)}</ul> : <p class="chapter-note">Sin datos suficientes de este equipo por ahora.</p>}</article>)}</div>}</section>
       {true && <section class="story-chapter" id="resultado" data-chapter="resultado"><h2>Escenarios de resultado.<br/>Distribución en 100 escenarios.</h2><p>{waffleSource ? `Estimación ${waffleSource}: reparte 100 escenarios simulados entre victoria local, empate y victoria visitante. No anticipa el resultado: es la distribución que estima el modelo con datos previos al partido.` : 'Sin lectura de proveedor para este encuentro por ahora.'}</p><div class="notes-visuals">
        <div class="prob-rows">
         {dcM && <ProbabilityBar variant="rows" title={storyTerm('doubleChance').term} segments={[{label: `${teamShort(match.home)} o empate`, value: dcM['1X'], tone: 'home'}, {label: `${teamShort(match.away)} o empate`, value: dcM.X2, tone: 'away'}]}/>}
@@ -366,7 +368,7 @@ const crumbsFor = side => {
          <small>{row.goals} {row.goals === 1 ? 'gol' : 'goles'} de temporada</small>
         </li>)}
         </ol>
-         <p class="scorer-note">Si el primer gol lo hace uno de estos cinco, así se reparten las probabilidades.{scorerLeftover != null && scorerLeftover > 0.005 ? ` Fuera de esta fila queda un ${pct(scorerLeftover)} (se queda en cero + resto de plantilla).` : ''}{scorerMissingSide ? ` Sin dato de goleadores de ${scorerMissingSide} por ahora.` : ''}</p>
+         <p class="scorer-note">Si el primer gol lo hace uno de estos cinco, así se reparten las probabilidades.{scorerLeftover != null && scorerLeftover > 0.005 ? ` Fuera de esta fila queda un ${pct(scorerLeftover)} (se queda en cero + resto de plantilla).` : ''}{scorerMissingSide ? ` Sin dato de goleadores de ${teamEsDisplay(scorerMissingSide)} por ahora.` : ''}</p>
        </div>
        </div>}
       {scorerUnified.length === 0 && teamSplit && <div class="prob-scorers is-unified">
@@ -384,7 +386,7 @@ const crumbsFor = side => {
        </div>
        </div>}
       </div></section>}
-     <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>La síntesis.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{match.home}</span><span><i class="away-dot"></i>{match.away}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · estimación</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{(hasProbRows || duelAxes.length > 0) && (<div class="notes-visuals">
+     <section class="story-chapter" id="veredicto" data-chapter="veredicto"><h2>La síntesis.<br/>Con sus pesos a la vista.</h2><p>GoatLab combina sus propios cálculos con el modelo del proveedor y señales de rendimiento. Cada insumo declara su peso; lo que falta, se dice.</p><div class="legend"><span><i class="home-dot"></i>{homeEs}</span><span><i class="away-dot"></i>{awayEs}</span></div><table class="data-table"><caption class="sr-only">Valores esperados por equipo</caption><thead><tr><th>Esperados · estimación</th><th>{teamShort(match.home)}</th><th>{teamShort(match.away)}</th></tr></thead><tbody>{FORECAST_ROWS.map(row=><tr><td>{row[0]}</td><td>{forecastCell(forecastTable?.home,row)}</td><td>{forecastCell(forecastTable?.away,row)}</td></tr>)}</tbody></table>{(hasProbRows || duelAxes.length > 0) && (<div class="notes-visuals">
       <div class="prob-rows">
       {cornersDuel && <ProbabilityBar title={storyTerm('cornersDuel').term} segments={[{label: teamShort(match.home), value: cornersDuel.home, tone: 'home'}, {label: 'Empate', value: cornersDuel.draw, tone: 'draw'}, {label: teamShort(match.away), value: cornersDuel.away, tone: 'away'}]}/>}
       {raceTargets.map(target => <ProbabilityBar title={`Primero a ${target} córners`} segments={[{label: teamShort(match.home), value: cornerRace[target].home, tone: 'home'}, {label: teamShort(match.away), value: cornerRace[target].away, tone: 'away'}]}/>)}
@@ -393,7 +395,7 @@ const crumbsFor = side => {
       {lastTrio && <ProbabilityBar title={storyTerm('lastGoalTeam').term} segments={[{label: teamShort(match.home), value: lastTrio.home, tone: 'home'}, {label: 'Se queda en cero', value: lastTrio.noGoal, tone: 'mute'}, {label: teamShort(match.away), value: lastTrio.away, tone: 'away'}]}/>}
       </div>
        {duelAxes.length > 0 && <h3>Frente a frente</h3>}
-      {duelAxes.length > 0 && <RadarDuel axes={duelAxes} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} summary={`Dominancia esperada entre ${match.home} y ${match.away}: reparto de tiros a puerta, faltas, fueras de juego y posesión`}/>}
+      {duelAxes.length > 0 && <RadarDuel axes={duelAxes} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} summary={`Dominancia esperada entre ${homeEs} y ${awayEs}: reparto de tiros a puerta, faltas, fueras de juego y posesión`}/>}
        </div>)}{published && (<div class="notes-visuals">
       <span class="chapter-note">Evaluación histórica publicada sobre {evaluation.ensemble?.oneX2?.sampleSize ?? 0} partidos evaluados. Contenido informativo: son estimaciones con incertidumbre, no cuotas ni consejo para apostar.</span>
          </div>)}<p class="chapter-note">Contenido informativo y educativo sobre análisis deportivo. Las probabilidades son estimaciones con incertidumbre y no constituyen consejo ni incitación a apostar.</p><a class="text-link" href="/metodologia/">Cómo se calcula y se evalúa <Icon size={18}/></a></section>
@@ -402,7 +404,7 @@ const crumbsFor = side => {
     <div class="stage-pane is-active" data-pane="llegada" aria-hidden="false">{hasRecent ? <FormStrip home={match.home} away={match.away} homeForm={homeRecent} awayForm={awayRecent} homeCrumbs={crumbsFor('home')} awayCrumbs={crumbsFor('away')}/> : <FormStrip home={match.home} away={match.away} homeForm={null} awayForm={null} homeCrumbs={crumbsFor('home')} awayCrumbs={crumbsFor('away')}/>}</div>
      {true && <div class="stage-pane" data-pane="resultado" aria-hidden="true" hidden>
       <h3>Escenarios de resultado</h3>
-       {waffle.length > 0 ? <div class="waffle-row"><WaffleResult title="Simulación educativa: 100 escenarios" segments={waffle} summary={`Distribución en 100 escenarios simulados (${waffleSource}): ${match.home} ${Math.round(waffleOneX2.home * 100)}, empate ${Math.round(waffleOneX2.draw * 100)}, ${match.away} ${Math.round(waffleOneX2.away * 100)}`} note={`Cada cuadrito representa un escenario simulado con la misma distribución. Sirve para entender la incertidumbre, no para anticipar el resultado. Estimación ${waffleSource}.`}/><WaffleKicker /></div> : <p class="chapter-note">Sin lectura de proveedor para este encuentro por ahora.</p>}
+       {waffle.length > 0 ? <div class="waffle-row"><WaffleResult title="Simulación educativa: 100 escenarios" segments={waffle} summary={`Distribución en 100 escenarios simulados (${waffleSource}): ${homeEs} ${Math.round(waffleOneX2.home * 100)}, empate ${Math.round(waffleOneX2.draw * 100)}, ${awayEs} ${Math.round(waffleOneX2.away * 100)}`} note={`Cada cuadrito representa un escenario simulado con la misma distribución. Sirve para entender la incertidumbre, no para anticipar el resultado. Estimación ${waffleSource}.`}/><WaffleKicker /></div> : <p class="chapter-note">Sin lectura de proveedor para este encuentro por ahora.</p>}
     </div>}
      {true && <div class="stage-pane" data-pane="goles" aria-hidden="true" hidden>
       <h3>Goles totales</h3>
@@ -435,7 +437,7 @@ const crumbsFor = side => {
        {(['home','draw','away'] as const).map(side => <div class="verdict-row"><span class="verdict-label">{side === 'home' ? teamShort(match.home) : side === 'away' ? teamShort(match.away) : 'Empate'}</span><div class="verdict-track"><i style={`--p:${verdict.oneX2[side] * 100}%`}></i></div><span class="verdict-value">{Math.round(verdict.oneX2[side] * 100)}%</span></div>)}
       </div>
       {!published && <span class="outline-label">Lectura con reserva · evaluación en curso</span>}
-       <p class="verdict-direction">Con estos insumos, el equipo con mayor probabilidad estimada es <strong>{direction ?? 'el empate'}</strong> — con la reserva de siempre: la muestra corta no demuestra el futuro.</p>
+       <p class="verdict-direction">Con estos insumos, el equipo con mayor probabilidad estimada es <strong>{direction ? teamEsDisplay(direction) : 'el empate'}</strong> — con la reserva de siempre: la muestra corta no demuestra el futuro.</p>
       </> : <><h3>La síntesis</h3><div class="verdict-bars">{displayOneX2 && (['home','draw','away'] as const).map(side => <div class="verdict-row"><span class="verdict-label">{side === 'home' ? teamShort(match.home) : side === 'away' ? teamShort(match.away) : 'Empate'}</span><div class="verdict-track"><i style={`--p:${displayOneX2[side] * 100}%`}></i></div><span class="verdict-value">{Math.round(displayOneX2[side] * 100)}%</span></div>)}</div></>}</div>
   </div>
  </div>

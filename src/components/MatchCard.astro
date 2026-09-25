@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import TeamLogo from './TeamLogo.astro';
+import { teamEsDisplay, normalize } from '../lib/teams.js';
 
 const { match, competitionCode, competitionName, kickoffLabel, formHome = null, formAway = null } = Astro.props;
 const LIVE = new Set(['LIVE', 'HT', 'ET', 'BT', 'P', 'SUSP', 'INT']);
@@ -8,11 +9,13 @@ const isLive = LIVE.has(match.status);
 const isFinished = match.status === 'FT' || match.status === 'AET' || match.status === 'PEN';
 const statusLabel = isLive ? `EN VIVO${match.minute ? ` · ${match.minute}'` : ''}` : isFinished ? 'FINAL' : null;
 const sides = [
-  { name: match.home, teamId: match.teamIds?.home ?? null, form: formHome },
-  { name: match.away, teamId: match.teamIds?.away ?? null, form: formAway },
+  { name: teamEsDisplay(match.home), teamId: match.teamIds?.home ?? null, form: formHome },
+  { name: teamEsDisplay(match.away), teamId: match.teamIds?.away ?? null, form: formAway },
 ];
+// Búsqueda bilingüe y sin tildes: "spain" y "españa" encuentran el mismo card.
+const searchIndex = `${normalize(match.home)} ${normalize(match.away)} ${normalize(sides[0].name)} ${normalize(sides[1].name)} ${match.venue ?? ''}`.toLowerCase();
 ---
-<a href={`/partido/${match.webId ?? match.id}/`} class="match-card" data-fixture data-league-id={match.competition} data-date={match.kickoff.slice(0, 10)} data-stage={isLive ? 'live' : isFinished ? 'finished' : 'upcoming'} data-teams={`${match.home} ${match.away} ${match.venue ?? ''}`.toLowerCase()}>
+<a href={`/partido/${match.webId ?? match.id}/`} class="match-card" data-fixture data-league-id={match.competition} data-date={match.kickoff.slice(0, 10)} data-stage={isLive ? 'live' : isFinished ? 'finished' : 'upcoming'} data-teams={searchIndex}>
   <span class="card-top">
     <span class="card-league">{competitionCode}</span>
     {statusLabel && <span class:list={['card-status', { live: isLive }]}>{isLive && <i class="live-dot" aria-hidden="true"></i>}{statusLabel}</span>}

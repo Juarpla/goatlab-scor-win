@@ -1,5 +1,5 @@
 ---
-import { teamShort } from '../lib/teams.js';
+import { teamShort, teamEsDisplay } from '../lib/teams.js';
 /**
  * "Cómo llegan al encuentro" como SVG dinámico: una fila por equipo con sus
  * últimos 5 partidos (marcador + rival abreviado), generada desde los datos —
@@ -46,8 +46,8 @@ const height = cursor - ROW_GAP + 4;
 const count = Math.max(homeForm?.played ?? 0, awayForm?.played ?? 0);
 const emptyBlocks = blocks.filter(block => !block.games);
 const ariaSeries = blocks.map(block => block.games
-  ? `${block.name}, ${block.games.map(game => `${game.scored}-${game.conceded}`).join(', ')}`
-  : `${block.name}: sin serie registrada, en un futuro tendremos datos`).join('; ');
+  ? `${teamEsDisplay(block.name)}, ${block.games.map(game => `${game.scored}-${game.conceded}`).join(', ')}`
+  : `${teamEsDisplay(block.name)}: sin serie registrada, en un futuro tendremos datos`).join('; ');
 /* Fila blueprint: andamio discontinuo con la línea dibujándose en bucle y
    dos nodos parpadeantes; geometría relativa al ancho, nada estático. */
 const blueprint = y => {
@@ -67,7 +67,7 @@ const blueprint = y => {
     {blocks.map(block => (
       <g>
         <circle cx={PAD + 4} cy={block.y + 9} r="4" fill={block.dot} />
-        <text class="fs-name" x={PAD + 14} y={block.y + 15}>{block.name}</text>
+        <text class="fs-name" x={PAD + 14} y={block.y + 15}>{teamEsDisplay(block.name)}</text>
         {block.games && <text class="fs-total" x={width - PAD} y={block.y + 15} text-anchor="end">{summaryOf(block.form)}</text>}
         {!block.games && <text class="fs-total" x={width - PAD} y={block.y + 15} text-anchor="end">Sin serie registrada por ahora.</text>}
         {block.games ? block.slots.map((game, index) => {
@@ -76,13 +76,13 @@ const blueprint = y => {
           if (!game) return <g aria-hidden="true"><rect x={x} y={y} width={CELL_W} height={CELL_H} rx="6" class="fs-slot" /><text class="fs-gap" x={x + CELL_W / 2} y={y + 34} text-anchor="middle">–</text></g>;
           const tone = TONES[game.letter] ?? TONES.E;
           return <g>
-            <title>{`${game.scored}-${game.conceded} contra ${game.rival} (${game.date})`}</title>
+            <title>{`${game.scored}-${game.conceded} contra ${teamEsDisplay(game.rival)} (${game.date})`}</title>
             <rect x={x} y={y} width={CELL_W} height={CELL_H} rx="6" fill={tone.bg} />
             <text class="fs-score" x={x + CELL_W / 2} y={y + 23} text-anchor="middle" fill={tone.fg}>{game.scored}-{game.conceded}</text>
             <text class="fs-rival" x={x + CELL_W / 2} y={y + 41} text-anchor="middle">{teamShort(game.rival)}</text>
           </g>;
         }) : (() => { const bp = blueprint(block.y + HEAD_H); return <g>
-          <title>{`${block.name}: en un futuro tendremos datos, aún sin partidos registrados`}</title>
+          <title>{`${teamEsDisplay(block.name)}: en un futuro tendremos datos, aún sin partidos registrados`}</title>
           <rect x={PAD} y={bp.frameY} width={width - PAD * 2} height="36" rx="6" class="suc-frame" />
           <line x1={PAD + 12} x2={width - PAD - 12} y1={bp.mid - 9} y2={bp.mid - 9} class="suc-grid" />
           <line x1={PAD + 12} x2={width - PAD - 12} y1={bp.mid + 8} y2={bp.mid + 8} class="suc-grid" />
@@ -95,7 +95,7 @@ const blueprint = y => {
     ))}
   </svg>
   {emptyBlocks.filter(block => block.crumbs?.length).map(block => (
-    <p class="suc-crumbs"><strong>{block.name}</strong>{block.crumbs.map(crumb => <span>{crumb}</span>)}</p>
+    <p class="suc-crumbs"><strong>{teamEsDisplay(block.name)}</strong>{block.crumbs.map(crumb => <span>{crumb}</span>)}</p>
   ))}
   {emptyBlocks.length > 0 && <p class="suc-expect">Sus últimos 5 aparecerán aquí en cuanto {emptyBlocks.length > 1 ? 'acumulen' : 'acumule'} partidos registrados.</p>}
   <p class="form-strip-note">Marcador desde la óptica de cada equipo: verde ganó, gris empató, rojo perdió.</p>

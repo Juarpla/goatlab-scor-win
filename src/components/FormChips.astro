@@ -1,11 +1,12 @@
 ---
 import TeamLogo from './TeamLogo.astro';
+import { teamEsDisplay } from '../lib/teams.js';
 const { home, away, homeForm, awayForm, teamIds = null } = Astro.props;
 // Un chip por partido: marcador desde la óptica del equipo, color por resultado
 // y el rival escrito completo (nada de siglas). El más reciente queda a la derecha.
 const sides = [
-  { name: home, form: homeForm, teamId: teamIds?.home ?? null },
-  { name: away, form: awayForm, teamId: teamIds?.away ?? null },
+  { name: teamEsDisplay(home), form: homeForm, teamId: teamIds?.home ?? null },
+  { name: teamEsDisplay(away), form: awayForm, teamId: teamIds?.away ?? null },
 ];
 const rows = sides.map(side => {
   const games = side.form.goalsFor.map((scored, index) => ({
@@ -32,9 +33,9 @@ const rows = sides.map(side => {
       </div>
       <div class="form-chip-row">
         {row.games.map(game => (
-          <span class:list={['form-chip', game.letter]} title={`${game.scored}-${game.conceded} vs. ${game.rival} (${game.date})`}>
+          <span class:list={['form-chip', game.letter]} title={`${game.scored}-${game.conceded} vs. ${teamEsDisplay(game.rival)} (${game.date})`}>
             <strong>{game.scored}-{game.conceded}</strong>
-            <small>{game.rival}</small>
+            <small>{teamEsDisplay(game.rival)}</small>
           </span>
         ))}
       </div>

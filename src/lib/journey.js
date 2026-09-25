@@ -3,7 +3,7 @@
  * termómetro de curiosidades. Todo se calcula sobre los JSON locales en la
  * build; nada de esta página consulta al proveedor en runtime.
  */
-import { normalize, teamDisplay } from './teams.js';
+import { normalize, teamEsDisplay } from './teams.js';
 import { competitions } from './football.js';
 import { locateMatch, MAP_CROP } from './venues.js';
 
@@ -91,7 +91,7 @@ export function computePlayerPulse(scorersData = {}) {
   }
   if (scorer?.value > 0) rows.push({
     label: 'El goleador', fact: scorer.player,
-    detail: `${teamDisplay(scorer.team)} · ${scorer.value} goles en ${scorer.matches ?? '?'} partidos · ${competitionName(scorer.competition)}`,
+    detail: `${teamEsDisplay(scorer.team)} · ${scorer.value} goles en ${scorer.matches ?? '?'} partidos · ${competitionName(scorer.competition)}`,
   });
 
   let assister = null;
@@ -102,7 +102,7 @@ export function computePlayerPulse(scorersData = {}) {
   }
   if (assister?.value > 0) rows.push({
     label: 'El asistente', fact: assister.player,
-    detail: `${teamDisplay(assister.team)} · ${assister.value} asistencias · ${competitionName(assister.competition)}`,
+    detail: `${teamEsDisplay(assister.team)} · ${assister.value} asistencias · ${competitionName(assister.competition)}`,
   });
 
   let efficient = null;
@@ -116,7 +116,7 @@ export function computePlayerPulse(scorersData = {}) {
   }
   if (efficient?.value > 0) rows.push({
     label: 'El más eficaz', fact: efficient.player,
-    detail: `${teamDisplay(efficient.team)} · ${efficient.value} goles en ${efficient.matches} partidos · ${competitionName(efficient.competition)}`,
+    detail: `${teamEsDisplay(efficient.team)} · ${efficient.value} goles en ${efficient.matches} partidos · ${competitionName(efficient.competition)}`,
   });
 
   return rows.slice(0, 4);
@@ -139,7 +139,7 @@ export function computePulse(results = []) {
     for (let index = games.length - 1; index >= 0 && games[index].scored > games[index].conceded; index--) run++;
     if (run > (streak?.run ?? 0) && run > 1) streak = { team: games[games.length - 1].name, run };
   }
-  if (streak) items.push({ label: 'La racha más larga', fact: teamDisplay(streak.team), detail: `${streak.run} victorias seguidas` });
+  if (streak) items.push({ label: 'La racha más larga', fact: teamEsDisplay(streak.team), detail: `${streak.run} victorias seguidas` });
 
   let goals = null;
   for (const row of rows) {
@@ -148,7 +148,7 @@ export function computePulse(results = []) {
   }
   if (goals) items.push({
     label: 'Más goles',
-    fact: `${teamDisplay(goals.home)} ${goals.homeScore}-${goals.awayScore} ${teamDisplay(goals.away)}`,
+    fact: `${teamEsDisplay(goals.home)} ${goals.homeScore}-${goals.awayScore} ${teamEsDisplay(goals.away)}`,
     detail: `${goals.total} goles · ${shortDate(goals.date)}`,
   });
 
@@ -159,7 +159,7 @@ export function computePulse(results = []) {
   }
   if (blowout) items.push({
     label: 'La goleada',
-    fact: `${teamDisplay(blowout.home)} ${blowout.homeScore}-${blowout.awayScore} ${teamDisplay(blowout.away)}`,
+    fact: `${teamEsDisplay(blowout.home)} ${blowout.homeScore}-${blowout.awayScore} ${teamEsDisplay(blowout.away)}`,
     detail: `diferencia de ${blowout.margin} · ${shortDate(blowout.date)}`,
   });
 
@@ -171,7 +171,7 @@ export function computePulse(results = []) {
     const scored = last.reduce((sum, game) => sum + game.scored, 0);
     if (wins > (inForm?.wins ?? 0) || (wins === inForm?.wins && scored > inForm.scored)) inForm = { team: last[last.length - 1].name, wins, scored, sample: last.length };
   }
-  if (inForm) items.push({ label: 'El equipo de moda', fact: teamDisplay(inForm.team), detail: `${inForm.wins} victorias en sus últimos ${inForm.sample} partidos` });
+  if (inForm) items.push({ label: 'El equipo de moda', fact: teamEsDisplay(inForm.team), detail: `${inForm.wins} victorias en sus últimos ${inForm.sample} partidos` });
 
   return items.slice(0, 4);
 }
@@ -199,7 +199,7 @@ export function computeCuriosities(results = []) {
       if (run > (ever?.run ?? 0)) ever = { team: game.name, run };
     }
   }
-  if (ever && ever.run > 3) slides.push({ figure: ever.run, line: `victorias seguidas, la racha más larga de la base (${ever.team}).` });
+  if (ever && ever.run > 3) slides.push({ figure: ever.run, line: `victorias seguidas, la racha más larga de la base (${teamEsDisplay(ever.team)}).` });
 
   return slides.slice(0, 3);
 }

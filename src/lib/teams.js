@@ -12,7 +12,7 @@ const SHORTS = {
   barcelona: 'BAR', 'real madrid': 'RMA', 'paris saint germain': 'PSG', arsenal: 'ARS', liverpool: 'LIV',
   'manchester city': 'MCI', 'manchester united': 'MUN', chelsea: 'CHE', tottenham: 'TOT', newcastle: 'NEW',
   'aston villa': 'AVL', 'west ham': 'WHU', everton: 'EVE', 'real betis': 'BET', villarreal: 'VIL',
-  'atlético madrid': 'ATM', 'athletic club': 'ATH', sevilla: 'SEV', 'real sociedad': 'RSO', valencia: 'VAL',
+  'atletico madrid': 'ATM', 'athletic club': 'ATH', sevilla: 'SEV', 'real sociedad': 'RSO', valencia: 'VAL',
 };
 export function normalize(name) {
   return String(name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -118,8 +118,12 @@ export function webMatchId(catalog, home, away, kickoff) {
 export function slugify(name) {
   return normalize(name).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'equipo';
 }
+/** Nombre visible en español: limpia prefijos/sufijos y traduce selecciones (`Spain` → `España`). Clubes intactos. */
+export function teamEsDisplay(name) {
+  return esName(teamDisplay(name));
+}
 export function teamShort(name) {
-  const key = normalize(name);
+  const key = normalize(teamEsDisplay(name));
   if (SHORTS[key]) return SHORTS[key];
   const letters = key.replace(/ /g, '').slice(0, 3).toUpperCase();
   return letters || '???';
@@ -132,7 +136,7 @@ export function teamShort(name) {
  */
 const SKIP = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'al', 'en', 'a', 'the', 'of', 'da', 'do', 'das', 'dos', 'di', 'du', 'von', 'van']);
 export function teamCompact(name) {
-  const words = teamDisplay(name).split(/\s+/).filter(Boolean);
+  const words = teamEsDisplay(name).split(/\s+/).filter(Boolean);
   if (!words.length) return '???';
   if (words.length === 1) return words[0];
   const last = words[words.length - 1];

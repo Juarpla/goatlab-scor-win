@@ -5,6 +5,7 @@
  * cuotas, siempre atribuido al proveedor. Plantillas deterministas y
  * testeables; lo irreconocible se omite, nunca se imprime en crudo.
  */
+import { esName } from './teams.js';
 
 const FAVORITE_SIDE = {
   home: 'home', h: 'home', local: 'home',
@@ -59,12 +60,12 @@ function neutralHead(fragment) {
   const sides = body.match(/^(.+?)\s+or\s+(.+)$/i);
   if (sides) {
     const left = sides[1].trim(), right = sides[2].trim();
-    if (/^draws?$/i.test(left)) return `${cap(right)} sin perder`;
-    if (/^draws?$/i.test(right)) return `${cap(left)} sin perder`;
-    return `${cap(left)} o ${cap(right)}`;
+    if (/^draws?$/i.test(left)) return `${cap(esName(right))} sin perder`;
+    if (/^draws?$/i.test(right)) return `${cap(esName(left))} sin perder`;
+    return `${cap(esName(left))} o ${cap(esName(right))}`;
   }
   const winner = text.match(/^winner\s*:\s*(.+)$/i);
-  if (winner) return `gana ${winner[1].trim()}`;
+  if (winner) return `gana ${esName(winner[1].trim())}`;
   return null;
 }
 
@@ -97,7 +98,7 @@ export function buildProviderAdvice({ provider = null, afPrediction = null, home
     const fav = favoriteName(rec.favorite, home, away);
     if (fav) {
       const prob = pct(rec.favoriteProb);
-      bz.push({ label: 'Mayor probabilidad estimada', text: prob ? `${fav} (${prob}, según el modelo)` : `${fav}, según el modelo` });
+      bz.push({ label: 'Mayor probabilidad estimada', text: prob ? `${esName(fav)} (${prob}, según el modelo)` : `${esName(fav)}, según el modelo` });
     }
   }
   // Las probabilidades mandan sobre el booleano: el `No` tajante contradecía
@@ -117,7 +118,7 @@ export function buildProviderAdvice({ provider = null, afPrediction = null, home
   const af = [];
   const neutral = adviceToNeutral(afPrediction?.advice);
   if (neutral) af.push({ label: 'Lectura del proveedor', text: neutral });
-  else if (afPrediction?.winner) af.push({ label: 'Lectura del proveedor', text: `Mayor probabilidad estimada: ${afPrediction.winner}, según el modelo` });
+  else if (afPrediction?.winner) af.push({ label: 'Lectura del proveedor', text: `Mayor probabilidad estimada: ${esName(afPrediction.winner)}, según el modelo` });
   if (!bz.length && !af.length) return null;
   return { bz, af };
 }

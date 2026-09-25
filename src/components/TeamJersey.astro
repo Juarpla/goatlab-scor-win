@@ -7,9 +7,11 @@
  * `pattern` opcional: 'stripes' | 'sash' | 'plain'.
  */
 import { teamColors } from '../lib/team-colors.js';
+import { teamEsDisplay } from '../lib/teams.js';
 
 const { name, short, pattern, side = 'home' } = Astro.props;
 const colors = teamColors(name);
+const displayName = teamEsDisplay(name);
 const stripePattern = pattern === 'stripes';
 const sash = pattern === 'sash';
 const BODY = 'M40 14 14 28 4 14 12 4C24 0 40 0 60 0s36 0 48 4l8 10-10 14-26-14v96c-6 4-34 4-40 0Z';
@@ -18,7 +20,7 @@ const uid = `jersey-${side}`;
 
 <figure class="jersey">
   <div class="jersey-wrap">
-    <svg viewBox="0 0 120 116" role="img" aria-label={`Camiseta estimada de ${name}`}>
+    <svg viewBox="0 0 120 116" role="img" aria-label={`Camiseta estimada de ${displayName}`}>
       <defs>
         <clipPath id={`${uid}-clip`}><path d={BODY}/></clipPath>
         <pattern id={`${uid}-grid`} width="7" height="7" patternUnits="userSpaceOnUse">
