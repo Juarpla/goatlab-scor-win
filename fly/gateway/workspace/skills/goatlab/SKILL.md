@@ -1,6 +1,6 @@
 ---
 name: goatlab
-description: GoatLab Shorts. Responde al mensaje /goatlab en Telegram: lista los partidos vigentes, envía los guiones uno a la vez con botones (saltar, ver guion, otra toma, todos, estado, basta) y recibe las notas de voz.
+description: GoatLab Shorts. Responde al mensaje /goatlab en Telegram: lista los partidos vigentes, envía los 10 guiones de una vez, recibe los audios en lote con acuses mínimos, pide confirmación única y renderiza.
 ---
 
 # GoatLab Shorts (`/goatlab`)
@@ -22,21 +22,32 @@ Todo en el mismo chat de Telegram. Los guiones viven en
 1. **Lista vigentes**: muestra la lista numerada con `match`, `competition` y
    `kickoff` (como hasta ahora). Si no hay archivos, dilo y termina.
 2. **Elige número**: el usuario responde con el número. Confirma el partido
-   (`matchId`) y envía el **guion 1** (`narration` tal cual, para leer en voz
-   alta) con la botonera completa (ver tabla).
-3. **Lee en cualquier orden**: el usuario lee el guion que quiera y manda su
-   audio. No exijas orden ni lectura literal: dirá muletillas, repetirá
-   frases y cambiará palabras.
-4. **Match aproximado por contenido**: transcribe el audio, normalízalo
-   (minúsculas, sin puntuación, fuera muletillas y repeticiones) y compáralo
-   con las 10 `narration` por **anclas distintivas** (equipos + números, que
-   casi seguro dirá igual). Elige el más parecido; si el parecido es bajo,
-   **no adivines**: pregunta `¿qué número era?`. Confirma siempre:
-   *"esto fue el guion N, ¿ok?"* con botones `✅ Sí` `❌ Es otro`
-   (si es otro, pide el número).
-5. **Avanza**: tras confirmar, envía el siguiente guion pendiente con sus
-   botones. Si era el último: `Serie completa 🎉` + resumen.
-6. **🎬 Render**: al cerrar (`⏹ Basta` o serie completa) ofrece
+   (`matchId`) y envía los **10 guiones de una vez** (`narration` tal cual,
+   para leer en voz alta), numerados del 1 al 10, repartidos en 2-3 mensajes
+   de ≤3500 caracteres. Encabeza el primero con instrucciones cortas, p. ej.:
+   *"Lee y graba en orden, uno tras otro, sin esperar. Si una toma sale mal,
+   escribe `repetir` y manda la nueva. Cuando termines escribe `listo`."*
+   Adjunta la botonera de apoyo (ver tabla).
+3. **Recibe audios en lote**: el usuario manda sus audios en orden, sin
+   esperar respuesta. Por cada audio: transcribe, normaliza (minúsculas, sin
+   puntuación, fuera muletillas y repeticiones) y verifica anclas distintivas
+   (equipos + números) contra el guion que le toca **por orden**
+   (audio k ↔ guion k). Responde SOLO un acuse mínimo: `✅ 3`. Si las anclas
+   no cuadran, `✅ 3 ❓ ¿este era el guion 3?` y sigue. Nada de botoneras ni
+   resúmenes por audio: lo importante es no frenar al usuario.
+   (Si antes del audio llegó `repetir` o `repetir N`, el audio reemplaza al
+   indicado en vez de avanzar — ver paso 4.)
+4. **`repetir` (cambiar una toma)**: bare (`repetir`) = reemplaza el último
+   audio recibido; con número (`repetir 5`) = reemplaza el 5. Responde
+   *"Dale, manda la nueva toma del N"* y el siguiente audio lo reemplaza
+   (no suma). El botón 🔁 equivale a `repetir` (el último).
+5. **Cierre y resumen único**: al recibir `listo` (= `basta` = `terminar`) o
+   al llegar los 10 audios: `Serie completa 🎉` + tabla de estado
+   (`1 ✅ 2 ✅ … 5 🔁 …`) + botones `✅ Todo bien` `🔁 Repetir uno`.
+   `✅ Todo bien` (o `sí`) → paso 6. `🔁 Repetir uno` → pide el número
+   (o asume el último si no lo da) → vuelve a este resumen al recibir la
+   nueva toma. Con `basta` a mitad se cierra con lo recibido hasta ahí.
+6. **🎬 Render**: al confirmar el resumen ofrece
    *"¿renderizo los N videos con tus audios? 🎬"*. Si acepta, o si pide
    `video`/`render` en cualquier momento, por cada guion con audio:
    1. Crea el heartbeat: `touch /data/.busy` (vía `exec`). Esto impide que el
@@ -61,26 +72,32 @@ válidos (viven en Telegram, no en disco).
 
 ## Botones y comandos (misma acción)
 
-Cada mensaje del bot lleva la botonera completa: no hay nada que memorizar.
+Cada mensaje del bot lleva la botonera de apoyo: no hay nada que memorizar.
+Durante la grabación los acuses son solo texto (`✅ N`) para no frenar.
 
 | Botón | Comando escrito | Qué hace |
 |---|---|---|
-| ⏭ Saltar | `saltar` | Pasa al siguiente sin audio (queda pendiente) |
-| 👁 Ver guion | `ver guion` | Reenvía el guion en curso |
-| 🔁 Otra toma | `otra toma` | Descarta el último audio, espera regrabación |
-| 📦 Todos | `todos` | Vuelca los restantes de golpe |
+| 👁 Ver guion | `ver guion [N]` | Reenvía el guion en curso (o el N) |
+| 🔁 Repetir | `repetir [N]` | La siguiente toma reemplaza la última (o la N) |
 | 📊 Estado | `estado` | Recibidos vs pendientes de la serie |
-| ⏹ Basta | `basta` | Cierra la serie con resumen |
-| ✅ Sí / ❌ Es otro | `sí` / `es otro` | Confirma o corrige el match del audio |
+| ⏹ Basta | `basta` / `listo` / `terminar` | Cierra la serie con resumen único |
+| ✅ Todo bien / 🔁 Repetir uno | `sí` / `repetir [N]` | Confirma el resumen o corrige una toma |
 
 Los botones se mandan como `presentation.blocks[type=buttons]` del message
 tool (callbacks). Los comandos escritos son el fallback.
 
 ## Reglas
 
-- Estado por chat: `{matchId, audios: {n: fileId}, pendientes: [n]}`.
+- Estado por chat: `{matchId, audios: {n: fileId}, pendientes: [n],
+  reemplazoPendiente: n|null}`. Un guion sin audio queda pendiente (no hace
+  falta saltarlo: simplemente no se manda).
 - Audio sin serie activa → pide `/goatlab` primero.
-- Número a mitad de serie → no cambia de partido; recuerda en qué guion estás.
+- Número a mitad de serie → no cambia de partido; recuerda en qué van.
+- Todo mensaje con botones incluye el bloque
+  `presentation.blocks[type=buttons]`; tras mandar una confirmación o el
+  resumen, cierra el turno sin más razonamiento para que los toques lleguen
+  a un turno vivo. Si el usuario dice que un botón murió o manda texto tras
+  una confirmación, reenvía el mensaje con botones frescos.
 - Sin reset automático de sesión (decisión del usuario: control manual con
   `/start`, que hace borrado total; las series a medias se conservan mientras
   no se pida `/start`).
