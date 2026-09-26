@@ -1,15 +1,15 @@
 {
-  "id": "bz-212602",
-  "home": "Iceland",
-  "away": "Estonia",
+  "id": "af-1528893",
+  "home": "Albania",
+  "away": "Belarus",
   "competition": "nations",
-  "kickoff": "2026-09-26T16:00:00+00:00",
-  "updatedAt": "2026-09-25T21:42:18.164Z",
+  "kickoff": "2026-09-26T18:45:00+00:00",
+  "updatedAt": "2026-09-26T16:31:04.670Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.7,
-      "away": 1.25
+      "home": 1.34,
+      "away": 1.12
     },
     "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
@@ -19,25 +19,10 @@
       "away": 0
     },
     "standings": {
-      "Iceland": {
-        "position": 5,
-        "team": "Iceland",
-        "teamId": 665,
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "goalsFor": null,
-        "goalsAgainst": null,
-        "goalDifference": null,
-        "points": 0,
-        "zone": null,
-        "form": null
-      },
-      "Estonia": {
-        "position": 4,
-        "team": "Estonia",
-        "teamId": 2208,
+      "Albania": {
+        "position": 1,
+        "team": "Albania",
+        "teamId": 724,
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -47,8 +32,27 @@
         "goalDifference": null,
         "points": 0,
         "zone": {
-          "key": "rel",
-          "label": "Relegation",
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "Belarus": {
+        "position": 3,
+        "team": "Belarus",
+        "teamId": 677,
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 0,
+        "zone": {
+          "key": "relq",
+          "label": "Relegation Playoffs",
           "type": "relegation"
         },
         "form": null
@@ -65,100 +69,100 @@
   },
   "markets": {
     "oneX2": {
-      "home": 0.468,
-      "draw": 0.261,
-      "away": 0.271
+      "home": 0.405,
+      "draw": 0.296,
+      "away": 0.299
     },
     "doubleChance": {
-      "12": 0.739,
-      "1X": 0.729,
-      "X2": 0.532
+      "12": 0.704,
+      "1X": 0.701,
+      "X2": 0.595
     },
     "dnb": {
-      "home": 0.634,
-      "away": 0.366
+      "home": 0.575,
+      "away": 0.425
     },
     "totals": {
-      "over15": 0.804,
-      "under15": 0.196,
-      "over25": 0.565,
-      "under25": 0.435,
-      "over35": 0.342,
-      "under35": 0.658
+      "over15": 0.717,
+      "under15": 0.283,
+      "over25": 0.446,
+      "under25": 0.554,
+      "over35": 0.234,
+      "under35": 0.766
     },
     "btts": {
-      "yes": 0.594,
-      "no": 0.406
+      "yes": 0.51,
+      "no": 0.49
     },
     "cleanSheet": {
-      "home": 0.287,
-      "away": 0.183
+      "home": 0.326,
+      "away": 0.262
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.122
+        "p": 0.141
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.102
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.098
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.095
+        "p": 0.086
       },
       {
-        "home": 1,
-        "away": 0,
-        "p": 0.078
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.076
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.07
+        "home": 0,
+        "away": 1,
+        "p": 0.083
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.95,
-    "noGoal": 0.052,
+    "lambdaTotal": 2.46,
+    "noGoal": 0.085,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.388
+        "p": 0.336
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.238
+        "p": 0.223
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.145
+        "p": 0.148
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.089
+        "p": 0.098
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.054
+        "p": 0.065
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.033
+        "p": 0.043
       }
     ],
-    "firstHome": 0.546,
-    "firstAway": 0.402
+    "firstHome": 0.498,
+    "firstAway": 0.416
   },
   "scorers": {
     "home": null,
@@ -168,95 +172,123 @@
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.718,
-      "draw": 0.183,
-      "away": 0.098,
+      "home": 0.621,
+      "draw": 0.23800000000000002,
+      "away": 0.14,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.7,
-      "away": 1.25
+      "home": 1.34,
+      "away": 1.12
     },
-    "over15": 0.768,
-    "over25": 0.547,
-    "over35": 0.33,
-    "btts": 0.445,
+    "over15": 0.669,
+    "over25": 0.426,
+    "over35": 0.226,
+    "btts": 0.439,
     "score": "1-1",
-    "cornersOver95": 0.42700000000000005,
+    "cornersOver95": 0.433,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.718,
+      "favoriteProb": 0.621,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.7184,
+    "confidence": 0.6213,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-23T12:24:18.283Z",
+    "capturedAt": "2026-09-26T16:30:26.378Z",
     "source": "Bzzoiro"
   },
-  "afPrediction": null,
-  "afOdds": null,
+  "afPrediction": {
+    "winner": "Albania",
+    "winnerComment": "Win or draw",
+    "winOrDraw": true,
+    "underOver": null,
+    "goals": {
+      "home": null,
+      "away": null
+    },
+    "advice": "Double chance : Albania or draw",
+    "percent": {
+      "home": 0.5,
+      "draw": 0.5,
+      "away": 0
+    },
+    "capturedAt": "2026-09-26T05:09:21.349Z",
+    "source": "API-Football"
+  },
+  "afOdds": {
+    "oneX2": {
+      "home": 0.628,
+      "draw": 0.238,
+      "away": 0.134
+    },
+    "over25": 0.426,
+    "btts": 0.401,
+    "bookmakers": 7,
+    "capturedAt": "2026-09-26T05:10:13.099Z",
+    "source": "API-Football"
+  },
   "xgMarkets": {
     "oneX2": {
-      "home": 0.468,
-      "draw": 0.261,
-      "away": 0.271
+      "home": 0.405,
+      "draw": 0.296,
+      "away": 0.299
     },
     "doubleChance": {
-      "12": 0.739,
-      "1X": 0.729,
-      "X2": 0.532
+      "12": 0.704,
+      "1X": 0.701,
+      "X2": 0.595
     },
     "dnb": {
-      "home": 0.634,
-      "away": 0.366
+      "home": 0.575,
+      "away": 0.425
     },
     "totals": {
-      "over15": 0.804,
-      "under15": 0.196,
-      "over25": 0.565,
-      "under25": 0.435,
-      "over35": 0.342,
-      "under35": 0.658
+      "over15": 0.717,
+      "under15": 0.283,
+      "over25": 0.446,
+      "under25": 0.554,
+      "over35": 0.234,
+      "under35": 0.766
     },
     "btts": {
-      "yes": 0.594,
-      "no": 0.406
+      "yes": 0.51,
+      "no": 0.49
     },
     "cleanSheet": {
-      "home": 0.287,
-      "away": 0.183
+      "home": 0.326,
+      "away": 0.262
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.119,
-        "share": 0.271689497716895
+        "p": 0.128,
+        "share": 0.2575452716297787
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.102,
+        "share": 0.2052313883299799
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.098,
+        "share": 0.19718309859154934
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.095,
-        "share": 0.2168949771689498
+        "p": 0.086,
+        "share": 0.17303822937625754
       },
       {
-        "home": 1,
-        "away": 0,
-        "p": 0.078,
-        "share": 0.1780821917808219
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.076,
-        "share": 0.1735159817351598
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.07,
-        "share": 0.15981735159817353
+        "home": 0,
+        "away": 1,
+        "p": 0.083,
+        "share": 0.16700201207243465
       }
     ],
     "providerPick": {
@@ -268,50 +300,40 @@
   },
   "market": null,
   "h2h": {
-    "totalMatches": 4,
-    "homeWins": 1,
-    "draws": 3,
+    "totalMatches": 3,
+    "homeWins": 2,
+    "draws": 1,
     "awayWins": 0,
-    "avgTotalGoals": 1.25,
+    "avgTotalGoals": 2.3333333333333335,
     "recent": [
       {
-        "eventId": 243184,
-        "date": "2023-01-08T17:00:00+00:00",
-        "home": "Estonia",
-        "away": "Iceland",
-        "homeTeamId": 2208,
-        "awayTeamId": 665,
-        "homeScore": 1,
-        "awayScore": 1
+        "eventId": 284938,
+        "date": "2020-11-18T15:00:00+00:00",
+        "home": "Albania",
+        "away": "Belarus",
+        "homeTeamId": 724,
+        "awayTeamId": 677,
+        "homeScore": 3,
+        "awayScore": 2
       },
       {
-        "eventId": 290109,
-        "date": "2019-01-15T16:45:00+00:00",
-        "home": "Iceland",
-        "away": "Estonia",
-        "homeTeamId": 665,
-        "awayTeamId": 2208,
+        "eventId": 284811,
+        "date": "2020-09-04T18:45:00+00:00",
+        "home": "Belarus",
+        "away": "Albania",
+        "homeTeamId": 677,
+        "awayTeamId": 724,
         "homeScore": 0,
-        "awayScore": 0
+        "awayScore": 2
       },
       {
-        "eventId": 380399,
-        "date": "2015-03-31T16:00:00+00:00",
-        "home": "Estonia",
-        "away": "Iceland",
-        "homeTeamId": 2208,
-        "awayTeamId": 665,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 395409,
-        "date": "2014-06-04T19:15:00+00:00",
-        "home": "Iceland",
-        "away": "Estonia",
-        "homeTeamId": 665,
-        "awayTeamId": 2208,
-        "homeScore": 1,
+        "eventId": 410675,
+        "date": "2013-11-15T16:00:00+00:00",
+        "home": "Belarus",
+        "away": "Albania",
+        "homeTeamId": 677,
+        "awayTeamId": 724,
+        "homeScore": 0,
         "awayScore": 0
       }
     ],
@@ -345,70 +367,70 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 6.7
+    "expectedTotal": 8.7
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 12.04,
-      "shotsOnTarget": 4.33,
-      "xg": 1.7,
-      "corners": 3.52,
-      "fouls": 12.66,
-      "yellowCards": 2.23,
-      "redCards": 0.5,
-      "offsides": 1.83,
-      "possession": 50.13
+      "shots": 10.54,
+      "shotsOnTarget": 3.05,
+      "xg": 1.34,
+      "corners": 4.72,
+      "fouls": 10.02,
+      "yellowCards": 1.96,
+      "redCards": 0,
+      "offsides": 0.86,
+      "possession": 51.74
     },
     "away": {
-      "shots": 11.97,
-      "shotsOnTarget": 4.46,
-      "xg": 1.25,
-      "corners": 3.18,
-      "fouls": 13.68,
-      "yellowCards": 2.05,
-      "redCards": 0.5,
-      "offsides": 1.76,
-      "possession": 49.87
+      "shots": 11.02,
+      "shotsOnTarget": 3.38,
+      "xg": 1.12,
+      "corners": 4,
+      "fouls": 11.16,
+      "yellowCards": 2.29,
+      "redCards": 0,
+      "offsides": 1.02,
+      "possession": 48.26
     },
     "sample": {
-      "home": 5,
-      "away": 3
+      "home": 3,
+      "away": 4
     },
     "coverage": {
       "home": {
-        "possession": 5,
-        "shots": 5,
-        "shotsOnTarget": 5,
-        "xg": 4,
-        "corners": 5,
-        "fouls": 5,
-        "yellowCards": 5,
-        "redCards": 1,
-        "offsides": 5
-      },
-      "away": {
         "possession": 3,
         "shots": 3,
         "shotsOnTarget": 3,
         "xg": 3,
         "corners": 3,
         "fouls": 3,
-        "yellowCards": 2,
+        "yellowCards": 3,
         "redCards": 0,
-        "offsides": 2
+        "offsides": 3
+      },
+      "away": {
+        "possession": 4,
+        "shots": 2,
+        "shotsOnTarget": 4,
+        "xg": 1,
+        "corners": 4,
+        "fouls": 4,
+        "yellowCards": 4,
+        "redCards": 3,
+        "offsides": 4
       }
     },
     "league": {
       "possession": 50,
-      "shots": 11.88,
-      "shotsOnTarget": 4.38,
-      "xg": 1.45,
-      "corners": 3.31,
-      "fouls": 13.13,
-      "yellowCards": 2.07,
-      "redCards": 0.5,
-      "offsides": 1.86
+      "shots": 10.8,
+      "shotsOnTarget": 3.21,
+      "xg": 0.99,
+      "corners": 4.36,
+      "fouls": 10.57,
+      "yellowCards": 2.14,
+      "redCards": 0,
+      "offsides": 0.93
     },
     "sources": {
       "home": {
@@ -445,40 +467,40 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.473,
-      "draw": 0.156,
-      "away": 0.371
+      "home": 0.528,
+      "draw": 0.133,
+      "away": 0.338
     },
     "cardsDuel": {
-      "home": 0.434,
-      "draw": 0.199,
-      "away": 0.367
+      "home": 0.339,
+      "draw": 0.198,
+      "away": 0.463
     },
     "lastGoal": {
-      "home": 0.546,
-      "away": 0.402,
-      "noGoal": 0.052
+      "home": 0.498,
+      "away": 0.416,
+      "noGoal": 0.085
     },
     "cornerRace": {
       "3": {
-        "home": 0.547,
-        "away": 0.453
+        "home": 0.577,
+        "away": 0.423
       },
       "5": {
-        "home": 0.562,
-        "away": 0.438
+        "home": 0.601,
+        "away": 0.399
       },
       "7": {
-        "home": 0.574,
-        "away": 0.426
+        "home": 0.619,
+        "away": 0.381
       }
     },
     "cornerMargin": {
-      "home3plus": 0.197,
-      "home12": 0.276,
-      "level": 0.156,
-      "away12": 0.239,
-      "away3plus": 0.132
+      "home3plus": 0.269,
+      "home12": 0.26,
+      "level": 0.133,
+      "away12": 0.204,
+      "away3plus": 0.134
     },
     "source": "GoatLab"
   },
@@ -512,14 +534,14 @@
   },
   "context": {
     "home": {
-      "team": "Iceland",
+      "team": "Albania",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 5,
+        "position": 1,
         "played": 0,
         "gf": null,
         "ga": null,
@@ -528,14 +550,14 @@
       "player": null
     },
     "away": {
-      "team": "Estonia",
+      "team": "Belarus",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 4,
+        "position": 3,
         "played": 0,
         "gf": null,
         "ga": null,
