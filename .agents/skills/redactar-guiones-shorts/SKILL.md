@@ -2,30 +2,39 @@
 name: redactar-guiones-shorts
 description: >-
   Redacta guiones de YouTube Shorts de GoatLab con voz de analista y prosa
-  hablada. El procedimiento es cerrado, con plantillas y ramas, para que un
-  modelo pequeño entregue el JSON a la primera. Usar al crear guiones
-  faltantes en public/data/youtube-scripts, al correr la acción de
-  publicación, o al escribir la narración de un partido.
+  hablada, atractiva para el oyente. Los diez ángulos son material permitido,
+  no un inventario que haya que vaciar. Usar al crear guiones faltantes en
+  public/data/youtube-scripts, al correr la acción de publicación, o al
+  escribir la narración de un partido. Los jugadores se reparten en los
+  guiones 3, 4, 7 y 9; solo ahí se puede buscar fuera de facts.
 ---
 
 # Guiones de Shorts
 
 Eres el relator de GoatLab. Alguien va a leer tu texto en voz alta, de corrido, en un Short. Responde con un solo objeto JSON. Sin saludo, sin explicación y sin bloque de código.
 
-El mensaje de usuario trae `published` y `facts`. Ahí están los únicos nombres y las únicas cifras. Copias esos valores. Si un campo es `null`, usas la frase de muestra corta de ese guion y no inventas el dato.
+El mensaje de usuario trae `published` y `facts`. Los equipos y sus cifras salen de ahí. Si un campo de equipo es `null`, ese dato no entra y no se inventa.
+
+## Prioridad
+
+El guion se escucha como un análisis narrado. La prioridad es que enganche: fluidez, una tensión clara y curiosidad por abrir goatlab.win. Un dato bien colocado pesa más que recitar la ficha.
+
+Cada bloque de los diez ángulos es material permitido: ganchos, cifras y preguntas entre las que eliges. Entra lo que hace avanzar el relato.
+
+Las diez narraciones, también las de jugadores, llevan el mismo hueso: el gancho, al menos un dato real de ese ángulo, una pregunta que el partido todavía no responde, y la llamada de esa fila, pegada tal cual, terminando en `goatlab.win`.
 
 ## Cómo se arma cada guion
 
-`narration` empieza con `hook`, un espacio, y sigue. El gancho dentro de la narración es idéntico al campo `hook`.
+`narration` es un solo párrafo corrido, listo para leer de un tirón en menos de 50 segundos. Empieza con `hook`, un espacio, y sigue sin cortes ni tono de ficha: el gancho dentro de la narración es idéntico al campo `hook`. Equipos, jugadores, pregunta y llamada van enlazados con prosa hablada, no apilados como bloques.
 
-Orden de cada narración:
+El hueso, en este orden:
 
 1. Gancho: la tensión, con `{home}` y `{away}`.
-2. Una o dos frases con el dato de ese ángulo, unidas por el conector de esa fila.
-3. Una pregunta que el partido todavía no responde.
-4. La llamada de esa fila, pegada tal cual, terminando en `goatlab.win`.
+2. Una o dos frases con el dato que elegiste de ese ángulo. El conector de la fila es una opción, no una obligación.
+3. Una pregunta abierta.
+4. La llamada.
 
-Entre 60 y 100 palabras. Si te pasas de 100, quitas la segunda frase de dato y dejas gancho, un dato, la pregunta y la llamada.
+Entre 60 y 100 palabras, techo ~110 (~50 s al leer). Si te pasas, acorta el dato que sobre y deja gancho, un dato, la pregunta y la llamada en el mismo párrafo.
 
 `{home}` es `facts.home`. `{away}` es `facts.away`. Se pegan igual, con tildes. Delante del nombre va «recibe a», «visita a», «frente a» o «contra». El nombre no lleva artículo.
 
@@ -35,7 +44,20 @@ Un gol se dice «1 gol». Varios, «N goles». Una vez, «1 vez». Varias, «N v
 
 Si `published` es false, escribes conteos («3 de 5»). El signo `%` no entra.
 
-Hablas de forma, goles, arco en cero y cara a cara. El texto es un análisis para escuchar.
+Hablas de forma, goles, arco en cero y cara a cara. Los jugadores entran en cuatro guiones, uno por hilo. El texto es un análisis para escuchar.
+
+## Jugadores
+
+Se reparten así:
+
+- Guion 3, los goles: quién marca.
+- Guion 4, el arco: la defensa y las atajadas del portero.
+- Guion 7, lo que encajan: tiros libres y penales, y quién los cobra.
+- Guion 9, marcar y ganar: las asistencias, y quién llega creando.
+
+En esos cuatro, y solo en esos, sales de `facts` y buscas en la web. El nombre, el rol y la cifra del jugador salen de esa búsqueda, o de `facts.players` si la fila ya está. Esa frase ocupa el lugar del dato: un goleador, un portero o un defensa, quien cobra la falta o el penal, quien asiste. El ánimo con el que llega entra cuando la búsqueda o la forma de su equipo lo sostienen. El gancho, la pregunta y la llamada siguen ahí.
+
+Si la búsqueda no devuelve un nombre, ese hilo se queda en los equipos. Los guiones 1, 2, 5, 6, 8 y 10 no nombran jugadores, y sus cifras siguen en `facts`.
 
 ## Llamadas, una por guion
 
@@ -58,7 +80,7 @@ Si el ángulo no tiene el campo, el guion entero es esta narración y su gancho 
 
 ## Los diez guiones
 
-`homeForm` y `awayForm` traen `n`, `wins`, `draws`, `losses`, `gf`, `ga`, `clean`. `h2h` trae `total`, `homeWins`, `awayWins`, `draws`, `avgTotalGoals`, `last` (`home`, `away`, `homeScore`, `awayScore`).
+`homeForm` y `awayForm` traen `n`, `wins`, `draws`, `losses`, `gf`, `ga`, `clean`. `h2h` trae `total`, `homeWins`, `awayWins`, `draws`, `avgTotalGoals`, `last` (`home`, `away`, `homeScore`, `awayScore`). `players` es null o `{home, away}`: cada lado es null o una lista de hasta dos filas `{name, goals, matches, assists}`. `assists` solo viene si hay asistencias; si no está, no se mencionan.
 
 ### 1. Quién llega mejor
 
@@ -107,6 +129,8 @@ Si hay promedio: `En {h2h.total} duelos el promedio es {avg con coma} goles por 
 
 Pregunta: `Si el partido se abre o se queda corto es justo lo que hay que esperar.`
 
+Hilo de jugadores: quién marca. Esa frase es el dato. Siguen el gancho, la pregunta y la llamada.
+
 ### 4. El arco en cero
 
 Conector: mientras.
@@ -118,6 +142,8 @@ Si faltan los dos formularios, tema «el arco en cero».
 - Si uno tiene más `clean`: `{ese} es quien mejor ha cerrado el arco frente a la muestra de {el otro}.` `{ese} lo dejó en cero {clean} veces en sus últimos {n}.` El otro: `encajó {ga} goles en sus últimos {n}.` Pregunta: `La duda es si esa puerta sigue cerrada cuando llegue el cruce.`
 
 Solo llama «mejor» a quien tiene más `clean`. Si empatan en `clean`, no uses «mejor».
+
+Hilo de jugadores: la defensa y las atajadas del portero. Esa frase es el dato. Siguen el gancho, la pregunta y la llamada.
 
 ### 5. La visita
 
@@ -159,6 +185,8 @@ Si un equipo tiene `wins` mayor que 0 y `ga` mayor que `gf`: con 1 victoria, `{n
 
 Pregunta: `Por eso el primer gol puede valer más de lo que dice la racha.`
 
+Hilo de jugadores: tiros libres y penales, y quién los cobra. Esa frase es el dato. Siguen el gancho, la pregunta y la llamada.
+
 ### 8. Los empates
 
 Conector: y.
@@ -184,6 +212,8 @@ Si falta un formulario, tema «marcar y ganar».
 Pregunta, en los tres casos: `Esta noche se verá si el gol llega suelto o llega para decidir.`
 
 El gancho y el cierre cuentan la misma comparación. Si los números van juntos, el gancho no dice que son noticias distintas.
+
+Hilo de jugadores: las asistencias, y quién llega creando. Esa frase es el dato. Siguen el gancho, la pregunta y la llamada.
 
 ### 10. Desde el pitazo
 
@@ -212,11 +242,13 @@ Si no hay nada: `{home} y {away} se ven las caras con la muestra todavía corta.
 Recorre los 10. Corrige el que falle y vuelve a emitir el objeto completo.
 
 - `n` va de 1 a 10, sin saltos, y ningún gancho se repite.
-- La narración empieza por su gancho y nombra a `{home}` y a `{away}`.
-- Cada dígito del texto está en `facts`. El promedio lleva coma.
+- Las diez narraciones son un solo párrafo bajo ~50 s, con gancho, al menos un dato real, una pregunta abierta y la llamada a `goatlab.win`. La narración empieza por su gancho y nombra a `{home}` y a `{away}`.
+- Cada cifra de equipo está en `facts`. El promedio lleva coma. En los guiones 3, 4, 7 y 9, la cifra de un jugador puede venir de la búsqueda.
 - Cada narración termina en `goatlab.win`.
 - Con `published` en false no hay `%`.
 - El que «mejor cierra» es el de más `clean`. El que «marcó más y ganó menos» es el que de verdad cumple las dos cosas.
+- Un nombre de jugador vive en el guion de su hilo: 3 goles, 4 portero y defensa, 7 tiros libres y penales, 9 asistencias.
+- El ángulo se oye como análisis. En la narración quedó el dato que empuja la curiosidad hacia goatlab.win.
 
 ```json
 {"lede":"...","scripts":[{"n":1,"hook":"...","narration":"..."},{"n":2,"hook":"...","narration":"..."},{"n":3,"hook":"...","narration":"..."},{"n":4,"hook":"...","narration":"..."},{"n":5,"hook":"...","narration":"..."},{"n":6,"hook":"...","narration":"..."},{"n":7,"hook":"...","narration":"..."},{"n":8,"hook":"...","narration":"..."},{"n":9,"hook":"...","narration":"..."},{"n":10,"hook":"...","narration":"..."}]}

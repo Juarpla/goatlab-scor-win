@@ -145,8 +145,51 @@ export function sameCore(prev, next) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-/** Hechos que el modelo puede decir. Sin porcentajes ni lectura de apuesta. */
-export function scriptFacts(match) {
+/** Hasta dos goleadores por lado, copiados de la tabla de la competición. */
+function sideScorers(table, competition, team, teamId, limit = 2) {
+  const rows = (table?.[competition]?.scorers ?? [])
+    .filter(row => row?.player && Number.isFinite(Number(row.value)) && Number(row.value) > 0)
+    .filter(row => (teamId != null && row.teamId === teamId) || sameClub(row.team, team))
+    .sort((a, b) => Number(b.value) - Number(a.value) || String(a.player).localeCompare(String(b.player), 'es'));
+  const picked = [];
+  const seen = new Set();
+  for (const row of rows) {
+    const name = String(row.player).trim();
+    if (!name || seen.has(name)) continue;
+    seen.add(name);
+    const player = {
+      name,
+      goals: Number(row.value),
+      matches: Number.isFinite(Number(row.matches)) ? Number(row.matches) : null,
+    };
+    if (Number.isFinite(Number(row.assists)) && Number(row.assists) > 0) player.assists = Number(row.assists);
+    picked.push(player);
+    if (picked.length === limit) break;
+  }
+  return picked.length ? picked : null;
+}
+
+function importantPlayers(match, scorers) {
+  if (!scorers || !match?.competition) return null;
+  const home = sideScorers(scorers, match.competition, match.home, match.teamIds?.home ?? null);
+  const away = sideScorers(scorers, match.competition, match.away, match.teamIds?.away ?? null);
+  if (!home && !away) return null;
+  return { home, away };
+}
+
+function playerNames(facts) {
+  return [facts?.players?.home, facts?.players?.away]
+    .flatMap(side => side ?? [])
+    .map(row => row?.name)
+    .filter(Boolean);
+}
+
+/** Guiones 3, 4, 7 y 9: ahí el relato puede nombrar jugadores y usar cifras buscadas. */
+const PLAYER_SCRIPT_INDEXES = new Set([2, 3, 6, 8]);
+
+/** Hechos que el modelo puede decir. Sin porcentajes ni lectura de apuesta.
+ *  `players` sale de la tabla de goleadores de la competición; null si no hay filas. */
+export function scriptFacts(match, scorers = null) {
   const home = esName(match.home);
   const away = esName(match.away);
   const homeForm = formLine(match.lastMatches?.home, match.home);
@@ -170,7 +213,7 @@ export function scriptFacts(match) {
       } : null,
     };
   }
-  return { home, away, homeForm, awayForm, h2h };
+  return { home, away, homeForm, awayForm, h2h, players: importantPlayers(match, scorers) };
 }
 
 /** Partidos de la corrida que todavía no tienen un JSON con 10 guiones. */
@@ -248,6 +291,7 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
   if (!Array.isArray(scripts) || scripts.length !== 10) errors.push('hacen falta 10 guiones');
   const allowed = allowedNumbers(facts);
   const names = [facts?.home, facts?.away].filter(Boolean);
+  const players = playerNames(facts);
   const hooks = new Set();
   for (const [i, script] of (scripts ?? []).entries()) {
     const hook = String(script?.hook ?? '').trim();
@@ -259,10 +303,18 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
     for (const name of names) {
       if (!narration.includes(name)) errors.push(`${label}: falta ${name}`);
       const article = new RegExp(`(?:^|\\s)(?:el|al|del|este|la|los|las)\\s+${escapeRegExp(name)}\\b`, 'i');
-      if (article.test(narration)) errors.push(`${label}: artículo delante de ${name}`);
+      if (article.test(`${hook} ${narration}`)) errors.push(`${label}: artículo delante de ${name}`);
     }
-    for (const n of numbersInText(`${hook} ${narration}`)) {
-      if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);
+    for (const name of players) {
+      const article = new RegExp(`(?:^|\\s)(?:el|al|del|este|la|los|las)\\s+${escapeRegExp(name)}\\b`, 'i');
+      if (article.test(`${hook} ${narration}`)) errors.push(`${label}: artículo delante de ${name}`);
+      const mentioned = hook.includes(name) || narration.includes(name);
+      if (mentioned && !PLAYER_SCRIPT_INDEXES.has(i)) errors.push(`${label}: ${name} va en un guion de jugadores`);
+    }
+    if (!PLAYER_SCRIPT_INDEXES.has(i)) {
+      for (const n of numbersInText(`${hook} ${narration}`)) {
+        if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);
+      }
     }
     for (const error of checkScript({ hook, narration }, { published })) errors.push(`${label}: ${error}`);
   }

@@ -95,7 +95,22 @@ test('scriptFacts no lleva porcentajes y missingScripts solo pide los que faltan
   assert.equal(facts.homeForm.ga, 4);
   assert.equal(facts.h2h.total, 4);
   assert.equal(facts.h2h.avgTotalGoals, 1.25);
+  assert.equal(facts.players, null);
   assert.equal(JSON.stringify(facts).includes('%'), false);
+  const withScorers = scriptFacts(
+    { ...match, competition: 'nations', teamIds: { home: 1, away: 2 } },
+    { nations: { scorers: [
+      { player: 'Marc Vales', team: 'Andorra', teamId: 1, value: 3, matches: 4, assists: 2 },
+      { player: 'Otro', team: 'Andorra', teamId: 1, value: 1, matches: 4 },
+      { player: 'Sobra', team: 'Andorra', teamId: 1, value: 1, matches: 2 },
+      { player: 'Kyrian Nwoko', team: 'Malta', teamId: 2, value: 2, matches: 3 },
+      { player: 'Sin goles', team: 'Malta', teamId: 2, value: 0, matches: 3 },
+    ] } },
+  );
+  assert.deepEqual(withScorers.players, {
+    home: [{ name: 'Marc Vales', goals: 3, matches: 4, assists: 2 }, { name: 'Otro', goals: 1, matches: 4 }],
+    away: [{ name: 'Kyrian Nwoko', goals: 2, matches: 3 }],
+  });
   assert.equal(JSON.stringify(youtubeUserPayload({ published: false, facts })).includes('oneX2'), false);
   assert.deepEqual(
     missingScripts(
@@ -130,6 +145,19 @@ test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artíc
   const articled = structuredClone(scripts);
   articled[0] = { ...articled[0], hook: 'El Andorra llega entero frente a Malta hoy.', narration: 'El Andorra llega entero frente a Malta hoy. Andorra ganó 1 de sus últimos 5. El análisis está en goatlab.win.' };
   assert.ok(acceptYoutubeDraft({ scripts: articled, lede }, { facts, published: false }).some(e => /artículo/.test(e)));
+  const named = {
+    ...facts,
+    players: { home: [{ name: 'Marc Vales', goals: 3, matches: 4 }], away: null },
+  };
+  const withPlayer = structuredClone(scripts);
+  withPlayer[2] = {
+    ...withPlayer[2],
+    narration: `${withPlayer[2].hook} Andorra ganó 1 de sus últimos 5. Marc Vales lleva 7 goles. La pregunta sigue abierta. El análisis está en goatlab.win.`,
+  };
+  assert.deepEqual(acceptYoutubeDraft({ scripts: withPlayer, lede }, { facts: named, published: false }), []);
+  const spilled = structuredClone(withPlayer);
+  spilled[0] = { ...spilled[0], narration: `${spilled[0].hook} Marc Vales lleva 3 goles. El análisis está en goatlab.win.` };
+  assert.ok(acceptYoutubeDraft({ scripts: spilled, lede }, { facts: named, published: false }).some(e => /va en un guion de jugadores/.test(e)));
 });
 
 test('staleScripts detecta rancios y sameCore ignora generatedAt', () => {

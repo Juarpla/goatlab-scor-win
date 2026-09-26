@@ -24,10 +24,17 @@ const skillPath = '.agents/skills/redactar-guiones-shorts/SKILL.md';
 const args = new Map(process.argv.slice(2).map(a => a.split('=')));
 const onlyMatch = args.get('--match');
 const limitRaw = args.get('--limit');
-const fullRun = !onlyMatch && limitRaw == null;
+const force = args.has('--force');
+const fullRun = !onlyMatch && limitRaw == null && !force;
 
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
 const evaluation = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8'));
+let scorers = null;
+try {
+  scorers = JSON.parse(await readFile('public/data/scorers.json', 'utf8'));
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
 const published = evaluation?.published === true;
 const skill = (await readFile(skillPath, 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
 
@@ -47,24 +54,25 @@ if (fullRun) {
 }
 
 const names = (await readdir(dir)).filter(f => f.endsWith('.json'));
-const pending = missingScripts(matches, names);
+const pending = force ? matches : missingScripts(matches, names);
 let failures = 0;
 let written = 0;
-const skipped = matches.length - pending.length;
+const skipped = force ? 0 : matches.length - pending.length;
 if (!pending.length) {
   console.log(`shorts: ${skipped} ya redactados, 0 faltantes`);
   process.exit(0);
 }
+if (force) console.log(`shorts: reescritura forzada de ${pending.length} partidos`);
 
 const breaker = createProviderBreaker();
 for (const match of pending) {
   const matchId = match.webId ?? match.id;
-  const facts = scriptFacts(match);
+  const facts = scriptFacts(match, scorers);
   const file = join(dir, `${matchId}.json`);
   try {
     const { value, provider, model } = await withFailover([
       { role: 'system', content: skill },
-      { role: 'user', content: `Sigue el procedimiento. Responde solo el JSON de 10 guiones, copiando nombres y cifras de este objeto.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
+      { role: 'user', content: `Sigue el procedimiento. Cada narración es un solo párrafo corrido, menos de 50 s, con prosa hablada. Copia nombres y cifras de equipos de este objeto; en guiones 3, 4, 7 y 9 usa tu conocimiento reciente de jugadores si hace falta. Responde solo el JSON de 10 guiones.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
     ], {
       maxTokens: 4500,
       timeoutMs: 120_000,
