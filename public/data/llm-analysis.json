@@ -1,5 +1,138 @@
 {
-  "bz-212600": {
+  "bz-212624": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama del cruce",
+        "bullets": [
+          "Latvia y Cyprus se enfrentan en Nations League el 28 de septiembre de 2026.",
+          "La sede figura como NS, sin más detalle de estadio o condiciones.",
+          "Ambos equipos aparecen con 0 partidos y 0 puntos en la tabla, así que es un duelo temprano."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: Poisson y Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab: Latvia 36.7%, empate 29.4%, Cyprus 33.9%; over 2.5 46.1% y BTTS 52.6%.",
+          "CatBoost Bzzoiro: Latvia 37.3%, empate 28.2%, Cyprus 34.4%; over 2.5 46.3% y BTTS 51.1%.",
+          "B2 de Bzzoiro se decanta por el local (H) con 37.3% y no activa over 2.5 ni BTTS.",
+          "El resultado más probable según B es 1-1."
+        ],
+        "stats": [
+          {
+            "value": "36.7%",
+            "label": "Poisson local"
+          },
+          {
+            "value": "37.3%",
+            "label": "Bzzoiro local"
+          },
+          {
+            "value": "1-1",
+            "label": "Resultado B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial reciente",
+        "bullets": [
+          "El precedente con fecha es del 21 de marzo de 2024: Cyprus 1-1 Latvia.",
+          "La línea H registra 1 victoria para Latvia y 1 para Cyprus, con 0 empates; no se puede reconstruir la serie completa.",
+          "El 1-1 reciente sugiere un cruce parejo, aunque los modelos dan ventaja ligera a Latvia."
+        ],
+        "stats": [
+          {
+            "value": "1-1",
+            "label": "Último cruce"
+          },
+          {
+            "value": "2024",
+            "label": "Año"
+          },
+          {
+            "value": "1",
+            "label": "Victorias por lado"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Situación en la tabla",
+        "bullets": [
+          "Latvia figura 8º y Cyprus 3º, ambos con 0 puntos y 0 partidos disputados.",
+          "La clasificación es preliminar: no hay partidos jugados en el registro."
+        ],
+        "stats": [
+          {
+            "value": "8º",
+            "label": "Latvia"
+          },
+          {
+            "value": "3º",
+            "label": "Cyprus"
+          },
+          {
+            "value": "0",
+            "label": "Puntos ambos"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves del partido",
+        "bullets": [
+          "La ventaja de Latvia es pequeña: Bzzoiro le da 37.3% frente al 34.4% de Cyprus.",
+          "El empate tiene peso: 29.4% en Poisson y 28.2% en Bzzoiro.",
+          "El over 2.5 no es mayoritario: 46.1% y 46.3%; el BTTS ronda 51-53%.",
+          "El 1-1 como resultado más probable refuerza la idea de un partido cerrado."
+        ],
+        "stats": [
+          {
+            "value": "37.3%",
+            "label": "Favorito B"
+          },
+          {
+            "value": "29.4%",
+            "label": "Empate P"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos ausentes",
+        "detail": "No hay líneas de forma reciente (R), goleadores (S), clima/sede (W), bajas (L) ni mercado (M2) en el input."
+      },
+      {
+        "label": "Historial parcial",
+        "detail": "La línea H indica 0 empates, pero el cruce fechado de 2024 fue 1-1; la serie no está completa o el formato es ambiguo."
+      },
+      {
+        "label": "B2 sin over/BTTS",
+        "detail": "B2 no activa over 2.5 ni BTTS aunque B da 46.3% y 51.1%; puede ser un umbral del modelo, no una inconsistencia."
+      },
+      {
+        "label": "Sede NS",
+        "detail": "El campo figura como NS; no se especifica estadio ni condiciones de juego."
+      },
+      {
+        "label": "Tabla inicial",
+        "detail": "Ambos equipos tienen 0 partidos y 0 puntos; las posiciones 8 y 3 son preliminares."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "No se detectan desviaciones porcentuales claras entre Poisson y Bzzoiro; las diferencias son de 0.2 a 1.5 puntos. El historial H es inconsistente con el 1-1 de 2024, pero no afecta a los porcentajes."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4-flash",
+    "generatedAt": "2026-09-22T13:53:15.514Z",
+    "inputKey": "v2|M|bz-212624|Latvia|Cyprus|nations|2026-09-28T16:00:00+00:0|NS\nP|1.29|1.23|0.367|0.294|0.339|0.461|0.526\nB|0.373|0.282|0.344|1.29|1.23|0.463|0.511|1-1|0.475\nB2|H|0.373|no|no\nH|1|0|1|0|2\nT|8|Latvia|0|0||\nT|3|Cyprus|0|0||\nHR|2024-03-21|Cyprus|Latvia|1|1"
+  },
+  "af-1528889": {
     "summary": [
       {
         "kind": "panorama",
@@ -139,139 +272,11 @@
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4-flash",
     "generatedAt": "2026-09-22T13:19:01.646Z",
-    "inputKey": "v2|M|bz-212600|Faroe Islands|Kazakhstan|nations|2026-09-26T16:00:00+00:0|NS\nP|1.71|0.85|0.566|0.26|0.173|0.471|0.48\nB|0.411|0.3|0.289|1.71|0.85|0.404|0.472|1-0|\nB2|H|0.411|no|no\nH|3|1|1|1|2\nT|5|Faroe Islands|0|0||\nT|8|Kazakhstan|0|0||\nHR|2025-11-18|Faroe Islands|Kazakhstan|1|0\nHR|2013-10-11|Faroe Islands|Kazakhstan|1|1\nHR|2013-09-06|Kazakhstan|Faroe Islands|2|1"
-  },
-  "bz-212624": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Panorama del cruce",
-        "bullets": [
-          "Latvia y Cyprus se enfrentan en Nations League el 28 de septiembre de 2026.",
-          "La sede figura como NS, sin más detalle de estadio o condiciones.",
-          "Ambos equipos aparecen con 0 partidos y 0 puntos en la tabla, así que es un duelo temprano."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "modelos",
-        "title": "Modelos: Poisson y Bzzoiro",
-        "bullets": [
-          "Poisson GoatLab: Latvia 36.7%, empate 29.4%, Cyprus 33.9%; over 2.5 46.1% y BTTS 52.6%.",
-          "CatBoost Bzzoiro: Latvia 37.3%, empate 28.2%, Cyprus 34.4%; over 2.5 46.3% y BTTS 51.1%.",
-          "B2 de Bzzoiro se decanta por el local (H) con 37.3% y no activa over 2.5 ni BTTS.",
-          "El resultado más probable según B es 1-1."
-        ],
-        "stats": [
-          {
-            "value": "36.7%",
-            "label": "Poisson local"
-          },
-          {
-            "value": "37.3%",
-            "label": "Bzzoiro local"
-          },
-          {
-            "value": "1-1",
-            "label": "Resultado B"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Historial reciente",
-        "bullets": [
-          "El precedente con fecha es del 21 de marzo de 2024: Cyprus 1-1 Latvia.",
-          "La línea H registra 1 victoria para Latvia y 1 para Cyprus, con 0 empates; no se puede reconstruir la serie completa.",
-          "El 1-1 reciente sugiere un cruce parejo, aunque los modelos dan ventaja ligera a Latvia."
-        ],
-        "stats": [
-          {
-            "value": "1-1",
-            "label": "Último cruce"
-          },
-          {
-            "value": "2024",
-            "label": "Año"
-          },
-          {
-            "value": "1",
-            "label": "Victorias por lado"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Situación en la tabla",
-        "bullets": [
-          "Latvia figura 8º y Cyprus 3º, ambos con 0 puntos y 0 partidos disputados.",
-          "La clasificación es preliminar: no hay partidos jugados en el registro."
-        ],
-        "stats": [
-          {
-            "value": "8º",
-            "label": "Latvia"
-          },
-          {
-            "value": "3º",
-            "label": "Cyprus"
-          },
-          {
-            "value": "0",
-            "label": "Puntos ambos"
-          }
-        ]
-      },
-      {
-        "kind": "claves",
-        "title": "Claves del partido",
-        "bullets": [
-          "La ventaja de Latvia es pequeña: Bzzoiro le da 37.3% frente al 34.4% de Cyprus.",
-          "El empate tiene peso: 29.4% en Poisson y 28.2% en Bzzoiro.",
-          "El over 2.5 no es mayoritario: 46.1% y 46.3%; el BTTS ronda 51-53%.",
-          "El 1-1 como resultado más probable refuerza la idea de un partido cerrado."
-        ],
-        "stats": [
-          {
-            "value": "37.3%",
-            "label": "Favorito B"
-          },
-          {
-            "value": "29.4%",
-            "label": "Empate P"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Datos ausentes",
-        "detail": "No hay líneas de forma reciente (R), goleadores (S), clima/sede (W), bajas (L) ni mercado (M2) en el input."
-      },
-      {
-        "label": "Historial parcial",
-        "detail": "La línea H indica 0 empates, pero el cruce fechado de 2024 fue 1-1; la serie no está completa o el formato es ambiguo."
-      },
-      {
-        "label": "B2 sin over/BTTS",
-        "detail": "B2 no activa over 2.5 ni BTTS aunque B da 46.3% y 51.1%; puede ser un umbral del modelo, no una inconsistencia."
-      },
-      {
-        "label": "Sede NS",
-        "detail": "El campo figura como NS; no se especifica estadio ni condiciones de juego."
-      },
-      {
-        "label": "Tabla inicial",
-        "detail": "Ambos equipos tienen 0 partidos y 0 puntos; las posiciones 8 y 3 son preliminares."
-      }
-    ],
-    "review": {
-      "flag": false,
-      "note": "No se detectan desviaciones porcentuales claras entre Poisson y Bzzoiro; las diferencias son de 0.2 a 1.5 puntos. El historial H es inconsistente con el 1-1 de 2024, pero no afecta a los porcentajes."
-    },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4-flash",
-    "generatedAt": "2026-09-22T13:53:15.514Z",
-    "inputKey": "v2|M|bz-212624|Latvia|Cyprus|nations|2026-09-28T16:00:00+00:0|NS\nP|1.29|1.23|0.367|0.294|0.339|0.461|0.526\nB|0.373|0.282|0.344|1.29|1.23|0.463|0.511|1-1|0.475\nB2|H|0.373|no|no\nH|1|0|1|0|2\nT|8|Latvia|0|0||\nT|3|Cyprus|0|0||\nHR|2024-03-21|Cyprus|Latvia|1|1"
+    "inputKey": "v3|M|af-1528889|Faroe Islands|Kazakhstan|nations|2026-09-26T16:00:00+00:0|NS\nP|1.65|0.84|0.554|0.267|0.178|0.454|0.471\nB|0.408|0.3|0.291|1.65|0.84|0.383|0.458|1-0|\nB2|H|0.408|no|no\nA|0.5|0.5|0|Faroe Islands|si||||Double chance : Faroe Islands or draw\nH|3|1|1|1|2\nT|5|Faroe Islands|0|0||\nT|8|Kazakhstan|0|0||\nHR|2025-11-18|Faroe Islands|Kazakhstan|1|0\nHR|2013-10-11|Faroe Islands|Kazakhstan|1|1\nHR|2013-09-06|Kazakhstan|Faroe Islands|2|1",
+    "home": "Faroe Islands",
+    "away": "Kazakhstan",
+    "kickoff": "2026-09-26T16:00:00+00:00",
+    "webId": "faroe-islands-vs-kazakhstan-2026-09-26",
+    "rekeyedFrom": "bz-212600"
   }
 }
