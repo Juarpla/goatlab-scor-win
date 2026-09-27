@@ -4,7 +4,9 @@ primary_region = 'iad'
 [http_service]
   internal_port = 3000
   force_https = true
-  auto_stop_machines = 'stop'
+  # El downscaler del proxy aborta el stop (cordon y uncordon cada ~6 min).
+  # El proceso sale con código 0 al quedar idle; on-failure no lo reinicia.
+  auto_stop_machines = 'off'
   auto_start_machines = true
   min_machines_running = 0
 

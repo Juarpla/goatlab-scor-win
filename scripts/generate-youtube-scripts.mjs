@@ -74,11 +74,18 @@ for (const match of pending) {
       { role: 'system', content: skill },
       { role: 'user', content: `Sigue el procedimiento. Cada narración es un solo párrafo corrido, menos de 50 s, con prosa hablada. Copia nombres y cifras de equipos de este objeto; en guiones 3, 4, 7 y 9 usa tu conocimiento reciente de jugadores si hace falta. Responde solo el JSON de 10 guiones.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
     ], {
-      maxTokens: 4500,
-      timeoutMs: 120_000,
+      maxTokens: 12_000,
+      timeoutMs: 180_000,
       breaker,
       validate: content => {
         const draft = extractJson(content);
+        for (const script of draft?.scripts ?? []) {
+          const hook = String(script?.hook ?? '').trim();
+          let narration = String(script?.narration ?? '').trim();
+          if (hook && narration && !narration.startsWith(hook)) {
+            script.narration = `${hook} ${narration}`;
+          }
+        }
         const lede = cleanLede(draft?.lede);
         const description = buildDescription({ lede, matchId, competition: match.competition });
         const errors = [
@@ -108,6 +115,7 @@ for (const match of pending) {
     await writeFile(file, JSON.stringify(payload, null, 2));
     written += 1;
     console.log(`shorts: ${file} redactado por ${provider}/${model}`);
+    if (force && pending.length > 1) await new Promise(r => setTimeout(r, 2000));
   } catch (error) {
     failures += 1;
     console.error(`shorts: ${file}: ${error.message}`);

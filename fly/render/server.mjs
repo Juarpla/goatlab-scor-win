@@ -34,6 +34,9 @@ if (!SECRET) throw new Error('falta RENDER_SECRET');
 const jobs = new Map();
 let seq = 0;
 let tail = Promise.resolve(); // un render a la vez
+const IDLE_MS = 5 * 60_000;
+let lastWork = Date.now();
+let inflight = 0;
 
 const tg = (method, body) =>
   fetch(`https://api.telegram.org/bot${BOT}/${method}`, {
@@ -205,6 +208,7 @@ const server = createServer(async (req, res) => {
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
       const job = jobs.get(m[1]);
+      if (job) lastWork = Date.now();
       return job ? json(200, job) : json(404, { error: 'job inexistente' });
     }
     if (req.method === 'POST' && req.url === '/render') {
@@ -229,9 +233,14 @@ const server = createServer(async (req, res) => {
         photos: b.photos.slice(0, 5),
       };
       jobs.set(id, job);
+      inflight++;
+      lastWork = Date.now();
       tail = tail.then(() => {
         job.status = 'working';
         return runJob(job);
+      }).finally(() => {
+        inflight--;
+        lastWork = Date.now();
       });
       return json(202, { jobId: id });
     }
@@ -242,3 +251,12 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => console.log(`render: http://localhost:${PORT}`));
+
+// El proxy no logra completar el autostop. Salir con 0 deja la máquina
+// stopped (restart on-failure) y el siguiente request la vuelve a encender.
+setInterval(() => {
+  if (inflight > 0 || Date.now() - lastWork < IDLE_MS) return;
+  console.log('render: 5 min sin jobs, apagando');
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(0), 3000).unref();
+}, 30_000).unref();
