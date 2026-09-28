@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, titleFromHook, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -33,7 +33,8 @@ test('genera 10 guiones corridos que pasan compliance con gate cerrado', () => {
     assert.ok(script.narration.startsWith(script.hook));
     assert.ok(script.narration.includes('goatlab.win'));
     assert.equal(script.words, script.narration.split(/\s+/).filter(Boolean).length);
-    assert.equal(script.title, titleFromHook(script.hook, script.n));
+    assert.equal(script.title, shortTitle({ home: 'Andorra', away: 'Malta', n: script.n, hook: script.hook }));
+    assert.equal(script.title.includes(script.hook), false);
     assert.ok(Array.from(script.title).length <= TITLE_MAX);
     assert.deepEqual(checkScript(script, { published: false, matchId: out.matchId }), []);
     assert.ok(!/%/.test(script.narration));
@@ -162,13 +163,26 @@ test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artíc
   assert.ok(acceptYoutubeDraft({ scripts: spilled, lede }, { facts: named, published: false }).some(e => /va en un guion de jugadores/.test(e)));
 });
 
-test('título con iconos, tope de 100, y pie de Telegram en dos líneas', () => {
+test('título de clic con equipos o jugadores, distinto del gancho', () => {
   const hook = 'España llega con mejor racha que Croacia, aunque el visitante todavía tiene cómo discutirla.';
-  const title = titleFromHook(hook, 1);
+  const title = shortTitle({ home: 'España', away: 'Croacia', n: 1, hook });
   assert.ok(title.startsWith('🔥⚽ '));
-  assert.ok(title.includes('España llega con mejor racha'));
+  assert.ok(title.includes('España'));
+  assert.ok(title.includes('Croacia'));
+  assert.equal(title.includes(hook), false);
+  assert.equal(hook.startsWith(title.replace(/^.*⚽\s*/, '')), false);
   assert.ok(Array.from(title).length <= TITLE_MAX);
-  const long = titleFromHook(`${hook} ${hook} ${hook}`, 10);
+  const narration = `${hook} En el gol mandan Lamine Yamal y Nico Williams. Esta noche se verá. Cuando quieras la pieza, ábrela en goatlab.win.`;
+  const names = playersInNarration(narration, { home: 'España', away: 'Croacia' });
+  assert.deepEqual(names, ['Lamine Yamal', 'Nico Williams']);
+  assert.deepEqual(playersInNarration('Islas Feroe marcó 10 ante Moldavia.', { home: 'Moldavia', away: 'Islas Feroe' }), []);
+  assert.deepEqual(playersInNarration('Creando desde la mediocancha, Nedim Bajrami es uno.', { home: 'San Marino', away: 'Albania' }), ['Nedim Bajrami']);
+  const playerTitle = shortTitle({ home: 'España', away: 'Croacia', n: 9, hook, players: names });
+  assert.ok(playerTitle.startsWith('✨⚽ '));
+  assert.ok(playerTitle.includes('Lamine Yamal'));
+  assert.ok(playerTitle.includes('Nico Williams'));
+  assert.equal(playerTitle.includes(hook), false);
+  const long = shortTitle({ home: 'España', away: 'Croacia', n: 10, hook: `${hook} ${hook} ${hook}` });
   assert.ok(long.startsWith('⏱️⚽ '));
   assert.equal(Array.from(long).length <= TITLE_MAX, true);
   assert.equal(telegramCaption({ title, hook }), `${title}\n${hook}`);
@@ -177,14 +191,29 @@ test('título con iconos, tope de 100, y pie de Telegram en dos líneas', () => 
 });
 
 test('hashtags de búsqueda y descripción con crédito de música', () => {
-  const tags = hashtagLine({ home: 'España', away: 'Croacia', competition: 'nations' });
-  assert.equal(tags, '#futbol #fútbol #soccer #football #Shorts #YouTubeShorts #goles #previa #analisis #deporte #deportes #UEFA #NationsLeague #UEFANationsLeague #LigaDeNaciones #selecciones #España #Croacia #goatlab');
+  const tags = hashtagLine({
+    home: 'España',
+    away: 'Croacia',
+    competition: 'nations',
+    players: ['Lamine Yamal', 'Álvaro Morata', 'Luka Modrić', 'Unai Simón'],
+  });
+  assert.equal(tags.split(' ').length <= 15, true);
+  assert.ok(tags.startsWith('#España #Croacia #LamineYamal #ÁlvaroMorata #LukaModrić #UnaiSimón'));
+  assert.ok(tags.includes('#goatlab'));
+  assert.ok(tags.includes('#Shorts'));
+  const ranked = attentionPlayers([
+    { n: 3, narration: 'Álvaro Morata y Andrej Kramarić abren España contra Croacia.' },
+    { n: 9, narration: 'Lamine Yamal y Nico Williams crean para España ante Croacia.' },
+    { n: 4, narration: 'Unai Simón para el arco de España frente a Croacia.' },
+  ], { home: 'España', away: 'Croacia' });
+  assert.deepEqual(ranked, ['Álvaro Morata', 'Andrej Kramarić', 'Lamine Yamal', 'Nico Williams']);
   const copy = youtubeCopy({
     lede: 'España recibe a Croacia.\n#viejo\nhttps://goatlab.win/x',
     matchId: 'spain-vs-croatia-2026-09-29',
     home: 'España',
     away: 'Croacia',
     competition: 'nations',
+    players: ['Lamine Yamal', 'Álvaro Morata', 'Luka Modrić', 'Unai Simón'],
     attribution: 'Foto: Commons (CC BY 4.0)',
     credit: 'Música: Kevin MacLeod (incompetech.com) — CC BY 4.0',
   });

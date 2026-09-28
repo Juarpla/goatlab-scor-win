@@ -1,7 +1,7 @@
 ---
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import Layout from '../../../layouts/Layout.astro';
-import { titleFromHook, youtubeCopy } from '../../../lib/youtube.js';
+import { attentionPlayers, playersInNarration, shortTitle, youtubeCopy } from '../../../lib/youtube.js';
 
 export function getStaticPaths() {
   let files = [];
@@ -24,9 +24,16 @@ const packPath = `public/data/media-pack/${data.matchId}.json`;
 const attribution = existsSync(packPath)
   ? JSON.parse(readFileSync(packPath, 'utf8')).attribution
   : '';
+const named = { home: data.home, away: data.away };
+const players = attentionPlayers(data.scripts, named);
 const scripts = data.scripts.map((script) => ({
   ...script,
-  title: script.title || titleFromHook(script.hook, script.n),
+  title: shortTitle({
+    ...named,
+    n: script.n,
+    hook: script.hook,
+    players: [3, 4, 7, 9].includes(Number(script.n)) ? playersInNarration(script.narration, named) : [],
+  }),
 }));
 const youtubeDescription = youtubeCopy({
   lede: data.description,
@@ -34,6 +41,7 @@ const youtubeDescription = youtubeCopy({
   home: data.home,
   away: data.away,
   competition: data.competition,
+  players,
   attribution,
   credit,
 });

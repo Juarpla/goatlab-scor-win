@@ -280,35 +280,36 @@ export function teamTag(name) {
 }
 
 const COMPETITION_TAGS = {
-  nations: ['#UEFA', '#NationsLeague', '#UEFANationsLeague', '#LigaDeNaciones', '#selecciones'],
+  nations: ['#UEFANationsLeague', '#selecciones', '#UEFA', '#NationsLeague', '#LigaDeNaciones'],
 };
 
-/** Hashtags de alta búsqueda. Van solo en la descripción de YouTube. */
-export function hashtagLine({ home, away, competition } = {}) {
+const HASHTAG_CAP = 15;
+
+/** Hashtags de alta búsqueda. Equipos y jugadores van delante: YouTube ignora la lista si pasa de 15. */
+export function hashtagLine({ home, away, competition, players } = {}) {
   const comp = COMPETITION_TAGS[competition] ?? [competitionTag(competition)];
-  const tags = [
-    '#futbol', '#fútbol', '#soccer', '#football',
-    '#Shorts', '#YouTubeShorts',
-    '#goles', '#previa', '#analisis', '#deporte', '#deportes',
+  const playerTags = (players ?? []).slice(0, 4).map(teamTag).filter(Boolean);
+  const head = [teamTag(home), teamTag(away), ...playerTags, '#Shorts', '#goatlab'];
+  const tail = [
+    '#futbol', '#fútbol', '#soccer', '#goles', '#previa',
     ...comp,
-    teamTag(home), teamTag(away),
-    '#goatlab',
+    '#football', '#analisis', '#YouTubeShorts', '#deporte', '#deportes',
   ];
-  return [...new Set(tags.filter(Boolean))].join(' ');
+  return [...new Set([...head, ...tail].filter(Boolean))].slice(0, HASHTAG_CAP).join(' ');
 }
 
-export function buildDescription({ lede, matchId, competition, home, away }) {
+export function buildDescription({ lede, matchId, competition, home, away, players }) {
   return [
     cleanLede(lede),
     `🔗 Más data: https://goatlab.win/partido/${matchId}`,
-    hashtagLine({ home, away, competition }),
+    hashtagLine({ home, away, competition, players }),
     DISCLAIMER,
   ].join('\n');
 }
 
 /** Descripción que se copia en /partido/id/youtube. El crédito sale de bed.txt. */
-export function youtubeCopy({ lede, matchId, home, away, competition, attribution, credit }) {
-  const lines = [buildDescription({ lede, matchId, competition, home, away })];
+export function youtubeCopy({ lede, matchId, home, away, competition, players, attribution, credit }) {
+  const lines = [buildDescription({ lede, matchId, competition, home, away, players })];
   const photo = String(attribution ?? '').trim();
   const music = String(credit ?? '').trim();
   if (photo) lines.push(photo);
@@ -319,20 +320,134 @@ export function youtubeCopy({ lede, matchId, home, away, competition, attributio
 const TITLE_ICONS = ['🔥', '👀', '⚡', '🧤', '✈️', '⏪', '🧱', '🤝', '✨', '⏱️'];
 export const TITLE_MAX = 100;
 
-/** Título del Short a partir del gancho: dos iconos y tope de YouTube. */
-export function titleFromHook(hook, n) {
-  const icon = TITLE_ICONS[(Math.max(1, Number(n) || 1) - 1) % TITLE_ICONS.length];
-  const prefix = `${icon}⚽ `;
-  const text = String(hook ?? '').replace(/\s+/g, ' ').trim();
+const NAME_STOP = new Set([
+  'ahí', 'ahi', 'al', 'aunque', 'antes', 'asi', 'así', 'como', 'cómo', 'con', 'cual', 'cuál',
+  'cuando', 'de', 'del', 'despues', 'después', 'detras', 'detrás', 'donde', 'dónde', 'el',
+  'en', 'entre', 'esa', 'esas', 'ese', 'eso', 'esos', 'esta', 'estas', 'este', 'estos',
+  'hay', 'la', 'las', 'lo', 'los', 'mas', 'más', 'mientras', 'ni', 'ojo', 'para', 'pero',
+  'por', 'que', 'qué', 'quien', 'quién', 'si', 'sin', 'sobre', 'su', 'sus', 'tambien',
+  'también', 'toda', 'todas', 'todavia', 'todavía', 'todo', 'todos', 'un', 'una', 'y',
+]);
+
+function teamWords(home, away) {
+  const words = new Set();
+  for (const name of [home, away]) {
+    const lower = String(name ?? '').toLowerCase();
+    if (lower) words.add(lower);
+    for (const word of lower.split(/\s+/)) {
+      if (word.length >= 3) words.add(word);
+    }
+  }
+  return words;
+}
+
+function isNameToken(word, teams) {
+  if (!word || word.length < 3) return false;
+  const lower = word.toLowerCase();
+  if (teams.has(lower) || NAME_STOP.has(lower)) return false;
+  return /^[\p{Lu}][\p{L}\p{M}’'.-]+$/u.test(word) && /\p{Ll}/u.test(word);
+}
+
+/** Nombres propios de la narración que no son los equipos. */
+export function playersInNarration(narration, { home, away } = {}) {
+  const teams = teamWords(home, away);
+  const found = [];
+  let buf = [];
+  const flush = () => {
+    if (buf.length === 1 && /(?:ando|iendo|yendo)$/iu.test(buf[0])) {
+      buf = [];
+      return;
+    }
+    if (buf.length) found.push(buf.join(' '));
+    buf = [];
+  };
+  for (const raw of String(narration ?? '').split(/\s+/)) {
+    const word = raw.replace(/^[«"“(\[]+|[»"”),:;.!?]+$/g, '');
+    if (isNameToken(word, teams)) buf.push(word);
+    else flush();
+  }
+  flush();
+  return collapseNames(found.filter(name => !teams.has(name.toLowerCase())));
+}
+
+function collapseNames(names) {
+  const unique = [...new Set(names.filter(Boolean))];
+  return unique.filter(name => !unique.some(other => other !== name && other.toLowerCase().includes(name.toLowerCase())));
+}
+
+/** Hasta cuatro jugadores de los guiones 3, 4, 7 y 9, goles y creación primero. */
+export function attentionPlayers(scripts, { home, away } = {}) {
+  const order = [3, 9, 7, 4];
+  const ranked = [];
+  for (const n of order) {
+    const script = (scripts ?? []).find(item => Number(item?.n) === n);
+    if (!script) continue;
+    for (const name of playersInNarration(script.narration, { home, away })) {
+      if (!ranked.includes(name)) ranked.push(name);
+    }
+  }
+  return collapseNames(ranked).slice(0, 4);
+}
+
+function clickLine(n, { home, away, names }) {
+  const vs = `${home} vs ${away}`;
+  const who = names.slice(0, 2);
+  const pair = who.length === 2 ? `${who[0]} y ${who[1]}` : who[0];
+  const lines = [
+    `¿${home} o ${away}? Uno llega más caliente`,
+    `${vs}: el historial que no te cuentan`,
+    pair ? `${pair}: ¿quién marca en ${vs}?` : `${vs}: ¿se abre el marcador?`,
+    pair ? `${pair}: ¿aguanta el arco en ${vs}?` : `¿Quién cierra el arco en ${vs}?`,
+    `${away} llega a ${home}: ¿alcanza la visita?`,
+    `${vs}: ¿se repite el último golpe?`,
+    pair ? `${pair} ${who.length > 1 ? 'pueden' : 'puede'} decidir ${vs}` : `${vs}: el primer gol lo cambia`,
+    `${vs}: cuidado, puede terminar en empate`,
+    pair ? `${pair} en ${vs}` : `${vs}: marcar no es ganar`,
+    `${vs}: lo único que importa al pitazo`,
+  ];
+  return lines[(Math.max(1, Number(n) || 1) - 1) % lines.length];
+}
+
+function sharesOpening(title, hook) {
+  const norm = (value) => String(value ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^\p{L}\p{N}\s]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const left = norm(title).split(' ').slice(0, 6).join(' ');
+  const right = norm(hook).split(' ').slice(0, 6).join(' ');
+  if (!left || !right) return false;
+  return right.startsWith(left) || left.startsWith(right);
+}
+
+function clipTitle(prefix, text) {
   const budget = TITLE_MAX - Array.from(prefix).length;
-  if (Array.from(text).length <= budget) return prefix + text;
+  const clean = String(text ?? '').replace(/\s+/g, ' ').trim();
+  if (Array.from(clean).length <= budget) return prefix + clean;
   let out = '';
-  for (const word of text.split(' ')) {
+  for (const word of clean.split(' ')) {
     const next = out ? `${out} ${word}` : word;
     if (Array.from(next).length > budget) break;
     out = next;
   }
-  return prefix + (out || Array.from(text).slice(0, budget).join(''));
+  return prefix + (out || Array.from(clean).slice(0, budget).join(''));
+}
+
+/**
+ * Título de clic del Short. No repite el gancho: nombra a los equipos
+ * o a los jugadores de ese guion, con dos iconos y tope de 100.
+ */
+export function shortTitle({ home, away, n, hook, players = [] } = {}) {
+  const icon = TITLE_ICONS[(Math.max(1, Number(n) || 1) - 1) % TITLE_ICONS.length];
+  const prefix = `${icon}⚽ `;
+  const names = collapseNames(players).slice(0, 2);
+  const ctx = { home, away, names };
+  const line = sharesOpening(clickLine(n, ctx), hook)
+    ? (names.length ? `No te pierdas a ${names.join(' y ')} en ${home} vs ${away}` : `${home} vs ${away}: la previa que engancha`)
+    : clickLine(n, ctx);
+  return clipTitle(prefix, line);
 }
 
 /** Pie de Telegram: título y gancho. Sin título, solo el gancho. */
@@ -402,7 +517,7 @@ export function buildYoutubeScripts(match) {
   const names = { ...match, home: esName(match.home), away: esName(match.away) };
   const scripts = Array.from({ length: HOOKS.length }, (_, i) => {
     const { hook, narration, words } = buildNarration(names, metrics, i);
-    return { n: i + 1, hook, title: titleFromHook(hook, i + 1), narration, words };
+    return { n: i + 1, hook, title: shortTitle({ home: names.home, away: names.away, n: i + 1, hook }), narration, words };
   });
   const description = buildDescription({
     lede: [`${names.home} contra ${names.away}: forma, goles y cara a cara en menos de un minuto.`, metrics[0] ?? ''].filter(Boolean).join(' '),

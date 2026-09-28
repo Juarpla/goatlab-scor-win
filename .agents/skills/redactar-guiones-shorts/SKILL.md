@@ -250,7 +250,22 @@ Recorre los 10. Corrige el que falle y vuelve a emitir el objeto completo.
 - Un nombre de jugador vive en el guion de su hilo: 3 goles, 4 portero y defensa, 7 tiros libres y penales, 9 asistencias.
 - El ángulo se oye como análisis. En la narración quedó el dato que empuja la curiosidad hacia goatlab.win.
 
-No escribas `title`. Al guardar, cada guion recibe un título derivado de su `hook`: dos iconos al inicio y un tope de 100 caracteres. El gancho hablado sigue siendo `hook`.
+No escribas `title` ni hashtags. La acción de GitHub los descarta y estampa `shortTitle` y `hashtagLine`. El lint falla si el título guardado no es esa frase. El gancho hablado sigue siendo `hook` y no se copia en el título.
+
+Si un modelo arma el título a mano, usa estas frases y nada más. Icono de la fila, luego `⚽`, luego el texto. Tope de 100 caracteres. En los guiones 3, 4, 7 y 9, `{jugadores}` son hasta dos nombres ya escritos en esa narración, unidos con «y». Un solo nombre conjuga en singular («puede»). Si esa narración no nombra jugadores, usa la frase de equipos.
+
+1. `🔥` `¿{home} o {away}? Uno llega más caliente`
+2. `👀` `{home} vs {away}: el historial que no te cuentan`
+3. `⚡` `{jugadores}: ¿quién marca en {home} vs {away}?` — sin jugadores: `{home} vs {away}: ¿se abre el marcador?`
+4. `🧤` `{jugadores}: ¿aguanta el arco en {home} vs {away}?` — sin jugadores: `¿Quién cierra el arco en {home} vs {away}?`
+5. `✈️` `{away} llega a {home}: ¿alcanza la visita?`
+6. `⏪` `{home} vs {away}: ¿se repite el último golpe?`
+7. `🧱` `{jugadores} puede decidir {home} vs {away}` — dos nombres: «pueden». Sin jugadores: `{home} vs {away}: el primer gol lo cambia`
+8. `🤝` `{home} vs {away}: cuidado, puede terminar en empate`
+9. `✨` `{jugadores} en {home} vs {away}` — sin jugadores: `{home} vs {away}: marcar no es ganar`
+10. `⏱️` `{home} vs {away}: lo único que importa al pitazo`
+
+Los hashtags los estampa el mismo guardado. Van los dos equipos y hasta cuatro jugadores, en este orden: goles (3), creación (9), faltas (7), arco (4). Después `#Shorts` y `#goatlab`. Tope de 15: equipos y jugadores delante, para que YouTube no ignore la lista.
 
 ```json
 {"lede":"...","scripts":[{"n":1,"hook":"...","narration":"..."},{"n":2,"hook":"...","narration":"..."},{"n":3,"hook":"...","narration":"..."},{"n":4,"hook":"...","narration":"..."},{"n":5,"hook":"...","narration":"..."},{"n":6,"hook":"...","narration":"..."},{"n":7,"hook":"...","narration":"..."},{"n":8,"hook":"...","narration":"..."},{"n":9,"hook":"...","narration":"..."},{"n":10,"hook":"...","narration":"..."}]}

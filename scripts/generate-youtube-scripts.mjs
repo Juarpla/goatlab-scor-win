@@ -9,7 +9,9 @@ import {
   acceptYoutubeDraft,
   buildDescription,
   cleanLede,
-  titleFromHook,
+  attentionPlayers,
+  playersInNarration,
+  shortTitle,
   countWords,
   missingScripts,
   scriptFacts,
@@ -73,7 +75,7 @@ for (const match of pending) {
   try {
     const { value, provider, model } = await withFailover([
       { role: 'system', content: skill },
-      { role: 'user', content: `Sigue el procedimiento. Cada narración es un solo párrafo corrido, menos de 50 s, con prosa hablada. Copia nombres y cifras de equipos de este objeto; en guiones 3, 4, 7 y 9 usa tu conocimiento reciente de jugadores si hace falta. Responde solo el JSON de 10 guiones.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
+      { role: 'user', content: `Sigue el procedimiento. Cada narración es un solo párrafo corrido, menos de 50 s, con prosa hablada. Copia nombres y cifras de equipos de este objeto; en guiones 3, 4, 7 y 9 usa tu conocimiento reciente de jugadores si hace falta. No escribas title ni hashtags: al guardar se estampan las frases de clic del skill. Responde solo el JSON de 10 guiones.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
     ], {
       maxTokens: 12_000,
       timeoutMs: 180_000,
@@ -88,12 +90,17 @@ for (const match of pending) {
           }
         }
         const lede = cleanLede(draft?.lede);
+        const home = esName(match.home);
+        const away = esName(match.away);
+        const numbered = (draft?.scripts ?? []).map((script, i) => ({ ...script, n: i + 1 }));
+        const players = attentionPlayers(numbered, { home, away });
         const description = buildDescription({
           lede,
           matchId,
           competition: match.competition,
-          home: esName(match.home),
-          away: esName(match.away),
+          home,
+          away,
+          players,
         });
         const errors = [
           ...acceptYoutubeDraft({ ...draft, lede }, { facts, published }),
@@ -103,7 +110,9 @@ for (const match of pending) {
         const scripts = draft.scripts.map((script, i) => {
           const narration = String(script.narration).trim();
           const hook = String(script.hook).trim();
-          return { n: i + 1, hook, title: titleFromHook(hook, i + 1), narration, words: countWords(narration) };
+          const n = i + 1;
+          const named = [3, 4, 7, 9].includes(n) ? playersInNarration(narration, { home, away }) : [];
+          return { n, hook, title: shortTitle({ home, away, n, hook, players: named }), narration, words: countWords(narration) };
         });
         return { scripts, description };
       },

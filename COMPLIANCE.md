@@ -21,6 +21,7 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 - Descripción con: hook + análisis + `🔗 Más data: https://goatlab.win/partido/<id>` + `#goatlab` + disclaimer fijo:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
 - Guion en texto corrido ≤ 110 palabras (~50s), listo para leer en voz alta: hook + datos entrelazados + cierre + CTA hablada a `goatlab.win`. Fotos con licencia + atribución registrada en `media-pack`.
+- Título de clic distinto del gancho. Lo estampa `shortTitle`: icono de la fila, `⚽` y la frase fija del skill `redactar-guiones-shorts` (equipos, o hasta dos jugadores de los guiones 3, 4, 7 y 9). Hashtags con equipos y jugadores delante, tope de 15. El lint falla si el JSON no coincide.
 
 ## Fotos
 

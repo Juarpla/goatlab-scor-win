@@ -2,6 +2,27 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { checkScript, checkDescription, checkMediaManifest } from '../src/lib/compliance.js';
+import { attentionPlayers, hashtagLine, playersInNarration, shortTitle } from '../src/lib/youtube.js';
+
+function clickErrors(data) {
+  const named = { home: data.home, away: data.away };
+  const errors = [];
+  for (const script of data.scripts ?? []) {
+    const players = [3, 4, 7, 9].includes(Number(script.n))
+      ? playersInNarration(script.narration, named)
+      : [];
+    const expected = shortTitle({ ...named, n: script.n, hook: script.hook, players });
+    if (script.title !== expected) errors.push(`guion ${script.n}: el título no es la frase de clic`);
+  }
+  const tags = hashtagLine({
+    ...named,
+    competition: data.competition,
+    players: attentionPlayers(data.scripts, named),
+  });
+  const line = String(data.description ?? '').split('\n').find(row => row.trimStart().startsWith('#'));
+  if (line !== tags) errors.push('hashtags: equipos y jugadores no van delante');
+  return errors;
+}
 
 const dir = 'public/data/youtube-scripts';
 let files = [];
@@ -25,6 +46,10 @@ for (const file of files) {
   }
   for (const error of checkDescription(data.description, { matchId })) {
     console.error(`${file} descripción: ${error}`);
+    failures += 1;
+  }
+  for (const error of clickErrors(data)) {
+    console.error(`${file} ${error}`);
     failures += 1;
   }
 }
