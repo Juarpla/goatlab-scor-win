@@ -264,6 +264,7 @@ export function cleanLede(lede) {
     .replace(/https?:\/\/\S+/g, '')
     .replace(/#\S+/g, '')
     .replace(/🔗/g, '')
+    .replace(/Más data:\s*/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -272,13 +273,74 @@ export function competitionTag(competition) {
   return `#${String(competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
 }
 
-export function buildDescription({ lede, matchId, competition }) {
+/** Hashtag de un equipo: sin espacios. */
+export function teamTag(name) {
+  const tag = String(name ?? '').replace(/\s+/g, '').replace(/[^\p{L}\p{N}_]/gu, '');
+  return tag ? `#${tag}` : '';
+}
+
+const COMPETITION_TAGS = {
+  nations: ['#UEFA', '#NationsLeague', '#UEFANationsLeague', '#LigaDeNaciones', '#selecciones'],
+};
+
+/** Hashtags de alta búsqueda. Van solo en la descripción de YouTube. */
+export function hashtagLine({ home, away, competition } = {}) {
+  const comp = COMPETITION_TAGS[competition] ?? [competitionTag(competition)];
+  const tags = [
+    '#futbol', '#fútbol', '#soccer', '#football',
+    '#Shorts', '#YouTubeShorts',
+    '#goles', '#previa', '#analisis', '#deporte', '#deportes',
+    ...comp,
+    teamTag(home), teamTag(away),
+    '#goatlab',
+  ];
+  return [...new Set(tags.filter(Boolean))].join(' ');
+}
+
+export function buildDescription({ lede, matchId, competition, home, away }) {
   return [
     cleanLede(lede),
     `🔗 Más data: https://goatlab.win/partido/${matchId}`,
-    `#goatlab #futbol ${competitionTag(competition)}`,
+    hashtagLine({ home, away, competition }),
     DISCLAIMER,
   ].join('\n');
+}
+
+/** Descripción que se copia en /partido/id/youtube. El crédito sale de bed.txt. */
+export function youtubeCopy({ lede, matchId, home, away, competition, attribution, credit }) {
+  const lines = [buildDescription({ lede, matchId, competition, home, away })];
+  const photo = String(attribution ?? '').trim();
+  const music = String(credit ?? '').trim();
+  if (photo) lines.push(photo);
+  if (music) lines.push(music);
+  return lines.join('\n');
+}
+
+const TITLE_ICONS = ['🔥', '👀', '⚡', '🧤', '✈️', '⏪', '🧱', '🤝', '✨', '⏱️'];
+export const TITLE_MAX = 100;
+
+/** Título del Short a partir del gancho: dos iconos y tope de YouTube. */
+export function titleFromHook(hook, n) {
+  const icon = TITLE_ICONS[(Math.max(1, Number(n) || 1) - 1) % TITLE_ICONS.length];
+  const prefix = `${icon}⚽ `;
+  const text = String(hook ?? '').replace(/\s+/g, ' ').trim();
+  const budget = TITLE_MAX - Array.from(prefix).length;
+  if (Array.from(text).length <= budget) return prefix + text;
+  let out = '';
+  for (const word of text.split(' ')) {
+    const next = out ? `${out} ${word}` : word;
+    if (Array.from(next).length > budget) break;
+    out = next;
+  }
+  return prefix + (out || Array.from(text).slice(0, budget).join(''));
+}
+
+/** Pie de Telegram: título y gancho. Sin título, solo el gancho. */
+export function telegramCaption({ title, hook } = {}) {
+  const head = String(title ?? '').trim();
+  const line = String(hook ?? '').trim();
+  const text = head && line && head !== line ? `${head}\n${line}` : (head || line);
+  return text.slice(0, 1000);
 }
 
 /**
@@ -340,15 +402,14 @@ export function buildYoutubeScripts(match) {
   const names = { ...match, home: esName(match.home), away: esName(match.away) };
   const scripts = Array.from({ length: HOOKS.length }, (_, i) => {
     const { hook, narration, words } = buildNarration(names, metrics, i);
-    return { n: i + 1, hook, narration, words };
+    return { n: i + 1, hook, title: titleFromHook(hook, i + 1), narration, words };
   });
-  const tag = `#${String(match.competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
-  const description = [
-    `${names.home} contra ${names.away}: forma, goles y cara a cara en menos de un minuto.`,
-    metrics[0] ?? '',
-    `🔗 Más data: https://goatlab.win/partido/${webId}`,
-    `#goatlab #futbol ${tag}`,
-    DISCLAIMER,
-  ].join('\n');
+  const description = buildDescription({
+    lede: [`${names.home} contra ${names.away}: forma, goles y cara a cara en menos de un minuto.`, metrics[0] ?? ''].filter(Boolean).join(' '),
+    matchId: webId,
+    competition: match.competition,
+    home: names.home,
+    away: names.away,
+  });
   return { matchId: webId, providerId: match.id, scripts, description };
 }

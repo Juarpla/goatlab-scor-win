@@ -250,6 +250,8 @@ Recorre los 10. Corrige el que falle y vuelve a emitir el objeto completo.
 - Un nombre de jugador vive en el guion de su hilo: 3 goles, 4 portero y defensa, 7 tiros libres y penales, 9 asistencias.
 - El ángulo se oye como análisis. En la narración quedó el dato que empuja la curiosidad hacia goatlab.win.
 
+No escribas `title`. Al guardar, cada guion recibe un título derivado de su `hook`: dos iconos al inicio y un tope de 100 caracteres. El gancho hablado sigue siendo `hook`.
+
 ```json
 {"lede":"...","scripts":[{"n":1,"hook":"...","narration":"..."},{"n":2,"hook":"...","narration":"..."},{"n":3,"hook":"...","narration":"..."},{"n":4,"hook":"...","narration":"..."},{"n":5,"hook":"...","narration":"..."},{"n":6,"hook":"...","narration":"..."},{"n":7,"hook":"...","narration":"..."},{"n":8,"hook":"...","narration":"..."},{"n":9,"hook":"...","narration":"..."},{"n":10,"hook":"...","narration":"..."}]}
 ```

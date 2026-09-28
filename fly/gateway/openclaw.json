@@ -1,6 +1,6 @@
-// Gateway GoatLab en Fly (app goatlab-gateway).
-// Sin secrets: todo lo sensible vive en ${VAR} inyectadas como Fly secrets.
-// Ver fly/gateway/fly.toml y `fly secrets set`.
+// GoatLab gateway on Fly (app goatlab-gateway).
+// No secrets in this file: sensitive values are ${VAR} injected as Fly secrets.
+// See fly/gateway/fly.toml and `fly secrets set`.
 {
   gateway: {
     mode: "local",
@@ -12,7 +12,15 @@
   agents: {
     defaults: {
       workspace: "/home/node/.openclaw/workspace",
-      model: { primary: "opencode-go/mimo-v2.6-flash" },
+      model: {
+        primary: "opencode-go/mimo-v2.6-flash",
+        fallbacks: ["opencode-go/deepseek-v4.1-flash"],
+      },
+      models: {
+        "opencode-go/deepseek-v4.1-flash": {
+          params: { thinking: "max" },
+        },
+      },
     },
   },
   models: {
@@ -22,7 +30,10 @@
         baseUrl: "https://opencode.ai/zen/go/v1",
         apiKey: "${OPENCODE_GO_API_KEY}",
         api: "openai-completions",
-        models: [{ id: "mimo-v2.6-flash", name: "Mimo 2.6 Flash (Go)" }],
+        models: [
+          { id: "mimo-v2.6-flash", name: "Mimo 2.6 Flash (Go)" },
+          { id: "deepseek-v4.1-flash", name: "DeepSeek V4.1 Flash" },
+        ],
       },
     },
   },

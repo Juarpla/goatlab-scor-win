@@ -9,6 +9,7 @@ import {
   acceptYoutubeDraft,
   buildDescription,
   cleanLede,
+  titleFromHook,
   countWords,
   missingScripts,
   scriptFacts,
@@ -87,7 +88,13 @@ for (const match of pending) {
           }
         }
         const lede = cleanLede(draft?.lede);
-        const description = buildDescription({ lede, matchId, competition: match.competition });
+        const description = buildDescription({
+          lede,
+          matchId,
+          competition: match.competition,
+          home: esName(match.home),
+          away: esName(match.away),
+        });
         const errors = [
           ...acceptYoutubeDraft({ ...draft, lede }, { facts, published }),
           ...checkDescription(description, { matchId }),
@@ -95,7 +102,8 @@ for (const match of pending) {
         if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
         const scripts = draft.scripts.map((script, i) => {
           const narration = String(script.narration).trim();
-          return { n: i + 1, hook: String(script.hook).trim(), narration, words: countWords(narration) };
+          const hook = String(script.hook).trim();
+          return { n: i + 1, hook, title: titleFromHook(hook, i + 1), narration, words: countWords(narration) };
         });
         return { scripts, description };
       },

@@ -4,8 +4,8 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 
 ## Prohibido (cero tolerancia)
 
-1. **Footage de transmisión**: solo foto fija con licencia registrada, Ken Burns, gráficos y web-card propia.
-2. **Logos de equipos/ligas y marcas**: el único logo permitido es el de GoatLab (`public/favicon.svg`).
+1. **Footage de transmisión**: solo foto fija con licencia registrada. El movimiento es un recorrido de cámara sobre esa foto, más gráficos y la web-card propia. Nada de clips de un partido televisado.
+2. **Logos dibujados por GoatLab**: la plantilla no agrega escudos, ligas ni marcas. El único logo que pinta es el de GoatLab (`public/favicon.svg`). El escudo y el patrocinador que ya vienen en la foto del jugador se quedan.
 3. **Cuotas, casas de apuestas y CTA de apuesta**: nada de cuotas/momios, picks, stake/bankroll, tipster, bonos, casino, parlay/combinada, hándicap, "fija/segura".
 4. **Garantías de resultado**: nada de "gana seguro", "100% seguro", "garantizado".
 5. **Claves crudas al lector**: `1X2`, `BTTS`, `DNB`, `H2H`, `HT/FT` jamás se imprimen (ver `src/lib/story-dictionary.js`).
@@ -24,8 +24,8 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 
 ## Fotos
 
-Relleno genérico (estadio, hinchada, balón), sin portada por partido, nada que parezca footage. Fuentes: Pexels → Pixabay vía API (keys en `PEXELS_API_KEY` / `PIXABAY_API_KEY`, solo secrets/entorno, jamás en git) > Commons/Flickr CC con atribución. Cada manifiesto `media-pack/<webId>.json` registra fuente, id, url https, fotógrafo y atribución. Prohibido: Getty/AP/Reuters/Shutterstock/Alamy/Instagram/scraping Google.
+Jugadores del partido (entrenamiento, después del encuentro o retrato), al menos 20 por manifiesto, en Wikimedia Commons. Licencias: dominio público, CC0, CC BY, CC BY-SA. Fuera: CC BY-NC, CC BY-ND, "uso justo", Getty/AP/Reuters/Shutterstock/Alamy/Instagram/Pexels/Pixabay y scraping de Google. Cada manifiesto `media-pack/<webId>.json` registra fuente `commons`, id, url https, fotógrafo, licencia, atribución y 10 secuencias con distinto orden y distinta cámara. Los nombres salen de los guiones 3, 4, 7 y 9.
 
 ## Video
 
-`pnpm short -- --match=<webId>`: MP4 1080x1920 30fps ~42s (3 fotos Ken Burns + dissolves + web-card propia + end card `goatlab.win`), sin audio salvo `--audio`. Renders en `public/shorts/` (gitignorados, se regeneran).
+`pnpm short -- --match=<webId>`: MP4 1080x1920. La plantilla fija es HyperFrames (HTML + GSAP) dentro de `goatlab-render`: subtítulo por palabra en amarillo con borde negro, cifras que entran animadas, recorrido de cámara de esa secuencia y end card `goatlab.win`. Node 22 lanza el render; Chrome captura y FFmpeg comprime y mezcla la voz. No hay otro motor. Renders en `public/shorts/` (gitignorados, se regeneran).

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, titleFromHook, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -33,6 +33,8 @@ test('genera 10 guiones corridos que pasan compliance con gate cerrado', () => {
     assert.ok(script.narration.startsWith(script.hook));
     assert.ok(script.narration.includes('goatlab.win'));
     assert.equal(script.words, script.narration.split(/\s+/).filter(Boolean).length);
+    assert.equal(script.title, titleFromHook(script.hook, script.n));
+    assert.ok(Array.from(script.title).length <= TITLE_MAX);
     assert.deepEqual(checkScript(script, { published: false, matchId: out.matchId }), []);
     assert.ok(!/%/.test(script.narration));
   }
@@ -158,6 +160,41 @@ test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artíc
   const spilled = structuredClone(withPlayer);
   spilled[0] = { ...spilled[0], narration: `${spilled[0].hook} Marc Vales lleva 3 goles. El análisis está en goatlab.win.` };
   assert.ok(acceptYoutubeDraft({ scripts: spilled, lede }, { facts: named, published: false }).some(e => /va en un guion de jugadores/.test(e)));
+});
+
+test('título con iconos, tope de 100, y pie de Telegram en dos líneas', () => {
+  const hook = 'España llega con mejor racha que Croacia, aunque el visitante todavía tiene cómo discutirla.';
+  const title = titleFromHook(hook, 1);
+  assert.ok(title.startsWith('🔥⚽ '));
+  assert.ok(title.includes('España llega con mejor racha'));
+  assert.ok(Array.from(title).length <= TITLE_MAX);
+  const long = titleFromHook(`${hook} ${hook} ${hook}`, 10);
+  assert.ok(long.startsWith('⏱️⚽ '));
+  assert.equal(Array.from(long).length <= TITLE_MAX, true);
+  assert.equal(telegramCaption({ title, hook }), `${title}\n${hook}`);
+  assert.equal(telegramCaption({ hook }), hook);
+  assert.equal(telegramCaption({ title: '', hook }).includes('#'), false);
+});
+
+test('hashtags de búsqueda y descripción con crédito de música', () => {
+  const tags = hashtagLine({ home: 'España', away: 'Croacia', competition: 'nations' });
+  assert.equal(tags, '#futbol #fútbol #soccer #football #Shorts #YouTubeShorts #goles #previa #analisis #deporte #deportes #UEFA #NationsLeague #UEFANationsLeague #LigaDeNaciones #selecciones #España #Croacia #goatlab');
+  const copy = youtubeCopy({
+    lede: 'España recibe a Croacia.\n#viejo\nhttps://goatlab.win/x',
+    matchId: 'spain-vs-croatia-2026-09-29',
+    home: 'España',
+    away: 'Croacia',
+    competition: 'nations',
+    attribution: 'Foto: Commons (CC BY 4.0)',
+    credit: 'Música: Kevin MacLeod (incompetech.com) — CC BY 4.0',
+  });
+  assert.ok(copy.startsWith('España recibe a Croacia.'));
+  assert.equal((copy.match(/Más data:/g) ?? []).length, 1);
+  assert.ok(copy.includes('https://goatlab.win/partido/spain-vs-croatia-2026-09-29'));
+  assert.ok(copy.includes(tags));
+  assert.ok(copy.includes('Foto: Commons (CC BY 4.0)'));
+  assert.ok(copy.endsWith('Música: Kevin MacLeod (incompetech.com) — CC BY 4.0'));
+  assert.equal(checkDescription(copy, { matchId: 'spain-vs-croatia-2026-09-29' }).length, 0);
 });
 
 test('staleScripts detecta rancios y sameCore ignora generatedAt', () => {

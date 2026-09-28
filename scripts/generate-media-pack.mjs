@@ -1,76 +1,96 @@
-/** Genera public/data/media-pack/<webId>.json (fotos genéricas con licencia).
- *  Default: todos los NS de fixtures.json. Solo llama a la API cuando el
- *  manifiesto no existe (--match fuerza refresco). En corrida completa
- *  (sin --match/--limit) poda además los manifiestos rancios.
- *  Keys por env: PEXELS_API_KEY, PIXABAY_API_KEY (nunca commitear). */
+/** Genera public/data/media-pack/<webId>.json desde Wikimedia Commons.
+ *  Al menos 20 fotos de jugadores (dominio público, CC0, CC BY, CC BY-SA)
+ *  y 10 secuencias. Sin Pexels ni Pixabay. La red vive solo aquí. */
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { selectMatches, staleScripts, sameCore } from '../src/lib/youtube.js';
+import { esName } from '../src/lib/teams.js';
 import {
-  pickQueries,
-  hashWebId,
-  normalizePexelsPhoto,
-  normalizePixabayHit,
+  ASSETS_PER_MATCH,
+  THUMB_WIDTH,
+  playerNamesFromScripts,
+  playerQueries,
+  normalizeCommonsPage,
+  rankAssets,
   buildManifest,
 } from '../src/lib/media.js';
 import { checkMediaManifest } from '../src/lib/compliance.js';
 
 const dir = 'public/data/media-pack';
+const scriptsDir = 'public/data/youtube-scripts';
 const args = new Map(process.argv.slice(2).map(a => a.split('=')));
 const onlyMatch = args.get('--match');
 const limitRaw = args.get('--limit');
 const fullRun = !onlyMatch && limitRaw == null;
-const force = Boolean(onlyMatch);
+const force = Boolean(onlyMatch) || args.has('--force');
+const UA = 'GoatLab/1.0 (https://goatlab.win; media-pack)';
 
-const PEXELS_KEY = (process.env.PEXELS_API_KEY ?? '').trim();
-const PIXABAY_KEY = (process.env.PIXABAY_API_KEY ?? '').trim();
-if (!PEXELS_KEY && !PIXABAY_KEY) {
-  console.error('media: faltan PEXELS_API_KEY y PIXABAY_API_KEY en el entorno');
-  process.exit(1);
-}
-
-async function fetchJson(url, headers = {}) {
+async function fetchJson(url) {
   const res = await fetch(url, {
-    headers: { 'user-agent': 'GoatLab/1.0', ...headers },
-    signal: AbortSignal.timeout(15000),
+    headers: { 'user-agent': UA, accept: 'application/json' },
+    signal: AbortSignal.timeout(20000),
   });
-  if (!res.ok) throw new Error(`${res.status} ${url}`);
+  if (!res.ok) throw new Error(`${res.status} ${url.slice(0, 120)}`);
   return res.json();
 }
 
-async function searchPexels(query, seed) {
-  const data = await fetchJson(
-    `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=landscape&per_page=3`,
-    { Authorization: PEXELS_KEY },
-  );
-  const photos = Array.isArray(data.photos) ? data.photos : [];
-  if (!photos.length) return null;
-  return normalizePexelsPhoto(photos[seed % photos.length], query);
+async function searchCommons({ query, player = null }) {
+  const found = [];
+  let cont = '';
+  for (let page = 0; page < 3; page += 1) {
+    const params = new URLSearchParams({
+      action: 'query',
+      format: 'json',
+      generator: 'search',
+      gsrnamespace: '6',
+      gsrlimit: '20',
+      gsrsearch: `${query} filetype:bitmap`,
+      prop: 'imageinfo',
+      iiprop: 'url|mime|size|extmetadata',
+      iiurlwidth: String(THUMB_WIDTH),
+      maxlag: '5',
+    });
+    if (cont) params.set('gsroffset', cont);
+    const data = await fetchJson(`https://commons.wikimedia.org/w/api.php?${params}`);
+    const pages = Object.values(data?.query?.pages ?? {});
+    for (const page of pages) {
+      const asset = normalizeCommonsPage(page, query, { player });
+      if (asset) found.push(asset);
+    }
+    cont = data?.continue?.gsroffset;
+    if (!cont) break;
+  }
+  return found;
 }
 
-async function searchPixabay(query, seed) {
-  const data = await fetchJson(
-    `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(query)}&orientation=horizontal&image_type=photo&safesearch=true&per_page=3`,
-  );
-  const hits = Array.isArray(data.hits) ? data.hits : [];
-  if (!hits.length) return null;
-  return normalizePixabayHit(hits[seed % hits.length], query);
+async function namesFor(matchId, home, away) {
+  try {
+    const script = JSON.parse(await readFile(join(scriptsDir, `${matchId}.json`), 'utf8'));
+    return playerNamesFromScripts(script.scripts, {
+      home: script.home ?? home ?? '',
+      away: script.away ?? away ?? '',
+    });
+  } catch {
+    return [];
+  }
 }
 
-async function resolveAsset(query, seed) {
-  if (PEXELS_KEY) {
-    const hit = await searchPexels(query, seed).catch(() => null);
-    if (hit) return hit;
+async function poolFor(queries) {
+  const byId = new Map();
+  for (const query of queries) {
+    if (byId.size >= ASSETS_PER_MATCH) break;
+    const batch = await searchCommons(query).catch((error) => {
+      console.error(`media: ${query.query}: ${error.message}`);
+      return [];
+    });
+    for (const asset of batch) {
+      if (!byId.has(asset.id)) byId.set(asset.id, asset);
+    }
   }
-  if (PIXABAY_KEY) {
-    const hit = await searchPixabay(query, seed).catch(() => null);
-    if (hit) return hit;
-  }
-  return null;
+  return rankAssets([...byId.values()]);
 }
 
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
-
 let matches = selectMatches(fixtures.matches, { onlyMatch, limit: limitRaw });
 if (!matches.length) {
   console.error('media: sin partidos NS para generar');
@@ -94,30 +114,29 @@ for (const match of matches) {
   try {
     prev = JSON.parse(await readFile(file, 'utf8'));
   } catch { /* nuevo manifiesto */ }
-  // Sin llamadas a la API si el manifiesto ya existe (solo --match refresca).
-  if (prev && !force) {
-    for (const error of checkMediaManifest(prev, { matchId })) {
-      console.error(`${file}: ${error}`);
-      failures += 1;
-    }
+  if (prev && !force && checkMediaManifest(prev, { matchId }).length === 0) {
     kept += 1;
     continue;
   }
-  const seed = hashWebId(matchId);
-  const assets = [];
-  for (const query of pickQueries(matchId)) {
-    const asset = await resolveAsset(query, seed);
-    if (!asset) {
-      console.error(`${file}: sin foto para "${query}" (Pexels y Pixabay fallaron)`);
-      failures += 1;
-    } else {
-      assets.push(asset);
-    }
-  }
+  const names = await namesFor(matchId, match.home, match.away);
+  const queries = [
+    ...playerQueries(names),
+    ...[
+      `${esName(match.home)} footballer`,
+      `${esName(match.away)} footballer`,
+      `${esName(match.home)} national football team`,
+      `${esName(match.away)} national football team`,
+      `${match.home} soccer player`,
+      `${match.away} soccer player`,
+    ].map(query => ({ query })),
+  ];
+  const assets = await poolFor(queries);
   const payload = { ...buildManifest({ match, assets }), generatedAt: new Date().toISOString() };
-  for (const error of checkMediaManifest(payload, { matchId })) {
-    console.error(`${file}: ${error}`);
+  const errors = checkMediaManifest(payload, { matchId });
+  if (errors.length) {
+    for (const error of errors) console.error(`${file}: ${error}`);
     failures += 1;
+    continue;
   }
   if (prev && sameCore(prev, payload)) {
     console.log(`media: ${file} sin cambios`);
@@ -126,7 +145,7 @@ for (const match of matches) {
   }
   await writeFile(file, JSON.stringify(payload, null, 2));
   written += 1;
-  console.log(`media: ${file} (${assets.length} fotos)`);
+  console.log(`media: ${file} (${payload.assets.length} fotos, ${names.length} jugadores)`);
 }
 console.log(`media: ${written} escritos, ${kept} conservados, ${failures} fallos`);
 process.exit(failures ? 1 : 0);

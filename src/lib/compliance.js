@@ -2,7 +2,16 @@
  * Compliance GoatLab Shorts: vocabulario y reglas bloqueantes pre-render.
  * Semilla: COMPLIANCE.md. Sin dependencias npm; corre en Node y workerd.
  */
-import { ALLOWED_SOURCES, BANNED_PHOTO_DOMAINS } from './media.js';
+import {
+  ALLOWED_SOURCES,
+  ASSETS_PER_MATCH,
+  BANNED_PHOTO_DOMAINS,
+  CAMERA_MOVES,
+  SEQUENCES_PER_MATCH,
+  PHOTOS_PER_SEQUENCE,
+  classifyLicense,
+  isUsableStill,
+} from './media.js';
 export const DISCLAIMER =
   'Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.';
 
@@ -86,15 +95,16 @@ export function checkDescription(description, { matchId = null } = {}) {
 }
 
 /**
- * Valida un manifiesto de media-pack: fuentes permitidas, URLs https sin
- * dominios prohibidos, fotógrafo y atribución registrados.
+ * Valida un manifiesto de media-pack: Commons, licencia libre, al menos 20
+ * fotos, 10 secuencias de 12 fotos, rótulos respaldados, URLs https y atribución.
  */
 export function checkMediaManifest(data, { matchId = null } = {}) {
   const errors = [];
   if (!data || typeof data !== 'object') return ['manifiesto vacío'];
   if (matchId && data.matchId !== matchId) errors.push(`matchId ${data.matchId} no coincide con ${matchId}`);
   const assets = Array.isArray(data.assets) ? data.assets : [];
-  if (!assets.length) errors.push('sin assets: el partido no tiene fotos');
+  if (assets.length < ASSETS_PER_MATCH) errors.push(`faltan fotos: ${assets.length} < ${ASSETS_PER_MATCH}`);
+  const urls = new Set();
   for (const [i, asset] of assets.entries()) {
     if (!asset || typeof asset !== 'object') {
       errors.push(`asset ${i} vacío`);
@@ -102,6 +112,8 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
     }
     if (!ALLOWED_SOURCES.includes(asset.source)) errors.push(`asset ${i}: fuente no permitida (${asset.source})`);
     if (!asset.id) errors.push(`asset ${i}: sin id`);
+    if (!classifyLicense(asset.license)) errors.push(`asset ${i}: licencia no libre (${asset.license ?? ''})`);
+    if (!isUsableStill(asset)) errors.push(`asset ${i}: no es una foto de jugador`);
     for (const field of ['url', 'page', 'photographer']) {
       if (!asset[field] || !String(asset[field]).trim()) errors.push(`asset ${i}: sin ${field}`);
     }
@@ -113,6 +125,31 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
         if (banned.test(value)) errors.push(`asset ${i}: dominio prohibido en ${field}`);
       }
     }
+    if (asset.url) urls.add(asset.url);
+  }
+  const sequences = Array.isArray(data.sequences) ? data.sequences : [];
+  if (sequences.length !== SEQUENCES_PER_MATCH) errors.push(`faltan secuencias: ${sequences.length}`);
+  const orders = new Set();
+  for (const [i, seq] of sequences.entries()) {
+    if (!CAMERA_MOVES.includes(seq?.camera)) errors.push(`secuencia ${i}: cámara desconocida`);
+    const photos = Array.isArray(seq?.photos) ? seq.photos : [];
+    if (photos.length < PHOTOS_PER_SEQUENCE) {
+      errors.push(`secuencia ${i}: ${photos.length} fotos < ${PHOTOS_PER_SEQUENCE} (una cada 2 a 4 s)`);
+    }
+    orders.add(photos.join('|'));
+    for (const url of photos) {
+      if (!urls.has(url)) errors.push(`secuencia ${i}: foto fuera del pool`);
+    }
+    const subjects = Array.isArray(seq?.subjects) ? seq.subjects : [];
+    if (subjects.length !== photos.length) errors.push(`secuencia ${i}: subjects no acompaña a photos`);
+    subjects.forEach((subject, k) => {
+      if (subject == null) return;
+      const asset = assets.find(a => a?.url === photos[k]);
+      if (asset?.subject !== subject) errors.push(`secuencia ${i}: rótulo ${subject} sin respaldo en el asset`);
+    });
+  }
+  if (sequences.length === SEQUENCES_PER_MATCH && orders.size < SEQUENCES_PER_MATCH) {
+    errors.push('las secuencias repiten el mismo orden');
   }
   if (!String(data.attribution ?? '').trim()) errors.push('falta la atribución de fotos');
   return errors;
