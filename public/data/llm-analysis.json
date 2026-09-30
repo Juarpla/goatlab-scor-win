@@ -1058,5 +1058,729 @@
     "generatedAt": "2026-09-30T12:46:25.714Z",
     "inputKey": "v3|M|bz-212645|France|Italy|nations|2026-10-02T18:45:00+00:0|NS\nP|1.58|1.33|0.422|0.268|0.31|0.556|0.595\nB|0.653|0.196|0.151|1.58|1.33|0.647|0.584|1-1|0.439\nB2|H|0.653|no|no\nH|12|6|2|4|2.92\nW|18||5|\nT|1|France|2|6||\nT|2|Italy|2|3||\nS|Alessandro Bastoni|Italy|1|1\nS|Davide Frattesi|Italy|1|2\nHR|2024-11-17|Italy|France|1|3\nHR|2024-09-06|France|Italy|1|3\nHR|2018-06-01|France|Italy|3|1\nHR|2016-09-01|Italy|France|1|3\nHR|2012-11-14|Italy|France|1|2",
     "materialKey": "M|bz-212645|France|Italy|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212644": {
+    "matchId": "bz-212644",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Belgium recibe a Türkiye en Nations League",
+        "bullets": [
+          "Encuentro de Nations League entre Bélgica y Türkiye, programado para el 2 de octubre de 2026 a las 18:45 UTC, con estado sin iniciar.",
+          "La sede registraría cielo despejado según el bloque de clima, con un dato ambiental adicional no especificado en la entrada.",
+          "En la tabla, Bélgica ocupa el tercer puesto con 3 puntos en 2 jornadas, mientras Türkiye está cuarto con 0 puntos en 2 jornadas."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost separan el favorito local",
+        "bullets": [
+          "El modelo Poisson GoatLab reparte 0.54 de probabilidad local, 0.242 de empate y 0.217 visitante, con 0.594 de goles totales por encima del umbral y 0.596 de ambos anotan.",
+          "CatBoost Bzzoiro declara 0.636 local, 0.199 empate y 0.165 visitante, con goles esperados 1.92 y 1.16, 0.655 de goles totales, 0.605 de ambos anotan y marcador más probable 1-1 con 0.453.",
+          "La estimación declarada de Bzzoiro señala al local como escenario de mayor probabilidad con 0.636, sin umbral declarado de goles totales ni de ambos anotan.",
+          "Las lecturas de los proveedores son declaraciones propias de cada modelo y no constituyen una recomendación de GoatLab."
+        ],
+        "stats": [
+          {
+            "value": "0.54",
+            "label": "Local Poisson"
+          },
+          {
+            "value": "0.636",
+            "label": "Local CatBoost"
+          },
+          {
+            "value": "0.605",
+            "label": "Ambos anotan CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Tres cruces con reparto equilibrado",
+        "bullets": [
+          "El historial acumulado de tres enfrentamientos se reparte en una victoria local, un empate y una victoria visitante, con dos goles de media.",
+          "El cruce de 2009 terminó 2-0 para Bélgica; el de 2008 quedó 1-1 en Türkiye; el de 2000 terminó 0-2 para Türkiye en Bélgica.",
+          "El promedio implícito de dos goles por partido coincide con el registro goleador del bloque histórico."
+        ],
+        "stats": [
+          {
+            "value": "1-1",
+            "label": "Marcador 2008"
+          },
+          {
+            "value": "2",
+            "label": "Goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros de ambos elencos",
+        "bullets": [
+          "Dodi Lukebakio figura como goleador belga con 1 tanto en 2 apariciones.",
+          "Barış Alper Yılmaz encabeza la lista turca con 1 tanto en 2 apariciones."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "claves",
+        "title": "Brecha entre Poisson y CatBoost",
+        "bullets": [
+          "La diferencia principal entre modelos es local: 0.54 de Poisson frente a 0.636 de CatBoost, cercana a diez puntos.",
+          "Ambos modelos convergen en escenario abierto: 0.594 y 0.655 de goles totales, 0.596 y 0.605 de ambos anotan.",
+          "Sin bloque de forma reciente, bajas confirmadas, API-Football ni consenso externo en la entrada, el panorama queda limitado a los datos disponibles."
+        ],
+        "stats": [
+          {
+            "value": "0.636",
+            "label": "Brecha local CatBoost"
+          },
+          {
+            "value": "0.655",
+            "label": "Goles totales CatBoost"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma reciente",
+        "detail": "No se aportan filas de resultados recientes R, por lo que la racha de ambos equipos no puede describirse."
+      },
+      {
+        "label": "Sin API-Football",
+        "detail": "No hay bloque A: falta la distribución y lectura declarada del proveedor externo para contrastar con P y B."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se incluye bloque M2 de consenso en porcentaje, así que no hay lectura externa de referencia."
+      },
+      {
+        "label": "Sin bajas confirmadas",
+        "detail": "No hay bloque L de bajas ni alineaciones disponibles; cualquier absentismo queda fuera de este análisis."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Auditoría: CatBoost declara el marcador 1-1 con 0.453 mientras su propio empate total es 0.199, cifra internamente incoherente. También se observa desviación clara entre Poisson (local 0.54) y CatBoost (local 0.636); conviene tratar ambas lecturas como declaraciones de proveedor."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:21:16.640Z",
+    "inputKey": "v3|M|bz-212644|Belgium|Türkiye|nations|2026-10-02T18:45:00+00:0|NS\nP|1.92|1.16|0.54|0.242|0.217|0.594|0.596\nB|0.636|0.199|0.165|1.92|1.16|0.655|0.605|1-1|0.453\nB2|H|0.636|no|no\nH|3|1|1|1|2\nW||clear|1|\nT|3|Belgium|2|3||\nT|4|Türkiye|2|0||\nS|Dodi Lukebakio|Belgium|1|2\nS|Barış Alper Yılmaz|Türkiye|1|2\nHR|2009-10-10|Belgium|Türkiye|2|0\nHR|2008-09-10|Türkiye|Belgium|1|1\nHR|2000-06-19|Belgium|Türkiye|0|2",
+    "materialKey": "M|bz-212644|Belgium|Türkiye|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212653": {
+    "matchId": "bz-212653",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Finlandia recibe a Albania en Nations League",
+        "bullets": [
+          "Encuentro de Nations League entre Finlandia y Albania, programado para el 3 de octubre de 2026 a las 13:00 UTC, con estado sin iniciar.",
+          "En la tabla, Finlandia ocupa el segundo puesto con 4 puntos en 2 jornadas, mientras Albania lidera con 6 puntos en 2 jornadas.",
+          "No se aportan datos de sede ni de clima para este cruce."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson equilibra el cruce con leve ventaja visitante",
+        "bullets": [
+          "El modelo Poisson GoatLab reparte 0.324 de probabilidad local, 0.308 de empate y 0.368 visitante, con 0.412 de goles totales por encima del umbral y 0.486 de ambos anotan.",
+          "Los goles esperados del bloque Poisson son 1.12 para Finlandia y 1.21 para Albania, reflejo de un partido parejo con ligero sesgo visitante.",
+          "La estimación declarada de Bzzoiro señala al visitante como escenario de mayor probabilidad con 0.379, sin umbral declarado de goles totales ni de ambos anotan.",
+          "Las lecturas de los proveedores son declaraciones propias de cada modelo y no constituyen una recomendación de GoatLab."
+        ],
+        "stats": [
+          {
+            "value": "0.368",
+            "label": "Visitante Poisson"
+          },
+          {
+            "value": "0.379",
+            "label": "Visitante Bzzoiro"
+          },
+          {
+            "value": "0.412",
+            "label": "Goles totales Poisson"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Finlandia concentra sus anotadores",
+        "bullets": [
+          "Joel Pohjanpalo lidera Finlandia con 3 goles en 2 apariciones, seguido de Leo Walta con 2 goles en 2.",
+          "Adrian Svanback suma 1 tanto en 2 apariciones para Finlandia.",
+          "Anis Mehmeti y Ernest Muçi anotan 1 gol cada uno en 2 apariciones para Albania."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "claves",
+        "title": "Modelo CatBoost ausente y datos incompletos",
+        "bullets": [
+          "No hay fila CatBoost B para este partido, por lo que la estimación declarada de 0.379 carece de fila de modelo que la respalde en la entrada.",
+          "El cruce se perfila parejo: 0.324 local, 0.308 empate y 0.368 visitante en Poisson, con 0.486 de ambos anotan.",
+          "No se aportan historial de cruces, forma reciente, clima, bajas, API-Football ni consenso externo."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin fila CatBoost",
+        "detail": "No existe bloque B en la entrada, por lo que no se pueden contrastar probabilidades ni goles esperados del modelo Bzzoiro con Poisson."
+      },
+      {
+        "label": "Sin historial ni forma",
+        "detail": "No hay bloques H, HR ni R: se desconocen cruces previos y resultados recientes de ambos equipos."
+      },
+      {
+        "label": "Sin API-Football",
+        "detail": "No hay bloque A con distribución ni lectura del proveedor externo para el cruce."
+      },
+      {
+        "label": "Sin clima ni bajas",
+        "detail": "Faltan bloques W y L, por lo que sede, condiciones y absentismos no están disponibles."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se incluye bloque M2 de consenso en porcentaje, así que no hay lectura externa de referencia."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Auditoría: la estimación declarada de Bzzoiro (visitante 0.379) no coincide con ninguna cifra del bloque Poisson disponible (0.368 visitante, 0.324 local, 0.308 empate) y no se aporta fila B que la sustente; se recomienda tratarla como dato declarado sin contraste interno."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:21:16.647Z",
+    "inputKey": "v3|M|bz-212653|Finland|Albania|nations|2026-10-03T13:00:00+00:0|NS\nP|1.12|1.21|0.324|0.308|0.368|0.412|0.486\nB|0.322|0.299|0.379|1.12|1.21|0.417|0.48|1-1|0.404\nB2|A|0.379|no|no\nT|2|Finland|2|4||\nT|1|Albania|2|6||\nS|Joel Pohjanpalo|Finland|3|2\nS|Leo Walta|Finland|2|2\nS|Adrian Svanback|Finland|1|2\nS|Anis Mehmeti|Albania|1|2\nS|Ernest Muçi|Albania|1|2",
+    "materialKey": "M|bz-212653|Finland|Albania|nations|2026-10-03T13:00:00+00:0|NS"
+  },
+  "bz-212656": {
+    "matchId": "bz-212656",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Estonia y Luxemburgo empatados",
+        "bullets": [
+          "Estonia y Luxemburgo se enfrentan el 3 de octubre de 2026 a las 16:00 UTC en la Nations League, con estado sin iniciar.",
+          "Solo un punto separa a ambos: Luxemburgo segunda con 3 puntos, Estonia tercera con 2, ambos con 2 partidos jugados.",
+          "Condiciones declaradas: cielo nublado y 10 grados en la sede del encuentro."
+        ],
+        "stats": [
+          {
+            "value": "10",
+            "label": "Grados declarados"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost muy ajustados",
+        "bullets": [
+          "GoatLab Poisson proyecta 1.17 goles de local y 1.12 de visitante, con 0.357 de victoria local, 0.311 de empate y 0.332 de victoria visitante.",
+          "CatBoost Bzzoiro reparte 0.359 local, 0.302 empate y 0.339 visitante, con 1.17 y 1.12 goles esperados, 0.41 en goles totales y 0.476 en ambos anotan.",
+          "CatBoost declara 1-1 como marcador de mayor probabilidad; B2 señala a Estonia con 0.359 de mayor probabilidad y no declara umbral de goles totales ni ambos anotan.",
+          "Los tres resultados están prácticamente nivelados: la suma de los tres deja apenas margen a cualquiera de las opciones."
+        ],
+        "stats": [
+          {
+            "value": "0.357",
+            "label": "Local Poisson"
+          },
+          {
+            "value": "0.359",
+            "label": "Local CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dominio local histórico",
+        "bullets": [
+          "El historial recoge 2 enfrentamientos directos con 3 goles acumulados en el bloque H.",
+          "En 2005 Luxemburgo perdió 0-2 contra Estonia; en 2004 Estonia ganó 4-0 a Luxemburgo.",
+          "Estonia no encañó goles en ninguno de los dos precedentes registrados."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Cruces previos"
+          },
+          {
+            "value": "3",
+            "label": "Goles acumulados"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Luxemburgo un punto arriba",
+        "bullets": [
+          "Luxemburgo ocupa la segunda plaza con 3 puntos en 2 partidos.",
+          "Estonia es tercera con 2 puntos en las mismas 2 jornadas.",
+          "La diferencia entre ambos es de un único punto."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Puntos Luxemburgo"
+          },
+          {
+            "value": "2",
+            "label": "Puntos Estonia"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Qué vigilar",
+        "bullets": [
+          "B2 deja sin declarar el umbral de goles totales y la lectura de ambos anotans, aunque CatBoost sí publica 0.41 y 0.476.",
+          "No hay bloque de API-Football, goleadores, forma reciente ni bajas confirmadas para este cruce.",
+          "El empate 1-1 declarado por CatBoost es coherente con la igualdad de goles esperados (1.17-1.12) y con la proximidad de las tres probabilidades."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin lectura API-Football",
+        "detail": "No se aporta bloque A, por lo que no hay distribución externa, umbral de goles ni lectura cruda de ese proveedor."
+      },
+      {
+        "label": "Sin goleadores",
+        "detail": "No se informa de artilleros en este cruce, a diferencia del otro partido del mismo día."
+      },
+      {
+        "label": "Sin forma ni bajas",
+        "detail": "Faltan resultados recientes (R), bajas confirmadas (L) y consenso externo (M2) para Estonia - Luxemburgo."
+      },
+      {
+        "label": "B2 incompleto",
+        "detail": "Las estimaciones declaradas de Bzzoiro omiten goles totales y ambos anotan (marcados como no), dejando hueco frente a los valores de CatBoost."
+      },
+      {
+        "label": "Historial antiguo",
+        "detail": "Los dos enfrentamientos datan de 2004 y 2005, por lo que su vigencia para el duelo actual es limitada."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Poisson (0.357/0.311/0.332) y CatBoost (0.359/0.302/0.339) coinciden estrechamente y son coherentes con los goles esperados 1.17-1.12. No se detectan desviaciones porcentuales claras; la limitación principal es la ausencia de varios bloques de contexto."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:22:30.655Z",
+    "inputKey": "v3|M|bz-212656|Estonia|Luxembourg|nations|2026-10-03T16:00:00+00:0|NS\nP|1.17|1.12|0.357|0.311|0.332|0.401|0.478\nB|0.359|0.302|0.339|1.17|1.12|0.41|0.476|1-1|\nB2|H|0.359|no|no\nH|2|2|0|0|3\nW||cloudy|10|\nT|3|Estonia|2|2||\nT|2|Luxembourg|2|3||\nHR|2005-10-12|Luxembourg|Estonia|0|2\nHR|2004-09-04|Estonia|Luxembourg|4|0",
+    "materialKey": "M|bz-212656|Estonia|Luxembourg|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212657": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Islandia recibe a Bulgaria en Nations League",
+        "bullets": [
+          "Partido de Nations League entre Islandia y Bulgaria, código bz-212657, fecha 2026-10-03 a las 16:00 UTC y estado NS (sin iniciar).",
+          "Ambos llevan 2 partidos en la competición; Islandia figura en primer lugar y Bulgaria en cuarto, según el bloque de tabla."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-03",
+            "label": "Fecha del cruce"
+          },
+          {
+            "value": "16:00 UTC",
+            "label": "Horario programado"
+          },
+          {
+            "value": "NS",
+            "label": "Estado del partido"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: ligera ventaja local",
+        "bullets": [
+          "El modelo Poisson GoatLab reparte 0.489 de victoria local, 0.274 de empate y 0.236 de triunfo visitante, con 1.59 y 1.04 goles esperados.",
+          "En ese Poisson, el umbral de más de 2.5 goles queda en 0.489 y ambos equipos anotan en 0.527.",
+          "CatBoost Bzzoiro marca 0.51 local, 0.26 empate y 0.23 visitante, con 0.486 en más de 2.5 goles y 0.511 en ambos anotan.",
+          "Bzzoiro declara el 1-1 como marcador más probable y su lectura B2 da 0.51 al local con 'no' en goles totales y en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.51",
+            "label": "Local (CatBoost)"
+          },
+          {
+            "value": "0.489",
+            "label": "Local (Poisson)"
+          },
+          {
+            "value": "0.527",
+            "label": "Ambos anotan (Poisson)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial: dominio búlgaro en 2004-2005",
+        "bullets": [
+          "El bloque H registra 2 partidos, 0 victorias, 0 empates, 2 derrotas y 4.5 goles de promedio en el recuento del cruce.",
+          "Bulgaria se llevó los dos enfrentamientos: 3-2 en 2005 y 1-3 en 2004, con 5 y 4 goles respectivamente."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Cruces previos"
+          },
+          {
+            "value": "4.5",
+            "label": "Goles de promedio"
+          },
+          {
+            "value": "5",
+            "label": "Goles en 2005"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Tabla: Islandia arriba, Bulgaria cuarta",
+        "bullets": [
+          "Islandia ocupa el primer puesto con 2 partidos disputados y 4 puntos.",
+          "Bulgaria figura en el cuarto lugar con 2 partidos y 1 punto."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Puesto de Islandia"
+          },
+          {
+            "value": "4",
+            "label": "Puntos de Islandia"
+          },
+          {
+            "value": "1",
+            "label": "Puntos de Bulgaria"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores de referencia",
+        "bullets": [
+          "Andri Guðjohnsen es el referente islandés con 2 goles en 2 partidos.",
+          "Asen Chandarov encabeza la aportación búlgara con 1 gol en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles de Guðjohnsen"
+          },
+          {
+            "value": "1",
+            "label": "Gol de Chandarov"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma ni ambiente",
+        "detail": "No se aportaron filas R de resultados recientes, W de clima y sede ni L de bajas confirmadas, por lo que el contexto inmediato queda fuera del análisis."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No hay bloque M2 de porcentajes interpretativos, así que no puede contrastarse el panorama con estimaciones externas."
+      },
+      {
+        "label": "Sin lectura de API-Football",
+        "detail": "El bloque A no aparece: no hay distribución, umbral de goles ni lectura cruda del proveedor que comparar con P y B."
+      },
+      {
+        "label": "Campos sin etiquetar",
+        "detail": "Los bloques T, S y H no declaran unidades; se han leído como partidos/puntos, goles/partidos y recuento del cruce."
+      },
+      {
+        "label": "Historial muy antiguo",
+        "detail": "Los dos enfrentamientos datan de 2004 y 2005, con lo que su peso sobre el cruce de 2026 es limitado."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Sin porcentajes que se desvíen con claridad: 0.51 (CatBoost) y 0.489 (Poisson) son coherentes entre sí. Fricción menor: B2 declara 'no' a ambos anotan frente a 0.527 y 0.511, y el 1-1 declarado convive con 0.51 local."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:24:27.710Z",
+    "inputKey": "v3|M|bz-212657|Iceland|Bulgaria|nations|2026-10-03T16:00:00+00:0|NS\nP|1.59|1.04|0.489|0.274|0.236|0.489|0.527\nB|0.51|0.26|0.23|1.59|1.04|0.486|0.511|1-1|\nB2|H|0.51|no|no\nH|2|0|0|2|4.5\nT|1|Iceland|2|4||\nT|4|Bulgaria|2|1||\nS|Andri Guðjohnsen|Iceland|2|2\nS|Asen Chandarov|Bulgaria|1|2\nHR|2005-09-07|Bulgaria|Iceland|3|2\nHR|2004-09-04|Iceland|Bulgaria|1|3",
+    "materialKey": "M|bz-212657|Iceland|Bulgaria|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212654": {
+    "matchId": "bz-212654",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Croacia e Inglaterra, cruce de Naciones",
+        "bullets": [
+          "Croacia e Inglaterra se enfrentan el 3 de octubre de 2026 a las 16:00 UTC en la jornada de Naciones.",
+          "Ambos acumulan 3 puntos tras 2 partidos, situados en los puestos 3 y 2 del grupo.",
+          "El registro de clima indica lluvia con el valor 7, sin unidad especificada."
+        ],
+        "stats": [
+          {
+            "value": "3 puntos",
+            "label": "Puntos de ambos"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Inglaterra ligeramente por delante",
+        "bullets": [
+          "El Poisson de GoatLab reparte 0.258 a Croacia, 0.263 al empate y 0.479 a Inglaterra.",
+          "CatBoost (Bzzoiro) lo cifra en 0.286, 0.241 y 0.474 respectivamente.",
+          "Los goles esperados coinciden: 1.19 para Croacia y 1.69 para Inglaterra.",
+          "Poisson da 0.549 en umbral de goles y 0.579 en ambos anotan; CatBoost 0.533 y 0.559. Bzzoiro declara a Inglaterra (0.474) como lectura principal, con 'no' en goles totales y 'no' en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.479",
+            "label": "Victoria inglesa Poisson"
+          },
+          {
+            "value": "0.474",
+            "label": "Victoria inglesa CatBoost"
+          },
+          {
+            "value": "1.69",
+            "label": "Goles esperados Inglaterra"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial dominado por Inglaterra",
+        "bullets": [
+          "El resumen H acumula 8 partidos: 1 victoria croata, 1 empate y 6 inglesas, con 3.75 goles de media.",
+          "Se listan 5 cruces concretos entre 2018 y 2026.",
+          "El más reciente fue 4-2 para Inglaterra el 17 de junio de 2026.",
+          "Croacia ganó 2-1 en julio de 2018 e Inglaterra venció 1-0 en junio de 2021."
+        ],
+        "stats": [
+          {
+            "value": "8",
+            "label": "Cruces en el historial"
+          },
+          {
+            "value": "6",
+            "label": "Victorias inglesas"
+          },
+          {
+            "value": "3.75",
+            "label": "Goles de media"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Kane y Gordon encabezan",
+        "bullets": [
+          "Harry Kane e Anthony Gordon aparecen con 2 cada uno en la fila de goleadores de Inglaterra.",
+          "Dion Drena Beljo es el referente croata con 1 en su fila."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Cifra de Kane"
+          },
+          {
+            "value": "2",
+            "label": "Cifra de Gordon"
+          },
+          {
+            "value": "1",
+            "label": "Cifra de Beljo"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Cruce abierto y con lluvia prevista",
+        "bullets": [
+          "CatBoost declara 1-1 como marcador más probable con 0.405, pese a dar a Inglaterra 0.474 como opción mayor.",
+          "Los dos modelos mantienen el empate técnico entre 0.241 y 0.263.",
+          "La lluvia prevista en el parte enmarca un encuentro de márgenes estrechos."
+        ],
+        "stats": [
+          {
+            "value": "1-1",
+            "label": "Marcador declarado"
+          },
+          {
+            "value": "0.405",
+            "label": "Probabilidad del 1-1"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Historial parcial",
+        "detail": "El resumen H indica 8 partidos, pero en el input solo se detallan 5 filas de enfrentamientos previos."
+      },
+      {
+        "label": "Sin API ni forma",
+        "detail": "No hay estimación de API-Football ni fila de forma reciente para este cruce."
+      },
+      {
+        "label": "Columnas sin etiquetar",
+        "detail": "Las filas de tabla y de goleadores no llevan cabeceras: sus cifras se leen por posición."
+      },
+      {
+        "label": "Sede no indicada",
+        "detail": "La fila de clima viene sin estadio ni ciudad asociados."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Bzzoiro declara 'no' a ambos anotan con 0.559 y 0.579 en los modelos, y 'no' a goles totales con 0.533 y 0.549, pero a la vez su marcador más probable es 1-1, lo que implicaría ambos anotan. Declaración internamente tensa."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:27:05.244Z",
+    "inputKey": "v3|M|bz-212654|Croatia|England|nations|2026-10-03T16:00:00+00:0|NS\nP|1.19|1.69|0.258|0.263|0.479|0.549|0.579\nB|0.286|0.241|0.474|1.19|1.69|0.533|0.559|1-1|0.405\nB2|A|0.474|no|no\nH|8|1|1|6|3.75\nW||rain|7|\nT|3|Croatia|2|3||\nT|2|England|2|3||\nS|Dion Drena Beljo|Croatia|1|2\nS|Anthony Gordon|England|2|2\nS|Harry Kane|England|2|2\nHR|2026-06-17|England|Croatia|4|2\nHR|2021-06-13|England|Croatia|1|0\nHR|2018-11-18|England|Croatia|2|1\nHR|2018-10-12|Croatia|England|0|0\nHR|2018-07-11|Croatia|England|2|1",
+    "materialKey": "M|bz-212654|Croatia|England|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212655": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Belarus recibe a San Marino en Nations League",
+        "bullets": [
+          "Partido bz-212655 de la Nations League, programado para 2026-10-03 a las 16:00 UTC, con estado sin iniciar.",
+          "El bloque de clima y sede no está presente en los datos recibidos.",
+          "No se adjuntaron alineaciones ni disponibilidad de jugadores."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-03",
+            "label": "fecha del cruce"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost calculan el cruce",
+        "bullets": [
+          "Poisson GoatLab proyecta 2.16 goles de local y 0.77 de visitante, con 68.4% de local, 20.5% de empate y 11.1% de visitante; 56.1% en más de 2.5 goles y 48.4% de ambos anotan.",
+          "CatBoost Bzzoiro da 83.1% de local, 12% de empate y 4.9% de visitante, con 60.2% en más de 2.5 goles, 39% de ambos anotan y 2-0 como marcador más probable.",
+          "Bzzoiro declara como estimación propia 0.831 de mayor probabilidad a favor del local, sin umbral de goles totales ni de ambos anotan declarados.",
+          "Bzzoiro añade un valor residual de 0.412 en su línea de modelo sin etiqueta asociada en el dato."
+        ],
+        "stats": [
+          {
+            "value": "2.16",
+            "label": "goles proyectados local"
+          },
+          {
+            "value": "68.4%",
+            "label": "Poisson victoria local"
+          },
+          {
+            "value": "83.1%",
+            "label": "CatBoost victoria local"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dos cruces previos, ambos en 2018",
+        "bullets": [
+          "Solo hay dos enfrentamientos directos registrados, ambos en 2018, con victoria de Belarus en los dos.",
+          "2018-09-08: Belarus 5-0 San Marino; 2018-11-18: San Marino 0-2 Belarus.",
+          "El bloque histórico resume 2 partidos, 2 victorias, 0 empates, 0 victorias de San Marino y 3.5 de promedio de goles."
+        ],
+        "stats": [
+          {
+            "value": "3.5",
+            "label": "promedio de goles"
+          },
+          {
+            "value": "2",
+            "label": "enfrentamientos previos"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Belarus tercero, San Marino cuarto",
+        "bullets": [
+          "Belarus ocupa el tercer puesto del grupo con 2 partidos jugados y 1 victoria.",
+          "San Marino aparece en el cuarto puesto con 2 partidos y 0 victorias.",
+          "El bloque de tabla no incluye goles a favor, en contra ni puntos."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "claves",
+        "title": "Qué mirar en el análisis",
+        "bullets": [
+          "Los modelos coinciden en la localía como escenario más probable, pero el margen difiere: 68.4% frente a 83.1%.",
+          "En ambos anotan hay divergencia: 48.4% en Poisson frente a 39% en CatBoost.",
+          "El historial disponible data de 2018, con más de siete años sin cruces registrados entre ambos.",
+          "Faltan bloques de forma reciente, clima, bajas y consenso externo para contrastar el panorama."
+        ],
+        "stats": [
+          {
+            "value": "48.4%",
+            "label": "Poisson ambos anotan"
+          },
+          {
+            "value": "39%",
+            "label": "CatBoost ambos anotan"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se recibieron filas M2, por lo que no hay lectura de consenso externo en porcentajes para contrastar."
+      },
+      {
+        "label": "Sin forma, clima ni bajas",
+        "detail": "No hay bloques R, W ni L: no se puede verificar racha reciente, condiciones del partido ni disponibilidad."
+      },
+      {
+        "label": "Historial antiguo",
+        "detail": "Los dos enfrentamientos directos datan de 2018; no existen cruces más recientes entre estos equipos."
+      },
+      {
+        "label": "Estimación A ausente",
+        "detail": "No se incluyó el bloque de estimación externa ni el bloque de goleadores del encuentro."
+      },
+      {
+        "label": "B2 sin umbrales",
+        "detail": "Bzzoiro no declara umbral de goles totales ni de ambos anotan en su estimación propia, solo la mayor probabilidad."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Divergencia marcada entre modelos: victoria local 68.4% en Poisson frente a 83.1% en CatBoost, y visitante 11.1% frente a 4.9%; ambos anotan 48.4% frente a 39%. El campo 0.412 de CatBoost no tiene etiqueta clara y no se interpreta."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:28:37.256Z",
+    "inputKey": "v3|M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS\nP|2.16|0.77|0.684|0.205|0.111|0.561|0.484\nB|0.831|0.12|0.049|2.16|0.77|0.602|0.39|2-0|0.412\nB2|H|0.831|no|no\nH|2|2|0|0|3.5\nT|3|Belarus|2|1||\nT|4|San Marino|2|0||\nHR|2018-11-18|San Marino|Belarus|0|2\nHR|2018-09-08|Belarus|San Marino|5|0",
+    "materialKey": "M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS"
   }
 }

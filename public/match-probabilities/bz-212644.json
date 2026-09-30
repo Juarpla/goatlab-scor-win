@@ -4,7 +4,7 @@
   "away": "Türkiye",
   "competition": "nations",
   "kickoff": "2026-10-02T18:45:00+00:00",
-  "updatedAt": "2026-09-30T12:46:32.546Z",
+  "updatedAt": "2026-09-30T13:19:43.524Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -59,7 +59,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-30T11:37:14.014Z",
+      "updatedAt": "2026-09-30T13:19:08.919Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -70,7 +70,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-30T11:37:14.014Z",
+      "updatedAt": "2026-09-30T13:19:08.919Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -220,7 +220,7 @@
     "over35": 0.428,
     "btts": 0.605,
     "score": "1-1",
-    "cornersOver95": 0.451,
+    "cornersOver95": 0.45299999999999996,
     "recommendations": {
       "favorite": "H",
       "favoriteProb": 0.636,
@@ -229,7 +229,7 @@
     },
     "confidence": 0.6357,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-30T11:37:21.432Z",
+    "capturedAt": "2026-09-30T13:19:12.869Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -580,5 +580,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Auditoría: CatBoost declara el marcador 1-1 con 0.453 mientras su propio empate total es 0.199, cifra internamente incoherente. También se observa desviación clara entre Poisson (local 0.54) y CatBoost (local 0.636); conviene tratar ambas lecturas como declaraciones de proveedor.",
+    "provider": "OPENCODE_GO",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-09-30T13:21:16.640Z"
+  }
 }
