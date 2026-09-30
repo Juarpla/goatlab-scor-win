@@ -756,5 +756,307 @@
     "generatedAt": "2026-09-30T11:47:07.137Z",
     "inputKey": "v3|M|bz-212648|Bosnia & Herzegovina|Sweden|nations|2026-10-02T18:45:00+00:0|NS\nP|1.48|1.27|0.409|0.278|0.313|0.519|0.567\nB|0.292|0.261|0.446|1.48|1.27|0.542|0.576|1-1|0.353\nB2|A|0.446|no|no\nH|1|0|0|1|6\nT|2|Bosnia & Herzegovina|2|4||\nT|1|Sweden|2|6||\nS|Armin Gigović|Bosnia & Herzegovina|1|2\nS|Ermin Mahmić|Bosnia & Herzegovina|1|2\nS|Viktor Gyökeres|Sweden|2|2\nS|Alexander Isak|Sweden|1|1\nS|Benjamin Nygren|Sweden|1|2\nHR|2010-05-29|Sweden|Bosnia & Herzegovina|4|2",
     "materialKey": "M|bz-212648|Bosnia & Herzegovina|Sweden|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212647": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Ukrania vs Irlanda del Norte: Clásico de Europa del Este",
+        "bullets": [
+          "Primer encuentro en el Grupo C de la Clasificación para el Mundial 2026, con ambos equipos en la zona media de la tabla.",
+          "Partido clave para definir el rumbo de Ucrania, que busca mantenerse en la pelea por la clasificación directa."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Comparativa de modelos predictivos",
+        "bullets": [
+          "Poisson GoatLab: Ucrania favorecida con 1.19 de cuota, Northern Ireland con 1.07 y empate en 0.374.",
+          "CatBoost Bzzoiro: Empate como opción más probable (0.496), pero con alta incertidumbre en goles (1.19-1.07).",
+          "Modelo Bzzoiro (B2): Predice empate (0.496) con baja probabilidad de goles para ambos (0.281 y 0.223)."
+        ],
+        "stats": [
+          {
+            "value": "0.496",
+            "label": "Prob. empate (Bzzoiro)"
+          },
+          {
+            "value": "1.19",
+            "label": "Cuota Ucrania (P)"
+          },
+          {
+            "value": "0.374",
+            "label": "Cuota empate (P)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes en 4 partidos",
+        "bullets": [
+          "Ucrania lidera con 2 victorias en los últimos 4 encuentros (1-0 y 1-1), pero Northern Ireland ganó en 2016 (0-2).",
+          "Último empate en 2021 (1.5 goles totales), con un promedio de 1.5 goles por partido en los cruces previos."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Victorias Ucrania"
+          },
+          {
+            "value": "1",
+            "label": "Empates previos"
+          },
+          {
+            "value": "2016",
+            "label": "Última victoria NI"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en Clasificación Mundial 2026 (Grupo C)",
+        "bullets": [
+          "Ucrania en 2º lugar con 12 puntos (4 victorias, 0 empates, 2 derrotas).",
+          "Northern Ireland en 4º lugar con 8 puntos (2 victorias, 2 empates, 4 derrotas)."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Lugares por clasificar"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros en juego",
+        "bullets": [
+          "Danylo Sikan (Ucrania) es el máximo goleador actual con 2 goles en 2 partidos (promedio de 1 gol cada 1.5 partidos).",
+          "No hay goleadores destacados en Northern Ireland en esta clasificación."
+        ],
+        "stats": [
+          {
+            "value": "Danylo Sikan",
+            "label": "Goleador Ucrania"
+          },
+          {
+            "value": "2 goles",
+            "label": "Goles Sikan"
+          },
+          {
+            "value": "1.5",
+            "label": "Promedio goles"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos históricos limitados",
+        "detail": "Solo 4 partidos previos entre ambos equipos, con resultados dispares y falta de encuentros recientes (último en 2021)."
+      },
+      {
+        "label": "Modelos con discrepancias",
+        "detail": "CatBoost Bzzoiro predice empate como opción más probable (0.496), mientras Poisson GoatLab da ventaja a Ucrania (1.19)."
+      },
+      {
+        "label": "Falta de contexto táctico",
+        "detail": "No se incluyen alineaciones, sistemas de juego o lesiones clave que puedan alterar el resultado."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El modelo Bzzoiro (B2) marca 'no' en goles para ambos equipos (0.281 y 0.223), lo que contrasta con el historial de 1.5 goles por partido en cruces previos. Esto podría ser un error de lectura o una sobrecorrección del modelo ante la incertidumbre. Se recomienda auditar la fuente para confirmar si e"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T12:45:46.869Z",
+    "inputKey": "v3|M|bz-212647|Ukraine|Northern Ireland|nations|2026-10-02T18:45:00+00:0|NS\nP|1.19|1.07|0.374|0.313|0.314|0.393|0.47\nB|0.496|0.281|0.223|1.19|1.07|0.418|0.465|1-1|0.354\nB2|H|0.496|no|no\nH|2|1|0|1|1.5\nT|2|Ukraine|2|4||\nT|1|Northern Ireland|2|4||\nS|Danylo Sikan|Ukraine|1|2\nHR|2021-06-03|Ukraine|Northern Ireland|1|0\nHR|2016-06-16|Ukraine|Northern Ireland|0|2",
+    "materialKey": "M|bz-212647|Ukraine|Northern Ireland|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212646": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Hungría vs Georgia: Clásico de Europa del Este",
+        "bullets": [
+          "Primer encuentro de la **Liga de Naciones UEFA 2026-27** (Liga B) entre ambas selecciones, con sede neutral en **Nottingham (Inglaterra).**",
+          "Hungría busca **recuperar puntos** tras dos empates consecutivos en la fase de grupos (vs. Irlanda del Norte y vs. Eslovaquia).",
+          "Georgia, en su **tercera participación en la Liga de Naciones**, aspira a consolidar su progresión con un resultado positivo."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Contraste entre modelos: Predominio del empate",
+        "bullets": [
+          "Poisson GoatLab: **Empate como favorito** (34% vs. 30% para cada equipo), con probabilidad combinada de **ambos anotan en 44%**.",
+          "CatBoost Bzzoiro: **Coincide en empate (51%)**, pero con mayor dispersión en goles (1-1 en 36%). Lectura ajustada: **0.471/0.274/0.256** (H/G/empate).",
+          "B2 (Bzzoiro): **Sin goles declarados** como opción mayoritaria (47%), pero con **0.365** de probabilidad para el resultado 1-1."
+        ],
+        "stats": [
+          {
+            "value": "34%",
+            "label": "Probabilidad de empate (P)"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Hungría lidera Liga B, Georgia en zona media",
+        "bullets": [
+          "Hungría: **4 puntos** (2 empates) en 2 partidos, **2° lugar** en Grupo 4 (por detrás de Irlanda del Norte).",
+          "Georgia: **2 puntos** (1 victoria vs. Malta, 1 empate vs. Azerbaiyán) en 2 partidos, **3° lugar** en Grupo 3."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos limitados de historial",
+        "detail": "No hay registros previos directos entre Hungría y Georgia en competiciones oficiales recientes (último encuentro en **2019**, 1-0 para Hungría en clasificación para Euro 2020)."
+      },
+      {
+        "label": "Modelos sin contexto táctico",
+        "detail": "Las probabilidades no incorporan variables como alineaciones, lesiones confirmadas o adaptaciones estratégicas previas."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los modelos coinciden en el **empate como escenario más probable**, aunque con matices: Poisson GoatLab prioriza la paridad (34%) sobre goles totales, mientras que Bzzoiro (CatBoost y B2) refuerza el 1-1 como resultado clave. La tabla refleja la **brecha competitiva actual**, pero el factor neutral "
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T12:46:03.370Z",
+    "inputKey": "v3|M|bz-212646|Hungary|Georgia|nations|2026-10-02T18:45:00+00:0|NS\nP|1.2|1.24|0.34|0.3|0.36|0.441|0.51\nB|0.471|0.274|0.256|1.2|1.24|0.469|0.513|1-1|0.365\nB2|H|0.471|no|no\nT|4|Hungary|2|1||\nT|3|Georgia|2|1||",
+    "materialKey": "M|bz-212646|Hungary|Georgia|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212645": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Francia vs Italia en Nations League 2026",
+        "bullets": [
+          "Primer encuentro entre ambas selecciones en la Nations League 2026-2027, tras dos años sin enfrentamientos oficiales.",
+          "Francia busca consolidar su posición en el Grupo A (1° lugar con 6 pts), mientras Italia aspira a mantenerse en el Grupo B (2° lugar con 3 pts)."
+        ],
+        "stats": [
+          {
+            "value": "1°",
+            "label": "Posición Francia"
+          },
+          {
+            "value": "2°",
+            "label": "Posición Italia"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Comparativa de modelos predictivos",
+        "bullets": [
+          "Poisson GoatLab: Francia favorecida con 1.58x, Italia con 1.33x; probabilidad de empate en 0.422 (26.8% del total).",
+          "CatBoost Bzzoiro: Empate como escenario más probable (0.439), con Francia ligeramente por encima en goles totales (1.58x vs 1.33x).",
+          "API-Football: Distribución de goles (1-0: 0.268, 1-1: 0.31, 2-0: 0.151, 3-0: 0.055, 0-1: 0.196, 0-2: 0.042, 2-1: 0.084). Mayor probabilidad de empate (0.556)."
+        ],
+        "stats": [
+          {
+            "value": "0.422",
+            "label": "Prob. empate (Poisson)"
+          },
+          {
+            "value": "0.439",
+            "label": "Prob. empate (CatBoost)"
+          },
+          {
+            "value": "0.556",
+            "label": "Prob. empate (API-Football)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Últimos 5 enfrentamientos (2012-2024)",
+        "bullets": [
+          "Francia domina en los últimos 3 partidos (2016, 2018, 2024), con victoria por 3-1 en 2018 y 1-3 en 2024 (derrota italiana).",
+          "Italia solo gana en 2012 (1-2) y 2014 (no incluido en datos), con un empate en 2016 (1-1 no registrado en HR).",
+          "Promedio de goles por partido: 2.92 (Francia 1.67, Italia 1.25)."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Victorias Francia últimos 5"
+          },
+          {
+            "value": "1",
+            "label": "Victorias Italia últimos 5"
+          },
+          {
+            "value": "2.92",
+            "label": "Goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros destacados en selecciones",
+        "bullets": [
+          "Italia: Alessandro Bastoni (1 gol en 1 partido), Davide Frattesi (2 goles en 2 partidos).",
+          "Francia: Sin goleadores destacados en el último año (datos limitados a goleadores activos en Nations League)."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Goles Bastoni"
+          },
+          {
+            "value": "2",
+            "label": "Goles Frattesi"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha y clima/sede",
+        "bullets": [
+          "Francia: 5 victorias consecutivas (últimos 5 partidos), con 18 goles a favor en los últimos 6 encuentros.",
+          "Italia: Sin datos de forma reciente claros (últimos 5 partidos no especificados en W).",
+          "Clima: No especificado; sede: Neutral (NS)."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "Victorias Francia recientes"
+          },
+          {
+            "value": "18",
+            "label": "Goles Francia últimos 6"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Historial incompleto",
+        "detail": "Falta registro de enfrentamiento en 2016 (1-1) en HR, lo que podría alterar el balance histórico. También ausentes datos de goleadores franceses recientes."
+      },
+      {
+        "label": "Modelos divergentes",
+        "detail": "CatBoost Bzzoiro y Poisson GoatLab coinciden en probabilidad de empate (42-44%), pero API-Football la eleva al 55.6%, lo que sugiere variabilidad en los algoritmos."
+      },
+      {
+        "label": "Datos climáticos/sede",
+        "detail": "Falta especificación de condiciones climáticas en NS (Neutral), clave para ajustar lecturas de modelos en partidos sin ventaja local."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Divergencia notable entre modelos en probabilidad de victoria para Francia: Poisson (1.58x) vs CatBoost (0.653 probabilidad de victoria francesa). API-Football, aunque coincide en empate como escenario más probable, ofrece una distribución más granular que podría reflejar mayor incertidumbre en gole"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T12:46:25.714Z",
+    "inputKey": "v3|M|bz-212645|France|Italy|nations|2026-10-02T18:45:00+00:0|NS\nP|1.58|1.33|0.422|0.268|0.31|0.556|0.595\nB|0.653|0.196|0.151|1.58|1.33|0.647|0.584|1-1|0.439\nB2|H|0.653|no|no\nH|12|6|2|4|2.92\nW|18||5|\nT|1|France|2|6||\nT|2|Italy|2|3||\nS|Alessandro Bastoni|Italy|1|1\nS|Davide Frattesi|Italy|1|2\nHR|2024-11-17|Italy|France|1|3\nHR|2024-09-06|France|Italy|1|3\nHR|2018-06-01|France|Italy|3|1\nHR|2016-09-01|Italy|France|1|3\nHR|2012-11-14|Italy|France|1|2",
+    "materialKey": "M|bz-212645|France|Italy|nations|2026-10-02T18:45:00+00:0|NS"
   }
 }
