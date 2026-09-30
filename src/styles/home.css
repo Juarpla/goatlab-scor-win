@@ -111,7 +111,11 @@
 
 /* ---- Muro de /encuentros: ads reservados a los costados + primera fila de 3 ---- */
 /* La fila de 3 vive solo en escritorio y a ancho completo: la anatomía de la card
-   (código, nombre, escudo y 5 chips) no cabe en pistas de ~200px. */
+   (código, nombre, escudo y 5 chips) no cabe en pistas de ~200px.
+   #wall-grid lee por filas (el más próximo a la izquierda). La portada conserva
+   el masonry de .wall-grid. */
+#wall-grid{columns:unset;display:grid;grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+#wall-grid .match-card{margin-bottom:0}
 .wall-lead{display:none}
 .wall-body{display:block}
 .ad-rail{display:none}
@@ -125,6 +129,7 @@
      rieles (display:none por filtros cosméticos), el muro no colapsa al track de 300px. */
   .wall-center{grid-column:2;min-width:0}
   .wall--ads .wall-grid{columns:2}
+  .wall--ads #wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ad-rail{display:flex}
   /* El riel acompaña el scroll (sticky) y su recorrido termina con la columna
      de tarjetas: nunca alcanza el anuncio horizontal ni baja más allá. */
@@ -141,6 +146,7 @@
   .wall-body.no-ads{grid-template-columns:minmax(0,1fr)}
   .wall-body.no-ads .wall-center{grid-column:1}
   .wall-body.no-ads .wall-grid{columns:3}
+  .wall-body.no-ads #wall-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:1149px){
   .ad-rail{display:none}
@@ -148,6 +154,7 @@
 @media(max-width:760px){
   .ad-under-filters{display:flex;margin-block:0 26px}
   .wall--ads .wall-grid{columns:1}
+  .wall--ads #wall-grid{grid-template-columns:minmax(0,1fr)}
 }
 
 /* ---- Región de jornada: mapa de sedes, pulso, tabla y termómetro ---- */
@@ -221,6 +228,7 @@
 @media(max-width:1150px){
   .hero{grid-template-columns:1fr;gap:26px}
   .wall-grid{columns:2}
+  #wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .guia-path{gap:22px}
   .journey-grid{grid-template-columns:1fr}
 }
@@ -243,6 +251,7 @@
   .guia-path{grid-template-columns:1fr;gap:20px}
   .guia-join{display:none}
   .wall-grid{columns:1}
+  #wall-grid{grid-template-columns:minmax(0,1fr)}
   .filter-row{flex-direction:column;align-items:stretch;gap:10px}
   .search{min-width:0}
   .match-card{padding:16px}
