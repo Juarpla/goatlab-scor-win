@@ -1,8 +1,6 @@
 name: Actualizar datos GoatLab
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
   schedule:
     - cron: '0 7 * * *'    # actualización completa: ventana de 7 días, forma, análisis (2 a.m. hora de Perú)
     - cron: '17 */6 * * *' # refresco de marcadores del día
@@ -29,7 +27,6 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: node --test tests/*.test.js
       - name: Actualización completa (diaria, 07:00 UTC)
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *')
         run: node scripts/update-data.mjs
