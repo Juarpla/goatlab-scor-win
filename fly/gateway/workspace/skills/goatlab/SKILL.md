@@ -31,7 +31,16 @@ If the user types those words, they are ordinary text and trigger nothing.
    and `kickoff`. If there are no files, say so in Spanish and stop. No buttons.
 
 2. **Pick a number**: the user replies with the number. Confirm the match
-   (`matchId`) and send all **10 scripts at once** (`narration` verbatim, for
+   (`matchId`). Before sending any script, choose the photos once. Say one
+   short line in Spanish: *"Estoy eligiendo las fotos de este partido."*
+   Then, with `exec`, once, from the repo root:
+   `cd /home/node/goatlab && git pull --ff-only && node scripts/generate-media-pack.mjs --match=<matchId> --out=/data/media-pack`
+   The process inherits `PEXELS_API_KEY`, `PIXABAY_API_KEY` and
+   `OPENCODE_GO_API_KEY`. Do not put keys on the command line. Do not search
+   the web yourself and do not pick photo URLs. If the command exits non-zero,
+   say in Spanish that this match does not have enough photos and stop. Do
+   not send the scripts and do not ask for voice notes.
+   If it exits zero, send all **10 scripts at once** (`narration` verbatim, for
    reading aloud), numbered 1 to 10, split across 2-3 messages of ≤3500
    characters. Head the first message with this short instruction, in Spanish:
    *"Lee y graba en orden, uno tras otro, sin esperar. Manda los 10 audios."*
@@ -54,7 +63,7 @@ If the user types those words, they are ordinary text and trigger nothing.
    `title` / `hook` / `narration` from that script (`scripts[].title` and
    `scripts[].hook`); `matchLabel` is `home` contra `away` from the same
    file; `photos`, `subjects` and `camera` from
-   `public/data/media-pack/<matchId>.json` → `sequences[variant]`;
+   `/data/media-pack/<matchId>.json` → `sequences[variant]`;
    do not send `attribution`, hashtags or the YouTube description.
    `WORKER_URL=https://goatlab-render.fly.dev`; `RENDER_SECRET` from the
    environment). The worker renders the fixed HyperFrames template. Do not

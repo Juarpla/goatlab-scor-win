@@ -25,7 +25,7 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 
 ## Fotos
 
-Jugadores del partido (entrenamiento, después del encuentro o retrato), al menos 20 por manifiesto, en Wikimedia Commons. Licencias: dominio público, CC0, CC BY, CC BY-SA. Fuera: CC BY-NC, CC BY-ND, "uso justo", Getty/AP/Reuters/Shutterstock/Alamy/Instagram/Pexels/Pixabay y scraping de Google. Cada manifiesto `media-pack/<webId>.json` registra fuente `commons`, id, url https, fotógrafo, licencia, atribución y 10 secuencias con distinto orden y distinta cámara. Los nombres salen de los guiones 3, 4, 7 y 9.
+Jugadores del partido (entrenamiento, después del encuentro o retrato), al menos 20 por manifiesto. Fuentes: Wikimedia Commons (dominio público, CC0, CC BY, CC BY-SA), Pexels (Pexels License) y Pixabay (Pixabay Content License). Esas dos últimas cubren el archivo, no un aval del jugador. Fuera: CC BY-NC, CC BY-ND, "uso justo", Getty/AP/Reuters/Shutterstock/Alamy/Instagram y scraping de Google. Cada foto trae `seen` con el modelo y la fecha; sin eso el manifiesto no vale. Cada manifiesto registra fuente (`commons`, `pexels` o `pixabay`), id, url https, fotógrafo, licencia, atribución y 10 secuencias con distinto orden y distinta cámara. Lo arma el gateway al elegir el partido. Los nombres salen de los guiones 3, 4, 7 y 9.
 
 ## Video
 

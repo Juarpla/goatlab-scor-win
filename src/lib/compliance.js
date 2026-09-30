@@ -9,7 +9,7 @@ import {
   CAMERA_MOVES,
   SEQUENCES_PER_MATCH,
   PHOTOS_PER_SEQUENCE,
-  classifyLicense,
+  acceptAssetLicense,
   isUsableStill,
 } from './media.js';
 export const DISCLAIMER =
@@ -95,8 +95,9 @@ export function checkDescription(description, { matchId = null } = {}) {
 }
 
 /**
- * Valida un manifiesto de media-pack: Commons, licencia libre, al menos 20
- * fotos, 10 secuencias de 12 fotos, rótulos respaldados, URLs https y atribución.
+ * Valida un manifiesto de media-pack: fuente permitida, licencia de esa fuente,
+ * foto vista por el modelo, al menos 20 fotos, 10 secuencias de 12,
+ * rótulos respaldados, URLs https y atribución.
  */
 export function checkMediaManifest(data, { matchId = null } = {}) {
   const errors = [];
@@ -112,7 +113,8 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
     }
     if (!ALLOWED_SOURCES.includes(asset.source)) errors.push(`asset ${i}: fuente no permitida (${asset.source})`);
     if (!asset.id) errors.push(`asset ${i}: sin id`);
-    if (!classifyLicense(asset.license)) errors.push(`asset ${i}: licencia no libre (${asset.license ?? ''})`);
+    if (!acceptAssetLicense(asset.source, asset.license)) errors.push(`asset ${i}: licencia no libre (${asset.license ?? ''})`);
+    if (!asset.seen?.model || !asset.seen?.at) errors.push(`asset ${i}: el modelo no vio la foto`);
     if (!isUsableStill(asset)) errors.push(`asset ${i}: no es una foto de jugador`);
     for (const field of ['url', 'page', 'photographer']) {
       if (!asset[field] || !String(asset[field]).trim()) errors.push(`asset ${i}: sin ${field}`);

@@ -1,12 +1,14 @@
 /**
- * Media-pack GoatLab Shorts: fotos de jugadores en Wikimedia Commons.
- * Licencia libre de uso comercial (dominio público, CC0, CC BY, CC BY-SA).
- * El generador (scripts/generate-media-pack.mjs) hace la red; aquí solo
- * se normaliza, se arman las 10 secuencias y se valida la forma.
+ * Media-pack GoatLab Shorts: fotos de jugadores.
+ * Commons (dominio público, CC0, CC BY, CC BY-SA), Pexels y Pixabay.
+ * El generador (scripts/generate-media-pack.mjs) hace la red y la visión;
+ * aquí solo se normaliza, se arman las 10 secuencias y se valida la forma.
  */
 import { esName } from './teams.js';
 
 export const ASSETS_PER_MATCH = 20;
+/** Candidatas que el modelo puede mirar antes de quedarse con 20. */
+export const CANDIDATES_PER_MATCH = 40;
 export const SEQUENCES_PER_MATCH = 10;
 export const PHOTOS_PER_SEQUENCE = 12;
 /** Ancho de la miniatura de Commons: nítida al cubrir 1080x1920 con recorrido. */
@@ -29,7 +31,13 @@ export const CAMERA_MOVES = [
 /** Guiones 3, 4, 7 y 9: ahí el relato nombra jugadores. */
 export const PLAYER_SCRIPT_INDEXES = [2, 3, 6, 8];
 
-export const ALLOWED_SOURCES = ['commons'];
+export const ALLOWED_SOURCES = ['commons', 'pexels', 'pixabay'];
+
+export const SOURCE_CREDIT = {
+  commons: 'Wikimedia Commons',
+  pexels: 'Pexels',
+  pixabay: 'Pixabay',
+};
 
 export const BANNED_PHOTO_DOMAINS = [
   /gettyimages?/i,
@@ -39,9 +47,9 @@ export const BANNED_PHOTO_DOMAINS = [
   /alamy/i,
   /instagram/i,
   /facebook/i,
-  /pexels/i,
-  /pixabay/i,
 ];
+
+const VISION_MOTIVES = new Set(['training', 'after', 'portrait']);
 
 const REJECT_FILE = /flag of|\bflag\b|coat of arms|\blogo\b|locator map|\.svg\b|escudo|bandera|\bsignature\b|\bautograph\b|kit (body|socks|shorts|left|right)|pictogram|\bicon\b|\bbadge\b|\bstamp\b|football field|soccer field/i;
 
@@ -152,6 +160,36 @@ export function classifyLicense(shortName) {
   return null;
 }
 
+/** Licencia según la fuente. Pexels y Pixabay no son Creative Commons. */
+export function acceptAssetLicense(source, license) {
+  if (source === 'commons') return classifyLicense(license);
+  const text = String(license ?? '').trim();
+  if (source === 'pexels' && /^Pexels License$/i.test(text)) return 'Pexels License';
+  if (source === 'pixabay' && /^Pixabay Content License$/i.test(text)) return 'Pixabay Content License';
+  return null;
+}
+
+/** Miniatura corta para el modelo. La url de render se queda ancha. */
+export function commonsPreviewUrl(url) {
+  return String(url ?? '').replace(/\/\d+px-/, '/480px-');
+}
+
+/**
+ * Veredicto del modelo. `ok` solo vale si el motivo es entrenamiento,
+ * después del partido o retrato, y el apellido coincide con el jugador buscado.
+ */
+export function acceptVisionVerdict(raw, { player = null, names = [] } = {}) {
+  if (!raw || raw.ok !== true) return null;
+  const motive = String(raw.motive ?? '').toLowerCase();
+  if (!VISION_MOTIVES.has(motive)) return null;
+  const who = String(raw.who ?? '').trim();
+  if (!who) return null;
+  const pool = player ? [String(player)] : (names ?? []).map(name => String(name));
+  const subject = pool.find(name => subjectFor(name, who));
+  if (!subject) return null;
+  return { subject, motive };
+}
+
 export function plainArtist(html) {
   return String(html ?? '')
     .replace(/<[^>]+>/g, ' ')
@@ -200,9 +238,69 @@ export function normalizeCommonsPage(page, query, { player = null } = {}) {
     width: info.thumbwidth ?? info.width ?? null,
     height: info.thumbheight ?? info.height ?? null,
     query,
+    previewUrl: commonsPreviewUrl(url),
+    playerHint: player || null,
     subject: subjectFor(player, page.title),
     motive: photoMotive(blob),
   };
+}
+
+function stockAsset(base, blob, player) {
+  if (looksRejected(blob)) return null;
+  return {
+    ...base,
+    playerHint: player || null,
+    subject: subjectFor(player, blob),
+    motive: photoMotive(blob),
+  };
+}
+
+export function normalizePexelsPhoto(photo, query, { player = null } = {}) {
+  if (!photo || typeof photo !== 'object') return null;
+  const src = photo.src ?? {};
+  const url = src.large2x || src.large || src.original || null;
+  const previewUrl = src.medium || src.small || url;
+  const page = photo.url ?? null;
+  const photographer = String(photo.photographer ?? '').trim();
+  if (!photo.id || !url || !previewUrl || !page || !photographer) return null;
+  if (![url, previewUrl, page].every(value => /^https:\/\//.test(value))) return null;
+  const photographerUrl = /^https:\/\//.test(String(photo.photographer_url ?? '')) ? photo.photographer_url : page;
+  return stockAsset({
+    source: 'pexels',
+    id: String(photo.id),
+    url,
+    previewUrl,
+    page,
+    photographer,
+    photographerUrl,
+    license: 'Pexels License',
+    width: photo.width ?? null,
+    height: photo.height ?? null,
+    query,
+  }, `${photo.alt ?? ''} ${photographer}`, player);
+}
+
+export function normalizePixabayHit(hit, query, { player = null } = {}) {
+  if (!hit || typeof hit !== 'object') return null;
+  const url = hit.largeImageURL || hit.webformatURL || null;
+  const previewUrl = hit.webformatURL || hit.previewURL || url;
+  const page = hit.pageURL ?? null;
+  const photographer = String(hit.user ?? '').trim();
+  if (!hit.id || !url || !previewUrl || !page || !photographer) return null;
+  if (![url, previewUrl, page].every(value => /^https:\/\//.test(value))) return null;
+  return stockAsset({
+    source: 'pixabay',
+    id: String(hit.id),
+    url,
+    previewUrl,
+    page,
+    photographer,
+    photographerUrl: page,
+    license: 'Pixabay Content License',
+    width: hit.imageWidth ?? null,
+    height: hit.imageHeight ?? null,
+    query,
+  }, `${hit.tags ?? ''} ${photographer}`, player);
 }
 
 export function rankAssets(assets) {
@@ -253,7 +351,8 @@ export function buildAttribution(assets) {
     if (!asset?.photographer || !ALLOWED_SOURCES.includes(asset.source)) continue;
     const key = `${asset.photographer}|${asset.license}`;
     if (!seen.has(key)) {
-      seen.set(key, `Foto: ${asset.photographer} / Wikimedia Commons (${asset.license})`);
+      const credit = SOURCE_CREDIT[asset.source] ?? asset.source;
+      seen.set(key, `Foto: ${asset.photographer} / ${credit} (${asset.license})`);
     }
   }
   return [...seen.values()].join(' · ');

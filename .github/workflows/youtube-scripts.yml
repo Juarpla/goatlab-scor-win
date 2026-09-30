@@ -43,13 +43,11 @@ jobs:
           LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
       - name: Lint de guiones
         run: node scripts/check-compliance.mjs
-      - name: Media-pack de Shorts (fotos con licencia)
-        run: node scripts/generate-media-pack.mjs
       - name: Commit de guiones
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/youtube-scripts public/data/media-pack public/data/llm-health.json
+          git add public/data/youtube-scripts public/data/llm-health.json
           if git diff --cached --quiet; then
             echo "Sin cambios de guiones que commitear"
           else

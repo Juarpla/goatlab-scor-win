@@ -6,7 +6,11 @@ import {
   playerQueries,
   hashWebId,
   classifyLicense,
+  acceptAssetLicense,
+  acceptVisionVerdict,
   normalizeCommonsPage,
+  normalizePexelsPhoto,
+  normalizePixabayHit,
   buildAttribution,
   buildManifest,
   buildSequences,
@@ -29,6 +33,7 @@ function asset(i, motive = 'player') {
     license: 'CC BY 4.0',
     query: 'Kenan Yıldız footballer',
     motive,
+    seen: { model: 'mimo-v2.6-flash', at: '2026-09-30T12:00:00.000Z' },
   };
 }
 
@@ -41,6 +46,12 @@ test('classifyLicense acepta uso comercial y rechaza NC y ND', () => {
   assert.equal(classifyLicense('CC BY-ND 2.0'), null);
   assert.equal(classifyLicense('CC BY-NC-SA 4.0'), null);
   assert.equal(classifyLicense(''), null);
+  assert.equal(acceptAssetLicense('commons', 'CC BY 4.0'), 'CC BY 4.0');
+  assert.equal(acceptAssetLicense('commons', 'CC BY-NC 4.0'), null);
+  assert.equal(acceptAssetLicense('pexels', 'Pexels License'), 'Pexels License');
+  assert.equal(acceptAssetLicense('pixabay', 'Pixabay Content License'), 'Pixabay Content License');
+  assert.equal(acceptAssetLicense('pexels', 'CC BY 4.0'), null);
+  assert.equal(acceptAssetLicense('getty', 'Pexels License'), null);
 });
 
 test('playerNamesFromScripts lee los guiones de jugadores y omite los equipos', () => {
@@ -131,14 +142,64 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   const bad = structuredClone(manifest);
   bad.assets[0].license = 'CC BY-NC 4.0';
   assert.ok(checkMediaManifest(bad).some(e => /licencia no libre/.test(e)));
+  const unseen = structuredClone(manifest);
+  delete unseen.assets[0].seen;
+  assert.ok(checkMediaManifest(unseen).some(e => /no vio la foto/.test(e)));
   const banned = structuredClone(manifest);
-  banned.assets[0].url = 'https://images.pexels.com/x.jpg';
+  banned.assets[0].url = 'https://media.gettyimages.com/x.jpg';
   assert.ok(checkMediaManifest(banned).some(e => /dominio prohibido/.test(e)));
+  const stockAssets = Array.from({ length: 20 }, (_, i) => asset(i));
+  stockAssets[0] = {
+    ...stockAssets[0],
+    source: 'pexels',
+    url: 'https://images.pexels.com/photos/1/x.jpeg',
+    page: 'https://www.pexels.com/photo/1/',
+    photographerUrl: 'https://www.pexels.com/@ana',
+    license: 'Pexels License',
+  };
+  const stock = buildManifest({ match: { webId: 'm-1', home: 'A', away: 'B' }, assets: stockAssets });
+  assert.deepEqual(checkMediaManifest(stock, { matchId: 'm-1' }), []);
   assert.ok(checkMediaManifest(null).length > 0);
-  assert.deepEqual(ALLOWED_SOURCES, ['commons']);
+  assert.deepEqual(ALLOWED_SOURCES, ['commons', 'pexels', 'pixabay']);
   assert.equal(subjectFor('Álvaro Morata', 'File:Alvaro_Morata_training.jpg'), 'Álvaro Morata');
   assert.equal(subjectFor('San', 'File:San_Siro.jpg'), null);
   assert.equal(subjectFor('Dennis Man', 'File:Flag_of_Romania.jpg'), null);
   assert.equal(buildSequences([], 'm-1').length, 0);
   assert.match(buildAttribution([{ source: 'commons', photographer: 'Ana', license: 'CC0' }]), /Ana/);
+  assert.match(buildAttribution([{ source: 'pixabay', photographer: 'Luis', license: 'Pixabay Content License' }]), /Pixabay \(Pixabay Content License\)/);
+  const pexels = normalizePexelsPhoto({
+    id: 7,
+    photographer: 'Ana',
+    photographer_url: 'https://www.pexels.com/@ana',
+    url: 'https://www.pexels.com/photo/7/',
+    alt: 'Kenan Yıldız training',
+    src: { large: 'https://images.pexels.com/photos/7/large.jpeg', medium: 'https://images.pexels.com/photos/7/medium.jpeg' },
+  }, 'Kenan Yıldız footballer', { player: 'Kenan Yıldız' });
+  assert.equal(pexels.source, 'pexels');
+  assert.equal(pexels.license, 'Pexels License');
+  assert.equal(pexels.motive, 'training');
+  assert.equal(pexels.subject, 'Kenan Yıldız');
+  assert.equal(normalizePexelsPhoto({ id: 1 }, 'q'), null);
+  const pixabay = normalizePixabayHit({
+    id: 8,
+    user: 'Luis',
+    pageURL: 'https://pixabay.com/photos/8/',
+    largeImageURL: 'https://cdn.pixabay.com/photo/8.jpg',
+    webformatURL: 'https://cdn.pixabay.com/photo/8_640.jpg',
+    tags: 'portrait football',
+  }, 'Kenan Yıldız', { player: 'Kenan Yıldız' });
+  assert.equal(pixabay.source, 'pixabay');
+  assert.equal(pixabay.motive, 'portrait');
+  assert.equal(normalizePixabayHit({ id: 1, largeImageURL: 'http://insecure.example/a.jpg' }, 'q'), null);
+  assert.deepEqual(acceptVisionVerdict(
+    { ok: true, who: 'Kenan Yıldız', motive: 'portrait' },
+    { player: 'Kenan Yıldız' },
+  ), { subject: 'Kenan Yıldız', motive: 'portrait' });
+  assert.equal(acceptVisionVerdict({ ok: false, who: 'Kenan Yıldız', motive: 'portrait' }, { player: 'Kenan Yıldız' }), null);
+  assert.equal(acceptVisionVerdict({ ok: true, who: 'Otro', motive: 'portrait' }, { player: 'Kenan Yıldız' }), null);
+  assert.equal(acceptVisionVerdict({ ok: true, who: 'Kenan Yıldız', motive: 'player' }, { player: 'Kenan Yıldız' }), null);
+  assert.deepEqual(acceptVisionVerdict(
+    { ok: true, who: 'Jorginho', motive: 'after' },
+    { names: ['Jorginho', 'Kenan Yıldız'] },
+  ), { subject: 'Jorginho', motive: 'after' });
 });
