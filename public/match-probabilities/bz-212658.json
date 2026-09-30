@@ -1,15 +1,15 @@
 {
-  "id": "bz-212626",
+  "id": "bz-212658",
   "home": "Spain",
-  "away": "Croatia",
+  "away": "Czechia",
   "competition": "nations",
-  "kickoff": "2026-09-29T18:45:00+00:00",
-  "updatedAt": "2026-09-28T14:08:59.811Z",
+  "kickoff": "2026-10-03T18:45:00+00:00",
+  "updatedAt": "2026-09-30T11:37:51.558Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 2.02,
-      "away": 0.82
+      "home": 2.04,
+      "away": 0.79
     },
     "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
@@ -20,47 +20,59 @@
     },
     "standings": {
       "Spain": {
-        "position": 12,
+        "position": 1,
         "team": "Spain",
         "teamId": 475,
-        "played": 0,
-        "won": 0,
+        "played": 2,
+        "won": 2,
         "drawn": 0,
         "lost": 0,
         "goalsFor": null,
         "goalsAgainst": null,
         "goalDifference": null,
-        "points": 0,
-        "zone": null,
+        "points": 6,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
         "form": null
       },
-      "Croatia": {
-        "position": 2,
-        "team": "Croatia",
-        "teamId": 494,
-        "played": 0,
+      "Czechia": {
+        "position": 4,
+        "team": "Czechia",
+        "teamId": 930,
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 2,
         "goalsFor": null,
         "goalsAgainst": null,
         "goalDifference": null,
         "points": 0,
         "zone": {
-          "key": "playoff",
-          "label": "Promotion Playoffs",
-          "type": "promotion"
+          "key": "rel",
+          "label": "Relegation",
+          "type": "relegation"
         },
         "form": null
       }
     },
-    "scorers": null,
+    "scorers": {
+      "updatedAt": "2026-09-30T11:37:14.014Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-09-29T18:45:00+00:00",
+      "sampledAt": "2026-10-03T18:45:00+00:00",
       "source": "bzzoiro"
     },
-    "discipline": null,
+    "discipline": {
+      "updatedAt": "2026-09-30T11:37:14.014Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
     "history": {
       "rows": 150
     },
@@ -68,71 +80,71 @@
   },
   "markets": {
     "oneX2": {
-      "home": 0.644,
-      "draw": 0.223,
-      "away": 0.133
+      "home": 0.655,
+      "draw": 0.219,
+      "away": 0.125
     },
     "doubleChance": {
-      "12": 0.777,
-      "1X": 0.867,
-      "X2": 0.356
+      "12": 0.781,
+      "1X": 0.875,
+      "X2": 0.345
     },
     "dnb": {
-      "home": 0.828,
-      "away": 0.172
+      "home": 0.839,
+      "away": 0.161
     },
     "totals": {
-      "over15": 0.785,
-      "under15": 0.215,
-      "over25": 0.54,
-      "under25": 0.46,
-      "over35": 0.317,
-      "under35": 0.683
+      "over15": 0.783,
+      "under15": 0.217,
+      "over25": 0.538,
+      "under25": 0.462,
+      "over35": 0.315,
+      "under35": 0.685
     },
     "btts": {
-      "yes": 0.495,
-      "no": 0.505
+      "yes": 0.485,
+      "no": 0.515
     },
     "cleanSheet": {
-      "home": 0.44,
-      "away": 0.133
+      "home": 0.454,
+      "away": 0.13
     },
     "exactScores": [
       {
         "home": 2,
         "away": 0,
-        "p": 0.119
+        "p": 0.123
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.108
+        "p": 0.111
       },
       {
         "home": 1,
         "away": 1,
-        "p": 0.106
+        "p": 0.105
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.098
+        "p": 0.097
       },
       {
         "home": 3,
         "away": 0,
-        "p": 0.08
+        "p": 0.083
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.84,
-    "noGoal": 0.058,
+    "lambdaTotal": 2.83,
+    "noGoal": 0.059,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.377
+        "p": 0.376
       },
       {
         "from": 15,
@@ -157,109 +169,138 @@
       {
         "from": 75,
         "to": 90,
-        "p": 0.035
+        "p": 0.036
       }
     ],
-    "firstHome": 0.67,
-    "firstAway": 0.272
+    "firstHome": 0.678,
+    "firstAway": 0.263
   },
   "scorers": {
-    "home": null,
-    "away": null
+    "home": [
+      {
+        "player": "Lamine Yamal",
+        "goals": 3,
+        "matches": 2,
+        "share": 0.75,
+        "rate": 1.53,
+        "anytime": 0.783,
+        "first": 0.541
+      },
+      {
+        "player": "Alex Baena",
+        "goals": 1,
+        "matches": 2,
+        "share": 0.25,
+        "rate": 0.51,
+        "anytime": 0.4,
+        "first": 0.18
+      }
+    ],
+    "away": [
+      {
+        "player": "Adam Karabec",
+        "goals": 1,
+        "matches": 2,
+        "share": 0.9,
+        "rate": 0.71,
+        "anytime": 0.509,
+        "first": 0.251
+      }
+    ]
   },
-  "hasScorers": false,
+  "hasScorers": true,
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.682,
-      "draw": 0.198,
-      "away": 0.12,
+      "home": 0.7929999999999999,
+      "draw": 0.14,
+      "away": 0.067,
       "predicted": "H"
     },
     "xg": {
-      "home": 2.02,
-      "away": 0.82
+      "home": 2.04,
+      "away": 0.79
     },
-    "over15": 0.7659999999999999,
-    "over25": 0.535,
-    "over35": 0.309,
-    "btts": 0.491,
+    "over15": 0.8109999999999999,
+    "over25": 0.629,
+    "over35": 0.39799999999999996,
+    "btts": 0.441,
     "score": "2-0",
-    "cornersOver95": 0.48,
+    "cornersOver95": 0.42,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.682,
+      "favoriteProb": 0.793,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6818,
+    "confidence": 0.793,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-23T12:24:21.618Z",
+    "capturedAt": "2026-09-30T11:37:22.692Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.644,
-      "draw": 0.223,
-      "away": 0.133
+      "home": 0.655,
+      "draw": 0.219,
+      "away": 0.125
     },
     "doubleChance": {
-      "12": 0.777,
-      "1X": 0.867,
-      "X2": 0.356
+      "12": 0.781,
+      "1X": 0.875,
+      "X2": 0.345
     },
     "dnb": {
-      "home": 0.828,
-      "away": 0.172
+      "home": 0.839,
+      "away": 0.161
     },
     "totals": {
-      "over15": 0.785,
-      "under15": 0.215,
-      "over25": 0.54,
-      "under25": 0.46,
-      "over35": 0.317,
-      "under35": 0.683
+      "over15": 0.783,
+      "under15": 0.217,
+      "over25": 0.538,
+      "under25": 0.462,
+      "over35": 0.315,
+      "under35": 0.685
     },
     "btts": {
-      "yes": 0.495,
-      "no": 0.505
+      "yes": 0.485,
+      "no": 0.515
     },
     "cleanSheet": {
-      "home": 0.44,
-      "away": 0.133
+      "home": 0.454,
+      "away": 0.13
     },
     "exactScores": [
       {
         "home": 2,
         "away": 0,
-        "p": 0.135,
-        "share": 0.2561669829222012
+        "p": 0.139,
+        "share": 0.2598130841121496
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.108,
-        "share": 0.20493358633776093
+        "p": 0.111,
+        "share": 0.20747663551401874
       },
       {
         "home": 1,
         "away": 1,
-        "p": 0.106,
-        "share": 0.2011385199240987
+        "p": 0.105,
+        "share": 0.19626168224299068
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.098,
-        "share": 0.18595825426944976
+        "p": 0.097,
+        "share": 0.1813084112149533
       },
       {
         "home": 3,
         "away": 0,
-        "p": 0.08,
-        "share": 0.15180265654648958
+        "p": 0.083,
+        "share": 0.15514018691588788
       }
     ],
     "providerPick": {
@@ -271,60 +312,40 @@
   },
   "market": null,
   "h2h": {
-    "totalMatches": 7,
-    "homeWins": 4,
+    "totalMatches": 3,
+    "homeWins": 2,
     "draws": 1,
-    "awayWins": 2,
-    "avgTotalGoals": 3.7142857142857144,
+    "awayWins": 0,
+    "avgTotalGoals": 2.3333333333333335,
     "recent": [
       {
-        "eventId": 209197,
-        "date": "2024-06-15T16:00:00+00:00",
+        "eventId": 261486,
+        "date": "2022-06-12T18:45:00+00:00",
         "home": "Spain",
-        "away": "Croatia",
+        "away": "Czechia",
         "homeTeamId": 475,
-        "awayTeamId": 494,
-        "homeScore": 3,
+        "awayTeamId": 930,
+        "homeScore": 2,
         "awayScore": 0
       },
       {
-        "eventId": 261566,
-        "date": "2023-06-18T18:45:00+00:00",
-        "home": "Croatia",
+        "eventId": 261432,
+        "date": "2022-06-05T18:45:00+00:00",
+        "home": "Czechia",
         "away": "Spain",
-        "homeTeamId": 494,
+        "homeTeamId": 930,
         "awayTeamId": 475,
-        "homeScore": 0,
-        "awayScore": 0
-      },
-      {
-        "eventId": 274847,
-        "date": "2021-06-28T16:00:00+00:00",
-        "home": "Croatia",
-        "away": "Spain",
-        "homeTeamId": 494,
-        "awayTeamId": 475,
-        "homeScore": 3,
-        "awayScore": 5
-      },
-      {
-        "eventId": 338706,
-        "date": "2018-11-15T19:45:00+00:00",
-        "home": "Croatia",
-        "away": "Spain",
-        "homeTeamId": 494,
-        "awayTeamId": 475,
-        "homeScore": 3,
+        "homeScore": 2,
         "awayScore": 2
       },
       {
-        "eventId": 338652,
-        "date": "2018-09-11T18:45:00+00:00",
+        "eventId": 370260,
+        "date": "2016-06-13T13:00:00+00:00",
         "home": "Spain",
-        "away": "Croatia",
+        "away": "Czechia",
         "homeTeamId": 475,
-        "awayTeamId": 494,
-        "homeScore": 6,
+        "awayTeamId": 930,
+        "homeScore": 1,
         "awayScore": 0
       }
     ],
@@ -343,7 +364,7 @@
       "foulsAvg": null
     },
     "sample": {
-      "scorers": 0,
+      "scorers": 50,
       "historyRows": 150
     },
     "source": "GoatLab",
@@ -358,31 +379,31 @@
       "historyRows": 150
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 8.3
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.32,
-      "shotsOnTarget": 5.04,
-      "xg": 2.02,
-      "corners": 5.39,
-      "fouls": 12.65,
-      "yellowCards": 1.3,
-      "redCards": 0.5,
-      "offsides": 2.13,
-      "possession": 51.58
+      "shots": 13.75,
+      "shotsOnTarget": 5.09,
+      "xg": 2.04,
+      "corners": 4.35,
+      "fouls": 12.48,
+      "yellowCards": 1.27,
+      "redCards": 0.43,
+      "offsides": 2.44,
+      "possession": 54.29
     },
     "away": {
-      "shots": 10.68,
-      "shotsOnTarget": 3.76,
-      "xg": 0.82,
-      "corners": 4.21,
-      "fouls": 12.75,
-      "yellowCards": 1.66,
-      "redCards": 0.5,
-      "offsides": 2.25,
-      "possession": 48.42
+      "shots": 10.15,
+      "shotsOnTarget": 3.41,
+      "xg": 0.79,
+      "corners": 3.95,
+      "fouls": 12.62,
+      "yellowCards": 1.73,
+      "redCards": 0.57,
+      "offsides": 2.16,
+      "possession": 45.71
     },
     "sample": {
       "home": 5,
@@ -407,21 +428,21 @@
         "xg": 5,
         "corners": 5,
         "fouls": 5,
-        "yellowCards": 3,
-        "redCards": 0,
-        "offsides": 4
+        "yellowCards": 5,
+        "redCards": 1,
+        "offsides": 5
       }
     },
     "league": {
       "possession": 50,
-      "shots": 12,
-      "shotsOnTarget": 4.4,
-      "xg": 1.29,
-      "corners": 4.8,
-      "fouls": 12.7,
+      "shots": 11.95,
+      "shotsOnTarget": 4.25,
+      "xg": 1.26,
+      "corners": 4.15,
+      "fouls": 12.55,
       "yellowCards": 1.5,
       "redCards": 0.5,
-      "offsides": 2.22
+      "offsides": 2.3
     },
     "sources": {
       "home": {
@@ -431,7 +452,7 @@
         "corners": "Bzzoiro",
         "fouls": "Bzzoiro",
         "yellowCards": "Bzzoiro",
-        "redCards": "media",
+        "redCards": "Bzzoiro",
         "offsides": "Bzzoiro",
         "possession": "Bzzoiro"
       },
@@ -442,56 +463,55 @@
         "corners": "Bzzoiro",
         "fouls": "Bzzoiro",
         "yellowCards": "Bzzoiro",
-        "redCards": "media",
+        "redCards": "Bzzoiro",
         "offsides": "Bzzoiro",
         "possession": "Bzzoiro"
       }
     },
     "origins": [
-      "Bzzoiro",
-      "media"
+      "Bzzoiro"
     ],
     "xgSource": "Bzzoiro",
-    "shortSample": true,
-    "source": "Bzzoiro+media"
+    "shortSample": false,
+    "source": "Bzzoiro"
   },
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.586,
-      "draw": 0.122,
-      "away": 0.292
+      "home": 0.485,
+      "draw": 0.139,
+      "away": 0.376
     },
     "cardsDuel": {
-      "home": 0.3,
-      "draw": 0.241,
-      "away": 0.459
+      "home": 0.282,
+      "draw": 0.236,
+      "away": 0.482
     },
     "lastGoal": {
-      "home": 0.67,
-      "away": 0.272,
-      "noGoal": 0.058
+      "home": 0.678,
+      "away": 0.263,
+      "noGoal": 0.059
     },
     "cornerRace": {
       "3": {
-        "home": 0.614,
-        "away": 0.386
+        "home": 0.545,
+        "away": 0.455
       },
       "5": {
-        "home": 0.648,
-        "away": 0.352
+        "home": 0.559,
+        "away": 0.441
       },
       "7": {
-        "home": 0.675,
-        "away": 0.325
+        "home": 0.57,
+        "away": 0.43
       }
     },
     "cornerMargin": {
-      "home3plus": 0.33,
-      "home12": 0.255,
-      "level": 0.122,
-      "away12": 0.178,
-      "away3plus": 0.114
+      "home3plus": 0.229,
+      "home12": 0.256,
+      "level": 0.139,
+      "away12": 0.223,
+      "away3plus": 0.153
     },
     "source": "GoatLab"
   },
@@ -500,9 +520,9 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": 23.3,
-      "condition": "unknown",
-      "sampledAt": "2026-09-29T18:45:00+00:00",
+      "wind": 4.7,
+      "condition": "rain",
+      "sampledAt": "2026-10-03T18:45:00+00:00",
       "source": "bzzoiro"
     },
     "venue": {
@@ -532,29 +552,37 @@
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 12,
-        "played": 0,
+        "position": 1,
+        "played": 2,
         "gf": null,
         "ga": null,
         "provider": null
       },
-      "player": null
+      "player": {
+        "name": "Lamine Yamal",
+        "detail": "3 goles en 2 partidos",
+        "source": "líder del equipo en la temporada"
+      }
     },
     "away": {
-      "team": "Croatia",
+      "team": "Czechia",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 2,
-        "played": 0,
+        "position": 4,
+        "played": 2,
         "gf": null,
         "ga": null,
         "provider": null
       },
-      "player": null
+      "player": {
+        "name": "Adam Karabec",
+        "detail": "1 goles en 2 partidos",
+        "source": "líder del equipo en la temporada"
+      }
     }
   },
   "llmReview": null
