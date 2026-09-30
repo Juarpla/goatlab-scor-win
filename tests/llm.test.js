@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { resolveChain, withFailover, extractJson, hasTransportFailure, hasPermanentFailure, hasTruncatedFailure, createProviderBreaker, parseRetryAfter } from '../src/lib/llm.js';
 const logger = { warn() {} };
-const env = { MISTRAL_API_KEY: 'test-a', OPENCODE_GO_API_KEY: 'test-b' };
+const env = { MISTRAL_API_KEY: 'test-a', OPENCODE_GO_API_KEY: 'test-b', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL,OPENCODE_GO_MODEL' };
 const response = content => new Response(JSON.stringify({ choices: [{ message: { content } }] }));
 test('runtime resolution skips missing credentials and requirements and deduplicates', () => {
   assert.deepEqual(resolveChain({ ...env, WORKERS_AI_API_KEY: 'x', LLM_PROVIDER_ORDER: 'UNKNOWN_MODEL,MISTRAL_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL' }, logger).map(p => p.id), ['MISTRAL', 'OPENCODE_GO']);
@@ -11,7 +11,13 @@ test('HTTP error falls through exactly once and keeps temperature zero', async (
   const calls = [];
   const result = await withFailover([], { env, logger, fetchImpl: async (url, init) => { calls.push({ url, init }); return calls.length === 1 ? new Response('', { status: 429 }) : response('{"ok":true}'); }, validate: extractJson });
   assert.equal(calls.length, 2); assert.equal(result.value.ok, true);
-  assert.equal(JSON.parse(calls[1].init.body).temperature, 0);
+  const mistralBody = JSON.parse(calls[0].init.body);
+  const opencodeBody = JSON.parse(calls[1].init.body);
+  assert.equal(mistralBody.temperature, 0);
+  assert.ok(!('reasoning_effort' in mistralBody));
+  assert.equal(opencodeBody.model, 'mimo-v2.6-flash');
+  assert.ok(!('temperature' in opencodeBody));
+  assert.ok(!('reasoning_effort' in opencodeBody));
   assert.ok(calls[1].init.headers['x-opencode-session']);
 });
 test('caller validation failure and empty responses are aggregated', async () => {
@@ -31,11 +37,11 @@ test('los fallos quedan tipados: transporte vs validación', async () => {
   assert.ok(validation.details.every(d => d.provider && d.reason));
 });
 test('el proveedor que revive corta la cadena y reporta su modelo', async () => {
-  const result = await withFailover([], { env, logger, fetchImpl: async (url, init) => JSON.parse(init.body).model === 'mistral-small-latest'
+  const result = await withFailover([], { env, logger, fetchImpl: async (url, init) => JSON.parse(init.body).model === 'ministral-8b-2512'
     ? new Response('', { status: 500 })
     : response('{"ok":true}'), validate: extractJson });
   assert.equal(result.provider, 'OPENCODE_GO');
-  assert.equal(result.model, 'deepseek-v4-flash');
+  assert.equal(result.model, 'mimo-v2.6-flash');
 });
 test('thinking, nested data, arrays and braces in strings parse correctly', () => {
   assert.deepEqual(extractJson('<think>{ignore}</think>```json\n{"items":[{"label":"a } b"}]}\n```'), { items: [{ label: 'a } b' }] });
@@ -84,7 +90,7 @@ test('fusible integrado: tras la racha el proveedor deja de intentarse', async (
   const breaker = createProviderBreaker({ maxConsecutiveFailures: 1 });
   let mistralCalls = 0;
   const fetchImpl = async (url, init) => {
-    if (JSON.parse(init.body).model === 'mistral-small-latest') { mistralCalls += 1; return new Response('', { status: 429 }); }
+    if (JSON.parse(init.body).model === 'ministral-8b-2512') { mistralCalls += 1; return new Response('', { status: 429 }); }
     return response('{"ok":true}');
   };
   await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
@@ -116,6 +122,7 @@ test('mimo omite temperature para evitar 400 en thinking mode', async () => {
   assert.equal(calls.length, 1);
   assert.equal(calls[0].model, 'mimo-v2.6-flash');
   assert.ok(!('temperature' in calls[0]));
+  assert.ok(!('reasoning_effort' in calls[0]));
   assert.equal(result.model, 'mimo-v2.6-flash');
 });
 test('workers AI construye URL con account id y usa glm-4.7-flash', async () => {
@@ -133,4 +140,59 @@ test('opencode go construye URL zen/go sin duplicar chat/completions', async () 
   const oEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'mimo-v2.6-flash' };
   await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
   assert.ok(calls[0] === 'https://opencode.ai/zen/go/v1/chat/completions');
+});
+test('deepseek pide reasoning_effort max y temperatura cero', async () => {
+  const calls = [];
+  const deepseekEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_FALLBACK_MODEL', OPENCODE_GO_FALLBACK_MODEL: 'deepseek-v4.1-flash' };
+  await withFailover([], { env: deepseekEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
+  assert.equal(calls[0].model, 'deepseek-v4.1-flash');
+  assert.equal(calls[0].temperature, 0);
+  assert.equal(calls[0].reasoning_effort, 'max');
+});
+test('el fallback de OpenCode Go reusa la clave y entra en el orden por defecto', () => {
+  const chain = resolveChain({
+    MISTRAL_API_KEY: 'a',
+    WORKERS_AI_API_KEY: 'b',
+    CLOUDFLARE_ACCOUNT_ID: 'abc',
+    OPENCODE_GO_API_KEY: 'c',
+  }, logger);
+  assert.deepEqual(chain.map(p => p.id), ['MISTRAL', 'WORKERS_AI', 'OPENCODE_GO', 'OPENCODE_GO_FALLBACK']);
+  assert.equal(chain[2].model, 'mimo-v2.6-flash');
+  assert.equal(chain[3].model, 'deepseek-v4.1-flash');
+  assert.equal(chain[3].keyVar, 'OPENCODE_GO_API_KEY');
+  assert.equal(chain[0].model, 'ministral-8b-2512');
+});
+test('un orden en blanco usa la cadena por defecto', () => {
+  const chain = resolveChain({ MISTRAL_API_KEY: 'a', LLM_PROVIDER_ORDER: '   ' }, logger);
+  assert.deepEqual(chain.map(p => p.id), ['MISTRAL']);
+});
+test('reasoning_content cubre un content vacío', async () => {
+  const onlyReasoning = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'deepseek-v4.1-flash' };
+  const result = await withFailover([], {
+    env: onlyReasoning,
+    logger,
+    fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: '', reasoning_content: '{"ok":true}' }, finish_reason: 'stop' }] })),
+    validate: extractJson,
+  });
+  assert.equal(result.value.ok, true);
+});
+test('content en partes se concatena', async () => {
+  const partsEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL' };
+  const result = await withFailover([], {
+    env: partsEnv,
+    logger,
+    fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: [{ type: 'text', text: '{"ok":' }, { type: 'text', text: 'true}' }] }, finish_reason: 'stop' }] })),
+    validate: extractJson,
+  });
+  assert.equal(result.value.ok, true);
+});
+test('razonamiento sin respuesta y finish length es truncado', async () => {
+  const error = await withFailover([], {
+    env: { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL' },
+    logger,
+    maxTokens: 40,
+    fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: null, reasoning_content: 'pensando' }, finish_reason: 'length' }], usage: { completion_tokens: 40 } })),
+  }).catch(e => e);
+  assert.equal(hasTruncatedFailure(error), true);
+  assert.equal(hasTransportFailure(error), true);
 });

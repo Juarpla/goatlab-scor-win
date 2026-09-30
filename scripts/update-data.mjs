@@ -49,11 +49,18 @@ function buildBatchInput(items) {
   return items.map(({ match, compact }) => `## ${match.id}\n${compact}`).join('\n');
 }
 /* ---- Presupuesto y ritmo LLM (plan anti-desperdicio) ---- */
-const ANALYSIS_FULL_MAX = Math.max(0, Number(process.env.ANALYSIS_FULL_MAX ?? 10));
-const ANALYSIS_BATCH_SIZE = Math.max(1, Number(process.env.ANALYSIS_BATCH_SIZE ?? 2));
-const ANALYSIS_RETRY_MAX_TOKENS = Math.max(1, Number(process.env.ANALYSIS_RETRY_MAX_TOKENS ?? 5000));
-const ANALYSIS_BATCH_MAX_TOKENS = Math.max(1, Number(process.env.ANALYSIS_BATCH_MAX_TOKENS ?? 6000));
-const ANALYSIS_BATCH_RETRY_MAX_TOKENS = Math.max(1, Number(process.env.ANALYSIS_BATCH_RETRY_MAX_TOKENS ?? 8000));
+function envInt(name, fallback, min = 1) {
+  const raw = process.env[name]?.trim();
+  if (!raw) return fallback;
+  const value = Number(raw);
+  return Number.isFinite(value) ? Math.max(min, Math.floor(value)) : fallback;
+}
+const ANALYSIS_FULL_MAX = envInt('ANALYSIS_FULL_MAX', 10, 0);
+const ANALYSIS_BATCH_SIZE = envInt('ANALYSIS_BATCH_SIZE', 2);
+const ANALYSIS_MAX_TOKENS = envInt('ANALYSIS_MAX_TOKENS', 15_000);
+const ANALYSIS_RETRY_MAX_TOKENS = envInt('ANALYSIS_RETRY_MAX_TOKENS', 15_000);
+const ANALYSIS_BATCH_MAX_TOKENS = envInt('ANALYSIS_BATCH_MAX_TOKENS', 40_000);
+const ANALYSIS_BATCH_RETRY_MAX_TOKENS = envInt('ANALYSIS_BATCH_RETRY_MAX_TOKENS', 40_000);
 const LLM_TIMEOUT_SINGLE_MS = 180_000;
 const LLM_TIMEOUT_BATCH_MS = 300_000;
 const sleepWithJitter = (baseMs, jitterMs = 0) => new Promise(resolve => setTimeout(resolve, baseMs + Math.floor(Math.random() * Math.max(0, jitterMs))));
@@ -115,7 +122,7 @@ async function generateAnalysis(match, markets = null, ctx = {}) {
   const inputKey = buildAnalysisKey(match, markets, ctx);
   const failures = [];
   let madeAttempts = 0;
-  let maxTokens = 3000;
+  let maxTokens = ANALYSIS_MAX_TOKENS;
   let usage = null;
   let callId = null;
   // Dos intentos: el segundo (con techo mayor) solo si el fallo fue de transporte o truncado; validación no mejora reintentando.
@@ -246,6 +253,8 @@ async function ensureAnalyses(matches, analyses, prepare, { budget = ANALYSIS_FU
   }
   let batches = 0;
   for (let i = 0; i < pending.length; i += Math.max(1, batchSize)) {
+    // Un batch malo no deja el fusible cerrado para el resto de la corrida.
+    llmBreaker.reset();
     const chunk = pending.slice(i, i + Math.max(1, batchSize));
     if (chunk.length === 1) {
       const entry = await generateAnalysis(chunk[0].match, chunk[0].markets, chunk[0].ctx);

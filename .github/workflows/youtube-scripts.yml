@@ -1,0 +1,73 @@
+name: Guiones de Shorts
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Actualizar datos GoatLab"]
+    types: [completed]
+# Corre después de que los datos ya están en main. Un fallo de narración
+# no bloquea el deploy de probabilidades.
+permissions:
+  contents: write
+concurrency:
+  group: goatlab-shorts
+  cancel-in-progress: false
+jobs:
+  shorts:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # historial completo: el commit del bot hace rebase antes del push
+          ref: main # el SHA del workflow que disparó este job es el de antes del commit de datos
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Guiones de Shorts
+        id: scripts
+        continue-on-error: true # los JSON válidos se commitean aunque otro partido falle
+        run: node scripts/generate-youtube-scripts.mjs
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
+          OPENCODE_GO_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MISTRAL_BASE_URL: ${{ vars.MISTRAL_BASE_URL }}
+          MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          WORKERS_AI_MODEL: ${{ vars.WORKERS_AI_MODEL }}
+          OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
+          OPENCODE_GO_FALLBACK_MODEL: ${{ vars.OPENCODE_GO_FALLBACK_MODEL }}
+          LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
+      - name: Lint de guiones
+        run: node scripts/check-compliance.mjs
+      - name: Media-pack de Shorts (fotos con licencia)
+        run: node scripts/generate-media-pack.mjs
+      - name: Commit de guiones
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/youtube-scripts public/data/media-pack public/data/llm-health.json
+          if git diff --cached --quiet; then
+            echo "Sin cambios de guiones que commitear"
+          else
+            git commit -m "chore: update youtube scripts"
+            for i in 1 2 3; do
+              git fetch origin
+              if ! git rebase --autostash origin/main; then
+                git rebase --abort || true
+                echo "Conflicto con main: revisar a mano"
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                break
+              fi
+              echo "Push rechazado, reintento $i/3"
+              sleep 10
+            done
+          fi
+      - name: Fallos de redacción
+        if: steps.scripts.outcome == 'failure'
+        run: exit 1

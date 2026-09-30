@@ -25,15 +25,24 @@ export class LlmPermanentError extends Error {
   }
 }
 
+const openCodeGo = {
+  keyVar: 'OPENCODE_GO_API_KEY',
+  requires: [],
+  baseUrl: () => 'https://opencode.ai/zen/go/v1',
+  extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }),
+};
 export const providers = {
   // baseUrl admite override opcional (MISTRAL_BASE_URL) para servir modelos
   // de la misma firma OpenAI a través de otra pasarela.
-  MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'mistral-small-latest', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
+  MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
-  OPENCODE_GO: { name: 'OpenCode Go', keyVar: 'OPENCODE_GO_API_KEY', defaultModel: 'deepseek-v4-flash', requires: [], baseUrl: () => 'https://opencode.ai/zen/go/v1', extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }) },
+  OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'mimo-v2.6-flash', ...openCodeGo },
+  // Mismo gateway y misma clave. Solo cambia el modelo: DeepSeek acepta reasoning_effort.
+  OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
 };
+const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
 export function resolveChain(env = runtimeEnv(), logger = console) {
-  const order = env.LLM_PROVIDER_ORDER ?? 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL';
+  const order = env.LLM_PROVIDER_ORDER?.trim() || DEFAULT_PROVIDER_ORDER;
   const seen = new Set();
   return order.split(',').flatMap(value => {
     const id = value.trim().replace(/_MODEL$/, '');
@@ -46,15 +55,40 @@ export function resolveChain(env = runtimeEnv(), logger = console) {
     return [{ ...provider, id, model: env[`${id}_MODEL`]?.trim() || provider.defaultModel }];
   });
 }
+/** MiMo rechaza temperature y reasoning_effort (HTTP 400). DeepSeek sí acepta esfuerzo máximo. */
+function requestExtras(model) {
+  const name = String(model ?? '').toLowerCase();
+  if (name.startsWith('mimo-')) return {};
+  const extras = { temperature: 0 };
+  if (name.includes('deepseek')) extras.reasoning_effort = 'max';
+  return extras;
+}
+function textFromContent(content) {
+  if (typeof content === 'string') return content.trim();
+  if (!Array.isArray(content)) return '';
+  return content.map(part => {
+    if (typeof part === 'string') return part;
+    if (typeof part?.text === 'string') return part.text;
+    if (typeof part?.content === 'string') return part.content;
+    return '';
+  }).join('').trim();
+}
+/** Algunos modelos gastan el techo en reasoning y dejan content vacío o en partes. */
+function textFromMessage(message) {
+  const visible = textFromContent(message?.content);
+  if (visible) return visible;
+  for (const key of ['reasoning_content', 'reasoning', 'reasoning_text']) {
+    if (typeof message?.[key] === 'string' && message[key].trim()) return message[key].trim();
+  }
+  return '';
+}
 export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
   let res;
-  // Mimo en thinking mode no acepta temperature custom (fuerza 1.0/0.95): omitir evita HTTP 400.
-  const omitTemperature = String(provider.model ?? '').toLowerCase().startsWith('mimo-');
   try {
     res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
       method: 'POST', signal: AbortSignal.timeout(timeoutMs),
       headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
-      body: JSON.stringify({ model: provider.model, ...(omitTemperature ? {} : { temperature: 0 }), messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
+      body: JSON.stringify({ model: provider.model, ...requestExtras(provider.model), messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
     });
   } catch (error) {
     throw new LlmTransportError(error?.message ?? 'Error de red', { provider: provider.id });
@@ -65,10 +99,10 @@ export async function callProvider(provider, messages, { env = runtimeEnv(), fet
     throw new LlmTransportError(`HTTP ${res.status}`, { provider: provider.id, retryAfterMs: parseRetryAfter(res.headers?.get?.('retry-after')) });
   }
   const body = await res.json();
-  const content = body?.choices?.[0]?.message?.content;
+  const content = textFromMessage(body?.choices?.[0]?.message);
   const usage = normalizeUsage(body?.usage);
   const finishReason = body?.choices?.[0]?.finish_reason ?? null;
-  if (typeof content !== 'string' || !content.trim()) throw new LlmTransportError('Respuesta vacía o inválida', { provider: provider.id, usage });
+  if (!content) throw new LlmTransportError('Respuesta vacía o inválida', { provider: provider.id, usage });
   if (finishReason === 'length' || (maxTokens !== undefined && usage.outputTokens != null && usage.outputTokens >= maxTokens)) {
     throw new LlmTransportError(`Respuesta truncada (techo ${maxTokens} tokens)`, { provider: provider.id, truncated: true, usage });
   }
