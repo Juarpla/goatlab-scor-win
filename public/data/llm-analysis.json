@@ -1782,5 +1782,235 @@
     "generatedAt": "2026-09-30T13:28:37.256Z",
     "inputKey": "v3|M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS\nP|2.16|0.77|0.684|0.205|0.111|0.561|0.484\nB|0.831|0.12|0.049|2.16|0.77|0.602|0.39|2-0|0.412\nB2|H|0.831|no|no\nH|2|2|0|0|3.5\nT|3|Belarus|2|1||\nT|4|San Marino|2|0||\nHR|2018-11-18|San Marino|Belarus|0|2\nHR|2018-09-08|Belarus|San Marino|5|0",
     "materialKey": "M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212658": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "España vs República Checa: Clave en la ruta a 2026",
+        "bullets": [
+          "Partido de clasificación para el Mundial 2026, con España buscando consolidar su liderazgo en el Grupo B (1° con 6 pts).",
+          "República Checa en zona de repechaje (2° con 0 pts), con presión por evitar la eliminación directa."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Contraste entre modelos: Poisson vs CatBoost",
+        "bullets": [
+          "Poisson GoatLab: Probabilidad de victoria española (79.4%), empate (21.9%), derrota (12.5%).",
+          "CatBoost Bzzoiro: Mayor probabilidad de victoria española (79.3%), pero con menor confianza en goles (2-0 con 42%).",
+          "API-Football: Distribución similar a Poisson, pero con umbral de goles más bajo (mayor probabilidad en 1-0 o 2-0)."
+        ],
+        "stats": [
+          {
+            "value": "79.4%",
+            "label": "Prob. victoria España (P)"
+          },
+          {
+            "value": "21.9%",
+            "label": "Prob. empate (P)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Enfrentamientos previos: Dominio español",
+        "bullets": [
+          "España lidera la serie histórica (3-2-1), con victoria en el último duelo (2022, 2-0).",
+          "Último empate en 2016 (1-0), pero República Checa no gana en España desde 2009 (0-2).",
+          "Promedio de goles por partido: 2.33 (España anota más, pero Chequia defiende bien)."
+        ],
+        "stats": [
+          {
+            "value": "3-2-1",
+            "label": "Balance España-Chequia"
+          },
+          {
+            "value": "2022",
+            "label": "Último encuentro"
+          },
+          {
+            "value": "2.33",
+            "label": "Goles/pj promedio"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación actual: España invicta",
+        "bullets": [
+          "España en 1° lugar con 6 puntos (2 victorias, 0 empates, 0 derrotas).",
+          "República Checa en 4° lugar con 0 puntos (0 victorias, 0 empates, 2 derrotas).",
+          "Diferencia de goles clave: España +6, Chequia -2."
+        ],
+        "stats": [
+          {
+            "value": "+6",
+            "label": "Dif. goles España"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros en juego: Lamine Yamal y Adam Karabec",
+        "bullets": [
+          "Lamine Yamal (España): 3 goles y 2 asistencias en 2024, clave en la ofensiva española.",
+          "Adam Karabec (Chequia): 1 gol y 2 asistencias, pero con menor impacto en partidos recientes.",
+          "Alex Baena (España): 1 gol y 2 asistencias, pero sin minutos recientes en selección."
+        ],
+        "stats": [
+          {
+            "value": "3 goles",
+            "label": "Yamal (España)"
+          },
+          {
+            "value": "1 gol",
+            "label": "Karabec (Chequia)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos climáticos limitados",
+        "detail": "Solo se indica lluvia en la sede, pero no se especifica intensidad ni impacto en el césped o visibilidad."
+      },
+      {
+        "label": "Bajas no detalladas",
+        "detail": "No hay información sobre bajas confirmadas en ninguno de los dos equipos, lo que podría alterar alineaciones."
+      },
+      {
+        "label": "Consenso externo ausente",
+        "detail": "El campo M2 (consenso externo) no está presente en el input, por lo que no se puede comparar con modelos internos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los datos de modelos (P/B) son consistentes entre sí, pero la lectura de CatBoost Bzzoiro (B2) muestra una discrepancia notable al declarar 'no' en ambos goles totales (0.793 de victoria sin goles asignados), lo que contrasta con su probabilidad de victoria. Esto podría indicar un error en la interp"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T22:25:47.229Z",
+    "inputKey": "v3|M|bz-212658|Spain|Czechia|nations|2026-10-03T18:45:00+00:0|NS\nP|2.04|0.79|0.655|0.219|0.125|0.538|0.485\nB|0.793|0.14|0.067|2.04|0.79|0.629|0.441|2-0|0.42\nB2|H|0.793|no|no\nH|3|2|1|0|2.33\nW||rain|5|\nT|1|Spain|2|6||\nT|4|Czechia|2|0||\nS|Lamine Yamal|Spain|3|2\nS|Alex Baena|Spain|1|2\nS|Adam Karabec|Czechia|1|2\nHR|2022-06-12|Spain|Czechia|2|0\nHR|2022-06-05|Czechia|Spain|2|2\nHR|2016-06-13|Spain|Czechia|1|0",
+    "materialKey": "M|bz-212658|Spain|Czechia|nations|2026-10-03T18:45:00+00:0|NS"
+  },
+  "bz-212634": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Clasificación para 2026: Suiza vs Eslovenia",
+        "bullets": [
+          "Partido de la Liga C de la UEFA Nations League (Grupo 2) con impacto directo en la clasificación para el Mundial 2026.",
+          "Ambos equipos buscan consolidar su posición en el Grupo 2, donde Suiza lidera con 6 puntos y Eslovenia ocupa el segundo lugar con 4."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Puntos Suiza (1°)"
+          },
+          {
+            "value": "4",
+            "label": "Puntos Eslovenia (2°)"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades y estimaciones de modelos",
+        "bullets": [
+          "Poisson GoatLab: 1.53 goles totales, con probabilidad de victoria para Suiza del 53% y Eslovenia del 28%.",
+          "CatBoost Bzzoiro: 1.53 goles totales, con victoria suiza del 53% y empate del 44%. Estimación declarada: 1-0 (41.8%).",
+          "API-Football: Mayor probabilidad de victoria para Suiza (47.7%), con distribución de goles: 0-0 (21%), 1-0 (43.8%), 2-0 (28.2%)."
+        ],
+        "stats": [
+          {
+            "value": "1.53",
+            "label": "Goles totales (P/B)"
+          },
+          {
+            "value": "53%",
+            "label": "Prob. victoria Suiza (P/B)"
+          },
+          {
+            "value": "47.7%",
+            "label": "Mayor prob. API-Football"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Enfrentamientos recientes y tendencias",
+        "bullets": [
+          "En los últimos 4 partidos, Suiza ha ganado 3 y empatado 1, mientras Eslovenia ha ganado 1 y empatado 2.",
+          "Último encuentro en 2025 (13-10): empate 0-0 en Eslovenia; anterior victoria suiza por 3-0 en 2025 (08-09)."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Victorias Suiza últimos 4"
+          },
+          {
+            "value": "0-0",
+            "label": "Último resultado (2025)"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros clave en la clasificación",
+        "bullets": [
+          "Zeki Amdouni (Suiza) lidera con 3 goles y 2 asistencias en la Nations League, clave para el ataque suizo.",
+          "Aljoša Matko (Eslovenia) aporta 1 gol y 2 asistencias, pero con menor impacto goleador en el grupo."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles Amdouni (Suiza)"
+          },
+          {
+            "value": "1",
+            "label": "Goles Matko (Eslovenia)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha y contexto actual",
+        "bullets": [
+          "Suiza mantiene una racha positiva en partidos recientes, aunque sin victorias en los últimos 2 encuentros de Nations League (empate 0-0 vs. Eslovenia en 2025).",
+          "Clima y sede desconocidos para este partido, lo que añade incertidumbre táctica."
+        ],
+        "stats": [
+          {
+            "value": "0-0",
+            "label": "Último resultado (2025)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos climáticos/sede",
+        "detail": "Falta información específica sobre el clima o condiciones del estadio para este partido, lo que podría influir en el rendimiento."
+      },
+      {
+        "label": "Bajas confirmadas",
+        "detail": "No se proporcionan bajas confirmadas en jugadores clave, lo que podría alterar el equilibrio táctico."
+      },
+      {
+        "label": "Consenso externo (M2)",
+        "detail": "No se incluye consenso externo en el input, por lo que no hay datos para comparar con los modelos internos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los modelos Poisson y CatBoost coinciden en la estimación de goles totales (1.53), pero difieren ligeramente en la probabilidad de empate (43.8% vs. 44.1%). La API-Football sugiere una distribución más equilibrada en goles, con un 43.8% de probabilidad para el resultado 1-0. El historial reciente mu"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T22:32:58.411Z",
+    "inputKey": "v3|M|bz-212634|Switzerland|Slovenia|nations|2026-10-03T18:45:00+00:0|NS\nP|1.53|0.9|0.508|0.282|0.21|0.438|0.477\nB|0.531|0.268|0.201|1.53|0.9|0.441|0.475|1-0|0.418\nB2|H|0.531|no|no\nH|4|3|1|0|1.5\nW||unknown|4|\nT|1|Switzerland|2|6||\nT|2|Slovenia|2|4||\nS|Zeki Amdouni|Switzerland|3|2\nS|Aljoša Matko|Slovenia|1|2\nHR|2025-10-13|Slovenia|Switzerland|0|0\nHR|2025-09-08|Switzerland|Slovenia|3|0\nHR|2013-10-15|Switzerland|Slovenia|1|0\nHR|2012-09-07|Slovenia|Switzerland|0|2",
+    "materialKey": "M|bz-212634|Switzerland|Slovenia|nations|2026-10-03T18:45:00+00:0|NS"
   }
 }
