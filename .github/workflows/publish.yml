@@ -53,6 +53,21 @@ jobs:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           BZZOIRO_API_TOKEN: ${{ secrets.BZZOIRO_API_TOKEN }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
+          OPENCODE_GO_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MISTRAL_BASE_URL: ${{ vars.MISTRAL_BASE_URL }}
+          MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          WORKERS_AI_MODEL: ${{ vars.WORKERS_AI_MODEL }}
+          OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
+          OPENCODE_GO_FALLBACK_MODEL: ${{ vars.OPENCODE_GO_FALLBACK_MODEL }}
+          LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
+          ANALYSIS_BATCH_SIZE: ${{ vars.ANALYSIS_BATCH_SIZE }}
+          ANALYSIS_MAX_TOKENS: ${{ vars.ANALYSIS_MAX_TOKENS }}
+          ANALYSIS_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_RETRY_MAX_TOKENS }}
+          ANALYSIS_BATCH_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_MAX_TOKENS }}
+          ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
       - uses: actions/upload-artifact@v4
         with:
           name: goatlab-data

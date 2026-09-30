@@ -11,7 +11,7 @@ import { fetchKickoffWeather } from '../src/lib/weather.js';
 import { normalize, resolveCanonical, webMatchId, canonicalClubKey, sameClub } from '../src/lib/teams.js';
 import { mapMarketProbs } from '../src/lib/odds.js';
 import { withFailover, extractJson, hasTransportFailure, hasTruncatedFailure, createProviderBreaker } from '../src/lib/llm.js';
-import { adoptAnalyses, findAnalysis, buildAnalysisKey, parseBatchAnalyses } from '../src/lib/analysis.js';
+import { adoptAnalyses, findAnalysis, analysisIsFresh, buildAnalysisKey, buildMaterialKey, parseBatchAnalyses } from '../src/lib/analysis.js';
 import { mergeResolvedLeagues, providerLeagueId } from '../src/lib/leagues.js';
 import { toCompactInput } from '../src/lib/compact.js';
 import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../src/lib/predictions.js';
@@ -61,6 +61,7 @@ const ANALYSIS_MAX_TOKENS = envInt('ANALYSIS_MAX_TOKENS', 15_000);
 const ANALYSIS_RETRY_MAX_TOKENS = envInt('ANALYSIS_RETRY_MAX_TOKENS', 15_000);
 const ANALYSIS_BATCH_MAX_TOKENS = envInt('ANALYSIS_BATCH_MAX_TOKENS', 40_000);
 const ANALYSIS_BATCH_RETRY_MAX_TOKENS = envInt('ANALYSIS_BATCH_RETRY_MAX_TOKENS', 40_000);
+const ANALYSIS_PHASE_MAX_MS = envInt('ANALYSIS_PHASE_MAX_MS', 6 * 60_000, 0);
 const LLM_TIMEOUT_SINGLE_MS = 180_000;
 const LLM_TIMEOUT_BATCH_MS = 300_000;
 const sleepWithJitter = (baseMs, jitterMs = 0) => new Promise(resolve => setTimeout(resolve, baseMs + Math.floor(Math.random() * Math.max(0, jitterMs))));
@@ -136,7 +137,7 @@ async function generateAnalysis(match, markets = null, ctx = {}) {
       usage = analysis.usage;
       callId = analysis.callId;
       noteLlmHealth({ at: new Date().toISOString(), matchId: match.id, attempts: madeAttempts, failures: failures.slice(0, 8), ok: { provider: analysis.provider, model: analysis.model }, usage, truncated: false, maxTokens, batchSize: 1, callId });
-      return { ...analysis.value, provider: analysis.provider, model: analysis.model, generatedAt: new Date().toISOString(), inputKey };
+      return { ...analysis.value, provider: analysis.provider, model: analysis.model, generatedAt: new Date().toISOString(), inputKey, materialKey: buildMaterialKey(match, markets, ctx) };
     } catch (error) {
       const configured = !/No hay proveedores/.test(String(error?.message ?? ''));
       const details = Array.isArray(error?.details) && error.details.length
@@ -192,7 +193,7 @@ async function generateAnalysesBatch(pairs) {
         const pair = pairs.find(row => row.match.id === matchId);
         try {
           const entry = validateAnalysis(value);
-          ok.push({ matchId, entry: { ...entry, provider: result.provider, model: result.model, generatedAt: new Date().toISOString(), inputKey: buildAnalysisKey(pair.match, pair.markets, pair.ctx) } });
+          ok.push({ matchId, entry: { ...entry, provider: result.provider, model: result.model, generatedAt: new Date().toISOString(), inputKey: buildAnalysisKey(pair.match, pair.markets, pair.ctx), materialKey: buildMaterialKey(pair.match, pair.markets, pair.ctx) } });
         } catch (error) {
           failed.push({ matchId, reason: `Validación: ${error?.message ?? error}`, failures: failures.slice(0, 8) });
         }
@@ -252,7 +253,12 @@ async function ensureAnalyses(matches, analyses, prepare, { budget = ANALYSIS_FU
     pending.push({ match, markets, ctx: fullCtx });
   }
   let batches = 0;
+  const phaseStarted = Date.now();
   for (let i = 0; i < pending.length; i += Math.max(1, batchSize)) {
+    if (ANALYSIS_PHASE_MAX_MS > 0 && Date.now() - phaseStarted >= ANALYSIS_PHASE_MAX_MS) {
+      console.log(`análisis: tope de tiempo; ${pending.length - i} pendiente(s) para el catch-up.`);
+      break;
+    }
     // Un batch malo no deja el fusible cerrado para el resto de la corrida.
     llmBreaker.reset();
     const chunk = pending.slice(i, i + Math.max(1, batchSize));
@@ -1409,7 +1415,7 @@ async function full() {
   await capturePredictions(windowMatches, results);
   try { await import('./evaluate-predictions.mjs'); } catch (error) { console.warn(`Evaluación no completada: ${error.message}`); }
 
-  // Análisis LLM para partidos no jugados; cacheado por inputKey. Pausa corta entre partidos.
+  // Análisis LLM para partidos no jugados; vigente si no cambió hora, estado ni bajas.
   // El mapa vive en memoria y se persiste al final: pruneAnalysis relee el disco
   // y descartaría lo recién generado.
   const previous = analyses;
@@ -1418,7 +1424,7 @@ async function full() {
     await ensureAnalyses(aliveWindow, previous, match => {
       const markets = resolveMatchMarkets({ match, results, scorers: scorersMerged?.[match.competition] ?? null, standings: standingsBase });
       const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
-      return { markets, fullCtx, fresh: previous[match.id]?.inputKey === buildAnalysisKey(match, markets, fullCtx) };
+      return { markets, fullCtx, fresh: analysisIsFresh(previous[match.id], match, markets, fullCtx) };
     });
     const validIds = new Set(aliveWindow.map(match => match.id));
     await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(previous).filter(([id]) => validIds.has(id))));
@@ -1459,7 +1465,7 @@ async function analysisOnly() {
     await ensureAnalyses(aliveWindow, previous, match => {
       const markets = resolveMatchMarkets({ match, results, scorers: scorersMergedOnly?.[match.competition] ?? null, standings: standingsBase });
       const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
-      return { markets, fullCtx, fresh: previous[match.id]?.inputKey === buildAnalysisKey(match, markets, fullCtx) };
+      return { markets, fullCtx, fresh: analysisIsFresh(previous[match.id], match, markets, fullCtx) };
     });
     const validIds = new Set(aliveWindow.map(match => match.id));
     await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(previous).filter(([id]) => validIds.has(id))));

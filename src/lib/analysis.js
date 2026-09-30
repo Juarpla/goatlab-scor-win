@@ -18,6 +18,25 @@ export function buildAnalysisKey(match, markets = null, ctx = {}) {
   return `v3|${toCompactInput(match, markets, ctx)}`;
 }
 
+/** Líneas que obligan a reescribir la lectura: identidad del partido (M) y bajas (L).
+ *  Probabilidades, cuotas y clima quedan fuera: la tabla de números se actualiza sola. */
+export function buildMaterialKey(match, markets = null, ctx = {}) {
+  return toCompactInput(match, markets, ctx)
+    .split('\n')
+    .filter(line => line.startsWith('M|') || line.startsWith('L|'))
+    .join('\n');
+}
+
+/** Una lectura con `materialKey` sigue vigente si no cambió M ni L.
+ *  Las guardadas antes de ese sello se comparan con el `inputKey` completo. */
+export function analysisIsFresh(stored, match, markets = null, ctx = {}) {
+  if (!stored || typeof stored !== 'object') return false;
+  if (typeof stored.materialKey === 'string' && stored.materialKey) {
+    return stored.materialKey === buildMaterialKey(match, markets, ctx);
+  }
+  return typeof stored.inputKey === 'string' && stored.inputKey === buildAnalysisKey(match, markets, ctx);
+}
+
 /**
  * Parte la respuesta batch en valores por partido, sin validar el contenido
  * (eso lo hace validateAnalysis por ítem en el pipeline). Pura y testeable:

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { matchIdentity, entryIdentity, sameFixture, findAnalysis, adoptAnalyses, buildAnalysisKey, parseBatchAnalyses } from '../src/lib/analysis.js';
+import { matchIdentity, entryIdentity, sameFixture, findAnalysis, adoptAnalyses, buildAnalysisKey, buildMaterialKey, analysisIsFresh, parseBatchAnalyses } from '../src/lib/analysis.js';
 
 const v2Key = (id, home, away, kickoff) => `v2|M|${id}|${home}|${away}|laliga|${kickoff}|NS\nP|1.7|1.1|0.5|0.3|0.2|0.4|0.5`;
 const entry = overrides => ({ summary: [{ title: 't', bullets: ['a', 'b'] }], limitations: [{ label: 'l', detail: 'd' }], ...overrides });
@@ -80,6 +80,34 @@ test('buildAnalysisKey sella v3 y es estable: generar == comparar (el full salta
   const markets = { lambdas: { home: 1.6, away: 1.1 }, markets: { oneX2: { home: 0.5, draw: 0.25, away: 0.25 } } };
   assert.notEqual(buildAnalysisKey(match, markets, {}), stored.inputKey); // cambió el input → sí regenera
   assert.equal(buildAnalysisKey(match, null, {}), stored.inputKey); // mismo input → se salta
+});
+
+test('buildMaterialKey ignora números y cambia con hora, estado o bajas', () => {
+  const match = { id: 'af-1', home: 'Osasuna', away: 'Rayo Vallecano', competition: 'laliga', kickoff: '2026-09-19T12:00:00Z', status: 'NS' };
+  const markets = { lambdas: { home: 1.6, away: 1.1 }, markets: { oneX2: { home: 0.5, draw: 0.25, away: 0.25 }, totals: { over25: 0.6 }, btts: { yes: 0.4 } } };
+  const base = buildMaterialKey(match, null, {});
+  assert.equal(buildMaterialKey(match, markets, { weather: { 'af-1': { temp: 18, condition: 'clear' } }, market: { oneX2: { home: 0.48 } } }), base);
+  assert.ok(base.startsWith('M|'));
+  assert.equal(base.includes('\n'), false);
+  assert.notEqual(buildMaterialKey({ ...match, status: 'LIVE' }, null, {}), base);
+  assert.notEqual(buildMaterialKey({ ...match, kickoff: '2026-09-19T14:00:00Z' }, null, {}), base);
+  const out = { ...match, lineups: { unavailablePlayers: [{ team: 'home', name: 'Budimir' }] } };
+  const withAbsence = buildMaterialKey(out, null, {});
+  assert.notEqual(withAbsence, base);
+  assert.ok(withAbsence.includes('\nL|'));
+});
+
+test('analysisIsFresh conserva la lectura si solo se mueven los números', () => {
+  const match = { id: 'af-1', home: 'Osasuna', away: 'Rayo Vallecano', competition: 'laliga', kickoff: '2026-09-19T12:00:00Z', status: 'NS' };
+  const stored = { inputKey: buildAnalysisKey(match, null, {}), materialKey: buildMaterialKey(match, null, {}) };
+  const markets = { lambdas: { home: 1.2, away: 1.4 }, markets: { oneX2: { home: 0.3, draw: 0.3, away: 0.4 } } };
+  assert.equal(analysisIsFresh(stored, match, markets, {}), true);
+  assert.equal(analysisIsFresh(stored, { ...match, status: 'POSTP' }, null, {}), false);
+  const legacy = { inputKey: buildAnalysisKey(match, null, {}) };
+  assert.equal(analysisIsFresh(legacy, match, null, {}), true);
+  assert.equal(analysisIsFresh(legacy, match, markets, {}), false);
+  assert.equal(analysisIsFresh(null, match, null, {}), false);
+  assert.equal(analysisIsFresh({}, match, null, {}), false);
 });
 
 test('parseBatchAnalyses reparte por matchId y reporta faltantes e inesperados', () => {
