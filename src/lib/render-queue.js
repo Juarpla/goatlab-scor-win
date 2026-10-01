@@ -34,10 +34,21 @@ export function queueDecision({ ready, request }) {
   return 'pending';
 }
 
-/** Últimas líneas útiles del log, para el mensaje de Telegram. */
+/** Últimas líneas útiles del log, para el mensaje de Telegram. No dice que falten fotos. */
 export function photoFailureText(log) {
   const lines = String(log ?? '').split('\n').map(line => line.trim()).filter(Boolean);
-  const useful = lines.filter(line => /faltan fotos|visión|vision|HTTP|agnes|error|fallo|truncad/i.test(line));
-  const tail = (useful.length ? useful : lines).slice(-5);
+  const useful = lines.filter(line => !/faltan fotos/i.test(line) && /visión|vision|HTTP|agnes|error|fallo|truncad/i.test(line));
+  const tail = (useful.length ? useful : lines.filter(line => !/faltan fotos/i.test(line))).slice(-5);
   return tail.join('\n').slice(0, 500);
+}
+
+/** Aviso al chat cuando un audio no se puede renderizar. No reenvía el archivo. */
+export function audioFailureText(n, error) {
+  const raw = String(error ?? '').split('\n')[0].trim();
+  const corrupt = /ffmpeg|ffprobe|descarga|getFile|invalid data|moov|corrupt|ebml|ogg|no such file/i.test(raw);
+  if (corrupt) return `El audio ${n} que enviaste está corrompido. Grábalo otra vez.`;
+  const reason = raw.replace(/^Error:\s*/i, '').slice(0, 120);
+  return reason
+    ? `El audio ${n} no se pudo usar. Grábalo otra vez. ${reason}`
+    : `El audio ${n} no se pudo usar. Grábalo otra vez.`;
 }

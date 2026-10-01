@@ -23,7 +23,7 @@ import {
 } from '../src/lib/media.js';
 import { agnesPrompts, normalizeAgnesImage } from '../src/lib/agnes.js';
 import { checkMediaManifest } from '../src/lib/compliance.js';
-import { extractJson, resolveChain, withFailover } from '../src/lib/llm.js';
+import { extractJson, parseRetryAfter, resolveChain, withFailover } from '../src/lib/llm.js';
 
 const args = new Map(process.argv.slice(2).map(a => {
   const i = a.indexOf('=');
@@ -253,6 +253,11 @@ async function agnesImage(prompt, model, key) {
     }),
     signal: AbortSignal.timeout(120_000),
   });
+  if (res.status === 429) {
+    const error = new Error('HTTP 429');
+    error.retryAfterMs = parseRetryAfter(res.headers.get('retry-after')) || 15_000;
+    throw error;
+  }
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   const item = data?.data?.[0] ?? data?.images?.[0] ?? data;
@@ -271,27 +276,61 @@ async function agnesImage(prompt, model, key) {
   return { buf, ext: sniffImage(buf) };
 }
 
+/** Como máximo 8 arranques por minuto: el plan gratis de Agnes en 2K ejecuta 10. */
+function agnesGate(limit = 8, windowMs = 60_000) {
+  const starts = [];
+  let chain = Promise.resolve();
+  return function takeSlot() {
+    const run = chain.then(async () => {
+      for (;;) {
+        const now = Date.now();
+        while (starts.length && now - starts[0] >= windowMs) starts.shift();
+        if (starts.length < limit) {
+          starts.push(now);
+          return;
+        }
+        await new Promise(resolve => setTimeout(resolve, windowMs - (now - starts[0]) + 50));
+      }
+    });
+    chain = run.then(() => {}, () => {});
+    return run;
+  };
+}
+
 /** Genera solo las fotos que faltan para llegar a 20. Sin clave, no genera. */
 async function fillWithAgnes({ matchId, home, away, missing }) {
   const key = process.env.AGNES_API_KEY?.trim();
-  const cap = envInt('AGNES_MAX_IMAGES', 10);
+  const cap = envInt('AGNES_MAX_IMAGES', 20);
   const count = Math.min(missing, cap);
   if (!key || count <= 0) {
-    if (missing > 0 && !key) console.error('media: faltan fotos y no hay AGNES_API_KEY');
+    if (missing > 0 && !key) console.error('media: agnes sin clave');
     return [];
   }
   const model = process.env.AGNES_IMAGE_MODEL?.trim() || 'agnes-image-2.1-flash';
   const prompts = agnesPrompts({ home, away, count });
   const folder = join(dir, 'gen', matchId);
   await mkdir(folder, { recursive: true });
+  const takeSlot = agnesGate();
   const made = [];
   let cursor = 0;
+  async function one(index) {
+    await takeSlot();
+    try {
+      return await agnesImage(prompts[index], model, key);
+    } catch (error) {
+      if (error.retryAfterMs == null) throw error;
+      console.error(`media: agnes ${index}: HTTP 429, reintento`);
+      await new Promise(resolve => setTimeout(resolve, error.retryAfterMs));
+      await takeSlot();
+      return agnesImage(prompts[index], model, key);
+    }
+  }
   async function worker() {
     while (cursor < prompts.length) {
       const index = cursor;
       cursor += 1;
       try {
-        const image = await agnesImage(prompts[index], model, key);
+        const image = await one(index);
         const file = `${index}.${image.ext}`;
         await writeFile(join(folder, file), image.buf);
         made.push(normalizeAgnesImage({

@@ -36,9 +36,9 @@ export const providers = {
   // de la misma firma OpenAI a través de otra pasarela.
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
-  OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'mimo-v2.6-flash-free', ...openCodeGo },
+  OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
   // Mismo gateway y misma clave. Solo cambia el modelo. Ninguno manda reasoning_effort.
-  OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'space-bunny-free', ...openCodeGo },
+  OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'mimo-v2.6-flash', ...openCodeGo },
 };
 const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
 export function resolveChain(env = runtimeEnv(), logger = console, { orderVar } = {}) {

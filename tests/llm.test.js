@@ -15,8 +15,8 @@ test('HTTP error falls through exactly once and keeps temperature zero', async (
   const opencodeBody = JSON.parse(calls[1].init.body);
   assert.equal(mistralBody.temperature, 0);
   assert.ok(!('reasoning_effort' in mistralBody));
-  assert.equal(opencodeBody.model, 'mimo-v2.6-flash-free');
-  assert.ok(!('temperature' in opencodeBody));
+  assert.equal(opencodeBody.model, 'deepseek-v4.1-flash');
+  assert.equal(opencodeBody.temperature, 0);
   assert.ok(!('reasoning_effort' in opencodeBody));
   assert.ok(calls[1].init.headers['x-opencode-session']);
 });
@@ -41,7 +41,7 @@ test('el proveedor que revive corta la cadena y reporta su modelo', async () => 
     ? new Response('', { status: 500 })
     : response('{"ok":true}'), validate: extractJson });
   assert.equal(result.provider, 'OPENCODE_GO');
-  assert.equal(result.model, 'mimo-v2.6-flash-free');
+  assert.equal(result.model, 'deepseek-v4.1-flash');
 });
 test('thinking, nested data, arrays and braces in strings parse correctly', () => {
   assert.deepEqual(extractJson('<think>{ignore}</think>```json\n{"items":[{"label":"a } b"}]}\n```'), { items: [{ label: 'a } b' }] });
@@ -172,8 +172,8 @@ test('el fallback de OpenCode Go reusa la clave y entra en el orden por defecto'
     OPENCODE_GO_API_KEY: 'c',
   }, logger);
   assert.deepEqual(chain.map(p => p.id), ['MISTRAL', 'WORKERS_AI', 'OPENCODE_GO', 'OPENCODE_GO_FALLBACK']);
-  assert.equal(chain[2].model, 'mimo-v2.6-flash-free');
-  assert.equal(chain[3].model, 'space-bunny-free');
+  assert.equal(chain[2].model, 'deepseek-v4.1-flash');
+  assert.equal(chain[3].model, 'mimo-v2.6-flash');
   assert.equal(chain[3].keyVar, 'OPENCODE_GO_API_KEY');
   assert.equal(chain[0].model, 'ministral-8b-2512');
 });

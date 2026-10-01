@@ -1,23 +1,36 @@
 /** Prompts y forma de una foto generada con Agnes AI. La red vive en el generador. */
 import { esName } from './teams.js';
+import { NEUTRAL_KIT, teamColors } from './team-colors.js';
 
-const TEMPLATES = [
-  (home, away) => `Night photo of a packed football stadium, crowd in ${home} and ${away} colours, scarves without any crest or logo, no readable text, no recognizable faces, cinematic, vertical`,
-  (home, away) => `Photo of a football stand full of supporters in ${home} colours, scarves raised, no crests, no logos, no recognizable faces, vertical`,
-  (home, away) => `Photo of a football on the grass of a stadium lit for a night match, seats in ${home} and ${away} colours far away, no people, no logos, vertical`,
-  (home, away) => `Photo of an empty football dressing room, shirts in ${home} colours on pegs, no crest, no sponsor, no faces, vertical`,
-  (home, away) => `Photo of an empty press conference room at a football stadium, microphones on a table, a backdrop in ${away} colours without a crest, no people, vertical`,
-  (home, away) => `Photo of a football stadium tunnel, lights, no people, no logos, walls in ${home} colours without a crest, vertical`,
-];
+function kitPhrase(name) {
+  const label = esName(name) || String(name || 'the team');
+  const colors = teamColors(name);
+  if (colors === NEUTRAL_KIT) return `the national team kit of ${label}`;
+  return `a shirt in ${colors.primary} with trim in ${colors.secondary}, the kit of ${label}, no crest and no readable sponsor`;
+}
 
-/** Una consigna por foto que falta. Sin caras ni escudos. */
+function scenes(home, away) {
+  const homeKit = kitPhrase(home);
+  const awayKit = kitPhrase(away);
+  return [
+    `Photo of a footballer controlling the ball at his feet, wearing ${homeKit}, match lighting, no readable text, vertical`,
+    `Photo of a footballer controlling the ball at his feet, wearing ${awayKit}, match lighting, no readable text, vertical`,
+    `Photo of a footballer dribbling, ball glued to the boot, wearing ${homeKit}, sideline view, no readable text, vertical`,
+    `Photo of a footballer shielding the ball, wearing ${awayKit}, night match, no readable text, vertical`,
+    `Photo of a national team training session, players in ${homeKit}, ball at their feet, no crest, no readable text, vertical`,
+    `Photo of a football stand full of supporters in the colours of ${esName(home) || home}, scarves raised, no crest, no readable text, no recognizable faces, vertical`,
+    `Night photo of a packed football stadium before kickoff, crowd in the colours of ${esName(home) || home} and ${esName(away) || away}, no crest, no readable text, vertical`,
+    `Photo of a football press conference, coach and microphones, backdrop in the colours of ${esName(away) || away}, no crest, no readable text, vertical`,
+  ];
+}
+
+/** Una consigna por foto que falta. Primero el jugador con el balón. */
 export function agnesPrompts({ home = '', away = '', count = 0 } = {}) {
-  const h = esName(home) || String(home || 'local');
-  const a = esName(away) || String(away || 'visita');
+  const bank = scenes(home, away);
   const n = Math.max(0, Number(count) || 0);
   return Array.from({ length: n }, (_, i) => {
-    const base = TEMPLATES[i % TEMPLATES.length](h, a);
-    const lap = Math.floor(i / TEMPLATES.length);
+    const base = bank[i % bank.length];
+    const lap = Math.floor(i / bank.length);
     return lap ? `${base}, alternate angle ${lap + 1}` : base;
   });
 }

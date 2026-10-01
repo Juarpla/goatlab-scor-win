@@ -14,8 +14,9 @@ Everything happens in the same Telegram chat. Scripts live at
 (`scripts[].n`, `scripts[].title`, `scripts[].hook`, `scripts[].narration`, `scripts[].words`).
 
 There is no support button row. There are no text commands to view a script,
-replace a take, ask for status, stop early, confirm, or request a render.
-If the user types those words, they are ordinary text and trigger nothing.
+ask for status, stop early, confirm, or request a render. If the user types
+those words, they are ordinary text and trigger nothing. The one replacement
+is natural language about the last voice note (step 3): it gets no reply.
 
 ## Flow
 
@@ -49,40 +50,50 @@ If the user types those words, they are ordinary text and trigger nothing.
    *"📸 Estoy buscando las fotos en segundo plano. Ya puedes mandar los audios; te aviso cuando estén o si hay un error."*
    No buttons. A photo failure does not block the scripts or the voice notes.
 
-3. **Receive voice notes in order**: the user sends them one after another
-   without waiting for a reply. Do not transcribe the note. Do not wait for
-   the photo search. With `exec`, once, from the repo root:
+3. **Receive voice notes in order**: the user sends them one after another,
+   in a burst, without waiting. Do not wait for a reply and do not send one.
+   A queued audio gets silence: no `✅`, no photo status, no per-audio summary.
+   If several notes arrive in one turn, handle them in arrival order, one
+   `exec` each. Do not transcribe the note. Do not wait for the photo search.
+   With `exec`, once, from the repo root:
    `cd /home/node/goatlab && node scripts/queue-render.mjs --match=<matchId> --variant=<k-1> --chat=<chatId> --audio=<fileId>`
    (`variant` = k - 1; `fileId` = the voice note's Telegram file id). The
    script reads title, hook, narration and the match label from the script
    file, and photos from `/data/media-pack` when they exist. Do not build the
-   render JSON yourself and do not call curl.
-   If stdout is `ok`, reply with ONLY `✅ k`. If stdout is `pending`, reply
-   with ONLY `✅ k (espera fotos)`. The worker compares team names and numbers
-   against the script that matches **by order** (audio k ↔ script k). If they
-   do not match, the worker itself sends `❓ ¿este era el guion 3?` before it
-   renders. The audio still advances: there is no take replacement. No
-   buttons and no per-audio summary.
-   The worker renders the fixed HyperFrames template. Do not pick another
-   engine. Do not poll `/jobs`. The worker queues the renders, sends each
-   MP4 to the chat via `sendVideo`, and sends `❌ Short k: …` itself if one
-   fails. Repeating the same POST is harmless: the worker returns the same job.
+   render JSON yourself and do not call curl. Ignore `ok` and `pending` on
+   stdout; do not tell the user which one it was.
+   The worker compares team names and numbers against the script that matches
+   **by order** (audio k ↔ script k). If they do not match, the worker itself
+   sends `❓ ¿este era el guion 3?` before it renders. The worker renders the
+   fixed HyperFrames template. Do not pick another engine. Do not poll
+   `/jobs`. The worker queues the renders, sends each MP4 to the chat via
+   `sendVideo`, and if an audio cannot be used it sends one Spanish line with
+   that audio's number (for example `El audio 2 que enviaste está corrompido. Grábalo otra vez.`).
+   It does not resend the voice note. Repeating the same POST is harmless:
+   the worker returns the same job.
    When the photo job finishes it posts any pending audios itself and sends
-   either `📸 Fotos listas` or `❌ Fotos: …`.
+   `📸 Fotos listas`, or `❌ Fotos: …` if generation itself failed. It does
+   not say that photos are missing.
 
-   **reintenta fotos** is the only text command. If the user writes that
-   (or the same request in other words) and `/data/media-pack/<matchId>.failed`
-   exists, launch the same `nohup` command from step 2 again. Pending audios
-   are posted when it finishes. If the user gives an instruction about the
-   error (for example, use only the fallback model), relaunch the job with
-   that variable in the environment (`OPENCODE_GO_MODEL=...`) and do not edit
-   code. Any other text is still ordinary text.
+   **Replace the last voice note**, in the user's own words ("ese último no
+   va", "te mando otro", or the same idea). This is not a fixed command.
+   Do not reply at all. With `exec`, once:
+   `cd /home/node/goatlab && node scripts/drop-last-audio.mjs --match=<matchId> --variant=<k-1> --chat=<chatId> --audio=<fileId>`
+   (`k` is the last note already queued). The next voice note reuses that
+   same k. It does not advance the count.
+
+   **reintenta fotos** is the only other text that does something. If the
+   user writes that (or the same request in other words) and
+   `/data/media-pack/<matchId>.failed` exists, launch the same `nohup`
+   command from step 2 again. Pending audios are posted when it finishes.
+   If the user gives an instruction about the error (for example, use only
+   the fallback model), relaunch the job with that variable in the
+   environment (`OPENCODE_GO_MODEL=...`) and do not edit code. Any other text
+   is still ordinary text.
 
 4. **Close**: when audio 10 arrives (and its render has been posted, or left
-   pending), the series closes by itself. Say `Serie completa`. If
-   `queue-render` printed `pending` for any audio that is still waiting, add
-   one line: *"Los videos salen cuando estén las fotos."* Nothing else: no
-   confirm button, no status board, no polling. If the pack attribution
+   pending), the series closes by itself. Say `Serie completa`. Nothing else:
+   no confirm button, no status board, no polling. If the pack attribution
    mentions images generated with AI, add that the Shorts include supporting
    images generated with AI.
 
@@ -97,7 +108,8 @@ Telegram, not on disk).
 ## Rules
 
 - Per-chat state: `{matchId, audios: {n: fileId}}`. Voice notes enter in
-  order, 1 through 10. None are skipped or replaced.
+  order, 1 through 10. The only replacement is the last note, when the user
+  says so in their own words (step 3). Do not reply to that.
 - A voice note with no active series → ask for `/goatlab` first, in Spanish.
 - A number mid-series does not switch matches; the next voice note is the
   one due by order.
@@ -105,7 +117,8 @@ Telegram, not on disk).
   video, or render do not close, confirm, correct, or start the worker.
   Treat them as ordinary text. The one exception is *reintenta fotos*
   (step 3), which relaunches the photo job.
-- No buttons during the list, the scripts, the acks, or the render.
+- No buttons during the list, the scripts, or the render. A good audio gets
+  no acknowledgement.
 - No automatic session reset (manual control via `/start`, which wipes the
   series; a half-finished series is kept until `/start`).
 - No odds, no result guarantees. CTA is always `goatlab.win`.

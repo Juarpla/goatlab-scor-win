@@ -12,6 +12,7 @@ import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H } from '../../src/lib/hyperframe.js';
 import { CAMERA_MOVES } from '../../src/lib/media.js';
 import { anchorWarning } from '../../src/lib/timing.js';
+import { audioFailureText } from '../../src/lib/render-queue.js';
 import { telegramCaption } from '../../src/lib/youtube.js';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
 
@@ -67,10 +68,18 @@ async function sendVideo(chatId, file, cap) {
   return j.result.message_id;
 }
 
+function stopIfCancelled(job, log) {
+  if (!job.cancelled) return false;
+  job.status = 'cancelled';
+  log('cancelado');
+  return true;
+}
+
 async function runJob(job) {
   const tmp = join(tmpdir(), `goatlab-render-${job.id}`);
   const log = (msg) => console.log(`render: ${job.id} ${msg}`);
   const started = Date.now();
+  if (stopIfCancelled(job, log)) return;
   rmSync(tmp, { recursive: true, force: true });
   mkdirSync(tmp, { recursive: true });
   try {
@@ -128,7 +137,8 @@ async function runJob(job) {
     const sizeMb = statSync(out).size / 1024 / 1024;
     if (sizeMb > MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB supera ${MAX_MB}MB`);
 
-    // 4. Envío.
+    // 4. Envío. Un reemplazo del último audio llega a cancelar antes de publicarlo.
+    if (stopIfCancelled(job, log)) return;
     const messageId = await sendVideo(job.chatId, out, telegramCaption(job));
     const seconds = Math.round((Date.now() - started) / 1000);
     Object.assign(job, { status: 'done', messageId, duration: dur, sizeMb, seconds });
@@ -136,9 +146,10 @@ async function runJob(job) {
   } catch (e) {
     Object.assign(job, { status: 'error', error: String(e.message ?? e).slice(0, 500) });
     log(`error: ${job.error}`);
+    if (job.cancelled) return;
     await tg('sendMessage', {
       chat_id: job.chatId,
-      text: `❌ Short ${job.variant + 1}: ${job.error.split('\n')[0].slice(0, 300)}`,
+      text: audioFailureText(job.variant + 1, job.error),
     }).catch((err) => log(`aviso al chat falló: ${err.message}`));
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -169,6 +180,16 @@ const server = createServer(async (req, res) => {
       const job = jobs.get(m[1]);
       if (job) lastWork = Date.now();
       return job ? json(200, job) : json(404, { error: 'job inexistente' });
+    }
+    if (req.method === 'POST' && req.url === '/render/cancel') {
+      if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
+      const b = JSON.parse(await readBody(req));
+      const key = [b.chatId, b.matchId, Number(b.variant ?? 0), b.audioFileId ?? b.audioUrl].join(':');
+      const job = jobs.get(byKey.get(key));
+      if (!job || job.status === 'done' || job.status === 'cancelled') return json(200, { cancelled: false });
+      job.cancelled = true;
+      if (job.status === 'queued') job.status = 'cancelled';
+      return json(200, { cancelled: true });
     }
     if (req.method === 'POST' && req.url === '/render') {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });

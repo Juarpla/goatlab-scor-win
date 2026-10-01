@@ -34,7 +34,7 @@ RUN npm ci --omit=dev --no-audit --no-fund \
   && CHROME="$(npx --no-install hyperframes browser path | tail -1)" \
   && ! ldd "$CHROME" | grep 'not found' \
   && /opt/whisper/whisper-cli --help > /dev/null
-COPY src/lib/hyperframe.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js ./src/lib/
+COPY src/lib/hyperframe.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/render-queue.js ./src/lib/
 COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/transcribe.mjs ./fly/render/
 COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt ./fly/render/assets/
 

@@ -108,8 +108,7 @@ try {
   const manifest = JSON.parse(await readFile(join(out, `${matchId}.json`), 'utf8'));
   await writeFile(ready, new Date().toISOString());
   const posted = await flush(manifest);
-  const count = Array.isArray(manifest.assets) ? manifest.assets.length : 0;
-  await notify(`📸 Fotos listas (${count} fotos). ${posted ? `Renderizo ${posted} audios en espera.` : 'Ya puedes seguir mandando audios.'}`);
+  await notify(posted ? `📸 Fotos listas. Renderizo ${posted} audios en espera.` : '📸 Fotos listas.');
 } catch (error) {
   const text = photoFailureText(log) || error.message;
   await writeFile(failed, text).catch(() => {});
