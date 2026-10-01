@@ -133,7 +133,7 @@ async function generateAnalysis(match, markets = null, ctx = {}) {
       const analysis = await withFailover([
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: compact },
-      ], { maxTokens, timeoutMs: LLM_TIMEOUT_SINGLE_MS, breaker: llmBreaker, validate: content => validateAnalysis(extractJson(content)) });
+      ], { maxTokens, timeoutMs: LLM_TIMEOUT_SINGLE_MS, breaker: llmBreaker, orderVar: 'ANALYSIS_PROVIDER_ORDER', validate: content => validateAnalysis(extractJson(content)) });
       usage = analysis.usage;
       callId = analysis.callId;
       noteLlmHealth({ at: new Date().toISOString(), matchId: match.id, attempts: madeAttempts, failures: failures.slice(0, 8), ok: { provider: analysis.provider, model: analysis.model }, usage, truncated: false, maxTokens, batchSize: 1, callId });
@@ -184,7 +184,7 @@ async function generateAnalysesBatch(pairs) {
       const result = await withFailover([
         { role: 'system', content: BATCH_SYSTEM_PROMPT },
         { role: 'user', content: buildBatchInput(items) },
-      ], { maxTokens, timeoutMs: LLM_TIMEOUT_BATCH_MS, breaker: llmBreaker, validate: content => parseBatchAnalyses(extractJson(content), expectedIds) });
+      ], { maxTokens, timeoutMs: LLM_TIMEOUT_BATCH_MS, breaker: llmBreaker, orderVar: 'ANALYSIS_PROVIDER_ORDER', validate: content => parseBatchAnalyses(extractJson(content), expectedIds) });
       usage = result.usage;
       callId = result.callId;
       const ok = [];

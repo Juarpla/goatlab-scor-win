@@ -1,6 +1,19 @@
 name: Guiones de Shorts
 on:
   workflow_dispatch:
+    inputs:
+      match:
+        description: 'ID del partido (webId o id). Vacío = top N'
+        required: false
+        type: string
+      top:
+        description: 'Cuántos partidos del ranking (vacío = SCRIPT_TOP_N o 5)'
+        required: false
+        type: string
+      force:
+        description: 'Reescribir aunque el JSON ya exista'
+        type: boolean
+        default: false
   workflow_run:
     workflows: ["Actualizar datos GoatLab"]
     types: [completed]
@@ -29,8 +42,16 @@ jobs:
       - name: Guiones de Shorts
         id: scripts
         continue-on-error: true # los JSON válidos se commitean aunque otro partido falle
-        run: node scripts/generate-youtube-scripts.mjs
+        run: |
+          args=()
+          if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
+          if [ -n "$TOP" ]; then args+=("--top=$TOP"); fi
+          if [ "$FORCE" = "true" ]; then args+=("--force"); fi
+          node scripts/generate-youtube-scripts.mjs "${args[@]}"
         env:
+          MATCH: ${{ inputs.match }}
+          TOP: ${{ inputs.top }}
+          FORCE: ${{ inputs.force }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
           OPENCODE_GO_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
@@ -41,6 +62,8 @@ jobs:
           OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
           OPENCODE_GO_FALLBACK_MODEL: ${{ vars.OPENCODE_GO_FALLBACK_MODEL }}
           LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
+          SCRIPT_TOP_N: ${{ vars.SCRIPT_TOP_N }}
+          SCRIPT_PROVIDER_ORDER: ${{ vars.SCRIPT_PROVIDER_ORDER }}
       - name: Lint de guiones
         run: node scripts/check-compliance.mjs
       - name: Commit de guiones
@@ -66,6 +89,3 @@ jobs:
               sleep 10
             done
           fi
-      - name: Fallos de redacción
-        if: steps.scripts.outcome == 'failure'
-        run: exit 1

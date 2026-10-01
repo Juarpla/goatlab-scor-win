@@ -90,6 +90,17 @@ test('selectMatches: todos los NS ordenados; --match y --limit recortan', () => 
   assert.deepEqual(selectMatches(rows, { limit: 1 }).map(m => m.id), ['a']);
 });
 
+test('selectMatches con top elige clubes prioritarios y onlyMatch ignora el tope', () => {
+  const rows = [
+    { id: 'early', home: 'Leeds', away: 'Newcastle', status: 'NS', kickoff: '2026-09-14T19:00:00Z' },
+    { id: 'madrid', home: 'Getafe', away: 'Real Madrid', status: 'NS', kickoff: '2026-09-14T23:00:00Z' },
+    { id: 'barca', home: 'Barcelona', away: 'Sevilla', status: 'NS', kickoff: '2026-09-15T19:00:00Z' },
+    { id: 'live', home: 'Arsenal', away: 'Chelsea', status: 'FT', kickoff: '2026-09-14T12:00:00Z' },
+  ];
+  assert.deepEqual(selectMatches(rows, { top: 2 }).map(m => m.id), ['madrid', 'barca']);
+  assert.deepEqual(selectMatches(rows, { onlyMatch: 'early', top: 1 }).map(m => m.id), ['early']);
+});
+
 test('scriptFacts no lleva porcentajes y missingScripts solo pide los que faltan', () => {
   const facts = scriptFacts(match);
   assert.equal(facts.home, 'Andorra');

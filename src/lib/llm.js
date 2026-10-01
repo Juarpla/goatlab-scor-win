@@ -37,12 +37,13 @@ export const providers = {
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
   OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'mimo-v2.6-flash', ...openCodeGo },
-  // Mismo gateway y misma clave. Solo cambia el modelo: DeepSeek acepta reasoning_effort.
+  // Mismo gateway y misma clave. Solo cambia el modelo. Ninguno manda reasoning_effort.
   OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
 };
 const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
-export function resolveChain(env = runtimeEnv(), logger = console) {
-  const order = env.LLM_PROVIDER_ORDER?.trim() || DEFAULT_PROVIDER_ORDER;
+export function resolveChain(env = runtimeEnv(), logger = console, { orderVar } = {}) {
+  const preferred = orderVar ? env[orderVar]?.trim() : '';
+  const order = preferred || env.LLM_PROVIDER_ORDER?.trim() || DEFAULT_PROVIDER_ORDER;
   const seen = new Set();
   return order.split(',').flatMap(value => {
     const id = value.trim().replace(/_MODEL$/, '');
@@ -55,13 +56,11 @@ export function resolveChain(env = runtimeEnv(), logger = console) {
     return [{ ...provider, id, model: env[`${id}_MODEL`]?.trim() || provider.defaultModel }];
   });
 }
-/** MiMo rechaza temperature y reasoning_effort (HTTP 400). DeepSeek sí acepta esfuerzo máximo. */
+/** MiMo rechaza temperature y reasoning_effort (HTTP 400). El resto pide temperature 0 y deja el esfuerzo en el default del proveedor. */
 function requestExtras(model) {
   const name = String(model ?? '').toLowerCase();
   if (name.startsWith('mimo-')) return {};
-  const extras = { temperature: 0 };
-  if (name.includes('deepseek')) extras.reasoning_effort = 'max';
-  return extras;
+  return { temperature: 0 };
 }
 function textFromContent(content) {
   if (typeof content === 'string') return content.trim();
@@ -160,7 +159,7 @@ export function createProviderBreaker({ maxConsecutiveFailures = 3 } = {}) {
 }
 export async function withFailover(messages, options = {}) {
   const env = options.env ?? runtimeEnv();
-  const chain = resolveChain(env, options.logger ?? console);
+  const chain = resolveChain(env, options.logger ?? console, { orderVar: options.orderVar });
   const breaker = options.breaker ?? null;
   const skipped = new Set([...(options.excludeProviders ?? []), ...(breaker?.excluded() ?? [])]);
   const failures = [];

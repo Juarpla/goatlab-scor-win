@@ -1,5 +1,7 @@
 // GoatLab gateway on Fly (app goatlab-gateway).
 // No secrets in this file: sensitive values are ${VAR} injected as Fly secrets.
+// OPENCODE_GO_MODEL and OPENCODE_GO_FALLBACK_MODEL are model ids (no provider
+// prefix). start.sh defaults them when the Fly secret is unset.
 // See fly/gateway/fly.toml and `fly secrets set`.
 {
   gateway: {
@@ -13,9 +15,12 @@
     defaults: {
       workspace: "/home/node/.openclaw/workspace",
       model: {
-        primary: "opencode-go/mimo-v2.6-flash",
-        fallbacks: ["opencode-go/deepseek-v4.1-flash"],
+        primary: "opencode-go/${OPENCODE_GO_MODEL}",
+        fallbacks: ["opencode-go/${OPENCODE_GO_FALLBACK_MODEL}"],
       },
+      // Per-model params only. OpenClaw does not treat this map as an allowlist
+      // (that is modelPolicy.allow, which we leave unset) and does not substitute
+      // ${VAR} in object keys, so this stays a fixed override for DeepSeek.
       models: {
         "opencode-go/deepseek-v4.1-flash": {
           params: { thinking: "max" },
@@ -31,8 +36,8 @@
         apiKey: "${OPENCODE_GO_API_KEY}",
         api: "openai-completions",
         models: [
-          { id: "mimo-v2.6-flash", name: "Mimo 2.6 Flash (Go)" },
-          { id: "deepseek-v4.1-flash", name: "DeepSeek V4.1 Flash" },
+          { id: "${OPENCODE_GO_MODEL}", name: "${OPENCODE_GO_MODEL}" },
+          { id: "${OPENCODE_GO_FALLBACK_MODEL}", name: "${OPENCODE_GO_FALLBACK_MODEL}" },
         ],
       },
     },

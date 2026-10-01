@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { heroMatch, teamShort, priorityIndex, nationsPriorityIndex } from '../src/lib/teams.js';
+import { heroMatch, rankMatches, teamShort, priorityIndex, nationsPriorityIndex } from '../src/lib/teams.js';
 
 const match = (id, home, away, kickoff, status = 'NS') => ({ id, home, away, kickoff, status });
 
@@ -64,6 +64,34 @@ test('heroMatch excludes finished matches', () => {
 test('heroMatch returns null with no candidates', () => {
   assert.equal(heroMatch([]), null);
   assert.equal(heroMatch([match('done', 'Barcelona', 'Sevilla', '2026-09-14T12:00:00Z', 'PEN')]), null);
+});
+
+test('rankMatches orders clubs, then both-priority bonus, then kickoff', () => {
+  const ranked = rankMatches([
+    match('late-barca', 'Barcelona', 'Sevilla', '2026-09-15T20:00:00Z'),
+    match('early-other', 'Leeds', 'Newcastle', '2026-09-14T19:00:00Z'),
+    match('both', 'Arsenal', 'Chelsea', '2026-09-16T20:00:00Z'),
+    match('madrid', 'Getafe', 'Real Madrid', '2026-09-14T23:00:00Z'),
+    match('done', 'Liverpool', 'Chelsea', '2026-09-13T12:00:00Z', 'FT'),
+  ]);
+  assert.deepEqual(ranked.map(m => m.id), ['late-barca', 'madrid', 'both', 'early-other']);
+  assert.equal(heroMatch(ranked).id, 'late-barca');
+});
+
+test('rankMatches breaks equal club priority by earliest kickoff', () => {
+  const ranked = rankMatches([
+    match('late', 'Barcelona', 'Sevilla', '2026-09-16T20:00:00Z'),
+    match('early', 'Barcelona', 'Getafe', '2026-09-14T20:00:00Z'),
+  ]);
+  assert.deepEqual(ranked.map(m => m.id), ['early', 'late']);
+});
+
+test('rankMatches uses nation ranking when no priority club is playing', () => {
+  const ranked = rankMatches([
+    match('por', 'Portugal', 'Wales', '2026-09-24T18:45:00Z'),
+    match('eng', 'England', 'Spain', '2026-09-26T18:45:00Z'),
+  ]);
+  assert.deepEqual(ranked.map(m => m.id), ['eng', 'por']);
 });
 
 test('priority order follows the agreed list', () => {

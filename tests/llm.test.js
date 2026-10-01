@@ -141,13 +141,28 @@ test('opencode go construye URL zen/go sin duplicar chat/completions', async () 
   await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
   assert.ok(calls[0] === 'https://opencode.ai/zen/go/v1/chat/completions');
 });
-test('deepseek pide reasoning_effort max y temperatura cero', async () => {
+test('deepseek pide temperatura cero y deja el esfuerzo en el default', async () => {
   const calls = [];
   const deepseekEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_FALLBACK_MODEL', OPENCODE_GO_FALLBACK_MODEL: 'deepseek-v4.1-flash' };
   await withFailover([], { env: deepseekEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
   assert.equal(calls[0].model, 'deepseek-v4.1-flash');
   assert.equal(calls[0].temperature, 0);
-  assert.equal(calls[0].reasoning_effort, 'max');
+  assert.ok(!('reasoning_effort' in calls[0]));
+});
+test('orderVar gana sobre LLM_PROVIDER_ORDER', () => {
+  const chain = resolveChain({
+    MISTRAL_API_KEY: 'a',
+    OPENCODE_GO_API_KEY: 'b',
+    LLM_PROVIDER_ORDER: 'MISTRAL_MODEL',
+    SCRIPT_PROVIDER_ORDER: 'OPENCODE_GO_MODEL,MISTRAL_MODEL',
+  }, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' });
+  assert.deepEqual(chain.map(p => p.id), ['OPENCODE_GO', 'MISTRAL']);
+});
+test('orderVar vacío o ausente usa LLM_PROVIDER_ORDER', () => {
+  const base = { MISTRAL_API_KEY: 'a', OPENCODE_GO_API_KEY: 'b', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', SCRIPT_PROVIDER_ORDER: '   ' };
+  assert.deepEqual(resolveChain(base, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' }).map(p => p.id), ['OPENCODE_GO']);
+  const { SCRIPT_PROVIDER_ORDER: _drop, ...without } = base;
+  assert.deepEqual(resolveChain(without, logger, { orderVar: 'ANALYSIS_PROVIDER_ORDER' }).map(p => p.id), ['OPENCODE_GO']);
 });
 test('el fallback de OpenCode Go reusa la clave y entra en el orden por defecto', () => {
   const chain = resolveChain({

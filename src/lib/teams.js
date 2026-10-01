@@ -163,16 +163,16 @@ export function nationsPriorityIndex(name) {
   return index === -1 ? NATIONS_PRIORITY.length : index;
 }
 /**
- * The featured match, scored in layers (acordado en planificación):
- * la lista de clubes manda primero (×100); si no hay ningún club
+ * Partidos no terminados, del más relevante al menos.
+ * La lista de clubes manda primero (×100); si no hay ningún club
  * prioritario, manda el ranking de selecciones (×100) en vez del kickoff.
  * En ambos casos: ambos equipos rankeados (+10) y proximidad del kickoff
  * (el más temprano gana el desempate, con paso pequeño para no pisar bonus).
- * Los partidos terminados quedan fuera. Determinista: no usa el reloj.
+ * Determinista: no usa el reloj.
  */
-export function heroMatch(matches) {
+export function rankMatches(matches) {
   const candidates = (matches ?? []).filter(match => !FINISHED.has(match.status));
-  if (!candidates.length) return null;
+  if (!candidates.length) return [];
   const hasClub = candidates.some(match => priorityIndex(match.home) < PRIORITY_TEAMS.length || priorityIndex(match.away) < PRIORITY_TEAMS.length);
   const score = match => {
     if (hasClub) {
@@ -190,5 +190,10 @@ export function heroMatch(matches) {
     const proximity = -Date.parse(match.kickoff) / 1e11;
     return base + bothPriority + proximity;
   };
-  return [...candidates].sort((a, b) => score(b) - score(a))[0];
+  return [...candidates].sort((a, b) => score(b) - score(a));
+}
+
+/** Partido destacado de la portada: el primero de rankMatches. */
+export function heroMatch(matches) {
+  return rankMatches(matches)[0] ?? null;
 }

@@ -6,7 +6,7 @@
  * (ver COMPLIANCE.md).
  */
 import { DISCLAIMER, checkScript, checkText } from './compliance.js';
-import { sameClub, esName } from './teams.js';
+import { sameClub, esName, rankMatches } from './teams.js';
 
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 
@@ -124,10 +124,13 @@ export function buildNarration(match, metrics, i) {
   return { hook, narration, words: countWords(narration) };
 }
 
-/** Selección de la corrida: todos los NS de la ventana (fixtures.json ya es 7 días). */
-export function selectMatches(matches, { onlyMatch = null, limit = null } = {}) {
+/** Selección de la corrida. Sin `top`: todos los NS de la ventana (fixtures.json ya es 7 días).
+ *  Con `top`: los NS más relevantes, vueltos a ordenar por kickoff.
+ *  `onlyMatch` ignora el ranking y el tope. */
+export function selectMatches(matches, { onlyMatch = null, limit = null, top = null } = {}) {
   let out = (matches ?? []).filter(m => m.status === 'NS');
   if (onlyMatch) out = out.filter(m => m.id === onlyMatch || m.webId === onlyMatch);
+  else if (top != null && Number.isFinite(Number(top))) out = rankMatches(out).slice(0, Math.max(1, Number(top)));
   out = out.sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
   return limit == null ? out : out.slice(0, Math.max(1, Number(limit)));
 }

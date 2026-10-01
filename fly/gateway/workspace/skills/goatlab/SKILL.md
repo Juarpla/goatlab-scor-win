@@ -27,8 +27,10 @@ If the user types those words, they are ordinary text and trigger nothing.
    (OpenClaw cannot map `/start` to `/new` in config, so the reset is
    logical: ignore everything before it; compaction purges it.)
 
-1. **List current matches**: show a numbered list with `match`, `competition`,
-   and `kickoff`. If there are no files, say so in Spanish and stop. No buttons.
+1. **List current matches**: before listing, refresh the clone once with
+   `exec`: `cd /home/node/goatlab && git pull --ff-only`. Then show a numbered
+   list with `match`, `competition`, and `kickoff` from the JSON files. If
+   the pull fails or there are no files, say so in Spanish and stop. No buttons.
 
 2. **Pick a number**: the user replies with the number. Confirm the match
    (`matchId`). Before sending any script, choose the photos once. Say one
