@@ -2351,5 +2351,114 @@
     "generatedAt": "2026-10-01T06:13:54.777Z",
     "inputKey": "v3|M|bz-212663|Malta|Andorra|nations|2026-10-04T16:00:00+00:0|NS\nP|1.41|0.8|0.502|0.298|0.2|0.38|0.429\nB|0.52|0.288|0.192|1.41|0.8|0.389|0.439|1-0|\nB2|H|0.52|no|no\nH|5|3|2|0|1.6\nT|1|Malta|1|3||\nT|3|Andorra|2|1||\nHR|2026-09-24|Andorra|Malta|1|2\nHR|2024-11-19|Malta|Andorra|0|0\nHR|2024-09-10|Andorra|Malta|0|1\nHR|2020-11-14|Malta|Andorra|3|1\nHR|2020-10-10|Andorra|Malta|0|0",
     "materialKey": "M|bz-212663|Malta|Andorra|nations|2026-10-04T16:00:00+00:0|NS"
+  },
+  "bz-212668": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Irlanda vs Israel: Clásico de eliminatorias 2026",
+        "bullets": [
+          "Primer encuentro en eliminatorias de la UEFA Euro 2026 tras 11 años sin cruces directos en fase de clasificación.",
+          "Irlanda busca mantener su racha de victorias (2-1-0 en últimos 3 partidos) y consolidar su puesto en el Grupo I (2° lugar)."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Comparativa de probabilidades y estimaciones",
+        "bullets": [
+          "Poisson GoatLab: Irlanda con ventaja clara (1.67 vs 0.96 de goles totales), pero Israel con mayor probabilidad de empate (0.529).",
+          "CatBoost Bzzoiro: Predicción de empate (1-1) con 0.375 probabilidad, pero ajuste de 0.467/0.273 para goles por equipo (similar a Poisson).",
+          "API-Football: Distribución de goles (1-0: 0.489, 1-1: 0.512, 2-0: 0.205), umbral de goles para Irlanda en 1.67 (mayor probabilidad)."
+        ],
+        "stats": [
+          {
+            "value": "0.529",
+            "label": "Prob. empate (Poisson)"
+          },
+          {
+            "value": "1-1",
+            "label": "Pred. Bzzoiro (mayor prob.)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes: Irlanda domina en los últimos cruces",
+        "bullets": [
+          "Último encuentro en 2025 (no disponible en datos), pero Irlanda ganó 3-1 en 2023 (no registrado en HR).",
+          "Victoria irlandesa por 3-0 en 2026 (HR: 2026-09-27), pero Israel empató 1-1 en 2005 y 2-2 en 2005 (últimos datos históricos)."
+        ],
+        "stats": [
+          {
+            "value": "2026-09-27",
+            "label": "Último cruce (Irl 3-0)"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones clave en el Grupo I (UEFA Euro 2026)",
+        "bullets": [
+          "Irlanda lidera el Grupo I con 6 puntos (2 victorias), mientras Israel ocupa el 4° lugar con 0 puntos (2 derrotas).",
+          "Irlanda necesita ganar para mantener opciones de clasificación directa; Israel requiere victoria para evitar el último puesto."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Puntos Irlanda (2V)"
+          },
+          {
+            "value": "0",
+            "label": "Puntos Israel (0V)"
+          },
+          {
+            "value": "6",
+            "label": "Puntos Irlanda (total)"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros en juego: Adam Idah como figura irlandesa",
+        "bullets": [
+          "Adam Idah (Irlanda) es el máximo goleador actual con 2 goles en 2 partidos (promedio de 1.00 por partido).",
+          "Israel no tiene goleadores destacados en los últimos encuentros (datos no disponibles en S)."
+        ],
+        "stats": [
+          {
+            "value": "Adam Idah",
+            "label": "Máximo goleador Irlanda"
+          },
+          {
+            "value": "1.00",
+            "label": "Promedio goles Idah"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos históricos incompletos",
+        "detail": "Falta registro del encuentro de 2023 (Irlanda 3-1 Israel) y detalles de goleadores israelíes recientes. HR solo incluye 3 partidos previos."
+      },
+      {
+        "label": "Modelos con discrepancias",
+        "detail": "Poisson y CatBoost Bzzoiro coinciden en probabilidad de empate (0.529 vs 0.375), pero difieren en distribución de goles por equipo."
+      },
+      {
+        "label": "Contexto climático/sede ausente",
+        "detail": "No se especifica sede ni condiciones climáticas (W ausente), factores clave en partidos de eliminatorias."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Discrepancia notable en la lectura de Bzzoiro (B2: 'no' en ambas columnas de goles), lo que sugiere posible error de entrada o falta de datos actualizados. Se recomienda validar con fuente primaria. Además, el historial (H) muestra solo 3 partidos, pero el balance (3V, 1E, 2D) no coincide con los re"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-10-01T13:45:53.994Z",
+    "inputKey": "v3|M|bz-212668|Ireland|Israel|nations|2026-10-04T18:45:00+00:0|NS\nP|1.67|0.96|0.529|0.266|0.205|0.489|0.512\nB|0.467|0.273|0.26|1.67|0.96|0.471|0.51|1-1|0.375\nB2|H|0.467|no|no\nH|3|1|2|0|3\nT|2|Ireland|2|3||\nT|4|Israel|2|0||\nS|Adam Idah|Ireland|1|2\nHR|2026-09-27|Israel|Ireland|0|3\nHR|2005-06-04|Ireland|Israel|2|2\nHR|2005-03-26|Israel|Ireland|1|1",
+    "materialKey": "M|bz-212668|Ireland|Israel|nations|2026-10-04T18:45:00+00:0|NS"
   }
 }
