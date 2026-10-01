@@ -1,138 +1,6 @@
 {
-  "updatedAt": "2026-09-30T22:34:09.621Z",
+  "updatedAt": "2026-10-01T06:14:03.953Z",
   "runs": [
-    {
-      "at": "2026-09-20T11:57:03.325Z",
-      "matchId": "af-1557407",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-20T11:58:13.395Z",
-      "matchId": "af-1557412",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-20T11:59:22.138Z",
-      "matchId": "af-1557413",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida"
-        }
-      ],
-      "ok": null
-    },
     {
       "at": "2026-09-20T12:01:18.922Z",
       "matchId": "af-1570394",
@@ -5438,6 +5306,60 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-01T06:10:32.489Z",
+      "matchId": "bz-212633",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": {
+        "inputTokens": 954,
+        "outputTokens": 1025
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "efec4780-6b56-44d0-9a9b-0465dd4e003f"
+    },
+    {
+      "at": "2026-10-01T06:12:14.424Z",
+      "matchId": "bz-212661",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "space-bunny-free"
+      },
+      "usage": {
+        "inputTokens": 954,
+        "outputTokens": 11906
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "9d61d001-658a-4eb0-ad47-7124bd75a98f"
+    },
+    {
+      "at": "2026-10-01T06:13:54.777Z",
+      "matchId": "bz-212663",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "space-bunny-free"
+      },
+      "usage": {
+        "inputTokens": 972,
+        "outputTokens": 7251
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "0b10c34b-ab3b-4859-bc13-c8bdaef6e92d"
     }
   ]
 }
