@@ -1,122 +1,6 @@
 {
-  "updatedAt": "2026-10-01T13:48:01.145Z",
+  "updatedAt": "2026-10-01T14:31:15.248Z",
   "runs": [
-    {
-      "at": "2026-09-20T12:05:58.697Z",
-      "matchId": "af-1570402",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-20T12:07:14.584Z",
-      "matchId": "af-1570401",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/meta/llama-3.1-8b-instruct",
-          "kind": "transport",
-          "reason": "HTTP 410"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-20T16:12:33.965Z",
-      "matchId": "af-1570396",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-22T05:04:00.268Z",
-      "matchId": "bz-212589",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null
-    },
     {
       "at": "2026-09-22T05:04:03.276Z",
       "matchId": "bz-212590",
@@ -5409,6 +5293,121 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-01T14:17:48.253Z",
+      "matchId": "bz-212662",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "space-bunny-free"
+      },
+      "usage": {
+        "inputTokens": 952,
+        "outputTokens": 8546
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "7f826f8f-55ad-4004-9d5a-75b1d45409ff"
+    },
+    {
+      "at": "2026-10-01T14:30:55.451Z",
+      "matchId": "bz-212667",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "mimo-v2.6-flash-free",
+          "kind": "permanent",
+          "reason": "HTTP 400",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 165
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "space-bunny-free",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 978,
+            "outputTokens": 1233
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11369
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "WORKERS_AI",
+        "model": "@cf/zai-org/glm-4.7-flash"
+      },
+      "usage": {
+        "inputTokens": 936,
+        "outputTokens": 8165
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "7ff81005-62ad-4c1a-9262-524a85167204"
+    },
+    {
+      "at": "2026-10-01T14:31:00.880Z",
+      "matchId": "bz-212662",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": {
+        "inputTokens": 1347,
+        "outputTokens": 2739
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "a40e666a-b22b-4346-8114-fdecb20d22a5"
+    },
+    {
+      "at": "2026-10-01T14:31:00.880Z",
+      "matchId": "bz-212667",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "a40e666a-b22b-4346-8114-fdecb20d22a5"
     }
   ]
 }

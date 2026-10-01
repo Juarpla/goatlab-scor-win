@@ -4,7 +4,7 @@
   "away": "Austria",
   "competition": "nations",
   "kickoff": "2026-10-04T16:00:00+00:00",
-  "updatedAt": "2026-10-01T13:48:00.243Z",
+  "updatedAt": "2026-10-01T14:09:53.955Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -55,7 +55,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-09-30T13:19:08.919Z",
+      "updatedAt": "2026-10-01T14:09:22.545Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -66,7 +66,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-09-30T13:19:08.919Z",
+      "updatedAt": "2026-10-01T14:09:22.545Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -208,30 +208,30 @@
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": {
-      "home": 0.317,
+      "home": 0.318,
       "draw": 0.271,
-      "away": 0.41200000000000003,
+      "away": 0.41100000000000003,
       "predicted": "A"
     },
     "xg": {
       "home": 1.24,
       "away": 1.41
     },
-    "over15": 0.736,
-    "over25": 0.494,
-    "over35": 0.27,
-    "btts": 0.53,
+    "over15": 0.735,
+    "over25": 0.49200000000000005,
+    "over35": 0.26899999999999996,
+    "btts": 0.529,
     "score": "1-1",
     "cornersOver95": 0.281,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.412,
+      "favoriteProb": 0.411,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4119,
+    "confidence": 0.4107,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-09-30T13:19:14.944Z",
+    "capturedAt": "2026-10-01T14:09:27.015Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -562,5 +562,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Se detecta una discordancia interna: B2 declara no para ambos anotan, mientras P y B muestran 0.549 y 0.529. El 0.411 de Austria sí coincide entre B y B2; los demás 1X2 no muestran una desviación clara.",
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "space-bunny-free",
+    "generatedAt": "2026-10-01T14:17:48.253Z"
+  }
 }
