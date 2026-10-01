@@ -9,6 +9,7 @@ import {
   CAMERA_MOVES,
   SEQUENCES_PER_MATCH,
   PHOTOS_PER_SEQUENCE,
+  AI_CREDIT,
   acceptAssetLicense,
   isUsableStill,
 } from './media.js';
@@ -154,5 +155,8 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
     errors.push('las secuencias repiten el mismo orden');
   }
   if (!String(data.attribution ?? '').trim()) errors.push('falta la atribución de fotos');
+  if (assets.some(asset => asset?.source === 'agnes') && !String(data.attribution ?? '').includes(AI_CREDIT)) {
+    errors.push('falta el aviso de imágenes generadas con IA');
+  }
   return errors;
 }

@@ -18,14 +18,8 @@
         primary: "opencode-go/${OPENCODE_GO_MODEL}",
         fallbacks: ["opencode-go/${OPENCODE_GO_FALLBACK_MODEL}"],
       },
-      // Per-model params only. OpenClaw does not treat this map as an allowlist
-      // (that is modelPolicy.allow, which we leave unset) and does not substitute
-      // ${VAR} in object keys, so this stays a fixed override for DeepSeek.
-      models: {
-        "opencode-go/deepseek-v4.1-flash": {
-          params: { thinking: "max" },
-        },
-      },
+      // No per-model params. OpenClaw does not substitute ${VAR} in object keys,
+      // so a fixed override would keep pointing at a retired model id.
     },
   },
   models: {

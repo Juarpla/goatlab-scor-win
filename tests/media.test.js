@@ -4,6 +4,9 @@ import { checkMediaManifest } from '../src/lib/compliance.js';
 import {
   playerNamesFromScripts,
   playerQueries,
+  sceneQueries,
+  selectAssets,
+  AI_CREDIT,
   hashWebId,
   classifyLicense,
   acceptAssetLicense,
@@ -160,7 +163,7 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   const stock = buildManifest({ match: { webId: 'm-1', home: 'A', away: 'B' }, assets: stockAssets });
   assert.deepEqual(checkMediaManifest(stock, { matchId: 'm-1' }), []);
   assert.ok(checkMediaManifest(null).length > 0);
-  assert.deepEqual(ALLOWED_SOURCES, ['commons', 'pexels', 'pixabay']);
+  assert.deepEqual(ALLOWED_SOURCES, ['commons', 'pexels', 'pixabay', 'agnes']);
   assert.equal(subjectFor('Álvaro Morata', 'File:Alvaro_Morata_training.jpg'), 'Álvaro Morata');
   assert.equal(subjectFor('San', 'File:San_Siro.jpg'), null);
   assert.equal(subjectFor('Dennis Man', 'File:Flag_of_Romania.jpg'), null);
@@ -202,4 +205,58 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
     { ok: true, who: 'Jorginho', motive: 'after' },
     { names: ['Jorginho', 'Kenan Yıldız'] },
   ), { subject: 'Jorginho', motive: 'after' });
+  assert.deepEqual(acceptVisionVerdict({ ok: true, motive: 'fans' }, {}), { subject: null, motive: 'fans' });
+  assert.equal(acceptVisionVerdict({ ok: true, motive: 'logo' }, { scene: 'fans' }), null);
+  assert.deepEqual(
+    acceptVisionVerdict({ ok: true, motive: 'stadium' }, { scene: 'stadium' }),
+    { subject: null, motive: 'stadium' },
+  );
+});
+
+test('sceneQueries arma estadio, hinchas y prensa, y cae a la ciudad', () => {
+  const withStadium = sceneQueries({
+    home: 'Kazakhstan',
+    away: 'Moldova',
+    venue: { stadium: 'Astana Arena', city: 'Astana', country: 'Kazakhstan' },
+  });
+  assert.ok(withStadium.some(q => q.query === 'Kazakhstan fans' && q.scene === 'fans'));
+  assert.ok(withStadium.some(q => q.query === 'Kazakhstan press conference' && q.scene === 'press'));
+  assert.ok(withStadium.some(q => q.query === 'Astana Arena' && q.scene === 'stadium'));
+  assert.ok(withStadium.some(q => /training/.test(q.query) && q.scene === 'training'));
+  const cityOnly = sceneQueries({ home: 'Kazakhstan', away: 'Moldova', venue: { city: 'Astana' } });
+  assert.ok(cityOnly.some(q => q.query === 'Astana stadium' && q.scene === 'stadium'));
+  assert.ok(!cityOnly.some(q => q.scene === 'stadium' && q.query !== 'Astana stadium'));
+  const countryOnly = sceneQueries({ home: 'Kazakhstan', away: 'Moldova', venue: { country: 'Kazakhstan' } });
+  assert.ok(countryOnly.some(q => q.query === 'football stadium Kazakhstan'));
+});
+
+test('selectAssets reserva plazas de escena y buildManifest avisa de IA', () => {
+  const players = Array.from({ length: 20 }, (_, i) => asset(i, 'portrait'));
+  const scenes = Array.from({ length: 8 }, (_, i) => ({
+    ...asset(100 + i, 'fans'),
+    subject: null,
+  }));
+  const mixed = selectAssets([...players, ...scenes]);
+  assert.equal(mixed.length, ASSETS_PER_MATCH);
+  assert.equal(mixed.filter(item => item.motive === 'fans').length, 6);
+  const generated = {
+    ...asset(200, 'generated'),
+    source: 'agnes',
+    url: 'https://goatlab-gateway.fly.dev/media-gen/m-1/0.jpg',
+    page: 'https://agnes-ai.com/',
+    photographer: 'Agnes AI',
+    photographerUrl: 'https://agnes-ai.com/',
+    license: 'AI generated',
+    subject: null,
+  };
+  const manifest = buildManifest({
+    match: { webId: 'm-1', home: 'A', away: 'B' },
+    assets: [...players.slice(0, 19), generated],
+  });
+  assert.ok(manifest.assets.some(item => item.source === 'agnes'));
+  assert.match(manifest.attribution, new RegExp(AI_CREDIT.replace(/[()]/g, '\\$&')));
+  assert.deepEqual(checkMediaManifest(manifest, { matchId: 'm-1' }), []);
+  const bare = structuredClone(manifest);
+  bare.attribution = bare.attribution.replace(AI_CREDIT, '');
+  assert.ok(checkMediaManifest(bare).some(error => /generadas con IA/.test(error)));
 });

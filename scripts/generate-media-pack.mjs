@@ -5,12 +5,15 @@ import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { selectMatches, staleScripts, sameCore } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
+import { locateMatch } from '../src/lib/venues.js';
 import {
   ASSETS_PER_MATCH,
-  CANDIDATES_PER_MATCH,
+  PLAYER_CANDIDATES,
+  SCENE_CANDIDATES,
   THUMB_WIDTH,
   playerNamesFromScripts,
   playerQueries,
+  sceneQueries,
   normalizeCommonsPage,
   normalizePexelsPhoto,
   normalizePixabayHit,
@@ -18,8 +21,9 @@ import {
   buildManifest,
   acceptVisionVerdict,
 } from '../src/lib/media.js';
+import { agnesPrompts, normalizeAgnesImage } from '../src/lib/agnes.js';
 import { checkMediaManifest } from '../src/lib/compliance.js';
-import { extractJson, withFailover } from '../src/lib/llm.js';
+import { extractJson, resolveChain, withFailover } from '../src/lib/llm.js';
 
 const args = new Map(process.argv.slice(2).map(a => {
   const i = a.indexOf('=');
@@ -31,9 +35,13 @@ const dir = args.get('--out') || process.env.MEDIA_PACK_DIR || 'public/data/medi
 const fullRun = !onlyMatch && limitRaw == null;
 const force = Boolean(onlyMatch) || args.has('--force');
 const UA = 'GoatLab/1.0 (https://goatlab.win; media-pack)';
-const VISION_ORDER = 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
-const VISION_PHASE_MAX_MS = envInt('VISION_PHASE_MAX_MS', 180_000);
+const VISION_ORDER = process.env.VISION_PROVIDER_ORDER?.trim() || 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
+const VISION_PHASE_MAX_MS = envInt('VISION_PHASE_MAX_MS', 600_000);
+const VISION_MAX_TOKENS = envInt('VISION_MAX_TOKENS', 15_000);
+const VISION_CALL_MS = envInt('VISION_CALL_MS', 120_000);
 const VISION_CONCURRENCY = 3;
+const AGNES_URL = 'https://apihub.agnes-ai.com/v1/images/generations';
+const GEN_BASE = (process.env.MEDIA_GEN_BASE || 'https://goatlab-gateway.fly.dev/media-gen').replace(/\/$/, '');
 
 function envInt(name, fallback) {
   const n = Number(process.env[name]);
@@ -56,7 +64,11 @@ async function fetchJson(url, headers = {}) {
   return res.json();
 }
 
-async function searchCommons({ query, player = null }) {
+function visionEnv() {
+  return { ...process.env, LLM_PROVIDER_ORDER: VISION_ORDER };
+}
+
+async function searchCommons({ query, player = null, scene = null }) {
   const found = [];
   let cont = '';
   for (let page = 0; page < 3; page += 1) {
@@ -76,7 +88,7 @@ async function searchCommons({ query, player = null }) {
     const data = await fetchJson(`https://commons.wikimedia.org/w/api.php?${params}`);
     const pages = Object.values(data?.query?.pages ?? {});
     for (const page of pages) {
-      const asset = normalizeCommonsPage(page, query, { player });
+      const asset = normalizeCommonsPage(page, query, { player, scene });
       if (asset) found.push(asset);
     }
     cont = data?.continue?.gsroffset;
@@ -85,15 +97,15 @@ async function searchCommons({ query, player = null }) {
   return found;
 }
 
-async function searchPexels({ query, player = null }) {
+async function searchPexels({ query, player = null, scene = null }) {
   const key = process.env.PEXELS_API_KEY?.trim();
   if (!key) return [];
   const params = new URLSearchParams({ query, per_page: '20' });
   const data = await fetchJson(`https://api.pexels.com/v1/search?${params}`, { authorization: key });
-  return (data.photos ?? []).map(photo => normalizePexelsPhoto(photo, query, { player })).filter(Boolean);
+  return (data.photos ?? []).map(photo => normalizePexelsPhoto(photo, query, { player, scene })).filter(Boolean);
 }
 
-async function searchPixabay({ query, player = null }) {
+async function searchPixabay({ query, player = null, scene = null }) {
   const key = process.env.PIXABAY_API_KEY?.trim();
   if (!key) return [];
   const params = new URLSearchParams({
@@ -104,7 +116,7 @@ async function searchPixabay({ query, player = null }) {
     safesearch: 'true',
   });
   const data = await fetchJson(`https://pixabay.com/api/?${params}`);
-  return (data.hits ?? []).map(hit => normalizePixabayHit(hit, query, { player })).filter(Boolean);
+  return (data.hits ?? []).map(hit => normalizePixabayHit(hit, query, { player, scene })).filter(Boolean);
 }
 
 async function namesFor(matchId, home, away) {
@@ -119,13 +131,13 @@ async function namesFor(matchId, home, away) {
   }
 }
 
-async function poolFor(queries) {
+async function poolFor(queries, quota) {
   const byId = new Map();
   const searchers = [searchCommons, searchPexels, searchPixabay];
   for (const query of queries) {
-    if (byId.size >= CANDIDATES_PER_MATCH) break;
+    if (byId.size >= quota) break;
     for (const search of searchers) {
-      if (byId.size >= CANDIDATES_PER_MATCH) break;
+      if (byId.size >= quota) break;
       const batch = await search(query).catch((error) => {
         console.error(`media: ${query.query}: ${error.message}`);
         return [];
@@ -135,10 +147,19 @@ async function poolFor(queries) {
       }
     }
   }
-  return rankAssets([...byId.values()]).slice(0, CANDIDATES_PER_MATCH);
+  return rankAssets([...byId.values()]).slice(0, quota);
 }
 
 function visionPrompt(asset, names) {
+  if (asset.sceneHint) {
+    return [
+      'Check this still photo for a football short.',
+      `Expected scene: ${asset.sceneHint}.`,
+      'Reply with JSON only: {"ok":true|false,"motive":"stadium"|"fans"|"press"|"training"|"team"}.',
+      'ok is true only when the photo clearly shows that scene: a stadium, fans or stands in team colours, a press conference, a training session, or a team photo.',
+      'ok is false for a logo, a flag alone, a graphic, a broadcast screenshot, or a different scene.',
+    ].join(' ');
+  }
   const expected = asset.playerHint
     ? `Expected player: ${asset.playerHint}.`
     : `The player must be one of: ${(names ?? []).join(', ') || 'a named footballer'}.`;
@@ -182,12 +203,16 @@ async function judgeAsset(asset, names, deadline) {
         { type: 'image_url', image_url: { url: `data:${image.mime};base64,${image.b64}` } },
       ],
     }], {
-      env: { ...process.env, LLM_PROVIDER_ORDER: VISION_ORDER },
-      maxTokens: 800,
-      timeoutMs: 45_000,
+      env: visionEnv(),
+      maxTokens: VISION_MAX_TOKENS,
+      timeoutMs: VISION_CALL_MS,
       validate(content) {
         const parsed = extractJson(content);
-        const accepted = acceptVisionVerdict(parsed, { player: asset.playerHint, names });
+        const accepted = acceptVisionVerdict(parsed, {
+          player: asset.playerHint,
+          names: asset.sceneHint ? [] : names,
+          scene: asset.sceneHint,
+        });
         if (!accepted) return { rejected: true };
         return accepted;
       },
@@ -196,6 +221,7 @@ async function judgeAsset(asset, names, deadline) {
     const rest = { ...asset };
     delete rest.previewUrl;
     delete rest.playerHint;
+    delete rest.sceneHint;
     return {
       ...rest,
       subject: result.value.subject,
@@ -206,6 +232,83 @@ async function judgeAsset(asset, names, deadline) {
     console.error(`media: visión ${asset.source}:${asset.id}: ${error.message}`);
     return null;
   }
+}
+
+function sniffImage(buf) {
+  if (buf[0] === 0x89 && buf[1] === 0x50) return 'png';
+  if (buf[0] === 0x52 && buf[1] === 0x49) return 'webp';
+  return 'jpg';
+}
+
+async function agnesImage(prompt, model, key) {
+  const res = await fetch(AGNES_URL, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      prompt,
+      size: '2K',
+      ratio: '9:16',
+      extra_body: { response_format: 'b64_json' },
+    }),
+    signal: AbortSignal.timeout(120_000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  const item = data?.data?.[0] ?? data?.images?.[0] ?? data;
+  const b64 = item?.b64_json ?? item?.base64 ?? null;
+  if (b64) {
+    const buf = Buffer.from(String(b64).replace(/^data:image\/\w+;base64,/, ''), 'base64');
+    if (!buf.length) throw new Error('vacía');
+    return { buf, ext: sniffImage(buf) };
+  }
+  const url = item?.url;
+  if (!url || !/^https:\/\//.test(url)) throw new Error('sin imagen');
+  const img = await fetch(url, { signal: AbortSignal.timeout(60_000) });
+  if (!img.ok) throw new Error(`HTTP ${img.status}`);
+  const buf = Buffer.from(await img.arrayBuffer());
+  if (!buf.length) throw new Error('vacía');
+  return { buf, ext: sniffImage(buf) };
+}
+
+/** Genera solo las fotos que faltan para llegar a 20. Sin clave, no genera. */
+async function fillWithAgnes({ matchId, home, away, missing }) {
+  const key = process.env.AGNES_API_KEY?.trim();
+  const cap = envInt('AGNES_MAX_IMAGES', 10);
+  const count = Math.min(missing, cap);
+  if (!key || count <= 0) {
+    if (missing > 0 && !key) console.error('media: faltan fotos y no hay AGNES_API_KEY');
+    return [];
+  }
+  const model = process.env.AGNES_IMAGE_MODEL?.trim() || 'agnes-image-2.1-flash';
+  const prompts = agnesPrompts({ home, away, count });
+  const folder = join(dir, 'gen', matchId);
+  await mkdir(folder, { recursive: true });
+  const made = [];
+  let cursor = 0;
+  async function worker() {
+    while (cursor < prompts.length) {
+      const index = cursor;
+      cursor += 1;
+      try {
+        const image = await agnesImage(prompts[index], model, key);
+        const file = `${index}.${image.ext}`;
+        await writeFile(join(folder, file), image.buf);
+        made.push(normalizeAgnesImage({
+          matchId,
+          index,
+          publicUrl: `${GEN_BASE}/${encodeURIComponent(matchId)}/${file}`,
+          model,
+          prompt: prompts[index],
+        }));
+      } catch (error) {
+        console.error(`media: agnes ${index}: ${error.message}`);
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: 2 }, () => worker()));
+  console.log(`media: agnes generó ${made.length} de ${count}`);
+  return made;
 }
 
 async function seeAssets(assets, names) {
@@ -236,6 +339,11 @@ if (!matches.length) {
 
 if (!process.env.PEXELS_API_KEY?.trim()) console.log('media: sin PEXELS_API_KEY, se omite Pexels');
 if (!process.env.PIXABAY_API_KEY?.trim()) console.log('media: sin PIXABAY_API_KEY, se omite Pixabay');
+if (!process.env.AGNES_API_KEY?.trim()) console.log('media: sin AGNES_API_KEY, no se generan fotos de apoyo');
+{
+  const chain = resolveChain(visionEnv(), console);
+  console.log(`media: visión con ${chain.map(item => item.model).join(', ') || 'sin proveedores'}`);
+}
 
 await mkdir(dir, { recursive: true });
 if (fullRun) {
@@ -264,7 +372,7 @@ for (const match of matches) {
     continue;
   }
   const names = await namesFor(matchId, match.home, match.away);
-  const queries = [
+  const playerQs = [
     ...playerQueries(names),
     ...[
       `${esName(match.home)} footballer`,
@@ -275,8 +383,27 @@ for (const match of matches) {
       `${match.away} soccer player`,
     ].map(query => ({ query })),
   ];
-  const candidates = await poolFor(queries);
-  const accepted = await seeAssets(candidates, names);
+  const located = locateMatch(match);
+  const scenes = sceneQueries({
+    home: match.home,
+    away: match.away,
+    venue: located ?? { stadium: match.venue ?? null, city: match.venueCity ?? null },
+  });
+  const [players, scenePool] = await Promise.all([
+    poolFor(playerQs, PLAYER_CANDIDATES),
+    poolFor(scenes, SCENE_CANDIDATES),
+  ]);
+  const candidates = rankAssets([...players, ...scenePool]).slice(0, PLAYER_CANDIDATES + SCENE_CANDIDATES);
+  let accepted = await seeAssets(candidates, names);
+  if (accepted.length < ASSETS_PER_MATCH) {
+    const extra = await fillWithAgnes({
+      matchId,
+      home: match.home,
+      away: match.away,
+      missing: ASSETS_PER_MATCH - accepted.length,
+    });
+    accepted = [...accepted, ...extra];
+  }
   const payload = { ...buildManifest({ match, assets: accepted }), generatedAt: new Date().toISOString() };
   const errors = checkMediaManifest(payload, { matchId });
   if (errors.length) {

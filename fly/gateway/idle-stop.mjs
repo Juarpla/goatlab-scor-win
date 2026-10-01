@@ -4,7 +4,7 @@
 // Pre-apagado: setWebhook (re-registrar por si OpenClaw lo limpia) +
 // POST /machines/<id>/stop vía Fly Machines API.
 import { execFile } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { promisify } from 'node:util';
 
 const run = promisify(execFile);
@@ -24,6 +24,11 @@ const start = Date.now();
 async function busyReason() {
   if (Date.now() - start < MIN_UPTIME_MS) return 'uptime mínimo (10min) no cumplido';
   if (existsSync(BUSY_FILE)) return '/data/.busy presente (render en vuelo)';
+  try {
+    if (readdirSync('/data/media-pack').some(name => name.endsWith('.running'))) {
+      return 'búsqueda de fotos en curso';
+    }
+  } catch { /* sin directorio: no hay búsqueda */ }
   try {
     const { stdout } = await run('openclaw', ['sessions', '--json', '--limit', '5'], { timeout: 15_000 });
     const data = JSON.parse(stdout);

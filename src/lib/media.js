@@ -8,7 +8,12 @@ import { esName } from './teams.js';
 
 export const ASSETS_PER_MATCH = 20;
 /** Candidatas que el modelo puede mirar antes de quedarse con 20. */
-export const CANDIDATES_PER_MATCH = 40;
+export const CANDIDATES_PER_MATCH = 60;
+/** Cupo de cada grupo, para que las escenas no queden fuera del pool. */
+export const PLAYER_CANDIDATES = 30;
+export const SCENE_CANDIDATES = 30;
+/** Plazas del manifiesto reservadas a estadio, hinchas, prensa o entrenamiento. */
+export const SCENE_SLOTS = 6;
 export const SEQUENCES_PER_MATCH = 10;
 export const PHOTOS_PER_SEQUENCE = 12;
 /** Ancho de la miniatura de Commons: nítida al cubrir 1080x1920 con recorrido. */
@@ -31,13 +36,16 @@ export const CAMERA_MOVES = [
 /** Guiones 3, 4, 7 y 9: ahí el relato nombra jugadores. */
 export const PLAYER_SCRIPT_INDEXES = [2, 3, 6, 8];
 
-export const ALLOWED_SOURCES = ['commons', 'pexels', 'pixabay'];
+export const ALLOWED_SOURCES = ['commons', 'pexels', 'pixabay', 'agnes'];
 
 export const SOURCE_CREDIT = {
   commons: 'Wikimedia Commons',
   pexels: 'Pexels',
   pixabay: 'Pixabay',
+  agnes: 'Agnes AI',
 };
+
+export const AI_CREDIT = 'Imágenes de apoyo generadas con IA (Agnes AI)';
 
 export const BANNED_PHOTO_DOMAINS = [
   /gettyimages?/i,
@@ -49,7 +57,8 @@ export const BANNED_PHOTO_DOMAINS = [
   /facebook/i,
 ];
 
-const VISION_MOTIVES = new Set(['training', 'after', 'portrait']);
+const PLAYER_MOTIVES = new Set(['training', 'after', 'portrait']);
+const SCENE_MOTIVES = new Set(['stadium', 'fans', 'press', 'training', 'team', 'generated']);
 
 const REJECT_FILE = /flag of|\bflag\b|coat of arms|\blogo\b|locator map|\.svg\b|escudo|bandera|\bsignature\b|\bautograph\b|kit (body|socks|shorts|left|right)|pictogram|\bicon\b|\bbadge\b|\bstamp\b|football field|soccer field/i;
 
@@ -126,6 +135,50 @@ export function playerQueries(names) {
   return out;
 }
 
+/** Consultas de estadio, hinchas, prensa y entrenamiento. `scene` viaja con la consulta. */
+export function sceneQueries({ home = '', away = '', venue = null } = {}) {
+  const out = [];
+  const seen = new Set();
+  const add = (query, scene) => {
+    const q = String(query ?? '').replace(/\s+/g, ' ').trim();
+    const key = q.toLowerCase();
+    if (!q || seen.has(key)) return;
+    seen.add(key);
+    out.push({ query: q, scene });
+  };
+  for (const team of [home, away]) {
+    const names = [];
+    for (const name of [team, esName(team)]) {
+      const n = String(name ?? '').trim();
+      if (n && !names.some(item => item.toLowerCase() === n.toLowerCase())) names.push(n);
+    }
+    for (const name of names) {
+      add(`${name} national team training`, 'training');
+      add(`${name} training session`, 'training');
+      add(`${name} fans`, 'fans');
+      add(`${name} supporters stadium`, 'fans');
+      add(`${name} fans stands`, 'fans');
+      add(`${name} press conference`, 'press');
+      add(`${name} coach press conference`, 'press');
+      add(`${name} team photo`, 'team');
+      add(`${name} line up`, 'team');
+    }
+  }
+  const stadium = String(venue?.stadium ?? '').trim();
+  const city = String(venue?.city ?? '').trim();
+  const country = String(venue?.country ?? '').trim();
+  if (stadium) {
+    add(stadium, 'stadium');
+    add(`${stadium} stadium`, 'stadium');
+    add(`${stadium} interior`, 'stadium');
+  } else if (city) {
+    add(`${city} stadium`, 'stadium');
+  } else if (country) {
+    add(`football stadium ${country}`, 'stadium');
+  }
+  return out;
+}
+
 function plainKey(text) {
   return String(text ?? '')
     .normalize('NFD')
@@ -166,6 +219,7 @@ export function acceptAssetLicense(source, license) {
   const text = String(license ?? '').trim();
   if (source === 'pexels' && /^Pexels License$/i.test(text)) return 'Pexels License';
   if (source === 'pixabay' && /^Pixabay Content License$/i.test(text)) return 'Pixabay Content License';
+  if (source === 'agnes' && /^AI generated$/i.test(text)) return 'AI generated';
   return null;
 }
 
@@ -175,14 +229,16 @@ export function commonsPreviewUrl(url) {
 }
 
 /**
- * Veredicto del modelo. `ok` solo vale si el motivo es entrenamiento,
- * después del partido o retrato, y el apellido coincide con el jugador buscado.
+ * Veredicto del modelo. Con jugador, el motivo es entrenamiento, después del
+ * partido o retrato, y el apellido coincide. Sin jugador, una escena
+ * (estadio, hinchas, prensa, entrenamiento o foto de equipo) vale con sujeto nulo.
  */
-export function acceptVisionVerdict(raw, { player = null, names = [] } = {}) {
+export function acceptVisionVerdict(raw, { player = null, names = [], scene = null } = {}) {
   if (!raw || raw.ok !== true) return null;
   const motive = String(raw.motive ?? '').toLowerCase();
-  if (!VISION_MOTIVES.has(motive)) return null;
   const who = String(raw.who ?? '').trim();
+  if ((scene || !who) && !player && SCENE_MOTIVES.has(motive)) return { subject: null, motive };
+  if (!PLAYER_MOTIVES.has(motive)) return null;
   if (!who) return null;
   const pool = player ? [String(player)] : (names ?? []).map(name => String(name));
   const subject = pool.find(name => subjectFor(name, who));
@@ -208,9 +264,17 @@ export function photoMotive(text) {
   return 'player';
 }
 
-const MOTIVE_RANK = { training: 0, after: 1, portrait: 2, player: 3 };
+const MOTIVE_RANK = {
+  training: 0, after: 1, portrait: 2, player: 3,
+  stadium: 4, fans: 5, press: 6, team: 7, generated: 8,
+};
 
-export function normalizeCommonsPage(page, query, { player = null } = {}) {
+function hintedMotive(blob, scene) {
+  const fromText = photoMotive(blob);
+  return fromText === 'player' && scene ? scene : fromText;
+}
+
+export function normalizeCommonsPage(page, query, { player = null, scene = null } = {}) {
   if (!page || typeof page !== 'object') return null;
   const info = Array.isArray(page.imageinfo) ? page.imageinfo[0] : null;
   if (!info) return null;
@@ -240,22 +304,24 @@ export function normalizeCommonsPage(page, query, { player = null } = {}) {
     query,
     previewUrl: commonsPreviewUrl(url),
     playerHint: player || null,
+    sceneHint: scene || null,
     subject: subjectFor(player, page.title),
-    motive: photoMotive(blob),
+    motive: hintedMotive(blob, scene),
   };
 }
 
-function stockAsset(base, blob, player) {
+function stockAsset(base, blob, player, scene) {
   if (looksRejected(blob)) return null;
   return {
     ...base,
     playerHint: player || null,
+    sceneHint: scene || null,
     subject: subjectFor(player, blob),
-    motive: photoMotive(blob),
+    motive: hintedMotive(blob, scene),
   };
 }
 
-export function normalizePexelsPhoto(photo, query, { player = null } = {}) {
+export function normalizePexelsPhoto(photo, query, { player = null, scene = null } = {}) {
   if (!photo || typeof photo !== 'object') return null;
   const src = photo.src ?? {};
   const url = src.large2x || src.large || src.original || null;
@@ -277,10 +343,10 @@ export function normalizePexelsPhoto(photo, query, { player = null } = {}) {
     width: photo.width ?? null,
     height: photo.height ?? null,
     query,
-  }, `${photo.alt ?? ''} ${photographer}`, player);
+  }, `${photo.alt ?? ''} ${photographer}`, player, scene);
 }
 
-export function normalizePixabayHit(hit, query, { player = null } = {}) {
+export function normalizePixabayHit(hit, query, { player = null, scene = null } = {}) {
   if (!hit || typeof hit !== 'object') return null;
   const url = hit.largeImageURL || hit.webformatURL || null;
   const previewUrl = hit.webformatURL || hit.previewURL || url;
@@ -300,7 +366,24 @@ export function normalizePixabayHit(hit, query, { player = null } = {}) {
     width: hit.imageWidth ?? null,
     height: hit.imageHeight ?? null,
     query,
-  }, `${hit.tags ?? ''} ${photographer}`, player);
+  }, `${hit.tags ?? ''} ${photographer}`, player, scene);
+}
+
+/** Escena: sin jugador, y motivo de estadio, hinchas, prensa, entrenamiento o imagen generada. */
+export function isSceneAsset(asset) {
+  return asset?.subject == null && (SCENE_MOTIVES.has(asset?.motive) || asset?.source === 'agnes');
+}
+
+/** Reserva plazas de escena y completa con jugadores hasta `total`. */
+export function selectAssets(assets, { total = ASSETS_PER_MATCH, sceneSlots = SCENE_SLOTS } = {}) {
+  const ranked = rankAssets((assets ?? []).filter(Boolean));
+  const scenes = ranked.filter(isSceneAsset);
+  const players = ranked.filter(asset => !isSceneAsset(asset));
+  const chosenScenes = scenes.slice(0, Math.min(sceneSlots, scenes.length, total));
+  const chosenPlayers = players.slice(0, total - chosenScenes.length);
+  const short = total - chosenScenes.length - chosenPlayers.length;
+  if (short > 0) chosenScenes.push(...scenes.slice(chosenScenes.length, chosenScenes.length + short));
+  return rankAssets([...chosenPlayers, ...chosenScenes]).slice(0, total);
 }
 
 export function rankAssets(assets) {
@@ -347,7 +430,12 @@ export function buildSequences(assets, webId) {
 
 export function buildAttribution(assets) {
   const seen = new Map();
+  let generated = false;
   for (const asset of assets ?? []) {
+    if (asset?.source === 'agnes') {
+      generated = true;
+      continue;
+    }
     if (!asset?.photographer || !ALLOWED_SOURCES.includes(asset.source)) continue;
     const key = `${asset.photographer}|${asset.license}`;
     if (!seen.has(key)) {
@@ -355,11 +443,13 @@ export function buildAttribution(assets) {
       seen.set(key, `Foto: ${asset.photographer} / ${credit} (${asset.license})`);
     }
   }
-  return [...seen.values()].join(' · ');
+  const lines = [...seen.values()];
+  if (generated) lines.push(AI_CREDIT);
+  return lines.join(' · ');
 }
 
 export function buildManifest({ match, assets }) {
-  const list = rankAssets((assets ?? []).filter(Boolean)).slice(0, ASSETS_PER_MATCH);
+  const list = selectAssets(assets);
   const matchId = match.webId ?? match.id;
   return {
     matchId,
