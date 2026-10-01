@@ -1782,5 +1782,574 @@
     "generatedAt": "2026-09-30T13:28:37.256Z",
     "inputKey": "v3|M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS\nP|2.16|0.77|0.684|0.205|0.111|0.561|0.484\nB|0.831|0.12|0.049|2.16|0.77|0.602|0.39|2-0|0.412\nB2|H|0.831|no|no\nH|2|2|0|0|3.5\nT|3|Belarus|2|1||\nT|4|San Marino|2|0||\nHR|2018-11-18|San Marino|Belarus|0|2\nHR|2018-09-08|Belarus|San Marino|5|0",
     "materialKey": "M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212658": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "España vs República Checa: Clave en la ruta a 2026",
+        "bullets": [
+          "Partido de clasificación para el Mundial 2026, con España buscando consolidar su liderazgo en el Grupo B (1° con 6 pts).",
+          "República Checa en zona de repechaje (2° con 0 pts), con presión por evitar la eliminación directa."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Contraste entre modelos: Poisson vs CatBoost",
+        "bullets": [
+          "Poisson GoatLab: Probabilidad de victoria española (79.4%), empate (21.9%), derrota (12.5%).",
+          "CatBoost Bzzoiro: Mayor probabilidad de victoria española (79.3%), pero con menor confianza en goles (2-0 con 42%).",
+          "API-Football: Distribución similar a Poisson, pero con umbral de goles más bajo (mayor probabilidad en 1-0 o 2-0)."
+        ],
+        "stats": [
+          {
+            "value": "79.4%",
+            "label": "Prob. victoria España (P)"
+          },
+          {
+            "value": "21.9%",
+            "label": "Prob. empate (P)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Enfrentamientos previos: Dominio español",
+        "bullets": [
+          "España lidera la serie histórica (3-2-1), con victoria en el último duelo (2022, 2-0).",
+          "Último empate en 2016 (1-0), pero República Checa no gana en España desde 2009 (0-2).",
+          "Promedio de goles por partido: 2.33 (España anota más, pero Chequia defiende bien)."
+        ],
+        "stats": [
+          {
+            "value": "3-2-1",
+            "label": "Balance España-Chequia"
+          },
+          {
+            "value": "2022",
+            "label": "Último encuentro"
+          },
+          {
+            "value": "2.33",
+            "label": "Goles/pj promedio"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación actual: España invicta",
+        "bullets": [
+          "España en 1° lugar con 6 puntos (2 victorias, 0 empates, 0 derrotas).",
+          "República Checa en 4° lugar con 0 puntos (0 victorias, 0 empates, 2 derrotas).",
+          "Diferencia de goles clave: España +6, Chequia -2."
+        ],
+        "stats": [
+          {
+            "value": "+6",
+            "label": "Dif. goles España"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros en juego: Lamine Yamal y Adam Karabec",
+        "bullets": [
+          "Lamine Yamal (España): 3 goles y 2 asistencias en 2024, clave en la ofensiva española.",
+          "Adam Karabec (Chequia): 1 gol y 2 asistencias, pero con menor impacto en partidos recientes.",
+          "Alex Baena (España): 1 gol y 2 asistencias, pero sin minutos recientes en selección."
+        ],
+        "stats": [
+          {
+            "value": "3 goles",
+            "label": "Yamal (España)"
+          },
+          {
+            "value": "1 gol",
+            "label": "Karabec (Chequia)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos climáticos limitados",
+        "detail": "Solo se indica lluvia en la sede, pero no se especifica intensidad ni impacto en el césped o visibilidad."
+      },
+      {
+        "label": "Bajas no detalladas",
+        "detail": "No hay información sobre bajas confirmadas en ninguno de los dos equipos, lo que podría alterar alineaciones."
+      },
+      {
+        "label": "Consenso externo ausente",
+        "detail": "El campo M2 (consenso externo) no está presente en el input, por lo que no se puede comparar con modelos internos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los datos de modelos (P/B) son consistentes entre sí, pero la lectura de CatBoost Bzzoiro (B2) muestra una discrepancia notable al declarar 'no' en ambos goles totales (0.793 de victoria sin goles asignados), lo que contrasta con su probabilidad de victoria. Esto podría indicar un error en la interp"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T22:25:47.229Z",
+    "inputKey": "v3|M|bz-212658|Spain|Czechia|nations|2026-10-03T18:45:00+00:0|NS\nP|2.04|0.79|0.655|0.219|0.125|0.538|0.485\nB|0.793|0.14|0.067|2.04|0.79|0.629|0.441|2-0|0.42\nB2|H|0.793|no|no\nH|3|2|1|0|2.33\nW||rain|5|\nT|1|Spain|2|6||\nT|4|Czechia|2|0||\nS|Lamine Yamal|Spain|3|2\nS|Alex Baena|Spain|1|2\nS|Adam Karabec|Czechia|1|2\nHR|2022-06-12|Spain|Czechia|2|0\nHR|2022-06-05|Czechia|Spain|2|2\nHR|2016-06-13|Spain|Czechia|1|0",
+    "materialKey": "M|bz-212658|Spain|Czechia|nations|2026-10-03T18:45:00+00:0|NS"
+  },
+  "bz-212634": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Clasificación para 2026: Suiza vs Eslovenia",
+        "bullets": [
+          "Partido de la Liga C de la UEFA Nations League (Grupo 2) con impacto directo en la clasificación para el Mundial 2026.",
+          "Ambos equipos buscan consolidar su posición en el Grupo 2, donde Suiza lidera con 6 puntos y Eslovenia ocupa el segundo lugar con 4."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Puntos Suiza (1°)"
+          },
+          {
+            "value": "4",
+            "label": "Puntos Eslovenia (2°)"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades y estimaciones de modelos",
+        "bullets": [
+          "Poisson GoatLab: 1.53 goles totales, con probabilidad de victoria para Suiza del 53% y Eslovenia del 28%.",
+          "CatBoost Bzzoiro: 1.53 goles totales, con victoria suiza del 53% y empate del 44%. Estimación declarada: 1-0 (41.8%).",
+          "API-Football: Mayor probabilidad de victoria para Suiza (47.7%), con distribución de goles: 0-0 (21%), 1-0 (43.8%), 2-0 (28.2%)."
+        ],
+        "stats": [
+          {
+            "value": "1.53",
+            "label": "Goles totales (P/B)"
+          },
+          {
+            "value": "53%",
+            "label": "Prob. victoria Suiza (P/B)"
+          },
+          {
+            "value": "47.7%",
+            "label": "Mayor prob. API-Football"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Enfrentamientos recientes y tendencias",
+        "bullets": [
+          "En los últimos 4 partidos, Suiza ha ganado 3 y empatado 1, mientras Eslovenia ha ganado 1 y empatado 2.",
+          "Último encuentro en 2025 (13-10): empate 0-0 en Eslovenia; anterior victoria suiza por 3-0 en 2025 (08-09)."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Victorias Suiza últimos 4"
+          },
+          {
+            "value": "0-0",
+            "label": "Último resultado (2025)"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros clave en la clasificación",
+        "bullets": [
+          "Zeki Amdouni (Suiza) lidera con 3 goles y 2 asistencias en la Nations League, clave para el ataque suizo.",
+          "Aljoša Matko (Eslovenia) aporta 1 gol y 2 asistencias, pero con menor impacto goleador en el grupo."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles Amdouni (Suiza)"
+          },
+          {
+            "value": "1",
+            "label": "Goles Matko (Eslovenia)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha y contexto actual",
+        "bullets": [
+          "Suiza mantiene una racha positiva en partidos recientes, aunque sin victorias en los últimos 2 encuentros de Nations League (empate 0-0 vs. Eslovenia en 2025).",
+          "Clima y sede desconocidos para este partido, lo que añade incertidumbre táctica."
+        ],
+        "stats": [
+          {
+            "value": "0-0",
+            "label": "Último resultado (2025)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos climáticos/sede",
+        "detail": "Falta información específica sobre el clima o condiciones del estadio para este partido, lo que podría influir en el rendimiento."
+      },
+      {
+        "label": "Bajas confirmadas",
+        "detail": "No se proporcionan bajas confirmadas en jugadores clave, lo que podría alterar el equilibrio táctico."
+      },
+      {
+        "label": "Consenso externo (M2)",
+        "detail": "No se incluye consenso externo en el input, por lo que no hay datos para comparar con los modelos internos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los modelos Poisson y CatBoost coinciden en la estimación de goles totales (1.53), pero difieren ligeramente en la probabilidad de empate (43.8% vs. 44.1%). La API-Football sugiere una distribución más equilibrada en goles, con un 43.8% de probabilidad para el resultado 1-0. El historial reciente mu"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-09-30T22:32:58.411Z",
+    "inputKey": "v3|M|bz-212634|Switzerland|Slovenia|nations|2026-10-03T18:45:00+00:0|NS\nP|1.53|0.9|0.508|0.282|0.21|0.438|0.477\nB|0.531|0.268|0.201|1.53|0.9|0.441|0.475|1-0|0.418\nB2|H|0.531|no|no\nH|4|3|1|0|1.5\nW||unknown|4|\nT|1|Switzerland|2|6||\nT|2|Slovenia|2|4||\nS|Zeki Amdouni|Switzerland|3|2\nS|Aljoša Matko|Slovenia|1|2\nHR|2025-10-13|Slovenia|Switzerland|0|0\nHR|2025-09-08|Switzerland|Slovenia|3|0\nHR|2013-10-15|Switzerland|Slovenia|1|0\nHR|2012-09-07|Slovenia|Switzerland|0|2",
+    "materialKey": "M|bz-212634|Switzerland|Slovenia|nations|2026-10-03T18:45:00+00:0|NS"
+  },
+  "bz-212633": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Macedonia vs Escocia: Clásico de eliminatorias 2026",
+        "bullets": [
+          "Primer encuentro en eliminatorias para el Mundial 2026, con ambos equipos en zona de clasificación directa.",
+          "Escocia busca romper su sequía de 12 años sin victorias en Macedonia (2-1-1 en históricos)."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Consenso de probabilidades y modelos",
+        "bullets": [
+          "Poisson GoatLab: 24.4% victoria Macedonia, 47.1% empate, 28.5% victoria Escocia (umbral goleador: 0.456).",
+          "CatBoost Bzzoiro: 24.1% victoria Macedonia, 48.9% empate, 27.0% victoria Escocia; mayor probabilidad: empate (49.4%).",
+          "B2 Bzzoiro: Mayor probabilidad empate (48.9%), sin goles totales destacados, ambos equipos con baja probabilidad de anotar."
+        ],
+        "stats": [
+          {
+            "value": "47.1%",
+            "label": "Empate como favorito"
+          },
+          {
+            "value": "24.4%",
+            "label": "Victoria Macedonia"
+          },
+          {
+            "value": "28.5%",
+            "label": "Victoria Escocia"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial reciente y clave",
+        "bullets": [
+          "Último encuentro en 2013: Escocia ganó 2-1 en Skopje (Macedonia en declive defensivo post-2013).",
+          "Escocia no gana en Macedonia desde 2008 (1-0), con 0 victorias en los últimos 4 partidos (2-2-0)."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en eliminatorias (2026)",
+        "bullets": [
+          "Macedonia: 4º lugar (2 pts), 2 victorias, 0 derrotas, 2 empates (necesita 4 pts más para clasificar).",
+          "Escocia: 3º lugar (3 pts), 1 victoria, 2 empates, 1 derrota (en zona de repechaje)."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Pts Macedonia"
+          },
+          {
+            "value": "3",
+            "label": "Pts Escocia"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos climáticos ausentes",
+        "detail": "El campo 'W' indica clima desconocido, lo que podría afectar condiciones de juego (ej: humedad, viento)."
+      },
+      {
+        "label": "Bajas no detalladas",
+        "detail": "El campo 'L' está vacío; posibles ausencias en ambos equipos podrían alterar dinámicas tácticas."
+      },
+      {
+        "label": "Modelos con discrepancia",
+        "detail": "Poisson GoatLab (47.1% empate) vs. CatBoost Bzzoiro (49.4% empate): diferencia de 2.3 puntos en probabilidad de empate."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El consenso de modelos (Poisson y CatBoost) coincide en que el empate es la opción más probable, pero con márgenes estrechos. El historial reciente de Escocia (0 victorias en Macedonia desde 2008) sugiere un partido ajustado, aunque la tabla actual refleja que Macedonia tiene menos presión por clasi"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-10-01T06:10:32.489Z",
+    "inputKey": "v3|M|bz-212633|North Macedonia|Scotland|nations|2026-10-03T18:45:00+00:0|NS\nP|1.01|1.49|0.244|0.285|0.471|0.456|0.505\nB|0.241|0.27|0.489|1.01|1.49|0.472|0.494|1-1|0.409\nB2|A|0.489|no|no\nH|4|1|1|2|2\nW||unknown|3|\nT|4|North Macedonia|2|0||\nT|3|Scotland|2|1||\nHR|2013-09-10|North Macedonia|Scotland|1|2\nHR|2012-09-11|Scotland|North Macedonia|1|1\nHR|2009-09-05|Scotland|North Macedonia|2|0\nHR|2008-09-06|North Macedonia|Scotland|1|0",
+    "materialKey": "M|bz-212633|North Macedonia|Scotland|nations|2026-10-03T18:45:00+00:0|NS"
+  },
+  "bz-212661": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Encuentro Azerbaiyán-Lituania",
+        "bullets": [
+          "Azerbaiyán y Lituania se enfrentan en la categoría nations el 2026-10-04 a las 13:00 UTC.",
+          "El estado figura como NS, por lo que no consta un resultado registrado.",
+          "El input no aporta sede, clima, alineaciones ni bajas confirmadas."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-04",
+            "label": "Fecha"
+          },
+          {
+            "value": "13:00 UTC",
+            "label": "Hora"
+          },
+          {
+            "value": "NS",
+            "label": "Estado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de Poisson y CatBoost",
+        "bullets": [
+          "Poisson GoatLab reparte 0.281 para Azerbaiyán, 0.306 para el empate y 0.413 para Lituania (28.1%, 30.6% y 41.3%).",
+          "CatBoost Bzzoiro asigna 0.275, 0.296 y 0.429, respectivamente; respecto de P, sus diferencias son -0.006, -0.010 y +0.016.",
+          "P y B coinciden en 1.02 y 1.29. Sus salidas secundarias son 0.407 y 0.476 en P, y 0.412 y 0.474 en B; el input no etiqueta esas variables.",
+          "La lectura B2 del proveedor A declara 0.429 como mayor probabilidad, «no» en goles totales y «no» en ambos anotan; B registra 1-1 como marcador modal."
+        ],
+        "stats": [
+          {
+            "value": "0.413",
+            "label": "P: Lituania"
+          },
+          {
+            "value": "0.429",
+            "label": "B: Lituania"
+          },
+          {
+            "value": "1-1",
+            "label": "Marcador modal B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes entre ambos equipos",
+        "bullets": [
+          "H consigna 2 cruces: 0 victorias de Azerbaiyán, 2 empates, 0 victorias de Lituania y 1 partido con ambos anotando.",
+          "Lituania-SQL Azerbaiyán 1-1 el 2026-09-27.",
+          "Azerbaiyán-Lituania 0-0 el 2019-03-25.",
+          "Los dos cruces finishes draw; solo el primero terminó con goles."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Cruces H"
+          },
+          {
+            "value": "0-0",
+            "label": "Cruce de 2019"
+          },
+          {
+            "value": "1-1",
+            "label": "Cruce de 2026"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones registradas en la tabla",
+        "bullets": [
+          "Lituania ocupa el 1º puesto con 2 partidos disputados y 4 puntos.",
+          "Azerbaiyán figura 2º con 1 partido disputado y 1 punto.",
+          "Lituania presenta un partido más y 3 puntos más, aunque las muestras no son equivalentes."
+        ],
+        "stats": [
+          {
+            "value": "1º",
+            "label": "Lituania"
+          },
+          {
+            "value": "2º",
+            "label": "Azerbaiyán"
+          },
+          {
+            "value": "4 puntos",
+            "label": "Lituania"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores declarados por la fuente S",
+        "bullets": [
+          "Armandas Kučys y Artur Dolznikov aparecen como goleadores de Lituania.",
+          "Ambos registros terminan en 1|2; el input no especifica el significado de los dos campos numéricos.",
+          "No se aportan más filas de goleadores."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Resultado no disponible",
+        "detail": "El partido figura como NS y no contiene marcador, por lo que no permite comprobar rendimiento realizado."
+      },
+      {
+        "label": "Variables de modelo sin etiqueta",
+        "detail": "El input no identifica qué representan 1.02, 1.29 ni las salidas secundarias de P y B."
+      },
+      {
+        "label": "Forma, clima y bajas",
+        "detail": "No hay filas R, W ni L, así que no se analizan resultados recientes, clima, sede o ausencias confirmadas."
+      },
+      {
+        "label": "Lectura A incompleta",
+        "detail": "No existe una fila A independiente con distribución, umbral y lectura cruda; solo aparece una estimación B2 atribuida a la fuente A."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El 0.429 de B2 coincide con la victoria de Lituania en B. No hay desvíos porcentuales claros: P y B suman 1.000. Sí existe divergencia categórica: el modo 1-1 de B implica dos goles y ambos anotan, frente a los dos «no» de B2."
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "space-bunny-free",
+    "generatedAt": "2026-10-01T06:12:14.424Z",
+    "inputKey": "v3|M|bz-212661|Azerbaijan|Lithuania|nations|2026-10-04T13:00:00+00:0|NS\nP|1.02|1.29|0.281|0.306|0.413|0.407|0.476\nB|0.275|0.296|0.429|1.02|1.29|0.412|0.474|1-1|\nB2|A|0.429|no|no\nH|2|0|2|0|1\nT|2|Azerbaijan|1|1||\nT|1|Lithuania|2|4||\nS|Armandas Kučys|Lithuania|1|2\nS|Artur Dolznikov|Lithuania|1|2\nHR|2026-09-27|Lithuania|Azerbaijan|1|1\nHR|2019-03-25|Azerbaijan|Lithuania|0|0",
+    "materialKey": "M|bz-212661|Azerbaijan|Lithuania|nations|2026-10-04T13:00:00+00:0|NS"
+  },
+  "bz-212663": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Malta-Andorra el 4 de octubre de 2026",
+        "bullets": [
+          "El calendario fija Malta-Andorra para el 2026-10-04 a las 16:00 UTC dentro de Nations.",
+          "El estado consta como NS; la fila no informa sede, clima, alineaciones, bajas confirmadas ni resultado."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-04",
+            "label": "Fecha"
+          },
+          {
+            "value": "16:00 UTC",
+            "label": "Hora"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lectura comparada de los modelos",
+        "bullets": [
+          "Poisson GoatLab estima 1.41 y 0.8 goles y reparte el resultado en 50.2% para Malta, 29.8% para empate y 20% para Andorra.",
+          "CatBoost Bzzoiro reparte 52% Malta, 28.8% empate y 19.2% Andorra, con 1.41 y 0.8 como estimaciones de goles.",
+          "Los indicadores de goles totales y ambos anotan aparecen como 38% y 42.9% en P, frente a 38.9% y 43.9% en B.",
+          "B2, lectura declarada de Bzzoiro, señala H para Malta y 52% como mayor probabilidad; sus respuestas sobre umbral de goles y ambos anotan son ambas no."
+        ],
+        "stats": [
+          {
+            "value": "50.2%",
+            "label": "P: victoria Malta"
+          },
+          {
+            "value": "52%",
+            "label": "B: victoria Malta"
+          },
+          {
+            "value": "43.9%",
+            "label": "B: ambos anotan"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Cinco cruces Malta-Andorra",
+        "bullets": [
+          "Malta presenta 5 cruces, 3 victorias, 2 empates, 0 derrotas y 1.6 de media total de goles según H.",
+          "HR registra Andorra-Malta 1-2 (2026-09-24), Malta-Andorra 0-0 (2024-11-19) y Andorra-Malta 0-1 (2024-09-10).",
+          "También constan Malta-Andorra 3-1 (2020-11-14) y Andorra-Malta 0-0 (2020-10-10)."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "Cruces"
+          },
+          {
+            "value": "3",
+            "label": "Victorias Malta"
+          },
+          {
+            "value": "1.6",
+            "label": "Media total"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en la tabla",
+        "bullets": [
+          "La tabla sitúa a Malta en el puesto 1º, con 1 partido y 3 puntos.",
+          "Andorra ocupa el puesto 3º, con 2 partidos y 1 punto."
+        ],
+        "stats": [
+          {
+            "value": "1º",
+            "label": "Posición Malta"
+          },
+          {
+            "value": "3º",
+            "label": "Posición Andorra"
+          },
+          {
+            "value": "3",
+            "label": "Puntos Malta"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Estado del calendario",
+        "detail": "La fila M marca NS y no contiene un resultado associated al encuentro."
+      },
+      {
+        "label": "Contexto no informado",
+        "detail": "No constan bloques W, L, S, R, A ni M2; tampoco sede, clima, alineaciones, goleadores ni consenso externo."
+      },
+      {
+        "label": "Historial limitado",
+        "detail": "H y HR abarcan cinco cruces entre 2020 y 2026; no hay un bloque R para describir la forma reciente de cada equipo."
+      },
+      {
+        "label": "Umbral no explicitado",
+        "detail": "B2 responde no sobre el umbral de goles, pero la fila no identifica cuál es el umbral numérico."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "No se detecta una desviación clara de porcentajes: B2 replica el 52% de B para H, mientras P y B muestran distribuciones próximas en los tres resultados y en los indicadores de goles totales y ambos anotan."
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "space-bunny-free",
+    "generatedAt": "2026-10-01T06:13:54.777Z",
+    "inputKey": "v3|M|bz-212663|Malta|Andorra|nations|2026-10-04T16:00:00+00:0|NS\nP|1.41|0.8|0.502|0.298|0.2|0.38|0.429\nB|0.52|0.288|0.192|1.41|0.8|0.389|0.439|1-0|\nB2|H|0.52|no|no\nH|5|3|2|0|1.6\nT|1|Malta|1|3||\nT|3|Andorra|2|1||\nHR|2026-09-24|Andorra|Malta|1|2\nHR|2024-11-19|Malta|Andorra|0|0\nHR|2024-09-10|Andorra|Malta|0|1\nHR|2020-11-14|Malta|Andorra|3|1\nHR|2020-10-10|Andorra|Malta|0|0",
+    "materialKey": "M|bz-212663|Malta|Andorra|nations|2026-10-04T16:00:00+00:0|NS"
   }
 }
