@@ -1517,5 +1517,430 @@
     "generatedAt": "2026-10-01T14:30:55.451Z",
     "inputKey": "v3|M|bz-212667|Wales|Denmark|nations|2026-10-04T18:45:00+00:0|NS\nP|1|1.6|0.225|0.274|0.502|0.482|0.516\nB|0.236|0.242|0.522|1|1.6|0.574|0.574|1-1|0.456\nB2|A|0.522|no|no\nH|5|1|0|4|2.4\nW|||15|\nT|4|Wales|2|0||\nT|2|Denmark|2|3||\nHR|2026-09-27|Denmark|Wales|2|0\nHR|2021-06-26|Wales|Denmark|0|4\nHR|2018-11-16|Wales|Denmark|1|2\nHR|2018-09-09|Denmark|Wales|2|0\nHR|2008-11-19|Denmark|Wales|0|1",
     "materialKey": "M|bz-212667|Wales|Denmark|nations|2026-10-04T18:45:00+00:0|NS"
+  },
+  "bz-212666": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Portugal-Norway: contexto del cruce",
+        "bullets": [
+          "El cruce de Nations enfrenta a Portugal con Norway el 2026-10-04 a las 18:45 UTC; M declara estado NS.",
+          "W informa condición clear y el valor 12, pero no identifica la sede ni la unidad de ese número.",
+          "No se recibió un bloque L, por lo que la entrada no contiene bajas confirmadas."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-04",
+            "label": "fecha"
+          },
+          {
+            "value": "18:45",
+            "label": "hora UTC"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost en paralelo",
+        "bullets": [
+          "Poisson GoatLab fija 1.46 para Portugal y 1.44 para Norway, con distribución de 36.9%, 27.1% y 36.0%.",
+          "Las lecturas complementarias de P son 55.4% y 59.7%; la fila no vuelve a escribir el nombre de esos dos campos.",
+          "CatBoost Bzzoiro declara 53.6% para Portugal, 22.4% para empate y 24.0% para Norway; también repite 1.46 y 1.44 y añade 62.6% y 61.8%.",
+          "B2 de Bzzoiro declara H, Portugal, con 53.6%, y marca no en goles totales y ambos anotan. B cierra con 1-1 y 43.7%, datos que requieren revisión."
+        ],
+        "stats": [
+          {
+            "value": "53.6%",
+            "label": "Portugal en B"
+          },
+          {
+            "value": "36.9%",
+            "label": "Portugal en P"
+          },
+          {
+            "value": "43.7%",
+            "label": "marcador B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dos cruces Portugal-Norway",
+        "bullets": [
+          "El resumen H contiene 2|2|0|0|3, aunque la entrada no identifica cada subcampo.",
+          "El cruce más reciente fue Norway 1-2 Portugal el 2026-09-27.",
+          "El cruce anterior fue Portugal 3-0 Norway el 2016-05-29.",
+          "Los dos HR confirman dos victorias de Portugal y ninguna de Norway."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "cruces HR"
+          },
+          {
+            "value": "1-2",
+            "label": "cruce reciente"
+          },
+          {
+            "value": "3-0",
+            "label": "cruce anterior"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Puestos y puntos disponibles",
+        "bullets": [
+          "T sitúa a Portugal en el puesto 1, con 2 partidos y 6 puntos.",
+          "T sitúa a Norway en el puesto 3, con 2 partidos y 3 puntos.",
+          "Ambos equipos han disputado el mismo número de partidos, pero Portugal suma 3 puntos más."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "puesto Portugal"
+          },
+          {
+            "value": "6",
+            "label": "puntos Portugal"
+          },
+          {
+            "value": "3",
+            "label": "puesto Norway"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores reportados",
+        "bullets": [
+          "João Félix registra 2 goles en 2 partidos con Portugal.",
+          "Erling Haaland registra 3 goles en 2 partidos con Norway."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles João Félix"
+          },
+          {
+            "value": "3",
+            "label": "goles Haaland"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos ausentes",
+        "detail": "No se recibieron filas A, R, L ni M2; no hay lectura API-Football, forma reciente, bajas confirmadas ni consenso externo."
+      },
+      {
+        "label": "Campos B y B2",
+        "detail": "Los subcampos de B y B2 no llevan nombres explícitos. La asignación de 1-1, 43.7% y los dos no requiere interpretación condicional."
+      },
+      {
+        "label": "Resumen H",
+        "detail": "H presenta 2|2|0|0|3 sin explicar los subcampos; solo dos filas HR permiten verificar los cruces individuales."
+      },
+      {
+        "label": "Clima y sede",
+        "detail": "W solo permite leer clear y 12; la unidad del número y la sede del partido no están especificadas."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Auditar B y B2: el marcador 1-1 no concuerda con la lectura no de ambos anotan. Si 43.7% representa la probabilidad del 1-1, tampoco puede superar el 22.4% atribuido al empate."
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "space-bunny-free",
+    "generatedAt": "2026-10-01T22:48:41.598Z",
+    "inputKey": "v3|M|bz-212666|Portugal|Norway|nations|2026-10-04T18:45:00+00:0|NS\nP|1.46|1.44|0.369|0.271|0.36|0.554|0.597\nB|0.536|0.224|0.24|1.46|1.44|0.626|0.618|1-1|0.437\nB2|H|0.536|no|no\nH|2|2|0|0|3\nW||clear|12|\nT|1|Portugal|2|6||\nT|3|Norway|2|3||\nS|João Félix|Portugal|2|2\nS|Erling Haaland|Norway|3|2\nHR|2026-09-27|Norway|Portugal|1|2\nHR|2016-05-29|Portugal|Norway|3|0",
+    "materialKey": "M|bz-212666|Portugal|Norway|nations|2026-10-04T18:45:00+00:0|NS"
+  },
+  "bz-212665": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama del cruce",
+        "bullets": [
+          "Netherlands figura ante Serbia en nations, cruce bz-212665, con estado NS y hora 18:45 registrada el 2026-10-04.",
+          "El bloque W declara rain y el valor 12, pero no identifica la sede ni la unidad de ese dato."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-04",
+            "label": "Fecha"
+          },
+          {
+            "value": "18:45",
+            "label": "Hora registrada"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y diferencias",
+        "bullets": [
+          "Poisson GoatLab proyecta 2.05 y 0.89 de goles esperados, asigna 63.3% a Netherlands, 22.3% al empate y 14.5% a Serbia, y añade 56.3% y 52.3%.",
+          "CatBoost Bzzoiro da 74.9%, 16.9% y 8.2% en ese orden; frente a P, Netherlands queda 11.6 puntos arriba, empate y Serbia 5.4 y 6.3 abajo.",
+          "Bzzoiro repite 2.05 y 0.89, registra 61.4%, 48.1%, el marcador 2-0 y un valor 0.41 sin etiqueta; esos porcentajes carecen de umbral declarado.",
+          "B2 de Bzzoiro declara H con 74.9%; sus indicadores de goles totales y ambos anotan figuran como no, sin umbral para el primero."
+        ],
+        "stats": [
+          {
+            "value": "63.3%",
+            "label": "Netherlands, Poisson"
+          },
+          {
+            "value": "74.9%",
+            "label": "Netherlands, Bzzoiro"
+          },
+          {
+            "value": "2-0",
+            "label": "Marcador B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de cruces",
+        "bullets": [
+          "El bloque H deja 1, 1, 0, 0 y 3 sin nombres de campo; no puede asignarse con certeza a resultados o goleadores.",
+          "HR registra Serbia 1-2 Netherlands el 2026-09-27; ese resultado deja a Netherlands arriba por un gol."
+        ],
+        "stats": [
+          {
+            "value": "1-2",
+            "label": "Resultado HR"
+          },
+          {
+            "value": "2026-09-27",
+            "label": "Fecha HR"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en la tabla",
+        "bullets": [
+          "T asigna el puesto 2 a Netherlands y el puesto 4 a Serbia; ambos tienen 2 partidos disputados.",
+          "T registra 4 puntos para Netherlands y 0 para Serbia, una diferencia de 4 puntos.",
+          "La tabla no identifica grupo, zona ni reglas de desempate."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Puesto Netherlands"
+          },
+          {
+            "value": "4",
+            "label": "Puntos Netherlands"
+          },
+          {
+            "value": "0",
+            "label": "Puntos Serbia"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artillería declarada",
+        "bullets": [
+          "Mexx Meerdink encabeza Netherlands con 2 goles declarados; Cody Gakpo registra 1.",
+          "Andrija Živković suma 1 para Serbia. Las tres filas incluyen 2 como segundo dato, aunque el campo carece de etiqueta.",
+          "La suma de goles individuales publicados es 3 para Netherlands y 1 para Serbia."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles Meerdink"
+          },
+          {
+            "value": "1",
+            "label": "Goles Serbia"
+          },
+          {
+            "value": "3",
+            "label": "Suma Netherlands"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Proveedores incompletos",
+        "detail": "No hay bloque A ni M2; por ello no existe lectura API-Football ni consenso externo que contrastar con P y B."
+      },
+      {
+        "label": "Historial H sin etiquetas",
+        "detail": "H contiene cinco valores sin etiquetas. Solo HR permite confirmar el encuentro Serbia 1-2 Netherlands del 2026-09-27."
+      },
+      {
+        "label": "Campos B sin umbrales",
+        "detail": "P y B contienen lecturas porcentuales sin umbral; B2 usa dos indicadores no sin detalle y el valor 0.41 carece de definición."
+      },
+      {
+        "label": "Metadatos del cruce",
+        "detail": "W no da sede ni unidad para 12. El offset de M aparece como +00:0, con un dígito menos que una zona horaria completa."
+      },
+      {
+        "label": "Forma reciente ausente",
+        "detail": "No se aportó R, de modo que no puede describirse una racha reciente más allá del resultado HR."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "No se detecta un porcentaje incoherente: 74.9% de B2 reproduce 0.749 de B. Se marca por H sin etiquetas, W incompleto, offset +00:0 y ausencia de A, M2 y R."
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "space-bunny-free",
+    "generatedAt": "2026-10-01T22:51:25.154Z",
+    "inputKey": "v3|M|bz-212665|Netherlands|Serbia|nations|2026-10-04T18:45:00+00:0|NS\nP|2.05|0.89|0.633|0.223|0.145|0.563|0.523\nB|0.749|0.169|0.082|2.05|0.89|0.614|0.481|2-0|0.41\nB2|H|0.749|no|no\nH|1|1|0|0|3\nW||rain|12|\nT|2|Netherlands|2|4||\nT|4|Serbia|2|0||\nS|Mexx Meerdink|Netherlands|2|2\nS|Cody Gakpo|Netherlands|1|2\nS|Andrija Živković|Serbia|1|2\nHR|2026-09-27|Serbia|Netherlands|1|2",
+    "materialKey": "M|bz-212665|Netherlands|Serbia|nations|2026-10-04T18:45:00+00:0|NS"
+  },
+  "bz-212664": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Grecia-Alemania en Nations",
+        "bullets": [
+          "Cruce de Nations entre Grecia y Alemania, programado para 2026-10-04 a las 18:45 UTC y con estado NS.",
+          "El bloque W declara tiempo clear y viento 9; no informa sede ni unidad del viento."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-04",
+            "label": "Fecha del partido"
+          },
+          {
+            "value": "18:45 UTC",
+            "label": "Hora del partido"
+          },
+          {
+            "value": "9",
+            "label": "Viento declarado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Coincidencia sobre Alemania",
+        "bullets": [
+          "GoatLab P proyecta 1.19 de goles para Grecia y 1.57 para Alemania; 1-X-2: 0.277/0.273/0.45, y total/ambos: 0.521/0.563.",
+          "CatBoost B da 1-X-2 0.279/0.259/0.462, mismos goles esperados y total/ambos 0.552/0.588; declara 1-1 y 0.449.",
+          "B2 confirma como mayor probabilidad al visitante (A), 0.462, pero declara no en total y no en ambos anotan.",
+          "Los modelos coinciden en Witt Alemania como favorito; B2 concuerda con B en el máximo 1-X-2, pero no con sus lecturas no/no."
+        ],
+        "stats": [
+          {
+            "value": "1.19",
+            "label": "Goles esperados Grecia"
+          },
+          {
+            "value": "1.57",
+            "label": "Goles esperados Alemania"
+          },
+          {
+            "value": "0.462",
+            "label": "Mayor probabilidad B/B2"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Tres cruces anteriores",
+        "bullets": [
+          "H registra 3 cruces: Grecia gana 1, empates 0 y Alemania gana 2; el último campo declara 3.33.",
+          "HR: 2026-09-27, Alemania 0-1 Grecia; 2024-06-07, Alemania 2-1 Grecia; 2012-06-22, Alemania 4-2 Grecia.",
+          "Los tres HR suman 12 goles, promedio 4.00, frente al 3.33 declarado en H; la última métrica de H no trae etiqueta."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Cruces registrados"
+          },
+          {
+            "value": "1",
+            "label": "Victorias de Grecia"
+          },
+          {
+            "value": "2",
+            "label": "Victorias de Alemania"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Puestos proporcionados",
+        "bullets": [
+          "Grecia aparece 1ª, con 2 partidos disputados y 6 puntos.",
+          "Alemania aparece 3ª, con 2 partidos disputados y 1 punto.",
+          "Solo se proporcionan estas dos filas de la tabla."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Posición de Grecia"
+          },
+          {
+            "value": "6",
+            "label": "Puntos de Grecia"
+          },
+          {
+            "value": "3",
+            "label": "Posición de Alemania"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Máximos anotadores declarados",
+        "bullets": [
+          "Douvikas, Tzolis y Kourbelis registran 1 gol en 2 partidos cada uno.",
+          "Los tres máximos anotadores furnishidos pertenecen a Grecia; no hay goleadores de Alemania en S."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Goles por jugador"
+          },
+          {
+            "value": "2",
+            "label": "Partidos por jugador"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Ausencia de estimación A",
+        "detail": "No existe fila A; no hay distribución API-Football, mayor probabilidad ni umbral o lectura cruda para contrastar."
+      },
+      {
+        "label": "Ausencia de consenso M2",
+        "detail": "No se proporcionan porcentajes de consenso externo, por lo que no existe comparación interpretativa externa."
+      },
+      {
+        "label": "Campos B parcialmente rotulados",
+        "detail": "La fila B no identifica el significado de 0.449 y tampoco explicita el umbral de la lectura de goles totales."
+      },
+      {
+        "label": "Métrica de H discrepante",
+        "detail": "El último campo de H declara 3.33, mientras que los tres HRifelados producen un promedio de 4.00 goles."
+      },
+      {
+        "label": "Sin forma reciente independiente",
+        "detail": "No existe bloque R; HR permite revisar cruces previos, pero no establecer la forma reciente de cada equipo."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "La auditoría detecta dos tensions: el 3.33 de H no coincide con el promedio 4.00 calculado from HR, y el no/no de B2 para total y ambos anotan no concuerda con 0.552/0.588 de B ni con el marcador 1-1."
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "space-bunny-free",
+    "generatedAt": "2026-10-01T22:59:11.221Z",
+    "inputKey": "v3|M|bz-212664|Greece|Germany|nations|2026-10-04T18:45:00+00:0|NS\nP|1.19|1.57|0.277|0.273|0.45|0.521|0.563\nB|0.279|0.259|0.462|1.19|1.57|0.552|0.588|1-1|0.449\nB2|A|0.462|no|no\nH|3|1|0|2|3.33\nW||clear|9|\nT|1|Greece|2|6||\nT|3|Germany|2|1||\nS|Anastasios Douvikas|Greece|1|2\nS|Christos Tzolis|Greece|1|2\nS|Dimitris Kourbelis|Greece|1|2\nHR|2026-09-27|Germany|Greece|0|1\nHR|2024-06-07|Germany|Greece|2|1\nHR|2012-06-22|Germany|Greece|4|2",
+    "materialKey": "M|bz-212664|Greece|Germany|nations|2026-10-04T18:45:00+00:0|NS"
   }
 }

@@ -1,48 +1,6 @@
 {
-  "updatedAt": "2026-10-01T14:31:15.248Z",
+  "updatedAt": "2026-10-01T22:59:19.514Z",
   "runs": [
-    {
-      "at": "2026-09-22T05:04:03.276Z",
-      "matchId": "bz-212590",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-22T05:04:06.286Z",
-      "matchId": "bz-212588",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null
-    },
-    {
-      "at": "2026-09-22T11:45:07.652Z",
-      "matchId": "bz-212589",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null
-    },
     {
       "at": "2026-09-22T11:45:10.659Z",
       "matchId": "bz-212590",
@@ -5408,6 +5366,107 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "a40e666a-b22b-4346-8114-fdecb20d22a5"
+    },
+    {
+      "at": "2026-10-01T22:48:41.598Z",
+      "matchId": "bz-212666",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "space-bunny-free"
+      },
+      "usage": {
+        "inputTokens": 952,
+        "outputTokens": 10728
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b6a3fc60-b51f-4f32-8529-0c63ca487396"
+    },
+    {
+      "at": "2026-10-01T22:51:25.154Z",
+      "matchId": "bz-212665",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "space-bunny-free"
+      },
+      "usage": {
+        "inputTokens": 952,
+        "outputTokens": 13532
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "dbe7a6f9-4914-49eb-b5ed-372a4721f128"
+    },
+    {
+      "at": "2026-10-01T22:59:11.221Z",
+      "matchId": "bz-212664",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "mimo-v2.6-flash-free",
+          "kind": "permanent",
+          "reason": "HTTP 400",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 161
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "space-bunny-free",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 15000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 983,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 143490
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 991,
+            "outputTokens": 1776
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11902
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "space-bunny-free"
+      },
+      "usage": {
+        "inputTokens": 983,
+        "outputTokens": 10458
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "06811e58-2cda-4200-a557-af9cd0ba8897"
     }
   ]
 }
