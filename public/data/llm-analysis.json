@@ -3245,5 +3245,1284 @@
     "generatedAt": "2026-10-02T13:38:42.186Z",
     "inputKey": "v3|M|bz-212678|Croatia|Spain|nations|2026-10-06T18:45:00+00:0|NS\nP|0.95|1.85|0.179|0.246|0.574|0.53|0.528\nB|0.166|0.224|0.61|0.95|1.85|0.526|0.514|0-1|0.395\nB2|A|0.61|no|no\nH|8|2|1|5|3.88\nW||rain|4|\nT|3|Croatia|2|3||\nT|1|Spain|2|6||\nS|Lamine Yamal|Spain|3|2\nS|Alex Baena|Spain|1|2\nHR|2026-09-29|Spain|Croatia|4|1\nHR|2024-06-15|Spain|Croatia|3|0\nHR|2023-06-18|Croatia|Spain|0|0\nHR|2021-06-28|Croatia|Spain|3|5\nHR|2018-11-15|Croatia|Spain|3|2",
     "materialKey": "M|bz-212678|Croatia|Spain|nations|2026-10-06T18:45:00+00:0|NS"
+  },
+  "bz-212651": {
+    "matchId": "bz-212651",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Latvia y Montenegro, duelo de selecciones",
+        "bullets": [
+          "Encuentro de selecciones previsto para el 2 de octubre de 2026 a las 16:00 UTC, con el partido aún no iniciado.",
+          "Montenegro llega primero de la tabla con 6 puntos en 2 partidos; Latvia ocupa la cuarta posición con 1 punto en 2 jornadas.",
+          "La sede aparece sin confirmar en el input y el bloque de clima la marca como desconocida."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "puntos Montenegro"
+          },
+          {
+            "value": "1",
+            "label": "puntos Latvia"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost: favorito visitante",
+        "bullets": [
+          "El modelo Poisson de GoatLab asigna 27.2% al local, 30.5% al empate y 42.4% al visitante.",
+          "CatBoost Bzzoiro otorga 19.9% al local, 27.3% al empate y 52.8% al visitante, con marcador más probable 1-1 y 44.4%.",
+          "B2, estimación declarada del modelo Bzzoiro, señala al visitante como mayor probabilidad con 52.8%.",
+          "Los dos bloques coinciden en el favorito, con distinta intensidad; el Poisson añade dos lecturas de 40.7% y 47.5% sin etiqueta en el input."
+        ],
+        "stats": [
+          {
+            "value": "52.8%",
+            "label": "visitante CatBoost"
+          },
+          {
+            "value": "42.4%",
+            "label": "visitante Poisson"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador más probable"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Cuatro antecedentes sin victorias de Latvia",
+        "bullets": [
+          "El registro acumulado recoge 4 cruces: 0 victorias del equipo local de este partido, 2 empates y 2 derrotas, con 1.75 goles de promedio.",
+          "El antecedente más reciente, en septiembre de 2021, acabó 0-0 entre Montenegro y Latvia.",
+          "En marzo de 2021 Montenegro ganó 1-2 como visitante, en octubre de 2020 hubo 1-1 y en 2012 se registró un 2-0 local."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "cruces previos"
+          },
+          {
+            "value": "1.75",
+            "label": "goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Montenegro arriba, Latvia en cuarto puesto",
+        "bullets": [
+          "Montenegro figura primero con 6 puntos en 2 partidos disputados.",
+          "Latvia aparece cuarto con 1 punto en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "puntos Montenegro"
+          },
+          {
+            "value": "1",
+            "label": "puntos Latvia"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Krstović, referencia anotadora de Montenegro",
+        "bullets": [
+          "Nikola Krstović registra 2 goles con Montenegro, el registro más alto entre los citados.",
+          "Aleksa Latković suma 1 gol con Montenegro."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles de Krstović"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sede y clima",
+        "detail": "El bloque W marca clima desconocido y no precisa sede, por lo que no hay lectura de condiciones del partido."
+      },
+      {
+        "label": "Bajas",
+        "detail": "No se incluye bloque L con bajas confirmadas para ninguno de los dos equipos."
+      },
+      {
+        "label": "Forma reciente",
+        "detail": "No se aporta bloque R de resultados recientes más allá del historial de cruces."
+      },
+      {
+        "label": "Divergencia entre modelos",
+        "detail": "Poisson y CatBoost difieren en el peso del visitante (42.4% frente a 52.8%) y en el del local (27.2% frente a 19.9%)."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Ambas estimaciones señalan al visitante como favorito, pero con 10.4 puntos de diferencia (42.4% Poisson frente a 52.8% CatBoost); B2 replica el 52.8%. El empate en 30.5% del Poisson convive con un historial de solo 1.75 goles por partido."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:06:21.196Z",
+    "inputKey": "v3|M|bz-212651|Latvia|Montenegro|nations|2026-10-02T16:00:00+00:0|NS\nP|1|1.31|0.272|0.305|0.424|0.407|0.475\nB|0.199|0.273|0.528|1|1.31|0.415|0.466|1-1|0.444\nB2|A|0.528|no|no\nH|4|0|2|2|1.75\nW||unknown|3|\nT|4|Latvia|2|1||\nT|1|Montenegro|2|6||\nS|Nikola Krstović|Montenegro|2|2\nS|Aleksa Latković|Montenegro|1|2\nHR|2021-09-07|Montenegro|Latvia|0|0\nHR|2021-03-24|Latvia|Montenegro|1|2\nHR|2020-10-07|Montenegro|Latvia|1|1\nHR|2012-08-15|Montenegro|Latvia|2|0",
+    "materialKey": "M|bz-212651|Latvia|Montenegro|nations|2026-10-02T16:00:00+00:0|NS"
+  },
+  "bz-212650": {
+    "matchId": "bz-212650",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Cyprus y Armenia, duelo de selecciones",
+        "bullets": [
+          "Encuentro de selecciones programado para el 2 de octubre de 2026 a las 16:00 UTC, aún no iniciado.",
+          "Armenia ocupa la segunda posición con 3 puntos en 2 partidos; Cyprus es tercero con 1 punto.",
+          "Sede sin confirmar y clima marcado como desconocido en el input."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "puntos Armenia"
+          },
+          {
+            "value": "1",
+            "label": "puntos Cyprus"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost: favorito local",
+        "bullets": [
+          "El modelo Poisson de GoatLab otorga 49.3% al local, 26.3% al empate y 24.4% al visitante.",
+          "CatBoost Bzzoiro reparte 41.2% local, 28.7% empate y 30.1% visitante, con marcador más probable 1-1 y 45.5%.",
+          "B2, estimación declarada del modelo Bzzoiro, indica al local como mayor probabilidad con 41.2%.",
+          "Los dos bloques apuntan al mismo favorito con intensidades distintas; el Poisson añade lecturas de 54% y 56.7% sin etiqueta."
+        ],
+        "stats": [
+          {
+            "value": "49.3%",
+            "label": "local Poisson"
+          },
+          {
+            "value": "41.2%",
+            "label": "local CatBoost"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador más probable"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dos antecedentes y promedio alto de goles",
+        "bullets": [
+          "El registro acumulado recoge 2 cruces: 0 victorias de Cyprus, 1 empate y 1 derrota, con 4.5 goles de promedio.",
+          "En marzo de 2023 el Armenia-Cyprus finalizó 2-2.",
+          "En noviembre de 2017 Armenia se impuso 3-2 como local."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "cruces previos"
+          },
+          {
+            "value": "4.5",
+            "label": "goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Armenia segundo, Cyprus tercero",
+        "bullets": [
+          "Armenia figura segunda con 3 puntos en 2 partidos disputados.",
+          "Cyprus aparece tercero con 1 punto en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "puntos Armenia"
+          },
+          {
+            "value": "1",
+            "label": "puntos Cyprus"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Dos anotadores repartidos en Armenia",
+        "bullets": [
+          "Artur Gharibyan suma 1 gol con Armenia.",
+          "Artur Serobyan suma 1 gol con Armenia."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "goles de Gharibyan"
+          },
+          {
+            "value": "1",
+            "label": "goles de Serobyan"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sede y clima",
+        "detail": "Clima marcado como desconocido y sede sin confirmar en el input."
+      },
+      {
+        "label": "Bajas",
+        "detail": "No se incluye bloque L con bajas confirmadas para ninguno de los dos equipos."
+      },
+      {
+        "label": "Forma reciente",
+        "detail": "Sin bloque R de racha reciente; solo constan los dos cruces previos registrados."
+      },
+      {
+        "label": "Divergencia entre modelos",
+        "detail": "El Poisson concede 49.3% al local frente al 41.2% de CatBoost, con el visitante entre 24.4% y 30.1% según el sistema."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los modelos apuntan al local pero con 8.1 puntos de diferencia (49.3% Poisson frente a 41.2% de CatBoost y B2); el reparto del visitante también varía (24.4% frente a 30.1%). El historial de 4.5 goles por partido no se refleja en el 1-1 más probable de CatBoost."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:06:21.202Z",
+    "inputKey": "v3|M|bz-212650|Cyprus|Armenia|nations|2026-10-02T16:00:00+00:0|NS\nP|1.7|1.14|0.493|0.263|0.244|0.54|0.567\nB|0.412|0.287|0.301|1.7|1.14|0.461|0.521|1-1|0.455\nB2|H|0.412|no|no\nH|2|0|1|1|4.5\nW||unknown|5|\nT|3|Cyprus|2|1||\nT|2|Armenia|2|3||\nS|Artur Gharibyan|Armenia|1|2\nS|Artur Serobyan|Armenia|1|2\nHR|2023-03-28|Armenia|Cyprus|2|2\nHR|2017-11-13|Armenia|Cyprus|3|2",
+    "materialKey": "M|bz-212650|Cyprus|Armenia|nations|2026-10-02T16:00:00+00:0|NS"
+  },
+  "bz-212649": {
+    "matchId": "bz-212649",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Poland - Romania: contexto del cruce",
+        "bullets": [
+          "Poland recibe a Romania en un partido de selecciones (nations) fijado para el 2026-10-02 a las 18:45 UTC, con estado NS (no iniciado).",
+          "Poland es tercera con 1 punto en 2 partidos; Romania es cuarta con 0 puntos en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "punto de Poland"
+          },
+          {
+            "value": "0",
+            "label": "puntos de Romania"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson GoatLab y CatBoost Bzzoiro",
+        "bullets": [
+          "El Poisson de GoatLab reparte 0.348 a Poland, 0.281 al empate y 0.371 a Romania, con medias de 1.34 y 1.39 goles y 0.514 y 0.566 en goles totales y ambos anotan.",
+          "El CatBoost Bzzoiro da 0.618 a Poland, 0.219 al empate y 0.163 a Romania, con 0.556 y 0.559 en goles totales y ambos anotan y 1-1 como marcador más probable (0.416).",
+          "La estimación declarada del modelo Bzzoiro sitúa su mayor probabilidad en la victoria local de Poland (0.618) y no declara lectura sobre umbral de goles ni sobre ambos anotan.",
+          "Los dos modelos no comparten favorito: el Poisson deja a Romania por delante (0.371 frente a 0.348) y el CatBoost Bzzoiro invierte la relación (0.618 frente a 0.163)."
+        ],
+        "stats": [
+          {
+            "value": "0.618",
+            "label": "Poland en CatBoost"
+          },
+          {
+            "value": "0.371",
+            "label": "Romania en Poisson"
+          },
+          {
+            "value": "0.416",
+            "label": "marcador 1-1 CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Precedentes entre Poland y Romania",
+        "bullets": [
+          "El registro de precedentes reúne 4 partidos con 3 victorias de Poland, 0 empates y 1 victoria de Romania, con 3.25 goles por encuentro.",
+          "Cruces aportados: 2017-06-10 Poland 3-1 Romania; 2016-11-11 Romania 0-3 Poland; 2013-02-02 Poland 4-1 Romania; 2009-11-14 Poland 0-1 Romania."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "precedentes"
+          },
+          {
+            "value": "3",
+            "label": "victorias de Poland"
+          },
+          {
+            "value": "3.25",
+            "label": "goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación de las dos selecciones",
+        "bullets": [
+          "Poland ocupa la posición 3 con 1 punto en 2 partidos disputados.",
+          "Romania es cuarta con 0 puntos en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "puesto de Poland"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Referencias anotadoras declaradas",
+        "bullets": [
+          "Alexandru Cicâldău, Daniel Bîrligea y Dennis Man aparecen por Romania en el registro de anotación, cada uno con 1 gol y 1 en la segunda cifra aportada.",
+          "El input no incluye nombres de anotadores por Poland en ese registro."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "gol por jugador rumano"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Bloques ausentes",
+        "detail": "No se aportan clima/sede (W), bajas confirmadas (L), consenso externo (M2) ni estimación API-Football (A)."
+      },
+      {
+        "label": "Registro de anotación sin etiquetas",
+        "detail": "El bloque S muestra 1 y 1 por jugador sin nombrar los campos; se interpreta la primera cifra como goles."
+      },
+      {
+        "label": "Precedentes no recientes",
+        "detail": "Los cuatro cruces registrados corresponden a 2009, 2013, 2016 y 2017, sin datos de enfrentamientos posteriores."
+      },
+      {
+        "label": "Favoritismo no coincidente",
+        "detail": "Poisson y CatBoost Bzzoiro señalan favoritos distintos, por lo que no hay una lectura única de probabilidad."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El 0.618 de CatBoost Bzzoiro a favor de Poland contrasta con el 0.371 que el Poisson de GoatLab asigna a Romania; al no compartir favorito, la lectura de probabilidades del cruce queda abierta y así se señala."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:07:19.862Z",
+    "inputKey": "v3|M|bz-212649|Poland|Romania|nations|2026-10-02T18:45:00+00:0|NS\nP|1.34|1.39|0.348|0.281|0.371|0.514|0.566\nB|0.618|0.219|0.163|1.34|1.39|0.556|0.559|1-1|0.416\nB2|H|0.618|no|no\nH|4|3|0|1|3.25\nT|3|Poland|2|1||\nT|4|Romania|2|0||\nS|Alexandru Cicâldău|Romania|1|1\nS|Daniel Bîrligea|Romania|1|1\nS|Dennis Man|Romania|1|1\nHR|2017-06-10|Poland|Romania|3|1\nHR|2016-11-11|Romania|Poland|0|3\nHR|2013-02-02|Poland|Romania|4|1\nHR|2009-11-14|Poland|Romania|0|1",
+    "materialKey": "M|bz-212649|Poland|Romania|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212652": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Faroe Islands vs Slovakia: contexto",
+        "bullets": [
+          "Partido de selecciones nacionales (nations) programado para 2026-10-02 a las 18:45, marcado como NS.",
+          "La tabla sitúa a Eslovaquia en el puesto 1 con 2 partidos y 6 puntos, y a Faroe Islands en el puesto 3 con 2 partidos y 2 puntos."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-02",
+            "label": "fecha del partido"
+          },
+          {
+            "value": "18:45",
+            "label": "hora programada"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos Poisson y CatBoost Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab consigna 0.372, 0.305 y 0.323 como probabilidades, junto a 0.42 y 0.492.",
+          "CatBoost Bzzoiro registra 0.154, 0.248 y 0.598 como probabilidades, 1.23 y 1.13 como valores de goles, y 0.427, 0.426 y 0.437; su marcador es 1-1.",
+          "La estimación declarada del modelo Bzzoiro marca 0.598 como mayor probabilidad, con 'no' en goles totales y 'no' en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.598",
+            "label": "mayor probabilidad B/B2"
+          },
+          {
+            "value": "0.372",
+            "label": "probabilidad Poisson"
+          },
+          {
+            "value": "0.154",
+            "label": "probabilidad CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación del grupo",
+        "bullets": [
+          "Eslovaquia ocupa el puesto 1 con 2 partidos jugados y 6 puntos.",
+          "Faroe Islands ocupa el puesto 3 con 2 partidos jugados y 2 puntos."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "puesto de Eslovaquia"
+          },
+          {
+            "value": "6",
+            "label": "puntos de Eslovaquia"
+          },
+          {
+            "value": "3",
+            "label": "puesto de Faroe Islands"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Registro de goleadores",
+        "bullets": [
+          "Áki Samuelsen (Faroe Islands) aparece con 1 y 2 en los registros de goleadores.",
+          "Dávid Hancko (Slovakia) aparece con 1 y 2 en los registros de goleadores."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "registro de Samuelsen"
+          },
+          {
+            "value": "1",
+            "label": "registro de Hancko"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Puntos de atención del cruce",
+        "bullets": [
+          "La divergencia entre Poisson GoatLab (0.372 a Faroe Islands, 0.323 a Eslovaquia) y CatBoost Bzzoiro (0.598 a Eslovaquia) es el principal contraste entre modelos.",
+          "La tabla y el modelo CatBoost Bzzoiro apuntan a Eslovaquia como favorita, mientras Poisson GoatLab reparte más su lectura.",
+          "El marcador declarado por CatBoost Bzzoiro es 1-1, con 0.427, 0.426 y 0.437 en sus lecturas complementarias."
+        ],
+        "stats": [
+          {
+            "value": "0.598",
+            "label": "Eslovaquia en CatBoost"
+          },
+          {
+            "value": "0.372",
+            "label": "Faroe Islands en Poisson"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador de Bzzoiro"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin historial de cruces",
+        "detail": "No se recibieron filas H/HR con enfrentamientos previos entre Faroe Islands y Eslovaquia."
+      },
+      {
+        "label": "Sin forma reciente",
+        "detail": "No hay filas R con la racha de resultados recientes de ninguna de las dos selecciones."
+      },
+      {
+        "label": "Sin clima ni sede",
+        "detail": "No se incluyen datos W de condiciones climáticas o sede del partido."
+      },
+      {
+        "label": "Sin bajas confirmadas",
+        "detail": "No hay filas L con ausencias o bajas confirmadas para este encuentro."
+      },
+      {
+        "label": "Sin API-Football ni consenso M2",
+        "detail": "No se recibieron bloques A (estimación API-Football) ni M2 (consenso externo) para este cruce."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Se detecta divergencia clara entre modelos: Poisson GoatLab da 0.372 a Faroe Islands y 0.323 a Eslovaquia; CatBoost Bzzoiro y B2 elevan a Eslovaquia a 0.598. La tabla respalda a Eslovaquia con 6 puntos frente a 2 de Faroe Islands. El marcador 1-1 de Bzzoiro matiza esa ventaja."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:07:54.300Z",
+    "inputKey": "v3|M|bz-212652|Faroe Islands|Slovakia|nations|2026-10-02T18:45:00+00:0|NS\nP|1.23|1.13|0.372|0.305|0.323|0.42|0.492\nB|0.154|0.248|0.598|1.23|1.13|0.427|0.426|1-1|0.437\nB2|A|0.598|no|no\nT|3|Faroe Islands|2|2||\nT|1|Slovakia|2|6||\nS|Áki Samuelsen|Faroe Islands|1|2\nS|Dávid Hancko|Slovakia|1|2",
+    "materialKey": "M|bz-212652|Faroe Islands|Slovakia|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212648": {
+    "matchId": "bz-212648",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Nations League: Bosnia y Suecia, 2 de octubre",
+        "bullets": [
+          "Bosnia y Herzegovina recibe a Suecia en partido de Nations League fechado el 2 de octubre de 2026 a las 18:45 UTC, con estado NS (no iniciado).",
+          "El bloque W no identifica sede ni ciudad y marca clima desconocido, con un valor final de 4 sin unidad especificada.",
+          "El input no aporta forma reciente, bajas confirmadas ni consenso externo, por lo que la lectura se apoya en modelos, historial, tabla y goleadores."
+        ],
+        "stats": [
+          {
+            "value": "18:45 UTC",
+            "label": "Hora de inicio"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Los modelos discrepan sobre el favorito",
+        "bullets": [
+          "Poisson GoatLab otorga 41.4% a Bosnia, 27.8% al empate y 30.9% a Suecia, con goles esperados de 1.49 y 1.26, 51.9% en goles totales y 56.7% en ambos anotan.",
+          "CatBoost de Bzzoiro da 35.5% a Bosnia, 26.8% al empate y 37.7% a Suecia, con marcador más probable 1-1 al 36.7% y los mismos goles esperados (1.49 y 1.26).",
+          "La estimación declarada del modelo Bzzoiro (B2) apunta al visitante como mayor probabilidad con 37.7% y no declara valores de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "41.4%",
+            "label": "Victoria Bosnia (Poisson)"
+          },
+          {
+            "value": "37.7%",
+            "label": "Victoria Suecia (CatBoost)"
+          },
+          {
+            "value": "1-1",
+            "label": "Marcador más probable"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Un único precedente: Suecia 4-2 en 2010",
+        "bullets": [
+          "El historial disponible recoge un solo cruce: Suecia 4-2 Bosnia y Herzegovina, disputado el 29 de mayo de 2010.",
+          "El resumen H lo confirma con 1 partido, 0 victorias locales, 0 empates, 1 victoria visitante y un promedio de 6 goles por encuentro."
+        ],
+        "stats": [
+          {
+            "value": "4-2",
+            "label": "Resultado del precedente"
+          },
+          {
+            "value": "6",
+            "label": "Promedio de goles"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Suecia lidera y Bosnia es segunda",
+        "bullets": [
+          "Suecia ocupa la primera posición con 6 puntos en 2 partidos disputados.",
+          "Bosnia y Herzegovina figura segunda con 4 puntos en 2 jornadas, a dos unidades del liderato."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Puntos Suecia"
+          },
+          {
+            "value": "4",
+            "label": "Puntos Bosnia"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Gyökeres encabeza la nómina sueca",
+        "bullets": [
+          "Viktor Gyökeres (Suecia) acumula 2 goles, por delante de Alexander Isak y Benjamin Nygren, con 1 cada uno.",
+          "Armin Gigović es el único anotador registrado por Bosnia y Herzegovina, con 1 gol.",
+          "La fuente acompaña cada nombre con un segundo registro numérico que no aparece etiquetado en el input."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles de Gyökeres"
+          },
+          {
+            "value": "1",
+            "label": "Goles de Gigović"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma reciente",
+        "detail": "El input no incluye filas R, por lo que no existe racha de resultados recientes de ninguno de los dos equipos."
+      },
+      {
+        "label": "Sin bajas ni consenso externo",
+        "detail": "No se aportan bloques L (bajas confirmadas) ni M2 (consenso externo en porcentaje interpretativo)."
+      },
+      {
+        "label": "Sede y clima incompletos",
+        "detail": "El bloque W no identifica estadio ni ciudad, indica clima desconocido y cierra con un valor de 4 sin unidad especificada."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los modelos divergen sobre el favorito: Poisson GoatLab da 41.4% a Bosnia y 30.9% a Suecia, mientras CatBoost de Bzzoiro da 35.5% y 37.7%, alineado con la estimación declarada B2 (visitante, 37.7%). El historial se reduce a un solo cruce de 2010."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:09:04.879Z",
+    "inputKey": "v3|M|bz-212648|Bosnia & Herzegovina|Sweden|nations|2026-10-02T18:45:00+00:0|NS\nP|1.49|1.26|0.414|0.278|0.309|0.519|0.567\nB|0.355|0.268|0.377|1.49|1.26|0.561|0.599|1-1|0.367\nB2|A|0.377|no|no\nH|1|0|0|1|6\nW||unknown|4|\nT|2|Bosnia & Herzegovina|2|4||\nT|1|Sweden|2|6||\nS|Armin Gigović|Bosnia & Herzegovina|1|2\nS|Viktor Gyökeres|Sweden|2|2\nS|Alexander Isak|Sweden|1|1\nS|Benjamin Nygren|Sweden|1|2\nHR|2010-05-29|Sweden|Bosnia & Herzegovina|4|2",
+    "materialKey": "M|bz-212648|Bosnia & Herzegovina|Sweden|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212647": {
+    "matchId": "bz-212647",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Nations League: Ucrania recibe a Irlanda del Norte",
+        "bullets": [
+          "Ucrania e Irlanda del Norte se enfrentan en partido de Nations League del 2 de octubre de 2026 a las 18:45 UTC, con estado NS (no iniciado).",
+          "El bloque W señala lluvia y un valor final de 4 sin unidad especificada, sin sede ni ciudad identificadas.",
+          "No hay forma reciente, bajas confirmadas ni consenso externo declarado en el input."
+        ],
+        "stats": [
+          {
+            "value": "18:45 UTC",
+            "label": "Hora de inicio"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Ucrania favorita en las dos lecturas",
+        "bullets": [
+          "Poisson GoatLab concede 37.9% a Ucrania, 31.2% al empate y 30.9% a Irlanda del Norte, con goles esperados de 1.2 y 1.06, 39.3% en goles totales y 47.0% en ambos anotan.",
+          "CatBoost de Bzzoiro eleva a Ucrania al 48.3%, baja el empate al 29.0% y a Irlanda del Norte al 22.7%, con marcador más probable 1-1 al 37.2% y 39.0% en goles totales.",
+          "La estimación declarada del modelo Bzzoiro (B2) coincide con CatBoost al señalar al local como mayor probabilidad, 48.3%, sin valores de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "48.3%",
+            "label": "Victoria Ucrania (CatBoost)"
+          },
+          {
+            "value": "37.9%",
+            "label": "Victoria Ucrania (Poisson)"
+          },
+          {
+            "value": "1-1",
+            "label": "Marcador más probable"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dos cruces recientes: un triunfo por lado",
+        "bullets": [
+          "El historial registra dos enfrentamientos: Ucrania 1-0 Irlanda del Norte el 3 de junio de 2021 y Ucrania 0-2 Irlanda del Norte el 16 de junio de 2016.",
+          "El resumen H contabiliza 2 partidos, 1 victoria local, 0 empates y 1 victoria visitante, con 1.5 goles de promedio."
+        ],
+        "stats": [
+          {
+            "value": "1-0",
+            "label": "Cruce de 2021"
+          },
+          {
+            "value": "0-2",
+            "label": "Cruce de 2016"
+          },
+          {
+            "value": "1.5",
+            "label": "Promedio de goles"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Irlanda del Norte primera, Ucrania segunda",
+        "bullets": [
+          "Irlanda del Norte encabeza el grupo con 4 puntos en 2 partidos disputados.",
+          "Ucrania es segunda con los mismos 4 puntos en 2 jornadas, igualada en la cima pero por detrás en la clasificación."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Puntos Irlanda del Norte"
+          },
+          {
+            "value": "4",
+            "label": "Puntos Ucrania"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Sikan, único anotador registrado",
+        "bullets": [
+          "Danylo Sikan (Ucrania) aparece con 1 gol en la lista de goleadores facilitada.",
+          "El bloque S no registra artilleros por parte de Irlanda del Norte."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Goles de Sikan"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma reciente",
+        "detail": "No hay filas R en el input, por lo que se desconoce la racha de resultados recientes de ambos equipos."
+      },
+      {
+        "label": "Sin bajas ni consenso externo",
+        "detail": "No se facilitan bloques L (bajas confirmadas) ni M2 (consenso externo en porcentaje interpretativo)."
+      },
+      {
+        "label": "Sede sin identificar",
+        "detail": "El bloque W apunta lluvia y un valor de 4 sin unidad, pero no indica estadio ni ciudad del encuentro."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Las dos lecturas de modelo coinciden en el favorito local, pero con brecha amplia: 37.9% en Poisson GoatLab frente a 48.3% en CatBoost de Bzzoiro, y 30.9% frente a 22.7% para Irlanda del Norte. El historial queda igualado en dos cruces."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:09:04.884Z",
+    "inputKey": "v3|M|bz-212647|Ukraine|Northern Ireland|nations|2026-10-02T18:45:00+00:0|NS\nP|1.2|1.06|0.379|0.312|0.309|0.393|0.47\nB|0.483|0.29|0.227|1.2|1.06|0.39|0.427|1-1|0.372\nB2|H|0.483|no|no\nH|2|1|0|1|1.5\nW||rain|4|\nT|2|Ukraine|2|4||\nT|1|Northern Ireland|2|4||\nS|Danylo Sikan|Ukraine|1|2\nHR|2021-06-03|Ukraine|Northern Ireland|1|0\nHR|2016-06-16|Ukraine|Northern Ireland|0|2",
+    "materialKey": "M|bz-212647|Ukraine|Northern Ireland|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212646": {
+    "matchId": "bz-212646",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Naciones: Hungría recibe a Georgia",
+        "bullets": [
+          "Cruce de selecciones previsto para el 2 de octubre de 2026 a las 18:45, con Hungría y Georgia igualadas en la parte baja de la tabla.",
+          "Hungría aparece 4.ª con 2 partidos jugados y 1 punto; Georgia es 3.ª con 2 partidos jugados y 1 punto."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Puntos Hungría"
+          },
+          {
+            "value": "1",
+            "label": "Puntos Georgia"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost no señalan al mismo favorito",
+        "bullets": [
+          "Poisson GoatLab reparte 0.345 al local, 0.3 al empate y 0.355 al visitante, con goles esperados de 1.21 y 1.23.",
+          "CatBoost Bzzoiro da 0.442 al local, 0.287 al empate y 0.271 al visitante sobre los mismos goles esperados.",
+          "B2 declara 0.442 como mayor probabilidad, favorable al local, y responde no a goles totales y ambos anotan.",
+          "Los segundos valores de cada modelo quedan próximos (0.441 y 0.443; 0.51 y 0.495), pero la dirección del ganador no coincide."
+        ],
+        "stats": [
+          {
+            "value": "0.345",
+            "label": "Local Poisson GoatLab"
+          },
+          {
+            "value": "0.442",
+            "label": "Local CatBoost Bzzoiro"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Zona baja del grupo",
+        "bullets": [
+          "Hungría ocupa la 4.ª posición con 2 partidos jugados y 1 punto.",
+          "Georgia se sitúa 3.ª con 2 partidos jugados y 1 punto.",
+          "La tabla aportada no declara goles a favor ni en contra para ninguna de las dos."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Partidos Hungría"
+          },
+          {
+            "value": "2",
+            "label": "Partidos Georgia"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves a vigilar",
+        "bullets": [
+          "El desacuerdo de dirección entre Poisson GoatLab y CatBoost Bzzoiro es lo más llamativo del cruce.",
+          "El empate mantiene peso en ambos modelos (0.3 y 0.287) como escenario intermedio.",
+          "El input no incluye historial, forma reciente, bajas, clima ni lectura de API-Football para este partido."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin historial",
+        "detail": "No se aportan cruces previos entre Hungría y Georgia."
+      },
+      {
+        "label": "Sin forma reciente",
+        "detail": "No hay filas R con la racha inmediata de ninguna de las dos selecciones."
+      },
+      {
+        "label": "Sin clima ni sede",
+        "detail": "No se informa bloque W para este partido."
+      },
+      {
+        "label": "Sin lecturas externas",
+        "detail": "No hay bloque A de API-Football ni M2 de consenso externo."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No se declaran ausencias confirmadas."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Poisson GoatLab sitúa al visitante por delante (0.355 frente a 0.345), mientras CatBoost Bzzoiro asigna 0.442 al local y B2 declara esa misma probabilidad como mayoritaria. La discrepancia de dirección entre proveedores queda marcada."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:09:47.395Z",
+    "inputKey": "v3|M|bz-212646|Hungary|Georgia|nations|2026-10-02T18:45:00+00:0|NS\nP|1.21|1.23|0.345|0.3|0.355|0.441|0.51\nB|0.442|0.287|0.271|1.21|1.23|0.443|0.495|1-1|0.38\nB2|H|0.442|no|no\nT|4|Hungary|2|1||\nT|3|Georgia|2|1||",
+    "materialKey": "M|bz-212646|Hungary|Georgia|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212645": {
+    "matchId": "bz-212645",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Francia e Italia, duelo en la cima",
+        "bullets": [
+          "Partido de selecciones el 2 de octubre de 2026 a las 18:45, con Francia líder e Italia segunda tras dos jornadas.",
+          "El clima declarado es lluvia con viento de 6.",
+          "Francia suma 6 puntos en 2 partidos; Italia acumula 3 puntos en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Puntos Francia"
+          },
+          {
+            "value": "3",
+            "label": "Puntos Italia"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost, mismo lado y distinto margen",
+        "bullets": [
+          "Poisson GoatLab reparte 0.426 al local, 0.268 al empate y 0.306 al visitante, con goles esperados de 1.59 y 1.32.",
+          "CatBoost Bzzoiro eleva al local a 0.652 y deja el empate en 0.195 y el visitante en 0.153.",
+          "B2 declara 0.652 como mayor probabilidad, favorable a Francia, y responde no a goles totales y ambos anotan.",
+          "Los segundos valores de cada modelo se separan (0.556 frente a 0.632 y 0.595 frente a 0.567)."
+        ],
+        "stats": [
+          {
+            "value": "0.426",
+            "label": "Local Poisson GoatLab"
+          },
+          {
+            "value": "0.652",
+            "label": "Local CatBoost Bzzoiro"
+          },
+          {
+            "value": "1.59",
+            "label": "Goles esperados local"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial con dominio francés",
+        "bullets": [
+          "El balance declarado en 12 cruces es de 6 victorias de Francia, 2 empates y 4 de Italia, con 2.92 goles por partido.",
+          "Los cinco resultados listados incluyen cuatro triunfos franceses: 1-3, 3-1, 1-3 y 1-2.",
+          "El único triunfo italiano de la muestra es el 1-3 de septiembre de 2024, jugado en Francia."
+        ],
+        "stats": [
+          {
+            "value": "12",
+            "label": "Cruces previos"
+          },
+          {
+            "value": "6",
+            "label": "Victorias Francia"
+          },
+          {
+            "value": "2.92",
+            "label": "Goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Liderato en juego",
+        "bullets": [
+          "Francia es 1.ª con 2 partidos jugados y 6 puntos.",
+          "Italia es 2.ª con 2 partidos jugados y 3 puntos.",
+          "Ambas selecciones llegan con el mismo número de encuentros disputados en el grupo."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Puesto Francia"
+          },
+          {
+            "value": "2",
+            "label": "Puesto Italia"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goles italianos repartidos",
+        "bullets": [
+          "Alessandro Bastoni figura con 1 gol en el registro de goleadores aportado, con Italia como selección.",
+          "Davide Frattesi aparece también con 1 gol para Italia.",
+          "No se declaran goleadores por el lado francés en el input."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Goles Bastoni"
+          },
+          {
+            "value": "1",
+            "label": "Goles Frattesi"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Muestra de historial parcial",
+        "detail": "El bloque H declara 12 cruces (6-2-4), pero HR solo lista 5 resultados, cuatro de ellos favorables a Francia."
+      },
+      {
+        "label": "Sin forma reciente",
+        "detail": "No hay filas R con la racha inmediata de Francia ni de Italia."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No se informan ausencias confirmadas para el partido."
+      },
+      {
+        "label": "Sin lectura de API-Football",
+        "detail": "No se aporta bloque A con distribución de probabilidades."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No hay M2 con porcentajes interpretativos de terceros."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Poisson GoatLab asigna 0.426 al local frente a 0.652 de CatBoost Bzzoiro: coinciden en el favorito, pero la magnitud difiere de forma clara entre proveedores. Se marca la desviación."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:09:47.399Z",
+    "inputKey": "v3|M|bz-212645|France|Italy|nations|2026-10-02T18:45:00+00:0|NS\nP|1.59|1.32|0.426|0.268|0.306|0.556|0.595\nB|0.652|0.195|0.153|1.59|1.32|0.632|0.567|1-1|0.461\nB2|H|0.652|no|no\nH|12|6|2|4|2.92\nW||rain|6|\nT|1|France|2|6||\nT|2|Italy|2|3||\nS|Alessandro Bastoni|Italy|1|1\nS|Davide Frattesi|Italy|1|2\nHR|2024-11-17|Italy|France|1|3\nHR|2024-09-06|France|Italy|1|3\nHR|2018-06-01|France|Italy|3|1\nHR|2016-09-01|Italy|France|1|3\nHR|2012-11-14|Italy|France|1|2",
+    "materialKey": "M|bz-212645|France|Italy|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212644": {
+    "matchId": "bz-212644",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Bélgica y Türkiye en jornada de Nations",
+        "bullets": [
+          "Partido de Nations League fijado para el 2 de octubre de 2026 a las 18:45 UTC, declarado todavía sin comenzar.",
+          "Bélgica llega 3ª con 3 puntos en 2 partidos; Türkiye es 4ª con 0 puntos en 2 partidos.",
+          "El clima declarado en la sede es despejado, aunque el input no identifica estadio ni ciudad."
+        ],
+        "stats": [
+          {
+            "value": "3ª",
+            "label": "Puesto de Bélgica"
+          },
+          {
+            "value": "4ª",
+            "label": "Puesto de Türkiye"
+          },
+          {
+            "value": "18:45 UTC",
+            "label": "Hora prevista"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades y goles esperados",
+        "bullets": [
+          "Poisson GoatLab: Bélgica 54.7%, empate 24.0%, Türkiye 21.3%, con 1.94 y 1.15 como goles esperados.",
+          "CatBoost Bzzoiro: Bélgica 61.8%, empate 20.5%, Türkiye 17.8%, con los mismos 1.94 y 1.15; su estimación declarada marca la victoria local con 0.618.",
+          "Ambos cálculos coinciden en señalar a Bélgica como favorita, con una diferencia cercana a 7 puntos en esa probabilidad.",
+          "El proveedor declara además 0.647 y 0.609 en lecturas de goles y un marcador más probable 1-1 con 0.468."
+        ],
+        "stats": [
+          {
+            "value": "54.7%",
+            "label": "Victoria local (Poisson)"
+          },
+          {
+            "value": "61.8%",
+            "label": "Victoria local (Bzzoiro)"
+          },
+          {
+            "value": "1.94",
+            "label": "Goles esperados Bélgica"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes del cruce",
+        "bullets": [
+          "Tres antecedentes registrados: Bélgica 2-0 Türkiye (2009), Türkiye 1-1 Bélgica (2008) y Bélgica 0-2 Türkiye (2000).",
+          "El resumen de historial recoge 3 cruces con balance 1-1-1."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Antecedentes registrados"
+          },
+          {
+            "value": "1-1-1",
+            "label": "Balance del historial"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en la clasificación",
+        "bullets": [
+          "Bélgica ocupa la 3ª plaza con 3 puntos en 2 partidos disputados.",
+          "Türkiye es 4ª con 0 puntos en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Puntos de Bélgica"
+          },
+          {
+            "value": "0",
+            "label": "Puntos de Türkiye"
+          },
+          {
+            "value": "2",
+            "label": "Partidos jugados"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Referencias anotadoras declaradas",
+        "bullets": [
+          "Barış Alper Yılmaz (Türkiye) figura con 1 gol en 2 partidos.",
+          "El listado de goleadores del input solo incluye un nombre para este cruce."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Goles de Yılmaz (Türkiye)"
+          },
+          {
+            "value": "2",
+            "label": "Partidos"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sede no declarada",
+        "detail": "El clima se declara despejado, pero el input no identifica estadio ni ciudad."
+      },
+      {
+        "label": "Marcador exacto",
+        "detail": "El 0.468 asociado al 1-1 de Bzzoiro es alto para una probabilidad de resultado exacto y se reproduce tal cual."
+      },
+      {
+        "label": "Lecturas sin etiqueta",
+        "detail": "Los valores 0.647 y 0.609 del proveedor no vienen asociados a un mercado concreto."
+      },
+      {
+        "label": "Sin alineaciones ni bajas",
+        "detail": "El input no incluye alineaciones confirmadas ni bajas para este cruce."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los dos modelos coinciden en dirección (Bélgica favorita) y en los goles esperados; la diferencia de unos 7 puntos en la victoria local y el valor 0.468 del marcador 1-1 se registran como lecturas declaradas del proveedor, sin contradicción clara con el resto de datos."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:10:38.335Z",
+    "inputKey": "v3|M|bz-212644|Belgium|Türkiye|nations|2026-10-02T18:45:00+00:0|NS\nP|1.94|1.15|0.547|0.24|0.213|0.597|0.595\nB|0.618|0.205|0.178|1.94|1.15|0.647|0.609|1-1|0.468\nB2|H|0.618|no|no\nH|3|1|1|1|2\nW||clear|1|\nT|3|Belgium|2|3||\nT|4|Türkiye|2|0||\nS|Barış Alper Yılmaz|Türkiye|1|2\nHR|2009-10-10|Belgium|Türkiye|2|0\nHR|2008-09-10|Türkiye|Belgium|1|1\nHR|2000-06-19|Belgium|Türkiye|0|2",
+    "materialKey": "M|bz-212644|Belgium|Türkiye|nations|2026-10-02T18:45:00+00:0|NS"
+  },
+  "bz-212653": {
+    "matchId": "bz-212653",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Finlandia recibe a Albania en Nations",
+        "bullets": [
+          "Cruce de Nations League fijado para el 3 de octubre de 2026 a las 13:00 UTC, declarado sin comenzar.",
+          "Albania llega 1ª con 6 puntos en 2 partidos; Finlandia es 2ª con 4 puntos en 2 partidos.",
+          "El input no aporta sede ni condiciones meteorológicas para este partido."
+        ],
+        "stats": [
+          {
+            "value": "1ª",
+            "label": "Puesto de Albania"
+          },
+          {
+            "value": "2ª",
+            "label": "Puesto de Finlandia"
+          },
+          {
+            "value": "13:00 UTC",
+            "label": "Hora prevista"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades y goles esperados",
+        "bullets": [
+          "Poisson GoatLab: Finlandia 32.9%, empate 30.8%, Albania 36.3%, con 1.13 y 1.20 como goles esperados.",
+          "CatBoost Bzzoiro: Finlandia 39.2%, empate 29.5%, Albania 31.4%, con los mismos 1.13 y 1.20; su estimación declarada señala la victoria local con 0.392.",
+          "Los cálculos se separan en la dirección: Poisson concede la mayor probabilidad a Albania y Bzzoiro a Finlandia.",
+          "El proveedor declara además 0.409 y 0.474 en lecturas de goles y un marcador más probable 1-1 con 0.42."
+        ],
+        "stats": [
+          {
+            "value": "36.3%",
+            "label": "Mayor probabilidad (Poisson)"
+          },
+          {
+            "value": "39.2%",
+            "label": "Mayor probabilidad (Bzzoiro)"
+          },
+          {
+            "value": "1.20",
+            "label": "Goles esperados Albania"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en la clasificación",
+        "bullets": [
+          "Albania lidera el grupo con 6 puntos en 2 partidos disputados.",
+          "Finlandia es 2ª con 4 puntos en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Puntos de Albania"
+          },
+          {
+            "value": "4",
+            "label": "Puntos de Finlandia"
+          },
+          {
+            "value": "2",
+            "label": "Partidos jugados"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros declarados del grupo",
+        "bullets": [
+          "Joel Pohjanpalo (Finlandia) encabeza el listado con 3 goles en 2 partidos.",
+          "Leo Walta suma 2 goles y Adrian Svanback 1, ambos con Finlandia y en 2 partidos.",
+          "Por Albania aparece Anis Mehmeti con 1 gol en 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles de Pohjanpalo"
+          },
+          {
+            "value": "2",
+            "label": "Goles de Walta"
+          },
+          {
+            "value": "1",
+            "label": "Goles de Mehmeti"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Puntos de atención del cruce",
+        "bullets": [
+          "El desacuerdo entre modelos sobre el favorito, con Albania al 36.3% en Poisson y Finlandia al 39.2% en Bzzoiro, es el punto central de la previa.",
+          "La igualdad en el empate, en torno al 30% en ambos cálculos, reduce la separación entre los tres desenlaces.",
+          "La ventaja de Albania en la tabla (6 puntos) frente a Finlandia (4) marca el contexto competitivo del partido.",
+          "Pohjanpalo, con 3 goles, aparece como la referencia individual más productiva del grupo."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Favorito divergente",
+        "detail": "Poisson otorga 36.3% a Albania y Bzzoiro 39.2% a Finlandia, pese a compartir los goles esperados de 1.13 y 1.20."
+      },
+      {
+        "label": "Coherencia de Bzzoiro",
+        "detail": "El proveedor señala a Finlandia como mayor probabilidad aunque sus propios goles esperados favorecen levemente a Albania."
+      },
+      {
+        "label": "Lecturas sin etiqueta",
+        "detail": "Los valores 0.409 y 0.474 no vienen asociados a un mercado concreto en el input."
+      },
+      {
+        "label": "Marcador exacto",
+        "detail": "El 0.42 ligado al 1-1 resulta alto para una probabilidad de resultado exacto y se reproduce tal cual."
+      },
+      {
+        "label": "Sede no declarada",
+        "detail": "El input no aporta estadio ni condiciones meteorológicas para este partido."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Divergencia clara en el favorito: Poisson da a Albania 36.3% y Bzzoiro a Finlandia 39.2%, con goles esperados idénticos (1.13 y 1.20) y Albania líder del grupo con 6 puntos. Ambas lecturas corresponden a proveedores y se reproducen como estimaciones declaradas, no como recomendación."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T17:10:38.339Z",
+    "inputKey": "v3|M|bz-212653|Finland|Albania|nations|2026-10-03T13:00:00+00:0|NS\nP|1.13|1.2|0.329|0.308|0.363|0.412|0.486\nB|0.392|0.295|0.314|1.13|1.2|0.409|0.474|1-1|0.42\nB2|H|0.392|no|no\nT|2|Finland|2|4||\nT|1|Albania|2|6||\nS|Joel Pohjanpalo|Finland|3|2\nS|Leo Walta|Finland|2|2\nS|Adrian Svanback|Finland|1|2\nS|Anis Mehmeti|Albania|1|2",
+    "materialKey": "M|bz-212653|Finland|Albania|nations|2026-10-03T13:00:00+00:0|NS"
   }
 }
