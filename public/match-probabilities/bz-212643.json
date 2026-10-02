@@ -1,9 +1,9 @@
 {
-  "id": "bz-212652",
-  "home": "Faroe Islands",
-  "away": "Slovakia",
+  "id": "bz-212643",
+  "home": "Kazakhstan",
+  "away": "Moldova",
   "competition": "nations",
-  "kickoff": "2026-10-02T18:45:00+00:00",
+  "kickoff": "2026-10-02T14:00:00+00:00",
   "updatedAt": "2026-10-02T22:22:17.977Z",
   "schemaVersion": 5,
   "inputs": {
@@ -19,36 +19,36 @@
       "away": 0
     },
     "standings": {
-      "Faroe Islands": {
-        "position": 3,
-        "team": "Faroe Islands",
-        "teamId": 711,
-        "played": 2,
+      "Kazakhstan": {
+        "position": 4,
+        "team": "Kazakhstan",
+        "teamId": 2209,
+        "played": 3,
         "won": 0,
-        "drawn": 2,
-        "lost": 0,
+        "drawn": 1,
+        "lost": 2,
         "goalsFor": null,
         "goalsAgainst": null,
         "goalDifference": null,
-        "points": 2,
+        "points": 1,
         "zone": null,
         "form": null
       },
-      "Slovakia": {
-        "position": 1,
-        "team": "Slovakia",
-        "teamId": 725,
-        "played": 2,
-        "won": 2,
-        "drawn": 0,
-        "lost": 0,
+      "Moldova": {
+        "position": 2,
+        "team": "Moldova",
+        "teamId": 673,
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
         "goalsFor": null,
         "goalsAgainst": null,
         "goalDifference": null,
-        "points": 6,
+        "points": 4,
         "zone": {
-          "key": "promo",
-          "label": "Promotion",
+          "key": "playoff",
+          "label": "Promotion Playoffs",
           "type": "promotion"
         },
         "form": null
@@ -58,10 +58,13 @@
       "updatedAt": "2026-10-02T17:05:12.799Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
-      "scorerSource": "leaderboard"
+      "scorerSource": null
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-10-02T14:00:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": {
       "updatedAt": "2026-10-02T17:05:12.799Z",
       "provider": "Bzzoiro + Football-Data.org"
@@ -169,30 +172,10 @@
     "firstAway": 0.472
   },
   "scorers": {
-    "home": [
-      {
-        "player": "Áki Samuelsen",
-        "goals": 1,
-        "matches": 2,
-        "share": 0.9,
-        "rate": 1.31,
-        "anytime": 0.729,
-        "first": 0.45
-      }
-    ],
-    "away": [
-      {
-        "player": "Dávid Hancko",
-        "goals": 1,
-        "matches": 2,
-        "share": 0.9,
-        "rate": 1.31,
-        "anytime": 0.729,
-        "first": 0.45
-      }
-    ]
+    "home": null,
+    "away": null
   },
-  "hasScorers": true,
+  "hasScorers": false,
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": null,
@@ -391,10 +374,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 13.3,
+      "condition": "cloudy",
+      "sampledAt": "2026-10-02T14:00:00+00:00",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": null,
@@ -416,51 +399,43 @@
   },
   "context": {
     "home": {
-      "team": "Faroe Islands",
+      "team": "Kazakhstan",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 3,
-        "played": 2,
+        "position": 4,
+        "played": 3,
         "gf": null,
         "ga": null,
         "provider": null
       },
-      "player": {
-        "name": "Áki Samuelsen",
-        "detail": "1 goles en 2 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     },
     "away": {
-      "team": "Slovakia",
+      "team": "Moldova",
       "recentSample": 0,
       "debut": true,
       "cleanSheets": null,
       "biggestWin": null,
       "unbeaten": null,
       "season": {
-        "position": 1,
-        "played": 2,
+        "position": 2,
+        "played": 3,
         "gf": null,
         "ga": null,
         "provider": null
       },
-      "player": {
-        "name": "Dávid Hancko",
-        "detail": "1 goles en 2 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     }
   },
   "llmReview": {
     "flag": true,
-    "note": "Se detecta divergencia clara entre modelos: Poisson GoatLab da 0.372 a Faroe Islands y 0.323 a Eslovaquia; CatBoost Bzzoiro y B2 elevan a Eslovaquia a 0.598. La tabla respalda a Eslovaquia con 6 puntos frente a 2 de Faroe Islands. El marcador 1-1 de Bzzoiro matiza esa ventaja.",
+    "note": "Se detecta inconsistencia de calendario: el registro marca FT para 2026-10-02, fecha posterior a la referencia actual, sin marcador. Las probabilidades de P suman 100.1% por redondeo y no muestran desviación clara, pero faltan datos para auditoría completa.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-02T17:07:54.300Z"
+    "generatedAt": "2026-10-02T22:20:54.546Z"
   }
 }

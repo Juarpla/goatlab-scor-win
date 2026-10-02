@@ -4524,5 +4524,388 @@
     "generatedAt": "2026-10-02T17:10:38.339Z",
     "inputKey": "v3|M|bz-212653|Finland|Albania|nations|2026-10-03T13:00:00+00:0|NS\nP|1.13|1.2|0.329|0.308|0.363|0.412|0.486\nB|0.392|0.295|0.314|1.13|1.2|0.409|0.474|1-1|0.42\nB2|H|0.392|no|no\nT|2|Finland|2|4||\nT|1|Albania|2|6||\nS|Joel Pohjanpalo|Finland|3|2\nS|Leo Walta|Finland|2|2\nS|Adrian Svanback|Finland|1|2\nS|Anis Mehmeti|Albania|1|2",
     "materialKey": "M|bz-212653|Finland|Albania|nations|2026-10-03T13:00:00+00:0|NS"
+  },
+  "bz-212643": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Contexto del cruce Kazakhstan-Moldova",
+        "bullets": [
+          "El registro del partido corresponde a Nations League, con fecha 2026-10-02 y marca FT, sin marcador ni goles detallados en el input.",
+          "El clima previsto en la sede es nublado y 13 grados; no se aportó nombre de estadio ni ciudad.",
+          "Kazakhstan y Moldova llegan al cruce sin datos de historial, forma reciente, goleadores, bajas o consenso externo en el input."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-02",
+            "label": "Fecha"
+          },
+          {
+            "value": "13",
+            "label": "Temperatura"
+          },
+          {
+            "value": "FT",
+            "label": "Estado registrado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Cálculo Poisson y probabilidades",
+        "bullets": [
+          "El cálculo Poisson de GoatLab proyecta 1.45 goles esperados para cada equipo y probabilidades de 36.5% para victoria local, 27.1% para empate y 36.5% para victoria visitante.",
+          "El mismo cálculo otorga 55.4% a un umbral de goles y 59.7% a que ambos equipos anoten, según los campos declarados.",
+          "La suma de las tres probabilidades principales es 100.1%, compatible con redondeo; no se emiten recomendaciones."
+        ],
+        "stats": [
+          {
+            "value": "1.45",
+            "label": "Goles esperados por equipo"
+          },
+          {
+            "value": "36.5%",
+            "label": "Prob. victoria local"
+          },
+          {
+            "value": "27.1%",
+            "label": "Prob. empate"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación en el grupo",
+        "bullets": [
+          "Moldova aparece en la posición 2 con 3 partidos y 4 puntos en la tabla registrada.",
+          "Kazakhstan figura en la posición 4 con 3 partidos y 1 punto en la misma tabla.",
+          "La tabla muestra una diferencia de 3 puntos entre ambos equipos antes del cruce."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Puntos de Moldova"
+          },
+          {
+            "value": "1",
+            "label": "Puntos de Kazakhstan"
+          },
+          {
+            "value": "3",
+            "label": "Partidos jugados"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Lectura y datos ausentes",
+        "bullets": [
+          "El input no detalla marcador ni goles, por lo que no es posible describir el desarrollo del partido.",
+          "La ausencia de historial, forma, goleadores, bajas, CatBoost, API-Football y consenso externo limita la comparación entre modelos.",
+          "El registro marca FT en una fecha futura respecto a la referencia actual, una inconsistencia del calendario declarado."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin resultado",
+        "detail": "El input no incluye marcador ni goles, aunque el partido aparece con marca FT."
+      },
+      {
+        "label": "Datos ausentes",
+        "detail": "No hay historial, forma reciente, goleadores, bajas, CatBoost, API-Football ni consenso externo."
+      },
+      {
+        "label": "Sede incompleta",
+        "detail": "Solo se informa clima nublado y 13 grados; no hay estadio ni ciudad."
+      },
+      {
+        "label": "Calendario",
+        "detail": "La fecha 2026-10-02 es posterior a la referencia actual y aparece como FT, sin resultado."
+      },
+      {
+        "label": "Campos Poisson",
+        "detail": "Los valores 55.4% y 59.7% no se etiquetan explícitamente en el input."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Se detecta inconsistencia de calendario: el registro marca FT para 2026-10-02, fecha posterior a la referencia actual, sin marcador. Las probabilidades de P suman 100.1% por redondeo y no muestran desviación clara, pero faltan datos para auditoría completa."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T22:20:54.546Z",
+    "inputKey": "v3|M|bz-212643|Kazakhstan|Moldova|nations|2026-10-02T14:00:00+00:0|FT\nP|1.45|1.45|0.365|0.271|0.365|0.554|0.597\nW||cloudy|13|\nT|4|Kazakhstan|3|1||\nT|2|Moldova|3|4||",
+    "materialKey": "M|bz-212643|Kazakhstan|Moldova|nations|2026-10-02T14:00:00+00:0|FT"
+  },
+  "bz-212657": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Islandia y Bulgaria en jornada de Nations League",
+        "bullets": [
+          "Islandia recibe a Bulgaria en un partido de la Nations League fijado para el 3 de octubre de 2026 a las 16:00 UTC, con estado de no iniciado.",
+          "El duelo llega con Islandia en lo alto de la tabla de su grupo y Bulgaria en la cuarta posición, según los registros de clasificación disponibles.",
+          "La sede no aparece detallada en los datos recibidos y solo se registra una temperatura de 23 grados."
+        ],
+        "stats": [
+          {
+            "value": "16:00 UTC",
+            "label": "hora de inicio"
+          },
+          {
+            "value": "23",
+            "label": "grados registrados"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Dos modelos, dos lecturas del mismo partido",
+        "bullets": [
+          "El Poisson de GoatLab reparte 0.499 para Islandia, 0.273 para el empate y 0.228 para Bulgaria, con goles esperados de 1.61 y 1.02.",
+          "El CatBoost de Bzzoiro eleva la victoria local a 0.664, deja el empate en 0.209 y la victoria visitante en 0.127, con marcador más probable 1-1.",
+          "Ambos modelos comparten los goles esperados (1.61 y 1.02) y señalan a Islandia como favorita, pero discrepan en el peso del empate y de la visita.",
+          "B2 declara como mayor probabilidad la victoria local (0.664) y responde de forma negativa a los apartados declarados de goles totales y ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.664",
+            "label": "prob. local CatBoost"
+          },
+          {
+            "value": "0.499",
+            "label": "prob. local Poisson"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador más probable"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dos precedentes, ambos con triunfo búlgaro",
+        "bullets": [
+          "Los únicos cruces registrados se remontan a 2004 y 2005: Islandia 1-3 Bulgaria y Bulgaria 3-2 Islandia.",
+          "El balance es de dos victorias búlgaras en dos partidos, sin empates ni triunfos islandeses, con un promedio de 4.5 goles por encuentro."
+        ],
+        "stats": [
+          {
+            "value": "4.5",
+            "label": "promedio de goles"
+          },
+          {
+            "value": "3-2",
+            "label": "marcador en 2005"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Islandia arriba y Bulgaria en el cuarto puesto",
+        "bullets": [
+          "Iceland aparece en la primera posición con 2 partidos jugados y 4 puntos.",
+          "Bulgaria figura en la cuarta posición con 2 partidos jugados y 1 punto.",
+          "Los registros de tabla no incluyen diferencia de goles ni otros desgloses de rendimiento."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "puntos de Islandia"
+          },
+          {
+            "value": "1",
+            "label": "puntos de Bulgaria"
+          },
+          {
+            "value": "2",
+            "label": "partidos jugados"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Guðjohnsen y Chandarov, referencias anotadoras",
+        "bullets": [
+          "Andri Guðjohnsen, de Islandia, encabeza el registro de goleadores con 2.",
+          "Asen Chandarov, de Bulgaria, aparece en ese registro con 1.",
+          "No hay más nombres ni desglose de minutos en los datos de goleadores."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "registro de Guðjohnsen"
+          },
+          {
+            "value": "1",
+            "label": "registro de Chandarov"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin estimación API-Football",
+        "detail": "No llegó fila A, por lo que no hay distribución, mayor probabilidad ni umbral de goles de ese proveedor."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se recibió bloque M2 con porcentajes interpretativos de terceros."
+      },
+      {
+        "label": "Sin forma reciente",
+        "detail": "Faltan filas R, así que no hay racha ni resultados recientes de ninguno de los dos equipos."
+      },
+      {
+        "label": "Sede y clima incompletos",
+        "detail": "El bloque W solo aporta una temperatura de 23 grados; no se detallan sede ni condiciones de juego."
+      },
+      {
+        "label": "Campos sin etiqueta",
+        "detail": "Los valores 0.489 y 0.523 del Poisson y 0.527 y 0.469 del CatBoost no traen variable asociada, por lo que no se interpretan."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los modelos difieren de forma clara en la victoria local: 0.499 en el Poisson de GoatLab frente a 0.664 en el CatBoost de Bzzoiro, unos 16.5 puntos porcentuales. Comparten goles esperados (1.61 y 1.02) y marcador 1-1, y B2 alinea su lectura con B. El historial se apoya en solo dos cruces, el último "
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T22:21:28.196Z",
+    "inputKey": "v3|M|bz-212657|Iceland|Bulgaria|nations|2026-10-03T16:00:00+00:0|NS\nP|1.61|1.02|0.499|0.273|0.228|0.489|0.523\nB|0.664|0.209|0.127|1.61|1.02|0.527|0.469|1-1|\nB2|H|0.664|no|no\nH|2|0|0|2|4.5\nW|||23|\nT|1|Iceland|2|4||\nT|4|Bulgaria|2|1||\nS|Andri Guðjohnsen|Iceland|2|2\nS|Asen Chandarov|Bulgaria|1|2\nHR|2005-09-07|Bulgaria|Iceland|3|2\nHR|2004-09-04|Iceland|Bulgaria|1|3",
+    "materialKey": "M|bz-212657|Iceland|Bulgaria|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212656": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Estonia y Luxemburgo, duelo de selecciones",
+        "bullets": [
+          "Cruce de selecciones entre Estonia y Luxemburgo, programado para el 3 de octubre de 2026 a las 16:00 UTC y aún no iniciado.",
+          "Las condiciones previstas apuntan a cielo Nublado y 10 °C; el input no especifica la sede del encuentro.",
+          "No se aportan bloques de forma reciente, goleadores, bajas confirmadas ni consenso externo para este cruce."
+        ],
+        "stats": [
+          {
+            "value": "16:00",
+            "label": "Hora UTC programada"
+          },
+          {
+            "value": "10 °C",
+            "label": "Temperatura prevista"
+          },
+          {
+            "value": "Nublado",
+            "label": "Cielo previsto"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost discrepan en el favorito",
+        "bullets": [
+          "El modelo Poisson de GoatLab reparte la probabilidad 1X2 en 36.2% para Estonia, 31.1% para el empate y 32.7% para Luxemburgo.",
+          "El bloque Poisson acompaña esa distribución con goles esperados de 1.18 y 1.11, y con dos lecturas adicionales de 40.1% y 47.8% cuyo concepto no se detalla.",
+          "CatBoost Bzzoiro ordena de otro modo: 31.8% Estonia, 30.2% empate y 38.0% Luxemburgo, con los mismos goles esperados de 1.18 y 1.11.",
+          "El bloque B2 declara para el modelo Bzzoiro una mayor probabilidad de 0.38 vinculada a la opción visitante, y marca con 'no' las casillas de goles totales y ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "36.2%",
+            "label": "Victoria Estonia (Poisson)"
+          },
+          {
+            "value": "1.18",
+            "label": "Goles esperados registrados"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes directos escasos y antiguos",
+        "bullets": [
+          "El encabezado histórico del cruce registra 2 partidos, 2 victorias, 0 empates y 0 derrotas desde la perspectiva de Estonia.",
+          "El 12 de octubre de 2005, Luxemburgo cayó 0-2 como local frente a Estonia.",
+          "El 4 de septiembre de 2004, Estonia se impuso 4-0 como local ante Luxemburgo.",
+          "Ambos antecedentes terminaron con victoria estonia y portería a cero, aunque corresponden a ciclos muy anteriores al partido de 2026."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Cruces registrados"
+          },
+          {
+            "value": "4-0",
+            "label": "Estonia-Luxemburgo (2004)"
+          },
+          {
+            "value": "0-2",
+            "label": "Luxemburgo-Estonia (2005)"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en la clasificación aportada",
+        "bullets": [
+          "El cuadro clasificatorio sitúa a Luxemburgo en 2.º lugar con un registro de 2-3.",
+          "Estonia aparece en 3.º lugar con un registro de 2-2.",
+          "El input no detalla el concepto de cada cifra del bloque de tabla, aunque sitúa a Luxemburgo por delante de Estonia."
+        ],
+        "stats": [
+          {
+            "value": "2.º",
+            "label": "Posición de Luxemburgo"
+          },
+          {
+            "value": "3.º",
+            "label": "Posición de Estonia"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Qué mirar en este cruce",
+        "bullets": [
+          "Los dos modelos no señalan al mismo favorito: Poisson coloca a Estonia por delante, mientras CatBoost da la probabilidad más alta a Luxemburgo.",
+          "El historial directo es favorable a Estonia pero muy antiguo, sin continuidad con el contexto actual de ambas selecciones.",
+          "La falta de forma reciente, goleadores y consenso externo reduce el soporte disponible para interpretar el partido."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma reciente",
+        "detail": "El input no incluye el bloque R de racha ni resultados recientes de ninguna de las dos selecciones."
+      },
+      {
+        "label": "Sin goleadores",
+        "detail": "No se aporta el bloque S de máximos anotadores ni referencias individuales de ninguno de los dos equipos."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No hay bloque M2 de consenso en porcentaje interpretativo ni estimación declarada del proveedor A de API-Football."
+      },
+      {
+        "label": "Sede no indicada",
+        "detail": "El bloque W llega sin sede, únicamente con cielo nublado y 10 grados de temperatura."
+      },
+      {
+        "label": "Cifras sin concepto",
+        "detail": "El encabezado histórico incluye un quinto valor de 3 y las cifras del bloque de tabla, 40.1% y 47.8%, aparecen sin etiqueta explicativa."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los modelos no coinciden en el favorito: Poisson otorga 36.2% a Estonia y CatBoost 38.0% a Luxemburgo, con goles esperados idénticos (1.18 y 1.11). La estimación declarada B2 (0.38 visitante) replica la lectura de CatBoost, de modo que la discrepancia se apoya en muy pocos datos de soporte."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T22:22:09.611Z",
+    "inputKey": "v3|M|bz-212656|Estonia|Luxembourg|nations|2026-10-03T16:00:00+00:0|NS\nP|1.18|1.11|0.362|0.311|0.327|0.401|0.478\nB|0.318|0.302|0.38|1.18|1.11|0.407|0.482|1-1|\nB2|A|0.38|no|no\nH|2|2|0|0|3\nW||cloudy|10|\nT|3|Estonia|2|2||\nT|2|Luxembourg|2|3||\nHR|2005-10-12|Luxembourg|Estonia|0|2\nHR|2004-09-04|Estonia|Luxembourg|4|0",
+    "materialKey": "M|bz-212656|Estonia|Luxembourg|nations|2026-10-03T16:00:00+00:0|NS"
   }
 }
