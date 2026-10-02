@@ -19,6 +19,8 @@ import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, 
 import { forecastStatsFull, forecastDominance } from '../src/lib/stats-forecast.js';
 
 const today = new Date().toISOString().slice(0, 10);
+/** Inicio de la ventana del muro: el día de Lima, que no cambia a las 19:00. */
+const windowDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const refresh = process.argv.includes('--refresh');
 await mkdir('public/data', { recursive: true });
 const CONCURRENCY = Number(process.env.DATA_CONCURRENCY ?? 4);
@@ -1369,7 +1371,7 @@ async function capturePredictions(matches, results = []) {
 
 /** Full run (daily 07:00 UTC): ventana de 7 días, base de resultados, Bzzoiro, análisis. */
 async function full() {
-  const result = await getFixtures({ date: today, days: 7, env: process.env });
+  const result = await getFixtures({ date: windowDate, days: 7, env: process.env });
   if (result.unavailable) {
     console.warn('No se actualizó el calendario; se conserva la última copia disponible.');
     process.exitCode = 0;
@@ -1483,7 +1485,7 @@ async function refreshScores() {
     process.exitCode = 0;
     return;
   }
-  const result = await getFixtures({ date: today, env: process.env });
+  const result = await getFixtures({ date: windowDate, env: process.env });
   if (result.unavailable) {
     console.warn('No se actualizó el marcador; se conserva la última copia disponible.');
     process.exitCode = 0;
@@ -1491,7 +1493,7 @@ async function refreshScores() {
   }
   const enrichments = await enrichMatches(result.matches, { date: today, env: process.env });
   const fresh = await enrichWindow(result.matches.map(match => ({ ...match, ...(enrichments[match.id] ?? {}) })));
-  const merged = mergeFixtures(previous.matches, fresh, [today]);
+  const merged = mergeFixtures(previous.matches, fresh, [windowDate]);
   stampSlugs(merged, (await readJson('public/data/teams.json'))?.teams ?? {});
   const resultsBase = await readJson('public/data/results.json');
   const [scorersBase, standingsBase, weatherBase, historyBase] = await Promise.all([

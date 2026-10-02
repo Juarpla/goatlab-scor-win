@@ -81,10 +81,11 @@ test('fallback statuses are normalized to the API-Football vocabulary', async ()
   assert.equal(data.matches[0].status, 'FT');
   assert.equal(data.matches[1].status, 'LIVE');
 });
-test('Bzzoiro discovers nations/europa/libertadores past tomorrow in one range request', async () => {
+test('Bzzoiro discovers nations/europa/libertadores across the whole window in one range request', async () => {
   const calls = [];
   const events = [
     { id: 212590, league_id: 64, home_team_id: 2212, home_team: 'Liechtenstein', away_team_id: 674, away_team: 'Lithuania', event_date: '2026-09-24T18:45:00+00:00', status: 'notstarted', round_label: 'Group 2 · Matchday 1', home_score: null, away_score: null, home_score_ht: null, away_score_ht: null },
+    { id: 212600, league_id: 64, home_team_id: 10, home_team: 'France', away_team_id: 11, away_team: 'Italy', event_date: '2026-09-21T18:45:00+00:00', status: 'notstarted', round_label: 'Matchday 1', home_score: null, away_score: null, home_score_ht: null, away_score_ht: null },
     { id: 999, league_id: 7, home_team_id: 1, home_team: 'Real Madrid', away_team_id: 2, away_team: 'Man City', event_date: '2026-09-24T19:00:00Z', status: 'notstarted' },
   ];
   const result = await getFixtures({ date: '2026-09-21', days: 7, now: '2026-09-21',
@@ -97,8 +98,9 @@ test('Bzzoiro discovers nations/europa/libertadores past tomorrow in one range r
     }, paceMs: 0 });
   const bzCalls = calls.filter(url => url.includes('sports.bzzoiro.com'));
   assert.equal(bzCalls.length, 1);
-  assert.equal(new URL(bzCalls[0]).searchParams.get('date_from'), '2026-09-23'); // complement only
+  assert.equal(new URL(bzCalls[0]).searchParams.get('date_from'), '2026-09-21');
   assert.equal(new URL(bzCalls[0]).searchParams.get('date_to'), '2026-09-27');
+  assert.ok(result.matches.some(entry => entry.id === 'bz-212600' && entry.competition === 'nations'));
   const match = result.matches.find(entry => entry.id === 'bz-212590');
   assert.ok(match);
   assert.equal(match.competition, 'nations');
@@ -110,6 +112,56 @@ test('Bzzoiro discovers nations/europa/libertadores past tomorrow in one range r
   assert.equal(match.events, null); // no invented metrics
   assert.ok(!result.matches.some(entry => entry.id === 'bz-999')); // champions stays with FD
   assert.ok(result.provider.includes('Bzzoiro'));
+});
+test('Nations de hoy sigue en la ventana cuando API-Football falla', async () => {
+  const warnings = [];
+  const calls = [];
+  const events = [
+    { id: 3, league_id: 64, home_team_id: 10, home_team: 'France', away_team_id: 11, away_team: 'Italy', event_date: '2026-09-21T18:45:00+00:00', status: 'notstarted' },
+  ];
+  const result = await getFixtures({ date: '2026-09-21', days: 7, now: '2026-09-21',
+    env: { API_FOOTBALL_KEY: 'a', FOOTBALL_DATA_KEY: 'b', BZZOIRO_API_TOKEN: 'c' },
+    logger: { warn(message) { warnings.push(String(message)); } },
+    fetchImpl: async url => {
+      calls.push(url);
+      if (url.includes('api-sports')) return new Response('', { status: 429 });
+      if (url.includes('football-data')) return new Response(JSON.stringify({ matches: [
+        { id: 7, competition: { code: 'PL' }, homeTeam: { name: 'Arsenal' }, awayTeam: { name: 'Chelsea' }, utcDate: '2026-09-21T15:00:00Z', status: 'TIMED', score: { fullTime: { home: null, away: null }, halfTime: { home: null, away: null } } },
+      ] }));
+      return new Response(JSON.stringify({ results: events }));
+    }, paceMs: 0 });
+  const fdCalls = calls.filter(url => url.includes('football-data'));
+  assert.equal(fdCalls.length, 1);
+  assert.equal(new URL(fdCalls[0]).searchParams.get('dateFrom'), '2026-09-21');
+  assert.equal(new URL(fdCalls[0]).searchParams.get('dateTo'), '2026-09-27');
+  assert.ok(result.matches.some(entry => entry.id === 'bz-3' && entry.competition === 'nations'));
+  assert.ok(result.matches.some(entry => entry.id === 'fd-7' && entry.competition === 'premier'));
+  assert.ok(warnings.some(message => message.startsWith('API-Football:')));
+  assert.equal(result.provider.includes('API-Football'), false);
+  assert.equal(result.delayed, true);
+});
+test('API-Football reemplaza el mismo cruce que ya trajo Bzzoiro', async () => {
+  const events = [
+    { id: 5, league_id: 64, home_team_id: 10, home_team: 'France', away_team_id: 11, away_team: 'Italy', event_date: '2026-09-21T18:45:00Z', status: 'notstarted' },
+  ];
+  const af = {
+    fixture: { id: 50, date: '2026-09-21T18:45:00Z', status: { short: '1H', elapsed: 12 }, venue: { name: null, city: null } },
+    league: { id: 5, round: 'Matchday 1' },
+    teams: { home: { name: 'France' }, away: { name: 'Italy' } },
+    goals: { home: 1, away: 0 },
+    score: { halftime: { home: null, away: null } },
+  };
+  const result = await getFixtures({ date: '2026-09-21', days: 1, now: '2026-09-21',
+    env: { API_FOOTBALL_KEY: 'a', BZZOIRO_API_TOKEN: 'c' },
+    fetchImpl: async url => url.includes('api-sports')
+      ? new Response(JSON.stringify({ response: [af] }))
+      : new Response(JSON.stringify({ results: events })),
+    paceMs: 0 });
+  const france = result.matches.filter(entry => entry.home === 'France');
+  assert.equal(france.length, 1);
+  assert.equal(france[0].id, 'af-50');
+  assert.equal(france[0].status, '1H');
+  assert.equal(france[0].minute, 12);
 });
 test('sin token Bzzoiro no hay descubrimiento ni llamadas extra', async () => {
   const calls = [];

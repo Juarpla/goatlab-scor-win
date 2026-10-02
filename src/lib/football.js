@@ -6,7 +6,7 @@ import { leagues, leagueByProviderId, providerLeagueId } from './leagues.js';
 
 /** Vista de conveniencia del catálogo único (`public/data/leagues.json`). */
 export const competitions = Object.values(leagues).map(({ id, name, providers }) => ({ id, name, api: providers.api, fd: providers.fd }));
-/** Leagues the FD free plan does not serve; Bzzoiro discovers them past tomorrow. */
+/** Leagues the FD free plan does not serve; Bzzoiro discovers them across the whole window. */
 const BZ_DISCOVERY = new Set(['nations', 'europa', 'libertadores']);
 /** Statuses that mean the match is played and its final score is authoritative. */
 export const FINISHED_STATUSES = new Set(['FT', 'AET', 'PEN']);
@@ -67,19 +67,18 @@ export function mergeFixtures(previous, fresh, replacedDates = []) {
 /**
  * The fixture window. Three free providers, one boundary:
  * - API-Football is fresher (minute-by-minute score) but its free plan only
- *   serves yesterday..tomorrow; it is authoritative for those dates.
- * - Football-Data.org serves any date range in one request and fills the rest
- *   of the window. When API-Football already covers the whole window, it is
- *   not called at all.
- * - Bzzoiro discovers the leagues the FD free plan does not serve (nations,
- *   europa, libertadores) on the days API-Football cannot reach, in a single
- *   range request. Events arrive with canonical team ids, so enrichment pairs
- *   them without name guessing.
+ *   serves yesterday..tomorrow. A successful response is authoritative there
+ *   for the leagues it returns; the same fixture replaces a Bzzoiro twin.
+ * - Football-Data.org fills the days API-Football cannot reach in one request.
+ *   When API-Football fails, it also covers today and tomorrow. A successful
+ *   empty overlay is not a failure, so those dates are not asked of it.
+ * - Bzzoiro discovers nations, europa and libertadores across the whole window
+ *   (today included) in a single range request. Events arrive with canonical
+ *   team ids, so enrichment pairs them without name guessing.
  */
 export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500, now = new Date() }) {
   const dates = dateWindow(date, days);
   const errors = [];
-  let matches = [];
   let provider = null;
   let delayed = true;
   const todayUtc = typeof now === 'string' ? now : now.toISOString().slice(0, 10);
@@ -90,10 +89,10 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
   };
   const overlayDates = dates.filter(day => day >= shift(todayUtc, -1) && day <= shift(todayUtc, 1));
   const complement = dates.filter(day => !overlayDates.includes(day));
+  let afMatches = [];
   let afDone = false;
   if (env.API_FOOTBALL_KEY && overlayDates.length) {
     try {
-      const afMatches = [];
       // One request per day: the from/to window requires league+season, which we do not want here.
       for (const day of overlayDates) {
         const data = await pacedRequest(`https://v3.football.api-sports.io/fixtures?date=${encodeURIComponent(day)}`, { 'x-apisports-key': env.API_FOOTBALL_KEY }, fetchImpl, paceMs);
@@ -113,22 +112,21 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
           }] : [];
         }));
       }
-      matches = afMatches;
-      provider = 'API-Football';
-      delayed = false;
       afDone = true;
     } catch (error) { errors.push(`API-Football: ${error.message}`); }
   }
-  const fdNeeded = complement.length > 0 || !afDone;
-  if (env.FOOTBALL_DATA_KEY && fdNeeded) {
+  // A successful overlay is authoritative for LaLiga, Premier and Champions.
+  // A failure is not: Football-Data then covers today and tomorrow too.
+  const fdSpan = afDone ? complement : dates;
+  let fdMatches = [];
+  let fdDone = false;
+  if (env.FOOTBALL_DATA_KEY && fdSpan.length) {
     try {
-      const from = complement.length ? complement[0] : date;
-      const to = complement.length ? complement[complement.length - 1] : dates[dates.length - 1];
-      const data = await request(`https://api.football-data.org/v4/matches?dateFrom=${encodeURIComponent(from)}&dateTo=${encodeURIComponent(to)}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl);
+      const data = await request(`https://api.football-data.org/v4/matches?dateFrom=${encodeURIComponent(fdSpan[0])}&dateTo=${encodeURIComponent(fdSpan[fdSpan.length - 1])}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl);
       if (!Array.isArray(data.matches)) throw new Error('Formato inválido');
       // Normalize statuses to the API-Football vocabulary the rest of the site speaks.
       const FD_STATUS = { SCHEDULED: 'NS', TIMED: 'NS', IN_PLAY: 'LIVE', PAUSED: 'HT', FINISHED: 'FT', SUSPENDED: 'SUSP', POSTPONED: 'PST', CANCELLED: 'CANC', AWARDED: 'FT' };
-      const fdMatches = data.matches.flatMap(item => {
+      fdMatches = data.matches.flatMap(item => {
         const league = leagueByProviderId('fd', item.competition.code);
         return league ? [{
           id: `fd-${item.id}`, providerId: item.id, competition: league.id,
@@ -143,15 +141,15 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
           events: null, statistics: null,
         }] : [];
       });
-      matches = afDone ? mergeFixtures(matches, fdMatches) : fdMatches;
-      provider = provider ? 'API-Football + Football-Data.org' : 'Football-Data.org';
+      fdDone = true;
     } catch (error) { errors.push(`Football-Data.org: ${error.message}`); }
   }
-  if (env.BZZOIRO_API_TOKEN && complement.length) {
+  let discovered = [];
+  if (env.BZZOIRO_API_TOKEN && dates.length) {
     try {
-      const events = await listEvents({ dateFrom: complement[0], dateTo: complement[complement.length - 1], env, fetchImpl });
+      const events = await listEvents({ dateFrom: dates[0], dateTo: dates[dates.length - 1], env, fetchImpl, logger });
       const BZ_STATUS = { notstarted: 'NS', finished: 'FT' };
-      const discovered = events.flatMap(event => {
+      discovered = events.flatMap(event => {
         const league = leagueByProviderId('bzzoiro', event?.league_id);
         if (!league || !BZ_DISCOVERY.has(league.id) || !event?.home_team || !event?.away_team || !event?.event_date) return [];
         return [{
@@ -166,16 +164,19 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
           eventId: event.id, teamIds: { home: event.home_team_id ?? null, away: event.away_team_id ?? null },
         }];
       });
-      if (discovered.length) {
-        matches = mergeFixtures(matches, discovered);
-        provider = provider ? `${provider} + Bzzoiro` : 'Bzzoiro';
-      }
     } catch (error) { errors.push(`Bzzoiro: ${error.message}`); }
   }
-  if (!provider) {
-    errors.forEach(error => logger.warn(error));
-    return { matches: [], provider: null, delayed: true, updatedAt: null, unavailable: true, errors };
+  let matches = fdDone ? fdMatches : [];
+  if (discovered.length) matches = mergeFixtures(matches, discovered);
+  if (afDone) matches = mergeFixtures(matches, afMatches);
+  if (afDone) {
+    provider = 'API-Football';
+    delayed = false;
   }
+  if (fdDone) provider = provider ? `${provider} + Football-Data.org` : 'Football-Data.org';
+  if (discovered.length) provider = provider ? `${provider} + Bzzoiro` : 'Bzzoiro';
+  errors.forEach(error => logger.warn(error));
+  if (!provider) return { matches: [], provider: null, delayed: true, updatedAt: null, unavailable: true, errors };
   // An empty valid schedule is authoritative, not an outage.
   return { matches, provider, delayed, updatedAt: new Date().toISOString(), errors };
 }
