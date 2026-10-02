@@ -1,18 +1,14 @@
 /** Genera media-pack/<webId>.json: Commons, Pexels y Pixabay.
- *  Un modelo de OpenCode Go ve las candidatas y deja 20 confirmadas.
+ *  Un modelo de OpenCode Go ve las candidatas y deja hasta 15 confirmadas.
  *  Pexels y Pixabay se omiten si falta la clave. La red vive solo aquí. */
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { selectMatches, staleScripts, sameCore } from '../src/lib/youtube.js';
-import { esName } from '../src/lib/teams.js';
-import { locateMatch } from '../src/lib/venues.js';
 import {
+  AGNES_MAX_IMAGES,
   ASSETS_PER_MATCH,
-  PLAYER_CANDIDATES,
-  SCENE_CANDIDATES,
+  CANDIDATES_PER_MATCH,
   THUMB_WIDTH,
-  playerNamesFromScripts,
-  playerQueries,
   sceneQueries,
   normalizeCommonsPage,
   normalizePexelsPhoto,
@@ -21,7 +17,7 @@ import {
   buildManifest,
   acceptVisionVerdict,
 } from '../src/lib/media.js';
-import { agnesPrompts, normalizeAgnesImage } from '../src/lib/agnes.js';
+import { agnesAfter429, agnesPrompts, normalizeAgnesImage } from '../src/lib/agnes.js';
 import { checkMediaManifest } from '../src/lib/compliance.js';
 import { extractJson, parseRetryAfter, resolveChain, withFailover } from '../src/lib/llm.js';
 
@@ -119,18 +115,6 @@ async function searchPixabay({ query, player = null, scene = null }) {
   return (data.hits ?? []).map(hit => normalizePixabayHit(hit, query, { player, scene })).filter(Boolean);
 }
 
-async function namesFor(matchId, home, away) {
-  try {
-    const script = JSON.parse(await readFile(join('public/data/youtube-scripts', `${matchId}.json`), 'utf8'));
-    return playerNamesFromScripts(script.scripts, {
-      home: script.home ?? home ?? '',
-      away: script.away ?? away ?? '',
-    });
-  } catch {
-    return [];
-  }
-}
-
 async function poolFor(queries, quota) {
   const byId = new Map();
   const searchers = [searchCommons, searchPexels, searchPixabay];
@@ -150,25 +134,13 @@ async function poolFor(queries, quota) {
   return rankAssets([...byId.values()]).slice(0, quota);
 }
 
-function visionPrompt(asset, names) {
-  if (asset.sceneHint) {
-    return [
-      'Check this still photo for a football short.',
-      `Expected scene: ${asset.sceneHint}.`,
-      'Reply with JSON only: {"ok":true|false,"motive":"stadium"|"fans"|"press"|"training"|"team"}.',
-      'ok is true only when the photo clearly shows that scene: a stadium, fans or stands in team colours, a press conference, a training session, or a team photo.',
-      'ok is false for a logo, a flag alone, a graphic, a broadcast screenshot, or a different scene.',
-    ].join(' ');
-  }
-  const expected = asset.playerHint
-    ? `Expected player: ${asset.playerHint}.`
-    : `The player must be one of: ${(names ?? []).join(', ') || 'a named footballer'}.`;
+function visionPrompt(asset) {
   return [
-    'Check this still photo for a football short.',
-    expected,
-    'Reply with JSON only: {"ok":true|false,"who":"Full name","motive":"training"|"after"|"portrait"}.',
-    'ok is true only when that player is clearly the subject, in training, after a match, or a portrait.',
-    'ok is false for a different person, a flag, a logo, an empty stadium, a broadcast screenshot, a graphic, or a crowd without one clear player.',
+    'Check this still photo for a football short about two men\'s national teams.',
+    `Expected scene: ${asset.sceneHint || 'training, interview, arrival, fans, press, or a current portrait'}.`,
+    'Reply with JSON only: {"ok":true|false,"motive":"training"|"interview"|"arrival"|"fans"|"press"|"portrait","men":true|false,"current":true|false}.',
+    'ok is true only for adult men in a current photo: a training session, an interview, players walking off a team bus, fans, a press conference, or a current portrait.',
+    'ok is false for a women\'s or girls\' team, match action, a broadcast screenshot, a graphic, a flag, a logo, or a photo that is clearly old.',
   ].join(' ');
 }
 
@@ -186,7 +158,7 @@ async function downloadPreview(asset) {
   return { mime, b64: buf.toString('base64') };
 }
 
-async function judgeAsset(asset, names, deadline) {
+async function judgeAsset(asset, deadline) {
   if (Date.now() >= deadline) return null;
   let image;
   try {
@@ -199,7 +171,7 @@ async function judgeAsset(asset, names, deadline) {
     const result = await withFailover([{
       role: 'user',
       content: [
-        { type: 'text', text: visionPrompt(asset, names) },
+        { type: 'text', text: visionPrompt(asset) },
         { type: 'image_url', image_url: { url: `data:${image.mime};base64,${image.b64}` } },
       ],
     }], {
@@ -208,11 +180,7 @@ async function judgeAsset(asset, names, deadline) {
       timeoutMs: VISION_CALL_MS,
       validate(content) {
         const parsed = extractJson(content);
-        const accepted = acceptVisionVerdict(parsed, {
-          player: asset.playerHint,
-          names: asset.sceneHint ? [] : names,
-          scene: asset.sceneHint,
-        });
+        const accepted = acceptVisionVerdict(parsed);
         if (!accepted) return { rejected: true };
         return accepted;
       },
@@ -276,8 +244,8 @@ async function agnesImage(prompt, model, key) {
   return { buf, ext: sniffImage(buf) };
 }
 
-/** Como máximo 8 arranques por minuto: el plan gratis de Agnes en 2K ejecuta 10. */
-function agnesGate(limit = 8, windowMs = 60_000) {
+/** Como máximo 4 arranques por minuto: el plan gratis de Agnes en 2K ejecuta 10. */
+function agnesGate(limit = 4, windowMs = 60_000) {
   const starts = [];
   let chain = Promise.resolve();
   return function takeSlot() {
@@ -297,10 +265,10 @@ function agnesGate(limit = 8, windowMs = 60_000) {
   };
 }
 
-/** Genera solo las fotos que faltan para llegar a 20. Sin clave, no genera. */
+/** Genera solo las fotos que faltan, con techo de 5. Sin clave, no genera. */
 async function fillWithAgnes({ matchId, home, away, missing }) {
   const key = process.env.AGNES_API_KEY?.trim();
-  const cap = envInt('AGNES_MAX_IMAGES', 20);
+  const cap = Math.min(envInt('AGNES_MAX_IMAGES', AGNES_MAX_IMAGES), AGNES_MAX_IMAGES);
   const count = Math.min(missing, cap);
   if (!key || count <= 0) {
     if (missing > 0 && !key) console.error('media: agnes sin clave');
@@ -313,24 +281,36 @@ async function fillWithAgnes({ matchId, home, away, missing }) {
   const takeSlot = agnesGate();
   const made = [];
   let cursor = 0;
+  let stop = false;
   async function one(index) {
+    if (stop) return null;
     await takeSlot();
     try {
       return await agnesImage(prompts[index], model, key);
     } catch (error) {
-      if (error.retryAfterMs == null) throw error;
+      if (error.retryAfterMs == null || agnesAfter429(1) === 'stop') {
+        if (error.retryAfterMs != null) stop = true;
+        throw error;
+      }
       console.error(`media: agnes ${index}: HTTP 429, reintento`);
       await new Promise(resolve => setTimeout(resolve, error.retryAfterMs));
+      if (stop) return null;
       await takeSlot();
-      return agnesImage(prompts[index], model, key);
+      try {
+        return await agnesImage(prompts[index], model, key);
+      } catch (again) {
+        if (again.retryAfterMs != null && agnesAfter429(2) === 'stop') stop = true;
+        throw again;
+      }
     }
   }
   async function worker() {
-    while (cursor < prompts.length) {
+    while (!stop && cursor < prompts.length) {
       const index = cursor;
       cursor += 1;
       try {
         const image = await one(index);
+        if (!image) continue;
         const file = `${index}.${image.ext}`;
         await writeFile(join(folder, file), image.buf);
         made.push(normalizeAgnesImage({
@@ -345,12 +325,12 @@ async function fillWithAgnes({ matchId, home, away, missing }) {
       }
     }
   }
-  await Promise.all(Array.from({ length: 2 }, () => worker()));
+  await worker();
   console.log(`media: agnes generó ${made.length} de ${count}`);
   return made;
 }
 
-async function seeAssets(assets, names) {
+async function seeAssets(assets) {
   const deadline = Date.now() + VISION_PHASE_MAX_MS;
   const accepted = [];
   let cursor = 0;
@@ -358,7 +338,7 @@ async function seeAssets(assets, names) {
     while (cursor < assets.length && accepted.length < ASSETS_PER_MATCH && Date.now() < deadline) {
       const asset = assets[cursor];
       cursor += 1;
-      const judged = await judgeAsset(asset, names, deadline);
+      const judged = await judgeAsset(asset, deadline);
       if (judged) accepted.push(judged);
     }
   }
@@ -410,30 +390,9 @@ for (const match of matches) {
     failures += 1;
     continue;
   }
-  const names = await namesFor(matchId, match.home, match.away);
-  const playerQs = [
-    ...playerQueries(names),
-    ...[
-      `${esName(match.home)} footballer`,
-      `${esName(match.away)} footballer`,
-      `${esName(match.home)} national football team`,
-      `${esName(match.away)} national football team`,
-      `${match.home} soccer player`,
-      `${match.away} soccer player`,
-    ].map(query => ({ query })),
-  ];
-  const located = locateMatch(match);
-  const scenes = sceneQueries({
-    home: match.home,
-    away: match.away,
-    venue: located ?? { stadium: match.venue ?? null, city: match.venueCity ?? null },
-  });
-  const [players, scenePool] = await Promise.all([
-    poolFor(playerQs, PLAYER_CANDIDATES),
-    poolFor(scenes, SCENE_CANDIDATES),
-  ]);
-  const candidates = rankAssets([...players, ...scenePool]).slice(0, PLAYER_CANDIDATES + SCENE_CANDIDATES);
-  let accepted = await seeAssets(candidates, names);
+  const scenes = sceneQueries({ home: match.home, away: match.away });
+  const candidates = rankAssets(await poolFor(scenes, CANDIDATES_PER_MATCH));
+  let accepted = await seeAssets(candidates);
   if (accepted.length < ASSETS_PER_MATCH) {
     const extra = await fillWithAgnes({
       matchId,

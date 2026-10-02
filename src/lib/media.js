@@ -1,21 +1,20 @@
 /**
- * Media-pack GoatLab Shorts: fotos de jugadores.
+ * Media-pack GoatLab Shorts: fotos actuales de los dos equipos masculinos.
  * Commons (dominio público, CC0, CC BY, CC BY-SA), Pexels y Pixabay.
  * El generador (scripts/generate-media-pack.mjs) hace la red y la visión;
- * aquí solo se normaliza, se arman las 10 secuencias y se valida la forma.
+ * aquí solo se normaliza el pool. Cada audio ordena ese pool al renderizar.
  */
 import { esName } from './teams.js';
 
-export const ASSETS_PER_MATCH = 20;
-/** Candidatas que el modelo puede mirar antes de quedarse con 20. */
+/** Tope del pool. Con menos de ASSETS_MIN el pack no se publica. */
+export const ASSETS_PER_MATCH = 15;
+export const ASSETS_MIN = 8;
+/** Fotos de apoyo que Agnes puede generar en un pack. No se llega al tope del plan. */
+export const AGNES_MAX_IMAGES = 5;
+/** Candidatas que el modelo puede mirar antes de quedarse con el pool. */
 export const CANDIDATES_PER_MATCH = 60;
-/** Cupo de cada grupo, para que las escenas no queden fuera del pool. */
-export const PLAYER_CANDIDATES = 30;
-export const SCENE_CANDIDATES = 30;
-/** Plazas del manifiesto reservadas a estadio, hinchas, prensa o entrenamiento. */
+/** Plazas reservadas a entrenamiento, entrevista, llegada, hinchas o prensa. */
 export const SCENE_SLOTS = 6;
-export const SEQUENCES_PER_MATCH = 10;
-export const PHOTOS_PER_SEQUENCE = 12;
 /** Ancho de la miniatura de Commons: nítida al cubrir 1080x1920 con recorrido. */
 export const THUMB_WIDTH = 1440;
 
@@ -32,9 +31,6 @@ export const CAMERA_MOVES = [
   'slide',
   'hold-push',
 ];
-
-/** Guiones 3, 4, 7 y 9: ahí el relato nombra jugadores. */
-export const PLAYER_SCRIPT_INDEXES = [2, 3, 6, 8];
 
 export const ALLOWED_SOURCES = ['commons', 'pexels', 'pixabay', 'agnes'];
 
@@ -57,10 +53,11 @@ export const BANNED_PHOTO_DOMAINS = [
   /facebook/i,
 ];
 
-const PLAYER_MOTIVES = new Set(['training', 'after', 'portrait']);
-const SCENE_MOTIVES = new Set(['stadium', 'fans', 'press', 'training', 'team', 'generated']);
+const SCENE_MOTIVES = new Set(['training', 'interview', 'arrival', 'fans', 'press', 'generated']);
+const FILL_MOTIVES = new Set(['portrait']);
+const ACCEPTED_MOTIVES = new Set([...SCENE_MOTIVES, ...FILL_MOTIVES]);
 
-const REJECT_FILE = /flag of|\bflag\b|coat of arms|\blogo\b|locator map|\.svg\b|escudo|bandera|\bsignature\b|\bautograph\b|kit (body|socks|shorts|left|right)|pictogram|\bicon\b|\bbadge\b|\bstamp\b|football field|soccer field/i;
+const REJECT_FILE = /flag of|\bflag\b|coat of arms|\blogo\b|locator map|\.svg\b|escudo|bandera|\bsignature\b|\bautograph\b|kit (body|socks|shorts|left|right)|pictogram|\bicon\b|\bbadge\b|\bstamp\b|football field|soccer field|\bwomen\b|\bwoman\b|femenin|f[eé]minin|\bfemale\b|\bwnt\b|\bbroadcast\b|\bscreenshot\b|\btelecast\b/i;
 
 function looksRejected(text) {
   return REJECT_FILE.test(String(text ?? '').replace(/[_-]+/g, ' '));
@@ -79,64 +76,8 @@ export function hashWebId(webId) {
   return h >>> 0;
 }
 
-const NAME_STOP = new Set([
-  'el', 'la', 'los', 'las', 'en', 'si', 'lo', 'y', 'por', 'desde', 'detrás', 'detras',
-  'ojo', 'cuál', 'cual', 'esa', 'ese', 'un', 'una', 'delante', 'toda', 'ahí', 'ahi',
-  'para', 'cuando', 'esta', 'este', 'con', 'que', 'hay', 'también', 'tambien',
-  'marcar', 'creando', 'antes', 'bajo', 'quien', 'quién', 'esas', 'aunque', 'entre',
-  'ni', 'del',
-]);
-
-function teamTokens(home, away) {
-  const tokens = new Set();
-  for (const name of [home, away, esName(home), esName(away)]) {
-    const full = String(name ?? '').trim().toLowerCase();
-    if (!full) continue;
-    tokens.add(full);
-    for (const part of full.split(/\s+/)) {
-      if (part.length >= 4 && !['del', 'de', 'and', 'the'].includes(part)) tokens.add(part);
-    }
-  }
-  return tokens;
-}
-
-/** Nombres propios en los guiones de jugadores. Omite equipos y arranques de frase. */
-export function playerNamesFromScripts(scripts, { home = '', away = '' } = {}) {
-  const banned = teamTokens(home, away);
-  const found = [];
-  const seen = new Set();
-  for (const index of PLAYER_SCRIPT_INDEXES) {
-    const text = String(scripts?.[index]?.narration ?? '');
-    for (const match of text.matchAll(/\p{Lu}[\p{L}'’-]+(?:\s+\p{Lu}[\p{L}'’-]+)*/gu)) {
-      const tokens = match[0].trim().split(/\s+/).filter(token => {
-        const key = token.toLowerCase();
-        return token.length >= 2 && !NAME_STOP.has(key) && !banned.has(key);
-      });
-      if (!tokens.length) continue;
-      const name = tokens.join(' ');
-      const key = name.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      found.push(name);
-    }
-  }
-  return found;
-}
-
-/** Consultas por jugador. `player` viaja con la consulta para el rótulo. */
-export function playerQueries(names) {
-  const out = [];
-  for (const name of names ?? []) {
-    const n = String(name).trim();
-    if (!n) continue;
-    out.push({ query: `${n} footballer`, player: n });
-    out.push({ query: `${n} soccer`, player: n });
-  }
-  return out;
-}
-
-/** Consultas de estadio, hinchas, prensa y entrenamiento. `scene` viaja con la consulta. */
-export function sceneQueries({ home = '', away = '', venue = null } = {}) {
+/** Consultas de entrenamiento, entrevista, llegada, hinchada y prensa. Solo hombres. */
+export function sceneQueries({ home = '', away = '' } = {}) {
   const out = [];
   const seen = new Set();
   const add = (query, scene) => {
@@ -153,28 +94,17 @@ export function sceneQueries({ home = '', away = '', venue = null } = {}) {
       if (n && !names.some(item => item.toLowerCase() === n.toLowerCase())) names.push(n);
     }
     for (const name of names) {
-      add(`${name} national team training`, 'training');
-      add(`${name} training session`, 'training');
-      add(`${name} fans`, 'fans');
-      add(`${name} supporters stadium`, 'fans');
-      add(`${name} fans stands`, 'fans');
-      add(`${name} press conference`, 'press');
-      add(`${name} coach press conference`, 'press');
-      add(`${name} team photo`, 'team');
-      add(`${name} line up`, 'team');
+      add(`${name} men's national team training`, 'training');
+      add(`${name} men's training session`, 'training');
+      add(`${name} men's national team interview`, 'interview');
+      add(`${name} men's player interview`, 'interview');
+      add(`${name} men's national team arrival`, 'arrival');
+      add(`${name} men's team bus`, 'arrival');
+      add(`${name} men's football fans`, 'fans');
+      add(`${name} men's supporters`, 'fans');
+      add(`${name} men's press conference`, 'press');
+      add(`${name} men's coach press conference`, 'press');
     }
-  }
-  const stadium = String(venue?.stadium ?? '').trim();
-  const city = String(venue?.city ?? '').trim();
-  const country = String(venue?.country ?? '').trim();
-  if (stadium) {
-    add(stadium, 'stadium');
-    add(`${stadium} stadium`, 'stadium');
-    add(`${stadium} interior`, 'stadium');
-  } else if (city) {
-    add(`${city} stadium`, 'stadium');
-  } else if (country) {
-    add(`football stadium ${country}`, 'stadium');
   }
   return out;
 }
@@ -229,21 +159,15 @@ export function commonsPreviewUrl(url) {
 }
 
 /**
- * Veredicto del modelo. Con jugador, el motivo es entrenamiento, después del
- * partido o retrato, y el apellido coincide. Sin jugador, una escena
- * (estadio, hinchas, prensa, entrenamiento o foto de equipo) vale con sujeto nulo.
+ * Veredicto del modelo. Hombres adultos, foto actual, y un motivo de
+ * entrenamiento, entrevista, llegada, hinchada, prensa o retrato.
  */
-export function acceptVisionVerdict(raw, { player = null, names = [], scene = null } = {}) {
+export function acceptVisionVerdict(raw) {
   if (!raw || raw.ok !== true) return null;
+  if (raw.men === false || raw.current === false) return null;
   const motive = String(raw.motive ?? '').toLowerCase();
-  const who = String(raw.who ?? '').trim();
-  if ((scene || !who) && !player && SCENE_MOTIVES.has(motive)) return { subject: null, motive };
-  if (!PLAYER_MOTIVES.has(motive)) return null;
-  if (!who) return null;
-  const pool = player ? [String(player)] : (names ?? []).map(name => String(name));
-  const subject = pool.find(name => subjectFor(name, who));
-  if (!subject) return null;
-  return { subject, motive };
+  if (!ACCEPTED_MOTIVES.has(motive) || motive === 'generated') return null;
+  return { subject: null, motive };
 }
 
 export function plainArtist(html) {
@@ -259,14 +183,17 @@ export function plainArtist(html) {
 export function photoMotive(text) {
   const t = String(text ?? '').toLowerCase();
   if (/train|entren/.test(t)) return 'training';
-  if (/after the match|post-match|después|despues|celebration|celebraci/.test(t)) return 'after';
+  if (/interview|entrevista/.test(t)) return 'interview';
+  if (/\bbus\b|arrival|llegada/.test(t)) return 'arrival';
+  if (/fan|hincha|supporter|aficion/.test(t)) return 'fans';
+  if (/press|prensa|conference/.test(t)) return 'press';
   if (/portrait|retrat|headshot/.test(t)) return 'portrait';
-  return 'player';
+  return 'scene';
 }
 
 const MOTIVE_RANK = {
-  training: 0, after: 1, portrait: 2, player: 3,
-  stadium: 4, fans: 5, press: 6, team: 7, generated: 8,
+  training: 0, interview: 1, arrival: 2, portrait: 3,
+  fans: 4, press: 5, scene: 6, generated: 7,
 };
 
 function hintedMotive(blob, scene) {
@@ -369,7 +296,7 @@ export function normalizePixabayHit(hit, query, { player = null, scene = null } 
   }, `${hit.tags ?? ''} ${photographer}`, player, scene);
 }
 
-/** Escena: sin jugador, y motivo de estadio, hinchas, prensa, entrenamiento o imagen generada. */
+/** Escena de contexto. El retrato rellena el resto del pool. */
 export function isSceneAsset(asset) {
   return asset?.subject == null && (SCENE_MOTIVES.has(asset?.motive) || asset?.source === 'agnes');
 }
@@ -405,27 +332,62 @@ function mulberry32(seed) {
   };
 }
 
-/** 10 secuencias de hasta 12 fotos del pool, cada una con otro orden. */
-export function buildSequences(assets, webId) {
-  const list = (assets ?? []).filter(photo => photo?.id);
-  if (!list.length) return [];
-  const seed = hashWebId(webId);
-  const count = Math.min(PHOTOS_PER_SEQUENCE, list.length);
-  return Array.from({ length: SEQUENCES_PER_MATCH }, (_, variant) => {
-    const rand = mulberry32(seed + Math.imul(variant + 1, 0x9e3779b1));
-    const order = [...list];
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(rand() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-    const photos = order.slice(0, count);
-    return {
-      variant,
-      camera: CAMERA_MOVES[variant % CAMERA_MOVES.length],
-      photos: photos.map(photo => photo.url),
-      subjects: photos.map(photo => photo.subject ?? null),
-    };
-  });
+const MOTIVE_WORDS = {
+  training: ['entren', 'training', 'practica'],
+  interview: ['entrevista', 'interview'],
+  arrival: ['bus', 'llegada', 'arrival'],
+  fans: ['hincha', 'hinchada', 'aficion', 'fans', 'supporter'],
+  press: ['prensa', 'press', 'rueda'],
+  portrait: ['retrato', 'portrait'],
+};
+
+function shuffle(list, rand) {
+  const order = [...list];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+function rotate(list, n) {
+  if (list.length < 2) return list;
+  const k = ((n % list.length) + list.length) % list.length;
+  return list.slice(k).concat(list.slice(0, k));
+}
+
+/**
+ * Orden nuevo para un audio. Lo que nombra la voz va primero.
+ * El resto cambia con la variante, así cada video no repite el mismo corte.
+ */
+export function orderPool(assets, { variant = 0, words = [], home = '', away = '' } = {}) {
+  const list = (assets ?? []).filter(photo => photo?.url);
+  if (list.length < 2) return null;
+  const spoken = plainKey((words ?? []).map(word => (typeof word === 'string' ? word : word?.word)).join(' '));
+  const teams = [home, away, esName(home), esName(away)].map(plainKey).filter(name => name.length > 2);
+  const mentionedTeams = teams.filter(name => spoken.includes(name));
+  const mentioned = new Set(
+    Object.entries(MOTIVE_WORDS)
+      .filter(([, keys]) => keys.some(key => spoken.includes(plainKey(key))))
+      .map(([motive]) => motive),
+  );
+  const rand = mulberry32(hashWebId(`${variant}:${spoken.slice(0, 80)}`));
+  const front = [];
+  const rest = [];
+  for (const photo of list) {
+    const blob = plainKey(`${photo.query ?? ''} ${photo.subject ?? ''}`);
+    const hitMotive = mentioned.has(photo.motive);
+    const hitTeam = mentionedTeams.some(name => blob.includes(name));
+    if (hitMotive || hitTeam) front.push(photo);
+    else rest.push(photo);
+  }
+  const ordered = [...shuffle(front, rand), ...rotate(shuffle(rest, rand), variant)];
+  return {
+    camera: CAMERA_MOVES[Math.abs(Number(variant) || 0) % CAMERA_MOVES.length],
+    photos: ordered.map(photo => photo.url),
+    subjects: ordered.map(photo => photo.subject ?? null),
+    motives: ordered.map(photo => photo.motive ?? null),
+  };
 }
 
 export function buildAttribution(assets) {
@@ -458,7 +420,6 @@ export function buildManifest({ match, assets }) {
     kickoff: match.kickoff ?? null,
     queries: [...new Set(list.map(a => a.query).filter(Boolean))],
     assets: list,
-    sequences: buildSequences(list, matchId),
     attribution: buildAttribution(list),
   };
 }

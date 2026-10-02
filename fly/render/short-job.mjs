@@ -5,8 +5,9 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { buildComposition, alignWords, ENDCARD_SECONDS } from '../../src/lib/hyperframe.js';
-import { alignToScript, shiftWords } from '../../src/lib/timing.js';
+import { buildComposition, ENDCARD_SECONDS, FONT_FILE } from '../../src/lib/hyperframe.js';
+import { orderPool } from '../../src/lib/media.js';
+import { cuesFromHeard, shiftWords } from '../../src/lib/timing.js';
 import { transcribeWords } from './transcribe.mjs';
 
 const run = promisify(execFile);
@@ -52,7 +53,7 @@ async function fetchPhoto(url, raw, out) {
   await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw, '-vf', `scale=${PHOTO_MAX_W}:-2:flags=lanczos`, '-q:v', '2', out]);
 }
 
-async function voiceTimes({ tmp, voiceFile, voiceSeconds, narration, log }) {
+async function voiceTimes({ tmp, voiceFile, voiceSeconds, log }) {
   const flac = join(tmp, 'voice16k.flac');
   const wav = join(tmp, 'voice16k.wav');
   await Promise.all([
@@ -60,10 +61,9 @@ async function voiceTimes({ tmp, voiceFile, voiceSeconds, narration, log }) {
     run('ffmpeg', ['-y', '-loglevel', 'error', '-i', voiceFile, '-ac', '1', '-ar', '16000', '-c:a', 'pcm_s16le', wav]),
   ]);
   const { provider, words, errors } = await transcribeWords({ flac, wav, voiceSeconds, log });
-  const aligned = provider ? alignToScript(narration, words, voiceSeconds) : [];
-  if (aligned.length) return { provider, words: aligned, heard: words, errors };
-  log('tiempos: sin proveedor, reparto por largo de palabra');
-  return { provider: 'reparto', words: alignWords(narration, voiceSeconds), heard: [], errors };
+  const cues = cuesFromHeard(words);
+  if (!cues.length) log('tiempos: sin transcripción, el video sale sin subtítulos');
+  return { provider: provider || 'ninguno', words: cues, heard: words, errors };
 }
 
 /**
@@ -74,34 +74,37 @@ export async function prepareShort({
   tmp,
   voiceFile,
   voiceSeconds,
-  narration,
-  photos,
-  subjects = [],
-  camera,
+  assets = [],
+  variant = 0,
+  home = '',
+  away = '',
   matchLabel,
   log = () => {},
 }) {
   const total = voiceSeconds + LEAD_SECONDS * 2 + ENDCARD_SECONDS;
-  const [timing, frames] = await Promise.all([
-    voiceTimes({ tmp, voiceFile, voiceSeconds, narration, log }),
-    Promise.all(photos.map(async (url, i) => {
-      const src = `${i}.jpg`;
-      try {
-        await fetchPhoto(url, join(tmp, `raw-${i}`), join(tmp, src));
-        return { src, subject: subjects[i] ?? null };
-      } catch (e) {
-        log(`foto ${i}: ${e.message}`);
-        return null;
-      }
-    })),
-  ]);
+  const timing = await voiceTimes({ tmp, voiceFile, voiceSeconds, log });
+  const cut = orderPool(assets, { variant, words: timing.words, home, away });
+  if (!cut || cut.photos.length < 2) throw new Error('pool de fotos insuficiente');
+  const font = join(HERE, 'assets', FONT_FILE);
+  if (!existsSync(font)) throw new Error(`falta la fuente ${FONT_FILE}`);
+  writeFileSync(join(tmp, FONT_FILE), readFileSync(font));
+  const frames = await Promise.all(cut.photos.map(async (url, i) => {
+    const src = `${i}.jpg`;
+    try {
+      await fetchPhoto(url, join(tmp, `raw-${i}`), join(tmp, src));
+      return { src, subject: cut.subjects[i] ?? null };
+    } catch (e) {
+      log(`foto ${i}: ${e.message}`);
+      return null;
+    }
+  }));
   const ready = frames.filter(Boolean);
   if (ready.length < 2) throw new Error(`solo ${ready.length} fotos descargadas`);
   writeFileSync(join(tmp, 'gsap.min.js'), readFileSync(gsapSource()));
   writeFileSync(join(tmp, 'index.html'), buildComposition({
     duration: total,
     photos: ready,
-    camera,
+    camera: cut.camera,
     words: shiftWords(timing.words, LEAD_SECONDS),
     match: matchLabel,
   }));

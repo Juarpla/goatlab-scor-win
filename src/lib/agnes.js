@@ -12,16 +12,20 @@ function kitPhrase(name) {
 function scenes(home, away) {
   const homeKit = kitPhrase(home);
   const awayKit = kitPhrase(away);
+  const homeName = esName(home) || home;
+  const awayName = esName(away) || away;
   return [
-    `Photo of a footballer controlling the ball at his feet, wearing ${homeKit}, match lighting, no readable text, vertical`,
-    `Photo of a footballer controlling the ball at his feet, wearing ${awayKit}, match lighting, no readable text, vertical`,
-    `Photo of a footballer dribbling, ball glued to the boot, wearing ${homeKit}, sideline view, no readable text, vertical`,
-    `Photo of a footballer shielding the ball, wearing ${awayKit}, night match, no readable text, vertical`,
-    `Photo of a national team training session, players in ${homeKit}, ball at their feet, no crest, no readable text, vertical`,
-    `Photo of a football stand full of supporters in the colours of ${esName(home) || home}, scarves raised, no crest, no readable text, no recognizable faces, vertical`,
-    `Night photo of a packed football stadium before kickoff, crowd in the colours of ${esName(home) || home} and ${esName(away) || away}, no crest, no readable text, vertical`,
-    `Photo of a football press conference, coach and microphones, backdrop in the colours of ${esName(away) || away}, no crest, no readable text, vertical`,
+    `Photo of adult men at a football training session, wearing ${homeKit}, no women, no match, no crest, no readable text, vertical`,
+    `Photo of adult men at a football training session, wearing ${awayKit}, no women, no match, no crest, no readable text, vertical`,
+    `Photo of an adult male footballer in a sit-down interview, wearing ${homeKit}, microphones, no women, no match, no crest, no readable text, vertical`,
+    `Photo of adult male footballers walking off a team bus, wearing ${awayKit}, no women, no match, no crest, no readable text, vertical`,
+    `Photo of adult male supporters in the colours of ${homeName} and ${awayName}, scarves raised, no women, no crest, no readable text, no recognizable faces, vertical`,
   ];
+}
+
+/** El primer 429 reintenta esa foto. El segundo corta el lote. */
+export function agnesAfter429(failures) {
+  return Number(failures) >= 2 ? 'stop' : 'retry';
 }
 
 /** Una consigna por foto que falta. Primero el jugador con el balón. */

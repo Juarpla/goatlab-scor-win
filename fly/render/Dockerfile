@@ -36,7 +36,7 @@ RUN npm ci --omit=dev --no-audit --no-fund \
   && /opt/whisper/whisper-cli --help > /dev/null
 COPY src/lib/hyperframe.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/render-queue.js ./src/lib/
 COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/transcribe.mjs ./fly/render/
-COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt ./fly/render/assets/
+COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt fly/render/assets/LiberationSans-Bold.ttf fly/render/assets/LiberationSans-OFL.txt ./fly/render/assets/
 
 ENV PORT=3000 NODE_ENV=production \
     WHISPER_BIN=/opt/whisper/whisper-cli \

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { audioFailureText, pendingRecord, photoFailureText, queueDecision, renderRequest } from '../src/lib/render-queue.js';
-import { agnesPrompts, normalizeAgnesImage } from '../src/lib/agnes.js';
+import { agnesAfter429, agnesPrompts, normalizeAgnesImage } from '../src/lib/agnes.js';
 
 const script = {
   home: 'Kazakhstan',
@@ -9,20 +9,26 @@ const script = {
   scripts: [{ title: 'El duelo', hook: 'Ojo', narration: 'Kazajistán recibe a Moldavia.' }],
 };
 
-test('pendingRecord toma el guion y renderRequest exige fotos', () => {
+test('pendingRecord toma los equipos y renderRequest manda el pool, no el guion', () => {
   const record = pendingRecord({
     chatId: '1', matchId: 'kz', variant: 0, audioFileId: 'file', script,
   });
   assert.equal(record.matchLabel, 'Kazakhstan contra Moldova');
-  assert.equal(record.narration, 'Kazajistán recibe a Moldavia.');
-  assert.equal(renderRequest(record, { sequences: [] }), null);
+  assert.equal(record.home, 'Kazakhstan');
+  assert.equal(record.away, 'Moldova');
+  assert.equal(record.narration, undefined);
+  assert.equal(renderRequest(record, { assets: [] }), null);
   const ready = renderRequest(record, {
-    sequences: [{ camera: 'push', photos: ['https://a', 'https://b'], subjects: [null, 'Ana'] }],
+    assets: [
+      { url: 'https://a', motive: 'training', query: 'Kazakhstan men', subject: null },
+      { url: 'https://b', motive: 'fans', query: 'Moldova men', subject: null },
+    ],
   });
   assert.equal(queueDecision({ ready: true, request: ready }), 'post');
   assert.equal(queueDecision({ ready: false, request: null }), 'pending');
-  assert.equal(ready.photos.length, 2);
-  assert.equal(ready.camera, 'push');
+  assert.equal(ready.assets.length, 2);
+  assert.equal(ready.assets[0].motive, 'training');
+  assert.equal(ready.narration, undefined);
 });
 
 test('photoFailureText se queda con el error útil', () => {
@@ -38,14 +44,18 @@ test('audioFailureText nombra el número y no pide reenviar el archivo', () => {
   assert.doesNotMatch(audioFailureText(2, 'ffmpeg: Invalid data'), /file_id|reenvi/);
 });
 
-test('agnesPrompts prioriza el balón y la camiseta', () => {
+test('agnesPrompts pide hombres en entrenamiento y corta al segundo 429', () => {
   const prompts = agnesPrompts({ home: 'Liverpool', away: 'Moldova', count: 3 });
   assert.equal(prompts.length, 3);
-  assert.match(prompts[0], /controlling the ball/);
+  assert.match(prompts[0], /adult men/);
+  assert.match(prompts[0], /training/);
   assert.match(prompts[0], /#c8102e/);
-  assert.match(prompts[1], /controlling the ball/);
-  assert.match(prompts[2], /dribbling/);
-  assert.ok(prompts.every(prompt => /no crest|no readable/i.test(prompt)));
+  assert.match(prompts[1], /training/);
+  assert.match(prompts[2], /interview/);
+  assert.ok(prompts.every(prompt => /no women/i.test(prompt)));
+  assert.ok(prompts.every(prompt => !/match lighting|night match/i.test(prompt)));
+  assert.equal(agnesAfter429(1), 'retry');
+  assert.equal(agnesAfter429(2), 'stop');
   assert.equal(normalizeAgnesImage({ matchId: 'kz', index: 0, publicUrl: 'http://insecure/a.jpg' }), null);
   const asset = normalizeAgnesImage({
     matchId: 'kz', index: 1, publicUrl: 'https://goatlab-gateway.fly.dev/media-gen/kz/1.jpg', model: 'agnes-image-2.1-flash', prompt: prompts[1], at: '2026-10-01T00:00:00.000Z',

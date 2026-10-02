@@ -1,17 +1,23 @@
 ---
 name: goatlab
-description: GoatLab Shorts. Handles the /goatlab Telegram message: list current matches, send all 10 scripts at once, accept voice notes in order, and start each Short's render as soon as its voice note arrives.
+description: GoatLab Shorts. Handles the /goatlab Telegram message: list current matches, send all 10 scripts for the user to read, accept voice notes in order, and start each Short's render as soon as its voice note arrives.
 ---
 
 # GoatLab Shorts (`/goatlab`)
 
 Always reply to the user in Spanish. The user writes in Spanish. Script
-narrations are already Spanish and must be copied verbatim. Do not answer in
-English, even though these instructions are in English.
+narrations are already Spanish and must be copied verbatim when you show
+them. Do not answer in English, even though these instructions are in English.
 
 Everything happens in the same Telegram chat. Scripts live at
 `/home/node/goatlab/public/data/youtube-scripts/<matchId>.json`
-(`scripts[].n`, `scripts[].title`, `scripts[].hook`, `scripts[].narration`, `scripts[].words`).
+(`scripts[].n`, `scripts[].title`, `scripts[].hook`, `scripts[].narration`).
+
+The scripts are only for the user to read and record. They are not the video.
+Do not use a narration to choose photos, write captions, pick graphics, or
+decide what the Short says. The worker transcribes each voice note. That
+transcript is the only text in the video. Photos come from the two teams
+(home and away), not from the scripts.
 
 There is no support button row. There are no text commands to view a script,
 ask for status, stop early, confirm, or request a render. If the user types
@@ -40,8 +46,10 @@ is natural language about the last voice note (step 3): it gets no reply.
    (`chatId` = the current chat). The process inherits `PEXELS_API_KEY`,
    `PIXABAY_API_KEY`, `AGNES_API_KEY`, `OPENCODE_GO_API_KEY` and
    `TELEGRAM_BOT_TOKEN`. Do not put keys on the command line. Do not search
-   the web yourself and do not pick photo URLs. Do not wait for this command
-   and do not read its output: the job messages the chat itself.
+   the web yourself and do not pick photo URLs. The job searches licensed
+   stills of the two men's teams (training, interview, arrival, fans, press).
+   Do not wait for this command and do not read its output: the job messages
+   the chat itself.
    Then send all **10 scripts at once** (`narration` verbatim, for reading
    aloud), numbered 1 to 10, split across 2-3 messages of ≤3500 characters.
    Head the first message with this short instruction, in Spanish:
@@ -58,17 +66,16 @@ is natural language about the last voice note (step 3): it gets no reply.
    With `exec`, once, from the repo root:
    `cd /home/node/goatlab && node scripts/queue-render.mjs --match=<matchId> --variant=<k-1> --chat=<chatId> --audio=<fileId>`
    (`variant` = k - 1; `fileId` = the voice note's Telegram file id). The
-   script reads title, hook, narration and the match label from the script
-   file, and photos from `/data/media-pack` when they exist. Do not build the
-   render JSON yourself and do not call curl. Ignore `ok` and `pending` on
-   stdout; do not tell the user which one it was.
-   The worker compares team names and numbers against the script that matches
-   **by order** (audio k ↔ script k). If they do not match, the worker itself
-   sends `❓ ¿este era el guion 3?` before it renders. The worker renders the
-   fixed HyperFrames template. Do not pick another engine. Do not poll
-   `/jobs`. The worker queues the renders, sends each MP4 to the chat via
-   `sendVideo`, and if an audio cannot be used it sends one Spanish line with
-   that audio's number (for example `El audio 2 que enviaste está corrompido. Grábalo otra vez.`).
+   script reads the match label from the script file and the photo pool from
+   `/data/media-pack` when it exists. It does not send the narration as the
+   video text. Do not build the render JSON yourself and do not call curl.
+   Ignore `ok` and `pending` on stdout; do not tell the user which one it was.
+   The worker transcribes the voice, orders a fresh cut of the photo pool for
+   that audio, and renders the fixed HyperFrames template. Do not pick another
+   engine. Do not compare the voice to a script. Do not poll `/jobs`. The
+   worker queues the renders, sends each MP4 to the chat via `sendVideo`, and
+   if an audio cannot be used it sends one Spanish line with that audio's
+   number (for example `El audio 2 que enviaste está corrompido. Grábalo otra vez.`).
    It does not resend the voice note. Repeating the same POST is harmless:
    the worker returns the same job.
    When the photo job finishes it posts any pending audios itself and sends
@@ -89,7 +96,8 @@ is natural language about the last voice note (step 3): it gets no reply.
    If the user gives an instruction about the error (for example, use only
    the fallback model), relaunch the job with that variable in the
    environment (`OPENCODE_GO_MODEL=...`) and do not edit code. Any other text
-   is still ordinary text.
+   is still ordinary text. Do not relaunch Agnes yourself and do not raise
+   `AGNES_MAX_IMAGES`: the job already stops when the image API rate-limits.
 
 4. **Close**: when audio 10 arrives (and its render has been posted, or left
    pending), the series closes by itself. Say `Serie completa`. Nothing else:
@@ -122,3 +130,4 @@ Telegram, not on disk).
 - No automatic session reset (manual control via `/start`, which wipes the
   series; a half-finished series is kept until `/start`).
 - No odds, no result guarantees. CTA is always `goatlab.win`.
+- Scripts on screen are for reading. The voice is the video.

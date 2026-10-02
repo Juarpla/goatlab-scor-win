@@ -1,7 +1,6 @@
 /**
- * Tiempos de un Short: guion alineado con lo oído, tomas de 2 a 4 s,
+ * Tiempos de un Short: la transcripción es el texto, tomas de 2 a 4 s,
  * páginas de subtítulo y cifras en el instante en que se dicen.
- * El texto siempre es el del guion; lo oído solo aporta los tiempos.
  */
 
 export const SHOT_MIN = 2;
@@ -21,104 +20,17 @@ function round3(n) {
   return Math.round(n * 1000) / 1000;
 }
 
-function levenshtein(a, b) {
-  if (a === b) return 0;
-  if (!a.length) return b.length;
-  if (!b.length) return a.length;
-  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
-  for (let i = 1; i <= a.length; i++) {
-    const cur = [i];
-    for (let j = 1; j <= b.length; j++) {
-      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
-    }
-    prev = cur;
-  }
-  return prev[b.length];
-}
-
-/** 0 si son la misma palabra, 0.5 si se parecen, 1 si no. */
-function substitutionCost(a, b) {
-  if (a === b) return 0;
-  if (!a || !b) return 1;
-  const d = levenshtein(a, b);
-  return d <= Math.max(1, Math.floor(Math.max(a.length, b.length) / 3)) ? 0.5 : 1;
-}
-
-/**
- * Alinea las palabras del guion con las oídas ({word, start, end}, en
- * segundos desde el inicio de la voz). Devuelve una entrada por palabra del
- * guion. Las que no se oyeron se interpolan entre sus vecinas.
- */
-export function alignToScript(narration, heard, durationSeconds) {
-  const script = String(narration ?? '').split(/\s+/).filter(Boolean);
-  const duration = Number(durationSeconds) > 0 ? Number(durationSeconds) : 0;
+/** El texto en pantalla es lo que se oyó, con sus tiempos. */
+export function cuesFromHeard(heard) {
   const clean = (heard ?? [])
-    .filter(h => h && Number.isFinite(h.start) && Number.isFinite(h.end) && normalizeWord(h.word))
-    .sort((x, y) => x.start - y.start);
-  if (!script.length || !clean.length) return [];
-
-  const a = script.map(normalizeWord);
-  const b = clean.map(h => normalizeWord(h.word));
-  const n = a.length;
-  const m = b.length;
-  const cost = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
-  for (let i = 1; i <= n; i++) cost[i][0] = i;
-  for (let j = 1; j <= m; j++) cost[0][j] = j;
-  for (let i = 1; i <= n; i++) {
-    for (let j = 1; j <= m; j++) {
-      cost[i][j] = Math.min(
-        cost[i - 1][j - 1] + substitutionCost(a[i - 1], b[j - 1]),
-        cost[i - 1][j] + 1,
-        cost[i][j - 1] + 1,
-      );
-    }
-  }
-
-  const pairs = new Array(n).fill(null);
-  let i = n;
-  let j = m;
-  while (i > 0 && j > 0) {
-    if (cost[i][j] === cost[i - 1][j - 1] + substitutionCost(a[i - 1], b[j - 1])) {
-      pairs[i - 1] = clean[j - 1];
-      i--;
-      j--;
-    } else if (cost[i][j] === cost[i - 1][j] + 1) {
-      i--;
-    } else {
-      j--;
-    }
-  }
-
-  const end = Math.max(duration, clean.at(-1).end);
-  const out = script.map((word, k) => (pairs[k] ? { word, start: pairs[k].start, end: pairs[k].end } : { word }));
-  let k = 0;
-  while (k < n) {
-    if (out[k].start != null) {
-      k++;
-      continue;
-    }
-    let g = k;
-    while (g < n && out[g].start == null) g++;
-    const from = k > 0 ? out[k - 1].end : 0;
-    const to = g < n ? out[g].start : end;
-    const weights = out.slice(k, g).map(w => Math.max(1, w.word.length));
-    const total = weights.reduce((s, x) => s + x, 0);
-    let t = from;
-    for (let x = k; x < g; x++) {
-      const span = (Math.max(0, to - from) * weights[x - k]) / total;
-      out[x].start = t;
-      out[x].end = t + span;
-      t += span;
-    }
-    k = g;
-  }
-
+    .filter(h => h && Number.isFinite(h.start) && Number.isFinite(h.end) && String(h.word ?? '').trim())
+    .sort((a, b) => a.start - b.start);
   let floor = 0;
-  return out.map(w => {
-    const start = Math.max(floor, w.start);
-    const stop = Math.max(start + MIN_WORD, w.end);
+  return clean.map(h => {
+    const start = Math.max(floor, h.start);
+    const end = Math.max(start + MIN_WORD, h.end);
     floor = start;
-    return { word: w.word, start: round3(start), end: round3(stop) };
+    return { word: String(h.word).trim(), start: round3(start), end: round3(end) };
   });
 }
 
@@ -199,104 +111,32 @@ const WORD_NUM = {
   sesenta: '60', setenta: '70', ochenta: '80', noventa: '90', cien: '100', ciento: '100',
 };
 
-function heardTokens(heard) {
-  const list = Array.isArray(heard)
-    ? heard.map(h => (typeof h === 'string' ? h : h?.word))
-    : String(heard ?? '').split(/\s+/);
-  return list.filter(Boolean).map(raw => {
-    const letters = normalizeWord(raw);
-    if (WORD_NUM[letters]) return WORD_NUM[letters];
-    const digits = String(raw).replace(/[.,](?=\d)/g, '').replace(/\D/g, '');
-    return digits || letters;
-  });
-}
-
-/** Junta «setenta y uno» y «tres coma setenta y uno» en una sola cifra. */
-function composeFigures(tokens) {
-  const tens = [];
-  for (let i = 0; i < tokens.length; i++) {
-    const t = tokens[i];
-    if (/^[2-9]0$/.test(t) && tokens[i + 1] === 'y' && /^[1-9]$/.test(tokens[i + 2] ?? '')) {
-      tens.push(String(Number(t) + Number(tokens[i + 2])));
-      i += 2;
-      continue;
-    }
-    tens.push(t);
-  }
-  const out = [];
-  for (let i = 0; i < tens.length; i++) {
-    const t = tens[i];
-    if (/^\d+$/.test(t) && tens[i + 1] === 'coma' && /^\d+$/.test(tens[i + 2] ?? '')) {
-      out.push(t + tens[i + 2]);
-      i += 2;
-      continue;
-    }
-    out.push(t);
-  }
-  return out;
-}
-
-function scriptFigures(narration) {
-  const seen = [];
-  for (const m of String(narration ?? '').matchAll(/\d+(?:[.,]\d+)?/g)) {
-    const key = m[0].replace(/[.,]/g, '');
-    if (!seen.includes(key)) seen.push(key);
-  }
-  return seen;
-}
-
-function teamsOf(matchLabel) {
-  return String(matchLabel ?? '')
-    .split(/\s+contra\s+/i)
-    .map(side => normalizeWord(side))
-    .filter(name => name.length > 2);
-}
-
-/**
- * El guion y lo oído coinciden si están los dos equipos y al menos la mitad
- * de las cifras distintas. Lo oído puede venir en palabras («cuatro», «3,71»).
- */
-export function anchorsMatch(narration, heard, matchLabel) {
-  const tokens = composeFigures(heardTokens(heard));
-  const flat = tokens.join('');
-  if (teamsOf(matchLabel).some(name => !flat.includes(name))) return false;
-  const figs = scriptFigures(narration);
-  if (!figs.length) return true;
-  const heardFigs = new Set(tokens.filter(t => /^\d+$/.test(t)));
-  const hit = figs.filter(f => heardFigs.has(f)).length;
-  return hit >= Math.ceil(figs.length / 2);
-}
-
-/** Aviso de Telegram si la voz no parece el guion. Null si no hay que avisar. */
-export function anchorWarning({ provider, narration, heard, matchLabel, variant }) {
-  if (!provider || provider === 'reparto') return null;
-  if (anchorsMatch(narration, heard, matchLabel)) return null;
-  return `❓ ¿este era el guion ${Number(variant) + 1}?`;
-}
-
 /**
  * Hasta `limit` cifras distintas, en el instante en que se dicen.
+ * Acepta dígitos y números dichos en español («cuatro»).
  * `value` es null si la cifra no admite count-up (por ejemplo `3-0`).
  */
 export function figuresFromWords(words, limit = 3) {
   const out = [];
   const seen = new Set();
   for (const w of words ?? []) {
-    if (!/\d/.test(w.word)) continue;
-    const label = w.word.replace(/^[¿¡("«“]+/, '').replace(/[.,;:?!…"»”)]+$/, '');
+    const bare = String(w.word ?? '').replace(/^[¿¡("«“]+/, '').replace(/[.,;:?!…"»”)]+$/, '');
+    const spoken = WORD_NUM[normalizeWord(bare)];
+    const label = spoken || bare;
+    if (!spoken && !/\d/.test(label)) continue;
     if (!label || seen.has(label)) continue;
     seen.add(label);
-    const m = label.match(FIGURE);
-    const digits = m?.[2] ?? '';
-    const decimals = digits.includes(',') || digits.includes('.') ? digits.split(/[.,]/)[1].length : 0;
+    const m = spoken ? null : label.match(FIGURE);
+    const digits = spoken || m?.[2] || '';
+    const decimals = !spoken && (digits.includes(',') || digits.includes('.')) ? digits.split(/[.,]/)[1].length : 0;
     out.push({
       label,
       at: w.start,
       prefix: m ? m[1] : '',
       suffix: m ? m[3] : '',
-      value: m ? Number(digits.replace(',', '.')) : null,
+      value: digits ? Number(String(digits).replace(',', '.')) : null,
       decimals,
-      comma: digits.includes(','),
+      comma: !spoken && digits.includes(','),
     });
     if (out.length === limit) break;
   }

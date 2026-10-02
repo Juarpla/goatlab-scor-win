@@ -25,7 +25,7 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 
 ## Fotos
 
-Jugadores del partido (entrenamiento, después del encuentro o retrato), al menos 20 por manifiesto. Fuentes: Wikimedia Commons (dominio público, CC0, CC BY, CC BY-SA), Pexels (Pexels License) y Pixabay (Pixabay Content License). Esas dos últimas cubren el archivo, no un aval del jugador. Fuera: CC BY-NC, CC BY-ND, "uso justo", Getty/AP/Reuters/Shutterstock/Alamy/Instagram y scraping de Google. Cada foto trae `seen` con el modelo y la fecha; sin eso el manifiesto no vale. Cada manifiesto registra fuente (`commons`, `pexels` o `pixabay`), id, url https, fotógrafo, licencia, atribución y 10 secuencias con distinto orden y distinta cámara. Lo arma el gateway al elegir el partido. Los nombres salen de los guiones 3, 4, 7 y 9.
+Fotos actuales de los dos equipos masculinos (entrenamiento, entrevista, llegada o bajada del bus, hinchada, rueda de prensa o retrato). Entre 8 y 15 por manifiesto. No es el partido en sí. Fuentes: Wikimedia Commons (dominio público, CC0, CC BY, CC BY-SA), Pexels (Pexels License), Pixabay (Pixabay Content License) y, si faltan, hasta 5 de apoyo generadas con Agnes. Fuera: equipo femenino, acción del encuentro, CC BY-NC, CC BY-ND, "uso justo", Getty/AP/Reuters/Shutterstock/Alamy/Instagram y scraping de Google. Cada foto trae `seen` con el modelo y la fecha; sin eso el manifiesto no vale. Cada manifiesto registra fuente (`commons`, `pexels`, `pixabay` o `agnes`), id, url https, fotógrafo, licencia y atribución. Lo arma el gateway al elegir el partido, a partir de los dos equipos, no de los guiones. Cada audio ordena ese pool al renderizar.
 
 ## Video
 

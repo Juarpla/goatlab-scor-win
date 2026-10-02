@@ -9,6 +9,9 @@ import { planShots, captionPages, figuresFromWords } from './timing.js';
 
 export const FRAME_W = 1080;
 export const FRAME_H = 1920;
+/** Familia declarada con @font-face. HyperFrames no mapea DejaVu ni Liberation por nombre. */
+export const FONT_FAMILY = 'Liberation Sans';
+export const FONT_FILE = 'LiberationSans-Bold.ttf';
 export const ENDCARD_SECONDS = 3;
 export const CAPTION_FILL = '#ffe14a';
 export const CAPTION_EDGE = '#000';
@@ -202,18 +205,19 @@ export function buildComposition({
 <meta charset="utf-8" />
 <script src="gsap.min.js"></script>
 <style>
+  @font-face { font-family: "${FONT_FAMILY}"; src: url("${FONT_FILE}") format("truetype"); font-weight: 800; font-style: normal; }
   html, body { margin: 0; background: #101412; }
   #stage { position: relative; width: ${FRAME_W}px; height: ${FRAME_H}px; overflow: hidden; background: #101412; }
   .shot { position: absolute; inset: 0; overflow: hidden; background: #101412; transform-origin: center center; }
   .shot img { position: absolute; width: 140%; height: 140%; left: -20%; top: -20%; object-fit: cover; transform-origin: center center; }
   .flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
-  .page { position: absolute; left: 64px; right: 64px; bottom: 240px; text-align: center; font-family: Arial, "DejaVu Sans", sans-serif; font-weight: 800; font-size: 68px; line-height: 1.2; }
+  .page { position: absolute; left: 64px; right: 64px; bottom: 240px; text-align: center; font-family: "${FONT_FAMILY}"; font-weight: 800; font-size: 68px; line-height: 1.2; }
   .word { display: inline-block; opacity: 0; color: ${CAPTION_FILL}; text-shadow: ${edge}; }
-  .fig { position: absolute; left: 72px; top: 180px; font-family: Arial, "DejaVu Sans", sans-serif; font-weight: 800; font-size: 150px; color: #c5ed74; text-shadow: ${edge}; }
-  .tag { position: absolute; left: 64px; bottom: 560px; display: flex; align-items: stretch; gap: 16px; font-family: Arial, "DejaVu Sans", sans-serif; }
+  .fig { position: absolute; left: 72px; top: 180px; font-family: "${FONT_FAMILY}"; font-weight: 800; font-size: 150px; color: #c5ed74; text-shadow: ${edge}; }
+  .tag { position: absolute; left: 64px; bottom: 560px; display: flex; align-items: stretch; gap: 16px; font-family: "${FONT_FAMILY}"; }
   .tag-bar { width: 12px; background: #c5ed74; }
   .tag-name { padding: 14px 24px; background: rgba(16, 20, 18, 0.86); color: #fff; font-size: 46px; font-weight: 800; }
-  .endcard { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #101412; color: #c5ed74; font-family: Arial, "DejaVu Sans", sans-serif; font-weight: 800; }
+  .endcard { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #101412; color: #c5ed74; font-family: "${FONT_FAMILY}"; font-weight: 800; }
   .endcard .brand { font-size: 84px; }
   .endcard .match { margin-top: 24px; font-size: 36px; color: #fff; font-weight: 700; }
 </style>

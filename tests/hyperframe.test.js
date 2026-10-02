@@ -5,6 +5,8 @@ import {
   figuresFromNarration,
   buildComposition,
   cameraMove,
+  FONT_FAMILY,
+  FONT_FILE,
   CAPTION_FILL,
   CAPTION_EDGE,
   FRAME_W,
@@ -66,4 +68,7 @@ test('la plantilla pinta 9:16, subtítulo amarillo con borde y la cámara pedida
   assert.match(other, /y: 60/);
   assert.notEqual(cameraMove('pan-left').from, cameraMove('rise').from);
   assert.doesNotMatch(html, /zoompan/);
+  assert.match(html, new RegExp(`font-family: "${FONT_FAMILY}"`));
+  assert.match(html, new RegExp(`@font-face \\{ font-family: "${FONT_FAMILY}"; src: url\\("${FONT_FILE}"\\)`));
+  assert.doesNotMatch(html, /DejaVu|Arial/);
 });

@@ -1,4 +1,4 @@
-// Render local: youtube-scripts + media-pack -> MP4 1080x1920 vía HyperFrames.
+// Render local: media-pack + voz -> MP4 1080x1920 vía HyperFrames.
 // Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg [--variant=N] [--out=salida.mp4]
 // Mismo camino que el worker: tiempos por palabra (Mistral, whisper.cpp),
 // fotos reducidas, plantilla fija y voz mezclada. Requiere Node 22, ffmpeg,
@@ -48,11 +48,9 @@ const load = (p) => {
   if (!existsSync(p)) fail(`falta ${p}`);
   return JSON.parse(readFileSync(p, 'utf8'));
 };
-const script = load(join(ROOT, 'public/data/youtube-scripts', `${match}.json`));
 const media = load(join(ROOT, 'public/data/media-pack', `${match}.json`));
-const sequence = media.sequences?.[variant] ?? media.sequences?.[0];
-if (!sequence?.photos?.length) fail(`sin secuencia ${variant}`);
-const narration = script.scripts?.[variant]?.narration ?? script.scripts?.[0]?.narration ?? '';
+const assets = Array.isArray(media.assets) ? media.assets : [];
+if (assets.filter(asset => asset?.url).length < 2) fail('pool de fotos insuficiente');
 
 const out = args.out ?? join(ROOT, 'public/shorts', `${match}-v${variant}.mp4`);
 mkdirSync(dirname(out), { recursive: true });
@@ -71,10 +69,10 @@ try {
     tmp,
     voiceFile,
     voiceSeconds,
-    narration,
-    photos: sequence.photos,
-    subjects: sequence.subjects,
-    camera: sequence.camera,
+    assets,
+    variant,
+    home: media.home ?? '',
+    away: media.away ?? '',
     matchLabel: media.match,
     log: (m) => console.log(`render: ${m}`),
   });
@@ -96,4 +94,4 @@ const probe = JSON.parse(
 const v = probe.streams.find((s) => s.codec_type === 'video');
 if (!v || v.width !== FRAME_W || v.height !== FRAME_H) fail(`video inesperado: ${v?.width}x${v?.height}`);
 rmSync(tmp, { recursive: true, force: true });
-lap(`listo ${out} (${v.width}x${v.height}, variante ${variant}, cámara ${sequence.camera})`);
+lap(`listo ${out} (${v.width}x${v.height}, variante ${variant})`);

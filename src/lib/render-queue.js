@@ -8,23 +8,27 @@ export function pendingRecord({ chatId, matchId, variant, audioFileId, script })
     chatId,
     matchId,
     variant,
+    home,
+    away,
     matchLabel: [home, away].filter(Boolean).join(' contra '),
     title: shot.title ?? '',
     hook: shot.hook ?? '',
-    narration: shot.narration ?? '',
     audioFileId,
   };
 }
 
-/** null si el manifiesto no tiene fotos para esa variante. */
+/** null si el pool no tiene al menos dos fotos. El orden lo arma el render. */
 export function renderRequest(record, manifest) {
-  const seq = manifest?.sequences?.[record?.variant];
-  if (!seq || !Array.isArray(seq.photos) || seq.photos.length < 2) return null;
+  const assets = (Array.isArray(manifest?.assets) ? manifest.assets : []).filter(asset => asset?.url);
+  if (assets.length < 2) return null;
   return {
     ...record,
-    camera: seq.camera,
-    photos: seq.photos,
-    subjects: Array.isArray(seq.subjects) ? seq.subjects : [],
+    assets: assets.map(asset => ({
+      url: asset.url,
+      subject: asset.subject ?? null,
+      motive: asset.motive ?? null,
+      query: asset.query ?? '',
+    })),
   };
 }
 

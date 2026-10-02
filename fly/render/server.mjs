@@ -1,4 +1,4 @@
-// Worker goatlab-render: voz + secuencia -> MP4 -> sendVideo por Telegram.
+// Worker goatlab-render: voz + pool de fotos -> MP4 -> sendVideo por Telegram.
 // HyperFrames (plantilla fija) pinta el 9:16. FFmpeg mezcla la voz.
 // Stateless: POST /render encola un job (202 {jobId}), GET /jobs/:id sondea.
 // El gateway manda un POST por audio apenas llega; la cola renderiza de a uno
@@ -10,8 +10,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H } from '../../src/lib/hyperframe.js';
-import { CAMERA_MOVES } from '../../src/lib/media.js';
-import { anchorWarning } from '../../src/lib/timing.js';
+import { ASSETS_PER_MATCH } from '../../src/lib/media.js';
 import { audioFailureText } from '../../src/lib/render-queue.js';
 import { telegramCaption } from '../../src/lib/youtube.js';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
@@ -23,7 +22,6 @@ const SECRET = process.env.RENDER_SECRET;
 const MAX_MB = 45; // sendVideo permite 50MB: margen de seguridad
 const MIN_VOICE = 5; // segundos mínimos de voz aceptados
 const MAX_VOICE = 120; // segundos máximos de voz aceptados
-const MAX_PHOTOS = 16;
 
 if (!BOT) throw new Error('falta TELEGRAM_BOT_TOKEN');
 if (!SECRET) throw new Error('falta RENDER_SECRET');
@@ -95,31 +93,19 @@ async function runJob(job) {
     if (!(voiceSeconds >= MIN_VOICE && voiceSeconds <= MAX_VOICE))
       throw new Error(`voz de ${voiceSeconds.toFixed(1)}s fuera de rango (${MIN_VOICE}-${MAX_VOICE}s)`);
 
-    // 2. Tiempos por palabra y fotos. Si la voz no es el guion, avisar antes de HyperFrames.
-    const { total, provider, heard } = await prepareShort({
+    // 2. La transcripción ordena el pool y es el texto del video.
+    const { total, provider } = await prepareShort({
       tmp,
       voiceFile,
       voiceSeconds,
-      narration: job.narration,
-      photos: job.photos,
-      subjects: job.subjects,
-      camera: job.camera,
+      assets: job.assets,
+      variant: job.variant,
+      home: job.home,
+      away: job.away,
       matchLabel: job.matchLabel,
       log,
     });
     job.timing = provider;
-    const notice = anchorWarning({
-      provider,
-      narration: job.narration,
-      heard,
-      matchLabel: job.matchLabel,
-      variant: job.variant,
-    });
-    if (notice) {
-      log(`anclas: ${notice}`);
-      await tg('sendMessage', { chat_id: job.chatId, text: notice })
-        .catch((err) => log(`aviso de anclas falló: ${err.message}`));
-    }
     const silent = join(tmp, 'silent.mp4');
     const out = join(tmp, 'short.mp4');
     await renderSilent(tmp, silent);
@@ -194,11 +180,11 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST' && req.url === '/render') {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
       const b = JSON.parse(await readBody(req));
-      for (const k of ['chatId', 'matchId', 'matchLabel', 'hook', 'photos']) {
+      for (const k of ['chatId', 'matchId', 'matchLabel', 'hook', 'assets']) {
         if (b[k] == null || b[k] === '') return json(400, { error: `falta ${k}` });
       }
       if (!b.audioFileId && !b.audioUrl) return json(400, { error: 'falta audioFileId o audioUrl' });
-      if (!Array.isArray(b.photos) || b.photos.length < 2) return json(400, { error: 'photos vacío' });
+      if (!Array.isArray(b.assets) || b.assets.filter(asset => asset?.url).length < 2) return json(400, { error: 'fotos insuficientes' });
       const variant = Number(b.variant ?? 0);
       const key = [b.chatId, b.matchId, variant, b.audioFileId ?? b.audioUrl].join(':');
       const prior = jobs.get(byKey.get(key));
@@ -213,12 +199,16 @@ const server = createServer(async (req, res) => {
         matchLabel: b.matchLabel,
         title: String(b.title ?? ''),
         hook: b.hook,
-        narration: String(b.narration ?? ''),
-        camera: CAMERA_MOVES.includes(b.camera) ? b.camera : CAMERA_MOVES[Math.abs(variant) % CAMERA_MOVES.length],
+        home: String(b.home ?? ''),
+        away: String(b.away ?? ''),
         audioFileId: b.audioFileId,
         audioUrl: b.audioUrl,
-        photos: b.photos.slice(0, MAX_PHOTOS),
-        subjects: Array.isArray(b.subjects) ? b.subjects.slice(0, MAX_PHOTOS) : [],
+        assets: b.assets.slice(0, ASSETS_PER_MATCH).map(asset => ({
+          url: asset.url,
+          subject: asset.subject ?? null,
+          motive: asset.motive ?? null,
+          query: asset.query ?? '',
+        })),
       };
       jobs.set(id, job);
       byKey.set(key, id);

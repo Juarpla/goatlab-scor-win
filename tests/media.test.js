@@ -2,10 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { checkMediaManifest } from '../src/lib/compliance.js';
 import {
-  playerNamesFromScripts,
-  playerQueries,
   sceneQueries,
   selectAssets,
+  orderPool,
   AI_CREDIT,
   hashWebId,
   classifyLicense,
@@ -16,12 +15,10 @@ import {
   normalizePixabayHit,
   buildAttribution,
   buildManifest,
-  buildSequences,
+  isUsableStill,
   subjectFor,
-  PHOTOS_PER_SEQUENCE,
-  CAMERA_MOVES,
+  ASSETS_MIN,
   ASSETS_PER_MATCH,
-  SEQUENCES_PER_MATCH,
   ALLOWED_SOURCES,
 } from '../src/lib/media.js';
 
@@ -57,30 +54,15 @@ test('classifyLicense acepta uso comercial y rechaza NC y ND', () => {
   assert.equal(acceptAssetLicense('getty', 'Pexels License'), null);
 });
 
-test('playerNamesFromScripts lee los guiones de jugadores y omite los equipos', () => {
-  const scripts = [];
-  scripts[2] = {
-    narration: 'Turquía contra Italia huele a partido abierto. Delante de esas cifras están Kenan Yıldız empujando el gol turco y Mateo Retegui como la referencia de Italia.',
-  };
-  scripts[3] = {
-    narration: 'Y detrás de esa puerta está Gianluigi Donnarumma, cuyas atajadas sostienen el arco italiano.',
-  };
-  scripts[6] = {
-    narration: 'Hakan Çalhanoğlu es quien cobra las faltas y en Italia ese papel ha recaído en Jorginho.',
-  };
-  scripts[8] = {
-    narration: 'En el lado de la creación, Federico Dimarco llega desde Italia con centros.',
-  };
-  const names = playerNamesFromScripts(scripts, { home: 'Turquía', away: 'Italia' });
-  assert.ok(names.includes('Kenan Yıldız'));
-  assert.ok(names.includes('Mateo Retegui'));
-  assert.ok(names.includes('Gianluigi Donnarumma'));
-  assert.ok(names.includes('Hakan Çalhanoğlu'));
-  assert.ok(names.includes('Jorginho'));
-  assert.ok(names.includes('Federico Dimarco'));
-  assert.ok(!names.includes('Turquía'));
-  assert.ok(!names.includes('Italia'));
-  assert.ok(playerQueries(names).some(q => q.query.includes('footballer') && q.player));
+test('sceneQueries busca hombres en entrenamiento, entrevista, llegada, hinchada y prensa', () => {
+  const queries = sceneQueries({ home: 'France', away: 'Italy' });
+  assert.ok(queries.some(q => q.query === "France men's national team training" && q.scene === 'training'));
+  assert.ok(queries.some(q => q.query === "Italy men's national team interview" && q.scene === 'interview'));
+  assert.ok(queries.some(q => q.query === "France men's team bus" && q.scene === 'arrival'));
+  assert.ok(queries.some(q => q.query === "Italy men's football fans" && q.scene === 'fans'));
+  assert.ok(queries.some(q => q.query === "France men's press conference" && q.scene === 'press'));
+  assert.ok(queries.every(q => /men's/.test(q.query)));
+  assert.ok(!queries.some(q => /line up|footballer|soccer player/.test(q.query)));
 });
 
 test('normalizeCommonsPage exige licencia libre, autor y foto', () => {
@@ -114,25 +96,30 @@ test('normalizeCommonsPage exige licencia libre, autor y foto', () => {
   const kit = structuredClone(page);
   kit.title = 'File:Kit_body_slovenia01a.png';
   assert.equal(normalizeCommonsPage(kit, 'q'), null);
+  const women = structuredClone(page);
+  women.title = "File:France women's national team training.jpg";
+  assert.equal(normalizeCommonsPage(women, 'q'), null);
+  assert.equal(isUsableStill({ url: 'https://upload.wikimedia.org/wikipedia/commons/France_women_training.jpg', page: 'https://commons.wikimedia.org/wiki/File:France_women.jpg' }), false);
   assert.equal(normalizeCommonsPage(null, 'q'), null);
 });
 
-test('buildManifest arma 20 fotos, 10 secuencias distintas y atribución', () => {
-  const assets = Array.from({ length: 24 }, (_, i) => asset(i, i < 3 ? 'training' : 'player'));
+test('buildManifest arma hasta 15 fotos y publica desde 8', () => {
+  const assets = Array.from({ length: 24 }, (_, i) => asset(i, i < 3 ? 'training' : 'portrait'));
   const manifest = buildManifest({
     match: { webId: 'm-1', home: 'Türkiye', away: 'Italy', competition: 'nations', kickoff: '2026-09-28T18:45:00Z' },
     assets,
   });
   assert.equal(manifest.assets.length, ASSETS_PER_MATCH);
   assert.equal(manifest.assets[0].motive, 'training');
-  assert.equal(manifest.sequences.length, SEQUENCES_PER_MATCH);
-  assert.deepEqual(manifest.sequences.map(s => s.camera), CAMERA_MOVES);
-  const orders = new Set(manifest.sequences.map(s => s.photos.join('|')));
-  assert.equal(orders.size, SEQUENCES_PER_MATCH);
-  assert.equal(manifest.sequences[0].photos.length, PHOTOS_PER_SEQUENCE);
-  assert.equal(manifest.sequences[0].subjects.length, PHOTOS_PER_SEQUENCE);
+  assert.equal(manifest.sequences, undefined);
   assert.match(manifest.attribution, /Wikimedia Commons \(CC BY 4.0\)/);
   assert.deepEqual(checkMediaManifest(manifest, { matchId: 'm-1' }), []);
+  const floor = buildManifest({
+    match: { webId: 'm-1', home: 'A', away: 'B' },
+    assets: Array.from({ length: ASSETS_MIN }, (_, i) => asset(i, 'portrait')),
+  });
+  assert.equal(floor.assets.length, ASSETS_MIN);
+  assert.deepEqual(checkMediaManifest(floor, { matchId: 'm-1' }), []);
   assert.equal(new Set([hashWebId('a'), hashWebId('b')]).size, 2);
 });
 
@@ -151,7 +138,7 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   const banned = structuredClone(manifest);
   banned.assets[0].url = 'https://media.gettyimages.com/x.jpg';
   assert.ok(checkMediaManifest(banned).some(e => /dominio prohibido/.test(e)));
-  const stockAssets = Array.from({ length: 20 }, (_, i) => asset(i));
+  const stockAssets = Array.from({ length: ASSETS_PER_MATCH }, (_, i) => asset(i, 'portrait'));
   stockAssets[0] = {
     ...stockAssets[0],
     source: 'pexels',
@@ -167,7 +154,8 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   assert.equal(subjectFor('Álvaro Morata', 'File:Alvaro_Morata_training.jpg'), 'Álvaro Morata');
   assert.equal(subjectFor('San', 'File:San_Siro.jpg'), null);
   assert.equal(subjectFor('Dennis Man', 'File:Flag_of_Romania.jpg'), null);
-  assert.equal(buildSequences([], 'm-1').length, 0);
+  assert.equal(orderPool([]), null);
+  assert.equal(orderPool([{ url: 'https://a.example/one.jpg' }]), null);
   assert.match(buildAttribution([{ source: 'commons', photographer: 'Ana', license: 'CC0' }]), /Ana/);
   assert.match(buildAttribution([{ source: 'pixabay', photographer: 'Luis', license: 'Pixabay Content License' }]), /Pixabay \(Pixabay Content License\)/);
   const pexels = normalizePexelsPhoto({
@@ -194,40 +182,38 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   assert.equal(pixabay.source, 'pixabay');
   assert.equal(pixabay.motive, 'portrait');
   assert.equal(normalizePixabayHit({ id: 1, largeImageURL: 'http://insecure.example/a.jpg' }, 'q'), null);
-  assert.deepEqual(acceptVisionVerdict(
-    { ok: true, who: 'Kenan Yıldız', motive: 'portrait' },
-    { player: 'Kenan Yıldız' },
-  ), { subject: 'Kenan Yıldız', motive: 'portrait' });
-  assert.equal(acceptVisionVerdict({ ok: false, who: 'Kenan Yıldız', motive: 'portrait' }, { player: 'Kenan Yıldız' }), null);
-  assert.equal(acceptVisionVerdict({ ok: true, who: 'Otro', motive: 'portrait' }, { player: 'Kenan Yıldız' }), null);
-  assert.equal(acceptVisionVerdict({ ok: true, who: 'Kenan Yıldız', motive: 'player' }, { player: 'Kenan Yıldız' }), null);
-  assert.deepEqual(acceptVisionVerdict(
-    { ok: true, who: 'Jorginho', motive: 'after' },
-    { names: ['Jorginho', 'Kenan Yıldız'] },
-  ), { subject: 'Jorginho', motive: 'after' });
-  assert.deepEqual(acceptVisionVerdict({ ok: true, motive: 'fans' }, {}), { subject: null, motive: 'fans' });
-  assert.equal(acceptVisionVerdict({ ok: true, motive: 'logo' }, { scene: 'fans' }), null);
   assert.deepEqual(
-    acceptVisionVerdict({ ok: true, motive: 'stadium' }, { scene: 'stadium' }),
-    { subject: null, motive: 'stadium' },
+    acceptVisionVerdict({ ok: true, motive: 'portrait', men: true, current: true }),
+    { subject: null, motive: 'portrait' },
+  );
+  assert.equal(acceptVisionVerdict({ ok: false, motive: 'portrait', men: true, current: true }), null);
+  assert.equal(acceptVisionVerdict({ ok: true, motive: 'portrait', men: false, current: true }), null);
+  assert.equal(acceptVisionVerdict({ ok: true, motive: 'portrait', men: true, current: false }), null);
+  assert.equal(acceptVisionVerdict({ ok: true, motive: 'after', men: true, current: true }), null);
+  assert.deepEqual(acceptVisionVerdict({ ok: true, motive: 'fans', men: true, current: true }), { subject: null, motive: 'fans' });
+  assert.equal(acceptVisionVerdict({ ok: true, motive: 'logo', men: true, current: true }), null);
+  assert.deepEqual(
+    acceptVisionVerdict({ ok: true, motive: 'training', men: true, current: true }),
+    { subject: null, motive: 'training' },
   );
 });
 
-test('sceneQueries arma estadio, hinchas y prensa, y cae a la ciudad', () => {
-  const withStadium = sceneQueries({
-    home: 'Kazakhstan',
-    away: 'Moldova',
-    venue: { stadium: 'Astana Arena', city: 'Astana', country: 'Kazakhstan' },
-  });
-  assert.ok(withStadium.some(q => q.query === 'Kazakhstan fans' && q.scene === 'fans'));
-  assert.ok(withStadium.some(q => q.query === 'Kazakhstan press conference' && q.scene === 'press'));
-  assert.ok(withStadium.some(q => q.query === 'Astana Arena' && q.scene === 'stadium'));
-  assert.ok(withStadium.some(q => /training/.test(q.query) && q.scene === 'training'));
-  const cityOnly = sceneQueries({ home: 'Kazakhstan', away: 'Moldova', venue: { city: 'Astana' } });
-  assert.ok(cityOnly.some(q => q.query === 'Astana stadium' && q.scene === 'stadium'));
-  assert.ok(!cityOnly.some(q => q.scene === 'stadium' && q.query !== 'Astana stadium'));
-  const countryOnly = sceneQueries({ home: 'Kazakhstan', away: 'Moldova', venue: { country: 'Kazakhstan' } });
-  assert.ok(countryOnly.some(q => q.query === 'football stadium Kazakhstan'));
+test('orderPool pone primero lo que nombra la voz y cambia el corte por audio', () => {
+  const pool = [
+    { url: 'https://a.example/train.jpg', motive: 'training', query: "France men's training", id: '1' },
+    { url: 'https://a.example/fans.jpg', motive: 'fans', query: "Italy men's fans", id: '2' },
+    { url: 'https://a.example/press.jpg', motive: 'press', query: "France men's press", id: '3' },
+    { url: 'https://a.example/bus.jpg', motive: 'arrival', query: "Italy men's bus", id: '4' },
+  ];
+  const first = orderPool(pool, { variant: 0, words: [{ word: 'hinchada' }], home: 'France', away: 'Italy' });
+  const second = orderPool(pool, { variant: 1, words: [{ word: 'hinchada' }], home: 'France', away: 'Italy' });
+  assert.equal(first.photos[0], 'https://a.example/fans.jpg');
+  assert.equal(second.photos[0], 'https://a.example/fans.jpg');
+  assert.notEqual(first.photos.join('|'), second.photos.join('|'));
+  assert.notEqual(first.camera, second.camera);
+  const quiet = orderPool(pool, { variant: 0, words: [], home: 'France', away: 'Italy' });
+  const next = orderPool(pool, { variant: 3, words: [], home: 'France', away: 'Italy' });
+  assert.notEqual(quiet.photos.join('|'), next.photos.join('|'));
 });
 
 test('selectAssets reserva plazas de escena y buildManifest avisa de IA', () => {

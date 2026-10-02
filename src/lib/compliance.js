@@ -4,11 +4,9 @@
  */
 import {
   ALLOWED_SOURCES,
+  ASSETS_MIN,
   ASSETS_PER_MATCH,
   BANNED_PHOTO_DOMAINS,
-  CAMERA_MOVES,
-  SEQUENCES_PER_MATCH,
-  PHOTOS_PER_SEQUENCE,
   AI_CREDIT,
   acceptAssetLicense,
   isUsableStill,
@@ -97,16 +95,15 @@ export function checkDescription(description, { matchId = null } = {}) {
 
 /**
  * Valida un manifiesto de media-pack: fuente permitida, licencia de esa fuente,
- * foto vista por el modelo, al menos 20 fotos, 10 secuencias de 12,
- * rótulos respaldados, URLs https y atribución.
+ * foto vista por el modelo, entre 8 y 15 fotos, URLs https y atribución.
  */
 export function checkMediaManifest(data, { matchId = null } = {}) {
   const errors = [];
   if (!data || typeof data !== 'object') return ['manifiesto vacío'];
   if (matchId && data.matchId !== matchId) errors.push(`matchId ${data.matchId} no coincide con ${matchId}`);
   const assets = Array.isArray(data.assets) ? data.assets : [];
-  if (assets.length < ASSETS_PER_MATCH) errors.push(`faltan fotos: ${assets.length} < ${ASSETS_PER_MATCH}`);
-  const urls = new Set();
+  if (assets.length < ASSETS_MIN) errors.push(`faltan fotos: ${assets.length} < ${ASSETS_MIN}`);
+  if (assets.length > ASSETS_PER_MATCH) errors.push(`sobran fotos: ${assets.length} > ${ASSETS_PER_MATCH}`);
   for (const [i, asset] of assets.entries()) {
     if (!asset || typeof asset !== 'object') {
       errors.push(`asset ${i} vacío`);
@@ -128,31 +125,6 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
         if (banned.test(value)) errors.push(`asset ${i}: dominio prohibido en ${field}`);
       }
     }
-    if (asset.url) urls.add(asset.url);
-  }
-  const sequences = Array.isArray(data.sequences) ? data.sequences : [];
-  if (sequences.length !== SEQUENCES_PER_MATCH) errors.push(`faltan secuencias: ${sequences.length}`);
-  const orders = new Set();
-  for (const [i, seq] of sequences.entries()) {
-    if (!CAMERA_MOVES.includes(seq?.camera)) errors.push(`secuencia ${i}: cámara desconocida`);
-    const photos = Array.isArray(seq?.photos) ? seq.photos : [];
-    if (photos.length < PHOTOS_PER_SEQUENCE) {
-      errors.push(`secuencia ${i}: ${photos.length} fotos < ${PHOTOS_PER_SEQUENCE} (una cada 2 a 4 s)`);
-    }
-    orders.add(photos.join('|'));
-    for (const url of photos) {
-      if (!urls.has(url)) errors.push(`secuencia ${i}: foto fuera del pool`);
-    }
-    const subjects = Array.isArray(seq?.subjects) ? seq.subjects : [];
-    if (subjects.length !== photos.length) errors.push(`secuencia ${i}: subjects no acompaña a photos`);
-    subjects.forEach((subject, k) => {
-      if (subject == null) return;
-      const asset = assets.find(a => a?.url === photos[k]);
-      if (asset?.subject !== subject) errors.push(`secuencia ${i}: rótulo ${subject} sin respaldo en el asset`);
-    });
-  }
-  if (sequences.length === SEQUENCES_PER_MATCH && orders.size < SEQUENCES_PER_MATCH) {
-    errors.push('las secuencias repiten el mismo orden');
   }
   if (!String(data.attribution ?? '').trim()) errors.push('falta la atribución de fotos');
   if (assets.some(asset => asset?.source === 'agnes') && !String(data.attribution ?? '').includes(AI_CREDIT)) {
