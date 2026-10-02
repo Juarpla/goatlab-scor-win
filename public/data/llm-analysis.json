@@ -1942,5 +1942,416 @@
     "generatedAt": "2026-10-01T22:59:11.221Z",
     "inputKey": "v3|M|bz-212664|Greece|Germany|nations|2026-10-04T18:45:00+00:0|NS\nP|1.19|1.57|0.277|0.273|0.45|0.521|0.563\nB|0.279|0.259|0.462|1.19|1.57|0.552|0.588|1-1|0.449\nB2|A|0.462|no|no\nH|3|1|0|2|3.33\nW||clear|9|\nT|1|Greece|2|6||\nT|3|Germany|2|1||\nS|Anastasios Douvikas|Greece|1|2\nS|Christos Tzolis|Greece|1|2\nS|Dimitris Kourbelis|Greece|1|2\nHR|2026-09-27|Germany|Greece|0|1\nHR|2024-06-07|Germany|Greece|2|1\nHR|2012-06-22|Germany|Greece|4|2",
     "materialKey": "M|bz-212664|Greece|Germany|nations|2026-10-04T18:45:00+00:0|NS"
+  },
+  "bz-212675": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Cyprus recibe a Latvia en Nations",
+        "bullets": [
+          "Cyprus y Latvia se enfrentan el 2026-10-05 a las 16:00 UTC en competición de selecciones (Nations), con el partido declarado como no iniciado (NS).",
+          "El duelo llega una semana después del 0-0 del 2026-09-28 entre ambos en Latvia, según el historial de enfrentamientos.",
+          "No se aportan alineaciones, bajas ni datos de forma para este cruce en el input disponible."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-05",
+            "label": "fecha del partido"
+          },
+          {
+            "value": "16:00",
+            "label": "hora UTC"
+          },
+          {
+            "value": "0-0",
+            "label": "último cruce directo"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: Poisson GoatLab y Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab estima 1.29 goles esperados para Cyprus y 0.95 para Latvia, con 0.43 de victoria local, 0.309 de empate y 0.261 visitante.",
+          "El mismo cálculo sitúa en 0.388 la probabilidad de un total superior a 2.5 goles y en 0.457 la de que marquen ambos equipos.",
+          "CatBoost Bzzoiro ofrece cifras muy próximas: 0.44 local, 0.30 empate, 0.26 visitante, 0.398 para más de 2.5 goles, 0.461 para ambos equipos marcando y marcador más probable 1-0.",
+          "El modelo declarado Bzzoiro (B2) concentra su mayor probabilidad en el local con 0.44 y no aporta lecturas de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "1.29",
+            "label": "goles esperados Cyprus (P)"
+          },
+          {
+            "value": "0.43",
+            "label": "prob. victoria local (P)"
+          },
+          {
+            "value": "0.44",
+            "label": "prob. local B/B2"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes: dos empates recientes",
+        "bullets": [
+          "El bloque de historial consigna 2 enfrentamientos, sin victorias para ninguna de las dos selecciones y con 2 empates registrados.",
+          "El 2026-09-28 igualaron 0-0 en Latvia, en el duelo más reciente de la serie.",
+          "El antecedente anterior es del 2024-03-21, con 1-1 en Cyprus."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "empates registrados"
+          },
+          {
+            "value": "0-0",
+            "label": "marcador 2026-09-28"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador 2024-03-21"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación: Cyprus 3º, Latvia 4º",
+        "bullets": [
+          "La clasificación sitúa a Cyprus en la 3ª posición y a Latvia en la 4ª, los dos únicos puestos incluidos en el extracto.",
+          "Ambas presentan registros idénticos en la tabla (2 y 1), coherente con una situación de igualdad entre ellas.",
+          "No se detallan más posiciones ni el resto de columnas de la tabla."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "posición de Cyprus"
+          },
+          {
+            "value": "4",
+            "label": "posición de Latvia"
+          },
+          {
+            "value": "2",
+            "label": "registro declarado"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Qué mirar: clima y datos ausentes",
+        "bullets": [
+          "El bloque de clima y sede declara condiciones unknown y un valor de 5 sin unidad especificada, por lo que no hay lectura ambiental.",
+          "Faltan forma reciente, goleadores, bajas confirmadas y consenso externo: los modelos trabajan solo con goles esperados y probabilidades.",
+          "Sin datos de alineaciones ni de rendimiento reciente, la comparación se limita a los cálculos de P y B y a los antecedentes directos."
+        ],
+        "stats": [
+          {
+            "value": "unknown",
+            "label": "clima declarado"
+          },
+          {
+            "value": "5",
+            "label": "valor sin unidad (W)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Clima sin datos",
+        "detail": "El bloque W declara condiciones desconocidas y un valor de 5 sin unidad, por lo que no puede evaluarse el efecto ambiental ni la sede."
+      },
+      {
+        "label": "Sin forma reciente",
+        "detail": "No se aportan rachas ni resultados recientes (bloque R ausente), lo que impide contrastar el estado actual con los cálculos de los modelos."
+      },
+      {
+        "label": "Sin goleadores ni bajas",
+        "detail": "Los bloques S y L no aparecen en el input; no hay artilleros ni ausencias confirmadas que considerar."
+      },
+      {
+        "label": "Tabla parcial",
+        "detail": "Solo se listan las posiciones 3ª y 4ª con registros idénticos (2 y 1); el resto de la clasificación no se detalla."
+      },
+      {
+        "label": "Consenso externo ausente",
+        "detail": "No hay bloque M2 ni estimación de API-Football (A), por lo que no es posible comparar con otras lecturas declaradas."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El 0.515 ligado al marcador 1-0 del bloque B no es compatible con la probabilidad de ese resultado exacto con 1.29 y 0.95 goles esperados; parece otra métrica y se cita sin interpretar. Los registros idénticos (2 y 1) de Cyprus y Latvia en la tabla tampoco se desglosan."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T05:50:37.481Z",
+    "inputKey": "v3|M|bz-212675|Cyprus|Latvia|nations|2026-10-05T16:00:00+00:0|NS\nP|1.29|0.95|0.43|0.309|0.261|0.388|0.457\nB|0.44|0.3|0.26|1.29|0.95|0.398|0.461|1-0|0.515\nB2|H|0.44|no|no\nH|2|0|2|0|1\nW||unknown|5|\nT|3|Cyprus|2|1||\nT|4|Latvia|2|1||\nHR|2026-09-28|Latvia|Cyprus|0|0\nHR|2024-03-21|Cyprus|Latvia|1|1",
+    "materialKey": "M|bz-212675|Cyprus|Latvia|nations|2026-10-05T16:00:00+00:0|NS"
+  },
+  "bz-212676": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Montenegro y Armenia, duelo de selecciones",
+        "bullets": [
+          "Montenegro y Armenia se enfrentan el 5 de octubre de 2026 a las 18:45 (UTC) en un partido de selecciones que figura como no iniciado.",
+          "Ambas llegan con dos partidos disputados: Montenegro lidera con 6 puntos y Armenia ocupa la segunda plaza con 3 puntos.",
+          "El cruce enfrenta al primer clasificado del grupo con el segundo en la misma jornada disputada."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "puntos de Montenegro"
+          },
+          {
+            "value": "3",
+            "label": "puntos de Armenia"
+          },
+          {
+            "value": "2",
+            "label": "partidos disputados"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Cálculos Poisson y CatBoost Bzzoiro",
+        "bullets": [
+          "El cálculo Poisson de GoatLab reparte 0.51 para el local, 0.254 para el empate y 0.236 para el visitante, con 1.79 y 1.16 como goles esperados.",
+          "El modelo CatBoost Bzzoiro otorga 0.534 al local, 0.236 al empate y 0.23 al visitante, además de referencias de 0.558 y 0.555 y un marcador 1-1 al que asocia 0.398.",
+          "La estimación declarada de Bzzoiro (B2) señala al local como mayor probabilidad con 0.534 y no declara lectura de goles totales ni de ambos anotan.",
+          "Ambos cálculos coinciden en un favoritismo moderado del local y sitúan el empate por delante del visitante; la diferencia entre los dos modelos en la probabilidad local es de 0.024."
+        ],
+        "stats": [
+          {
+            "value": "0.51",
+            "label": "local Poisson GoatLab"
+          },
+          {
+            "value": "0.534",
+            "label": "local CatBoost Bzzoiro"
+          },
+          {
+            "value": "1.79 y 1.16",
+            "label": "goles esperados"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Cinco cruces previos registrados",
+        "bullets": [
+          "El historial registrado suma cinco enfrentamientos: dos victorias de Montenegro, dos de Armenia y un empate.",
+          "El cruce más reciente, del 28 de septiembre de 2026, terminó 3-2 para Montenegro como visitante; antes, el 9 de junio de 2025, firmaron un 2-2.",
+          "Los marcadores recogidos son 2-3, 2-2, 1-0, 4-1 y 3-2, con 20 goles acumulados en esos cinco partidos."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "cruces registrados"
+          },
+          {
+            "value": "20",
+            "label": "goles en el historial"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación con Montenegro al frente",
+        "bullets": [
+          "Montenegro ocupa la primera posición con 6 puntos en dos partidos.",
+          "Armenia es segunda con 3 puntos en dos partidos.",
+          "Ambas selecciones han disputado el mismo número de encuentros; la tabla aportada no incluye goles a favor ni en contra."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "puntos de Montenegro"
+          },
+          {
+            "value": "3",
+            "label": "puntos de Armenia"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Krstović encabeza la lista de anotadores",
+        "bullets": [
+          "Nikola Krstović, de Montenegro, lidera con 2 goles; su compatriota Aleksa Latković registra 1.",
+          "Armenia reparte su aporte entre Artur Gharibyan, Artur Serobyan y Eduard Spertsyan, con 1 gol cada uno.",
+          "Los cinco nombres listados en el cuadro de goleadores aparecen con 2 partidos."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles de Krstović"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin lectura de API-Football",
+        "detail": "El input no incluye fila A, por lo que no hay distribución, mayor probabilidad ni umbral de goles atribuidos a ese proveedor."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se aporta bloque M2, de modo que no hay porcentajes de consenso externo para contrastar con los cálculos de P y B."
+      },
+      {
+        "label": "Sin clima, sede ni bajas",
+        "detail": "No hay filas W ni L: se desconocen las condiciones del partido, el escenario y las ausencias confirmadas de cada selección."
+      },
+      {
+        "label": "Campos sin etiquetar",
+        "detail": "Las filas P y B llegan como valores numéricos sin encabezado; la asignación a local, empate y visitante se apoya en que cada terna suma 1.000."
+      },
+      {
+        "label": "Forma reciente no ampliada",
+        "detail": "Solo constan los cruces del historial; no hay bloque R con la racha de cada selección en otros partidos."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El valor 0.398 asociado en la fila B al marcador 1-1 resulta elevado para unos goles esperados de 1.79 y 1.16; puede corresponder a un campo distinto no etiquetado, por lo que conviene verificarlo antes de usarlo."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T05:51:22.301Z",
+    "inputKey": "v3|M|bz-212676|Montenegro|Armenia|nations|2026-10-05T18:45:00+00:0|NS\nP|1.79|1.16|0.51|0.254|0.236|0.565|0.583\nB|0.534|0.236|0.23|1.79|1.16|0.558|0.555|1-1|0.398\nB2|H|0.534|no|no\nH|5|2|1|2|4\nT|1|Montenegro|2|6||\nT|2|Armenia|2|3||\nS|Nikola Krstović|Montenegro|2|2\nS|Aleksa Latković|Montenegro|1|2\nS|Artur Gharibyan|Armenia|1|2\nS|Artur Serobyan|Armenia|1|2\nS|Eduard Spertsyan|Armenia|1|2\nHR|2026-09-28|Armenia|Montenegro|2|3\nHR|2025-06-09|Montenegro|Armenia|2|2\nHR|2022-03-24|Armenia|Montenegro|1|0\nHR|2017-06-10|Montenegro|Armenia|4|1\nHR|2016-11-11|Armenia|Montenegro|3|2",
+    "materialKey": "M|bz-212676|Montenegro|Armenia|nations|2026-10-05T18:45:00+00:0|NS"
+  },
+  "bz-212674": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Rumanía y Suecia se citan en competición de selecciones",
+        "bullets": [
+          "Rumanía recibe a Suecia en un partido de selecciones (nations) programado para el 5 de octubre de 2026 a las 18:45, con estado NS, es decir, no iniciado.",
+          "El parte meteorológico del encuentro señala lluvia y una temperatura de 3 grados, en una sede que no viene informada en el input.",
+          "El contexto clasificatorio sitúa a los dos equipos en polos opuestos del grupo tras las primeras jornadas."
+        ],
+        "stats": [
+          {
+            "value": "18:45",
+            "label": "Hora de inicio (NS)"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de Poisson GoatLab y CatBoost Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab: 35.8% de victoria local, 26.6% de empate y 37.6% de victoria visitante, con goles esperados de 1.47 para Rumanía y 1.51 para Suecia.",
+          "Poisson GoatLab sitúa el umbral de más de 2.5 goles en 57.2% y el ambos anotan en 61.1%.",
+          "CatBoost Bzzoiro: 36.1% local, 25.0% empate y 38.9% visitante, con los mismos goles esperados (1.47 y 1.51), más de 2.5 en 56.5% y ambos anotan en 57.7%.",
+          "La estimación declarada de Bzzoiro apunta al visitante como resultado de mayor probabilidad con 38.9% y marca el 1-1 (36.9%) como marcador más probable, sin datos de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "35.8%",
+            "label": "Local Poisson GoatLab"
+          },
+          {
+            "value": "37.6%",
+            "label": "Visitante Poisson GoatLab"
+          },
+          {
+            "value": "38.9%",
+            "label": "Visitante CatBoost Bzzoiro"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Tres precedentes con equilibrio y goles",
+        "bullets": [
+          "Se registran tres precedentes entre ambas selecciones, con 1 victoria de Rumanía, 1 empate y 1 derrota, y un promedio de 2.67 goles por partido.",
+          "El cruce más reciente, el 25 de septiembre de 2026, finalizó 2-1 a favor de Suecia.",
+          "En 2018 Rumanía se impuso 1-0 y en 1994 el duelo concluyó 2-2."
+        ],
+        "stats": [
+          {
+            "value": "2.67",
+            "label": "Goles por partido"
+          },
+          {
+            "value": "2-1",
+            "label": "Último cruce (Suecia)"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Suecia arriba y Rumanía en el fondo del grupo",
+        "bullets": [
+          "Suecia lidera la clasificación del grupo con 6 puntos en 2 partidos disputados.",
+          "Rumanía ocupa la cuarta posición con 0 puntos en 2 partidos disputados."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Puntos de Suecia"
+          },
+          {
+            "value": "0",
+            "label": "Puntos de Rumanía"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Gyökeres encabeza el registro anotador",
+        "bullets": [
+          "Viktor Gyökeres aparece como máximo anotador sueco con 2 goles, mientras Alexander Isak y Benjamin Nygren suman 1 gol cada uno.",
+          "Por Rumanía figuran Alexandru Cicâldău, Daniel Bîrligea y Dennis Man con 1 gol cada uno."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles de Gyökeres"
+          },
+          {
+            "value": "1",
+            "label": "Goles de Isak"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin estimación de API-Football",
+        "detail": "El input no incluye fila A, por lo que no hay distribución ni lectura cruda de ese proveedor para contrastar."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se aporta bloque M2, de modo que no existe porcentaje interpretativo de consenso externo que comparar con las lecturas de los modelos."
+      },
+      {
+        "label": "Sin bajas ni forma reciente",
+        "detail": "No se incluyen bloques L ni R, por lo que no hay datos de ausencias confirmadas ni secuencia detallada de resultados recientes."
+      },
+      {
+        "label": "Sede no informada",
+        "detail": "El bloque de clima indica lluvia y 3 grados, pero el campo de sede aparece vacío en el input."
+      },
+      {
+        "label": "Goleadores sin contexto",
+        "detail": "Las cifras de goleadores se ofrecen sin número de partidos ni minutos, por lo que solo reflejan el registro tal cual fue aportado."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-02T05:51:52.657Z",
+    "inputKey": "v3|M|bz-212674|Romania|Sweden|nations|2026-10-05T18:45:00+00:0|NS\nP|1.47|1.51|0.358|0.266|0.376|0.572|0.611\nB|0.361|0.25|0.389|1.47|1.51|0.565|0.577|1-1|0.369\nB2|A|0.389|no|no\nH|3|1|1|1|2.67\nW||rain|3|\nT|4|Romania|2|0||\nT|1|Sweden|2|6||\nS|Alexandru Cicâldău|Romania|1|1\nS|Daniel Bîrligea|Romania|1|1\nS|Dennis Man|Romania|1|1\nS|Viktor Gyökeres|Sweden|2|2\nS|Alexander Isak|Sweden|1|1\nS|Benjamin Nygren|Sweden|1|2\nHR|2026-09-25|Sweden|Romania|2|1\nHR|2018-03-27|Romania|Sweden|1|0\nHR|1994-07-10|Romania|Sweden|2|2",
+    "materialKey": "M|bz-212674|Romania|Sweden|nations|2026-10-05T18:45:00+00:0|NS"
   }
 }
