@@ -7,20 +7,21 @@
  * Nunca se presenta como seguimiento real de posición: así lo dice la nota.
  */
 import { teamShort, teamEsDisplay } from '../lib/teams.js';
-import { FINISHED_STATUSES } from '../lib/football.js';
+import { matchPhase } from '../lib/football.js';
 import { buildBeats } from '../lib/pitch-path.js';
 
 const { match, events = [] } = Astro.props;
 const beats = buildBeats(match.id, events ?? []);
 const anchors = beats.filter(beat => beat.event);
-const finished = FINISHED_STATUSES.has(match.status);
-const live = !finished && match.status !== 'NS';
+const phase = matchPhase(match);
+const finished = phase === 'finished';
+const live = phase === 'live';
 const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
 const isRed = event => /roja|second yellow/i.test(event.detail ?? '');
 const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status === 'NS' ? 'Programado' : 'Sin datos en vivo';
 ---
 
-<section class="pitch-block" data-pitch data-match={match.id} data-kickoff={match.kickoff} data-status={match.status} data-home={teamEsDisplay(match.home)} data-away={teamEsDisplay(match.away)} data-live={match.id.startsWith('af-') ? '1' : '0'} data-beats={JSON.stringify(beats)}>
+<section class="pitch-block" data-pitch data-match={match.id} data-kickoff={match.kickoff} data-status={match.status} data-phase={phase} data-home={teamEsDisplay(match.home)} data-away={teamEsDisplay(match.away)} data-live={match.id.startsWith('af-') ? '1' : '0'} data-beats={JSON.stringify(beats)}>
   <header class="pitch-head">
     <div>
       <h2>{finished ? 'El partido, en la cancha.' : 'Así se mueve el partido.'}</h2>
@@ -125,7 +126,8 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
   const matchId = root.dataset.match!;
   const kickoff = Date.parse(root.dataset.kickoff!);
   const status = root.dataset.status!;
-  const finished = new Set(['FT', 'AET', 'PEN']).has(status);
+  const phase = root.dataset.phase ?? '';
+  const finished = phase === 'finished' || new Set(['FT', 'AET', 'PEN']).has(status);
   // Cualquier estado dentro de la ventana que no sea programado/cancelado se trata como en juego
   // (API-Football usa 1H/2H además de HT/ET/BT).
   const notLive = new Set(['NS', 'TBD', 'PST', 'CANC', 'ABD', 'AWD', 'WO']);
@@ -183,7 +185,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
   let replayStart = 0;
 
   const inLiveWindow = () => Date.now() >= kickoff && Date.now() < kickoff + LIVE_WINDOW_MS;
-  const mode = () => (finished ? 'replay' : !notLive.has(status) && inLiveWindow() ? 'live' : Date.now() >= kickoff && inLiveWindow() ? 'live' : 'pre');
+  const mode = () => (finished ? 'replay' : (phase === 'live' || (!notLive.has(status) && inLiveWindow())) ? 'live' : 'pre');
 
   const setBall = (x: number, y: number) => {
    ball.setAttribute('cx', String(x));

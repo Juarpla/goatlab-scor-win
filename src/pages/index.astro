@@ -10,7 +10,7 @@ import MatchPulse from '../components/MatchPulse.astro';
 import PlayerPulse from '../components/PlayerPulse.astro';
 import StandingsBoard from '../components/StandingsBoard.astro';
 import JornadaBand from '../components/JornadaBand.astro';
-import { competitions } from '../lib/football.js';
+import { competitions, matchPhase, staysOnWall } from '../lib/football.js';
 import { heroMatch, teamShort, teamEsDisplay } from '../lib/teams.js';
 import { matchForm, teamForm } from '../lib/form.js';
 import { buildMapData, computePulse, computeCuriosities, computePlayerPulse } from '../lib/journey.js';
@@ -21,18 +21,18 @@ import scorers from '../../public/data/scorers.json';
 import '../styles/home.css';
 
 const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
-const FINISHED = new Set(['FT', 'AET', 'PEN']);
-const upcoming = matches.filter(match => !FINISHED.has(match.status));
-const hero = heroMatch(matches);
+const listed = matches.filter(match => staysOnWall(match));
+const upcoming = matches.filter(match => matchPhase(match) !== 'finished');
+const hero = heroMatch(upcoming);
 const heroForm = hero ? matchForm(results.results, hero.home, hero.away) : null;
 const heroDate = hero ? new Date(hero.kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'long', day: 'numeric', month: 'long' }) : null;
 const heroTime = hero ? new Date(hero.kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) : null;
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
-// Muro: solo próximos, sin el destacado, capados a los 9 más cercanos por kickoff.
-const wallRows = upcoming.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
-const hasMore = hero ? upcoming.length - 1 > wallRows.length : upcoming.length > wallRows.length;
+// Muro: la ventana, con marcador si ya hay resultado; sin el destacado; 9 más cercanos.
+const wallRows = listed.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
+const hasMore = (hero && listed.includes(hero) ? listed.length - 1 : listed.length) > wallRows.length;
 const heroFormOnly = hero ? teamForm(results.results, hero.home) : null;
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 
@@ -115,7 +115,7 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
  <section id="encuentros" class="wall" aria-labelledby="wall-title">
   <div class="section-heading"><h2 id="wall-title">El muro de encuentros</h2><span>Los 9 más próximos</span></div>
   <div class="wall-grid">
-   {(hero ? wallRows : upcoming.slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }))).map(m => <MatchCard match={m} competitionCode={CODES[m.competition] ?? 'FUT'} competitionName={competitionById(m.competition)?.name ?? ''} kickoffLabel={kickoffLabel(m.kickoff)} formHome={m.form?.homeForm ?? null} formAway={m.form?.awayForm ?? null}/>)}
+   {wallRows.map(m => <MatchCard match={m} competitionCode={CODES[m.competition] ?? 'FUT'} competitionName={competitionById(m.competition)?.name ?? ''} kickoffLabel={kickoffLabel(m.kickoff)} formHome={m.form?.homeForm ?? null} formAway={m.form?.awayForm ?? null}/>)}
   </div>
   {hasMore && <nav class="wall-nav" aria-label="Más encuentros"><a class="wall-more" href="/encuentros/">Ver más encuentros <Icon size={16}/></a></nav>}
  </section>

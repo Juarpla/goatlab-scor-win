@@ -18,16 +18,20 @@
   min-width: 0;
 }
 
-.encounter-score {
+/* .real-data p fija 13px y color apagado; el marcador tiene que ganarle. */
+.real-data p.encounter-score {
   font-family: var(--display);
-  font-size: 34px;
-  line-height: 1.15;
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   color: var(--text);
-  margin-top: 4px !important;
+  max-width: none;
+  margin-top: 4px;
 }
 
-.encounter-score.is-waiting {
+.real-data p.encounter-score.is-waiting {
   color: var(--muted);
   font-size: 20px;
   font-weight: 600;
@@ -813,7 +817,9 @@
 }
 
 .pitch-score strong {
-  font-size: 32px;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   color: var(--accent);
 }
@@ -1692,8 +1698,9 @@
   .prob-scorers { grid-template-columns: 1fr; }
   .trends-grid { grid-template-columns: 1fr; }
   .trends-extra { grid-template-columns: 1fr; }
+  .real-data p.encounter-score { font-size: 48px; }
   .pitch-head h2 { font-size: 32px; }
-  .pitch-score strong { font-size: 26px; }
+  .pitch-score strong { font-size: 40px; }
   .race-none { margin-left: 0; }
   .pitch-side { max-height: 340px; }
   .pitch-side-head { padding: 14px 14px 10px; }

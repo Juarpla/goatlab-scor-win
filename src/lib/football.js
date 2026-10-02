@@ -19,6 +19,34 @@ export const ESTIMATED_DURATION_MS = 115 * 60_000;
 export function isMatchExpired(match, now = Date.now()) {
   return Date.parse(match.kickoff) + ESTIMATED_DURATION_MS <= now;
 }
+const LIVE_STATUSES = new Set(['LIVE', 'HT', 'ET', 'BT', 'P', '1H', '2H', 'SUSP', 'INT']);
+/** Both goals are numbers. Null means the feed has not reported a score. */
+export function hasNumericScore(match) {
+  return Number.isFinite(match?.homeScore) && Number.isFinite(match?.awayScore);
+}
+/**
+ * Wall phase. A numeric score after kickoff is in play until the 115' boundary,
+ * then final — even when the provider still says NS. Official FT/AET/PEN is final
+ * immediately. The page phase does not wait for the feed to say finished.
+ */
+export function matchPhase(match, now = Date.now()) {
+  if (FINISHED_STATUSES.has(match?.status)) return 'finished';
+  const kickoff = Date.parse(match?.kickoff);
+  const started = Number.isFinite(kickoff) && kickoff <= now;
+  const scored = hasNumericScore(match);
+  const expired = isMatchExpired(match, now);
+  if (scored && started && expired) return 'finished';
+  if (!expired && (LIVE_STATUSES.has(match?.status) || (scored && started))) return 'live';
+  return 'upcoming';
+}
+/**
+ * Stays in the seven-day wall. Without a score, the estimated end still removes it.
+ * With a numeric score, it stays so the list can show the result.
+ */
+export function staysOnWall(match, now = Date.now()) {
+  if (hasNumericScore(match)) return true;
+  return !isMatchExpired(match, now) && !FINISHED_STATUSES.has(match?.status);
+}
 async function request(url, headers, fetchImpl) {
   const res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(12_000) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -148,7 +176,7 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
   if (env.BZZOIRO_API_TOKEN && dates.length) {
     try {
       const events = await listEvents({ dateFrom: dates[0], dateTo: dates[dates.length - 1], env, fetchImpl, logger });
-      const BZ_STATUS = { notstarted: 'NS', finished: 'FT' };
+      const BZ_STATUS = { notstarted: 'NS', inprogress: 'LIVE', finished: 'FT' };
       discovered = events.flatMap(event => {
         const league = leagueByProviderId('bzzoiro', event?.league_id);
         if (!league || !BZ_DISCOVERY.has(league.id) || !event?.home_team || !event?.away_team || !event?.event_date) return [];

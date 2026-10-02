@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import MatchCard from '../components/MatchCard.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { competitions, FINISHED_STATUSES, isMatchExpired } from '../lib/football.js';
+import { competitions, staysOnWall } from '../lib/football.js';
 import { matchForm } from '../lib/form.js';
 import fixtures from '../../public/data/fixtures.json';
 import results from '../../public/data/results.json';
@@ -14,8 +14,8 @@ const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'L
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const dayLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'short', day: 'numeric', month: 'short' });
-// Solo lo vivo: sin finalizados y dentro de la ventana estimada de juego (90' + descanso + 10').
-const rows = matches.filter(match => !FINISHED_STATUSES.has(match.status) && !isMatchExpired(match)).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
+// La ventana de siete días. Sin marcador, sale a los 115'. Con marcador, se queda y la tarjeta lo muestra.
+const rows = matches.filter(match => staysOnWall(match)).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
 const days = [...new Set(rows.map(match => match.kickoff.slice(0, 10)))];
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 // Orden del muro, distinto del array global: LaLiga y Premier primero.
@@ -26,7 +26,7 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
 <main id="main" class="wrap">
  <section class="intro">
   <div><h1>Todos los<br/><span>encuentros.</span></h1></div>
-  <p>La ventana completa de siete días de nuestras competiciones, ordenada por kickoff{updated ? ` · actualizado ${updated} (Lima)` : ''}. Los horarios se muestran en tu hora local. Cada encuentro permanece hasta el final estimado de su juego (90' + descanso + 10'); después sale del muro.</p>
+  <p>La ventana completa de siete días de nuestras competiciones, ordenada por kickoff{updated ? ` · actualizado ${updated} (Lima)` : ''}. Los horarios se muestran en tu hora local. Cuando el partido ya tiene marcador, la tarjeta lo muestra. Si pasa el tiempo de juego y no hay resultado, sale del muro.</p>
  </section>
  <section class="wall wall--ads" aria-labelledby="wall-title" style="padding-top:0;border-top:0;margin-top:0">
   <div class="section-heading"><h2 id="wall-title" class="sr-only">El muro de encuentros</h2><span>Cada tarjeta abre el análisis del partido</span></div>

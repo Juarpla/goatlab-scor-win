@@ -18,7 +18,7 @@ import TrendsStrip from '../../components/TrendsStrip.astro';
 import { storyTerm } from '../../lib/story-dictionary.js';
 import { normalizeReading } from '../../lib/reading.js';
 import { findAnalysis } from '../../lib/analysis.js';
-import { competitions, FINISHED_STATUSES } from '../../lib/football.js';
+import { competitions, matchPhase } from '../../lib/football.js';
 import { teamShort, teamCompact, teamEsDisplay } from '../../lib/teams.js';
 import { teamForm, bakedForm } from '../../lib/form.js';
 import { roundFecha, findStandingRow, topScorerFor } from '../../lib/series-crumbs.js';
@@ -60,8 +60,9 @@ const hasRecent = Boolean(homeRecent?.played || awayRecent?.played);
 const tableHome = homeRecent;
 const tableAway = awayRecent;
 const events = match.events;
-const finished = FINISHED_STATUSES.has(match.status);
-const statusLabel = finished ? 'Finalizado' : match.status === 'NS' ? 'Programado' : 'En juego';
+const phase = matchPhase(match);
+const finished = phase === 'finished';
+const statusLabel = finished ? 'Finalizado' : phase === 'live' ? 'En juego' : 'Programado';
 const ai = findAnalysis(analyses as Record<string, {summary:unknown;limitations:unknown}>, match)?.entry;
 /* Sin lectura LLM (fallo de proveedores o presupuesto), la vista cae al
    fallback de proveedores; `normalizeReading` decide lo mostrable. */

@@ -1,6 +1,6 @@
 import { writeFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, isMatchExpired, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../src/lib/football.js';
+import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, staysOnWall, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
   fetchEventPlayerStats, fetchEventPrediction, fetchEventOdds, fetchEventBroadcasts, fetchEventSocial, fetchEventReferee, fetchTeamLast, collectTeamIds, resolveLeagues,
@@ -34,8 +34,8 @@ async function writeJson(path, value) {
 }
 const byKickoff = (a, b) => (a.kickoff < b.kickoff ? -1 : a.kickoff > b.kickoff ? 1 : 0);
 const isFinished = match => FINISHED_STATUSES.has(match.status);
-/** Lo que queda vivo en el muro: no finalizado y dentro de su ventana estimada de juego (115'). */
-const alive = match => !isFinished(match) && !isMatchExpired(match);
+/** Permanece en la ventana: aún no venció, o ya tiene marcador numérico. */
+const alive = match => staysOnWall(match);
 function seasonOf(date, competition) {
   const day = new Date(`${date}T00:00:00Z`);
   const year = day.getUTCFullYear();

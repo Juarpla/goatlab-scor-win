@@ -2,20 +2,22 @@
 import Icon from './Icon.astro';
 import TeamLogo from './TeamLogo.astro';
 import { teamEsDisplay, normalize } from '../lib/teams.js';
+import { hasNumericScore, matchPhase } from '../lib/football.js';
 
 const { match, competitionCode, competitionName, kickoffLabel, formHome = null, formAway = null } = Astro.props;
-const LIVE = new Set(['LIVE', 'HT', 'ET', 'BT', 'P', 'SUSP', 'INT']);
-const isLive = LIVE.has(match.status);
-const isFinished = match.status === 'FT' || match.status === 'AET' || match.status === 'PEN';
+const phase = matchPhase(match);
+const isLive = phase === 'live';
+const isFinished = phase === 'finished';
+const showScore = phase !== 'upcoming' && hasNumericScore(match);
 const statusLabel = isLive ? `EN VIVO${match.minute ? ` · ${match.minute}'` : ''}` : isFinished ? 'FINAL' : null;
 const sides = [
-  { name: teamEsDisplay(match.home), teamId: match.teamIds?.home ?? null, form: formHome },
-  { name: teamEsDisplay(match.away), teamId: match.teamIds?.away ?? null, form: formAway },
+  { name: teamEsDisplay(match.home), teamId: match.teamIds?.home ?? null, form: formHome, score: match.homeScore },
+  { name: teamEsDisplay(match.away), teamId: match.teamIds?.away ?? null, form: formAway, score: match.awayScore },
 ];
 // Búsqueda bilingüe y sin tildes: "spain" y "españa" encuentran el mismo card.
 const searchIndex = `${normalize(match.home)} ${normalize(match.away)} ${normalize(sides[0].name)} ${normalize(sides[1].name)} ${match.venue ?? ''}`.toLowerCase();
 ---
-<a href={`/partido/${match.webId ?? match.id}/`} class="match-card" data-fixture data-league-id={match.competition} data-date={match.kickoff.slice(0, 10)} data-stage={isLive ? 'live' : isFinished ? 'finished' : 'upcoming'} data-teams={searchIndex}>
+<a href={`/partido/${match.webId ?? match.id}/`} class="match-card" data-fixture data-league-id={match.competition} data-date={match.kickoff.slice(0, 10)} data-stage={phase} data-teams={searchIndex}>
   <span class="card-top">
     <span class="card-league">{competitionCode}</span>
     {statusLabel && <span class:list={['card-status', { live: isLive }]}>{isLive && <i class="live-dot" aria-hidden="true"></i>}{statusLabel}</span>}
@@ -27,6 +29,7 @@ const searchIndex = `${normalize(match.home)} ${normalize(match.away)} ${normali
         <TeamLogo name={side.name} teamId={side.teamId} size={28}/>
         <span class="card-team-name">{side.name}</span>
         <span class="card-form" aria-label={side.form ? `Forma reciente de ${side.name}: ${side.form.form.map(l => l === 'G' ? 'ganó' : l === 'E' ? 'empató' : 'perdió').join(', ')}` : `Sin forma suficiente de ${side.name}`}>{side.form ? side.form.form.map(l => <b class:list={['form-cell', l]} title={l === 'G' ? 'Ganó' : l === 'E' ? 'Empató' : 'Perdió'}>{l}</b>) : <b class="form-cell E" title="Sin forma suficiente">–</b>}</span>
+        {showScore && <span class:list={['card-score', { live: isLive }]}>{side.score}</span>}
       </span>
     ))}
   </span>

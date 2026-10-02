@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getFixtures, getLeagueResults, mergeFixtures, isMatchExpired } from '../src/lib/football.js';
+import { getFixtures, getLeagueResults, mergeFixtures, isMatchExpired, matchPhase, staysOnWall } from '../src/lib/football.js';
 const logger = { warn() {} };
 
 test('fallback is explicitly delayed and does not invent detailed metrics', async () => {
@@ -72,6 +72,30 @@ test('a match expires 115 minutes after kickoff, even without a final status', (
   assert.equal(isMatchExpired(match, Date.parse('2026-09-14T20:54:59Z')), false); // 114' in
   assert.equal(isMatchExpired(match, Date.parse('2026-09-14T20:55:00Z')), true);  // 115' in
   assert.equal(isMatchExpired(match, Date.parse('2026-09-15T12:00:00Z')), true);  // the stale Leeds–Newcastle case
+});
+test('a scored match stays on the wall after 115 minutes; an unscored one leaves', () => {
+  const later = Date.parse('2026-10-02T18:30:00Z');
+  const played = { kickoff: '2026-10-02T16:00:00Z', status: 'NS', homeScore: 0, awayScore: 1 };
+  const pending = { kickoff: '2026-10-02T18:45:00Z', status: 'NS', homeScore: null, awayScore: null };
+  const stale = { kickoff: '2026-10-02T16:00:00Z', status: 'NS', homeScore: null, awayScore: null };
+  assert.equal(matchPhase(played, Date.parse('2026-10-02T16:40:00Z')), 'live');
+  assert.equal(matchPhase(played, later), 'finished');
+  assert.equal(staysOnWall(played, later), true);
+  assert.equal(matchPhase(pending, later), 'upcoming');
+  assert.equal(staysOnWall(pending, later), true);
+  assert.equal(staysOnWall(stale, later), false);
+});
+test('Bzzoiro inprogress maps to LIVE', async () => {
+  const events = [
+    { id: 8, league_id: 64, home_team_id: 2262, home_team: 'Latvia', away_team_id: 700, away_team: 'Montenegro', event_date: '2026-10-02T16:00:00+00:00', status: 'inprogress', home_score: 0, away_score: 1 },
+  ];
+  const result = await getFixtures({ date: '2026-10-02', days: 1, now: '2026-10-02',
+    env: { BZZOIRO_API_TOKEN: 'c' },
+    fetchImpl: async () => new Response(JSON.stringify({ results: events })),
+    paceMs: 0 });
+  assert.equal(result.matches[0].status, 'LIVE');
+  assert.equal(result.matches[0].homeScore, 0);
+  assert.equal(result.matches[0].awayScore, 1);
 });
 test('fallback statuses are normalized to the API-Football vocabulary', async () => {
   const data = await getFixtures({ date: '2026-09-13', logger, env: { FOOTBALL_DATA_KEY: 'b' }, fetchImpl: async () => new Response(JSON.stringify({ matches: [
