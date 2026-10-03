@@ -64,6 +64,8 @@ class Workflow:
 
     def release_media(self, protected=()):
         out = Path(os.environ.get("MEDIA_PACK_DIR", str(STATE / "media-pack")))
+        from render_ledger import Ledger
+        records = {r["id"]: r for r in Ledger(self.state / "render-ledger").records()}
         needed = {r[0] for r in self.db.execute("SELECT match_id FROM series WHERE active=1 AND closed=0 AND created>?", (self.clock()-86400,))}
         for task in self.db.execute("SELECT * FROM tasks WHERE kind IN ('render','media','cancel')"):
             body = json.loads(task['payload'])
@@ -72,7 +74,7 @@ class Workflow:
             elif task['kind'] == 'render' and task['status'] in ('done','cancelled'):
                 result = json.loads(task['result'] or 'null')
                 if isinstance(result, dict) and result.get('jobId'):
-                    state = render_status({'result': task['result']}).get('render', {}).get('status')
+                    state = records.get(result['jobId'], {}).get('status')
                     if state not in ('done','cancelled'):
                         needed.add(body['matchId'])
                     else:

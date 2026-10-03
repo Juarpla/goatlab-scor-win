@@ -191,8 +191,8 @@ composición en capas, límites de resolución verificables y recuperación del
 flujo. El ahorro esperado de caché y quitar visión requiere medir series reales.
 
 Los Dockerfiles ahora usan el contexto de la raíz; desplegar con
-`fly deploy --config fly/render/fly.toml --local-only --ha=false --strategy rolling` y
-`fly deploy --config fly/gateway/fly.toml --local-only --ha=false --strategy rolling`. Actualizar Gateway primero para
+`fly deploy . --config fly/render/fly.toml --local-only --ha=false --strategy rolling` y
+`fly deploy . --config fly/gateway/fly.toml --local-only --ha=false --strategy rolling`. Actualizar Gateway primero para
 habilitar el registro temporal. Se conserva su volumen existente; no crear
 aplicaciones ni volúmenes y no ampliar CPU/RAM.
 Render necesita `OPENCODE_GO_API_KEY`, `TELEGRAM_BOT_TOKEN`, `RENDER_SECRET`, y las
@@ -208,3 +208,8 @@ El Dockerfile de Render omite las bibliotecas CUDA opcionales de ONNX porque las
 máquinas existentes usan CPU; conserva el runtime CPU y whisper.cpp. La descarga
 del modelo tiene timeout y reintento limitado, y queda en una capa separada para
 reutilizarla cuando falle una etapa posterior.
+
+Apagado automático existente: Gateway conserva 10 minutos de inactividad y
+Render 15 minutos. La limpieza de Gateway consulta el registro local, sin
+despertar Render por consultas periódicas de estado. Los trabajos en curso
+impiden apagar las máquinas hasta que terminan.

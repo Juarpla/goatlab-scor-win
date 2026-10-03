@@ -169,3 +169,27 @@ class DeploymentCompatibilityTests(unittest.TestCase):
         with patch('workflow.request_json',side_effect=[{'ok':True,'workflowProtocol':2},{'jobId':'stable'}]) as call:
             self.assertEqual(worker_post('/render',{'requestId':'stable'}),{'jobId':'stable'})
             self.assertEqual(call.call_count,2)
+
+class IdleCleanupTests(unittest.TestCase):
+    def test_cleanup_reads_local_delivery_record_without_waking_render(self):
+        import os
+        import time
+        from unittest.mock import patch
+        from render_ledger import Ledger
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            flow=Workflow(root/'goatlab.sqlite')
+            self.addCleanup(flow.db.close)
+            flow.select('1',script())
+            request=flow.receive('1','voice','event')['requestId']
+            job_id='job-'+'f'*32
+            flow.db.execute('UPDATE series SET closed=1')
+            flow.db.execute("UPDATE tasks SET status='done'")
+            flow.db.execute('UPDATE tasks SET result=? WHERE id=?',(json.dumps({'jobId':job_id}),request))
+            Ledger(root/'render-ledger').put({'id':job_id,'status':'done','expiresAt':int((time.time()+3600)*1000)})
+            media=root/'media-pack'; media.mkdir(); (media/'a-b.json').write_text('{}')
+            with patch.dict(os.environ,{'MEDIA_PACK_DIR':str(media)}), patch('workflow.request_json') as http:
+                flow.release_media()
+                http.assert_not_called()
+            self.assertFalse((media/'a-b.json').exists())
+            self.assertEqual(flow.db.execute('SELECT file_id FROM audios WHERE id=?',(request,)).fetchone()[0],'')
