@@ -4907,5 +4907,444 @@
     "generatedAt": "2026-10-02T22:22:09.611Z",
     "inputKey": "v3|M|bz-212656|Estonia|Luxembourg|nations|2026-10-03T16:00:00+00:0|NS\nP|1.18|1.11|0.362|0.311|0.327|0.401|0.478\nB|0.318|0.302|0.38|1.18|1.11|0.407|0.482|1-1|\nB2|A|0.38|no|no\nH|2|2|0|0|3\nW||cloudy|10|\nT|3|Estonia|2|2||\nT|2|Luxembourg|2|3||\nHR|2005-10-12|Luxembourg|Estonia|0|2\nHR|2004-09-04|Estonia|Luxembourg|4|0",
     "materialKey": "M|bz-212656|Estonia|Luxembourg|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212655": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Belarus recibe a San Marino",
+        "bullets": [
+          "Partido de Nations League programado para 2026-10-03 a las 16:00; estado NS en el registro.",
+          "Belarus llega desde el puesto 3 de la tabla con 2 partidos y 1 punto; San Marino es 4.º con 2 partidos y 0 puntos.",
+          "El bloque W indica sede unknown y viento 7; no hay más datos de clima o escenario."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-03",
+            "label": "fecha"
+          },
+          {
+            "value": "16:00",
+            "label": "hora"
+          },
+          {
+            "value": "7",
+            "label": "viento"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab: local 0.701, empate 0.197 y visitante 0.102; medias de goles 2.21 y 0.74.",
+          "Poisson GoatLab añade 0.565 y 0.474 en indicadores de goles totales y ambos anotan.",
+          "CatBoost Bzzoiro: local 0.87, empate 0.091 y visitante 0.039; medias 2.21 y 0.74; 0.662 y 0.34 en indicadores de goles totales y ambos anotan; marcador 2-0 con 0.43.",
+          "B2 declara mayor probabilidad H con 0.87, y marca no en goles totales y ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.701",
+            "label": "local Poisson"
+          },
+          {
+            "value": "0.87",
+            "label": "local CatBoost"
+          },
+          {
+            "value": "2-0",
+            "label": "marcador CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes entre selecciones",
+        "bullets": [
+          "2018-11-18: San Marino 0-2 Belarus.",
+          "2018-09-08: Belarus 5-0 San Marino.",
+          "H resume 2 partidos, 2 triunfos de Belarus, 0 empates, 0 derrotas y promedio de 3.5 goles."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "antecedentes"
+          },
+          {
+            "value": "2",
+            "label": "victorias Belarus"
+          },
+          {
+            "value": "3.5",
+            "label": "promedio goles"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación en el grupo",
+        "bullets": [
+          "Belarus figura 3.º con 2 partidos y 1 punto.",
+          "San Marino figura 4.º con 2 partidos y 0 puntos.",
+          "La tabla suministrada no incluye diferencia de goles ni otros registros."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "puesto Belarus"
+          },
+          {
+            "value": "1",
+            "label": "puntos Belarus"
+          },
+          {
+            "value": "0",
+            "label": "puntos San Marino"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves del cruce",
+        "bullets": [
+          "Los modelos coinciden en señalar a Belarus como amplio favorito, con distinta magnitud: 0.701 en Poisson y 0.87 en CatBoost/B2.",
+          "El historial reciente favorece a Belarus con dos triunfos y marcadores 2-0 y 5-0.",
+          "La tabla muestra a San Marino sin puntos en 2 partidos, mientras Belarus suma 1.",
+          "Sede y clima no están confirmados; el bloque W solo añade viento 7."
+        ],
+        "stats": [
+          {
+            "value": "0.87",
+            "label": "local CatBoost/B2"
+          },
+          {
+            "value": "0.701",
+            "label": "local Poisson"
+          },
+          {
+            "value": "5-0",
+            "label": "mayor goleada previa"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin bloque A",
+        "detail": "No se incluye estimación API-Football (A) en el input."
+      },
+      {
+        "label": "Sede y clima",
+        "detail": "W registra sede unknown y viento 7; no hay más contexto de condiciones."
+      },
+      {
+        "label": "B2 sin umbrales",
+        "detail": "B2 declara H 0.87 y responde no a goles totales y ambos anotan, sin especificar umbrales."
+      },
+      {
+        "label": "Alineaciones y goleadores",
+        "detail": "No hay bloques L de bajas, S de goleadores ni R de forma reciente."
+      },
+      {
+        "label": "Tabla incompleta",
+        "detail": "T solo ofrece puesto, partidos y puntos; no diferencia de goles ni otros registros."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "No aparece un porcentaje claramente incompatible con los datos. Se observa brecha entre Poisson (0.701 local) y CatBoost/B2 (0.87 local), atribuible a metodologías distintas."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-03T05:27:21.240Z",
+    "inputKey": "v3|M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS\nP|2.21|0.74|0.701|0.197|0.102|0.565|0.474\nB|0.87|0.091|0.039|2.21|0.74|0.662|0.34|2-0|0.43\nB2|H|0.87|no|no\nH|2|2|0|0|3.5\nW||unknown|7|\nT|3|Belarus|2|1||\nT|4|San Marino|2|0||\nHR|2018-11-18|San Marino|Belarus|0|2\nHR|2018-09-08|Belarus|San Marino|5|0",
+    "materialKey": "M|bz-212655|Belarus|San Marino|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212654": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Croatia y England, jornada de naciones",
+        "bullets": [
+          "Croatia y England se enfrentan en competición de naciones el 3 de octubre de 2026 a las 16:00, con el partido aún sin comenzar.",
+          "Ambos equipos llegan con 2 partidos jugados y 3 puntos, con England en la 2ª posición del grupo y Croatia en la 3ª.",
+          "El bloque meteorológico señala lluvia y un registro de 7 asociado a la temperatura, sin datos de sede ni de viento."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Partidos jugados"
+          },
+          {
+            "value": "3",
+            "label": "Puntos por equipo"
+          },
+          {
+            "value": "7",
+            "label": "Registro térmico previsto"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de Poisson y Bzzoiro",
+        "bullets": [
+          "El modelo Poisson de GoatLab reparte 27% para Croatia, 26.5% para el empate y 46.5% para England, partiendo de 1.22 y 1.66 goles esperados.",
+          "Ese mismo cálculo añade dos probabilidades declaradas de 54.9% y 58.2%, sin que el input explicite a qué mercado corresponden.",
+          "CatBoost Bzzoiro asigna 23.9% a Croatia, 24.4% al empate y 51.7% a England, con los mismos 1.22 y 1.66 goles esperados y el 1-1 como marcador más repetible.",
+          "B2 atribuye a Bzzoiro una estimación de 51.7% para la victoria visitante, con respuesta negativa en las casillas de goles totales y ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "46.5%",
+            "label": "England según Poisson"
+          },
+          {
+            "value": "51.7%",
+            "label": "England según Bzzoiro"
+          },
+          {
+            "value": "1.22",
+            "label": "Goles esperados Croatia"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Serie histórica entre ambos",
+        "bullets": [
+          "El agregado declara 8 enfrentamientos: 1 victoria de Croatia, 1 empate y 6 victorias de England, con una cifra adicional de 3.75 sin etiqueta explícita.",
+          "HR recoge los 5 cruces más recientes: England 4-2, England 1-0 y England 2-1, además de un 0-0 y un 2-1 favorable a Croatia.",
+          "El triunfo croata más reciente del listado corresponde al Croatia 2 England 1 registrado el 11 de julio de 2018."
+        ],
+        "stats": [
+          {
+            "value": "8",
+            "label": "Enfrentamientos declarados"
+          },
+          {
+            "value": "6",
+            "label": "Victorias de England"
+          },
+          {
+            "value": "5",
+            "label": "Cruces en historial reciente"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones del grupo",
+        "bullets": [
+          "England ocupa la 2ª posición con 2 partidos jugados y 3 puntos.",
+          "Croatia figura en 3ª posición con los mismos 2 partidos jugados y 3 puntos.",
+          "Los registros de partidos y puntos son idénticos, por lo que el orden depende de criterios de desempate que el input no incluye."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Partidos jugados"
+          },
+          {
+            "value": "3",
+            "label": "Puntos por equipo"
+          },
+          {
+            "value": "2ª",
+            "label": "Posición de England"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Anotadores declarados",
+        "bullets": [
+          "Anthony Gordon (England) acumula 2 goles en los 2 registros aportados por el bloque de goleadores.",
+          "Harry Kane (England) presenta un registro idéntico: 2 goles en 2 apariciones.",
+          "El listado no incluye anotadores de Croatia."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles de Gordon (England)"
+          },
+          {
+            "value": "2",
+            "label": "Goles de Kane (England)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Mercados sin etiquetar",
+        "detail": "Las cifras 0.549 y 0.582 (P), y 0.575, 0.58 y 0.423 (B), aparecen sin mercado indicado, por lo que no se les asigna etiqueta ni lectura de mercado."
+      },
+      {
+        "label": "Sin bloque A",
+        "detail": "No se aporta línea A de API-Football, de modo que no hay distribución, mayor probabilidad ni umbral de goles de ese proveedor."
+      },
+      {
+        "label": "Clima y sede incompletos",
+        "detail": "El bloque W solo indica lluvia y un valor de 7; no consta nombre de sede, altitud ni viento."
+      },
+      {
+        "label": "Sin forma ni bajas",
+        "detail": "No hay bloques R ni L, por lo que no existen datos de racha reciente ni de ausencias confirmadas."
+      },
+      {
+        "label": "Orden de tabla sin criterio",
+        "detail": "Croatia y England comparten 2 partidos y 3 puntos; falta el criterio de desempate que explica el 2º y 3º puesto."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El historial agregado da 6 victorias de England en 8 cruces (75%), muy por encima del 46.5% de Poisson y del 51.7% de Bzzoiro para England. Además, B2 declara 'no' en ambos anotan mientras P publica 54.9% y 58.2% en casillas sin mercado explicitado."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-03T05:28:05.212Z",
+    "inputKey": "v3|M|bz-212654|Croatia|England|nations|2026-10-03T16:00:00+00:0|NS\nP|1.22|1.66|0.27|0.265|0.465|0.549|0.582\nB|0.239|0.244|0.517|1.22|1.66|0.575|0.58|1-1|0.423\nB2|A|0.517|no|no\nH|8|1|1|6|3.75\nW||rain|7|\nT|3|Croatia|2|3||\nT|2|England|2|3||\nS|Anthony Gordon|England|2|2\nS|Harry Kane|England|2|2\nHR|2026-06-17|England|Croatia|4|2\nHR|2021-06-13|England|Croatia|1|0\nHR|2018-11-18|England|Croatia|2|1\nHR|2018-10-12|Croatia|England|0|0\nHR|2018-07-11|Croatia|England|2|1",
+    "materialKey": "M|bz-212654|Croatia|England|nations|2026-10-03T16:00:00+00:0|NS"
+  },
+  "bz-212658": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Contexto del cruce",
+        "bullets": [
+          "Partido de Nations League entre España y Chequia, programado para el 3 de octubre de 2026 a las 18:45 (hora indicada).",
+          "El encuentro se disputa en sede no especificada, con condiciones de lluvia y viento de 5 (unidad no indicada).",
+          "Ambas selecciones se encuentran en la fase de grupos del torneo, con España en el puesto 1 y Chequia en el 4 según la tabla proporcionada."
+        ],
+        "stats": [
+          {
+            "value": "18:45",
+            "label": "Hora programada"
+          },
+          {
+            "value": "lluvia",
+            "label": "Clima"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "Poisson GoatLab: probabilidad de victoria local 0.671, empate 0.213, victoria visitante 0.116; goles esperados 2.08 para España y 0.76 para Chequia.",
+          "CatBoost Bzzoiro: probabilidad de victoria local 0.885, empate 0.082, victoria visitante 0.032; marcador más probable 2-0 con 0.441; goles totales estimados 2.08 y 0.76.",
+          "B2 (estimaciones declaradas del modelo Bzzoiro): mayor probabilidad local (H), goles totales 'no', ambos anotan 'no'.",
+          "API-Football: distribución no detallada, mayor probabilidad no especificada, umbral de goles no indicado; lectura cruda no disponible."
+        ],
+        "stats": [
+          {
+            "value": "0.671",
+            "label": "Prob. local (Poisson)"
+          },
+          {
+            "value": "0.885",
+            "label": "Prob. local (CatBoost)"
+          },
+          {
+            "value": "2-0",
+            "label": "Marcador más probable (B)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de enfrentamientos",
+        "bullets": [
+          "2022-06-12: España 2-0 Chequia.",
+          "2022-06-05: Chequia 2-2 España.",
+          "2016-06-13: España 1-0 Chequia.",
+          "En los últimos tres cruces, España suma 2 victorias y 1 empate, con 5 goles a favor y 2 en contra."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Partidos registrados"
+          },
+          {
+            "value": "2",
+            "label": "Victorias de España"
+          },
+          {
+            "value": "1",
+            "label": "Empates"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación en el grupo",
+        "bullets": [
+          "España ocupa la 1ª posición con 6 puntos en 2 partidos.",
+          "Chequia se sitúa en la 4ª posición con 0 puntos en 2 partidos.",
+          "La diferencia de puntos entre ambas selecciones es de 6 unidades."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Puesto de España"
+          },
+          {
+            "value": "4",
+            "label": "Puesto de Chequia"
+          },
+          {
+            "value": "6",
+            "label": "Puntos de España"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores destacados",
+        "bullets": [
+          "Lamine Yamal (España): 3 goles y 2 asistencias en el torneo.",
+          "Alex Baena (España): 1 gol y 2 asistencias.",
+          "Adam Karabec (Chequia): 1 gol y 2 asistencias."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles de Lamine Yamal"
+          },
+          {
+            "value": "2",
+            "label": "Asistencias de Lamine Yamal"
+          },
+          {
+            "value": "1",
+            "label": "Goles de Karabec"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos de API-Football",
+        "detail": "No se proporcionan detalles de distribución, probabilidad máxima ni umbral de goles; la lectura cruda no está disponible."
+      },
+      {
+        "label": "Condiciones climáticas",
+        "detail": "Se indica lluvia y viento de 5, pero no se especifica la unidad de viento ni la sede exacta del partido."
+      },
+      {
+        "label": "B2 sin detalles",
+        "detail": "Las estimaciones declaradas de B2 solo indican 'H', 'no' y 'no' para mayor probabilidad, goles totales y ambos anotan, sin valores numéricos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-03T05:28:19.968Z",
+    "inputKey": "v3|M|bz-212658|Spain|Czechia|nations|2026-10-03T18:45:00+00:0|NS\nP|2.08|0.76|0.671|0.213|0.116|0.54|0.475\nB|0.885|0.082|0.032|2.08|0.76|0.708|0.365|2-0|0.441\nB2|H|0.885|no|no\nH|3|2|1|0|2.33\nW||rain|5|\nT|1|Spain|2|6||\nT|4|Czechia|2|0||\nS|Lamine Yamal|Spain|3|2\nS|Alex Baena|Spain|1|2\nS|Adam Karabec|Czechia|1|2\nHR|2022-06-12|Spain|Czechia|2|0\nHR|2022-06-05|Czechia|Spain|2|2\nHR|2016-06-13|Spain|Czechia|1|0",
+    "materialKey": "M|bz-212658|Spain|Czechia|nations|2026-10-03T18:45:00+00:0|NS"
   }
 }
