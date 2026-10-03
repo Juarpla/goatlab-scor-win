@@ -154,7 +154,7 @@ class PortableSkillTests(unittest.TestCase):
             self.addCleanup(flow.db.close)
             self.assertEqual(flow.db.execute('SELECT COUNT(*) FROM tasks').fetchone()[0],0)
             call('select','--chat=1','--number=1')
-            self.assertEqual(call('receive','--chat=1','--audio=voice','--event=1')['n'],1)
+            self.assertEqual(call('receive','--chat=1','--audio=telegram_valid_voice_id','--event=1')['n'],1)
             call('reset','--chat=1')
             self.assertIsNone(call('status','--chat=1'))
             subprocess.check_call(['node','--input-type=module','-e',"await import('./skill/lib/youtube.js'); await import('./skill/lib/agnes.js');"],cwd=root)

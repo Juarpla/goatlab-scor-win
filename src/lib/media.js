@@ -332,15 +332,17 @@ export function relevantAssets(assets, { home = '', away = '', players = [] } = 
     const text = plainKey(`${asset.title ?? ''} ${asset.description ?? ''}`);
     const team = names.find(name => text.includes(name));
     const player = players.find(name => subjectFor(name, text));
-    const football = /football|soccer|futbol|training|entrenamiento/.test(text);
-    if (!team && !player && !football) return [];
+    const football = /football|soccer|futbol|futebol|fussball|calcio|supporter|hincha/.test(text);
+    if (/american football|rugby|quarterback|gridiron/.test(text)) return [];
+    const verifiedPlayer = player && plainKey(player).split(' ').filter(t=>t.length>2).every(token=>text.split(' ').includes(token));
+    if (!football && !verifiedPlayer && !(/supporter|hincha|aficion/.test(text) && team)) return [];
     if (asset.width && asset.height && Math.max(asset.width, asset.height) < 720) return [];
     const date = Date.parse(asset.date ?? '');
     const recent = Number.isFinite(date) && Date.now() - date < 3 * 365 * 86400_000;
     const score = (team ? 8 : 0) + (player ? 8 : 0) + (recent ? 2 : 0) + (football ? 1 : 0);
     const { previewUrl: _preview, playerHint: _player, sceneHint: _scene, ...rest } = asset;
-    return [{ ...rest, subject: player ?? null, relevance: score,
-      selection: { method: 'metadata', team: team ?? null, contextOnly: !team && !player } }];
+    return [{ ...rest, subject: verifiedPlayer ? player : null, relevance: score,
+      selection: { method: 'metadata', team: team ?? null, contextOnly: !team && !verifiedPlayer } }];
   }).sort((a, b) => b.relevance - a.relevance);
   const seen = new Set();
   const unique = scored.filter(asset => {

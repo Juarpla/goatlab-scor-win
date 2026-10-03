@@ -67,3 +67,57 @@ class SupervisorTests(unittest.TestCase):
             finally: stop(process)
             self.assertEqual(calls[-1]['requestId'], ids[-1])
             flow.db.close()
+
+    def test_real_generator_publishes_eight_before_finishing_and_freezes_request_snapshot(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);data=root/'public/data';data.mkdir(parents=True)
+            (data/'fixtures.json').write_text(json.dumps({'matches':[{'id':'a-b','webId':'a-b','home':'Spain','away':'Czechia','status':'NS','kickoff':'2030-10-03T18:00:00Z'}]}))
+            release=root/'release'
+            preload=root/'provider.mjs'
+            preload.write_text("""
+import { existsSync } from 'node:fs';
+let calls=0;
+globalThis.fetch=async()=>{
+  const request=calls++;
+  if(request>=2) while(!existsSync(process.env.TEST_RELEASE)) await new Promise(r=>setTimeout(r,20));
+  const pages=Object.fromEntries(Array.from({length:4},(_,i)=>{
+    const id=request*4+i;
+    return [id,{pageid:id+1,title:`File:Spain football training ${id}.jpg`,imageinfo:[{mime:'image/jpeg',thumburl:`https://example.test/${id}.jpg`,descriptionurl:`https://example.test/photo/${id}`,thumbwidth:1472,thumbheight:2624,extmetadata:{LicenseShortName:{value:'CC BY 4.0'},Artist:{value:'Author'},ImageDescription:{value:'Spain soccer football training'}}}]}];
+  }));
+  return new Response(JSON.stringify({query:{pages}}));
+};
+""")
+            flow=Workflow(root/'goatlab.sqlite')
+            flow.select('1',{'matchId':'a-b','scripts':[{'hook':'Gancho'} for _ in range(10)]})
+            request=flow.receive('1','voice','event')['requestId']
+            calls=[];media_status=[]
+            class Worker(BaseHTTPRequestHandler):
+                def log_message(self,*_):pass
+                def do_GET(self):
+                    self.send_response(200);self.end_headers();self.wfile.write(b'{"workflowProtocol":2}')
+                def do_POST(self):
+                    import sqlite3
+                    body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+                    db=sqlite3.connect(root/'goatlab.sqlite')
+                    media_status.append(db.execute("SELECT status FROM tasks WHERE kind='media'").fetchone()[0]);db.close()
+                    calls.append(body);release.touch()
+                    self.send_response(200);self.end_headers();self.wfile.write(json.dumps({'jobId':'accepted'}).encode())
+            server=ThreadingHTTPServer(('127.0.0.1',0),Worker)
+            threading.Thread(target=server.serve_forever,daemon=True).start()
+            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','TEST_RELEASE':str(release),'PEXELS_API_KEY':'','PIXABAY_API_KEY':'','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':''}
+            script=Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts/workflow.py'
+            process=subprocess.Popen([sys.executable,str(script),'supervise'],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+            try:
+                deadline=time.monotonic()+12
+                while not calls and time.monotonic()<deadline:time.sleep(.05)
+                self.assertTrue(calls,'no render after first eight photos')
+                self.assertEqual(len(calls[0]['assets']),8)
+                self.assertEqual(media_status[0],'running')
+                while flow.db.execute("SELECT status FROM tasks WHERE kind='media'").fetchone()[0]!='done' and time.monotonic()<deadline:time.sleep(.05)
+                self.assertEqual(len(json.loads((root/'media-pack/a-b.json').read_text())['assets']),15)
+                persisted=json.loads(flow.db.execute('SELECT payload FROM tasks WHERE id=?',(request,)).fetchone()[0])
+                self.assertEqual(len(persisted['assets']),8)
+            finally:
+                release.touch();process.terminate();_,error=process.communicate(timeout=8)
+                server.shutdown();server.server_close();flow.db.close()
+                self.assertEqual(process.returncode,0,error.decode())

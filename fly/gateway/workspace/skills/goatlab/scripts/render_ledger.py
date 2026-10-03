@@ -7,7 +7,9 @@ import os
 import re
 import threading
 import time
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import urllib.request
+import urllib.error
 from pathlib import Path
 from common import atomic_json
 
@@ -98,7 +100,47 @@ def serve(state, port=3002):
                 self.respond(200,{'ok':True})
             except (ValueError,TypeError):
                 self.respond(400,{'error':'registro inválido, caducado o presupuesto agotado'})
-    server=HTTPServer(('127.0.0.1',port),Handler)
+        def do_POST(self):
+            if self.path != '/telegram-webhook': return self.respond(404,{})
+            webhook_secret=os.environ.get('TELEGRAM_WEBHOOK_SECRET','')
+            if not webhook_secret or not hmac.compare_digest(self.headers.get('X-Telegram-Bot-Api-Secret-Token',''),webhook_secret):
+                return self.respond(401,{'error':'no autorizado'})
+            try:
+                length=int(self.headers.get('Content-Length','0'))
+                if not 0<length<=512_000: return self.respond(413,{})
+                raw=self.rfile.read(length)
+                update=json.loads(raw)
+                from telegram_input import ingest
+                result=ingest(update,state)
+                if result is not None:
+                    self.respond(200,{'ok':True})
+                    if result.get('closed') and not result.get('duplicate'):
+                        from common import telegram
+                        try: telegram('sendMessage',{'chat_id':result['chat'],'text':'Serie completa. Los videos pendientes continúan.'})
+                        except Exception: print('workflow: aviso de cierre no entregado',flush=True)
+                    return
+                # Native /new, /start, /goatlab and all other messages stay in OpenClaw.
+                request=urllib.request.Request(os.environ.get('OPENCLAW_TELEGRAM_URL','http://127.0.0.1:8787/telegram-webhook'),raw,
+                    headers={'Content-Type':'application/json','X-Telegram-Bot-Api-Secret-Token':webhook_secret})
+                with urllib.request.urlopen(request,timeout=25) as response:
+                    payload=response.read(512_000)
+                    self.send_response(response.status); self.send_header('Content-Type','application/json');
+                    self.send_header('Content-Length',str(len(payload))); self.end_headers();self.wfile.write(payload)
+            except ValueError:
+                self.respond(400,{'error':'evento de Telegram inválido'})
+            except Exception:
+                self.respond(503,{'error':'recepción temporalmente no disponible'})
+    class Server(ThreadingHTTPServer):
+        daemon_threads=True
+        slots=threading.BoundedSemaphore(8)
+        def process_request(self,request,address):
+            self.slots.acquire()
+            try: super().process_request(request,address)
+            except Exception: self.slots.release(); raise
+        def process_request_thread(self,request,address):
+            try: super().process_request_thread(request,address)
+            finally: self.slots.release()
+    server=Server(('127.0.0.1',port),Handler)
     server.timeout=1
     threading.Thread(target=server.serve_forever,daemon=True).start()
     return server

@@ -15,6 +15,7 @@ import urllib.error
 from pathlib import Path
 
 from common import atomic_json, database, request_json, telegram
+from telegram_input import chat_id, file_id
 
 SKILL = Path(__file__).resolve().parents[1]
 ROOT = next((p for p in SKILL.parents if (p / "public/data").exists()), Path.cwd())
@@ -84,7 +85,7 @@ class Workflow:
         if not out.exists():
             return
         for path in out.iterdir():
-            match = path.stem
+            match = path.stem.removesuffix('.progress')
             if path.name == 'gen':
                 for folder in path.iterdir():
                     if folder.name not in needed:
@@ -102,7 +103,7 @@ class Workflow:
                         (key, kind, json.dumps(payload), self.clock()))
 
     def current(self, chat):
-        return self.db.execute("SELECT * FROM series WHERE chat=? AND active=1 AND created>?", (str(chat), self.clock()-86400)).fetchone()
+        return self.db.execute("SELECT * FROM series WHERE chat=? AND active=1 AND created>?", (chat_id(chat), self.clock()-86400)).fetchone()
 
     def import_pending(self, directory):
         """Recover pre-Python pending JSONs without guessing the agent's audio counter."""
@@ -125,7 +126,7 @@ class Workflow:
     def select(self, chat, script):
         if len(script.get('scripts', [])) != 10 or not script.get('matchId') or Path(script['matchId']).name != script['matchId']:
             raise ValueError('se requiere un partido válido con diez guiones')
-        chat = str(chat)
+        chat = chat_id(chat)
         self.db.execute("BEGIN IMMEDIATE")
         try:
             if self.current(chat):
@@ -143,6 +144,7 @@ class Workflow:
             raise
 
     def receive(self, chat, file_id, event):
+        chat = chat_id(chat)
         self.db.execute("BEGIN IMMEDIATE")
         try:
             series = self.current(chat)
@@ -208,6 +210,7 @@ class Workflow:
             raise
 
     def reset(self, chat):
+        chat = str(chat)  # preserve ability to discard a legacy prefixed series
         self.db.execute("BEGIN IMMEDIATE")
         try:
             series = self.db.execute("SELECT * FROM series WHERE chat=? AND active=1", (str(chat),)).fetchone()
@@ -276,7 +279,8 @@ def execute(task):
     if not ready.exists():
         return None
     manifest = json.loads((out / f"{match}.json").read_text())
-    body.update(assets=manifest["assets"], attribution=manifest.get("attribution", ""))
+    if not body.get('assets'):
+        body.update(assets=manifest["assets"], attribution=manifest.get("attribution", ""), facts=manifest.get('facts',[]), mediaMinimum=8)
     return worker_post("/render", body)
 
 
@@ -287,6 +291,8 @@ def supervise():
     from render_ledger import serve
     ledger_server = serve(STATE)
     flow = Workflow()
+    from progress import ProgressReporter
+    reporter=ProgressReporter(flow) if os.environ.get('TELEGRAM_BOT_TOKEN') else None
     flow.import_pending(STATE / "pending")
     flow.db.execute("UPDATE tasks SET status='queued' WHERE status='running'")
     flow.cleanup()
@@ -300,6 +306,9 @@ def supervise():
     last_cleanup = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
         while not stopping or futures:
+            if reporter and not stopping and time.time()>=reporter.next:
+                from render_ledger import Ledger
+                reporter.update(Ledger(STATE/'render-ledger').records())
             if time.time() - last_cleanup >= 300 or (STATE / ".cleanup-request").exists():
                 protected = [t["id"] for t in futures.values()]
                 from render_ledger import Ledger
@@ -328,14 +337,6 @@ def supervise():
                     status = "done" if result is not None else "queued"
                     flow.db.execute("UPDATE tasks SET status=?,result=?,next_at=? WHERE id=?",
                                     (status, json.dumps(result), time.time() + 3, task["id"]))
-                    if task["kind"] == "media" and result:
-                        match = json.loads(task["payload"])["matchId"]
-                        chats = flow.db.execute("SELECT DISTINCT chat FROM series WHERE match_id=? AND active=1", (match,)).fetchall()
-                        for chat in chats:
-                            try:
-                                telegram("sendMessage", {"chat_id": chat[0], "text": "📸 Fotos listas"})
-                            except Exception:
-                                print("workflow: aviso de fotos no entregado", file=sys.stderr)
                 except Exception as error:
                     if current == "cancelled":
                         continue
@@ -374,6 +375,12 @@ def supervise():
                             continue
                         if not (Path(os.environ.get("MEDIA_PACK_DIR", str(STATE / "media-pack"))) / f'{body["matchId"]}.ready').exists():
                             continue
+                        if not body.get('assets'):
+                            manifest=json.loads((Path(os.environ.get('MEDIA_PACK_DIR',str(STATE/'media-pack')))/f'{body["matchId"]}.json').read_text())
+                            body.update(assets=manifest['assets'],attribution=manifest.get('attribution',''),facts=manifest.get('facts',[]), mediaMinimum=8)
+                            payload=json.dumps(body)
+                            flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(payload,task['id']))
+                            task=dict(task); task['payload']=payload
                     flow.db.execute("UPDATE tasks SET status='running' WHERE id=?", (task["id"],))
                     futures[pool.submit(execute, dict(task))] = dict(task)
                     media_running |= task["kind"] == "media"
@@ -411,6 +418,7 @@ def main():
         return
     if not args.chat:
         parser.error("--chat es obligatorio")
+    args.chat = chat_id(args.chat)
     if args.command == "list":
         if (REPO / ".git").exists():
             subprocess.run(["git", "pull", "--ff-only"], cwd=REPO, check=True, stdout=sys.stderr)
@@ -434,7 +442,7 @@ def main():
             raise ValueError("el partido no coincide con la serie activa")
         if not args.audio or (args.command == "receive" and not args.event):
             parser.error("receive requiere --audio y --event")
-        result = flow.receive(args.chat, args.audio, args.event or args.audio)
+        result = flow.receive(args.chat, file_id(args.audio), args.event or args.audio)
     elif args.command == "drop-last":
         result = flow.drop_last(args.chat)
     elif args.command == "reset":
@@ -448,6 +456,15 @@ def main():
             audio = flow.db.execute("SELECT 1 FROM audios WHERE id=? AND series_id=? AND cancelled=0", (key, series["id"])).fetchone()
             if not audio:
                 raise ValueError("el trabajo no pertenece a la serie")
+            from render_ledger import Ledger
+            remote=next((r for r in Ledger(STATE/'render-ledger').records() if r.get('requestId')==key),None)
+            if remote and remote.get('status') in ('done','delivering','delivery-unknown','working','queued'):
+                raise ValueError('no se reintenta una entrega completada, incierta o en curso')
+            row=flow.db.execute('SELECT payload FROM tasks WHERE id=?',(key,)).fetchone()
+            if row:
+                body=json.loads(row[0])
+                for field in ('assets','attribution','facts'):body.pop(field,None)
+                flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(json.dumps(body),key))
         flow.db.execute("UPDATE tasks SET status='queued',attempts=0,next_at=0 WHERE id=? AND status IN ('failed','done')", (key,))
         result = {"retry": key}
     else:

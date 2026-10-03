@@ -15,7 +15,10 @@ Si hay varios audios en un turno, procésalos en orden de llegada, uno por llama
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,
    sin esperar. Manda los 10 audios.» Después: «📸 Estoy buscando las fotos en
    segundo plano. Ya puedes mandar los audios; te aviso cuando estén o si hay un error.»
-4. Audio: `receive --chat=<chat> --audio=<file_id> --event=<message_id>`.
+4. Audio: el webhook ejecuta `receive` usando el chat, file_id y message_id
+   originales. No vuelvas a encolarlo desde el agente. Para una instalación sin
+   webhook, usa `receive --chat=<chat> --audio=<file_id> --event=<message_id>`
+   solo con identificadores originales de Telegram.
    No respondas ni esperes al render. El código asigna `n`, guarda el audio y
    encola el trabajo. Una respuesta `duplicate` no avanza la serie ni genera
    otra respuesta al usuario. Si falta una serie, pide `/goatlab`.

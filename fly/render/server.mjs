@@ -96,7 +96,13 @@ async function runJob(job) {
   const started = Date.now();
   if (stopIfCancelled(job, log)) return;
   mkdirSync(tmp, { recursive: true });
-  const measure = async (name, fn) => { const at = Date.now(); try { return await fn(); } finally { job.stages[name] = Date.now() - at; store.save(job); await store.flush(); } };
+  const onStage = async (name, elapsed) => {
+    job.currentStage=name;
+    if(elapsed !== undefined) job.stages[name]=elapsed;
+    else { job.stageStartedAt=Date.now(); log(`etapa ${name}`); }
+    store.save(job); await store.flush();
+  };
+  const measure = async (name, fn) => { const at = Date.now(); await onStage(name); try { return await fn(); } finally { await onStage(name, Date.now()-at); } };
   try {
     // 1. Voz: desde Telegram (file_id) o URL directa (pruebas).
     const voiceFile = join(tmp, 'voice.ogg');
@@ -123,6 +129,7 @@ async function runJob(job) {
       away: job.away,
       matchLabel: job.matchLabel,
       log, cacheDir,
+      facts: job.facts ?? [], mediaMinimum: job.mediaMinimum ?? 2, requestId: job.requestId ?? job.id, onStage,
     }));
     Object.assign(job.stages, stages);
     job.planModel = plan.model;
@@ -159,6 +166,7 @@ async function runJob(job) {
     const messageId = await measure('delivery', () => sendVideo(job.chatId, out, telegramCaption({ ...job, musicCredit })));
     const seconds = Math.round((Date.now() - started) / 1000);
     Object.assign(job, { status: 'done', messageId, duration: dur, sizeMb, seconds });
+    job.currentStage='done';
     store.save(job);
     rmSync(tmp, { recursive: true, force: true });
     const credits = [musicCredit.trim(), String(job.attribution ?? '').trim()].filter(Boolean).join('\n');
@@ -224,7 +232,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 2 });
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
@@ -253,7 +261,12 @@ const server = createServer(async (req, res) => {
         if (b[k] == null || b[k] === '') return json(400, { error: `falta ${k}` });
       }
       if (!b.audioFileId && !b.audioUrl) return json(400, { error: 'falta audioFileId o audioUrl' });
+      if (!/^-?[1-9][0-9]{0,19}$/.test(String(b.chatId))) return json(400, { error: 'chatId debe ser el identificador numérico de Telegram' });
+      if (b.audioFileId && !/^[A-Za-z0-9_-]{16,256}$/.test(b.audioFileId)) return json(400, { error: 'audioFileId no admite rutas locales' });
       if (!Array.isArray(b.assets) || b.assets.filter(asset => asset?.url).length < 2) return json(400, { error: 'fotos insuficientes' });
+      const mediaMinimum = b.mediaMinimum ?? 2;
+      if (![2, 8].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
+      if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
@@ -263,7 +276,7 @@ const server = createServer(async (req, res) => {
         variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
         audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
-        assets: b.assets.slice(0, ASSETS_PER_MATCH),
+        assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
       });
       await store.flush();
       if (job.status === 'queued' && !protectedIds.has(job.id)) schedule(job);

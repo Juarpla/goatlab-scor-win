@@ -8,7 +8,8 @@ USER node
 COPY --chown=node:node fly/gateway/openclaw.json /home/node/.openclaw/openclaw.json
 COPY --chown=node:node fly/gateway/workspace/ /home/node/.openclaw/workspace/
 COPY --chown=node:node fly/gateway/idle-stop.mjs /home/node/idle-stop.mjs
-ENV GOATLAB_REPO=/home/node/goatlab GOATLAB_STATE_DIR=/data \
+ARG GOATLAB_REVISION=unknown
+ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_REPO=/home/node/goatlab GOATLAB_STATE_DIR=/data \
     GOATLAB_SKILL_DIR=/home/node/.openclaw/workspace/skills/goatlab
 
 # Repo goatlab (scripts + datos) para el skill /goatlab. Público, sin secrets.

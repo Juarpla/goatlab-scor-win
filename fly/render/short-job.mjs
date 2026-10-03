@@ -63,10 +63,12 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   home = '', away = '', matchLabel, log = () => {},
   cacheDir = process.env.PHOTO_CACHE_DIR || join(APP_ROOT, '.cache/shorts/photos'),
   planner = planEdit, transcriber = voiceTimes,
+  facts = [], mediaMinimum = 2, requestId, onStage = async () => {},
 }) {
   const stages = {}, measure = async (label, fn) => {
     const at = Date.now();
-    try { return await fn(); } finally { stages[label] = Date.now() - at; }
+    await onStage(label);
+    try { return await fn(); } finally { stages[label] = Date.now() - at; await onStage(label, stages[label]); }
   };
   const total = voiceSeconds + LEAD_SECONDS * 2 + ENDCARD_SECONDS;
   let timing;
@@ -92,26 +94,28 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     copyFileSync(photo.path, join(tmp, src));
     const backdrop = `${photos.length}-back.jpg`;
     copyFileSync(photo.backdrop, join(tmp, backdrop));
-    photos.push({ src, backdrop, width: photo.width, height: photo.height, subject: assets[i].subject ?? null });
+    const focusBlur = `${photos.length}-focus.jpg`;
+    copyFileSync(photo.focusBlur, join(tmp, focusBlur));
+    photos.push({ src, backdrop, focusBlur, width: photo.width, height: photo.height, subject: assets[i].subject ?? null });
     available.push({ ...assets[i], width: photo.width, height: photo.height });
   });
   } finally { unpin(); }
-  if (photos.length < 2) throw new Error('fotos descargadas insuficientes');
+  if (photos.length < mediaMinimum) throw new Error(`fotos descargadas insuficientes: ${photos.length}/${mediaMinimum}`);
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { planVersion: 2, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
-  const plan = await measure('planning', () => planner(source, tmp));
+  const plan = await measure('planning', () => planner(source, tmp, log));
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
   copyFileSync(gsapSource(), join(tmp, 'gsap.min.js'));
-  writeFileSync(join(tmp, 'index.html'), buildPlannedComposition({ duration: total, photos, words, plan, match: matchLabel }));
+  writeFileSync(join(tmp, 'index.html'), buildPlannedComposition({ duration: total, photos, words, plan, facts, match: matchLabel }));
   writeJson(join(tmp, 'stages.json'), stages);
   return { total, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages };
 }
 
-export async function planEdit(source, tmp) {
+export async function planEdit(source, tmp, log = () => {}) {
   const input = join(tmp, 'edit-input.json'), output = join(tmp, 'edit-plan.json');
   const serialized = JSON.stringify(source);
   if (existsSync(input) && existsSync(output) && readFileSync(input, 'utf8') === serialized)
@@ -120,9 +124,14 @@ export async function planEdit(source, tmp) {
   rmSync(output, { force: true });
   writeJson(input, source);
   try {
-    await run(process.env.PYTHON_BIN || 'python3', [join(SKILL_ROOT, 'scripts/planner.py'), '--input', input, '--out', output],
-      { timeout: 10 * 60_000, maxBuffer: 1024 * 1024, env: process.env });
-  } catch (error) { throw new Error(`montaje: ${String(error.stderr || 'planificador no disponible').slice(0, 400)}`); }
+    const result = await run(process.env.PYTHON_BIN || 'python3', [join(SKILL_ROOT, 'scripts/planner.py'), '--input', input, '--out', output],
+      { timeout: 250_000, maxBuffer: 1024 * 1024, env: process.env });
+    result.stderr.split('\n').filter(line=>line.startsWith('planner: ')).forEach(log);
+  } catch (error) {
+    const lines=String(error.stderr || 'planificador no disponible').split('\n');
+    lines.filter(line=>line.startsWith('planner: ')).forEach(log);
+    throw new Error(`montaje: ${lines.filter(line=>!line.startsWith('planner: ')).join('\n').trim().slice(0, 400)}`);
+  }
   return JSON.parse(readFileSync(output, 'utf8'));
 }
 

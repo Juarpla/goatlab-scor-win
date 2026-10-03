@@ -39,9 +39,11 @@ test('photoFailureText se queda con el error útil', () => {
 });
 
 test('audioFailureText nombra el número y no pide reenviar el archivo', () => {
-  assert.match(audioFailureText(2, 'ffmpeg: Invalid data found'), /El audio 2 que enviaste está corrompido/);
+  assert.match(audioFailureText(2, 'ffmpeg: Invalid data found when processing input'), /El audio 2 que enviaste está corrompido/);
   assert.match(audioFailureText(2, 'voz de 1.0s fuera de rango (5-120s)'), /El video 2 no se pudo completar/);
   assert.doesNotMatch(audioFailureText(2, 'ffmpeg: Invalid data'), /file_id|reenvi/);
+  assert.doesNotMatch(audioFailureText(2, 'telegram getFile: invalid file_id'), /corrompido|Grábalo/);
+  assert.doesNotMatch(audioFailureText(2, 'descarga HTTP 500'), /corrompido|Grábalo/);
 });
 
 test('agnesPrompts pide hombres en entrenamiento y corta al segundo 429', () => {

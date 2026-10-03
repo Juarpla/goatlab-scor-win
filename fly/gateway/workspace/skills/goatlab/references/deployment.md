@@ -213,3 +213,28 @@ Apagado automático existente: Gateway conserva 10 minutos de inactividad y
 Render 15 minutos. La limpieza de Gateway consulta el registro local, sin
 despertar Render por consultas periódicas de estado. Los trabajos en curso
 impiden apagar las máquinas hasta que terminan.
+
+
+## Corrección de transporte y progreso
+
+El planificador identifica GoatLab y envía `x-opencode-session`, estable por
+requestId. Su presupuesto es 240 s, hasta 90 s por llamada y 60 s reservados
+al respaldo. Una validación fallida permite una reparación por modelo. Si ambos
+fallan, no se sustituye por un montaje local: se conserva el audio y se avisa.
+
+Nginx envía `/telegram-webhook` al servicio Python existente, en localhost:3002.
+Este verifica el secreto y TELEGRAM_ALLOWED_USERS, registra audios de series
+activas y reenvía el resto al webhook nativo de OpenClaw en :8787. El usuario
+no necesita entregar tokens Fly al bot. Las credenciales de apagado conservan
+el alcance de Gateway; los despliegues se hacen desde el entorno del operador.
+
+El pack se publica desde ocho fotos, mientras busca hasta quince. Un mensaje
+editable muestra count/15 y etapas reales; las actualizaciones usan el ledger
+local, nunca sondeos periódicos HTTP a Render. Cada POST fija una copia del pack.
+Los campos opcionales nuevos son `facts` y `mediaMinimum` (8 en GoatLab); los planes aceptan
+versiones 1 y 2. `/healthz` de Render añade revision y editPlanVersion.
+
+El progreso y sus message_id caducan con la serie. Los límites de SQLite y caché,
+las dos aplicaciones y el apagado a 10/15 minutos se mantienen. Renderizar ejemplos
+con motion graphics y revisar subtítulos antes del despliegue; registrar la revisión
+en GOATLAB_REVISION al construir ambas imágenes.

@@ -17,6 +17,11 @@ necesario. El código conserva el estado y asigna el número de cada audio.
 Flujo: elegir partido → mostrar los diez guiones originales → recibir audios en
 orden y en silencio → entrega automática de MP4. La búsqueda sucede en segundo
 plano. El supervisor inicia cada render cuando las fotos están disponibles.
+El webhook registra los audios de una serie activa con los identificadores
+originales de Telegram; no inventes `file_id` ni uses una ruta local como tal.
+El código actualiza un mensaje de progreso; no confirmes cada audio ni inventes
+porcentajes. No modifiques archivos del servidor ni solicites tokens administrativos
+durante una serie: informa el fallo y usa el reintento documentado.
 
 La voz es la fuente del texto del video. Los guiones son para leer y grabar;
 muéstralos completos y literalmente. Cada audio tiene un montaje propio, decidido

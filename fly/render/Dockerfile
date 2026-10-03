@@ -41,7 +41,8 @@ COPY fly/gateway/workspace/skills/goatlab/ ./goatlab-skill/
 COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs ./fly/render/
 COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt fly/render/assets/LiberationSans-Bold.ttf fly/render/assets/LiberationSans-OFL.txt ./fly/render/assets/
 
-ENV GOATLAB_SKILL_DIR=/app/goatlab-skill PORT=3000 NODE_ENV=production \
+ARG GOATLAB_REVISION=unknown
+ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_SKILL_DIR=/app/goatlab-skill PORT=3000 NODE_ENV=production \
     WHISPER_BIN=/opt/whisper/whisper-cli \
     WHISPER_MODEL=/opt/whisper/ggml-base.bin \
     RENDER_STATE_DIR=/data/render-jobs PHOTO_CACHE_DIR=/data/photo-cache

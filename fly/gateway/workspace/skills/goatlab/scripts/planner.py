@@ -6,12 +6,16 @@ import os
 import re
 import sys
 import urllib.error
+import time
+import uuid
+import hashlib
+import socket
 from pathlib import Path
 
 from common import atomic_json, request_json
 
 MOVES = {"push", "pull", "pan-left", "pan-right", "rise", "drift", "tilt", "hold", "cut-in"}
-TRANSITIONS = {"cut", "fade", "slide", "wipe", "iris"}
+TRANSITIONS = {"cut", "fade", "slide", "wipe", "iris", "focus", "defocus"}
 EASES = {"none", "power1.inOut", "power2.inOut", "power3.out", "sine.inOut"}
 
 
@@ -23,8 +27,9 @@ def number(value, low, high, label):
 
 def validate(plan, source):
     span, assets, words = source["span"], source["assets"], source["words"]
-    if not isinstance(plan, dict) or plan.get("version") != 1:
-        raise ValueError("version debe ser 1")
+    if not isinstance(plan, dict) or plan.get("version") not in (1, 2):
+        raise ValueError("version debe ser 1 o 2")
+    facts = {f['id']: f for f in source.get('facts', []) if isinstance(f, dict) and isinstance(f.get('id'), str)}
     scenes = plan.get("scenes")
     if not isinstance(scenes, list) or not 1 <= len(scenes) <= 64:
         raise ValueError("se requieren 1–64 escenas")
@@ -40,8 +45,13 @@ def validate(plan, source):
         if not re.fullmatch(r"#[0-9a-fA-F]{6}", scene.get("accent", "#c5ed74")):
             raise ValueError("accent requiere un color hexadecimal")
         layers = scene.get("layers")
-        if not isinstance(layers, list) or not 1 <= len(layers) <= 4:
-            raise ValueError("cada escena requiere 1–4 capas de fotos")
+        if not isinstance(layers, list) or not 0 <= len(layers) <= 4:
+            raise ValueError("cada escena admite 0–4 capas de fotos")
+        if not layers and not scene.get('graphics') and not scene.get('objects'):
+            raise ValueError("una escena sin fotos requiere gráficos u objetos")
+        camera = scene.get('camera', {})
+        for key, bounds in {'x': (-.03,.03), 'y': (-.03,.03), 'scale': (1,1.08)}.items():
+            if key in camera: number(camera[key], *bounds, 'camera.'+key)
         for layer in layers:
             index = layer.get("asset")
             if isinstance(index, bool) or not isinstance(index, int) or not 0 <= index < len(assets):
@@ -55,6 +65,8 @@ def validate(plan, source):
                 raise ValueError("movimiento desconocido")
             if layer.get("ease", "sine.inOut") not in EASES:
                 raise ValueError("ease desconocido")
+            if layer.get('focusEffect', 'none') not in {'none','focus','defocus','pulse'}:
+                raise ValueError('focusEffect desconocido')
             for state in ["from", "to"]:
                 transform = layer.get(state, {})
                 for key, bounds in {"x": (-.25, .25), "y": (-.25, .25), "scale": (1, 1.5), "rotation": (-5, 5)}.items():
@@ -67,23 +79,47 @@ def validate(plan, source):
         if not isinstance(graphics, list) or len(graphics) > 4:
             raise ValueError("máximo cuatro gráficos por escena")
         for graphic in graphics:
-            if graphic.get("kind") not in {"label", "stat", "bars", "ring", "line"}:
+            if graphic.get("kind") not in {"label", "stat", "bars", "ring", "line", "title"}:
                 raise ValueError("gráfico desconocido")
             at = number(graphic.get("at"), start, end, "graphic.at")
             number(graphic.get("duration"), .2, end - at + .03, "graphic.duration")
             number(graphic.get("x", .07), 0, .8, "graphic.x")
             number(graphic.get("y", .13), 0, .65, "graphic.y")
-            if graphic["kind"] in {"label", "stat", "bars"}:
+            if graphic["kind"] in {"label", "stat", "bars", "title"}:
                 number(graphic.get("x", .07), 0, .35, "text graphic.x")
                 number(graphic.get("y", .13), 0, .4, "text graphic.y")
-                lo, hi = graphic.get("wordStart"), graphic.get("wordEnd")
-                if any(isinstance(v, bool) or not isinstance(v, int) for v in [lo, hi]) or not 0 <= lo < hi <= len(words) or hi - lo > 10:
-                    raise ValueError("gráfico requiere un fragmento de 1–10 palabras de la voz")
-                if not start - .3 <= words[lo]["start"] <= end:
-                    raise ValueError("el gráfico debe aparecer durante su fragmento hablado")
+                refs = graphic.get('factIds')
+                if refs is not None:
+                    if not isinstance(refs,list) or not 1 <= len(refs) <= 4 or any(not isinstance(r,str) or r not in facts for r in refs):
+                        raise ValueError('referencia de hecho inexistente')
+                    selected = [facts[r] for r in refs]
+                    for fact in selected:
+                        if not isinstance(fact.get('label'),str) or not fact.get('source'):
+                            raise ValueError('hecho sin etiqueta o procedencia')
+                        if graphic['kind']=='bars': number(fact.get('value'),0,1e6,'fact.value')
+                    if graphic['kind']=='bars' and len({f.get('unit') for f in selected}) != 1:
+                        raise ValueError('barras requieren unidades iguales')
+                else:
+                    lo, hi = graphic.get("wordStart"), graphic.get("wordEnd")
+                    if any(isinstance(v, bool) or not isinstance(v, int) for v in [lo, hi]) or not 0 <= lo < hi <= len(words) or hi - lo > 10:
+                        raise ValueError("gráfico requiere un fragmento de 1–10 palabras de la voz")
+                    if not start - .3 <= words[lo]["start"] <= end:
+                        raise ValueError("el gráfico debe aparecer durante su fragmento hablado")
                 # The renderer derives text and bars from these exact words. No invented values.
                 graphic.pop("text", None)
                 graphic.pop("value", None)
+        objects = scene.get('objects', [])
+        if not isinstance(objects,list) or len(objects)>3:
+            raise ValueError('máximo tres objetos 3D por escena')
+        for obj in objects:
+            if obj.get('kind') not in {'cube','card','prism'}: raise ValueError('objeto 3D desconocido')
+            for key,bounds in {'x':(.08,.7),'y':(.08,.55),'size':(80,360),'rotateX':(-35,35),'rotateY':(-180,180),'spin':(-180,180)}.items():
+                if key in obj: number(obj[key],*bounds,'object.'+key)
+            if obj.get('wordStart') is not None:
+                lo,hi=obj.get('wordStart'),obj.get('wordEnd')
+                if any(isinstance(v,bool) or not isinstance(v,int) for v in (lo,hi)) or not 0<=lo<hi<=len(words) or hi-lo>6:
+                    raise ValueError('título 3D requiere 1–6 palabras de la voz')
+            obj.pop('text',None)
     if abs(cursor - span) > .03:
         raise ValueError("las escenas deben cubrir span completo")
     return plan
@@ -105,7 +141,7 @@ def parse_json(content):
     raise ValueError("respuesta JSON inválida")
 
 
-def create_plan(source, call=request_json, env=None):
+def create_plan(source, call=request_json, env=None, clock=time.monotonic, logger=None):
     env = os.environ if env is None else env
     if not source.get("words"):
         raise ValueError("se requiere transcripción antes del montaje")
@@ -117,28 +153,57 @@ def create_plan(source, call=request_json, env=None):
     if not env.get("OPENCODE_GO_API_KEY"):
         raise ValueError("falta OPENCODE_GO_API_KEY para planificar el montaje")
     url = env.get("OPENCODE_GO_BASE_URL", "https://opencode.ai/zen/go/v1").rstrip("/") + "/chat/completions"
-    errors = []
-    for model in models:
+    errors, attempts = [], []
+    started = clock()
+    # No Telegram identifiers or credentials enter provider routing headers.
+    identity = source.get('requestId') or hashlib.sha256(json.dumps(source,sort_keys=True).encode()).hexdigest()
+    session = str(uuid.uuid5(uuid.NAMESPACE_URL, 'goatlab:edit:'+str(identity)))
+    per_call = max(1,min(90,int(env.get('EDIT_PLAN_TIMEOUT_SECONDS','90'))))
+    budget = 240
+    def note(model, status, at, http=None):
+        item={'model':model,'stage':'planning','status':status,'durationMs':round((clock()-at)*1000),'httpStatus':http}
+        attempts.append(item)
+        if logger: logger(item)
+    for index, model in enumerate(models):
         messages = [{"role": "system", "content": guide}, {"role": "user", "content": json.dumps(source, ensure_ascii=False)}]
         for attempt in range(2):
+            remaining = budget - (clock()-started) - (60 if index==0 and len(models)>1 else 0)
+            if remaining <= 0:
+                errors.append(f'{model}: presupuesto de planificación agotado'); break
+            content = ''
+            at = clock()
             try:
                 result = call(url, {"model": model, "messages": messages, "max_tokens": 14000},
-                              {"Authorization": "Bearer " + env["OPENCODE_GO_API_KEY"]},
-                              timeout=int(env.get("EDIT_PLAN_TIMEOUT_SECONDS", "120")))
+                              {"Authorization": "Bearer " + env["OPENCODE_GO_API_KEY"],
+                               'User-Agent':'GoatLab/2.0', 'x-opencode-session':session},
+                              timeout=min(per_call,remaining))
                 choice = result["choices"][0]
                 if choice.get("finish_reason") == "length":
                     raise ValueError("plan truncado")
                 content = choice["message"].get("content") or ""
                 plan = validate(parse_json(content), source)
-                return {**plan, "model": model}
+                note(model,'ok',at,200)
+                return {**plan, "model": model, 'attempts':attempts}
             except ValueError as error:
+                note(model,'validation',at,200)
                 errors.append(f"{model}: {error}")
-                messages.append({"role": "assistant", "content": content if 'content' in locals() else "{}"})
+                messages.append({"role": "assistant", "content": content or "{}"})
                 messages.append({"role": "user", "content": f"Corrige el JSON completo. Error de validación: {error}"})
                 if attempt:
                     break
+            except urllib.error.HTTPError as error:
+                status=error.code; error.close()
+                kind='configuración' if status in (400,401,403,404,422) else 'transporte'
+                errors.append(f'{model}: {kind} HTTP {status}')
+                note(model,kind,at,status)
+                break
+            except (TimeoutError,socket.timeout,urllib.error.URLError):
+                errors.append(f'{model}: timeout o red')
+                note(model,'transport',at)
+                break
             except Exception:
-                errors.append(f"{model}: proveedor no disponible")
+                errors.append(f"{model}: respuesta del proveedor inválida")
+                note(model,'response',at)
                 break
     raise ValueError("No se pudo validar el montaje: " + "; ".join(errors))
 
@@ -149,7 +214,8 @@ if __name__ == "__main__":
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
     try:
-        atomic_json(args.out, create_plan(json.loads(Path(args.input).read_text())))
+        atomic_json(args.out, create_plan(json.loads(Path(args.input).read_text()),
+                    logger=lambda item: print('planner: '+json.dumps(item),file=sys.stderr)))
     except Exception as error:
         print(str(error) if isinstance(error, ValueError) else type(error).__name__, file=sys.stderr)
         sys.exit(1)

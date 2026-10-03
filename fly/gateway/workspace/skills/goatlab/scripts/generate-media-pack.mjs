@@ -8,6 +8,7 @@ import { selectMatches, staleScripts, sameCore, attentionPlayers } from '../lib/
 import {
   AGNES_MAX_IMAGES,
   ASSETS_PER_MATCH,
+  ASSETS_MIN,
   CANDIDATES_PER_MATCH,
   THUMB_WIDTH,
   sceneQueries,
@@ -18,6 +19,8 @@ import {
   relevantAssets,
 } from '../lib/media.js';
 import { agnesPrompts, normalizeAgnesImage } from '../lib/agnes.js';
+import { editingFacts } from '../lib/match-facts.js';
+import { mediaPublisher } from '../lib/media-progress.js';
 import { checkMediaManifest } from '../lib/compliance.js';
 const run = promisify(execFile);
 const PIPELINE = fileURLToPath(new URL('./', import.meta.url));
@@ -106,7 +109,7 @@ async function searchPixabay({ query, player = null, scene = null }) {
   return (data.hits ?? []).map(hit => normalizePixabayHit(hit, query, { player, scene })).filter(Boolean);
 }
 
-async function poolFor(queries, quota) {
+async function poolFor(queries, quota, publish) {
   const byId = new Map();
   const sources = [searchCommons, searchPexels, searchPixabay];
   // Two queries at a time; keep both teams and several contexts represented.
@@ -119,12 +122,13 @@ async function poolFor(queries, quota) {
       const key = `${asset.source}:${asset.id}`;
       if (!byId.has(key)) byId.set(key, asset);
     }
+    if (await publish([...byId.values()], 'searching')) break;
   }
   // Relevance is ranked after gathering, not by the order of the providers.
   return [...byId.values()];
 }
 
-async function fillWithAgnes({ matchId, home, away, missing, kickoff }) {
+async function fillWithAgnes({ matchId, home, away, missing, kickoff, publish }) {
   if (!process.env.AGNES_API_KEY?.trim() || missing <= 0) return [];
   const cap = Math.min(envInt('AGNES_MAX_IMAGES', AGNES_MAX_IMAGES), AGNES_MAX_IMAGES);
   const folder = join(dir, 'gen', matchId);
@@ -145,10 +149,11 @@ async function fillWithAgnes({ matchId, home, away, missing, kickoff }) {
         publicUrl: `${GEN_BASE}/${encodeURIComponent(matchId)}/${saved.file}`,
         model: saved.model, prompt: saved.prompt, at: saved.at }),
         width: saved.width, height: saved.height });
+      await publish(made);
     } catch (error) {
       const reason = String(error.stderr || 'generación no completada').trim().slice(0, 200);
       console.error(`media: agnes ${index}: ${reason}`);
-      if (/429|pausado/.test(reason)) break;
+      if (/429|pausado|incierto/.test(reason)) break;
     }
   }
   return made;
@@ -192,13 +197,20 @@ for (const match of matches) {
   let scripts = [];
   try { scripts = JSON.parse(await readFile(join(process.env.GOATLAB_REPO || '.', 'public/data/youtube-scripts', `${matchId}.json`), 'utf8')).scripts || []; } catch { /* fixtures-only search */ }
   const players = attentionPlayers(scripts, { home: match.home, away: match.away });
+  let scorers = null;
+  try { scorers = JSON.parse(await readFile(join(process.env.GOATLAB_REPO || '.', 'public/data/scorers.json'), 'utf8')); } catch { /* optional */ }
+  const publish = mediaPublisher({ dir, match, facts: editingFacts(match, scorers) });
+  await publish([], 'searching');
   const teams = [match.home, match.away].map(name => sceneQueries({ home: name }));
   const scenes = [];
   for (let i = 0; i < Math.max(...teams.map(q => q.length)); i++) {
     for (const queries of teams) if (queries[i]) scenes.push(queries[i]);
   }
   scenes.splice(2, 0, ...players.slice(0, 6).map(player => ({ query: `${player} football portrait`, player, scene: 'portrait' })));
-  const candidates = await poolFor(scenes, CANDIDATES_PER_MATCH);
+  const candidates = await poolFor(scenes, CANDIDATES_PER_MATCH, async pool => {
+    const selected = relevantAssets(pool, { home: match.home, away: match.away, players }).slice(0, ASSETS_PER_MATCH);
+    return (await publish(selected, 'searching')).complete;
+  });
   let accepted = relevantAssets(candidates, { home: match.home, away: match.away, players }).slice(0, ASSETS_PER_MATCH);
   if (accepted.length < ASSETS_PER_MATCH) {
     const extra = await fillWithAgnes({
@@ -207,10 +219,12 @@ for (const match of matches) {
       home: match.home,
       away: match.away,
       missing: ASSETS_PER_MATCH - accepted.length,
+      publish: async generated => publish([...accepted, ...generated], 'generating'),
     });
     accepted = [...accepted, ...extra];
   }
-  const payload = { ...buildManifest({ match, assets: accepted }), generatedAt: new Date().toISOString() };
+  await publish(accepted, 'finished');
+  const payload = { ...buildManifest({ match, assets: accepted }), facts: editingFacts(match, scorers), generatedAt: new Date().toISOString() };
   const errors = checkMediaManifest(payload, { matchId });
   if (errors.length) {
     for (const error of errors) console.error(`${file}: ${error}`);

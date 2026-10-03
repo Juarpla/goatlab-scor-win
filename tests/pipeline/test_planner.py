@@ -2,6 +2,10 @@ import copy
 import json
 import sys
 import unittest
+import threading
+import urllib.error
+import io
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
 from planner import create_plan, validate
@@ -14,6 +18,30 @@ PLAN = {'version': 1, 'scenes': [{'start': 0, 'end': 5, 'layers': [{'asset': 0}]
 
 
 class PlannerTests(unittest.TestCase):
+    def test_real_http_transport_sends_stable_session_and_client_identity(self):
+        requests = []
+        class Provider(BaseHTTPRequestHandler):
+            def log_message(self, *_): pass
+            def do_POST(self):
+                body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+                session = self.headers.get('x-opencode-session')
+                requests.append((session, self.headers.get('User-Agent'), body['model']))
+                self.send_response(200 if session else 400)
+                self.end_headers()
+                plan = PLAN if body['model'] == 'backup' else {'version': 1, 'scenes': []}
+                self.wfile.write(json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(plan)}}]}).encode())
+        server = HTTPServer(('127.0.0.1', 0), Provider)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        self.addCleanup(server.server_close); self.addCleanup(server.shutdown)
+        env = {'OPENCODE_GO_API_KEY': 'test', 'OPENCODE_GO_MODEL': 'primary', 'OPENCODE_GO_FALLBACK_MODEL': 'backup',
+               'OPENCODE_GO_BASE_URL': f'http://127.0.0.1:{server.server_port}'}
+        for _ in range(2):
+            result = create_plan({**SOURCE, 'requestId': 'stable-job'}, env=env)
+            self.assertEqual(result['model'], 'backup')
+        self.assertEqual(len({r[0] for r in requests}), 1)
+        self.assertTrue(requests[0][0])
+        self.assertTrue(all(r[1].startswith('GoatLab/') for r in requests))
+
     def test_rejects_invalid_assets_gaps_and_unfounded_graphics(self):
         for mutation in [lambda p: p['scenes'][0].update(start=1),
                          lambda p: p['scenes'][0]['layers'][0].update(asset=2),
@@ -45,3 +73,37 @@ class PlannerTests(unittest.TestCase):
     def test_empty_transcript_blocks_provider_call(self):
         with self.assertRaises(ValueError):
             create_plan({**SOURCE, 'words': []}, call=lambda *_: self.fail('must not call'))
+
+    def test_http_status_is_preserved_and_both_models_stop_without_local_plan(self):
+        calls,logs=[],[]
+        def denied(url,body,headers,timeout):
+            calls.append(body['model'])
+            raise urllib.error.HTTPError(url,400,'bad request',{},io.BytesIO(b'private prompt'))
+        with self.assertRaisesRegex(ValueError,'HTTP 400') as error:
+            create_plan(SOURCE,call=denied,env={'OPENCODE_GO_API_KEY':'test'},logger=logs.append)
+        self.assertEqual(len(calls),2)
+        self.assertNotIn('private prompt',str(error.exception))
+        self.assertTrue(all(log['httpStatus']==400 for log in logs))
+
+    def test_shared_time_budget_reserves_fallback_and_never_exceeds_240_seconds(self):
+        now=[0];calls=[]
+        def slow(url,body,headers,timeout):
+            calls.append((body['model'],timeout));now[0]+=timeout
+            return {'choices':[{'message':{'content':'{}'}}]}
+        with self.assertRaises(ValueError):
+            create_plan(SOURCE,call=slow,env={'OPENCODE_GO_API_KEY':'test'},clock=lambda:now[0])
+        self.assertEqual(now[0],240)
+        self.assertTrue(all(timeout<=90 for _,timeout in calls))
+        self.assertIn('mimo-v2.6-flash',[model for model,_ in calls])
+
+    def test_motion_scenes_and_catalog_charts_validate_without_photo_layers(self):
+        plan=copy.deepcopy(PLAN);plan['version']=2
+        scene=plan['scenes'][0];scene['layers']=[];scene['transition']='focus'
+        scene['objects']=[{'kind':'cube','size':200,'spin':70}]
+        scene['graphics']=[{'kind':'bars','at':0,'duration':3,'factIds':['home.gf','away.gf']}]
+        facts=[{'id':side+'.gf','label':side,'value':n,'unit':'goles','source':'fixtures:a-b'} for side,n in [('home',3),('away',1)]]
+        validate(plan,{**SOURCE,'facts':facts})
+        with self.assertRaisesRegex(ValueError,'unidades'):
+            validate(plan,{**SOURCE,'facts':[facts[0],{**facts[1],'unit':'partidos'}]})
+        scene['graphics'][0]['factIds']=['invented']
+        with self.assertRaisesRegex(ValueError,'inexistente'):validate(plan,{**SOURCE,'facts':facts})

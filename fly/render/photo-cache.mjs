@@ -50,8 +50,8 @@ export async function imageDimensions(file) {
 export async function cachedPhoto(asset, cacheDir, { fetchImpl = fetch } = {}) {
   mkdirSync(cacheDir, { recursive: true });
   const key = createHash('sha256').update(asset.url).digest('hex');
-  const file = join(cacheDir, `${key}.jpg`), meta = join(cacheDir, `${key}.json`), backdrop = join(cacheDir, `${key}-back.jpg`);
-  if (existsSync(file) && existsSync(meta) && existsSync(backdrop)) return { path: file, backdrop, ...JSON.parse(readFileSync(meta)), cached: true };
+  const file = join(cacheDir, `${key}.jpg`), meta = join(cacheDir, `${key}.json`), backdrop = join(cacheDir, `${key}-back.jpg`), focusBlur = join(cacheDir, `${key}-focus.jpg`);
+  if (existsSync(file) && existsSync(meta) && existsSync(backdrop) && existsSync(focusBlur)) return { path: file, backdrop, focusBlur, ...JSON.parse(readFileSync(meta)), cached: true };
   if (inProgress.has(file)) return inProgress.get(file);
   const operation = (async () => {
     await acquire();
@@ -79,13 +79,15 @@ export async function cachedPhoto(asset, cacheDir, { fetchImpl = fetch } = {}) {
       await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw, '-vf', `scale=${width}:${height}:flags=lanczos`, '-frames:v', '1', '-q:v', '2', temp], { timeout: 60_000 });
       const dimensions = await imageDimensions(temp);
       await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', temp, '-vf', 'scale=270:480:force_original_aspect_ratio=increase,crop=270:480,gblur=sigma=12', '-frames:v', '1', '-q:v', '4', `${backdrop}.tmp.jpg`], { timeout: 60_000 });
+      await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', temp, '-vf', "scale='max(2,trunc(iw/8)*2)':'max(2,trunc(ih/8)*2)',gblur=sigma=8", '-frames:v', '1', '-q:v', '4', `${focusBlur}.tmp.jpg`], { timeout: 60_000 });
       writeFileSync(`${meta}.tmp`, JSON.stringify(dimensions));
       renameSync(temp, file);
       renameSync(`${backdrop}.tmp.jpg`, backdrop);
+      renameSync(`${focusBlur}.tmp.jpg`, focusBlur);
       renameSync(`${meta}.tmp`, meta);
-      return { path: file, backdrop, ...dimensions, cached: false };
+      return { path: file, backdrop, focusBlur, ...dimensions, cached: false };
     } finally {
-      for (const path of [raw, temp, `${backdrop}.tmp.jpg`, `${meta}.tmp`]) rmSync(path, { force: true });
+      for (const path of [raw, temp, `${backdrop}.tmp.jpg`, `${focusBlur}.tmp.jpg`, `${meta}.tmp`]) rmSync(path, { force: true });
       release();
     }
   })();

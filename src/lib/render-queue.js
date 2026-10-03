@@ -51,7 +51,9 @@ export function photoFailureText(log) {
 /** Aviso al chat cuando un audio no se puede renderizar. No reenvía el archivo. */
 export function audioFailureText(n, error) {
   const raw = String(error ?? '').split('\n')[0].trim();
-  const corrupt = /ffmpeg|ffprobe|descarga|getFile|invalid data|moov|corrupt|ebml|ogg|no such file/i.test(raw);
+  if (/getFile|file_id|chat not found|descarga|HTTP/i.test(raw))
+    return `El video ${n} no se pudo completar por un problema del servicio o de identificación. Se conserva el audio para reintentar.`;
+  const corrupt = /invalid data found when processing input|moov atom not found|corrupt(?:ed)? audio/i.test(raw);
   if (corrupt) return `El audio ${n} que enviaste está corrompido. Grábalo otra vez.`;
   const reason = raw.replace(/^Error:\s*/i, '').slice(0, 120);
   return reason

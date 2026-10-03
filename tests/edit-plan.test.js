@@ -13,6 +13,19 @@ test('movement stays inside native image resolution and crop margins', () => {
   assert.ok(Math.abs(large.to.y) <= (large.imageHeight * large.to.scale - 1920) / 2);
 });
 
+test('motion graphics, CSS 3D and focus transitions keep the transcript above all scenes',()=>{
+  const words=[{word:'Tres',start:.5,end:1},{word:'goles.',start:1,end:1.5},{word:'Uno.',start:3,end:3.5}];
+  const facts=[{id:'home.gf',label:'España',value:3,unit:'goles',source:'fixtures:a-b'},{id:'away.gf',label:'Chequia',value:1,unit:'goles',source:'fixtures:a-b'}];
+  const plan={version:2,scenes:[{start:0,end:2,layers:[{asset:0,focusEffect:'pulse'}]},{start:2,end:5,transition:'focus',layers:[],camera:{scale:1.04},objects:[{kind:'cube',size:200,spin:70}],graphics:[{kind:'bars',factIds:['home.gf','away.gf'],at:2,duration:3}]}]};
+  const html=buildPlannedComposition({duration:8,words,facts,photos:[{src:'0.jpg',focusBlur:'0-focus.jpg',width:1472,height:2624}],plan});
+  assert.match(html,/motion-scene/);assert.match(html,/transform-style:preserve-3d/);assert.match(html,/0-focus.jpg/);
+  assert.match(html,/España/);assert.match(html,/3 goles/);assert.match(html,/class="bar-fill"/);assert.doesNotMatch(html,/\.bars div\{/);assert.match(html,/z-index:1000/);
+  for(const word of words) assert.ok(html.includes(`>${word.word}</span>`));
+  assert.match(html,/data-start="0.5" data-duration="2.5"/); // captions hold through a pause
+  assert.doesNotMatch(html,/filter:blur/);
+  assert.throws(()=>buildPlannedComposition({duration:8,words,facts:[],photos:[{src:'0.jpg'}],plan}),/hecho/);
+});
+
 test('planned layers, graphics and all captions render with the brand closure', () => {
   const words = [{ word: 'España', start: .5, end: 1 }, { word: 'ganó', start: 1, end: 1.5 }, { word: '3', start: 1.5, end: 2 }];
   const html = buildPlannedComposition({ duration: 8, photos: [{ src: '0.jpg', width: 1472, height: 2624 }], words,

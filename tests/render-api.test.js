@@ -20,7 +20,7 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     });
     return { url, async stop() { const exited = once(process, 'exit'); process.kill(); await exited; } };
   }
-  const body = { expiresAt: Date.now()+3600_000, requestId: 'stable-cancelled', chatId: '1', matchId: 'a-b', matchLabel: 'A contra B', hook: 'Gancho', audioFileId: 'voice', assets: [{ url: 'https://example.test/0.jpg' }, { url: 'https://example.test/1.jpg' }] };
+  const body = { expiresAt: Date.now()+3600_000, requestId: 'stable-cancelled', chatId: '1', matchId: 'a-b', matchLabel: 'A contra B', hook: 'Gancho', audioFileId: 'telegram_valid_voice_id', assets: [{ url: 'https://example.test/0.jpg' }, { url: 'https://example.test/1.jpg' }] };
   const send = (app, path, value, authorized = true) => fetch(app.url + path, { method: value ? 'POST' : 'GET', headers: authorized ? { authorization: 'Bearer secret', 'content-type': 'application/json' } : {}, body: value ? JSON.stringify(value) : undefined });
   let app = await start();
   try {
@@ -36,7 +36,11 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     assert.equal((await send(app, `/jobs/${job.jobId}`, undefined, false)).status, 401);
     assert.equal((await (await send(app, `/jobs/${job.jobId}`)).json()).status, 'cancelled');
     assert.equal((await send(app, '/render', { ...body, variant: 10 })).status, 400);
+    assert.equal((await send(app, '/render', { ...body, mediaMinimum: 8 })).status,400);
+    assert.equal((await send(app, '/render', { ...body, facts: [{id:'fake',value:3}] })).status,400);
     assert.equal((await send(app, '/render', { ...body, expiresAt: Date.now()-1 })).status, 410);
     assert.equal((await send(app, '/render', { ...body, expiresAt: undefined })).status, 400);
+    assert.equal((await send(app, '/render', { ...body, chatId: 'telegram:1' })).status,400);
+    assert.equal((await send(app, '/render', { ...body, audioFileId: '/workspace/voice.ogg' })).status,400);
   } finally { await app.stop(); }
 });
