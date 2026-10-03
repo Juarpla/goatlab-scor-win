@@ -20,5 +20,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: ffmpeg (tests de mezcla de cama)
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python3 -m unittest discover -s tests/pipeline -v
+      - run: node scripts/sync-goatlab-skill.mjs --check
       - run: pnpm test
       - run: pnpm run build

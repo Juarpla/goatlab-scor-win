@@ -23,7 +23,9 @@ export function renderRequest(record, manifest) {
   if (assets.length < 2) return null;
   return {
     ...record,
+    attribution: manifest.attribution ?? '',
     assets: assets.map(asset => ({
+      ...asset,
       url: asset.url,
       subject: asset.subject ?? null,
       motive: asset.motive ?? null,
@@ -53,6 +55,6 @@ export function audioFailureText(n, error) {
   if (corrupt) return `El audio ${n} que enviaste está corrompido. Grábalo otra vez.`;
   const reason = raw.replace(/^Error:\s*/i, '').slice(0, 120);
   return reason
-    ? `El audio ${n} no se pudo usar. Grábalo otra vez. ${reason}`
-    : `El audio ${n} no se pudo usar. Grábalo otra vez.`;
+    ? `El video ${n} no se pudo completar. Puedes pedir reintentarlo. ${reason}`
+    : `El video ${n} no se pudo completar. Puedes pedir reintentarlo.`;
 }

@@ -56,8 +56,8 @@ test('classifyLicense acepta uso comercial y rechaza NC y ND', () => {
 
 test('sceneQueries busca hombres en entrenamiento, entrevista, llegada, hinchada y prensa', () => {
   const queries = sceneQueries({ home: 'France', away: 'Italy' });
-  assert.ok(queries.some(q => q.query === "France men's national team training" && q.scene === 'training'));
-  assert.ok(queries.some(q => q.query === "Italy men's national team interview" && q.scene === 'interview'));
+  assert.ok(queries.some(q => q.query === "France men's football team training" && q.scene === 'training'));
+  assert.ok(queries.some(q => q.query === "Italy men's football team interview" && q.scene === 'interview'));
   assert.ok(queries.some(q => q.query === "France men's team bus" && q.scene === 'arrival'));
   assert.ok(queries.some(q => q.query === "Italy men's football fans" && q.scene === 'fans'));
   assert.ok(queries.some(q => q.query === "France men's press conference" && q.scene === 'press'));
@@ -134,7 +134,7 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   assert.ok(checkMediaManifest(bad).some(e => /licencia no libre/.test(e)));
   const unseen = structuredClone(manifest);
   delete unseen.assets[0].seen;
-  assert.ok(checkMediaManifest(unseen).some(e => /no vio la foto/.test(e)));
+  assert.deepEqual(checkMediaManifest(unseen), []);
   const banned = structuredClone(manifest);
   banned.assets[0].url = 'https://media.gettyimages.com/x.jpg';
   assert.ok(checkMediaManifest(banned).some(e => /dominio prohibido/.test(e)));

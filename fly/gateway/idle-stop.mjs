@@ -25,6 +25,12 @@ async function busyReason() {
   if (Date.now() - start < MIN_UPTIME_MS) return 'uptime mínimo (10min) no cumplido';
   if (existsSync(BUSY_FILE)) return '/data/.busy presente (render en vuelo)';
   try {
+    const { stdout } = await run('python3', [`${process.env.GOATLAB_SKILL_DIR}/scripts/workflow.py`, 'busy'], { timeout: 10_000 });
+    if (JSON.parse(stdout).busy) return 'tareas del flujo pendientes';
+  } catch {
+    return 'supervisor del flujo no disponible';
+  }
+  try {
     if (readdirSync('/data/media-pack').some(name => name.endsWith('.running'))) {
       return 'búsqueda de fotos en curso';
     }

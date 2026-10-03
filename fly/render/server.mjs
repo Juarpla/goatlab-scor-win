@@ -1,18 +1,20 @@
 // Worker goatlab-render: voz + pool de fotos -> MP4 -> sendVideo por Telegram.
-// HyperFrames (plantilla fija) pinta el 9:16. FFmpeg mezcla la voz.
-// Stateless: POST /render encola un job (202 {jobId}), GET /jobs/:id sondea.
+// HyperFrames interpreta el plan por audio. FFmpeg normaliza y mezcla la voz.
+// Durable: POST /render encola un job; GET /jobs/:id recupera su estado.
 // El gateway manda un POST por audio apenas llega; la cola renderiza de a uno
 // y avisa al chat si un Short falla. Node 22. Sin OpenMontage y sin Rust.
 import { execFile } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H } from '../../src/lib/hyperframe.js';
 import { ASSETS_PER_MATCH } from '../../src/lib/media.js';
 import { audioFailureText } from '../../src/lib/render-queue.js';
 import { telegramCaption } from '../../src/lib/youtube.js';
+import { JobStore } from './job-store.mjs';
+import { RemoteLedger } from './remote-ledger.mjs';
+import { warmPhotos, prunePhotoCache, pinPhotos } from './photo-cache.mjs';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
 
 const run = promisify(execFile);
@@ -26,17 +28,27 @@ const MAX_VOICE = 120; // segundos máximos de voz aceptados
 if (!BOT) throw new Error('falta TELEGRAM_BOT_TOKEN');
 if (!SECRET) throw new Error('falta RENDER_SECRET');
 
-const jobs = new Map();
-const byKey = new Map(); // chatId:matchId:variant:audio -> jobId
-let seq = 0;
-let tail = Promise.resolve(); // un render a la vez
+const stateDir=process.env.RENDER_STATE_DIR || '/data/render-jobs';
+const ledger=process.env.RENDER_LEDGER_URL ? new RemoteLedger(process.env.RENDER_LEDGER_URL, SECRET) : undefined;
+if(ledger) await ledger.restore(stateDir);
+const store = new JobStore(stateDir, { ledger });
+const jobs = store.jobs;
+const cacheDir = process.env.PHOTO_CACHE_DIR || '/data/photo-cache';
+let tail = Promise.resolve(); // una sola captura activa
 const IDLE_MS = 15 * 60_000;
 let lastWork = Date.now();
 let inflight = 0;
+const protectedIds = new Set();
+function cleanup() {
+  store.cleanup(protectedIds);
+  prunePhotoCache(cacheDir, { protectedUrls: [...jobs.values()].flatMap(j => j.assets ?? []).map(a => a.url), purgeUnused: true });
+}
+setInterval(cleanup, 300_000).unref();
 
 const tg = (method, body) =>
   fetch(`https://api.telegram.org/bot${BOT}/${method}`, {
     method: 'POST',
+    signal: AbortSignal.timeout(30_000),
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   }).then(async (r) => {
@@ -46,9 +58,12 @@ const tg = (method, body) =>
   });
 
 async function download(url, file) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`descarga HTTP ${r.status}: ${url.slice(0, 80)}`);
-  writeFileSync(file, Buffer.from(await r.arrayBuffer()));
+  const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
+  if (!r.ok) throw new Error(`descarga HTTP ${r.status}`);
+  const bytes = Buffer.from(await r.arrayBuffer());
+  if (bytes.length > 30 * 1024 * 1024) throw new Error('audio demasiado grande');
+  writeFileSync(`${file}.tmp`, bytes);
+  renameSync(`${file}.tmp`, file);
 }
 
 async function sendVideo(chatId, file, cap) {
@@ -59,6 +74,7 @@ async function sendVideo(chatId, file, cap) {
   form.set('supports_streaming', 'true');
   const r = await fetch(`https://api.telegram.org/bot${BOT}/sendVideo`, {
     method: 'POST',
+    signal: AbortSignal.timeout(120_000),
     body: form,
   });
   const j = await r.json();
@@ -69,32 +85,35 @@ async function sendVideo(chatId, file, cap) {
 function stopIfCancelled(job, log) {
   if (!job.cancelled) return false;
   job.status = 'cancelled';
+  store.save(job);
   log('cancelado');
   return true;
 }
 
 async function runJob(job) {
-  const tmp = join(tmpdir(), `goatlab-render-${job.id}`);
+  const tmp = store.directory(job);
   const log = (msg) => console.log(`render: ${job.id} ${msg}`);
   const started = Date.now();
   if (stopIfCancelled(job, log)) return;
-  rmSync(tmp, { recursive: true, force: true });
   mkdirSync(tmp, { recursive: true });
+  const measure = async (name, fn) => { const at = Date.now(); try { return await fn(); } finally { job.stages[name] = Date.now() - at; store.save(job); await store.flush(); } };
   try {
     // 1. Voz: desde Telegram (file_id) o URL directa (pruebas).
     const voiceFile = join(tmp, 'voice.ogg');
-    if (job.audioFileId) {
-      const f = await tg('getFile', { file_id: job.audioFileId });
-      await download(`https://api.telegram.org/file/bot${BOT}/${f.file_path}`, voiceFile);
-    } else {
-      await download(job.audioUrl, voiceFile);
-    }
+    await measure('voiceDownload', async () => {
+      if (existsSync(voiceFile)) return;
+      if (job.audioFileId) {
+        const f = await tg('getFile', { file_id: job.audioFileId });
+        await download(`https://api.telegram.org/file/bot${BOT}/${f.file_path}`, voiceFile);
+      } else await download(job.audioUrl, voiceFile);
+    });
+    if (stopIfCancelled(job, log)) return;
     const voiceSeconds = await mediaDuration(voiceFile);
     if (!(voiceSeconds >= MIN_VOICE && voiceSeconds <= MAX_VOICE))
       throw new Error(`voz de ${voiceSeconds.toFixed(1)}s fuera de rango (${MIN_VOICE}-${MAX_VOICE}s)`);
 
     // 2. La transcripción ordena el pool y es el texto del video.
-    const { total, provider } = await prepareShort({
+    const { total, provider, stages, plan } = await measure('preparation', () => prepareShort({
       tmp,
       voiceFile,
       voiceSeconds,
@@ -103,13 +122,18 @@ async function runJob(job) {
       home: job.home,
       away: job.away,
       matchLabel: job.matchLabel,
-      log,
-    });
+      log, cacheDir,
+    }));
+    Object.assign(job.stages, stages);
+    job.planModel = plan.model;
+    store.save(job);
     job.timing = provider;
     const silent = join(tmp, 'silent.mp4');
     const out = join(tmp, 'short.mp4');
-    await renderSilent(tmp, silent);
-    await muxVoice({ silent, voiceFile, total, out });
+    if (stopIfCancelled(job, log)) return;
+    await measure('capture', () => renderSilent(tmp, silent));
+    if (stopIfCancelled(job, log)) return;
+    await measure('mux', () => muxVoice({ silent, voiceFile, total, out }));
 
     // 3. Verificación: 1080x1920, duración ≈ plan, peso < 45MB.
     const probe = JSON.parse(
@@ -118,27 +142,48 @@ async function runJob(job) {
     const v = probe.streams.find((s) => s.codec_type === 'video');
     if (!v || v.width !== FRAME_W || v.height !== FRAME_H)
       throw new Error(`video inesperado: ${v?.width}x${v?.height}`);
+    const [numerator, denominator] = String(v.avg_frame_rate).split('/').map(Number);
+    if (Math.abs(numerator / denominator - 30) > .01 || v.codec_name !== 'h264' || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac'))
+      throw new Error('se requiere H.264 a 30 fps y audio AAC');
     const dur = await mediaDuration(out);
     if (Math.abs(dur - total) > 1.5) throw new Error(`duración ${dur}s ≠ ${total}s`);
-    const sizeMb = statSync(out).size / 1024 / 1024;
-    if (sizeMb > MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB supera ${MAX_MB}MB`);
+    const sizeMb = statSync(out).size / 1_000_000;
+    if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
 
     // 4. Envío. Un reemplazo del último audio llega a cancelar antes de publicarlo.
     if (stopIfCancelled(job, log)) return;
-    const messageId = await sendVideo(job.chatId, out, telegramCaption(job));
+    job.status = 'delivering';
+    store.save(job);
+    await store.flush();
+    const musicCredit = readFileSync(new URL('./assets/bed.txt', import.meta.url), 'utf8');
+    const messageId = await measure('delivery', () => sendVideo(job.chatId, out, telegramCaption({ ...job, musicCredit })));
     const seconds = Math.round((Date.now() - started) / 1000);
     Object.assign(job, { status: 'done', messageId, duration: dur, sizeMb, seconds });
+    store.save(job);
+    rmSync(tmp, { recursive: true, force: true });
+    const credits = [musicCredit.trim(), String(job.attribution ?? '').trim()].filter(Boolean).join('\n');
+    if ([String(job.title ?? '').slice(0, 220), String(job.hook ?? ''), credits].join('\n').length > 1024) {
+      const form = new FormData();
+      form.set('chat_id', String(job.chatId));
+      form.set('document', new Blob([credits], { type: 'text/plain' }), 'goatlab-creditos.txt');
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${BOT}/sendDocument`, { method: 'POST', body: form, signal: AbortSignal.timeout(30_000) });
+        const result = await response.json();
+        if (!result.ok) throw new Error('créditos no entregados');
+        job.creditsMessageId = result.result.message_id;
+      } catch { job.creditsError = 'Reenviar los créditos completos desde el registro del trabajo.'; log(job.creditsError); }
+      store.save(job);
+    }
     log(`done (${dur.toFixed(1)}s, ${sizeMb.toFixed(1)}MB, tiempos ${provider}, ${seconds}s de render, msg ${messageId})`);
   } catch (e) {
-    Object.assign(job, { status: 'error', error: String(e.message ?? e).slice(0, 500) });
+    Object.assign(job, { status: job.status === 'delivering' ? 'delivery-unknown' : job.cancelled ? 'cancelled' : 'error', error: String(e.message ?? e).slice(0, 500) });
+    store.save(job);
     log(`error: ${job.error}`);
     if (job.cancelled) return;
     await tg('sendMessage', {
       chat_id: job.chatId,
-      text: audioFailureText(job.variant + 1, job.error),
+      text: job.status === 'delivery-unknown' ? `El envío del video ${job.variant + 1} no quedó confirmado. Se conserva el MP4; no se reenviará automáticamente.` : audioFailureText(job.variant + 1, job.error),
     }).catch((err) => log(`aviso al chat falló: ${err.message}`));
-  } finally {
-    rmSync(tmp, { recursive: true, force: true });
   }
 }
 
@@ -154,15 +199,36 @@ function readBody(req) {
   });
 }
 
+function schedule(job) {
+  inflight++;
+  protectedIds.add(job.id);
+  lastWork = Date.now();
+  // Pre-download future media while the current job captures frames. Cache limits concurrency globally.
+  const unpin = pinPhotos(job.assets);
+  const warming = warmPhotos(job.assets, cacheDir).catch(() => {});
+  tail = tail.then(async () => {
+    await warming;
+    if (job.expiresAt <= Date.now()) job.cancelled = true;
+    if (job.cancelled) { job.status = 'cancelled'; return; }
+    job.status = 'working';
+    store.save(job);
+    await runJob(job);
+  }).catch(() => {
+    job.status = 'error'; job.error = 'No se pudo iniciar el trabajo'; store.save(job);
+  }).finally(async () => { unpin(); store.release(job); try { await store.flush(); } catch { console.error('render: registro remoto pendiente; no reenviar entregas inciertas'); } protectedIds.delete(job.id); inflight--; lastWork = Date.now(); cleanup(); });
+}
+
 const server = createServer(async (req, res) => {
   const json = (code, obj) => {
     res.writeHead(code, { 'content-type': 'application/json' });
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2 });
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
+      if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
+      cleanup();
       const job = jobs.get(m[1]);
       if (job) lastWork = Date.now();
       return job ? json(200, job) : json(404, { error: 'job inexistente' });
@@ -170,58 +236,38 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST' && req.url === '/render/cancel') {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
       const b = JSON.parse(await readBody(req));
-      const key = [b.chatId, b.matchId, Number(b.variant ?? 0), b.audioFileId ?? b.audioUrl].join(':');
-      const job = jobs.get(byKey.get(key));
-      if (!job || job.status === 'done' || job.status === 'cancelled') return json(200, { cancelled: false });
-      job.cancelled = true;
-      if (job.status === 'queued') job.status = 'cancelled';
-      return json(200, { cancelled: true });
+      if (!b.chatId || !b.matchId || (!b.requestId && !b.audioFileId && !b.audioUrl)) return json(400, { error: 'cancelación incompleta' });
+      const cancelled = store.cancel(b);
+      for (const job of jobs.values()) if (job.status === "cancelled" && !protectedIds.has(job.id)) store.release(job);
+      cleanup();
+      await store.flush();
+      return json(200, { cancelled });
     }
     if (req.method === 'POST' && req.url === '/render') {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
       const b = JSON.parse(await readBody(req));
+      if (!Number.isFinite(b.expiresAt) || b.expiresAt > Date.now()+86400_000) return json(400, { error: 'expiresAt inválido' });
+      if (b.expiresAt <= Date.now()) return json(410, { error: 'solicitud caducada' });
+      cleanup();
       for (const k of ['chatId', 'matchId', 'matchLabel', 'hook', 'assets']) {
         if (b[k] == null || b[k] === '') return json(400, { error: `falta ${k}` });
       }
       if (!b.audioFileId && !b.audioUrl) return json(400, { error: 'falta audioFileId o audioUrl' });
       if (!Array.isArray(b.assets) || b.assets.filter(asset => asset?.url).length < 2) return json(400, { error: 'fotos insuficientes' });
       const variant = Number(b.variant ?? 0);
-      const key = [b.chatId, b.matchId, variant, b.audioFileId ?? b.audioUrl].join(':');
-      const prior = jobs.get(byKey.get(key));
-      if (prior && prior.status !== 'error') return json(202, { jobId: prior.id, duplicate: true });
-      const id = `job-${Date.now().toString(36)}-${seq++}`;
-      const job = {
-        id,
-        status: 'queued',
-        chatId: b.chatId,
-        matchId: b.matchId,
-        variant,
-        matchLabel: b.matchLabel,
-        title: String(b.title ?? ''),
-        hook: b.hook,
-        home: String(b.home ?? ''),
-        away: String(b.away ?? ''),
-        audioFileId: b.audioFileId,
-        audioUrl: b.audioUrl,
-        assets: b.assets.slice(0, ASSETS_PER_MATCH).map(asset => ({
-          url: asset.url,
-          subject: asset.subject ?? null,
-          motive: asset.motive ?? null,
-          query: asset.query ?? '',
-        })),
-      };
-      jobs.set(id, job);
-      byKey.set(key, id);
-      inflight++;
-      lastWork = Date.now();
-      tail = tail.then(() => {
-        job.status = 'working';
-        return runJob(job);
-      }).finally(() => {
-        inflight--;
-        lastWork = Date.now();
+      if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
+      if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
+      for (const asset of b.assets) if (!asset?.url || !/^https?:\/\//.test(asset.url)) return json(400, { error: 'URL de foto inválida' });
+      const { job, duplicate } = store.accept({
+        expiresAt: b.expiresAt, chatId: b.chatId, matchId: b.matchId, requestId: b.requestId, seriesId: b.seriesId,
+        variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
+        home: String(b.home ?? ''), away: String(b.away ?? ''),
+        audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
+        assets: b.assets.slice(0, ASSETS_PER_MATCH),
       });
-      return json(202, { jobId: id });
+      await store.flush();
+      if (job.status === 'queued' && !protectedIds.has(job.id)) schedule(job);
+      return json(202, { jobId: job.id, duplicate, status: job.status });
     }
     return json(404, { error: 'desconocido' });
   } catch (e) {
@@ -229,7 +275,12 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => console.log(`render: http://localhost:${PORT}`));
+for (const job of jobs.values()) if (["done", "cancelled"].includes(job.status)) store.release(job);
+cleanup();
+await store.flush();
+for (const job of store.pending()) schedule(job);
+
+server.listen(PORT, () => console.log(`render: http://localhost:${server.address().port}`));
 
 // El proxy no logra completar el autostop. Salir con 0 deja la máquina
 // stopped (restart on-failure) y el siguiente request la vuelve a encender.
