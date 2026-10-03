@@ -224,7 +224,8 @@ fallan, no se sustituye por un montaje local: se conserva el audio y se avisa.
 
 Nginx envía `/telegram-webhook` al servicio Python existente, en localhost:3002.
 Este verifica el secreto y TELEGRAM_ALLOWED_USERS, registra audios de series
-activas y reenvía el resto al webhook nativo de OpenClaw en :8787. El usuario
+activas. `/start` cancela GoatLab antes de reenviar la bienvenida al webhook
+nativo de OpenClaw en :8787; `/new` se reenvía sin interceptarlo. El usuario
 no necesita entregar tokens Fly al bot. Las credenciales de apagado conservan
 el alcance de Gateway; los despliegues se hacen desde el entorno del operador.
 

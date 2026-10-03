@@ -21,7 +21,9 @@ def ingest(update, state):
     from workflow import Workflow
     message = update.get('message', {})
     voice = message.get('voice') or message.get('audio')
-    if not voice: return None
+    command = str(message.get('text', '')).split(maxsplit=1)[0] if message.get('text') else ''
+    start = command.split('@',1)[0] == '/start'
+    if not voice and not start: return None
     allowed = set(os.environ.get('TELEGRAM_ALLOWED_USERS', '').split(','))
     if str(message.get('from', {}).get('id')) not in allowed:
         return {'ignored': True}
@@ -29,6 +31,10 @@ def ingest(update, state):
     if message.get('chat', {}).get('type') != 'private': return None
     flow = Workflow(Path(state) / 'goatlab.sqlite')
     try:
+        if start:
+            # Reset only GoatLab; OpenClaw still handles the welcome and native session.
+            flow.reset(chat)
+            return None
         series=flow.current(chat)
         if not series: return None
         if series['closed']: return {'ignored':True}

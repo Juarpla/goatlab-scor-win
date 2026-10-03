@@ -44,7 +44,9 @@ class TelegramTests(unittest.TestCase):
                 self.assertEqual(json.loads(flow.db.execute("SELECT payload FROM tasks WHERE kind='render'").fetchone()[0])['chatId'],'1')
                 self.assertEqual(forwarded,[])
                 for text in ['/new','/start','/goatlab','2']:
-                    send({'message':{'text':text,'chat':{'id':1},'from':{'id':1}}})
+                    send({'message':{'text':text,'chat':{'id':1,'type':'private'},'from':{'id':1}}})
+                    if text == '/new': self.assertIsNotNone(flow.current('1'))
+                    if text == '/start': self.assertIsNone(flow.current('1'))
                 self.assertEqual([u['message']['text'] for u in forwarded],['/new','/start','/goatlab','2'])
                 flow.reset('1')
                 send(voice)
