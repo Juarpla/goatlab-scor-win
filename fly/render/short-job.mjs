@@ -96,7 +96,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     copyFileSync(photo.backdrop, join(tmp, backdrop));
     const focusBlur = `${photos.length}-focus.jpg`;
     copyFileSync(photo.focusBlur, join(tmp, focusBlur));
-    photos.push({ src, backdrop, focusBlur, width: photo.width, height: photo.height, subject: assets[i].subject ?? null });
+    photos.push({ src, backdrop, focusBlur, width: photo.width, height: photo.height, subject: assets[i].subject ?? null, generated: assets[i].source === 'agnes' });
     available.push({ ...assets[i], width: photo.width, height: photo.height });
   });
   } finally { unpin(); }

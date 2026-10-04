@@ -66,7 +66,7 @@ function looksRejected(text) {
 }
 
 export function isUsableStill(asset) {
-  return !looksRejected(`${asset?.url ?? ''} ${asset?.page ?? ''}`);
+  return !looksRejected(`${asset?.url ?? ''} ${asset?.originalUrl ?? ''} ${asset?.page ?? ''}`);
 }
 
 /** Shared candidate/publisher contract: dropping one invalid asset never aborts a bank. */

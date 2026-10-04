@@ -65,7 +65,7 @@ export function buildPlannedComposition({ duration, photos, words, plan, facts =
         `<img class="backdrop" src="${esc(photo.backdrop ?? photo.src)}" alt=""/>` +
         `<img id="photo${i}_${j}" class="photo" data-layout-allow-overflow src="${esc(photo.src)}" alt="" style="width:${motion.imageWidth}px;height:${motion.imageHeight}px;object-position:${focus.x * 100}% ${focus.y * 100}%"/>` +
         `<img id="focus${i}_${j}" class="photo focus-blur" data-layout-allow-overflow src="${esc(photo.focusBlur ?? photo.backdrop ?? photo.src)}" alt="" style="width:${motion.imageWidth}px;height:${motion.imageHeight}px;opacity:0"/>` +
-        `<div class="photo-shade"></div></div>`;
+        `<div class="photo-shade"></div>${photo.generated ? '<div class="ai-disclosure">Ilustración con IA</div>' : ''}</div>`;
     }).join('');
     const objects=(scene.objects ?? []).map((obj,j)=>{
       const oid=`object${i}_${j}`, size=obj.size ?? 210;
@@ -131,6 +131,7 @@ export function buildPlannedComposition({ duration, photos, words, plan, facts =
 .backdrop{position:absolute;width:100%;height:100%;object-fit:cover;opacity:.25}
 .photo-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 40%,rgba(0,0,0,.48))}
 .scene-edge{position:absolute;top:80px;left:65px;width:95px;height:8px;background:var(--accent)}
+.ai-disclosure{position:absolute;z-index:25;right:30px;top:30px;padding:10px 16px;background:#101412d9;color:#fff;font-size:26px;border-radius:8px}
 .graphic{position:absolute;z-index:20;max-width:82%;max-height:970px;color:var(--accent);font-size:64px;font-weight:800;line-height:1.08;overflow-wrap:anywhere;text-shadow:0 3px 10px #000}
 .graphic-title{font-size:88px;letter-spacing:-2px;padding:30px 15px;text-shadow:2px 2px #163c2b,4px 4px #163c2b,6px 6px #163c2b}
 .graphic-label{padding:18px 26px;background:rgba(16,20,18,.87);border-left:8px solid var(--accent);font-size:46px}
