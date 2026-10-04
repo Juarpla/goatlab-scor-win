@@ -1,50 +1,6 @@
 {
-  "updatedAt": "2026-10-04T13:17:15.299Z",
+  "updatedAt": "2026-10-04T21:40:10.166Z",
   "runs": [
-    {
-      "at": "2026-09-22T13:59:58.246Z",
-      "matchId": "bz-212619",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 429"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida"
-        }
-      ],
-      "ok": null
-    },
     {
       "at": "2026-09-22T17:01:07.493Z",
       "matchId": "bz-212589",
@@ -4596,6 +4552,24 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-04T21:39:59.461Z",
+      "matchId": "fd-564706",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 1448,
+        "outputTokens": 7535
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "766d6483-6af2-4868-b508-9888207a4f4b"
     }
   ]
 }
