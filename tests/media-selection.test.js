@@ -27,3 +27,11 @@ test('long credits use an attachment notice while preserving the generated-image
   assert.match(caption, /Agnes/);
   assert.match(caption, /archivo adjunto/);
 });
+
+test('Openverse auto-tags and country locations cannot identify national-team photographs',()=>{
+ const base={source:'openverse',license:'CC BY 4.0',licenseUrl:'https://creativecommons.org/licenses/by/4.0/',photographer:'Author',page:'https://example.test/source',width:1472,height:2624};
+ const assets=[['train','Virgin Trains billboard','england football training'],['handball','Jakov Gojun','croatia football handball training'],['nfl','DSC_0324','new england nfl football training'],['football','England national football team training','england football training']].map(([id,title,description])=>({...base,id,title,description,url:`https://example.test/${id}.jpg`}));
+ assert.deepEqual(relevantAssets(assets,{home:'Croatia',away:'England'}).map(a=>a.id),['football']);
+ const stock={...base,source:'pexels',license:'Pexels License',id:'stock',title:'',description:'Soccer players in a field in Croatia',url:'https://example.test/stock.jpg'};
+ assert.equal(relevantAssets([stock],{home:'Croatia',away:'England'}).length,0);
+});

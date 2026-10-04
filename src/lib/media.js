@@ -359,13 +359,15 @@ export function rankAssets(assets) {
 export function relevantAssets(assets, { home = '', away = '', players = [] } = {}) {
   const names = [home, away, esName(home), esName(away)].map(plainKey).filter(Boolean);
   const scored = assets.flatMap(asset => {
-    const text = plainKey(`${asset.title ?? ''} ${asset.description ?? ''}`);
+    // Openverse tags include broad machine labels: only its original title establishes identity.
+    const text = plainKey(asset.source === 'openverse' ? asset.title : `${asset.title ?? ''} ${asset.description ?? ''}`);
     const team = names.find(name => text.includes(name));
     const player = players.find(name => subjectFor(name, text));
     const football = /football|soccer|futbol|futebol|fussball|calcio|supporter|hincha/.test(text);
-    if (assetErrors(asset).length || /american football|rugby|quarterback|gridiron/.test(text)) return [];
+    if (assetErrors(asset).length || /american football|rugby|quarterback|gridiron|handball|basketball|baseball|\bnfl\b|soccer aid|socceraid|billboard|railway|locomotive|supermarket|athletics track/.test(text)) return [];
     const verifiedPlayer = player && plainKey(player).split(' ').filter(t=>t.length>2).every(token=>text.split(' ').includes(token));
-    if (!team && !verifiedPlayer) return [];
+    const explicitTeam=team && (text.includes(`${team} football`) || text.includes(`${team} soccer`) || text.includes(`${team} national`) || text.includes(`${team} mens`) || text.includes(`${team} supporters`) || text.includes(`${team} fans`) || (text.includes(team) && /football team|soccer team|national team|seleccion|football club/.test(text)));
+    if (!explicitTeam && !verifiedPlayer) return [];
     if (!football && !verifiedPlayer && !/stadium|estadio|jersey|camiseta|shirt|kit|supporter|hincha|aficion/.test(text)) return [];
     if (asset.width && asset.height && Math.max(asset.width, asset.height) < 720) return [];
     const date = Date.parse(asset.date ?? '');
@@ -373,7 +375,7 @@ export function relevantAssets(assets, { home = '', away = '', players = [] } = 
     const score = (team ? 8 : 0) + (player ? 8 : 0) + (recent ? 2 : 0) + (football ? 1 : 0);
     const { previewUrl: _preview, playerHint: _player, sceneHint: _scene, ...rest } = asset;
     return [{ ...rest, subject: verifiedPlayer ? player : null, relevance: score,
-      selection: { method: 'metadata', team: team ?? null, contextOnly: !team && !verifiedPlayer } }];
+      selection: { method: 'metadata', team: team ?? null, contextOnly: !verifiedPlayer } }];
   }).sort((a, b) => b.relevance - a.relevance);
   const seen = new Set();
   const unique = scored.filter(asset => {

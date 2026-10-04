@@ -213,7 +213,8 @@ for (const match of matches) {
   const attemptStartedAt=progress?.phase !== 'finished' && Number.isFinite(progress?.attemptStartedAt) ? progress.attemptStartedAt : Date.now();
   const publish = mediaPublisher({ dir, match, facts: editingFacts(match, scorers), attemptStartedAt });
   bankDeadline=attemptStartedAt+15*60_000;searchDeadline=Math.min(bankDeadline,Date.now()+90_000);
-  let initial=(prev?.assets ?? []).filter(a=>!assetErrors(a).length);
+  const prior=(prev?.assets ?? []).filter(a=>!assetErrors(a).length);
+  let initial=[...relevantAssets(prior.filter(a=>a.source!=='agnes'),{home:match.home,away:match.away,players}),...prior.filter(a=>a.source==='agnes')];
   // Revalidate legacy remote resources; only decoded files enter the available count.
   const checked=[];
   for(const asset of initial){const saved=await prepareImage(asset,{dir,matchId,base:GEN_BASE,deadline:searchDeadline});if(saved)checked.push(saved);}
