@@ -50,7 +50,9 @@ los rostros, los gráficos entre sí ni los subtítulos.
 
 Devuelve `version: 2`. Alterna fotos con escenas informativas de motion graphics;
 usa una cifra real o un título hablado para cambiar el ritmo. No llenes todas las
-escenas de efectos. Diseña al menos un momento gráfico si la duración lo permite.
+escenas de efectos. Intercala escenas gráficas completas: no más de dos escenas consecutivas solo de fotos.
+Si `assets` está vacío, todas las escenas tienen `layers: []` y gráficos u objetos.
+Usa escenas de aproximadamente 2–5 segundos ajustadas a la voz.
 Los subtítulos viven en una capa superior permanente durante toda la voz: ninguna
 escena ni objeto los oculta. Mantén gráficos y objetos en la parte superior y media.
 

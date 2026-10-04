@@ -1,6 +1,6 @@
 ---
 name: goatlab
-description: "Atiende /start con bienvenida y limpieza de GoatLab, preserva /new nativo y procesa /goatlab en Telegram: elegir un partido, leer diez guiones, recibir diez audios en orden y entregar Shorts con fotos buscadas y montaje creativo."
+description: "Atiende /start con bienvenida y limpieza de GoatLab, preserva /new nativo y procesa /goatlab en Telegram: elegir un partido, leer diez guiones, recibir hasta diez audios en orden y entregar Shorts con fotos buscadas o generadas, motion graphics y montaje creativo."
 ---
 
 # GoatLab Shorts
@@ -16,7 +16,9 @@ necesario. El código conserva el estado y asigna el número de cada audio.
 
 Flujo: elegir partido → mostrar los diez guiones originales → recibir audios en
 orden y en silencio → entrega automática de MP4. La búsqueda sucede en segundo
-plano. El supervisor inicia cada render cuando las fotos están disponibles.
+plano. Primero se intenta completar el banco de quince imágenes dentro del tiempo limitado.
+Después se renderizan los audios recibidos, uno a la vez, con el banco disponible y
+motion graphics; si no hay fotos, se usan gráficos y animaciones. No esperes diez audios.
 El webhook registra los audios de una serie activa con los identificadores
 originales de Telegram; no inventes `file_id` ni uses una ruta local como tal.
 El código actualiza un mensaje de progreso; no confirmes cada audio ni inventes

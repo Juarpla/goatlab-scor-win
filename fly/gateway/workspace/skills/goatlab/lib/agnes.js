@@ -15,6 +15,7 @@ function scenes(home, away) {
   const homeName = esName(home) || home;
   const awayName = esName(away) || away;
   return [
+    `Photorealistic editorial illustration of fictional adult men football players from ${homeName} and ${awayName} contesting a ball, wearing ${homeKit} and ${awayKit}, vertical`,
     `Photo of adult men at a football training session, wearing ${homeKit}, no women, no match, no crest, no readable text, vertical`,
     `Photo of adult men at a football training session, wearing ${awayKit}, no women, no match, no crest, no readable text, vertical`,
     `Photo of an adult male footballer in a sit-down interview, wearing ${homeKit}, microphones, no women, no match, no crest, no readable text, vertical`,
@@ -33,7 +34,7 @@ export function agnesPrompts({ home = '', away = '', count = 0 } = {}) {
   const bank = scenes(home, away);
   const n = Math.max(0, Number(count) || 0);
   return Array.from({ length: n }, (_, i) => {
-    const base = bank[i % bank.length];
+    const base = `Editorial illustration, entirely fictional people with original faces, never impersonate actual players, no official logos or sponsors. ${bank[i % bank.length]}`;
     const lap = Math.floor(i / bank.length);
     return lap ? `${base}, alternate angle ${lap + 1}` : base;
   });

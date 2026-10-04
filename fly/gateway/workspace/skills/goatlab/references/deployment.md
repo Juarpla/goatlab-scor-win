@@ -80,7 +80,7 @@ una ampliación. SVG para logo y gráficos. Salida H.264/AAC, 1080×1920, 30 fps
 menos de 45 MB (45 000 000 bytes); música existente y cierre de tres segundos `goatlab.win`.
 
 `/data/agnes.sqlite` y su lock centralizan una generación simultánea y cuatro
-inicios por ventana de 60 segundos, incluidos reintentos. Cinco slots por partido
+inicios por ventana de 60 segundos, incluidos reintentos. Quince slots por partido
 comparten los diez videos. Las imágenes completadas se reutilizan y el presupuesto
 se conserva incluso tras reiniciar hasta kickoff + 24 h; pasado ese plazo,
 se rechazan nuevas generaciones y se borran los controles caducados. 429 respeta `Retry-After` (segundos o fecha),
@@ -89,7 +89,7 @@ o espera 60 segundos; una repetición detiene la generación e impone pausa glob
 resultado incierto que no vuelve a solicitarse automáticamente. Si se obtuvo una
 respuesta pero falló la descarga/decodificación, el archivo `.response.json` queda
 para recuperación local. Restaurar esa imagen y actualizar su slot conservando el
-presupuesto; no borrar el registro para obtener una sexta generación.
+presupuesto; no borrar el registro para obtener una generación adicional fuera del presupuesto.
 
 Se guardan imagen, hash, dimensiones reales, prompt, modelo y fecha inmediatamente.
 Nginx publica únicamente los archivos de imagen, no prompts, respuestas ni SQLite.
@@ -158,7 +158,7 @@ escena, cajas y focos normalizados, movimientos/transiciones permitidos. Gráfic
 validación limita posiciones, duración, índices y transformaciones; el motor
 ajusta recortes y zooms. Actualmente las rotaciones de fotos se neutralizan para
 impedir esquinas vacías. Primario y respaldo usan los modelos configurados; cada
-proveedor admite una corrección de un plan inválido. Si ambos fallan, se conserva
+proveedor admite una corrección de un plan inválido. Si ambos fallan, se usa el montaje local; se conserva
 el trabajo para reintentar y no se entrega un montaje sin subtítulos.
 
 ## Instalación, comprobación y despliegue
@@ -192,8 +192,8 @@ flujo. El ahorro esperado de caché y quitar visión requiere medir series reale
 
 Los Dockerfiles ahora usan el contexto de la raíz; desplegar con
 `fly deploy . --config fly/render/fly.toml --local-only --ha=false --strategy rolling` y
-`fly deploy . --config fly/gateway/fly.toml --local-only --ha=false --strategy rolling`. Actualizar Gateway primero para
-habilitar el registro temporal. Se conserva su volumen existente; no crear
+`fly deploy . --config fly/gateway/fly.toml --local-only --ha=false --strategy rolling`. En una instalación inicial, habilitar primero el registro temporal de Gateway.
+Para esta actualización compatible, desplegar Render y después Gateway. Se conserva su volumen existente; no crear
 aplicaciones ni volúmenes y no ampliar CPU/RAM.
 Render necesita `OPENCODE_GO_API_KEY`, `TELEGRAM_BOT_TOKEN`, `RENDER_SECRET`, y las
 claves de transcripción existentes. Gateway mantiene sus secretos y puede recibir
@@ -220,7 +220,8 @@ impiden apagar las máquinas hasta que terminan.
 El planificador identifica GoatLab y envía `x-opencode-session`, estable por
 requestId. Su presupuesto es 240 s, hasta 90 s por llamada y 60 s reservados
 al respaldo. Una validación fallida permite una reparación por modelo. Si ambos
-fallan, no se sustituye por un montaje local: se conserva el audio y se avisa.
+fallan, se usa un montaje local validado con títulos de la voz, gráficos y 3D ligero.
+Una transcripción fallida conserva el audio y avisa; no se entrega sin subtítulos.
 
 Nginx envía `/telegram-webhook` al servicio Python existente, en localhost:3002.
 Este verifica el secreto y TELEGRAM_ALLOWED_USERS, registra audios de series
@@ -229,10 +230,11 @@ nativo de OpenClaw en :8787; `/new` se reenvía sin interceptarlo. El usuario
 no necesita entregar tokens Fly al bot. Las credenciales de apagado conservan
 el alcance de Gateway; los despliegues se hacen desde el entorno del operador.
 
-El pack se publica desde ocho fotos, mientras busca hasta quince. Un mensaje
+El banco persiste incrementalmente y habilita los videos al terminar su intento
+limitado de reunir quince imágenes, incluso si obtiene cero. Un mensaje
 editable muestra count/15 y etapas reales; las actualizaciones usan el ledger
 local, nunca sondeos periódicos HTTP a Render. Cada POST fija una copia del pack.
-Los campos opcionales nuevos son `facts` y `mediaMinimum` (8 en GoatLab); los planes aceptan
+Los campos opcionales nuevos son `facts` y `mediaMinimum` (0 en GoatLab, admite 0/1/2/8 por compatibilidad); los planes aceptan
 versiones 1 y 2. `/healthz` de Render añade revision y editPlanVersion.
 
 El progreso y sus message_id caducan con la serie. Los límites de SQLite y caché,

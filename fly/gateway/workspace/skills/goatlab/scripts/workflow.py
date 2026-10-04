@@ -264,14 +264,11 @@ def execute(task):
         raise ValueError("solicitud caducada")
     if task["kind"] == "media":
         ready = out / f"{match}.ready"
-        if not ready.exists():
-            out.mkdir(parents=True, exist_ok=True)
-            env = {**os.environ, "GOATLAB_REPO": str(REPO), "AGNES_STATE_DB": str(STATE / "agnes.sqlite")}
-            with (out / f"{match}.log").open("a") as log:
-                subprocess.run(["node", str(SKILL / "scripts/generate-media-pack.mjs"), f"--match={match}", f"--out={out}"],
-                               cwd=REPO, env=env, stdout=log, stderr=log, check=True)
-            manifest = json.loads((out / f"{match}.json").read_text())
-            atomic_json(ready, {"assets": len(manifest["assets"])})
+        out.mkdir(parents=True, exist_ok=True)
+        env = {**os.environ, "GOATLAB_REPO": str(REPO), "AGNES_STATE_DB": str(STATE / "agnes.sqlite")}
+        with (out / f"{match}.log").open("a") as log:
+            subprocess.run(["node", str(SKILL / "scripts/generate-media-pack.mjs"), f"--match={match}", f"--out={out}"],
+                           cwd=REPO, env=env, stdout=log, stderr=log, check=True)
         return {"ready": True}
     if task["kind"] == "cancel":
         return worker_post("/render/cancel", body)
@@ -279,8 +276,8 @@ def execute(task):
     if not ready.exists():
         return None
     manifest = json.loads((out / f"{match}.json").read_text())
-    if not body.get('assets'):
-        body.update(assets=manifest["assets"], attribution=manifest.get("attribution", ""), facts=manifest.get('facts',[]), mediaMinimum=8)
+    if 'assets' not in body:
+        body.update(assets=manifest["assets"], attribution=manifest.get("attribution", ""), facts=manifest.get('facts',[]), mediaMinimum=0)
     return worker_post("/render", body)
 
 
@@ -359,7 +356,13 @@ def supervise():
                                 print("workflow: aviso de fallo no entregado", file=sys.stderr)
             if not stopping:
                 media_running = any(t["kind"] == "media" for t in futures.values())
-                render_running = any(t["kind"] == "render" for t in futures.values())
+                from render_ledger import Ledger
+                records=Ledger(STATE/'render-ledger').records()
+                by_request={r.get('requestId'):r for r in records}
+                # Accepted HTTP submissions remain active until their durable delivery result.
+                accepted=flow.db.execute("SELECT id FROM tasks WHERE kind='render' AND status='done'").fetchall()
+                awaiting=any(by_request.get(t['id'],{}).get('status') not in ('done','cancelled','error','delivery-unknown') for t in accepted)
+                render_running = awaiting or any(t["kind"] == "render" for t in futures.values())
                 first_by_chat = {}
                 for pending in flow.db.execute("SELECT id,payload FROM tasks WHERE kind='render' AND status IN ('queued','running','failed') ORDER BY rowid"):
                     first_by_chat.setdefault(str(json.loads(pending['payload'])['chatId']), pending['id'])
@@ -375,9 +378,9 @@ def supervise():
                             continue
                         if not (Path(os.environ.get("MEDIA_PACK_DIR", str(STATE / "media-pack"))) / f'{body["matchId"]}.ready').exists():
                             continue
-                        if not body.get('assets'):
+                        if 'assets' not in body:
                             manifest=json.loads((Path(os.environ.get('MEDIA_PACK_DIR',str(STATE/'media-pack')))/f'{body["matchId"]}.json').read_text())
-                            body.update(assets=manifest['assets'],attribution=manifest.get('attribution',''),facts=manifest.get('facts',[]), mediaMinimum=8)
+                            body.update(assets=manifest['assets'],attribution=manifest.get('attribution',''),facts=manifest.get('facts',[]), mediaMinimum=0)
                             payload=json.dumps(body)
                             flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(payload,task['id']))
                             task=dict(task); task['payload']=payload

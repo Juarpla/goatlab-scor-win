@@ -7,14 +7,15 @@ from pathlib import Path
 from common import request_json
 
 STAGES = {'voiceDownload':'descargando audio','transcription':'transcribiendo audio','photos':'preparando fotos',
-          'planning':'planificando el montaje','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video'}
+          'planning':'planificando el montaje','planningFallback':'montaje local con gráficos y animaciones','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video'}
 
 
-def progress_text(count, phase, jobs, created, now):
+def progress_text(count, phase, jobs, created, now, received=0):
     count = min(15, max(0, count))
     filled = count * 10 // 15
     lines=[f'📸 Fotos: {count}/15 · {count*100//15}%', '█'*filled+'░'*(10-filled)]
-    if phase=='finished' and count<8: lines.append('⚠️ Búsqueda detenida: faltan fotos válidas para comenzar.')
+    if phase=='failed': lines.append('⚠️ Preparación interrumpida; se conserva el banco y el audio para reintentar.')
+    elif phase=='finished' and count==0: lines.append('Banco sin imágenes: los videos usarán motion graphics y animaciones.')
     elif phase=='finished' and count<15: lines.append(f'Búsqueda finalizada con {count} fotos disponibles.')
     elif phase=='generating': lines.append('Generando fotos de apoyo con Agnes…')
     elif phase=='searching': lines.append('Buscando fotos y comprobando sus metadatos…')
@@ -25,7 +26,11 @@ def progress_text(count, phase, jobs, created, now):
         lines.append(f'🎬 Video {live.get("variant",0)+1}: {STAGES.get(live.get("currentStage"),"en cola")}')
     elif failed:
         lines.append(f'⚠️ Video {failed.get("variant",0)+1}: detenido; puedes pedir reintentarlo.')
-    else: lines.append('🎬 Esperando audios' if not jobs else f'🎬 Videos entregados: {done}')
+    else:
+        pending=max(0,received-done)
+        lines.append(f'🎙 Audios recibidos: {received}')
+        lines.append(f'🎬 {pending} videos pendientes: '+('preparando el banco visual' if phase in ('searching','generating') else 'en cola') if pending else ('🎬 Esperando audios' if not jobs else f'🎬 Videos entregados: {done}'))
+    if any(j.get('planningFallback') or j.get('planModel')=='local-montage' for j in jobs): lines.append('Montaje de respaldo activo: gráficos y animaciones basados en tu audio.')
     elapsed=max(0,int(now-created))
     lines.append(f'⏱ Tiempo transcurrido: {elapsed//60:02d}:{elapsed%60:02d}')
     return '\n'.join(lines)
@@ -55,8 +60,15 @@ class ProgressReporter:
             try: media=json.loads(path.read_text())
             except (OSError,ValueError): media={'count':0,'phase':'searching'}
             audios=db.execute('SELECT id FROM audios WHERE series_id=? AND cancelled=0 ORDER BY ordinal',(series['id'],)).fetchall()
-            jobs=[by_request[a[0]] for a in audios if a[0] in by_request]
-            text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now)
+            jobs=[]
+            for audio in audios:
+                if audio[0] in by_request: jobs.append(by_request[audio[0]])
+                else:
+                    pending=db.execute('SELECT status,payload FROM tasks WHERE id=?',(audio[0],)).fetchone()
+                    if pending and pending[0]=='failed': jobs.append({'status':'error','variant':json.loads(pending[1]).get('variant',0)})
+            task=db.execute('SELECT status FROM tasks WHERE id=?',('media:'+series['match_id'],)).fetchone()
+            if task and task[0]=='failed': media['phase']='failed'
+            text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now,len(audios))
             prior=db.execute('SELECT * FROM progress WHERE series_id=?',(series['id'],)).fetchone()
             if prior and prior['message_id'] is None:continue
             if prior and (now-prior['last_sent']<10 or prior['text']==text):continue

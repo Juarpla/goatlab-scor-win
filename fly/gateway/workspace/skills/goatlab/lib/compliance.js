@@ -2,14 +2,7 @@
  * Compliance GoatLab Shorts: vocabulario y reglas bloqueantes pre-render.
  * Semilla: COMPLIANCE.md. Sin dependencias npm; corre en Node y workerd.
  */
-import {
-  ALLOWED_SOURCES,
-  ASSETS_MIN,
-  ASSETS_PER_MATCH,
-  BANNED_PHOTO_DOMAINS,
-  AI_CREDIT,
-  acceptAssetLicense,
-  isUsableStill,
+import { ASSETS_MIN, ASSETS_PER_MATCH, AI_CREDIT, assetErrors,
 } from './media.js';
 export const DISCLAIMER =
   'Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.';
@@ -95,7 +88,7 @@ export function checkDescription(description, { matchId = null } = {}) {
 
 /**
  * Valida un manifiesto de media-pack: fuente permitida, licencia de esa fuente,
- * entre 8 y 15 fotos, URLs https y atribución. La visión no es obligatoria.
+ * entre 0 y 15 imágenes, URLs https y atribución. La visión no es obligatoria.
  */
 export function checkMediaManifest(data, { matchId = null } = {}) {
   const errors = [];
@@ -104,28 +97,8 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
   const assets = Array.isArray(data.assets) ? data.assets : [];
   if (assets.length < ASSETS_MIN) errors.push(`faltan fotos: ${assets.length} < ${ASSETS_MIN}`);
   if (assets.length > ASSETS_PER_MATCH) errors.push(`sobran fotos: ${assets.length} > ${ASSETS_PER_MATCH}`);
-  for (const [i, asset] of assets.entries()) {
-    if (!asset || typeof asset !== 'object') {
-      errors.push(`asset ${i} vacío`);
-      continue;
-    }
-    if (!ALLOWED_SOURCES.includes(asset.source)) errors.push(`asset ${i}: fuente no permitida (${asset.source})`);
-    if (!asset.id) errors.push(`asset ${i}: sin id`);
-    if (!acceptAssetLicense(asset.source, asset.license)) errors.push(`asset ${i}: licencia no libre (${asset.license ?? ''})`);
-    if (!isUsableStill(asset)) errors.push(`asset ${i}: no es una foto de jugador`);
-    for (const field of ['url', 'page', 'photographer']) {
-      if (!asset[field] || !String(asset[field]).trim()) errors.push(`asset ${i}: sin ${field}`);
-    }
-    for (const field of ['url', 'page', 'photographerUrl']) {
-      const value = String(asset[field] ?? '');
-      if (!value) continue;
-      if (!/^https:\/\//.test(value)) errors.push(`asset ${i}: ${field} no es https`);
-      for (const banned of BANNED_PHOTO_DOMAINS) {
-        if (banned.test(value)) errors.push(`asset ${i}: dominio prohibido en ${field}`);
-      }
-    }
-  }
-  if (!String(data.attribution ?? '').trim()) errors.push('falta la atribución de fotos');
+  for (const [i, asset] of assets.entries()) for (const error of assetErrors(asset)) errors.push(`asset ${i}: ${error}`);
+  if (assets.length && !String(data.attribution ?? '').trim()) errors.push('falta la atribución de fotos');
   if (assets.some(asset => asset?.source === 'agnes') && !String(data.attribution ?? '').includes(AI_CREDIT)) {
     errors.push('falta el aviso de imágenes generadas con IA');
   }

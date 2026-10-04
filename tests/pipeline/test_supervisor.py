@@ -11,6 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
 from workflow import Workflow
+from render_ledger import Ledger
 
 class SupervisorTests(unittest.TestCase):
     def test_waits_for_media_preserves_order_and_replays_stable_id_after_restart(self):
@@ -29,7 +30,8 @@ class SupervisorTests(unittest.TestCase):
                 def do_POST(self):
                     body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
                     calls.append(body)
-                    payload = json.dumps({'id': body['requestId'], 'duplicate': sum(b['requestId'] == body['requestId'] for b in calls) > 1}).encode()
+                    Ledger(root/'render-ledger').put({'id':'job-'+body['requestId'],'requestId':body['requestId'],'expiresAt':body['expiresAt'],'status':'done'})
+                    payload = json.dumps({'jobId':'job-'+body['requestId'], 'duplicate': sum(b['requestId'] == body['requestId'] for b in calls) > 1}).encode()
                     self.send_response(200); self.end_headers(); self.wfile.write(payload)
                 def log_message(self, *_): pass
             server = ThreadingHTTPServer(('127.0.0.1', 0), Worker)
@@ -68,21 +70,24 @@ class SupervisorTests(unittest.TestCase):
             self.assertEqual(calls[-1]['requestId'], ids[-1])
             flow.db.close()
 
-    def test_real_generator_publishes_eight_before_finishing_and_freezes_request_snapshot(self):
+    def test_real_generator_drops_invalid_candidates_and_finishes_bank_before_post(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);data=root/'public/data';data.mkdir(parents=True)
             (data/'fixtures.json').write_text(json.dumps({'matches':[{'id':'a-b','webId':'a-b','home':'Spain','away':'Czechia','status':'NS','kickoff':'2030-10-03T18:00:00Z'}]}))
-            release=root/'release'
+            image=root/'fixture.jpg'
+            subprocess.run(['ffmpeg','-y','-loglevel','error','-f','lavfi','-i','color=c=blue:s=1472x2624','-frames:v','1',str(image)],check=True)
             preload=root/'provider.mjs'
             preload.write_text("""
-import { existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 let calls=0;
-globalThis.fetch=async()=>{
+globalThis.fetch=async(url)=>{
+  if(String(url).includes('example.test')) return new Response(readFileSync(process.env.TEST_IMAGE),{headers:{'content-type':'image/jpeg'}});
+  if(!String(url).includes('commons.wikimedia')) return new Response('{}');
   const request=calls++;
-  if(request>=2) while(!existsSync(process.env.TEST_RELEASE)) await new Promise(r=>setTimeout(r,20));
-  const pages=Object.fromEntries(Array.from({length:4},(_,i)=>{
-    const id=request*4+i;
-    return [id,{pageid:id+1,title:`File:Spain football training ${id}.jpg`,imageinfo:[{mime:'image/jpeg',thumburl:`https://example.test/${id}.jpg`,descriptionurl:`https://example.test/photo/${id}`,thumbwidth:1472,thumbheight:2624,extmetadata:{LicenseShortName:{value:'CC BY 4.0'},Artist:{value:'Author'},ImageDescription:{value:'Spain soccer football training'}}}]}];
+  const pages=Object.fromEntries(Array.from({length:5},(_,i)=>{
+    const id=request*5+i;
+    const suffix=i===4?'broadcast_screenshot':String(id);
+    return [id,{pageid:id+1,title:`File:Spain football training ${id}.jpg`,imageinfo:[{mime:'image/jpeg',thumburl:`https://example.test/${suffix}.jpg`,descriptionurl:`https://example.test/photo/${id}`,thumbwidth:1472,thumbheight:2624,extmetadata:{LicenseShortName:{value:'CC BY 4.0'},Artist:{value:'Author'},ImageDescription:{value:'Spain soccer football training'}}}]}];
   }));
   return new Response(JSON.stringify({query:{pages}}));
 };
@@ -90,34 +95,32 @@ globalThis.fetch=async()=>{
             flow=Workflow(root/'goatlab.sqlite')
             flow.select('1',{'matchId':'a-b','scripts':[{'hook':'Gancho'} for _ in range(10)]})
             request=flow.receive('1','voice','event')['requestId']
-            calls=[];media_status=[]
+            calls=[]
             class Worker(BaseHTTPRequestHandler):
                 def log_message(self,*_):pass
                 def do_GET(self):
                     self.send_response(200);self.end_headers();self.wfile.write(b'{"workflowProtocol":2}')
                 def do_POST(self):
-                    import sqlite3
                     body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
-                    db=sqlite3.connect(root/'goatlab.sqlite')
-                    media_status.append(db.execute("SELECT status FROM tasks WHERE kind='media'").fetchone()[0]);db.close()
-                    calls.append(body);release.touch()
+                    progress=json.loads((root/'media-pack/a-b.progress.json').read_text())
+                    calls.append((body,progress))
                     self.send_response(200);self.end_headers();self.wfile.write(json.dumps({'jobId':'accepted'}).encode())
             server=ThreadingHTTPServer(('127.0.0.1',0),Worker)
             threading.Thread(target=server.serve_forever,daemon=True).start()
-            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','TEST_RELEASE':str(release),'PEXELS_API_KEY':'','PIXABAY_API_KEY':'','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':''}
+            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','TEST_IMAGE':str(image),'PEXELS_API_KEY':'','PIXABAY_API_KEY':'','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':''}
             script=Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts/workflow.py'
             process=subprocess.Popen([sys.executable,str(script),'supervise'],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
             try:
-                deadline=time.monotonic()+12
+                deadline=time.monotonic()+25
                 while not calls and time.monotonic()<deadline:time.sleep(.05)
-                self.assertTrue(calls,'no render after first eight photos')
-                self.assertEqual(len(calls[0]['assets']),8)
-                self.assertEqual(media_status[0],'running')
-                while flow.db.execute("SELECT status FROM tasks WHERE kind='media'").fetchone()[0]!='done' and time.monotonic()<deadline:time.sleep(.05)
-                self.assertEqual(len(json.loads((root/'media-pack/a-b.json').read_text())['assets']),15)
+                self.assertTrue(calls,'no render after the bank attempt')
+                body,progress=calls[0]
+                self.assertEqual(progress['phase'],'finished');self.assertEqual(len(body['assets']),15)
+                self.assertEqual(body['mediaMinimum'],0)
+                self.assertTrue(all(a['prepared'] and a['width']>0 and a['originalUrl'] for a in body['assets']))
                 persisted=json.loads(flow.db.execute('SELECT payload FROM tasks WHERE id=?',(request,)).fetchone()[0])
-                self.assertEqual(len(persisted['assets']),8)
+                self.assertEqual(len(persisted['assets']),15)
             finally:
-                release.touch();process.terminate();_,error=process.communicate(timeout=8)
+                process.terminate();_,error=process.communicate(timeout=8)
                 server.shutdown();server.server_close();flow.db.close()
                 self.assertEqual(process.returncode,0,error.decode())

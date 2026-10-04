@@ -50,11 +50,12 @@ test('agnesPrompts pide hombres en entrenamiento y corta al segundo 429', () => 
   const prompts = agnesPrompts({ home: 'Liverpool', away: 'Moldova', count: 3 });
   assert.equal(prompts.length, 3);
   assert.match(prompts[0], /adult men/);
-  assert.match(prompts[0], /training/);
+  assert.match(prompts[0], /contesting a ball/);
+  assert.match(prompts[0], /fictional/);
   assert.match(prompts[0], /#c8102e/);
   assert.match(prompts[1], /training/);
-  assert.match(prompts[2], /interview/);
-  assert.ok(prompts.every(prompt => /no women/i.test(prompt)));
+  assert.match(prompts[2], /training/);
+  assert.ok(prompts.every(prompt => /no official logos or sponsors/i.test(prompt)));
   assert.ok(prompts.every(prompt => !/match lighting|night match/i.test(prompt)));
   assert.equal(agnesAfter429(1), 'retry');
   assert.equal(agnesAfter429(2), 'stop');

@@ -133,6 +133,7 @@ async function runJob(job) {
     }));
     Object.assign(job.stages, stages);
     job.planModel = plan.model;
+    job.planningFallback = Boolean(plan.fallback);
     store.save(job);
     job.timing = provider;
     const silent = join(tmp, 'silent.mp4');
@@ -263,9 +264,9 @@ const server = createServer(async (req, res) => {
       if (!b.audioFileId && !b.audioUrl) return json(400, { error: 'falta audioFileId o audioUrl' });
       if (!/^-?[1-9][0-9]{0,19}$/.test(String(b.chatId))) return json(400, { error: 'chatId debe ser el identificador numérico de Telegram' });
       if (b.audioFileId && !/^[A-Za-z0-9_-]{16,256}$/.test(b.audioFileId)) return json(400, { error: 'audioFileId no admite rutas locales' });
-      if (!Array.isArray(b.assets) || b.assets.filter(asset => asset?.url).length < 2) return json(400, { error: 'fotos insuficientes' });
+      if (!Array.isArray(b.assets) || b.assets.length > ASSETS_PER_MATCH) return json(400, { error: 'fotos insuficientes' });
       const mediaMinimum = b.mediaMinimum ?? 2;
-      if (![2, 8].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
+      if (![0, 1, 2, 8].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });

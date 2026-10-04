@@ -74,15 +74,16 @@ class PlannerTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             create_plan({**SOURCE, 'words': []}, call=lambda *_: self.fail('must not call'))
 
-    def test_http_status_is_preserved_and_both_models_stop_without_local_plan(self):
+    def test_http_status_is_preserved_and_both_models_use_validated_local_plan(self):
         calls,logs=[],[]
         def denied(url,body,headers,timeout):
             calls.append(body['model'])
             raise urllib.error.HTTPError(url,400,'bad request',{},io.BytesIO(b'private prompt'))
-        with self.assertRaisesRegex(ValueError,'HTTP 400') as error:
-            create_plan(SOURCE,call=denied,env={'OPENCODE_GO_API_KEY':'test'},logger=logs.append)
+        result=create_plan(SOURCE,call=denied,env={'OPENCODE_GO_API_KEY':'test'},logger=logs.append)
+        self.assertTrue(result['fallback']);validate(result,SOURCE)
+        self.assertIn('HTTP 400',result['fallbackReason'])
         self.assertEqual(len(calls),2)
-        self.assertNotIn('private prompt',str(error.exception))
+        self.assertNotIn('private prompt',result['fallbackReason'])
         self.assertTrue(all(log['httpStatus']==400 for log in logs))
 
     def test_shared_time_budget_reserves_fallback_and_never_exceeds_240_seconds(self):
@@ -90,8 +91,8 @@ class PlannerTests(unittest.TestCase):
         def slow(url,body,headers,timeout):
             calls.append((body['model'],timeout));now[0]+=timeout
             return {'choices':[{'message':{'content':'{}'}}]}
-        with self.assertRaises(ValueError):
-            create_plan(SOURCE,call=slow,env={'OPENCODE_GO_API_KEY':'test'},clock=lambda:now[0])
+        result=create_plan(SOURCE,call=slow,env={'OPENCODE_GO_API_KEY':'test'},clock=lambda:now[0])
+        self.assertTrue(result['fallback'])
         self.assertEqual(now[0],240)
         self.assertTrue(all(timeout<=90 for _,timeout in calls))
         self.assertIn('mimo-v2.6-flash',[model for model,_ in calls])
@@ -107,3 +108,12 @@ class PlannerTests(unittest.TestCase):
             validate(plan,{**SOURCE,'facts':[facts[0],{**facts[1],'unit':'partidos'}]})
         scene['graphics'][0]['factIds']=['invented']
         with self.assertRaisesRegex(ValueError,'inexistente'):validate(plan,{**SOURCE,'facts':facts})
+
+    def test_local_montage_covers_voice_with_zero_one_and_fifteen_images(self):
+        from planner import local_plan
+        for n in (0,1,15):
+            source={**SOURCE,'span':24,'assets':[{'index':i} for i in range(n)]}
+            plan=local_plan(source);validate(plan,source)
+            self.assertTrue(any(not s['layers'] and s['objects'] for s in plan['scenes']))
+            self.assertEqual(sum(s['end']-s['start'] for s in plan['scenes']),24)
+            if n:self.assertTrue(any(s['layers'] for s in plan['scenes']))

@@ -128,7 +128,7 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
     match: { webId: 'm-1', home: 'A', away: 'B' },
     assets: Array.from({ length: 20 }, (_, i) => asset(i)),
   });
-  assert.ok(checkMediaManifest({ ...manifest, assets: manifest.assets.slice(0, 3) }).some(e => /faltan fotos/.test(e)));
+  assert.deepEqual(checkMediaManifest({ ...manifest, assets: manifest.assets.slice(0, 3) }), []);
   const bad = structuredClone(manifest);
   bad.assets[0].license = 'CC BY-NC 4.0';
   assert.ok(checkMediaManifest(bad).some(e => /licencia no libre/.test(e)));
@@ -137,7 +137,7 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   assert.deepEqual(checkMediaManifest(unseen), []);
   const banned = structuredClone(manifest);
   banned.assets[0].url = 'https://media.gettyimages.com/x.jpg';
-  assert.ok(checkMediaManifest(banned).some(e => /dominio prohibido/.test(e)));
+  assert.ok(checkMediaManifest(banned).some(e => /URL no permitida/.test(e)));
   const stockAssets = Array.from({ length: ASSETS_PER_MATCH }, (_, i) => asset(i, 'portrait'));
   stockAssets[0] = {
     ...stockAssets[0],
@@ -150,7 +150,7 @@ test('checkMediaManifest bloquea pool corto, licencia y dominio', () => {
   const stock = buildManifest({ match: { webId: 'm-1', home: 'A', away: 'B' }, assets: stockAssets });
   assert.deepEqual(checkMediaManifest(stock, { matchId: 'm-1' }), []);
   assert.ok(checkMediaManifest(null).length > 0);
-  assert.deepEqual(ALLOWED_SOURCES, ['commons', 'pexels', 'pixabay', 'agnes']);
+  assert.deepEqual(ALLOWED_SOURCES, ['commons', 'pexels', 'pixabay', 'openverse', 'licensed', 'agnes']);
   assert.equal(subjectFor('Álvaro Morata', 'File:Alvaro_Morata_training.jpg'), 'Álvaro Morata');
   assert.equal(subjectFor('San', 'File:San_Siro.jpg'), null);
   assert.equal(subjectFor('Dennis Man', 'File:Flag_of_Romania.jpg'), null);

@@ -8,21 +8,21 @@ import { selectMatches, staleScripts, sameCore, attentionPlayers } from '../lib/
 import {
   AGNES_MAX_IMAGES,
   ASSETS_PER_MATCH,
-  ASSETS_MIN,
-  CANDIDATES_PER_MATCH,
   THUMB_WIDTH,
-  sceneQueries,
   normalizeCommonsPage,
   normalizePexelsPhoto,
   normalizePixabayHit,
-  buildManifest,
   relevantAssets,
+  normalizeOpenverseImage,
+  assetErrors,
 } from '../lib/media.js';
 import { agnesPrompts, normalizeAgnesImage } from '../lib/agnes.js';
 import { editingFacts } from '../lib/match-facts.js';
 import { mediaPublisher } from '../lib/media-progress.js';
 import { checkMediaManifest } from '../lib/compliance.js';
+import { prepareImage } from '../lib/media-download.js';
 const run = promisify(execFile);
+let searchDeadline = Infinity, bankDeadline = Infinity;
 const PIPELINE = fileURLToPath(new URL('./', import.meta.url));
 
 const args = new Map(process.argv.slice(2).map(a => {
@@ -45,7 +45,7 @@ function envInt(name, fallback) {
 async function fetchJson(url, headers = {}) {
   const res = await fetch(url, {
     headers: { 'user-agent': UA, accept: 'application/json', ...headers },
-    signal: AbortSignal.timeout(20000),
+    signal: AbortSignal.timeout(Math.max(1, Math.min(20000, searchDeadline - Date.now()))),
   });
   if (!res.ok) {
     let where = 'request';
@@ -61,7 +61,7 @@ async function fetchJson(url, headers = {}) {
 async function searchCommons({ query, player = null, scene = null }) {
   const found = [];
   let cont = '';
-  for (let page = 0; page < 3; page += 1) {
+  for (let page = 0; page < 1; page += 1) {
     const params = new URLSearchParams({
       action: 'query',
       format: 'json',
@@ -109,26 +109,32 @@ async function searchPixabay({ query, player = null, scene = null }) {
   return (data.hits ?? []).map(hit => normalizePixabayHit(hit, query, { player, scene })).filter(Boolean);
 }
 
-async function poolFor(queries, quota, publish) {
-  const byId = new Map();
-  const sources = [searchCommons, searchPexels, searchPixabay];
-  // Two queries at a time; keep both teams and several contexts represented.
-  for (let i = 0; i < Math.min(queries.length, 16); i += 2) {
-    const batches = await Promise.all(queries.slice(i, i + 2).flatMap(query => sources.map(async search => {
-      try { return await search(query); }
-      catch (error) { console.error(`media: búsqueda HTTP fallida (${query.scene})`); return []; }
-    })));
-    for (const batch of batches) for (const asset of batch.slice(0, 6)) {
-      const key = `${asset.source}:${asset.id}`;
-      if (!byId.has(key)) byId.set(key, asset);
+async function searchOpenverse({query, player=null, scene=null}) {
+  const params=new URLSearchParams({q:query,page_size:'20',license:'cc0,pdm,by,by-sa'});
+  const data=await fetchJson(`https://api.openverse.org/v1/images/?${params}`);
+  return (data.results ?? []).map(image=>normalizeOpenverseImage(image,query,{player,scene})).filter(Boolean);
+}
+async function poolFor(queries, initial, context, publish) {
+  const accepted=new Map(initial.map(a=>[a.originalUrl || a.url,a]));
+  const sources=[searchCommons,searchPexels,searchPixabay,searchOpenverse];
+  const tried=new Set(accepted.keys());
+  for(const query of queries.slice(0,6)) {
+    if(Date.now()>=searchDeadline || accepted.size>=ASSETS_PER_MATCH)break;
+    const batches=await Promise.all(sources.map(async search=>{
+      try{return await search(query);}catch{return [];}
+    }));
+    const ranked=relevantAssets(batches.flat(),context);
+    for(const asset of ranked) {
+      if(Date.now()>=searchDeadline || accepted.size>=ASSETS_PER_MATCH)break;
+      if(tried.has(asset.url))continue;tried.add(asset.url);
+      const saved=await prepareImage(asset,{dir,matchId:context.matchId,base:GEN_BASE,deadline:searchDeadline});
+      if(saved){accepted.set(asset.url,saved);await publish([...accepted.values()],'searching');}
     }
-    if (await publish([...byId.values()], 'searching')) break;
   }
-  // Relevance is ranked after gathering, not by the order of the providers.
-  return [...byId.values()];
+  return [...accepted.values()];
 }
 
-async function fillWithAgnes({ matchId, home, away, missing, kickoff, publish }) {
+async function fillWithAgnes({ matchId, home, away, missing, kickoff, existing = [], publish }) {
   if (!process.env.AGNES_API_KEY?.trim() || missing <= 0) return [];
   const cap = Math.min(envInt('AGNES_MAX_IMAGES', AGNES_MAX_IMAGES), AGNES_MAX_IMAGES);
   const folder = join(dir, 'gen', matchId);
@@ -137,18 +143,22 @@ async function fillWithAgnes({ matchId, home, away, missing, kickoff, publish })
   const made = [];
   // Start at zero on recovery: Python returns cached slots without a new API call.
   for (let index = 0; index < cap && made.length < missing; index++) {
+    if(existing.some(a=>a.source==='agnes' && a.id===`${matchId}-${index}`)) continue;
+    const requestTimeout=Number(process.env.AGNES_TIMEOUT_SECONDS || 300);
+    if (Date.now()+requestTimeout*1000+35000>bankDeadline) break;
     const promptFile = join(folder, `${index}.prompt.txt`);
     await writeFile(promptFile, prompts[index]);
     try {
       const { stdout } = await run(process.env.PYTHON_BIN || 'python3', [
         join(PIPELINE, 'agnes.py'), `--match=${matchId}`, `--index=${index}`,
-        `--expires-at=${(Date.parse(kickoff) + 86400_000)/1000}`, `--prompt-file=${promptFile}`, `--out=${folder}`,
-      ], { env: process.env, timeout: 20 * 60_000, maxBuffer: 1024 * 1024 });
+        `--expires-at=${(Date.parse(kickoff) + 86400_000)/1000}`, `--attempt-deadline=${bankDeadline/1000}`, `--prompt-file=${promptFile}`, `--out=${folder}`,
+      ], { env: process.env, timeout: Math.max(1,bankDeadline-Date.now()+1000), maxBuffer: 1024 * 1024 });
       const saved = JSON.parse(stdout);
-      made.push({ ...normalizeAgnesImage({ matchId, index,
+      const image = { ...normalizeAgnesImage({ matchId, index,
         publicUrl: `${GEN_BASE}/${encodeURIComponent(matchId)}/${saved.file}`,
         model: saved.model, prompt: saved.prompt, at: saved.at }),
-        width: saved.width, height: saved.height });
+        width: saved.width, height: saved.height, prepared:true };
+      if(!assetErrors(image).length) made.push(image);
       await publish(made);
     } catch (error) {
       const reason = String(error.stderr || 'generación no completada').trim().slice(0, 200);
@@ -199,19 +209,23 @@ for (const match of matches) {
   const players = attentionPlayers(scripts, { home: match.home, away: match.away });
   let scorers = null;
   try { scorers = JSON.parse(await readFile(join(process.env.GOATLAB_REPO || '.', 'public/data/scorers.json'), 'utf8')); } catch { /* optional */ }
-  const publish = mediaPublisher({ dir, match, facts: editingFacts(match, scorers) });
-  await publish([], 'searching');
-  const teams = [match.home, match.away].map(name => sceneQueries({ home: name }));
-  const scenes = [];
-  for (let i = 0; i < Math.max(...teams.map(q => q.length)); i++) {
-    for (const queries of teams) if (queries[i]) scenes.push(queries[i]);
-  }
-  scenes.splice(2, 0, ...players.slice(0, 6).map(player => ({ query: `${player} football portrait`, player, scene: 'portrait' })));
-  const candidates = await poolFor(scenes, CANDIDATES_PER_MATCH, async pool => {
-    const selected = relevantAssets(pool, { home: match.home, away: match.away, players }).slice(0, ASSETS_PER_MATCH);
-    return (await publish(selected, 'searching')).complete;
-  });
-  let accepted = relevantAssets(candidates, { home: match.home, away: match.away, players }).slice(0, ASSETS_PER_MATCH);
+  let progress;try{progress=JSON.parse(await readFile(join(dir,`${matchId}.progress.json`),'utf8'));}catch{}
+  const attemptStartedAt=progress?.phase !== 'finished' && Number.isFinite(progress?.attemptStartedAt) ? progress.attemptStartedAt : Date.now();
+  const publish = mediaPublisher({ dir, match, facts: editingFacts(match, scorers), attemptStartedAt });
+  bankDeadline=attemptStartedAt+15*60_000;searchDeadline=Math.min(bankDeadline,Date.now()+90_000);
+  let initial=(prev?.assets ?? []).filter(a=>!assetErrors(a).length);
+  // Revalidate legacy remote resources; only decoded files enter the available count.
+  const checked=[];
+  for(const asset of initial){const saved=await prepareImage(asset,{dir,matchId,base:GEN_BASE,deadline:searchDeadline});if(saved)checked.push(saved);}
+  initial=checked;
+  await publish(initial, 'searching');
+  // Two team queries, two player queries, then team-specific fans/stadium/kit contexts.
+  const queries=[{query:`${match.home} football training`,scene:'training'},
+    {query:`${match.away} football training`,scene:'training'},
+    ...players.slice(0,2).map(player=>({query:`${player} football`,player,scene:'portrait'})),
+    {query:`${match.home} football fans stadium`,scene:'fans'},
+    {query:`${match.away} football jersey arrival stadium`,scene:'arrival'}];
+  let accepted=await poolFor(queries,initial,{home:match.home,away:match.away,players,matchId},publish);
   if (accepted.length < ASSETS_PER_MATCH) {
     const extra = await fillWithAgnes({
       matchId,
@@ -219,12 +233,13 @@ for (const match of matches) {
       home: match.home,
       away: match.away,
       missing: ASSETS_PER_MATCH - accepted.length,
+      existing: accepted,
       publish: async generated => publish([...accepted, ...generated], 'generating'),
     });
     accepted = [...accepted, ...extra];
   }
   await publish(accepted, 'finished');
-  const payload = { ...buildManifest({ match, assets: accepted }), facts: editingFacts(match, scorers), generatedAt: new Date().toISOString() };
+  const payload = JSON.parse(await readFile(file,'utf8'));
   const errors = checkMediaManifest(payload, { matchId });
   if (errors.length) {
     for (const error of errors) console.error(`${file}: ${error}`);

@@ -33,6 +33,10 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     assert.equal(response.status, 202);
     const job = await response.json();
     assert.equal(job.status, 'cancelled'); assert.equal(job.duplicate, true);
+    for (const assets of [[], body.assets.slice(0,1)]) {
+      const partial=await send(app,'/render',{...body,assets,mediaMinimum:0});
+      assert.equal(partial.status,202);assert.equal((await partial.json()).duplicate,true);
+    }
     assert.equal((await send(app, `/jobs/${job.jobId}`, undefined, false)).status, 401);
     assert.equal((await (await send(app, `/jobs/${job.jobId}`)).json()).status, 'cancelled');
     assert.equal((await send(app, '/render', { ...body, variant: 10 })).status, 400);

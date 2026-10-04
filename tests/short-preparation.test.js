@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { planEdit, prepareShort } from '../fly/render/short-job.mjs';
 
-test('a failed replanning invalidates the previous plan across later retries', async t => {
+test('provider failure replaces a stale plan with a validated local montage', async t => {
   const tmp = mkdtempSync(join(tmpdir(), 'goatlab-plan-'));
   const key = process.env.OPENCODE_GO_API_KEY;
   process.env.OPENCODE_GO_API_KEY = '';
@@ -13,9 +13,11 @@ test('a failed replanning invalidates the previous plan across later retries', a
   writeFileSync(join(tmp, 'edit-input.json'), '{}');
   writeFileSync(join(tmp, 'edit-plan.json'), JSON.stringify({ stale: true }));
   const source = { span: 6, words: [{ word: 'Hola', start: .5, end: 1 }], assets: [] };
-  await assert.rejects(planEdit(source, tmp), /OPENCODE_GO_API_KEY/);
-  assert.equal(existsSync(join(tmp, 'edit-plan.json')), false);
-  await assert.rejects(planEdit(source, tmp), /OPENCODE_GO_API_KEY/);
+  const plan=await planEdit(source,tmp);
+  assert.equal(plan.model,'local-montage');assert.equal(plan.fallback,true);
+  assert.equal(plan.scenes.at(-1).end,source.span);
+  assert.ok(plan.scenes.every(s=>!s.layers.length && s.graphics.length));
+  assert.deepEqual(await planEdit(source,tmp),plan);
 });
 
 test('empty cached transcription cannot produce a video without subtitles', async t => {

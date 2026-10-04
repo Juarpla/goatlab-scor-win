@@ -63,7 +63,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   home = '', away = '', matchLabel, log = () => {},
   cacheDir = process.env.PHOTO_CACHE_DIR || join(APP_ROOT, '.cache/shorts/photos'),
   planner = planEdit, transcriber = voiceTimes,
-  facts = [], mediaMinimum = 2, requestId, onStage = async () => {},
+  facts = [], mediaMinimum = 0, requestId, onStage = async () => {},
 }) {
   const stages = {}, measure = async (label, fn) => {
     const at = Date.now();
@@ -100,13 +100,14 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     available.push({ ...assets[i], width: photo.width, height: photo.height });
   });
   } finally { unpin(); }
-  if (photos.length < mediaMinimum) throw new Error(`fotos descargadas insuficientes: ${photos.length}/${mediaMinimum}`);
+  if (photos.length < assets.length) log(`media: ${photos.length}/${assets.length} fotos disponibles; se completará con gráficos`);
   const words = shiftWords(timing.words, LEAD_SECONDS);
   const source = { planVersion: 2, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
   const plan = await measure('planning', () => planner(source, tmp, log));
+  if (plan.fallback) await onStage('planningFallback');
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
   copyFileSync(gsapSource(), join(tmp, 'gsap.min.js'));

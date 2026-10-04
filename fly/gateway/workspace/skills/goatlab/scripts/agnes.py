@@ -56,7 +56,7 @@ class ImagePool:
         self.db.execute("DELETE FROM starts WHERE at<=?", (self.clock()-60,))
         self.db.execute("DELETE FROM throttle WHERE until<=?", (self.clock(),))
 
-    def take_slot(self):
+    def take_slot(self, deadline=None, reserve=0):
         # Called while holding the global lock, including on every retry.
         while True:
             now = self.clock()
@@ -65,15 +65,17 @@ class ImagePool:
             starts = [r[0] for r in self.db.execute("SELECT at FROM starts ORDER BY at")]
             wait = max(0, (pause[0] - now) if pause else 0,
                        (starts[0] + 60.05 - now) if len(starts) >= 4 else 0)
+            if deadline is not None and now+wait+reserve>deadline:
+                raise ValueError("presupuesto de preparación agotado")
             if wait > 0:
                 self.sleep(wait)
                 continue
             self.db.execute("INSERT INTO starts VALUES(?)", (now,))
             return
 
-    def generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None):
-        if slot not in range(5):
-            raise ValueError("máximo cinco imágenes por encuentro")
+    def generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None, attempt_deadline=None):
+        if slot not in range(15):
+            raise ValueError("máximo quince imágenes por encuentro")
         if size not in {"1K", "2K"} or ratio not in {"1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"}:
             raise ValueError("resolución o ratio no admitidos")
         out = Path(out)
@@ -106,11 +108,11 @@ class ImagePool:
             timeout = int(os.environ.get("AGNES_TIMEOUT_SECONDS", "300"))
             if not 60 <= timeout <= 360:
                 raise ValueError("AGNES_TIMEOUT_SECONDS debe estar entre 60 y 360")
-            self.db.execute("INSERT OR REPLACE INTO images VALUES(?,?,?,NULL)", (match, slot, "pending"))
             for attempt in range(2):
-                self.take_slot()
+                self.take_slot(attempt_deadline, timeout+35)
                 if self.clock() >= (prior_match[0] if prior_match else deadline):
                     raise ValueError("encuentro caducado; generaciones cerradas")
+                self.db.execute("INSERT OR REPLACE INTO images VALUES(?,?,?,NULL)", (match, slot, "pending"))
                 try:
                     result = call("https://apihub.agnes-ai.com/v1/images/generations", {
                         "model": model, "prompt": prompt, "size": size, "ratio": ratio,
@@ -120,6 +122,7 @@ class ImagePool:
                 except urllib.error.HTTPError as error:
                     error.close()
                     if error.code == 429:
+                        self.db.execute("UPDATE images SET status='limited' WHERE match_id=? AND slot=?", (match, slot))
                         until = self.clock() + retry_seconds(error.headers.get("Retry-After"))
                         self.db.execute("INSERT OR REPLACE INTO throttle VALUES(1,?)", (until,))
                         if attempt == 0:
@@ -188,10 +191,11 @@ if __name__ == "__main__":
     parser.add_argument("--size", choices=["1K", "2K"], default="2K")
     parser.add_argument("--ratio", default="9:16")
     parser.add_argument("--expires-at", type=float, required=True)
+    parser.add_argument("--attempt-deadline", type=float)
     args = parser.parse_args()
     try:
         pool = ImagePool(os.environ.get("AGNES_STATE_DB", str(Path(args.out).parents[1] / "agnes.sqlite")))
-        print(json.dumps(pool.generate(args.match, args.index, Path(args.prompt_file).read_text(), args.out, size=args.size, ratio=args.ratio, expires_at=args.expires_at)))
+        print(json.dumps(pool.generate(args.match, args.index, Path(args.prompt_file).read_text(), args.out, size=args.size, ratio=args.ratio, expires_at=args.expires_at, attempt_deadline=args.attempt_deadline)))
     except Exception as error:
         print(str(error) if isinstance(error, ValueError) else type(error).__name__, file=sys.stderr)
         sys.exit(1)

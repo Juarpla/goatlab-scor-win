@@ -4,7 +4,7 @@ import { relevantAssets } from '../src/lib/media.js';
 import { telegramCaption } from '../src/lib/youtube.js';
 
 test('metadata establishes relevance and diversity; the search query alone never identifies a team', () => {
-  const asset = (id, title, motive = 'training') => ({ id, url: `https://example.test/${id}.jpg`, query: 'Alpha FC football', title, motive, width: 1472, height: 2624 });
+  const asset = (id, title, motive = 'training') => ({ id, source:'pexels',license:'Pexels License',page:'https://example.test/photo',photographer:'Author', url: `https://example.test/${id}.jpg`, query: 'Alpha FC football', title, motive, width: 1472, height: 2624 });
   const selected = relevantAssets([
     ...Array.from({ length: 12 }, (_, i) => asset(i, 'Alpha FC football training')),
     asset('away', 'Beta FC football training'), asset('fans', 'Alpha FC supporters', 'fans'),
@@ -12,12 +12,12 @@ test('metadata establishes relevance and diversity; the search query alone never
   ], { home: 'Alpha FC', away: 'Beta FC' });
   assert.ok(selected.slice(0, 4).some(a => a.id === 'away'));
   assert.ok(selected.slice(0, 4).some(a => a.id === 'fans'));
-  assert.ok(selected.slice(0, 4).some(a => a.selection.contextOnly));
+  assert.ok(!selected.some(a => a.id === 'context'));
   assert.ok(!selected.some(a => a.id === 'wrong'));
 });
 
 test('country names, ambiguous surnames and American football cannot fill a soccer pack',()=>{
-  const assets=['Prague Czechia banknotes money','Spain city bus tour','Yamal winter snow family','American football quarterback training','Spain football team training'].map((title,id)=>({id:String(id),title,url:`https://example.test/${id}.jpg`,width:1440,height:1920}));
+  const assets=['Prague Czechia banknotes money','Spain city bus tour','Yamal winter snow family','American football quarterback training','Spain football team training'].map((title,id)=>({id:String(id),source:'pexels',license:'Pexels License',page:'https://example.test/photo',photographer:'Author',title,url:`https://example.test/${id}.jpg`,width:1440,height:1920}));
   assert.deepEqual(relevantAssets(assets,{home:'Spain',away:'Czechia',players:['Lamine Yamal']}).map(a=>a.id),['4']);
 });
 

@@ -6,11 +6,11 @@
  */
 import { esName } from './teams.js';
 
-/** Tope del pool. Con menos de ASSETS_MIN el pack no se publica. */
+/** Bank target; an exhausted preparation may finish with zero usable images. */
 export const ASSETS_PER_MATCH = 15;
-export const ASSETS_MIN = 8;
-/** Fotos de apoyo que Agnes puede generar en un pack. No se llega al tope del plan. */
-export const AGNES_MAX_IMAGES = 5;
+export const ASSETS_MIN = 0;
+/** Shared generation budget across all videos of one encounter. */
+export const AGNES_MAX_IMAGES = 15;
 /** Candidatas de búsqueda antes de seleccionar el pool. */
 export const CANDIDATES_PER_MATCH = 60;
 /** Plazas reservadas a entrenamiento, entrevista, llegada, hinchas o prensa. */
@@ -32,13 +32,15 @@ export const CAMERA_MOVES = [
   'hold-push',
 ];
 
-export const ALLOWED_SOURCES = ['commons', 'pexels', 'pixabay', 'agnes'];
+export const ALLOWED_SOURCES = ['commons', 'pexels', 'pixabay', 'openverse', 'licensed', 'agnes'];
 
 export const SOURCE_CREDIT = {
   commons: 'Wikimedia Commons',
   pexels: 'Pexels',
   pixabay: 'Pixabay',
   agnes: 'Agnes AI',
+  openverse: 'Openverse',
+  licensed: 'Fuente con licencia',
 };
 
 export const AI_CREDIT = 'Imágenes de apoyo generadas con IA (Agnes AI)';
@@ -57,7 +59,7 @@ const SCENE_MOTIVES = new Set(['training', 'interview', 'arrival', 'fans', 'pres
 const FILL_MOTIVES = new Set(['portrait']);
 const ACCEPTED_MOTIVES = new Set([...SCENE_MOTIVES, ...FILL_MOTIVES]);
 
-const REJECT_FILE = /flag of|\bflag\b|coat of arms|\blogo\b|locator map|\.svg\b|escudo|bandera|\bsignature\b|\bautograph\b|kit (body|socks|shorts|left|right)|pictogram|\bicon\b|\bbadge\b|\bstamp\b|football field|soccer field|\bwomen\b|\bwoman\b|femenin|f[eé]minin|\bfemale\b|\bwnt\b|\bbroadcast\b|\bscreenshot\b|\btelecast\b/i;
+const REJECT_FILE = /flag of|\bflag\b|coat of arms|\blogo\b|locator map|\.svg\b|escudo|bandera|\bsignature\b|\bautograph\b|kit (body|socks|shorts|left|right)|pictogram|\bicon\b|\bbadge\b|\bstamp\b|\bwomen\b|\bwoman\b|femenin|f[eé]minin|\bfemale\b|\bwnt\b|\bbroadcast\b|\bscreenshot\b|\btelecast\b/i;
 
 function looksRejected(text) {
   return REJECT_FILE.test(String(text ?? '').replace(/[_-]+/g, ' '));
@@ -65,6 +67,34 @@ function looksRejected(text) {
 
 export function isUsableStill(asset) {
   return !looksRejected(`${asset?.url ?? ''} ${asset?.page ?? ''}`);
+}
+
+/** Shared candidate/publisher contract: dropping one invalid asset never aborts a bank. */
+export function assetErrors(asset) {
+  if (!asset || typeof asset !== 'object') return ['recurso vacío'];
+  const errors = [];
+  if (!ALLOWED_SOURCES.includes(asset.source)) errors.push('fuente no permitida');
+  if (!asset.id) errors.push('sin id');
+  if (!acceptAssetLicense(asset.source, asset.license)) errors.push('licencia no libre');
+  if (!isUsableStill(asset)) errors.push('imagen no utilizable');
+  for (const field of ['url','page','photographer']) if (!String(asset[field] ?? '').trim()) errors.push(`sin ${field}`);
+  for (const field of ['url','originalUrl','page','photographerUrl','licenseUrl']) {
+    const value = String(asset[field] ?? '');
+    if (value && (!value.startsWith('https://') || BANNED_PHOTO_DOMAINS.some(p=>p.test(value)))) errors.push(`URL no permitida: ${field}`);
+  }
+  if (['openverse','licensed'].includes(asset.source) && !asset.licenseUrl) errors.push('sin enlace de licencia');
+  return errors;
+}
+
+/** Openverse indexes many sites; retain the original author, source page and license. */
+export function normalizeOpenverseImage(image, query, {player=null, scene=null}={}) {
+  const license = image?.license === 'pdm' ? 'Public domain' : image?.license === 'cc0' ? 'CC0' : `CC ${String(image?.license ?? '').toUpperCase()} ${image?.license_version ?? ''}`;
+  const asset = {source:'openverse',id:image?.id,url:image?.url,page:image?.foreign_landing_url,
+    photographer:image?.creator,photographerUrl:image?.creator_url?.startsWith('https://') ? image.creator_url : image?.foreign_landing_url,
+    license,licenseUrl:image?.license_url,width:image?.width,height:image?.height,title:image?.title ?? '',
+    description:(image?.tags ?? []).map(t=>t.name).join(' '),query,subject:subjectFor(player,image?.title),
+    motive:photoMotive(image?.title),sceneHint:scene,provider:image?.source};
+  return assetErrors(asset).length ? null : asset;
 }
 
 export function hashWebId(webId) {
@@ -145,7 +175,7 @@ export function classifyLicense(shortName) {
 
 /** Licencia según la fuente. Pexels y Pixabay no son Creative Commons. */
 export function acceptAssetLicense(source, license) {
-  if (source === 'commons') return classifyLicense(license);
+  if (['commons', 'openverse', 'licensed'].includes(source)) return classifyLicense(license);
   const text = String(license ?? '').trim();
   if (source === 'pexels' && /^Pexels License$/i.test(text)) return 'Pexels License';
   if (source === 'pixabay' && /^Pixabay Content License$/i.test(text)) return 'Pixabay Content License';
@@ -333,9 +363,10 @@ export function relevantAssets(assets, { home = '', away = '', players = [] } = 
     const team = names.find(name => text.includes(name));
     const player = players.find(name => subjectFor(name, text));
     const football = /football|soccer|futbol|futebol|fussball|calcio|supporter|hincha/.test(text);
-    if (/american football|rugby|quarterback|gridiron/.test(text)) return [];
+    if (assetErrors(asset).length || /american football|rugby|quarterback|gridiron/.test(text)) return [];
     const verifiedPlayer = player && plainKey(player).split(' ').filter(t=>t.length>2).every(token=>text.split(' ').includes(token));
-    if (!football && !verifiedPlayer && !(/supporter|hincha|aficion/.test(text) && team)) return [];
+    if (!team && !verifiedPlayer) return [];
+    if (!football && !verifiedPlayer && !/stadium|estadio|jersey|camiseta|shirt|kit|supporter|hincha|aficion/.test(text)) return [];
     if (asset.width && asset.height && Math.max(asset.width, asset.height) < 720) return [];
     const date = Date.parse(asset.date ?? '');
     const recent = Number.isFinite(date) && Date.now() - date < 3 * 365 * 86400_000;
@@ -445,7 +476,7 @@ export function buildAttribution(assets) {
     const key = `${asset.photographer}|${asset.license}`;
     if (!seen.has(key)) {
       const credit = SOURCE_CREDIT[asset.source] ?? asset.source;
-      seen.set(key, `Foto: ${asset.photographer} / ${credit} (${asset.license})`);
+      seen.set(key, `Foto: ${asset.photographer} / ${credit} (${asset.license})${asset.page ? ` · ${asset.page}` : ''}${asset.licenseUrl ? ` · ${asset.licenseUrl}` : ''}`);
     }
   }
   const lines = [...seen.values()];

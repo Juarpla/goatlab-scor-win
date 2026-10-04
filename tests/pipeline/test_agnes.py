@@ -50,7 +50,7 @@ class AgnesTests(unittest.TestCase):
         self.assertEqual(calls[0][0]['ratio'], '9:16')
         self.assertEqual(calls[0][1], 300)
         self.assertEqual(first['width'], 1472)
-        with self.assertRaises(ValueError): self.pool.generate('match', 5, 'prompt', out, call)
+        with self.assertRaises(ValueError): self.pool.generate('match', 15, 'prompt', out, call)
 
     def test_timeout_is_not_repeated_after_restart(self):
         def timeout(*_, **__): raise TimeoutError()
@@ -74,6 +74,15 @@ class AgnesTests(unittest.TestCase):
             self.pool.generate('other', 0, 'prompt', Path(self.temp.name) / 'images', limited)
         self.assertEqual(retry_seconds(None), 60)
 
+    @patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}')
+    def test_fifteen_shared_slots_are_available_and_do_not_accumulate_base64(self, _probe):
+        out=Path(self.temp.name)/'images'
+        for slot in range(15):
+            self.pool.generate('m',slot,'fictional players',out,lambda *a,**kw:self.result())
+        self.assertEqual(self.pool.db.execute("SELECT COUNT(*) FROM images WHERE status='done'").fetchone()[0],15)
+        self.assertFalse(list(out.glob('*.response.json')))
+        self.assertGreaterEqual(self.now,1180)
+
 class ExpiryTests(unittest.TestCase):
     def test_past_match_is_closed_even_after_control_records_are_cleaned(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -82,3 +91,11 @@ class ExpiryTests(unittest.TestCase):
             pool.cleanup()
             with self.assertRaisesRegex(ValueError,'caducado'):
                 pool.generate('past',0,'prompt',Path(folder)/'images',expires_at=99999)
+
+    def test_deadline_prevents_a_new_generation_before_sending_http(self):
+        with tempfile.TemporaryDirectory() as folder:
+            pool=ImagePool(Path(folder)/'agnes.sqlite',clock=lambda:1000)
+            self.addCleanup(pool.db.close)
+            with patch.dict(os.environ,{'AGNES_API_KEY':'test'}):
+                with self.assertRaisesRegex(ValueError,'presupuesto'):
+                    pool.generate('m',14,'prompt',Path(folder)/'gen',call=lambda *a,**k:self.fail('no request'),attempt_deadline=1100)

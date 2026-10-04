@@ -34,6 +34,7 @@ def validate(plan, source):
     if not isinstance(scenes, list) or not 1 <= len(scenes) <= 64:
         raise ValueError("se requieren 1–64 escenas")
     cursor = 0
+    photo_run = 0
     for scene in scenes:
         start = number(scene.get("start"), 0, span, "start")
         end = number(scene.get("end"), 0, span, "end")
@@ -49,6 +50,9 @@ def validate(plan, source):
             raise ValueError("cada escena admite 0–4 capas de fotos")
         if not layers and not scene.get('graphics') and not scene.get('objects'):
             raise ValueError("una escena sin fotos requiere gráficos u objetos")
+        photo_run = photo_run+1 if layers else 0
+        if plan['version']==2 and len(scenes)>2 and photo_run>2:
+            raise ValueError('intercala una escena de motion graphics tras dos escenas de fotos')
         camera = scene.get('camera', {})
         for key, bounds in {'x': (-.03,.03), 'y': (-.03,.03), 'scale': (1,1.08)}.items():
             if key in camera: number(camera[key], *bounds, 'camera.'+key)
@@ -141,6 +145,32 @@ def parse_json(content):
     raise ValueError("respuesta JSON inválida")
 
 
+def local_plan(source, reason="proveedores no disponibles", attempts=None):
+    """Narration-grounded fallback with an independent scene/caption timeline."""
+    if not source.get('words'):
+        raise ValueError('se requiere transcripción antes del montaje')
+    span, words, assets = source['span'], source['words'], source.get('assets', [])
+    count = max(1, min(64, math.ceil(span/4)))
+    scenes=[]
+    for i in range(count):
+        start, end = i*span/count, (i+1)*span/count
+        indices=[j for j,w in enumerate(words) if start-.3 <= w['start'] < end-.2]
+        graphics=[{'kind':'ring' if i%2 else 'line','at':start,'duration':end-start,'x':.15,'y':.3}]
+        if indices:
+            lo=indices[0]; hi=min(lo+5,len(words))
+            graphics.append({'kind':'title','at':max(start,words[lo]['start']),
+                             'duration':end-max(start,words[lo]['start']), 'wordStart':lo,'wordEnd':hi,'x':.07,'y':.13})
+        layers=[]
+        if assets and i%2==0:
+            layers=[{'asset':(i//2+int(source.get('variant',0)))%len(assets),'move':'push' if i%4==0 else 'pan-left',
+                     'focusEffect':'focus','from':{'scale':1},'to':{'scale':1.05}}]
+        scenes.append({'start':start,'end':end,'transition':['fade','focus','slide','wipe'][i%4],
+                       'accent':'#c5ed74','layers':layers,'graphics':graphics,
+                       'objects':[{'kind':['card','cube','prism'][i%3],'x':.25,'y':.35,'size':220,'rotateX':12,'rotateY':-20,'spin':55}] if not layers else []})
+    return {**validate({'version':2,'scenes':scenes},source),'model':'local-montage','fallback':True,
+            'fallbackReason':reason,'attempts':attempts or []}
+
+
 def create_plan(source, call=request_json, env=None, clock=time.monotonic, logger=None):
     env = os.environ if env is None else env
     if not source.get("words"):
@@ -151,7 +181,7 @@ def create_plan(source, call=request_json, env=None, clock=time.monotonic, logge
         env.get("OPENCODE_GO_FALLBACK_MODEL", "mimo-v2.6-flash"),
     ]))
     if not env.get("OPENCODE_GO_API_KEY"):
-        raise ValueError("falta OPENCODE_GO_API_KEY para planificar el montaje")
+        return local_plan(source, "configuración del proveedor no disponible")
     url = env.get("OPENCODE_GO_BASE_URL", "https://opencode.ai/zen/go/v1").rstrip("/") + "/chat/completions"
     errors, attempts = [], []
     started = clock()
@@ -205,7 +235,7 @@ def create_plan(source, call=request_json, env=None, clock=time.monotonic, logge
                 errors.append(f"{model}: respuesta del proveedor inválida")
                 note(model,'response',at)
                 break
-    raise ValueError("No se pudo validar el montaje: " + "; ".join(errors))
+    return local_plan(source, "; ".join(errors), attempts)
 
 
 if __name__ == "__main__":
