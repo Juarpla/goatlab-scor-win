@@ -62,10 +62,12 @@ class ProgressReporter:
             audios=db.execute('SELECT id FROM audios WHERE series_id=? AND cancelled=0 ORDER BY ordinal',(series['id'],)).fetchall()
             jobs=[]
             for audio in audios:
-                if audio[0] in by_request: jobs.append(by_request[audio[0]])
-                else:
-                    pending=db.execute('SELECT status,payload FROM tasks WHERE id=?',(audio[0],)).fetchone()
-                    if pending and pending[0]=='failed': jobs.append({'status':'error','variant':json.loads(pending[1]).get('variant',0)})
+                pending=db.execute('SELECT status,payload FROM tasks WHERE id=?',(audio[0],)).fetchone()
+                remote=by_request.get(audio[0])
+                # An explicit retry supersedes the previous error while waiting for media/submission.
+                retrying=pending and pending[0] in ('queued','running') and remote and remote.get('status')=='error'
+                if remote and not retrying: jobs.append(remote)
+                elif pending and pending[0]=='failed': jobs.append({'status':'error','variant':json.loads(pending[1]).get('variant',0)})
             task=db.execute('SELECT status FROM tasks WHERE id=?',('media:'+series['match_id'],)).fetchone()
             if task and task[0]=='failed': media['phase']='failed'
             text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now,len(audios))

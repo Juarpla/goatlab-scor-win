@@ -43,3 +43,13 @@ class ProgressTests(unittest.TestCase):
             restored=ProgressReporter(flow,send=lambda method,body:(calls.append(body) or {'message_id':12}),clock=lambda:now[0])
             restored.update([]);self.assertEqual(calls[-1]['message_id'],12)
             flow.db.close()
+
+    def test_retry_supersedes_the_previous_worker_error_while_preparing_media(self):
+        with tempfile.TemporaryDirectory() as root:
+            flow=Workflow(Path(root)/'goatlab.sqlite',clock=lambda:1000)
+            flow.select('1',{'matchId':'a-b','scripts':[{} for _ in range(10)]})
+            request=flow.receive('1','voice','event')['requestId'];calls=[]
+            reporter=ProgressReporter(flow,send=lambda method,body:(calls.append(body) or {'message_id':12}),clock=lambda:1000)
+            reporter.update([{'requestId':request,'status':'error','variant':0}])
+            self.assertNotIn('detenido',calls[-1]['text']);self.assertIn('1 videos pendientes',calls[-1]['text'])
+            flow.db.close()
