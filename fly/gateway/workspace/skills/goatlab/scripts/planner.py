@@ -157,7 +157,15 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
         indices=[j for j,w in enumerate(words) if start-.3 <= w['start'] < end-.2]
         graphics=[{'kind':'ring' if i%2 else 'line','at':start,'duration':end-start,'x':.15,'y':.3}]
         if indices:
-            lo=indices[0]; hi=min(lo+5,len(words))
+            lo=indices[0]
+            # Start on a substantive phrase instead of a dangling connective.
+            weak={'y','o','pero','porque','que','de','del','el','la','los','las','un','una','en','a','al','con','es','se','su','sus'}
+            while lo < indices[-1] and words[lo]['word'].lower().strip('.,:;¿?¡!') in weak: lo+=1
+            hi=min(lo+6,indices[-1]+1)
+            for j in range(lo,hi):
+                if words[j]['word'].endswith(('.', '?', '!', ';')):
+                    hi=j+1; break
+            while hi>lo+1 and words[hi-1]['word'].lower().strip('.,:;¿?¡!') in weak: hi-=1
             graphics.append({'kind':'title','at':max(start,words[lo]['start']),
                              'duration':end-max(start,words[lo]['start']), 'wordStart':lo,'wordEnd':hi,'x':.07,'y':.13})
         layers=[]
@@ -166,7 +174,7 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
                      'focusEffect':'focus','from':{'scale':1},'to':{'scale':1.05}}]
         scenes.append({'start':start,'end':end,'transition':['fade','focus','slide','wipe'][i%4],
                        'accent':'#c5ed74','layers':layers,'graphics':graphics,
-                       'objects':[{'kind':['card','cube','prism'][i%3],'x':.25,'y':.35,'size':220,'rotateX':12,'rotateY':-20,'spin':55}] if not layers else []})
+                       'objects':[{'kind':['card','cube','prism'][i%3],'x':.7,'y':.53,'size':100,'rotateX':12,'rotateY':-20,'spin':35}] if not layers else []})
     return {**validate({'version':2,'scenes':scenes},source),'model':'local-montage','fallback':True,
             'fallbackReason':reason,'attempts':attempts or []}
 

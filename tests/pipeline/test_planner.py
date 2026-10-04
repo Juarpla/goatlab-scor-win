@@ -8,7 +8,7 @@ import io
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
-from planner import create_plan, validate
+from planner import create_plan, validate, local_plan
 
 
 SOURCE = {'span': 5, 'words': [{'word': 'Ganó', 'start': .5, 'end': 1}, {'word': 'tres', 'start': 1, 'end': 1.4}],
@@ -18,6 +18,15 @@ PLAN = {'version': 1, 'scenes': [{'start': 0, 'end': 5, 'layers': [{'asset': 0}]
 
 
 class PlannerTests(unittest.TestCase):
+    def test_local_titles_follow_sentence_boundaries_and_skip_connectives(self):
+        words=[{'word':w,'start':.5+i*.35,'end':.8+i*.35} for i,w in enumerate(['El','espacio','cambia','el','partido.','Pero','nadie','lo','aprovecha.'])]
+        source={**SOURCE,'span':4,'words':words,'assets':[]}
+        plan=local_plan(source)
+        title=next(g for g in plan['scenes'][0]['graphics'] if g['kind']=='title')
+        phrase=' '.join(w['word'] for w in words[title['wordStart']:title['wordEnd']])
+        self.assertEqual(phrase,'espacio cambia el partido.')
+        validate(plan,source)
+
     def test_real_http_transport_sends_stable_session_and_client_identity(self):
         requests = []
         class Provider(BaseHTTPRequestHandler):

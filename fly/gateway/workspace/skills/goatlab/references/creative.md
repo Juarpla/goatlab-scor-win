@@ -1,5 +1,20 @@
 # Dirección artística GoatLab
 
+## Composición editorial deportiva
+
+Fotos protagonistas y escenas de análisis con jerarquía clara. El motor incorpora
+una cancha con perspectiva como geometría decorativa, marca discreta y títulos
+blancos sobre fondo carbón. Reserva y=0.13–0.30 para un titular hablado de 2–6
+palabras que tenga sentido completo; el título enfatiza una idea, no repite cada
+subtítulo. Elige límites de frase y evita fragmentos cortados entre dos oraciones.
+Reserva y=0.35–0.65 para una comparación o escena gráfica. Los objetos de
+profundidad acompañan el contenido; usa tarjetas con palabras respaldadas y
+colócalas sin superponer título, caras o gráficos. Una foto a pantalla completa
+puede respirar sin texto adicional. Cambia el ritmo cada 2–5 segundos con cortes,
+reencuadres y transiciones breves. Las escenas tácticas decorativas no representan
+posiciones ni jugadas verificadas. Con hechos disponibles, presenta una comparación
+con etiquetas y unidades legibles. Conserva un único punto de atención por escena.
+
 Diseña un Short deportivo que se entienda sin sonido. La voz temporizada manda;
 las fotos son contexto. Usa contraste, jerarquía, ritmo y momentos de énfasis.
 Compón cada video según su argumento, evitando rotar mecánicamente un preset.
