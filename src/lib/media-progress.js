@@ -4,7 +4,7 @@ import { ASSETS_PER_MATCH, buildManifest, assetErrors } from './media.js';
 import { checkMediaManifest } from './compliance.js';
 
 /** Publish valid packs before the producer finishes; every file replaces atomically. */
-export function mediaPublisher({ dir, match, facts = [], attemptStartedAt = Date.now(), clock = () => new Date().toISOString() }) {
+export function mediaPublisher({ dir, match, facts = [], attemptStartedAt = Date.now(), target = ASSETS_PER_MATCH, clock = () => new Date().toISOString() }) {
   const matchId = match.webId ?? match.id;
   let count = 0, ready = false;
   const atomic = async (name, value) => {
@@ -13,18 +13,18 @@ export function mediaPublisher({ dir, match, facts = [], attemptStartedAt = Date
     await writeFile(`${path}.tmp`, JSON.stringify(value));
     await rename(`${path}.tmp`, path);
   };
-  return async (assets, phase) => {
-    const payload = { ...buildManifest({ match, assets: [...new Map(assets.filter(a=>!assetErrors(a).length).map(a=>[`${a.source}:${a.id}`,a])).values()].slice(0, ASSETS_PER_MATCH) }), facts, generatedAt: clock() };
+  return async (assets, phase, extra = {}) => {
+    const payload = { ...buildManifest({ match, assets: [...new Map(assets.filter(a=>!assetErrors(a).length).map(a=>[`${a.source}:${a.id}`,a])).values()].slice(0, ASSETS_PER_MATCH) }), facts, generatedAt: clock(), ...extra };
     count = payload.assets.length;
     const errors = checkMediaManifest(payload, { matchId });
     if (errors.length) throw new Error(`manifiesto inválido: ${errors.join('; ')}`);
-    await atomic('.json', {...payload, bankStatus: phase === 'finished' ? (count === ASSETS_PER_MATCH ? 'complete' : 'partial') : 'preparing'});
+    await atomic('.json', {...payload, bankStatus: phase === 'finished' ? (count === target && (!extra.contentVersion || (extra.clips?.length ?? 0) === 3) ? 'complete' : 'partial') : 'preparing'});
     // Existing ready snapshots remain usable during an explicit bank retry.
     if (phase === 'finished') {
       await atomic('.ready', { assets: count, updatedAt: clock() });
       ready = true;
     }
-    await atomic('.progress.json', { count, target: ASSETS_PER_MATCH, phase, ready, attemptStartedAt, updatedAt: clock() });
-    return { count, ready, complete: count === ASSETS_PER_MATCH };
+    await atomic('.progress.json', { count, target, clips: extra.clips?.length ?? 0, failures: extra.failures ?? [], phase, ready, attemptStartedAt, updatedAt: clock() });
+    return { count, ready, complete: count === target };
   };
 }

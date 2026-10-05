@@ -171,6 +171,27 @@ class DeploymentCompatibilityTests(unittest.TestCase):
             self.assertEqual(call.call_count,2)
 
 class IdleCleanupTests(unittest.TestCase):
+    def test_shared_bank_survives_closed_series_until_match_expiry(self):
+        import os
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            flow = Workflow(root/'goatlab.sqlite', clock=lambda: 1800000000)
+            self.addCleanup(flow.db.close)
+            media = root/'media-pack'; media.mkdir()
+            bank = media/'a-b.json'
+            bank.write_text(json.dumps({'contentVersion': 1, 'kickoff': '2027-01-15T08:00:00Z'}))
+            assets = media/'gen/a-b'; assets.mkdir(parents=True)
+            (assets/'image.jpg').write_bytes(b'cached')
+            with patch.dict(os.environ, {'MEDIA_PACK_DIR': str(media)}):
+                flow.release_media()
+                self.assertTrue(bank.exists())
+                self.assertTrue(assets.exists())
+                bank.write_text(json.dumps({'contentVersion': 1, 'kickoff': '2020-01-01T00:00:00Z'}))
+                flow.release_media()
+                self.assertFalse(bank.exists())
+                self.assertFalse(assets.exists())
+
     def test_cleanup_reads_local_delivery_record_without_waking_render(self):
         import os
         import time

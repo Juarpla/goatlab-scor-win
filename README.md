@@ -55,3 +55,19 @@ AdSense está pendiente de implementación; no se cargan anuncios ni rastreadore
 - [OpenCode Go: endpoints y uso](https://opencode.ai/docs/go/)
 
 Las decisiones del producto están en PRODUCT.md. El diseño se construirá directamente en código, según `.impeccable/config.json`.
+
+
+### Contenido audiovisual
+
+`pnpm content` prepara los guiones y prompts del top 5 configurable. Admite
+`--category=all|scripts|image-prompts|video-prompts|motion-prompts`, `--match=<webId>`,
+`--top=N` y `--force`. Las categorías se guardan de forma independiente y conservan
+el contenido válido existente. Prioridad: MiMo → DeepSeek → Mistral → Workers AI,
+configurada por `SCRIPT_PROVIDER_ORDER`, independiente del análisis deportivo.
+
+Cada partido tiene `/scripts`, `/image-prompts`, `/video-prompts` y `/motion-prompts`
+con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
+para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
+partido, genera un banco compartido de 10 imágenes y hasta 3 clips Agnes, y monta
+los gráficos según la voz. La preparación dura hasta 15 minutos, con entrega
+parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts`.

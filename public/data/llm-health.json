@@ -1,741 +1,6 @@
 {
-  "updatedAt": "2026-10-05T15:41:45.104Z",
+  "updatedAt": "2026-10-05T17:46:57.245Z",
   "runs": [
-    {
-      "at": "2026-09-23T12:32:42.486Z",
-      "matchId": "af-1528862",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 225
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 959,
-            "outputTokens": 3000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 56332
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 997,
-            "outputTokens": 3000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13162
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "transport",
-          "reason": "HTTP 429",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 451
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 959,
-            "outputTokens": 5000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 133924
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 5000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 997,
-            "outputTokens": 5000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 19895
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 997,
-        "outputTokens": 5000
-      },
-      "truncated": true,
-      "maxTokens": 5000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:32:50.415Z",
-      "matchId": "af-1545601",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "WORKERS_AI",
-        "model": "@cf/zai-org/glm-4.7-flash"
-      },
-      "usage": {
-        "inputTokens": 1314,
-        "outputTokens": 4915
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": "a02e4b9a-cebb-43a8-b36f-acf940b7af21"
-    },
-    {
-      "at": "2026-09-23T12:32:50.415Z",
-      "matchId": "af-1528862",
-      "attempts": 1,
-      "failures": [],
-      "ok": null,
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": "a02e4b9a-cebb-43a8-b36f-acf940b7af21"
-    },
-    {
-      "at": "2026-09-23T12:39:05.864Z",
-      "matchId": "af-1528863",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 906,
-            "outputTokens": 3000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 69760
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 942,
-            "outputTokens": 3000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13895
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 5000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 906,
-            "outputTokens": 5000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 136396
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 906,
-        "outputTokens": 5000
-      },
-      "truncated": true,
-      "maxTokens": 5000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:08.228Z",
-      "matchId": "af-1528864",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 3000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 886,
-            "outputTokens": 3000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 82891
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 886,
-        "outputTokens": 3000
-      },
-      "truncated": true,
-      "maxTokens": 5000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:14.432Z",
-      "matchId": "af-1528863",
-      "attempts": 1,
-      "failures": [],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1205,
-        "outputTokens": 4695
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": "2cdf6b70-cecf-4db0-9db2-566ac538cf66"
-    },
-    {
-      "at": "2026-09-23T12:41:14.432Z",
-      "matchId": "af-1528864",
-      "attempts": 1,
-      "failures": [],
-      "ok": null,
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": "2cdf6b70-cecf-4db0-9db2-566ac538cf66"
-    },
-    {
-      "at": "2026-09-23T12:41:27.083Z",
-      "matchId": "af-1528865",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:27.083Z",
-      "matchId": "af-1528865",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:33.905Z",
-      "matchId": "af-1528878",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:33.905Z",
-      "matchId": "af-1528878",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:51.280Z",
-      "matchId": "af-1528879",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:51.280Z",
-      "matchId": "af-1528879",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:57.454Z",
-      "matchId": "af-1528880",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:41:57.454Z",
-      "matchId": "af-1528880",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:42:15.727Z",
-      "matchId": "bz-212592",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:42:15.727Z",
-      "matchId": "bz-212592",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:42:21.300Z",
-      "matchId": "bz-212591",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T12:42:21.300Z",
-      "matchId": "bz-212591",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "MISTRAL",
-          "model": "mistral-small-latest",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 6000,
-      "batchSize": 2,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T17:08:19.156Z",
-      "matchId": "af-1528862",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T17:08:24.179Z",
-      "matchId": "af-1528863",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T17:08:32.055Z",
-      "matchId": "af-1528864",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-09-23T21:33:19.441Z",
-      "matchId": "af-1528862",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": null,
-          "model": null,
-          "kind": "config",
-          "reason": "No hay proveedores LLM configurados"
-        }
-      ],
-      "ok": null,
-      "usage": null,
-      "truncated": false,
-      "maxTokens": 3000,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-09-23T21:33:24.839Z",
       "matchId": "af-1528863",
@@ -2035,7 +1300,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta la CTA a goatlab.win en la narración; guion 4: falta la CTA a goatlab.win en la narración; guion 5: falta la CTA a goatlab.win en la narración; guion 6: falta la CTA a goatlab.win en la narración; guion 7: falta la CTA a goatlab.win en la narración; guion 8: falta la CTA a goatlab.win en la narración",
+          "reason": "guion 1: falta la CTA a goatlab.win en la narraci\u00f3n; guion 2: falta la CTA a goatlab.win en la narraci\u00f3n; guion 3: falta la CTA a goatlab.win en la narraci\u00f3n; guion 4: falta la CTA a goatlab.win en la narraci\u00f3n; guion 5: falta la CTA a goatlab.win en la narraci\u00f3n; guion 6: falta la CTA a goatlab.win en la narraci\u00f3n; guion 7: falta la CTA a goatlab.win en la narraci\u00f3n; guion 8: falta la CTA a goatlab.win en la narraci\u00f3n",
           "truncated": false,
           "usage": {
             "inputTokens": 5721,
@@ -2218,7 +1483,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta la CTA a goatlab.win en la narración; guion 4: falta la CTA a goatlab.win en la narración; guion 5: falta la CTA a goatlab.win en la narración; guion 6: falta la CTA a goatlab.win en la narración; guion 7: falta la CTA a goatlab.win en la narración; guion 8: falta la CTA a goatlab.win en la narración",
+          "reason": "guion 1: falta la CTA a goatlab.win en la narraci\u00f3n; guion 2: falta la CTA a goatlab.win en la narraci\u00f3n; guion 3: falta la CTA a goatlab.win en la narraci\u00f3n; guion 4: falta la CTA a goatlab.win en la narraci\u00f3n; guion 5: falta la CTA a goatlab.win en la narraci\u00f3n; guion 6: falta la CTA a goatlab.win en la narraci\u00f3n; guion 7: falta la CTA a goatlab.win en la narraci\u00f3n; guion 8: falta la CTA a goatlab.win en la narraci\u00f3n",
           "truncated": false,
           "usage": {
             "inputTokens": 5831,
@@ -2572,7 +1837,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta la CTA a goatlab.win en la narración; guion 4: falta la CTA a goatlab.win en la narración; guion 5: falta la CTA a goatlab.win en la narración; guion 6: falta la CTA a goatlab.win en la narración; guion 7: falta la CTA a goatlab.win en la narración; guion 8: falta la CTA a goatlab.win en la narración",
+          "reason": "guion 1: falta la CTA a goatlab.win en la narraci\u00f3n; guion 2: falta la CTA a goatlab.win en la narraci\u00f3n; guion 3: falta la CTA a goatlab.win en la narraci\u00f3n; guion 4: falta la CTA a goatlab.win en la narraci\u00f3n; guion 5: falta la CTA a goatlab.win en la narraci\u00f3n; guion 6: falta la CTA a goatlab.win en la narraci\u00f3n; guion 7: falta la CTA a goatlab.win en la narraci\u00f3n; guion 8: falta la CTA a goatlab.win en la narraci\u00f3n",
           "truncated": false,
           "usage": {
             "inputTokens": 5796,
@@ -2899,7 +2164,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 998,
@@ -2951,13 +2216,13 @@
           "provider": "OPENCODE_GO_FALLBACK",
           "model": "space-bunny-free",
           "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
+          "reason": "Pausado por el fusible o la lista de exclusi\u00f3n"
         },
         {
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 954,
@@ -2990,13 +2255,13 @@
           "provider": "OPENCODE_GO_FALLBACK",
           "model": "space-bunny-free",
           "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
+          "reason": "Pausado por el fusible o la lista de exclusi\u00f3n"
         },
         {
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 954,
@@ -3109,7 +2374,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 943,
@@ -3122,7 +2387,7 @@
           "provider": "WORKERS_AI",
           "model": "@cf/zai-org/glm-4.7-flash",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 915,
@@ -3155,7 +2420,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 943,
@@ -3222,7 +2487,7 @@
           "provider": "OPENCODE_GO_FALLBACK",
           "model": "space-bunny-free",
           "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
+          "reason": "Pausado por el fusible o la lista de exclusi\u00f3n"
         },
         {
           "provider": "MISTRAL",
@@ -3241,7 +2506,7 @@
           "provider": "WORKERS_AI",
           "model": "@cf/zai-org/glm-4.7-flash",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 936,
@@ -3308,7 +2573,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 978,
@@ -3444,7 +2709,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 991,
@@ -4258,7 +3523,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 1380,
@@ -4271,7 +3536,7 @@
           "provider": "WORKERS_AI",
           "model": "@cf/zai-org/glm-4.7-flash",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 1306,
@@ -4307,7 +3572,7 @@
           "provider": "MISTRAL",
           "model": "ministral-8b-2512",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 1380,
@@ -4320,7 +3585,7 @@
           "provider": "WORKERS_AI",
           "model": "@cf/zai-org/glm-4.7-flash",
           "kind": "validation",
-          "reason": "Análisis inválido",
+          "reason": "An\u00e1lisis inv\u00e1lido",
           "truncated": false,
           "usage": {
             "inputTokens": 1306,
@@ -4568,6 +3833,772 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "807fdbc3-b3de-48ff-87ca-ec92959db752"
+    },
+    {
+      "at": "2026-10-05T17:00:24.086Z",
+      "task": "image-prompts",
+      "matchId": "france-vs-belgium-2026-10-05",
+      "instructionVersion": "0fabf04ab0ca53d2bb943adb6dd33af94b456b39dccc9527e444ac5343d6d322",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "image-prompts 1: falta identidad de los equipos; image-prompts 3: falta identidad de los equipos; image-prompts 7: falta identidad de los equipos; image-prompts 9: falta identidad de los equipos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1592,
+            "outputTokens": 2374
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 52520
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "image-prompts 9: falta identidad de los equipos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1571,
+            "outputTokens": 3283
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 24092
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "image-prompts 9: falta identidad de los equipos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1685,
+            "outputTokens": 2939
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 36229
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "image-prompts 1: falta identidad de los equipos; image-prompts 3: falta identidad de los equipos; image-prompts 4: falta identidad de los equipos; image-prompts 6: falta identidad de los equipos; image-prompts 7: falta identidad de los equipos; image-prompts 9: falta identidad de los equipos; image-prompts 10: falta identidad de los equipos; image-prompts 10: falta presentaci\u00f3n, banderas o escudos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1486,
+            "outputTokens": 3748
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65127
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:02:21.705Z",
+      "task": "image-prompts",
+      "matchId": "france-vs-belgium-2026-10-05",
+      "instructionVersion": "0fabf04ab0ca53d2bb943adb6dd33af94b456b39dccc9527e444ac5343d6d322",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1592,
+        "outputTokens": 2025
+      }
+    },
+    {
+      "at": "2026-10-05T17:03:26.904Z",
+      "task": "image-prompts",
+      "matchId": "italy-vs-turkiye-2026-10-05",
+      "instructionVersion": "0fabf04ab0ca53d2bb943adb6dd33af94b456b39dccc9527e444ac5343d6d322",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1606,
+        "outputTokens": 2461
+      }
+    },
+    {
+      "at": "2026-10-05T17:04:32.695Z",
+      "task": "image-prompts",
+      "matchId": "croatia-vs-spain-2026-10-06",
+      "instructionVersion": "0fabf04ab0ca53d2bb943adb6dd33af94b456b39dccc9527e444ac5343d6d322",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1569,
+        "outputTokens": 2033
+      }
+    },
+    {
+      "at": "2026-10-05T17:06:08.793Z",
+      "task": "image-prompts",
+      "matchId": "england-vs-czechia-2026-10-06",
+      "instructionVersion": "0fabf04ab0ca53d2bb943adb6dd33af94b456b39dccc9527e444ac5343d6d322",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1638,
+        "outputTokens": 3203
+      }
+    },
+    {
+      "at": "2026-10-05T17:07:51.285Z",
+      "task": "image-prompts",
+      "matchId": "switzerland-vs-north-macedonia-2026-10-06",
+      "instructionVersion": "0fabf04ab0ca53d2bb943adb6dd33af94b456b39dccc9527e444ac5343d6d322",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1613,
+        "outputTokens": 3004
+      }
+    },
+    {
+      "at": "2026-10-05T17:08:32.809Z",
+      "task": "video-prompts",
+      "matchId": "france-vs-belgium-2026-10-05",
+      "instructionVersion": "95220fcc0d4c4d0356834d4b8bca582f22bb6b3d795b29b411e133fea2422589",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "video-prompts 4: faltan duraci\u00f3n, imagen de referencia o c\u00e1mara",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1670,
+            "outputTokens": 791
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23432
+        }
+      ],
+      "usage": {
+        "inputTokens": 1640,
+        "outputTokens": 3127
+      }
+    },
+    {
+      "at": "2026-10-05T17:08:56.756Z",
+      "task": "video-prompts",
+      "matchId": "italy-vs-turkiye-2026-10-05",
+      "instructionVersion": "95220fcc0d4c4d0356834d4b8bca582f22bb6b3d795b29b411e133fea2422589",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1684,
+        "outputTokens": 850
+      }
+    },
+    {
+      "at": "2026-10-05T17:09:55.299Z",
+      "task": "video-prompts",
+      "matchId": "croatia-vs-spain-2026-10-06",
+      "instructionVersion": "95220fcc0d4c4d0356834d4b8bca582f22bb6b3d795b29b411e133fea2422589",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "video-prompts 4: faltan duraci\u00f3n, imagen de referencia o c\u00e1mara",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1647,
+            "outputTokens": 872
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23348
+        }
+      ],
+      "usage": {
+        "inputTokens": 1649,
+        "outputTokens": 908
+      }
+    },
+    {
+      "at": "2026-10-05T17:10:25.084Z",
+      "task": "video-prompts",
+      "matchId": "england-vs-czechia-2026-10-06",
+      "instructionVersion": "95220fcc0d4c4d0356834d4b8bca582f22bb6b3d795b29b411e133fea2422589",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "video-prompts 4: faltan duraci\u00f3n, imagen de referencia o c\u00e1mara",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1724,
+            "outputTokens": 1276
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 18205
+        }
+      ],
+      "usage": {
+        "inputTokens": 1725,
+        "outputTokens": 1765
+      }
+    },
+    {
+      "at": "2026-10-05T17:11:40.917Z",
+      "task": "video-prompts",
+      "matchId": "switzerland-vs-north-macedonia-2026-10-06",
+      "instructionVersion": "95220fcc0d4c4d0356834d4b8bca582f22bb6b3d795b29b411e133fea2422589",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1683,
+        "outputTokens": 3692
+      }
+    },
+    {
+      "at": "2026-10-05T17:13:28.291Z",
+      "task": "motion-prompts",
+      "matchId": "france-vs-belgium-2026-10-05",
+      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 3: porcentajes no publicados",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1926,
+            "outputTokens": 2585
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 54123
+        }
+      ],
+      "usage": {
+        "inputTokens": 1895,
+        "outputTokens": 8367
+      }
+    },
+    {
+      "at": "2026-10-05T17:18:02.026Z",
+      "task": "motion-prompts",
+      "matchId": "italy-vs-turkiye-2026-10-05",
+      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 2: porcentajes no publicados; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 5: porcentajes no publicados; motion-prompts 5: faltan r\u00f3tulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1940,
+            "outputTokens": 2833
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 67428
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan r\u00f3tulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1944,
+            "outputTokens": 9094
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 56546
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1984,
+            "outputTokens": 2295
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 43550
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: direcci\u00f3n insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: direcci\u00f3n insuficientemente detallada; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: direcci\u00f3n insuficientemente detallada; motion-prompts 3: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1829,
+            "outputTokens": 5568
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 106205
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:22:17.270Z",
+      "task": "motion-prompts",
+      "matchId": "croatia-vs-spain-2026-10-06",
+      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 3: porcentajes no publicados",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1903,
+            "outputTokens": 4266
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 76978
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 2: porcentajes no publicados; motion-prompts 3: porcentajes no publicados; motion-prompts 4: porcentajes no publicados; motion-prompts 5: porcentajes no publicados",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1904,
+            "outputTokens": 9457
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 57268
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1957,
+            "outputTokens": 3853
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 47361
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: direcci\u00f3n insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: direcci\u00f3n insuficientemente detallada; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 3: direcci\u00f3n insuficientemente detallada; motion-prompts 4: direcci\u00f3n insuficientemente detallada; motion-prompts 5: direcci\u00f3n insuficientemente detallada",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1799,
+            "outputTokens": 3813
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 73630
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:26:16.035Z",
+      "task": "motion-prompts",
+      "matchId": "england-vs-czechia-2026-10-06",
+      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan r\u00f3tulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1980,
+            "outputTokens": 2706
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 49947
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 2: porcentajes no publicados",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1980,
+            "outputTokens": 10823
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 60075
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2043,
+            "outputTokens": 4014
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 46746
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: direcci\u00f3n insuficientemente detallada; motion-prompts 4: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1874,
+            "outputTokens": 3214
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 81978
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:28:17.054Z",
+      "task": "motion-prompts",
+      "matchId": "switzerland-vs-north-macedonia-2026-10-06",
+      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan r\u00f3tulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1939,
+            "outputTokens": 3019
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 48844
+        }
+      ],
+      "usage": {
+        "inputTokens": 1931,
+        "outputTokens": 11414
+      }
+    },
+    {
+      "at": "2026-10-05T17:29:20.328Z",
+      "task": "motion-prompts",
+      "matchId": "italy-vs-turkiye-2026-10-05",
+      "instructionVersion": "eac46702f3685cf21019012d879369913587c0fac552f37f343aa605ad2fc1c5",
+      "ok": null,
+      "failures": [],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:32:43.396Z",
+      "task": "motion-prompts",
+      "matchId": "italy-vs-turkiye-2026-10-05",
+      "instructionVersion": "eac46702f3685cf21019012d879369913587c0fac552f37f343aa605ad2fc1c5",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: porcentajes no publicados; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 5: porcentajes no publicados",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1968,
+            "outputTokens": 2664
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 40375
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 3: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 4: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 5: faltan r\u00f3tulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1972,
+            "outputTokens": 9458
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 55314
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2012,
+            "outputTokens": 4327
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 41094
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: faltan r\u00f3tulos, transiciones o fuente; motion-prompts 5: faltan r\u00f3tulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1857,
+            "outputTokens": 3314
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 62631
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:34:45.996Z",
+      "task": "motion-prompts",
+      "matchId": "italy-vs-turkiye-2026-10-05",
+      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1989,
+            "outputTokens": 2587
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 54337
+        }
+      ],
+      "usage": {
+        "inputTokens": 1993,
+        "outputTokens": 7869
+      }
+    },
+    {
+      "at": "2026-10-05T17:38:45.201Z",
+      "task": "motion-prompts",
+      "matchId": "croatia-vs-spain-2026-10-06",
+      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 5: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1952,
+            "outputTokens": 3297
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 51506
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1953,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 64691
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2006,
+            "outputTokens": 3609
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 45302
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: direcci\u00f3n insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: direcci\u00f3n insuficientemente detallada; motion-prompts 3: direcci\u00f3n insuficientemente detallada; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 3: porcentajes no publicados; motion-prompts 4: direcci\u00f3n insuficientemente detallada; motion-prompts 4: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1848,
+            "outputTokens": 3387
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 73497
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:43:36.463Z",
+      "task": "motion-prompts",
+      "matchId": "england-vs-czechia-2026-10-06",
+      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 3: porcentajes no publicados",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2029,
+            "outputTokens": 3662
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65007
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2029,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 57093
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren 5 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2092,
+            "outputTokens": 4910
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 103306
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: direcci\u00f3n insuficientemente detallada; motion-prompts 3: direcci\u00f3n insuficientemente detallada; motion-prompts 4: direcci\u00f3n insuficientemente detallada; motion-prompts 5: direcci\u00f3n insuficientemente detallada; motion-prompts 5: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1923,
+            "outputTokens": 3263
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65790
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-05T17:45:25.346Z",
+      "task": "motion-prompts",
+      "matchId": "croatia-vs-spain-2026-10-06",
+      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1952,
+        "outputTokens": 6493
+      }
+    },
+    {
+      "at": "2026-10-05T17:46:57.245Z",
+      "task": "motion-prompts",
+      "matchId": "england-vs-czechia-2026-10-06",
+      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 4: los marcadores no coinciden con factIds; motion-prompts 5: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2029,
+            "outputTokens": 2848
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 37811
+        }
+      ],
+      "usage": {
+        "inputTokens": 2029,
+        "outputTokens": 9432
+      }
     }
   ]
 }

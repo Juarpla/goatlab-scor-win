@@ -25,8 +25,15 @@ class TelegramTests(unittest.TestCase):
         native=HTTPServer(('127.0.0.1',0),Native)
         threading.Thread(target=native.serve_forever,daemon=True).start()
         self.addCleanup(native.server_close);self.addCleanup(native.shutdown)
-        with tempfile.TemporaryDirectory() as root, patch.dict(os.environ,{'RENDER_SECRET':'secret','TELEGRAM_WEBHOOK_SECRET':'hook','TELEGRAM_ALLOWED_USERS':'1','OPENCLAW_TELEGRAM_URL':f'http://127.0.0.1:{native.server_port}'}):
+        with tempfile.TemporaryDirectory() as root, patch.dict(os.environ,{'RENDER_SECRET':'secret','TELEGRAM_WEBHOOK_SECRET':'hook','TELEGRAM_ALLOWED_USERS':'1','OPENCLAW_TELEGRAM_URL':f'http://127.0.0.1:{native.server_port}'}), patch('telegram_input.access_control') as control:
             flow=Workflow(Path(root)/'goatlab.sqlite')
+            def access(path, body):
+                if path == '/start':
+                    local=Workflow(Path(root)/'goatlab.sqlite')
+                    try: local.reset(body['chat'])
+                    finally: local.db.close()
+                return {'ok':True}
+            control.side_effect=access
             flow.select('telegram:1',{'matchId':'a-b','scripts':[{'hook':'Hola'} for _ in range(10)]})
             server=serve(root,0)
             try:
@@ -44,13 +51,14 @@ class TelegramTests(unittest.TestCase):
                 self.assertEqual(json.loads(flow.db.execute("SELECT payload FROM tasks WHERE kind='render'").fetchone()[0])['chatId'],'1')
                 self.assertEqual(forwarded,[])
                 for text in ['/new','/start','/goatlab','2']:
-                    send({'message':{'text':text,'chat':{'id':1,'type':'private'},'from':{'id':1}}})
+                    send({'update_id':101,'message':{'text':text,'chat':{'id':1,'type':'private'},'from':{'id':1}}})
                     if text == '/new': self.assertIsNotNone(flow.current('1'))
                     if text == '/start': self.assertIsNone(flow.current('1'))
-                self.assertEqual([u['message']['text'] for u in forwarded],['/new','/start','/goatlab','2'])
+                self.assertEqual([u['message']['text'] for u in forwarded],['/new','/goatlab','2'])
                 flow.reset('1')
                 send(voice)
-                self.assertEqual(len(forwarded),5)
+                self.assertEqual(len(forwarded),4)
+                self.assertEqual([c.args for c in control.call_args_list if c.args[0]=='/start'],[('/start',{'chat':'1','event':101})])
             finally:server.shutdown();server.server_close();flow.db.close()
 
     def test_ids_never_confuse_openclaw_address_or_local_path_with_telegram(self):

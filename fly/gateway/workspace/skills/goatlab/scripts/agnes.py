@@ -92,6 +92,7 @@ class ImagePool:
             if old and old["status"] == "done":
                 result = json.loads(old["result"])
                 if Path(result["path"]).exists():
+                    if result.get("prompt") != prompt: raise ValueError("slot pertenece a otra versión de prompts; no se regenera")
                     return result
                 raise ValueError("la imagen guardada no existe; restaurar el recurso antes de reintentar")
             if old and old["status"] == "used":
@@ -109,6 +110,12 @@ class ImagePool:
             if not 60 <= timeout <= 360:
                 raise ValueError("AGNES_TIMEOUT_SECONDS debe estar entre 60 y 360")
             for attempt in range(2):
+                workflow_db = Path(os.environ.get('GOATLAB_STATE_DIR', str(self.path.parent))) / 'goatlab.sqlite'
+                if workflow_db.exists():
+                    import sqlite3
+                    with sqlite3.connect(workflow_db) as flow:
+                        task = flow.execute('SELECT status FROM tasks WHERE id=?', ('media:'+match,)).fetchone()
+                        if task and task[0] == 'cancelled': raise ValueError('preparación cancelada')
                 self.take_slot(attempt_deadline, timeout+35)
                 if self.clock() >= (prior_match[0] if prior_match else deadline):
                     raise ValueError("encuentro caducado; generaciones cerradas")

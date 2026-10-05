@@ -27,7 +27,7 @@ def number(value, low, high, label):
 
 def validate(plan, source):
     span, assets, words = source["span"], source["assets"], source["words"]
-    if not isinstance(plan, dict) or plan.get("version") not in (1, 2):
+    if not isinstance(plan, dict) or plan.get("version") not in (1, 2, 3):
         raise ValueError("version debe ser 1 o 2")
     facts = {f['id']: f for f in source.get('facts', []) if isinstance(f, dict) and isinstance(f.get('id'), str)}
     scenes = plan.get("scenes")
@@ -48,10 +48,19 @@ def validate(plan, source):
         layers = scene.get("layers")
         if not isinstance(layers, list) or not 0 <= len(layers) <= 4:
             raise ValueError("cada escena admite 0–4 capas de fotos")
-        if not layers and not scene.get('graphics') and not scene.get('objects'):
+        if not layers and not scene.get('clips') and not scene.get('graphics') and not scene.get('objects'):
             raise ValueError("una escena sin fotos requiere gráficos u objetos")
-        photo_run = photo_run+1 if layers else 0
-        if plan['version']==2 and len(scenes)>2 and photo_run>2:
+        clip_layers = scene.get('clips', [])
+        if not isinstance(clip_layers, list) or len(clip_layers)>2: raise ValueError('máximo dos clips por escena')
+        for item in clip_layers:
+            index = item.get('clip')
+            source_clips = source.get('clips', [])
+            if isinstance(index,bool) or not isinstance(index,int) or not 0<=index<len(source_clips): raise ValueError('clip inexistente')
+            offset = number(item.get('offset',0),0,source_clips[index]['duration'],'clip.offset')
+            duration = number(item.get('duration',end-start),.2,end-start,'clip.duration')
+            if offset+duration>source_clips[index]['duration']+.02: raise ValueError('recorte de clip fuera de duración')
+        photo_run = photo_run+1 if layers or clip_layers else 0
+        if plan['version']>=2 and len(scenes)>2 and photo_run>2:
             raise ValueError('intercala una escena de motion graphics tras dos escenas de fotos')
         camera = scene.get('camera', {})
         for key, bounds in {'x': (-.03,.03), 'y': (-.03,.03), 'scale': (1,1.08)}.items():
@@ -172,10 +181,14 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
         if assets and i%2==0:
             layers=[{'asset':(i//2+int(source.get('variant',0)))%len(assets),'move':'push' if i%4==0 else 'pan-left',
                      'focusEffect':'focus','from':{'scale':1},'to':{'scale':1.05}}]
+        clip_layers=[]
+        if source.get('clips') and i%3==1:
+            clip_index=(i//3+int(source.get('variant',0)))%len(source['clips'])
+            clip_layers=[{'clip':clip_index,'offset':0,'duration':min(end-start,source['clips'][clip_index]['duration'])}]
         scenes.append({'start':start,'end':end,'transition':['fade','focus','slide','wipe'][i%4],
-                       'accent':'#c5ed74','layers':layers,'graphics':graphics,
+                       'accent':'#c5ed74','layers':layers,'clips':clip_layers,'graphics':graphics,
                        'objects':[{'kind':['card','cube','prism'][i%3],'x':.7,'y':.53,'size':100,'rotateX':12,'rotateY':-20,'spin':35}] if not layers else []})
-    return {**validate({'version':2,'scenes':scenes},source),'model':'local-montage','fallback':True,
+    return {**validate({'version':3 if source.get('clips') else 2,'scenes':scenes},source),'model':'local-montage','fallback':True,
             'fallbackReason':reason,'attempts':attempts or []}
 
 

@@ -2,6 +2,9 @@
 import { esName } from './teams.js';
 import { NEUTRAL_KIT, teamColors } from './team-colors.js';
 
+// Effective defaults, not paid Token Plan quotas. See the operations reference.
+export const AGNES_FREE_LIMITS = Object.freeze({ imageRpm: Object.freeze({ '1K':10, '2K':5, '3K':1, '4K':1 }), videoRpm:1, dailyImages:null, dailyVideoSeconds:null });
+
 function kitPhrase(name) {
   const label = esName(name) || String(name || 'the team');
   const colors = teamColors(name);

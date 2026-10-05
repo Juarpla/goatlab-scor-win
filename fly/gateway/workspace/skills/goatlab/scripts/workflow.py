@@ -10,6 +10,7 @@ import sys
 import time
 import uuid
 import hashlib
+from datetime import datetime
 import shutil
 import urllib.error
 from pathlib import Path
@@ -84,6 +85,15 @@ class Workflow:
                         self.db.execute("UPDATE audios SET file_id='' WHERE id=?", (task['id'],))
         if not out.exists():
             return
+        # A completed bank belongs to the match, including future chats.
+        for manifest in out.glob('*.json'):
+            try:
+                bank = json.loads(manifest.read_text())
+                kickoff = datetime.fromisoformat((bank.get('kickoff') or '').replace('Z', '+00:00')).timestamp()
+                if bank.get('contentVersion') == 1 and kickoff + 86400 > self.clock():
+                    needed.add(manifest.stem)
+            except (ValueError, TypeError, OSError):
+                pass
         for path in out.iterdir():
             match = path.stem.removesuffix('.progress')
             if path.name == 'gen':
@@ -135,10 +145,10 @@ class Workflow:
             match = script["matchId"]
             self.db.execute("INSERT INTO series(id,chat,match_id,payload,created) VALUES(?,?,?,?,?)",
                             (sid, chat, match, json.dumps(script), self.clock()))
-            self.task("media:" + match, "media", {"matchId": match})
+            self.task("media:" + match, "media", {"matchId": match, "content": script.get("content", {})})
             self.db.execute("UPDATE tasks SET status='queued',next_at=0 WHERE id=? AND status='cancelled'", ("media:"+match,))
             self.db.execute("COMMIT")
-            return {"seriesId": sid, "matchId": match, "scripts": script["scripts"]}
+            return {"seriesId": sid, "matchId": match, "scripts": script["scripts"], "missingCategories": script.get("missingCategories", [])}
         except Exception:
             self.db.execute("ROLLBACK")
             raise
@@ -170,6 +180,8 @@ class Workflow:
                 "matchId": series["match_id"], "variant": n - 1,
                 "home": script.get("home", ""), "away": script.get("away", ""),
                 "matchLabel": script.get("match") or f'{script.get("home", "")} contra {script.get("away", "")}',
+                "motionPrompts": (script.get("content", {}).get("motion-prompts") or {}).get("prompts", []),
+                "contentFacts": (script.get("content", {}).get("motion-prompts") or {}).get("facts", []),
                 "hook": shot.get("hook", ""), "title": shot.get("title", ""), "audioFileId": file_id,
             })
             if n == 10:
@@ -266,8 +278,11 @@ def execute(task):
         ready = out / f"{match}.ready"
         out.mkdir(parents=True, exist_ok=True)
         env = {**os.environ, "GOATLAB_REPO": str(REPO), "AGNES_STATE_DB": str(STATE / "agnes.sqlite")}
+        from common import atomic_json
+        snapshot = out / f"{match}.content.json"
+        atomic_json(snapshot, body.get("content", {}))
         with (out / f"{match}.log").open("a") as log:
-            subprocess.run(["node", str(SKILL / "scripts/generate-media-pack.mjs"), f"--match={match}", f"--out={out}"],
+            subprocess.run(["node", str(SKILL / "scripts/generate-media-pack.mjs"), f"--match={match}", f"--out={out}", f"--content={snapshot}"],
                            cwd=REPO, env=env, stdout=log, stderr=log, check=True)
         return {"ready": True}
     if task["kind"] == "cancel":
@@ -277,7 +292,8 @@ def execute(task):
         return None
     manifest = json.loads((out / f"{match}.json").read_text())
     if 'assets' not in body:
-        body.update(assets=manifest["assets"], attribution=manifest.get("attribution", ""), facts=manifest.get('facts',[]), mediaMinimum=0)
+        body.update(assets=[a for a in manifest["assets"] if a.get('source') == 'agnes'], attribution=manifest.get("attribution", ""), facts=body.pop("contentFacts", None) or manifest.get('facts',[]), clips=manifest.get("clips", []), mediaMinimum=0)
+    body['assets'] = [a for a in body.get('assets', []) if a.get('source') == 'agnes']
     return worker_post("/render", body)
 
 
@@ -350,7 +366,7 @@ def supervise():
                             "SELECT DISTINCT chat FROM series WHERE match_id=? AND active=1", (body["matchId"],))]
                         for chat in chats:
                             try:
-                                text = "❌ Fotos: no se pudo completar la búsqueda. Puedes pedir reintentar fotos." if task["kind"] == "media" else "No pude enviar un trabajo a Render. Puedes pedir reintentar el video."
+                                text = "❌ Imágenes: no se pudo completar la generación. Puedes pedir reintentar imágenes." if task["kind"] == "media" else "No pude enviar un trabajo a Render. Puedes pedir reintentar el video."
                                 telegram("sendMessage", {"chat_id": chat, "text": text})
                             except Exception:
                                 print("workflow: aviso de fallo no entregado", file=sys.stderr)
@@ -380,7 +396,7 @@ def supervise():
                             continue
                         if 'assets' not in body:
                             manifest=json.loads((Path(os.environ.get('MEDIA_PACK_DIR',str(STATE/'media-pack')))/f'{body["matchId"]}.json').read_text())
-                            body.update(assets=manifest['assets'],attribution=manifest.get('attribution',''),facts=manifest.get('facts',[]), mediaMinimum=0)
+                            body.update(assets=[a for a in manifest['assets'] if a.get('source') == 'agnes'],attribution=manifest.get('attribution',''),facts=body.pop("contentFacts", None) or manifest.get('facts',[]), clips=manifest.get("clips", []), mediaMinimum=0)
                             payload=json.dumps(body)
                             flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(payload,task['id']))
                             task=dict(task); task['payload']=payload
@@ -425,7 +441,8 @@ def main():
     if args.command == "list":
         if (REPO / ".git").exists():
             subprocess.run(["git", "pull", "--ff-only"], cwd=REPO, check=True, stdout=sys.stderr)
-        scripts = [json.loads(p.read_text()) for p in sorted((REPO / "public/data/youtube-scripts").glob("*.json"))]
+        from content_client import ContentClient
+        scripts = ContentClient(REPO, STATE).list()
         if not scripts:
             raise ValueError("no hay guiones disponibles")
         flow.db.execute("INSERT OR REPLACE INTO choices(chat,payload,created) VALUES(?,?,?)", (args.chat, json.dumps(scripts), flow.clock()))
@@ -434,7 +451,9 @@ def main():
         row = flow.db.execute("SELECT payload FROM choices WHERE chat=?", (args.chat,)).fetchone()
         if not row or not args.number or not 1 <= args.number <= len(json.loads(row[0])):
             raise ValueError("elige un número de la lista actual")
-        result = flow.select(args.chat, json.loads(row[0])[args.number - 1])
+        from content_client import ContentClient
+        choice = json.loads(row[0])[args.number - 1]
+        result = flow.select(args.chat, ContentClient(REPO, STATE).package(choice["matchId"]))
     elif args.command in {"receive", "enqueue"}:
         if args.command == "enqueue" and not flow.current(args.chat):
             if not args.match or Path(args.match).name != args.match:
@@ -466,7 +485,7 @@ def main():
             row=flow.db.execute('SELECT payload FROM tasks WHERE id=?',(key,)).fetchone()
             if row:
                 body=json.loads(row[0])
-                for field in ('assets','attribution','facts'):body.pop(field,None)
+                for field in ('assets','attribution','facts','clips'):body.pop(field,None)
                 flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(json.dumps(body),key))
         flow.db.execute("UPDATE tasks SET status='queued',attempts=0,next_at=0 WHERE id=? AND status IN ('failed','done')", (key,))
         result = {"retry": key}

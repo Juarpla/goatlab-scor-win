@@ -110,7 +110,8 @@ def serve(state, port=3002):
                 if not 0<length<=512_000: return self.respond(413,{})
                 raw=self.rfile.read(length)
                 update=json.loads(raw)
-                from telegram_input import ingest
+                from telegram_input import ingest, note_activity
+                note_activity(update)
                 result=ingest(update,state)
                 if result is not None:
                     self.respond(200,{'ok':True})
@@ -119,7 +120,7 @@ def serve(state, port=3002):
                         try: telegram('sendMessage',{'chat_id':result['chat'],'text':'Serie completa. Los videos pendientes continúan.'})
                         except Exception: print('workflow: aviso de cierre no entregado',flush=True)
                     return
-                # Native /new, /start, /goatlab and all other messages stay in OpenClaw.
+                # /start is consumed by the access gate. Native /new stays in OpenClaw.
                 request=urllib.request.Request(os.environ.get('OPENCLAW_TELEGRAM_URL','http://127.0.0.1:8787/telegram-webhook'),raw,
                     headers={'Content-Type':'application/json','X-Telegram-Bot-Api-Secret-Token':webhook_secret})
                 with urllib.request.urlopen(request,timeout=25) as response:

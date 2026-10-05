@@ -1,12 +1,12 @@
 ---
 name: goatlab
-description: "Atiende /start con bienvenida y limpieza de GoatLab, preserva /new nativo y procesa /goatlab en Telegram: elegir un partido, leer diez guiones, recibir hasta diez audios en orden y entregar Shorts con fotos buscadas o generadas, motion graphics y montaje creativo."
+description: "Procesa /goatlab en Telegram: elegir un partido, leer diez guiones, recibir hasta diez audios en orden y entregar Shorts con imágenes Agnes, motion graphics y montaje creativo."
 ---
 
 # GoatLab Shorts
 
 `/new` pertenece a OpenClaw: no lo interceptes ni ejecutes herramientas por ese comando.
-`/start` da la bienvenida y cancela la serie; no inicia el procedimiento ni otra sesión.
+`/start` se procesa fuera del agente; el webhook cancela la serie y envía el acceso.
 `/goatlab` inicia el workflow. Consulta [operación](references/series.md).
 
 Responde en español. Para operar una serie, lee [references/series.md](references/series.md).
@@ -15,10 +15,10 @@ El JSON de la herramienta es información interna; comunica solo el resultado
 necesario. El código conserva el estado y asigna el número de cada audio.
 
 Flujo: elegir partido → mostrar los diez guiones originales → recibir audios en
-orden y en silencio → entrega automática de MP4. La búsqueda sucede en segundo
-plano. Primero se intenta completar el banco de quince imágenes dentro del tiempo limitado.
+orden y en silencio → entrega automática de MP4. La generación sucede en segundo
+plano. Primero se intenta completar el banco de diez imágenes y hasta tres clips Agnes dentro del tiempo limitado.
 Después se renderizan los audios recibidos, uno a la vez, con el banco disponible y
-motion graphics; si no hay fotos, se usan gráficos y animaciones. No esperes diez audios.
+motion graphics guiados por los cinco Motion Prompts; si no hay fotos, se usan gráficos y animaciones. No esperes diez audios.
 El webhook registra los audios de una serie activa con los identificadores
 originales de Telegram; no inventes `file_id` ni uses una ruta local como tal.
 El código actualiza un mensaje de progreso; no confirmes cada audio ni inventes

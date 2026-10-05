@@ -449,6 +449,7 @@ const crumbsFor = side => {
    {!hasReading && <ProviderAdvice provider={prov} afPrediction={afPred} home={match.home} away={match.away}/>}
     <AdSlot variant="rect" slotKey="partidoCierre"/>
   <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} afPrediction={afPred} />
+<nav class="wrap" aria-label="Contenido audiovisual del partido" style="display:flex;flex-wrap:wrap;gap:20px;padding-block:32px"><a href={`/partido/${match.webId ?? match.id}/scripts`}>Scripts</a><a href={`/partido/${match.webId ?? match.id}/image-prompts`}>Image Prompts</a><a href={`/partido/${match.webId ?? match.id}/video-prompts`}>Video Prompts</a><a href={`/partido/${match.webId ?? match.id}/motion-prompts`}>Motion Prompts</a></nav>
 </main>
 <script>
  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];

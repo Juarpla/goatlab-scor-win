@@ -36,7 +36,7 @@ export function boundedMotion(layer, photo) {
     imageWidth: iw * base, imageHeight: ih * base, cover };
 }
 
-export function buildPlannedComposition({ duration, photos, words, plan, facts = [], match = '' }) {
+export function buildPlannedComposition({ duration, photos, clips = [], words, plan, facts = [], match = '' }) {
   if (!words?.length || !plan?.scenes?.length) throw new Error('se requiere transcripción y plan de edición');
   const span = duration - ENDCARD_SECONDS;
   const html = [], animations = [];
@@ -48,6 +48,14 @@ export function buildPlannedComposition({ duration, photos, words, plan, facts =
     const overlap = i === plan.scenes.length - 1 ? 0 : Math.min(.3, length / 3);
     const id = `scene${i}`;
     const accent = /^#[0-9a-f]{6}$/i.test(scene.accent) ? scene.accent : '#c5ed74';
+    for (const [j, layer] of (scene.clips ?? []).entries()) {
+      const clip = clips[layer.clip];
+      if (!clip) throw new Error('clip del plan inexistente');
+      const offset = layer.offset ?? 0, length = layer.duration ?? scene.end - scene.start;
+      if (offset < 0 || offset + length > clip.duration + .02) throw new Error('recorte de clip inválido');
+      // Host-root media avoids timed-wrapper offsets in HyperFrames extraction.
+      html.push(`<video id="video${i}_${j}" class="media-video clip" src="${esc(clip.src)}" muted playsinline data-volume="0" data-start="${scene.start}" data-duration="${length}" data-media-start="${offset}" data-track-index="${track++}" style="z-index:2;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#101412"></video>`);
+    }
     const layers = scene.layers.map((layer, j) => {
       const photo = photos[layer.asset];
       if (!photo) throw new Error('asset del plan inexistente');
@@ -108,7 +116,11 @@ export function buildPlannedComposition({ duration, photos, words, plan, facts =
         const max = Math.max(1, ...values);
         content = selectedFacts.length ? `<div class="bars fact-bars">${selectedFacts.map(f=>`<span class="fact-label">${esc(f.label)} <b>${f.value} ${esc(f.unit)}</b></span><div class="bar-fill" style="width:${f.value / max * 100}%"></div>`).join('')}</div>` : `<span>${esc(phrase)}</span><div class="bars">${values.slice(0, 4).map(n => `<div class="bar-fill" style="width:${n / max * 100}%"></div>`).join('')}</div>`;
       } else content = `<span>${esc(phrase)}</span>`;
-      html.push(`<div id="${gid}" class="graphic graphic-${esc(graphic.kind)} clip" data-start="${graphic.at}" data-duration="${graphic.duration}" data-track-index="${track++}" style="left:${(graphic.x ?? .07) * 100}%;right:7%;top:${Math.min(graphic.y ?? .13, .38) * 100}%;--accent:${accent};${['title','stat','label'].includes(graphic.kind) ? `font-size:${phrase.length > 65 ? 48 : phrase.length > 38 ? 62 : graphic.kind === 'label' ? 46 : 88}px` : ''}">${content}</div>`);
+      if (selectedFacts.length) {
+        const notes = [...new Set(selectedFacts.map(f => `${f.provider ?? 'Datos del encuentro'}${Number.isFinite(f.sampleSize) ? ` · muestra: ${f.sampleSize} partidos` : ''}`))];
+        content += `<div class="fact-source">${notes.map(esc).join(' / ')}</div>`;
+      }
+      html.push(`<div id="${gid}" class="graphic graphic-${esc(graphic.kind)} clip" data-start="${graphic.at}" data-duration="${graphic.duration}" data-track-index="${track++}" style="z-index:10;left:${(graphic.x ?? .07) * 100}%;right:7%;top:${Math.min(graphic.y ?? .13, .38) * 100}%;--accent:${accent};${['title','stat','label'].includes(graphic.kind) ? `font-size:${phrase.length > 65 ? 48 : phrase.length > 38 ? 62 : graphic.kind === 'label' ? 46 : 88}px` : ''}">${content}</div>`);
       animate(`#${gid}`, { opacity: 0, y: 30, scale: .92 }, { opacity: 1, y: 0, scale: 1, duration: Math.min(.3, graphic.duration / 2), ease: 'power3.out' }, graphic.at);
       if (graphic.kind === 'ring') animations.push(`tl.to('#${gid} svg',{rotation:90,duration:${graphic.duration},ease:'none'},${graphic.at});`);
       if (graphic.kind === 'bars') animate(`#${gid} .bar-fill`, { scaleX: 0 }, { scaleX: 1, duration: Math.min(.6, graphic.duration / 2), stagger: .08, ease: 'power2.out' }, graphic.at);
@@ -118,10 +130,10 @@ export function buildPlannedComposition({ duration, photos, words, plan, facts =
   pages.forEach((page, p) => {
     const end = Math.min(pages[p+1]?.start ?? span, span);
     if (page.start >= end) return;
-    html.push(`<div class="captions clip" data-start="${page.start}" data-duration="${end - page.start}" data-track-index="${track++}">${page.words.map(w => `<span id="word${w.index}">${esc(w.word)}</span>`).join(' ')}</div>`);
+    html.push(`<div class="captions clip" style="z-index:20" data-start="${page.start}" data-duration="${end - page.start}" data-track-index="${track++}">${page.words.map(w => `<span id="word${w.index}">${esc(w.word)}</span>`).join(' ')}</div>`);
     for (const word of page.words) animate(`#word${word.index}`, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .07 }, word.start);
   });
-  html.push(`<div id="endcard" class="endcard clip" data-start="${span}" data-duration="3" data-track-index="${track++}"><img id="brand-logo" src="brand.svg" alt="GoatLab"/><div class="brand">goatlab.win</div><div class="match">${esc(match)}</div></div>`);
+  html.push(`<div id="endcard" class="endcard clip" style="z-index:30" data-start="${span}" data-duration="3" data-track-index="${track++}"><img id="brand-logo" src="brand.svg" alt="GoatLab"/><div class="brand">goatlab.win</div><div class="match">${esc(match)}</div></div>`);
   animate('#brand-logo', { opacity: 0, scale: .8, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: .55, ease: 'power3.out' }, span);
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"/><script src="gsap.min.js"></script><style>
 @font-face{font-family:"${FONT_FAMILY}";src:url("${FONT_FILE}");font-weight:800}
@@ -147,7 +159,7 @@ export function buildPlannedComposition({ duration, photos, words, plan, facts =
 .captions span{display:inline-block;max-width:100%;overflow-wrap:anywhere}
 .endcard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,#223528,#101412 65%);color:#c5ed74;gap:35px;text-align:center}
 .endcard img{width:210px;height:210px}.brand{font-size:88px;font-weight:800}.match{font-size:36px;color:white;max-width:900px}
-</style></head><body><div id="stage" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="${duration}">${html.join('\n')}</div><script>
+.fact-source{font-size:24px;line-height:1.4;margin-top:18px;color:#edf0e6;font-weight:400;max-width:90%}</style></head><body><div id="stage" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="${duration}">${html.join('\n')}</div><script>
 const tl=gsap.timeline({paused:true});${animations.join('\n')}window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
 </script></body></html>`;
 }

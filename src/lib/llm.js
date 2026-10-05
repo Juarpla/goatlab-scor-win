@@ -199,7 +199,7 @@ export async function withFailover(messages, options = {}) {
       continue;
     }
     breaker?.note(provider.id, { kind: 'ok' });
-    return { value, provider: provider.id, model: provider.model, usage: call.usage, finishReason: call.finishReason, callId: sessionId };
+    return { value, provider: provider.id, model: provider.model, usage: call.usage, finishReason: call.finishReason, callId: sessionId, failures: details };
   }
   const aggregate = new AggregateError(failures, failures.length ? failures.map(e => e.message).join('; ') : details.length ? `No hay proveedores LLM disponibles (fusible): ${details.map(d => `${d.provider} (${d.kind})`).join(', ')}` : 'No hay proveedores LLM configurados');
   aggregate.details = details;

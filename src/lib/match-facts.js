@@ -5,7 +5,7 @@ export function editingFacts(match, scorers) {
   const facts = scriptFacts(match, scorers), result = [];
   const labels = { n: 'partidos', wins: 'victorias', draws: 'empates', losses: 'derrotas', gf: 'goles a favor', ga: 'goles recibidos', clean: 'arcos en cero' };
   const add = (id, label, value, unit, source) => {
-    if (Number.isFinite(value) && value >= 0) result.push({ id, label, value, unit, source });
+    if (Number.isFinite(value) && value >= 0) result.push({ id, label, value, unit, source, provider: id.startsWith('h2h.') ? match.h2h?.source ?? 'Datos del encuentro' : source.startsWith('scorers:') ? 'Tabla de goleadores' : match.lastMatches?.source ?? 'Historial del encuentro', sampleSize: id.startsWith('h2h.') ? facts.h2h?.total ?? null : facts[`${id.split('.')[0]}Form`]?.n ?? null });
   };
   for (const side of ['home', 'away']) {
     for (const [key, label] of Object.entries(labels))

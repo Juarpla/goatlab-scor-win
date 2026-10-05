@@ -20,9 +20,12 @@ import {
   staleScripts,
   youtubeUserPayload,
 } from '../src/lib/youtube.js';
+import { CONTENT_PROVIDER_ORDER } from '../src/lib/match-content.js';
+import { createHash } from 'node:crypto';
 import { esName } from '../src/lib/teams.js';
 import { checkDescription } from '../src/lib/compliance.js';
 
+process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const dir = 'public/data/youtube-scripts';
 const healthPath = 'public/data/llm-health.json';
 const skillPath = '.agents/skills/redactar-guiones-shorts/SKILL.md';
@@ -53,7 +56,7 @@ const published = evaluation?.published === true;
 const skill = (await readFile(skillPath, 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
 
 const allNs = selectMatches(fixtures.matches, {});
-let matches = selectMatches(fixtures.matches, { onlyMatch, limit: limitRaw, top });
+let matches = selectMatches(onlyMatch ? fixtures.matches : fixtures.matches.filter(m => Date.parse(m.kickoff) > Date.now()), { onlyMatch, limit: limitRaw, top });
 if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS`);
 if (!matches.length) {
   console.error('shorts: sin partidos NS para generar');
@@ -171,7 +174,7 @@ async function draftMatch(match, { breaker, skill, published, facts, priorFailur
       validate: content => validateDraft(content, match, { published, facts, matchId }),
     });
     noteLlmHealth({
-      at: new Date().toISOString(), task: 'shorts', matchId, attempts, failures: priorFailures.slice(0, 8),
+      at: new Date().toISOString(), task: 'shorts', matchId, attempts, failures: [...priorFailures, ...(drafted.failures ?? [])].slice(0, 8),
       ok: { provider: drafted.provider, model: drafted.model }, usage: drafted.usage, truncated: false, maxTokens: SCRIPT_MAX_TOKENS, batchSize: 1, callId: drafted.callId,
     });
     return drafted;
@@ -205,6 +208,7 @@ async function saveDraft(match, drafted) {
     competition: match.competition,
     kickoff: match.kickoff,
     author: { provider, model },
+    instructionVersion: createHash('sha256').update(skill).digest('hex'),
     generatedAt: new Date().toISOString(),
   };
   await writeFile(file, JSON.stringify(payload, null, 2));

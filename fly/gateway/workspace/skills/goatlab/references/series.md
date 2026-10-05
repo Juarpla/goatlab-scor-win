@@ -4,17 +4,19 @@ Ejecuta la herramienta una vez por mensaje recibido. `chat` es el chat actual;
 `event` es el `message_id` original de Telegram, estable al repetir una llamada.
 Si hay varios audios en un turno, procésalos en orden de llegada, uno por llamada.
 
-1. `/start`: `reset --chat=<chat>`. Cancela y limpia la serie de ese chat y solicita
-   cancelación de sus trabajos anteriores. Da una bienvenida con el único botón
-   de entrada: `⚽ Goatlab`, equivalente a `/goatlab`.
+1. `/start` de Telegram: el webhook cancela la serie y sus trabajos anteriores,
+   renueva el acceso web y envía la bienvenida con `⚽ Goatlab`. El agente no
+   ejecuta herramientas ni repite la bienvenida por ese comando.
 2. `/goatlab`: `list --chat=<chat>`. La herramienta actualiza los datos una vez y
    conserva la lista mostrada. Presenta número, encuentro, competición y hora;
    si falla o está vacía, informa el error y termina ese paso. Sin botones.
-3. Número elegido: `select --chat=<chat> --number=<n>`. La búsqueda queda
-   programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
+3. Número elegido: `select --chat=<chat> --number=<n>`. Los JSON de Scripts, Image Prompts, Video Prompts y Motion Prompts se consultan
+   desde goatlab.win y se guardan con la serie. La generación queda programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,
-   sin esperar. Manda los 10 audios.» Después: «📸 Estoy buscando las fotos en
+   sin esperar. Manda los 10 audios.» Después: «📸 Estoy preparando imágenes y clips con Agnes en
    segundo plano. Ya puedes mandar los audios; te aviso cuando estén o si hay un error.»
+   Si `missingCategories` no está vacío, informa cuáles faltan y que el montaje
+   utilizará el material disponible.
 4. Audio: el webhook ejecuta `receive` usando el chat, file_id y message_id
    originales. No vuelvas a encolarlo desde el agente. Para una instalación sin
    webhook, usa `receive --chat=<chat> --audio=<file_id> --event=<message_id>`
