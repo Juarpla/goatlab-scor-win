@@ -3,6 +3,7 @@
 // quieta, sin .busy, sin turno activo y con uptime ≥10 min.
 // Pre-apagado: setWebhook (re-registrar por si OpenClaw lo limpia) +
 // POST /machines/<id>/stop vía Fly Machines API.
+import { prepareNativeStop, resumeNativeStop } from './idle-safety.mjs';
 import { execFile } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { promisify } from 'node:util';
@@ -16,14 +17,26 @@ const BOT = process.env.TELEGRAM_BOT_TOKEN;
 const FLY_TOKEN = process.env.FLY_API_TOKEN;
 const APP = process.env.FLY_APP_NAME ?? 'goatlab-gateway';
 const MACHINE_ID = process.env.FLY_MACHINE_ID;
-const WEBHOOK_URL = 'https://goatlab-gateway.fly.dev/telegram-webhook';
+const WEBHOOK_URL = process.env.TELEGRAM_PUBLIC_WEBHOOK_URL;
 const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET;
 
 const start = Date.now();
+const control = async (path, method = 'GET') => {
+  const r = await fetch(`http://127.0.0.1:4004${path}`, {
+    method, headers: { Authorization: `Bearer ${WEBHOOK_SECRET}` },
+    ...(method === 'POST' ? { body: '{}' } : {}), signal: AbortSignal.timeout(3000),
+  });
+  if (!r.ok) throw new Error('control de acceso no disponible');
+  return r.json();
+};
 
 async function busyReason() {
   if (Date.now() - start < MIN_UPTIME_MS) return 'uptime mínimo (10min) no cumplido';
   if (existsSync(BUSY_FILE)) return '/data/.busy presente (render en vuelo)';
+  try {
+    const { lastActivity } = await control('/state');
+    if (!Number.isFinite(lastActivity) || Date.now() - lastActivity < IDLE_MS) return 'interacción reciente en Telegram o UI';
+  } catch { return 'control de actividad no disponible'; }
   try {
     const { stdout } = await run('python3', [`${process.env.GOATLAB_SKILL_DIR}/scripts/workflow.py`, 'busy'], { timeout: 10_000 });
     if (JSON.parse(stdout).busy) return 'tareas del flujo pendientes';
@@ -32,37 +45,25 @@ async function busyReason() {
   }
   try {
     if (readdirSync('/data/media-pack').some(name => name.endsWith('.running'))) {
-      return 'búsqueda de fotos en curso';
+      return 'generación de imágenes en curso';
     }
   } catch { /* sin directorio: no hay búsqueda */ }
-  try {
-    const { stdout } = await run('openclaw', ['sessions', '--json', '--limit', '5'], { timeout: 15_000 });
-    const data = JSON.parse(stdout);
-    let newest = 0;
-    for (const s of data.sessions ?? []) {
-      if (s.status === 'active' || s.status === 'running') return `sesión ${s.key} en estado ${s.status}`;
-      if (s.updatedAt && s.updatedAt > newest) newest = s.updatedAt;
-    }
-    if (newest && Date.now() - newest < IDLE_MS)
-      return `sesión más reciente actualizada hace ${Math.round((Date.now() - newest) / 60000)}min`;
-  } catch (e) {
-    return `sessions.list falló: ${String(e.message ?? e).slice(0, 120)}`;
-  }
   return null;
 }
 
 async function setWebhook() {
+  if (!WEBHOOK_URL) throw new Error('falta TELEGRAM_PUBLIC_WEBHOOK_URL');
   const r = await fetch(`https://api.telegram.org/bot${BOT}/setWebhook`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ url: WEBHOOK_URL, secret_token: WEBHOOK_SECRET }),
+    body: JSON.stringify({ url: WEBHOOK_URL, secret_token: WEBHOOK_SECRET }), signal: AbortSignal.timeout(10_000),
   });
   const j = await r.json();
   if (!j.ok) throw new Error(`setWebhook: ${j.description}`);
 }
 
 async function verifyWebhook() {
-  const r = await fetch(`https://api.telegram.org/bot${BOT}/getWebhookInfo`);
+  const r = await fetch(`https://api.telegram.org/bot${BOT}/getWebhookInfo`, { signal: AbortSignal.timeout(10_000) });
   const j = await r.json();
   return j.ok && j.result.url === WEBHOOK_URL;
 }
@@ -71,7 +72,7 @@ async function stopMachine() {
   const r = await fetch(`https://api.machines.dev/v1/apps/${APP}/machines/${MACHINE_ID}/stop`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${FLY_TOKEN}`, 'Content-Type': 'application/json' },
-    body: '{}',
+    body: '{}', signal: AbortSignal.timeout(10_000),
   });
   if (!r.ok) throw new Error(`machines stop: ${r.status} ${await r.text()}`);
 }
@@ -86,13 +87,21 @@ async function check() {
     return;
   }
   console.log('idle-stop: 10 min sin actividad, apagando…');
+  let suspensionId;
   try {
     await setWebhook();
     if (!(await verifyWebhook())) throw new Error('webhook no verificado tras setWebhook');
+    if (await busyReason()) return; // activity may have arrived during network calls
+    suspensionId = await prepareNativeStop();
+    if (!suspensionId) return;
+    if (await busyReason()) { await resumeNativeStop(suspensionId); return; }
+    await control('/revoke', 'POST');
     await stopMachine();
     console.log('idle-stop: máquina apagada');
   } catch (e) {
-    console.error(`idle-stop: ${e.message}`);
+    if (suspensionId) await resumeNativeStop(suspensionId).catch(() => {});
+    await control('/resume', 'POST').catch(() => {});
+    console.error('idle-stop: apagado pendiente; se volverá a intentar');
   }
 }
 

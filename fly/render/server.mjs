@@ -15,6 +15,7 @@ import { telegramCaption } from '../../src/lib/youtube.js';
 import { JobStore } from './job-store.mjs';
 import { RemoteLedger } from './remote-ledger.mjs';
 import { warmPhotos, prunePhotoCache, pinPhotos } from './photo-cache.mjs';
+import { pruneClipCache } from './clip-cache.mjs';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
 
 const run = promisify(execFile);
@@ -41,6 +42,7 @@ let inflight = 0;
 const protectedIds = new Set();
 function cleanup() {
   store.cleanup(protectedIds);
+  pruneClipCache(join(cacheDir, '../clip-cache'), { protectedUrls: [...jobs.values()].flatMap(j => j.clips ?? []).map(c => c.url), purgeUnused: true });
   prunePhotoCache(cacheDir, { protectedUrls: [...jobs.values()].flatMap(j => j.assets ?? []).map(a => a.url), purgeUnused: true });
 }
 setInterval(cleanup, 300_000).unref();
@@ -104,6 +106,7 @@ async function runJob(job) {
   };
   const measure = async (name, fn) => { const at = Date.now(); await onStage(name); try { return await fn(); } finally { await onStage(name, Date.now()-at); } };
   try {
+    if (job.assets.some(asset => asset.source !== 'agnes')) throw new Error('El banco contiene imágenes externas; inicia una serie nueva con /start.');
     // 1. Voz: desde Telegram (file_id) o URL directa (pruebas).
     const voiceFile = join(tmp, 'voice.ogg');
     await measure('voiceDownload', async () => {
@@ -123,7 +126,7 @@ async function runJob(job) {
       tmp,
       voiceFile,
       voiceSeconds,
-      assets: job.assets,
+      assets: job.assets, clips: job.clips ?? [], motionPrompts: job.motionPrompts ?? [],
       variant: job.variant,
       home: job.home,
       away: job.away,
@@ -213,8 +216,9 @@ function schedule(job) {
   protectedIds.add(job.id);
   lastWork = Date.now();
   // Pre-download future media while the current job captures frames. Cache limits concurrency globally.
-  const unpin = pinPhotos(job.assets);
-  const warming = warmPhotos(job.assets, cacheDir).catch(() => {});
+  const allowedAssets = job.assets.filter(asset => asset.source === 'agnes');
+  const unpin = pinPhotos(allowedAssets);
+  const warming = warmPhotos(allowedAssets, cacheDir).catch(() => {});
   tail = tail.then(async () => {
     await warming;
     if (job.expiresAt <= Date.now()) job.cancelled = true;
@@ -233,7 +237,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 2 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 3 });
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
@@ -268,16 +272,18 @@ const server = createServer(async (req, res) => {
       const mediaMinimum = b.mediaMinimum ?? 2;
       if (![0, 1, 2, 8].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
+      if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > 3 || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
+      if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 5 || b.motionPrompts.some(p => typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
-      for (const asset of b.assets) if (!asset?.url || !/^https?:\/\//.test(asset.url)) return json(400, { error: 'URL de foto inválida' });
+      for (const asset of b.assets) if (asset?.source !== 'agnes' || !asset?.url || !/^https:\/\//.test(asset.url)) return json(400, { error: 'Solo se admiten imágenes generadas con Agnes' });
       const { job, duplicate } = store.accept({
         expiresAt: b.expiresAt, chatId: b.chatId, matchId: b.matchId, requestId: b.requestId, seriesId: b.seriesId,
         variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
         audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
-        assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
+        clips: b.clips ?? [], motionPrompts: b.motionPrompts ?? [], assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
       });
       await store.flush();
       if (job.status === 'queued' && !protectedIds.has(job.id)) schedule(job);

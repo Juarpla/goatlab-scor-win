@@ -20,3 +20,6 @@
 .verdict-direction{color:var(--text)}
 .verdict-direction strong{color:var(--accent)}
 .stage-pane .chapter-note{display:block;margin-top:18px}
+
+/* Content pages and shared footer remain within narrow viewports. */
+@media(max-width:640px){.site-footer{grid-template-columns:minmax(0,1fr)}.site-footer>*{min-width:0}.site-footer p,.site-footer>small{justify-self:start}.site-footer>div{flex-wrap:wrap;gap:12px 20px}}

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { ENDCARD_SECONDS, FONT_FILE } from '../../src/lib/hyperframe.js';
 import { buildPlannedComposition } from '../../src/lib/edit-plan.js';
+import { warmClips, pinClips } from './clip-cache.mjs';
 import { warmPhotos, pinPhotos } from './photo-cache.mjs';
 import { cuesFromHeard, shiftWords } from '../../src/lib/timing.js';
 import { transcribeWords } from './transcribe.mjs';
@@ -63,7 +64,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   home = '', away = '', matchLabel, log = () => {},
   cacheDir = process.env.PHOTO_CACHE_DIR || join(APP_ROOT, '.cache/shorts/photos'),
   planner = planEdit, transcriber = voiceTimes,
-  facts = [], mediaMinimum = 0, requestId, onStage = async () => {},
+  facts = [], clips = [], motionPrompts = [], mediaMinimum = 0, requestId, onStage = async () => {},
 }) {
   const stages = {}, measure = async (label, fn) => {
     const at = Date.now();
@@ -101,8 +102,20 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   });
   } finally { unpin(); }
   if (photos.length < assets.length) log(`media: ${photos.length}/${assets.length} fotos disponibles; se completará con gráficos`);
+  const videos = [], availableClips = [];
+  const unpinClips = pinClips(clips);
+  try {
+    const warmedClips = await measure('clips', () => warmClips(clips, join(cacheDir, '../clip-cache'), log));
+    warmedClips.forEach((clip, index) => {
+      if (!clip) return;
+      const src = `clip-${videos.length}.mp4`;
+      copyFileSync(clip.path, join(tmp, src));
+      videos.push({ src, width: clip.width, height: clip.height, duration: clip.duration });
+      availableClips.push({ index: videos.length - 1, width: clip.width, height: clip.height, duration: clip.duration, generated: true, title: clips[index].prompt ?? 'Football animation' });
+    });
+  } finally { unpinClips(); }
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { planVersion: 2, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { planVersion: 3, clips: availableClips, motionPrompts, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
@@ -111,7 +124,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
   copyFileSync(gsapSource(), join(tmp, 'gsap.min.js'));
-  writeFileSync(join(tmp, 'index.html'), buildPlannedComposition({ duration: total, photos, words, plan, facts, match: matchLabel }));
+  writeFileSync(join(tmp, 'index.html'), buildPlannedComposition({ duration: total, photos, clips: videos, words, plan, facts, match: matchLabel }));
   writeJson(join(tmp, 'stages.json'), stages);
   return { total, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages };
 }

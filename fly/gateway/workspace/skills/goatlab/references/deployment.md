@@ -14,7 +14,7 @@ con Python, Node, FFmpeg, datos de encuentros y un endpoint Render configurado.
 `node scripts/sync-goatlab-skill.mjs --check` verifica las bibliotecas empaquetadas.
 
 `/new` sigue siendo nativo. `/start` cancela la serie y da la bienvenida sin
-otro reinicio de sesión. `/goatlab` lista partidos; elegir uno activa la búsqueda.
+otro reinicio de sesión. `/goatlab` lista partidos; elegir uno activa la generación Agnes.
 
 El supervisor arranca con el Gateway, usa un bloqueo de proceso y persiste en
 `/data/goatlab.sqlite` (SQLite con journal DELETE y caché de conexión de 1 MB). Cada chat tiene una serie activa, diez slots,
@@ -25,7 +25,7 @@ un contador calculado desde filas y eventos Telegram únicos por serie.
 `POST /render` deja un registro en Render para rechazar la solicitud tardía.
 Un video ya enviado no puede retirarse con este mecanismo.
 
-Las búsquedas y generaciones suceden fuera de la conversación. Los audios se
+Las generaciones suceden fuera de la conversación. Los audios se
 reciben aunque no haya fotos. La marca `.ready` libera los renders, que se envían
 en orden por chat, con una solicitud HTTP activa y reintentos de red con el mismo
 `requestId`. Una tarea de envío fallida bloquea las posteriores de ese chat hasta
@@ -62,14 +62,9 @@ cola; los locks y límites son locales al volumen compartido por este proceso.
 
 ## Medios y Agnes
 
-Se consultan Commons, Pexels y Pixabay con equipos y protagonistas del guion.
-Pexels/Pixabay son opcionales si no hay clave. La identidad se establece desde
-metadatos del recurso, nunca desde la consulta. Fotos genéricas de fútbol llevan
-`contextOnly`; no se presentan como prueba del encuentro. No hay revisión visual
-obligatoria: los metadatos pueden ser incorrectos, y una revisión editorial sigue
-siendo útil para fotos históricas o identidades ambiguas. Se conservan URL, página,
-autor y licencia. Si los créditos exceden el pie de Telegram, se adjuntan completos
-en un TXT; un fallo de ese envío queda en el registro sin repetir el MP4.
+Las imágenes se generan exclusivamente con Agnes. Los bancos antiguos se filtran
+para excluir fotos externas, sin descargarlas. Se conservan gráficos y recursos de marca.
+La investigación web de información sigue habilitada.
 
 Las fotos completas se solicitan con `agnes-image-2.5-flash`, `size: "2K"`,
 `ratio: "9:16"` (1472×2624 esperados). Recursos pequeños pueden usar `1K` y otros
@@ -177,7 +172,7 @@ El benchmark usa exactamente los mismos recursos 2K, duración, palabras, FPS y
 un worker para ambos motores. Alterna el orden en tres repeticiones y escribe
 `.cache/shorts-review/benchmark.json` y dos MP4 revisables. Es una muestra técnica
 con imágenes SVG rasterizadas, audio de prueba y tiempos sintéticos. No mide APIs,
-transcripción, búsquedas, tráfico ni la CPU de Fly. En producción, los registros
+transcripción, generación de imágenes, tráfico ni la CPU de Fly. En producción, los registros
 `stages` separan descarga, transcripción, normalización, planificación, captura,
 mezcla y entrega; repetir en la misma VM con audios reales antes de decidir Rust.
 
@@ -196,8 +191,7 @@ Los Dockerfiles ahora usan el contexto de la raíz; desplegar con
 Para esta actualización compatible, desplegar Render y después Gateway. Se conserva su volumen existente; no crear
 aplicaciones ni volúmenes y no ampliar CPU/RAM.
 Render necesita `OPENCODE_GO_API_KEY`, `TELEGRAM_BOT_TOKEN`, `RENDER_SECRET`, y las
-claves de transcripción existentes. Gateway mantiene sus secretos y puede recibir
-`AGNES_API_KEY`, `PEXELS_API_KEY`, `PIXABAY_API_KEY`. Configurar ambas aplicaciones
+claves de transcripción existentes. Gateway mantiene sus secretos y recibe `AGNES_API_KEY`. Configurar ambas aplicaciones
 con los mismos modelos principal/respaldo, y la misma clave de Render.
 No enviar pruebas al chat real durante las comprobaciones técnicas de despliegue.
 
@@ -241,3 +235,22 @@ El progreso y sus message_id caducan con la serie. Los límites de SQLite y cach
 las dos aplicaciones y el apagado a 10/15 minutos se mantienen. Renderizar ejemplos
 con motion graphics y revisar subtítulos antes del despliegue; registrar la revisión
 en GOATLAB_REVISION al construir ambas imágenes.
+
+Para browser, acceso web y transporte de Telegram, lee [base de OpenClaw](../../../references/openclaw-base.md).
+
+
+## Contenido público y clips Agnes
+
+La web publica `/content-index.json` y las páginas por partido `/scripts`,
+`/image-prompts`, `/video-prompts` y `/motion-prompts`, cada una con `.json` para
+consumo automático. `/youtube` redirige permanentemente a `/scripts`. Los archivos
+históricos `public/data/youtube-scripts` siguen siendo compatibles.
+
+Publicar primero la web y sus datos; después Render y Gateway, en ese orden por
+compatibilidad del protocolo. El contenido se guarda con cada serie; el banco de
+10 imágenes y hasta 3 clips se comparte por partido y se prepara hasta 15 minutos.
+Las versiones antiguas del contrato de montaje siguen aceptadas. El índice y las
+categorías web tienen caché validada local (24 horas, máximo 3 MB); las descargas
+Agnes de clips y su caché en Render están limitadas a 128 MB cada una, fuera de SQLite.
+Nginx publica únicamente imágenes y MP4, nunca instrucciones, respuestas o bases.
+La voz y música originales son las fuentes de audio; los clips se silencian.

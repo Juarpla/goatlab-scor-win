@@ -6,11 +6,37 @@
 {
   gateway: {
     mode: "local",
-    port: 3000,
-    bind: "lan",
-    auth: { token: "${OPENCLAW_GATEWAY_TOKEN}" },
+    port: 3001,
+    bind: "loopback",
+    trustedProxies: ["127.0.0.1"],
+    auth: {
+      mode: "trusted-proxy",
+      password: "${OPENCLAW_GATEWAY_PASSWORD}", // direct local CLI only
+      trustedProxy: {
+        userHeader: "x-forwarded-user",
+        requiredHeaders: ["x-forwarded-proto", "x-forwarded-host"],
+        allowUsers: ["telegram:${TELEGRAM_ALLOWED_USERS}"],
+        allowLoopback: true,
+        deviceAutoApprove: {
+          enabled: true,
+          scopes: ["operator.read", "operator.write", "operator.approvals", "operator.questions"],
+        },
+      },
+    },
     controlUi: { allowedOrigins: ["https://goatlab-gateway.fly.dev"] },
   },
+  browser: {
+    enabled: true,
+    defaultProfile: "openclaw",
+    executablePath: "/usr/bin/chromium",
+    headless: true,
+    noSandbox: true, // dedicated Fly VM; CDP/control remain loopback-only
+    snapshotDefaults: { mode: "efficient" },
+    tabCleanup: { enabled: true },
+    profiles: { openclaw: { cdpPort: 18800 } },
+  },
+  plugins: { entries: { browser: { enabled: true } } },
+  tools: { alsoAllow: ["browser"] },
   agents: {
     defaults: {
       workspace: "/home/node/.openclaw/workspace",
@@ -43,9 +69,10 @@
       dmPolicy: "allowlist",
       allowFrom: ["${TELEGRAM_ALLOWED_USERS}"],
       capabilities: { inlineButtons: "allowlist" },
-      webhookUrl: "https://goatlab-gateway.fly.dev/telegram-webhook",
+      webhookUrl: "${TELEGRAM_PUBLIC_WEBHOOK_URL}",
+      webhookPath: "/telegram-webhook",
       webhookSecret: "${TELEGRAM_WEBHOOK_SECRET}",
-      webhookHost: "0.0.0.0",
+      webhookHost: "127.0.0.1",
       webhookPort: 8787,
     },
   },
