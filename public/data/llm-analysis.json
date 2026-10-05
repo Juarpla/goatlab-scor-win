@@ -1,1021 +1,4 @@
 {
-  "bz-212661": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Encuentro Azerbaiyán-Lituania",
-        "bullets": [
-          "Azerbaiyán y Lituania se enfrentan en la categoría nations el 2026-10-04 a las 13:00 UTC.",
-          "El estado figura como NS, por lo que no consta un resultado registrado.",
-          "El input no aporta sede, clima, alineaciones ni bajas confirmadas."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-04",
-            "label": "Fecha"
-          },
-          {
-            "value": "13:00 UTC",
-            "label": "Hora"
-          },
-          {
-            "value": "NS",
-            "label": "Estado"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Lecturas de Poisson y CatBoost",
-        "bullets": [
-          "Poisson GoatLab reparte 0.281 para Azerbaiyán, 0.306 para el empate y 0.413 para Lituania (28.1%, 30.6% y 41.3%).",
-          "CatBoost Bzzoiro asigna 0.275, 0.296 y 0.429, respectivamente; respecto de P, sus diferencias son -0.006, -0.010 y +0.016.",
-          "P y B coinciden en 1.02 y 1.29. Sus salidas secundarias son 0.407 y 0.476 en P, y 0.412 y 0.474 en B; el input no etiqueta esas variables.",
-          "La lectura B2 del proveedor A declara 0.429 como mayor probabilidad, «no» en goles totales y «no» en ambos anotan; B registra 1-1 como marcador modal."
-        ],
-        "stats": [
-          {
-            "value": "0.413",
-            "label": "P: Lituania"
-          },
-          {
-            "value": "0.429",
-            "label": "B: Lituania"
-          },
-          {
-            "value": "1-1",
-            "label": "Marcador modal B"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Antecedentes entre ambos equipos",
-        "bullets": [
-          "H consigna 2 cruces: 0 victorias de Azerbaiyán, 2 empates, 0 victorias de Lituania y 1 partido con ambos anotando.",
-          "Lituania-SQL Azerbaiyán 1-1 el 2026-09-27.",
-          "Azerbaiyán-Lituania 0-0 el 2019-03-25.",
-          "Los dos cruces finishes draw; solo el primero terminó con goles."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Cruces H"
-          },
-          {
-            "value": "0-0",
-            "label": "Cruce de 2019"
-          },
-          {
-            "value": "1-1",
-            "label": "Cruce de 2026"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Posiciones registradas en la tabla",
-        "bullets": [
-          "Lituania ocupa el 1º puesto con 2 partidos disputados y 4 puntos.",
-          "Azerbaiyán figura 2º con 1 partido disputado y 1 punto.",
-          "Lituania presenta un partido más y 3 puntos más, aunque las muestras no son equivalentes."
-        ],
-        "stats": [
-          {
-            "value": "1º",
-            "label": "Lituania"
-          },
-          {
-            "value": "2º",
-            "label": "Azerbaiyán"
-          },
-          {
-            "value": "4 puntos",
-            "label": "Lituania"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Goleadores declarados por la fuente S",
-        "bullets": [
-          "Armandas Kučys y Artur Dolznikov aparecen como goleadores de Lituania.",
-          "Ambos registros terminan en 1|2; el input no especifica el significado de los dos campos numéricos.",
-          "No se aportan más filas de goleadores."
-        ],
-        "stats": []
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Resultado no disponible",
-        "detail": "El partido figura como NS y no contiene marcador, por lo que no permite comprobar rendimiento realizado."
-      },
-      {
-        "label": "Variables de modelo sin etiqueta",
-        "detail": "El input no identifica qué representan 1.02, 1.29 ni las salidas secundarias de P y B."
-      },
-      {
-        "label": "Forma, clima y bajas",
-        "detail": "No hay filas R, W ni L, así que no se analizan resultados recientes, clima, sede o ausencias confirmadas."
-      },
-      {
-        "label": "Lectura A incompleta",
-        "detail": "No existe una fila A independiente con distribución, umbral y lectura cruda; solo aparece una estimación B2 atribuida a la fuente A."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "El 0.429 de B2 coincide con la victoria de Lituania en B. No hay desvíos porcentuales claros: P y B suman 1.000. Sí existe divergencia categórica: el modo 1-1 de B implica dos goles y ambos anotan, frente a los dos «no» de B2."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "space-bunny-free",
-    "generatedAt": "2026-10-01T06:12:14.424Z",
-    "inputKey": "v3|M|bz-212661|Azerbaijan|Lithuania|nations|2026-10-04T13:00:00+00:0|NS\nP|1.02|1.29|0.281|0.306|0.413|0.407|0.476\nB|0.275|0.296|0.429|1.02|1.29|0.412|0.474|1-1|\nB2|A|0.429|no|no\nH|2|0|2|0|1\nT|2|Azerbaijan|1|1||\nT|1|Lithuania|2|4||\nS|Armandas Kučys|Lithuania|1|2\nS|Artur Dolznikov|Lithuania|1|2\nHR|2026-09-27|Lithuania|Azerbaijan|1|1\nHR|2019-03-25|Azerbaijan|Lithuania|0|0",
-    "materialKey": "M|bz-212661|Azerbaijan|Lithuania|nations|2026-10-04T13:00:00+00:0|NS"
-  },
-  "bz-212663": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Malta-Andorra el 4 de octubre de 2026",
-        "bullets": [
-          "El calendario fija Malta-Andorra para el 2026-10-04 a las 16:00 UTC dentro de Nations.",
-          "El estado consta como NS; la fila no informa sede, clima, alineaciones, bajas confirmadas ni resultado."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-04",
-            "label": "Fecha"
-          },
-          {
-            "value": "16:00 UTC",
-            "label": "Hora"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Lectura comparada de los modelos",
-        "bullets": [
-          "Poisson GoatLab estima 1.41 y 0.8 goles y reparte el resultado en 50.2% para Malta, 29.8% para empate y 20% para Andorra.",
-          "CatBoost Bzzoiro reparte 52% Malta, 28.8% empate y 19.2% Andorra, con 1.41 y 0.8 como estimaciones de goles.",
-          "Los indicadores de goles totales y ambos anotan aparecen como 38% y 42.9% en P, frente a 38.9% y 43.9% en B.",
-          "B2, lectura declarada de Bzzoiro, señala H para Malta y 52% como mayor probabilidad; sus respuestas sobre umbral de goles y ambos anotan son ambas no."
-        ],
-        "stats": [
-          {
-            "value": "50.2%",
-            "label": "P: victoria Malta"
-          },
-          {
-            "value": "52%",
-            "label": "B: victoria Malta"
-          },
-          {
-            "value": "43.9%",
-            "label": "B: ambos anotan"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Cinco cruces Malta-Andorra",
-        "bullets": [
-          "Malta presenta 5 cruces, 3 victorias, 2 empates, 0 derrotas y 1.6 de media total de goles según H.",
-          "HR registra Andorra-Malta 1-2 (2026-09-24), Malta-Andorra 0-0 (2024-11-19) y Andorra-Malta 0-1 (2024-09-10).",
-          "También constan Malta-Andorra 3-1 (2020-11-14) y Andorra-Malta 0-0 (2020-10-10)."
-        ],
-        "stats": [
-          {
-            "value": "5",
-            "label": "Cruces"
-          },
-          {
-            "value": "3",
-            "label": "Victorias Malta"
-          },
-          {
-            "value": "1.6",
-            "label": "Media total"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Posiciones en la tabla",
-        "bullets": [
-          "La tabla sitúa a Malta en el puesto 1º, con 1 partido y 3 puntos.",
-          "Andorra ocupa el puesto 3º, con 2 partidos y 1 punto."
-        ],
-        "stats": [
-          {
-            "value": "1º",
-            "label": "Posición Malta"
-          },
-          {
-            "value": "3º",
-            "label": "Posición Andorra"
-          },
-          {
-            "value": "3",
-            "label": "Puntos Malta"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Estado del calendario",
-        "detail": "La fila M marca NS y no contiene un resultado associated al encuentro."
-      },
-      {
-        "label": "Contexto no informado",
-        "detail": "No constan bloques W, L, S, R, A ni M2; tampoco sede, clima, alineaciones, goleadores ni consenso externo."
-      },
-      {
-        "label": "Historial limitado",
-        "detail": "H y HR abarcan cinco cruces entre 2020 y 2026; no hay un bloque R para describir la forma reciente de cada equipo."
-      },
-      {
-        "label": "Umbral no explicitado",
-        "detail": "B2 responde no sobre el umbral de goles, pero la fila no identifica cuál es el umbral numérico."
-      }
-    ],
-    "review": {
-      "flag": false,
-      "note": "No se detecta una desviación clara de porcentajes: B2 replica el 52% de B para H, mientras P y B muestran distribuciones próximas en los tres resultados y en los indicadores de goles totales y ambos anotan."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "space-bunny-free",
-    "generatedAt": "2026-10-01T06:13:54.777Z",
-    "inputKey": "v3|M|bz-212663|Malta|Andorra|nations|2026-10-04T16:00:00+00:0|NS\nP|1.41|0.8|0.502|0.298|0.2|0.38|0.429\nB|0.52|0.288|0.192|1.41|0.8|0.389|0.439|1-0|\nB2|H|0.52|no|no\nH|5|3|2|0|1.6\nT|1|Malta|1|3||\nT|3|Andorra|2|1||\nHR|2026-09-24|Andorra|Malta|1|2\nHR|2024-11-19|Malta|Andorra|0|0\nHR|2024-09-10|Andorra|Malta|0|1\nHR|2020-11-14|Malta|Andorra|3|1\nHR|2020-10-10|Andorra|Malta|0|0",
-    "materialKey": "M|bz-212663|Malta|Andorra|nations|2026-10-04T16:00:00+00:0|NS"
-  },
-  "bz-212668": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Irlanda vs Israel: Clásico de eliminatorias 2026",
-        "bullets": [
-          "Primer encuentro en eliminatorias de la UEFA Euro 2026 tras 11 años sin cruces directos en fase de clasificación.",
-          "Irlanda busca mantener su racha de victorias (2-1-0 en últimos 3 partidos) y consolidar su puesto en el Grupo I (2° lugar)."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "modelos",
-        "title": "Comparativa de probabilidades y estimaciones",
-        "bullets": [
-          "Poisson GoatLab: Irlanda con ventaja clara (1.67 vs 0.96 de goles totales), pero Israel con mayor probabilidad de empate (0.529).",
-          "CatBoost Bzzoiro: Predicción de empate (1-1) con 0.375 probabilidad, pero ajuste de 0.467/0.273 para goles por equipo (similar a Poisson).",
-          "API-Football: Distribución de goles (1-0: 0.489, 1-1: 0.512, 2-0: 0.205), umbral de goles para Irlanda en 1.67 (mayor probabilidad)."
-        ],
-        "stats": [
-          {
-            "value": "0.529",
-            "label": "Prob. empate (Poisson)"
-          },
-          {
-            "value": "1-1",
-            "label": "Pred. Bzzoiro (mayor prob.)"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Antecedentes: Irlanda domina en los últimos cruces",
-        "bullets": [
-          "Último encuentro en 2025 (no disponible en datos), pero Irlanda ganó 3-1 en 2023 (no registrado en HR).",
-          "Victoria irlandesa por 3-0 en 2026 (HR: 2026-09-27), pero Israel empató 1-1 en 2005 y 2-2 en 2005 (últimos datos históricos)."
-        ],
-        "stats": [
-          {
-            "value": "2026-09-27",
-            "label": "Último cruce (Irl 3-0)"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Posiciones clave en el Grupo I (UEFA Euro 2026)",
-        "bullets": [
-          "Irlanda lidera el Grupo I con 6 puntos (2 victorias), mientras Israel ocupa el 4° lugar con 0 puntos (2 derrotas).",
-          "Irlanda necesita ganar para mantener opciones de clasificación directa; Israel requiere victoria para evitar el último puesto."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Puntos Irlanda (2V)"
-          },
-          {
-            "value": "0",
-            "label": "Puntos Israel (0V)"
-          },
-          {
-            "value": "6",
-            "label": "Puntos Irlanda (total)"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Artilleros en juego: Adam Idah como figura irlandesa",
-        "bullets": [
-          "Adam Idah (Irlanda) es el máximo goleador actual con 2 goles en 2 partidos (promedio de 1.00 por partido).",
-          "Israel no tiene goleadores destacados en los últimos encuentros (datos no disponibles en S)."
-        ],
-        "stats": [
-          {
-            "value": "Adam Idah",
-            "label": "Máximo goleador Irlanda"
-          },
-          {
-            "value": "1.00",
-            "label": "Promedio goles Idah"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Datos históricos incompletos",
-        "detail": "Falta registro del encuentro de 2023 (Irlanda 3-1 Israel) y detalles de goleadores israelíes recientes. HR solo incluye 3 partidos previos."
-      },
-      {
-        "label": "Modelos con discrepancias",
-        "detail": "Poisson y CatBoost Bzzoiro coinciden en probabilidad de empate (0.529 vs 0.375), pero difieren en distribución de goles por equipo."
-      },
-      {
-        "label": "Contexto climático/sede ausente",
-        "detail": "No se especifica sede ni condiciones climáticas (W ausente), factores clave en partidos de eliminatorias."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Discrepancia notable en la lectura de Bzzoiro (B2: 'no' en ambas columnas de goles), lo que sugiere posible error de entrada o falta de datos actualizados. Se recomienda validar con fuente primaria. Además, el historial (H) muestra solo 3 partidos, pero el balance (3V, 1E, 2D) no coincide con los re"
-    },
-    "provider": "MISTRAL",
-    "model": "ministral-8b-2512",
-    "generatedAt": "2026-10-01T13:45:53.994Z",
-    "inputKey": "v3|M|bz-212668|Ireland|Israel|nations|2026-10-04T18:45:00+00:0|NS\nP|1.67|0.96|0.529|0.266|0.205|0.489|0.512\nB|0.467|0.273|0.26|1.67|0.96|0.471|0.51|1-1|0.375\nB2|H|0.467|no|no\nH|3|1|2|0|3\nT|2|Ireland|2|3||\nT|4|Israel|2|0||\nS|Adam Idah|Ireland|1|2\nHR|2026-09-27|Israel|Ireland|0|3\nHR|2005-06-04|Ireland|Israel|2|2\nHR|2005-03-26|Israel|Ireland|1|1",
-    "materialKey": "M|bz-212668|Ireland|Israel|nations|2026-10-04T18:45:00+00:0|NS"
-  },
-  "bz-212662": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Contexto del cruce",
-        "bullets": [
-          "El cruce internacional Kosovo-Austria está programado para 2026-10-04 a las 16:00 UTC y figura con estado NS.",
-          "W no informa la sede; registra lluvia (rain) y el valor 3, sin unidad indicada."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-04",
-            "label": "Fecha"
-          },
-          {
-            "value": "16:00 UTC",
-            "label": "Hora"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Modelos y lectura declarada",
-        "bullets": [
-          "Poisson GoatLab estima 1.24 y 1.41 goles; 1X2 0.318/0.285/0.397, total de goles 0.494 y ambos anotan 0.549.",
-          "CatBoost Bzzoiro da 1X2 0.318/0.271/0.411, goles 1.24/1.41, total 0.492, ambos anotan 0.529 y 1-1 con 0.281.",
-          "B2 declara Austria (A) con 0.411, no en total de goles y no en ambos anotan; es una lectura de Bzzoiro, no de GoatLab.",
-          "El 0.411 de B2 coincide con B; su no para ambos anotar contrasta con 0.529 en B y 0.549 en Poisson."
-        ],
-        "stats": [
-          {
-            "value": "0.411",
-            "label": "Austria en B y B2"
-          },
-          {
-            "value": "1.41",
-            "label": "Goles Austria"
-          },
-          {
-            "value": "0.529",
-            "label": "Ambos anotan B"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Cruce previo documentado",
-        "bullets": [
-          "H consigna 1 encuentro: Kosovo 0, empates 0, Austria 1 y 4 goles totales.",
-          "HR registra 3-1 para Austria sobre Kosovo el 2026-09-27.",
-          "No hay bloque R; la evidencia de forma reciente se limita al cruce HR."
-        ],
-        "stats": [
-          {
-            "value": "3-1",
-            "label": "Resultado HR"
-          },
-          {
-            "value": "4",
-            "label": "Goles del cruce"
-          },
-          {
-            "value": "1",
-            "label": "Encuentros H"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Clasificación informada",
-        "bullets": [
-          "Austria figura en el puesto 1, con 2 partidos disputados y 6 puntos.",
-          "Kosovo figura en el puesto 3, con 2 partidos disputados y 3 puntos.",
-          "La tabla no informa goles, diferencia ni criterios de desempate."
-        ],
-        "stats": [
-          {
-            "value": "1",
-            "label": "Puesto Austria"
-          },
-          {
-            "value": "6",
-            "label": "Puntos Austria"
-          },
-          {
-            "value": "3",
-            "label": "Puntos Kosovo"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Goleadores registrados",
-        "bullets": [
-          "Edon Zhegrova (Kosovo), Carney Chukwuemeka y David Affengruber (Austria) registran 1 gol cada uno.",
-          "El máximo de goles indicado en S es 2 para los tres registros."
-        ],
-        "stats": [
-          {
-            "value": "1",
-            "label": "Gol de cada uno"
-          },
-          {
-            "value": "2",
-            "label": "Máximo indicado"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Datos meteorológicos parciales",
-        "detail": "La sede está vacía; W solo ofrece rain y 3, sin unidad identificable."
-      },
-      {
-        "label": "Historial y forma limitados",
-        "detail": "Solo hay un encuentro en H/HR y no se recibió un bloque R con una secuencia reciente."
-      },
-      {
-        "label": "Sin filas L ni M2",
-        "detail": "No constan bajas confirmadas ni consenso externo M2 para contrastar los modelos."
-      },
-      {
-        "label": "Bloque API-Football ausente",
-        "detail": "No se recibió una fila A; el identificador A dentro de B2 se trató como Austria."
-      },
-      {
-        "label": "Semántica compacta",
-        "detail": "Algunas etiquetas no aparecen en el input; los pares 0.494/0.549 y 0.492/0.529 se interpretan como total de goles y ambos anotan."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Se detecta una discordancia interna: B2 declara no para ambos anotan, mientras P y B muestran 0.549 y 0.529. El 0.411 de Austria sí coincide entre B y B2; los demás 1X2 no muestran una desviación clara."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "space-bunny-free",
-    "generatedAt": "2026-10-01T14:17:48.253Z",
-    "inputKey": "v3|M|bz-212662|Kosovo|Austria|nations|2026-10-04T16:00:00+00:0|NS\nP|1.24|1.41|0.318|0.285|0.397|0.494|0.549\nB|0.318|0.271|0.411|1.24|1.41|0.492|0.529|1-1|0.281\nB2|A|0.411|no|no\nH|1|0|0|1|4\nW||rain|3|\nT|3|Kosovo|2|3||\nT|1|Austria|2|6||\nS|Edon Zhegrova|Kosovo|1|2\nS|Carney Chukwuemeka|Austria|1|2\nS|David Affengruber|Austria|1|2\nHR|2026-09-27|Austria|Kosovo|3|1",
-    "materialKey": "M|bz-212662|Kosovo|Austria|nations|2026-10-04T16:00:00+00:0|NS"
-  },
-  "bz-212667": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Cruce Nations League: Gales vs Dinamarca",
-        "bullets": [
-          "Encuentro correspondiente a la Nations League programado para el 4 de octubre de 2026.",
-          "Dinamarca lidera el historial de enfrentamientos con 4 victorias y 1 empate en los últimos 5 cruces.",
-          "La tabla actual sitúa a Dinamarca en la segunda posición con 2 puntos, mientras que Gales ocupa el cuarto puesto con 2 puntos."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "modelos",
-        "title": "Análisis probabilístico GoatLab y Bzzoiro",
-        "bullets": [
-          "El modelo CatBoost Bzzoiro asigna una probabilidad del 52.2% a la victoria visitante de Dinamarca.",
-          "La lectura del modelo Bzzoiro declara una probabilidad del 52.2% para el equipo visitante.",
-          "El resultado más probable según el modelo es el empate a 1 gol."
-        ],
-        "stats": [
-          {
-            "value": "52.2%",
-            "label": "Prob. Dinamarca"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Racha de enfrentamientos",
-        "bullets": [
-          "Dinamarca ha ganado los últimos dos cruces directos (2021 y 2026).",
-          "El promedio de goles en los enfrentamientos previos es de 2.4 por partido.",
-          "Gales ha logrado una sola victoria en los últimos cinco cruces."
-        ],
-        "stats": [
-          {
-            "value": "0",
-            "label": "Empates"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Posiciones en la liga",
-        "bullets": [
-          "Dinamarca ocupa el segundo lugar de la clasificación con 2 puntos.",
-          "Gales se encuentra en la cuarta posición con 2 puntos."
-        ],
-        "stats": [
-          {
-            "value": "2 puntos",
-            "label": "Puntos Dinamarca"
-          },
-          {
-            "value": "2 puntos",
-            "label": "Puntos Gales"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Datos de clima y sede",
-        "detail": "No se proporcionan condiciones climáticas ni detalles de la sede del partido."
-      },
-      {
-        "label": "Información de jugadores",
-        "detail": "Faltan datos de bajas confirmadas, goleadores y forma reciente de los equipos."
-      },
-      {
-        "label": "Estimaciones API-Football",
-        "detail": "No se incluyen la distribución detallada, el umbral de goles ni la lectura cruda de la API-Football."
-      },
-      {
-        "label": "Datos de consenso externo",
-        "detail": "No se proporciona el bloque M2 de consenso externo en porcentaje."
-      }
-    ],
-    "review": {
-      "flag": false,
-      "note": "Los datos de B2 coinciden con la probabilidad de victoria visitante del modelo B (52.2%). Sin embargo, el bloque P no muestra una distribución de probabilidades estándar (valores que no suman 100%), lo que sugiere que los valores pueden representar métricas distintas a las probabilidades de resultad"
-    },
-    "provider": "WORKERS_AI",
-    "model": "@cf/zai-org/glm-4.7-flash",
-    "generatedAt": "2026-10-01T14:30:55.451Z",
-    "inputKey": "v3|M|bz-212667|Wales|Denmark|nations|2026-10-04T18:45:00+00:0|NS\nP|1|1.6|0.225|0.274|0.502|0.482|0.516\nB|0.236|0.242|0.522|1|1.6|0.574|0.574|1-1|0.456\nB2|A|0.522|no|no\nH|5|1|0|4|2.4\nW|||15|\nT|4|Wales|2|0||\nT|2|Denmark|2|3||\nHR|2026-09-27|Denmark|Wales|2|0\nHR|2021-06-26|Wales|Denmark|0|4\nHR|2018-11-16|Wales|Denmark|1|2\nHR|2018-09-09|Denmark|Wales|2|0\nHR|2008-11-19|Denmark|Wales|0|1",
-    "materialKey": "M|bz-212667|Wales|Denmark|nations|2026-10-04T18:45:00+00:0|NS"
-  },
-  "bz-212666": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Portugal-Norway: contexto del cruce",
-        "bullets": [
-          "El cruce de Nations enfrenta a Portugal con Norway el 2026-10-04 a las 18:45 UTC; M declara estado NS.",
-          "W informa condición clear y el valor 12, pero no identifica la sede ni la unidad de ese número.",
-          "No se recibió un bloque L, por lo que la entrada no contiene bajas confirmadas."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-04",
-            "label": "fecha"
-          },
-          {
-            "value": "18:45",
-            "label": "hora UTC"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Poisson y CatBoost en paralelo",
-        "bullets": [
-          "Poisson GoatLab fija 1.46 para Portugal y 1.44 para Norway, con distribución de 36.9%, 27.1% y 36.0%.",
-          "Las lecturas complementarias de P son 55.4% y 59.7%; la fila no vuelve a escribir el nombre de esos dos campos.",
-          "CatBoost Bzzoiro declara 53.6% para Portugal, 22.4% para empate y 24.0% para Norway; también repite 1.46 y 1.44 y añade 62.6% y 61.8%.",
-          "B2 de Bzzoiro declara H, Portugal, con 53.6%, y marca no en goles totales y ambos anotan. B cierra con 1-1 y 43.7%, datos que requieren revisión."
-        ],
-        "stats": [
-          {
-            "value": "53.6%",
-            "label": "Portugal en B"
-          },
-          {
-            "value": "36.9%",
-            "label": "Portugal en P"
-          },
-          {
-            "value": "43.7%",
-            "label": "marcador B"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Dos cruces Portugal-Norway",
-        "bullets": [
-          "El resumen H contiene 2|2|0|0|3, aunque la entrada no identifica cada subcampo.",
-          "El cruce más reciente fue Norway 1-2 Portugal el 2026-09-27.",
-          "El cruce anterior fue Portugal 3-0 Norway el 2016-05-29.",
-          "Los dos HR confirman dos victorias de Portugal y ninguna de Norway."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "cruces HR"
-          },
-          {
-            "value": "1-2",
-            "label": "cruce reciente"
-          },
-          {
-            "value": "3-0",
-            "label": "cruce anterior"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Puestos y puntos disponibles",
-        "bullets": [
-          "T sitúa a Portugal en el puesto 1, con 2 partidos y 6 puntos.",
-          "T sitúa a Norway en el puesto 3, con 2 partidos y 3 puntos.",
-          "Ambos equipos han disputado el mismo número de partidos, pero Portugal suma 3 puntos más."
-        ],
-        "stats": [
-          {
-            "value": "1",
-            "label": "puesto Portugal"
-          },
-          {
-            "value": "6",
-            "label": "puntos Portugal"
-          },
-          {
-            "value": "3",
-            "label": "puesto Norway"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Goleadores reportados",
-        "bullets": [
-          "João Félix registra 2 goles en 2 partidos con Portugal.",
-          "Erling Haaland registra 3 goles en 2 partidos con Norway."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "goles João Félix"
-          },
-          {
-            "value": "3",
-            "label": "goles Haaland"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Datos ausentes",
-        "detail": "No se recibieron filas A, R, L ni M2; no hay lectura API-Football, forma reciente, bajas confirmadas ni consenso externo."
-      },
-      {
-        "label": "Campos B y B2",
-        "detail": "Los subcampos de B y B2 no llevan nombres explícitos. La asignación de 1-1, 43.7% y los dos no requiere interpretación condicional."
-      },
-      {
-        "label": "Resumen H",
-        "detail": "H presenta 2|2|0|0|3 sin explicar los subcampos; solo dos filas HR permiten verificar los cruces individuales."
-      },
-      {
-        "label": "Clima y sede",
-        "detail": "W solo permite leer clear y 12; la unidad del número y la sede del partido no están especificadas."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Auditar B y B2: el marcador 1-1 no concuerda con la lectura no de ambos anotan. Si 43.7% representa la probabilidad del 1-1, tampoco puede superar el 22.4% atribuido al empate."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "space-bunny-free",
-    "generatedAt": "2026-10-01T22:48:41.598Z",
-    "inputKey": "v3|M|bz-212666|Portugal|Norway|nations|2026-10-04T18:45:00+00:0|NS\nP|1.46|1.44|0.369|0.271|0.36|0.554|0.597\nB|0.536|0.224|0.24|1.46|1.44|0.626|0.618|1-1|0.437\nB2|H|0.536|no|no\nH|2|2|0|0|3\nW||clear|12|\nT|1|Portugal|2|6||\nT|3|Norway|2|3||\nS|João Félix|Portugal|2|2\nS|Erling Haaland|Norway|3|2\nHR|2026-09-27|Norway|Portugal|1|2\nHR|2016-05-29|Portugal|Norway|3|0",
-    "materialKey": "M|bz-212666|Portugal|Norway|nations|2026-10-04T18:45:00+00:0|NS"
-  },
-  "bz-212665": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Panorama del cruce",
-        "bullets": [
-          "Netherlands figura ante Serbia en nations, cruce bz-212665, con estado NS y hora 18:45 registrada el 2026-10-04.",
-          "El bloque W declara rain y el valor 12, pero no identifica la sede ni la unidad de ese dato."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-04",
-            "label": "Fecha"
-          },
-          {
-            "value": "18:45",
-            "label": "Hora registrada"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Modelos y diferencias",
-        "bullets": [
-          "Poisson GoatLab proyecta 2.05 y 0.89 de goles esperados, asigna 63.3% a Netherlands, 22.3% al empate y 14.5% a Serbia, y añade 56.3% y 52.3%.",
-          "CatBoost Bzzoiro da 74.9%, 16.9% y 8.2% en ese orden; frente a P, Netherlands queda 11.6 puntos arriba, empate y Serbia 5.4 y 6.3 abajo.",
-          "Bzzoiro repite 2.05 y 0.89, registra 61.4%, 48.1%, el marcador 2-0 y un valor 0.41 sin etiqueta; esos porcentajes carecen de umbral declarado.",
-          "B2 de Bzzoiro declara H con 74.9%; sus indicadores de goles totales y ambos anotan figuran como no, sin umbral para el primero."
-        ],
-        "stats": [
-          {
-            "value": "63.3%",
-            "label": "Netherlands, Poisson"
-          },
-          {
-            "value": "74.9%",
-            "label": "Netherlands, Bzzoiro"
-          },
-          {
-            "value": "2-0",
-            "label": "Marcador B"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Historial de cruces",
-        "bullets": [
-          "El bloque H deja 1, 1, 0, 0 y 3 sin nombres de campo; no puede asignarse con certeza a resultados o goleadores.",
-          "HR registra Serbia 1-2 Netherlands el 2026-09-27; ese resultado deja a Netherlands arriba por un gol."
-        ],
-        "stats": [
-          {
-            "value": "1-2",
-            "label": "Resultado HR"
-          },
-          {
-            "value": "2026-09-27",
-            "label": "Fecha HR"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Posiciones en la tabla",
-        "bullets": [
-          "T asigna el puesto 2 a Netherlands y el puesto 4 a Serbia; ambos tienen 2 partidos disputados.",
-          "T registra 4 puntos para Netherlands y 0 para Serbia, una diferencia de 4 puntos.",
-          "La tabla no identifica grupo, zona ni reglas de desempate."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Puesto Netherlands"
-          },
-          {
-            "value": "4",
-            "label": "Puntos Netherlands"
-          },
-          {
-            "value": "0",
-            "label": "Puntos Serbia"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Artillería declarada",
-        "bullets": [
-          "Mexx Meerdink encabeza Netherlands con 2 goles declarados; Cody Gakpo registra 1.",
-          "Andrija Živković suma 1 para Serbia. Las tres filas incluyen 2 como segundo dato, aunque el campo carece de etiqueta.",
-          "La suma de goles individuales publicados es 3 para Netherlands y 1 para Serbia."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Goles Meerdink"
-          },
-          {
-            "value": "1",
-            "label": "Goles Serbia"
-          },
-          {
-            "value": "3",
-            "label": "Suma Netherlands"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Proveedores incompletos",
-        "detail": "No hay bloque A ni M2; por ello no existe lectura API-Football ni consenso externo que contrastar con P y B."
-      },
-      {
-        "label": "Historial H sin etiquetas",
-        "detail": "H contiene cinco valores sin etiquetas. Solo HR permite confirmar el encuentro Serbia 1-2 Netherlands del 2026-09-27."
-      },
-      {
-        "label": "Campos B sin umbrales",
-        "detail": "P y B contienen lecturas porcentuales sin umbral; B2 usa dos indicadores no sin detalle y el valor 0.41 carece de definición."
-      },
-      {
-        "label": "Metadatos del cruce",
-        "detail": "W no da sede ni unidad para 12. El offset de M aparece como +00:0, con un dígito menos que una zona horaria completa."
-      },
-      {
-        "label": "Forma reciente ausente",
-        "detail": "No se aportó R, de modo que no puede describirse una racha reciente más allá del resultado HR."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "No se detecta un porcentaje incoherente: 74.9% de B2 reproduce 0.749 de B. Se marca por H sin etiquetas, W incompleto, offset +00:0 y ausencia de A, M2 y R."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "space-bunny-free",
-    "generatedAt": "2026-10-01T22:51:25.154Z",
-    "inputKey": "v3|M|bz-212665|Netherlands|Serbia|nations|2026-10-04T18:45:00+00:0|NS\nP|2.05|0.89|0.633|0.223|0.145|0.563|0.523\nB|0.749|0.169|0.082|2.05|0.89|0.614|0.481|2-0|0.41\nB2|H|0.749|no|no\nH|1|1|0|0|3\nW||rain|12|\nT|2|Netherlands|2|4||\nT|4|Serbia|2|0||\nS|Mexx Meerdink|Netherlands|2|2\nS|Cody Gakpo|Netherlands|1|2\nS|Andrija Živković|Serbia|1|2\nHR|2026-09-27|Serbia|Netherlands|1|2",
-    "materialKey": "M|bz-212665|Netherlands|Serbia|nations|2026-10-04T18:45:00+00:0|NS"
-  },
-  "bz-212664": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Grecia-Alemania en Nations",
-        "bullets": [
-          "Cruce de Nations entre Grecia y Alemania, programado para 2026-10-04 a las 18:45 UTC y con estado NS.",
-          "El bloque W declara tiempo clear y viento 9; no informa sede ni unidad del viento."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-04",
-            "label": "Fecha del partido"
-          },
-          {
-            "value": "18:45 UTC",
-            "label": "Hora del partido"
-          },
-          {
-            "value": "9",
-            "label": "Viento declarado"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Coincidencia sobre Alemania",
-        "bullets": [
-          "GoatLab P proyecta 1.19 de goles para Grecia y 1.57 para Alemania; 1-X-2: 0.277/0.273/0.45, y total/ambos: 0.521/0.563.",
-          "CatBoost B da 1-X-2 0.279/0.259/0.462, mismos goles esperados y total/ambos 0.552/0.588; declara 1-1 y 0.449.",
-          "B2 confirma como mayor probabilidad al visitante (A), 0.462, pero declara no en total y no en ambos anotan.",
-          "Los modelos coinciden en Witt Alemania como favorito; B2 concuerda con B en el máximo 1-X-2, pero no con sus lecturas no/no."
-        ],
-        "stats": [
-          {
-            "value": "1.19",
-            "label": "Goles esperados Grecia"
-          },
-          {
-            "value": "1.57",
-            "label": "Goles esperados Alemania"
-          },
-          {
-            "value": "0.462",
-            "label": "Mayor probabilidad B/B2"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Tres cruces anteriores",
-        "bullets": [
-          "H registra 3 cruces: Grecia gana 1, empates 0 y Alemania gana 2; el último campo declara 3.33.",
-          "HR: 2026-09-27, Alemania 0-1 Grecia; 2024-06-07, Alemania 2-1 Grecia; 2012-06-22, Alemania 4-2 Grecia.",
-          "Los tres HR suman 12 goles, promedio 4.00, frente al 3.33 declarado en H; la última métrica de H no trae etiqueta."
-        ],
-        "stats": [
-          {
-            "value": "3",
-            "label": "Cruces registrados"
-          },
-          {
-            "value": "1",
-            "label": "Victorias de Grecia"
-          },
-          {
-            "value": "2",
-            "label": "Victorias de Alemania"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Puestos proporcionados",
-        "bullets": [
-          "Grecia aparece 1ª, con 2 partidos disputados y 6 puntos.",
-          "Alemania aparece 3ª, con 2 partidos disputados y 1 punto.",
-          "Solo se proporcionan estas dos filas de la tabla."
-        ],
-        "stats": [
-          {
-            "value": "1",
-            "label": "Posición de Grecia"
-          },
-          {
-            "value": "6",
-            "label": "Puntos de Grecia"
-          },
-          {
-            "value": "3",
-            "label": "Posición de Alemania"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Máximos anotadores declarados",
-        "bullets": [
-          "Douvikas, Tzolis y Kourbelis registran 1 gol en 2 partidos cada uno.",
-          "Los tres máximos anotadores furnishidos pertenecen a Grecia; no hay goleadores de Alemania en S."
-        ],
-        "stats": [
-          {
-            "value": "1",
-            "label": "Goles por jugador"
-          },
-          {
-            "value": "2",
-            "label": "Partidos por jugador"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Ausencia de estimación A",
-        "detail": "No existe fila A; no hay distribución API-Football, mayor probabilidad ni umbral o lectura cruda para contrastar."
-      },
-      {
-        "label": "Ausencia de consenso M2",
-        "detail": "No se proporcionan porcentajes de consenso externo, por lo que no existe comparación interpretativa externa."
-      },
-      {
-        "label": "Campos B parcialmente rotulados",
-        "detail": "La fila B no identifica el significado de 0.449 y tampoco explicita el umbral de la lectura de goles totales."
-      },
-      {
-        "label": "Métrica de H discrepante",
-        "detail": "El último campo de H declara 3.33, mientras que los tres HRifelados producen un promedio de 4.00 goles."
-      },
-      {
-        "label": "Sin forma reciente independiente",
-        "detail": "No existe bloque R; HR permite revisar cruces previos, pero no establecer la forma reciente de cada equipo."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "La auditoría detecta dos tensions: el 3.33 de H no coincide con el promedio 4.00 calculado from HR, y el no/no de B2 para total y ambos anotan no concuerda con 0.552/0.588 de B ni con el marcador 1-1."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "space-bunny-free",
-    "generatedAt": "2026-10-01T22:59:11.221Z",
-    "inputKey": "v3|M|bz-212664|Greece|Germany|nations|2026-10-04T18:45:00+00:0|NS\nP|1.19|1.57|0.277|0.273|0.45|0.521|0.563\nB|0.279|0.259|0.462|1.19|1.57|0.552|0.588|1-1|0.449\nB2|A|0.462|no|no\nH|3|1|0|2|3.33\nW||clear|9|\nT|1|Greece|2|6||\nT|3|Germany|2|1||\nS|Anastasios Douvikas|Greece|1|2\nS|Christos Tzolis|Greece|1|2\nS|Dimitris Kourbelis|Greece|1|2\nHR|2026-09-27|Germany|Greece|0|1\nHR|2024-06-07|Germany|Greece|2|1\nHR|2012-06-22|Germany|Greece|4|2",
-    "materialKey": "M|bz-212664|Greece|Germany|nations|2026-10-04T18:45:00+00:0|NS"
-  },
   "bz-212675": {
     "summary": [
       {
@@ -3647,5 +2630,1451 @@
     "generatedAt": "2026-10-04T21:39:59.461Z",
     "inputKey": "v3|M|fd-564706|Málaga CF|RCD Espanyol de Barcelona|laliga|2026-10-09T19:00:00Z|NS\nP|1.17|1.303|0.32|0.297|0.383|0.449|0.515\nB|0.354|0.301|0.345|1.69|1.09|0.455|0.521|1-1|0.469\nB2|H|0.354|no|no\nH|58|20|15|23|2.5\nW|||12|\nT|20|Málaga CF|7|3|3|12\nT|15|RCD Espanyol de Barcelona|7|7|10|10\nS|Adrián Niño|Málaga CF|1|3\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|7\nS|Álex Calatrava|RCD Espanyol de Barcelona|1|7\nR|2026-08-30|Real Madrid CF|Málaga CF|4|0\nR|2026-09-06|Málaga CF|Levante UD|0|0\nR|2026-09-06|RCD Espanyol de Barcelona|Sevilla FC|1|1\nR|2026-09-12|CA Osasuna|RCD Espanyol de Barcelona|0|2\nR|2026-09-13|RC Celta de Vigo|Málaga CF|1|1\nR|2026-09-13|Celta Vigo|Malaga|1|1\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-15|Rayo Vallecano|Espanyol|2|1\nR|2026-09-17|Málaga CF|Villarreal CF|1|3\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Getafe CF|Málaga CF|1|0\nHR|2021-05-02|Espanyol|Málaga CF|3|0\nHR|2020-11-02|Málaga CF|Espanyol|0|3\nHR|2018-05-13|Espanyol|Málaga CF|4|1\nHR|2018-01-08|Málaga CF|Espanyol|0|1\nHR|2017-02-04|Málaga CF|Espanyol|0|1",
     "materialKey": "M|fd-564706|Málaga CF|RCD Espanyol de Barcelona|laliga|2026-10-09T19:00:00Z|NS"
+  },
+  "fd-560593": {
+    "matchId": "fd-560593",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Arsenal recibe a Leeds en la Premier",
+        "bullets": [
+          "Partido de Premier League el 2026-10-10 11:30 UTC en sede no indicada; clima despejado y 13.",
+          "Arsenal ocupa la 2ª posición con 5 partidos, 12 puntos, 8 goles a favor y 4 en contra.",
+          "Leeds United es 5º con 5 partidos, 9 puntos, 7 goles a favor y 3 en contra."
+        ],
+        "stats": [
+          {
+            "value": "12",
+            "label": "Puntos Arsenal"
+          },
+          {
+            "value": "9",
+            "label": "Puntos Leeds"
+          },
+          {
+            "value": "13",
+            "label": "Temperatura"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "P y B difieren en el favorito",
+        "bullets": [
+          "P Poisson GoatLab estima local 0.384, empate 0.326 y visitante 0.29; xG 1.134 frente a 0.951; over 2.5 en 0.346 y ambos anotan en 0.43.",
+          "B CatBoost Bzzoiro estima local 0.671, empate 0.206 y visitante 0.123; xG 1.8 frente a 0.95; over 2.5 en 0.546 y ambos anotan en 0.471.",
+          "B2 declara H con 0.671, no over y no ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.671",
+            "label": "B local"
+          },
+          {
+            "value": "0.384",
+            "label": "P local"
+          },
+          {
+            "value": "0.546",
+            "label": "B over 2.5"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial favorable al Arsenal",
+        "bullets": [
+          "H registra 37 partidos entre ambos: 23 victorias del Arsenal, 6 empates y 8 del Leeds, con 2.89 goles de promedio.",
+          "HR: Leeds 0-4 Arsenal (2026-01-31); Arsenal 5-0 Leeds (2025-08-23); Arsenal 4-1 Leeds (2023-04-01).",
+          "HR: Leeds 0-1 Arsenal (2022-10-16); Arsenal 2-1 Leeds (2022-05-08)."
+        ],
+        "stats": [
+          {
+            "value": "23",
+            "label": "Victorias Arsenal"
+          },
+          {
+            "value": "8",
+            "label": "Victorias Leeds"
+          },
+          {
+            "value": "2.89",
+            "label": "Promedio goles"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente de ambos",
+        "bullets": [
+          "Arsenal: 1-0 ante Aston Villa (2026-08-31); 2-1 ante Chelsea (2026-09-06); 1-0 ante Napoli (2026-09-09); 2-0 ante Sunderland (2026-09-12); 0-3 ante Brighton (2026-09-19).",
+          "Leeds: 1-0 ante Nottingham Forest (2026-08-22); 1-1 ante Brentford (2026-08-30); 1-1 ante Brighton (2026-09-05); 4-1 ante Newcastle (2026-09-14); 0-0 ante Crystal Palace (2026-09-20)."
+        ],
+        "stats": [
+          {
+            "value": "0-3",
+            "label": "Arsenal-Brighton"
+          },
+          {
+            "value": "4-1",
+            "label": "Leeds-Newcastle"
+          },
+          {
+            "value": "0-0",
+            "label": "Leeds-Palace"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores del cruce",
+        "bullets": [
+          "Arsenal: Bukayo Saka 3 goles en 5; Kai Havertz 2 en 5; Martin Ødegaard 2 en 5.",
+          "Leeds: Dominic Calvert-Lewin 2 en 5; Jayden Bogle 2 en 5; Anton Stach 1 en 5."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles Saka"
+          },
+          {
+            "value": "2",
+            "label": "Goles Havertz"
+          },
+          {
+            "value": "2",
+            "label": "Goles Calvert-Lewin"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A",
+        "detail": "No se incluye estimación API-Football en el input."
+      },
+      {
+        "label": "Sin M2",
+        "detail": "No hay consenso externo en % interpretativo."
+      },
+      {
+        "label": "Sin alineaciones",
+        "detail": "No hay bajas confirmadas ni onces probables."
+      },
+      {
+        "label": "Sede no indicada",
+        "detail": "W solo aporta clima despejado y 13, sin estadio."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "P Poisson asigna 0.384 al local y 0.29 al visitante; B CatBoost eleva al local a 0.671 y baja al visitante a 0.123. La diferencia en el local supera 28 puntos porcentuales. B2 declara H con 0.671, en línea con B."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:33:38.815Z",
+    "inputKey": "v3|M|fd-560593|Arsenal FC|Leeds United FC|premier|2026-10-10T11:30:00Z|NS\nP|1.134|0.951|0.384|0.326|0.29|0.346|0.43\nB|0.671|0.206|0.123|1.8|0.95|0.546|0.471|1-0|0.458\nB2|H|0.671|no|no\nH|37|23|6|8|2.89\nW||clear|13|\nT|2|Arsenal FC|5|12|8|4\nT|5|Leeds United FC|5|9|7|3\nS|Bukayo Saka|Arsenal FC|3|5\nS|Kai Havertz|Arsenal FC|2|5\nS|Martin Ødegaard|Arsenal FC|2|5\nS|Dominic Calvert-Lewin|Leeds United FC|2|5\nS|Jayden Bogle|Leeds United FC|2|5\nS|Anton Stach|Leeds United FC|1|5\nR|2026-08-22|Nottingham Forest FC|Leeds United FC|0|1\nR|2026-08-30|Leeds United FC|Brentford FC|1|1\nR|2026-08-31|Aston Villa FC|Arsenal FC|0|1\nR|2026-09-05|Brighton & Hove Albion FC|Leeds United FC|1|1\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-09-12|Sunderland AFC|Arsenal FC|0|2\nR|2026-09-14|Leeds United FC|Newcastle United FC|4|1\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-09-20|Leeds|Crystal Palace|0|0\nHR|2026-01-31|Leeds United|Arsenal|0|4\nHR|2025-08-23|Arsenal|Leeds United|5|0\nHR|2023-04-01|Arsenal|Leeds United|4|1\nHR|2022-10-16|Leeds United|Arsenal|0|1\nHR|2022-05-08|Arsenal|Leeds United|2|1",
+    "materialKey": "M|fd-560593|Arsenal FC|Leeds United FC|premier|2026-10-10T11:30:00Z|NS"
+  },
+  "fd-564698": {
+    "matchId": "fd-564698",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Rayo y Athletic en LaLiga",
+        "bullets": [
+          "Partido de LaLiga el 2026-10-10 12:00 UTC en sede no indicada; clima lluvia y 24.",
+          "Rayo Vallecano ocupa la 12ª posición con 7 partidos, 8 puntos, 11 goles a favor y 16 en contra.",
+          "Athletic Club es 10º con 6 partidos, 8 puntos, 7 goles a favor y 6 en contra."
+        ],
+        "stats": [
+          {
+            "value": "8",
+            "label": "Puntos Rayo"
+          },
+          {
+            "value": "8",
+            "label": "Puntos Athletic"
+          },
+          {
+            "value": "24",
+            "label": "Temperatura"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Coincidencia en el visitante",
+        "bullets": [
+          "P Poisson GoatLab estima local 0.278, empate 0.277 y visitante 0.445; xG 1.17 frente a 1.533; over 2.5 en 0.507 y ambos anotan en 0.553.",
+          "B CatBoost Bzzoiro estima local 0.321, empate 0.274 y visitante 0.405; xG 1.42 frente a 1.16; over 2.5 en 0.499 y ambos anotan en 0.544.",
+          "B2 declara A con 0.405, no over y no ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.445",
+            "label": "P visitante"
+          },
+          {
+            "value": "0.405",
+            "label": "B visitante"
+          },
+          {
+            "value": "0.553",
+            "label": "P ambos anotan"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial favorable al Athletic",
+        "bullets": [
+          "H registra 48 partidos: 10 victorias del Rayo, 12 empates y 26 del Athletic, con 3.02 goles de promedio.",
+          "HR: Rayo 1-1 Athletic (2026-02-28); Athletic 1-0 Rayo (2025-08-25); Athletic 3-1 Rayo (2025-04-13).",
+          "HR: Rayo 1-2 Athletic (2024-12-01); Rayo 0-1 Athletic (2024-05-25)."
+        ],
+        "stats": [
+          {
+            "value": "26",
+            "label": "Victorias Athletic"
+          },
+          {
+            "value": "10",
+            "label": "Victorias Rayo"
+          },
+          {
+            "value": "3.02",
+            "label": "Promedio goles"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente de ambos",
+        "bullets": [
+          "Rayo: 3-2 ante Racing de Santander (2026-09-05); 1-4 ante Real Madrid (2026-09-12); 2-1 ante Espanyol (2026-09-15); 1-1 ante Osasuna (2026-09-19).",
+          "Athletic: 0-2 ante Barcelona (2026-08-27); 2-0 ante Celta (2026-08-30); 3-0 ante Atlético de Madrid (2026-09-05); 1-1 ante Elche (2026-09-12); 0-0 ante Alavés (2026-09-19)."
+        ],
+        "stats": [
+          {
+            "value": "3-2",
+            "label": "Rayo-Racing"
+          },
+          {
+            "value": "3-0",
+            "label": "Athletic-Atlético"
+          },
+          {
+            "value": "1-4",
+            "label": "Rayo-Real Madrid"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores del cruce",
+        "bullets": [
+          "Rayo: Sergio Camello 7 goles en 7; Álvaro García 2 en 7; Adrià Pedrosa 1 en 5.",
+          "Athletic: Robert Navarro 2 en 6; Aitor Paredes 1 en 6; Álex Berenguer 1 en 6."
+        ],
+        "stats": [
+          {
+            "value": "7",
+            "label": "Goles Camello"
+          },
+          {
+            "value": "2",
+            "label": "Goles Álvaro García"
+          },
+          {
+            "value": "2",
+            "label": "Goles Navarro"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A",
+        "detail": "No se incluye estimación API-Football en el input."
+      },
+      {
+        "label": "Sin M2",
+        "detail": "No hay consenso externo en % interpretativo."
+      },
+      {
+        "label": "Sin alineaciones",
+        "detail": "No hay bajas confirmadas ni onces probables."
+      },
+      {
+        "label": "Sede no indicada",
+        "detail": "W solo aporta clima lluvia y 24, sin estadio."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "P y B coinciden en la tendencia: el visitante supera al local (P 0.445, B 0.405), con over 2.5 y ambos anotan en valores cercanos (0.507/0.499 y 0.553/0.544). B2 declara A con 0.405. No se observan desvíos claros entre modelos."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:33:38.820Z",
+    "inputKey": "v3|M|fd-564698|Rayo Vallecano de Madrid|Athletic Club|laliga|2026-10-10T12:00:00Z|NS\nP|1.17|1.533|0.278|0.277|0.445|0.507|0.553\nB|0.321|0.274|0.405|1.42|1.16|0.499|0.544|1-1|0.544\nB2|A|0.405|no|no\nH|48|10|12|26|3.02\nW||rain|24|\nT|12|Rayo Vallecano de Madrid|7|8|11|16\nT|10|Athletic Club|6|8|7|6\nS|Sergio Camello|Rayo Vallecano de Madrid|7|7\nS|Álvaro García|Rayo Vallecano de Madrid|2|7\nS|Adrià Pedrosa|Rayo Vallecano de Madrid|1|5\nS|Robert Navarro|Athletic Club|2|6\nS|Aitor Paredes|Athletic Club|1|6\nS|Álex Berenguer|Athletic Club|1|6\nR|2026-08-27|FC Barcelona|Athletic Club|2|0\nR|2026-08-30|RC Celta de Vigo|Athletic Club|0|2\nR|2026-09-05|Rayo Vallecano de Madrid|Real Racing Club de Santander|3|2\nR|2026-09-05|Athletic Club|Club Atlético de Madrid|3|0\nR|2026-09-12|Real Madrid CF|Rayo Vallecano de Madrid|4|1\nR|2026-09-12|Athletic Club|Elche CF|1|1\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-15|Rayo Vallecano|Espanyol|2|1\nR|2026-09-19|CA Osasuna|Rayo Vallecano de Madrid|1|1\nR|2026-09-19|Osasuna|Rayo Vallecano|1|1\nR|2026-09-19|Athletic Club|Deportivo Alavés|0|0\nR|2026-09-19|Athletic Club|Alaves|0|0\nHR|2026-02-28|Rayo Vallecano|Athletic Club|1|1\nHR|2025-08-25|Athletic Club|Rayo Vallecano|1|0\nHR|2025-04-13|Athletic Club|Rayo Vallecano|3|1\nHR|2024-12-01|Rayo Vallecano|Athletic Club|1|2\nHR|2024-05-25|Rayo Vallecano|Athletic Club|0|1",
+    "materialKey": "M|fd-564698|Rayo Vallecano de Madrid|Athletic Club|laliga|2026-10-10T12:00:00Z|NS"
+  },
+  "fd-560592": {
+    "matchId": "fd-560592",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Sunderland recibe a Brighton en Premier",
+        "bullets": [
+          "El partido figura para 2026-10-10T14:00:00Z con Sunderland AFC como local y Brighton & Hove Albion FC como visitante.",
+          "La tabla coloca a Sunderland AFC en 14º con columnas 5, 4, 6 y 10; a Brighton & Hove Albion FC en 3º con 5, 10, 16 y 5.",
+          "El bloque W aporta 8 sin etiquetas de clima o sede."
+        ],
+        "stats": [
+          {
+            "value": "14º",
+            "label": "Puesto Sunderland"
+          },
+          {
+            "value": "3º",
+            "label": "Puesto Brighton"
+          },
+          {
+            "value": "8",
+            "label": "Dato W"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: Poisson, CatBoost y Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab consigna 1.17, 2.239, 0.18, 0.213, 0.606, 0.662 y 0.625.",
+          "CatBoost Bzzoiro declara 0.326, 0.276, 0.399, 1.29, 1.46, 0.526, 0.556, marcador 1-1 y 0.498.",
+          "B2 atribuye al modelo Bzzoiro una mayor probabilidad para la visita con 0.399, y señala no en goles totales y no en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.606",
+            "label": "Poisson principal"
+          },
+          {
+            "value": "0.326",
+            "label": "CatBoost local"
+          },
+          {
+            "value": "0.399",
+            "label": "B2 visita"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Serie histórica entre ambos",
+        "bullets": [
+          "H resume 3 partidos con 0, 1, 2 y un 0.67 adicional.",
+          "HR: Sunderland 0-1 Brighton (2026-03-14); Brighton 0-0 Sunderland (2025-12-20); Brighton 1-0 Sunderland (2011-08-23)."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Partidos H"
+          },
+          {
+            "value": "0.67",
+            "label": "Dato H"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros de ambos equipos",
+        "bullets": [
+          "Sunderland AFC: Brian Brobbey registra 3 y 5; Enzo Le Fée, 1 y 5.",
+          "Brighton & Hove Albion FC: Pascal Groß 3 y 5; Charalampos Kostoulas 2 y 5; Jack Hinshelwood 2 y 1."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Brobbey"
+          },
+          {
+            "value": "3",
+            "label": "Groß"
+          },
+          {
+            "value": "2",
+            "label": "Kostoulas"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha y resultados recientes",
+        "bullets": [
+          "Sunderland AFC: derrotas ante Ipswich Town FC (2-1), Arsenal FC (0-2) y Manchester City FC (5-3); victorias ante Fulham FC (1-0) y AZ Alkmaar (1-0); empate con Brentford FC (1-1).",
+          "Brighton & Hove Albion FC: derrota con Chelsea FC (4-3); empate con Leeds United FC (1-1); victorias ante Coventry City FC (0-5) y Arsenal FC (3-0).",
+          "R incluye duplicados con nombres abreviados de Coventry y Brighton."
+        ],
+        "stats": [
+          {
+            "value": "5-3",
+            "label": "Man City-Sunderland"
+          },
+          {
+            "value": "0-5",
+            "label": "Coventry-Brighton"
+          },
+          {
+            "value": "3-0",
+            "label": "Brighton-Arsenal"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A API-Football",
+        "detail": "No se incluye bloque A de API-Football; no se puede contrastar esa estimación."
+      },
+      {
+        "label": "W sin etiquetas",
+        "detail": "El bloque W solo aporta 8 y no trae encabezados de clima o sede."
+      },
+      {
+        "label": "T sin cabeceras",
+        "detail": "Las columnas de T no vienen etiquetadas; se citan como 5,4,6,10 y 5,10,16,5."
+      },
+      {
+        "label": "R duplicada",
+        "detail": "Hay filas repetidas con nombres abreviados de Coventry y Brighton."
+      },
+      {
+        "label": "Sin alineaciones",
+        "detail": "No hay bloque L de bajas confirmadas ni datos de alineación."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:34:58.629Z",
+    "inputKey": "v3|M|fd-560592|Sunderland AFC|Brighton & Hove Albion FC|premier|2026-10-10T14:00:00Z|NS\nP|1.17|2.239|0.18|0.213|0.606|0.662|0.625\nB|0.326|0.276|0.399|1.29|1.46|0.526|0.556|1-1|0.498\nB2|A|0.399|no|no\nH|3|0|1|2|0.67\nW|||8|\nT|14|Sunderland AFC|5|4|6|10\nT|3|Brighton & Hove Albion FC|5|10|16|5\nS|Brian Brobbey|Sunderland AFC|3|5\nS|Enzo Le Fée|Sunderland AFC|1|5\nS|Pascal Groß|Brighton & Hove Albion FC|3|5\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|2|5\nS|Jack Hinshelwood|Brighton & Hove Albion FC|2|1\nR|2026-08-22|Ipswich Town FC|Sunderland AFC|2|1\nR|2026-08-30|Sunderland AFC|Fulham FC|1|0\nR|2026-08-30|Chelsea FC|Brighton & Hove Albion FC|4|3\nR|2026-09-05|Brentford FC|Sunderland AFC|1|1\nR|2026-09-05|Brighton & Hove Albion FC|Leeds United FC|1|1\nR|2026-09-12|Sunderland AFC|Arsenal FC|0|2\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-13|Coventry|Brighton|0|5\nR|2026-09-16|Sunderland|AZ Alkmaar|1|0\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nHR|2026-03-14|Sunderland|Brighton & Hove Albion|0|1\nHR|2025-12-20|Brighton & Hove Albion|Sunderland|0|0\nHR|2011-08-23|Brighton & Hove Albion|Sunderland|1|0",
+    "materialKey": "M|fd-560592|Sunderland AFC|Brighton & Hove Albion FC|premier|2026-10-10T14:00:00Z|NS"
+  },
+  "fd-560595": {
+    "matchId": "fd-560595",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Chelsea recibe a Bournemouth en Premier",
+        "bullets": [
+          "El partido figura para 2026-10-10T14:00:00Z con Chelsea FC como local y AFC Bournemouth como visitante.",
+          "La tabla coloca a Chelsea FC en 10º con columnas 5, 7, 10 y 12; a AFC Bournemouth en 17º con 5, 3, 6 y 8.",
+          "El bloque W aporta 13 sin etiquetas de clima o sede."
+        ],
+        "stats": [
+          {
+            "value": "10º",
+            "label": "Puesto Chelsea"
+          },
+          {
+            "value": "17º",
+            "label": "Puesto Bournemouth"
+          },
+          {
+            "value": "13",
+            "label": "Dato W"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: Poisson, CatBoost y Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab consigna 1.89, 1.717, 0.417, 0.236, 0.347, 0.698 y 0.705.",
+          "CatBoost Bzzoiro declara 0.55, 0.234, 0.216, 1.81, 1.32, 0.634, 0.621, marcador 1-1 y 0.535.",
+          "B2 atribuye al modelo Bzzoiro una mayor probabilidad para el local con 0.55, y señala no en goles totales y no en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.417",
+            "label": "Poisson principal"
+          },
+          {
+            "value": "0.55",
+            "label": "CatBoost local"
+          },
+          {
+            "value": "0.705",
+            "label": "Poisson complementario"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Serie histórica entre ambos",
+        "bullets": [
+          "H resume 20 partidos con 11, 5, 4 y un 2.5 adicional.",
+          "HR: Chelsea 2-2 Bournemouth (2025-12-30); Bournemouth 0-0 Chelsea (2025-12-06); Chelsea 2-2 Bournemouth (2025-01-14); Bournemouth 0-1 Chelsea (2024-09-14); Chelsea 2-1 Bournemouth (2024-05-19)."
+        ],
+        "stats": [
+          {
+            "value": "20",
+            "label": "Partidos H"
+          },
+          {
+            "value": "2.5",
+            "label": "Dato H"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros de ambos equipos",
+        "bullets": [
+          "Chelsea FC: João Pedro 3 y 4; Morgan Rogers 3 y 5; Cole Palmer 2 y 5.",
+          "AFC Bournemouth: Marcus Tavernier 3 y 5; Alex Scott 1 y 5."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "João Pedro"
+          },
+          {
+            "value": "3",
+            "label": "Rogers"
+          },
+          {
+            "value": "3",
+            "label": "Tavernier"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha y resultados recientes",
+        "bullets": [
+          "Chelsea FC: derrotas ante Arsenal FC (2-1) y Brentford FC (3-0); empates con Hull City AFC (2-2) y Brighton & Hove Albion FC (4-3); victoria ante Fulham FC (2-3).",
+          "AFC Bournemouth: empates con Everton FC (1-1), Newcastle United FC (2-2) y Brentford FC (2-2); derrotas ante Manchester City FC (2-1) y Liverpool FC (0-1); victoria ante Real Sociedad (1-2).",
+          "R muestra a Chelsea con altibajos y a Bournemouth con varios empates."
+        ],
+        "stats": [
+          {
+            "value": "2-3",
+            "label": "Fulham-Chelsea"
+          },
+          {
+            "value": "0-1",
+            "label": "Bournemouth-Liverpool"
+          },
+          {
+            "value": "1-2",
+            "label": "Real Sociedad-Bournemouth"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A API-Football",
+        "detail": "No se incluye bloque A de API-Football; no se puede contrastar esa estimación."
+      },
+      {
+        "label": "W sin etiquetas",
+        "detail": "El bloque W solo aporta 13 y no trae encabezados de clima o sede."
+      },
+      {
+        "label": "T sin cabeceras",
+        "detail": "Las columnas de T no vienen etiquetadas; se citan como 5,7,10,12 y 5,3,6,8."
+      },
+      {
+        "label": "Sin M2/L",
+        "detail": "No hay consenso externo M2 ni bajas confirmadas L en el input."
+      },
+      {
+        "label": "R abreviada",
+        "detail": "Algunas filas de R usan nombres abreviados que no siempre distinguen local y visitante."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:34:58.634Z",
+    "inputKey": "v3|M|fd-560595|Chelsea FC|AFC Bournemouth|premier|2026-10-10T14:00:00Z|NS\nP|1.89|1.717|0.417|0.236|0.347|0.698|0.705\nB|0.55|0.234|0.216|1.81|1.32|0.634|0.621|1-1|0.535\nB2|H|0.55|no|no\nH|20|11|5|4|2.5\nW|||13|\nT|10|Chelsea FC|5|7|10|12\nT|17|AFC Bournemouth|5|3|6|8\nS|João Pedro|Chelsea FC|3|4\nS|Morgan Rogers|Chelsea FC|3|5\nS|Cole Palmer|Chelsea FC|2|5\nS|Marcus Tavernier|AFC Bournemouth|3|5\nS|Alex Scott|AFC Bournemouth|1|5\nR|2026-08-23|Manchester City FC|AFC Bournemouth|2|1\nR|2026-08-24|Fulham FC|Chelsea FC|2|3\nR|2026-08-29|AFC Bournemouth|Everton FC|1|1\nR|2026-08-30|Chelsea FC|Brighton & Hove Albion FC|4|3\nR|2026-09-05|Newcastle United FC|AFC Bournemouth|2|2\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-17|Real Sociedad|Bournemouth|1|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|AFC Bournemouth|Liverpool FC|0|1\nHR|2025-12-30|Chelsea|Bournemouth|2|2\nHR|2025-12-06|Bournemouth|Chelsea|0|0\nHR|2025-01-14|Chelsea|Bournemouth|2|2\nHR|2024-09-14|Bournemouth|Chelsea|0|1\nHR|2024-05-19|Chelsea|Bournemouth|2|1",
+    "materialKey": "M|fd-560595|Chelsea FC|AFC Bournemouth|premier|2026-10-10T14:00:00Z|NS"
+  },
+  "fd-560599": {
+    "matchId": "fd-560599",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Ipswich y Fulham en la jornada de octubre",
+        "bullets": [
+          "El partido Ipswich Town FC vs Fulham FC está programado para 2026-10-10 a las 14:00Z en la Premier, con estado NS.",
+          "En la tabla, Ipswich figura en la posición 11 con registros 5-6-7-11; Fulham aparece en la 19 con 5-2-5-8.",
+          "El bloque W solo consigna 16, sin sede ni más detalle climático.",
+          "Goleadores listados: Emersonn y Leif Davis con 2 en 5, Chuba Akpom 1 en 4 por Ipswich; Josh King 2 en 5 y César Palacios 1 en 5 por Fulham."
+        ],
+        "stats": [
+          {
+            "value": "11",
+            "label": "posición Ipswich"
+          },
+          {
+            "value": "19",
+            "label": "posición Fulham"
+          },
+          {
+            "value": "16",
+            "label": "dato W"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de P, B y B2",
+        "bullets": [
+          "P Poisson GoatLab registra 1.62, 1.472, 0.402, 0.26, 0.338, 0.597 y 0.629; en su lectura principal 0.402 apunta al local.",
+          "B CatBoost Bzzoiro registra 0.341, 0.276, 0.383, 1.73, 1.21, 0.549, 0.576, con marcador 1-1 y 0.51.",
+          "B2 declara A con 0.383; en goles totales y ambos anotan aparece como no.",
+          "El cruce de modelos muestra a P con 0.402 local y a B/B2 con 0.383 visitante."
+        ],
+        "stats": [
+          {
+            "value": "0.402",
+            "label": "P local"
+          },
+          {
+            "value": "0.383",
+            "label": "B visitante"
+          },
+          {
+            "value": "0.383",
+            "label": "B2 A"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes Ipswich-Fulham",
+        "bullets": [
+          "H acumula 14 enfrentamientos con secuencia 4-4-6 y promedio de 2.71 goles.",
+          "HR 2025-01-05: Fulham 2-2 Ipswich Town.",
+          "HR 2024-08-31: Ipswich Town 1-1 Fulham; 2023-11-01: Ipswich Town 1-3 Fulham; 2020-09-16: Ipswich Town 0-1 Fulham; 2018-01-02: Fulham 4-1 Ipswich Town."
+        ],
+        "stats": [
+          {
+            "value": "14",
+            "label": "enfrentamientos"
+          },
+          {
+            "value": "2.71",
+            "label": "promedio goles"
+          },
+          {
+            "value": "4-4-6",
+            "label": "secuencia H"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente",
+        "bullets": [
+          "Ipswich: 2-1 vs Sunderland, 2-5 en Manchester United, 0-2 vs Liverpool, 3-2 en Crystal Palace y 0-1 en Everton.",
+          "Fulham: 2-3 vs Chelsea, 0-1 en Sunderland, 2-3 vs Crystal Palace, 0-0 en Liverpool y 1-1 vs Manchester United.",
+          "En el registro R aparece duplicado Everton 1-0 Ipswich con formato abreviado."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "último Ipswich"
+          },
+          {
+            "value": "1-1",
+            "label": "último Fulham"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros declarados",
+        "bullets": [
+          "Por Ipswich, Emersonn y Leif Davis suman 2 goles en 5 apariciones; Chuba Akpom registra 1 en 4.",
+          "Por Fulham, Josh King suma 2 en 5 y César Palacios 1 en 5."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles Emersonn"
+          },
+          {
+            "value": "2",
+            "label": "goles Leif Davis"
+          },
+          {
+            "value": "2",
+            "label": "goles Josh King"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "A ausente",
+        "detail": "No hay filas A de API-Football en el input, por lo que no se puede contrastar su distribución."
+      },
+      {
+        "label": "W incompleto",
+        "detail": "El bloque W solo aporta 16, sin sede, clima ni condiciones de juego."
+      },
+      {
+        "label": "Columnas T no explícitas",
+        "detail": "La tabla llega sin encabezados; los valores se leen como posición y secuencia numérica sin desglose confirmado."
+      },
+      {
+        "label": "B2 telegráfico",
+        "detail": "B2 usa etiquetas no y valores breves, sin detalle de goles totales ni ambos anotan."
+      },
+      {
+        "label": "R duplicado",
+        "detail": "Aparece dos veces Everton 1-0 Ipswich, una con nombres abreviados."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "P Poisson GoatLab da 0.402 al local, mientras B CatBoost Bzzoiro y B2 sitúan al visitante con 0.383; la discrepancia en la lectura principal es clara. El historial H y HR muestra ventaja de Fulham. W y A están incompletos."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:36:27.113Z",
+    "inputKey": "v3|M|fd-560599|Ipswich Town FC|Fulham FC|premier|2026-10-10T14:00:00Z|NS\nP|1.62|1.472|0.402|0.26|0.338|0.597|0.629\nB|0.341|0.276|0.383|1.73|1.21|0.549|0.576|1-1|0.51\nB2|A|0.383|no|no\nH|14|4|4|6|2.71\nW|||16|\nT|11|Ipswich Town FC|5|6|7|11\nT|19|Fulham FC|5|2|5|8\nS|Emersonn|Ipswich Town FC|2|5\nS|Leif Davis|Ipswich Town FC|2|5\nS|Chuba Akpom|Ipswich Town FC|1|4\nS|Josh King|Fulham FC|2|5\nS|César Palacios|Fulham FC|1|5\nR|2026-08-22|Ipswich Town FC|Sunderland AFC|2|1\nR|2026-08-24|Fulham FC|Chelsea FC|2|3\nR|2026-08-30|Manchester United FC|Ipswich Town FC|5|2\nR|2026-08-30|Sunderland AFC|Fulham FC|1|0\nR|2026-09-04|Ipswich Town FC|Liverpool FC|0|2\nR|2026-09-05|Fulham FC|Crystal Palace FC|2|3\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-12|Liverpool FC|Fulham FC|0|0\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-09-20|Fulham FC|Manchester United FC|1|1\nHR|2025-01-05|Fulham|Ipswich Town|2|2\nHR|2024-08-31|Ipswich Town|Fulham|1|1\nHR|2023-11-01|Ipswich Town|Fulham|1|3\nHR|2020-09-16|Ipswich Town|Fulham|0|1\nHR|2018-01-02|Fulham|Ipswich Town|4|1",
+    "materialKey": "M|fd-560599|Ipswich Town FC|Fulham FC|premier|2026-10-10T14:00:00Z|NS"
+  },
+  "fd-560601": {
+    "matchId": "fd-560601",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Aston Villa y Brentford en la jornada de octubre",
+        "bullets": [
+          "El partido Aston Villa FC vs Brentford FC está programado para 2026-10-10 a las 14:00Z en la Premier, con estado NS.",
+          "En la tabla, Aston Villa figura en la posición 16 con registros 5-4-4-9; Brentford aparece en la 4 con 5-9-10-4.",
+          "El bloque W solo consigna 11, sin sede ni más detalle climático.",
+          "Goleadores listados: Alysson 1 en 4 y Emiliano Buendía 1 en 5 por Aston Villa; Kevin Schade 3 en 5, Vitaly Janelt 2 en 5 y Fabio Carvalho 1 en 4 por Brentford."
+        ],
+        "stats": [
+          {
+            "value": "16",
+            "label": "posición Aston Villa"
+          },
+          {
+            "value": "4",
+            "label": "posición Brentford"
+          },
+          {
+            "value": "11",
+            "label": "dato W"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de P, B y B2",
+        "bullets": [
+          "P Poisson GoatLab registra 1.062, 1.763, 0.216, 0.257, 0.527, 0.536 y 0.553; en su lectura principal 0.527 apunta al visitante.",
+          "B CatBoost Bzzoiro registra 0.359, 0.267, 0.374, 1.53, 1.35, 0.567, 0.586, con marcador 1-1 y 0.488.",
+          "B2 declara A con 0.374; en goles totales y ambos anotan aparece como no.",
+          "El cruce muestra a P con 0.527 visitante y a B/B2 con 0.374 visitante."
+        ],
+        "stats": [
+          {
+            "value": "0.527",
+            "label": "P visitante"
+          },
+          {
+            "value": "0.374",
+            "label": "B visitante"
+          },
+          {
+            "value": "0.374",
+            "label": "B2 A"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes Aston Villa-Brentford",
+        "bullets": [
+          "H acumula 17 enfrentamientos con secuencia 4-7-6 y promedio de 2.47 goles.",
+          "HR 2026-02-01: Aston Villa 0-1 Brentford.",
+          "HR 2025-09-16: Brentford 1-1 Aston Villa; 2025-08-23: Brentford 1-0 Aston Villa; 2025-03-08: Brentford 0-1 Aston Villa; 2024-12-04: Aston Villa 3-1 Brentford."
+        ],
+        "stats": [
+          {
+            "value": "17",
+            "label": "enfrentamientos"
+          },
+          {
+            "value": "2.47",
+            "label": "promedio goles"
+          },
+          {
+            "value": "4-7-6",
+            "label": "secuencia H"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente",
+        "bullets": [
+          "Aston Villa: 0-1 vs Arsenal, 0-0 en Hull City, 3-2 en Club Brugge, 1-2 vs Nottingham Forest y 3-2 en Tottenham Hotspur.",
+          "Brentford: 3-0 vs Tottenham Hotspur, 1-1 en Leeds United, 1-1 vs Sunderland, 2-2 en Bournemouth y 3-0 vs Chelsea.",
+          "En el registro R aparece duplicado Tottenham 2-3 Aston Villa con formato abreviado."
+        ],
+        "stats": [
+          {
+            "value": "3-2",
+            "label": "último Aston Villa"
+          },
+          {
+            "value": "3-0",
+            "label": "último Brentford"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros declarados",
+        "bullets": [
+          "Por Aston Villa, Alysson registra 1 en 4 y Emiliano Buendía 1 en 5.",
+          "Por Brentford, Kevin Schade suma 3 en 5, Vitaly Janelt 2 en 5 y Fabio Carvalho 1 en 4."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "goles Schade"
+          },
+          {
+            "value": "2",
+            "label": "goles Janelt"
+          },
+          {
+            "value": "1",
+            "label": "goles Carvalho"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "A ausente",
+        "detail": "No hay filas A de API-Football en el input, por lo que no se puede contrastar su distribución."
+      },
+      {
+        "label": "W incompleto",
+        "detail": "El bloque W solo aporta 11, sin sede, clima ni condiciones de juego."
+      },
+      {
+        "label": "Columnas T no explícitas",
+        "detail": "La tabla llega sin encabezados; los valores se leen como posición y secuencia numérica sin desglose confirmado."
+      },
+      {
+        "label": "B2 telegráfico",
+        "detail": "B2 usa etiquetas no y valores breves, sin detalle de goles totales ni ambos anotan."
+      },
+      {
+        "label": "R duplicado",
+        "detail": "Aparece dos veces Tottenham 2-3 Aston Villa, una con nombres abreviados."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "P Poisson GoatLab da 0.527 al visitante, mientras B CatBoost Bzzoiro y B2 dan 0.374; la diferencia en la lectura principal es amplia. El historial H y HR muestra equilibrio con 4-7-6 y 2.47 de promedio. W y A están incompletos."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:36:27.118Z",
+    "inputKey": "v3|M|fd-560601|Aston Villa FC|Brentford FC|premier|2026-10-10T14:00:00Z|NS\nP|1.062|1.763|0.216|0.257|0.527|0.536|0.553\nB|0.359|0.267|0.374|1.53|1.35|0.567|0.586|1-1|0.488\nB2|A|0.374|no|no\nH|17|4|7|6|2.47\nW|||11|\nT|16|Aston Villa FC|5|4|4|9\nT|4|Brentford FC|5|9|10|4\nS|Alysson|Aston Villa FC|1|4\nS|Emiliano Buendía|Aston Villa FC|1|5\nS|Kevin Schade|Brentford FC|3|5\nS|Vitaly Janelt|Brentford FC|2|5\nS|Fabio Carvalho|Brentford FC|1|4\nR|2026-08-22|Brentford FC|Tottenham Hotspur FC|3|0\nR|2026-08-30|Leeds United FC|Brentford FC|1|1\nR|2026-08-31|Aston Villa FC|Arsenal FC|0|1\nR|2026-09-05|Hull City AFC|Aston Villa FC|0|0\nR|2026-09-05|Brentford FC|Sunderland AFC|1|1\nR|2026-09-08|Club Brugge KV|Aston Villa FC|2|3\nR|2026-09-12|Aston Villa FC|Nottingham Forest FC|1|2\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-19|Tottenham Hotspur FC|Aston Villa FC|2|3\nR|2026-09-19|Tottenham|Aston Villa|2|3\nHR|2026-02-01|Aston Villa|Brentford|0|1\nHR|2025-09-16|Brentford|Aston Villa|1|1\nHR|2025-08-23|Brentford|Aston Villa|1|0\nHR|2025-03-08|Brentford|Aston Villa|0|1\nHR|2024-12-04|Aston Villa|Brentford|3|1",
+    "materialKey": "M|fd-560601|Aston Villa FC|Brentford FC|premier|2026-10-10T14:00:00Z|NS"
+  },
+  "fd-564699": {
+    "matchId": "fd-564699",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Alavés y Atlético, duelo de contrastes en LaLiga",
+        "bullets": [
+          "Deportivo Alavés recibe al Club Atlético de Madrid en LaLiga el 10/10/2026 a las 14:15, con estado NS en el calendario.",
+          "El Alavés es 6º con 11 puntos y 11 goles a favor; el Atlético es 2º con 16 puntos y 16 goles a favor.",
+          "Las dos lecturas de modelos y el historial sitúan al conjunto visitante por delante en probabilidad."
+        ],
+        "stats": [
+          {
+            "value": "6º",
+            "label": "Puesto Alavés"
+          },
+          {
+            "value": "2º",
+            "label": "Puesto Atlético"
+          },
+          {
+            "value": "16",
+            "label": "Puntos Atlético"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: Poisson y CatBoost miran al visitante",
+        "bullets": [
+          "Poisson GoatLab: goles esperados de 1.35 para el Alavés y 1.457 para el Atlético; 33.8% victoria local, 27.6% empate y 38.6% visitante.",
+          "CatBoost Bzzoiro: 23.3% local, 25.9% empate y 50.9% visitante, con goles esperados de 1.4 y 1.37 y marcador más probable 1-1.",
+          "Estimación declarada de Bzzoiro: mayor probabilidad para el visitante con 0.509, sin señal marcada en goles totales ni en ambos anotan.",
+          "Poisson concede al local 33.8% frente al 23.3% de CatBoost, que concentra su masa probabilística en el visitante."
+        ],
+        "stats": [
+          {
+            "value": "38.6%",
+            "label": "Visitante Poisson"
+          },
+          {
+            "value": "50.9%",
+            "label": "Visitante CatBoost"
+          },
+          {
+            "value": "1.457",
+            "label": "Goles esperados Atlético"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial: dominio rojiblanco en 26 cruces",
+        "bullets": [
+          "26 enfrentamientos registrados: 6 victorias del Alavés, 6 empates y 14 del Atlético, con 1.96 goles de promedio.",
+          "Los cinco cruces recogidos: 1-0 y 2-1 para el Atlético, 1-1, 0-0 y un 2-0 del Alavés en 2024.",
+          "En esos cinco duelos el Atlético ganó dos, el Alavés uno y otros dos acabaron igualados."
+        ],
+        "stats": [
+          {
+            "value": "26",
+            "label": "Cruces registrados"
+          },
+          {
+            "value": "14",
+            "label": "Victorias Atlético"
+          },
+          {
+            "value": "1.96",
+            "label": "Goles por cruce"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente: ritmos distintos antes del cruce",
+        "bullets": [
+          "Alavés: 1-1 con Rayo, 1-0 a Villarreal, 5-2 a Osasuna, 1-2 en Racing, 0-1 con Valencia y 0-0 en Athletic.",
+          "Atlético: 1-3 en Sevilla, 0-3 en Real Sociedad, 4-0 a Osasuna y 2-1 al Real Madrid; derrotas 3-0 en Athletic y 2-1 con Liverpool.",
+          "El Atlético firma 4 victorias en seis partidos recientes; el Alavés suma 2, con 2 empates y 2 derrotas."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Victorias Atlético en 6"
+          },
+          {
+            "value": "2",
+            "label": "Victorias Alavés en 6"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Tabla y goleadores: Alavés 6º, Atlético 2º",
+        "bullets": [
+          "Alavés: 6º con 7 partidos, 11 puntos, 11 goles a favor y 6 en contra.",
+          "Atlético: 2º con 7 partidos, 16 puntos, 16 goles a favor y 7 en contra.",
+          "Lucas Boyé suma 4 goles en 6 partidos y Mariano Díaz 3 en 7 por parte del Alavés."
+        ],
+        "stats": [
+          {
+            "value": "11",
+            "label": "Puntos Alavés"
+          },
+          {
+            "value": "16",
+            "label": "Puntos Atlético"
+          },
+          {
+            "value": "4",
+            "label": "Goles Lucas Boyé"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Campos sin etiquetar",
+        "detail": "Los valores 0.532 y 0.58 de Poisson y 0.526 y 0.535 de CatBoost llegan sin etiqueta en el input; no se les atribuye un significado concreto."
+      },
+      {
+        "label": "Sin sede ni clima",
+        "detail": "La fila W solo aporta el valor 11 sin campo identificado, por lo que no se describe estadio ni condiciones meteorológicas."
+      },
+      {
+        "label": "Sin bajas ni consenso externo",
+        "detail": "No hay filas L ni M2, de modo que no se recogen bajas confirmadas ni porcentajes de consenso de terceros."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:37:54.171Z",
+    "inputKey": "v3|M|fd-564699|Deportivo Alavés|Club Atlético de Madrid|laliga|2026-10-10T14:15:00Z|NS\nP|1.35|1.457|0.338|0.276|0.386|0.532|0.58\nB|0.233|0.259|0.509|1.4|1.37|0.526|0.535|1-1|0.509\nB2|A|0.509|no|no\nH|26|6|6|14|1.96\nW|||11|\nT|6|Deportivo Alavés|7|11|11|6\nT|2|Club Atlético de Madrid|7|16|16|7\nS|Lucas Boyé|Deportivo Alavés|4|6\nS|Mariano Díaz|Deportivo Alavés|3|7\nR|2026-08-20|Rayo Vallecano de Madrid|Deportivo Alavés|1|1\nR|2026-08-28|Deportivo Alavés|Villarreal CF|1|0\nR|2026-08-29|Sevilla FC|Club Atlético de Madrid|1|3\nR|2026-09-05|Athletic Club|Club Atlético de Madrid|3|0\nR|2026-09-06|Deportivo Alavés|CA Osasuna|5|2\nR|2026-09-09|Liverpool FC|Club Atlético de Madrid|2|1\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-13|Real Sociedad de Fútbol|Club Atlético de Madrid|0|3\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-16|Club Atlético de Madrid|CA Osasuna|4|0\nR|2026-09-19|Athletic Club|Deportivo Alavés|0|0\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nHR|2026-01-18|Atlético Madrid|Deportivo Alavés|1|0\nHR|2025-08-30|Deportivo Alavés|Atlético Madrid|1|1\nHR|2025-05-03|Deportivo Alavés|Atlético Madrid|0|0\nHR|2024-11-23|Atlético Madrid|Deportivo Alavés|2|1\nHR|2024-04-21|Deportivo Alavés|Atlético Madrid|2|0",
+    "materialKey": "M|fd-564699|Deportivo Alavés|Club Atlético de Madrid|laliga|2026-10-10T14:15:00Z|NS"
+  },
+  "fd-560600": {
+    "matchId": "fd-560600",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Manchester United y Tottenham, arranques grises",
+        "bullets": [
+          "Manchester United FC recibe a Tottenham Hotspur FC en la Premier League el 10/10/2026 a las 16:30, con estado NS.",
+          "El United es 12º con 5 puntos, 8 goles a favor y 8 en contra; el Tottenham es 20º con 2 puntos, 2 a favor y 8 en contra.",
+          "Los modelos apuntan al local y el historial también favorece al Manchester United."
+        ],
+        "stats": [
+          {
+            "value": "12º",
+            "label": "Puesto United"
+          },
+          {
+            "value": "20º",
+            "label": "Puesto Tottenham"
+          },
+          {
+            "value": "5",
+            "label": "Puntos United"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: ventaja local con matices",
+        "bullets": [
+          "Poisson GoatLab: goles esperados de 1.944 para el United y 0.797 para el Tottenham; 63.3% victoria local, 23.1% empate y 13.6% visitante.",
+          "CatBoost Bzzoiro: 55.6% local, 23.8% empate y 20.6% visitante, con goles esperados de 1.87 y 1.19 y marcador más probable 1-1.",
+          "Estimación declarada de Bzzoiro: mayor probabilidad local con 0.556, sin señal marcada en goles totales ni en ambos anotan.",
+          "Poisson eleva la victoria local al 63.3% frente al 55.6% de CatBoost, que reparte más peso entre empate y visitante."
+        ],
+        "stats": [
+          {
+            "value": "63.3%",
+            "label": "Local Poisson"
+          },
+          {
+            "value": "55.6%",
+            "label": "Local CatBoost"
+          },
+          {
+            "value": "1.944",
+            "label": "Goles esperados United"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial: 74 cruces con ventaja clara del United",
+        "bullets": [
+          "74 enfrentamientos registrados: 43 victorias del Manchester United, 16 empates y 15 del Tottenham, con 2.72 goles de promedio.",
+          "Últimos cruces: 2-0 del United en 2026, 2-2 en 2025 y tres triunfos del Tottenham por 1-0, 1-0 y 4-3.",
+          "En los cinco duelos recogidos el Tottenham ganó tres, el United uno y otro acabó en empate."
+        ],
+        "stats": [
+          {
+            "value": "74",
+            "label": "Cruces registrados"
+          },
+          {
+            "value": "43",
+            "label": "Victorias United"
+          },
+          {
+            "value": "2.72",
+            "label": "Goles por cruce"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma: el Tottenham sigue sin ganar",
+        "bullets": [
+          "United: 0-2 en Hull, 5-2 a Ipswich, 2-2 en Everton, 4-0 a Sabah FK, 0-1 con Manchester City y 1-1 en Fulham.",
+          "Tottenham: 0-3 en Brentford, 0-2 con Newcastle, 0-0 en Nottingham, 0-0 con Everton y 2-3 con Aston Villa.",
+          "El United reúne 2 victorias, 2 empates y 2 derrotas en sus registros; el Tottenham acumula 2 empates y 3 derrotas en cinco partidos."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Victorias United en 6"
+          },
+          {
+            "value": "2",
+            "label": "Empates Tottenham en 5"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Tabla y goleadores: United 12º, Tottenham 20º",
+        "bullets": [
+          "Manchester United: 12º con 5 partidos, 5 puntos, 8 goles a favor y 8 en contra.",
+          "Tottenham: 20º con 5 partidos, 2 puntos, 2 goles a favor y 8 en contra.",
+          "Bruno Fernandes suma 3 goles en 5 y Bryan Mbeumo 2 en 5, con Benjamin Šeško en 1 de 4; por el Tottenham, Conor Gallagher registra 1 en 5."
+        ],
+        "stats": [
+          {
+            "value": "12º",
+            "label": "Puesto United"
+          },
+          {
+            "value": "20º",
+            "label": "Puesto Tottenham"
+          },
+          {
+            "value": "3",
+            "label": "Goles Bruno Fernandes"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Fila duplicada",
+        "detail": "El partido Tottenham-Aston Villa del 19/09/2026 aparece dos veces en R con idéntico 2-3; se contabiliza una sola vez."
+      },
+      {
+        "label": "Campos sin etiquetar",
+        "detail": "Los valores 0.516 y 0.481 de Poisson y 0.618 y 0.605 de CatBoost figuran en el input sin etiqueta asignada."
+      },
+      {
+        "label": "Sin bajas, sede ni consenso externo",
+        "detail": "No hay filas L ni M2, y la fila W solo aporta el valor 23 sin campo identificado sobre clima o estadio."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:37:54.177Z",
+    "inputKey": "v3|M|fd-560600|Manchester United FC|Tottenham Hotspur FC|premier|2026-10-10T16:30:00Z|NS\nP|1.944|0.797|0.633|0.231|0.136|0.516|0.481\nB|0.556|0.238|0.206|1.87|1.19|0.618|0.605|1-1|0.547\nB2|H|0.556|no|no\nH|74|43|16|15|2.72\nW|||23|\nT|12|Manchester United FC|5|5|8|8\nT|20|Tottenham Hotspur FC|5|2|2|8\nS|Bruno Fernandes|Manchester United FC|3|5\nS|Bryan Mbeumo|Manchester United FC|2|5\nS|Benjamin Šeško|Manchester United FC|1|4\nS|Conor Gallagher|Tottenham Hotspur FC|1|5\nR|2026-08-22|Hull City AFC|Manchester United FC|2|0\nR|2026-08-22|Brentford FC|Tottenham Hotspur FC|3|0\nR|2026-08-29|Tottenham Hotspur FC|Newcastle United FC|0|2\nR|2026-08-30|Manchester United FC|Ipswich Town FC|5|2\nR|2026-09-05|Nottingham Forest FC|Tottenham Hotspur FC|0|0\nR|2026-09-06|Everton FC|Manchester United FC|2|2\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-09-12|Tottenham Hotspur FC|Everton FC|0|0\nR|2026-09-13|Manchester United FC|Manchester City FC|0|1\nR|2026-09-19|Tottenham Hotspur FC|Aston Villa FC|2|3\nR|2026-09-19|Tottenham|Aston Villa|2|3\nR|2026-09-20|Fulham FC|Manchester United FC|1|1\nHR|2026-02-07|Manchester United|Tottenham Hotspur|2|0\nHR|2025-11-08|Tottenham Hotspur|Manchester United|2|2\nHR|2025-05-21|Tottenham Hotspur|Manchester United|1|0\nHR|2025-02-16|Tottenham Hotspur|Manchester United|1|0\nHR|2024-12-19|Tottenham Hotspur|Manchester United|4|3",
+    "materialKey": "M|fd-560600|Manchester United FC|Tottenham Hotspur FC|premier|2026-10-10T16:30:00Z|NS"
+  },
+  "fd-564700": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama del Barcelona-Getafe",
+        "bullets": [
+          "FC Barcelona y Getafe CF se enfrentan en LaLiga el 10 de octubre de 2026 a las 16:30 UTC, según el calendario.",
+          "El Barcelona llega como líder con 21 puntos en 7 jornadas; el Getafe ocupa la posición 11 con 8 puntos.",
+          "El historial reciente favorece al Barcelona: cuatro victorias y un empate en los últimos cinco cruces."
+        ],
+        "stats": [
+          {
+            "value": "21",
+            "label": "Puntos Barcelona"
+          },
+          {
+            "value": "8",
+            "label": "Puntos Getafe"
+          },
+          {
+            "value": "11",
+            "label": "Posición Getafe"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "Poisson GoatLab estima 0.802 para victoria local, 0.127 para empate y 0.071 para victoria visitante, con 3.15 y 0.92 goles esperados.",
+          "CatBoost Bzzoiro estima 0.893 para victoria local, 0.056 para empate y 0.05 para victoria visitante, con 2.33 goles totales y 0.71 en un umbral de goles.",
+          "El bloque B añade indicadores de 0.78 y 0.427, marcador más probable 2-0 y confianza 0.51.",
+          "La estimación declarada B2 fija la mayor probabilidad en local con 0.893, mientras que goles totales y ambos anotan aparecen como 'no'."
+        ],
+        "stats": [
+          {
+            "value": "0.802",
+            "label": "Prob. local Poisson"
+          },
+          {
+            "value": "0.893",
+            "label": "Prob. local Bzzoiro"
+          },
+          {
+            "value": "2.33",
+            "label": "Goles totales Bzzoiro"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial entre Barcelona y Getafe",
+        "bullets": [
+          "El registro histórico agregado suma 44 partidos, con 31 victorias del Barcelona, 10 empates y 3 victorias del Getafe, y un promedio de 2.68 goles por encuentro.",
+          "En los últimos cinco cruces, el Barcelona acumula cuatro victorias y un empate, con 11 goles a favor y 1 en contra.",
+          "Los cruces recientes incluyen un 4-0 y un 3-0 en casa del Barcelona, un 0-2 en Getafe y un 1-1 en campo del Getafe."
+        ],
+        "stats": [
+          {
+            "value": "44",
+            "label": "Partidos históricos"
+          },
+          {
+            "value": "31",
+            "label": "Victorias Barcelona"
+          },
+          {
+            "value": "11",
+            "label": "Goles Barça últimos 5"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación y goleadores",
+        "bullets": [
+          "El Barcelona es primero con 7 partidos, 21 puntos, 31 goles a favor y 7 en contra.",
+          "El Getafe es undécimo con 7 partidos, 8 puntos, 4 goles a favor y 7 en contra.",
+          "Raphinha registra 12 goles en 7 partidos; Lamine Yamal suma 7 goles en 7 partidos y Fermín López 4 goles en 7 partidos."
+        ],
+        "stats": [
+          {
+            "value": "21",
+            "label": "Puntos Barcelona"
+          },
+          {
+            "value": "8",
+            "label": "Puntos Getafe"
+          },
+          {
+            "value": "12",
+            "label": "Goles Raphinha"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente de ambos equipos",
+        "bullets": [
+          "El Barcelona acumula victorias recientes por 5-0, 5-1, 4-2, 7-2 y 3-1, con una producción ofensiva alta.",
+          "El Getafe muestra un patrón de partidos cerrados: derrotas 1-0 ante Osasuna y Betis, empates 1-1 con Celta y Deportivo, y victoria 1-0 sobre Málaga.",
+          "En el listado se repiten los partidos Barcelona-Racing Santander (7-2) y Betis-Getafe (1-0), probablemente por duplicidad de registros."
+        ],
+        "stats": [
+          {
+            "value": "7-2",
+            "label": "Barcelona-Racing"
+          },
+          {
+            "value": "1-0",
+            "label": "Betis-Getafe"
+          },
+          {
+            "value": "5-0",
+            "label": "Valencia-Barcelona"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin alineaciones confirmadas",
+        "detail": "No hay bloque L de bajas ni alineaciones probables; no se puede evaluar disponibilidad de jugadores."
+      },
+      {
+        "label": "Clima sin condición",
+        "detail": "El bloque W indica condición desconocida y 13 grados; no hay sede ni estado del campo."
+      },
+      {
+        "label": "B2 con 'no'",
+        "detail": "La estimación B2 declara 'no' en goles totales y ambos anotan, lo que limita su comparación con los indicadores numéricos de B."
+      },
+      {
+        "label": "Duplicados en forma reciente",
+        "detail": "Aparecen repetidos Barcelona-Racing Santander (7-2) y Betis-Getafe (1-0) con nombres alternativos."
+      },
+      {
+        "label": "Sin API-Football",
+        "detail": "No se recibió bloque A, por lo que no hay distribución, umbral de goles ni lectura cruda de ese proveedor."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "B2 declara 'no' en goles totales y ambos anotan, mientras B incluye 2.33 goles y un indicador de 0.78; conviene verificar etiquetas. La probabilidad local de Poisson (0.802) es inferior a la de Bzzoiro (0.893), sin contradicción clara con los datos."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:40:37.073Z",
+    "inputKey": "v3|M|fd-564700|FC Barcelona|Getafe CF|laliga|2026-10-10T16:30:00Z|NS\nP|3.15|0.92|0.802|0.127|0.071|0.771|0.581\nB|0.893|0.056|0.05|2.33|0.71|0.78|0.427|2-0|0.51\nB2|H|0.893|no|no\nH|44|31|10|3|2.68\nW||unknown|13|\nT|1|FC Barcelona|7|21|31|7\nT|11|Getafe CF|7|8|4|7\nS|Raphinha|FC Barcelona|12|7\nS|Lamine Yamal|FC Barcelona|7|7\nS|Fermín López|FC Barcelona|4|7\nR|2026-08-31|CA Osasuna|Getafe CF|1|0\nR|2026-09-06|Valencia CF|FC Barcelona|0|5\nR|2026-09-07|Getafe CF|RC Celta de Vigo|1|1\nR|2026-09-09|FC Barcelona|Feyenoord Rotterdam|5|1\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-13|Getafe CF|RC Deportivo La Coruña|1|1\nR|2026-09-16|FC Barcelona|Real Racing Club de Santander|7|2\nR|2026-09-16|Barcelona|Racing Santander|7|2\nR|2026-09-17|Real Betis Balompié|Getafe CF|1|0\nR|2026-09-17|Real Betis|Getafe|1|0\nR|2026-09-19|Sevilla FC|FC Barcelona|1|3\nR|2026-09-20|Getafe CF|Málaga CF|1|0\nHR|2026-04-25|Getafe|FC Barcelona|0|2\nHR|2025-09-21|FC Barcelona|Getafe|3|0\nHR|2025-01-18|Getafe|FC Barcelona|1|1\nHR|2024-09-25|FC Barcelona|Getafe|1|0\nHR|2024-02-24|FC Barcelona|Getafe|4|0",
+    "materialKey": "M|fd-564700|FC Barcelona|Getafe CF|laliga|2026-10-10T16:30:00Z|NS"
+  },
+  "fd-564702": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Real Madrid y Villarreal en LaLiga",
+        "bullets": [
+          "Real Madrid CF y Villarreal CF se enfrentan en LaLiga el 10 de octubre de 2026 a las 19:00 UTC; el partido figura como no iniciado.",
+          "El Real Madrid llega en cuarta posición con 15 puntos en 7 partidos (18 goles a favor y 8 en contra); el Villarreal es noveno con 8 puntos en 7 (13 a favor y 12 en contra).",
+          "El pronóstico de sede apunta a lluvia y 8 grados de temperatura, sin más detalle de estadio en los datos disponibles."
+        ],
+        "stats": [
+          {
+            "value": "15 puntos",
+            "label": "Real Madrid en la tabla"
+          },
+          {
+            "value": "8 puntos",
+            "label": "Villarreal en la tabla"
+          },
+          {
+            "value": "8 grados",
+            "label": "Temperatura prevista"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades de los modelos",
+        "bullets": [
+          "Poisson GoatLab estima 2.25 goles esperados para el Real Madrid y 1.38 para el Villarreal, con 56.3% para el local, 21.6% para el empate y 22.1% para la visita.",
+          "CatBoost Bzzoiro otorga 70.9% al local, 16.8% al empate y 12.3% a la visita, con 2.21 y 1.20 goles esperados y un marcador más probable de 2-1 (56.7%).",
+          "Bzzoiro declara la victoria local como escenario de mayor probabilidad (70.9%) y no aporta lectura de goles totales ni de ambos anotan.",
+          "Auditoría: la estimación de victoria local se desvía entre proveedores, del 56.3% de Poisson al 70.9% de CatBoost, una brecha de 14.6 puntos porcentuales."
+        ],
+        "stats": [
+          {
+            "value": "2.25",
+            "label": "Goles esperados local (P)"
+          },
+          {
+            "value": "70.9%",
+            "label": "Victoria local (Bzzoiro)"
+          },
+          {
+            "value": "56.3%",
+            "label": "Victoria local (Poisson)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes entre ambos",
+        "bullets": [
+          "En 53 enfrentamientos históricos, el Real Madrid acumula 30 victorias y el Villarreal 6, con 17 empates y un promedio de 3.15 goles por partido.",
+          "Los cinco cruces más recientes dejan cuatro victorias del Real Madrid: 2-0 en enero de 2026, 3-1 en octubre de 2025, 2-1 en marzo de 2025 y 2-0 en octubre de 2024.",
+          "El único resultado no favorable al Real Madrid en esa serie fue el empate 4-4 de mayo de 2024 en campo del Villarreal."
+        ],
+        "stats": [
+          {
+            "value": "53",
+            "label": "Enfrentamientos históricos"
+          },
+          {
+            "value": "30",
+            "label": "Victorias Real Madrid"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Registro de anotadores",
+        "bullets": [
+          "Kylian Mbappé encabeza el registro con 7 goles en 7 partidos con el Real Madrid.",
+          "Jude Bellingham suma 3 goles en 7 partidos y Carlos Espí 2 en 7, ambos en el conjunto madridista.",
+          "En el Villarreal, Pape Gueye registra 3 goles en 7 partidos, mientras Alberto Moleiro y Georges Mikautadze acumulan 2 cada uno en 7."
+        ],
+        "stats": [
+          {
+            "value": "7",
+            "label": "Goles de Mbappé"
+          },
+          {
+            "value": "3",
+            "label": "Goles de Pape Gueye"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente de ambos",
+        "bullets": [
+          "El Real Madrid suma 3 victorias y 2 derrotas en sus últimos 5 partidos: 0-1 ante Betis, 2-1 ante Inter, 4-1 ante Rayo Vallecano, 3-2 en Elche y 1-2 ante Atlético de Madrid.",
+          "El Villarreal suma 2 victorias y 3 derrotas en sus últimos 5: 2-3 ante Deportivo La Coruña, 2-3 ante Dortmund, 1-2 ante Betis, 1-3 en Málaga y 3-1 ante Levante.",
+          "El registro incluye una fila duplicada del Atlético de Madrid-Real Madrid del 20 de septiembre (2-1), contabilizada una sola vez."
+        ],
+        "stats": [
+          {
+            "value": "3 victorias",
+            "label": "Real Madrid, últimos 5"
+          },
+          {
+            "value": "3 derrotas",
+            "label": "Villarreal, últimos 5"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin datos de API-Football",
+        "detail": "El input no incluye bloque A, por lo que no hay distribución, probabilidad mayor ni umbral de goles declarados por ese proveedor."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se aporta bloque M2 con porcentajes interpretativos de terceros para contrastar las lecturas de los modelos."
+      },
+      {
+        "label": "Alineaciones no confirmadas",
+        "detail": "No hay bloque L de bajas ni alineaciones confirmadas, y el bloque W no identifica el estadio."
+      },
+      {
+        "label": "Bzzoiro sin goles ni ambos anotan",
+        "detail": "El bloque B2 solo declara la probabilidad de victoria local (70.9%) y marca 'no' en goles totales y en ambos anotan."
+      },
+      {
+        "label": "Fila duplicada en forma reciente",
+        "detail": "El 20 de septiembre aparece dos veces el Atlético de Madrid-Real Madrid (2-1); se ha contabilizado como un único partido."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "La probabilidad de victoria local se desvía de forma clara entre proveedores: 56.3% en Poisson GoatLab frente a 70.9% en CatBoost Bzzoiro, 14.6 puntos de brecha. También el 12.3% visitante de Bzzoiro se aleja del 22.1% de Poisson y del historial, donde el Villarreal ganó solo 6 de 53 cruces."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:41:26.873Z",
+    "inputKey": "v3|M|fd-564702|Real Madrid CF|Villarreal CF|laliga|2026-10-10T19:00:00Z|NS\nP|2.25|1.38|0.563|0.216|0.221|0.702|0.678\nB|0.709|0.168|0.123|2.21|1.2|0.725|0.607|2-1|0.567\nB2|H|0.709|no|no\nH|53|30|17|6|3.15\nW||rain|8|\nT|4|Real Madrid CF|7|15|18|8\nT|9|Villarreal CF|7|8|13|12\nS|Kylian Mbappé|Real Madrid CF|7|7\nS|Jude Bellingham|Real Madrid CF|3|7\nS|Carlos Espí|Real Madrid CF|2|7\nS|Pape Gueye|Villarreal CF|3|7\nS|Alberto Moleiro|Villarreal CF|2|7\nS|Georges Mikautadze|Villarreal CF|2|7\nR|2026-08-28|Deportivo Alavés|Villarreal CF|1|0\nR|2026-09-04|Real Betis Balompié|Real Madrid CF|1|0\nR|2026-09-05|Villarreal CF|RC Deportivo La Coruña|2|3\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-08|Borussia Dortmund|Villarreal CF|3|2\nR|2026-09-12|Real Madrid CF|Rayo Vallecano de Madrid|4|1\nR|2026-09-14|Villarreal CF|Real Betis Balompié|1|2\nR|2026-09-15|Elche CF|Real Madrid CF|2|3\nR|2026-09-17|Málaga CF|Villarreal CF|1|3\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nR|2026-09-20|Atletico Madrid|Real Madrid|2|1\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nHR|2026-01-24|Villarreal|Real Madrid|0|2\nHR|2025-10-04|Real Madrid|Villarreal|3|1\nHR|2025-03-15|Villarreal|Real Madrid|1|2\nHR|2024-10-05|Real Madrid|Villarreal|2|0\nHR|2024-05-19|Villarreal|Real Madrid|4|4",
+    "materialKey": "M|fd-564702|Real Madrid CF|Villarreal CF|laliga|2026-10-10T19:00:00Z|NS"
   }
 }

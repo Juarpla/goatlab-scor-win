@@ -1,0 +1,625 @@
+{
+  "id": "fd-560592",
+  "home": "Sunderland AFC",
+  "away": "Brighton & Hove Albion FC",
+  "competition": "premier",
+  "kickoff": "2026-10-10T14:00:00Z",
+  "updatedAt": "2026-10-05T15:32:25.339Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.17,
+      "away": 2.239
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.23,
+      "away": 1.85
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 5
+    },
+    "standings": {
+      "Sunderland AFC": {
+        "position": 14,
+        "team": "Sunderland AFC",
+        "played": 5,
+        "won": 1,
+        "drawn": 1,
+        "lost": 3,
+        "goalsFor": 6,
+        "goalsAgainst": 10,
+        "goalDifference": -4,
+        "points": 4,
+        "form": null
+      },
+      "Brighton & Hove Albion FC": {
+        "position": 3,
+        "team": "Brighton & Hove Albion FC",
+        "played": 5,
+        "won": 3,
+        "drawn": 1,
+        "lost": 1,
+        "goalsFor": 16,
+        "goalsAgainst": 5,
+        "goalDifference": 11,
+        "points": 10,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-05T15:31:54.358Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-10T14:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-05T15:31:54.358Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 184
+    },
+    "venue": {
+      "city": "Sunderland",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.18,
+      "draw": 0.213,
+      "away": 0.606
+    },
+    "doubleChance": {
+      "12": 0.787,
+      "1X": 0.394,
+      "X2": 0.82
+    },
+    "dnb": {
+      "home": 0.229,
+      "away": 0.771
+    },
+    "totals": {
+      "over15": 0.863,
+      "under15": 0.137,
+      "over25": 0.662,
+      "under25": 0.338,
+      "over35": 0.443,
+      "under35": 0.557
+    },
+    "btts": {
+      "yes": 0.625,
+      "no": 0.375
+    },
+    "cleanSheet": {
+      "home": 0.107,
+      "away": 0.31
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.097
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.095
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.083
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.072
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.065
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.08,
+    "noGoal": 0.046,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.402
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.24
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.144
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.086
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.052
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.031
+      }
+    ],
+    "firstHome": 0.381,
+    "firstAway": 0.573
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Brian Brobbey",
+        "goals": 3,
+        "matches": 5,
+        "share": 0.5,
+        "rate": 0.62,
+        "anytime": 0.459,
+        "first": 0.2
+      },
+      {
+        "player": "Enzo Le Fée",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.167,
+        "rate": 0.21,
+        "anytime": 0.186,
+        "first": 0.067
+      }
+    ],
+    "away": [
+      {
+        "player": "Pascal Groß",
+        "goals": 3,
+        "matches": 5,
+        "share": 0.188,
+        "rate": 0.35,
+        "anytime": 0.294,
+        "first": 0.113
+      },
+      {
+        "player": "Charalampos Kostoulas",
+        "goals": 2,
+        "matches": 5,
+        "share": 0.125,
+        "rate": 0.23,
+        "anytime": 0.206,
+        "first": 0.075
+      },
+      {
+        "player": "Jack Hinshelwood",
+        "goals": 2,
+        "matches": 1,
+        "share": 0.125,
+        "rate": 0.23,
+        "anytime": 0.206,
+        "first": 0.075
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.326,
+      "draw": 0.276,
+      "away": 0.39899999999999997,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.29,
+      "away": 1.46
+    },
+    "over15": 0.7609999999999999,
+    "over25": 0.526,
+    "over35": 0.31,
+    "btts": 0.556,
+    "score": "1-1",
+    "cornersOver95": 0.498,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.399,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3989,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-05T15:32:10.884Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.322,
+      "draw": 0.278,
+      "away": 0.4
+    },
+    "doubleChance": {
+      "12": 0.722,
+      "1X": 0.6,
+      "X2": 0.678
+    },
+    "dnb": {
+      "home": 0.446,
+      "away": 0.554
+    },
+    "totals": {
+      "over15": 0.772,
+      "under15": 0.228,
+      "over25": 0.519,
+      "under25": 0.481,
+      "over35": 0.297,
+      "under35": 0.703
+    },
+    "btts": {
+      "yes": 0.568,
+      "no": 0.432
+    },
+    "cleanSheet": {
+      "home": 0.232,
+      "away": 0.275
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.11,
+        "share": 0.25404157043879905
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.088,
+        "share": 0.20323325635103923
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.081,
+        "share": 0.18706697459584293
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.078,
+        "share": 0.18013856812933024
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.076,
+        "share": 0.17551963048498842
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 3,
+    "homeWins": 0,
+    "draws": 1,
+    "awayWins": 2,
+    "avgTotalGoals": 0.6666666666666666,
+    "recent": [
+      {
+        "eventId": 302,
+        "date": "2026-03-14T15:00:00+00:00",
+        "home": "Sunderland",
+        "away": "Brighton & Hove Albion",
+        "homeTeamId": 7,
+        "awayTeamId": 5,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 163,
+        "date": "2025-12-20T15:00:00+00:00",
+        "home": "Brighton & Hove Albion",
+        "away": "Sunderland",
+        "homeTeamId": 5,
+        "awayTeamId": 7,
+        "homeScore": 0,
+        "awayScore": 0
+      },
+      {
+        "eventId": 434949,
+        "date": "2011-08-23T18:45:00+00:00",
+        "home": "Brighton & Hove Albion",
+        "away": "Sunderland",
+        "homeTeamId": 5,
+        "awayTeamId": 7,
+        "homeScore": 1,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 184
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.2
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 184
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.9
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.45,
+      "shotsOnTarget": 4.37,
+      "xg": 1.29,
+      "corners": 4.95,
+      "fouls": 11.15,
+      "yellowCards": 1.97,
+      "redCards": 0.57,
+      "offsides": 1.99,
+      "possession": 46.67
+    },
+    "away": {
+      "shots": 14.45,
+      "shotsOnTarget": 4.29,
+      "xg": 1.46,
+      "corners": 4.96,
+      "fouls": 12.53,
+      "yellowCards": 2.2,
+      "redCards": 0.43,
+      "offsides": 1.84,
+      "possession": 53.33
+    },
+    "sample": {
+      "home": 7,
+      "away": 6
+    },
+    "coverage": {
+      "home": {
+        "possession": 7,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 7,
+        "fouls": 7,
+        "yellowCards": 7,
+        "redCards": 1,
+        "offsides": 6
+      },
+      "away": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 5,
+        "redCards": 2,
+        "offsides": 5
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.92,
+      "shotsOnTarget": 4.4,
+      "xg": 1.49,
+      "corners": 4.86,
+      "fouls": 11.26,
+      "yellowCards": 1.99,
+      "redCards": 0.5,
+      "offsides": 1.86
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.435,
+      "draw": 0.128,
+      "away": 0.437
+    },
+    "cardsDuel": {
+      "home": 0.356,
+      "draw": 0.201,
+      "away": 0.443
+    },
+    "lastGoal": {
+      "home": 0.381,
+      "away": 0.573,
+      "noGoal": 0.046
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.499,
+        "away": 0.501
+      },
+      "5": {
+        "home": 0.499,
+        "away": 0.501
+      },
+      "7": {
+        "home": 0.499,
+        "away": 0.501
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.209,
+      "home12": 0.225,
+      "level": 0.128,
+      "away12": 0.226,
+      "away3plus": 0.211
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 8,
+      "condition": null,
+      "sampledAt": "2026-10-10T14:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Stadium of Light",
+      "city": "Sunderland",
+      "capacity": 49000,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Sunderland AFC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 14,
+        "played": 5,
+        "gf": 6,
+        "ga": 10,
+        "provider": null
+      },
+      "player": {
+        "name": "Brian Brobbey",
+        "detail": "3 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Brighton & Hove Albion FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 4,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 5,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 3,
+        "played": 5,
+        "gf": 16,
+        "ga": 5,
+        "provider": null
+      },
+      "player": {
+        "name": "Pascal Groß",
+        "detail": "3 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": false,
+    "note": null,
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-05T15:34:58.629Z"
+  }
+}
