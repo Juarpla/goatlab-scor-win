@@ -141,7 +141,7 @@
       "unit": "goles",
       "source": "scorers:nations:Adrian Justinussen",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
     },
     {
       "id": "away.player1.goals",
@@ -150,7 +150,7 @@
       "unit": "goles",
       "source": "scorers:nations:Áki Samuelsen",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
     },
     {
       "id": "h2h.total",
@@ -197,17 +197,21 @@
     "head-to-head",
     "synthesis"
   ],
-  "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+  "instructionVersion": "7b5f827b7f1a0f21fa315116e67e484636ee37e1ed3158393ca50f287d94ddea",
   "author": {
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash"
   },
-  "generatedAt": "2026-10-06T00:13:57.843Z",
+  "generatedAt": "2026-10-06T08:15:05.370Z",
   "prompts": [
     {
       "n": 1,
       "kind": "form",
-      "title": "Recent Form: Wins, Draws, Losses",
+      "title": "Recent form: grouped outcomes",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.n",
         "home.wins",
@@ -218,59 +222,75 @@
         "away.draws",
         "away.losses"
       ],
-      "prompt": "Vertical 9:16 analytic motion-graphics sequence, roughly 8 seconds. Use GoatLab charcoal #101412 background, warm white #edf0e6 for titles and axes, lime #c5ed74 for home team accents, slate #8ca6bf for away team accents. Reserve the lower quarter for permanent yellow subtitles; all chart content sits above it. Title in warm white, bold condensed sans, Spanish on-screen label: \"FORMA RECIENTE · ÚLTIMOS PARTIDOS\". Subtitle small Spanish: \"Muestra: {{home.n}} y {{away.n}} partidos\" with source note \"Fuente: Bzzoiro · muestra reciente\". Layout: two horizontal grouped count bar clusters, one per team. Shared zero baseline at left; same count scale for both groups. Home cluster uses {{home.wins}}, {{home.draws}}, {{home.losses}}; away cluster uses {{away.wins}}, {{away.draws}}, {{away.losses}}. Y-axis label Spanish \"Partidos\"; bars labelled \"Victorias\", \"Empates\", \"Derrotas\" in Spanish, with team names \"Kazajistán\" and \"Islas Feroe\" above each cluster. Entry animation: baseline draws first, then bars grow from zero left to right in staggered order. Main comparison: grouped bars align by outcome category so wins sit against wins, draws against draws, losses against losses. Emphasis: the largest bar pulses in lime or slate, and a small sample tag shows {{home.n}} / {{away.n}} to identify any unequal sample sizes; here both sample sizes are shown explicitly. Transition: a soft wipe from home cluster to away cluster. Camera movement: slow push-in from wide to medium, keeping labels legible. Exit: bars settle, sample and source line hold, then fade to the lower-quarter subtitle zone. No predictive language. Ensure Spanish labels, source and sample annotation remain visible."
+      "prompt": "Vertical 9:16 compositing for a 6-10 second transcript-led insert. Reserve the lower quarter for permanent yellow subtitles over charcoal #101412, with a subtle dark scrim so captions stay legible. Editorial presentation: kinetic typography built from Spanish words 'FORMA RECIENTE', 'VICTORIA', 'EMPATE', 'DERROTA' in warm white #edf0e6 and lime #c5ed74, arranged as three rhythmic lanes that punch in on the spoken beats. Kazajistán and Islas Feroe appear as Spanish team labels in slate #8ca6bf on opposite sides of the frame; their lane markers pulse in time with narration. No axes, no counts, no invented events. Main emphasis is the rhythmic contrast between the two team names; camera does a slow push-in from three-quarter height to centre, then a small parallax drift. Entry: letters slide from the lower quarter upward with a hard cut on the first spoken word. Transition: a lime wipe sweeps upward to reveal the statistical variant, then a soft match cut returns to editorial during the team-name callout. Exit: typography compresses into a single line and fades to charcoal. Statistical presentation: grouped count bars for wins, draws and losses per team, using a shared zero baseline and the same unit partidos. Bars are charcoal #101412 with warm white outlines; wins use lime #c5ed74, draws use slate #8ca6bf, losses use warm white #edf0e6. Kazajistán group and Islas Feroe group sit side by side, each with Spanish labels 'Kazajistán · victorias' {{home.wins}}, 'Kazajistán · empates' {{home.draws}}, 'Kazajistán · derrotas' {{home.losses}}, 'Islas Feroe · victorias' {{away.wins}}, 'Islas Feroe · empates' {{away.draws}}, 'Islas Feroe · derrotas' {{away.losses}}. Sample/source annotation sits beneath each group: sample n = {{home.n}} for Kazajistán and sample n = {{away.n}} for Islas Feroe, with source string from catalog and provider Bzzoiro. If samples are unequal, add a Spanish note 'muestras distintas' beside the larger group. Entry animation: zero baseline draws first, then bars grow vertically in staggered order. Main comparison: outcome distribution across both teams. Emphasis: the tallest bar gets a lime edge glow and a short camera push; secondary bars remain slate. Transition: chart slides half width left as editorial lanes reappear. Exit: axis labels collapse into a compact source/sample stamp."
     },
     {
       "n": 2,
       "kind": "goals",
-      "title": "Goals For and Against",
+      "title": "Goals for and against: paired bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.n",
+        "away.n",
         "home.gf",
         "home.ga",
-        "away.n",
         "away.gf",
         "away.ga"
       ],
-      "prompt": "Vertical 9:16 analytic motion-graphics sequence, roughly 9 seconds. Charcoal #101412 background, warm white #edf0e6 for axes and titles, lime #c5ed74 for \"a favor\" bars, slate #8ca6bf for \"recibidos\" bars. Lower quarter stays free for permanent yellow subtitles; chart occupies upper three quarters. Title in Spanish: \"GOLES A FAVOR Y EN CONTRA\". Subtitle Spanish: \"Últimos {{home.n}} y {{away.n}} partidos · fuente Bzzoiro\". Layout: two paired vertical bar groups, one per team, sharing one common scale in goals. Left group \"Kazajistán\" shows {{home.gf}} versus {{home.ga}}; right group \"Islas Feroe\" shows {{away.gf}} versus {{away.ga}}. Y-axis label Spanish \"Goles\"; x-axis team labels in Spanish. Entry animation: zero baseline sweeps across, then each bar rises from baseline with a slight overshoot. Main comparison: paired bars show goals for and against side by side per team, same unit and same y-scale so heights are directly comparable. Emphasis: the taller bar in each pair glows briefly; a football-context annotation reads \"Muestra reciente · no es pronóstico\". Transition: vertical wipe between team groups, keeping scale locked. Camera movement: gentle parallax slide upward to reveal sample note. Exit: values settle, source line \"Bzzoiro · muestra\" holds, then everything dims behind subtitle zone. Use Spanish labels \"Goles a favor\", \"Goles recibidos\", \"Kazajistán\", \"Islas Feroe\". Include sample size. No predictive claim. Ensure the 9:16 frame remains clean and legible."
+      "prompt": "Vertical 9:16 animation for 6-10 seconds, lower quarter reserved for permanent yellow subtitles over charcoal #101412. Editorial presentation: illustrative football pitch in perspective, charcoal turf with warm white lines, lime #c5ed74 ball path and slate #8ca6bf player silhouettes. Spanish headings 'GOLES' and team names 'Kazajistán', 'Islas Feroe' animate as large warm white type. Ball travels along a curved path from one half to the other on the narration beat, then rebounds; this is symbolic movement, not a match event. No axes, no counts, no sample claims. Emphasis on the ball's lime trail and the pitch's vanishing point. Camera tilts down from high angle to pitch level, then drifts laterally. Entry: pitch lines draw outward from centre circle. Transition: ball exits frame and its trail becomes the baseline of the statistical chart. Exit: pitch fades to charcoal while Spanish 'GOLES' remains. Statistical presentation: paired horizontal bars for both teams, comparing goles a favor and goles recibidos. Shared scale in unit goles, common zero baseline. Kazajistán pair: 'Kazajistán · goles a favor' {{home.gf}} in lime and 'Kazajistán · goles recibidos' {{home.ga}} in slate. Islas Feroe pair: 'Islas Feroe · goles a favor' {{away.gf}} in lime and 'Islas Feroe · goles recibidos' {{away.ga}} in slate. Each bar carries a direct value label resolved by renderer; unit label 'goles' is fixed at axis end. Sample/source annotation under each team: sample n = {{home.n}} for Kazajistán and sample n = {{away.n}} for Islas Feroe, with source string from catalog and provider Bzzoiro. Entry animation: baseline sweeps across, then paired bars extend simultaneously per team. Main comparison: attacking output versus defensive concession for both teams. Emphasis: the larger gap within each pair gets a warm white bracket and a slight camera push. Transition: vertical lime line wipes from pitch to chart and back. Exit: bars retract to zero baseline, leaving source/sample stamp and Spanish 'GOLES'."
     },
     {
       "n": 3,
       "kind": "clean-sheets",
-      "title": "Clean Sheets: Counts and Samples",
+      "title": "Clean sheets: counts and samples",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.clean",
         "away.clean",
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 analytic motion-graphics sequence, about 7 seconds. Charcoal #101412 background, warm white #edf0e6 text, lime #c5ed74 for clean-sheet bars, slate #8ca6bf for comparison accents. Reserve the lower quarter for permanent yellow subtitles. Title Spanish: \"ARCOS EN CERO · CONTEOS\". Subtitle Spanish: \"Muestra: {{home.n}} y {{away.n}} partidos · fuente Bzzoiro\". Layout: two count bars, one per team, sharing a zero baseline and one count scale. Left bar \"Kazajistán\" uses {{home.clean}}; right bar \"Islas Feroe\" uses {{away.clean}}. Y-axis Spanish \"Partidos\"; bar labels \"Kazajistán\" and \"Islas Feroe\". Directly beneath each bar, a sample tag shows {{home.n}} and {{away.n}} so viewers see the sample size attached to each count. Do not convert counts into rates; no rate conversions, no fractions, no averages. Entry animation: baseline draws, then bars grow from zero with a restrained ease. Main comparison: side-by-side count bars, same unit \"partidos\", same scale, so the counts are directly readable. Emphasis: the higher count receives a subtle lime outline, while the sample tag remains neutral warm white. Transition: horizontal slide from home to away, preserving baseline and axis labels. Camera movement: slow push-in to medium shot. Exit: bars hold, source and sample line remain visible, then fade to subtitle-safe lower quarter. Spanish labels: \"Arcos en cero\", \"Partidos\", \"Muestra\", \"Fuente\". Historical sample only; no forecast, no predictive claim. Ensure clarity and professional hierarchy."
+      "prompt": "Vertical 9:16 motion insert, 6-10 seconds. Lower quarter reserved for permanent yellow subtitles over charcoal #101412. Editorial presentation: defensive energy as a stylised shield. A large shield outline in warm white #edf0e6 and lime #c5ed74 pulses at centre; inside, Spanish heading 'ARCOS EN CERO' and Spanish team labels 'Kazajistán' and 'Islas Feroe' orbit as slate #8ca6bf tags. Motion is rhythmic and protective, with short impact ripples on beat. No axes, no counts, no invented saves or match events. Main focal point is the shield edge; camera slowly rotates around the shield, then settles front-on. Entry: shield ribs draw sequentially from top to bottom. Transition: shield splits into two halves that become the statistical count bars. Exit: shield closes and fades to charcoal while Spanish 'DEFENSA' stays briefly. Statistical presentation: two horizontal count bars comparing clean sheet counts, not rates. Shared zero baseline and same unit partidos. Bar for Kazajistán uses lime #c5ed74 and Spanish label 'Kazajistán · arcos en cero' {{home.clean}}; bar for Islas Feroe uses slate #8ca6bf and Spanish label 'Islas Feroe · arcos en cero' {{away.clean}}. Direct value labels resolved by renderer, unit 'partidos' fixed at axis end. Sample/source annotation attached to each bar: sample n = {{home.n}} for Kazajistán and sample n = {{away.n}} for Islas Feroe, with source string from catalog and provider Bzzoiro. Entry animation: baseline draws, then both bars extend; sample chips slide in afterward. Main comparison: clean sheet counts under each recent sample. Emphasis: the higher count receives a lime outline and a short camera push; the lower count remains slate with no negative colour. Transition: a horizontal warm white wipe moves from shield to chart. Exit: bars collapse into a single dot beside the source/sample stamp, then fade."
     },
     {
       "n": 4,
       "kind": "head-to-head",
-      "title": "Head-to-Head Historical Results",
+      "title": "Head-to-head: historical duel",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "h2h.total",
         "h2h.homeWins",
         "h2h.awayWins",
         "h2h.draws"
       ],
-      "prompt": "Vertical 9:16 analytic motion-graphics sequence, roughly 8 seconds. Charcoal #101412, warm white #edf0e6, lime #c5ed74 for home historical wins, slate #8ca6bf for away historical wins, and a neutral warm white for draws. Lower quarter reserved for permanent yellow subtitles. Title Spanish: \"HISTORIAL DE CRUCES\". Subtitle Spanish: \"Total de cruces: {{h2h.total}} · fuente Bzzoiro\". Layout: a grouped count bar showing historical wins, draws and losses across the available head-to-head sample. Use {{h2h.homeWins}} for \"Kazajistán · victorias en cruces\", {{h2h.awayWins}} for \"Islas Feroe · victorias en cruces\" and {{h2h.draws}} for \"Empates en cruces\". Y-axis Spanish \"Partidos\"; shared zero baseline and one count scale. Include total sample annotation {{h2h.total}} attached to the whole chart. Entry animation: total sample bracket draws first, then segments fill in order home wins, draws, away wins. Main comparison: the three outcome counts sit on the same common scale, with Spanish team labels clearly distinguishing historical results. Emphasis: the draw segment receives a brief neutral glow because it is the largest historical outcome in the sample. Transition: vertical wipe from total sample to category breakdown. Camera movement: locked-off frame with a subtle scale settle. Exit: source line \"Bzzoiro · muestra histórica\" stays visible. Historical data is not a forecast; no predictive claim. Spanish labels: \"Cruces previos\", \"Victorias\", \"Empates\", \"Muestra\". Keep labels legible and source attached."
+      "prompt": "Vertical 9:16 duel sequence, 6-10 seconds, lower quarter reserved for permanent yellow subtitles over charcoal #101412. Editorial presentation: both teams as a visual duel. Kazajistán and Islas Feroe appear as Spanish team labels in large warm white #edf0e6 and slate #8ca6bf on opposite sides of a central lime #c5ed74 vertical line. Abstract crests or jersey blocks move toward each other in a tug-of-war rhythm, then hold at centre. Spanish heading 'HISTORIAL' and 'CRUCES PREVIOS' flash on beat. No axes, no counts, no invented goals or predictions. Main emphasis is the central tension line; camera pushes in slowly along the line, then pulls back. Entry: two team blocks slide from left and right. Transition: the central line expands into the statistical chart baseline. Exit: blocks retreat and fade to charcoal. Statistical presentation: a single stacked horizontal bar representing historical head-to-head outcomes, with segments for 'Kazajistán · victorias en cruces' {{h2h.homeWins}}, 'Empates en cruces' {{h2h.draws}} and 'Islas Feroe · victorias en cruces' {{h2h.awayWins}}. Shared scale in unit partidos, zero baseline, total sample annotation 'Cruces previos' {{h2h.total}} with source string from catalog and provider Bzzoiro. Colour segments: Kazajistán wins lime #c5ed74, draws warm white #edf0e6, Islas Feroe wins slate #8ca6bf. Direct value labels resolved by renderer; Spanish legend labels remain fixed. Entry animation: baseline draws, then segments grow left to right in historical order. Main comparison: win/draw counts within the available historical sample. Emphasis: the draw segment gets a brief warm white pulse because it is the shared middle; no segment is labelled as a forecast. Historical data is not a forecast, and a Spanish note 'Historial, no pronóstico' stays beside the source/sample stamp. Transition: stacked bar splits into two team blocks for the duel exit. Exit: total sample label and source stamp remain as the composition fades."
     },
     {
       "n": 5,
       "kind": "synthesis",
-      "title": "Synthesis: Goals Balance Tension",
-      "factIds": [
-        "home.n",
-        "away.n",
-        "home.gf",
-        "home.ga",
-        "away.gf",
-        "away.ga"
+      "title": "Synthesis: no wins against no losses",
+      "presentations": [
+        "editorial",
+        "statistical"
       ],
-      "prompt": "Vertical 9:16 analytic motion-graphics sequence, around 10 seconds. Charcoal #101412 background, warm white #edf0e6, lime #c5ed74 for attacking output, slate #8ca6bf for defensive concession. Lower quarter reserved for permanent yellow subtitles. Title Spanish: \"LECTURA ESTADÍSTICA · GOLES\". Subtitle Spanish: \"Muestra reciente: {{home.n}} y {{away.n}} partidos · fuente Bzzoiro\". No published model estimates are supplied, so the piece uses only historical sample counts. Layout: a two-row paired bar chart. Top row \"Kazajistán\" shows {{home.gf}} \"a favor\" versus {{home.ga}} \"recibidos\"; bottom row \"Islas Feroe\" shows {{away.gf}} \"a favor\" versus {{away.ga}} \"recibidos\". Shared zero baseline and one common scale in \"goles\". Y-axis Spanish \"Goles\". Entry animation: baseline draws, then bars grow in staggered pairs. Main comparison: the grounded tension is that the home sample combines fewer goals for with more goals against, while the away sample shows the opposite balance. Emphasis: the larger \"recibidos\" bar in the home row and the larger \"a favor\" bar in the away row each pulse briefly with a neutral outline. Transition: horizontal slide linking the two rows. Camera movement: slow push from wide chart to medium close on the paired bars. Exit: bars settle, source and sample labels hold, then fade into subtitle-safe lower quarter. Spanish labels distinguish historical sample data from any model estimate; since none is published, label both rows \"Histórico · muestra\". No predictive claim, no forecast. Ensure source and sample remain attached to all counts."
+      "factIds": [
+        "home.wins",
+        "away.losses",
+        "home.draws",
+        "away.draws",
+        "home.n",
+        "away.n"
+      ],
+      "prompt": "Vertical 9:16 narrative synthesis, 6-10 seconds, lower quarter reserved for permanent yellow subtitles over charcoal #101412. Editorial presentation: two team reveals. Start with Spanish heading 'SEÑALES RECIENTES' in warm white #edf0e6. Kazajistán appears first as a lime #c5ed74 outline block with Spanish label; Islas Feroe appears second as a slate #8ca6bf outline block. They slide in from opposite edges, pause, then rotate slightly toward each other. Narrative emphasis lands on the spoken tension: one side has no victories in its sample, the other has no defeats in its sample. No axes, no counts, no invented match events. Camera does a slow parallax push between the two blocks, then settles centre. Entry: team blocks scale up with a soft blur. Transition: both blocks collapse into the statistical bars. Exit: blocks merge into a single source/sample stamp and fade. Statistical presentation: paired horizontal count bars showing the grounded tension between 'Kazajistán · victorias' {{home.wins}} and 'Islas Feroe · derrotas' {{away.losses}}, with context bars for 'Kazajistán · empates' {{home.draws}} and 'Islas Feroe · empates' {{away.draws}}. Same unit partidos, shared zero baseline, common scale across all bars. Colours: Kazajistán bars lime #c5ed74, Islas Feroe bars slate #8ca6bf, context bars at lower opacity but still legible. Direct value labels resolved by renderer; Spanish labels fixed. Sample/source annotation under each team: sample n = {{home.n}} for Kazajistán and sample n = {{away.n}} for Islas Feroe, with source string from catalog and provider Bzzoiro. Entry animation: baseline draws, then the two tension bars grow first, context bars second. Main comparison: absence of wins against absence of losses in the recent samples. Emphasis: the two tension bars receive a short lime edge trace and a camera push; no predictive language appears. Transition: warm white wipe moves from narrative blocks to bars and back. Exit: bars retract, narrative blocks dissolve, source/sample stamp holds for the final beat."
     }
   ]
 }

@@ -20,7 +20,7 @@
     {
       "id": "home.wins",
       "label": "Croacia · victorias",
-      "value": 3,
+      "value": 2,
       "unit": "partidos",
       "source": "fixtures:croatia-vs-spain-2026-10-06:lastMatches.home.wins",
       "provider": "Bzzoiro",
@@ -38,7 +38,7 @@
     {
       "id": "home.losses",
       "label": "Croacia · derrotas",
-      "value": 2,
+      "value": 3,
       "unit": "partidos",
       "source": "fixtures:croatia-vs-spain-2026-10-06:lastMatches.home.losses",
       "provider": "Bzzoiro",
@@ -47,7 +47,7 @@
     {
       "id": "home.gf",
       "label": "Croacia · goles a favor",
-      "value": 7,
+      "value": 6,
       "unit": "goles",
       "source": "fixtures:croatia-vs-spain-2026-10-06:lastMatches.home.gf",
       "provider": "Bzzoiro",
@@ -56,7 +56,7 @@
     {
       "id": "home.ga",
       "label": "Croacia · goles recibidos",
-      "value": 8,
+      "value": 15,
       "unit": "goles",
       "source": "fixtures:croatia-vs-spain-2026-10-06:lastMatches.home.ga",
       "provider": "Bzzoiro",
@@ -65,7 +65,7 @@
     {
       "id": "home.clean",
       "label": "Croacia · arcos en cero",
-      "value": 1,
+      "value": 0,
       "unit": "partidos",
       "source": "fixtures:croatia-vs-spain-2026-10-06:lastMatches.home.clean",
       "provider": "Bzzoiro",
@@ -110,7 +110,7 @@
     {
       "id": "away.gf",
       "label": "España · goles a favor",
-      "value": 11,
+      "value": 12,
       "unit": "goles",
       "source": "fixtures:croatia-vs-spain-2026-10-06:lastMatches.away.gf",
       "provider": "Bzzoiro",
@@ -137,11 +137,11 @@
     {
       "id": "away.player0.goals",
       "label": "Lamine Yamal · goles",
-      "value": 3,
+      "value": 4,
       "unit": "goles",
       "source": "scorers:nations:Lamine Yamal",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
     },
     {
       "id": "away.player1.goals",
@@ -150,7 +150,7 @@
       "unit": "goles",
       "source": "scorers:nations:Alex Baena",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
     },
     {
       "id": "h2h.total",
@@ -197,34 +197,98 @@
     "head-to-head",
     "synthesis"
   ],
-  "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+  "instructionVersion": "7b5f827b7f1a0f21fa315116e67e484636ee37e1ed3158393ca50f287d94ddea",
   "author": {
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "mimo-v2.6-flash"
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash"
   },
-  "generatedAt": "2026-10-05T17:45:25.340Z",
+  "generatedAt": "2026-10-06T08:18:39.244Z",
   "prompts": [
     {
       "n": 1,
       "kind": "form",
-      "title": "Récord reciente · grouped form bars",
+      "title": "Form Pulse: Croacia vs España",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
+        "home.n",
         "home.wins",
         "home.draws",
         "home.losses",
-        "home.n",
+        "away.n",
         "away.wins",
         "away.draws",
-        "away.losses",
-        "away.n"
+        "away.losses"
       ],
-      "prompt": "Vertical 9:16 analytic motion sequence, about 8 seconds, for Croacia vs España in the Nations competition. Layout: full-bleed GoatLab charcoal #101412, with one focal point — a grouped bar chart filling the upper two-thirds. The lower quarter is permanently reserved for yellow subtitles (flat yellow band, charcoal text) and must never be overlapped by chart, axis or captions. Typography: bold condensed title \"Récord reciente\" in warm white #edf0e6, small uppercase eyebrow \"CROACIA VS ESPAÑA · NATIONS\", grotesque axis and value type. All on-screen Spanish labels. Colour: Croacia bars lime #c5ed74, España bars slate #8ca6bf, warm white grid at low opacity. Chart type: three category groups on one shared zero baseline — \"Victorias\", \"Empates\", \"Derrotas\" — each group holding a Croacia bar and an España bar. Common scale: linear, from zero up to just above the largest of {{home.wins}}, {{away.wins}}, {{home.draws}}, {{away.draws}}, {{home.losses}}, {{away.losses}}; axis title \"Partidos\", values {{home.wins}}, {{home.draws}}, {{home.losses}}, {{away.wins}}, {{away.draws}}, {{away.losses}} printed above their bars with the unit. Sample treatment: a caption line in Spanish reads \"Muestra: Croacia {{home.n}} partidos · España {{away.n}} partidos — tamaños de muestra distintos si difieren\", followed by a source caption resolving from the fact source fields (provider Bzzoiro). Temporal stages: 0 to 1.4s title clip reveal; 1.4 to 2.6s baseline draws left to right and ticks fade up; 2.6 to 5.8s bars grow from zero with staggered ease-out, paired bars offset slightly; 5.8 to 7.2s emphasis — a lime bracket sweeps across {{home.wins}} victorias against {{away.wins}}, while the {{home.draws}} zero gets a thin underline flash; 7.2 to 8s hold. Entry animation: charcoal wipe from the top edge. Camera: restrained push-in and return, no parallax. transition: slide-up into the following card."
+      "prompt": "Title: 'Form Pulse: Croacia vs España'. 9:16 vertical composition on GoatLab charcoal #101412, warm white #edf0e6 type, lime #c5ed74 emphasis and slate #8ca6bf secondary. Reserve the lower quarter for permanent yellow subtitles. Editorial variant first: kinetic typography and rhythmic emphasis, no statistical axes, no sample claims and no invented match events. Spanish team labels Croacia and España sit as opposing vertical columns. Spanish category words 'Victorias', 'Empates', 'Derrotas' enter as bold staccato blocks, each word snapped by a beat, with lime underline sweeps and slate ghost echoes. Rhythmic emphasis increases as the narration names results; empty spaces pulse when a word is absent. Camera drifts slowly upward and then tilts between columns. Transition: hard whip-pan from Croacia to España, then soft dissolve on a held split frame. Exit on a clean two-column lock-up, subtitles still protected. Statistical variant: grouped count bars for recent form, one cluster per team, shared zero baseline, x-axis Spanish labels 'Victorias', 'Empates', 'Derrotas', y-axis unit 'partidos'. Croacia bars use {{home.wins}}, {{home.draws}}, {{home.losses}}; España bars use {{away.wins}}, {{away.draws}}, {{away.losses}}. Sample annotation uses {{home.n}} and {{away.n}}, with a source/sample note from Bzzoiro kept small but legible. If resolved sample sizes differ, place an honest 'muestras desiguales' flag above the smaller cluster and never normalise into rates. Entry animation: baseline draws first, then bars grow in staggered order, team labels fading in before counts. Main comparison: paired clusters separated by a central gutter, common scale visible in the y-axis. Emphasis: lime glow on the leading bar per category, slate for the trailing bar. Camera: subtle lateral drift, no zoom beyond frame. Transition: slide to the next category cluster or crossfade to the editorial close. Exit: bars settle, source annotation remains, lower quarter free for Spanish subtitles. Duration adapts to spoken words across approximately 6–10 seconds."
     },
     {
       "n": 2,
       "kind": "goals",
-      "title": "Goles a favor y en contra · paired bars",
+      "title": "Goal Flow: Croacia vs España",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
+        "home.n",
+        "away.n",
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga"
+      ],
+      "prompt": "Title: 'Goal Flow: Croacia vs España'. 9:16 vertical frame, charcoal #101412 field, warm white #edf0e6 text, lime #c5ed74 attack accents, slate #8ca6bf defensive accents. Lower quarter stays clear for permanent yellow subtitles. Editorial variant first: an illustrative football pitch and ball path, no axes, no sample claims, no invented match events. Spanish labels 'Croacia' and 'España' appear as pitch-side team names, while generic heading 'Goles' is written in Spanish. A lime ball travels from midfield toward goal, leaving a warm-white trail; slate defensive lines ripple when the narration mentions goals against. The pitch tilts in perspective, then flattens for a split-team reveal. Motion is continuous, with ball path accelerating and decelerating with spoken rhythm. Transition: ball exits frame and camera whip-pans to the opposite half. Exit on a held overhead pitch with both team names. Statistical variant: paired bars for both teams, shared scale, x-axis unit 'goles', y-axis Spanish labels 'Goles a favor' and 'Goles en contra'. Croacia uses {{home.gf}} and {{home.ga}}; España uses {{away.gf}} and {{away.ga}}. Add sample annotation with {{home.n}} and {{away.n}}, and a source/sample note from Bzzoiro under the chart. Bars share the same zero baseline and identical scale; labels are unambiguous and football context is given by a small pitch icon, not by invented events. Entry animation: axis and labels fade in, then paired bars rise from baseline. Main comparison: for each team, attack bar sits beside defensive bar, with a central divider. Emphasis: lime pulse on 'Goles a favor', slate pulse on 'Goles en contra'. Camera: gentle push-in on the larger pair, then hold. Transition: vertical wipe between Croacia and España pairs. Exit: chart holds while source annotation and Spanish subtitle area remain stable. Duration adapts to spoken words across approximately 6–10 seconds."
+    },
+    {
+      "n": 3,
+      "kind": "clean-sheets",
+      "title": "Shield Wall: Clean Sheets",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "away.n",
+        "home.clean",
+        "away.clean"
+      ],
+      "prompt": "Title: 'Shield Wall: Clean Sheets'. 9:16 vertical composition, charcoal #101412 background, warm white #edf0e6 type, lime #c5ed74 defensive highlights, slate #8ca6bf shadow tone. Keep the lower quarter free for permanent yellow subtitles. Editorial variant first: defensive energy and a stylised shield, no statistical axes, no sample claims, no invented match events. Spanish labels 'Croacia' and 'España' sit on either side of a central shield outline. The shield pulses with lime edges when narration signals a clean sheet, while slate shockwaves radiate outward. Kinetic Spanish words 'Arcos en cero' assemble from fragments, then lock into the shield. Camera circles the shield in a slow half-orbit, then settles front-on. Transition: shield splits into two team-coloured halves and slides apart. Exit on a firm shield lock-up with both team names. Statistical variant: compare clean sheet counts and sample sizes without converting counts into rates. Use horizontal count bars for Croacia and España, shared zero baseline, x-axis unit 'partidos', y-axis Spanish label 'Arcos en cero'. Croacia uses {{home.clean}}; España uses {{away.clean}}. Sample annotation uses {{home.n}} and {{away.n}}, with a source/sample note from Bzzoiro. Do not divide by matches, do not show rates, and keep counts as counts. Entry animation: baseline draws, bars grow from left to right, team labels fade in above each bar. Main comparison: two stacked horizontal bars, one per team, with a central Spanish heading 'Arcos en cero'. Emphasis: lime fill on the leading count, slate outline on the other. Camera: subtle vertical drift, no dramatic zoom. Transition: slate shutter wipe between Croacia and España bars. Exit: bars hold, source annotation remains, lower quarter clear for Spanish subtitles. Duration adapts to spoken words across approximately 6–10 seconds."
+    },
+    {
+      "n": 4,
+      "kind": "head-to-head",
+      "title": "Duelo Histórico: Croacia vs España",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws"
+      ],
+      "prompt": "Title: 'Duelo Histórico: Croacia vs España'. 9:16 vertical frame, charcoal #101412 background, warm white #edf0e6 text, lime #c5ed74 for Croacia energy, slate #8ca6bf for España discipline. Reserve the lower quarter for permanent yellow subtitles. Editorial variant first: present both teams as a visual duel, no statistical axes, no sample claims, no invented match events. Spanish labels 'Croacia' and 'España' face each other as large kinetic silhouettes. A central vertical seam flashes lime on one side and slate on the other. Spanish heading 'Cruces previos' enters as a bold stamp, while words 'Victorias' and 'Empates' orbit the seam. Motion is tense: quick lateral snaps, momentary freeze, then a mirrored push. Transition: seam cracks open and camera passes through to the statistical side. Exit on a held face-off with both team names. Statistical variant: compare available historical win and draw counts with total sample. Use grouped count bars, shared zero baseline, x-axis unit 'partidos', Spanish labels 'Victorias Croacia', 'Victorias España' and 'Empates'. Bars use {{h2h.homeWins}}, {{h2h.awayWins}} and {{h2h.draws}}. Total sample is {{h2h.total}}, shown as a source/sample annotation from Bzzoiro. Historical data is not a forecast; add Spanish note 'Historial, no predicción' and never imply future outcome. Entry animation: total-sample ring fills first, then bars grow from baseline. Main comparison: three bars side by side with equal scale and a central divider. Emphasis: lime for Croacia wins, slate for España wins, warm white for draws. Camera: slight push-in on the total-sample ring, then pull back to reveal all bars. Transition: vertical shutters wipe between historical bars and editorial face-off. Exit: chart holds, source annotation remains, lower quarter free for Spanish subtitles. Duration adapts to spoken words across approximately 6–10 seconds."
+    },
+    {
+      "n": 5,
+      "kind": "synthesis",
+      "title": "Tensión Estadística: Forma y Goles",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.wins",
+        "home.draws",
+        "home.losses",
+        "away.wins",
+        "away.draws",
+        "away.losses",
         "home.gf",
         "home.ga",
         "away.gf",
@@ -232,47 +296,7 @@
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 analytic motion graphics, about 7 seconds. Layout: charcoal #101412 field; the paired bar chart occupies the upper two-thirds as the single focal point; the lower quarter is permanently yellow subtitles (yellow band, charcoal text) and stays clear of every label. Typography: bold Spanish title \"Goles a favor y en contra\" in warm white #edf0e6, eyebrow \"ÚLTIMOS PARTIDOS · NATIONS\"; all Spanish labels: \"Croacia\", \"España\", \"Goles a favor\", \"Goles recibidos\", axis title \"Goles\", unit \"goles\". Colour: Croacia lime #c5ed74, España slate #8ca6bf, warm white numerals. Chart type: two category groups (\"Goles a favor\", \"Goles recibidos\"), each containing a Croacia bar and an España bar, all on one shared zero baseline and one shared linear scale running from zero to just above the largest of {{home.gf}}, {{away.gf}}, {{home.ga}}, {{away.ga}} — same unit, so the comparison is unambiguous. Football context: a thin centre-circle pitch motif behind the plot, a small goal-frame glyph beside \"Goles recibidos\", a ball glyph landing on the tallest bar. Data labels above the bars carry {{home.gf}}, {{away.gf}}, {{home.ga}}, {{away.ga}} with the unit. Sample and source treatment beneath the baseline in Spanish: \"Muestra: {{home.n}} partidos de Croacia · {{away.n}} partidos de España\", plus a source caption resolved from the fact source fields (provider Bzzoiro), sample size attached. Temporal stages: 0 to 1.2s title clip reveal; 1.2 to 2.2s pitch lines draw and the baseline extends; 2.2 to 5.0s paired bars grow upward with stagger; 5.0 to 6.2s emphasis — an animated warm white bracket measures the gap between {{home.gf}} and {{away.gf}}, while the received-goals pair dims to preserve one focal point; 6.2 to 7s hold. Entry animation: centre mask wipe. Camera: gentle push-in within the 9:16 frame. transition: fade through charcoal to the next card."
-    },
-    {
-      "n": 3,
-      "kind": "clean-sheets",
-      "title": "Arcos en cero · counts with sample",
-      "factIds": [
-        "home.clean",
-        "away.clean",
-        "home.n",
-        "away.n"
-      ],
-      "prompt": "Vertical 9:16 analytic motion sequence, about 6 seconds, on GoatLab charcoal #101412. Focal point: a two-row horizontal bar chart of clean-sheet counts, presented strictly as counts — never converted into rates or shares. The upper area holds the chart; the lower quarter is a permanent yellow subtitle band (yellow ground, charcoal text) that no label may enter. Typography: bold Spanish title \"Arcos en cero\" in warm white #edf0e6, eyebrow \"DEFENSA · ÚLTIMOS PARTIDOS\", row labels \"Croacia\" and \"España\", bar-end values with unit \"partidos\", axis title \"Partidos sin encajar\". All Spanish labels; colour: Croacia lime #c5ed74, España slate #8ca6bf, warm white grid at low opacity. Chart type: horizontal bars from a shared zero baseline on the left, common linear scale from zero to just above the larger of {{home.clean}} and {{away.clean}}. Bar ends read {{home.clean}} and {{away.clean}}. Sample treatment: beside each row a small square marker plus Spanish caption \"Muestra: Croacia {{home.n}} partidos\" and \"Muestra: España {{away.n}} partidos\", so the two counts are read against their own samples and no division is performed. Source treatment: a caption with the word source, resolving from the fact source fields (provider Bzzoiro), sample size attached. Temporal stages: 0 to 1.2s title clip reveal and eyebrow fade; 1.2 to 2.0s baseline draws and sample chips slide in from the right; 2.0 to 4.2s bars extend with ease-out while their integers step up from zero; 4.2 to 5.4s emphasis — the larger count takes a soft glow pulse and a thin bracket marks the difference in counts, sample chips hold still; 5.4 to 6s hold. Entry animation: charcoal wipe. Camera: locked off with a slight horizontal drift. transition: fade to charcoal before the next card."
-    },
-    {
-      "n": 4,
-      "kind": "head-to-head",
-      "title": "Cruces previos · historical counts",
-      "factIds": [
-        "h2h.total",
-        "h2h.homeWins",
-        "h2h.awayWins",
-        "h2h.draws"
-      ],
-      "prompt": "Vertical 9:16 analytic motion sequence, about 7 seconds, on GoatLab charcoal #101412. Layout: one focal point — a stacked horizontal bar of previous meetings, centred in the upper two-thirds; the lower quarter is permanently yellow subtitles (yellow band, charcoal text), untouched by chart or captions. Typography: bold Spanish title \"Cruces previos\" in warm white #edf0e6, eyebrow \"HISTORIAL · NO ES PRONÓSTICO\"; all Spanish labels: \"Croacia\", \"Empates\", \"España\", \"Partidos\", axis title \"Cruces históricos\". Colour: Croacia segment lime #c5ed74, draws segment warm white #edf0e6 at reduced opacity, España segment slate #8ca6bf. Chart type: a single stacked bar on a shared zero baseline and a linear scale running from zero to {{h2h.total}}, split into {{h2h.homeWins}} victorias de Croacia, {{h2h.draws}} empates and {{h2h.awayWins}} victorias de España; below it a slim grouped bar repeats the same three counts on the identical scale for direct reading. Values {{h2h.homeWins}}, {{h2h.draws}}, {{h2h.awayWins}} are printed with the unit \"partidos\" and reconcile visibly to {{h2h.total}}. Sample and source treatment in Spanish: \"Muestra: {{h2h.total}} cruces previos — datos históricos, no un pronóstico\" plus a source caption resolving from the fact source fields (provider Bzzoiro), sample size attached. Temporal stages: 0 to 1.3s title clip reveal; 1.3 to 2.3s baseline draws and the empty bar outline fades in; 2.3 to 5.0s segments fill left to right with staggered ease-out, labels snapping on as each segment closes; 5.0 to 6.2s emphasis — the España segment pulses in slate and a thin warm white bracket spans {{h2h.homeWins}} against {{h2h.awayWins}}; 6.2 to 7s hold. Entry animation: top-down mask wipe. Camera: slight push-in and return within 9:16. transition: horizontal slide into the next card."
-    },
-    {
-      "n": 5,
-      "kind": "synthesis",
-      "title": "Tensión · forma reciente frente a historial",
-      "factIds": [
-        "home.wins",
-        "away.wins",
-        "home.n",
-        "away.n",
-        "h2h.homeWins",
-        "h2h.awayWins",
-        "h2h.draws",
-        "h2h.total"
-      ],
-      "prompt": "Vertical 9:16 analytic motion sequence, about 9 seconds, on GoatLab charcoal #101412. One focal point: a two-panel grouped bar chart that summarises a single grounded statistical tension — recent wins versus historical wins, in the same unit. Layout: panel A \"Últimos partidos\" on top, panel B \"Cruces previos\" beneath, both above the lower quarter, which is permanently reserved for yellow subtitles (yellow band, charcoal text). Typography: bold Spanish title \"Tensión: forma frente a historial\" in warm white #edf0e6, eyebrow \"CROACIA VS ESPAÑA · NATIONS\"; all Spanish labels: \"Croacia\", \"España\", \"Victorias\", \"Empates\", axis title \"Partidos\". Colour: Croacia lime #c5ed74, España slate #8ca6bf, warm white grid at low opacity. Chart type: panel A shows two bars, {{home.wins}} for Croacia and {{away.wins}} for España, on a shared zero baseline; panel B shows {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}} on its own shared zero baseline. Panels use the same unit but their own scales, each scale labelled, and a connector line states the differing samples so the tension is read honestly and no forecast is implied. Sample and source treatment in Spanish: \"Muestra A: Croacia {{home.n}} · España {{away.n}} partidos\" and \"Muestra B: {{h2h.total}} cruces previos\", followed by a source caption resolved from the fact source fields (provider Bzzoiro), sample size attached; only published history appears — no model estimate is shown. Temporal stages: 0 to 1.6s title clip reveal; 1.6 to 3.4s panel A baseline draws and its bars grow with stagger; 3.4 to 5.6s panel B slides up and its three segments fill left to right; 5.6 to 7.6s emphasis — a warm white bracket links {{away.wins}} with {{h2h.awayWins}} while Croacia's pair dims slightly; 7.6 to 9s hold. Entry animation: charcoal wipe from the top. Camera: slow push-in, then locked. transition: fade through charcoal to the closing card."
+      "prompt": "Title: 'Tensión Estadística: Forma y Goles'. 9:16 vertical composition, charcoal #101412 background, warm white #edf0e6 type, lime #c5ed74 for Croacia, slate #8ca6bf for España. Lower quarter remains clear for permanent yellow subtitles. Editorial variant first: team reveals and narrative emphasis, no statistical axes, no sample claims, no invented match events. Spanish labels 'Croacia' and 'España' emerge from darkness as layered typographic towers. A lime thread and a slate thread cross the frame, tightening into a central knot when narration names the tension. Generic Spanish headings 'Forma reciente' and 'Goles' appear, but no invented results. Camera rises through the towers, then drops to a wide split. Transition: threads snap and whip-pan to the statistical dashboard. Exit on a tense two-team lock-up. Statistical variant: select compatible facts to summarise one grounded statistical tension. Use two panels: left panel compares recent result counts, Spanish labels 'Victorias', 'Empates', 'Derrotas', unit 'partidos'; right panel compares goals, Spanish labels 'Goles a favor' and 'Goles en contra', unit 'goles'. Left panel uses {{home.wins}}, {{home.draws}}, {{home.losses}}, {{away.wins}}, {{away.draws}}, {{away.losses}}. Right panel uses {{home.gf}}, {{home.ga}}, {{away.gf}}, {{away.ga}}. Sample annotation uses {{home.n}} and {{away.n}}, with a source/sample note from Bzzoiro. The published flag is false, so no model estimates are shown; all labels are source-attributed history. Spanish labels distinguish history from estimates with 'Historial' and 'Sin estimaciones publicadas'. Entry animation: panel frames draw, then bars grow from shared zero baselines. Main comparison: Croacia vs España within each category, never mixing units. Emphasis: lime for Croacia, slate for España, warm white for shared labels. Camera: slow push to the tension knot between panels. Transition: horizontal wipe between form and goals panels. Exit: both panels hold, source annotation remains, lower quarter free for Spanish subtitles. Duration adapts to spoken words across approximately 6–10 seconds."
     }
   ]
 }

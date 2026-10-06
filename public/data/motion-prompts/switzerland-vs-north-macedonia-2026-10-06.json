@@ -56,7 +56,7 @@
     {
       "id": "home.ga",
       "label": "Suiza · goles recibidos",
-      "value": 1,
+      "value": 2,
       "unit": "goles",
       "source": "fixtures:switzerland-vs-north-macedonia-2026-10-06:lastMatches.home.ga",
       "provider": "Bzzoiro",
@@ -65,7 +65,7 @@
     {
       "id": "home.clean",
       "label": "Suiza · arcos en cero",
-      "value": 4,
+      "value": 3,
       "unit": "partidos",
       "source": "fixtures:switzerland-vs-north-macedonia-2026-10-06:lastMatches.home.clean",
       "provider": "Bzzoiro",
@@ -78,7 +78,7 @@
       "unit": "goles",
       "source": "scorers:nations:Zeki Amdouni",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
     },
     {
       "id": "away.n",
@@ -101,7 +101,7 @@
     {
       "id": "away.draws",
       "label": "Macedonia del Norte · empates",
-      "value": 2,
+      "value": 1,
       "unit": "partidos",
       "source": "fixtures:switzerland-vs-north-macedonia-2026-10-06:lastMatches.away.draws",
       "provider": "Bzzoiro",
@@ -110,7 +110,7 @@
     {
       "id": "away.losses",
       "label": "Macedonia del Norte · derrotas",
-      "value": 3,
+      "value": 4,
       "unit": "partidos",
       "source": "fixtures:switzerland-vs-north-macedonia-2026-10-06:lastMatches.away.losses",
       "provider": "Bzzoiro",
@@ -128,7 +128,7 @@
     {
       "id": "away.ga",
       "label": "Macedonia del Norte · goles recibidos",
-      "value": 9,
+      "value": 11,
       "unit": "goles",
       "source": "fixtures:switzerland-vs-north-macedonia-2026-10-06:lastMatches.away.ga",
       "provider": "Bzzoiro",
@@ -137,7 +137,7 @@
     {
       "id": "away.clean",
       "label": "Macedonia del Norte · arcos en cero",
-      "value": 2,
+      "value": 1,
       "unit": "partidos",
       "source": "fixtures:switzerland-vs-north-macedonia-2026-10-06:lastMatches.away.clean",
       "provider": "Bzzoiro",
@@ -188,33 +188,41 @@
     "head-to-head",
     "synthesis"
   ],
-  "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
+  "instructionVersion": "7b5f827b7f1a0f21fa315116e67e484636ee37e1ed3158393ca50f287d94ddea",
   "author": {
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash"
   },
-  "generatedAt": "2026-10-05T17:28:17.050Z",
+  "generatedAt": "2026-10-06T08:30:42.034Z",
   "prompts": [
     {
       "n": 1,
       "kind": "form",
       "title": "Recent Form: Wins, Draws and Losses",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
+        "home.n",
         "home.wins",
         "home.draws",
         "home.losses",
+        "away.n",
         "away.wins",
         "away.draws",
-        "away.losses",
-        "home.n",
-        "away.n"
+        "away.losses"
       ],
-      "prompt": "Create a 9:16 vertical analytic motion-graphics sequence, 6–10 seconds, for recent form. Layout: charcoal #101412 background with a subtle slate #8ca6bf grid at low opacity. Top third holds title 'Forma reciente' in warm white #edf0e6, with subtitle 'Últimos partidos' in slate. Middle two-thirds: grouped count bars on a shared zero baseline. The count axis is labelled by the renderer using the fact unit; the categorical axis shows two teams, 'Suiza' and 'Macedonia del Norte'. Each team has three bars for 'Victorias', 'Empates' and 'Derrotas'. Use lime #c5ed74 for Suiza bars and slate #8ca6bf for Macedonia bars, with warm white value labels above each bar. Render Suiza victories as {{home.wins}}, draws as {{home.draws}}, losses as {{home.losses}}; Macedonia victories as {{away.wins}}, draws as {{away.draws}}, losses as {{away.losses}}. Add sample chips: 'Muestra Suiza: {{home.n}}' and 'Muestra Macedonia del Norte: {{away.n}}', with units resolved by the renderer. If samples differ, keep the same zero baseline and annotate the difference; do not normalise counts. Entry animation: title fades in, grid draws, bars grow upward in staggered order. Main comparison: Suiza bar group versus Macedonia bar group. Emphasis: pulse the highest bar in each group and draw a thin lime underline under any zero-count bar to show absence. Source annotation above the subtitle safe area: 'Fuente: Bzzoiro · muestra según chips'. Camera: slow vertical push-in. Transition: slate wipe to next scene. Exit: bars collapse to baseline. Reserve lower quarter for permanent yellow subtitles; do not place graphics there. Keep one focal point, legible Spanish labels and professional hierarchy. No predictive claims."
+      "prompt": "9:16 vertical montage, 6–10 seconds adapted to spoken words. Reserve the lower quarter for permanent yellow subtitles; keep all chart and typography above it. Palette: GoatLab charcoal #101412 background, warm white #edf0e6 text, lime #c5ed74 for Suiza, slate #8ca6bf for Macedonia del Norte. Editorial variant: kinetic typography and rhythmic emphasis. Open on charcoal field with Spanish heading 'FORMA RECIENTE'. The team names 'Suiza' and 'Macedonia del Norte' enter as large kinetic type stacks, left and right, snapping on the beat. Rhythmic pulses animate the Spanish words 'victorias', 'empates', 'derrotas' as generic sports vocabulary, without axes, counts, sample claims or invented match events. Composition is a two-column duel of type, with lime and slate accents, a slow orbital camera drift, and a central warm white baseline. Transition to statistical variant via fast lateral wipe that leaves a thin baseline. Editorial exit: type stacks compress to center and fade, subtitles remain. Statistical variant: title 'FORMA RECIENTE' in Spanish. Two grouped count bar clusters, one for Suiza and one for Macedonia del Norte. Bars represent {{home.wins}}, {{home.draws}}, {{home.losses}} for Suiza and {{away.wins}}, {{away.draws}}, {{away.losses}} for Macedonia del Norte. Shared zero baseline; common scale across all bars; unit 'partidos'; Spanish labels 'victorias', 'empates', 'derrotas'. Sample annotation shows Suiza sample {{home.n}} and Macedonia del Norte sample {{away.n}}; source Bzzoiro. If samples are unequal, a slate outline and Spanish note 'muestra desigual' flag the smaller sample, without changing bar heights. Entry animation staggers bars upward from zero, Suiza first, then Macedonia del Norte. Main comparison reads left-to-right. Emphasis: the highest count in each group receives lime glow, others drop to slate. Camera: subtle push-in and slight parallax on labels. Transition out: baseline sweeps upward, bars dissolve into next scene. Exit leaves source/sample line visible above subtitles. No predictive claims. Planner may alternate editorial and statistical blocks."
     },
     {
       "n": 2,
       "kind": "goals",
-      "title": "Goals For and Against: Paired Team Bars",
+      "title": "Goals For and Against: Paired Bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.gf",
         "home.ga",
@@ -223,42 +231,61 @@
         "home.n",
         "away.n"
       ],
-      "prompt": "Create a 9:16 vertical analytic motion-graphics sequence, 6–10 seconds, for goals for and against. Layout: charcoal #101412 background with warm white #edf0e6 typography and a slate #8ca6bf baseline. Top title 'Goles recientes' in warm white, subtitle 'A favor y en contra' in slate. Middle two-thirds: paired vertical bars for both teams on a shared scale. The value axis is labelled by the renderer using the fact unit; the categorical axis shows 'Suiza' and 'Macedonia del Norte'. For each team, one bar is 'Goles a favor' in lime #c5ed74 and the paired bar is 'Goles recibidos' in slate #8ca6bf. Render Suiza goals for as {{home.gf}} and goals against as {{home.ga}}; Macedonia goals for as {{away.gf}} and goals against as {{away.ga}}. Warm white value labels sit above each bar. Add sample chips: 'Muestra Suiza: {{home.n}}' and 'Muestra Macedonia del Norte: {{away.n}}', with units resolved by the renderer. Entry animation: title fades, axis baseline draws, bars grow from zero in paired sequence. Main comparison: the two teams' attacking and defensive counts. Emphasis: outline the largest bar and draw a thin connecting line between each team's for/against pair to show internal contrast. Source annotation above lower quarter: 'Fuente: Bzzoiro · muestra según chips'. Football context: recent sample only, not a forecast. Camera: slow horizontal drift with a gentle push-in. Transition: lime wipe. Exit: bars recede to baseline. Reserve lower quarter for permanent yellow subtitles; keep graphics clear of that zone. Maintain one focal point, legible Spanish labels and professional hierarchy. No predictive claims."
+      "prompt": "9:16 vertical montage, 6–10 seconds adapted to spoken words. Lower quarter reserved for permanent yellow subtitles. Palette: charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Editorial variant: illustrative football pitch and ball path. Begin with an abstract top-down pitch in charcoal and slate, Spanish heading 'GOLES'. A lime ball travels along a smooth curved path, leaving a warm white trail; the path splits into two generic directions labelled 'a favor' and 'recibidos' in Spanish. No axes, counts, sample claims or invented match events; the ball path is purely graphic. Composition centers the pitch, with Suiza and Macedonia del Norte as opposing Spanish team names at each end. Motion is fluid, with light defensive shadow shapes in slate. Emphasis pulses on the ball as it crosses the halfway line. Transition: the trail straightens into a statistical baseline. Editorial exit: pitch lines retract and ball fades into a lime dot. Statistical variant: title 'GOLES' in Spanish. Paired horizontal bars for both teams: Suiza shows {{home.gf}} and {{home.ga}}; Macedonia del Norte shows {{away.gf}} and {{away.ga}}. Shared scale across all bars, zero baseline, unit 'goles', Spanish labels 'goles a favor' and 'goles recibidos'. Sample annotation displays Suiza sample {{home.n}} and Macedonia del Norte sample {{away.n}}; source Bzzoiro. Entry animation: bars grow from center baseline outward, lime for goals for, slate for goals against. Main comparison pairs each team's attacking and defensive output. Emphasis: the larger of each pair gains a warm white outline. Camera: slow vertical pan from pitch to chart. Transition out: bars align into a single horizontal line, then dissolve. Exit keeps source/sample line above subtitles. No predictive claims. Planner may alternate editorial and statistical blocks."
     },
     {
       "n": 3,
       "kind": "clean-sheets",
-      "title": "Clean Sheets: Counts and Sample Sizes",
+      "title": "Clean Sheets and Sample Sizes",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.clean",
         "away.clean",
         "home.n",
         "away.n"
       ],
-      "prompt": "Create a 9:16 vertical analytic motion-graphics sequence, 6–10 seconds, for clean sheets. Layout: charcoal #101412 background with a slate #8ca6bf grid and warm white #edf0e6 type. Top title 'Arcos en cero' in warm white, subtitle 'Conteos y muestra' in slate. Middle two-thirds: two horizontal count bars, one per team, on a shared zero baseline. The count axis is labelled by the renderer using the fact unit; the categorical axis shows 'Suiza' and 'Macedonia del Norte'. Render Suiza clean sheets as {{home.clean}} in lime #c5ed74 and Macedonia clean sheets as {{away.clean}} in slate #8ca6bf. Warm white value labels sit at bar ends. Add sample chips: 'Muestra Suiza: {{home.n}}' and 'Muestra Macedonia del Norte: {{away.n}}', with units resolved by the renderer. Do not convert these counts into rates or derived values. Entry animation: title fades, baseline draws, bars extend from left to right. Main comparison: clean-sheet counts side by side. Emphasis: pulse the larger count and show a small shield icon in lime beside each bar, without implying prediction. Source annotation above lower quarter: 'Fuente: Bzzoiro · muestra según chips'. Camera: slow vertical push-in. Transition: slate wipe. Exit: bars retract to zero. Reserve lower quarter for permanent yellow subtitles; keep all labels and icons above it. Keep one focal point, legible Spanish labels and professional hierarchy. No predictive claims, no rate conversion."
+      "prompt": "9:16 vertical montage, 6–10 seconds adapted to spoken words. Lower quarter reserved for permanent yellow subtitles. Palette: charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Editorial variant: defensive energy and a stylised shield. Open on charcoal with a large geometric shield forming from slate and lime facets, Spanish heading 'ARCOS EN CERO'. Two Spanish team names, Suiza and Macedonia del Norte, appear as labels on opposite sides of the shield. Defensive motion: overlapping slate arcs sweep inward, warm white pulses block them, and lime flares mark successful stops. No axes, counts, sample claims or invented match events. Composition keeps the shield as single focal point, with subtle camera push and rhythmic breathing motion. Transition: shield rotates and its outline becomes a statistical axis baseline. Editorial exit: shield closes, facets collapse to a lime dot. Statistical variant: title 'ARCOS EN CERO' in Spanish. Two clean-sheet count bars, one for Suiza using {{home.clean}}, one for Macedonia del Norte using {{away.clean}}. Shared count scale, zero baseline, unit 'partidos', Spanish label 'arcos en cero'. The chart does not convert counts into rates. Sample annotation shows Suiza sample {{home.n}} and Macedonia del Norte sample {{away.n}}; source Bzzoiro. Entry animation: shield outline first, then bars rise from baseline. Main comparison is count versus count, with sample size shown separately so no rate is implied. Emphasis: higher count gets lime top edge; lower count stays slate. Camera: slight top-down tilt and slow push. Transition out: bars slide apart and shield outline reappears briefly. Exit leaves source/sample line above subtitles. No predictive claims. Planner may alternate editorial and statistical blocks."
     },
     {
       "n": 4,
       "kind": "head-to-head",
-      "title": "Head-to-Head History: Outcome Counts",
+      "title": "Head-to-Head History: Wins and Draws",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "h2h.homeWins",
-        "h2h.draws",
         "h2h.awayWins",
+        "h2h.draws",
         "h2h.total"
       ],
-      "prompt": "Create a 9:16 vertical analytic motion-graphics sequence, 6–10 seconds, for head-to-head history. Layout: charcoal #101412 background with a slate #8ca6bf divider and warm white #edf0e6 typography. Top title 'Cruces previos' in warm white, subtitle 'Historial, no pronóstico' in slate. Middle two-thirds: grouped count bars on a shared zero baseline. The count axis is labelled by the renderer using the fact unit; the categorical axis shows three outcomes: 'Victorias de Suiza', 'Empates' and 'Victorias de Macedonia del Norte'. Render Suiza wins in lime #c5ed74 as {{h2h.homeWins}}, draws in warm white as {{h2h.draws}} and Macedonia wins in slate #8ca6bf as {{h2h.awayWins}}. Add a sample chip: 'Muestra total: {{h2h.total}}', with unit resolved by the renderer. Entry animation: title fades, axis baseline draws, bars grow sequentially from zero. Main comparison: the three historical outcome counts. Emphasis: pulse the largest outcome bar and draw a thin lime underline beneath it. Source annotation above lower quarter: 'Fuente: Bzzoiro · historial'. Historical data is not a forecast and must not be framed as prediction. Camera: slow push-in with a slight downward tilt. Transition: warm white wipe. Exit: bars collapse to baseline and sample chip fades. Reserve lower quarter for permanent yellow subtitles; keep graphics clear of that zone. Maintain one focal point, legible Spanish labels and professional hierarchy. No predictive claims."
+      "prompt": "9:16 vertical montage, 6–10 seconds adapted to spoken words. Lower quarter reserved for permanent yellow subtitles. Palette: charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Editorial variant: both teams as a visual duel. Open on charcoal with Spanish heading 'CRUCES PREVIOS'. Suiza and Macedonia del Norte appear as two large opposing typographic blocks, lime versus slate, facing across a warm white center line. The duel is expressed through alternating pushes, light trails and rhythmic impacts, with generic Spanish labels 'victorias' and 'empates'. No axes, counts, sample claims or invented match events. Composition is symmetrical, single focal point at the center line. Camera orbits slightly around the clash. Transition: center line stretches into a statistical baseline. Editorial exit: typographic blocks pull back, leaving a thin warm white line. Statistical variant: title 'CRUCES PREVIOS' in Spanish. Historical win and draw counts are shown as count bars: Suiza wins {{h2h.homeWins}}, Macedonia del Norte wins {{h2h.awayWins}}, and draws {{h2h.draws}}. Shared count scale, zero baseline, unit 'partidos', Spanish labels 'victorias en cruces' and 'empates en cruces'. Total sample is annotated as {{h2h.total}}; source Bzzoiro. Historical data is not a forecast. Entry animation: total sample line draws first, then bars rise in duel order. Main comparison is historical counts within the available total sample. Emphasis: any non-zero count gets a lime edge, zero counts remain as slate baseline markers. Camera: locked-off chart with slow push. Transition out: bars collapse toward center line. Exit leaves source/sample note above subtitles. No predictive claims. Planner may alternate editorial and statistical blocks."
     },
     {
       "n": 5,
       "kind": "synthesis",
-      "title": "Synthesis: Grounded Statistical Tension",
+      "title": "Synthesis: Recent Results and Goal Balance",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
-        "home.player0.goals",
+        "home.wins",
+        "home.losses",
+        "away.wins",
+        "away.losses",
+        "home.gf",
+        "home.ga",
         "away.gf",
+        "away.ga",
+        "home.n",
         "away.n"
       ],
-      "prompt": "Create a 9:16 vertical analytic motion-graphics sequence, 6–10 seconds, for a grounded statistical synthesis. Layout: charcoal #101412 background with a slate #8ca6bf frame and warm white #edf0e6 typography. Top title 'Síntesis estadística' in warm white, subtitle 'Goles en la muestra reciente' in slate. Middle two-thirds: two horizontal bars on a shared scale; the value axis and unit label are resolved by the renderer. Bar one is 'Zeki Amdouni · goles' in lime #c5ed74, rendered as {{home.player0.goals}}. Bar two is 'Macedonia del Norte · goles a favor' in slate #8ca6bf, rendered as {{away.gf}}. Warm white value labels sit at bar ends. Add a sample chip: 'Muestra del equipo: {{away.n}}', with unit resolved by the renderer. Source-attributed Spanish labels distinguish history from estimates: 'Historial · Tabla de goleadores' for the player bar and 'Historial · Bzzoiro' for the team bar. No published model estimates are supplied, so do not show model output. Entry animation: title fades, shared scale draws, bars extend from left to right in staggered order. Main comparison: one player's goal count versus one team's goal-for count in the same unit. Emphasis: pulse the larger bar and draw a thin warm white bracket linking the two labels to show the tension. Source annotation above lower quarter: 'Fuentes: Tabla de goleadores y Bzzoiro · muestra del equipo {{away.n}}'. Historical data is not a forecast. Camera: slow vertical push-in. Transition: lime wipe. Exit: bars retract to baseline. Reserve lower quarter for permanent yellow subtitles; keep graphics above it. Maintain one focal point, legible Spanish labels and professional hierarchy. No predictive claims."
+      "prompt": "9:16 vertical montage, 6–10 seconds adapted to spoken words. Lower quarter reserved for permanent yellow subtitles. Palette: charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Editorial variant: team reveals and narrative emphasis. Open on charcoal with Spanish heading 'SÍNTESIS'. Suiza reveals first as a lime typographic slab, then Macedonia del Norte as a slate slab; warm white connective lines link generic Spanish words 'resultados' and 'goles'. The montage builds to a single grounded tension: one side's recent results and goal balance contrasted with the other's. No axes, counts, sample claims or invented match events. Composition uses a vertical stack, with camera pulling back to reveal both teams. Emphasis pulses on the word 'contraste'. Transition: connective lines fold into two statistical panels. Editorial exit: slabs slide apart, leaving a warm white divider. Statistical variant: title 'SÍNTESIS' in Spanish. Two aligned mini-charts share the same layout but not a cross-unit scale. Left panel shows result counts: Suiza {{home.wins}} and {{home.losses}}, Macedonia del Norte {{away.wins}} and {{away.losses}}, unit 'partidos', Spanish labels 'victorias' and 'derrotas'. Right panel shows goal counts: Suiza {{home.gf}} and {{home.ga}}, Macedonia del Norte {{away.gf}} and {{away.ga}}, unit 'goles', Spanish labels 'goles a favor' and 'goles recibidos'. Each panel has its own shared zero baseline and common scale. Sample annotation shows Suiza sample {{home.n}} and Macedonia del Norte sample {{away.n}}; source Bzzoiro. No published model estimates are available in the catalog, so no estimate graphics are shown. Entry animation: panels build left then right, bars rise from zero. Main comparison is the historical contrast between results and goal balance. Emphasis: the strongest lime and slate bars in each panel glow briefly. Camera: slow lateral drift across both panels. Transition out: panels merge into a single warm white line. Exit leaves source/sample note above subtitles. No predictive claims. Planner may alternate editorial and statistical blocks."
     }
   ]
 }

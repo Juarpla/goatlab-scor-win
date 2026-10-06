@@ -20,7 +20,7 @@
     {
       "id": "home.wins",
       "label": "Inglaterra · victorias",
-      "value": 2,
+      "value": 3,
       "unit": "partidos",
       "source": "fixtures:england-vs-czechia-2026-10-06:lastMatches.home.wins",
       "provider": "Bzzoiro",
@@ -29,7 +29,7 @@
     {
       "id": "home.draws",
       "label": "Inglaterra · empates",
-      "value": 1,
+      "value": 0,
       "unit": "partidos",
       "source": "fixtures:england-vs-czechia-2026-10-06:lastMatches.home.draws",
       "provider": "Bzzoiro",
@@ -47,7 +47,7 @@
     {
       "id": "home.gf",
       "label": "Inglaterra · goles a favor",
-      "value": 12,
+      "value": 18,
       "unit": "goles",
       "source": "fixtures:england-vs-czechia-2026-10-06:lastMatches.home.gf",
       "provider": "Bzzoiro",
@@ -56,7 +56,7 @@
     {
       "id": "home.ga",
       "label": "Inglaterra · goles recibidos",
-      "value": 10,
+      "value": 9,
       "unit": "goles",
       "source": "fixtures:england-vs-czechia-2026-10-06:lastMatches.home.ga",
       "provider": "Bzzoiro",
@@ -65,7 +65,7 @@
     {
       "id": "home.clean",
       "label": "Inglaterra · arcos en cero",
-      "value": 1,
+      "value": 2,
       "unit": "partidos",
       "source": "fixtures:england-vs-czechia-2026-10-06:lastMatches.home.clean",
       "provider": "Bzzoiro",
@@ -73,21 +73,21 @@
     },
     {
       "id": "home.player0.goals",
-      "label": "Anthony Gordon · goles",
-      "value": 2,
-      "unit": "goles",
-      "source": "scorers:nations:Anthony Gordon",
-      "provider": "Tabla de goleadores",
-      "sampleSize": 5
-    },
-    {
-      "id": "home.player1.goals",
       "label": "Harry Kane · goles",
-      "value": 2,
+      "value": 4,
       "unit": "goles",
       "source": "scorers:nations:Harry Kane",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
+    },
+    {
+      "id": "home.player1.goals",
+      "label": "Anthony Gordon · goles",
+      "value": 3,
+      "unit": "goles",
+      "source": "scorers:nations:Anthony Gordon",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
     },
     {
       "id": "away.n",
@@ -137,7 +137,7 @@
     {
       "id": "away.ga",
       "label": "Chequia · goles recibidos",
-      "value": 10,
+      "value": 11,
       "unit": "goles",
       "source": "fixtures:england-vs-czechia-2026-10-06:lastMatches.away.ga",
       "provider": "Bzzoiro",
@@ -159,7 +159,7 @@
       "unit": "goles",
       "source": "scorers:nations:Adam Karabec",
       "provider": "Tabla de goleadores",
-      "sampleSize": 5
+      "sampleSize": null
     },
     {
       "id": "h2h.total",
@@ -206,33 +206,41 @@
     "head-to-head",
     "synthesis"
   ],
-  "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
+  "instructionVersion": "7b5f827b7f1a0f21fa315116e67e484636ee37e1ed3158393ca50f287d94ddea",
   "author": {
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash"
   },
-  "generatedAt": "2026-10-05T17:46:57.239Z",
+  "generatedAt": "2026-10-06T08:22:27.510Z",
   "prompts": [
     {
       "n": 1,
       "kind": "form",
-      "title": "Recent form",
+      "title": "Recent Form: Wins, Draws, Losses",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
-        "home.n",
         "home.wins",
         "home.draws",
         "home.losses",
-        "away.n",
         "away.wins",
         "away.draws",
-        "away.losses"
+        "away.losses",
+        "home.n",
+        "away.n"
       ],
-      "prompt": "Vertical 9:16 analytic motion-graphics sequence, approximately 7 seconds, guided by spoken words. Layout: top sixth title 'Forma reciente' in warm white #edf0e6, Spanish labels. Below, two team groups: Inglaterra and Chequia. Chart type: grouped count bars, three bars per team: Victorias, Empates, Derrotas. Shared zero baseline and common scale in partidos. Values resolved as {{home.wins}}, {{home.draws}}, {{home.losses}} for Inglaterra and {{away.wins}}, {{away.draws}}, {{away.losses}} for Chequia. Axis label 'partidos'. Sample annotation: 'sample: {{home.n}} partidos · source: Bzzoiro' under Inglaterra; 'sample: {{away.n}} partidos · source: Bzzoiro' under Chequia. If samples differ, show Spanish notice 'Muestras desiguales'. Typography: bold condensed sans for title, regular sans for Spanish labels, tabular figures. Entry: bars grow from baseline with staggered timing, lime #c5ed74 for wins, slate #8ca6bf for draws, warm white for losses, on charcoal #101412. Main comparison: Inglaterra vs Chequia. Emphasis: highest bar scales slightly and receives soft glow. Camera: slow vertical push from lower third to center. Transition: crossfade to next graphic. Exit: bars shrink to baseline, title fades. Lower quarter reserved for permanent yellow subtitles. Keep one focal point: the bar group with the largest count. Labels remain legible. No hardcoded statistics."
+      "prompt": "Create a vertical 9:16 motion-graphics module for a football form comparison. Reserve the lower quarter for permanent yellow subtitles in Spanish, keeping all charts above that safe area. Palette: GoatLab charcoal #101412 background, warm white #edf0e6 type, lime #c5ed74 for active counts, slate #8ca6bf for neutral context. Typography: condensed geometric sans, uppercase Spanish labels, large placeholder numerals. EDITORIAL VARIANT: kinetic typography and rhythmic emphasis. Begin on charcoal. A big Spanish heading FORMA RECIENTE appears in warm white; team names Inglaterra and Chequia slide from opposite edges with a beat-synced scale pulse. Words VICTORIA, EMPATE and DERROTA flash in lime, slate and warm white, but there are no statistical axes, no sample claims and no invented match events. Alternate the focal point between the two team names every half second, using masked text reveals, staggered word blocks and hard cuts. Add light streaks and rhythmic stutter frames on narration accents. Final editorial lockup: both team names face each other with a thin slate rule between them. Transition: whip-pan transition between team blocks; final transition to a clean title card. Exit: text collapses toward center, leaving negative space for subtitles. STATISTICAL VARIANT: grouped count bars. Layout: shared zero baseline across half width, two groups, Inglaterra and Chequia, each with three bars for wins, draws and losses. Use {{home.wins}}, {{home.draws}}, {{home.losses}} for Inglaterra and {{away.wins}}, {{away.draws}}, {{away.losses}} for Chequia. Keep the same unit partidos from fact metadata and a common scale so bar heights compare counts directly. Spanish legend: Victorias, Empates, Derrotas. Annotate source and sample from fact metadata: show Fuente: Bzzoiro and sample sizes {{home.n}} and {{away.n}}; if sample sizes differ, identify unequal samples visibly without converting counts into rates. Entry animation: baseline draws left to right in slate, bars grow from zero in staggered order, lime for wins, slate for draws, warm white for losses. Main comparison: Inglaterra group against Chequia group. Emphasis: on the narration cue, pulse the larger active bar group in lime and dim the other group slightly. Camera: slow vertical push from lower third to center, then settle. Transitions: horizontal wipe transition between editorial and statistical presentations; within statistical, use 0.2 s bar-grow transitions. Exit: freeze chart, fade to charcoal, subtitles remain legible. Adapt total duration to 6–10 seconds of spoken words."
     },
     {
       "n": 2,
       "kind": "goals",
-      "title": "Goals for and against",
+      "title": "Goals For and Against: Paired Bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.gf",
         "home.ga",
@@ -241,47 +249,69 @@
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 analytic sequence, roughly 8 seconds, driven by commentary. Layout: upper half title 'Goles recientes' in warm white, subhead 'A favor y en contra'. Spanish labels. Chart type: paired vertical bars for both teams. Each team has two bars: 'Goles a favor' and 'Goles recibidos'. Shared scale in goles, shared zero baseline. Values: Inglaterra uses {{home.gf}} and {{home.ga}}; Chequia uses {{away.gf}} and {{away.ga}}. Football context: small pitch icon or ball motif in slate #8ca6bf behind bars. Source annotation at bottom of chart: 'source: Bzzoiro · sample: {{home.n}} y {{away.n}} partidos'. Use lime #c5ed74 for goals for, slate #8ca6bf for goals against, charcoal #101412 background. Entry: bars rise from baseline, paired by team, labels fade in. Main comparison: goals for vs goals against per team. Emphasis: larger bar in each pair pulses once; gap between paired bars highlighted with thin warm-white bracket. Camera: slight tilt down and push in on the larger gap. Transition: wipe from left to right revealing next frame. Exit: bars retract, labels fade. Lower quarter reserved for permanent yellow subtitles. Ensure units 'goles' appear on axis and in labels. No hardcoded values."
+      "prompt": "Create a vertical 9:16 motion-graphics module about goals for and against, with a football context. Reserve the lower quarter for permanent yellow Spanish subtitles. Palette: GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Typography: bold condensed sans, uppercase Spanish labels, clear unit labels. EDITORIAL VARIANT: illustrative football pitch and ball path. Build a stylised half-pitch seen from above in slate lines on charcoal, with a lime goal mouth. Team names Inglaterra and Chequia appear as warm white blocks on opposite sides. Animate a single ball path that arcs from one side toward the other, splitting into two directions: one path toward goal, one path away. The ball trail uses lime for attacking motion and slate for defensive recoil. No statistical axes, no sample claims and no invented match events. Emphasise the moment the ball crosses the final third with a flash frame, slight camera shake and a pulsing ring. Keep one focal point: the ball at the centre. Transition: a pitch-line wipe transition between team reveals. Exit: ball exits frame, pitch lines fade, subtitles remain. STATISTICAL VARIANT: paired bars for both teams. Use a shared scale and same unit goles from fact metadata. Layout: two horizontal paired-bar clusters, one for Inglaterra and one for Chequia. For Inglaterra show {{home.gf}} and {{home.ga}}; for Chequia show {{away.gf}} and {{away.ga}}. Spanish labels: Goles a favor and Goles recibidos. Place team names in Spanish above each cluster. Annotate source and sample from fact metadata: Fuente: Bzzoiro and sample sizes {{home.n}} and {{away.n}}. If one sample is smaller, keep the counts as counts and show the sample note without converting to rates. Entry animation: pair of bars grows from zero baseline, lime for goals for, slate for goals against. Main comparison: Inglaterra pair versus Chequia pair. Emphasis: when narration mentions goals, pulse the larger bar in each pair and draw a thin warm white connector to the unit label. Camera: slow lateral track across both clusters, then settle between them. Transitions: vertical wipe transition from editorial to statistical; within statistical, 0.25 s bar-grow transitions. Exit: bars settle, source and sample remain briefly, then fade to charcoal. Adapt duration to 6–10 seconds of spoken words."
     },
     {
       "n": 3,
       "kind": "clean-sheets",
-      "title": "Clean sheets",
+      "title": "Clean Sheets: Counts and Sample Sizes",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "home.clean",
         "away.clean",
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 analytic graphic, about 6 seconds. Layout: centered title 'Arcos en cero' in warm white, Spanish subtitle 'Conteo y muestra'. Chart type: two vertical bars side by side, one for each team. Labels: 'Inglaterra' and 'Chequia'. Values: {{home.clean}} and {{away.clean}}, unit 'partidos'. Shared zero baseline and common scale. Do not convert counts into rates; show raw counts only. Sample annotation directly under each bar: 'sample: {{home.n}} partidos' and 'sample: {{away.n}} partidos', plus 'source: Bzzoiro'. Colours: lime #c5ed74 for Inglaterra, slate #8ca6bf for Chequia, on charcoal #101412. Entry: bars grow upward, sample labels type on. Main comparison: clean sheet counts. Emphasis: larger count bar gets a soft outline; if both are low, a Spanish caption 'Muestra limitada' appears without inventing values. Camera: static with subtle parallax on labels. Transition: fade through charcoal to next sequence. Exit: bars shrink, title fades. Lower quarter reserved for permanent yellow subtitles. Typography: bold title, light Spanish labels. Use a thin warm-white axis line. Background remains charcoal with subtle texture. The bars align to a shared baseline at the lower quarter of the chart area. Keep hierarchy clear: title, bars, sample, source. No rate conversion."
+      "prompt": "Create a vertical 9:16 motion-graphics module comparing clean sheet counts and sample sizes. Reserve the lower quarter for permanent yellow Spanish subtitles. Palette: GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Typography: strong geometric sans, uppercase Spanish labels, large count placeholders. EDITORIAL VARIANT: defensive energy and a stylised shield. Open on charcoal with a subtle slate grid. A stylised shield outline draws itself in warm white at centre, then splits into two half-shields labelled Inglaterra and Chequia in Spanish. Use defensive energy: quick slate blocks slide in like a back line, then a lime pulse radiates from the shield when the narration lands. No statistical axes, no sample claims and no invented match events. Keep one focal point: the shield centre. Add motion trails, micro-shakes and a rhythmic lock-on beat. Transition: shield split transition between team reveals. Exit: shield closes, fades to charcoal, subtitles remain. STATISTICAL VARIANT: compare clean sheet counts without converting counts into rates. Layout: two vertical count columns on a shared zero baseline, Inglaterra and Chequia. Use {{home.clean}} and {{away.clean}} as count bars in lime and slate. Add Spanish labels: Arcos en cero and Partidos de muestra. Show sample sizes {{home.n}} and {{away.n}} beside each column, with source annotation Fuente: Bzzoiro from fact metadata. Keep counts as counts; do not show rates or proportions. Entry animation: zero baseline draws, then bars rise in staggered order. Main comparison: Inglaterra clean sheet count against Chequia clean sheet count, always with the sample size visible. Emphasis: when narration mentions defence, pulse the shield icon beside the active bar and dim the other column. Camera: slow vertical push from baseline to mid-frame, then hold. Transitions: cross-dissolve transition from editorial to statistical; within statistical, 0.2 s bar-rise transitions. Exit: freeze columns, keep source and sample visible for one beat, then fade to charcoal. Adapt duration to 6–10 seconds of spoken words. If clean sheet facts are unavailable, show an honest Spanish Datos no disponibles title sequence with restrained geometric animation, never invented axes, zeros or values."
     },
     {
       "n": 4,
       "kind": "head-to-head",
-      "title": "Head-to-head history",
+      "title": "Head-to-Head: Historical Win and Draw Counts",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
         "h2h.total",
         "h2h.homeWins",
         "h2h.awayWins",
         "h2h.draws"
       ],
-      "prompt": "Vertical 9:16 historical comparison, approximately 8 seconds. Layout: title 'Cruces previos' in warm white, Spanish note 'Dato histórico, no es un pronóstico'. Chart type: single stacked horizontal bar representing total sample {{h2h.total}}, split into segments: Inglaterra victorias {{h2h.homeWins}}, Empates {{h2h.draws}}, Chequia victorias {{h2h.awayWins}}. Unit 'partidos'. Shared scale with zero baseline. Spanish labels inside or beside segments. Colours: lime #c5ed74 for Inglaterra, warm white for Empates, slate #8ca6bf for Chequia, on charcoal #101412. Source annotation: 'source: Bzzoiro · sample: {{h2h.total}} cruces'. Entry: bar draws from left to right, segments appear sequentially with counts. Main comparison: historical win/draw distribution. Emphasis: largest segment glows; total sample label pulses. Camera: slow pan along bar. Transition: slide up to reveal synthesis frame. Exit: stacked bar fades to charcoal. Lower quarter reserved for permanent yellow subtitles. Explicitly state this is historical data, not a forecast, using Spanish text. Use bold condensed numerals for counts, regular sans for Spanish labels. A thin timeline marker shows the sample boundary. The stacked bar occupies the middle half of the frame width, leaving margins for labels. No hardcoded statistics."
+      "prompt": "Create a vertical 9:16 motion-graphics module for a head-to-head comparison. Reserve the lower quarter for permanent yellow Spanish subtitles. Palette: GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Typography: bold condensed sans, uppercase Spanish labels, clear historical context. EDITORIAL VARIANT: present both teams as a visual duel. Start on charcoal with a vertical slate divider. Inglaterra enters from the left in warm white, Chequia from the right in slate, each with a team-colour energy trail. Their names meet at centre, and a lime spark marks the duel point. Use rhythmic push-pull motion, speed lines and a held confrontation frame. No statistical axes, no sample claims and no invented match events. Emphasise the face-off, not a result. Transition: split-screen wipe transition between team reveals. Exit: both names retreat outward, divider fades, subtitles remain. STATISTICAL VARIANT: compare available historical win and draw counts, with total sample. Layout: a single shared zero baseline with three count bars: victorias de Inglaterra, empates, victorias de Chequia. Use {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}}. Add total sample {{h2h.total}} as a prominent source and sample note: Muestra histórica: {{h2h.total}}. Spanish labels: Victorias de Inglaterra, Empates, Victorias de Chequia, Cruces previos. Annotate source from fact metadata: Fuente: Bzzoiro. Historical data is not a forecast; keep the language neutral and avoid predictive claims. Entry animation: baseline draws, bars grow from zero in lime, slate and warm white. Main comparison: historical win and draw counts across the same unit partidos. Emphasis: when narration says historial, pulse the total sample badge and the three bars in sequence. Camera: slow push-in from lower third to centre, then settle. Transitions: horizontal wipe transition from editorial to statistical; within statistical, 0.2 s bar-grow transitions. Exit: bars hold, total sample remains visible, then fade to charcoal. Adapt duration to 6–10 seconds of spoken words."
     },
     {
       "n": 5,
       "kind": "synthesis",
-      "title": "Statistical synthesis",
+      "title": "Statistical Tension: Form, Goals, Clean Sheets and H2H",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
       "factIds": [
+        "home.wins",
+        "home.draws",
+        "home.losses",
+        "away.wins",
+        "away.draws",
+        "away.losses",
         "home.gf",
         "home.ga",
         "away.gf",
         "away.ga",
         "home.clean",
         "away.clean",
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 synthesis sequence, 9–10 seconds. Select compatible historical facts: {{home.gf}}, {{home.ga}}, {{away.gf}}, {{away.ga}}, {{home.clean}}, {{away.clean}}. Layout: split screen top half Inglaterra, bottom half Chequia, separated by thin warm-white rule. Spanish title 'Tensión estadística'. Chart type: paired dot-and-bar mini charts: for each team, a bar for goals for and a bar for goals against on shared scale in goles; below, a count chip for clean sheets with sample annotation. Values: Inglaterra uses {{home.gf}}, {{home.ga}}, {{home.clean}}; Chequia uses {{away.gf}}, {{away.ga}}, {{away.clean}}. Sample: {{home.n}} and {{away.n}} partidos, source: Bzzoiro. Colours: lime #c5ed74 for goals for, slate #8ca6bf for goals against, warm white for clean sheets, charcoal #101412 background. Entry: bars and chips animate in, labels type on in Spanish. Main comparison: attacking output vs defensive vulnerability across both teams. Emphasis: the largest gap between goals for and goals against receives a bracket and Spanish caption 'Contraste'. Published model estimates: none supplied as published=true, so only historical data appears; label all as 'Histórico'. Transition: cross-dissolve from head-to-head. Exit: elements collapse to center, title fades. Lower quarter reserved for permanent yellow subtitles. No predictive claims."
+      "prompt": "Create a vertical 9:16 motion-graphics synthesis module that selects compatible available facts to summarise one grounded statistical tension. Reserve the lower quarter for permanent yellow Spanish subtitles. Palette: GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74, slate #8ca6bf. Typography: editorial display sans with a strong numeric hierarchy. EDITORIAL VARIANT: team reveals and narrative emphasis. Open with abstract charcoal field. Inglaterra and Chequia appear as two opposing formations of warm white and slate blocks. A lime thread connects their recent form, then splits toward goals and clean sheets, but no statistical axes, no sample claims and no invented match events are shown. Keep one focal point: the lime thread as it moves between the two team blocks. Use reveal wipes, slow parallax and a final split lockup with Spanish headings FORMA, GOLES and ARCOS EN CERO. Transition: light-thread transition between team reveals. Exit: thread retracts, teams fade, subtitles remain. STATISTICAL VARIANT: combine only compatible facts to show a tension between recent form and historical head-to-head. Use {{home.wins}}, {{home.draws}}, {{home.losses}} and {{away.wins}}, {{away.draws}}, {{away.losses}} for recent form; {{home.gf}}, {{home.ga}}, {{away.gf}}, {{away.ga}} for goals; {{home.clean}} and {{away.clean}} for clean sheets; and {{h2h.total}}, {{h2h.homeWins}}, {{h2h.awayWins}}, {{h2h.draws}} for history. Keep units grouped: partidos for form, clean sheets and head-to-head; goles for goals. Show sample sizes {{home.n}} and {{away.n}} with source annotations from fact metadata: Fuente: Bzzoiro. No published model estimates are supplied, so do not show estimates; source-attributed Spanish labels must distinguish history from current sample. Spanish labels: Forma reciente, Goles, Arcos en cero, Historial en cruces. Main comparison: current sample form against historical head-to-head counts, without forecasting. Emphasis: when narration names the tension, pulse the lime thread between the form block and the history block. Camera: slow pull-back from form panel to full synthesis dashboard, then settle. Transitions: cross-dissolve transition between editorial and statistical; within statistical, 0.2 s panel transitions. Exit: hold the grounded tension, keep source and sample visible briefly, then fade to charcoal. Adapt duration to 6–10 seconds of spoken words."
     }
   ]
 }
