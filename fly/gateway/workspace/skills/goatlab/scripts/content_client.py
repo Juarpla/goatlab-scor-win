@@ -37,7 +37,8 @@ class ContentClient:
         self.clock = clock
 
     def download(self, url):
-        with urllib.request.urlopen(url, timeout=10) as response:
+        request = urllib.request.Request(url, headers={'User-Agent':'GoatLab-Content/1.0 (+https://goatlab.win)', 'Accept':'application/json'})
+        with urllib.request.urlopen(request, timeout=10) as response:
             raw = response.read(1_000_001)
             if len(raw)>1_000_000: raise ValueError('contenido demasiado grande')
             return json.loads(raw)
