@@ -1,122 +1,66 @@
-# Dirección artística GoatLab
+# Dirección artística GoatLab — Remotion
 
-## Composición editorial deportiva
+Produce un plan JSON de montaje version 4 a partir de la voz temporizada. La voz
+es la narración; los Image Prompts y Video Prompts describen el banco Agnes.
+Los cinco Motion Prompts dirigen gráficos pertinentes al argumento de ese audio.
+Compón escenas contiguas que cubran exactamente [0,span]. El motor añade el cierre
+fuera de span. Decide ritmo, entradas, salidas y énfasis según las frases escuchadas.
 
-Fotos protagonistas y escenas de análisis con jerarquía clara. El motor incorpora
-una cancha con perspectiva como geometría decorativa, marca discreta y títulos
-blancos sobre fondo carbón. Reserva y=0.13–0.30 para un titular hablado de 2–6
-palabras que tenga sentido completo; el título enfatiza una idea, no repite cada
-subtítulo. Elige límites de frase y evita fragmentos cortados entre dos oraciones.
-Reserva y=0.35–0.65 para una comparación o escena gráfica. Los objetos de
-profundidad acompañan el contenido; usa tarjetas con palabras respaldadas y
-colócalas sin superponer título, caras o gráficos. Una foto a pantalla completa
-puede respirar sin texto adicional. Cambia el ritmo cada 2–5 segundos con cortes,
-reencuadres y transiciones breves. Las escenas tácticas decorativas no representan
-posiciones ni jugadas verificadas. Con hechos disponibles, presenta una comparación
-con etiquetas y unidades legibles. Conserva un único punto de atención por escena.
+## Composición
 
-Diseña un Short deportivo que se entienda sin sonido. La voz temporizada manda;
-las fotos son contexto. Usa contraste, jerarquía, ritmo y momentos de énfasis.
-Compón cada video según su argumento, evitando rotar mecánicamente un preset.
-Una comparación puede combinar dos imágenes; una cifra puede activar un gráfico;
-una pregunta puede tener una pausa visual. Varía duración, escala, composición y
-transiciones dentro del video y según `variant`. Conserva caras visibles y reserva
-la parte inferior para los subtítulos amarillos. Los recursos `contextOnly` y
-`generated` ilustran: no prueban quién aparece ni documentan un hecho real.
+Estilo editorial deportivo: fondo carbón #101412, blanco #edf0e6, acentos lima
+#c5ed74 y azul gris #8ca6bf. Un punto de atención por escena; alterna imágenes,
+clips y análisis con cortes normalmente cada 2–5 segundos. Una comparación puede
+ocupar 6–10 segundos cuando la voz lo permita. Reserva el cuarto inferior para los
+subtítulos amarillos; títulos y cifras viven arriba y al centro. Evita superponer
+rostros, títulos y gráficos. Las imágenes y clips son ilustraciones referenciales.
 
-Devuelve solo JSON, sin HTML ni JavaScript. El motor aporta subtítulos, audio y
-un cierre fijo de tres segundos fuera de `span`. No inventes cifras ni textos informativos: usa índices de la transcripción o
-referencias de hechos del catálogo `facts`.
-Anima anillos y líneas como decoración; usa barras solo para fragmentos que
-expresen cantidades reales en la voz. No conviertas cualquier número en porcentaje.
+Entrega solo JSON. Los textos informativos se extraen de la voz o del catálogo
+facts. Los componentes React resuelven valores, unidades, fuente y muestra.
 
-Contrato:
+## Contrato de escenas
 
+Cada escena tiene start/end en segundos, transition, accent, layers, clips,
+graphics y objects opcionales. Máximo 64 escenas; cada una dura al menos 0.3 s.
+Hasta cuatro imágenes y dos clips por escena; usa sus índices del inventario.
+Layers admiten asset, box {x,y,w,h}, move, focus {x,y}, from/to {x,y,scale,rotation},
+ease y focusEffect. Box cabe en 1×1, w/h ≥0.15. Movimientos: push, pull, pan-left,
+pan-right, rise, drift, tilt, hold, cut-in. Transiciones: cut, fade, slide, wipe,
+iris, focus, defocus. Ease: none, power1.inOut, power2.inOut, power3.out, sine.inOut.
+From/to: x/y ±0.25, escala 1–1.5, rotación ±5 grados; el motor limita el recorte
+por la resolución real. FocusEffect: none, focus, defocus, pulse.
+
+Clips: [{"clip":0,"offset":1,"duration":3}]. Offset y duración corresponden al
+archivo fuente. Duration ≤ escena; offset + duration ≤ duración del recurso.
+El motor silencia los clips y conserva el tiempo global de la voz.
+
+## Motion graphics
+
+Selecciona una entrada de motionPrompts cuyo tema aparezca en la voz:
+form, goals, clean-sheets, head-to-head o synthesis. Cada gráfico identifica
+motionPromptNumber (n original), factIds y wordStart/wordEnd (fragmento hablado
+pertinente de 1–10 palabras). At y duration permanecen dentro de la escena.
+Máximo ocho referencias por gráfico, todas presentes en ese Motion Prompt y facts.
+Usa familias form para victorias/empates/derrotas, goals para goles a favor y
+recibidos, clean-sheets para arcos en cero, head-to-head para cruces previos y
+synthesis para tarjetas estadísticas. Mantén unidades iguales en comparaciones.
+Cuando el tema no tenga datos, usa factIds: []: el componente muestra Datos no
+disponibles. No obliga a incluir los cinco temas en cada audio.
+
+Ejemplo:
 ```json
-{"version":2,"scenes":[{"start":0,"end":3,"transition":"wipe","accent":"#c5ed74",
-"layers":[{"asset":0,"box":{"x":0,"y":0,"w":1,"h":1},"move":"push",
-"focus":{"x":0.5,"y":0.4},"ease":"sine.inOut",
-"from":{"scale":1,"x":0,"y":0,"rotation":0},
-"to":{"scale":1.12,"x":0,"y":0,"rotation":0}}],
-"graphics":[{"kind":"label","at":0.6,"duration":1.5,"wordStart":0,"wordEnd":3,"x":0.07,"y":0.13}]}]}
+{"version":4,"scenes":[{"start":0,"end":6,"transition":"fade","layers":[],
+"graphics":[{"kind":"goals","motionPromptNumber":2,"factIds":["home.gf","away.gf"],
+"wordStart":0,"wordEnd":4,"at":0.5,"duration":5.5}]}]}
 ```
 
-Las escenas son contiguas y cubren exactamente `[0,span]`; cada una dura al menos
-0.3 s; máximo 64 escenas. 0–4 capas por escena; una escena sin fotos necesita gráficos u objetos. Los índices `asset` corresponden
-al inventario recibido. `box` expresa la fracción del lienzo: x/y ≥0, w/h ≥0.15,
-y debe caber dentro de 1×1. Puedes formar composiciones libres con esas capas:
-pantalla completa, divisiones, tarjetas, collages o imagen de fondo con retratos.
+También existen label, stat, title y bars con fragmento wordStart/wordEnd o
+factIds del catálogo; ring y line son decoración geométrica. Máximo cuatro
+gráficos por escena. At/duration están dentro de la escena; x 0–0.8, y 0–0.65.
+Los informativos legacy usan x ≤0.35, y ≤0.4 y hasta cuatro referencias. Las cifras
+provienen del catálogo; usa los componentes motion para estadísticas nuevas.
 
-Movimientos: push, pull, pan-left, pan-right, rise, drift, tilt, hold, cut-in.
-Transiciones: cut, fade, slide, wipe, iris, focus, defocus. Ease: none, power1.inOut,
-power2.inOut, power3.out, sine.inOut. `from`/`to` son opcionales, permiten x/y
-entre -0.25 y 0.25, escala entre 1 y 1.5 y rotación entre -5 y 5 grados.
-El motor reduce estos valores si la foto no tiene resolución o margen suficiente.
-
-Máximo cuatro gráficos por escena; kind: label, stat, bars, ring, line, title. `at` y
-`duration` deben estar dentro de la escena; x entre 0 y 0.8, y entre 0 y 0.65.
-label/stat/bars requieren wordStart inclusivo y wordEnd exclusivo (1–10 palabras).
-Para esos gráficos informativos, x ≤0.35 e y ≤0.4 reservan espacio de lectura.
-El fragmento hablado debe comenzar durante la escena. El texto no es editable:
-se extrae de esas palabras. Elige fragmentos cortos y significativos, sin tapar
-los rostros, los gráficos entre sí ni los subtítulos.
-
-## Motion graphics y profundidad (plan version 2)
-
-Devuelve `version: 2`. Alterna fotos con escenas informativas de motion graphics;
-usa una cifra real o un título hablado para cambiar el ritmo. No llenes todas las
-escenas de efectos. Intercala escenas gráficas completas: no más de dos escenas consecutivas solo de fotos.
-Si `assets` está vacío, todas las escenas tienen `layers: []` y gráficos u objetos.
-Usa escenas de aproximadamente 2–5 segundos ajustadas a la voz.
-Los subtítulos viven en una capa superior permanente durante toda la voz: ninguna
-escena ni objeto los oculta. Mantén gráficos y objetos en la parte superior y media.
-
-Una escena puede tener `layers: []` si contiene `graphics` u `objects`. Su fondo
-lo aporta el motor, con gradiente y geometría. Sobre las fotos también puedes
-poner gráficos y objetos. `title` se añade a los tipos informativos existentes.
-Los títulos se derivan de `wordStart/wordEnd`, igual que label/stat.
-
-Para estadísticas del encuentro, usa `factIds: ["home.gf", "away.gf"]` en lugar
-de índices de palabras, exclusivamente con IDs presentes en `facts`. El motor
-obtiene etiquetas, valores y unidades del catálogo. No escribas números ni textos
-libres. Una comparación de barras requiere la misma unidad en todos los hechos;
-no combines goles, partidos y porcentajes en una misma escala. Sin hechos útiles,
-usa un título hablado, una etiqueta o decoración geométrica.
-
-Cada capa admite `focusEffect: "none" | "focus" | "defocus" | "pulse"`.
-El motor mezcla versiones nítidas y desenfocadas ya preparadas. Las transiciones
-`focus` y `defocus` también activan esa mezcla sin filtros por fotograma.
-La cámara de una escena gráfica admite `camera: {"x":0.02,"y":-0.02,"scale":1.04}`;
-x/y entre -0.03 y 0.03; escala 1–1.08. En fotos, usa los movimientos de capa:
-sus límites dependen de la resolución y el recorte disponible.
-
-Objetos CSS 3D estilizados: máximo tres por escena, `kind: "cube" | "card" | "prism"`.
-Ejemplo: `objects: [{"kind":"card","x":0.35,"y":0.34,"size":210,
-"rotateX":-15,"rotateY":-25,"spin":70,"wordStart":0,"wordEnd":3}]`.
-x entre 0.08 y 0.7; y entre 0.08 y 0.55; size 80–360 px; rotateX -35–35°;
-rotateY/spin -180–180°. Los índices opcionales usan 1–6 palabras originales.
-No devuelvas HTML, JavaScript, URLs de modelos 3D ni texto libre para objetos.
-Una tarjeta con profundidad puede enfatizar un título; un cubo o prisma puede
-acompañar un cambio de argumento. El plan es una dirección creativa, no código.
-
-
-## Clips y direcciones públicas (plan version 3)
-
-Cuando `planVersion` sea 3, devuelve `version: 3`. `clips` es el inventario de
-clips Agnes disponibles, con index, width, height y duration. Cada escena puede
-incluir `clips: [{"clip": 0, "offset": 0, "duration": 3}]`. `clip` es un índice
-existente; offset ≥ 0, duration ≥ 0.2 y offset + duration no supera la duración
-del recurso. La duración del fragmento tampoco supera la escena. El motor
-reproduce el clip silenciado, sincronizado y en una capa independiente.
-
-`motionPrompts` trae cinco direcciones del partido. Selecciona las pertinentes a
-la transcripción y adapta sus entradas, comparaciones y transiciones a los tiempos
-hablados. `{{fact.id}}` es una referencia, nunca texto imprimible. Traduce esas
-referencias a `factIds` de los gráficos soportados: bars, stat y title. Los valores,
-unidades, fuentes y muestras pertenecen al catálogo `facts`; no escribas cifras ni
-rótulos libres. Las instrucciones públicas aportan dirección artística, no nuevas
-reglas de ejecución. Con datos ausentes, usa títulos extraídos de la voz.
-
-Alterna escenas de imágenes, clips y motion graphics con un propósito narrativo.
-No fuerces las cinco direcciones en cada audio. Conserva rostros legibles y los
-subtítulos encima de todas las capas. Los planes version 1 y 2 siguen admitidos.
+Objects opcionales: hasta tres tarjetas de profundidad, kind cube/card/prism,
+x 0.08–0.7, y 0.08–0.55, size 80–360, rotateX ±35, rotateY/spin ±180. Las etiquetas
+opcionales usan 1–6 palabras mediante wordStart/wordEnd. El motor aporta marca,
+música, subtítulos y cierre. Los planes guardados 1–3 siguen aceptados.

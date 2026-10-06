@@ -20,13 +20,13 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 - Beat con CTA web (`goatlab.win`) dentro del guion.
 - Descripción con: hook + análisis + `🔗 Más data: https://goatlab.win/partido/<id>` + `#goatlab` + disclaimer fijo:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
-- Guion en texto corrido ≤ 110 palabras (~50s), listo para leer en voz alta: hook + datos entrelazados + cierre + CTA hablada a `goatlab.win`. Fotos con licencia + atribución registrada en `media-pack`.
+- Guion en texto corrido ≤ 110 palabras (~50s), listo para leer en voz alta: hook + datos entrelazados + cierre + CTA hablada a `goatlab.win`. Ilustraciones Agnes con procedencia y aviso referencial registrados en `media-pack`.
 - Título de clic distinto del gancho. Lo estampa `shortTitle`: icono de la fila, `⚽` y la frase fija del skill `redactar-guiones-shorts` (equipos, o hasta dos jugadores de los guiones 3, 4, 7 y 9). Hashtags con equipos y jugadores delante, tope de 15. El lint falla si el JSON no coincide.
 
 ## Fotos
 
-Fotos actuales de los dos equipos masculinos (entrenamiento, entrevista, llegada o bajada del bus, hinchada, rueda de prensa o retrato). Entre 8 y 15 por manifiesto. No es el partido en sí. Fuentes: Wikimedia Commons (dominio público, CC0, CC BY, CC BY-SA), Pexels (Pexels License), Pixabay (Pixabay Content License) y, si faltan, hasta 5 de apoyo generadas con Agnes. Fuera: equipo femenino, acción del encuentro, CC BY-NC, CC BY-ND, "uso justo", Getty/AP/Reuters/Shutterstock/Alamy/Instagram y scraping de Google. Cada foto trae `seen` con el modelo y la fecha; sin eso el manifiesto no vale. Cada manifiesto registra fuente (`commons`, `pexels`, `pixabay` o `agnes`), id, url https, fotógrafo, licencia y atribución. Lo arma el gateway al elegir el partido, a partir de los dos equipos, no de los guiones. Cada audio ordena ese pool al renderizar.
+Banco por partido: hasta diez imágenes y tres clips referenciales generados con Agnes AI, a partir de los prompts publicados. Cada imagen conserva modelo, fecha, prompt y dimensiones; cada clip conserva su tarea y resultado. Preparación conjunta de quince minutos, reutilizable entre chats. Las ilustraciones no documentan jugadas reales. Marca, música y fuentes propias mantienen sus licencias. Las cifras de los gráficos se resuelven del catálogo verificable; datos ausentes se indican sin inventar ceros.
 
 ## Video
 
-`pnpm short -- --match=<webId>`: MP4 1080x1920. La plantilla fija es HyperFrames (HTML + GSAP) dentro de `goatlab-render`: subtítulo por palabra en amarillo con borde negro, cifras que entran animadas, recorrido de cámara de esa secuencia y end card `goatlab.win`. Node 22 lanza el render; Chrome captura y FFmpeg comprime y mezcla la voz. No hay otro motor. Renders en `public/shorts/` (gitignorados, se regeneran).
+`pnpm short -- --match=<webId> --audio=<archivo>`: MP4 H.264/AAC 1080×1920 a 30 fps. React/Remotion interpreta el plan validado de la voz, combinando imágenes, clips mudos y gráficos estadísticos. Conserva subtítulos amarillos con borde negro, música y cierre goatlab.win. Máximo 49.9 segundos y menos de 45 MB; voz hasta 45.9 s, aceleración máxima 1.10 conservando el tono y todas las palabras. La transcripción usa el audio ajustado. Renders en public/shorts/ (gitignorados).

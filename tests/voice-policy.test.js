@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { voicePolicy, VOICE_SECONDS, MAX_FRAMES } from '../src/lib/short-format.js';
+import { adjustVoice } from '../fly/render/voice-policy.mjs';
+const run = promisify(execFile);
+test('strict frame budget preserves a short voice and caps acceleration at ten percent', () => {
+  assert.equal(voicePolicy(45).rate, 1);
+  assert.equal(voicePolicy(VOICE_SECONDS).frames, MAX_FRAMES);
+  assert.ok(voicePolicy(48).rate > 1);
+  assert.equal(voicePolicy(VOICE_SECONDS * 1.1).rate, 1.1);
+  assert.throws(() => voicePolicy(51), error => error.code === 'VOICE_TOO_LONG');
+  for (const invalid of [NaN, Infinity, 0, 4.9]) assert.throws(() => voicePolicy(invalid));
+});
+test('real audio adjustment fits, retains pitch and reuses its persisted policy', async t => {
+  const tmp = await mkdtemp(join(tmpdir(), 'goatlab-voice-')); t.after(() => rm(tmp, { recursive: true, force: true }));
+  const original = join(tmp, 'voice.wav');
+  await run('ffmpeg', ['-y','-loglevel','error','-f','lavfi','-i','sine=frequency=440:duration=48:sample_rate=44100',original]);
+  const result = await adjustVoice({ tmp, voiceFile: original, voiceSeconds: 48 });
+  assert.ok(result.seconds <= VOICE_SECONDS); assert.ok(result.rate <= 1.1); assert.ok(result.frames <= MAX_FRAMES);
+  assert.equal((await adjustVoice({ tmp, voiceFile: original, voiceSeconds: 48 })).changed, false);
+  const raw = join(tmp, 'samples.raw');
+  await run('ffmpeg', ['-y','-loglevel','error','-i',result.file,'-ss','10','-t','1','-f','s16le',raw]);
+  const bytes = await readFile(raw);
+  let crossings = 0;
+  for (let i=2;i<bytes.length;i+=2) if (bytes.readInt16LE(i-2) <= 0 && bytes.readInt16LE(i) > 0) crossings++;
+  assert.ok(Math.abs(crossings - 440) <= 2, `pitch ${crossings} Hz`);
+});

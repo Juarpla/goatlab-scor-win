@@ -87,8 +87,7 @@ export function checkDescription(description, { matchId = null } = {}) {
 }
 
 /**
- * Valida un manifiesto de media-pack: fuente permitida, licencia de esa fuente,
- * entre 0 y 15 imágenes, URLs https y atribución. La visión no es obligatoria.
+ * Agnes bank: zero to ten images, generation provenance and referential credit.
  */
 export function checkMediaManifest(data, { matchId = null } = {}) {
   const errors = [];

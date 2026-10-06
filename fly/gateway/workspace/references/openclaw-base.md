@@ -62,7 +62,7 @@ Cuando falte una capacidad, buscar con `openclaw skills search` o
 `openclaw plugins search`. Revisar versión, contenido, dependencias, permisos,
 coste y compatibilidad; un escaneo no sustituye esa revisión. Recomendar por
 Telegram con enlace y tarea que resolvería. Instalar solo cuando el usuario lo
-solicite y fijar la versión revisada. HyperFrames/GSAP y FFmpeg siguen siendo el
+solicite y fijar la versión revisada. React/Remotion y FFmpeg siguen siendo el
 motor de motion graphics dirigido por OpenClaw.
 
 DeepSeek y MiMo se consumen mediante OpenCode Go con su clave y endpoint.

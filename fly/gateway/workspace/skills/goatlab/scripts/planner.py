@@ -15,6 +15,7 @@ from pathlib import Path
 from common import atomic_json, request_json
 
 MOVES = {"push", "pull", "pan-left", "pan-right", "rise", "drift", "tilt", "hold", "cut-in"}
+MOTION_KINDS = {'form', 'goals', 'clean-sheets', 'head-to-head', 'synthesis'}
 TRANSITIONS = {"cut", "fade", "slide", "wipe", "iris", "focus", "defocus"}
 EASES = {"none", "power1.inOut", "power2.inOut", "power3.out", "sine.inOut"}
 
@@ -27,8 +28,8 @@ def number(value, low, high, label):
 
 def validate(plan, source):
     span, assets, words = source["span"], source["assets"], source["words"]
-    if not isinstance(plan, dict) or plan.get("version") not in (1, 2, 3):
-        raise ValueError("version debe ser 1 o 2")
+    if not isinstance(plan, dict) or plan.get("version") not in (1, 2, 3, 4):
+        raise ValueError("version debe ser 1, 2, 3 o 4")
     facts = {f['id']: f for f in source.get('facts', []) if isinstance(f, dict) and isinstance(f.get('id'), str)}
     scenes = plan.get("scenes")
     if not isinstance(scenes, list) or not 1 <= len(scenes) <= 64:
@@ -92,12 +93,29 @@ def validate(plan, source):
         if not isinstance(graphics, list) or len(graphics) > 4:
             raise ValueError("máximo cuatro gráficos por escena")
         for graphic in graphics:
-            if graphic.get("kind") not in {"label", "stat", "bars", "ring", "line", "title"}:
+            if graphic.get("kind") not in {"label", "stat", "bars", "ring", "line", "title"} | MOTION_KINDS:
                 raise ValueError("gráfico desconocido")
             at = number(graphic.get("at"), start, end, "graphic.at")
             number(graphic.get("duration"), .2, end - at + .03, "graphic.duration")
             number(graphic.get("x", .07), 0, .8, "graphic.x")
             number(graphic.get("y", .13), 0, .65, "graphic.y")
+            if graphic['kind'] in MOTION_KINDS:
+                if plan['version'] != 4: raise ValueError('motion requiere plan version 4')
+                prompt = next((p for p in source.get('motionPrompts', []) if p.get('n') == graphic.get('motionPromptNumber')), None)
+                if not prompt or prompt.get('kind') != graphic['kind']: raise ValueError('Motion Prompt inexistente o incompatible')
+                refs = graphic.get('factIds', [])
+                if not isinstance(refs, list) or len(refs) > 8 or any(not isinstance(r, str) or r not in facts or r not in prompt.get('factIds', []) for r in refs) or len(set(refs)) != len(refs):
+                    raise ValueError('hecho ajeno al Motion Prompt')
+                selected = [facts[r] for r in refs]
+                for fact in selected:
+                    number(fact.get('value'), 0, 1e6, 'motion.value')
+                    if not fact.get('label') or not fact.get('unit') or not fact.get('source'): raise ValueError('hecho sin procedencia')
+                if graphic['kind'] != 'synthesis' and len({f['unit'] for f in selected}) > 1: raise ValueError('unidades incompatibles')
+                lo, hi = graphic.get('wordStart'), graphic.get('wordEnd')
+                if any(isinstance(v, bool) or not isinstance(v, int) for v in (lo, hi)) or not 0 <= lo < hi <= len(words) or hi-lo > 10:
+                    raise ValueError('motion requiere fragmento hablado de 1–10 palabras')
+                if not start-.3 <= words[lo]['start'] <= end: raise ValueError('motion fuera de su fragmento hablado')
+                graphic.pop('text', None); graphic.pop('value', None)
             if graphic["kind"] in {"label", "stat", "bars", "title"}:
                 number(graphic.get("x", .07), 0, .35, "text graphic.x")
                 number(graphic.get("y", .13), 0, .4, "text graphic.y")
@@ -188,7 +206,22 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
         scenes.append({'start':start,'end':end,'transition':['fade','focus','slide','wipe'][i%4],
                        'accent':'#c5ed74','layers':layers,'clips':clip_layers,'graphics':graphics,
                        'objects':[{'kind':['card','cube','prism'][i%3],'x':.7,'y':.53,'size':100,'rotateX':12,'rotateY':-20,'spin':35}] if not layers else []})
-    return {**validate({'version':3 if source.get('clips') else 2,'scenes':scenes},source),'model':'local-montage','fallback':True,
+    if source.get('planVersion') == 4:
+        patterns = {'form': r'racha|forma|victoria|derrota|empate', 'goals': r'goles?|anota|marc[oó]|recib',
+                    'clean-sheets': r'arco|porter[ií]a|valla', 'head-to-head': r'cara a cara|cruces?|entre ellos|enfrentamientos?',
+                    'synthesis': r'clave|balance|estad[ií]stic|resumen'}
+        for scene in scenes:
+            indices = [i for i, w in enumerate(words) if scene['start'] <= w['start'] < scene['end']-.3]
+            if not indices: continue
+            text = ' '.join(words[i]['word'] for i in indices).lower()
+            prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('kind') == kind and re.search(patterns[kind], text)), None)
+            if not prompt: continue
+            refs = [r for r in prompt.get('factIds', []) if not r.endswith('.n') and r in {f['id'] for f in source.get('facts', [])}][:8]
+            scene.update(layers=[], clips=[], objects=[], graphics=[{'kind': prompt['kind'], 'motionPromptNumber': prompt['n'],
+                'factIds': refs, 'wordStart': indices[0], 'wordEnd': min(indices[0]+10, indices[-1]+1),
+                'at': scene['start'], 'duration': scene['end']-scene['start']}])
+    version = 4 if source.get('planVersion') == 4 else 3 if source.get('clips') else 2
+    return {**validate({'version':version,'scenes':scenes},source),'model':'local-montage','fallback':True,
             'fallbackReason':reason,'attempts':attempts or []}
 
 

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentUrl } from '../src/lib/match-content.js';
 import { resolveChain } from '../src/lib/llm.js';
-import { buildPlannedComposition } from '../src/lib/edit-plan.js';
+import { compositionProps } from '../src/lib/edit-plan.js';
 
 const env = { OPENCODE_GO_API_KEY:'a', MISTRAL_API_KEY:'b', WORKERS_AI_API_KEY:'c', CLOUDFLARE_ACCOUNT_ID:'d', SCRIPT_PROVIDER_ORDER:CONTENT_PROVIDER_ORDER };
 test('content priority starts with MiMo and keeps the independent analysis default',()=>{
@@ -23,9 +23,10 @@ test('motion rejects unknown facts and percentages when publication is closed',(
   data.prompts[0].factIds=['invented'];assert.ok(promptErrors(data).some(e=>e.includes('hechos inválida')));
   data.prompts[1].prompt+=' 70%';assert.ok(promptErrors(data).some(e=>e.includes('porcentajes')));
 });
-test('clip composition uses root timed muted media with a bounded source range',()=>{
-  const html=buildPlannedComposition({duration:9,photos:[],clips:[{src:'clip.mp4',width:720,height:1280,duration:6}],words:[{word:'Datos',start:0,end:1}],plan:{scenes:[{start:0,end:6,transition:'fade',layers:[],clips:[{clip:0,offset:1,duration:4}],graphics:[]}]}});
-  assert.match(html,/<video[^>]+muted[^>]+data-volume="0"[^>]+data-start="0"[^>]+data-duration="4"[^>]+data-media-start="1"/);
-  assert.throws(()=>buildPlannedComposition({duration:9,photos:[],clips:[{src:'clip.mp4',duration:6}],words:[{word:'Datos',start:0,end:1}],plan:{scenes:[{start:0,end:6,layers:[],clips:[{clip:0,offset:5,duration:4}]}]}}),/recorte/);
+test('clip adapter preserves verified ranges and accepts legacy plan version 3', () => {
+  const input={frames:270,photos:[],clips:[{src:'clip.mp4',width:720,height:1280,duration:6}],words:[{word:'Datos',start:0,end:1}],plan:{version:3,scenes:[{start:0,end:6,layers:[],clips:[{clip:0,offset:1,duration:4}]}]}};
+  assert.equal(compositionProps(input).plan.scenes[0].clips[0].offset,1);
+  input.plan.scenes[0].clips[0].offset=5;
+  assert.throws(()=>compositionProps(input),/recorte/);
   assert.equal(contentUrl('alpha-beta','scripts',true),'/partido/alpha-beta/scripts.json');
 });

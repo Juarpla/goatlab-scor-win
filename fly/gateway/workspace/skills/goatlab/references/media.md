@@ -39,3 +39,12 @@ reinicios y no se renueva al reintentar: se recuperan recursos existentes. Con e
 plazo agotado, se libera el banco parcial y se indican los fallos en el progreso.
 Los Motion Prompts se aplican dentro de cada montaje y siguen la transcripción;
 no son cinco clips pre-renderizados ni temas obligatorios para todos los audios.
+
+
+## Voz y motion graphics
+
+React y Remotion ejecutan los gráficos según el plan de cada voz. El sistema
+conserva todas las palabras y ajusta la velocidad solo cuando hace falta, hasta
+un 10%, manteniendo el tono. La voz disponible es 45.9 segundos dentro de un MP4
+máximo de 49.9 segundos. Si Render informa VOICE_TOO_LONG, explica que debe grabar
+hasta 45 segundos y sustituir ese audio; reintentar el mismo archivo no lo resuelve.

@@ -46,6 +46,6 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     assert.equal((await send(app, '/render', { ...body, expiresAt: undefined })).status, 400);
     assert.equal((await send(app, '/render', { ...body, chatId: 'telegram:1' })).status,400);
     assert.equal((await send(app, '/render', { ...body, audioFileId: '/workspace/voice.ogg' })).status,400);
-    assert.equal((await send(app, '/render', { ...body, assets:body.assets.map(a=>({...a,source:'pexels'})) })).status,400);
+    assert.equal((await send(app, '/render', { ...body, assets:body.assets.map(a=>({...a,source:'external'})) })).status,400);
   } finally { await app.stop(); }
 });

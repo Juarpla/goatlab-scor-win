@@ -18,12 +18,11 @@ primary_region = 'iad'
   OPENCODE_GO_MODEL = 'deepseek-v4.1-flash'
   OPENCODE_GO_FALLBACK_MODEL = 'mimo-v2.6-flash'
   EDIT_PLAN_TIMEOUT_SECONDS = '90'
-  # Workers de captura de HyperFrames (un Chrome cada uno, ~256 MB).
-  # Ajustar con `hyperframes benchmark` en esta VM.
-  RENDER_WORKERS = '2'
+  # One capture process and one job; bounded memory for media decoding.
+  RENDER_WORKERS = '1'
 
 [[vm]]
   cpu_kind = 'shared'
   cpus = 2
-  # Chrome (HyperFrames) no cabe en 2 GB. La CPU sigue shared: el tiempo es la captura.
+  # Chrome (Remotion) no cabe en 2 GB. La CPU sigue shared: el tiempo es la captura.
   memory_mb = 4096

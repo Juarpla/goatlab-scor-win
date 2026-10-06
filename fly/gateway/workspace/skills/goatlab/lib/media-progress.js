@@ -25,6 +25,6 @@ export function mediaPublisher({ dir, match, facts = [], attemptStartedAt = Date
       ready = true;
     }
     await atomic('.progress.json', { count, target, clips: extra.clips?.length ?? 0, failures: extra.failures ?? [], phase, ready, attemptStartedAt, updatedAt: clock() });
-    return { count, ready, complete: count === target };
+    return { count, ready, complete: count === target && (!extra.contentVersion || (extra.clips?.length ?? 0) === 3) };
   };
 }

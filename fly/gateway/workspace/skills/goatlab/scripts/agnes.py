@@ -74,8 +74,8 @@ class ImagePool:
             return
 
     def generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None, attempt_deadline=None):
-        if slot not in range(15):
-            raise ValueError("máximo quince imágenes por encuentro")
+        if slot not in range(10):
+            raise ValueError("máximo diez imágenes por encuentro")
         if size not in {"1K", "2K"} or ratio not in {"1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"}:
             raise ValueError("resolución o ratio no admitidos")
         out = Path(out)

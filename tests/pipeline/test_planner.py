@@ -126,3 +126,31 @@ class PlannerTests(unittest.TestCase):
             self.assertTrue(any(not s['layers'] and s['objects'] for s in plan['scenes']))
             self.assertEqual(sum(s['end']-s['start'] for s in plan['scenes']),24)
             if n:self.assertTrue(any(s['layers'] for s in plan['scenes']))
+
+
+class MotionPlanTests(unittest.TestCase):
+    def test_version_four_binds_prompt_facts_and_voice(self):
+        source={**SOURCE,'planVersion':4,'motionPrompts':[{'n':2,'kind':'goals','factIds':['home.gf']}],
+                'facts':[{'id':'home.gf','label':'Alpha goles','value':3,'unit':'goles','source':'fixtures:a-b'}]}
+        plan={'version':4,'scenes':[{'start':0,'end':5,'layers':[], 'graphics':[{'kind':'goals','motionPromptNumber':2,
+                'factIds':['home.gf'],'wordStart':0,'wordEnd':2,'at':.5,'duration':4}]}]}
+        validate(copy.deepcopy(plan),source)
+        for changes in [{'factIds':['away.gf']},{'motionPromptNumber':1},{'wordStart':99}]:
+            invalid=copy.deepcopy(plan);invalid['scenes'][0]['graphics'][0].update(changes)
+            with self.assertRaises(ValueError): validate(invalid,source)
+        missing=copy.deepcopy(plan);missing['scenes'][0]['graphics'][0]['factIds']=[]
+        validate(missing,{**source,'facts':[],'motionPrompts':[{'n':2,'kind':'goals','factIds':[]}]})
+    def test_local_fallback_uses_relevant_public_direction(self):
+        source={**SOURCE,'planVersion':4,'words':[{'word':'Goles','start':.5,'end':1}],
+                'motionPrompts':[{'n':2,'kind':'goals','factIds':[]}], 'assets':[]}
+        plan=local_plan(source)
+        self.assertEqual(plan['version'],4)
+        self.assertEqual(plan['scenes'][0]['graphics'][0]['kind'],'goals')
+
+    def test_local_goals_excludes_sample_size_from_comparison(self):
+        source={**SOURCE,'planVersion':4,'words':[{'word':'Goles','start':.5,'end':1}],
+                'facts':[{'id':'home.gf','label':'Goles','value':8,'unit':'goles','source':'fixtures'}, {'id':'home.n','label':'Muestra','value':5,'unit':'partidos','source':'fixtures'}],
+                'motionPrompts':[{'n':2,'kind':'goals','factIds':['home.gf','home.n']}], 'assets':[]}
+        plan=local_plan(source)
+        self.assertEqual(plan['scenes'][0]['graphics'][0]['factIds'],['home.gf'])
+        validate(plan,source)

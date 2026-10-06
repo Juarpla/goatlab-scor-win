@@ -1,15 +1,15 @@
-// Render local: media-pack + voz -> MP4 1080x1920 vía HyperFrames.
+// Render local: media-pack + voz -> MP4 1080x1920 vía Remotion.
 // Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg [--variant=N] [--out=salida.mp4]
 // Mismo camino que el worker: tiempos por palabra (Mistral, whisper.cpp),
 // fotos reducidas, plantilla fija y voz mezclada. Requiere Node 22, ffmpeg,
-// ffprobe y `npm install` en fly/render (hyperframes + gsap).
+// ffprobe y `npm install` en fly/render (Remotion + React).
 import { execFile } from 'node:child_process';
-import { mkdirSync, readFileSync, existsSync, rmSync, cpSync } from 'node:fs';
+import { mkdirSync, readFileSync, existsSync, rmSync, cpSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { FRAME_W, FRAME_H } from '../src/lib/hyperframe.js';
+import { FRAME_W, FRAME_H, FPS } from '../src/lib/short-format.js';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../fly/render/short-job.mjs';
 
 const run = promisify(execFile);
@@ -50,7 +50,7 @@ const load = (p) => {
 };
 const media = load(join(ROOT, 'public/data/media-pack', `${match}.json`));
 const assets = Array.isArray(media.assets) ? media.assets : [];
-if (assets.filter(asset => asset?.url).length < 2) fail('pool de fotos insuficiente');
+if (assets.some(asset => asset.source !== 'agnes')) fail('Solo se admiten recursos Agnes');
 
 const out = args.out ?? join(ROOT, 'public/shorts', `${match}-v${variant}.mp4`);
 mkdirSync(dirname(out), { recursive: true });
@@ -65,11 +65,11 @@ const started = Date.now();
 const lap = (label) => console.log(`render: ${label} ${((Date.now() - started) / 1000).toFixed(1)}s`);
 try {
   const voiceSeconds = await mediaDuration(voiceFile);
-  const { total, provider, errors } = await prepareShort({
+  const { total, provider, errors, voiceFile: adjustedVoiceFile } = await prepareShort({
     tmp,
     voiceFile,
     voiceSeconds,
-    assets,
+    assets, clips: media.clips ?? [], facts: media.facts ?? [], motionPrompts: media.motionPrompts ?? [],
     variant,
     home: media.home ?? '',
     away: media.away ?? '',
@@ -79,19 +79,21 @@ try {
   lap(`preparado (tiempos ${provider}${errors.length ? `; ${errors.join(' | ')}` : ''})`);
   const silent = join(tmp, 'silent.mp4');
   await renderSilent(tmp, silent);
-  lap('hyperframes');
+  lap('remotion');
   const finalOut = join(tmp, 'with-audio.mp4');
-  await muxVoice({ silent, voiceFile, total, out: finalOut });
+  await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut });
   cpSync(finalOut, out);
-  if (args.keep) cpSync(join(tmp, 'index.html'), out.replace(/\.mp4$/, '.html'));
+  if (args.keep) cpSync(join(tmp, 'composition.json'), out.replace(/\.mp4$/, '.json'));
 } catch (e) {
   fail(e.message);
 }
 
 const probe = JSON.parse(
-  (await run('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_streams', out])).stdout,
+  (await run('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_streams', '-show_format', out])).stdout,
 );
 const v = probe.streams.find((s) => s.codec_type === 'video');
 if (!v || v.width !== FRAME_W || v.height !== FRAME_H) fail(`video inesperado: ${v?.width}x${v?.height}`);
+const [num, den] = v.r_frame_rate.split('/').map(Number);
+if (v.codec_name !== 'h264' || Math.abs(num / den - FPS) > .01 || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac') || Number(probe.format.duration) >= 50 || statSync(out).size >= 45_000_000) fail('MP4 fuera del contrato de formato, duración o tamaño');
 rmSync(tmp, { recursive: true, force: true });
 lap(`listo ${out} (${v.width}x${v.height}, variante ${variant})`);

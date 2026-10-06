@@ -1,47 +1,6 @@
 /** Prompts y forma de una foto generada con Agnes AI. La red vive en el generador. */
-import { esName } from './teams.js';
-import { NEUTRAL_KIT, teamColors } from './team-colors.js';
-
-// Effective defaults, not paid Token Plan quotas. See the operations reference.
+// Local admission remains below these documented provider limits.
 export const AGNES_FREE_LIMITS = Object.freeze({ imageRpm: Object.freeze({ '1K':10, '2K':5, '3K':1, '4K':1 }), videoRpm:1, dailyImages:null, dailyVideoSeconds:null });
-
-function kitPhrase(name) {
-  const label = esName(name) || String(name || 'the team');
-  const colors = teamColors(name);
-  if (colors === NEUTRAL_KIT) return `the national team kit of ${label}`;
-  return `a shirt in ${colors.primary} with trim in ${colors.secondary}, the kit of ${label}, no crest and no readable sponsor`;
-}
-
-function scenes(home, away) {
-  const homeKit = kitPhrase(home);
-  const awayKit = kitPhrase(away);
-  const homeName = esName(home) || home;
-  const awayName = esName(away) || away;
-  return [
-    `Photorealistic editorial illustration of fictional adult men football players from ${homeName} and ${awayName} contesting a ball, wearing ${homeKit} and ${awayKit}, vertical`,
-    `Photo of adult men at a football training session, wearing ${homeKit}, no women, no match, no crest, no readable text, vertical`,
-    `Photo of adult men at a football training session, wearing ${awayKit}, no women, no match, no crest, no readable text, vertical`,
-    `Photo of an adult male footballer in a sit-down interview, wearing ${homeKit}, microphones, no women, no match, no crest, no readable text, vertical`,
-    `Photo of adult male footballers walking off a team bus, wearing ${awayKit}, no women, no match, no crest, no readable text, vertical`,
-    `Photo of adult male supporters in the colours of ${homeName} and ${awayName}, scarves raised, no women, no crest, no readable text, no recognizable faces, vertical`,
-  ];
-}
-
-/** El primer 429 reintenta esa foto. El segundo corta el lote. */
-export function agnesAfter429(failures) {
-  return Number(failures) >= 2 ? 'stop' : 'retry';
-}
-
-/** Una consigna por foto que falta. Primero el jugador con el balón. */
-export function agnesPrompts({ home = '', away = '', count = 0 } = {}) {
-  const bank = scenes(home, away);
-  const n = Math.max(0, Number(count) || 0);
-  return Array.from({ length: n }, (_, i) => {
-    const base = `Editorial illustration, entirely fictional people with original faces, never impersonate actual players, no official logos or sponsors. ${bank[i % bank.length]}`;
-    const lap = Math.floor(i / bank.length);
-    return lap ? `${base}, alternate angle ${lap + 1}` : base;
-  });
-}
 
 export function normalizeAgnesImage({ matchId, index, publicUrl, model, prompt, at = new Date().toISOString() }) {
   const url = String(publicUrl ?? '');

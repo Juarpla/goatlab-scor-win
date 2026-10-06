@@ -91,7 +91,7 @@ class SupervisorTests(unittest.TestCase):
                     self.send_response(200);self.end_headers();self.wfile.write(json.dumps({'jobId':'accepted'}).encode())
             server=ThreadingHTTPServer(('127.0.0.1',0),Worker)
             threading.Thread(target=server.serve_forever,daemon=True).start()
-            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','PEXELS_API_KEY':'','PIXABAY_API_KEY':'','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':''}
+            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':''}
             script=Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts/workflow.py'
             process=subprocess.Popen([sys.executable,str(script),'supervise'],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
             try:

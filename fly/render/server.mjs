@@ -1,5 +1,5 @@
 // Worker goatlab-render: voz + pool de fotos -> MP4 -> sendVideo por Telegram.
-// HyperFrames interpreta el plan por audio. FFmpeg normaliza y mezcla la voz.
+// Remotion interpreta el plan por audio. FFmpeg normaliza y mezcla la voz.
 // Durable: POST /render encola un job; GET /jobs/:id recupera su estado.
 // El gateway manda un POST por audio apenas llega; la cola renderiza de a uno
 // y avisa al chat si un Short falla. Node 22. Sin OpenMontage y sin Rust.
@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writ
 import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { FRAME_W, FRAME_H } from '../../src/lib/hyperframe.js';
+import { FRAME_W, FRAME_H } from '../../src/lib/short-format.js';
 import { ASSETS_PER_MATCH } from '../../src/lib/media.js';
 import { audioFailureText } from '../../src/lib/render-queue.js';
 import { telegramCaption } from '../../src/lib/youtube.js';
@@ -23,8 +23,6 @@ const PORT = Number(process.env.PORT ?? 3000);
 const BOT = process.env.TELEGRAM_BOT_TOKEN;
 const SECRET = process.env.RENDER_SECRET;
 const MAX_MB = 45; // sendVideo permite 50MB: margen de seguridad
-const MIN_VOICE = 5; // segundos mínimos de voz aceptados
-const MAX_VOICE = 120; // segundos máximos de voz aceptados
 
 if (!BOT) throw new Error('falta TELEGRAM_BOT_TOKEN');
 if (!SECRET) throw new Error('falta RENDER_SECRET');
@@ -118,11 +116,9 @@ async function runJob(job) {
     });
     if (stopIfCancelled(job, log)) return;
     const voiceSeconds = await mediaDuration(voiceFile);
-    if (!(voiceSeconds >= MIN_VOICE && voiceSeconds <= MAX_VOICE))
-      throw new Error(`voz de ${voiceSeconds.toFixed(1)}s fuera de rango (${MIN_VOICE}-${MAX_VOICE}s)`);
 
     // 2. La transcripción ordena el pool y es el texto del video.
-    const { total, provider, stages, plan } = await measure('preparation', () => prepareShort({
+    const { total, provider, stages, plan, voiceFile: adjustedVoiceFile, voiceRate, originalVoiceSeconds } = await measure('preparation', () => prepareShort({
       tmp,
       voiceFile,
       voiceSeconds,
@@ -135,6 +131,8 @@ async function runJob(job) {
       facts: job.facts ?? [], mediaMinimum: job.mediaMinimum ?? 2, requestId: job.requestId ?? job.id, onStage,
     }));
     Object.assign(job.stages, stages);
+    job.renderEngine = 'remotion';
+    job.voiceRate = voiceRate; job.originalVoiceSeconds = originalVoiceSeconds;
     job.planModel = plan.model;
     job.planningFallback = Boolean(plan.fallback);
     store.save(job);
@@ -142,9 +140,9 @@ async function runJob(job) {
     const silent = join(tmp, 'silent.mp4');
     const out = join(tmp, 'short.mp4');
     if (stopIfCancelled(job, log)) return;
-    await measure('capture', () => renderSilent(tmp, silent));
+    await measure('capture', () => renderSilent(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
     if (stopIfCancelled(job, log)) return;
-    await measure('mux', () => muxVoice({ silent, voiceFile, total, out }));
+    await measure('mux', () => muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out }));
 
     // 3. Verificación: 1080x1920, duración ≈ plan, peso < 45MB.
     const probe = JSON.parse(
@@ -157,7 +155,7 @@ async function runJob(job) {
     if (Math.abs(numerator / denominator - 30) > .01 || v.codec_name !== 'h264' || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac'))
       throw new Error('se requiere H.264 a 30 fps y audio AAC');
     const dur = await mediaDuration(out);
-    if (Math.abs(dur - total) > 1.5) throw new Error(`duración ${dur}s ≠ ${total}s`);
+    if (dur >= 50 || Math.abs(dur - total) > .1) throw new Error(`duración ${dur}s ≠ ${total}s`);
     const sizeMb = statSync(out).size / 1_000_000;
     if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
 
@@ -188,7 +186,7 @@ async function runJob(job) {
     }
     log(`done (${dur.toFixed(1)}s, ${sizeMb.toFixed(1)}MB, tiempos ${provider}, ${seconds}s de render, msg ${messageId})`);
   } catch (e) {
-    Object.assign(job, { status: job.status === 'delivering' ? 'delivery-unknown' : job.cancelled ? 'cancelled' : 'error', error: String(e.message ?? e).slice(0, 500) });
+    Object.assign(job, { status: job.status === 'delivering' ? 'delivery-unknown' : job.cancelled ? 'cancelled' : 'error', error: String(e.message ?? e).slice(0, 500), errorCode: e.code ?? null });
     store.save(job);
     log(`error: ${job.error}`);
     if (job.cancelled) return;
@@ -237,7 +235,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 3 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 4, renderEngine: 'remotion', maxSeconds: 49.9 });
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
@@ -271,9 +269,9 @@ const server = createServer(async (req, res) => {
       if (!Array.isArray(b.assets) || b.assets.length > ASSETS_PER_MATCH) return json(400, { error: 'fotos insuficientes' });
       const mediaMinimum = b.mediaMinimum ?? 2;
       if (![0, 1, 2, 8].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
-      if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
+      if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
       if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > 3 || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
-      if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 5 || b.motionPrompts.some(p => typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
+      if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 5 || b.motionPrompts.some(p => !Number.isInteger(p?.n) || p.n < 1 || p.n > 5 || !['form','goals','clean-sheets','head-to-head','synthesis'].includes(p.kind) || typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
@@ -282,7 +280,7 @@ const server = createServer(async (req, res) => {
         expiresAt: b.expiresAt, chatId: b.chatId, matchId: b.matchId, requestId: b.requestId, seriesId: b.seriesId,
         variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
-        audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
+        renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
         clips: b.clips ?? [], motionPrompts: b.motionPrompts ?? [], assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
       });
       await store.flush();

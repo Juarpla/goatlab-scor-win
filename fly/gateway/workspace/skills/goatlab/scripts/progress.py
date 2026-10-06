@@ -7,7 +7,7 @@ from pathlib import Path
 from common import request_json
 
 STAGES = {'voiceDownload':'descargando audio','transcription':'transcribiendo audio','photos':'preparando fotos',
-          'clips':'preparando clips','planning':'planificando el montaje','planningFallback':'montaje local con gráficos y animaciones','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video'}
+          'voiceAdjustment':'ajustando la voz','clips':'preparando clips','planning':'planificando el montaje','planningFallback':'montaje local con gráficos y animaciones','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video'}
 
 
 def progress_text(count, phase, jobs, created, now, received=0, target=15, clips=None, failures=()):

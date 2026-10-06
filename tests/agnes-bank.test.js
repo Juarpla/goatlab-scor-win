@@ -14,7 +14,7 @@ test('a cached external bank is discarded without searches or image downloads',a
   await writeFile(join(data,'fixtures.json'),JSON.stringify({matches:[match]}));
   const generated=normalizeAgnesImage({matchId:'a-b',index:0,publicUrl:'https://goatlab-gateway.fly.dev/media-gen/a-b/0.jpg'});
   await writeFile(join(out,'gen/a-b/0.jpg'),'existing generated file');
-  await writeFile(join(out,'a-b.json'),JSON.stringify({matchId:'a-b',assets:[generated,...Array.from({length:14},(_,i)=>({source:'pexels',id:String(i),url:`https://photos.test/${i}.jpg`}))]}));
+  await writeFile(join(out,'a-b.json'),JSON.stringify({matchId:'a-b',assets:[generated,...Array.from({length:14},(_,i)=>({source:'external',id:String(i),url:`https://photos.test/${i}.jpg`}))]}));
   const entry=resolve('fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs');
   await run(process.execPath,['--input-type=module','-e',`globalThis.fetch=()=>{throw Error('external HTTP forbidden')};await import(${JSON.stringify('file://'+entry)});`,'--','--match=a-b'],{
     env:{...process.env,GOATLAB_REPO:root,MEDIA_PACK_DIR:out,AGNES_API_KEY:''},

@@ -18,7 +18,7 @@ Flujo: elegir partido → mostrar los diez guiones originales → recibir audios
 orden y en silencio → entrega automática de MP4. La generación sucede en segundo
 plano. Primero se intenta completar el banco de diez imágenes y hasta tres clips Agnes dentro del tiempo limitado.
 Después se renderizan los audios recibidos, uno a la vez, con el banco disponible y
-motion graphics guiados por los cinco Motion Prompts; si no hay fotos, se usan gráficos y animaciones. No esperes diez audios.
+motion graphics de React/Remotion guiados por los cinco Motion Prompts; si no hay fotos, se usan gráficos y animaciones. No esperes diez audios.
 El webhook registra los audios de una serie activa con los identificadores
 originales de Telegram; no inventes `file_id` ni uses una ruta local como tal.
 El código actualiza un mensaje de progreso; no confirmes cada audio ni inventes

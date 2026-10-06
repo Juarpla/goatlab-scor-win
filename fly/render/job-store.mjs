@@ -65,7 +65,7 @@ export class JobStore {
     }
     rmSync(join(this.dir, job.id), { recursive: true, force: true });
     const kept = {};
-    for (const key of ['id', 'key', 'chatId', 'matchId', 'requestId', 'variant', 'status', 'cancelled', 'createdAt', 'expiresAt', 'messageId', 'stages', 'audioHash']) kept[key] = job[key];
+    for (const key of ['id', 'key', 'chatId', 'matchId', 'requestId', 'variant', 'status', 'cancelled', 'createdAt', 'expiresAt', 'messageId', 'stages', 'audioHash', 'renderEngine', 'voiceRate', 'originalVoiceSeconds', 'planModel', 'planningFallback', 'duration', 'sizeMb', 'seconds']) kept[key] = job[key];
     kept.retainUntil = job.retainUntil ?? this.clock() + 86400_000;
     for (const key of Object.keys(job)) delete job[key];
     Object.assign(job, kept); this.save(job);

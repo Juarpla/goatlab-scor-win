@@ -1,19 +1,20 @@
-// Prepara la carpeta de un Short para HyperFrames: voz normalizada, tiempos
-// por palabra, fotos reducidas y index.html. Lo usan el worker y el render local.
+// Prepare a bounded, immutable Remotion composition shared by local and Fly jobs.
 import { execFile } from 'node:child_process';
 import { copyFileSync, existsSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { ENDCARD_SECONDS, FONT_FILE } from '../../src/lib/hyperframe.js';
-import { buildPlannedComposition } from '../../src/lib/edit-plan.js';
+import { ENDCARD_SECONDS, FONT_FILE, FPS, LEAD_SECONDS } from '../../src/lib/short-format.js';
+import { adjustVoice } from './voice-policy.mjs';
+import { renderRemotion } from './remotion-render.mjs';
+import { compositionProps } from '../../src/lib/edit-plan.js';
 import { warmClips, pinClips } from './clip-cache.mjs';
 import { warmPhotos, pinPhotos } from './photo-cache.mjs';
 import { cuesFromHeard, shiftWords } from '../../src/lib/timing.js';
 import { transcribeWords } from './transcribe.mjs';
 
 const run = promisify(execFile);
-export const LEAD_SECONDS = 0.5; // la voz entra a los 0.5s
+export { LEAD_SECONDS };
 export const PHOTO_MAX_W = 1472;
 export const BED_VOLUME_DB = -18;
 const BED_FADE_IN = 0.5;
@@ -24,17 +25,6 @@ export const SKILL_ROOT = process.env.GOATLAB_SKILL_DIR || join(APP_ROOT, 'fly/g
 function writeJson(path, value) {
   writeFileSync(`${path}.tmp`, JSON.stringify(value));
   renameSync(`${path}.tmp`, path);
-}
-
-export function hyperframesCwd() {
-  return existsSync(join(HERE, 'node_modules/hyperframes')) ? HERE : APP_ROOT;
-}
-
-function gsapSource() {
-  for (const p of [join(HERE, 'node_modules/gsap/dist/gsap.min.js'), join(APP_ROOT, 'node_modules/gsap/dist/gsap.min.js')]) {
-    if (existsSync(p)) return p;
-  }
-  throw new Error('falta gsap.min.js (npm install en fly/render)');
 }
 
 export async function mediaDuration(file) {
@@ -57,7 +47,7 @@ async function voiceTimes({ tmp, voiceFile, voiceSeconds, log }) {
 }
 
 /**
- * Deja `tmp/index.html` listo para `hyperframes render tmp`.
+ * Persist the render input after adjusting voice and validating the plan.
  * Devuelve la duración total y el proveedor que dio los tiempos.
  */
 export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], variant = 0,
@@ -71,7 +61,13 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     await onStage(label);
     try { return await fn(); } finally { stages[label] = Date.now() - at; await onStage(label, stages[label]); }
   };
-  const total = voiceSeconds + LEAD_SECONDS * 2 + ENDCARD_SECONDS;
+  // Empty old transcripts must never pass into planning.
+  const cachedTranscript = join(tmp, 'transcript.json');
+  if (existsSync(cachedTranscript) && !JSON.parse(readFileSync(cachedTranscript)).words?.length) throw new Error('transcripción vacía');
+  const voice = await measure('voiceAdjustment', () => adjustVoice({ tmp, voiceFile, voiceSeconds }));
+  voiceFile = voice.file; voiceSeconds = voice.seconds;
+  if (voice.changed) rmSync(cachedTranscript, { force: true });
+  const total = voice.frames / FPS;
   let timing;
   const transcriptFile = join(tmp, 'transcript.json');
   if (existsSync(transcriptFile)) {
@@ -115,7 +111,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     });
   } finally { unpinClips(); }
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { planVersion: 3, clips: availableClips, motionPrompts, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { planVersion: 4, clips: availableClips, motionPrompts, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
@@ -123,10 +119,9 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   if (plan.fallback) await onStage('planningFallback');
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
-  copyFileSync(gsapSource(), join(tmp, 'gsap.min.js'));
-  writeFileSync(join(tmp, 'index.html'), buildPlannedComposition({ duration: total, photos, clips: videos, words, plan, facts, match: matchLabel }));
+  writeJson(join(tmp, 'composition.json'), compositionProps({ frames: voice.frames, photos, clips: videos, words, plan, facts, motionPrompts, match: matchLabel }));
   writeJson(join(tmp, 'stages.json'), stages);
-  return { total, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages };
+  return { total, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages };
 }
 
 export async function planEdit(source, tmp, log = () => {}) {
@@ -149,22 +144,8 @@ export async function planEdit(source, tmp, log = () => {}) {
   return JSON.parse(readFileSync(output, 'utf8'));
 }
 
-export function hyperframesArgs(tmp, out, { workers } = {}) {
-  const args = [
-    '--no-install', 'hyperframes', 'render', tmp, '-o', out, '--quiet',
-    '--fps', '30', '--quality', 'standard',
-  ];
-  if (workers) args.push('--workers', String(workers));
-  return args;
-}
-
-export async function renderSilent(tmp, out, { workers = process.env.RENDER_WORKERS } = {}) {
-  const args = hyperframesArgs(tmp, out, { workers });
-  try {
-    await run('npx', args, { timeout: 20 * 60 * 1000, cwd: hyperframesCwd(), env: process.env, maxBuffer: 16 * 1024 * 1024 });
-  } catch (e) {
-    throw new Error(`hyperframes: ${(e.stderr || e.stdout || e.message).split('\n').slice(-20).join('\n')}`);
-  }
+export async function renderSilent(tmp, out, { workers = process.env.RENDER_WORKERS || 1, onProgress, cancelSignal, isCancelled } = {}) {
+  return renderRemotion(tmp, out, { workers, onProgress, cancelSignal, isCancelled });
 }
 
 export function bedPath() {

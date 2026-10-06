@@ -5,16 +5,9 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { bedPath, hyperframesArgs, muxVoice, voiceBedGraph } from '../fly/render/short-job.mjs';
+import { bedPath, muxVoice, voiceBedGraph } from '../fly/render/short-job.mjs';
 
 const run = promisify(execFile);
-
-test('el render pide 30 fps y calidad standard', () => {
-  const args = hyperframesArgs('tmp', 'out.mp4', { workers: '2' });
-  assert.equal(args[args.indexOf('--fps') + 1], '30');
-  assert.equal(args[args.indexOf('--quality') + 1], 'standard');
-  assert.equal(args[args.indexOf('--workers') + 1], '2');
-});
 
 test('el filtro baja la cama y no parte la voz', () => {
   const graph = voiceBedGraph(18.5);

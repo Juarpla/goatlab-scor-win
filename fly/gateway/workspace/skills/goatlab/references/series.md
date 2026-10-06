@@ -13,7 +13,7 @@ Si hay varios audios en un turno, procésalos en orden de llegada, uno por llama
 3. Número elegido: `select --chat=<chat> --number=<n>`. Los JSON de Scripts, Image Prompts, Video Prompts y Motion Prompts se consultan
    desde goatlab.win y se guardan con la serie. La generación queda programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,
-   sin esperar. Manda los 10 audios.» Después: «📸 Estoy preparando imágenes y clips con Agnes en
+   sin esperar. Manda los 10 audios. Graba hasta 45 segundos por audio.» Después: «📸 Estoy preparando imágenes y clips con Agnes en
    segundo plano. Ya puedes mandar los audios; te aviso cuando estén o si hay un error.»
    Si `missingCategories` no está vacío, informa cuáles faltan y que el montaje
    utilizará el material disponible.

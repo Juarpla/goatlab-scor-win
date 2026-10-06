@@ -71,3 +71,15 @@ para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
 partido, genera un banco compartido de 10 imágenes y hasta 3 clips Agnes, y monta
 los gráficos según la voz. La preparación dura hasta 15 minutos, con entrega
 parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts`.
+
+
+El montaje usa React y Remotion en Fly.io: la IA entrega un plan validado version
+4 y los componentes dibujan forma reciente, goles, arcos en cero, cara a cara y
+síntesis con hechos del catálogo. Las versiones 1–3 se adaptan. La voz manda los
+tiempos; los clips Agnes se silencian. El render final mide como máximo 49.9 s.
+Recomendación de grabación: hasta 45 s; ajuste automático de velocidad hasta
+1.10 conservando el tono. Si no cabe, se solicita sustituir ese audio.
+
+Instalar el worker con npm ci --prefix fly/render y preparar el bundle con
+node fly/render/remotion-build.mjs. El render local usa el mismo camino:
+node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo>.

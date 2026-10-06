@@ -225,14 +225,14 @@ test('hashtags de búsqueda y descripción con crédito de música', () => {
     away: 'Croacia',
     competition: 'nations',
     players: ['Lamine Yamal', 'Álvaro Morata', 'Luka Modrić', 'Unai Simón'],
-    attribution: 'Foto: Commons (CC BY 4.0)',
+    attribution: 'Ilustración referencial con Agnes AI',
     credit: 'Música: Kevin MacLeod (incompetech.com) — CC BY 4.0',
   });
   assert.ok(copy.startsWith('España recibe a Croacia.'));
   assert.equal((copy.match(/Más data:/g) ?? []).length, 1);
   assert.ok(copy.includes('https://goatlab.win/partido/spain-vs-croatia-2026-09-29'));
   assert.ok(copy.includes(tags));
-  assert.ok(copy.includes('Foto: Commons (CC BY 4.0)'));
+  assert.ok(copy.includes('Ilustración referencial con Agnes AI'));
   assert.ok(copy.endsWith('Música: Kevin MacLeod (incompetech.com) — CC BY 4.0'));
   assert.equal(checkDescription(copy, { matchId: 'spain-vs-croatia-2026-09-29' }).length, 0);
 });
