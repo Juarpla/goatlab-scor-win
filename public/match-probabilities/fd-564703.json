@@ -1,20 +1,20 @@
 {
-  "id": "fd-564699",
-  "home": "Deportivo Alavés",
-  "away": "Club Atlético de Madrid",
+  "id": "fd-564703",
+  "home": "Elche CF",
+  "away": "RC Celta de Vigo",
   "competition": "laliga",
-  "kickoff": "2026-10-10T14:15:00Z",
+  "kickoff": "2026-10-11T12:00:00Z",
   "updatedAt": "2026-10-06T13:54:36.448Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.35,
-      "away": 1.457
+      "home": 1.44,
+      "away": 1.84
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 1.375,
-      "away": 1.414
+      "home": 1.47,
+      "away": 1.6
     },
     "firstGoalSource": "Blend Poisson+xG",
     "sample": {
@@ -22,30 +22,30 @@
       "away": 6
     },
     "standings": {
-      "Deportivo Alavés": {
-        "position": 6,
-        "team": "Deportivo Alavés",
+      "Elche CF": {
+        "position": 18,
+        "team": "Elche CF",
         "played": 7,
-        "won": 3,
+        "won": 1,
         "drawn": 2,
-        "lost": 2,
+        "lost": 4,
         "goalsFor": 11,
-        "goalsAgainst": 6,
-        "goalDifference": 5,
-        "points": 11,
+        "goalsAgainst": 17,
+        "goalDifference": -6,
+        "points": 5,
         "form": null
       },
-      "Club Atlético de Madrid": {
-        "position": 2,
-        "team": "Club Atlético de Madrid",
+      "RC Celta de Vigo": {
+        "position": 14,
+        "team": "RC Celta de Vigo",
         "played": 7,
-        "won": 5,
-        "drawn": 1,
-        "lost": 1,
-        "goalsFor": 16,
-        "goalsAgainst": 7,
-        "goalDifference": 9,
-        "points": 16,
+        "won": 1,
+        "drawn": 4,
+        "lost": 2,
+        "goalsFor": 8,
+        "goalsAgainst": 6,
+        "goalDifference": 2,
+        "points": 7,
         "form": null
       }
     },
@@ -57,8 +57,8 @@
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-10T14:15:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-11T12:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
       "updatedAt": "2026-10-06T13:53:55.539Z",
@@ -68,126 +68,135 @@
       "rows": 192
     },
     "venue": {
-      "city": "Vitoria-Gasteiz",
+      "city": "Elche",
       "tz": "Europe/Madrid"
     }
   },
   "markets": {
     "oneX2": {
-      "home": 0.338,
-      "draw": 0.276,
-      "away": 0.386
+      "home": 0.293,
+      "draw": 0.246,
+      "away": 0.461
     },
     "doubleChance": {
-      "12": 0.724,
-      "1X": 0.614,
-      "X2": 0.662
+      "12": 0.754,
+      "1X": 0.539,
+      "X2": 0.707
     },
     "dnb": {
-      "home": 0.467,
-      "away": 0.533
+      "home": 0.389,
+      "away": 0.611
     },
     "totals": {
-      "over15": 0.782,
-      "under15": 0.218,
-      "over25": 0.532,
-      "under25": 0.468,
-      "over35": 0.31,
-      "under35": 0.69
+      "over15": 0.849,
+      "under15": 0.151,
+      "over25": 0.636,
+      "under25": 0.364,
+      "over35": 0.415,
+      "under35": 0.585
     },
     "btts": {
-      "yes": 0.58,
-      "no": 0.42
+      "yes": 0.652,
+      "no": 0.348
     },
     "cleanSheet": {
-      "home": 0.233,
-      "away": 0.259
+      "home": 0.159,
+      "away": 0.237
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.131
+        "p": 0.11
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.087
+        "p": 0.092
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.08
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.076
-      },
-      {
-        "home": 0,
-        "away": 0,
         "p": 0.072
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.066
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.064
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.79,
-    "noGoal": 0.061,
+    "lambdaTotal": 3.07,
+    "noGoal": 0.046,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.372
+        "p": 0.401
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.234
+        "p": 0.24
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.147
+        "p": 0.144
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.092
+        "p": 0.086
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.058
+        "p": 0.052
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.036
+        "p": 0.031
       }
     ],
-    "firstHome": 0.463,
-    "firstAway": 0.476
+    "firstHome": 0.457,
+    "firstAway": 0.497
   },
   "scorers": {
     "home": [
       {
-        "player": "Lucas Boyé",
-        "goals": 4,
-        "matches": 6,
-        "share": 0.364,
-        "rate": 0.5,
-        "anytime": 0.394,
-        "first": 0.179
+        "player": "Fernando Niño",
+        "goals": 5,
+        "matches": 7,
+        "share": 0.455,
+        "rate": 0.67,
+        "anytime": 0.488,
+        "first": 0.218
       },
       {
-        "player": "Mariano Díaz",
-        "goals": 3,
+        "player": "Fer Niño",
+        "goals": 5,
         "matches": 7,
-        "share": 0.273,
-        "rate": 0.38,
-        "anytime": 0.313,
-        "first": 0.135
+        "share": 0.455,
+        "rate": 0.67,
+        "anytime": 0.488,
+        "first": 0.218
+      },
+      {
+        "player": "Abiel Osorio",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.091,
+        "rate": 0.13,
+        "anytime": 0.125,
+        "first": 0.044
       }
     ],
     "away": null
@@ -196,95 +205,95 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.233,
-      "draw": 0.259,
-      "away": 0.509,
+      "home": 0.34,
+      "draw": 0.292,
+      "away": 0.36700000000000005,
       "predicted": "A"
     },
     "xg": {
-      "home": 1.4,
-      "away": 1.37
+      "home": 1.5,
+      "away": 1.36
     },
-    "over15": 0.7609999999999999,
-    "over25": 0.526,
-    "over35": 0.297,
-    "btts": 0.535,
+    "over15": 0.7240000000000001,
+    "over25": 0.47700000000000004,
+    "over35": 0.271,
+    "btts": 0.524,
     "score": "1-1",
-    "cornersOver95": 0.508,
+    "cornersOver95": 0.396,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.509,
+      "favoriteProb": 0.367,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.5087,
+    "confidence": 0.3671,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-06T13:54:17.062Z",
+    "capturedAt": "2026-10-06T13:54:17.838Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.368,
-      "draw": 0.278,
-      "away": 0.354
+      "home": 0.395,
+      "draw": 0.272,
+      "away": 0.332
     },
     "doubleChance": {
-      "12": 0.722,
-      "1X": 0.646,
-      "X2": 0.632
+      "12": 0.728,
+      "1X": 0.668,
+      "X2": 0.605
     },
     "dnb": {
-      "home": 0.509,
-      "away": 0.491
+      "home": 0.543,
+      "away": 0.457
     },
     "totals": {
-      "over15": 0.776,
-      "under15": 0.224,
-      "over25": 0.523,
-      "under25": 0.477,
-      "over35": 0.301,
-      "under35": 0.699
+      "over15": 0.791,
+      "under15": 0.209,
+      "over25": 0.545,
+      "under25": 0.455,
+      "over35": 0.321,
+      "under35": 0.679
     },
     "btts": {
-      "yes": 0.574,
-      "no": 0.426
+      "yes": 0.589,
+      "no": 0.411
     },
     "cleanSheet": {
-      "home": 0.254,
-      "away": 0.247
+      "home": 0.257,
+      "away": 0.223
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.105,
-        "share": 0.2488151658767772
+        "p": 0.11,
+        "share": 0.26190476190476186
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.084,
-        "share": 0.1990521327014218
+        "p": 0.088,
+        "share": 0.2095238095238095
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.082,
-        "share": 0.19431279620853079
+        "p": 0.079,
+        "share": 0.18809523809523807
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.076,
-        "share": 0.1800947867298578
+        "p": 0.074,
+        "share": 0.17619047619047618
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.075,
-        "share": 0.1777251184834123
+        "p": 0.069,
+        "share": 0.16428571428571428
       }
     ],
     "providerPick": {
@@ -296,60 +305,60 @@
   },
   "market": null,
   "h2h": {
-    "totalMatches": 26,
-    "homeWins": 6,
-    "draws": 6,
+    "totalMatches": 32,
+    "homeWins": 10,
+    "draws": 8,
     "awayWins": 14,
-    "avgTotalGoals": 1.9615384615384615,
+    "avgTotalGoals": 2.3125,
     "recent": [
       {
-        "eventId": 881,
-        "date": "2026-01-18T15:15:00+00:00",
-        "home": "Atlético Madrid",
-        "away": "Deportivo Alavés",
-        "homeTeamId": 54,
-        "awayTeamId": 45,
+        "eventId": 1021,
+        "date": "2026-05-03T12:00:00+00:00",
+        "home": "Celta Vigo",
+        "away": "Elche",
+        "homeTeamId": 49,
+        "awayTeamId": 55,
+        "homeScore": 3,
+        "awayScore": 1
+      },
+      {
+        "eventId": 756,
+        "date": "2025-09-28T14:15:00+00:00",
+        "home": "Elche",
+        "away": "Celta Vigo",
+        "homeTeamId": 55,
+        "awayTeamId": 49,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 316136,
+        "date": "2023-04-26T20:00:00+00:00",
+        "home": "Celta Vigo",
+        "away": "Elche",
+        "homeTeamId": 49,
+        "awayTeamId": 55,
         "homeScore": 1,
         "awayScore": 0
       },
       {
-        "eventId": 712,
-        "date": "2025-08-30T15:00:00+00:00",
-        "home": "Deportivo Alavés",
-        "away": "Atlético Madrid",
-        "homeTeamId": 45,
-        "awayTeamId": 54,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 305685,
-        "date": "2025-05-03T12:00:00+00:00",
-        "home": "Deportivo Alavés",
-        "away": "Atlético Madrid",
-        "homeTeamId": 45,
-        "awayTeamId": 54,
+        "eventId": 315981,
+        "date": "2023-01-06T17:30:00+00:00",
+        "home": "Elche",
+        "away": "Celta Vigo",
+        "homeTeamId": 55,
+        "awayTeamId": 49,
         "homeScore": 0,
-        "awayScore": 0
-      },
-      {
-        "eventId": 305486,
-        "date": "2024-11-23T15:15:00+00:00",
-        "home": "Atlético Madrid",
-        "away": "Deportivo Alavés",
-        "homeTeamId": 54,
-        "awayTeamId": 45,
-        "homeScore": 2,
         "awayScore": 1
       },
       {
-        "eventId": 311135,
-        "date": "2024-04-21T16:30:00+00:00",
-        "home": "Deportivo Alavés",
-        "away": "Atlético Madrid",
-        "homeTeamId": 45,
-        "awayTeamId": 54,
-        "homeScore": 2,
+        "eventId": 319958,
+        "date": "2022-05-15T17:30:00+00:00",
+        "home": "Celta Vigo",
+        "away": "Elche",
+        "homeTeamId": 49,
+        "awayTeamId": 55,
+        "homeScore": 1,
         "awayScore": 0
       }
     ],
@@ -372,7 +381,7 @@
       "historyRows": 192
     },
     "source": "GoatLab",
-    "expectedTotal": 4.3
+    "expectedTotal": 4.1
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -383,47 +392,47 @@
       "historyRows": 192
     },
     "source": "GoatLab",
-    "expectedTotal": 9.2
+    "expectedTotal": 9.1
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.11,
-      "shotsOnTarget": 4.57,
-      "xg": 1.4,
-      "corners": 4.37,
-      "fouls": 12.92,
-      "yellowCards": 2.13,
-      "redCards": 0.46,
-      "offsides": 2.32,
-      "possession": 47.08
+      "shots": 12.96,
+      "shotsOnTarget": 4.75,
+      "xg": 1.5,
+      "corners": 4.53,
+      "fouls": 13.29,
+      "yellowCards": 2.16,
+      "redCards": 0.49,
+      "offsides": 2.12,
+      "possession": 48.84
     },
     "away": {
-      "shots": 13.51,
-      "shotsOnTarget": 4.69,
-      "xg": 1.37,
-      "corners": 4.79,
-      "fouls": 12.91,
-      "yellowCards": 2.16,
-      "redCards": 0.6,
-      "offsides": 2.1,
-      "possession": 52.92
+      "shots": 12.77,
+      "shotsOnTarget": 4.39,
+      "xg": 1.36,
+      "corners": 4.61,
+      "fouls": 11.93,
+      "yellowCards": 1.91,
+      "redCards": 0.56,
+      "offsides": 2.57,
+      "possession": 51.16
     },
     "sample": {
-      "home": 7,
+      "home": 6,
       "away": 3
     },
     "coverage": {
       "home": {
-        "possession": 7,
-        "shots": 7,
-        "shotsOnTarget": 7,
-        "xg": 7,
-        "corners": 7,
-        "fouls": 7,
-        "yellowCards": 7,
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 6,
         "redCards": 2,
-        "offsides": 7
+        "offsides": 6
       },
       "away": {
         "possession": 3,
@@ -439,14 +448,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.4,
+      "shots": 13.44,
       "shotsOnTarget": 4.75,
       "xg": 1.49,
-      "corners": 4.82,
-      "fouls": 12.33,
-      "yellowCards": 2.12,
+      "corners": 4.83,
+      "fouls": 12.31,
+      "yellowCards": 2.11,
       "redCards": 0.53,
-      "offsides": 2.18
+      "offsides": 2.14
     },
     "sources": {
       "home": {
@@ -482,57 +491,57 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.379,
-      "draw": 0.133,
-      "away": 0.488
+      "home": 0.423,
+      "draw": 0.134,
+      "away": 0.443
     },
     "cardsDuel": {
-      "home": 0.395,
-      "draw": 0.199,
-      "away": 0.406
+      "home": 0.446,
+      "draw": 0.204,
+      "away": 0.35
     },
     "lastGoal": {
-      "home": 0.463,
-      "away": 0.476,
-      "noGoal": 0.061
+      "home": 0.457,
+      "away": 0.497,
+      "noGoal": 0.046
     },
     "cornerRace": {
       "3": {
-        "home": 0.457,
-        "away": 0.543
+        "home": 0.492,
+        "away": 0.508
       },
       "5": {
-        "home": 0.444,
-        "away": 0.556
+        "home": 0.489,
+        "away": 0.511
       },
       "7": {
-        "home": 0.433,
-        "away": 0.567
+        "home": 0.487,
+        "away": 0.513
       }
     },
     "cornerMargin": {
-      "home3plus": 0.164,
-      "home12": 0.215,
-      "level": 0.133,
-      "away12": 0.246,
-      "away3plus": 0.242
+      "home3plus": 0.193,
+      "home12": 0.23,
+      "level": 0.134,
+      "away12": 0.235,
+      "away3plus": 0.208
     },
     "source": "GoatLab"
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 10.7,
+      "temp": 24.3,
+      "precipitation": 0.1,
+      "weathercode": 2,
+      "wind": 9.3,
       "condition": null,
-      "sampledAt": "2026-10-10T14:15:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-11T12:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
-      "stadium": "Mendizorroza",
-      "city": "Vitoria-Gasteiz",
-      "capacity": 19840,
+      "stadium": "Manuel Martínez Valero",
+      "city": "Elche",
+      "capacity": 31177,
       "tz": "Europe/Madrid"
     },
     "referee": null,
@@ -549,36 +558,36 @@
   },
   "context": {
     "home": {
-      "team": "Deportivo Alavés",
+      "team": "Elche CF",
       "recentSample": 5,
       "debut": false,
       "cleanSheets": {
-        "value": 2,
+        "value": 0,
         "sample": 5
       },
       "biggestWin": {
-        "value": 3,
+        "value": 2,
         "sample": 5
       },
       "unbeaten": {
-        "value": 1,
+        "value": 2,
         "sample": 5
       },
       "season": {
-        "position": 6,
+        "position": 18,
         "played": 7,
         "gf": 11,
-        "ga": 6,
+        "ga": 17,
         "provider": null
       },
       "player": {
-        "name": "Lucas Boyé",
-        "detail": "4 goles en 6 partidos",
+        "name": "Fernando Niño",
+        "detail": "5 goles en 7 partidos",
         "source": "líder del equipo en la temporada"
       }
     },
     "away": {
-      "team": "Club Atlético de Madrid",
+      "team": "RC Celta de Vigo",
       "recentSample": 5,
       "debut": false,
       "cleanSheets": {
@@ -586,18 +595,18 @@
         "sample": 5
       },
       "biggestWin": {
-        "value": 4,
+        "value": 5,
         "sample": 5
       },
       "unbeaten": {
-        "value": 3,
+        "value": 4,
         "sample": 5
       },
       "season": {
-        "position": 2,
+        "position": 14,
         "played": 7,
-        "gf": 16,
-        "ga": 7,
+        "gf": 8,
+        "ga": 6,
         "provider": null
       },
       "player": null
@@ -605,9 +614,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": null,
+    "note": "Divergencia entre modelos: Poisson GoatLab da 46.1% al Celta y CatBoost Bzzoiro 36.7%, con empate de 24.6% frente a 29.2%. El historial (14 victorias visitantes en 32 cruces) acompaña la orientación visitante.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-05T15:37:54.171Z"
+    "generatedAt": "2026-10-06T13:55:43.892Z"
   }
 }
