@@ -7,6 +7,7 @@ import { wipe } from '@remotion/transitions/wipe';
 import { iris } from '@remotion/transitions/iris';
 import { captionPages } from '../../../src/lib/timing.js';
 import { boundedMotion } from '../../../src/lib/edit-plan.js';
+import { EditorialMotion } from './editorial.jsx';
 import { resolveMotion, MOTION_KINDS } from '../../../src/lib/motion-data.js';
 import { FPS, FONT_FAMILY, CAPTION_FILL, ENDCARD_SECONDS } from '../../../src/lib/short-format.js';
 
@@ -88,8 +89,12 @@ function MotionChart({ graphic, facts, prompts, frames }) {
   </div>;
 }
 
-function Graphic({ graphic, words, facts, prompts, frames }) {
+function Graphic({ graphic, words, facts, prompts, frames, match }) {
   const frame = useCurrentFrame();
+  if (MOTION_KINDS.includes(graphic.kind) && graphic.presentation === 'editorial') {
+    resolveMotion(graphic,facts,prompts);
+    return <EditorialMotion graphic={graphic} words={words} frames={frames} match={match} />;
+  }
   if (MOTION_KINDS.includes(graphic.kind)) return <MotionChart graphic={graphic} facts={facts} prompts={prompts} frames={frames} />;
   const refs = (graphic.factIds ?? []).map(id => facts.find(f => f.id === id));
   if (refs.some(f => !f)) throw new Error('hecho inexistente');
@@ -104,7 +109,7 @@ function Graphic({ graphic, words, facts, prompts, frames }) {
   </div>;
 }
 
-function Scene({ scene, photos, clips, words, facts, prompts, frames }) {
+function Scene({ scene, photos, clips, words, facts, prompts, frames, match }) {
   const frame = useCurrentFrame();
   return <AbsoluteFill style={{ background: 'radial-gradient(ellipse at 80% 10%,#273d31,#101412 70%)', overflow: 'hidden' }}>
     {(scene.layers ?? []).map((layer, index) => <Photo key={index} photo={photos[layer.asset]} layer={{...layer,focusEffect:layer.focusEffect ?? (['focus','defocus'].includes(scene.transition)?scene.transition:'none')}} frames={frames} />)}
@@ -113,7 +118,7 @@ function Scene({ scene, photos, clips, words, facts, prompts, frames }) {
     </Sequence>)}
     <div style={{ position: 'absolute', top: 115, left: 70, width: 90, height: 6, background: scene.accent ?? lime }} />
     {(scene.graphics ?? []).map((graphic, index) => <Sequence key={index} from={frameAt(graphic.at - scene.start)} durationInFrames={Math.max(1, frameAt(graphic.duration))} layout="none">
-      <Graphic graphic={graphic} words={words} facts={facts} prompts={prompts} frames={frameAt(graphic.duration)} />
+      <Graphic match={match} graphic={graphic} words={words} facts={facts} prompts={prompts} frames={frameAt(graphic.duration)} />
     </Sequence>)}
     {(scene.objects ?? []).map((object, index) => <div key={index} style={{ position: 'absolute', top: (object.y ?? .35) * 1920, left: (object.x ?? .35) * 1080,
       width: object.size ?? 150, minHeight: object.size ?? 150, padding: 20, background: '#284438', border: `2px solid ${lime}`, fontSize: 35,
@@ -145,7 +150,7 @@ export function GoatLabShort({ frames, font, brand, photos, clips, words, facts 
       const overlap=next && next.transition !== 'cut' ? Math.min(8,length,frameAt(next.end)-frameAt(next.start)) : 0;
       const presentation=next?.transition==='slide'?slide():next?.transition==='wipe'?wipe():next?.transition==='iris'?iris({width:1080,height:1920}):fade();
       return length > 0 ? [<TransitionSeries.Sequence key={`scene-${index}`} durationInFrames={length+overlap}>
-        <Scene scene={scene} photos={photos} clips={clips} words={words} facts={facts} prompts={motionPrompts} frames={length} />
+        <Scene match={match} scene={scene} photos={photos} clips={clips} words={words} facts={facts} prompts={motionPrompts} frames={length} />
       </TransitionSeries.Sequence>, ...(overlap>0 ? [<TransitionSeries.Transition key={`transition-${index}`} presentation={presentation} timing={linearTiming({durationInFrames:overlap})}/>] : [])] : [];
     })}</TransitionSeries>
     {(photos.length > 0 || clips.length > 0) && frame < endStart && <div style={{ position: 'absolute', top: 42, right: 55, color: white, background: '#101412dd', padding: '10px 16px', fontSize: 23 }}>Ilustración con IA</div>}

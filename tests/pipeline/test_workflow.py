@@ -145,7 +145,7 @@ class PortableSkillTests(unittest.TestCase):
             data = root/'data/public/data/youtube-scripts'
             data.mkdir(parents=True)
             (data/'a-b.json').write_text(json.dumps(script()))
-            env = {**os.environ,'GOATLAB_REPO':str(root/'data'),'GOATLAB_STATE_DIR':str(root/'state')}
+            env = {**os.environ,'GOATLAB_REPO':str(root/'data'),'GOATLAB_STATE_DIR':str(root/'state'),'GOATLAB_CONTENT_BASE_URL':''}
             def call(*args):
                 return json.loads(subprocess.check_output([sys.executable,str(root/'skill/scripts/goatlab.py'),*args],env=env,cwd=root))
             call('reset','--chat=1')

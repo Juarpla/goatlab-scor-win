@@ -26,7 +26,7 @@ def valid(data, category, match_id):
     if data.get('version') != 1 or data.get('category') != category:
         return False
     facts = {f['id'] for f in data.get('facts', []) if isinstance(f, dict) and isinstance(f.get('id'), str)}
-    return all(isinstance(r, dict) and r.get('n') == i+1 and r.get('kind') == KINDS[category][i] and isinstance(r.get('prompt'), str) and 180 <= len(r['prompt']) <= 12000 and '9:16' in r['prompt'] and isinstance(r.get('title'), str) and (category != 'motion-prompts' or isinstance(r.get('factIds'), list) and all(f in facts for f in r['factIds'])) for i, r in enumerate(rows))
+    return all(isinstance(r, dict) and r.get('n') == i+1 and r.get('kind') == KINDS[category][i] and (category != 'motion-prompts' or r.get('presentations') is None or r['presentations'] == ['editorial','statistical']) and isinstance(r.get('prompt'), str) and 180 <= len(r['prompt']) <= 12000 and '9:16' in r['prompt'] and isinstance(r.get('title'), str) and (category != 'motion-prompts' or isinstance(r.get('factIds'), list) and all(f in facts for f in r['factIds'])) for i, r in enumerate(rows))
 
 
 class ContentClient:

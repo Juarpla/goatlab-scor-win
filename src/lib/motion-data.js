@@ -5,7 +5,13 @@ export function resolveMotion(graphic, facts = [], prompts = []) {
   if (!MOTION_KINDS.includes(graphic.kind)) throw new Error('motion desconocido');
   const prompt = prompts.find(p => p.n === graphic.motionPromptNumber);
   if (!prompt || prompt.kind !== graphic.kind) throw new Error('Motion Prompt inexistente o incompatible');
+  const presentation = graphic.presentation ?? 'statistical';
+  if (!['editorial','statistical'].includes(presentation)) throw new Error('presentación de motion desconocida');
   const refs = graphic.factIds ?? [];
+  if (presentation === 'editorial') {
+    if (!Array.isArray(refs) || refs.length) throw new Error('motion editorial no admite cifras');
+    return { presentation, facts: [], title: MOTION_TITLES[graphic.kind], notes: [] };
+  }
   if (!Array.isArray(refs) || new Set(refs).size !== refs.length || refs.some(id => !prompt.factIds.includes(id))) throw new Error('hecho ajeno al Motion Prompt');
   const selected = refs.map(id => {
     const fact = facts.find(f => f.id === id);
@@ -13,6 +19,6 @@ export function resolveMotion(graphic, facts = [], prompts = []) {
     return fact;
   });
   if (graphic.kind !== 'synthesis' && new Set(selected.map(f => f.unit)).size > 1) throw new Error('unidades incompatibles');
-  return { title: MOTION_TITLES[graphic.kind], facts: selected, max: Math.max(1, ...selected.map(f => f.value)),
+  return { presentation, title: MOTION_TITLES[graphic.kind], facts: selected, max: Math.max(1, ...selected.map(f => f.value)),
     notes: [...new Set(selected.map(f => `${f.provider || 'Datos del encuentro'}${Number.isFinite(f.sampleSize) ? ` · muestra: ${f.sampleSize} partidos` : ''}`))] };
 }

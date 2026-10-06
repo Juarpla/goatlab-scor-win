@@ -154,3 +154,22 @@ class MotionPlanTests(unittest.TestCase):
         plan=local_plan(source)
         self.assertEqual(plan['scenes'][0]['graphics'][0]['factIds'],['home.gf'])
         validate(plan,source)
+
+    def test_editorial_motion_without_facts_and_legacy_statistics(self):
+        source={**SOURCE,'planVersion':4,'facts':[], 'motionPrompts':[{'n':2,'kind':'goals','factIds':[]}]}
+        plan={'version':4,'scenes':[{'start':0,'end':5,'layers':[],'graphics':[{'kind':'goals','motionPromptNumber':2,'presentation':'editorial','factIds':[],'wordStart':0,'wordEnd':2,'at':.5,'duration':4}]}]}
+        validate(copy.deepcopy(plan),source)
+        bad=copy.deepcopy(plan);bad['scenes'][0]['graphics'][0]['presentation']='other'
+        with self.assertRaises(ValueError):validate(bad,source)
+        bad=copy.deepcopy(plan);bad['scenes'][0]['graphics'][0]['factIds']=['home.gf']
+        with self.assertRaises(ValueError):validate(bad,{**source,'facts':[{'id':'home.gf','label':'Goles','value':2,'unit':'goles','source':'fixtures'}],'motionPrompts':[{'n':2,'kind':'goals','factIds':['home.gf']}]})
+
+    def test_local_fallback_balances_and_becomes_creative_without_statistics(self):
+        source={**SOURCE,'planVersion':4,'span':12,'words':[{'word':'Goles','start':.5,'end':1},{'word':'goles','start':4.5,'end':5},{'word':'goles','start':8.5,'end':9}],
+                'facts':[{'id':'home.gf','label':'Goles','value':2,'unit':'goles','source':'fixtures'}],
+                'motionPrompts':[{'n':2,'kind':'goals','factIds':['home.gf']}]}
+        plan=local_plan(source)
+        modes={g.get('presentation') for s in plan['scenes'] for g in s['graphics'] if g['kind']=='goals'}
+        self.assertEqual(modes,{'editorial','statistical'})
+        plan=local_plan({**source,'facts':[],'motionPrompts':[{'n':2,'kind':'goals','factIds':[]}]})
+        self.assertTrue(all(g['presentation']=='editorial' for s in plan['scenes'] for g in s['graphics'] if g['kind']=='goals'))

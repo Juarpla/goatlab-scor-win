@@ -30,3 +30,12 @@ test('clip adapter preserves verified ranges and accepts legacy plan version 3',
   assert.throws(()=>compositionProps(input),/recorte/);
   assert.equal(contentUrl('alpha-beta','scripts',true),'/partido/alpha-beta/scripts.json');
 });
+
+test('balanced motion metadata preserves old prompts and rejects invalid presentations',()=>{
+  const data={category:'motion-prompts',home:'Alpha',away:'Beta',facts:[],prompts:CONTENT_CATEGORIES['motion-prompts'].kinds.map((kind,i)=>({n:i+1,kind,title:kind,factIds:[],prompt:`Vertical 9:16 Spanish source sample transition ${kind}. `+'Detailed editorial and statistical composition with timing and readable labels. '.repeat(18)}))};
+  assert.deepEqual(promptErrors(data),[]);
+  for(const row of data.prompts)row.presentations=['editorial','statistical'];
+  assert.deepEqual(promptErrors(data),[]);
+  data.prompts[0].presentations=['editorial','invented'];
+  assert.ok(promptErrors(data).some(e=>e.includes('presentaciones')));
+});

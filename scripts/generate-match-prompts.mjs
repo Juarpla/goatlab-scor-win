@@ -42,6 +42,7 @@ for (const match of matches) {
       validate: text => {
         const draft = extractJson(text);
         const errors = promptErrors(draft, { category, home, away, facts, published });
+        if (category === 'motion-prompts' && !draft.prompts?.every(p => Array.isArray(p.presentations) && p.presentations.join(',') === 'editorial,statistical')) errors.push('Cada Motion Prompt requiere las dos presentaciones');
         if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
         return draft;
       },

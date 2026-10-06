@@ -106,6 +106,9 @@ def validate(plan, source):
                 refs = graphic.get('factIds', [])
                 if not isinstance(refs, list) or len(refs) > 8 or any(not isinstance(r, str) or r not in facts or r not in prompt.get('factIds', []) for r in refs) or len(set(refs)) != len(refs):
                     raise ValueError('hecho ajeno al Motion Prompt')
+                presentation = graphic.get('presentation','statistical')
+                if presentation not in ('editorial','statistical'): raise ValueError('presentación de motion desconocida')
+                if presentation == 'editorial' and refs: raise ValueError('motion editorial no admite cifras')
                 selected = [facts[r] for r in refs]
                 for fact in selected:
                     number(fact.get('value'), 0, 1e6, 'motion.value')
@@ -210,16 +213,24 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
         patterns = {'form': r'racha|forma|victoria|derrota|empate', 'goals': r'goles?|anota|marc[oó]|recib',
                     'clean-sheets': r'arco|porter[ií]a|valla', 'head-to-head': r'cara a cara|cruces?|entre ellos|enfrentamientos?',
                     'synthesis': r'clave|balance|estad[ií]stic|resumen'}
-        for scene in scenes:
-            indices = [i for i, w in enumerate(words) if scene['start'] <= w['start'] < scene['end']-.3]
+        statistical = False
+        for i, scene in enumerate(scenes):
+            indices = [j for j,w in enumerate(words) if scene['start'] <= w['start'] < scene['end']-.3]
             if not indices: continue
-            text = ' '.join(words[i]['word'] for i in indices).lower()
+            text = ' '.join(words[j]['word'] for j in indices).lower()
             prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('kind') == kind and re.search(patterns[kind], text)), None)
+            matched = bool(prompt)
+            if not prompt and i % 3 == 0:
+                prompt = next((p for p in source.get('motionPrompts',[]) if p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
             if not prompt: continue
-            refs = [r for r in prompt.get('factIds', []) if not r.endswith('.n') and r in {f['id'] for f in source.get('facts', [])}][:8]
-            scene.update(layers=[], clips=[], objects=[], graphics=[{'kind': prompt['kind'], 'motionPromptNumber': prompt['n'],
-                'factIds': refs, 'wordStart': indices[0], 'wordEnd': min(indices[0]+10, indices[-1]+1),
-                'at': scene['start'], 'duration': scene['end']-scene['start']}])
+            refs = [r for r in prompt.get('factIds',[]) if not r.endswith('.n') and r in {f['id'] for f in source.get('facts',[])}][:8]
+            presentation = 'statistical' if matched and refs and not statistical else 'editorial'
+            statistical = presentation == 'statistical'
+            graphic={'kind':prompt['kind'],'motionPromptNumber':prompt['n'],'presentation':presentation,
+                     'factIds':refs if statistical else [],'wordStart':indices[0],'wordEnd':min(indices[0]+10,indices[-1]+1),
+                     'at':scene['start'],'duration':scene['end']-scene['start']}
+            scene.update(objects=[],graphics=[graphic])
+            if statistical: scene.update(layers=[],clips=[])
     version = 4 if source.get('planVersion') == 4 else 3 if source.get('clips') else 2
     return {**validate({'version':version,'scenes':scenes},source),'model':'local-montage','fallback':True,
             'fallbackReason':reason,'attempts':attempts or []}

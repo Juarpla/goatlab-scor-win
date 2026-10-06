@@ -32,7 +32,14 @@ cinco Video Prompts y cinco Motion Prompts. Cada imagen usa su prompt numerado.
 Los clips usan imágenes Agnes ya completadas como referencia; Agnes Video 2.5
 Flash, 720P, 9:16, seis segundos, una tarea simultánea y un inicio por minuto.
 Se detiene al completar tres clips o tras cinco tareas. Un fallo confirmado permite
-probar el siguiente prompt; un POST incierto se conserva y no se repite.
+probar la siguiente pareja imagen–prompt. Se agotan las imágenes disponibles antes
+de reutilizarlas; un 429 conserva la pareja. Solo Flash: no usar el modelo de pago.
+Un POST incierto sin identificador libera el montaje parcial inmediatamente. Con
+identificador, la recuperación tras errores dura como máximo 60 segundos por banco,
+con plazo persistente que otros chats y reinicios no renuevan. No repetir solicitudes
+inciertas ni iniciar otra generación mientras pueda seguir ejecutándose la anterior.
+Otro banco bloqueado no espera: continúa con material parcial. Los diagnósticos
+HTTP quedan acotados y saneados en video_errors dentro de agnes.sqlite.
 
 Los quince minutos cubren imágenes y clips juntos. El inicio persiste tras
 reinicios y no se renueva al reintentar: se recuperan recursos existentes. Con el
@@ -48,3 +55,8 @@ conserva todas las palabras y ajusta la velocidad solo cuando hace falta, hasta
 un 10%, manteniendo el tono. La voz disponible es 45.9 segundos dentro de un MP4
 máximo de 49.9 segundos. Si Render informa VOICE_TOO_LONG, explica que debe grabar
 hasta 45 segundos y sustituir ese audio; reintentar el mismo archivo no lo resuelve.
+
+El motion alterna presentation editorial y statistical según la voz. Editorial
+utiliza tipografía, duelos entre equipos, recorridos ilustrativos y energía sin
+necesitar datos verificados. Statistical resuelve cifras del catálogo. Sin datos
+pertinentes, el montaje puede ser totalmente creativo. Mantener subtítulos legibles.

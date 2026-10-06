@@ -18,3 +18,12 @@ test('motion refuses mismatched directions and incompatible comparison units', (
   assert.throws(()=>resolveMotion(graphic,[fact,{...fact,id:'away.n',unit:'partidos'}],prompts),/unidades/);
   assert.throws(()=>resolveMotion({...graphic,motionPromptNumber:3},[],prompts),/inexistente/);
 });
+
+test('editorial presentations need no catalog and retain statistical legacy defaults', () => {
+  const prompts=[{n:2,kind:'goals',factIds:[]}];
+  const graphic={kind:'goals',motionPromptNumber:2,presentation:'editorial',factIds:[]};
+  assert.equal(resolveMotion(graphic,[],prompts).presentation,'editorial');
+  assert.equal(resolveMotion({...graphic,presentation:undefined},[],prompts).presentation,'statistical');
+  assert.throws(()=>resolveMotion({...graphic,presentation:'invented'},[],prompts),/presentación/);
+  assert.throws(()=>resolveMotion({...graphic,factIds:['home.gf']},[],prompts),/editorial/);
+});

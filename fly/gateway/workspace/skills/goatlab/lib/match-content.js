@@ -35,6 +35,7 @@ export function promptErrors(data, { category = data?.category, home = data?.hom
     }
     if (category === 'video-prompts' && (!/6\s*(?:-| )?second/i.test(text) || !/image|picture/i.test(text) || !/camera/i.test(text))) errors.push(`${label}: faltan duración, imagen de referencia o cámara`);
     if (category === 'motion-prompts') {
+      if (row.presentations != null && (!Array.isArray(row.presentations) || row.presentations.length !== 2 || row.presentations[0] !== 'editorial' || row.presentations[1] !== 'statistical' || !/editorial/i.test(text) || !/statistical/i.test(text))) errors.push(`${label}: presentaciones de motion inválidas`);
       if (text.split(/\s+/).length < 150) errors.push(`${label}: dirección insuficientemente detallada`);
       if (!Array.isArray(row.factIds) || row.factIds.some(id => !known.has(id)) || new Set(row.factIds).size !== row.factIds.length) errors.push(`${label}: referencia de hechos inválida`);
       const refs = [...text.matchAll(/\{\{([^{}]+)\}\}/g)].map(m => m[1]);

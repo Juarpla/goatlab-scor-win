@@ -16,7 +16,9 @@ subtítulos amarillos; títulos y cifras viven arriba y al centro. Evita superpo
 rostros, títulos y gráficos. Las imágenes y clips son ilustraciones referenciales.
 
 Entrega solo JSON. Los textos informativos se extraen de la voz o del catálogo
-facts. Los componentes React resuelven valores, unidades, fuente y muestra.
+facts. Los componentes React resuelven valores, unidades, fuente y muestra para
+estadísticas. El motion editorial es ilustrativo y no requiere hechos verificados.
+Entrega un plan compacto: normalmente 6–12 escenas, sin repetir instrucciones.
 
 ## Contrato de escenas
 
@@ -39,13 +41,23 @@ El motor silencia los clips y conserva el tiempo global de la voz.
 Selecciona una entrada de motionPrompts cuyo tema aparezca en la voz:
 form, goals, clean-sheets, head-to-head o synthesis. Cada gráfico identifica
 motionPromptNumber (n original), factIds y wordStart/wordEnd (fragmento hablado
-pertinente de 1–10 palabras). At y duration permanecen dentro de la escena.
+pertinente de 1–10 palabras). At es un segundo ABSOLUTO de la composición (no un desplazamiento relativo).
+At y duration permanecen dentro de la escena.
 Máximo ocho referencias por gráfico, todas presentes en ese Motion Prompt y facts.
 Usa familias form para victorias/empates/derrotas, goals para goles a favor y
 recibidos, clean-sheets para arcos en cero, head-to-head para cruces previos y
 synthesis para tarjetas estadísticas. Mantén unidades iguales en comparaciones.
-Cuando el tema no tenga datos, usa factIds: []: el componente muestra Datos no
-disponibles. No obliga a incluir los cinco temas en cada audio.
+Indica presentation: editorial o statistical. Si falta presentation, los planes
+anteriores mantienen statistical. En editorial, factIds es [] y wordStart/wordEnd
+elige el texto de la voz: form usa tipografía cinética; goals, un recorrido
+ilustrativo del balón; clean-sheets, energía defensiva; head-to-head, duelo de
+ambos equipos; synthesis, presentación y énfasis. No hay cifras, ejes ni fuentes
+obligatorias. Las animaciones son referenciales y no prueban que una jugada ocurrió.
+En statistical usa exclusivamente hechos del catálogo y unidades compatibles.
+Busca un bloque editorial y otro statistical cuando la voz y los datos lo permitan,
+alternándolos con imágenes y clips; no impongas un tema ajeno a la narración.
+Cuando no haya estadísticas pertinentes, construye un montaje creativo completo.
+Un tema estadístico explícito sin datos puede mostrar Datos no disponibles. No obliga a incluir los cinco temas en cada audio.
 
 Ejemplo:
 ```json

@@ -75,7 +75,9 @@ parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts
 
 El montaje usa React y Remotion en Fly.io: la IA entrega un plan validado version
 4 y los componentes dibujan forma reciente, goles, arcos en cero, cara a cara y
-síntesis con hechos del catálogo. Las versiones 1–3 se adaptan. La voz manda los
+síntesis. La presentación editorial añade tipografía cinética, duelos y recorridos
+ilustrativos; la estadística utiliza hechos del catálogo. Se alternan cuando la
+voz y los datos lo permiten. Las versiones 1–3 se adaptan. La voz manda los
 tiempos; los clips Agnes se silencian. El render final mide como máximo 49.9 s.
 Recomendación de grabación: hasta 45 s; ajuste automático de velocidad hasta
 1.10 conservando el tono. Si no cabe, se solicita sustituir ese audio.
@@ -83,3 +85,9 @@ Recomendación de grabación: hasta 45 s; ajuste automático de velocidad hasta
 Instalar el worker con npm ci --prefix fly/render y preparar el bundle con
 node fly/render/remotion-build.mjs. El render local usa el mismo camino:
 node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo>.
+
+Los cinco intentos de Agnes Video Flash emparejan prompts e imágenes distintas
+antes de reutilizarlas. Una tarea incierta con identificador tiene hasta 60 s de
+recuperación por banco, conservados tras reinicios; sin identificador, el montaje
+parcial continúa inmediatamente. Los intentos inciertos no se repiten y un 429
+conserva la pareja respetando Retry-After dentro del presupuesto de 15 minutos.
