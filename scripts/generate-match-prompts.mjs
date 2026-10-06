@@ -34,10 +34,15 @@ for (const match of matches) {
   const home = esName(match.home), away = esName(match.away);
   const facts = editingFacts(match, scorers);
   const identity = { matchId, home, away, competition: match.competition, kickoff: match.kickoff, venue: match.venue ?? null, facts, published, kinds: spec.kinds };
+  const validationHints = category === 'motion-prompts' ? {
+    allowedFactIds: facts.map(f => f.id),
+    references: 'Use exact catalog IDs, e.g. {{home.wins}}, never {{fact.home.wins}}. factIds must list exactly the unique IDs actually used in prompt text, not all available IDs. No placeholders for team names, source, sample, timing or labels unless their exact ID exists in the catalog.',
+    presentations: 'Each entry needs presentations: ["editorial","statistical"] and both named variants in its prompt text. Never write % or percent even for layout when published=false.',
+  } : undefined;
   let result, error;
   console.log(`${category}: preparando ${matchId}`);
   try {
-    result = await withFailover([{ role: 'system', content: guide }, { role: 'user', content: JSON.stringify(identity) }], {
+    result = await withFailover([{ role: 'system', content: guide }, { role: 'user', content: JSON.stringify({ ...identity, validationHints }) }], {
       orderVar: 'SCRIPT_PROVIDER_ORDER', maxTokens: 12000, timeoutMs: 180000,
       validate: text => {
         const draft = extractJson(text);
