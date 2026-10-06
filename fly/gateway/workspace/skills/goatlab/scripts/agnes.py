@@ -16,9 +16,17 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 
-from common import atomic_json, database, request_json
+from common import add_quota, atomic_json, database, quota_caps, quota_day, read_quota, request_json
 
 MODEL = "agnes-image-2.5-flash"
+
+
+def image_rpm():
+    """Starter operative pace: 12 starts/min, far below the 80 RPM provider tier for 2K."""
+    try:
+        return max(1, min(80, int(os.environ.get("AGNES_IMAGE_RPM", "12"))))
+    except (TypeError, ValueError):
+        return 12
 
 
 def retry_seconds(value, now=None):
@@ -58,13 +66,14 @@ class ImagePool:
 
     def take_slot(self, deadline=None, reserve=0):
         # Called while holding the global lock, including on every retry.
+        rpm = image_rpm()
         while True:
             now = self.clock()
             self.db.execute("DELETE FROM starts WHERE at<=?", (now - 60,))
             pause = self.db.execute("SELECT until FROM throttle WHERE id=1").fetchone()
             starts = [r[0] for r in self.db.execute("SELECT at FROM starts ORDER BY at")]
             wait = max(0, (pause[0] - now) if pause else 0,
-                       (starts[0] + 60.05 - now) if len(starts) >= 4 else 0)
+                       (starts[len(starts) - rpm] + 60.05 - now) if len(starts) >= rpm else 0)
             if deadline is not None and now+wait+reserve>deadline:
                 raise ValueError("presupuesto de preparación agotado")
             if wait > 0:
@@ -74,8 +83,8 @@ class ImagePool:
             return
 
     def generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None, attempt_deadline=None):
-        if slot not in range(10):
-            raise ValueError("máximo diez imágenes por encuentro")
+        if slot not in range(4):
+            raise ValueError("máximo cuatro imágenes por encuentro")
         if size not in {"1K", "2K"} or ratio not in {"1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"}:
             raise ValueError("resolución o ratio no admitidos")
         out = Path(out)
@@ -88,6 +97,10 @@ class ImagePool:
                 raise ValueError("encuentro caducado; generaciones cerradas")
             self.cleanup()
             self.db.execute("INSERT OR IGNORE INTO matches VALUES(?,?)", (match, deadline))
+            day = quota_day(self.clock())
+            used = read_quota(self.db, day)
+            if used["images"] >= quota_caps()["images"]:
+                raise ValueError(f"cuota diaria de imágenes agotada ({used['images']}); continúa mañana")
             old = self.db.execute("SELECT * FROM images WHERE match_id=? AND slot=?", (match, slot)).fetchone()
             if old and old["status"] == "done":
                 result = json.loads(old["result"])
@@ -182,6 +195,7 @@ class ImagePool:
                 atomic_json(out / f"{slot}.json", saved)
                 self.db.execute("UPDATE images SET status='done',result=? WHERE match_id=? AND slot=?",
                                 (json.dumps(saved), match, slot))
+                add_quota(self.db, quota_day(self.clock()), images=1)
                 recovery.unlink(missing_ok=True)
                 return saved
             except Exception:
@@ -201,7 +215,8 @@ if __name__ == "__main__":
     parser.add_argument("--attempt-deadline", type=float)
     args = parser.parse_args()
     try:
-        pool = ImagePool(os.environ.get("AGNES_STATE_DB", str(Path(args.out).parents[1] / "agnes.sqlite")))
+        state = os.environ.get("AGNES_STATE_DB", str(Path(args.out).parents[1] / "agnes.sqlite"))
+        pool = ImagePool(state)
         print(json.dumps(pool.generate(args.match, args.index, Path(args.prompt_file).read_text(), args.out, size=args.size, ratio=args.ratio, expires_at=args.expires_at, attempt_deadline=args.attempt_deadline)))
     except Exception as error:
         print(str(error) if isinstance(error, ValueError) else type(error).__name__, file=sys.stderr)

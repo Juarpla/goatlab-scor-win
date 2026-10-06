@@ -101,8 +101,8 @@ Video `agnes-video-2.5-flash` es asíncrono: `POST /v1/videos` crea la tarea y
 `GET /agnesapi?video_id=…&model_name=agnes-video-2.5-flash` consulta el resultado.
 Un inicio/minuto no equivale a un video completado/minuto. Admite 720P, 4–12 s y
 n=1; 9:16 produce 720×1280. El precio cero es promocional. Verificar precio y
-acceso de la cuenta antes de habilitarlo. La producción utiliza hasta tres clips de seis segundos compartidos por partido,
-a partir de cinco prompts publicados. El presupuesto total de preparación es quince minutos.
+acceso de la cuenta antes de habilitarlo. La producción utiliza hasta dos clips de seis segundos compartidos por partido,
+a partir de dos prompts publicados. El presupuesto total de preparación es quince minutos.
 
 Fuentes: [cuotas](https://wiki.agnes-ai.com/en/docs/tokenplan),
 [imagen](https://wiki.agnes-ai.com/en/docs/agnes-image-25-flash),

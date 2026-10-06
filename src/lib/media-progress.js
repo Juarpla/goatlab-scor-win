@@ -18,13 +18,13 @@ export function mediaPublisher({ dir, match, facts = [], attemptStartedAt = Date
     count = payload.assets.length;
     const errors = checkMediaManifest(payload, { matchId });
     if (errors.length) throw new Error(`manifiesto inválido: ${errors.join('; ')}`);
-    await atomic('.json', {...payload, bankStatus: phase === 'finished' ? (count === target && (!extra.contentVersion || (extra.clips?.length ?? 0) === 3) ? 'complete' : 'partial') : 'preparing'});
+    await atomic('.json', {...payload, bankStatus: phase === 'finished' ? (count === target && (!extra.contentVersion || (extra.clips?.length ?? 0) === 2) ? 'complete' : 'partial') : 'preparing'});
     // Existing ready snapshots remain usable during an explicit bank retry.
     if (phase === 'finished') {
       await atomic('.ready', { assets: count, updatedAt: clock() });
       ready = true;
     }
     await atomic('.progress.json', { count, target, clips: extra.clips?.length ?? 0, failures: extra.failures ?? [], phase, ready, attemptStartedAt, updatedAt: clock() });
-    return { count, ready, complete: count === target && (!extra.contentVersion || (extra.clips?.length ?? 0) === 3) };
+    return { count, ready, complete: count === target && (!extra.contentVersion || (extra.clips?.length ?? 0) === 2) };
   };
 }

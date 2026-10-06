@@ -268,10 +268,10 @@ const server = createServer(async (req, res) => {
       if (b.audioFileId && !/^[A-Za-z0-9_-]{16,256}$/.test(b.audioFileId)) return json(400, { error: 'audioFileId no admite rutas locales' });
       if (!Array.isArray(b.assets) || b.assets.length > ASSETS_PER_MATCH) return json(400, { error: 'fotos insuficientes' });
       const mediaMinimum = b.mediaMinimum ?? 2;
-      if (![0, 1, 2, 8].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
+      if (![0, 1, 2, 4].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
       if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > 3 || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
-      if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 5 || b.motionPrompts.some(p => !Number.isInteger(p?.n) || p.n < 1 || p.n > 5 || !['form','goals','clean-sheets','head-to-head','synthesis'].includes(p.kind) || typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
+      if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 10 || b.motionPrompts.some(p => !Number.isInteger(p?.n) || p.n < 1 || p.n > 10 || !['form','goals','clean-sheets','head-to-head','synthesis'].includes(p.kind) || typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });

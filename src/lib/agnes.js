@@ -1,6 +1,12 @@
 /** Prompts y forma de una foto generada con Agnes AI. La red vive en el generador. */
 // Local admission remains below these documented provider limits.
 export const AGNES_FREE_LIMITS = Object.freeze({ imageRpm: Object.freeze({ '1K':10, '2K':5, '3K':1, '4K':1 }), videoRpm:1, dailyImages:null, dailyVideoSeconds:null });
+// Token Plan Starter (llave Token): cuotas y RPM efectivos del proveedor,
+// más el ritmo operativo conservador que usa este repo para repartir el mes.
+export const AGNES_TOKEN_LIMITS = Object.freeze({ plan: 'starter',
+  imageRpm: Object.freeze({ '1K':100, '2K':80, '3K':1, '4K':1 }), videoRpm:5,
+  dailyImages:4000, dailyVideoSeconds:500,
+  operative: Object.freeze({ imageRpm:12, videoStartSeconds:30, dailyVideoSeconds:360, dailyVideoMatches:20 }) });
 
 export function normalizeAgnesImage({ matchId, index, publicUrl, model, prompt, at = new Date().toISOString() }) {
   const url = String(publicUrl ?? '');

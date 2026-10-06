@@ -33,7 +33,7 @@ class AgnesTests(unittest.TestCase):
     def test_rate_limit_shared_across_pools(self):
         other = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep)
         self.addCleanup(other.db.close)
-        for _ in range(4): self.pool.take_slot()
+        for _ in range(12): self.pool.take_slot()
         other.take_slot()
         self.assertGreaterEqual(self.now, 1060)
 
@@ -75,13 +75,14 @@ class AgnesTests(unittest.TestCase):
         self.assertEqual(retry_seconds(None), 60)
 
     @patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}')
-    def test_ten_shared_slots_are_available_and_do_not_accumulate_base64(self, _probe):
+    def test_four_shared_slots_are_available_and_do_not_accumulate_base64(self, _probe):
         out=Path(self.temp.name)/'images'
-        for slot in range(10):
+        for slot in range(4):
             self.pool.generate('m',slot,'fictional players',out,lambda *a,**kw:self.result())
-        self.assertEqual(self.pool.db.execute("SELECT COUNT(*) FROM images WHERE status='done'").fetchone()[0],10)
+        self.assertEqual(self.pool.db.execute("SELECT COUNT(*) FROM images WHERE status='done'").fetchone()[0],4)
         self.assertFalse(list(out.glob('*.response.json')))
-        self.assertGreaterEqual(self.now,1120)
+        self.assertEqual(self.pool.db.execute("SELECT images FROM quota_use").fetchone()[0],4)
+        self.assertEqual(self.now,1000)
 
 class ExpiryTests(unittest.TestCase):
     def test_past_match_is_closed_even_after_control_records_are_cleaned(self):
@@ -98,4 +99,4 @@ class ExpiryTests(unittest.TestCase):
             self.addCleanup(pool.db.close)
             with patch.dict(os.environ,{'AGNES_API_KEY':'test'}):
                 with self.assertRaisesRegex(ValueError,'presupuesto'):
-                    pool.generate('m',9,'prompt',Path(folder)/'gen',call=lambda *a,**k:self.fail('no request'),attempt_deadline=1100)
+                    pool.generate('m',3,'prompt',Path(folder)/'gen',call=lambda *a,**k:self.fail('no request'),attempt_deadline=1100)

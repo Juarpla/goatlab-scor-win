@@ -14,5 +14,5 @@ proveedores o cuotas de Agnes, lee `references/openclaw-base.md`.
 
 Para el montaje, genera imágenes exclusivamente con Agnes AI. No busques ni
 descargues fotos externas ni las reutilices de bancos antiguos. Conserva los
-recursos de marca y React/Remotion/FFmpeg para motion graphics. Los clips Agnes se crean con los Video Prompts del partido: hasta tres clips
-compartidos, seis segundos, 9:16, con límites y recuperación persistente.
+recursos de marca y React/Remotion/FFmpeg para motion graphics. Los clips Agnes se crean con los Video Prompts del partido: hasta dos clips
+compartidos, seis segundos, 9:16, con límites y recuperación persistente. El banco por partido son cuatro fotos y dos clips.

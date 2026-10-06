@@ -1,4 +1,4 @@
-name: Contenido audiovisual GoatLab
+name: "2-scripting"
 on:
   workflow_dispatch:
     inputs:
@@ -20,7 +20,7 @@ on:
         type: boolean
         default: false
   workflow_run:
-    workflows: ["Actualizar datos GoatLab"]
+    workflows: ["1-update-data"]
     types: [completed]
 # Corre después de que los datos ya están en main. Un fallo de narración
 # no bloquea el deploy de probabilidades.
@@ -80,7 +80,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for path in public/data/youtube-scripts public/data/image-prompts public/data/video-prompts public/data/motion-prompts public/data/llm-health.json; do
+          for path in public/data/youtube-scripts public/data/image-prompts public/data/video-prompts public/data/motion-prompts public/data/llm-health.json public/data/top.json; do
             if [ -e "$path" ]; then git add "$path"; fi
           done
           if git diff --cached --quiet; then

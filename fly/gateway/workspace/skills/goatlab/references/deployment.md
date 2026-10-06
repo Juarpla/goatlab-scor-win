@@ -7,14 +7,14 @@ montaje. [Dirección artística](creative.md) es la referencia del planificador.
 ## Flujo y persistencia
 
 OpenClaw lee el índice y cuatro JSON públicos de goatlab.win. Cada serie conserva
-el contenido utilizado. El banco de diez imágenes y hasta tres clips pertenece
+el contenido utilizado. El banco de cuatro imágenes y hasta dos clips pertenece
 al partido y se reutiliza entre audios y chats hasta su caducidad. La preparación
 comparte un plazo persistente de quince minutos; al terminar publica .ready con
 el material conseguido, incluso sin imágenes. Los Motion Prompts se aplican por audio.
 
-Image 2.5 Flash: 2K, 9:16, cuatro inicios por minuto y una solicitud simultánea.
-Video 2.5 Flash: 720P, 9:16, seis segundos, un inicio por minuto y una tarea
-simultánea. Máximo cinco tareas y tres clips completados. Respeta Retry-After,
+Image 2.5 Flash: 2K, 9:16, doce inicios por minuto y una solicitud simultánea.
+Video 2.5 Flash: 720P, 9:16, seis segundos, un inicio cada 30 segundos y una tarea
+simultánea. Máximo dos tareas y dos clips completados. Respeta Retry-After,
 cancelaciones y caducidad. Un resultado incierto conserva su identidad y no
 provoca una nueva generación. Nginx publica imágenes y MP4, únicamente.
 

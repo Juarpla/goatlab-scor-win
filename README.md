@@ -68,7 +68,7 @@ configurada por `SCRIPT_PROVIDER_ORDER`, independiente del análisis deportivo.
 Cada partido tiene `/scripts`, `/image-prompts`, `/video-prompts` y `/motion-prompts`
 con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
 para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
-partido, genera un banco compartido de 10 imágenes y hasta 3 clips Agnes, y monta
+partido, genera un banco compartido de 4 imágenes y hasta 2 clips Agnes, y monta
 los gráficos según la voz. La preparación dura hasta 15 minutos, con entrega
 parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts`.
 

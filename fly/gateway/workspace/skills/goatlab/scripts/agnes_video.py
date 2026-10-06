@@ -12,10 +12,19 @@ import urllib.error
 import urllib.request
 import urllib.parse
 from pathlib import Path
-from common import atomic_json, database, request_json
+from common import add_quota, atomic_json, database, quota_caps, quota_day, read_quota, request_json
 from agnes import retry_seconds
 
 MODEL = 'agnes-video-2.5-flash'
+CLIP_SECONDS = 6
+
+
+def start_interval():
+    """Starter operative pace: one start every 30s, below the 5 RPM provider tier."""
+    try:
+        return max(12.0, min(120.0, float(os.environ.get('AGNES_VIDEO_START_INTERVAL', '30'))))
+    except (TypeError, ValueError):
+        return 30.0
 
 
 class VideoPool:
@@ -100,7 +109,7 @@ class VideoPool:
                     saved = json.loads(row['result'])
                     if Path(saved['path']).exists(): clips.append(saved)
                     else: failures.append(f'clip {ordinal+1}: archivo perdido; no se regenera')
-                    if len(clips)>=3: break
+                    if len(clips)>=2: break
                     continue
                 if row and row['status'] in ('failed','used'): continue
                 video_id = row['video_id'] if row else None
@@ -125,15 +134,19 @@ class VideoPool:
                     if active:
                         failures.append('otra tarea pendiente o incierta; montaje parcial sin otra pausa'); break
                     occupied = self.db.execute("SELECT COUNT(*) FROM video_tasks WHERE match_id=? AND status IN ('done','pending','uncertain')", (match,)).fetchone()[0]
-                    if occupied>=3: break
+                    if occupied>=2: break
                     while not video_id and self.clock()<deadline and not cancelled():
                         rate = self.db.execute('SELECT next_at FROM video_rate WHERE id=1').fetchone()
                         wait=max(0,(rate[0] if rate else 0)-self.clock())
                         if self.clock()+wait+1>=deadline: break
                         if wait: self.sleep(wait)
                         if cancelled() or self.clock()+1>=deadline: break
+                        day = quota_day(self.clock())
+                        used = read_quota(self.db, day)
+                        if used['video_seconds']+CLIP_SECONDS>quota_caps()['video_seconds']:
+                            failures.append(f'clip {ordinal+1}: cuota de vídeo diaria agotada ({used["video_seconds"]:.0f}s); continúa mañana');break
                         self.db.execute('INSERT OR REPLACE INTO video_tasks VALUES(?,?,?,NULL,?,?,?,NULL)', (match,ordinal,'uncertain',prompt['prompt'],reference,expires))
-                        self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)', (self.clock()+60.1,))
+                        self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)', (self.clock()+start_interval()+0.1,))
                         try:
                             result=call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':'Use <Picture 1> as the visual reference. '+prompt['prompt'],'mode':'reference','images':[reference],'seconds':'6','size':'720P','aspect_ratio':'9:16','n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
@@ -146,8 +159,8 @@ class VideoPool:
                                 self.db.execute("UPDATE video_tasks SET status='pending',video_id=? WHERE match_id=? AND ordinal=?",(video_id,match,ordinal));self.recovery(match,deadline,ordinal)
                             elif status==429:
                                 self.db.execute("UPDATE video_tasks SET status='limited' WHERE match_id=? AND ordinal=?",(match,ordinal))
-                                self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)',(self.clock()+max(60.1,retry),))
-                                if self.clock()+max(60.1,retry)+1>=deadline: failures.append(f'clip {ordinal+1}: HTTP 429; presupuesto agotado');break
+                                self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)',(self.clock()+max(start_interval()+0.1,retry),))
+                                if self.clock()+max(start_interval()+0.1,retry)+1>=deadline: failures.append(f'clip {ordinal+1}: HTTP 429; presupuesto agotado');break
                                 continue
                             elif 400<=status<500:
                                 self.db.execute("UPDATE video_tasks SET status='failed' WHERE match_id=? AND ordinal=?",(match,ordinal))
@@ -181,6 +194,7 @@ class VideoPool:
                             saved=download(result.get('url'),out/f'clip-{ordinal}.mp4',limit)
                             saved.update(model=MODEL,prompt=prompt['prompt'],videoId=video_id,reference=reference,index=ordinal)
                             atomic_json(out/f'clip-{ordinal}.json',saved)
+                            add_quota(self.db, quota_day(self.clock()), video_seconds=saved.get('duration') or CLIP_SECONDS)
                             self.db.execute("UPDATE video_tasks SET status='done',result=? WHERE match_id=? AND ordinal=?",(json.dumps(saved),match,ordinal))
                             clips.append(saved);break
                         if status not in ('queued','in_progress'): limit=self.recovery(match,deadline,ordinal)
@@ -199,8 +213,8 @@ class VideoPool:
                 state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                 if state[0]=='pending':
                     failures.append(f'clip {ordinal+1}: recuperación vencida o tarea pendiente; montaje parcial');break
-                if len(clips)>=3: break
-        return {'clips':clips[:3],'failures':failures}
+                if len(clips)>=2: break
+        return {'clips':clips[:2],'failures':failures}
 
     @staticmethod
     def task_url(video_id):

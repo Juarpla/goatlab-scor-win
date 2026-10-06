@@ -1,0 +1,102 @@
+name: "3-media-creation"
+on:
+  workflow_dispatch:
+    inputs:
+      match:
+        description: 'ID del partido (webId o id). Vacío = top N'
+        required: false
+        type: string
+      limit:
+        description: 'Tope de partidos por corrida (vacío = 5)'
+        required: false
+        type: string
+      mode:
+        description: 'Qué generar'
+        type: choice
+        default: all
+        options: [all, images-only, clips-only]
+  workflow_run:
+    workflows: ["2-scripting"]
+    types: [completed]
+# Corre después de que guiones+prompts están en main. Si ese workflow falló,
+# no hay prompts nuevos y este job no hace nada. Un fallo aquí nunca obliga
+# a repetir la generación de prompts: re-lanza solo este workflow.
+# Banco: 4 fotos + 2 clips por partido, solo partidos con guión+prompts
+# del top-5 + extras (public/data/top.json lo escribe 1-update-data).
+permissions:
+  contents: write
+concurrency:
+  group: goatlab-media
+  cancel-in-progress: false
+jobs:
+  media:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: main
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: ffmpeg (sondas de imagen y clip)
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Generar banco Agnes (Token Plan Starter)
+        run: |
+          args=()
+          if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
+          if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
+          pnpm media "${args[@]}"
+        env:
+          MATCH: ${{ inputs.match }}
+          LIMIT: ${{ inputs.limit || '5' }}
+          # La llave debe ser de tipo Token Plan: las llaves Free comparten
+          # otro pozo con 1 RPM de vídeo y se saturan con los clips.
+          AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
+          AGNES_IMAGE_MODEL: agnes-image-2.5-flash
+          AGNES_IMAGE_RPM: '12'
+          AGNES_VIDEO_START_INTERVAL: '30'
+          AGNES_DAILY_VIDEO_SECONDS_CAP: '360'
+          AGNES_DAILY_IMAGE_CAP: '4000'
+          AGNES_SKIP_IMAGES: ${{ inputs.mode == 'clips-only' && '1' || '' }}
+          AGNES_SKIP_VIDEO: ${{ inputs.mode == 'images-only' && '1' || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: goatlab-media-bank
+          path: public/data/media-pack/
+          retention-days: 30
+      - name: Commit de manifiestos (solo JSON, nunca binarios)
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for path in public/data/media-pack/*.json; do
+            if [ -e "$path" ]; then git add "$path"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "Sin manifiestos que commitear"
+          else
+            git commit -m "chore: update media bank manifests"
+            for i in 1 2 3; do
+              git fetch origin
+              if ! git rebase --autostash origin/main; then
+                git rebase --abort || true
+                echo "Conflicto con main: revisar a mano"
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                break
+              fi
+              echo "Push rechazado, reintento $i/3"
+              sleep 10
+            done
+          fi

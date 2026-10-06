@@ -2,7 +2,9 @@
 
 Produce un plan JSON de montaje version 4 a partir de la voz temporizada. La voz
 es la narración; los Image Prompts y Video Prompts describen el banco Agnes.
-Los cinco Motion Prompts dirigen gráficos pertinentes al argumento de ese audio.
+Los Motion Prompts (entre dos y diez, los que el modelo haya redactado) dirigen
+gráficos pertinentes al argumento de ese audio: el montaje siempre lleva motion
+gráfico, en pantalla completa o como overlays transparentes sobre fotos y vídeos.
 Compón escenas contiguas que cubran exactamente [0,span]. El motor añade el cierre
 fuera de span. Decide ritmo, entradas, salidas y énfasis según las frases escuchadas.
 

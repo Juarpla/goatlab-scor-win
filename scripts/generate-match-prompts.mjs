@@ -3,8 +3,9 @@ import { createHash } from 'node:crypto';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent } from '../src/lib/match-content.js';
 import { withFailover, extractJson } from '../src/lib/llm.js';
 import { selectMatches } from '../src/lib/youtube.js';
+import { rankMatches, esName } from '../src/lib/teams.js';
 import { editingFacts } from '../src/lib/match-facts.js';
-import { esName } from '../src/lib/teams.js';
+import { TOP_FILENAME, TOP_VERSION, defaultTopN, effectiveIds, liveIds, registerExtra } from '../src/lib/top.js';
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
 const category = args['--category'];
@@ -12,18 +13,65 @@ const spec = CONTENT_CATEGORIES[category];
 if (!spec?.kinds) throw new Error('Usa --category=image-prompts|video-prompts|motion-prompts');
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
+const onlyMatch = args['--match'];
+const limitRaw = args['--limit'];
+const topDefault = defaultTopN(process.env);
+const topRaw = args['--match'] ? null : (args['--top'] || process.env.SCRIPT_TOP_N);
+const top = onlyMatch ? null : (Number.isFinite(Number(topRaw)) && Number(topRaw) >= 1 ? Math.floor(Number(topRaw)) : topDefault);
+const manualTop = top != null && topRaw != null && String(topRaw).trim() !== '' && top > topDefault;
+const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > Date.now());
+const liveRanked = rankMatches(futureNs).map(m => m.webId ?? m.id);
+let topFile = null;
+try {
+  const raw = JSON.parse(await readFile(`public/data/${TOP_FILENAME}`, 'utf8'));
+  if (raw?.version === TOP_VERSION && Array.isArray(raw?.ranking) && raw.ranking.length) topFile = raw;
+  else console.log(`${category}: top.json inválido; recálculo en vivo`);
+} catch (e) {
+  if (e.code !== 'ENOENT') throw e;
+  console.log(`${category}: sin top.json; recálculo en vivo`);
+}
+async function saveTopFile() {
+  await writeFile(`public/data/${TOP_FILENAME}`, JSON.stringify(topFile, null, 2));
+}
+let matches;
+if (onlyMatch) {
+  matches = selectMatches(fixtures.matches, { onlyMatch });
+  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [onlyMatch]);
+  if (registered.added.length) {
+    topFile = registered.top;
+    await saveTopFile();
+    console.log(`${category}: extra manual ${registered.added.join(', ')}`);
+  }
+} else {
+  if (manualTop) {
+    const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, liveRanked.slice(topDefault, top));
+    if (registered.added.length) {
+      topFile = registered.top;
+      await saveTopFile();
+      console.log(`${category}: extras manuales ${registered.added.join(', ')}`);
+    }
+  }
+  const wanted = new Set(topFile ? effectiveIds(topFile, top) : liveRanked.slice(0, top));
+  matches = futureNs.filter(m => wanted.has(m.webId ?? m.id)).sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
+  if (limitRaw != null) matches = matches.slice(0, Math.max(1, Number(limitRaw)));
+}
+const fullPrune = !onlyMatch && !args['--force'] && limitRaw == null;
+const dir = `public/data/${spec.directory}`;
+await mkdir(dir, { recursive: true });
+if (fullPrune) {
+  const live = liveIds(fixtures.matches);
+  const keep = topFile ? new Set(effectiveIds(topFile, top).filter(id => live.has(id))) : live;
+  for (const name of await readdir(dir)) {
+    if (name.endsWith('.json') && !keep.has(name.replace(/\.json$/, ''))) {
+      await rm(`${dir}/${name}`);
+      console.log(`${category}: poda ${name}`);
+    }
+  }
+}
 const published = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8')).published === true;
 let scorers; try { scorers = JSON.parse(await readFile('public/data/scorers.json', 'utf8')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
 const guide = await readFile(`scripts/prompts/${category}.md`, 'utf8');
 const instructionVersion = createHash('sha256').update(guide).digest('hex');
-const dir = `public/data/${spec.directory}`;
-await mkdir(dir, { recursive: true });
-const all = selectMatches(fixtures.matches, {});
-const matches = selectMatches(args['--match'] ? fixtures.matches : fixtures.matches.filter(m => Date.parse(m.kickoff) > Date.now()), { onlyMatch: args['--match'], limit: args['--limit'], top: args['--match'] ? null : args['--top'] || process.env.SCRIPT_TOP_N || 5 });
-if (!args['--match'] && !args['--force'] && !args['--limit']) {
-  const live = new Set(all.map(m => `${m.webId ?? m.id}.json`));
-  for (const name of await readdir(dir)) if (name.endsWith('.json') && !live.has(name)) await rm(`${dir}/${name}`);
-}
 let failed = 0;
 for (const match of matches) {
   const matchId = match.webId ?? match.id, file = `${dir}/${matchId}.json`;

@@ -11,11 +11,11 @@ test('content priority starts with MiMo and keeps the independent analysis defau
   assert.equal(resolveChain(env)[0].id,'MISTRAL');
 });
 function images(){return{version:1,category:'image-prompts',matchId:'alpha-beta',home:'Alpha',away:'Beta',prompts:CONTENT_CATEGORIES['image-prompts'].kinds.map((kind,i)=>({n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(3)} ${kind==='stadium'?'Stadium, flags and team crests.':kind==='supporters'?'Both groups of supporters.':''}`}))};}
-test('image contract requires exactly ten ordered scenes, both teams and stadium identity',()=>{
+test('image contract requires exactly four ordered scenes, both teams and stadium identity',()=>{
   const data=images();assert.ok(validateContent(data,data.category,data.matchId));
-  data.prompts[9].prompt=data.prompts[9].prompt.replace('flags','banners');assert.ok(promptErrors(data).some(e=>e.includes('presentación')));
+  data.prompts[3].prompt=data.prompts[3].prompt.replace('flags','banners');assert.ok(promptErrors(data).some(e=>e.includes('presentación')));
   data.prompts[0].prompt=data.prompts[0].prompt.replace('Beta','Gamma');assert.ok(promptErrors(data).some(e=>e.includes('ambos equipos')));
-  data.prompts.pop();assert.ok(promptErrors(data).some(e=>e.includes('10')));
+  data.prompts.pop();assert.ok(promptErrors(data).some(e=>e.includes('4')));
 });
 test('motion rejects unknown facts and percentages when publication is closed',()=>{
   const data={category:'motion-prompts',home:'Alpha',away:'Beta',facts:[{id:'home.gf',value:4}],prompts:CONTENT_CATEGORIES['motion-prompts'].kinds.map((kind,i)=>({n:i+1,kind,title:kind,factIds:['home.gf'],prompt:`Vertical 9:16 Spanish labels, source and sample, transition. {{home.gf}} ${kind} `+'Detailed layout and timing with legible labels and clear baseline. '.repeat(17)}))};
@@ -38,4 +38,15 @@ test('balanced motion metadata preserves old prompts and rejects invalid present
   assert.deepEqual(promptErrors(data),[]);
   data.prompts[0].presentations=['editorial','invented'];
   assert.ok(promptErrors(data).some(e=>e.includes('presentaciones')));
+});
+test('motion count is decided by the model between two and ten scenes',()=>{
+  const scene=(n,kind)=>({n,kind,title:kind,factIds:[],presentations:['editorial','statistical'],prompt:`Vertical 9:16 Spanish source sample transition ${kind}. `+'Detailed editorial and statistical composition with timing and readable labels. '.repeat(18)});
+  const valid={category:'motion-prompts',version:1,matchId:'alpha-beta',home:'Alpha',away:'Beta',facts:[],prompts:[scene(1,'form'),scene(2,'goals')]};
+  assert.ok(validateContent(valid,'motion-prompts','alpha-beta'));
+  const one={...valid,prompts:[scene(1,'form')]};
+  assert.ok(promptErrors(one).some(e=>e.includes('2 y 10')));
+  const eleven={...valid,prompts:Array.from({length:11},(_,i)=>scene(i+1,'form'))};
+  assert.ok(promptErrors(eleven).some(e=>e.includes('2 y 10')));
+  const alien={...valid,prompts:[scene(1,'form'),{...scene(2,'goals'),kind:'invented'}]};
+  assert.ok(promptErrors(alien).some(e=>e.includes('catálogo')));
 });

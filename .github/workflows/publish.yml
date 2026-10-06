@@ -1,4 +1,4 @@
-name: Actualizar datos GoatLab
+name: "1-update-data"
 on:
   workflow_dispatch:
   schedule:
@@ -6,6 +6,8 @@ on:
     - cron: '17 */6 * * *' # refresco de marcadores del día
 # The bot commits refreshed data back to the repo; that push triggers the
 # Cloudflare Workers deploy (GitHub Actions never deploys itself).
+# build-top.mjs escribe public/data/top.json (ranking completo + extras):
+# 2-scripting y 3-media-creation leen el mismo top, nunca divergen.
 permissions:
   contents: write
 concurrency:
@@ -26,7 +28,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Actualización completa (diaria, 07:00 UTC)
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *')
-        run: node scripts/update-data.mjs
+        run: node scripts/update-data.mjs && node scripts/build-top.mjs
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
@@ -49,7 +51,7 @@ jobs:
           ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
       - name: Refresco de marcadores (cada 6 horas)
         if: github.event.schedule == '17 */6 * * *'
-        run: node scripts/update-data.mjs --refresh
+        run: node scripts/update-data.mjs --refresh && node scripts/build-top.mjs
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}

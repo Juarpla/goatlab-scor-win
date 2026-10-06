@@ -3,8 +3,8 @@ export const CONTENT_VERSION = 1;
 export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_FALLBACK_MODEL,OPENCODE_GO_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export const CONTENT_CATEGORIES = Object.freeze({
   scripts: { label: 'Scripts', directory: 'youtube-scripts', count: 10 },
-  'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 10, kinds: ['ball-duel', 'pressing', 'passing', 'dribbling', 'crossing', 'defending', 'aerial-duel', 'goal-action', 'supporters', 'stadium'] },
-  'video-prompts': { label: 'Video Prompts', directory: 'video-prompts', count: 5, kinds: ['push-in', 'tracking', 'orbit', 'pull-out', 'focus-transition'] },
+  'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 4, kinds: ['ball-duel', 'goal-action', 'supporters', 'stadium'] },
+  'video-prompts': { label: 'Video Prompts', directory: 'video-prompts', count: 2, kinds: ['push-in', 'tracking'] },
   'motion-prompts': { label: 'Motion Prompts', directory: 'motion-prompts', count: 5, kinds: ['form', 'goals', 'clean-sheets', 'head-to-head', 'synthesis'] },
 });
 export function contentUrl(matchId, category, json = false) {
@@ -14,14 +14,20 @@ export function contentUrl(matchId, category, json = false) {
 export function promptErrors(data, { category = data?.category, home = data?.home, away = data?.away, facts = data?.facts ?? [], published = false } = {}) {
   const spec = CONTENT_CATEGORIES[category];
   if (!spec?.kinds) return ['Categoría de prompts desconocida'];
-  if (!data || !Array.isArray(data.prompts) || data.prompts.length !== spec.count) return [`Se requieren ${spec.count} prompts`];
+  // Motion: el modelo decide la cantidad de escenas (2-10), no hay número fijo.
+  if (category === 'motion-prompts') {
+    if (!data || !Array.isArray(data.prompts) || data.prompts.length < 2 || data.prompts.length > 10) return ['Se requieren entre 2 y 10 Motion Prompts'];
+  } else if (!data || !Array.isArray(data.prompts) || data.prompts.length !== spec.count) return [`Se requieren ${spec.count} prompts`];
   const known = new Set(facts.map(f => f.id));
   const errors = [];
   const seen = new Set();
   for (const [i, row] of data.prompts.entries()) {
     const text = String(row?.prompt ?? '').trim();
     const label = `${category} ${i + 1}`;
-    if (row?.n !== i + 1 || row?.kind !== spec.kinds[i]) errors.push(`${label}: número o escena incorrectos`);
+    if (row?.n !== i + 1) errors.push(`${label}: número incorrecto`);
+    if (category === 'motion-prompts') {
+      if (!spec.kinds.includes(row?.kind)) errors.push(`${label}: escena fuera del catálogo`);
+    } else if (row?.kind !== spec.kinds[i]) errors.push(`${label}: escena incorrecta`);
     if (typeof row?.title !== 'string' || !row.title.trim() || row.title.length > 160) errors.push(`${label}: título inválido`);
     if (text.length < 180 || text.length > 12000 || !/9\s*:\s*16/.test(text)) errors.push(`${label}: texto incompleto o formato ausente`);
     if (seen.has(text.toLowerCase())) errors.push(`${label}: prompt repetido`);

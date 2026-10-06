@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs';
-const names = ['youtube', 'media', 'teams', 'compliance', 'agnes', 'team-colors', 'match-facts', 'media-progress', 'match-content'];
+const names = ['youtube', 'media', 'teams', 'compliance', 'agnes', 'team-colors', 'match-facts', 'media-progress', 'match-content', 'top'];
 for (const name of names) {
   const source = new URL(`../src/lib/${name}.js`, import.meta.url);
   const target = new URL(`../fly/gateway/workspace/skills/goatlab/lib/${name}.js`, import.meta.url);

@@ -1,8 +1,10 @@
 /** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
  *  redactar-guiones-shorts. Un JSON ya existente no se toca.
- *  Sin --match, redacta el top N (SCRIPT_TOP_N o 5) del ranking de relevancia.
- *  En corrida completa (sin --match/--limit) poda además los JSONs rancios
- *  cuyo partido ya salió de fixtures, mirando todos los NS, no solo el top. */
+ *  Sin --match, redacta el top N (input --top, SCRIPT_TOP_N o 5) del ranking
+ *  guardado en public/data/top.json (lo escribe 1-update-data). En corrida
+ *  completa (sin --match/--limit) poda además los JSONs fuera del conjunto
+ *  efectivo (top N + extras manuales) que ya salieron de la ventana NS.
+ *  --match o top ampliado registran el partido como extra protegido. */
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../src/lib/llm.js';
@@ -23,6 +25,8 @@ import {
 import { CONTENT_PROVIDER_ORDER } from '../src/lib/match-content.js';
 import { createHash } from 'node:crypto';
 import { esName } from '../src/lib/teams.js';
+import { rankMatches } from '../src/lib/teams.js';
+import { TOP_FILENAME, TOP_VERSION, defaultTopN, effectiveIds, liveIds, registerExtra } from '../src/lib/top.js';
 import { checkDescription } from '../src/lib/compliance.js';
 
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
@@ -42,7 +46,10 @@ function positiveInt(raw) {
   const n = Number(raw);
   return Number.isFinite(n) && n >= 1 ? Math.floor(n) : null;
 }
-const top = onlyMatch ? null : (positiveInt(args.has('--top') ? args.get('--top') : process.env.SCRIPT_TOP_N) ?? 5);
+const topDefault = defaultTopN(process.env);
+const topRaw = args.has('--top') ? args.get('--top') : process.env.SCRIPT_TOP_N;
+const top = onlyMatch ? null : (positiveInt(topRaw) ?? topDefault);
+const manualTop = top != null && topRaw != null && String(topRaw).trim() !== '' && top > topDefault;
 
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
 const evaluation = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8'));
@@ -56,8 +63,43 @@ const published = evaluation?.published === true;
 const skill = (await readFile(skillPath, 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
 
 const allNs = selectMatches(fixtures.matches, {});
-let matches = selectMatches(onlyMatch ? fixtures.matches : fixtures.matches.filter(m => Date.parse(m.kickoff) > Date.now()), { onlyMatch, limit: limitRaw, top });
-if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS`);
+const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > Date.now());
+const liveRanked = rankMatches(futureNs).map(m => m.webId ?? m.id);
+let topFile = null;
+try {
+  const raw = JSON.parse(await readFile(join('public/data', TOP_FILENAME), 'utf8'));
+  if (raw?.version === TOP_VERSION && Array.isArray(raw?.ranking) && raw.ranking.length) topFile = raw;
+  else console.log('shorts: top.json inválido; recálculo en vivo');
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+  console.log('shorts: sin top.json; recálculo en vivo');
+}
+async function saveTopFile() {
+  await writeFile(join('public/data', TOP_FILENAME), JSON.stringify(topFile, null, 2));
+}
+let matches;
+if (onlyMatch) {
+  matches = selectMatches(fixtures.matches, { onlyMatch });
+  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [onlyMatch]);
+  if (registered.added.length) {
+    topFile = registered.top;
+    await saveTopFile();
+    console.log(`shorts: extra manual ${registered.added.join(', ')}`);
+  }
+} else {
+  if (manualTop) {
+    const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, liveRanked.slice(topDefault, top));
+    if (registered.added.length) {
+      topFile = registered.top;
+      await saveTopFile();
+      console.log(`shorts: extras manuales ${registered.added.join(', ')}`);
+    }
+  }
+  const wanted = new Set(topFile ? effectiveIds(topFile, top) : liveRanked.slice(0, top));
+  matches = futureNs.filter(m => wanted.has(m.webId ?? m.id)).sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
+  if (limitRaw != null) matches = matches.slice(0, Math.max(1, Number(limitRaw)));
+}
+if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS [${topFile ? 'top.json' : 'en vivo'}]`);
 if (!matches.length) {
   console.error('shorts: sin partidos NS para generar');
   process.exit(1);
@@ -65,8 +107,9 @@ if (!matches.length) {
 
 await mkdir(dir, { recursive: true });
 if (fullRun) {
-  const live = allNs.map(m => m.webId ?? m.id);
-  for (const file of staleScripts(await readdir(dir), live)) {
+  const live = liveIds(fixtures.matches);
+  const keep = topFile ? effectiveIds(topFile, top).filter(id => live.has(id)) : [...live];
+  for (const file of staleScripts(await readdir(dir), keep)) {
     await rm(join(dir, file));
     console.log(`shorts: poda ${file}`);
   }

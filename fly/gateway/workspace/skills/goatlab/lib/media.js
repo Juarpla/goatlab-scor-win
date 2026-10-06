@@ -1,8 +1,8 @@
 /** Agnes-only per-match bank. Search adapters and stock-photo selection are retired. */
 import { esName } from './teams.js';
-export const ASSETS_PER_MATCH = 10;
+export const ASSETS_PER_MATCH = 4;
 export const ASSETS_MIN = 0;
-export const AGNES_MAX_IMAGES = 10;
+export const AGNES_MAX_IMAGES = 4;
 export const ALLOWED_SOURCES = ['agnes'];
 export const AI_CREDIT = 'Imágenes y clips referenciales generados con IA (Agnes AI)';
 export const CAMERA_MOVES = ['pan-left','pan-right','push','pull','tilt','rise','drift','cut-in','slide','hold-push'];

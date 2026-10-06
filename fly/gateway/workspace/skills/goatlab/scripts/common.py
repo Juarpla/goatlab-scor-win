@@ -4,6 +4,7 @@ import os
 import sqlite3
 import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -57,3 +58,43 @@ def telegram(method, body):
     if not result.get("ok"):
         raise RuntimeError(f"Telegram {method} rechazado")
     return result["result"]
+
+
+def quota_day(timestamp):
+    return datetime.fromtimestamp(timestamp, tz=timezone.utc).strftime("%Y-%m-%d")
+
+
+def quota_caps():
+    """Token Plan Starter quotas with a conservative operative video ceiling.
+
+    Provider Starter quotas: 4000 images/day, 500 video seconds/day.
+    The operative video ceiling (default 360s ~= 20 full banks) keeps a
+    reserve for retries and on-demand Telegram generations within the month.
+    """
+    def num(name, default):
+        try:
+            return float(os.environ.get(name, default))
+        except (TypeError, ValueError):
+            return float(default)
+    return {
+        "images": num("AGNES_DAILY_IMAGE_CAP", 4000),
+        "video_seconds": num("AGNES_DAILY_VIDEO_SECONDS_CAP", 360),
+    }
+
+
+def ensure_quota(db):
+    db.execute("CREATE TABLE IF NOT EXISTS quota_use(day TEXT PRIMARY KEY,"
+               " images INTEGER NOT NULL DEFAULT 0, video_seconds REAL NOT NULL DEFAULT 0)")
+
+
+def read_quota(db, day):
+    ensure_quota(db)
+    row = db.execute("SELECT images, video_seconds FROM quota_use WHERE day=?", (day,)).fetchone()
+    return {"images": row[0] if row else 0, "video_seconds": row[1] if row else 0.0}
+
+
+def add_quota(db, day, images=0, video_seconds=0.0):
+    ensure_quota(db)
+    db.execute("INSERT INTO quota_use(day, images, video_seconds) VALUES(?,?,?)"
+               " ON CONFLICT(day) DO UPDATE SET images=images+excluded.images,"
+               " video_seconds=video_seconds+excluded.video_seconds", (day, images, video_seconds))
