@@ -1,0 +1,637 @@
+{
+  "id": "fd-564704",
+  "home": "Levante UD",
+  "away": "Sevilla FC",
+  "competition": "laliga",
+  "kickoff": "2026-10-12T19:00:00Z",
+  "updatedAt": "2026-10-07T14:12:04.542Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.44,
+      "away": 1.533
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.585,
+      "away": 1.352
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Levante UD": {
+        "position": 17,
+        "team": "Levante UD",
+        "played": 6,
+        "won": 1,
+        "drawn": 2,
+        "lost": 3,
+        "goalsFor": 8,
+        "goalsAgainst": 12,
+        "goalDifference": -4,
+        "points": 5,
+        "form": null
+      },
+      "Sevilla FC": {
+        "position": 5,
+        "team": "Sevilla FC",
+        "played": 7,
+        "won": 4,
+        "drawn": 1,
+        "lost": 2,
+        "goalsFor": 10,
+        "goalsAgainst": 9,
+        "goalDifference": 1,
+        "points": 13,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-07T14:11:30.160Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-12T19:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-07T14:11:30.160Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 202
+    },
+    "venue": {
+      "city": "Valencia",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.346,
+      "draw": 0.267,
+      "away": 0.387
+    },
+    "doubleChance": {
+      "12": 0.733,
+      "1X": 0.613,
+      "X2": 0.654
+    },
+    "dnb": {
+      "home": 0.472,
+      "away": 0.528
+    },
+    "totals": {
+      "over15": 0.808,
+      "under15": 0.192,
+      "over25": 0.571,
+      "under25": 0.429,
+      "over35": 0.347,
+      "under35": 0.653
+    },
+    "btts": {
+      "yes": 0.61,
+      "no": 0.39
+    },
+    "cleanSheet": {
+      "home": 0.216,
+      "away": 0.237
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.124
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.087
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.081
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.067
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.062
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.94,
+    "noGoal": 0.053,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.387
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.237
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.145
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.089
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.055
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.033
+      }
+    ],
+    "firstHome": 0.511,
+    "firstAway": 0.436
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Roger Brugué",
+        "goals": 3,
+        "matches": 5,
+        "share": 0.375,
+        "rate": 0.59,
+        "anytime": 0.448,
+        "first": 0.202
+      },
+      {
+        "player": "Iván Romero",
+        "goals": 2,
+        "matches": 6,
+        "share": 0.25,
+        "rate": 0.4,
+        "anytime": 0.327,
+        "first": 0.135
+      },
+      {
+        "player": "Adrián de la Fuente",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.125,
+        "rate": 0.2,
+        "anytime": 0.18,
+        "first": 0.067
+      }
+    ],
+    "away": [
+      {
+        "player": "Miguel Sierra",
+        "goals": 2,
+        "matches": 7,
+        "share": 0.2,
+        "rate": 0.27,
+        "anytime": 0.237,
+        "first": 0.092
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.35600000000000004,
+      "draw": 0.28800000000000003,
+      "away": 0.35600000000000004,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.73,
+      "away": 1.17
+    },
+    "over15": 0.7240000000000001,
+    "over25": 0.478,
+    "over35": 0.273,
+    "btts": 0.523,
+    "score": "1-1",
+    "cornersOver95": 0.444,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.356,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.356,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-07T14:11:49.955Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.494,
+      "draw": 0.259,
+      "away": 0.247
+    },
+    "doubleChance": {
+      "12": 0.741,
+      "1X": 0.753,
+      "X2": 0.506
+    },
+    "dnb": {
+      "home": 0.667,
+      "away": 0.333
+    },
+    "totals": {
+      "over15": 0.797,
+      "under15": 0.203,
+      "over25": 0.554,
+      "under25": 0.446,
+      "over35": 0.33,
+      "under35": 0.67
+    },
+    "btts": {
+      "yes": 0.578,
+      "no": 0.422
+    },
+    "cleanSheet": {
+      "home": 0.31,
+      "away": 0.177
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12,
+        "share": 0.26785714285714285
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.096,
+        "share": 0.21428571428571427
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.084,
+        "share": 0.1875
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.082,
+        "share": 0.1830357142857143
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.066,
+        "share": 0.14732142857142858
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 31,
+    "homeWins": 6,
+    "draws": 7,
+    "awayWins": 18,
+    "avgTotalGoals": 3.032258064516129,
+    "recent": [
+      {
+        "eventId": 1015,
+        "date": "2026-04-23T17:00:00+00:00",
+        "home": "Levante UD",
+        "away": "Sevilla",
+        "homeTeamId": 46,
+        "awayTeamId": 52,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 865,
+        "date": "2026-01-04T13:00:00+00:00",
+        "home": "Sevilla",
+        "away": "Levante UD",
+        "homeTeamId": 52,
+        "awayTeamId": 46,
+        "homeScore": 0,
+        "awayScore": 3
+      },
+      {
+        "eventId": 319922,
+        "date": "2022-04-21T17:00:00+00:00",
+        "home": "Levante UD",
+        "away": "Sevilla",
+        "homeTeamId": 46,
+        "awayTeamId": 52,
+        "homeScore": 2,
+        "awayScore": 3
+      },
+      {
+        "eventId": 319688,
+        "date": "2021-10-24T12:00:00+00:00",
+        "home": "Sevilla",
+        "away": "Levante UD",
+        "homeTeamId": 52,
+        "awayTeamId": 46,
+        "homeScore": 5,
+        "awayScore": 3
+      },
+      {
+        "eventId": 323567,
+        "date": "2021-04-21T17:00:00+00:00",
+        "home": "Levante UD",
+        "away": "Sevilla",
+        "homeTeamId": 46,
+        "awayTeamId": 52,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 202
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 202
+    },
+    "source": "GoatLab",
+    "expectedTotal": 8.8
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 12.15,
+      "shotsOnTarget": 4.33,
+      "xg": 1.73,
+      "corners": 4.08,
+      "fouls": 12.27,
+      "yellowCards": 1.78,
+      "redCards": 0.5,
+      "offsides": 1.89,
+      "possession": 49.45
+    },
+    "away": {
+      "shots": 13.21,
+      "shotsOnTarget": 4.87,
+      "xg": 1.17,
+      "corners": 4.73,
+      "fouls": 12.64,
+      "yellowCards": 2.19,
+      "redCards": 0.5,
+      "offsides": 2.35,
+      "possession": 50.55
+    },
+    "sample": {
+      "home": 6,
+      "away": 8
+    },
+    "coverage": {
+      "home": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 6,
+        "redCards": 0,
+        "offsides": 6
+      },
+      "away": {
+        "possession": 8,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 8,
+        "fouls": 7,
+        "yellowCards": 8,
+        "redCards": 5,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.33,
+      "shotsOnTarget": 4.75,
+      "xg": 1.48,
+      "corners": 4.79,
+      "fouls": 12.4,
+      "yellowCards": 2.13,
+      "redCards": 0.5,
+      "offsides": 2.17
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "media",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "media",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro",
+      "media"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": true,
+    "source": "Bzzoiro+media"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.348,
+      "draw": 0.133,
+      "away": 0.519
+    },
+    "cardsDuel": {
+      "home": 0.319,
+      "draw": 0.204,
+      "away": 0.477
+    },
+    "lastGoal": {
+      "home": 0.511,
+      "away": 0.436,
+      "noGoal": 0.053
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.431,
+        "away": 0.569
+      },
+      "5": {
+        "home": 0.41,
+        "away": 0.59
+      },
+      "7": {
+        "home": 0.393,
+        "away": 0.607
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.141,
+      "home12": 0.207,
+      "level": 0.133,
+      "away12": 0.257,
+      "away3plus": 0.262
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 3.7,
+      "condition": "clear",
+      "sampledAt": "2026-10-12T19:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Ciutat de València",
+      "city": "Valencia",
+      "capacity": 26354,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Levante UD",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 17,
+        "played": 6,
+        "gf": 8,
+        "ga": 12,
+        "provider": null
+      },
+      "player": {
+        "name": "Roger Brugué",
+        "detail": "3 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Sevilla FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 5,
+        "played": 7,
+        "gf": 10,
+        "ga": 9,
+        "provider": null
+      },
+      "player": {
+        "name": "Miguel Sierra",
+        "detail": "2 goles en 7 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "B2 señala H con 35.6%, pero B registra empate técnico H/A (35.6% ambos); P da 38.7% al visitante y 34.6% al local, por lo que la mayor probabilidad no es unívoca entre modelos.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-07T14:14:09.543Z"
+  }
+}

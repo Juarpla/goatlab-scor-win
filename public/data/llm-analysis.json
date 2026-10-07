@@ -1,144 +1,4 @@
 {
-  "bz-212677": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Kazajistán recibe a Islas Feroe en la Nations League",
-        "bullets": [
-          "Kazajistán e Islas Feroe se enfrentan el 2026-10-06 en la Nations League, con Kazajistán como local y el encuentro aún sin comenzar.",
-          "El bloque de sede y clima refleja lluvia y una temperatura de 22 grados, sin recinto ni ciudad indicados en el input.",
-          "Islas Feroe aparece por delante de Kazajistán en las filas de clasificación disponibles, ambas con 2 registros en el bloque de tabla."
-        ],
-        "stats": [
-          {
-            "value": "2026-10-06",
-            "label": "fecha del partido"
-          },
-          {
-            "value": "lluvia",
-            "label": "clima previsto"
-          },
-          {
-            "value": "22",
-            "label": "grados previstos"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Los modelos conceden la mayor probabilidad al visitante",
-        "bullets": [
-          "Poisson GoatLab reparte 0.236 para el triunfo local, 0.298 para el empate y 0.466 para el visitante, con 0.92 y 1.39 como goles esperados de cada lado.",
-          "CatBoost Bzzoiro ofrece 0.225, 0.286 y 0.489 en el mismo orden, con 0.92 y 1.39 goles esperados y un marcador más probable de 0-1.",
-          "La estimación declarada de Bzzoiro (B2) señala al visitante como resultado de mayor probabilidad con 0.489 y responde de forma negativa en goles totales y en ambos anotan.",
-          "Los dos cálculos coinciden en dar al equipo visitante la probabilidad más alta y al local la más baja, con una diferencia estrecha entre sí."
-        ],
-        "stats": [
-          {
-            "value": "0.466",
-            "label": "triunfo visitante Poisson"
-          },
-          {
-            "value": "0.489",
-            "label": "triunfo visitante Bzzoiro"
-          },
-          {
-            "value": "0.92",
-            "label": "goles esperados locales"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Cuatro precedentes con equilibrio y un solo triunfo kazajo",
-        "bullets": [
-          "El historial registra 4 cruces: una victoria de Islas Feroe por 1-0 en 2025, dos empates 1-1 en 2026 y en 2013, y un triunfo de Kazajistán por 2-1 en 2013.",
-          "Islas Feroe actuó como local en tres de esos cuatro partidos, con un triunfo y dos empates, sin derrota en ese rol.",
-          "El único precedente disputado en Kazajistán, en septiembre de 2013, terminó 2-1 a favor del equipo local.",
-          "El cruce más reciente, en septiembre de 2026, se resolvió con empate 1-1."
-        ],
-        "stats": [
-          {
-            "value": "4",
-            "label": "cruces registrados"
-          },
-          {
-            "value": "1-1",
-            "label": "marcador más repetido"
-          },
-          {
-            "value": "2-1",
-            "label": "último triunfo local"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Islas Feroe por delante de Kazajistán en la tabla",
-        "bullets": [
-          "Las filas de clasificación colocan a Islas Feroe en el puesto 2 y a Kazajistán en el puesto 3.",
-          "Ambas filas comparten el valor 2 en la columna siguiente a la posición, sin que el input precise si corresponde a partidos jugados o a puntos."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "puesto de Islas Feroe"
-          },
-          {
-            "value": "3",
-            "label": "puesto de Kazajistán"
-          }
-        ]
-      },
-      {
-        "kind": "claves",
-        "title": "Claves: lluvia, goles bajos y un referente feroés",
-        "bullets": [
-          "Áki Samuelsen, de Islas Feroe, figura en el bloque de goleadores con 1 gol consignado.",
-          "Los goles esperados de 0.92 y 1.39 y la respuesta negativa a ambos anotan apuntan a un partido de pocos tantos, con el visitante mejor situado en los modelos.",
-          "La lluvia y los 22 grados son los únicos datos de sede y clima, sin recinto indicado.",
-          "Islas Feroe llega sin derrota en los dos cruces más recientes del historial, 1-0 y 1-1, ambos como local."
-        ],
-        "stats": [
-          {
-            "value": "1",
-            "label": "gol de Áki Samuelsen"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Sede sin especificar",
-        "detail": "El bloque W aporta lluvia y 22 grados, pero no indica estadio ni ciudad del encuentro."
-      },
-      {
-        "label": "Campos de P sin etiquetar",
-        "detail": "Los valores 0.407 y 0.464 del Poisson GoatLab no llevan descripción en el input, por lo que no se interpretan."
-      },
-      {
-        "label": "Sin estimación API-Football",
-        "detail": "No se incluye fila A, así que no hay distribución, mayor probabilidad ni umbral de goles de ese proveedor."
-      },
-      {
-        "label": "Tabla incompleta",
-        "detail": "Las filas T solo ofrecen posición y un valor numérico sin aclarar si son partidos, puntos o diferencia de goles."
-      },
-      {
-        "label": "Sin forma, bajas ni consenso",
-        "detail": "No hay filas R de forma reciente, L de bajas confirmadas ni M2 de consenso externo en porcentaje."
-      }
-    ],
-    "review": {
-      "flag": false,
-      "note": "Los cálculos de P y B son coherentes entre sí y con el historial y la tabla: el visitante concentra 0.466 y 0.489 de probabilidad y el local queda en 0.236 y 0.225. No se detecta una desviación clara que obligue a marcar los porcentajes; el favoritismo visitante encaja con los precedentes y con las "
-    },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-02T13:34:21.890Z",
-    "inputKey": "v3|M|bz-212677|Kazakhstan|Faroe Islands|nations|2026-10-06T14:00:00+00:0|NS\nP|0.92|1.39|0.236|0.298|0.466|0.407|0.464\nB|0.225|0.286|0.489|0.92|1.39|0.415|0.467|0-1|\nB2|A|0.489|no|no\nH|4|1|2|1|2\nW||rain|22|\nT|3|Kazakhstan|2|1||\nT|2|Faroe Islands|2|2||\nS|Áki Samuelsen|Faroe Islands|1|2\nHR|2026-09-26|Faroe Islands|Kazakhstan|1|1\nHR|2025-11-18|Faroe Islands|Kazakhstan|1|0\nHR|2013-10-11|Faroe Islands|Kazakhstan|1|1\nHR|2013-09-06|Kazakhstan|Faroe Islands|2|1",
-    "materialKey": "M|bz-212677|Kazakhstan|Faroe Islands|nations|2026-10-06T14:00:00+00:0|NS"
-  },
   "fd-564706": {
     "summary": [
       {
@@ -2651,5 +2511,291 @@
     "generatedAt": "2026-10-06T13:58:57.346Z",
     "inputKey": "v3|M|fd-564705|Real Racing Club de Santander|Valencia CF|laliga|2026-10-11T19:00:00Z|NS\nP|1.89|1.84|0.394|0.232|0.374|0.72|0.722\nB|0.563|0.218|0.219|1.97|1.23|0.607|0.583|1-1|0.532\nB2|H|0.563|no|no\nH|56|16|16|24|2.75\nT|16|Real Racing Club de Santander|7|7|11|21\nT|19|Valencia CF|7|4|4|13\nS|Yassir Zabiri|Real Racing Club de Santander|6|7\nS|Andrés Martín|Real Racing Club de Santander|1|3\nS|Aaron Mayol|Valencia CF|1|5\nR|2026-08-23|Getafe CF|Real Racing Club de Santander|1|0\nR|2026-08-28|Real Racing Club de Santander|Elche CF|3|2\nR|2026-09-05|Rayo Vallecano de Madrid|Real Racing Club de Santander|3|2\nR|2026-09-06|Valencia CF|FC Barcelona|0|5\nR|2026-09-11|Sevilla FC|Valencia CF|1|0\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-15|Alaves|Valencia|0|1\nR|2026-09-16|FC Barcelona|Real Racing Club de Santander|7|2\nR|2026-09-19|RC Celta de Vigo|Real Racing Club de Santander|5|0\nR|2026-09-20|Valencia CF|Real Sociedad de Fútbol|2|3\nR|2026-09-20|Valencia|Real Sociedad|2|3\nHR|2012-01-29|Real Racing Club|Valencia|2|2\nHR|2011-08-27|Valencia|Real Racing Club|4|3\nHR|2011-01-31|Real Racing Club|Valencia|1|1\nHR|2010-09-11|Valencia|Real Racing Club|1|0\nHR|2010-03-08|Valencia|Real Racing Club|0|0",
     "materialKey": "M|fd-564705|Real Racing Club de Santander|Valencia CF|laliga|2026-10-11T19:00:00Z|NS"
+  },
+  "fd-560597": {
+    "matchId": "fd-560597",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Coventry City FC vs Newcastle United FC",
+        "bullets": [
+          "Coventry City FC y Newcastle United FC se enfrentan en premier, con inicio programado para 2026-10-12T19:00:00Z y estado NS.",
+          "En la tabla, Coventry City FC figura 18º y Newcastle United FC 9º; el clima se registra como clear con valor 16.",
+          "El input no incluye alineaciones ni bajas confirmadas; el cruce se presenta como un partido de calendario de liga."
+        ],
+        "stats": [
+          {
+            "value": "18º",
+            "label": "posición Coventry"
+          },
+          {
+            "value": "9º",
+            "label": "posición Newcastle"
+          },
+          {
+            "value": "clear",
+            "label": "clima"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "Poisson GoatLab entrega 22.3% al local, 25.8% al empate y 51.9% al visitante.",
+          "CatBoost Bzzoiro registra 28.7% al local, 25.9% al empate y 45.5% al visitante.",
+          "B2 declara mayor probabilidad para A, con 45.5%, y señala no en goles totales y no en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "51.9%",
+            "label": "Poisson visitante"
+          },
+          {
+            "value": "45.5%",
+            "label": "Bzzoiro visitante"
+          },
+          {
+            "value": "45.5%",
+            "label": "B2 mayor probabilidad"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de cruces",
+        "bullets": [
+          "En 19 cruces registrados, Coventry City FC suma 3 triunfos, 3 empates y Newcastle United FC 13 triunfos, con promedio de 3.26 goles.",
+          "Los cinco partidos de HR muestran triunfos de Newcastle United: 4-1, 0-2, 2-3, 3-1 y 0-2."
+        ],
+        "stats": [
+          {
+            "value": "19",
+            "label": "cruces"
+          },
+          {
+            "value": "13",
+            "label": "triunfos Newcastle"
+          },
+          {
+            "value": "3.26",
+            "label": "promedio goles"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Newcastle United FC acumula en R: 2-2 con Liverpool, 0-2 en Tottenham, 2-2 con Bournemouth, 1-4 en Leeds y 2-1 con Hull City.",
+          "Coventry City FC registra en R: 0-1 con Hull City, 0-1 en Manchester City, 0-5 con Brighton y 1-0 en Nottingham Forest.",
+          "La forma reciente muestra a Newcastle con más resultados positivos y a Coventry con derrotas amplias y una victoria reciente."
+        ],
+        "stats": [
+          {
+            "value": "2-2",
+            "label": "Newcastle vs Liverpool"
+          },
+          {
+            "value": "0-5",
+            "label": "Coventry vs Brighton"
+          },
+          {
+            "value": "1-0",
+            "label": "Coventry en Forest"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores registrados",
+        "bullets": [
+          "En goleadores de Newcastle United FC, Anthony Elanga y Joe Willock aparecen con 2; Bazoumana Touré con 1.",
+          "No se registran goleadores de Coventry City FC en la lista S."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Elanga/Willock"
+          },
+          {
+            "value": "1",
+            "label": "Touré"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A",
+        "detail": "El input no incluye estimación API-Football (A), por lo que no hay lectura de distribución ni umbral de goles de ese proveedor."
+      },
+      {
+        "label": "Sin M2",
+        "detail": "No hay consenso externo M2 en porcentaje interpretativo para este cruce."
+      },
+      {
+        "label": "Sin alineaciones",
+        "detail": "No se registran L de bajas confirmadas ni alineaciones probables en el input."
+      },
+      {
+        "label": "HR distante",
+        "detail": "Los cruces HR corresponden a fechas antiguas y no reflejan el contexto actual de los equipos."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "P y B difieren en local (22.3% vs 28.7%) y visitante (51.9% vs 45.5%), aunque ambos favorecen a Newcastle; B2 coincide con B en A 45.5%. No hay contradicción grave, pero la magnitud entre modelos es apreciable."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-07T14:14:09.535Z",
+    "inputKey": "v3|M|fd-560597|Coventry City FC|Newcastle United FC|premier|2026-10-12T19:00:00Z|NS\nP|1.08|1.748|0.223|0.258|0.519|0.537|0.557\nB|0.287|0.259|0.455|1.85|1.35|0.571|0.59|1-1|0.489\nB2|A|0.455|no|no\nH|19|3|3|13|3.26\nW||clear|16|\nT|18|Coventry City FC|5|3|1|10\nT|9|Newcastle United FC|5|8|9|9\nS|Anthony Elanga|Newcastle United FC|2|3\nS|Joe Willock|Newcastle United FC|2|5\nS|Bazoumana Touré|Newcastle United FC|1|5\nR|2026-08-23|Newcastle United FC|Liverpool FC|2|2\nR|2026-08-29|Coventry City FC|Hull City AFC|0|1\nR|2026-08-29|Tottenham Hotspur FC|Newcastle United FC|0|2\nR|2026-09-05|Manchester City FC|Coventry City FC|1|0\nR|2026-09-05|Newcastle United FC|AFC Bournemouth|2|2\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-13|Coventry|Brighton|0|5\nR|2026-09-14|Leeds United FC|Newcastle United FC|4|1\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-09-19|Newcastle United FC|Hull City AFC|2|1\nR|2026-09-19|Newcastle|Hull City|2|1\nHR|2010-02-17|Newcastle United|Coventry City|4|1\nHR|2009-12-09|Coventry City|Newcastle United|0|2\nHR|2008-08-26|Coventry City|Newcastle United|2|3\nHR|2001-01-13|Newcastle United|Coventry City|3|1\nHR|2000-09-06|Coventry City|Newcastle United|0|2",
+    "materialKey": "M|fd-560597|Coventry City FC|Newcastle United FC|premier|2026-10-12T19:00:00Z|NS"
+  },
+  "fd-564704": {
+    "matchId": "fd-564704",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Levante UD vs Sevilla FC",
+        "bullets": [
+          "Levante UD y Sevilla FC se enfrentan en laliga, con inicio programado para 2026-10-12T19:00:00Z y estado NS.",
+          "En la tabla, Levante UD figura 17º y Sevilla FC 5º; el clima se registra como clear con valor 4.",
+          "El input no incluye alineaciones ni bajas confirmadas; el historial y los modelos muestran un cruce cerrado."
+        ],
+        "stats": [
+          {
+            "value": "17º",
+            "label": "posición Levante"
+          },
+          {
+            "value": "5º",
+            "label": "posición Sevilla"
+          },
+          {
+            "value": "clear",
+            "label": "clima"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "Poisson GoatLab otorga 34.6% al local, 26.7% al empate y 38.7% al visitante.",
+          "CatBoost Bzzoiro registra 35.6% al local, 28.8% al empate y 35.6% al visitante.",
+          "B2 declara mayor probabilidad para H, con 35.6%, y señala no en goles totales y no en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "38.7%",
+            "label": "Poisson visitante"
+          },
+          {
+            "value": "35.6%",
+            "label": "Bzzoiro local/visitante"
+          },
+          {
+            "value": "35.6%",
+            "label": "B2 mayor probabilidad"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de cruces",
+        "bullets": [
+          "En 31 cruces registrados, Levante UD suma 6 triunfos, 7 empates y Sevilla FC 18 triunfos, con promedio de 3.03 goles.",
+          "Los cruces recientes de HR muestran dos victorias de Levante (2-0 y 0-3) y tres de Sevilla (2-3, 5-3 y 0-1)."
+        ],
+        "stats": [
+          {
+            "value": "31",
+            "label": "cruces"
+          },
+          {
+            "value": "18",
+            "label": "triunfos Sevilla"
+          },
+          {
+            "value": "3.03",
+            "label": "promedio goles"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Levante UD registra en R: 0-3 en Espanyol, 0-0 con Osasuna, 5-2 con Betis, 0-0 en Málaga, 2-4 con Barcelona y 1-3 en Villarreal.",
+          "Sevilla FC registra en R: 1-3 en Athletic, 1-3 con Atlético, 1-1 en Espanyol, 1-0 con Valencia, 0-1 en Deportivo y 1-3 con Barcelona.",
+          "La forma reciente muestra a Sevilla con más victorias y a Levante con resultados irregulares."
+        ],
+        "stats": [
+          {
+            "value": "5-2",
+            "label": "Levante vs Betis"
+          },
+          {
+            "value": "1-3",
+            "label": "Sevilla en Athletic"
+          },
+          {
+            "value": "1-0",
+            "label": "Sevilla vs Valencia"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores registrados",
+        "bullets": [
+          "En goleadores de Levante UD, Roger Brugué aparece con 3; Iván Romero con 2; Adrián de la Fuente con 1.",
+          "En Sevilla FC, Miguel Sierra aparece con 2."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Brugué"
+          },
+          {
+            "value": "2",
+            "label": "Romero/Sierra"
+          },
+          {
+            "value": "1",
+            "label": "De la Fuente"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A",
+        "detail": "El input no incluye estimación API-Football (A), por lo que no hay lectura de distribución ni umbral de goles de ese proveedor."
+      },
+      {
+        "label": "Sin M2",
+        "detail": "No hay consenso externo M2 en porcentaje interpretativo para este cruce."
+      },
+      {
+        "label": "Sin alineaciones",
+        "detail": "No se registran L de bajas confirmadas ni alineaciones probables en el input."
+      },
+      {
+        "label": "Tabla no detallada",
+        "detail": "Los campos numéricos de T no se especifican y parte de su interpretación queda limitada."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "B2 señala H con 35.6%, pero B registra empate técnico H/A (35.6% ambos); P da 38.7% al visitante y 34.6% al local, por lo que la mayor probabilidad no es unívoca entre modelos."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-07T14:14:09.543Z",
+    "inputKey": "v3|M|fd-564704|Levante UD|Sevilla FC|laliga|2026-10-12T19:00:00Z|NS\nP|1.44|1.533|0.346|0.267|0.387|0.571|0.61\nB|0.356|0.288|0.356|1.73|1.17|0.478|0.523|1-1|0.444\nB2|H|0.356|no|no\nH|31|6|7|18|3.03\nW||clear|4|\nT|17|Levante UD|6|5|8|12\nT|5|Sevilla FC|7|13|10|9\nS|Roger Brugué|Levante UD|3|5\nS|Iván Romero|Levante UD|2|6\nS|Adrián de la Fuente|Levante UD|1|6\nS|Miguel Sierra|Sevilla FC|2|7\nR|2026-08-16|RCD Espanyol de Barcelona|Levante UD|3|0\nR|2026-08-22|Athletic Club|Sevilla FC|1|3\nR|2026-08-24|CA Osasuna|Levante UD|0|0\nR|2026-08-29|Levante UD|Real Betis Balompié|5|2\nR|2026-08-29|Sevilla FC|Club Atlético de Madrid|1|3\nR|2026-09-06|Málaga CF|Levante UD|0|0\nR|2026-09-06|RCD Espanyol de Barcelona|Sevilla FC|1|1\nR|2026-09-11|Sevilla FC|Valencia CF|1|0\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-16|RC Deportivo La Coruña|Sevilla FC|0|1\nR|2026-09-19|Sevilla FC|FC Barcelona|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nHR|2026-04-23|Levante UD|Sevilla|2|0\nHR|2026-01-04|Sevilla|Levante UD|0|3\nHR|2022-04-21|Levante UD|Sevilla|2|3\nHR|2021-10-24|Sevilla|Levante UD|5|3\nHR|2021-04-21|Levante UD|Sevilla|0|1",
+    "materialKey": "M|fd-564704|Levante UD|Sevilla FC|laliga|2026-10-12T19:00:00Z|NS"
   }
 }
