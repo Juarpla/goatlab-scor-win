@@ -9,7 +9,7 @@ import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H } from '../../src/lib/short-format.js';
-import { ASSETS_PER_MATCH } from '../../src/lib/media.js';
+import { ASSETS_PER_MATCH, CLIPS_PER_MATCH, LEGACY_ASSETS_MAX, LEGACY_CLIPS_MAX } from '../../src/lib/media.js';
 import { audioFailureText } from '../../src/lib/render-queue.js';
 import { telegramCaption } from '../../src/lib/youtube.js';
 import { JobStore } from './job-store.mjs';
@@ -266,11 +266,12 @@ const server = createServer(async (req, res) => {
       if (!b.audioFileId && !b.audioUrl) return json(400, { error: 'falta audioFileId o audioUrl' });
       if (!/^-?[1-9][0-9]{0,19}$/.test(String(b.chatId))) return json(400, { error: 'chatId debe ser el identificador numérico de Telegram' });
       if (b.audioFileId && !/^[A-Za-z0-9_-]{16,256}$/.test(b.audioFileId)) return json(400, { error: 'audioFileId no admite rutas locales' });
-      if (!Array.isArray(b.assets) || b.assets.length > ASSETS_PER_MATCH) return json(400, { error: 'fotos insuficientes' });
+      // Bancos antiguos traen hasta 10 fotos: se aceptan y se recortan al guardar.
+      if (!Array.isArray(b.assets) || b.assets.length > LEGACY_ASSETS_MAX) return json(400, { error: 'cantidad de fotos inválida' });
       const mediaMinimum = b.mediaMinimum ?? 2;
       if (![0, 1, 2, 4].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
-      if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > 3 || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
+      if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > LEGACY_CLIPS_MAX || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
       if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 10 || b.motionPrompts.some(p => !Number.isInteger(p?.n) || p.n < 1 || p.n > 10 || !['form','goals','clean-sheets','head-to-head','synthesis'].includes(p.kind) || typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
@@ -281,7 +282,7 @@ const server = createServer(async (req, res) => {
         variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
         renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
-        clips: b.clips ?? [], motionPrompts: b.motionPrompts ?? [], assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
+        clips: (b.clips ?? []).slice(0, CLIPS_PER_MATCH), motionPrompts: b.motionPrompts ?? [], assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
       });
       await store.flush();
       if (job.status === 'queued' && !protectedIds.has(job.id)) schedule(job);

@@ -47,5 +47,12 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     assert.equal((await send(app, '/render', { ...body, chatId: 'telegram:1' })).status,400);
     assert.equal((await send(app, '/render', { ...body, audioFileId: '/workspace/voice.ogg' })).status,400);
     assert.equal((await send(app, '/render', { ...body, assets:body.assets.map(a=>({...a,source:'external'})) })).status,400);
+    // Un banco antiguo (10 fotos + 3 clips) se acepta y se guarda recortado al contrato 4+2.
+    const legacy={...body, requestId:'legacy-ten-photos', assets:Array.from({length:10},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.jpg`})), clips:Array.from({length:3},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.mp4`,duration:6}))};
+    assert.equal((await send(app, '/render', legacy)).status,202);
+    const { readdirSync, readFileSync } = await import('node:fs');
+    const saved=readdirSync(state).filter(f=>/^job-[a-f0-9]+\.json$/.test(f)).map(f=>JSON.parse(readFileSync(join(state,f),'utf8'))).find(j=>j.requestId==='legacy-ten-photos');
+    assert.ok(saved, 'el trabajo legacy queda persistido');
+    assert.equal(saved.assets.length,4);assert.equal(saved.clips.length,2);
   } finally { await app.stop(); }
 });
