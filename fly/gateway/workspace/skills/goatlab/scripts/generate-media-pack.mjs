@@ -32,6 +32,14 @@ let matches;
 if (args['--match']) {
   matches = selectMatches(fixtures.matches,{ onlyMatch:args['--match'], limit:args['--limit'] });
   if (!matches.length) matches=(fixtures.matches ?? []).filter(m=>m.id===args['--match']||m.webId===args['--match']);
+  if (!matches.length) {
+    // Partido ya jugado y fuera de fixtures: el guión conserva la identidad.
+    try {
+      const s = JSON.parse(await readFile(join(repo,'public/data/youtube-scripts',`${args['--match']}.json`),'utf8'));
+      matches = [{ id: args['--match'], webId: args['--match'], home: s.home, away: s.away, competition: s.competition ?? null, kickoff: s.kickoff ?? null }];
+      console.log(`media: ${args['--match']} fuera de fixtures; identidad del guión`);
+    } catch {}
+  }
   if (matches.length && !args['--content']) {
     const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, matches.map(m=>m.webId ?? m.id));
     if (registered.added.length) {

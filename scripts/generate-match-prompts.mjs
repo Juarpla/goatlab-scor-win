@@ -36,6 +36,15 @@ async function saveTopFile() {
 let matches;
 if (onlyMatch) {
   matches = selectMatches(fixtures.matches, { onlyMatch });
+  // --match manual: también vale para un partido ya jugado (FT) que haga falta rehacer.
+  if (!matches.length) matches = (fixtures.matches ?? []).filter(m => m.id === onlyMatch || m.webId === onlyMatch);
+  if (!matches.length) {
+    try {
+      const s = JSON.parse(await readFile(`public/data/youtube-scripts/${onlyMatch}.json`, 'utf8'));
+      matches = [{ id: onlyMatch, webId: onlyMatch, home: s.home, away: s.away, competition: s.competition ?? null, kickoff: s.kickoff ?? null }];
+      console.log(`${category}: ${onlyMatch} fuera de fixtures; identidad del guión`);
+    } catch (e) { if (e.code !== 'ENOENT') throw e; }
+  }
   const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [onlyMatch]);
   if (registered.added.length) {
     topFile = registered.top;
