@@ -1,25 +1,6 @@
 {
-  "updatedAt": "2026-10-08T13:58:06.963Z",
+  "updatedAt": "2026-10-08T23:38:58.832Z",
   "runs": [
-    {
-      "at": "2026-09-30T15:34:38.556Z",
-      "task": "shorts",
-      "matchId": "bosnia-herzegovina-vs-sweden-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6257,
-        "outputTokens": 6118
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "7ec1f9d6-901f-4d40-817d-cf4a0d90086c"
-    },
     {
       "at": "2026-09-30T15:37:07.956Z",
       "task": "shorts",
@@ -4975,6 +4956,124 @@
       "usage": {
         "inputTokens": 2558,
         "outputTokens": 5620
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-08T23:38:58.830Z",
+      "task": "shorts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2644,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 86598
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 117585
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1456
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 17301
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2644,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 81719
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65983
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 1: cifra 1.2 no está en los hechos; guion 1: cifra 1.2 no está en los hechos; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1319
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9686
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2558,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 162117
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 2558,
+        "outputTokens": 12000
       },
       "truncated": true,
       "maxTokens": 12000,
