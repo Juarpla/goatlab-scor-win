@@ -108,6 +108,14 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     state.cutover.legacyMatchIds=[];
     result=change({released,legacyCleared:true});
   }
+  else if (operation === 'set-quota') {
+    if (input.confirm !== 'set-quota') throw new Error('cuota sin confirmar');
+    if (typeof input.day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(input.day)) throw new Error('día de cuota inválido');
+    if (!Number.isInteger(input.images) || input.images < 0 || input.images > state.limits.images) throw new Error('cuota de imágenes inválida');
+    if (typeof input.video_seconds !== 'number' || !(input.video_seconds >= 0) || input.video_seconds > state.limits.video_seconds) throw new Error('cuota de vídeo inválida');
+    state.quota[input.day]={images:input.images,video_seconds:input.video_seconds};
+    result=change({day:input.day,quota:state.quota[input.day]});
+  }
   else if (operation === 'report') result = {quota:state.quota,failureEvents:state.failureEvents.filter(e => e.at >= nowMs-48*3_600_000).map(e=>({eventId:e.eventId,at:new Date(e.at).toISOString(),hourUTC:e.hourUTC,stage:e.stage,httpStatus:e.httpStatus,matchId:e.matchId})),runs:Object.values(state.summaries).filter(r=>r.at>=nowMs-48*3_600_000).map(r=>({runId:r.runId,at:new Date(r.at).toISOString(),eligible:r.eligible,pending:r.pending,generated:r.generated,reused:r.reused,completed:r.completed})),usage:{opsA:state.usage.opsA,opsB:state.usage.opsB},updatedAt:state.updatedAt};
   else if (operation === 'status') result = {slot:readSlot() ?? null,closed:state.matches[input.matchId]?.closed ?? false};
   else if (operation === 'reserve') {

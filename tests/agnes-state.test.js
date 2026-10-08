@@ -48,6 +48,15 @@ test('release-legacy requires confirmation and frees only legacy-uncertain slots
   assert.equal(result.released.length,1);
   assert.equal(state.activeVideoAttemptId,null);
 });
+test('set-quota requires confirmation and bounds the values',()=>{
+  const seed=createAgnesState({nowMs:now});
+  assert.throws(()=>reduceAgnesState(seed,'set-quota',{day:'2026-10-09',images:4,video_seconds:0},{nowMs:now}),/sin confirmar/);
+  assert.throws(()=>reduceAgnesState(seed,'set-quota',{confirm:'set-quota',day:'mañana',images:4,video_seconds:0},{nowMs:now}),/día/);
+  assert.throws(()=>reduceAgnesState(seed,'set-quota',{confirm:'set-quota',day:'2026-10-09',images:4001,video_seconds:0},{nowMs:now}),/imágenes/);
+  const {state,result}=reduceAgnesState(seed,'set-quota',{confirm:'set-quota',day:'2026-10-09',images:4,video_seconds:0},{nowMs:now});
+  assert.deepEqual(state.quota['2026-10-09'],{images:4,video_seconds:0});
+  assert.equal(result.day,'2026-10-09');
+});
 test('shared CAS admits only one concurrent caller for the same slot',async()=>{
   const remote=backend(),clients=[0,1].map(()=>new AgnesStateClient({env,fetchImpl:remote.fetch.bind(remote)}));
   const outcomes=await Promise.all(clients.map(client=>client.transact('reserve',reserve())));
