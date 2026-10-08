@@ -24,6 +24,13 @@ function backend(seed=fresh()) {
     }
   };
 }
+test('reads use identity encoding so the CAS etag stays strong',async()=>{
+  const remote=backend(),seen={};
+  const client=new AgnesStateClient({env,fetchImpl:async(url,request)=>{seen.method=request.method;seen.accept=request.headers['accept-encoding'];return remote.fetch(url,request);}});
+  await client.readState();
+  assert.equal(seen.method,'GET');
+  assert.equal(seen.accept,'identity');
+});
 test('shared CAS admits only one concurrent caller for the same slot',async()=>{
   const remote=backend(),clients=[0,1].map(()=>new AgnesStateClient({env,fetchImpl:remote.fetch.bind(remote)}));
   const outcomes=await Promise.all(clients.map(client=>client.transact('reserve',reserve())));
