@@ -68,12 +68,38 @@ jobs:
           AGNES_DAILY_IMAGE_CAP: '4000'
           AGNES_SKIP_IMAGES: ${{ inputs.mode == 'clips-only' && '1' || '' }}
           AGNES_SKIP_VIDEO: ${{ inputs.mode == 'images-only' && '1' || '' }}
+          # R2 es el único almacén de la media (bucket goatlab → partidos/<id>/).
+          MEDIA_GEN_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+          R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+          R2_BUCKET: goatlab
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      - name: Artifact solo-JSON (la media vive en R2)
+        if: always()
+        run: rm -rf public/data/media-pack/gen public/data/media-pack/agnes.sqlite*
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: goatlab-media-bank
           path: public/data/media-pack/
           retention-days: 30
+      - name: Alerta de presupuesto R2 por Telegram
+        if: always()
+        run: |
+          level=$(node scripts/r2-media.mjs budget 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).level)}catch{console.log('unknown')}})" || level=unknown
+          echo "R2 budget: $level"
+          if [ "$level" = "warn70" ] || [ "$level" = "warn90" ] || [ "$level" = "block" ]; then
+            curl -s -o /dev/null -w "telegram:%{http_code}\n" "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" --data-urlencode "text=⚠️ R2 GoatLab nivel $level: cerca del tope gratuito. Revisar uso antes de seguir subiendo."
+          fi
+        env:
+          R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+          R2_BUCKET: goatlab
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Commit de manifiestos (solo JSON, nunca binarios)
         if: always()
         run: |
@@ -82,6 +108,7 @@ jobs:
           for path in public/data/media-pack/*.json; do
             if [ -e "$path" ]; then git add "$path"; fi
           done
+          if [ -e public/data/r2-usage.json ]; then git add public/data/r2-usage.json; fi
           if git diff --cached --quiet; then
             echo "Sin manifiestos que commitear"
           else

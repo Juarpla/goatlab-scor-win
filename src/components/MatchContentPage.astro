@@ -31,6 +31,7 @@ const introductions = {
     <h1>{match.home}<br/><span>contra {match.away}</span></h1>
     <nav aria-label="Contenido del encuentro">
       {Object.entries(CONTENT_CATEGORIES).map(([key, value]) => <a href={contentUrl(match.matchId, key)} aria-current={key === category ? 'page' : undefined}>{value.label}</a>)}
+      <a href={`/partido/${encodeURIComponent(match.matchId)}/media`}>Media</a>
     </nav>
     <h2>{spec.label}</h2>
     <p class="intro">{introductions[category]}</p>

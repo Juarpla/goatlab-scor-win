@@ -1,0 +1,65 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { mediaBankIds, readMediaBank } from '../../../lib/media-bank.js';
+import { ASSETS_PER_MATCH, CLIPS_PER_MATCH } from '../../../lib/media.js';
+import { CONTENT_CATEGORIES, contentUrl } from '../../../lib/match-content.js';
+export function getStaticPaths() {
+  return mediaBankIds().map(id => ({ params: { id }, props: { bank: readMediaBank(id) } }));
+}
+const { bank } = Astro.props;
+const id = Astro.params.id;
+const statusLabel = !bank ? 'Sin banco' : bank.bankStatus === 'complete' ? 'Completo' : bank.bankStatus === 'preparing' ? 'En preparación' : 'Parcial';
+---
+<Layout title={bank ? `Media: ${bank.match} | GoatLab` : `Media: ${id} | GoatLab`} description={bank ? `Banco de medios de ${bank.match}: ${bank.assets.length}/${ASSETS_PER_MATCH} fotos y ${bank.clips.length}/${CLIPS_PER_MATCH} clips generados con IA.` : 'Banco de medios en preparación.'} canonical={`https://goatlab.win/partido/${encodeURIComponent(id)}/media`}>
+  <main id="main" class="content-wrap">
+    <a class="back" href={`/partido/${encodeURIComponent(id)}/`}>Volver al análisis del partido</a>
+    <h1>{bank ? bank.match : id}<br/><span>banco de medios</span></h1>
+    {bank && <nav aria-label="Contenido del encuentro">
+      {Object.entries(CONTENT_CATEGORIES).map(([key, value]) => <a href={contentUrl(bank.matchId, key)}>{value.label}</a>)}
+      <a href={`/partido/${encodeURIComponent(bank.matchId)}/media`} aria-current="page">Media</a>
+    </nav>}
+    {!bank ? <section class="pending"><h2>Contenido en preparación</h2><p>Todavía no hay banco de medios para este partido.</p></section> : <>
+      <p class="intro">Estado: <strong>{statusLabel}</strong> · {bank.assets.length}/{ASSETS_PER_MATCH} fotos · {bank.clips.length}/{CLIPS_PER_MATCH} clips{bank.generatedAt ? ` · generado el ${new Date(bank.generatedAt).toLocaleDateString('es-PE', { timeZone: 'America/Lima' })}` : ''}.</p>
+      <h2>Fotos ({bank.assets.length})</h2>
+      {bank.assets.length ? <ul class="grid">
+        {bank.assets.map(asset => <li><figure>
+          <img src={asset.url} width={asset.width} height={asset.height} loading="lazy" decoding="async" alt={`Ilustración generada con IA para ${bank.match}`} />
+          <figcaption>{asset.id} · {asset.width}×{asset.height} · {asset.generated?.model ?? 'Agnes AI'}</figcaption>
+          {asset.query && <details><summary>Prompt</summary><p class="prompt" lang="en">{asset.query}</p></details>}
+        </figure></li>)}
+      </ul> : <p class="note">Sin fotos todavía.</p>}
+      <h2>Clips ({bank.clips.length})</h2>
+      {bank.clips.length ? <ul class="grid">
+        {bank.clips.map(clip => <li><figure>
+          <video src={clip.url} controls preload="metadata" playsinline width={clip.width ?? 720} height={clip.height ?? 1280}></video>
+          <figcaption>{clip.id ?? clip.file} · {clip.duration != null ? `${clip.duration}s` : 'duración no indicada'} · {(clip.width ?? 720)}×{(clip.height ?? 1280)} · {clip.model ?? 'Agnes AI'}</figcaption>
+          {clip.prompt && <details><summary>Prompt</summary><p class="prompt" lang="en">{clip.prompt}</p></details>}
+        </figure></li>)}
+      </ul> : <p class="note">Sin clips todavía.</p>}
+      {bank.failures.length > 0 && <section class="failures"><h2>Validación</h2><ul>{bank.failures.map(failure => <li>{failure}</li>)}</ul></section>}
+      {bank.attribution && <p class="note">{bank.attribution}</p>}
+    </>}
+  </main>
+</Layout>
+<style>
+  .content-wrap{max-width:960px;margin:auto;padding:48px 22px 80px;color:var(--ink,#edf0e6)}
+  .back{display:inline-block;margin-bottom:28px;text-underline-offset:5px}
+  h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.8rem,7vw,5rem);line-height:1.02;letter-spacing:-.02em;margin:0 0 36px;text-wrap:balance}
+  h1 span{color:var(--muted,#a4aea3)}
+  nav{display:flex;gap:8px 24px;flex-wrap:wrap;padding:18px 0;border-block:1px solid #354035;margin-bottom:38px}
+  nav a{padding:8px 0;text-underline-offset:8px;color:#a4aea3}
+  nav a[aria-current=page]{color:#c5ed74;font-weight:700}
+  h2{font-family:'Barlow Condensed',sans-serif;font-size:2.5rem;margin:36px 0 12px}
+  .intro{max-width:72ch;line-height:1.75;color:#a4aea3;margin-bottom:12px}
+  .grid{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:24px;padding:0;margin:0 0 12px}
+  .grid img,.grid video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;background:#181e1a;border-radius:5px}
+  figcaption{color:#a4aea3;font-size:.875rem;margin-top:8px;line-height:1.6}
+  details{margin-top:8px}
+  summary{cursor:pointer;color:#c5ed74;font-size:.875rem;text-underline-offset:4px}
+  .prompt{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.875rem;line-height:1.7;color:#a4aea3}
+  .failures{margin-top:36px;padding:24px 0;border-top:1px solid #354035}
+  .failures ul{padding-left:22px;margin:0;color:#a4aea3;line-height:1.7}
+  .note{color:#a4aea3;font-size:.875rem;line-height:1.6}
+  .pending{padding:24px 0 36px}
+  @media(max-width:600px){.content-wrap{padding:32px 18px 64px}.grid{grid-template-columns:1fr;max-width:420px}}
+</style>

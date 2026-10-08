@@ -16,7 +16,31 @@ const PIPELINE = fileURLToPath(new URL('./', import.meta.url));
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i=a.indexOf('='); return i<0 ? [a,true] : [a.slice(0,i),a.slice(i+1)]; }));
 const repo = process.env.GOATLAB_REPO || '.';
 const dir = args['--out'] || process.env.MEDIA_PACK_DIR || 'public/data/media-pack';
-const base = (process.env.MEDIA_GEN_BASE || 'https://goatlab-gateway.fly.dev/media-gen').replace(/\/$/,'');
+// R2 es el único almacén de la media (bucket goatlab → partidos/<id>/).
+// Solo se activa con credenciales en el entorno (nunca del .env: los tests
+// quedan herméticos). R2_PUBLIC_BASE es la URL pública (r2.dev).
+const R2 = (process.env.R2_PUBLIC_BASE && process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY)
+  ? { base: process.env.R2_PUBLIC_BASE.replace(/\/$/,''), bucket: process.env.R2_BUCKET || 'goatlab' } : null;
+const base = (process.env.MEDIA_GEN_BASE || (R2 ? R2.base : '') || 'https://goatlab-gateway.fly.dev/media-gen').replace(/\/$/,'');
+const r2tool = join(repo, 'scripts/r2-media.mjs');
+let r2A = 0, r2B = 0;
+async function r2(cmd, ...a) {
+  if (!R2) return null;
+  try {
+    const { stdout } = await run(process.execPath, [r2tool, cmd, ...a], { env: process.env, maxBuffer: 8 * 1024 * 1024 });
+    if (cmd === 'exists') r2B += 1; else if (cmd !== 'record' && cmd !== 'public') r2A += 1;
+    return JSON.parse(stdout);
+  } catch { return null; }
+}
+async function r2download(url, file) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return false;
+    await writeFile(file, Buffer.from(await res.arrayBuffer()));
+    r2B += 1;
+    return true;
+  } catch { return false; }
+}
 const fixtures = JSON.parse(await readFile(join(repo,'public/data/fixtures.json'),'utf8'));
 const topDefault = defaultTopN(process.env);
 let topFile = null;
@@ -56,23 +80,39 @@ if (args['--match']) {
 }
 if (!matches.length) throw new Error('No hay un partido disponible para el banco');
 await mkdir(dir,{recursive:true});
+/** Poda: manifiestos, progresos y gen/<id> fuera del conjunto a conservar.
+ *  En el Action corre en batch; en Fly (--match, bajo demanda) conserva
+ *  además el partido pedido para no borrar lo que se está generando. */
+async function pruneMediaBank(packDir, keep) {
+  const pruned = new Set();
+  let names = []; try { names = await readdir(packDir); } catch {}
+  for (const name of names) {
+    const id = name.endsWith('.progress.json') ? name.slice(0,-14) : name.endsWith('.ready') ? name.slice(0,-6) : name.endsWith('.json') ? name.slice(0,-5) : null;
+    if (id === null || !/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(id) || keep.has(id)) continue;
+    await rm(join(packDir, name), { force: true });
+    pruned.add(id);
+    console.log(`media: poda ${name}`);
+  }
+  let genNames = []; try { genNames = await readdir(join(packDir,'gen')); } catch {}
+  for (const id of genNames) {
+    if (keep.has(id)) continue;
+    await rm(join(packDir,'gen',id), { recursive: true, force: true });
+    pruned.add(id);
+    console.log(`media: poda gen/${id}`);
+  }
+  // La media podada también sale de R2 (vida útil = poda). Mejor esfuerzo:
+  // si R2 falla, lo local ya se podó y el siguiente ciclo lo reintenta.
+  if (R2) for (const id of pruned) await r2('del-prefix', `partidos/${id}`);
+}
 if (!args['--match']) {
   // Poda: manifiestos y gen/ fuera del conjunto efectivo (top + extras) en la ventana NS.
   const live = liveIds(fixtures.matches);
   const keep = new Set((topFile ? effectiveIds(topFile, topDefault) : matches.map(m=>m.webId ?? m.id)).filter(id=>live.has(id)));
-  let names = []; try { names = await readdir(dir); } catch {}
-  for (const name of names) {
-    const id = name.endsWith('.progress.json') ? name.slice(0,-14) : name.endsWith('.json') ? name.slice(0,-5) : null;
-    if (id === null || !/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(id) || keep.has(id)) continue;
-    await rm(join(dir, name), { force: true });
-    console.log(`media: poda ${name}`);
-  }
-  let genNames = []; try { genNames = await readdir(join(dir,'gen')); } catch {}
-  for (const id of genNames) {
-    if (keep.has(id)) continue;
-    await rm(join(dir,'gen',id), { recursive: true, force: true });
-    console.log(`media: poda gen/${id}`);
-  }
+  await pruneMediaBank(dir, keep);
+} else {
+  // Poda en Fly: lo terminado sale con sus fotos y clips; lo vivo y lo pedido se conserva.
+  const keep = new Set([...liveIds(fixtures.matches), ...matches.map(m=>m.webId ?? m.id)]);
+  await pruneMediaBank(dir, keep);
 }
 let snapshot={};
 if(args['--content']) snapshot=JSON.parse(await readFile(args['--content'],'utf8'));
@@ -110,12 +150,34 @@ for(const match of matches){
   if(!motionPrompts.length)failures.push('Motion Prompts no disponibles; montaje local disponible');
   const publish=mediaPublisher({dir,match,facts,attemptStartedAt:startedAt,target:4});
   const assets=[];
+  // Candado R2: con tope alcanzado se genera igual pero nada se sube.
+  let r2blocked = false;
+  if (R2) {
+    const b = await r2('budget');
+    if (b && b.level === 'block') { r2blocked = true; failures.push('R2: tope de presupuesto alcanzado; subidas pausadas (revisar Telegram)'); }
+    else {
+      // Reutilización: si R2 ya tiene el banco, se adopta sin gastar cuota Agnes.
+      for (let index = 0; index < 4 && assets.length < 4; index++) {
+        for (const ext of ['jpg', 'png', 'webp']) {
+          const file = `${index}.${ext}`;
+          try { await readFile(join(folder, file)); break; } catch {}
+          const found = await r2('exists', `partidos/${matchId}/${file}`);
+          if (!found) continue;
+          if (!(await r2download(`${R2.base}/partidos/${encodeURIComponent(matchId)}/${file}`, join(folder, file)))) continue;
+          const m = found.meta ?? {};
+          const image = { ...normalizeAgnesImage({ matchId, index, publicUrl: `${base}/${encodeURIComponent(matchId)}/${file}`, model: m.model, prompt: m.prompt || imagePrompts[index]?.prompt, at: m.at }), width: Number(m.width) || 1472, height: Number(m.height) || 2624, prepared: true };
+          if (!assetErrors(image).length) assets.push(image);
+          break;
+        }
+      }
+    }
+  }
   const skipImages=process.env.AGNES_SKIP_IMAGES==='1', skipVideo=process.env.AGNES_SKIP_VIDEO==='1';
   // Shared ledger: images and clips draw from the same daily Token Plan quota pool.
   const stateDb=process.env.AGNES_STATE_DB ?? join(dir,'agnes.sqlite');
   const childEnv={...process.env,AGNES_STATE_DB:stateDb};
   for(const asset of prev?.assets ?? []){
-    if(asset.source!=='agnes'||assetErrors(asset).length||assets.length>=4)continue;
+    if(asset.source!=='agnes'||assetErrors(asset).length||assets.length>=4||assets.some(a=>a.id===asset.id))continue;
     const file=new URL(asset.url).pathname.split('/').at(-1);
     if(!/^\d+\.(jpg|png|webp)$/.test(file))continue;
     const index=Number(file.split('.')[0]);
@@ -124,6 +186,18 @@ for(const match of matches){
   }
   let clips=[];
   for(const clip of prev?.clips ?? []){try{if(/^clip-\d+\.mp4$/.test(clip.file)&&clip.source==='agnes'&&clips.length<2){await readFile(join(folder,clip.file));clips.push(clip);}}catch{}}
+  if (R2 && !r2blocked) {
+    for (let ordinal = 0; ordinal < 2 && clips.length < 2; ordinal++) {
+      const file = `clip-${ordinal}.mp4`;
+      if (clips.some(c=>c.id === `${matchId}-clip-${ordinal}`)) continue;
+      try { await readFile(join(folder, file)); continue; } catch {}
+      const found = await r2('exists', `partidos/${matchId}/${file}`);
+      if (!found) continue;
+      if (!(await r2download(`${R2.base}/partidos/${encodeURIComponent(matchId)}/${file}`, join(folder, file)))) continue;
+      const m = found.meta ?? {};
+      clips.push({ id: `${matchId}-clip-${ordinal}`, source: 'agnes', file, url: `${base}/${encodeURIComponent(matchId)}/${file}`, width: Number(m.width) || 720, height: Number(m.height) || 1280, duration: Number(m.duration) || 6, model: m.model || 'agnes-video-2.5-flash' });
+    }
+  }
   const extras=()=>({clips,motionPrompts,failures,contentVersion:1});
   await publish(assets,'generating',extras());
   if(!process.env.AGNES_API_KEY?.trim())failures.push('falta AGNES_API_KEY');
@@ -140,6 +214,12 @@ for(const match of matches){
         const image={...normalizeAgnesImage({matchId,index,publicUrl:`${base}/${encodeURIComponent(matchId)}/${saved.file}`,model:saved.model,prompt:saved.prompt,at:saved.at}),width:saved.width,height:saved.height,prepared:true};
         if(assetErrors(image).length)throw new Error('imagen inválida');
         assets.push(image);await publish(assets,'generating',extras());
+        if (R2 && !r2blocked) {
+          const up = await r2('put', join(folder, saved.file), `partidos/${matchId}/${saved.file}`,
+            saved.file.endsWith('.png') ? 'image/png' : saved.file.endsWith('.webp') ? 'image/webp' : 'image/jpeg',
+            `model=${saved.model}`, `prompt=${row.prompt}`, `at=${saved.at}`, `width=${saved.width}`, `height=${saved.height}`);
+          if (!up) failures.push(`R2: no se pudo subir ${saved.file}; el banco local sigue válido`);
+        }
       }catch(error){const reason=String(error.stderr||error.message).trim().slice(0,180);failures.push(`Imagen ${index+1}: ${reason}`);if(/429|incierto|pausado|cuota/.test(reason))break;}
     }
     await publish(assets,'generating-clips',extras());
@@ -149,9 +229,16 @@ for(const match of matches){
         const {stdout}=await run(process.env.PYTHON_BIN||'python3',[join(PIPELINE,'agnes_video.py'),`--input=${input}`,`--out=${folder}`],{env:childEnv,timeout:Math.max(1,deadline-Date.now()+500),maxBuffer:1024*1024});
         const result=JSON.parse(stdout);failures.push(...result.failures);
         clips=[...new Map([...clips,...result.clips.map(c=>({...c,id:`${matchId}-clip-${c.index}`,source:'agnes',url:`${base}/${encodeURIComponent(matchId)}/${c.file}`}))].map(c=>[c.id,c])).values()].slice(0,2);
+        if (R2 && !r2blocked) for (const c of result.clips ?? []) {
+          const up = await r2('put', join(folder, c.file), `partidos/${matchId}/${c.file}`, 'video/mp4',
+            `model=agnes-video-2.5-flash`, `duration=${c.duration ?? 6}`, `width=${c.width ?? 720}`, `height=${c.height ?? 1280}`);
+          if (!up) failures.push(`R2: no se pudo subir ${c.file}; el banco local sigue válido`);
+        }
       }catch(error){failures.push(`Clips: ${String(error.stderr||error.message).slice(0,180)}`);}
     }
   }
   await publish(assets,'finished',extras());
+  // Libro de operaciones R2 (solo el Action lo commitea; en Fly es local y efímero).
+  if (R2 && process.env.GITHUB_ACTIONS) await r2('record', String(r2A), String(r2B));
   console.log(`media: ${matchId}: ${assets.length}/4 imágenes, ${clips.length}/2 clips; ${failures.join('; ')}`);
 }
