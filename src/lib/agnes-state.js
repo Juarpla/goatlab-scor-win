@@ -93,6 +93,21 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   };
   if (operation === 'health') result = {ready:true,version:1};
   else if (operation === 'compact') {changed=compactAgnesState(state,{nowMs});result={saved:true,compacted:changed};}
+  else if (operation === 'release-legacy') {
+    if (input.confirm !== 'release-legacy') throw new Error('liberación legacy sin confirmar');
+    const released=[];
+    for (const [key,row] of Object.entries(state.slots)) {
+      if ((row.state !== 'uncertain' && row.state !== 'pending') || (row.reservedUnits ?? 0) !== 0) continue;
+      delete state.slots[key]; released.push(key);
+      for (const [attemptId,attempt] of Object.entries(state.attempts)) {
+        if (attempt.slotKey !== key) continue;
+        delete state.attempts[attemptId];
+        if (state.activeVideoAttemptId === attemptId) state.activeVideoAttemptId = null;
+      }
+    }
+    state.cutover.legacyMatchIds=[];
+    result=change({released,legacyCleared:true});
+  }
   else if (operation === 'report') result = {quota:state.quota,failureEvents:state.failureEvents.filter(e => e.at >= nowMs-48*3_600_000).map(e=>({eventId:e.eventId,at:new Date(e.at).toISOString(),hourUTC:e.hourUTC,stage:e.stage,httpStatus:e.httpStatus,matchId:e.matchId})),runs:Object.values(state.summaries).filter(r=>r.at>=nowMs-48*3_600_000).map(r=>({runId:r.runId,at:new Date(r.at).toISOString(),eligible:r.eligible,pending:r.pending,generated:r.generated,reused:r.reused,completed:r.completed})),usage:{opsA:state.usage.opsA,opsB:state.usage.opsB},updatedAt:state.updatedAt};
   else if (operation === 'status') result = {slot:readSlot() ?? null,closed:state.matches[input.matchId]?.closed ?? false};
   else if (operation === 'reserve') {

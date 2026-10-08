@@ -20,6 +20,8 @@ const PIPELINE = fileURLToPath(new URL('./', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/;
 const digest = value => /^[a-f0-9]{64}$/.test(value ?? '');
+const pngSize = bytes => Buffer.isBuffer(bytes) && bytes.length > 24 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47 && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a
+  ? { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) } : null;
 const json = async path => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
 export const parseMediaArgs = values => Object.fromEntries(values.map(arg => { const index = arg.indexOf('='); return index < 0 ? [arg, true] : [arg.slice(0, index), arg.slice(index + 1)]; }));
 export function mediaRunDeadline(start, env = process.env) {
@@ -160,6 +162,12 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
           const found = await r2('exists', 'partidos/' + matchId + '/' + file);
           const remote = found?.found, meta = remote && typeof remote === 'object' ? remote.meta ?? {} : {};
           if (!remote && local?.file !== file) continue;
+          if (!local && remote) {
+            try {
+              const slot = (await state('status', { matchId, kind: 'image', ordinal })).slot;
+              if (slot?.state === 'completed' && slot.promptHash === hash(desired || '') && (slot.model || imageModel) === imageModel) local = { prompt: desired, model: imageModel };
+            } catch {}
+          }
           const prompt = meta.prompthash === hash(desired || '') ? desired : meta.prompt === desired ? meta.prompt : local?.prompt;
           const model = meta.model || local?.model;
           if ((desired && prompt !== desired) || model !== imageModel || (!prompt && !local)) continue;
@@ -171,6 +179,10 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
           const asset = { ...normalizeAgnesImage({ matchId, index: ordinal, publicUrl: base + '/' + encodeURIComponent(matchId) + '/' + file, model, prompt,
             at: meta.at || local?.at || prior?.generatedAt }), width: Number(meta.width || local?.width), height: Number(meta.height || local?.height),
             model, promptHash: hash(prompt || ''), sha256, prepared: true };
+          if ((!asset.width || !asset.height) && file.endsWith('.png') && bytes) {
+            const size = pngSize(bytes);
+            if (size) { asset.width = size.width; asset.height = size.height; }
+          }
           if (assetErrors(asset).length) continue;
           assets.push(asset); summary.reused++;
           if (remote || await putResource('image', ordinal, { file }, asset)) verifiedAssets.add(asset.id);

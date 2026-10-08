@@ -31,6 +31,23 @@ test('reads use identity encoding so the CAS etag stays strong',async()=>{
   assert.equal(seen.method,'GET');
   assert.equal(seen.accept,'identity');
 });
+test('release-legacy requires confirmation and frees only legacy-uncertain slots',()=>{
+  const legacySlots=[
+    {matchId:'alpha-beta',kind:'image',ordinal:0,promptHash:hash('p0'),model:'agnes-image-2.5-flash',state:'completed',expiresAtMs:now+86_400_000},
+    {matchId:'alpha-beta',kind:'video',ordinal:0,promptHash:hash('v0'),model:'agnes-video-2.5-flash',state:'uncertain',expiresAtMs:now+86_400_000},
+  ];
+  const seed=createAgnesState({nowMs:now-86_400_000,legacyMatchIds:['alpha-beta'],legacySlots});
+  assert.throws(()=>reduceAgnesState(seed,'release-legacy',{},{nowMs:now}),/sin confirmar/);
+  const reserved=reduceAgnesState(seed,'reserve',{attemptId:randomUUID(),matchId:'gamma-delta',kind:'image',ordinal:0,promptHash:hash('p1'),model:'agnes-image-2.5-flash',expiresAtMs:now+3_600_000,guard:{manual:true,kickoffMs:now+86_400_000}},{nowMs:now}).state;
+  assert.ok(reserved.slots['gamma-delta:image:0']);
+  const {state,result}=reduceAgnesState(reserved,'release-legacy',{confirm:'release-legacy'},{nowMs:now});
+  assert.deepEqual(state.cutover.legacyMatchIds,[]);
+  assert.ok(state.slots['alpha-beta:image:0']);
+  assert.ok(!state.slots['alpha-beta:video:0']);
+  assert.ok(state.slots['gamma-delta:image:0']);
+  assert.equal(result.released.length,1);
+  assert.equal(state.activeVideoAttemptId,null);
+});
 test('shared CAS admits only one concurrent caller for the same slot',async()=>{
   const remote=backend(),clients=[0,1].map(()=>new AgnesStateClient({env,fetchImpl:remote.fetch.bind(remote)}));
   const outcomes=await Promise.all(clients.map(client=>client.transact('reserve',reserve())));
