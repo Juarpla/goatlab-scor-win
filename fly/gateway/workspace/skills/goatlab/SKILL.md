@@ -29,7 +29,7 @@ La voz es la fuente del texto del video. Los guiones son para leer y grabar;
 muéstralos completos y literalmente. Cada audio tiene un montaje propio, decidido
 por el planificador a partir de su transcripción. El usuario solo envía audios.
 
-Para errores de fotos o solicitudes de reintento, lee
+Para errores de media, recuperación de tareas, solicitudes de reintento o poda, lee
 [references/media.md](references/media.md). Para cambios en la dirección artística,
 consulta `{baseDir}/references/creative.md`; es la misma referencia usada por el
 planificador de Render. Los scripts son responsables de límites y validación.

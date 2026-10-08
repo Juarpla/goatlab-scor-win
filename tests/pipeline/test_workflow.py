@@ -171,7 +171,7 @@ class DeploymentCompatibilityTests(unittest.TestCase):
             self.assertEqual(call.call_count,2)
 
 class IdleCleanupTests(unittest.TestCase):
-    def test_shared_bank_survives_closed_series_until_match_expiry(self):
+    def test_shared_bank_survives_expiry_without_confirmed_final_and_remote_deletion(self):
         import os
         from unittest.mock import patch
         with tempfile.TemporaryDirectory() as folder:
@@ -189,8 +189,8 @@ class IdleCleanupTests(unittest.TestCase):
                 self.assertTrue(assets.exists())
                 bank.write_text(json.dumps({'contentVersion': 1, 'kickoff': '2020-01-01T00:00:00Z'}))
                 flow.release_media()
-                self.assertFalse(bank.exists())
-                self.assertFalse(assets.exists())
+                self.assertTrue(bank.exists())
+                self.assertTrue(assets.exists())
 
     def test_cleanup_reads_local_delivery_record_without_waking_render(self):
         import os
@@ -212,5 +212,5 @@ class IdleCleanupTests(unittest.TestCase):
             with patch.dict(os.environ,{'MEDIA_PACK_DIR':str(media)}), patch('workflow.request_json') as http:
                 flow.release_media()
                 http.assert_not_called()
-            self.assertFalse((media/'a-b.json').exists())
+            self.assertTrue((media/'a-b.json').exists())
             self.assertEqual(flow.db.execute('SELECT file_id FROM audios WHERE id=?',(request,)).fetchone()[0],'')

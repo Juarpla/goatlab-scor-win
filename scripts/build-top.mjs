@@ -1,13 +1,13 @@
 /** Top-5 como dato: ranking completo de partidos NS por relevancia, escrito por
  *  1-update-data tras refrescar datos. Guiones, prompts y banco leen el mismo
  *  archivo, así nunca divergen. Uso: node scripts/build-top.mjs
- *  (respeta GOATLAB_REPO; conserva extra y expulsa lo que salió de la ventana). */
+ *  (respeta GOATLAB_REPO; conserva extra hasta final confirmado más gracia). */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { rankMatches } from '../src/lib/teams.js';
-import { TOP_FILENAME, TOP_VERSION, defaultTopN, liveIds, pruneExtra } from '../src/lib/top.js';
+import { TOP_FILENAME, TOP_VERSION, defaultTopN, pruneExtra } from '../src/lib/top.js';
 
-export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = process.env } = {}) {
+export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = process.env, now = Date.now() } = {}) {
   const dataDir = `${repo}/public/data`;
   const fixtures = JSON.parse(await readFile(`${dataDir}/fixtures.json`, 'utf8'));
   const matches = fixtures.matches ?? [];
@@ -18,10 +18,13 @@ export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = p
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
   }
-  const top = pruneExtra({ ranking: [], extra: prev?.extra ?? [] }, liveIds(matches));
+  let finished = null;
+  try { finished = JSON.parse(await readFile(`${dataDir}/finished-at.json`, 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error; }
+  const top = pruneExtra({ ranking: [], extra: prev?.extra ?? [] }, matches, finished, now);
   const out = {
     version: TOP_VERSION,
-    generatedAt: new Date().toISOString(),
+    generatedAt: new Date(now).toISOString(),
     n: defaultTopN(env),
     ranking: ranked.map(m => ({ id: m.webId ?? m.id, home: m.home ?? null, away: m.away ?? null, kickoff: m.kickoff ?? null })),
     extra: top.extra,

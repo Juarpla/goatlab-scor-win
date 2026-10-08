@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/worksp
 from agnes import ImagePool
 from agnes_video import VideoPool
 from common import ensure_quota
+from fake_agnes_state import FakeAgnesState
 
 
 class QuotaTests(unittest.TestCase):
@@ -17,6 +18,7 @@ class QuotaTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.now = 1000
+        self.state = FakeAgnesState(lambda: self.now)
         self.patch = patch.dict(os.environ, {'AGNES_API_KEY': 'fake'})
         self.patch.start()
         self.addCleanup(self.patch.stop)
@@ -25,10 +27,10 @@ class QuotaTests(unittest.TestCase):
         self.now += seconds
 
     def images(self):
-        return ImagePool(self.root / 'agnes.sqlite', clock=lambda: self.now, sleep=self.sleep)
+        return ImagePool(self.root / 'agnes.sqlite', clock=lambda: self.now, sleep=self.sleep, state=self.state)
 
     def videos(self):
-        return VideoPool(self.root / 'agnes.sqlite', clock=lambda: self.now, sleep=self.sleep)
+        return VideoPool(self.root / 'agnes.sqlite', clock=lambda: self.now, sleep=self.sleep, state=self.state)
 
     def download(self, url, path, deadline):
         path.write_bytes(b'fixture')
@@ -40,8 +42,9 @@ class QuotaTests(unittest.TestCase):
         self.addCleanup(pool.db.close)
         result = {'data': [{'b64_json': base64.b64encode(b'\x89PNGtest').decode()}]}
         pool.generate('m', 0, 'prompt', self.root / 'images', lambda *a, **k: result)
-        self.assertEqual(pool.db.execute('SELECT images FROM quota_use').fetchone()[0], 1)
-        with patch.dict(os.environ, {'AGNES_DAILY_IMAGE_CAP': '1'}):
+        self.assertEqual(self.state.quota['1970-01-01']['images'], 1)
+        self.state.caps['images'] = 1
+        with patch.dict(os.environ, {'AGNES_DAILY_IMAGE_CAP': '9999'}):
             with self.assertRaisesRegex(ValueError, 'cuota diaria de im\xe1genes'):
                 pool.generate('m', 1, 'prompt', self.root / 'images', lambda *a, **k: self.fail('capped'))
 
@@ -59,8 +62,9 @@ class QuotaTests(unittest.TestCase):
 
         result = pool.bank('a-b', prompts, images, self.root, 2000, 3000, call=success, download=self.download)
         self.assertEqual(len(result['clips']), 1)
-        self.assertEqual(pool.db.execute('SELECT video_seconds FROM quota_use').fetchone()[0], 6)
-        with patch.dict(os.environ, {'AGNES_DAILY_VIDEO_SECONDS_CAP': '6'}):
+        self.assertEqual(self.state.quota['1970-01-01']['video_seconds'], 6)
+        self.state.caps['video_seconds'] = 6
+        with patch.dict(os.environ, {'AGNES_DAILY_VIDEO_SECONDS_CAP': '9999'}):
             capped = pool.bank('c-d', prompts, images, self.root, 2000, 3000, call=success, download=self.download)
             self.assertEqual(len(capped['clips']), 0)
             self.assertIn('cuota de v\xeddeo diaria', capped['failures'][0])

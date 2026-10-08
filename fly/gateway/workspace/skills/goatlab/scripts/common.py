@@ -64,6 +64,12 @@ def quota_day(timestamp):
     return datetime.fromtimestamp(timestamp, tz=timezone.utc).strftime("%Y-%m-%d")
 
 
+def agnes_authority(clock=None):
+    """Production always uses R2. Tests inject a backend into the pools directly."""
+    from agnes_state import AgnesState
+    return AgnesState(**({'clock': clock} if clock is not None else {}))
+
+
 def quota_caps():
     """Token Plan Starter quotas with a conservative operative video ceiling.
 

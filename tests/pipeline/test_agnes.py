@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
 from agnes import ImagePool, retry_seconds
+from fake_agnes_state import FakeAgnesState
 
 
 class AgnesTests(unittest.TestCase):
@@ -18,7 +19,8 @@ class AgnesTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.now = 1000
         self.path = Path(self.temp.name) / 'agnes.sqlite'
-        self.pool = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep)
+        self.state = FakeAgnesState(lambda: self.now)
+        self.pool = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep, state=self.state)
         self.addCleanup(self.pool.db.close)
         self.env = patch.dict(os.environ, {'AGNES_API_KEY': 'test', 'AGNES_IMAGE_MODEL': 'agnes-image-2.5-flash', 'AGNES_TIMEOUT_SECONDS': '300'})
         self.env.start()
@@ -31,7 +33,7 @@ class AgnesTests(unittest.TestCase):
         return {'data': [{'b64_json': base64.b64encode(b'\x89PNGtest').decode()}]}
 
     def test_rate_limit_shared_across_pools(self):
-        other = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep)
+        other = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep, state=self.state)
         self.addCleanup(other.db.close)
         for _ in range(12): self.pool.take_slot()
         other.take_slot()
@@ -56,10 +58,40 @@ class AgnesTests(unittest.TestCase):
         def timeout(*_, **__): raise TimeoutError()
         with self.assertRaisesRegex(ValueError, 'incierto'):
             self.pool.generate('match', 0, 'prompt', Path(self.temp.name) / 'images', timeout)
-        restored = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep)
+        restored = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep, state=self.state)
         self.addCleanup(restored.db.close)
         with self.assertRaisesRegex(ValueError, 'incierto'):
             restored.generate('match', 0, 'prompt', Path(self.temp.name) / 'images', lambda *_: self.fail('must not regenerate'))
+
+    def test_saved_response_recovers_after_probe_failure_and_sqlite_loss(self):
+        out = Path(self.temp.name) / 'images'
+        calls = []
+        def call(*_, **__):
+            calls.append(1)
+            return self.result()
+        with patch('agnes.subprocess.check_output', side_effect=OSError('probe unavailable')):
+            with self.assertRaisesRegex(ValueError, 'recuperación local'):
+                self.pool.generate('match', 0, 'prompt', out, call)
+        self.state.slots[('match', 'image', 0)]['model'] = 'agnes-image-2.5-flash'
+        restored = ImagePool(Path(self.temp.name) / 'fresh.sqlite', clock=lambda: self.now, state=self.state)
+        self.addCleanup(restored.db.close)
+        with patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}'):
+            saved = restored.generate('match', 0, 'prompt', out, lambda *a, **kw: self.fail('no second POST'))
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(saved['prompt'], 'prompt')
+        self.assertFalse((out / '0.response.json').exists())
+        self.assertEqual(self.state.quota['1970-01-01']['images'], 1)
+        self.assertEqual(restored.db.execute('SELECT status FROM images').fetchone()[0], 'done')
+
+    def test_saved_response_with_changed_identity_blocks_recovery_and_post(self):
+        out = Path(self.temp.name) / 'images'
+        with patch('agnes.subprocess.check_output', side_effect=OSError('probe unavailable')):
+            with self.assertRaises(ValueError):
+                self.pool.generate('match', 0, 'prompt', out, lambda *a, **kw: self.result())
+        self.state.slots[('match', 'image', 0)]['model'] = 'agnes-image-2.5-flash'
+        with self.assertRaisesRegex(ValueError, 'incompatible'):
+            self.pool.generate('match', 0, 'different prompt', out, lambda *a, **kw: self.fail('no POST'))
+        self.assertTrue((out / '0.response.json').exists())
 
     def test_two_429_stop_generation_and_keep_shared_cooldown(self):
         calls = []
@@ -81,7 +113,7 @@ class AgnesTests(unittest.TestCase):
             self.pool.generate('m',slot,'fictional players',out,lambda *a,**kw:self.result())
         self.assertEqual(self.pool.db.execute("SELECT COUNT(*) FROM images WHERE status='done'").fetchone()[0],4)
         self.assertFalse(list(out.glob('*.response.json')))
-        self.assertEqual(self.pool.db.execute("SELECT images FROM quota_use").fetchone()[0],4)
+        self.assertEqual(self.state.quota["1970-01-01"]["images"],4)
         self.assertEqual(self.now,1000)
 
 class ExpiryTests(unittest.TestCase):

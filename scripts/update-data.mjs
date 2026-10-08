@@ -1,5 +1,7 @@
-import { writeFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
+import { writeFile, mkdir, readFile, readdir, rm, rename } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { observeFinishedMatches, buildPruneContext, resolvePruneMatch, pruneDue, pruneAnalysisEntries } from '../src/lib/pruning.js';
 import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, staysOnWall, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
@@ -22,7 +24,6 @@ const today = new Date().toISOString().slice(0, 10);
 /** Inicio de la ventana del muro: el día de Lima, que no cambia a las 19:00. */
 const windowDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const refresh = process.argv.includes('--refresh');
-await mkdir('public/data', { recursive: true });
 const CONCURRENCY = Number(process.env.DATA_CONCURRENCY ?? 4);
 const LIVE_STATUSES = new Set(['LIVE', 'HT', 'ET', 'BT', 'P', 'SUSP', 'INT']);
 
@@ -31,6 +32,13 @@ async function readJson(path) {
 }
 async function writeJson(path, value) {
   await writeFile(path, JSON.stringify(value, null, 2));
+}
+/** Only genuine fixture updates write the observation ledger. */
+export async function persistFinished(matches, { previousMatches = [], now = Date.now(), path = 'public/data/finished-at.json' } = {}) {
+  const finished = observeFinishedMatches(await readJson(path), matches, now, { previousMatches });
+  await writeJson(`${path}.tmp`, finished);
+  await rename(`${path}.tmp`, path);
+  return finished;
 }
 const byKickoff = (a, b) => (a.kickoff < b.kickoff ? -1 : a.kickoff > b.kickoff ? 1 : 0);
 const isFinished = match => FINISHED_STATUSES.has(match.status);
@@ -246,9 +254,10 @@ async function generateAnalysesBatch(pairs) {
  * de partidos por corrida y batch discreto con rescate 1x1. `prepare(match)`
  * devuelve `{ markets, fullCtx, fresh }`; lo fresco se salta sin gastar.
  */
-async function ensureAnalyses(matches, analyses, prepare, { budget = ANALYSIS_FULL_MAX, batchSize = ANALYSIS_BATCH_SIZE } = {}) {
+export async function ensureAnalyses(matches, analyses, prepare, { budget = ANALYSIS_FULL_MAX, batchSize = ANALYSIS_BATCH_SIZE } = {}) {
   const pending = [];
   for (const match of [...matches].sort(byKickoff)) {
+    if (isFinished(match)) continue;
     if (pending.length >= budget) break;
     const { markets, fullCtx, fresh } = prepare(match);
     if (fresh) continue;
@@ -278,10 +287,10 @@ async function ensureAnalyses(matches, analyses, prepare, { budget = ANALYSIS_FU
   if (pending.length) console.log(`análisis: ${pending.length} pendiente(s) en ${batches} batch(es).`);
 }
 
-async function pruneAnalysis(matches) {
-  const previous = await readJson('public/data/llm-analysis.json') ?? {};
-  const valid = new Set(matches.filter(match => !isFinished(match)).map(match => match.id));
-  await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(previous).filter(([id]) => valid.has(id))));
+export async function persistPrunedAnalyses(analyses, context, { now = Date.now(), path = 'public/data/llm-analysis.json' } = {}) {
+  const retained = pruneAnalysisEntries(analyses, context, now);
+  await writeJson(path, retained);
+  return retained;
 }
 
 /* ---- Probabilidades por partido (JSON supervisable) ---- */
@@ -290,21 +299,23 @@ const PROB_DIR = 'public/match-probabilities';
 
 /**
  * Un archivo por partido con inputs y mercados; el LLM audita los números y
- * su veredicto queda como llmReview para revisión manual. La poda borra los
- * archivos de partidos que ya salieron de la ventana. Los 6 bloques extendidos
+ * su veredicto queda como llmReview para revisión manual. La poda requiere
+ * final confirmado más gracia; salir de la ventana no basta. Los 6 bloques extendidos
  * (`provider`, `h2h`, `discipline`, `setPieces`, `weatherVenue`, `availability`)
  * se nutren en cada corrida: eco donde hay dato, stub null-honesto donde no.
  * `afPrediction` y `provider.recommendations` quedan además para auditoría y dataset.
  */
-async function updateMatchProbabilities(matches, { results = [], scorers = null, standings = null, analyses = null, weather = null, history = null, teamCtx = null } = {}) {
-  await mkdir(PROB_DIR, { recursive: true });
-  const now = new Date().toISOString();
-  const keep = new Set(matches.map(match => match.id));
-  for (const file of await readdir(PROB_DIR).catch(() => [])) {
-    if (file.endsWith('.json') && !keep.has(file.replace(/\.json$/, ''))) await rm(join(PROB_DIR, file));
+export async function updateMatchProbabilities(matches, { results = [], scorers = null, standings = null, analyses = null, weather = null, history = null, teamCtx = null, dir = PROB_DIR, pruneContext = buildPruneContext(matches), now = Date.now() } = {}) {
+  await mkdir(dir, { recursive: true });
+  const updatedAt = new Date(now).toISOString();
+  for (const file of await readdir(dir)) {
+    if (!file.endsWith('.json')) continue;
+    const id = file.slice(0, -5);
+    if (pruneDue(resolvePruneMatch(id, pruneContext), pruneContext.seen, now)) await rm(join(dir, file));
   }
   let written = 0;
   for (const match of matches) {
+    if (isFinished(match)) continue;
     // Cascada siempre-emite: Poisson local → xG Bzzoiro → media de liga.
     const markets = resolveMatchMarkets({ match, results, scorers: scorers?.[match.competition] ?? null, standings });
     const entry = analyses?.[match.id] ?? null;
@@ -329,7 +340,7 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
       away: match.away,
       competition: match.competition,
       kickoff: match.kickoff,
-      updatedAt: now,
+      updatedAt,
       schemaVersion: 5,
       inputs: {
         lambdas: markets?.lambdas ?? null,
@@ -368,7 +379,7 @@ async function updateMatchProbabilities(matches, { results = [], scorers = null,
       },
       llmReview: entry?.review ? { ...entry.review, provider: entry.provider ?? null, model: entry.model ?? null, generatedAt: entry.generatedAt ?? null } : null,
     };
-    await writeJson(join(PROB_DIR, `${match.id}.json`), payload);
+    await writeJson(join(dir, `${match.id}.json`), payload);
     written += 1;
   }
   console.log(`match-probabilities: ${written} partidos.`);
@@ -410,10 +421,11 @@ async function migrateAnalyses(matches, { results, standings, scorers, weather }
 }
 
 /** Catch-up acotado de lecturas ausentes en partidos vivos (default 3 por corrida). */
-async function catchUpAnalyses(matches, analyses, { results, standings, scorers, weather, budget = 3 }) {
+export async function catchUpAnalyses(matches, analyses, { results, standings, scorers, weather, budget = 3 }) {
   const ctx = { results, standings, scorers, weather };
   let made = 0;
   for (const match of matches) {
+    if (isFinished(match)) continue;
     if (made >= budget) break;
     if (findAnalysis(analyses, match)) continue;
     const markets = resolveMatchMarkets({ match, results, scorers: scorers?.[match.competition] ?? null, standings });
@@ -1371,6 +1383,7 @@ async function capturePredictions(matches, results = []) {
 
 /** Full run (daily 07:00 UTC): ventana de 7 días, base de resultados, Bzzoiro, análisis. */
 async function full() {
+  const previousCalendar = await readJson('public/data/fixtures.json');
   const result = await getFixtures({ date: windowDate, days: 7, env: process.env });
   if (result.unavailable) {
     console.warn('No se actualizó el calendario; se conserva la última copia disponible.');
@@ -1392,6 +1405,9 @@ async function full() {
   await captureAfOdds(windowMatches);
   // El muro solo guarda partidos vivos; la ventana completa sigue alimentando predicciones y análisis.
   await writeJson('public/data/fixtures.json', { matches: windowMatches.filter(alive), provider: result.provider, delayed: result.delayed, updatedAt: result.updatedAt });
+  const pruneNow = Date.now();
+  const finished = await persistFinished(windowMatches, { previousMatches: previousCalendar?.matches ?? [], now: pruneNow });
+  const pruneContext = buildPruneContext(windowMatches, finished);
 
   // Clima sidecar de la ventana (Bzzoiro primero, Open-Meteo fallback por sede).
   const weather = await updateWeather(windowMatches);
@@ -1401,6 +1417,7 @@ async function full() {
 
   // Probabilidades supervisables + análisis LLM (narrativa + auditoría) sobre los mismos números.
   const aliveWindow = windowMatches.filter(alive);
+  const generationMatches = aliveWindow.filter(match => !isFinished(match));
   const [scorersBase, standingsBase] = await Promise.all([
     readJson('public/data/scorers.json'),
     readJson('public/data/standings.json'),
@@ -1412,25 +1429,23 @@ async function full() {
   const scorersMerged = withScorerFallback(scorersBase, scorerFallback);
   const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersMerged, weather });
   const teamCtx = await updateTeamStats(aliveWindow, { historyRows: historyBase.rows ?? [] });
-  await updateMatchProbabilities(aliveWindow, { results, scorers: scorersMerged, standings: standingsBase, analyses, weather, history: historyBase.rows ?? [], teamCtx });
+  await updateMatchProbabilities(generationMatches, { results, scorers: scorersMerged, standings: standingsBase, analyses, weather, history: historyBase.rows ?? [], teamCtx, pruneContext, now: pruneNow });
 
   await capturePredictions(windowMatches, results);
   try { await import('./evaluate-predictions.mjs'); } catch (error) { console.warn(`Evaluación no completada: ${error.message}`); }
 
   // Análisis LLM para partidos no jugados; vigente si no cambió hora, estado ni bajas.
-  // El mapa vive en memoria y se persiste al final: pruneAnalysis relee el disco
-  // y descartaría lo recién generado.
+  // La poda se aplica al mapa en memoria para conservar las lecturas nuevas.
   const previous = analyses;
   const ctx = { results, standings: standingsBase, scorers: scorersMerged, weather };
   try {
-    await ensureAnalyses(aliveWindow, previous, match => {
+    await ensureAnalyses(generationMatches, previous, match => {
       const markets = resolveMatchMarkets({ match, results, scorers: scorersMerged?.[match.competition] ?? null, standings: standingsBase });
       const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
       return { markets, fullCtx, fresh: analysisIsFresh(previous[match.id], match, markets, fullCtx) };
     });
-    const validIds = new Set(aliveWindow.map(match => match.id));
-    await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(previous).filter(([id]) => validIds.has(id))));
-    await patchLlmReviews(aliveWindow);
+    await persistPrunedAnalyses(previous, pruneContext, { now: pruneNow });
+    await patchLlmReviews(generationMatches);
   } finally {
     await writeLlmHealth();
   }
@@ -1439,13 +1454,19 @@ async function full() {
 /** Solo análisis y probabilidades: reutiliza el calendario horneado; no gasta APIs de datos (solo puede refrescar la caché de predicciones AF). */
 async function analysisOnly() {
   const calendar = await readJson('public/data/fixtures.json');
+  const pruneNow = Date.now();
+  const finished = await readJson('public/data/finished-at.json');
+  const pruneContext = buildPruneContext(calendar?.matches ?? [], finished);
   if (!calendar?.matches?.length) {
-    console.warn('Sin calendario previo; se requiere la corrida completa para generar datos.');
+    console.warn('Sin calendario previo; solo mantenimiento con evidencia ya persistida.');
+    await persistPrunedAnalyses(await readJson('public/data/llm-analysis.json'), pruneContext, { now: pruneNow });
+    await updateMatchProbabilities([], { pruneContext, now: pruneNow });
     process.exitCode = 0;
     return;
   }
   const results = (await readJson('public/data/results.json'))?.results ?? [];
   const aliveWindow = calendar.matches.filter(alive);
+  const generationMatches = aliveWindow.filter(match => !isFinished(match));
   const [scorersBase, standingsBase, weatherBase, historyBase] = await Promise.all([
     readJson('public/data/scorers.json'),
     readJson('public/data/standings.json'),
@@ -1460,18 +1481,17 @@ async function analysisOnly() {
   const scorersMergedOnly = withScorerFallback(scorersBase, scorerFallbackOnly);
   const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersMergedOnly, weather: weatherBase });
   const teamCtxOnly = await updateTeamStats(aliveWindow, { historyRows: historyBase.rows ?? [], fetch: false });
-  await updateMatchProbabilities(aliveWindow, { results, scorers: scorersMergedOnly, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxOnly });
+  await updateMatchProbabilities(generationMatches, { results, scorers: scorersMergedOnly, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxOnly, pruneContext, now: pruneNow });
   const previous = analyses;
   const ctx = { results, standings: standingsBase, scorers: scorersMergedOnly, weather: weatherBase };
   try {
-    await ensureAnalyses(aliveWindow, previous, match => {
+    await ensureAnalyses(generationMatches, previous, match => {
       const markets = resolveMatchMarkets({ match, results, scorers: scorersMergedOnly?.[match.competition] ?? null, standings: standingsBase });
       const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
       return { markets, fullCtx, fresh: analysisIsFresh(previous[match.id], match, markets, fullCtx) };
     });
-    const validIds = new Set(aliveWindow.map(match => match.id));
-    await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(previous).filter(([id]) => validIds.has(id))));
-    await patchLlmReviews(aliveWindow);
+    await persistPrunedAnalyses(previous, pruneContext, { now: pruneNow });
+    await patchLlmReviews(generationMatches);
   } finally {
     await writeLlmHealth();
   }
@@ -1514,22 +1534,27 @@ async function refreshScores() {
   await capturePredictions(merged, resultsBase?.results ?? []);
   const matches = merged.filter(alive);
   await writeJson('public/data/fixtures.json', { matches, provider: result.provider, delayed: result.delayed, updatedAt: result.updatedAt });
-  await pruneAnalysis(matches);
+  const pruneNow = Date.now();
+  const finished = await persistFinished(merged, { previousMatches: previous.matches, now: pruneNow });
+  const pruneContext = buildPruneContext(merged, finished);
+  const generationMatches = matches.filter(match => !isFinished(match));
   await updateTrendsExtra(matches);
   // Catch-up acotado: las lecturas que fallaron en la corrida completa se reintentan sin bloquear el refresco.
   const catchUpBudget = Math.max(0, Number(process.env.ANALYSIS_CATCHUP_MAX ?? 3));
   try {
-    await catchUpAnalyses(matches, analyses, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersMergedRefresh, weather: weatherBase, budget: catchUpBudget });
-    const validIds = new Set(matches.map(match => match.id));
-    await writeJson('public/data/llm-analysis.json', Object.fromEntries(Object.entries(analyses).filter(([id]) => validIds.has(id))));
+    await catchUpAnalyses(generationMatches, analyses, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersMergedRefresh, weather: weatherBase, budget: catchUpBudget });
+    await persistPrunedAnalyses(analyses, pruneContext, { now: pruneNow });
     const teamCtxRefresh = await updateTeamStats(matches, { historyRows: historyBase.rows ?? [] });
-    await updateMatchProbabilities(matches, { results: resultsBase?.results ?? [], scorers: scorersMergedRefresh, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxRefresh });
-    await patchLlmReviews(matches);
+    await updateMatchProbabilities(generationMatches, { results: resultsBase?.results ?? [], scorers: scorersMergedRefresh, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxRefresh, pruneContext, now: pruneNow });
+    await patchLlmReviews(generationMatches);
     try { await import('./evaluate-predictions.mjs'); } catch (error) { console.warn(`Evaluación no completada: ${error.message}`); }
   } finally {
     await writeLlmHealth();
   }
 }
 
-if (process.argv.includes('--analysis-only')) await analysisOnly();
-else await (refresh ? refreshScores() : full());
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  await mkdir('public/data', { recursive: true });
+  if (process.argv.includes('--analysis-only')) await analysisOnly();
+  else await (refresh ? refreshScores() : full());
+}

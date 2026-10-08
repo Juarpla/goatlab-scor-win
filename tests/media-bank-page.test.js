@@ -41,7 +41,7 @@ test('readMediaBank devuelve null sin manifiesto válido', async t => {
   assert.deepEqual(mediaBankIds(dir), []);
 });
 
-test('--match poda en Fly la media del partido terminado y conserva lo vivo y lo pedido', async t => {
+test('--match conserves terminal media without final evidence or confirmed remote deletion', async t => {
   const root = await mkdtemp(join(tmpdir(), 'media-prune-')); t.after(() => rm(root, { recursive: true, force: true }));
   const data = join(root, 'public/data');
   const out = join(root, 'bank');
@@ -52,7 +52,7 @@ test('--match poda en Fly la media del partido terminado y conserva lo vivo y lo
     { id: 'a-b', webId: 'a-b', home: 'Alpha', away: 'Beta', status: 'NS', kickoff },
     { id: 'c-d', webId: 'c-d', home: 'Gamma', away: 'Delta', status: 'FT', kickoff: past },
   ] }));
-  await writeFile(join(data, 'top.json'), JSON.stringify({ version: 1, ranking: [{ id: 'a-b' }], extra: [] }));
+  await writeFile(join(data, 'top.json'), JSON.stringify({ version: 1, generatedAt: new Date().toISOString(), ranking: [{ id: 'a-b' }], extra: [] }));
   await writeFile(join(data, 'youtube-scripts', 'a-b.json'), '{}');
   for (const cat of ['image-prompts', 'video-prompts']) {
     await mkdir(join(data, cat), { recursive: true });
@@ -68,8 +68,8 @@ test('--match poda en Fly la media del partido terminado y conserva lo vivo y lo
   await run(process.execPath, [entry, '--match=a-b'], {
     env: { ...process.env, GOATLAB_REPO: root, MEDIA_PACK_DIR: out, AGNES_API_KEY: '' },
   });
-  await assert.rejects(access(join(out, 'c-d.json')));
-  await assert.rejects(access(join(out, 'c-d.progress.json')));
-  await assert.rejects(access(join(out, 'gen', 'c-d')));
+  await access(join(out, 'c-d.json'));
+  await access(join(out, 'c-d.progress.json'));
+  await access(join(out, 'gen', 'c-d'));
   assert.ok(JSON.parse(await readFile(join(out, 'a-b.json'), 'utf8')));
 });

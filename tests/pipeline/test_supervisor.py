@@ -7,6 +7,7 @@ import tempfile
 import threading
 import time
 import unittest
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
@@ -74,6 +75,7 @@ class SupervisorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);data=root/'public/data';data.mkdir(parents=True)
             (data/'fixtures.json').write_text(json.dumps({'matches':[{'id':'a-b','webId':'a-b','home':'Spain','away':'Czechia','status':'NS','kickoff':'2030-10-03T18:00:00Z'}]}))
+            (data/'top.json').write_text(json.dumps({'version':1,'generatedAt':datetime.now(timezone.utc).isoformat(),'ranking':[{'id':'a-b'}],'extra':[]}))
             preload=root/'provider.mjs'
             preload.write_text("globalThis.fetch=()=>{throw Error('External HTTP forbidden')};")
             flow=Workflow(root/'goatlab.sqlite')

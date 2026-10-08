@@ -2,6 +2,7 @@
 import argparse
 import fcntl
 import hashlib
+import http.client
 import json
 import os
 import re
@@ -12,11 +13,32 @@ import urllib.error
 import urllib.request
 import urllib.parse
 from pathlib import Path
-from common import add_quota, atomic_json, database, quota_caps, quota_day, read_quota, request_json
+from common import agnes_authority, atomic_json, database, request_json
 from agnes import retry_seconds
 
 MODEL = 'agnes-video-2.5-flash'
 CLIP_SECONDS = 6
+IDENTIFIER_KEYS = {'id', 'videoid', 'taskid', 'resultid', 'generationid'}
+
+
+def response_identifiers(payload):
+    """Any identifier prevents a rejection proof; only unique video IDs permit GET recovery."""
+    present, video_ids = False, set()
+    def walk(value):
+        nonlocal present
+        if isinstance(value, dict):
+            for key, item in value.items():
+                normalized = re.sub(r'[^a-z0-9]', '', str(key).lower())
+                if normalized in IDENTIFIER_KEYS:
+                    present = True
+                    if normalized == 'videoid' and isinstance(item, str) and re.fullmatch(r'[A-Za-z0-9_-]{1,200}', item):
+                        video_ids.add(item)
+                walk(item)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item)
+    walk(payload)
+    return present, next(iter(video_ids)) if len(video_ids) == 1 else None
 
 
 def start_interval():
@@ -28,8 +50,9 @@ def start_interval():
 
 
 class VideoPool:
-    def __init__(self, path, clock=time.time, sleep=time.sleep):
+    def __init__(self, path, clock=time.time, sleep=time.sleep, state=None):
         self.path, self.clock, self.sleep = Path(path), clock, sleep
+        self.state = state if state is not None else agnes_authority(clock)
         self.db = database(path)
         self.db.executescript('''
           CREATE TABLE IF NOT EXISTS video_tasks(match_id TEXT NOT NULL, ordinal INTEGER NOT NULL,
@@ -58,18 +81,28 @@ class VideoPool:
 
     def error(self, match, ordinal, stage, error):
         """Keep bounded diagnostics without credentials, signed URLs or raw headers."""
-        try: raw = error.read(4096).decode('utf8','replace')
-        except OSError: raw = '[unreadable response]'
-        try: payload = json.loads(raw)
-        except ValueError: payload = {}
-        video_id = payload.get('video_id') if isinstance(payload,dict) else None
-        if not isinstance(video_id,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,200}',video_id): video_id = None
+        headers = error.headers or {}
+        proven_rejected, video_id = False, None
+        try:
+            body = error.read(4097)
+            complete = bool(body) and len(body) <= 4096 and not error.read(1)
+            length = headers.get('Content-Length')
+            if length is not None:
+                try: complete = complete and int(length) == len(body)
+                except (TypeError, ValueError): complete = False
+            raw = body.decode('utf8', 'strict')
+            def invalid_constant(_):
+                raise ValueError('non-JSON numeric constant')
+            payload = json.loads(raw, parse_constant=invalid_constant)
+            identified, video_id = response_identifiers(payload)
+            proven_rejected = complete and isinstance(payload, dict) and not identified
+        except (OSError, ValueError, RecursionError, http.client.HTTPException):
+            raw = body.decode('utf8', 'replace') if 'body' in locals() else '[unreadable response]'
         for key,value in os.environ.items():
             if value and len(value)>5 and key.endswith(('_KEY','_TOKEN','_SECRET')): raw=raw.replace(value,'[redacted]')
         raw=re.sub(r'(?i)(bearer\s+)[^\s"<>]+',r'\1[redacted]',raw)
         raw=re.sub(r'(?i)("(?:token|api[_-]?key|secret|authorization|password)"\s*:\s*)"[^" ]*"',r'\1"[redacted]"',raw)
         raw=re.sub(r'(https?://[^\s"?]+)\?[^\s"]+',r'\1?[redacted]',raw)
-        headers=error.headers or {}
         request_id=str(headers.get('X-Request-ID') or headers.get('Request-ID') or '')[:200]
         for key,value in os.environ.items():
             if value and len(value)>5 and key.endswith(('_KEY','_TOKEN','_SECRET')):
@@ -79,7 +112,7 @@ class VideoPool:
                 'body':raw[:2048],'requestId':request_id,'videoId':video_id}
         self.diagnostic(match,ordinal,record)
         retry=retry_seconds(headers.get('Retry-After'));status=error.code;error.close()
-        return status,retry,video_id
+        return status,retry,video_id,proven_rejected
 
     def diagnostic(self, match, ordinal, record):
         self.db.execute('INSERT INTO video_errors(match_id,ordinal,metadata) VALUES(?,?,?)',(match,ordinal,json.dumps(record)))
@@ -102,14 +135,32 @@ class VideoPool:
             try: fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError: return {'clips': [], 'failures': ['otra generación en curso; montaje parcial sin espera']}
             self.cleanup()
-            for ordinal, prompt in enumerate(prompts[:5]):
+            # The 60-second error recovery window belongs to this bank invocation.
+            # Hourly runs may retrieve the same task again, but never recreate it.
+            self.db.execute('DELETE FROM video_recovery WHERE match_id=?', (match,))
+            target = min(2, len(prompts))
+            for ordinal in range(5):
+                prompt = prompts[ordinal % len(prompts)]
                 if self.clock() >= deadline or cancelled(): break
+                try:
+                    remote = self.state.status(match, 'video', ordinal)
+                except ValueError as error:
+                    failures.append(str(error)); break
+                if remote:
+                    expected_prompt = hashlib.sha256(prompt['prompt'].encode()).hexdigest()
+                    expected_reference = hashlib.sha256(images[ordinal%len(images)]['url'].encode()).hexdigest()
+                    if not remote.get('videoId') and (remote.get('promptHash') != expected_prompt or remote.get('model', MODEL) != MODEL or (remote.get('referenceHash') and remote['referenceHash'] != expected_reference)):
+                        failures.append('slot pertenece a otra versión de prompts o referencia'); break
+                    cached = self.db.execute('SELECT status,result FROM video_tasks WHERE match_id=? AND ordinal=?', (match,ordinal)).fetchone()
+                    if not (remote['state']=='completed' and cached and cached['status']=='done'):
+                        status = 'pending' if remote.get('videoId') else {'completed':'used','rejected':'limited'}.get(remote['state'],remote['state'])
+                        self.db.execute('INSERT OR REPLACE INTO video_tasks VALUES(?,?,?,?,?,?,?,NULL)', (match,ordinal,status,remote.get('videoId'),prompt['prompt'],images[ordinal%len(images)]['url'],expires))
                 row = self.db.execute('SELECT * FROM video_tasks WHERE match_id=? AND ordinal=?', (match,ordinal)).fetchone()
                 if row and row['status']=='done':
                     saved = json.loads(row['result'])
                     if Path(saved['path']).exists(): clips.append(saved)
                     else: failures.append(f'clip {ordinal+1}: archivo perdido; no se regenera')
-                    if len(clips)>=2: break
+                    if len(clips)>=target: break
                     continue
                 if row and row['status'] in ('failed','used'): continue
                 video_id = row['video_id'] if row else None
@@ -119,20 +170,6 @@ class VideoPool:
                 reference = row['reference'] if row else images[ordinal%len(images)]['url']
                 self.db.execute('INSERT OR IGNORE INTO video_models VALUES(?,?,?)',(match,ordinal,MODEL))
                 if not video_id:
-                    active = self.db.execute("SELECT * FROM video_tasks WHERE match_id!=? AND status IN ('pending','uncertain') LIMIT 1", (match,)).fetchone()
-                    poll_rate=self.db.execute('SELECT next_at FROM video_poll_rate WHERE video_id=?',(active['video_id'],)).fetchone() if active and active['video_id'] else None
-                    if active and active['video_id'] and (not poll_rate or poll_rate[0]<=self.clock()):
-                        try:
-                            recovered = call(self.task_url(active['video_id']), headers=headers, timeout=min(2,max(.1,deadline-self.clock())))
-                            if isinstance(recovered,dict) and recovered.get('status') in ('completed','failed'):
-                                self.db.execute("UPDATE video_tasks SET status='used',result=? WHERE match_id=? AND ordinal=?", (json.dumps(recovered),active['match_id'],active['ordinal']))
-                                active = None
-                        except urllib.error.HTTPError as error:
-                            status,retry,_=self.error(active['match_id'],active['ordinal'],'retrieve',error)
-                            if status==429: self.db.execute('INSERT OR REPLACE INTO video_poll_rate VALUES(?,?)',(active['video_id'],self.clock()+retry))
-                        except (OSError,ValueError): pass
-                    if active:
-                        failures.append('otra tarea pendiente o incierta; montaje parcial sin otra pausa'); break
                     occupied = self.db.execute("SELECT COUNT(*) FROM video_tasks WHERE match_id=? AND status IN ('done','pending','uncertain')", (match,)).fetchone()[0]
                     if occupied>=2: break
                     while not video_id and self.clock()<deadline and not cancelled():
@@ -141,10 +178,16 @@ class VideoPool:
                         if self.clock()+wait+1>=deadline: break
                         if wait: self.sleep(wait)
                         if cancelled() or self.clock()+1>=deadline: break
-                        day = quota_day(self.clock())
-                        used = read_quota(self.db, day)
-                        if used['video_seconds']+CLIP_SECONDS>quota_caps()['video_seconds']:
-                            failures.append(f'clip {ordinal+1}: cuota de vídeo diaria agotada ({used["video_seconds"]:.0f}s); continúa mañana');break
+                        try:
+                            admission = self.state.reserve(match, 'video', ordinal, prompt['prompt'], MODEL, expires, reference)
+                        except ValueError as error:
+                            failures.append(str(error)); break
+                        if not admission.get('canPost'):
+                            retry_at = admission.get('retryAtMs', 0)/1000
+                            if retry_at > self.clock() and retry_at+1 < deadline:
+                                self.sleep(retry_at-self.clock()); continue
+                            failures.append(admission.get('reason','autoridad Agnes no concedió permiso')); break
+                        attempt_id = admission['attemptId']
                         self.db.execute('INSERT OR REPLACE INTO video_tasks VALUES(?,?,?,NULL,?,?,?,NULL)', (match,ordinal,'uncertain',prompt['prompt'],reference,expires))
                         self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)', (self.clock()+start_interval()+0.1,))
                         try:
@@ -152,22 +195,30 @@ class VideoPool:
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
                             video_id=result.get('video_id')
                             if not isinstance(video_id,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,200}',video_id): raise ValueError('sin video_id')
+                            self.state.event(attempt_id, 'accepted', videoId=video_id)
                             self.db.execute("UPDATE video_tasks SET status='pending',video_id=? WHERE match_id=? AND ordinal=?",(video_id,match,ordinal))
                         except urllib.error.HTTPError as error:
-                            status,retry,video_id=self.error(match,ordinal,'create',error)
+                            status,retry,video_id,proven_rejected=self.error(match,ordinal,'create',error)
                             if video_id:
+                                self.state.event(attempt_id, 'accepted', videoId=video_id)
                                 self.db.execute("UPDATE video_tasks SET status='pending',video_id=? WHERE match_id=? AND ordinal=?",(video_id,match,ordinal));self.recovery(match,deadline,ordinal)
-                            elif status==429:
+                            elif status==429 and proven_rejected:
+                                self.state.event(attempt_id, 'hard-rejected-429', httpStatus=429, provenRejected=True, retryAfterMs=retry*1000)
                                 self.db.execute("UPDATE video_tasks SET status='limited' WHERE match_id=? AND ordinal=?",(match,ordinal))
                                 self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)',(self.clock()+max(start_interval()+0.1,retry),))
                                 if self.clock()+max(start_interval()+0.1,retry)+1>=deadline: failures.append(f'clip {ordinal+1}: HTTP 429; presupuesto agotado');break
                                 continue
-                            elif 400<=status<500:
+                            elif 400<=status<500 and status!=429:
                                 self.db.execute("UPDATE video_tasks SET status='failed' WHERE match_id=? AND ordinal=?",(match,ordinal))
+                                self.state.event(attempt_id, 'uncertain', httpStatus=status, stage='create')
+                            else:
+                                self.state.event(attempt_id, 'uncertain', httpStatus=status, stage='create')
                             failures.append(f'clip {ordinal+1}: HTTP {status}')
                             break
                         except (OSError,ValueError):
                             self.transport(match,ordinal,'create')
+                            try: self.state.event(attempt_id, 'uncertain', stage='create')
+                            except ValueError: pass
                             failures.append(f'clip {ordinal+1}: creación incierta sin identificador; montaje parcial inmediato');break
                     if not video_id:
                         state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
@@ -177,6 +228,12 @@ class VideoPool:
                     recovery=self.db.execute('SELECT deadline,ordinal FROM video_recovery WHERE match_id=?',(match,)).fetchone()
                     limit=min(deadline,recovery[0]) if recovery and recovery[1]==ordinal else deadline
                     if self.clock()>=limit: break
+                    try:
+                        claim = self.state.pollclaim(match, ordinal)
+                    except ValueError as error:
+                        failures.append(str(error)); break
+                    if not claim.get('canPoll'):
+                        failures.append(claim.get('reason','recuperación remota no disponible')); break
                     poll_rate=self.db.execute('SELECT next_at FROM video_poll_rate WHERE video_id=?',(video_id,)).fetchone()
                     wait=max(0,poll_rate[0]-self.clock()) if poll_rate else 0
                     if self.clock()+wait>=limit: break
@@ -187,33 +244,46 @@ class VideoPool:
                         if not isinstance(result,dict): raise ValueError('respuesta inválida')
                         status=result.get('status')
                         if status=='failed':
+                            self.state.event(claim['attemptId'], 'failed')
                             self.db.execute("UPDATE video_tasks SET status='failed' WHERE match_id=? AND ordinal=?",(match,ordinal))
                             failures.append(f'clip {ordinal+1}: Agnes confirmó fallo');break
                         if status=='completed':
+                            if not remote or remote['state'] != 'completed':
+                                self.state.event(claim['attemptId'], 'completed')
                             atomic_json(out/f'clip-{ordinal}.response.json',result)
                             saved=download(result.get('url'),out/f'clip-{ordinal}.mp4',limit)
-                            saved.update(model=MODEL,prompt=prompt['prompt'],videoId=video_id,reference=reference,index=ordinal)
+                            saved.update(model=MODEL,prompt=prompt['prompt'],videoId=video_id,reference=reference,index=ordinal,attemptId=claim['attemptId'])
+                            if remote:
+                                saved.update(model=remote.get('model',MODEL),promptHash=remote.get('promptHash'),referenceHash=remote.get('referenceHash'))
+                                if remote.get('promptHash') != hashlib.sha256(prompt['prompt'].encode()).hexdigest():
+                                    saved.pop('prompt',None)
                             atomic_json(out/f'clip-{ordinal}.json',saved)
-                            add_quota(self.db, quota_day(self.clock()), video_seconds=saved.get('duration') or CLIP_SECONDS)
                             self.db.execute("UPDATE video_tasks SET status='done',result=? WHERE match_id=? AND ordinal=?",(json.dumps(saved),match,ordinal))
                             clips.append(saved);break
                         if status not in ('queued','in_progress'): limit=self.recovery(match,deadline,ordinal)
                     except urllib.error.HTTPError as error:
-                        status,retry,_=self.error(match,ordinal,'retrieve',error)
+                        status,retry,_,_=self.error(match,ordinal,'retrieve',error)
                         limit=self.recovery(match,deadline,ordinal)
                         if status==429:
+                            try: self.state.event(claim['attemptId'], 'poll-throttle', httpStatus=429, retryAfterMs=retry*1000, stage='retrieve')
+                            except ValueError: break
                             self.db.execute('INSERT OR REPLACE INTO video_poll_rate VALUES(?,?)',(video_id,self.clock()+retry))
                             if self.clock()+retry>=limit: break
                             self.sleep(retry)
+                        else:
+                            try: self.state.event(claim['attemptId'], 'uncertain', httpStatus=status, stage='retrieve')
+                            except ValueError: break
                     except (OSError,ValueError,subprocess.SubprocessError):
                         self.transport(match,ordinal,'retrieve',video_id)
+                        try: self.state.event(claim['attemptId'], 'uncertain', stage='retrieve')
+                        except ValueError: pass
                         limit=self.recovery(match,deadline,ordinal)
                     if self.clock()+2>=limit: break
                     self.sleep(2)
                 state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                 if state[0]=='pending':
                     failures.append(f'clip {ordinal+1}: recuperación vencida o tarea pendiente; montaje parcial');break
-                if len(clips)>=2: break
+                if len(clips)>=target: break
         return {'clips':clips[:2],'failures':failures}
 
     @staticmethod

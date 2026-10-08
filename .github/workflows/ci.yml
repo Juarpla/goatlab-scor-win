@@ -29,4 +29,6 @@ jobs:
       - run: python3 -m unittest discover -s tests/pipeline -v
       - run: node scripts/sync-goatlab-skill.mjs --check
       - run: pnpm test
+      - run: pnpm run lint:shorts
+      - run: pnpm run lint:prompts
       - run: pnpm run build

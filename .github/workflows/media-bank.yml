@@ -1,5 +1,7 @@
 name: "3-media-creation"
 on:
+  schedule:
+    - cron: '15 7,9,11 * * *' # 02:15, 04:15 y 06:15 Lima
   workflow_dispatch:
     inputs:
       match:
@@ -18,112 +20,152 @@ on:
   workflow_run:
     workflows: ["2-scripting"]
     types: [completed]
-# Corre después de que guiones+prompts están en main. Si ese workflow falló,
-# no hay prompts nuevos y este job no hace nada. Un fallo aquí nunca obliga
-# a repetir la generación de prompts: re-lanza solo este workflow.
-# Banco: 4 fotos + 2 clips por partido, solo partidos con guión+prompts
-# del top-5 + extras (public/data/top.json lo escribe 1-update-data).
 permissions:
   contents: write
 concurrency:
   group: goatlab-media
   cancel-in-progress: false
+  queue: max
 jobs:
   media:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      MATCH: ${{ inputs.match }}
+      LIMIT: ${{ inputs.limit || '5' }}
+      MEDIA_DRAFT: '1'
+      # La llave debe ser de tipo Token Plan: las llaves Free comparten
+      # otro pozo con 1 RPM de vídeo y se saturan con los clips.
+      AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
+      AGNES_IMAGE_MODEL: agnes-image-2.5-flash
+      AGNES_IMAGE_RPM: '12'
+      AGNES_VIDEO_START_INTERVAL: '30'
+      AGNES_DAILY_VIDEO_SECONDS_CAP: '360'
+      AGNES_DAILY_IMAGE_CAP: '4000'
+      AGNES_SKIP_IMAGES: ${{ inputs.mode == 'clips-only' && '1' || '' }}
+      AGNES_SKIP_VIDEO: ${{ inputs.mode == 'images-only' && '1' || '' }}
+      R2_STATE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_STATE_BUCKET: app-states
+      R2_STATE_KEY: goatlab/agnes-state.json
+      # R2 es el único almacén de la media (bucket goatlab → partidos/<id>/).
+      MEDIA_GEN_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+      R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+      R2_BUCKET: goatlab
+      R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
-      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - name: Mantenimiento conservador
+        run: |
+          mkdir -p .cache
+          args=()
+          if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
+          node scripts/maintain-media.mjs "${args[@]}" > .cache/media-maintenance.json
+      - name: Comprobar banco
+        id: check
+        run: |
+          args=()
+          if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
+          if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
+          node scripts/check-media-complete.mjs "${args[@]}"
+      - name: Preflight del estado privado
+        if: steps.check.outputs.complete == 'false'
+        run: node scripts/agnes-preflight.mjs
+      - name: Recuperar caché cifrada
+        if: steps.check.outputs.complete == 'false'
+        uses: actions/cache/restore@v6
+        with:
+          path: .cache/agnes-recovery.enc
+          key: agnes-recovery-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: agnes-recovery-v1-
+      - name: Restaurar resultados pendientes
+        if: steps.check.outputs.complete == 'false'
+        run: node scripts/media-recovery.mjs --restore
+      - uses: pnpm/action-setup@v6
+        if: steps.check.outputs.complete == 'false'
+      - name: Instalar dependencias
+        if: steps.check.outputs.complete == 'false'
+        run: pnpm install --frozen-lockfile
       - uses: actions/setup-python@v6
+        if: steps.check.outputs.complete == 'false'
         with:
           python-version: '3.12'
-      - name: ffmpeg (sondas de imagen y clip)
+      - name: ffmpeg
+        if: steps.check.outputs.complete == 'false'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: Generar banco Agnes (Token Plan Starter)
+      - name: Generar banco Agnes
+        id: generate
+        if: steps.check.outputs.complete == 'false'
         run: |
           args=()
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
           pnpm media "${args[@]}"
-        env:
-          MATCH: ${{ inputs.match }}
-          LIMIT: ${{ inputs.limit || '5' }}
-          # La llave debe ser de tipo Token Plan: las llaves Free comparten
-          # otro pozo con 1 RPM de vídeo y se saturan con los clips.
-          AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
-          AGNES_IMAGE_MODEL: agnes-image-2.5-flash
-          AGNES_IMAGE_RPM: '12'
-          AGNES_VIDEO_START_INTERVAL: '30'
-          AGNES_DAILY_VIDEO_SECONDS_CAP: '360'
-          AGNES_DAILY_IMAGE_CAP: '4000'
-          AGNES_SKIP_IMAGES: ${{ inputs.mode == 'clips-only' && '1' || '' }}
-          AGNES_SKIP_VIDEO: ${{ inputs.mode == 'images-only' && '1' || '' }}
-          # R2 es el único almacén de la media (bucket goatlab → partidos/<id>/).
-          MEDIA_GEN_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
-          R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
-          R2_BUCKET: goatlab
-          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      - name: Artifact solo-JSON (la media vive en R2)
+      - name: Reportes saneados
+        if: always()
+        run: node scripts/export-agnes-reports.mjs
+        continue-on-error: true
+      - name: Conservar recuperación cifrada
+        id: recovery
+        if: always() && (steps.generate.outcome == 'success' || steps.generate.outcome == 'failure')
+        run: node scripts/media-recovery.mjs --save
+      - name: Guardar caché cifrada
+        if: always() && steps.recovery.outcome == 'success'
+        uses: actions/cache/save@v6
+        with:
+          path: .cache/agnes-recovery.enc
+          key: agnes-recovery-v1-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Artifact de recuperación cifrada
+        if: always() && steps.recovery.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: goatlab-media-recovery-encrypted
+          path: .cache/agnes-recovery.enc
+          retention-days: 30
+      - name: Artifact solo JSON
         if: always()
         run: rm -rf public/data/media-pack/gen public/data/media-pack/agnes.sqlite*
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: goatlab-media-bank
-          path: public/data/media-pack/
+          path: |
+            public/data/media-pack/*.json
+            public/data/agnes-quota.json
+            public/data/r2-usage.json
           retention-days: 30
       - name: Alerta de presupuesto R2 por Telegram
-        if: always()
+        if: always() && steps.generate.outcome == 'success'
         run: |
-          level=$(node scripts/r2-media.mjs budget 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).level)}catch{console.log('unknown')}})" || level=unknown
+          generated=$(node -e "const fs=require('fs');console.log(JSON.parse(fs.readFileSync('.cache/media-publication.json')).generated || 0)")
+          if [ "$generated" = "0" ]; then exit 0; fi
+          level=$(node scripts/r2-media.mjs budget 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).level)}catch{console.log('unknown')}})") || level=unknown
           echo "R2 budget: $level"
           if [ "$level" = "warn70" ] || [ "$level" = "warn90" ] || [ "$level" = "block" ]; then
-            curl -s -o /dev/null -w "telegram:%{http_code}\n" "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" --data-urlencode "text=⚠️ R2 GoatLab nivel $level: cerca del tope gratuito. Revisar uso antes de seguir subiendo."
+            curl -s -o /dev/null -w "telegram:%{http_code}\n" "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" --data-urlencode "text=⚠️ R2 GoatLab nivel $level: revisar uso antes de seguir subiendo."
           fi
         env:
-          R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
-          R2_BUCKET: goatlab
-          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      - name: Commit de manifiestos (solo JSON, nunca binarios)
+      - name: Commit selectivo y push
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for path in public/data/media-pack/*.json; do
-            if [ -e "$path" ]; then git add "$path"; fi
-          done
-          if [ -e public/data/r2-usage.json ]; then git add public/data/r2-usage.json; fi
+          args=()
+          if [ -n "$MATCH" ]; then args+=(--manual); fi
+          node scripts/publish-media.mjs "${args[@]}"
           if git diff --cached --quiet; then
-            echo "Sin manifiestos que commitear"
+            echo "Sin cambios autorizados"
           else
-            git commit -m "chore: update media bank manifests"
-            for i in 1 2 3; do
-              git fetch origin
-              if ! git rebase --autostash origin/main; then
-                git rebase --abort || true
-                echo "Conflicto con main: revisar a mano"
-                exit 1
-              fi
-              if git push origin HEAD:main; then
-                break
-              fi
-              echo "Push rechazado, reintento $i/3"
-              sleep 10
-            done
+            git commit -m "chore: update verified media banks and reports"
+            node scripts/publish-media.mjs --push
           fi

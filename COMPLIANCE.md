@@ -25,7 +25,9 @@ Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si 
 
 ## Fotos
 
-Banco por partido: hasta diez imágenes y tres clips referenciales generados con Agnes AI, a partir de los prompts publicados. Cada imagen conserva modelo, fecha, prompt y dimensiones; cada clip conserva su tarea y resultado. Preparación conjunta de quince minutos, reutilizable entre chats. Las ilustraciones no documentan jugadas reales. Marca, música y fuentes propias mantienen sus licencias. Las cifras de los gráficos se resuelven del catálogo verificable; datos ausentes se indican sin inventar ceros.
+Banco por partido: cuatro imágenes y dos clips referenciales Agnes. Las imágenes conservan modelo, prompt, fecha y dimensiones; los clips públicos conservan modelo, hashes de prompt/referencia y dimensiones, mientras sus identificadores de tarea quedan en el estado privado. El presupuesto efímero por corrida es de 50 minutos, limitado a kickoff + 24 h. SQLite es caché; admisión y cuotas dependen de `app-states/goatlab/agnes-state.json`, privado en R2. Los reportes públicos están saneados y no incluyen identificadores de tareas, respuestas crudas, credenciales o URLs firmadas. Las ilustraciones no documentan jugadas reales. Marca, música y fuentes propias mantienen sus licencias. Las cifras de gráficos se resuelven del catálogo verificable; datos ausentes se indican sin inventar ceros.
+
+Los bancos v2 completos requieren fingerprint e identidad coherentes, cuatro fotos y dos clips distintos y disponibilidad de almacenamiento comprobada. Los bancos legacy siguen siendo legibles y necesitan verificación antes de declararse completos. `_agnes-hourly.json` es telemetría, no un manifiesto. La poda requiere final FT/AET/PEN comprobado y más de una hora desde su primera detección válida; se aplica a guiones, prompts, media, análisis y probabilidades. Media requiere además cierre compartido y borrado remoto confirmado antes de borrar localmente. Los resultados y la evaluación histórica quedan fuera de esta poda.
 
 ## Video
 

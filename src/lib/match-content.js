@@ -1,4 +1,5 @@
 /** Public content contract shared by Actions, Astro and the portable GoatLab skill. */
+import { esName } from './teams.js';
 export const CONTENT_VERSION = 1;
 export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_FALLBACK_MODEL,OPENCODE_GO_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export const CONTENT_CATEGORIES = Object.freeze({
@@ -10,6 +11,47 @@ export const CONTENT_CATEGORIES = Object.freeze({
 export function contentUrl(matchId, category, json = false) {
   if (!CONTENT_CATEGORIES[category]) throw new Error('Categoría desconocida');
   return `/partido/${encodeURIComponent(matchId)}/${category}${json ? '.json' : ''}`;
+}
+
+const identityId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
+const nonempty = value => typeof value === 'string' && !!value.trim();
+const kickoffTime = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(value) ? Date.parse(value) : NaN;
+
+/** Structural identity only: names use the same translation as stored content. */
+export function contentIdentityErrors(data, match = null) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return ['contenido vacío o inválido'];
+  const errors = [];
+  if (!identityId(data.matchId)) errors.push('matchId inválido');
+  for (const field of ['home', 'away', 'competition']) if (!nonempty(data[field])) errors.push(`${field} inválido`);
+  const kickoff = kickoffTime(data.kickoff);
+  if (!Number.isFinite(kickoff)) errors.push('kickoff inválido');
+  if (match != null) {
+    const matchId = match?.webId ?? match?.id;
+    if (!identityId(matchId) || data.matchId !== matchId) errors.push('matchId no coincide con fixture');
+    for (const field of ['home', 'away']) {
+      if (!nonempty(match?.[field]) || data[field] !== esName(match[field])) errors.push(`${field} no coincide con fixture`);
+    }
+    if (!nonempty(match?.competition) || data.competition !== match.competition) errors.push('competition no coincide con fixture');
+    const expected = kickoffTime(match?.kickoff);
+    if (!Number.isFinite(expected) || kickoff !== expected) errors.push('kickoff no coincide con fixture');
+  }
+  return errors;
+}
+
+/** Saved-script shape, independent of today's facts and narrative numeric claims. */
+export function scriptStructureErrors(data, { matchId = null, match = null } = {}) {
+  const errors = contentIdentityErrors(data, match);
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return errors;
+  if (matchId != null && data.matchId !== matchId) errors.push('matchId no coincide con archivo');
+  if (!nonempty(data.description)) errors.push('description vacía o inválida');
+  if (!Array.isArray(data.scripts) || data.scripts.length !== 10) errors.push('se requieren diez guiones');
+  if (Array.isArray(data.scripts)) for (const [index, script] of data.scripts.entries()) {
+    const label = `guion ${index + 1}`;
+    if (script?.n !== index + 1) errors.push(`${label}: número incorrecto`);
+    for (const field of ['title', 'hook', 'narration']) if (!nonempty(script?.[field])) errors.push(`${label}: ${field} vacío o inválido`);
+    if (!Number.isInteger(script?.words) || script.words <= 0) errors.push(`${label}: words debe ser un entero positivo`);
+  }
+  return errors;
 }
 export function promptErrors(data, { category = data?.category, home = data?.home, away = data?.away, facts = data?.facts ?? [], published = false } = {}) {
   const spec = CONTENT_CATEGORIES[category];
@@ -52,9 +94,9 @@ export function promptErrors(data, { category = data?.category, home = data?.hom
   }
   return errors;
 }
-export function validateContent(data, category, matchId) {
+export function validateContent(data, category, matchId, { match = null } = {}) {
+  if (category === 'scripts') return scriptStructureErrors(data, { matchId, match }).length === 0;
   if (!data || data.matchId !== matchId || !data.home || !data.away) return false;
-  if (category === 'scripts') return Array.isArray(data.scripts) && data.scripts.length === 10 && data.scripts.every((s, i) => s.n === i + 1 && typeof s.narration === 'string' && s.narration.trim());
   if (data.facts != null && (!Array.isArray(data.facts) || data.facts.length > 128 || data.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return false;
   return data.version === CONTENT_VERSION && data.category === category && promptErrors(data, { published: data.published === true }).length === 0;
 }

@@ -9,16 +9,16 @@ montaje. [Dirección artística](creative.md) es la referencia del planificador.
 OpenClaw lee el índice y cuatro JSON públicos de goatlab.win. Cada serie conserva
 el contenido utilizado. El banco de cuatro imágenes y hasta dos clips pertenece
 al partido y se reutiliza entre audios y chats hasta su caducidad. La preparación
-comparte un plazo persistente de quince minutos; al terminar publica .ready con
+usa un presupuesto efímero de cincuenta minutos por corrida, limitado a kickoff + 24 h; al terminar publica .ready con
 el material conseguido, incluso sin imágenes. Los Motion Prompts se aplican por audio.
 
 Image 2.5 Flash: 2K, 9:16, doce inicios por minuto y una solicitud simultánea.
 Video 2.5 Flash: 720P, 9:16, seis segundos, un inicio cada 30 segundos y una tarea
-simultánea. Máximo dos tareas y dos clips completados. Respeta Retry-After,
+simultánea. Hasta cinco ordinales por partido, deteniéndose al recuperar dos clips compatibles. Respeta Retry-After,
 cancelaciones y caducidad. Un resultado incierto conserva su identidad y no
 provoca una nueva generación. Nginx publica imágenes y MP4, únicamente.
 
-SQLite, archivos de tareas Agnes y registro remoto conservan recuperación,
+El JSON privado de R2 gobierna admisión y cuotas de Actions y Fly; SQLite y archivos de tareas conservan recuperación local,
 cancelación e idempotencia. Render replica sus registros en /render-ledger del
 Gateway y los restaura al arrancar. Entregas delivering se recuperan como
 delivery-unknown: verificar Telegram antes de reintentar. Tras éxito se purgan
@@ -69,3 +69,33 @@ incluir GOATLAB_REVISION. Verificar health y un montaje antes de entrega real.
 
 Para acceso web y transporte Telegram, leer
 [base de OpenClaw](../../../references/openclaw-base.md).
+
+
+## Activación del estado compartido
+
+Actions y Fly reutilizan `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` y `R2_ACCOUNT_ID`
+para media y estado del mismo proyecto. Mantener `R2_STATE_BUCKET=app-states` y
+`R2_STATE_KEY=goatlab/agnes-state.json`. Los overrides de credenciales `R2_STATE_*`
+son opcionales y exigen una pareja completa cuando se usan. Bucket Standard privado, sin r2.dev ni dominio.
+El cliente portable `agnes-state.mjs` usa Node nativo y el adaptador Python intercambia
+JSON por stdin/stdout; importar el firmador no ejecuta CLI.
+
+El procedimiento autoritativo del repositorio es `AGNES-STATE.md`: suspender productores
+antiguos, importar SQLite/tareas conocidas y recursos existentes, bloquear legacy
+incierto y cerrar cuota del día de corte; inicializar con If-None-Match, comprobar CAS
+real y habilitar ambos consumidores después. Rollback conserva el JSON y detiene nuevas
+creaciones. La protección frente a intentos perdidos comienza en ese corte.
+
+Actions ejecuta mantenimiento y `media:check` con Node antes de instalar dependencias.
+Los pendientes pasan preflight privado y recuperan la caché cifrada de resultados,
+sin conservar SQLite. AES-256-GCM deriva su clave del secreto S3 usado por el cliente de estado; rotarlo requiere
+conservar la clave anterior para recuperar archivos cifrados existentes. La caché de
+GitHub puede expirar; el artifact cifrado dura 30 días. El helper limita recuperación
+a 128 MB y 1.024 archivos. Sólo el archivo cifrado sale del runner. Nunca incluir gen,
+respuestas crudas, temporales o binarios en Git ni artifacts públicos de reportes.
+
+La telemetría pública `_agnes-hourly.json` contiene fallos saneados y resúmenes con IDs
+de evento estables, deduplicación y ventana de 48 h. Los contadores R2 distinguen media
+y control, agrupan por mes UTC y son estimaciones operativas. Los retries conservan la
+cola `goatlab-media` con cancel-in-progress false y queue max. El commit selectivo publica
+sólo IDs completos, progresos/reportes y borrados autorizados; un push agotado falla.

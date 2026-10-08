@@ -1,11 +1,12 @@
 import { readFile, readdir, mkdir, writeFile, rename, rm } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
-import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent } from '../src/lib/match-content.js';
+import { createHash, randomUUID } from 'node:crypto';
+import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors } from '../src/lib/match-content.js';
 import { withFailover, extractJson } from '../src/lib/llm.js';
 import { selectMatches } from '../src/lib/youtube.js';
 import { rankMatches, esName } from '../src/lib/teams.js';
 import { editingFacts } from '../src/lib/match-facts.js';
-import { TOP_FILENAME, TOP_VERSION, defaultTopN, effectiveIds, liveIds, registerExtra } from '../src/lib/top.js';
+import { TOP_FILENAME, defaultTopN, effectiveIds, registerExtra, topFreshness } from '../src/lib/top.js';
+import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
 const category = args['--category'];
@@ -14,21 +15,36 @@ if (!spec?.kinds) throw new Error('Usa --category=image-prompts|video-prompts|mo
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
 const onlyMatch = args['--match'];
+const now = Date.now();
+let ledger = null;
+try { ledger = JSON.parse(await readFile('public/data/finished-at.json', 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error; }
+const pruneContext = buildPruneContext(fixtures.matches ?? [], ledger);
+const requested = onlyMatch ? resolvePruneMatch(onlyMatch, pruneContext) : null;
+const protectedId = onlyMatch ? (requested?.webId ?? requested?.id ?? onlyMatch) : null;
 const limitRaw = args['--limit'];
 const topDefault = defaultTopN(process.env);
 const topRaw = args['--match'] ? null : (args['--top'] || process.env.SCRIPT_TOP_N);
 const top = onlyMatch ? null : (Number.isFinite(Number(topRaw)) && Number(topRaw) >= 1 ? Math.floor(Number(topRaw)) : topDefault);
 const manualTop = top != null && topRaw != null && String(topRaw).trim() !== '' && top > topDefault;
-const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > Date.now());
+const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > now);
 const liveRanked = rankMatches(futureNs).map(m => m.webId ?? m.id);
+const dir = `public/data/${spec.directory}`;
+await mkdir(dir, { recursive: true });
+for (const name of await readdir(dir)) {
+  if (!/^[A-Za-z0-9][A-Za-z0-9_-]*\.json$/.test(name)) continue;
+  const match = resolvePruneMatch(name.slice(0, -5), pruneContext);
+  if ((match?.webId ?? match?.id) === protectedId || !pruneDue(match, pruneContext.seen, now)) continue;
+  await rm(`${dir}/${name}`);
+  console.log(`${category}: poda ${name}`);
+}
 let topFile = null;
-try {
-  const raw = JSON.parse(await readFile(`public/data/${TOP_FILENAME}`, 'utf8'));
-  if (raw?.version === TOP_VERSION && Array.isArray(raw?.ranking) && raw.ranking.length) topFile = raw;
-  else console.log(`${category}: top.json inválido; recálculo en vivo`);
-} catch (e) {
-  if (e.code !== 'ENOENT') throw e;
-  console.log(`${category}: sin top.json; recálculo en vivo`);
+try { topFile = JSON.parse(await readFile(`public/data/${TOP_FILENAME}`, 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT') topFile = {}; }
+const freshness = topFreshness(topFile, { now, env: process.env, manual: !!onlyMatch });
+if (!freshness.valid) {
+  console.error(`${category}: top.json rechazado (${freshness.reason})`);
+  process.exit(2);
 }
 async function saveTopFile() {
   await writeFile(`public/data/${TOP_FILENAME}`, JSON.stringify(topFile, null, 2));
@@ -45,7 +61,7 @@ if (onlyMatch) {
       console.log(`${category}: ${onlyMatch} fuera de fixtures; identidad del guión`);
     } catch (e) { if (e.code !== 'ENOENT') throw e; }
   }
-  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [onlyMatch]);
+  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [protectedId]);
   if (registered.added.length) {
     topFile = registered.top;
     await saveTopFile();
@@ -60,22 +76,14 @@ if (onlyMatch) {
       console.log(`${category}: extras manuales ${registered.added.join(', ')}`);
     }
   }
-  const wanted = new Set(topFile ? effectiveIds(topFile, top) : liveRanked.slice(0, top));
+  const wanted = new Set(effectiveIds(topFile, top));
   matches = futureNs.filter(m => wanted.has(m.webId ?? m.id)).sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
   if (limitRaw != null) matches = matches.slice(0, Math.max(1, Number(limitRaw)));
 }
-const fullPrune = !onlyMatch && !args['--force'] && limitRaw == null;
-const dir = `public/data/${spec.directory}`;
-await mkdir(dir, { recursive: true });
-if (fullPrune) {
-  const live = liveIds(fixtures.matches);
-  const keep = topFile ? new Set(effectiveIds(topFile, top).filter(id => live.has(id))) : live;
-  for (const name of await readdir(dir)) {
-    if (name.endsWith('.json') && !keep.has(name.replace(/\.json$/, ''))) {
-      await rm(`${dir}/${name}`);
-      console.log(`${category}: poda ${name}`);
-    }
-  }
+if (!onlyMatch) matches = matches.filter(match => !pruneDue(match, pruneContext.seen, now));
+if (!matches.length) {
+  console.log(`${category}: sin partidos para generar`);
+  process.exit(0);
 }
 const published = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8')).published === true;
 let scorers; try { scorers = JSON.parse(await readFile('public/data/scorers.json', 'utf8')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
@@ -86,7 +94,7 @@ for (const match of matches) {
   const matchId = match.webId ?? match.id, file = `${dir}/${matchId}.json`;
   try {
     const old = JSON.parse(await readFile(file, 'utf8'));
-    if (!args['--force'] && validateContent(old, category, matchId)) { console.log(`${category}: ${matchId} ya existe`); continue; }
+    if (!args['--force'] && validateContent(old, category, matchId) && !contentIdentityErrors(old, match).length) { console.log(`${category}: ${matchId} ya existe`); continue; }
   } catch (e) { if (e.code !== 'ENOENT' && !(e instanceof SyntaxError)) throw e; }
   const home = esName(match.home), away = esName(match.away);
   const facts = editingFacts(match, scorers);
@@ -110,8 +118,11 @@ for (const match of matches) {
       },
     });
     const payload = { version: 1, category, ...identity, instructionVersion, author: { provider: result.provider, model: result.model }, generatedAt: new Date().toISOString(), prompts: result.value.prompts };
-    await writeFile(`${file}.tmp`, JSON.stringify(payload, null, 2));
-    await rename(`${file}.tmp`, file);
+    const temporary = `${file}.${randomUUID()}.tmp`;
+    try {
+      await writeFile(temporary, JSON.stringify(payload, null, 2), { flag: 'wx' });
+      await rename(temporary, file);
+    } finally { await rm(temporary, { force: true }); }
     console.log(`${category}: ${matchId} por ${result.provider}/${result.model}`);
   } catch (e) { error = e; failed++; console.error(`${category}: ${matchId}: ${e.message}`); }
   const healthPath = 'public/data/llm-health.json';

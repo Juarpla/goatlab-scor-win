@@ -65,7 +65,7 @@ class Workflow:
         self.db.execute("DELETE FROM choices WHERE created<=?", (cutoff,))
 
     def release_media(self, protected=()):
-        out = Path(os.environ.get("MEDIA_PACK_DIR", str(STATE / "media-pack")))
+        out = Path(os.environ.get("MEDIA_PACK_DIR", str(self.state / "media-pack")))
         from render_ledger import Ledger
         records = {r["id"]: r for r in Ledger(self.state / "render-ledger").records()}
         needed = {r[0] for r in self.db.execute("SELECT match_id FROM series WHERE active=1 AND closed=0 AND created>?", (self.clock()-86400,))}
@@ -85,25 +85,19 @@ class Workflow:
                         self.db.execute("UPDATE audios SET file_id='' WHERE id=?", (task['id'],))
         if not out.exists():
             return
-        # A completed bank belongs to the match, including future chats.
-        for manifest in out.glob('*.json'):
-            try:
-                bank = json.loads(manifest.read_text())
-                kickoff = datetime.fromisoformat((bank.get('kickoff') or '').replace('Z', '+00:00')).timestamp()
-                if bank.get('contentVersion') == 1 and kickoff + 86400 > self.clock():
-                    needed.add(manifest.stem)
-            except (ValueError, TypeError, OSError):
-                pass
-        for path in out.iterdir():
-            match = path.stem.removesuffix('.progress')
-            if path.name == 'gen':
-                for folder in path.iterdir():
-                    if folder.name not in needed:
-                        shutil.rmtree(folder, ignore_errors=True)
-            elif match not in needed and path.is_file():
-                path.unlink(missing_ok=True)
+        # Only the shared maintenance client may retire banks, after remote proof.
+        try:
+            command = ['node', str(SKILL / 'scripts/maintain-media.mjs'),
+                       '--repo=' + str(REPO), '--out=' + str(out)]
+            command.extend('--protect=' + match for match in sorted(needed))
+            result = subprocess.run(command, capture_output=True, text=True, check=False,
+                                    timeout=120, env=os.environ)
+            report = json.loads(result.stdout) if result.returncode == 0 else {}
+            for match in report.get('deletedIds', []):
                 self.db.execute("DELETE FROM tasks WHERE id=? AND status!='running'", ('media:'+match,))
-        pending = STATE / 'pending'
+        except (OSError, ValueError, subprocess.SubprocessError):
+            pass
+        pending = self.state / 'pending'
         for path in pending.glob('*/*.json'):
             if path.stat().st_mtime <= self.clock()-86400:
                 path.unlink(missing_ok=True)

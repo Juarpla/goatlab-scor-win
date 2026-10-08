@@ -1,70 +1,58 @@
 # Medios y reintentos
 
-El supervisor crea imágenes con Agnes AI y reutiliza solo imágenes Agnes guardadas.
-Los bancos antiguos se filtran; las fotos externas no se descargan ni se reutilizan.
-Los recursos propios de marca, gráficos y música existentes se conservan.
+El banco pertenece al partido y reúne cuatro imágenes y dos clips Agnes, reutilizables
+entre audios y chats. El montaje puede continuar con recursos parciales y gráficos.
+Las fotos externas se filtran. Los prompts publicados de imagen/vídeo deben coincidir
+con ID, equipos traducidos, competición y kickoff; motion inválido usa `editingFacts`.
+El top debe ser válido y tener como máximo siete horas. Una petición manual omite
+solamente su antigüedad y conserva el límite kickoff + 24 h.
 
-Intenta reunir el banco compartido de cuatro imágenes y hasta dos clips durante un máximo de quince
-minutos, incluido un reinicio. Publica el banco parcial incluso con cero imágenes;
-el montaje puede continuar con motion graphics y animaciones. Cada video usa un
-subconjunto del banco y continúa con el siguiente audio sin exigir otras tres.
+## Admisión y recuperación
 
-Para «reintenta fotos»: `retry --chat=<chat>`. Se reutiliza lo conseguido; los trabajos
-ya preparados mantienen su copia del banco y siguen produciéndose. Con llave
-Token Plan Starter, Agnes permite hasta cuatro imágenes compartidas por encuentro:
-2K 9:16, doce inicios/minuto (proveedor: 80 RPM en 2K), una simultánea, timeout
-300 s. Cuota Starter: 4.000 imágenes/día. El gasto diario queda en
-`quota_use` dentro de `agnes.sqlite`; al agotarse, la generación se detiene con
-`cuota diaria de imágenes agotada` y continúa al día siguiente. Un resultado
-incierto no se regenera automáticamente.
-Los scripts conservan prompts, atribuciones y dimensiones reales; los recursos
-sintéticos son ilustraciones con personas ficticias y no documentan un hecho real.
+La autoridad es el JSON privado `app-states/goatlab/agnes-state.json` en R2. SQLite
+es caché. Cada POST requiere una reserva nueva confirmada con CAS. Los slots
+partido/tipo/ordinal conservan identidad y consumo tras un reinicio o cambio de prompt.
+Estado ausente/corrupto/offline cierra nuevas solicitudes; los recursos ya guardados
+siguen reutilizándose. Los scripts aplican estos controles, sin intervención del agente.
 
-Para «reintenta el video 3»: consulta `status --chat=<chat> --number=3`, busca `ordinal=3`,
-y ejecuta `retry --chat=<chat> --request=<requestId>`. El mismo identificador
-permite a Render reconocer una entrega completada y reintentar un fallo.
+Un 429 probado sin identificador devuelve cuota una sola vez y guarda `Retry-After`.
+Un 429 con ID, respuesta ilegible, transporte, timeout o 5xx conserva la reserva.
+Un vídeo con identificador se recupera mediante GET de ese mismo ID, con permisos
+compartidos de 60 s. La ventana de recuperación ante errores es de 60 s por corrida;
+la siguiente corrida puede retomar GET. Un resultado incierto sin ID queda bloqueado.
+Las respuestas de imagen guardadas localmente se recuperan con la misma identidad,
+sin otro POST. La pérdida del resultado puede dejar el banco parcial.
 
-El estado `status` local describe el envío de la solicitud; `render.status` indica
-el estado real del video, consultado solo cuando se solicita. `unavailable` no
-significa que falló. Un envío `delivery-unknown` requiere revisar si el MP4 llegó al chat: el sistema
-conserva el archivo y evita reenviarlo automáticamente. Informa esa situación
-si el usuario pide reintentar; no le pidas grabar de nuevo por un fallo del servidor.
+Image Flash usa 2K 9:16, doce inicios/minuto y una solicitud simultánea. Video Flash
+usa 720×1280, seis segundos, un inicio cada 30 s y una tarea simultánea. El techo
+operativo diario es 4.000 imágenes y 360 segundos reservados, contado en el día UTC
+de la reserva. Cada vídeo dispone de cinco ordinales; un fallo terminal confirmado
+permite avanzar. El presupuesto conjunto es nuevo por corrida: 50 minutos por defecto,
+limitado además a kickoff + 24 horas. Se ignora el cronómetro de progresos antiguos.
 
+Para «reintenta fotos», ejecutar `retry --chat=<chat>`: reutiliza lo conseguido.
+Para «reintenta el video 3», consultar `status --chat=<chat> --number=3` y ejecutar
+`retry --chat=<chat> --request=<requestId>` con su identificador original.
+`delivery-unknown` conserva el archivo y exige verificar Telegram antes de reenviar;
+`unavailable` no demuestra fallo. No pedir una grabación nueva por un fallo del servidor.
 
-Los prompts publicados del partido son la fuente de creación: cuatro Image Prompts,
-dos Video Prompts y entre dos y diez Motion Prompts (el modelo decide cuántos).
-Cada imagen usa su prompt numerado.
-Los clips usan imágenes Agnes ya completadas como referencia; Agnes Video 2.5
-Flash, 720P, 9:16, seis segundos, una tarea simultánea y un inicio cada 30
-segundos (proveedor Token: 5 RPM). Cuota Starter: 500 segundos/día; el repo
-opera con un techo diario de 360 segundos (≈30 bancos de dos clips) para guardar
-reserva de reintentos y generaciones bajo demanda por Telegram dentro del mes.
-Cada clip anota su duración en `quota_use`; al agotarse el techo, el banco se
-detiene con `cuota de vídeo diaria agotada` y continúa al día siguiente.
-Se detiene al completar dos clips. Un fallo confirmado permite
-probar la siguiente pareja imagen–prompt. Se agotan las imágenes disponibles antes
-de reutilizarlas; un 429 conserva la pareja. Solo Flash (`agnes-image-2.5-flash`,
-`agnes-video-2.5-flash`) con llave de tipo Token Plan: las llaves Free usan otro
-pozo con 1 RPM de vídeo y se saturan con los clips.
-Un POST incierto sin identificador libera el montaje parcial inmediatamente. Con
-identificador, la recuperación tras errores dura como máximo 60 segundos por banco,
-con plazo persistente que otros chats y reinicios no renuevan. No repetir solicitudes
-inciertas ni iniciar otra generación mientras pueda seguir ejecutándose la anterior.
-Otro banco bloqueado no espera: continúa con material parcial. Los diagnósticos
-HTTP quedan acotados y saneados en video_errors dentro de agnes.sqlite.
+## Publicación y conservación
 
-Selección: el banco solo cubre partidos del ranking guardado
-(`public/data/top.json`, top-5 + extras manuales) que tengan guión y prompts de
-fotos y vídeo. Sin guión o sin esos prompts, el partido se omite sin gastar cuota.
+Un banco v2 completo tiene cuatro fotos y dos clips distintos con evidencia de prompt,
+modelo, referencia y disponibilidad R2. Un PUT fallido deja el intento parcial.
+R2 block permite lecturas y reutilización, con cero solicitudes Agnes y cero PUT de media;
+los controles privados siguen disponibles. Los drafts conservan un completo anterior
+si el nuevo intento queda parcial. La web sigue leyendo bancos legacy.
 
-Los quince minutos cubren imágenes y clips juntos. El inicio persiste tras
-reinicios y no se renueva al reintentar: se recuperan recursos existentes. Con el
-plazo agotado, se libera el banco parcial y se indican los fallos en el progreso.
-Los Motion Prompts se aplican dentro de cada montaje y siguen la transcripción;
-son gráficos locales (full-screen u overlays transparentes), no clips
-pre-renderizados ni temas obligatorios para todos los audios. El montaje
-siempre lleva motion gráfico, aunque falten fotos o clips.
+La poda exige FT/AET/PEN con ambos marcadores finitos y más de una hora desde la
+primera detección válida del final. La evidencia terminal persiste aunque el fixture
+desaparezca; una corrección a NS/LIVE/PST invalida la autorización anterior.
+Salir del top o de la ventana conserva el contenido. Producción, generación pendiente
+o subida sin resolver impiden cerrar el partido. Primero se confirma el borrado del
+prefijo R2 exacto `partidos/<id>/`, y después se borran artefactos locales.
 
+Actions reintenta a las 02:15, 04:15 y 06:15 Lima, sin consultar ni encender Fly.
+Ver [deployment.md](deployment.md) para migración, secretos y comprobaciones.
 
 ## Voz y motion graphics
 

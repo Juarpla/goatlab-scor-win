@@ -1,11 +1,10 @@
 /** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
- *  redactar-guiones-shorts. Un JSON ya existente no se toca.
+ *  redactar-guiones-shorts. Un JSON válido ya existente no se toca.
  *  Sin --match, redacta el top N (input --top, SCRIPT_TOP_N o 5) del ranking
  *  guardado en public/data/top.json (lo escribe 1-update-data). En corrida
- *  completa (sin --match/--limit) poda además los JSONs fuera del conjunto
- *  efectivo (top N + extras manuales) que ya salieron de la ventana NS.
+ *  poda los JSONs terminales cuando vence la gracia desde su primera detección.
  *  --match o top ampliado registran el partido como extra protegido. */
-import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../src/lib/llm.js';
 import {
@@ -16,18 +15,17 @@ import {
   playersInNarration,
   shortTitle,
   countWords,
-  missingScripts,
   scriptFacts,
   selectMatches,
-  staleScripts,
   youtubeUserPayload,
 } from '../src/lib/youtube.js';
-import { CONTENT_PROVIDER_ORDER } from '../src/lib/match-content.js';
-import { createHash } from 'node:crypto';
+import { CONTENT_PROVIDER_ORDER, scriptStructureErrors } from '../src/lib/match-content.js';
+import { createHash, randomUUID } from 'node:crypto';
 import { esName } from '../src/lib/teams.js';
 import { rankMatches } from '../src/lib/teams.js';
-import { TOP_FILENAME, TOP_VERSION, defaultTopN, effectiveIds, liveIds, registerExtra } from '../src/lib/top.js';
+import { TOP_FILENAME, defaultTopN, effectiveIds, registerExtra, topFreshness } from '../src/lib/top.js';
 import { checkDescription } from '../src/lib/compliance.js';
+import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
 
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const dir = 'public/data/youtube-scripts';
@@ -40,7 +38,6 @@ const args = new Map(process.argv.slice(2).map(a => a.split('=')));
 const onlyMatch = args.get('--match');
 const limitRaw = args.get('--limit');
 const force = args.has('--force');
-const fullRun = !onlyMatch && limitRaw == null && !force;
 function positiveInt(raw) {
   if (raw == null || String(raw).trim() === '') return null;
   const n = Number(raw);
@@ -52,27 +49,32 @@ const top = onlyMatch ? null : (positiveInt(topRaw) ?? topDefault);
 const manualTop = top != null && topRaw != null && String(topRaw).trim() !== '' && top > topDefault;
 
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
-const evaluation = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8'));
-let scorers = null;
-try {
-  scorers = JSON.parse(await readFile('public/data/scorers.json', 'utf8'));
-} catch (error) {
-  if (error.code !== 'ENOENT') throw error;
-}
-const published = evaluation?.published === true;
-const skill = (await readFile(skillPath, 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
+const now = Date.now();
+let ledger = null;
+try { ledger = JSON.parse(await readFile('public/data/finished-at.json', 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error; }
+const pruneContext = buildPruneContext(fixtures.matches ?? [], ledger);
+const requested = onlyMatch ? resolvePruneMatch(onlyMatch, pruneContext) : null;
+const protectedId = onlyMatch ? (requested?.webId ?? requested?.id ?? onlyMatch) : null;
 
 const allNs = selectMatches(fixtures.matches, {});
-const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > Date.now());
+const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > now);
 const liveRanked = rankMatches(futureNs).map(m => m.webId ?? m.id);
+await mkdir(dir, { recursive: true });
+for (const file of await readdir(dir)) {
+  if (!/^[A-Za-z0-9][A-Za-z0-9_-]*\.json$/.test(file)) continue;
+  const match = resolvePruneMatch(file.slice(0, -5), pruneContext);
+  if ((match?.webId ?? match?.id) === protectedId || !pruneDue(match, pruneContext.seen, now)) continue;
+  await rm(join(dir, file));
+  console.log(`shorts: poda ${file}`);
+}
 let topFile = null;
-try {
-  const raw = JSON.parse(await readFile(join('public/data', TOP_FILENAME), 'utf8'));
-  if (raw?.version === TOP_VERSION && Array.isArray(raw?.ranking) && raw.ranking.length) topFile = raw;
-  else console.log('shorts: top.json inválido; recálculo en vivo');
-} catch (error) {
-  if (error.code !== 'ENOENT') throw error;
-  console.log('shorts: sin top.json; recálculo en vivo');
+try { topFile = JSON.parse(await readFile(join('public/data', TOP_FILENAME), 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT') topFile = {}; }
+const freshness = topFreshness(topFile, { now, env: process.env, manual: !!onlyMatch });
+if (!freshness.valid) {
+  console.error(`shorts: top.json rechazado (${freshness.reason})`);
+  process.exit(2);
 }
 async function saveTopFile() {
   await writeFile(join('public/data', TOP_FILENAME), JSON.stringify(topFile, null, 2));
@@ -80,7 +82,7 @@ async function saveTopFile() {
 let matches;
 if (onlyMatch) {
   matches = selectMatches(fixtures.matches, { onlyMatch });
-  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [onlyMatch]);
+  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [protectedId]);
   if (registered.added.length) {
     topFile = registered.top;
     await saveTopFile();
@@ -95,28 +97,31 @@ if (onlyMatch) {
       console.log(`shorts: extras manuales ${registered.added.join(', ')}`);
     }
   }
-  const wanted = new Set(topFile ? effectiveIds(topFile, top) : liveRanked.slice(0, top));
+  const wanted = new Set(effectiveIds(topFile, top));
   matches = futureNs.filter(m => wanted.has(m.webId ?? m.id)).sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
   if (limitRaw != null) matches = matches.slice(0, Math.max(1, Number(limitRaw)));
 }
-if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS [${topFile ? 'top.json' : 'en vivo'}]`);
+if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS [top.json]`);
+if (!onlyMatch) matches = matches.filter(match => !pruneDue(match, pruneContext.seen, now));
 if (!matches.length) {
   console.error('shorts: sin partidos NS para generar');
   process.exit(1);
 }
 
-await mkdir(dir, { recursive: true });
-if (fullRun) {
-  const live = liveIds(fixtures.matches);
-  const keep = topFile ? effectiveIds(topFile, top).filter(id => live.has(id)) : [...live];
-  for (const file of staleScripts(await readdir(dir), keep)) {
-    await rm(join(dir, file));
-    console.log(`shorts: poda ${file}`);
+const pending = [];
+for (const match of matches) {
+  const matchId = match.webId ?? match.id;
+  if (force) { pending.push(match); continue; }
+  try {
+    const existing = JSON.parse(await readFile(join(dir, `${matchId}.json`), 'utf8'));
+    const errors = scriptStructureErrors(existing, { matchId, match });
+    if (!errors.length) continue;
+    console.log(`shorts: ${matchId} corrupto; pendiente (${errors.slice(0, 3).join('; ')})`);
+  } catch (error) {
+    if (error.code !== 'ENOENT') console.log(`shorts: ${matchId} ilegible; pendiente`);
   }
+  pending.push(match);
 }
-
-const names = (await readdir(dir)).filter(f => f.endsWith('.json'));
-const pending = force ? matches : missingScripts(matches, names);
 let failures = 0;
 let written = 0;
 const skipped = force ? 0 : matches.length - pending.length;
@@ -125,6 +130,13 @@ if (!pending.length) {
   process.exit(0);
 }
 if (force) console.log(`shorts: reescritura forzada de ${pending.length} partidos`);
+
+const evaluation = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8'));
+let scorers = null;
+try { scorers = JSON.parse(await readFile('public/data/scorers.json', 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT') throw error; }
+const published = evaluation?.published === true;
+const skill = (await readFile(skillPath, 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
 
 const llmHealth = [];
 function noteLlmHealth(record) {
@@ -254,7 +266,13 @@ async function saveDraft(match, drafted) {
     instructionVersion: createHash('sha256').update(skill).digest('hex'),
     generatedAt: new Date().toISOString(),
   };
-  await writeFile(file, JSON.stringify(payload, null, 2));
+  const errors = scriptStructureErrors(payload, { matchId, match });
+  if (errors.length) throw new Error(`guion persistido inválido: ${errors.slice(0, 3).join('; ')}`);
+  const temporary = `${file}.${randomUUID()}.tmp`;
+  try {
+    await writeFile(temporary, JSON.stringify(payload, null, 2), { flag: 'wx' });
+    await rename(temporary, file);
+  } finally { await rm(temporary, { force: true }); }
   written += 1;
   console.log(`shorts: ${file} redactado por ${provider}/${model}`);
   if (force && pending.length > 1) await new Promise(r => setTimeout(r, 2000));
