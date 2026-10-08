@@ -103,3 +103,8 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
   }
   return errors;
 }
+
+/** Solo <id>.json son manifiestos; .progress.json y .ready son notas de avance. */
+export function isMediaManifestFile(name) {
+  return typeof name === 'string' && name.endsWith('.json') && !name.endsWith('.progress.json') && !name.endsWith('.ready');
+}

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkText, checkScript, checkDescription, DISCLAIMER } from '../src/lib/compliance.js';
+import { checkText, checkScript, checkDescription, DISCLAIMER, isMediaManifestFile } from '../src/lib/compliance.js';
 
 const good = {
   hook: 'Este cruce engaña: los números dicen otra cosa.',
@@ -40,4 +40,10 @@ test('descripción exige enlace, hashtag y disclaimer', () => {
   const desc = `Gran cruce.\n🔗 Más data: https://goatlab.win/partido/bz-1\n#goatlab #futbol\n${DISCLAIMER}`;
   assert.deepEqual(checkDescription(desc, { matchId: 'bz-1' }), []);
   assert.ok(checkDescription('sin nada', { matchId: 'bz-1' }).length >= 3);
+});
+
+test('solo <id>.json es manifiesto; notas de avance se ignoran', () => {
+  assert.equal(isMediaManifestFile('malaga-vs-espanyol-2026-10-09.json'), true);
+  assert.equal(isMediaManifestFile('malaga-vs-espanyol-2026-10-09.progress.json'), false);
+  assert.equal(isMediaManifestFile('malaga-vs-espanyol-2026-10-09.ready'), false);
 });

@@ -1,7 +1,7 @@
 /** Lint bloqueante pre-render: valida guiones y media-pack contra COMPLIANCE.md. */
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { checkScript, checkDescription, checkMediaManifest } from '../src/lib/compliance.js';
+import { checkScript, checkDescription, checkMediaManifest, isMediaManifestFile } from '../src/lib/compliance.js';
 import { attentionPlayers, hashtagLine, playersInNarration, shortTitle } from '../src/lib/youtube.js';
 
 function clickErrors(data) {
@@ -58,7 +58,7 @@ console.log(`lint:shorts: ${files.length} archivos, ${failures} fallos (publishe
 const mediaDir = 'public/data/media-pack';
 let mediaFiles = [];
 try {
-  mediaFiles = (await readdir(mediaDir)).filter(f => f.endsWith('.json'));
+  mediaFiles = (await readdir(mediaDir)).filter(isMediaManifestFile);
 } catch {
   console.log('lint:shorts: sin media-pack todavía, ok');
   process.exit(failures ? 1 : 0);
