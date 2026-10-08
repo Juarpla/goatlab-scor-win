@@ -1,82 +1,6 @@
 {
-  "updatedAt": "2026-10-08T06:46:20.670Z",
+  "updatedAt": "2026-10-08T07:03:13.295Z",
   "runs": [
-    {
-      "at": "2026-09-30T15:26:04.370Z",
-      "task": "shorts",
-      "matchId": "kazakhstan-vs-moldova-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6323,
-        "outputTokens": 9567
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "134a10b4-f9fe-416e-9a67-422e3f71a431"
-    },
-    {
-      "at": "2026-09-30T15:27:23.884Z",
-      "task": "shorts",
-      "matchId": "latvia-vs-montenegro-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6221,
-        "outputTokens": 7170
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "b10edf40-efd2-4d4f-a691-2c2d381f4f82"
-    },
-    {
-      "at": "2026-09-30T15:28:55.665Z",
-      "task": "shorts",
-      "matchId": "cyprus-vs-armenia-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6218,
-        "outputTokens": 7126
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "b0873412-fc19-4fbd-a89d-497a074b05b4"
-    },
-    {
-      "at": "2026-09-30T15:30:46.035Z",
-      "task": "shorts",
-      "matchId": "faroe-islands-vs-slovakia-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6172,
-        "outputTokens": 7792
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "798edc6b-bfdc-4f46-9a9b-4adb20da4d56"
-    },
     {
       "at": "2026-09-30T15:33:00.738Z",
       "task": "shorts",
@@ -4786,6 +4710,180 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "a1f938e9-e471-4cd3-80e3-fc67644fcdf8"
+    },
+    {
+      "at": "2026-10-08T06:59:44.285Z",
+      "task": "shorts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 77604
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1307
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 21419
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2558,
+            "outputTokens": 5146
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 108018
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 72388
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1367
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 28552
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2558,
+            "outputTokens": 5432
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 92172
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 2558,
+        "outputTokens": 5432
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-08T07:00:02.098Z",
+      "task": "image-prompts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 878
+      }
+    },
+    {
+      "at": "2026-10-08T07:00:55.099Z",
+      "task": "video-prompts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1873,
+        "outputTokens": 1309
+      }
+    },
+    {
+      "at": "2026-10-08T07:03:13.295Z",
+      "task": "motion-prompts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 4: faltan rótulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2657,
+            "outputTokens": 3177
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 71149
+        }
+      ],
+      "usage": {
+        "inputTokens": 2663,
+        "outputTokens": 9835
+      }
     }
   ]
 }
