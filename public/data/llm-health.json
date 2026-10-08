@@ -1,25 +1,6 @@
 {
-  "updatedAt": "2026-10-08T07:03:13.295Z",
+  "updatedAt": "2026-10-08T13:58:06.963Z",
   "runs": [
-    {
-      "at": "2026-09-30T15:33:00.738Z",
-      "task": "shorts",
-      "matchId": "poland-vs-romania-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6224,
-        "outputTokens": 8384
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "69ee40fe-12e4-4ac8-a7b9-ad043fdd2b11"
-    },
     {
       "at": "2026-09-30T15:34:38.556Z",
       "task": "shorts",
@@ -4884,6 +4865,121 @@
         "inputTokens": 2663,
         "outputTokens": 9835
       }
+    },
+    {
+      "at": "2026-10-08T13:58:06.961Z",
+      "task": "shorts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 97612
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1468
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 17695
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2558,
+            "outputTokens": 5016
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 122676
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 86402
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1205
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15111
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2558,
+            "outputTokens": 5620
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 58950
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 2558,
+        "outputTokens": 5620
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
