@@ -1,151 +1,6 @@
 {
-  "updatedAt": "2026-10-08T23:38:58.832Z",
+  "updatedAt": "2026-10-09T06:51:27.166Z",
   "runs": [
-    {
-      "at": "2026-09-30T15:37:07.956Z",
-      "task": "shorts",
-      "matchId": "ukraine-vs-northern-ireland-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6207,
-        "outputTokens": 7875
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "a6bde5ba-5b6a-40f5-8ea4-35b561ad8d20"
-    },
-    {
-      "at": "2026-09-30T15:42:54.549Z",
-      "task": "shorts",
-      "matchId": "hungary-vs-georgia-2026-10-02",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "guion 10: guion de 114 palabras supera el techo de 50s (~110)",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6131,
-            "outputTokens": 6128
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 75218
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6266,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 64156
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta la CTA a goatlab.win en la narración; guion 4: falta la CTA a goatlab.win en la narración; guion 5: falta la CTA a goatlab.win en la narración; guion 6: falta la CTA a goatlab.win en la narración; guion 7: falta la CTA a goatlab.win en la narración; guion 8: falta la CTA a goatlab.win en la narración",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 5721,
-            "outputTokens": 1205
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11576
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 429",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 244
-        }
-      ],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 5721,
-        "outputTokens": 1375
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "91b651c2-fb1f-40ed-bb9f-2e88ff7d8240"
-    },
-    {
-      "at": "2026-09-30T15:44:15.852Z",
-      "task": "shorts",
-      "matchId": "france-vs-italy-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6218,
-        "outputTokens": 5651
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "a3bccf00-deb6-48c5-9dc7-6536280c4ff5"
-    },
-    {
-      "at": "2026-09-30T15:45:54.259Z",
-      "task": "shorts",
-      "matchId": "belgium-vs-turkiye-2026-10-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6221,
-        "outputTokens": 6411
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "3be04557-9411-4e6d-be54-6add03abc00d"
-    },
-    {
-      "at": "2026-09-30T15:48:10.739Z",
-      "task": "shorts",
-      "matchId": "finland-vs-albania-2026-10-03",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6200,
-        "outputTokens": 8433
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "3bc4ef1e-4ca7-4f22-8592-4dd793f32648"
-    },
     {
       "at": "2026-09-30T15:49:58.146Z",
       "task": "shorts",
@@ -5079,6 +4934,312 @@
       "maxTokens": 12000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-09T06:42:09.491Z",
+      "task": "shorts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2644,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 145766
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1309
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11475
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2558,
+            "outputTokens": 5979
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 127741
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2644,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 144916
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2687,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 94858
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Sunderland AFC; guion 1: falta Brighton & Hove Albion FC; guion 2: falta Sunderland AFC; guion 2: falta Brighton & Hove Albion FC; guion 3: falta Sunderland AFC; guion 3: falta Brighton & Hove Albion FC; guion 4: falta Sunderland AFC; guion 4: falta Brighton & Hove Albion FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2504,
+            "outputTokens": 1372
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 21183
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 2504,
+        "outputTokens": 1372
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-09T06:48:40.579Z",
+      "task": "shorts",
+      "matchId": "chelsea-vs-bournemouth-2026-10-10",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2631,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 174916
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2677,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 89270
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: artículo delante de AFC Bournemouth; guion 2: cifra 7 no está en los hechos; guion 2: cifra 7 no está en los hechos; guion 3: falta AFC Bournemouth; guion 4: artículo delante de AFC Bournemouth; guion 5: artículo delante de AFC Bournemouth; guion 7: falta AFC Bournemouth; guion 9: falta AFC Bournemouth",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2501,
+            "outputTokens": 1544
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 20148
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2631,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 151162
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2677,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 131490
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: artículo delante de AFC Bournemouth; guion 2: falta AFC Bournemouth; guion 3: falta Chelsea FC; guion 3: falta AFC Bournemouth; guion 4: falta AFC Bournemouth; guion 5: falta Chelsea FC; guion 5: falta AFC Bournemouth; guion 6: falta Chelsea FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2501,
+            "outputTokens": 1532
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14645
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Chelsea FC; guion 1: falta AFC Bournemouth; guion 2: falta Chelsea FC; guion 2: falta AFC Bournemouth; guion 3: falta Chelsea FC; guion 3: falta AFC Bournemouth; guion 4: falta Chelsea FC; guion 4: falta AFC Bournemouth",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2542,
+            "outputTokens": 5226
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 93791
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 2542,
+        "outputTokens": 5226
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-09T06:48:56.443Z",
+      "task": "image-prompts",
+      "matchId": "chelsea-vs-bournemouth-2026-10-10",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1800,
+        "outputTokens": 733
+      }
+    },
+    {
+      "at": "2026-10-09T06:49:09.433Z",
+      "task": "video-prompts",
+      "matchId": "chelsea-vs-bournemouth-2026-10-10",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "Se requieren 2 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1696,
+            "outputTokens": 399
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6587
+        }
+      ],
+      "usage": {
+        "inputTokens": 1736,
+        "outputTokens": 1323
+      }
+    },
+    {
+      "at": "2026-10-09T06:51:27.166Z",
+      "task": "motion-prompts",
+      "matchId": "chelsea-vs-bournemouth-2026-10-10",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 2: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2480,
+            "outputTokens": 3824
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 76060
+        }
+      ],
+      "usage": {
+        "inputTokens": 2537,
+        "outputTokens": 6731
+      }
     }
   ]
 }
