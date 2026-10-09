@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { scriptStructureErrors } from '../src/lib/match-content.js';
+import { scriptFacts } from '../src/lib/youtube.js';
 
 const consumers = [
   { script: resolve('scripts/generate-youtube-scripts.mjs'), category: 'scripts', directory: 'youtube-scripts', emptyExit: 1 },
@@ -131,4 +132,31 @@ test('scripts: rejected regeneration preserves the prior file without temporary 
   assert.equal(service.calls(), 1);
   assert.equal(await readFile(file, 'utf8'), old);
   assert.deepEqual(await readdir(f.directory), ['upcoming.json']);
+});
+test('scripts: probability file feeds calc-backed picks into the saved draft', async t => {
+  const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };
+  const prob = { markets: { oneX2: { home: 0.6, draw: 0.25, away: 0.15 }, exactScores: [{ home: 2, away: 0, p: 0.2 }] } };
+  const facts = scriptFacts(probMatch, null, prob);
+  assert.ok(facts.picks.every(pick => pick));
+  const content = {
+    lede: 'Alpha recibe a Beta con la serie reciente a la vista.',
+    scripts: facts.picks.map((pick, i) => {
+      const hook = `Alpha y Beta abren el análisis número ${['uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'][i]}.`;
+      return { hook, narration: `${hook} ${pick.bridge} ${pick.antecedent}. El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada esta noche cuando el ambiente aprieta. ${pick.noun} se queda con ${pick.verdict}. ${pick.call}` };
+    }),
+  };
+  const service = await model(t, content);
+  const f = await fixture(t, consumers[0]);
+  await scriptGuide(f);
+  await writeFile(join(f.data, 'fixtures.json'), JSON.stringify({ matches: [probMatch] }));
+  await mkdir(join(f.cwd, 'public/match-probabilities'), { recursive: true });
+  await writeFile(join(f.cwd, 'public/match-probabilities', `${probMatch.id}.json`), JSON.stringify(prob));
+  const file = join(f.directory, 'upcoming.json');
+  const result = await f.run([], service.env);
+  assert.equal(result.status, 0, result.stderr);
+  const saved = JSON.parse(await readFile(file, 'utf8'));
+  assert.deepEqual(scriptStructureErrors(saved, { matchId: match.webId, match: probMatch }), []);
+  assert.ok(saved.scripts.every(script => script.pick && script.pick.verdict.includes('la victoria de Alpha en casa')));
+  assert.ok(saved.scripts[2].pick.verdict.includes('por 2'));
+  assert.ok(saved.scripts[2].narration.includes(saved.scripts[2].pick.verdict));
 });

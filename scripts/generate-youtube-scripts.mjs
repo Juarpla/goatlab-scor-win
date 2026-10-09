@@ -285,9 +285,11 @@ async function saveDraft(match, drafted) {
 const breaker = createProviderBreaker();
 const deferred = [];
 let leftForNext = 0;
-/** Probabilidades del partido para el pick (null si no hay archivo). */
+/** Probabilidades del partido para el pick (null si no hay archivo).
+ *  Vive en public/match-probabilities (trackeado, la misma llave que la
+ *  página del partido), no en public/data (artefacto local). */
 async function loadProbability(matchId) {
-  const file = join('public/data/match-probabilities', `${matchId}.json`);
+  const file = join('public/match-probabilities', `${matchId}.json`);
   try {
     return JSON.parse(await readFile(file, 'utf8'));
   } catch (error) {
