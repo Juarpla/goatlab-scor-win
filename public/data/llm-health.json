@@ -1,25 +1,6 @@
 {
-  "updatedAt": "2026-10-09T13:16:56.967Z",
+  "updatedAt": "2026-10-09T13:22:31.650Z",
   "runs": [
-    {
-      "at": "2026-09-30T16:08:01.588Z",
-      "task": "shorts",
-      "matchId": "ireland-vs-israel-2026-10-04",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6196,
-        "outputTokens": 4340
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "80702103-6b58-41e8-a7a0-9b79fd987a86"
-    },
     {
       "at": "2026-09-30T16:09:54.146Z",
       "task": "shorts",
@@ -5175,6 +5156,36 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "a71d343e-2b58-4ab9-9fc8-f3fabc2a5069"
+    },
+    {
+      "at": "2026-10-09T13:22:31.648Z",
+      "task": "shorts",
+      "matchId": "chelsea-vs-bournemouth-2026-10-10",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2677,
+        "outputTokens": 11216
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "326c8621-a92e-40cc-abaa-2bbd0a1cbb5f"
     }
   ]
 }
