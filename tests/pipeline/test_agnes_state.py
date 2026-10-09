@@ -62,7 +62,7 @@ class DurablePoolTests(unittest.TestCase):
 
     def sleep(self,seconds):self.now+=seconds
 
-    def test_deleted_sqlite_cannot_repeat_an_uncertain_image_or_video(self):
+    def test_deleted_sqlite_keeps_image_protection_and_video_attempt_budget(self):
         posts=[]
         def lost(*args,**kwargs):posts.append(args);raise TimeoutError()
         image=ImagePool(self.root/'image.sqlite',clock=lambda:self.now,sleep=self.sleep,state=self.state)
@@ -75,8 +75,8 @@ class DurablePoolTests(unittest.TestCase):
         video.db.close();(self.root/'video.sqlite').unlink()
         video=VideoPool(self.root/'video.sqlite',clock=lambda:self.now,sleep=self.sleep,state=self.state);self.addCleanup(video.db.close)
         video.bank('video-match',[{'prompt':'prompt'}],[{'url':'https://example.org/0.jpg'}],self.root,2000,3000,call=lost)
-        self.assertEqual(len(posts),2)
-        self.assertEqual(self.state.quota['1970-01-01'],{'images':1,'video_seconds':6})
+        self.assertEqual(len(posts),6)
+        self.assertEqual(self.state.quota['1970-01-01'],{'images':1,'video_seconds':30})
 
     def test_known_completed_clip_recovers_after_sqlite_loss_without_another_post(self):
         posts=[]

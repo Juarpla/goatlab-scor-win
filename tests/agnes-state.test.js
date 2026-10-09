@@ -127,3 +127,24 @@ test('uncertain image holds the shared flight until a known terminal response',(
   state=reduceAgnesState(state,'event',{attemptId:result.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:now}).state;
   assert.equal(reduceAgnesState(state,'reserve',reserve({matchId:'other-match'}),{nowMs:now}).result.canPost,true);
 });
+
+test('archived video requests preserve quota and free other matches, never the consumed ordinal',()=>{
+  const input=reserve({kind:'video',model:'agnes-video-2.5-flash',referenceHash:hash('image')});
+  const first=reduceAgnesState(fresh(),'reserve',input,{nowMs:now});
+  const archived=reduceAgnesState(first.state,'recover-uncertain',{}, {nowMs:now+31_000});
+  assert.equal(archived.state.slots['alpha-beta:video:0'].state,'abandoned');
+  assert.equal(archived.state.quota['2026-10-09'].video_seconds,6);
+  assert.equal(archived.state.activeVideoAttemptId,null);
+  assert.equal(reduceAgnesState(archived.state,'reserve',{...input,attemptId:randomUUID()},{nowMs:now+31_000}).result.canPost,false);
+  const next=reduceAgnesState(archived.state,'reserve',{...input,matchId:'another-match',attemptId:randomUUID()},{nowMs:now+31_000});
+  assert.equal(next.result.canPost,true);
+  assert.equal(next.state.quota['2026-10-09'].video_seconds,12);
+});
+test('recovery does not archive an active runner or a task with a known video ID',()=>{
+  const input=reserve({kind:'video',model:'agnes-video-2.5-flash',referenceHash:hash('image')});
+  const first=reduceAgnesState(fresh(),'reserve',input,{nowMs:now});
+  const heartbeat=reduceAgnesState(first.state,'heartbeat',{runId:randomUUID(),matchId:input.matchId},{nowMs:now});
+  assert.deepEqual(reduceAgnesState(heartbeat.state,'recover-uncertain',{}, {nowMs:now+1000}).result.abandoned,[]);
+  const accepted=reduceAgnesState(first.state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'accepted',videoId:'known-task'}, {nowMs:now});
+  assert.deepEqual(reduceAgnesState(accepted.state,'recover-uncertain',{}, {nowMs:now+31_000}).result.abandoned,[]);
+});

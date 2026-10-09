@@ -55,7 +55,7 @@ class FakeAgnesState:
         row = self.attempts[attempt_id]
         if event_type == 'accepted':
             row.update(state='pending', videoId=extra['videoId'])
-        elif event_type in ('completed', 'failed'):
+        elif event_type in ('completed', 'failed', 'abandoned'):
             row['state'] = event_type
             if self.active == attempt_id:
                 self.active = None

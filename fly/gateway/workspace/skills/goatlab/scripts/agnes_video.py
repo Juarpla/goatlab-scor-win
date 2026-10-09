@@ -7,6 +7,7 @@ import json
 import os
 import re
 import socket
+import sys
 import subprocess
 import time
 import urllib.error
@@ -79,7 +80,7 @@ class VideoPool:
         self.db.execute('UPDATE video_recovery SET ordinal=? WHERE match_id=?',(ordinal,match))
         return self.db.execute('SELECT deadline FROM video_recovery WHERE match_id=?',(match,)).fetchone()[0]
 
-    def error(self, match, ordinal, stage, error):
+    def error(self, match, ordinal, stage, error, attemptId=None, next=None):
         """Keep bounded diagnostics without credentials, signed URLs or raw headers."""
         headers = error.headers or {}
         proven_rejected, video_id = False, None
@@ -109,23 +110,82 @@ class VideoPool:
                 request_id=request_id.replace(value,'[redacted]')
                 if video_id and value in video_id: video_id=None
         record={'at':self.clock(),'model':MODEL,'stage':stage,'httpStatus':error.code,
-                'body':raw[:2048],'requestId':request_id,'videoId':video_id}
+                'body':raw[:2048],'requestId':request_id,'videoId':None,
+                'attemptId':attemptId,'next':next or self.error_next(stage,error.code,video_id,proven_rejected)}
         self.diagnostic(match,ordinal,record)
         retry=retry_seconds(headers.get('Retry-After'));status=error.code;error.close()
         return status,retry,video_id,proven_rejected
 
     def diagnostic(self, match, ordinal, record):
+        record.update(matchId=match, ordinal=ordinal, code=('provider-http' if record.get('httpStatus') else 'transport-or-response'))
+        record['body'] = self.safe_detail(record.get('body', ''))
+        if getattr(self, 'diagnostic_out', None):
+            path = self.diagnostic_out / 'video-diagnostics.json'
+            try: history = json.loads(path.read_text())
+            except (OSError, ValueError): history = []
+            atomic_json(path, (history + [record])[-128:])
+        print('agnes-video: ' + json.dumps(record, ensure_ascii=False), file=sys.stderr, flush=True)
         self.db.execute('INSERT INTO video_errors(match_id,ordinal,metadata) VALUES(?,?,?)',(match,ordinal,json.dumps(record)))
         self.db.execute('DELETE FROM video_errors WHERE id NOT IN (SELECT id FROM video_errors ORDER BY id DESC LIMIT 128)')
 
-    def transport(self, match, ordinal, stage, video_id=None):
+    def transport(self, match, ordinal, stage, video_id=None, error=None, response=None, attemptId=None, next=None):
         self.diagnostic(match,ordinal,{'at':self.clock(),'model':MODEL,'stage':stage,'httpStatus':None,
-                                     'body':'resultado incierto: transporte o respuesta inválida','requestId':'','videoId':video_id})
+                                      'body': self.safe_detail({'errorType': type(error).__name__ if error else 'UnknownError', 'message': str(error) if error else 'respuesta inválida', 'response': response}), 'requestId':'','videoId':None,
+                                      'attemptId':attemptId,'next':next or self.transport_next(stage)})
 
-    def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False):
+    @staticmethod
+    def error_next(stage, status, video_id, proven_rejected):
+        if video_id:
+            return 'identificador recuperado de la respuesta; consultar tarea sin repetir POST'
+        if stage == 'retrieve':
+            return 'reintentar consulta en la ventana de recuperación' if status != 429 else 'esperar Retry-After y reintentar consulta en la ventana de recuperación'
+        if status == 429 and proven_rejected:
+            return 'cuota devuelta; esperar Retry-After y reintentar con un nuevo intento'
+        return 'intento archivado sin identificador; siguiente intento permitido; consumo conservado'
+
+    @staticmethod
+    def transport_next(stage):
+        if stage == 'retrieve':
+            return 'reintentar consulta en la ventana de recuperación'
+        if stage == 'persist-accepted':
+            return 'identificador guardado; reintentar solo la actualización remota; no se repite POST'
+        return 'intento archivado sin identificador; siguiente intento permitido; consumo conservado'
+
+    @staticmethod
+    def safe_detail(value):
+        def clean(item):
+            if isinstance(item, dict):
+                return {key: '[redacted]' if re.search(r'token|key|secret|authorization|password|prompt|image|url|video.?id', str(key), re.I) else clean(val) for key, val in item.items()}
+            if isinstance(item, list): return [clean(val) for val in item[:10]]
+            return item
+        raw = json.dumps(clean(value), ensure_ascii=False, default=str) if not isinstance(value, str) else value
+        for key, secret in os.environ.items():
+            if secret and key.endswith(('_KEY', '_TOKEN', '_SECRET')):
+                raw = raw.replace(secret, '[redacted]')
+        raw = re.sub(r'(?i)("(?:token|api[_-]?key|secret|authorization|password|prompt|video[_-]?id)"\s*:\s*)"[^"\n]*"', r'\1"[redacted]"', raw)
+        raw = re.sub(r'(?i)(bearer\s+)[^\s"<>]+', r'\1[redacted]', raw)
+        raw = re.sub(r'https?://[^\s"<>]+', '[endpoint]', raw)
+        return raw[:2048]
+
+    def failure_details(self, match):
+        rows = self.db.execute('SELECT ordinal,metadata FROM video_errors WHERE match_id=? ORDER BY id DESC LIMIT 5', (match,)).fetchall()
+        details = []
+        for row in reversed(rows):
+            record = json.loads(row['metadata'])
+            attempt = record.get('attemptId') or 'detalle original no conservado'
+            following = record.get('next') or 'detalle original no conservado'
+            details.append(f"clip {row['ordinal']+1}: etapa={record['stage']} modelo={record['model']} HTTP={record['httpStatus'] or 'sin respuesta'} requestId={record['requestId'] or 'no disponible'} intento={attempt} registrado={record['at']}; {record['body']}; siguiente: {following}")
+        return details
+
+    def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None):
         if not prompts or not images: return {'clips': [], 'failures': ['faltan prompts de video o imágenes de referencia']}
         if not os.environ.get('AGNES_API_KEY'): return {'clips': [], 'failures': ['falta AGNES_API_KEY']}
         out = Path(out); out.mkdir(parents=True, exist_ok=True)
+        self.diagnostic_out = out
+        verified = set(verified or [])
+        diagnostics_path = out / 'video-diagnostics.json'
+        try: prior_diagnostics = json.loads(diagnostics_path.read_text())
+        except (OSError, ValueError): prior_diagnostics = []
         download = download or self.download
         clips, failures = [], []
         headers = {'Authorization': 'Bearer ' + os.environ['AGNES_API_KEY']}
@@ -138,14 +198,27 @@ class VideoPool:
             # The 60-second error recovery window belongs to this bank invocation.
             # Hourly runs may retrieve the same task again, but never recreate it.
             self.db.execute('DELETE FROM video_recovery WHERE match_id=?', (match,))
-            target = min(2, len(prompts))
+            target = max(0, min(2, len(prompts)) - len(verified))
+            if not target: return {'clips': [], 'failures': [], 'diagnostics': prior_diagnostics}
             for ordinal in range(5):
+                if f'clip-{ordinal}.mp4' in verified: continue
                 prompt = prompts[ordinal % len(prompts)]
                 if self.clock() >= deadline or cancelled(): break
                 try:
                     remote = self.state.status(match, 'video', ordinal)
                 except ValueError as error:
                     failures.append(str(error)); break
+                accepted_path = out / f'clip-{ordinal}.accepted.json'
+                try: accepted = json.loads(accepted_path.read_text())
+                except (OSError, ValueError): accepted = None
+                if accepted and remote and accepted.get('attemptId') == remote.get('attemptId') and not remote.get('videoId') and remote['state']=='uncertain':
+                    try:
+                        self.state.event(remote['attemptId'], 'accepted', videoId=accepted['videoId'])
+                        remote = self.state.status(match, 'video', ordinal)
+                    except ValueError as error:
+                        self.transport(match, ordinal, 'persist-accepted', error=error, attemptId=remote['attemptId'])
+                        failures.append(f'clip {ordinal+1}: identificador guardado; actualización remota pendiente; no se repite POST')
+                        break
                 if remote:
                     expected_prompt = hashlib.sha256(prompt['prompt'].encode()).hexdigest()
                     expected_reference = hashlib.sha256(images[ordinal%len(images)]['url'].encode()).hexdigest()
@@ -162,10 +235,13 @@ class VideoPool:
                     else: failures.append(f'clip {ordinal+1}: archivo perdido; no se regenera')
                     if len(clips)>=target: break
                     continue
-                if row and row['status'] in ('failed','used'): continue
+                if row and row['status'] in ('failed','used','abandoned'): continue
                 video_id = row['video_id'] if row else None
                 if row and row['status']=='uncertain' and not video_id:
-                    failures.append(f'clip {ordinal+1}: creación incierta sin identificador; montaje parcial inmediato'); break
+                    self.state.event(remote['attemptId'], 'abandoned')
+                    self.db.execute("UPDATE video_tasks SET status='abandoned' WHERE match_id=? AND ordinal=?", (match,ordinal))
+                    failures.append(f'clip {ordinal+1}: intento anterior sin identificador archivado; siguiente intento permitido')
+                    continue
                 # Pair by attempt, not by successes: a confirmed failure moves to a new image.
                 reference = row['reference'] if row else images[ordinal%len(images)]['url']
                 self.db.execute('INSERT OR IGNORE INTO video_models VALUES(?,?,?)',(match,ordinal,MODEL))
@@ -181,25 +257,38 @@ class VideoPool:
                         try:
                             admission = self.state.reserve(match, 'video', ordinal, prompt['prompt'], MODEL, expires, reference)
                         except ValueError as error:
+                            self.diagnostic(match,ordinal,{'at':self.clock(),'model':MODEL,'stage':'admission','httpStatus':None,'body':self.safe_detail(str(error)),'requestId':'','videoId':None,'attemptId':None,'next':'sin nueva solicitud; reutilizar evidencia o esperar ritmo/cuota'})
                             failures.append(str(error)); break
                         if not admission.get('canPost'):
                             retry_at = admission.get('retryAtMs', 0)/1000
                             if retry_at > self.clock() and retry_at+1 < deadline:
                                 self.sleep(retry_at-self.clock()); continue
+                            self.diagnostic(match,ordinal,{'at':self.clock(),'model':MODEL,'stage':'admission','httpStatus':None,'body':self.safe_detail(admission.get('reason','autoridad Agnes no concedió permiso')),'requestId':'','videoId':None,'attemptId':None,'next':'sin nueva solicitud; reutilizar evidencia o esperar ritmo/cuota'})
                             failures.append(admission.get('reason','autoridad Agnes no concedió permiso')); break
                         attempt_id = admission['attemptId']
                         self.db.execute('INSERT OR REPLACE INTO video_tasks VALUES(?,?,?,NULL,?,?,?,NULL)', (match,ordinal,'uncertain',prompt['prompt'],reference,expires))
                         self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)', (self.clock()+start_interval()+0.1,))
+                        result = None
+                        create_call = call
+                        if call is request_json:
+                            def create_call(*args, **kwargs):
+                                return request_json(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': self.safe_detail(payload)}))
                         try:
-                            result=call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':'Use <Picture 1> as the visual reference. '+prompt['prompt'],'mode':'reference','images':[reference],'seconds':'6','size':'720P','aspect_ratio':'9:16','n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
+                            result=create_call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':'Use <Picture 1> as the visual reference. '+prompt['prompt'],'mode':'reference','images':[reference],'seconds':'6','size':'720P','aspect_ratio':'9:16','n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
-                            video_id=result.get('video_id')
+                            _, video_id = response_identifiers(result)
                             if not isinstance(video_id,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,200}',video_id): raise ValueError('sin video_id')
-                            self.state.event(attempt_id, 'accepted', videoId=video_id)
+                            atomic_json(accepted_path, {'attemptId': attempt_id, 'videoId': video_id})
                             self.db.execute("UPDATE video_tasks SET status='pending',video_id=? WHERE match_id=? AND ordinal=?",(video_id,match,ordinal))
+                            try: self.state.event(attempt_id, 'accepted', videoId=video_id)
+                            except ValueError as error:
+                                self.transport(match,ordinal,'persist-accepted',error=error,attemptId=attempt_id)
+                                failures.append(f'clip {ordinal+1}: identificador guardado; actualización remota pendiente; no se repite POST')
+                                return {'clips':clips,'failures':failures + self.failure_details(match),'diagnostics':json.loads(diagnostics_path.read_text())}
                         except urllib.error.HTTPError as error:
-                            status,retry,video_id,proven_rejected=self.error(match,ordinal,'create',error)
+                            status,retry,video_id,proven_rejected=self.error(match,ordinal,'create',error,attemptId=attempt_id)
                             if video_id:
+                                atomic_json(accepted_path, {'attemptId': attempt_id, 'videoId': video_id})
                                 self.state.event(attempt_id, 'accepted', videoId=video_id)
                                 self.db.execute("UPDATE video_tasks SET status='pending',video_id=? WHERE match_id=? AND ordinal=?",(video_id,match,ordinal));self.recovery(match,deadline,ordinal)
                             elif status==429 and proven_rejected:
@@ -213,16 +302,22 @@ class VideoPool:
                                 self.state.event(attempt_id, 'uncertain', httpStatus=status, stage='create')
                             else:
                                 self.state.event(attempt_id, 'uncertain', httpStatus=status, stage='create')
+                            if not video_id:
+                                if status == 429: self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)',(self.clock()+max(start_interval()+0.1,retry),))
+                                self.state.event(attempt_id, 'abandoned')
+                                self.db.execute("UPDATE video_tasks SET status='abandoned' WHERE match_id=? AND ordinal=?",(match,ordinal))
                             failures.append(f'clip {ordinal+1}: HTTP {status}')
                             break
-                        except (OSError,ValueError):
-                            self.transport(match,ordinal,'create')
+                        except (OSError,ValueError) as error:
+                            self.transport(match,ordinal,'create',error=error,response=result,attemptId=attempt_id)
                             try: self.state.event(attempt_id, 'uncertain', stage='create')
                             except ValueError: pass
-                            failures.append(f'clip {ordinal+1}: creación incierta sin identificador; montaje parcial inmediato');break
+                            self.state.event(attempt_id, 'abandoned')
+                            self.db.execute("UPDATE video_tasks SET status='abandoned' WHERE match_id=? AND ordinal=?",(match,ordinal))
+                            failures.append(f'clip {ordinal+1}: creación incierta sin identificador; intento archivado sin devolver cuota');break
                     if not video_id:
                         state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
-                        if state and state[0]=='failed': continue
+                        if state and state[0] in ('failed','abandoned'): continue
                         break
                 while self.clock()<deadline and not cancelled():
                     recovery=self.db.execute('SELECT deadline,ordinal FROM video_recovery WHERE match_id=?',(match,)).fetchone()
@@ -262,7 +357,7 @@ class VideoPool:
                             clips.append(saved);break
                         if status not in ('queued','in_progress'): limit=self.recovery(match,deadline,ordinal)
                     except urllib.error.HTTPError as error:
-                        status,retry,_,_=self.error(match,ordinal,'retrieve',error)
+                        status,retry,_,_=self.error(match,ordinal,'retrieve',error,attemptId=claim['attemptId'])
                         limit=self.recovery(match,deadline,ordinal)
                         if status==429:
                             try: self.state.event(claim['attemptId'], 'poll-throttle', httpStatus=429, retryAfterMs=retry*1000, stage='retrieve')
@@ -273,8 +368,8 @@ class VideoPool:
                         else:
                             try: self.state.event(claim['attemptId'], 'uncertain', httpStatus=status, stage='retrieve')
                             except ValueError: break
-                    except (OSError,ValueError,subprocess.SubprocessError):
-                        self.transport(match,ordinal,'retrieve',video_id)
+                    except (OSError,ValueError,subprocess.SubprocessError) as error:
+                        self.transport(match,ordinal,'retrieve',video_id,error=error,attemptId=claim['attemptId'])
                         try: self.state.event(claim['attemptId'], 'uncertain', stage='retrieve')
                         except ValueError: pass
                         limit=self.recovery(match,deadline,ordinal)
@@ -284,7 +379,10 @@ class VideoPool:
                 if state[0]=='pending':
                     failures.append(f'clip {ordinal+1}: recuperación vencida o tarea pendiente; montaje parcial');break
                 if len(clips)>=target: break
-        return {'clips':clips[:2],'failures':failures}
+        if len(clips) < target and not failures: failures.append('faltan clips: plazo, cancelación o cinco intentos consumidos')
+        if failures:
+            failures.extend(self.failure_details(match))
+        return {'clips':clips[:target],'failures':failures,'diagnostics':json.loads(diagnostics_path.read_text()) if diagnostics_path.exists() else prior_diagnostics}
 
     @staticmethod
     def task_url(video_id):
@@ -321,5 +419,5 @@ if __name__=='__main__':
         with sqlite3.connect(state) as db:
             row=db.execute('SELECT status FROM tasks WHERE id=?', ('media:'+source['matchId'],)).fetchone()
             return bool(row and row[0]=='cancelled')
-    result=pool.bank(source['matchId'],source['prompts'],source['images'],args.out,source['deadline'],source['expiresAt'],cancelled=cancelled)
+    result=pool.bank(source['matchId'],source['prompts'],source['images'],args.out,source['deadline'],source['expiresAt'],cancelled=cancelled,verified=source.get('verifiedClips', []))
     print(json.dumps(result))

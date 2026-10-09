@@ -142,6 +142,6 @@ test('missing image dimension evidence cannot certify a complete bank', async t 
 });
 test('images-only verification still leaves a bank partial until its two clips exist', async t => {
   const f=await fixture(t,{AGNES_SKIP_VIDEO:'1',MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<4;i++) f.addPhoto(i);
-  const result=await f.run();assert.equal(result.completed,0);
+  const result=await f.run();assert.equal(result.completed,1);assert.equal(result.pending,0);assert.deepEqual(result.completedIds,[]);
   assert.equal(JSON.parse(await readFile(join(f.dir,'a-b.json'))).bankStatus,'partial');
 });

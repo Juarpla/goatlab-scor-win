@@ -33,12 +33,12 @@ test('readMediaBank sanea al contrato 4 fotos + 2 clips y conserva los fallos', 
   assert.deepEqual(mediaBankIds(dir), ['a-b']);
 });
 
-test('readMediaBank devuelve null sin manifiesto válido', async t => {
+test('readMediaBank expone progreso aunque no haya manifiesto', async t => {
   const dir = await mkdtemp(join(tmpdir(), 'media-bank-')); t.after(() => rm(dir, { recursive: true, force: true }));
   await writeFile(join(dir, 'x.progress.json'), '{}');
-  assert.equal(readMediaBank('x', dir), null);
+  assert.equal(readMediaBank('x', dir).bankStatus, 'partial');
   assert.equal(readMediaBank('../escape', dir), null);
-  assert.deepEqual(mediaBankIds(dir), []);
+  assert.deepEqual(mediaBankIds(dir), ['x']);
 });
 
 test('--match conserves terminal media without final evidence or confirmed remote deletion', async t => {
@@ -65,9 +65,9 @@ test('--match conserves terminal media without final evidence or confirmed remot
   await writeFile(join(out, 'gen', 'c-d', '0.jpg'), 'foto vieja');
   await writeFile(join(out, 'gen', 'c-d', 'clip-0.mp4'), 'clip viejo');
   const entry = resolve('fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs');
-  await run(process.execPath, [entry, '--match=a-b'], {
+  await assert.rejects(run(process.execPath, [entry, '--match=a-b'], {
     env: { ...process.env, GOATLAB_REPO: root, MEDIA_PACK_DIR: out, AGNES_API_KEY: '' },
-  });
+  }), /faltan recursos solicitados/);
   await access(join(out, 'c-d.json'));
   await access(join(out, 'c-d.progress.json'));
   await access(join(out, 'gen', 'c-d'));

@@ -30,11 +30,11 @@ export function validateAgnesState(state) {
     validateSlotInput(row);
     if (!keys(row,['matchId','kind','ordinal','promptHash','model','referenceHash','attemptId','state','videoId','expiresAtMs','reservedDay','reservedUnits','refunded','pollNextAtMs','pollLease','uploadClaim'])) throw new Error('campos de slot Agnes no admitidos');
     const attempt=state.attempts[row.attemptId];
-    if (key!==slotKey(row) || !uuid(row.attemptId) || !['uncertain','pending','completed','failed','rejected'].includes(row.state) || !finite(row.expiresAtMs) || !finite(row.reservedUnits) || !/^\d{4}-\d{2}-\d{2}$/.test(row.reservedDay) || !state.quota[row.reservedDay] || typeof row.refunded!=='boolean' || !finite(row.pollNextAtMs) || (row.videoId!==null && !id(row.videoId)) || (row.state==='pending' && !row.videoId) || (row.state==='rejected' && (!row.refunded || row.videoId)) || !object(attempt) || attempt.slotKey!==key || !Array.isArray(attempt.eventIds) || attempt.state!==row.state || attempt.refunded!==row.refunded) throw new Error('slot Agnes corrupto');
+    if (key!==slotKey(row) || !uuid(row.attemptId) || !['uncertain','pending','completed','failed','rejected','abandoned'].includes(row.state) || !finite(row.expiresAtMs) || !finite(row.reservedUnits) || !/^\d{4}-\d{2}-\d{2}$/.test(row.reservedDay) || !state.quota[row.reservedDay] || typeof row.refunded!=='boolean' || !finite(row.pollNextAtMs) || (row.videoId!==null && !id(row.videoId)) || (row.state==='pending' && !row.videoId) || (row.state==='rejected' && (!row.refunded || row.videoId)) || !object(attempt) || attempt.slotKey!==key || !Array.isArray(attempt.eventIds) || attempt.state!==row.state || attempt.refunded!==row.refunded) throw new Error('slot Agnes corrupto');
     if (row.pollLease!==null && (!keys(row.pollLease,['owner','untilMs']) || !uuid(row.pollLease.owner) || !finite(row.pollLease.untilMs))) throw new Error('lease Agnes corrupto');
     if (row.uploadClaim!==null && (!keys(row.uploadClaim,['id','sha256','confirmed']) || !uuid(row.uploadClaim.id) || !digest(row.uploadClaim.sha256) || typeof row.uploadClaim.confirmed!=='boolean')) throw new Error('subida Agnes corrupta');
   }
-  for(const [attemptId,row] of Object.entries(state.attempts)) if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds']) || !state.slots[row.slotKey] || !['uncertain','pending','completed','failed','rejected','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
+  for(const [attemptId,row] of Object.entries(state.attempts)) if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds']) || !state.slots[row.slotKey] || !['uncertain','pending','completed','failed','rejected','abandoned','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
   if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('single-flight Agnes corrupto');
   for (const [matchId,row] of Object.entries(state.matches)) if (!id(matchId) || !keys(row,['closed','fenceRevision','expiresAtMs','cleanupConfirmed']) || typeof row.closed!=='boolean' || !finite(row.expiresAtMs) || (row.closed && !uuid(row.fenceRevision))) throw new Error('partido Agnes corrupto');
   for(const [runId,row] of Object.entries(state.runs)) if(!uuid(runId) || !keys(row,['matchId','untilMs']) || !finite(row.untilMs) || (row.matchId!==null && !id(row.matchId))) throw new Error('corrida Agnes corrupta');
@@ -116,6 +116,17 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     state.quota[input.day]={images:input.images,video_seconds:input.video_seconds};
     result=change({day:input.day,quota:state.quota[input.day]});
   }
+  else if (operation === 'recover-uncertain') {
+    const abandoned=[];
+    for (const row of Object.values(state.slots)) {
+      if (row.kind !== 'video' || row.state !== 'uncertain' || row.videoId) continue;
+      if (Object.values(state.runs).some(run => run.matchId === row.matchId && run.untilMs > nowMs)) continue;
+      row.state='abandoned'; state.attempts[row.attemptId].state='abandoned';
+      if (state.activeVideoAttemptId === row.attemptId) state.activeVideoAttemptId=null;
+      abandoned.push({matchId:row.matchId,ordinal:row.ordinal,reason:'sin identificador recuperable; reserva conservada'});
+    }
+    result=abandoned.length ? change({abandoned}) : {abandoned};
+  }
   else if (operation === 'report') result = {quota:state.quota,failureEvents:state.failureEvents.filter(e => e.at >= nowMs-48*3_600_000).map(e=>({eventId:e.eventId,at:new Date(e.at).toISOString(),hourUTC:e.hourUTC,stage:e.stage,httpStatus:e.httpStatus,matchId:e.matchId})),runs:Object.values(state.summaries).filter(r=>r.at>=nowMs-48*3_600_000).map(r=>({runId:r.runId,at:new Date(r.at).toISOString(),eligible:r.eligible,pending:r.pending,generated:r.generated,reused:r.reused,completed:r.completed})),usage:{opsA:state.usage.opsA,opsB:state.usage.opsB},updatedAt:state.updatedAt};
   else if (operation === 'status') result = {slot:readSlot() ?? null,closed:state.matches[input.matchId]?.closed ?? false};
   else if (operation === 'reserve') {
@@ -158,12 +169,16 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     if (row.state==='retired') throw new Error('slot retirado; evento no aplicable');
     if (attempt.eventIds.includes(input.eventId)) result = {saved:true,state:row.state};
     else {
-      const terminal = ['completed','failed','rejected'].includes(row.state);
-      if (!['accepted','completed','failed','uncertain','hard-rejected-429','poll-throttle'].includes(input.type)) throw new Error('tipo de evento inválido');
+      const terminal = ['completed','failed','rejected','abandoned'].includes(row.state);
+      if (!['accepted','completed','failed','uncertain','hard-rejected-429','poll-throttle','abandoned'].includes(input.type)) throw new Error('tipo de evento inválido');
       if (terminal && input.type !== 'poll-throttle' && input.type !== row.state) throw new Error('estado terminal no se sobrescribe');
       if (input.type === 'accepted') {
         if (row.kind!=='video' || !id(input.videoId) || (row.videoId && row.videoId!==input.videoId)) throw new Error('identificador Agnes inválido');
         row.videoId=input.videoId; row.state='pending';
+      } else if (input.type === 'abandoned') {
+        if (row.kind !== 'video' || row.videoId || row.state !== 'uncertain') throw new Error('solo se archiva vídeo sin identificador');
+        row.state='abandoned';
+        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
       } else if (input.type === 'completed' || input.type === 'failed') {
         row.state=input.type;
         if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
@@ -186,7 +201,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     }
   } else if (operation === 'pollclaim') {
     const row=readSlot();
-    if (!row?.videoId || !uuid(input.owner) || ['failed','rejected'].includes(row.state) || row.expiresAtMs<=nowMs || state.matches[input.matchId]?.closed) result={canPoll:false,reason:'sin tarea recuperable vigente'};
+    if (!row?.videoId || !uuid(input.owner) || ['failed','rejected','abandoned'].includes(row.state) || row.expiresAtMs<=nowMs || state.matches[input.matchId]?.closed) result={canPoll:false,reason:'sin tarea recuperable vigente'};
     else if (row.pollNextAtMs>nowMs) result={canPoll:false,retryAtMs:row.pollNextAtMs,reason:'Retry-After vigente'};
     else if (row.pollLease && row.pollLease.owner!==input.owner && row.pollLease.untilMs>nowMs) result={canPoll:false,retryAtMs:row.pollLease.untilMs,reason:'otro recuperador activo'};
     else if (row.pollLease?.owner===input.owner && row.pollLease.untilMs>nowMs+10_000) result={canPoll:true,videoId:row.videoId,untilMs:row.pollLease.untilMs,attemptId:row.attemptId};

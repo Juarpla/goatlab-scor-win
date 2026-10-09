@@ -20,6 +20,13 @@ const statusLabel = !bank ? 'Sin banco' : bank.bankStatus === 'complete' ? 'Comp
     </nav>}
     {!bank ? <section class="pending"><h2>Contenido en preparación</h2><p>Todavía no hay banco de medios para este partido.</p></section> : <>
       <p class="intro">Estado: <strong>{statusLabel}</strong> · {bank.assets.length}/{ASSETS_PER_MATCH} fotos · {bank.clips.length}/{CLIPS_PER_MATCH} clips{bank.generatedAt ? ` · generado el ${new Date(bank.generatedAt).toLocaleDateString('es-PE', { timeZone: 'America/Lima' })}` : ''}.</p>
+      {(bank.failures.length > 0 || bank.runUrl) && <section class="failures" aria-labelledby="generation-status">
+        <h2 id="generation-status">{bank.bankStatus === 'complete' ? 'Última generación' : 'Generación pendiente'}</h2>
+        <p>{bank.verifiedImages}/4 fotos y {bank.verifiedClips}/2 clips verificados en R2.</p>
+        {bank.updatedAt && <p>Última comprobación: {new Date(bank.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' })} (Lima).</p>}
+        {bank.runUrl && <p><a href={bank.runUrl}>Ver ejecución y logs en GitHub</a></p>}
+        {bank.failures.length > 0 && <details><summary>Ver motivos y detalles técnicos</summary><ul>{bank.failures.map(failure => <li>{failure}</li>)}{bank.diagnostics.length === 0 && <li>Detalle original no conservado: este diagnóstico precede al registro por etapas.</li>}</ul></details>}
+      </section>}
       <h2>Fotos ({bank.assets.length})</h2>
       {bank.assets.length ? <ul class="grid">
         {bank.assets.map(asset => <li><figure>
@@ -36,7 +43,7 @@ const statusLabel = !bank ? 'Sin banco' : bank.bankStatus === 'complete' ? 'Comp
           {clip.prompt && <details><summary>Prompt</summary><p class="prompt" lang="en">{clip.prompt}</p></details>}
         </figure></li>)}
       </ul> : <p class="note">Sin clips todavía.</p>}
-      {bank.failures.length > 0 && <section class="failures"><h2>Validación</h2><ul>{bank.failures.map(failure => <li>{failure}</li>)}</ul></section>}
+
       {bank.attribution && <p class="note">{bank.attribution}</p>}
     </>}
   </main>
@@ -58,6 +65,7 @@ const statusLabel = !bank ? 'Sin banco' : bank.bankStatus === 'complete' ? 'Comp
   summary{cursor:pointer;color:#c5ed74;font-size:.875rem;text-underline-offset:4px}
   .prompt{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.875rem;line-height:1.7;color:#a4aea3}
   .failures{margin-top:36px;padding:24px 0;border-top:1px solid #354035}
+  .failures{overflow-wrap:anywhere}
   .failures ul{padding-left:22px;margin:0;color:#a4aea3;line-height:1.7}
   .note{color:#a4aea3;font-size:.875rem;line-height:1.6}
   .pending{padding:24px 0 36px}

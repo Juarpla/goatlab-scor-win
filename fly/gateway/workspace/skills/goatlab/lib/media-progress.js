@@ -46,7 +46,7 @@ export function mediaPublisher({ dir, match, facts = [], target = ASSETS_PER_MAT
       ready = true;
     }
     if (preserve) ready = true;
-    await atomic('.progress.json', { count, target, clips: payload.clips?.length ?? 0, failures: payload.failures ?? [], phase, ready, complete, updatedAt: generatedAt });
+    await atomic('.progress.json', { count, target, clips: payload.clips?.length ?? 0, failures: payload.failures ?? [], diagnostics: payload.diagnostics ?? [], runUrl: payload.runUrl ?? null, mode: payload.mode ?? 'all', verifiedImages: payload.verifiedAssets?.length ?? 0, verifiedClips: payload.verifiedClips?.length ?? 0, phase, ready, complete, updatedAt: generatedAt });
     return { count, ready, complete, publishable };
   };
 }

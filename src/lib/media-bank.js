@@ -14,10 +14,10 @@ const read = path => { try { return JSON.parse(readFileSync(path, 'utf8')); } ca
 export function mediaBankIds(dir = 'public/data/media-pack') {
   let names = [];
   try { names = readdirSync(dir); } catch { return []; }
-  return names
-    .filter(name => name.endsWith('.json') && !name.endsWith('.progress.json'))
-    .map(name => name.slice(0, -5))
-    .filter(id => ID.test(id));
+  return [...new Set(names
+    .filter(name => name.endsWith('.json'))
+    .map(name => name.replace(/(?:\.progress)?\.json$/, ''))
+    .filter(id => ID.test(id)))];
 }
 
 function validAsset(asset) {
@@ -31,9 +31,9 @@ function validClip(clip) {
 /** Manifiesto + progreso saneados, o null si no hay banco para el partido. */
 export function readMediaBank(matchId, dir = 'public/data/media-pack') {
   if (!ID.test(String(matchId ?? ''))) return null;
-  const manifest = read(`${dir}/${matchId}.json`);
-  if (!manifest || manifest.matchId !== matchId) return null;
   const progress = read(`${dir}/${matchId}.progress.json`);
+  const manifest = read(`${dir}/${matchId}.json`) ?? (progress ? {matchId,match:matchId,bankStatus:'partial',assets:[],clips:[]} : null);
+  if (!manifest || manifest.matchId !== matchId) return null;
   const assets = (manifest.assets ?? []).map(validAsset).filter(Boolean).slice(0, ASSETS_PER_MATCH);
   const clips = (manifest.clips ?? []).map(validClip).filter(Boolean).slice(0, CLIPS_PER_MATCH);
   return {
@@ -49,6 +49,11 @@ export function readMediaBank(matchId, dir = 'public/data/media-pack') {
     assets,
     clips,
     failures: Array.isArray(progress?.failures) ? progress.failures : [],
+    diagnostics: Array.isArray(progress?.diagnostics) ? progress.diagnostics : [],
+    runUrl: /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/actions\/runs\/\d+$/.test(progress?.runUrl ?? '') ? progress.runUrl : null,
+    updatedAt: progress?.updatedAt ?? null,
+    verifiedImages: progress?.verifiedImages ?? assets.length,
+    verifiedClips: progress?.verifiedClips ?? clips.length,
     phase: progress?.phase ?? null,
   };
 }

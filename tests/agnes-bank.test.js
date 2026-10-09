@@ -12,9 +12,9 @@ const run=promisify(execFile);
 async function runBank(root,out,extraArgs=[],env={}){
   // Sin AGNES_API_KEY no hay HTTP: el script falla antes de llamar a Agnes.
   const entry=resolve('fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs');
-  await run(process.execPath,[entry,...extraArgs],{
+  await assert.rejects(run(process.execPath,[entry,...extraArgs],{
     env:{...process.env,GOATLAB_REPO:root,MEDIA_PACK_DIR:out,AGNES_API_KEY:'',...env},
-  });
+  }), error=>error.code===2 && /faltan recursos solicitados/.test(error.stderr));
 }
 const IMAGE_KINDS=['ball-duel','goal-action','supporters','stadium'];
 function imagePromptsDoc(matchId){

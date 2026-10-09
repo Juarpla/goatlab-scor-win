@@ -41,13 +41,21 @@ def atomic_json(path, value):
         os.close(directory)
 
 
-def request_json(url, body=None, headers=None, timeout=30):
+def request_json(url, body=None, headers=None, timeout=30, observe=None):
     request = urllib.request.Request(
         url, data=None if body is None else json.dumps(body).encode(),
         headers={"Content-Type": "application/json", **(headers or {})},
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:
-        return json.load(response)
+        if observe is None: return json.load(response)
+        raw = response.read(1_048_577)
+        if len(raw) > 1_048_576: raise ValueError('respuesta excede 1 MB')
+        try: payload = json.loads(raw)
+        except (ValueError, UnicodeError):
+            observe(response.status, response.headers, raw[:4096].decode('utf8', 'replace'))
+            raise
+        observe(response.status, response.headers, payload)
+        return payload
 
 
 def telegram(method, body):

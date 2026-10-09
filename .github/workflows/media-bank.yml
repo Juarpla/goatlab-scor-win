@@ -109,6 +109,9 @@ jobs:
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
           pnpm media "${args[@]}"
+      - name: Resumen de generación
+        if: always()
+        run: node scripts/media-run-summary.mjs
       - name: Reportes saneados
         if: always()
         run: node scripts/export-agnes-reports.mjs
@@ -141,6 +144,7 @@ jobs:
             public/data/media-pack/*.json
             public/data/agnes-quota.json
             public/data/r2-usage.json
+            .cache/media-run.json
           retention-days: 30
       - name: Alerta de presupuesto R2 por Telegram
         if: always() && steps.generate.outcome == 'success'
