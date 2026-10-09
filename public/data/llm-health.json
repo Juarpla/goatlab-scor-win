@@ -1,25 +1,6 @@
 {
-  "updatedAt": "2026-10-09T18:28:29.369Z",
+  "updatedAt": "2026-10-09T18:38:58.075Z",
   "runs": [
-    {
-      "at": "2026-09-30T16:21:04.334Z",
-      "task": "shorts",
-      "matchId": "bosnia-herzegovina-vs-poland-2026-10-05",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6226,
-        "outputTokens": 6830
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "b5bf0d16-7805-4535-a4da-d8500d31975e"
-    },
     {
       "at": "2026-09-30T16:25:43.966Z",
       "task": "shorts",
@@ -5183,6 +5164,39 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "9c1c7144-d134-4312-b6af-b88dd5c6bf37"
+    },
+    {
+      "at": "2026-10-09T18:38:58.072Z",
+      "task": "shorts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 7249,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 174397
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6864,
+        "outputTokens": 7468
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "74fdfe4e-8348-441b-9359-9f6778b047bd"
     }
   ]
 }
