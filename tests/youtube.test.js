@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -76,7 +76,7 @@ test('nombres de países en español y passthrough de desconocidos', () => {
   assert.ok(out.description.includes('Inglaterra contra España'));
   const one = buildYoutubeScripts({ id: 'z', home: 'Italy', away: 'France', competition: 'nations',
     lastMatches: { home: [{ date: '2026-09-01', home: 'Italy', away: 'Malta', homeScore: 1, awayScore: 0 }], away: [] } });
-  assert.ok(one.scripts[0].narration.includes('con 1 gol a favor'));
+  assert.ok(one.scripts[0].narration.includes('muestra todavía es corta'));
 });
 
 test('selectMatches: todos los NS ordenados; --match y --limit recortan', () => {
@@ -126,6 +126,9 @@ test('scriptFacts no lleva porcentajes y missingScripts solo pide los que faltan
     away: [{ name: 'Kyrian Nwoko', goals: 2, matches: 3 }],
   });
   assert.equal(JSON.stringify(youtubeUserPayload({ published: false, facts })).includes('oneX2'), false);
+  assert.equal(facts.probability, null);
+  assert.equal(facts.picks.length, 10);
+  assert.ok(facts.picks.every(pick => pick && pick.bridge && pick.noun && pick.antecedent && pick.verdict && pick.call));
   assert.deepEqual(
     missingScripts(
       [{ webId: 'a' }, { webId: 'b' }],
@@ -148,16 +151,16 @@ test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artíc
     const hook = `Andorra y Malta abren la lectura de ${angle} con la muestra encima.`;
     return {
       hook,
-      narration: `${hook} Andorra ganó 1 de sus últimos 5, con 2 goles a favor. El cara a cara suma 4 duelos y promedia 1,25 goles. La pregunta sigue abierta. El análisis está en goatlab.win.`,
+      narration: `${hook} Andorra ganó 1 de sus últimos 5. El cara a cara suma 4 duelos. La tensión se cocina a fuego lento mientras el análisis espera su veredicto con calma. La pregunta sigue abierta para este cruce de naciones esta noche. El análisis está en goatlab.win.`,
     };
   });
   const lede = 'Andorra recibe a Malta con 4 duelos ya jugados y la forma reciente de Andorra en 5 partidos.';
   assert.deepEqual(acceptYoutubeDraft({ scripts, lede }, { facts, published: false }), []);
   const invented = structuredClone(scripts);
-  invented[0] = { ...invented[0], narration: `${invented[0].hook} Andorra marcaría 99 goles. El análisis está en goatlab.win.` };
+  invented[0] = { ...invented[0], narration: `${invented[0].hook} Andorra marcaría 99 goles en una noche imposible de repetir. El cara a cara suma 4 duelos. La tensión se cocina a fuego lento mientras el análisis espera su veredicto con calma. La pregunta sigue abierta para este cruce de naciones esta noche. El análisis está en goatlab.win.` };
   assert.ok(acceptYoutubeDraft({ scripts: invented, lede }, { facts, published: false }).some(e => /cifra 99/.test(e)));
   const articled = structuredClone(scripts);
-  articled[0] = { ...articled[0], hook: 'El Andorra llega entero frente a Malta hoy.', narration: 'El Andorra llega entero frente a Malta hoy. Andorra ganó 1 de sus últimos 5. El análisis está en goatlab.win.' };
+  articled[0] = { ...articled[0], hook: 'El Andorra llega entero frente a Malta hoy.', narration: 'El Andorra llega entero frente a Malta hoy. Andorra ganó 1 de sus últimos 5. El cara a cara suma 4 duelos. La tensión se cocina a fuego lento mientras el análisis espera su veredicto con calma. La pregunta sigue abierta para este cruce de naciones esta noche. El análisis está en goatlab.win.' };
   assert.ok(acceptYoutubeDraft({ scripts: articled, lede }, { facts, published: false }).some(e => /artículo/.test(e)));
   const named = {
     ...facts,
@@ -166,7 +169,7 @@ test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artíc
   const withPlayer = structuredClone(scripts);
   withPlayer[2] = {
     ...withPlayer[2],
-    narration: `${withPlayer[2].hook} Andorra ganó 1 de sus últimos 5. Marc Vales lleva 7 goles. La pregunta sigue abierta. El análisis está en goatlab.win.`,
+    narration: `${withPlayer[2].hook} Andorra ganó 1 de sus últimos 5. Con Marc Vales en la cancha, el ambiente pesa. El cara a cara suma 4 duelos. La tensión se cocina a fuego lento mientras el análisis espera su veredicto con calma. La pregunta sigue abierta para este cruce de naciones esta noche. El análisis está en goatlab.win.`,
   };
   assert.deepEqual(acceptYoutubeDraft({ scripts: withPlayer, lede }, { facts: named, published: false }), []);
   const spilled = structuredClone(withPlayer);
@@ -241,4 +244,119 @@ test('staleScripts detecta rancios y sameCore ignora generatedAt', () => {
   assert.deepEqual(staleScripts(['a.json', 'b.json', 'x.txt'], ['a']), ['b.json']);
   assert.equal(sameCore({ a: 1, generatedAt: 'x' }, { a: 1, generatedAt: 'y' }), true);
   assert.equal(sameCore({ a: 1 }, { a: 2 }), false);
+});
+
+const richMatch = {
+  id: 'test-1',
+  webId: 'alpha-vs-beta-2026-10-10',
+  competition: 'nations',
+  home: 'Alpha',
+  away: 'Beta',
+  lastMatches: {
+    home: [
+      { date: '2026-10-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 },
+      { date: '2026-09-24', home: 'Y', away: 'Alpha', homeScore: 1, awayScore: 1 },
+      { date: '2026-09-17', home: 'Alpha', away: 'Z', homeScore: 3, awayScore: 1 },
+    ],
+    away: [
+      { date: '2026-10-01', home: 'Beta', away: 'W', homeScore: 0, awayScore: 0 },
+      { date: '2026-09-24', home: 'Beta', away: 'V', homeScore: 1, awayScore: 2 },
+    ],
+  },
+  h2h: { totalMatches: 6, homeWins: 3, draws: 1, awayWins: 2, avgTotalGoals: 2.5, recent: [{ date: '2026-01-01', home: 'Alpha', away: 'Beta', homeScore: 2, awayScore: 1 }] },
+};
+const richProb = {
+  markets: {
+    oneX2: { home: 0.5, draw: 0.27, away: 0.23 },
+    totals: { over25: 0.6, under25: 0.4 },
+    btts: { yes: 0.55, no: 0.45 },
+    cleanSheet: { home: 0.4, away: 0.2 },
+    exactScores: [{ home: 2, away: 1, p: 0.12 }, { home: 1, away: 0, p: 0.1 }, { home: 1, away: 1, p: 0.09 }],
+  },
+  firstGoal: { bands: [{ from: 0, to: 15, p: 0.35 }], noGoal: 0.03 },
+  provider: { xg: { home: 1.9, away: 1.1 } },
+};
+const richScorers = { nations: { scorers: [{ player: 'Estrella Uno', team: 'Alpha', value: 4, matches: 5 }] } };
+
+test('buildPicks asigna diez piezas con veredicto explícito y rotación', () => {
+  const facts = scriptFacts(richMatch, richScorers, richProb);
+  assert.equal(facts.picks.length, 10);
+  assert.ok(facts.picks.every(pick => pick && pick.bridge && pick.noun && pick.antecedent && pick.verdict && pick.call));
+  assert.ok(new Set(facts.picks.map(pick => pick.noun)).size > 1);
+  assert.ok(new Set(facts.picks.map(pick => pick.bridge)).size > 1);
+  for (const pick of facts.picks) {
+    assert.ok(/la victoria de Alpha en casa|el empate/.test(pick.verdict), pick.verdict);
+  }
+  assert.ok(facts.picks[2].verdict.includes('2 a 1'));
+  assert.ok(facts.picks[8].verdict.includes('2 a 1'));
+  assert.equal(facts.picks[0].player, null);
+  assert.equal(facts.picks[2].player, 'Estrella Uno');
+  assert.equal(facts.picks[3].player, 'Estrella Uno');
+  assert.equal(facts.picks[6].player, 'Estrella Uno');
+  assert.equal(facts.picks[8].player, 'Estrella Uno');
+  const bare = scriptFacts(richMatch);
+  assert.ok(bare.picks.every(pick => pick && pick.player == null));
+  assert.deepEqual(matchVerdict({}), null);
+  assert.deepEqual(scriptFacts({ id: 'z', home: 'A', away: 'B', competition: 'nations' }).picks, Array(10).fill(null));
+});
+
+function assembleDraft(facts) {
+  const hooks = [
+    'Alpha y Beta marcan distinto y ganan distinto, y eso no cierra por ningún lado.',
+    'El cara a cara entre Alpha y Beta pesa más de lo que parece.',
+    'Alpha contra Beta huele a goles desde el sorteo del cruce.',
+    'El arco en cero de Alpha contra Beta tiene un guardián claro.',
+    'Beta visita a Alpha con la historia torcida en contra.',
+    'Alpha y Beta ya se cruzaron y el recuerdo todavía quema.',
+    'Lo que encaja Beta frente a Alpha abre una grieta visible.',
+    'El empate asoma entre Alpha y Beta cada vez que se cruzan.',
+    'Marcar no es ganar cuando Alpha recibe a Beta en casa.',
+    'Desde el pitazo, Alpha contra Beta promete ritmo alto.',
+  ];
+  return hooks.map((hook, i) => {
+    const pick = facts.picks[i];
+    const tissue = i % 2
+      ? 'El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada.'
+      : 'Nadie regala nada cuando el ambiente aprieta de este modo en la cancha.';
+    const playerBit = pick.player ? ` Con ${pick.player} en la cancha.` : '';
+    return { hook, narration: `${hook} ${pick.bridge} ${pick.antecedent}.${playerBit} ${tissue} ${pick.noun} se queda con ${pick.verdict}. ${pick.call}` };
+  });
+}
+
+test('borrador con piezas pasa; sin pronóstico, con cifras de más o con cero, no', () => {
+  const facts = scriptFacts(richMatch, richScorers, richProb);
+  const scripts = assembleDraft(facts);
+  const lede = 'Alpha recibe a Beta con 6 cruces ya jugados y la forma reciente en 3 partidos.';
+  assert.deepEqual(acceptYoutubeDraft({ scripts, lede }, { facts, published: false }), []);
+  for (const script of scripts) {
+    const words = script.narration.split(/\s+/).filter(Boolean).length;
+    assert.ok(words >= 55 && words <= 110, `${words} palabras`);
+  }
+  const noVerdict = structuredClone(scripts);
+  noVerdict[0] = { ...noVerdict[0], narration: noVerdict[0].narration.replace(facts.picks[0].verdict, 'Alpha') };
+  assert.ok(acceptYoutubeDraft({ scripts: noVerdict, lede }, { facts, published: false }).some(e => /pronóstico/.test(e)));
+  const crowded = structuredClone(scripts);
+  crowded[2] = { ...crowded[2], narration: `${crowded[2].narration} Dato extra con 7 figuras.` };
+  assert.ok(acceptYoutubeDraft({ scripts: crowded, lede }, { facts, published: false }).some(e => /máximo 3/.test(e)));
+  const zeroed = structuredClone(scripts);
+  zeroed[2] = { ...zeroed[2], narration: `${zeroed[2].narration} Fueron 0 errores.` };
+  assert.ok(acceptYoutubeDraft({ scripts: zeroed, lede }, { facts, published: false }).some(e => /cero/.test(e)));
+  const hooked = structuredClone(scripts);
+  hooked[3] = { ...hooked[3], hook: 'Alpha y Beta llegan con 9 goles cada uno.' };
+  assert.ok(acceptYoutubeDraft({ scripts: hooked, lede }, { facts, published: false }).some(e => /gancho no lleva cifras/.test(e)));
+  const nameless = structuredClone(scripts);
+  nameless[2] = { ...nameless[2], narration: nameless[2].narration.replace(' Con Estrella Uno en la cancha.', '') };
+  assert.ok(acceptYoutubeDraft({ scripts: nameless, lede }, { facts, published: false }).some(e => /Estrella Uno/.test(e)));
+});
+
+test('plantilla con probabilidad lleva picks válidos y pasa compliance', () => {
+  const out = buildYoutubeScripts(richMatch, richProb);
+  assert.equal(out.scripts.length, 10);
+  for (const script of out.scripts) {
+    assert.ok(script.pick && script.pick.antecedent && script.pick.verdict);
+    assert.ok(script.narration.includes(script.pick.verdict));
+    assert.deepEqual(checkScript(script, { published: false, matchId: out.matchId }), []);
+    assert.ok(script.words <= 110);
+  }
+  assert.deepEqual(checkDescription(out.description, { matchId: out.matchId }), []);
 });

@@ -50,6 +50,13 @@ export function scriptStructureErrors(data, { matchId = null, match = null } = {
     if (script?.n !== index + 1) errors.push(`${label}: número incorrecto`);
     for (const field of ['title', 'hook', 'narration']) if (!nonempty(script?.[field])) errors.push(`${label}: ${field} vacío o inválido`);
     if (!Number.isInteger(script?.words) || script.words <= 0) errors.push(`${label}: words debe ser un entero positivo`);
+    // El pick solo existe desde la mejora antecedente+pronóstico; los JSONs
+    // viejos sin pick siguen válidos, pero un pick presente debe tener forma.
+    if (script?.pick != null) {
+      for (const field of ['bridge', 'noun', 'antecedent', 'verdict', 'call']) {
+        if (!nonempty(script.pick[field])) errors.push(`${label}: pick.${field} vacío o inválido`);
+      }
+    }
   }
   return errors;
 }

@@ -47,3 +47,18 @@ test('solo <id>.json es manifiesto; notas de avance se ignoran', () => {
   assert.equal(isMediaManifestFile('malaga-vs-espanyol-2026-10-09.progress.json'), false);
   assert.equal(isMediaManifestFile('malaga-vs-espanyol-2026-10-09.ready'), false);
 });
+
+test('fraseo del pronóstico no dispara el vocabulario prohibido', () => {
+  assert.deepEqual(checkText('La proyección se queda con la victoria de Arsenal en casa.'), []);
+  assert.deepEqual(checkText('El diagnóstico final se queda con un partido corto y con Arsenal ganando por la mínima en casa.'), []);
+  assert.deepEqual(checkText('Quédate con este dato. Este es el dato que manda. Acá está la clave. Guarda este número.'), []);
+  assert.deepEqual(checkText('Dos caminos en uno: gana o empata, según el cálculo.'), []);
+  assert.ok(checkText('La combinada de la jornada paga bien.').length > 0);
+});
+
+test('narración voz A con antecedente y pronóstico pasa con gate cerrado', () => {
+  const narration = 'Arsenal y Leeds marcan lo mismo y ganan distinto, y eso no cierra por ningún lado. Quédate con este dato. En los últimos 5, Arsenal ganó 4 y Leeds empató 3 de sus partidos. Uno convierte la pegada en puntos y el otro la deja en empates. La proyección se queda con la victoria de Arsenal en casa. La lectura completa está en goatlab.win.';
+  const words = narration.split(/\s+/).filter(Boolean).length;
+  assert.ok(words >= 55 && words <= 110, `${words} palabras`);
+  assert.deepEqual(checkScript({ hook: narration.split('. ')[0] + '.', narration }, { published: false }), []);
+});

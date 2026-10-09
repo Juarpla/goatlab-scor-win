@@ -55,3 +55,16 @@ test('preserved narratives are not checked against newly available statistics', 
   assert.deepEqual(scriptStructureErrors(data, { match: { ...match, homeScore: 0, lastMatches: { home: [] } } }), []);
   assert.equal(validateContent(data, 'scripts', match.webId), true);
 });
+
+test('scripts sin pick siguen válidos; un pick presente debe tener forma', () => {
+  const pick = { bridge: 'Quédate con este dato.', noun: 'La proyección', antecedent: 'Alpha ganó 2 de 3', verdict: 'la victoria de Alpha en casa', player: null, call: 'La lectura completa está en goatlab.win.' };
+  const withPick = scriptData();
+  withPick.scripts = withPick.scripts.map(script => ({ ...script, pick: { ...pick } }));
+  assert.deepEqual(scriptStructureErrors(withPick, { matchId: match.webId, match }), []);
+  for (const field of ['bridge', 'noun', 'antecedent', 'verdict', 'call']) {
+    const broken = scriptData();
+    broken.scripts[4] = { ...broken.scripts[4], pick: { ...pick, [field]: ' ' } };
+    assert.ok(scriptStructureErrors(broken, { matchId: match.webId }).length, `pick.${field} vacío`);
+    assert.equal(validateContent(broken, 'scripts', match.webId), false);
+  }
+});

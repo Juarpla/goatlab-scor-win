@@ -101,7 +101,7 @@ function draft() {
   const phrases = ['abren el análisis', 'comparan sus ritmos', 'buscan continuidad', 'presentan sus fortalezas', 'preparan el encuentro', 'muestran sus contrastes', 'exploran el contexto', 'ponen a prueba su lectura', 'conservan sus matices', 'cierran la previa'];
   return { lede: 'Alpha y Beta presentan un contraste de ritmos antes del cruce.', scripts: phrases.map(phrase => {
     const hook = `Alpha y Beta ${phrase}.`;
-    return { hook, narration: `${hook} Los antecedentes aportan contexto y ayudan a explicar las tendencias de cada equipo. La información disponible conserva sus límites. Consulta la lectura completa en goatlab.win.` };
+    return { hook, narration: `${hook} Los antecedentes aportan contexto y ayudan a explicar las tendencias de cada equipo. La información disponible conserva sus límites y el análisis espera los datos con calma. La previa se cuenta sin prisa y con la muestra por delante. La tensión del cruce sostiene la espera. Consulta la lectura completa en goatlab.win.` };
   }) };
 }
 test('scripts: unreadable, incomplete and mismatched stored scripts are regenerated atomically', async t => {

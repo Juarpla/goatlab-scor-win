@@ -1,9 +1,9 @@
 /**
- * Guiones de Shorts (<50s). La acción no reescribe un JSON ya existente:
- * los faltantes los redacta el modelo de turno con el skill
- * redactar-guiones-shorts. buildYoutubeScripts queda como plantilla de
- * prueba. Sin porcentajes mientras el gate de publicación siga cerrado
- * (ver COMPLIANCE.md).
+ * Guiones de Shorts (<50s). Estructura por guion: gancho del modelo +
+ * piezas asignadas por código (puente, antecedente, sustantivo, pronóstico,
+ * llamada) + tejido del modelo. buildYoutubeScripts arma la misma estructura
+ * como plantilla de prueba. Sin porcentajes mientras el gate de publicación
+ * siga cerrado (ver COMPLIANCE.md).
  */
 import { DISCLAIMER, checkScript, checkText } from './compliance.js';
 import { sameClub, esName, rankMatches } from './teams.js';
@@ -47,80 +47,257 @@ const HOOKS = [
   (m) => `Últimos duelos, forma y goles: ${m.home} contra ${m.away}.`,
 ];
 
-const CONNECTORS = [
-  'Mira este dato:',
-  'Y ojo:',
-  'Pero hay más:',
-  'El dato clave:',
-  'Ahora compara:',
-  'Y esto pesa:',
-  'Suma esto:',
-  'La otra cara:',
-  'Y atención:',
-  'Para completar:',
+/** Puentes fijos: espejo de SKILL.md. El cuarto rota según el antecedente. */
+const BRIDGES = [
+  'Quédate con este dato.',
+  'Este es el dato que manda.',
+  'Acá está la clave.',
 ];
-
-const SPOKEN_CTAS = [
-  'Todo el análisis, partido por partido, en goatlab.win.',
-  'Tablas, forma y el veredicto completo en goatlab.win.',
-  'Más data del cruce en goatlab.win.',
+const BRIDGE_NUMBER = 'Guarda este número.';
+const BRIDGE_WORDS = 'Guarda esta lectura.';
+/** Sustantivos del pronóstico: espejo de SKILL.md. */
+const NOUNS = ['La proyección', 'El análisis final', 'El diagnóstico final', 'La lectura'];
+/** Llamadas fijas: espejo de SKILL.md §Llamadas. */
+const CALLS = [
+  'La lectura completa está en goatlab.win.',
+  'El análisis de este cruce te espera en goatlab.win.',
+  'Si quieres la data partida por partida, entra a goatlab.win.',
+  'Toda la forma y el cara a cara están en goatlab.win.',
+  'El detalle de este partido está en goatlab.win.',
+  'Para seguir el hilo, entra a goatlab.win.',
+  'Ahí está el análisis entero, en goatlab.win.',
+  'La forma y el historial están en goatlab.win.',
+  'Cuando quieras la pieza completa, ábrela en goatlab.win.',
+  'El partido se cuenta con calma en goatlab.win.',
 ];
+const RESERVE_TEXT = 'La muestra todavía es corta y conviene decirlo: sin serie reciente ni cruces previos, no hay antecedente que sostener. El análisis espera los datos. Cuando esa serie aparezca, la lectura va a poder afirmarse. Mientras tanto, la previa se cuenta con calma.';
+/** Guiones que pueden nombrar jugadores (solo el nombre, sin promesas). */
+const PLAYER_NS = new Set([3, 4, 7, 9]);
+/** Guiones de goles: el pronóstico lleva el marcador del cálculo. */
+const SCORE_NS = new Set([3, 9]);
+const MAX_FIGURES = 3;
+const MIN_WORDS = 55;
+const rotationOf = id => [...String(id ?? '')].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % NOUNS.length;
+const comma = value => String(value).replace('.', ',');
+const finite = value => Number.isFinite(Number(value)) ? Number(value) : null;
+/** El antecedente abre frase: siempre en mayúscula inicial, sin punto final. */
+const cap = value => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
-const CLOSERS = [
-  'La forma actual contra el historial: ahí está la lectura.',
-  'Goles recientes contra cruces previos: esa es la lectura.',
-  'Lo que ya jugaron manda más que el nombre.',
-];
-
-function metricBeats(match) {
-  const beats = [];
-  // Lógica con nombres crudos (sameClub); impresión en español (esName).
-  const H = esName(match.home);
-  const A = esName(match.away);
-  const home = formLine(match.lastMatches?.home, match.home);
-  const away = formLine(match.lastMatches?.away, match.away);
-  if (home) beats.push(`${H} ganó ${home.wins} de sus últimos ${home.n}, con ${home.gf} ${pl(home.gf, 'gol', 'goles')} a favor.`);
-  if (away) beats.push(`${A} ganó ${away.wins} de sus últimos ${away.n}, con ${away.gf} ${pl(away.gf, 'gol', 'goles')} a favor.`);
-  if (home?.clean || away?.clean) {
-    const clean = Math.max(home?.clean ?? 0, away?.clean ?? 0);
-    const side = (home?.clean ?? 0) >= (away?.clean ?? 0) ? H : A;
-    beats.push(`El arco en cero apareció ${clean} ${pl(clean, 'vez', 'veces')}: ${side} defiende bien.`);
+/** Fraseo de forma sin dígito cero (la regla lo prohíbe en voz alta). */
+function formClause(form, name) {
+  if (!form || !Number.isFinite(form.n) || form.n < 1) return null;
+  if (form.n === 1) {
+    if (form.wins === 1) return `${name} ganó su único partido reciente`;
+    if (form.draws === 1) return `${name} empató su único partido reciente`;
+    return `${name} perdió su único partido reciente`;
   }
-  const h2h = match.h2h;
-  if (h2h?.totalMatches) {
-    beats.push(`El cara a cara suma ${h2h.totalMatches} duelos: ${h2h.homeWins} ${pl(h2h.homeWins, 'local', 'locales')}, ${h2h.draws} ${pl(h2h.draws, 'empate', 'empates')}.`);
-    if (h2h.avgTotalGoals != null) beats.push(`Esos duelos promedian ${Number(h2h.avgTotalGoals).toFixed(2).replace('.', ',')} goles por partido.`);
-  }
-  if (!beats.length) beats.push('Sin serie registrada: la muestra aún es corta y se declara.');
-  return beats;
+  return form.wins === 0
+    ? `${name} no ganó ninguno de sus últimos ${form.n}`
+    : `${name} ganó ${form.wins} de sus últimos ${form.n}`;
 }
 
-/** Métricas distintas rotando desde i (hasta 4 para el texto corrido). */
-function distinctMetrics(metrics, i, count = 4) {
-  const out = [];
-  for (let k = 0; k < metrics.length && out.length < count; k += 1) {
-    const m = metrics[(i + k) % metrics.length];
-    if (!out.includes(m)) out.push(m);
+/** Veredicto único del partido: lado + marcador coherente del cálculo. */
+export function matchVerdict({ homeForm, awayForm, h2h, probability } = {}) {
+  const oneX2 = probability?.markets?.oneX2 ?? null;
+  let side = null;
+  if (oneX2 && [oneX2.home, oneX2.draw, oneX2.away].every(Number.isFinite)) {
+    const best = Math.max(oneX2.home, oneX2.draw, oneX2.away);
+    const top = ['home', 'draw', 'away'].filter(k => oneX2[k] === best);
+    side = top.length === 1 ? top[0] : null;
   }
-  return out;
+  if (!side) {
+    const hw = homeForm?.wins, aw = awayForm?.wins;
+    if (Number.isFinite(hw) && Number.isFinite(aw) && hw !== aw) side = hw > aw ? 'home' : 'away';
+    else if (Number.isFinite(h2h?.homeWins) && Number.isFinite(h2h?.awayWins) && h2h.homeWins !== h2h.awayWins) {
+      side = h2h.homeWins > h2h.awayWins ? 'home' : 'away';
+    }
+  }
+  if (!side) return null;
+  const score = topScore(probability?.markets?.exactScores, side);
+  return { side, score, scoreText: scoreFragment(score) };
+}
+
+function topScore(exactScores, side) {
+  const rows = (exactScores ?? []).filter(e => Number.isFinite(e?.home) && Number.isFinite(e?.away));
+  const fits = side === 'draw'
+    ? rows.filter(e => e.home === e.away)
+    : rows.filter(e => side === 'home' ? e.home > e.away : e.home < e.away);
+  if (!fits.length) return null;
+  return fits.reduce((a, b) => (b.p ?? 0) > (a.p ?? 0) ? b : a);
+}
+
+/** Fragmento de marcador sin dígito cero (1-0 es «por la mínima»). */
+function scoreFragment(score) {
+  if (!score) return null;
+  const h = score.home, a = score.away;
+  if (h === 0 && a === 0) return 'sin goles';
+  if ((h === 1 && a === 0) || (h === 0 && a === 1)) return 'por la mínima';
+  if (h === a) return `${h} a ${a}`;
+  return Math.min(h, a) === 0 ? `por ${Math.max(h, a)}` : `${h} a ${a}`;
+}
+
+function outcomeText(verdict, home, away, withScore) {
+  const frag = withScore ? verdict.scoreText : null;
+  if (verdict.side === 'draw') return frag ? `el empate ${frag}` : 'el empate';
+  const team = verdict.side === 'home' ? home : away;
+  const venue = verdict.side === 'home' ? 'en casa' : 'de visita';
+  return frag ? `la victoria de ${team} ${venue} ${frag}` : `la victoria de ${team} ${venue}`;
+}
+
+/** Un antecedente por ángulo: una frase, como máximo dos cifras. */
+function angleAntecedent(n, { home: H, away: A, homeForm, awayForm, h2h, probability }) {
+  const totals = probability?.markets?.totals ?? null;
+  switch (n) {
+    case 1: {
+      const hw = homeForm?.wins, aw = awayForm?.wins;
+      if (Number.isFinite(hw) && Number.isFinite(aw)) {
+        if (hw === aw) {
+          return hw === 0
+            ? 'ninguno ganó: los dos llegan sin victorias'
+            : `los dos ganaron ${hw} de ${homeForm.n > 0 ? homeForm.n : awayForm.n}`;
+        }
+        const lead = hw > aw ? formClause(homeForm, H) : formClause(awayForm, A);
+        return `${lead} y ${hw > aw ? A : H} llega por detrás`;
+      }
+      return formClause(homeForm, H) ?? formClause(awayForm, A) ?? 'sin serie reciente a la vista, el análisis mira el cálculo';
+    }
+    case 2: {
+      if (finite(h2h?.avgTotalGoals) > 0) return `el cara a cara promedia ${comma(Number(finite(h2h.avgTotalGoals).toFixed(2)))} goles`;
+      if (finite(h2h?.avgTotalGoals) === 0) return 'el cara a cara promedia sin goles';
+      if (h2h?.total > 0) {
+        if (h2h.homeWins === h2h.awayWins) return `el cara a cara trae ${h2h.total} cruces parejos`;
+        const [name, wins] = h2h.homeWins > h2h.awayWins ? [H, h2h.homeWins] : [A, h2h.awayWins];
+        return `${name} manda el cara a cara con ${wins} de ${h2h.total}`;
+      }
+      return 'sin cruces previos, el historial no inclina nada';
+    }
+    case 3: {
+      const over = finite(totals?.over25);
+      const avg = finite(h2h?.avgTotalGoals) > 0
+        ? `el historial promedia ${comma(Number(finite(h2h.avgTotalGoals).toFixed(2)))} goles`
+        : 'el historial pide goles';
+      const flavor = over == null ? '' : over >= 0.5 ? ', y el cálculo espera que se abra' : ', y el cálculo pide freno';
+      return `${avg}${flavor}`;
+    }
+    case 4: {
+      const hc = homeForm?.clean ?? 0, ac = awayForm?.clean ?? 0;
+      const best = hc >= ac ? (hc > 0 ? [H, hc, homeForm.n] : null) : (ac > 0 ? [A, ac, awayForm.n] : null);
+      return best ? `${best[0]} dejó el arco en cero en ${best[1]} de ${best[2]}` : 'sin arcos en cero en la serie reciente';
+    }
+    case 5:
+      return formClause(awayForm, A) ?? 'la visita llega sin serie reciente';
+    case 6: {
+      const last = h2h?.last;
+      if (last && Number.isFinite(last.homeScore) && Number.isFinite(last.awayScore)) {
+        const hs = last.homeScore, as = last.awayScore;
+        if (hs === 0 && as === 0) return 'el último cruce terminó sin goles';
+        if (hs === as) return `el último cruce terminó ${hs} a ${as}`;
+        const winner = hs > as ? last.home : last.away;
+        const max = Math.max(hs, as);
+        if (Math.min(hs, as) === 0) return `${winner} goleó el último por ${max}`;
+        return `${winner} ganó el último por ${hs} a ${as}`;
+      }
+      return 'no hay último cruce que pese';
+    }
+    case 7: {
+      const cand = [];
+      if (Number.isFinite(homeForm?.ga) && homeForm.n > 0) cand.push([H, homeForm.ga, homeForm.n]);
+      if (Number.isFinite(awayForm?.ga) && awayForm.n > 0) cand.push([A, awayForm.ga, awayForm.n]);
+      if (!cand.length) return 'sin serie de goles encajados a la vista';
+      cand.sort((a, b) => b[1] - a[1]);
+      const [name, ga, games] = cand[0];
+      return ga === 0 ? `${name} llega sin encajar en sus últimos ${games}` : `${name} encajó ${ga} en sus últimos ${games}`;
+    }
+    case 8: {
+      if (homeForm?.draws > 0) return `${H} empató ${homeForm.draws} de ${homeForm.n}`;
+      if (awayForm?.draws > 0) return `${A} empató ${awayForm.draws} de ${awayForm.n}`;
+      if (h2h?.draws > 0) return `el cara a cara dejó ${h2h.draws} empates en ${h2h.total}`;
+      return 'sin empates en la serie reciente';
+    }
+    case 9: {
+      const hgf = homeForm?.gf, agf = awayForm?.gf;
+      if (hgf > 0 || agf > 0) {
+        const [name, gf] = (hgf ?? 0) >= (agf ?? 0) ? [H, hgf] : [A, agf];
+        return `${name} marcó ${gf} ${pl(gf, 'gol', 'goles')} y no siempre los convirtió en victorias`;
+      }
+      return 'marcar no alcanzó para ganar últimamente';
+    }
+    default: {
+      if (homeForm && awayForm) return `los dos traen ${Math.max(homeForm.n, awayForm.n)} partidos recientes`;
+      return 'la serie reciente está por escribirse';
+    }
+  }
+}
+
+/** Matiz del ángulo sobre el veredicto, solo con respaldo en los datos. */
+function angleQualifier(n, { homeForm, awayForm, probability }, verdict) {
+  if (n === 4) {
+    const hc = homeForm?.clean ?? 0, ac = awayForm?.clean ?? 0;
+    if (hc === 0 && ac === 0) return '';
+    const cleanSide = hc >= ac ? 'home' : 'away';
+    return verdict.side === cleanSide ? ', con el arco en cero como candado' : '';
+  }
+  if (n === 7) {
+    const early = finite(probability?.firstGoal?.bands?.[0]?.p);
+    return early != null && early >= 0.3 ? ', con el primer gol cayendo temprano' : '';
+  }
+  if (n === 8) {
+    const draw = finite(probability?.markets?.oneX2?.draw);
+    return draw != null && draw >= 0.3 && verdict.side !== 'draw' ? ', pero el empate asoma' : '';
+  }
+  if (n === 10) {
+    const xg = probability?.provider?.xg;
+    const sum = finite(xg?.home) != null && finite(xg?.away) != null ? finite(xg.home) + finite(xg.away) : null;
+    if (sum == null) return '';
+    return sum >= 2.8 ? ', con arranque abierto' : ', con arranque trabado';
+  }
+  return '';
+}
+
+/**
+ * Las diez piezas asignadas (una por guion) o diez nulos cuando no hay
+ * veredicto: sin forma, sin historial y sin probabilidades no hay pronóstico
+ * y el skill usa sus temas de reserva.
+ */
+export function buildPicks(match, scorers = null, probability = null) {
+  const base = baseFacts(match, scorers);
+  const verdict = matchVerdict({ ...base, probability });
+  const offset = rotationOf(match?.webId ?? match?.id);
+  return Array.from({ length: 10 }, (_, i) => {
+    const n = i + 1;
+    if (!verdict) return null;
+    const ctx = { ...base, probability, verdict };
+    const antecedent = angleAntecedent(n, ctx);
+    if (!antecedent) return null;
+    const bridgeSlot = (offset + n - 1) % (BRIDGES.length + 1);
+    const bridge = bridgeSlot < BRIDGES.length
+      ? BRIDGES[bridgeSlot]
+      : (/\d/.test(antecedent) ? BRIDGE_NUMBER : BRIDGE_WORDS);
+    return {
+      n,
+      bridge,
+      noun: NOUNS[(offset + n) % NOUNS.length],
+      antecedent: cap(antecedent),
+      verdict: outcomeText(verdict, base.home, base.away, SCORE_NS.has(n)) + angleQualifier(n, ctx, verdict),
+      player: PLAYER_NS.has(n) ? (playerNames(base)[0] ?? null) : null,
+      call: CALLS[i],
+    };
+  });
 }
 
 export function countWords(text) {
   return String(text ?? '').split(/\s+/).filter(Boolean).length;
 }
 
-/** Narración corrida lista para leer: hook + datos + cierre + CTA hablada. */
-export function buildNarration(match, metrics, i) {
-  const hook = HOOKS[i % HOOKS.length](match);
-  const data = distinctMetrics(metrics, i);
-  const parts = [hook];
-  if (data[0]) parts.push(data[0]);
-  if (data[1]) parts.push(`${CONNECTORS[i % CONNECTORS.length]} ${data[1]}`);
-  if (data[2]) parts.push(`${CONNECTORS[(i + 3) % CONNECTORS.length]} ${data[2]}`);
-  if (data[3]) parts.push(`${CONNECTORS[(i + 6) % CONNECTORS.length]} ${data[3]}`);
-  parts.push(CLOSERS[i % CLOSERS.length]);
-  parts.push(SPOKEN_CTAS[i % SPOKEN_CTAS.length]);
-  const narration = parts.join(' ');
+/** Narración corrida lista para leer: gancho + piezas + tejido + llamada. */
+export function buildNarration(names, pick, i) {
+  const hook = HOOKS[i % HOOKS.length](names);
+  if (!pick) {
+    const narration = `${hook} ${RESERVE_TEXT} ${CALLS[0]}`;
+    return { hook, narration, words: countWords(narration) };
+  }
+  const playerBit = pick.player ? ` Con ${pick.player} en la cancha.` : '';
+  const narration = `${hook} ${pick.bridge} ${pick.antecedent}.${playerBit} ${pick.noun} se queda con ${pick.verdict}. ${pick.call}`;
   return { hook, narration, words: countWords(narration) };
 }
 
@@ -192,7 +369,7 @@ const PLAYER_SCRIPT_INDEXES = new Set([2, 3, 6, 8]);
 
 /** Hechos que el modelo puede decir. Sin porcentajes ni lectura de apuesta.
  *  `players` sale de la tabla de goleadores de la competición; null si no hay filas. */
-export function scriptFacts(match, scorers = null) {
+function baseFacts(match, scorers = null) {
   const home = esName(match.home);
   const away = esName(match.away);
   const homeForm = formLine(match.lastMatches?.home, match.home);
@@ -209,14 +386,22 @@ export function scriptFacts(match, scorers = null) {
       draws: match.h2h.draws ?? 0,
       avgTotalGoals: match.h2h.avgTotalGoals == null ? null : Number(Number(match.h2h.avgTotalGoals).toFixed(2)),
       last: recent ? {
-        home: esName(recent.home),
-        away: esName(recent.away),
+        home: sameClub(recent.home, match.home) ? home : sameClub(recent.home, match.away) ? away : esName(recent.home),
+        away: sameClub(recent.away, match.home) ? home : sameClub(recent.away, match.away) ? away : esName(recent.away),
         homeScore: recent.homeScore,
         awayScore: recent.awayScore,
       } : null,
     };
   }
   return { home, away, homeForm, awayForm, h2h, players: importantPlayers(match, scorers) };
+}
+
+/**
+ * Hechos + piezas asignadas + probabilidades del partido (el modelo solo
+ * puede citar las cifras de su pieza; el lint lo verifica).
+ */
+export function scriptFacts(match, scorers = null, probability = null) {
+  return { ...baseFacts(match, scorers), probability: probability ?? null, picks: buildPicks(match, scorers, probability) };
 }
 
 /** Partidos de la corrida que todavía no tienen un JSON con 10 guiones. */
@@ -468,7 +653,9 @@ export function telegramCaption({ title, hook, attribution, musicCredit } = {}) 
 
 /**
  * Rechaza un borrador del modelo si no se puede leer en voz alta,
- * inventa cifras o rompe el gate. Devuelve la lista de fallos.
+ * inventa cifras o rompe el gate. Con pieza asignada también exige sus
+ * textos tal cual, gancho sin cifras, tope de 3 cifras y piso de 55
+ * palabras. Devuelve la lista de fallos.
  */
 export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
   const errors = [];
@@ -496,10 +683,24 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
       const mentioned = hook.includes(name) || narration.includes(name);
       if (mentioned && !PLAYER_SCRIPT_INDEXES.has(i)) errors.push(`${label}: ${name} va en un guion de jugadores`);
     }
-    if (!PLAYER_SCRIPT_INDEXES.has(i)) {
-      for (const n of numbersInText(`${hook} ${narration}`)) {
-        if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);
+    const text = `${hook} ${narration}`;
+    const figures = numbersInText(text);
+    for (const n of figures) {
+      if (n === 0) errors.push(`${label}: el cero no se escribe en dígitos`);
+      else if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);
+    }
+    if (figures.length > MAX_FIGURES) errors.push(`${label}: ${figures.length} cifras, máximo ${MAX_FIGURES}`);
+    const words = narration.split(/\s+/).filter(Boolean).length;
+    if (words < MIN_WORDS) errors.push(`${label}: ${words} palabras, mínimo ${MIN_WORDS}`);
+    const pick = facts?.picks?.[i] ?? null;
+    if (pick) {
+      for (const [field, name] of [['bridge', 'puente'], ['noun', 'sustantivo'], ['antecedent', 'antecedente'], ['verdict', 'pronóstico'], ['call', 'llamada']]) {
+        const value = String(pick[field] ?? '').trim();
+        if (!value) errors.push(`${label}: falta ${name} asignado`);
+        else if (!text.includes(value)) errors.push(`${label}: falta el ${name} asignado`);
       }
+      if (pick.player && !text.includes(pick.player)) errors.push(`${label}: falta ${pick.player}`);
+      if (numbersInText(hook).length) errors.push(`${label}: el gancho no lleva cifras`);
     }
     for (const error of checkScript({ hook, narration }, { published })) errors.push(`${label}: ${error}`);
   }
@@ -519,16 +720,20 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
 }
 
 /** Diez guiones + descripción lista para YouTube (nombres en español). */
-export function buildYoutubeScripts(match) {
+export function buildYoutubeScripts(match, probability = null) {
   const webId = match.webId ?? match.id;
-  const metrics = metricBeats(match);
   const names = { ...match, home: esName(match.home), away: esName(match.away) };
-  const scripts = Array.from({ length: HOOKS.length }, (_, i) => {
-    const { hook, narration, words } = buildNarration(names, metrics, i);
-    return { n: i + 1, hook, title: shortTitle({ home: names.home, away: names.away, n: i + 1, hook }), narration, words };
+  const picks = buildPicks(match, null, probability);
+  const scripts = picks.map((pick, i) => {
+    const n = i + 1;
+    const { hook, narration, words } = buildNarration(names, pick, i);
+    const entry = { n, hook, title: shortTitle({ home: names.home, away: names.away, n, hook }), narration, words };
+    if (pick) entry.pick = { bridge: pick.bridge, noun: pick.noun, antecedent: pick.antecedent, verdict: pick.verdict, player: pick.player ?? null, call: pick.call };
+    return entry;
   });
+  const first = picks.find(pick => pick);
   const description = buildDescription({
-    lede: [`${names.home} contra ${names.away}: forma, goles y cara a cara en menos de un minuto.`, metrics[0] ?? ''].filter(Boolean).join(' '),
+    lede: [`${names.home} contra ${names.away}: forma, goles y cara a cara en menos de un minuto.`, first ? `${first.noun} se queda con ${first.verdict}.` : ''].filter(Boolean).join(' '),
     matchId: webId,
     competition: match.competition,
     home: names.home,

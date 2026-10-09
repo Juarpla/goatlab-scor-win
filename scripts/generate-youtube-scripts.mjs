@@ -178,6 +178,7 @@ function validateDraft(content, match, { published, facts, matchId }) {
   const away = esName(match.away);
   const numbered = (draft?.scripts ?? []).map((script, i) => ({ ...script, n: i + 1 }));
   const players = attentionPlayers(numbered, { home, away });
+  const pickOf = i => (Array.isArray(facts?.picks) ? facts.picks[i] : null) ?? null;
   const description = buildDescription({
     lede,
     matchId,
@@ -196,7 +197,10 @@ function validateDraft(content, match, { published, facts, matchId }) {
     const hook = String(script.hook).trim();
     const n = i + 1;
     const named = [3, 4, 7, 9].includes(n) ? playersInNarration(narration, { home, away }) : [];
-    return { n, hook, title: shortTitle({ home, away, n, hook, players: named }), narration, words: countWords(narration) };
+    const entry = { n, hook, title: shortTitle({ home, away, n, hook, players: named }), narration, words: countWords(narration) };
+    const pick = pickOf(i);
+    if (pick) entry.pick = { bridge: pick.bridge, noun: pick.noun, antecedent: pick.antecedent, verdict: pick.verdict, player: pick.player ?? null, call: pick.call };
+    return entry;
   });
   return { scripts, description };
 }
@@ -281,10 +285,19 @@ async function saveDraft(match, drafted) {
 const breaker = createProviderBreaker();
 const deferred = [];
 let leftForNext = 0;
+/** Probabilidades del partido para el pick (null si no hay archivo). */
+async function loadProbability(matchId) {
+  try {
+    return JSON.parse(await readFile(join('public/data/match-probabilities', `${matchId}.json`), 'utf8'));
+  } catch (error) {
+    if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error;
+    return null;
+  }
+}
 try {
   for (const match of pending) {
     const matchId = match.webId ?? match.id;
-    const facts = scriptFacts(match, scorers);
+    const facts = scriptFacts(match, scorers, await loadProbability(match.id));
     const file = join(dir, `${matchId}.json`);
     try {
       const drafted = await draftMatch(match, { breaker, skill, published, facts, deferTransport: true });
