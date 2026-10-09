@@ -89,6 +89,8 @@ test('R2 block reuses verified media, searches all five clip ordinals and makes 
   const manifest = JSON.parse(await readFile(join(f.dir, 'a-b.json'), 'utf8'));
   assert.equal(manifest.bankVersion, 2); assert.equal(manifest.bankStatus, 'complete');
   assert.deepEqual(manifest.clips.map(c => c.file), ['clip-3.mp4', 'clip-4.mp4']);
+  const progress = JSON.parse(await readFile(join(f.dir, 'a-b.progress.json'), 'utf8'));
+  assert.equal(progress.verifiedImages, 4); assert.equal(progress.verifiedClips, 2);
 });
 test('negative HEAD never downloads a missing object', async t => {
   const f = await fixture(t, { AGNES_API_KEY: '' }); await f.run(); assert.equal(f.downloads.length, 0);
