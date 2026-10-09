@@ -59,14 +59,23 @@ function validPrompts(category, matchId) {
   const kinds = CONTENT_CATEGORIES[category].kinds;
   const prompts = kinds.map((kind, index) => ({
     n: index + 1, kind, title: kind,
-    ...(category === 'motion-prompts' ? { factIds: [] } : {}),
+    ...(category === 'motion-prompts' ? { factIds: [], presentations: ['editorial', 'statistical'],
+      beats: [{ t0: 0, t1: 1.5, action: 'entry', detail: 'in' }, { t0: 1.5, t1: 4.5, action: 'build', detail: 'build' }, { t0: 4.5, t1: 7.5, action: 'main', detail: 'main' }, { t0: 7.5, t1: 9.5, action: 'exit', detail: 'out' }],
+      easing: { enter: 'ease-out', curve: 'cubic-bezier(0.23,1,0.32,1)', exit: 'ease-out' },
+      background: { variant: 'carbon-grain', base: '#101412', texture: 'grain', safeArea: 'left64 right64 top120 bottom480' },
+      motion: { spring: { damping: 22, stiffness: 180, mass: 0.6 }, countUp: true, staggerMs: 60, scaleFrom: 0.95 },
+      camera: { move: 'push-in 1.0 to 0.9 + drift', tilt: '0deg' },
+      transition: { in: 'wipe', editorialToStatistical: 'dissolve', out: 'collapse' },
+      emphasis_words: ['CLAVE'],
+      motionSystem: 'carbon-v1',
+      signature_move: 'stagger-reveal' } : {}),
     prompt: category === 'image-prompts'
       ? `Referential photorealistic illustration of Alpha and Beta football teams in realistic uniforms, vertical 9:16. ${kind} Stadium, supporters, flags and team crests. ${'Natural lighting and realistic anatomy. '.repeat(5)}`
       : category === 'video-prompts'
         ? `A 6-second camera movement for the reference image, vertical 9:16. ${kind}. ${'Maintain the original realistic scene and consistent lighting. '.repeat(5)}`
         : `Vertical 9:16 Spanish source sample transition ${kind}. ${'Detailed editorial and statistical composition with timing and readable labels. '.repeat(18)}`,
   }));
-  const data = { version: 1, category, matchId, home: 'Alpha', away: 'Beta', competition: 'nations', kickoff: match(matchId).kickoff, prompts };
+  const data = { version: 2, category, matchId, home: 'Alpha', away: 'Beta', competition: 'nations', kickoff: match(matchId).kickoff, prompts };
   assert.equal(validateContent(data, category, matchId), true);
   return data;
 }

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "category": "motion-prompts",
   "matchId": "chelsea-vs-bournemouth-2026-10-10",
   "home": "Chelsea FC",
@@ -215,17 +215,17 @@
     "head-to-head",
     "synthesis"
   ],
-  "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+  "instructionVersion": "8c239c8d7b16e945c921448dd0a3b18a8547f4dce90d6056470803ba5e9e7c19",
   "author": {
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash"
   },
-  "generatedAt": "2026-10-09T06:51:27.163Z",
+  "generatedAt": "2026-10-09T23:37:14.724Z",
   "prompts": [
     {
       "n": 1,
       "kind": "form",
-      "title": "Recent Form — Wins, Draws and Losses",
+      "title": "Forma reciente: victorias, empates y derrotas",
       "presentations": [
         "editorial",
         "statistical"
@@ -240,12 +240,81 @@
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 frame, about 8 seconds, timed to the spoken beat. Reserve the lower quarter as a permanent subtitle band: charcoal #101412 scrim with warm white #edf0e6 Spanish captions, and no graphic element may enter that zone. Background is GoatLab charcoal #101412 with a faint slate #8ca6bf grain. Editorial variant — kinetic typography with rhythmic emphasis. Open on the Spanish word FORMA in a condensed heavy warm white face, centred just above the subtitle band. On each percussive beat one result token stamps in: VICTORIA in lime #c5ed74, EMPATE in warm white, DERROTA in slate #8ca6bf, each snapping with a two-frame overshoot and a thin lime underline. Tokens stack into two columns, Chelsea FC left and AFC Bournemouth right, separated by a vertical slate hairline. A lime halo pulse sweeps down the Chelsea column, then the Bournemouth column, syncing to the voice. No axes, no numerals, no invented match events. Camera drifts slowly upward. Transition into the statistical variant is a horizontal wipe from centre outward, then the columns fade. Statistical variant — grouped count bars. Chart type: grouped vertical bars, three per team ordered victorias, empates, derrotas, all standing on a shared zero baseline with one common scale covering both teams so the tallest bar tops the plotting area. Chelsea bars lime #c5ed74, Bournemouth bars slate #8ca6bf, with warm white value numerals resolved from {{home.wins}}, {{home.draws}}, {{home.losses}}, {{away.wins}}, {{away.draws}} and {{away.losses}}. Spanish axis title: Partidos · últimos encuentros; unit label partidos. Sample annotation sits under each team name as muestra: {{home.n}} and muestra: {{away.n}}, with provider credited as source Bzzoiro. A small badge compares the two and reads muestras no equivalentes only when they differ. Entry: bars grow from the baseline in staggered order, Chelsea first. Emphasis: the largest bar lifts its numeral with a lime glow while the others dim for a beat. Camera pushes from full frame to a five-sixths crop centred on the bars. Exit: bars retract to the baseline, the Spanish axis title holds briefly, then the frame dissolves to charcoal."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Carbon-grain background opens with Spanish kinetic title and safe subtitle zone."
+        },
+        {
+          "t0": 1.6,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Team names and outcome words enter with rhythmic stagger and lime-slate emphasis."
+        },
+        {
+          "t0": 3.4,
+          "t1": 6.4,
+          "action": "main",
+          "detail": "Grouped count bars compare wins, draws and losses on a shared zero baseline."
+        },
+        {
+          "t0": 6.4,
+          "t1": 7.6,
+          "action": "exit",
+          "detail": "Sample annotation holds, emphasis word glows, layout collapses upward."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine carbon grain with faint lime dust",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "FORMA",
+        "DERROTAS",
+        "MUESTRA"
+      ],
+      "prompt": "Vertical 9:16 editorial and statistical form scene for Chelsea FC vs AFC Bournemouth. Reserve the lower quarter for permanent yellow subtitles and keep hero content above the safe area. Editorial variant: kinetic typography with rhythmic emphasis. Warm white Spanish headline FORMA RECIENTE enters from left, then Chelsea FC and AFC Bournemouth pulse as blocks. The words GANAR, EMPATAR, PERDER snap in with lime and slate weight, timed to narration beats. No axes, no invented events. Statistical variant: grouped count bars over a shared zero baseline for each available recent sample. Three bar groups per team: victorias, empates, derrotas, using {{home.wins}}, {{home.draws}}, {{home.losses}}, {{away.wins}}, {{away.draws}}, {{away.losses}}; sample rows use {{home.n}} and {{away.n}} to identify unequal or equal samples. Bars share one count scale in partidos and labels are Spanish. Count-up motion and stagger bring bars from zero; lime highlights Chelsea counts, slate highlights Bournemouth counts, warm white value labels. Entry: carbon-grain background with subtle grid, wipe transition in. Main comparison: grouped bars align by outcome so direct reading is possible. Emphasis: the word DERROTAS glows briefly, and the sample annotation states source and sample size from catalog, never converting counts into rates. Camera: gentle push-in 1.0 to 0.9 with drift, tilt 0deg. Transition editorial to statistical dissolve; exit collapse. Beats: entry 0 to 1.6, build 1.6 to 3.4, main 3.4 to 6.4, exit 6.4 to 7.6. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, stagger 60, scale from 0.95. Keep one focal point: the grouped bar comparison after the kinetic title. Source and sample annotation remain attached to facts, resolved by renderer. Final frame holds Spanish summary label FORMA RECIENTE until collapse.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "stagger-reveal",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "stagger-reveal",
+        "porque": "énfasis del dato que pide la narración"
+      }
     },
     {
       "n": 2,
       "kind": "goals",
-      "title": "Goals For and Against — Paired Bars",
+      "title": "Goles a favor y en contra: cancha ilustrada",
       "presentations": [
         "editorial",
         "statistical"
@@ -258,12 +327,81 @@
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 frame, about 8 seconds, locked to the spoken line. The lower quarter is a permanent subtitle band with a charcoal #101412 scrim and warm white #edf0e6 Spanish captions; keep graphics out of it. Editorial variant — illustrative football pitch and ball path. A top-down pitch drawn in thin slate #8ca6bf lines on GoatLab charcoal #101412 fills the upper three quarters; the halfway line separates Chelsea FC on the left, accented in lime #c5ed74, from AFC Bournemouth on the right, accented in slate. Two generic flat monogram shields, no real badges, sit on the centre circle. A warm white ball travels a curved path from the left third toward the right goal trailing a lime ribbon; on each beat the ribbon thickens, then a second slate ribbon returns right to left. The ribbons converge into two opposing arrows that halt beneath the Spanish heading GOLES. No numerals, no axes, no invented match events. Camera is a slow orbit of about twenty degrees around the pitch centre. Transition into the statistical variant: the pitch lines retract into one horizontal rule that becomes the chart axis. Statistical variant — paired bars. Chart type: two paired vertical bars per team, one for Goles a favor and one for Goles en contra, grouped side by side on a shared zero baseline with one common scale so all four bars are directly comparable. Spanish unit label: goles · últimos encuentros. Values resolved from {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}. Favour bars use lime #c5ed74; against bars use slate #8ca6bf with a diagonal hatch so the pairing reads instantly. Team headers Chelsea FC and AFC Bournemouth in warm white above each pair. Beneath them the sample annotation in Spanish: muestra: {{home.n}} partidos and muestra: {{away.n}} partidos, with source credit Bzzoiro in small warm white type at the foot of the plotting area. Entry: the four bars rise from the baseline in one sweep while numerals count up. Emphasis: a lime outline pulses around the pair with the taller favour bar, dimming the opposite pair for a beat. Camera pushes to a five-sixths crop on the numerals, then pulls back. Exit: bars fold flat onto the baseline and the frame dissolves to charcoal."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Stylised pitch appears in 9:16, Spanish title enters over carbon grid."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.2,
+          "action": "build",
+          "detail": "Animated ball path traces attack and defensive zones without inventing events."
+        },
+        {
+          "t0": 3.2,
+          "t1": 6.6,
+          "action": "main",
+          "detail": "Paired horizontal bars compare goals for and against with shared scale and sample labels."
+        },
+        {
+          "t0": 6.6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars settle, source annotation remains, frame slides away."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "dark grid like tactical board with soft lime glow",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 45,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "tilt down",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "FAVOR",
+        "RECIBIDOS"
+      ],
+      "prompt": "Vertical 9:16 editorial and statistical goals scene for Chelsea FC vs AFC Bournemouth. Reserve the lower quarter for permanent yellow subtitles. Editorial variant: an illustrative football pitch with a moving ball path. The pitch sits in the upper half, drawn in charcoal, warm white lines and subtle lime pressure zones. Spanish title GOLES enters with a ball trail that curves from midfield toward both attacking thirds. The labels A FAVOR and RECIBIDOS breathe in with slate and lime while the narration speaks. No axes, no invented match events, only football context. Statistical variant: paired horizontal bars for both teams, using {{home.gf}}, {{home.ga}}, {{away.gf}}, {{away.ga}} on a shared goals scale. Sample rows use {{home.n}} and {{away.n}} to keep source and sample attached. Bars start at zero and grow with count-up motion; lime fills goals for, slate fills goals against, and warm white values sit at bar ends. Entry is a stripe sweep transition into the grid background. Main comparison: pairs align vertically so each team has two bars, favoring direct reading. Emphasis: the word GOLES pulses once, then FAVOR and RECIBIDOS stagger into place. Camera: tilt down with gentle parallax, tilt 1deg. Transition editorial to statistical wipe; exit slide. Beats: entry 0 to 1.5, build 1.5 to 3.2, main 3.2 to 6.6, exit 6.6 to 8.0. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, stagger 45, scale from 0.95. Keep one focal point: the paired bar comparison after the pitch animation. Spanish labels remain legible, source and sample annotation resolves from catalog, and no forecast is implied.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
     },
     {
       "n": 3,
       "kind": "clean-sheets",
-      "title": "Clean Sheets — Counts and Sample Sizes",
+      "title": "Arcos en cero: escudo defensivo",
       "presentations": [
         "editorial",
         "statistical"
@@ -274,12 +412,678 @@
         "home.n",
         "away.n"
       ],
-      "prompt": "Vertical 9:16 frame, about 7 seconds. Permanent lower-quarter subtitle band: charcoal #101412 scrim with warm white #edf0e6 Spanish captions; the design field is everything above it. Editorial variant — defensive energy and a stylised shield. A large flat shield outline in lime #c5ed74 sits centre-frame on GoatLab charcoal #101412, drawn as one continuous stroke that animates as if being forged: entering at the top edge, sweeping down the left flank, closing at the point. Inside the shield the Spanish word SÓLIDO breathes slowly in condensed warm white capitals. Two narrower shields flank it, left labelled Chelsea FC in lime, right labelled AFC Bournemouth in slate #8ca6bf. Slate energy streaks ricochet off the shield faces on each percussive beat and disperse into fine particles. No numerals, no axes, no invented saves or match events. Camera holds a locked frame, then tilts up slightly on the final beat. Transition into the statistical variant: the central shield splits vertically into two halves that slide apart, opening a clean charcoal panel for the chart. Statistical variant — counts only, never rates. Chart type: two vertical count columns on a shared zero baseline with one common scale, Spanish title Arcos en cero and unit label partidos. Left column lime #c5ed74 labelled Chelsea FC, right column slate #8ca6bf labelled AFC Bournemouth. Heights and numerals resolved from {{home.clean}} and {{away.clean}}. Directly beneath each column a sample annotation in Spanish: muestra: {{home.n}} partidos and muestra: {{away.n}} partidos, plus the small line recuento, no tasa so no viewer reads the bars as a rate. Source credit Bzzoiro appears in small warm white type at the foot of the plotting area. Entry: columns grow from the baseline in sequence, Chelsea first. Emphasis: a thin lime bracket frames the gap between the two column tops, drawing the eye to the difference without commentary, while both numerals hold steady. Camera settles into a slow push from full frame to a five-sixths crop. Exit: the bracket closes, both columns retract to the baseline, the two shield halves slide back together, and the frame fades to charcoal."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Carbon-glow background and stylised shield enter with Spanish defensive title."
+        },
+        {
+          "t0": 1.4,
+          "t1": 3,
+          "action": "build",
+          "detail": "Shield segments pulse with lime and slate defensive energy."
+        },
+        {
+          "t0": 3,
+          "t1": 6,
+          "action": "main",
+          "detail": "Clean sheet counts and sample sizes compare without converting counts into rates."
+        },
+        {
+          "t0": 6,
+          "t1": 7.4,
+          "action": "exit",
+          "detail": "Shield locks, emphasis word settles, frame shutters out."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft lime defensive glow behind carbon grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "DEFENSA",
+        "CERO"
+      ],
+      "prompt": "Vertical 9:16 editorial and statistical clean-sheets scene for Chelsea FC vs AFC Bournemouth. Reserve the lower quarter for permanent yellow subtitles. Editorial variant: defensive energy built around a stylised shield. The shield occupies the central upper area, split into two halves with Chelsea FC and AFC Bournemouth Spanish labels. Lime pulses along the left edge, slate along the right, while the words ARCOS, DEFENSA and CERO enter with restrained athletic motion. No axes, no invented saves and no match events. Statistical variant: compare clean sheet counts and sample sizes without converting counts into rates. Two large counters show {{home.clean}} and {{away.clean}} in partidos, with sample rows using {{home.n}} and {{away.n}}. A shared zero baseline sits beneath the counters, and warm white Spanish labels ARCOS EN CERO keep the unit clear. Count-up motion brings each counter from zero, then a lime underline locks the higher count only if the resolved values support it; otherwise the layout holds both counters equally. Entry is a wipe transition into a carbon-glow background. Main comparison: paired counters and sample rows stay visible together, so counts are never detached from source and sample. Emphasis: CERO glows once at the center of the shield, then DEFENSA settles under the title. Camera: orbit leve with minimal parallax, tilt 0deg. Transition editorial to statistical fade; exit shutter. Beats: entry 0 to 1.4, build 1.4 to 3.0, main 3.0 to 6.0, exit 6.0 to 7.4. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, stagger 50, scale from 0.95. One focal point remains: the shield-to-counter comparison. Source and sample annotation resolve from catalog, Spanish labels stay legible, and no predictive claim is made.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
     },
     {
       "n": 4,
+      "kind": "goals",
+      "title": "Goals For and Against — Pitch Path and Paired Bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.2,
+          "action": "entry",
+          "detail": "abstract pitch fades in, ball at centre"
+        },
+        {
+          "t0": 1.2,
+          "t1": 3,
+          "action": "build",
+          "detail": "first ball path toward Chelsea FC third, Spanish 'Goles a favor'"
+        },
+        {
+          "t0": 3,
+          "t1": 6,
+          "action": "main",
+          "detail": "dissolve to paired bars, grow and compare goals for and against"
+        },
+        {
+          "t0": 6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "collapse to lower quarter subtitle safe zone"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine charcoal grain with subtle pitch lines",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "goles",
+        "a favor",
+        "recibidos"
+      ],
+      "prompt": "Two-team goal contrast in 9:16. Editorial variant: an illustrative abstract football pitch drawn in slate #8ca6bf lines on charcoal #101412, warm white #edf0e6 markings. A lime #c5ed74 ball begins at centre circle, arcs toward the Chelsea FC attacking third, then a second ball arcs toward AFC Bournemouth's third. The ball path uses easing cubic-bezier(0.23,1,0.32,1), timed to narration beats. Spanish label 'Goles a favor' appears with the first path; 'Goles recibidos' with the second. Editorial mode has no axes or counts; it is motion and metaphor only. Statistical variant: dissolve to a grouped paired-bar chart comparing {{home.gf}} and {{home.ga}} for Chelsea FC against {{away.gf}} and {{away.ga}} for AFC Bournemouth, all in goles with shared zero baseline. Bars grow from baseline with spring damping 22, stiffness 180, mass 0.6, stagger 60ms, scaleFrom 0.95. Warm white axis labels, slate grid, lime highlight on the larger value of each pair. Spanish labels 'Chelsea FC' and 'AFC Bournemouth' on the horizontal axis; unit 'goles' annotated. Sample treatment: source is the fixture sample of {{home.n}} and {{away.n}} matches, provider Bzzoiro, noted in small warm white type at chart foot. Camera push-in 1.0 to 0.9 with slight drift, tilt 1deg. transition in: stripe sweep; editorial-to-statistical: dissolve; out: collapse. Beats: entry 0.0-1.2 ball leaves centre; build 1.2-3.0 second path; main 3.0-6.0 bars grow and compare; exit 6.0-8.0 collapse to lower quarter subtitle safe zone. Emphasis words: 'goles', 'a favor', 'recibidos'. Lower quarter reserved for permanent yellow subtitles; safeArea left64 right64 top120 bottom480.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 5,
+      "kind": "clean-sheets",
+      "title": "Clean Sheets — Shield Pulse and Count Comparison",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "two shield silhouettes fade in"
+        },
+        {
+          "t0": 1.5,
+          "t1": 3,
+          "action": "build",
+          "detail": "lime energy rings pulse on each shield"
+        },
+        {
+          "t0": 3,
+          "t1": 6,
+          "action": "main",
+          "detail": "count columns grow, sample annotation appears"
+        },
+        {
+          "t0": 6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "slide out to lower quarter subtitle safe zone"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "soft carbon grid with faint defensive arcs",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 40,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "wipe",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "arcos en cero",
+        "defensa",
+        "muestra"
+      ],
+      "prompt": "Defensive resilience in 9:16. Editorial variant: a stylised shield silhouette drawn in slate #8ca6bf with warm white #edf0e6 inner rim on charcoal #101412 background, carbon-grid texture. Two shields, one labelled 'Chelsea FC', one 'AFC Bournemouth', pulse with lime #c5ed74 energy rings when the narration highlights a clean sheet. No numeric axes appear; motion conveys defensive focus. Camera tilts down 2deg max and orbits lightly. Statistical variant: dissolve to two vertical count columns, one per team, showing {{home.clean}} and {{away.clean}} clean sheets. Same unit: partidos. Shared zero baseline; bars grow from zero with spring damping 22, stiffness 180, mass 0.6, stagger 40ms, scaleFrom 0.95. Sample annotation uses {{home.n}} and {{away.n}} matches, provider Bzzoiro, labelled 'muestra' in Spanish warm white at chart foot. Slate grid lines, lime highlight on the taller bar, warm white counts. No rates, no conversion to fractions or averages. Camera push-in 1.0 to 0.9 plus drift, tilt 1deg. transition in: wipe; editorial-to-statistical: wipe; out: slide. Beats: entry 0.0-1.5 shields appear; build 1.5-3.0 energy rings; main 3.0-6.0 bars grow and sample text; exit 6.0-8.0 slide out to lower quarter subtitle safe zone. Emphasis words: 'arcos en cero', 'defensa', 'muestra'. Lower quarter reserved for permanent yellow subtitles; safeArea left64 right64 top120 bottom480. Spanish labels throughout: 'Chelsea FC', 'AFC Bournemouth', 'arcos en cero', 'partidos'.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 6,
       "kind": "head-to-head",
-      "title": "Head-to-Head — Historical Meeting Split",
+      "title": "Head-to-Head — Duel and Historical Counts",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "duel figures fade in facing each other"
+        },
+        {
+          "t0": 1.5,
+          "t1": 3,
+          "action": "build",
+          "detail": "lime sparks and Spanish labels appear"
+        },
+        {
+          "t0": 3,
+          "t1": 6,
+          "action": "main",
+          "detail": "historical counts resolve with total sample"
+        },
+        {
+          "t0": 6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "shutter out to lower quarter subtitle safe zone"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft carbon glow with radial duel light",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "cruces",
+        "victorias",
+        "historial"
+      ],
+      "prompt": "Historical duel in 9:16. Editorial variant: two abstract fighter silhouettes, Chelsea FC in warm white #edf0e6 and AFC Bournemouth in slate #8ca6bf, face each other on charcoal #101412 with carbon-glow background. Lime #c5ed74 sparks at the centre as the narration builds tension. Slow orbit camera around the centre point, tilt 2deg. Spanish labels 'Chelsea FC' and 'AFC Bournemouth' float beside each figure. No scores, no axes, no invented events. Statistical variant: fade to a three-count comparison: {{h2h.homeWins}} Chelsea FC wins, {{h2h.awayWins}} AFC Bournemouth wins, and {{h2h.draws}} draws, all in partidos, with total sample of {{h2h.total}} head-to-head matches. Same unit throughout. Bars use shared zero baseline, spring damping 22, stiffness 180, mass 0.6, stagger 70ms, scaleFrom 0.95. Warm white counts, slate dividers, lime highlight on the largest count. Sample treatment: source is the historical head-to-head record, provider Bzzoiro, annotated in small type as 'historial' and 'muestra' in Spanish. No forecast language. Camera push-in 1.0 to 0.9 plus drift, tilt 1deg. transition in: stripe sweep; editorial-to-statistical: fade; out: shutter. Beats: entry 0.0-1.5 duel figures appear; build 1.5-3.0 sparks and labels; main 3.0-6.0 counts resolve with sample; exit 6.0-8.0 shutter out to lower quarter subtitle safe zone. Emphasis words: 'cruces', 'victorias', 'historial'. Lower quarter reserved for permanent yellow subtitles; safeArea left64 right64 top120 bottom480.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 7,
+      "kind": "goals",
+      "title": "Goals For and Against: Paired Bars on the Pitch",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 0.9,
+          "action": "entry",
+          "detail": "Charcoal pitch fades in vertical 9:16; lime ball path enters as Spanish team names slide."
+        },
+        {
+          "t0": 0.9,
+          "t1": 3.2,
+          "action": "build",
+          "detail": "Pitch folds at centre; editorial rhythm hits GOLES; transition seam prepares statistical reveal."
+        },
+        {
+          "t0": 3.2,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Paired count bars grow for goals for and against with placeholder values and source/sample note."
+        },
+        {
+          "t0": 6.8,
+          "t1": 8.2,
+          "action": "exit",
+          "detail": "Bars settle, emphasis DIFERENCIA pulses, lower-quarter subtitles remain yellow."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft pitch mow lines and carbon fibre grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "DIFERENCIA"
+      ],
+      "prompt": "Vertical 9:16 scene in GoatLab charcoal #101412. Editorial variant: a stylised football pitch appears in perspective, drawn with warm white lines, lime traces and slate shadows. A lime ball path travels across the pitch, pausing at a central divide; Chelsea FC and AFC Bournemouth names enter in Spanish as bold kinetic type. Motion is rhythmic, with GOLES flashing on the beat and a gentle camera push-in; there are no axes, no sample claims and no invented match events. The pitch folds into a vertical seam, and a transition dissolves to the statistical view. Statistical variant: paired horizontal count bars compare goals for and against for each team on a common zero baseline and the same unit, goles. Spanish labels read Chelsea FC · goles a favor, Chelsea FC · goles recibidos, AFC Bournemouth · goles a favor and AFC Bournemouth · goles recibidos. Every quantitative value is rendered only through {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}, with units resolved by the renderer. Bars grow from zero with countUp, staggered 60ms, lime for goals for and slate for goals against. A compact source/sample annotation remains attached beneath the chart, naming provider and sampleSize from the catalog; it is not a forecast. Emphasis words GOLES and DIFERENCIA anchor the narration. Typography uses condensed sans for values, slate microcopy for source, and warm white for team names. Camera push-in 1.0 to 0.9 plus drift, tilt 1deg, preserving one focal point. The lower quarter is reserved for permanent yellow subtitles. Transition in wipe, editorial-to-statistical dissolve, exit collapse. End on a clean slate-lime split with the Spanish team names still legible.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 8,
+      "kind": "clean-sheets",
+      "title": "Clean Sheets: Shield Wall vs Count Bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1,
+          "action": "entry",
+          "detail": "Shield facets assemble in charcoal and lime; Spanish labels appear as defensive blocks."
+        },
+        {
+          "t0": 1,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Split badge forms; transition wipes to statistical view with sample chips prepared."
+        },
+        {
+          "t0": 3.4,
+          "t1": 7,
+          "action": "main",
+          "detail": "Two clean-sheet count bars lock to shared baseline; sample counts stay attached."
+        },
+        {
+          "t0": 7,
+          "t1": 8.6,
+          "action": "exit",
+          "detail": "Emphasis ARCOS and MURO pulse; lower-quarter subtitles remain permanent."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "fine grid and brushed shield metal",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": false,
+        "staggerMs": 45,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "MURO"
+      ],
+      "prompt": "In 9:16 vertical, build a defensive montage in GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf. Editorial variant: a stylised shield assembles from charcoal facets, warm white edge light and lime inner pulse. Chelsea FC and AFC Bournemouth names appear in Spanish as two blocks of defensive energy, with slate motion trails suggesting clearing movements, but no claims of real saves or events. The shield becomes a split badge, then a transition wipes to the statistical view. Statistical variant: two count bars compare clean sheets, not rates. Left bar is labelled Spanish Chelsea FC · arcos en cero and uses {{home.clean}}; right bar is labelled AFC Bournemouth · arcos en cero and uses {{away.clean}}. Below, sample chips read muestra with {{home.n}} and {{away.n}} partidos, same unit. Shared zero baseline, bars scale identically, and counts stay counts. Source annotation from the catalog stays attached, with provider and sampleSize visible as microcopy, not as a forecast. CountUp is off so integers lock crisply; staggerMs is 45. Emphasis words ARCOS and MURO anchor the narration. Camera fixed plus parallax, tilt 0deg, with one focal point on the taller bar. The lower quarter is reserved for permanent yellow subtitles. Transition in stripe sweep, editorial-to-statistical wipe, exit slide. End on the shield silhouette behind the Spanish labels, values still legible and the source line restrained.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 9,
+      "kind": "synthesis",
+      "title": "Synthesis: Attack Volume and Defensive Tension",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga",
+        "away.clean"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.1,
+          "action": "entry",
+          "detail": "Team reveals enter as two charcoal panels with lime and slate accents in 9:16."
+        },
+        {
+          "t0": 1.1,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Panels slide apart; Spanish narrative labels and transition prepare compatible facts."
+        },
+        {
+          "t0": 3.6,
+          "t1": 7.4,
+          "action": "main",
+          "detail": "Statistical comparison shows goals for, goals against and one clean-sheet count with source/sample."
+        },
+        {
+          "t0": 7.4,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Emphasis TENSIÓN and EQUILIBRIO pulse; lower-quarter subtitles remain yellow."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "deep grain with subtle lime flare",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "TENSIÓN",
+        "EQUILIBRIO"
+      ],
+      "prompt": "Vertical 9:16 synthesis scene using GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf. Editorial variant: team reveals enter as two vertical panels, Chelsea FC from the left and AFC Bournemouth from the right, each with Spanish type and a restrained lime flare. Slate motion bands suggest pressure and recovery, but they do not invent match events, axes or sample claims. The panels slide apart, and a transition fades into the statistical view. Statistical variant: select compatible available facts to summarise one grounded tension. A paired comparison shows goals for and against for both teams on a shared unit goles, using {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}. A separate defensive chip shows AFC Bournemouth · arcos en cero with {{away.clean}}, kept in partidos and not converted into a rate. Spanish labels remain explicit: Chelsea FC, AFC Bournemouth, goles a favor, goles recibidos, arcos en cero. Every value is resolved by the renderer; no published model estimate is used because published is false, and there are no predictive claims. A source/sample line stays attached with provider and sampleSize from the catalog. CountUp is true with staggerMs 70, spring damping 22, stiffness 180, mass 0.6. Emphasis words TENSIÓN and EQUILIBRIO anchor the narration. Camera push-in 1.0 to 0.9 plus drift, tilt 2deg max, one focal point on the tension between attack and defence. The lower quarter is reserved for permanent yellow subtitles. Transition in stripe sweep, editorial-to-statistical fade, exit shutter. End on a clean split with Spanish labels and source microcopy still readable.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 10,
+      "kind": "form",
+      "title": "Forma reciente: escalera rítmica",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "home.wins",
+        "home.draws",
+        "home.losses",
+        "away.n",
+        "away.wins",
+        "away.draws",
+        "away.losses"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Staircase of Spanish kinetic type rises, crests enter as silhouettes."
+        },
+        {
+          "t0": 1.5,
+          "t1": 4,
+          "action": "build",
+          "detail": "Grouped bars grow, sample badges slide in, source note appears."
+        },
+        {
+          "t0": 4,
+          "t1": 7.5,
+          "action": "main",
+          "detail": "Comparison holds, emphasis on victories and rhythm."
+        },
+        {
+          "t0": 7.5,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Bars collapse into lower quarter safe zone."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine charcoal grain, low contrast",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "FORMA",
+        "VICTORIAS"
+      ],
+      "prompt": "Vertical 9:16 editorial presentation: a kinetic typography staircase rises from the lower third, Spanish words 'FORMA' and 'RITMO' snapping upward with rhythmic emphasis; warm white #edf0e6 type on charcoal #101412, lime #c5ed74 accents. Chelsea FC and AFC Bournemouth crests enter as silhouettes, no axes or numbers. The statistical presentation dissolves in as grouped count bars: shared zero baseline, two clusters, Spanish labels 'Victorias', 'Empates', 'Derrotas'. Reference values: Chelsea FC {{home.wins}} {{home.draws}} {{home.losses}}; AFC Bournemouth {{away.wins}} {{away.draws}} {{away.losses}}. Sample sizes {{home.n}} and {{away.n}} remain attached as sample badges, with source Bzzoiro noted in small slate text. Bars animate with spring scaling from 0.95, stagger 60ms, countUp true. The lower quarter stays clear for permanent yellow subtitles. Beats: entry 0.0-1.5 staircase rise; build 1.5-4.0 bars grow and sample badges slide in; main 4.0-7.5 comparison holds with emphasis on 'VICTORIAS' for both teams; exit 7.5-9.0 collapse. Camera push-in 1.0 to 0.9 plus drift, tilt 0deg. Transition in wipe; editorial-to-statistical dissolve; out collapse. Editorial variant is kinetic typography and rhythmic emphasis; statistical variant is grouped count bars. Source/sample treatment: Bzzoiro lastMatches, sample of {{home.n}} for home and {{away.n}} for away. No predictive claims, no invented values. The 9:16 frame uses a single focal point: the tallest bar cluster. Spanish labels remain legible, hierarchy is professional, and the transition between editorial and statistical is smooth.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "stagger-reveal",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "stagger-reveal",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 11,
+      "kind": "head-to-head",
+      "title": "Duelo histórico: cuerda tensa",
       "presentations": [
         "editorial",
         "statistical"
@@ -287,10 +1091,417 @@
       "factIds": [
         "h2h.total",
         "h2h.homeWins",
-        "h2h.draws",
-        "h2h.awayWins"
+        "h2h.awayWins",
+        "h2h.draws"
       ],
-      "prompt": "Vertical 9:16 frame, about 9 seconds. Reserve the lower quarter for the permanent Spanish subtitle band, charcoal #101412 scrim beneath warm white #edf0e6 captions. Editorial variant — both teams presented as a visual duel. The frame splits on a slightly tilted diagonal: Chelsea FC territory left in deep charcoal with a lime #c5ed74 edge light, AFC Bournemouth territory right with a slate #8ca6bf edge light. Two flat monogram blocks advance from opposite edges toward the centre line, each leaving a motion trail of thin vertical bars behind it — purely graphic rhythm, never a data display. Spanish headings CHELSEA FC and AFC BOURNEMOUTH scale up as the blocks close in. On the final beat the blocks collide at centre and the impact flashes a lime-to-slate gradient across the seam. No numerals, no axes, no invented goals or results. Camera is a slow push toward the seam with a subtle handheld sway. Transition into the statistical variant: the impact flash wipes downward and resolves into a single bar. Statistical variant — one horizontal stacked bar. Chart type: a single stacked bar representing the whole history of meetings, split into three segments read left to right: Victorias Chelsea FC in lime #c5ed74, Empates in warm white, Victorias AFC Bournemouth in slate #8ca6bf, all sharing one scale that runs from zero to {{h2h.total}} partidos so the segments sum to the full bar. Spanish unit label: partidos. Segment values resolved from {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}}. A total marker above the bar reads Cruces previos with the value from {{h2h.total}}, and the sample annotation muestra: {{h2h.total}} cruces sits beneath it; source credit Bzzoiro in small warm white type at the foot. A persistent Spanish footnote reads historial, no pronóstico so the history is never read as a forecast. Entry: the bar draws from the left edge, segments filling in order while their numerals count up. Emphasis: a lime outline closes around the largest segment and the remaining segments drop to subdued tone. Camera pulls back to centre the full bar. Exit: the three segments separate slightly, fade in sequence, and the frame dissolves to charcoal."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Tug-of-war rope tightens, crests pull from opposite sides."
+        },
+        {
+          "t0": 1.8,
+          "t1": 4.5,
+          "action": "build",
+          "detail": "Crests pull, Spanish labels appear, bars begin to grow."
+        },
+        {
+          "t0": 4.5,
+          "t1": 7.8,
+          "action": "main",
+          "detail": "Historical win/draw bars hold, emphasis on duel tension."
+        },
+        {
+          "t0": 7.8,
+          "t1": 9.5,
+          "action": "exit",
+          "detail": "Shutter close on rope centre and sample badge."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft charcoal glow, radial vignette",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 45,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "DUELO",
+        "HISTORIA"
+      ],
+      "prompt": "Vertical 9:16 editorial presentation: a visual duel between Chelsea FC and AFC Bournemouth. A tug-of-war rope stretches across the frame, crests pull from opposite sides, Spanish words 'DUELO' and 'HISTORIA' flash with narrative emphasis. Charcoal #101412 background, warm white #edf0e6 rope, lime #c5ed74 and slate #8ca6bf team accents. No axes or numbers. Statistical presentation wipes in: historical win/draw counts as three horizontal bars, shared scale, Spanish labels 'Victorias Chelsea', 'Empates', 'Victorias Bournemouth'. Values: {{h2h.homeWins}} {{h2h.awayWins}} {{h2h.draws}}, total sample {{h2h.total}} shown as a sample badge. Source Bzzoiro, historical data is not a forecast. Lower quarter reserved for permanent yellow subtitles. Beats: entry 0.0-1.8 rope tightens; build 1.8-4.5 crests pull, bars begin to grow; main 4.5-7.8 comparison holds with emphasis on 'VICTORIAS' and 'EMPATES'; exit 7.8-9.5 shutter close. Camera orbit leve with tilt 1deg. Transition in stripe sweep; editorial-to-statistical wipe; out shutter. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, stagger 45ms, scaleFrom 0.95. Editorial variant is a visual duel; statistical variant is historical win/draw count bars. Source/sample: Bzzoiro h2h history with sample {{h2h.total}}. Spanish labels remain clear, one focal point at the rope centre, no predicted scores, no invented events. The 9:16 frame keeps the lower quarter free for subtitles and uses a professional hierarchy: headline, duel, then bars.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 12,
+      "kind": "clean-sheets",
+      "title": "Muros: escudos que resisten",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "home.clean",
+        "away.n",
+        "away.clean"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Stylised shield forms, Spanish word 'MURO' pulses."
+        },
+        {
+          "t0": 1.6,
+          "t1": 4.2,
+          "action": "build",
+          "detail": "Cracks appear then mend, bars start to rise with sample badges."
+        },
+        {
+          "t0": 4.2,
+          "t1": 7.6,
+          "action": "main",
+          "detail": "Clean sheet counts hold, emphasis on shield centre."
+        },
+        {
+          "t0": 7.6,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Slide away into subtitle safe zone."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "subtle charcoal grid, low opacity",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "fade",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "MURO",
+        "ARCOS"
+      ],
+      "prompt": "Vertical 9:16 editorial presentation: a stylised shield with crack-and-mend motion. Spanish word 'MURO' pulses as Chelsea FC and AFC Bournemouth shields absorb shots; lime #c5ed74 shield rim, slate #8ca6bf cracks, warm white #edf0e6 light. No axes, no numbers. Statistical presentation fades in: paired count bars for clean sheets, shared zero baseline, Spanish labels 'Arcos en cero Chelsea' and 'Arcos en cero Bournemouth'. Values: {{home.clean}} and {{away.clean}}, with sample sizes {{home.n}} and {{away.n}} attached as sample badges. Source Bzzoiro, lastMatches. Do not convert counts into rates. Lower quarter reserved for permanent yellow subtitles. Beats: entry 0.0-1.6 shield forms; build 1.6-4.2 cracks appear then mend, bars start to rise; main 4.2-7.6 comparison holds with emphasis on 'MURO' and 'ARCOS'; exit 7.6-9.0 slide away. Camera fixed plus parallax, tilt 0deg. Transition in wipe; editorial-to-statistical fade; out slide. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, stagger 70ms, scaleFrom 0.95. Editorial variant uses defensive energy and stylised shield; statistical variant uses paired count bars. Source/sample treatment: Bzzoiro, sample {{home.n}} and {{away.n}}, source noted in slate captions. Spanish labels remain legible, one focal point at the shield centre, no invented match events, no predictive claims. The 9:16 frame keeps hierarchy: editorial shield first, then statistical bars, all above the subtitle safe zone.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 13,
+      "kind": "clean-sheets",
+      "title": "Defensive Lock — Clean Sheets Count",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "home.n",
+        "away.clean",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Shield form wipes up from lower quarter; Spanish headline ARCOS EN CERO snaps in letter by letter."
+        },
+        {
+          "t0": 1.4,
+          "t1": 3.2,
+          "action": "build",
+          "detail": "Slate hatching parallaxes across shield face; subtitle SIN GOLES EN CONTRA slides under."
+        },
+        {
+          "t0": 3.2,
+          "t1": 6,
+          "action": "main",
+          "detail": "Shield pulse on FIRMEZA, then dissolve to paired count bars with count-up on both team values."
+        },
+        {
+          "t0": 6,
+          "t1": 7.4,
+          "action": "exit",
+          "detail": "Bars and shield collapse into a single lime line before full fade."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine defensive hatching",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "SIN GOLES",
+        "FIRMEZA",
+        "PARTIDOS"
+      ],
+      "prompt": "Vertical 9:16 frame opens on charcoal #101412 carbon-grain. Editorial variant 'Muro Firme': a stylised shield outline in lime #c5ed74 rises from the lower quarter with rhythmic defensive energy, its surface a slow parallax of slate #8ca6bf hatching. Spanish headline ARCOS EN CERO in warm white #edf0e6 kinetic type, letters snapping in with 60ms stagger, each beat a soft impact as the shield locks. No axes, no sample claims, no invented saves — pure defensive mood built from words and geometry. Camera pushes in 1.0 to 0.9 with slight drift, tilt 1deg, spring damping 22 stiffness 180 mass 0.6. Entry beat wipes the shield in; build beat adds the Spanish subtitle SIN GOLES EN CONTRA; main beat holds the shield steady with a lime pulse on FIRMEZA; exit collapses the shield upward into a thin line. Transition to statistical variant: dissolve over a third of a second. Statistical variant: paired count bars for both teams, shared zero baseline, same vertical scale, header ARCO EN CERO · ÚLTIMOS PARTIDOS, axis label 'partidos' in Spanish, counts animate via count-up. Chelsea FC value {{home.clean}} of sample {{home.n}}; AFC Bournemouth value {{away.clean}} of sample {{away.n}}. Source annotation 'Bzzoiro · fixtures' sits in slate #8ca6bf beneath the axis in small caps. Counts stay counts, never converted to rates. Camera fixed with parallax during the statistical beat, tilt 0deg. Exit: shutter. Editorial and statistical blocks alternate where narration allows; otherwise a fully creative montage carries the scene.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 14,
+      "kind": "head-to-head",
+      "title": "Split Frame — Historical Head-to-Head",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Frame splits along lime seam; both halves stripe-sweep in from the outer edges."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.3,
+          "action": "build",
+          "detail": "Spanish team names slide toward the seam; pulse tightens the divide."
+        },
+        {
+          "t0": 3.3,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Duel holds on DUELO, then dissolve to segmented historical bar with count-up."
+        },
+        {
+          "t0": 6.5,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bar segments collapse to centre and fade against carbon."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft rim glow along the split",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1.5deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "DUELO",
+        "HISTÓRICO",
+        "EMPATES"
+      ],
+      "prompt": "9:16 vertical composition. Editorial variant 'Duelo Dividido': the frame splits along a lime #c5ed74 seam, left half slate #8ca6bf, right half warm white #edf0e6, both over charcoal #101412 carbon-glow. Two abstract crest-less silhouettes advance toward the seam with opposing camera drift, Spanish titles CHELSEA FC and AFC BOURNEMOUTH sliding in from the outer edges in kinetic type, 60ms stagger. No historical counts appear here, no claims, no prediction — only mood. Beats: entry flips both halves in via stripe sweep; build tightens the seam with a pulse; main holds the duel with emphasis word DUELO; exit snaps both halves to black. Camera push-in 1.0 to 0.9 plus a 1.5deg tilt, spring damping 22 stiffness 180 mass 0.6. Transition to the statistical variant: wipe. Statistical variant: a single horizontal bar spanning the width, representing all {{h2h.total}} historical meetings, annotated with source 'Bzzoiro · fixtures' and sample of {{h2h.total}} matches under the Spanish word 'partidos'. Segments: Chelsea FC wins {{h2h.homeWins}}, draws {{h2h.draws}}, AFC Bournemouth wins {{h2h.awayWins}} — same unit, same scale, zero baseline at the left edge, the three segments summing to the full bar. Spanish labels beneath each segment: CHELSEA FC, EMPATES, AFC BOURNEMOUTH; legend in slate #8ca6bf. A footnote reads 'Datos históricos' in warm white. A slow count-up reveals each segment; emphasis word HISTÓRICO. Camera fixed with parallax, tilt 0deg. Exit: the bar collapses toward the centre. Editorial and statistical blocks alternate in the planner; if narration omits head-to-head, the statistical variant is dropped and a fully creative montage remains.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 15,
+      "kind": "synthesis",
+      "title": "Two Stories — Goals For and Against Tension",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "home.n",
+        "away.gf",
+        "away.ga",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Two vertical team panels stripe in from left and right over carbon grid."
+        },
+        {
+          "t0": 1.6,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Spanish words ATAQUE and EQUILIBRIO cross toward centre with rhythmic emphasis."
+        },
+        {
+          "t0": 3.4,
+          "t1": 6.6,
+          "action": "main",
+          "detail": "Panels hold on TENSIÓN, then dissolve to mirrored paired bars with count-up."
+        },
+        {
+          "t0": 6.6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars slide upward as panels fade to black."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "faint pitch-style grid",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 55,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "ATAQUE",
+        "SOLIDEZ",
+        "TENSIÓN"
+      ],
+      "prompt": "9:16 vertical. Editorial variant 'Dos Historias': two team reveals unfold as vertical panels, Chelsea FC left in warm white #edf0e6, AFC Bournemouth right in slate #8ca6bf, over charcoal #101412 carbon-grid. Kinetic Spanish words ATAQUE and EQUILIBRIO cross in opposite directions with rhythmic emphasis, 55ms stagger. No axes, no counts, no expected results — pure narrative mood. Beats: entry stripes the panels in; build slides the two Spanish words toward centre; main holds the tension with emphasis word TENSIÓN; exit collapses both panels inward. Camera orbits slowly with push-in 1.0 to 0.9, tilt 1deg, spring damping 22 stiffness 180 mass 0.6. Transition to the statistical variant: dissolve. Statistical variant: mirrored paired bars on a shared zero baseline, four bars total — Chelsea FC goals for {{home.gf}} and goals against {{home.ga}} over sample {{home.n}}; AFC Bournemouth goals for {{away.gf}} and goals against {{away.ga}} over sample {{away.n}}. Unit 'goles' in Spanish on the axis; teams labelled in Spanish CHELSEA FC and AFC BOURNEMOUTH. Colour coding: goals for in lime #c5ed74, goals against in slate #8ca6bf; counts animate via count-up, and each team's source and sample annotation 'Bzzoiro · fixtures' sits beside its name. The comparison stays count-to-count, never converted into rates, and no projections are drawn. Emphasis words ATAQUE and SOLIDEZ. Camera fixed with parallax, tilt 0deg. Exit: the whole chart slides upward. The planner alternates the editorial and statistical blocks where narration supports them; otherwise a fully creative montage carries the scene.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
     }
   ]
 }

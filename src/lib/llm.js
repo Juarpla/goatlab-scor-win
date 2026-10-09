@@ -56,11 +56,11 @@ export function resolveChain(env = runtimeEnv(), logger = console, { orderVar } 
     return [{ ...provider, id, model: env[`${id}_MODEL`]?.trim() || provider.defaultModel }];
   });
 }
-/** MiMo rechaza temperature y reasoning_effort (HTTP 400). El resto pide temperature 0 y deja el esfuerzo en el default del proveedor. */
-function requestExtras(model) {
+/** MiMo rechaza temperature y reasoning_effort (HTTP 400). El resto pide temperature 0 y deja el esfuerzo en el default del proveedor, salvo reasoningEffort explícito (solo modelos que lo acepten, ej. deepseek). */
+function requestExtras(model, reasoningEffort = null) {
   const name = String(model ?? '').toLowerCase();
   if (name.startsWith('mimo-')) return {};
-  return { temperature: 0 };
+  return { temperature: 0, ...(reasoningEffort ? { reasoning_effort: reasoningEffort } : {}) };
 }
 function textFromContent(content) {
   if (typeof content === 'string') return content.trim();
@@ -81,13 +81,13 @@ function textFromMessage(message) {
   }
   return '';
 }
-export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
+export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens, reasoningEffort = null, sessionId = crypto.randomUUID() } = {}) {
   let res;
   try {
     res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
       method: 'POST', signal: AbortSignal.timeout(timeoutMs),
       headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
-      body: JSON.stringify({ model: provider.model, ...requestExtras(provider.model), messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
+      body: JSON.stringify({ model: provider.model, ...requestExtras(provider.model, reasoningEffort), messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
     });
   } catch (error) {
     throw new LlmTransportError(error?.message ?? 'Error de red', { provider: provider.id });

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "category": "motion-prompts",
   "matchId": "rayo-vallecano-vs-athletic-club-2026-10-10",
   "home": "Rayo Vallecano de Madrid",
@@ -215,71 +215,191 @@
     "head-to-head",
     "synthesis"
   ],
-  "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+  "instructionVersion": "aaf6b6084dd7b855eef3467590f494a0de0ee2c6a071ccae404be9c54f9f870f",
   "author": {
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash"
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "mimo-v2.6-flash"
   },
-  "generatedAt": "2026-10-07T06:45:10.656Z",
+  "generatedAt": "2026-10-09T21:25:22.068Z",
   "prompts": [
     {
       "n": 1,
       "kind": "form",
-      "title": "Recent form: wins, draws and losses",
+      "title": "Kinetic form: récord de los últimos partidos",
       "presentations": [
         "editorial",
         "statistical"
       ],
       "factIds": [
         "home.n",
+        "away.n",
         "home.wins",
         "home.draws",
         "home.losses",
-        "away.n",
         "away.wins",
         "away.draws",
         "away.losses"
       ],
-      "prompt": "Vertical 9:16. Editorial variant first, prioritised: GoatLab charcoal #101412 field, split into two vertical columns for Rayo Vallecano de Madrid and Athletic Club. Kinetic typography uses warm white #edf0e6 for main Spanish words 'Victorias', 'Empates' and 'Derrotas', with lime #c5ed74 for Rayo accents and slate #8ca6bf for Athletic accents. Words slide in with elastic easing and pulse on rhythmic beats; no statistical axes, no sample claims and no invented match events. Lower quarter is reserved for permanent yellow subtitles. Camera is a slow push-in with micro-parallax between columns. Main editorial emphasis is the alternating rhythm of the three Spanish labels. Transition: whip-pan from the Rayo column to the Athletic column. Exit: typography compresses into one horizontal warm white line. Statistical variant follows: grouped count bars in vertical 9:16, three Spanish groups labelled 'Victorias', 'Empates' and 'Derrotas'. Each group has two bars, Rayo in lime #c5ed74 and Athletic in slate #8ca6bf, on a shared zero baseline with a common count scale in partidos. Values are rendered from {{home.wins}}, {{home.draws}}, {{home.losses}}, {{away.wins}}, {{away.draws}} and {{away.losses}}. Entry animation grows bars upward from the baseline. Main comparison is the paired grouped bars, with a soft warm white glow on the leading bar per group. Sample annotations sit under each team label as Spanish 'Muestra Rayo {{home.n}}' and 'Muestra Athletic {{away.n}}'. A source/sample line reads 'Fuente: Bzzoiro / muestra'. No rates are shown. Camera locks off with slight vertical drift. Transition: cross-dissolve from editorial to statistical. Exit: bars settle, source/sample line holds, then fades with the permanent yellow subtitles intact in the lower quarter."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.3,
+          "action": "entry",
+          "detail": "Editorial kinetic typography: Spanish team names slam in from opposite edges with lime accent slabs"
+        },
+        {
+          "t0": 1.3,
+          "t1": 3,
+          "action": "build",
+          "detail": "Wipe transition reveals grouped count bars standing up from the shared zero baseline"
+        },
+        {
+          "t0": 3,
+          "t1": 6.4,
+          "action": "main",
+          "detail": "Values count up in sequence, emphasis on Athletic's zero in derrotas versus Rayo's losses"
+        },
+        {
+          "t0": 6.4,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars and labels collapse toward the focal centre while subtitles hold"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine carbon grain with subtle vignette",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "DERROTAS",
+        "EMPATES"
+      ],
+      "prompt": "Vertical 9:16 frame on GoatLab charcoal #101412 with carbon-grain texture. This entry alternates an editorial kinetic-typography opening with a statistical grouped-count bar chart. Editorial stage: the Spanish team names RAYO VALLECANO and ATHLETIC CLUB enter from left and right in warm white #edf0e6 display type, rhythmic emphasis landing on VICTORIAS, EMPATES and DERROTAS with lime #c5ed74 accent slabs, then a wipe transition hands off to the statistical stage. Statistical stage: grouped count bars share one zero baseline and one common count scale from zero to {{home.n}} partidos, arranged as six columns in two labelled groups — Rayo Vallecano de Madrid and Athletic Club — with victorias, empates and derrotas as Spanish column labels, units in partidos, Rayo bars in slate #8ca6bf and Athletic bars in lime #c5ed74. A source/sample annotation stays pinned just above the subtitle band: fuente Bzzoiro, muestra de {{home.n}} y {{away.n}} partidos, never truncated. Beats run entry, build, main, exit across eight seconds. In the main comparison the values {{home.wins}}, {{home.draws}}, {{home.losses}}, {{away.wins}}, {{away.draws}} and {{away.losses}} rise in sequence, highlighting the honest tension between Athletic's zero defeats and Rayo's record — history only, never a forecast. One focal point: the paired groups. Camera push-in 1.0 to 0.9 with slight drift, tilt 0deg. Easing enter ease-out, curve cubic-bezier(0.23,1,0.32,1), exit ease-out. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 60, scaleFrom 0.95. Transition chain: stripe sweep in, wipe editorial-to-statistical, collapse out. The lower quarter stays reserved for permanent yellow subtitles, and all Spanish labels keep full legibility.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "stagger-reveal",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "stagger-reveal",
+        "porque": "énfasis del dato que pide la narración"
+      }
     },
     {
       "n": 2,
       "kind": "goals",
-      "title": "Goals for and against: paired bars on pitch",
+      "title": "Pitch and paired bars: goles a favor y recibidos",
       "presentations": [
         "editorial",
         "statistical"
       ],
       "factIds": [
-        "home.n",
         "home.gf",
         "home.ga",
-        "away.n",
         "away.gf",
-        "away.ga"
+        "away.ga",
+        "home.n",
+        "away.n"
       ],
-      "prompt": "Vertical 9:16. Editorial variant first: GoatLab charcoal #101412 background with an illustrated football pitch drawn in slate #8ca6bf lines, slightly isometric. A stylised ball path moves in lime #c5ed74 for Rayo Vallecano de Madrid and slate #8ca6bf for Athletic Club, with warm white #edf0e6 ghost overlays for Spanish words 'Goles a favor' and 'Goles en contra'. No statistical axes, no sample claims and no invented match events. Lower quarter is reserved for permanent yellow subtitles. Camera slow tilt from pitch centre towards goal. Main editorial emphasis is the curving ball trail and net ripple. Transition: ball wipe across the frame. Exit: ball exits into net, trail fades. Statistical variant follows: paired vertical bars in vertical 9:16, two Spanish groups labelled 'Goles a favor' and 'Goles en contra'. In each group, Rayo is lime #c5ed74 and Athletic is slate #8ca6bf. Shared scale is in goles, with a clear zero baseline. Values are rendered from {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}. Entry animation raises bars from baseline with slight overshoot. Main comparison is the paired bar structure, with warm white value labels and Spanish team names. Sample annotations use 'Muestra Rayo {{home.n}}' and 'Muestra Athletic {{away.n}}'. Source/sample line reads 'Fuente: Bzzoiro / muestra'. No differential or rate is invented. Camera locked with subtle parallax on grid lines. Transition: cross-dissolve from pitch illustration to chart. Exit: source/sample line remains, then chart fades behind permanent yellow subtitles in the lower quarter."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Editorial illustrative pitch draws in, ball travels along a lime path to the net"
+        },
+        {
+          "t0": 1.4,
+          "t1": 3,
+          "action": "build",
+          "detail": "Dissolve transition fades pitch to watermark and raises the statistical paired bars"
+        },
+        {
+          "t0": 3,
+          "t1": 6.6,
+          "action": "main",
+          "detail": "Paired bars count up on a shared goles scale with a pulsing difference band"
+        },
+        {
+          "t0": 6.6,
+          "t1": 8.2,
+          "action": "exit",
+          "detail": "Bars retract and shutter closes, source annotation remains legible"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft radial glow behind the focal chart",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "tilt down",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "ENCAJADOS"
+      ],
+      "prompt": "Vertical 9:16 on GoatLab charcoal #101412 with a gentle carbon glow. This entry pairs an editorial illustrative football pitch with a statistical paired-bar comparison. Editorial stage: a stylised pitch drawn in slate #8ca6bf hairlines fills the upper two thirds while a warm white #edf0e6 ball arcs along a lime #c5ed74 path from midfield into the net; Spanish captions GOLES A FAVOR and GOLES RECIBIDOS snap in with a stripe sweep transition and rhythmic emphasis on MARCADOS and ENCAJADOS. Then a dissolve transition introduces the statistical stage: paired horizontal bars on a shared zero baseline and one common goles scale for both teams — Rayo Vallecano de Madrid goles a favor {{home.gf}} versus goles recibidos {{home.ga}}, Athletic Club goles a favor {{away.gf}} versus goles recibidos {{away.ga}} — units labelled partidos de la muestra, with {{home.n}} and {{away.n}} shown as the sample sizes. Bars slide in from the left, counters roll up, and the gap band between Rayo's pair pulses lime once. A source annotation reads fuente Bzzoiro, muestra de {{home.n}} partidos, anchored above the subtitle band in slate small caps. Beats: entry pitch, build dissolve, main paired count-up, exit collapse. One focal point: the paired bars, while the pitch becomes a faint watermark. Camera tilt down 1deg plus push-in 1.0 to 0.9 with drift, never beyond the 2deg limit. Easing enter ease-out, curve cubic-bezier(0.16,1,0.3,1), exit ease-out. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 70, scaleFrom 0.95. Transition in stripe sweep, editorial-to-statistical dissolve, out collapse. The lower quarter is reserved for permanent yellow subtitles; every Spanish label stays clear in this 9:16 layout.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
     },
     {
       "n": 3,
-      "kind": "clean-sheets",
-      "title": "Clean sheets: shield comparison with samples",
-      "presentations": [
-        "editorial",
-        "statistical"
-      ],
-      "factIds": [
-        "home.n",
-        "home.clean",
-        "away.n",
-        "away.clean"
-      ],
-      "prompt": "Vertical 9:16. Editorial variant first: GoatLab charcoal #101412 field, defensive energy with two stylised shields. Rayo Vallecano de Madrid shield uses lime #c5ed74 outline; Athletic Club shield uses slate #8ca6bf outline. Warm white #edf0e6 Spanish words 'Arcos en cero' pulse with a low rhythmic thump, but no statistical axes, no sample claims and no invented match events. Lower quarter is reserved for permanent yellow subtitles. Camera pushes in between the shields. Main editorial emphasis is the shield clash and resilient bounce. Transition: shield edge wipe. Exit: shields lock together, then break apart. Statistical variant follows: paired horizontal count bars in vertical 9:16, labelled 'Arcos en cero'. Rayo bar is lime #c5ed74 and Athletic bar is slate #8ca6bf. Shared scale is in partidos, with zero baseline. Values are rendered from {{home.clean}} and {{away.clean}}. Entry animation extends bars left to right. Main comparison is clean sheet counts, not rates. Spanish sample annotations read 'Muestra Rayo {{home.n}}' and 'Muestra Athletic {{away.n}}'. Source/sample line reads 'Fuente: Bzzoiro / muestra'. A small shield icon sits beside each bar for context. Camera locked with gentle vertical breathing. Transition: cross-dissolve from shield illustration to chart. Exit: bars settle, sample labels hold, then fade behind permanent yellow subtitles in the lower quarter."
-    },
-    {
-      "n": 4,
       "kind": "head-to-head",
-      "title": "Head-to-head: historical duel and sample",
+      "title": "Duelo histórico: cruces previos",
       "presentations": [
         "editorial",
         "statistical"
@@ -290,27 +410,2371 @@
         "h2h.awayWins",
         "h2h.draws"
       ],
-      "prompt": "Vertical 9:16. Editorial variant first: GoatLab charcoal #101412 background, diagonal split between Rayo Vallecano de Madrid in lime #c5ed74 and Athletic Club in slate #8ca6bf. Warm white #edf0e6 Spanish words 'Duelo histórico' and 'Cruces previos' enter from opposite edges. Geometric crest-like shapes face each other. No statistical axes, no sample claims and no invented match events. Historical context is visual only. Lower quarter is reserved for permanent yellow subtitles. Camera orbits slightly around the diagonal. Main editorial emphasis is the visual duel. Transition: diagonal wipe. Exit: shapes merge into one warm white line. Statistical variant follows: historical head-to-head bars in vertical 9:16, with three Spanish labels 'Victorias Rayo', 'Empates' and 'Victorias Athletic'. Bars use lime #c5ed74 for Rayo, warm white #edf0e6 for draws and slate #8ca6bf for Athletic. Shared scale is in partidos, zero baseline. Values are rendered from {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}}. Entry animation grows bars from left to right. Main comparison is the three historical counts. Total sample annotation reads 'Muestra total {{h2h.total}}'. Source/sample line reads 'Fuente: Bzzoiro / muestra'. Spanish disclaimer reads 'Datos históricos, no pronóstico'. Camera locked. Transition: cross-dissolve from duel illustration to chart. Exit: disclaimer holds, then fades behind permanent yellow subtitles in the lower quarter."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Editorial duel: both crests charge from opposite sides and collide with a flash"
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.2,
+          "action": "build",
+          "detail": "Shutter transition parts the crests and raises the statistical column chart"
+        },
+        {
+          "t0": 3.2,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Columns count up for Rayo wins, Athletic wins and draws with the total sample on top"
+        },
+        {
+          "t0": 6.5,
+          "t1": 8.5,
+          "action": "exit",
+          "detail": "Columns collapse inward, historical disclaimer and source line remain"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "faint technical grid lines with grain overlay",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 55,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTORIA"
+      ],
+      "prompt": "Vertical 9:16 on GoatLab charcoal #101412 with a faint carbon grid. This entry runs an editorial duel followed by a statistical column chart of past meetings. Editorial stage: Rayo Vallecano de Madrid and Athletic Club enter as opposing blocks from left and right in warm white #edf0e6, colliding on a lime #c5ed74 flash with the Spanish headline CRUCES PREVIOS and rhythmic emphasis on HISTORIA and EMPATES; a stripe sweep then opens into the statistical stage. Statistical stage: three columns on a shared zero baseline and one common count scale up to {{h2h.total}} partidos — victorias Rayo {{h2h.homeWins}}, victorias Athletic {{h2h.awayWins}}, empates {{h2h.draws}} — with a header showing the total sample of {{h2h.total}} cruces. Units read partidos; Rayo columns in slate #8ca6bf, Athletic columns in lime #c5ed74, draws in warm white at reduced opacity. A source/sample annotation sits above the subtitle band: fuente Bzzoiro, muestra de {{h2h.total}} partidos, plus a Spanish note that these are historical meetings, never a forecast. Beats: entry duel, build fade transition, main count-up comparison, exit slide. The main comparison makes Athletic's column visibly taller while Rayo's column and the draws column rise beside it — one focal point, no extra charts. Camera fixed with parallax layers, tilt 0deg. Easing enter ease-out, curve cubic-bezier(0.23,1,0.32,1), exit ease-out. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 55, scaleFrom 0.95. Transition in stripe sweep, editorial-to-statistical fade, out slide. The lower quarter stays reserved for permanent yellow subtitles; all Spanish labels remain legible in this 9:16 composition.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
     },
     {
-      "n": 5,
-      "kind": "synthesis",
-      "title": "Synthesis: scoring volume against defensive solidity",
+      "n": 4,
+      "kind": "clean-sheets",
+      "title": "Arcos en cero · defensas opuestas",
       "presentations": [
         "editorial",
         "statistical"
       ],
       "factIds": [
+        "home.clean",
+        "away.clean",
         "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Wipe in; two shield outlines draw themselves stroke by stroke under a grain flicker, Spanish title ARCOS EN CERO snaps in."
+        },
+        {
+          "t0": 1.8,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Shields lock shoulder to shoulder; bar frame and shared zero baseline seed empty beneath, unit line fades up."
+        },
+        {
+          "t0": 3.6,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Both bars rise with countUp on a shared scale while shields fade to half opacity; the taller bar is the single focal point."
+        },
+        {
+          "t0": 6.8,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Everything collapses into a lime rule that slides off the top as subtitles hold."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "soft diagonal carbon grain with slow breathing flicker",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "SOLIDEZ"
+      ],
+      "prompt": "9:16 vertical, eight second span, two presentations: editorial shield sequence first, statistical panel second, joined by a transition wipe. The lower quarter stays reserved for permanent Spanish subtitles in warm white. Editorial variant — defensive energy: a stylised shield for each club, Rayo Vallecano de Madrid on the left and Athletic Club on the right, outlined in warm white #edf0e6 on GoatLab charcoal #101412 with lime #c5ed74 accents and slate #8ca6bf hairlines over carbon grain. Shields pulse on every narration hit. The Spanish title ARCOS EN CERO arrives with kinetic typography and a lime flash on the emphasis word. Statistical variant — grouped count bars on a shared zero baseline with one common scale in partidos: left bar labelled Rayo Vallecano de Madrid · arcos en cero {{home.clean}}, right bar Athletic Club · arcos en cero {{away.clean}}. Sample annotations ride beside each bar, muestra {{home.n}} partidos and muestra {{away.n}} partidos, plus a source line crediting Bzzoiro so counts stay counts and are never converted into rates; Spanish axis label partidos con arco en cero with the unit stated. Stages: 0 to 1.8 entry, wipe on while shields draw; 1.8 to 3.6 build, shields lock and the frame seeds; 3.6 to 6.8 main, bars rise with countUp while shields dim, the taller bar dominating; 6.8 to 8 exit collapse. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 60, scaleFrom 0.95. Easing enter ease-out, curve cubic-bezier(0.23,1,0.32,1), exit ease-out. Camera push-in 1.0 to 0.9 plus drift, tilt 1deg maximum. Background carbon-grain, base #101412, texture soft diagonal grain, safeArea left64 right64 top120 bottom480. Transition in wipe, editorialToStatistical dissolve, out collapse. Editorial and statistical halves keep one focal point throughout.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 5,
+      "kind": "head-to-head",
+      "title": "Duelo de cruces previos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 2,
+          "action": "entry",
+          "detail": "Stripe sweep opens a diagonal split; crests lunge from opposite edges with motion trails, Spanish heading CRUCES PREVIOS sweeps in."
+        },
+        {
+          "t0": 2,
+          "t1": 4,
+          "action": "build",
+          "detail": "Crests hold tension while the horizontal bar frame draws its shared zero baseline and segment guides."
+        },
+        {
+          "t0": 4,
+          "t1": 7.2,
+          "action": "main",
+          "detail": "Segments grow with countUp on one shared scale as crests trade pushes; the largest segment carries the focal point."
+        },
+        {
+          "t0": 7.2,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Shutter closes across the duelling halves and the frame slides upward, subtitles unaffected."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "fine carbon grid with faint diagonal duel split",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "VICTORIAS"
+      ],
+      "prompt": "9:16 vertical, nine second span, two presentations: an editorial duel first, a statistical historical panel second, joined by a transition dissolve. The lower quarter is reserved for permanent Spanish subtitles. Editorial variant — head-to-head as a visual duel: two crests facing each other across a diagonal split, Rayo Vallecano de Madrid tinted lime #c5ed74 on the left, Athletic Club tinted slate #8ca6bf on the right, over charcoal #101412 with warm white #edf0e6 hairline typography. Crests lunge on each percussive hit and leave short motion trails; the Spanish heading CRUCES PREVIOS sweeps in with rhythmic emphasis. No statistical axes, no sample claims and no invented match events appear in this half. Statistical variant — historical win and draw counts as a single stacked horizontal bar on a shared zero baseline and one common scale in partidos: Rayo Vallecano de Madrid · victorias en cruces {{h2h.homeWins}}, Athletic Club · victorias en cruces {{h2h.awayWins}}, Empates en cruces {{h2h.draws}}, wrapped by a total annotation muestra total {{h2h.total}} partidos. Labels are Spanish, the source is credited as Bzzoiro, and the caption reads datos históricos, no pronóstico so history is never read as a forecast. Stages: 0 to 2 entry stripe sweep and crest reveal; 2 to 4 build, bar frame draws; 4 to 7.2 main, segments grow with countUp while crests trade pushes; 7.2 to 9 exit slide. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 70, scaleFrom 0.95. Easing enter ease-out, curve cubic-bezier(0.16,1,0.3,1), exit ease-out. Camera orbit leve, tilt 1deg maximum. Background carbon-grid, base #101412, texture fine carbon grid, safeArea left64 right64 top120 bottom480. Transition in stripe sweep, editorialToStatistical dissolve, out slide. The editorial and statistical blocks alternate so the comparison reads as one duel.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 6,
+      "kind": "synthesis",
+      "title": "Tensión: marcas y murallas",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
         "home.gf",
         "home.ga",
-        "away.n",
         "away.gf",
         "away.ga",
         "home.clean",
-        "away.clean"
+        "away.clean",
+        "home.n",
+        "away.n"
       ],
-      "prompt": "Vertical 9:16. Editorial variant first: GoatLab charcoal #101412 background with two team reveals. Rayo Vallecano de Madrid enters with lime #c5ed74 kinetic energy and warm white #edf0e6 Spanish words 'Ataque y solidez'; Athletic Club enters with slate #8ca6bf calm geometry. No statistical axes, no sample claims and no invented match events. Lower quarter is reserved for permanent yellow subtitles. Camera whip-pans between reveals. Main editorial emphasis is the contrast between attacking motion and defensive stillness. Transition: match cut on a warm white flash. Exit: split screen compresses into a single line. Statistical variant follows as two grounded panels in vertical 9:16. Top panel: paired bars for goals, Spanish labels 'Goles a favor' and 'Goles en contra', Rayo lime #c5ed74, Athletic slate #8ca6bf, shared scale in goles, values rendered from {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}. Bottom panel: paired bars for clean sheets, Spanish label 'Arcos en cero', shared scale in partidos, values rendered from {{home.clean}} and {{away.clean}}. Entry animation builds top panel first, then bottom panel. Main tension is Rayo's scoring volume against Athletic's defensive solidity. Sample annotations read 'Muestra Rayo {{home.n}}' and 'Muestra Athletic {{away.n}}'. Source/sample line reads 'Fuente: Bzzoiro / muestra'. No published model estimates are shown, and no predictive claim is made. Camera locked with slow vertical drift. Transition: panel push from top to bottom. Exit: source/sample line holds, then fades behind permanent yellow subtitles in the lower quarter."
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 2.2,
+          "action": "entry",
+          "detail": "Two full-height vertical team reveals wipe in, Rayo Vallecano de Madrid then Athletic Club, giant Spanish words GOLES y ARCOS landing with overshoot."
+        },
+        {
+          "t0": 2.2,
+          "t1": 4,
+          "action": "build",
+          "detail": "Teams settle into left and right columns; paired bar guides and the clean-sheet row draw their shared zero baseline."
+        },
+        {
+          "t0": 4,
+          "t1": 7.4,
+          "action": "main",
+          "detail": "Paired bars grow with countUp on one shared scale of goles, then the clean-sheet row fills; the widest gap is the single focal point."
+        },
+        {
+          "t0": 7.4,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Columns fold inward into a lime seam that slides away under the shutter, subtitles hold."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "warm carbon glow behind columns with light grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 55,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "CONTRASTE",
+        "MURALLAS"
+      ],
+      "prompt": "9:16 vertical, nine second span, two presentations: editorial team reveals first, statistical synthesis second, connected by a transition fade. The lower quarter stays reserved for permanent Spanish subtitles. Editorial variant — narrative team reveals: full-height vertical wipes introduce Rayo Vallecano de Madrid and then Athletic Club as opposing columns, giant Spanish typography GOLES and ARCOS landing with overshoot and a lime pulse on the emphasis word. Columns breathe with parallax against a warm carbon glow; no statistical axes, sample claims or invented match events appear here, only composition, motion and narrative emphasis. Statistical variant — one grounded tension built from compatible historical facts, all in the unit goles on a shared zero baseline and one common scale: Rayo Vallecano de Madrid · goles a favor {{home.gf}} against Rayo Vallecano de Madrid · goles recibidos {{home.ga}}, paired with Athletic Club · goles a favor {{away.gf}} and Athletic Club · goles recibidos {{away.ga}}. Beneath, a count row of arcos en cero, {{home.clean}} and {{away.clean}}, each carrying a sample annotation, muestra {{home.n}} partidos and muestra {{away.n}} partidos, with source credited to Bzzoiro and a caption stating datos históricos, no pronóstico. Stages: 0 to 2.2 entry team reveals; 2.2 to 4 build guides and baseline; 4 to 7.4 main paired growth with countUp, widest gap as focal point; 7.4 to 9 exit shutter. Motion spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 55, scaleFrom 0.95. Easing enter ease-out, curve cubic-bezier(0.23,1,0.32,1), exit ease-out. Camera fixed plus parallax, tilt 2deg maximum. Background carbon-glow, base #101412, texture warm glow with light grain, safeArea left64 right64 top120 bottom480. Transition in wipe, editorialToStatistical fade, out shutter. The editorial and statistical blocks alternate cleanly inside the 9:16 frame.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 7,
+      "kind": "head-to-head",
+      "title": "Cruces previos: el duelo histórico",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.draws",
+        "h2h.awayWins"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Charcoal frame opens; vertical seam draws down, two Spanish team names slide in from opposite edges with spring stagger."
+        },
+        {
+          "t0": 1.8,
+          "t1": 4.6,
+          "action": "build",
+          "detail": "Crests push toward centre in the editorial duel; rhythmic flashes land on emphasis words, no axes or sample claims."
+        },
+        {
+          "t0": 4.6,
+          "t1": 7,
+          "action": "main",
+          "detail": "Dissolve to statistical grouped count bars on a shared zero baseline; count-up with stagger, tallest bar lifts with lime outline."
+        },
+        {
+          "t0": 7,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars collapse toward the baseline, source and sample annotation fades last under permanent yellow subtitles."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine charcoal noise with faint slate hatch",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTORIAL"
+      ],
+      "prompt": "Vertical 9:16 opening card for Rayo Vallecano de Madrid versus Athletic Club, an 8-second head-to-head piece carrying an editorial presentation and a statistical presentation. Editorial variant: a visual duel on GoatLab charcoal #101412 — two crests in warm white #edf0e6 split by a vertical lime #c5ed74 seam, slate #8ca6bf hatch marks ticking the crossings. From 0.0–1.8s the seam draws top to bottom and the two Spanish team names slide in from opposite edges in condensed uppercase typography (96pt names, 24pt kicker 'Cruces previos'), staggered 60ms with spring damping 22, stiffness 180, mass 0.6 and scaleFrom 0.95. From 1.8–4.6s the crests push toward centre, each impact flashing the emphasis words 'CRUCES' and 'HISTORIAL'; this half shows no statistical axes, no sample claims and no invented match events. At 4.6s a dissolve transition opens the statistical variant: grouped count bars on one shared zero baseline, a single row per outcome — victorias Rayo, empates, victorias Athletic — slate bars for Rayo, lime for Athletic, one common count scale in partidos with Spanish axis labels 'partidos' and whole-number ticks. Headline 'Historial de cruces'. Values resolve from {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}} against total {{h2h.total}}; the source and sample annotation reads 'Fuente: Bzzoiro · sample: 48 cruces' and stays attached beneath the plot. Count-up runs 4.6–7.0s with countUp true and 60ms stagger; the main comparison lifts the tallest bar 8px with a lime outline. From 7.0–8.0s the exit collapse folds the bars to baseline. Camera: push-in 1.0 to 0.9 with drift, tilt 0deg. Background carbon-grain with safeArea left64 right64 top120 bottom480 keeps the lower quarter free for permanent yellow subtitles. Historical data is not a forecast.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 8,
+      "kind": "clean-sheets",
+      "title": "Arcos en cero: el escudo defensivo",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 2,
+          "action": "entry",
+          "detail": "A stylised shield scales up from 0.95 in the upper half; two Spanish team names flank it with spring stagger."
+        },
+        {
+          "t0": 2,
+          "t1": 4.4,
+          "action": "build",
+          "detail": "Editorial defensive energy: lime rings pulse outward from the shield on each emphasis word, no axes or sample claims."
+        },
+        {
+          "t0": 4.4,
+          "t1": 7,
+          "action": "main",
+          "detail": "Dissolve to statistical paired count bars on a shared zero baseline; count-up with 70ms stagger and paired Spanish labels."
+        },
+        {
+          "t0": 7,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars retract, source and sample line holds one beat, then shutter transition closes under the yellow subtitle band."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft lime halo behind shield, charcoal grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "DEFENSA"
+      ],
+      "prompt": "Vertical 9:16 card for Rayo Vallecano de Madrid versus Athletic Club, an 8-second clean-sheets piece with an editorial presentation and a statistical presentation. Editorial variant: defensive energy around a stylised shield — a slate #8ca6bf outline shield in warm white #edf0e6 line weight, centred on charcoal #101412 with a faint lime #c5ed74 halo. From 0.0–2.0s the shield scales from 0.95 with spring damping 22, stiffness 180, mass 0.6 while the Spanish team names 'Rayo Vallecano' and 'Athletic Club' slide in from left and right in condensed uppercase type (72pt names, 22pt kicker 'Arcos en cero'), staggered 70ms. From 2.0–4.4s the editorial half shows the shield absorbing impact: lime rings pulse outward on each emphasis word 'ARCOS' and 'DEFENSA', background grain drifts with parallax. No statistical axes, no sample claims, no invented match events. At 4.4s a fade transition enters the statistical variant: two paired count bars on one shared zero baseline, one pair per team, slate bar for Rayo, lime bar for Athletic, a common count scale in partidos with Spanish axis labels 'partidos' and whole-number ticks; the counts are never converted into rates. Headline 'Arcos en cero · últimos partidos'. Values resolve from {{home.clean}} and {{away.clean}}, with sample sizes {{home.n}} and {{away.n}} shown as 'sample: 5 partidos' beside each bar and the source line 'Fuente: Bzzoiro' attached beneath. Count-up runs 4.4–7.0s with countUp true and 70ms stagger, paired bars rising together for the main comparison. From 7.0–8.0s bars retract and a shutter transition closes. Camera: fixed plus parallax, tilt 1deg. Background carbon-glow, safeArea left64 right64 top120 bottom480 keeps the lower quarter free for permanent yellow subtitles in Spanish.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 9,
+      "kind": "synthesis",
+      "title": "Tensión de forma: la revelación de equipos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.wins",
+        "home.draws",
+        "home.losses",
+        "away.wins",
+        "away.draws",
+        "away.losses",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 2.2,
+          "action": "entry",
+          "detail": "Team reveal: two vertical name panels wipe in from opposite edges on charcoal, warm white type, spring stagger."
+        },
+        {
+          "t0": 2.2,
+          "t1": 4.6,
+          "action": "build",
+          "detail": "Editorial narrative emphasis with alternating lime and slate light sweeps across each panel; no axes or sample claims."
+        },
+        {
+          "t0": 4.6,
+          "t1": 7.2,
+          "action": "main",
+          "detail": "Dissolve to statistical stacked count bars on a shared zero baseline for both teams; count-up, main comparison centres on the diverging shapes."
+        },
+        {
+          "t0": 7.2,
+          "t1": 8.4,
+          "action": "exit",
+          "detail": "Segments compress to baseline, source and sample annotation lingers, slide transition out under the yellow subtitle band."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "subtle grid lines with charcoal grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 80,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "TENSIÓN",
+        "FORMA"
+      ],
+      "prompt": "Vertical 9:16 synthesis card for Rayo Vallecano de Madrid versus Athletic Club, an 8.4-second clip pairing an editorial presentation with a statistical presentation and summarising one grounded tension: the contrasting shape of both recent samples. Editorial variant: team reveals with narrative emphasis. From 0.0–2.2s two vertical panels wipe in from opposite edges on charcoal #101412 — 'RAYO VALLECANO' in slate #8ca6bf, 'ATHLETIC CLUB' in lime #c5ed74, both in condensed uppercase Spanish typography with warm white #edf0e6 kickers, staggered 80ms, spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95. From 2.2–4.6s light sweeps alternate across the panels, hard cuts landing on the emphasis words 'TENSIÓN' and 'FORMA'; grain drifts behind. This editorial half carries no statistical axes, no sample claims and no invented match events. At 4.6s a dissolve transition opens the statistical variant: two stacked count bars on one shared zero baseline, one stack per team, segments ordered victorias, empates, derrotas — slate tones for Rayo, lime tones for Athletic — sharing one count scale in partidos with Spanish axis labels 'partidos' and whole-number ticks. Headline 'Forma reciente'. Values resolve from {{home.wins}}, {{home.draws}}, {{home.losses}} for Rayo and {{away.wins}}, {{away.draws}}, {{away.losses}} for Athletic, with sample sizes {{home.n}} and {{away.n}} annotated as 'sample: 5 partidos' plus the source line 'Fuente: Bzzoiro' beneath the plot. Count-up runs 4.6–7.2s with countUp true and 80ms stagger; the main comparison holds on the diverging stack shapes. From 7.2–8.4s segments compress and a slide transition exits. Camera: push-in 1.0 to 0.9 with drift, tilt 2deg. Background carbon-grid, safeArea left64 right64 top120 bottom480 reserves the lower quarter for permanent yellow subtitles.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 10,
+      "kind": "head-to-head",
+      "title": "Duelo de cruces históricos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.draws",
+        "h2h.awayWins",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.2,
+          "action": "entry",
+          "detail": "Diagonal wipe from bottom-left; Rayo crest and Athletic crest rise from opposite corners onto a central lime seam, stagger 60ms"
+        },
+        {
+          "t0": 1.2,
+          "t1": 4.2,
+          "action": "build",
+          "detail": "Crest push-in and seam pulse; statistical stacked bar grows from shared zero baseline with countUp"
+        },
+        {
+          "t0": 4.2,
+          "t1": 7.6,
+          "action": "main",
+          "detail": "Comparison holds on the stacked bar; camera push-in 1.0 to 0.9 with slight drift, tilt toward leading segment"
+        },
+        {
+          "t0": 7.6,
+          "t1": 9.6,
+          "action": "exit",
+          "detail": "Segments collapse back to the seam, crests slide out, shutter closes on the yellow subtitle band"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "faint ruled grid, fine carbon grain over charcoal",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1.5deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTÓRICO"
+      ],
+      "prompt": "Vertical 9:16 composition on GoatLab charcoal #101412 with carbon-grid texture, warm white #edf0e6 type, lime #c5ed74 reserved for Rayo Vallecano de Madrid and slate #8ca6bf for Athletic Club. One beat map drives both named variants. The EDITORIAL variant presents the match as a visual duel: the two crests face each other across a vertical lime seam that flexes and snaps, a single Spanish headline word 'CRUCES' slams in letter by letter, and short diagonal light streaks cross the seam. No axes, no counts, no sample claims here — only confrontation. The STATISTICAL variant dissolves the seam into one horizontal stacked bar chart on a shared zero baseline, scale running from zero to {{h2h.total}} partidos, split into three segments labelled in Spanish 'Victorias Rayo', 'Empates', 'Victorias Athletic'. Values are rendered only as {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}}. A source and sample annotation sits above the chart, never inside the lower quarter reserved for permanent yellow Spanish subtitles: 'Cruces previos · source: Bzzoiro · sample: {{h2h.total}} partidos'. Temporal stages in seconds: 0–1.2 entry, 1.2–4.2 build, 4.2–7.6 main comparison, 7.6–9.6 exit. Bars grow from zero with countUp, spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, stagger 60ms. One focal point: the bar. Camera tilt stays within 1.5deg. This is historical record, never a forecast, and the source stays visible. The transition in is a stripe sweep, the transition between editorial and statistical is a dissolve, and the transition out is a shutter. All labels are Spanish; the full frame is 9:16.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 11,
+      "kind": "clean-sheets",
+      "title": "Escudos y arcos en cero",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.1,
+          "action": "entry",
+          "detail": "Wipe from centre; a stylised shield outline draws itself, inner glow builds, subtitles already locked in lower quarter"
+        },
+        {
+          "t0": 1.1,
+          "t1": 4,
+          "action": "build",
+          "detail": "Shield splits into two defensive halves; statistical paired bars rise from shared zero baseline with countUp"
+        },
+        {
+          "t0": 4,
+          "t1": 7.4,
+          "action": "main",
+          "detail": "Defensive energy pulse behind the bars; camera push-in 1.0 to 0.9 + drift, tilt 1deg toward the taller bar"
+        },
+        {
+          "t0": 7.4,
+          "t1": 9.5,
+          "action": "exit",
+          "detail": "Shield halves re-lock, bars slide left and fade, collapse transition clears frame"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft radial charcoal glow behind shield, subtle grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "fade",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "CERO"
+      ],
+      "prompt": "Vertical 9:16 frame, charcoal #101412 with carbon-glow, warm white #edf0e6 type, lime #c5ed74 for Rayo Vallecano de Madrid, slate #8ca6bf for Athletic Club, and a permanent yellow subtitle band filling the lower quarter. The EDITORIAL variant is defensive energy: a stylised shield outline strokes on, fills with layered chevrons, then cracks open into two halves that breathe with a slow luminous pulse; the Spanish word 'ARCOS' appears in large condensed type, followed by 'CERO' stamped like a seal. No axes and no counts in this variant, only the idea of an unbreached goal. The STATISTICAL variant fades the shield into two vertical count bars on one shared zero baseline, identical unit 'partidos' for both sides, identical sample frames. Rayo's bar shows {{home.clean}} and Athletic's shows {{away.clean}}, each annotated 'muestra: {{home.n}} partidos' and 'muestra: {{away.n}} partidos' in Spanish, with the source line 'source: Bzzoiro' docked above the chart, well clear of the subtitles. Counts stay counts — no rates are derived. Beats in seconds: 0–1.1 entry, 1.1–4.0 build, 4.0–7.4 main comparison, 7.4–9.5 exit. Bars spring up with damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, stagger 70ms, countUp on the numerals only. Single focal point: the taller bar with a soft lime halo. Camera tilt 1deg maximum. The transition in is a wipe, editorial to statistical is a fade, and the transition out is a collapse. All on-screen labels are Spanish in 9:16.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 12,
+      "kind": "goals",
+      "title": "Balón y trayectoria de goles",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.3,
+          "action": "entry",
+          "detail": "Pitch centre-line wipes in from the left; a ball rolls on and stops on the spot, subtitles reserved below"
+        },
+        {
+          "t0": 1.3,
+          "t1": 4.4,
+          "action": "build",
+          "detail": "Ball path curves toward one goal, then back; statistical paired bars draw upward from shared zero baseline with countUp"
+        },
+        {
+          "t0": 4.4,
+          "t1": 7.7,
+          "action": "main",
+          "detail": "Pitch grid dims behind bars, only the paired comparison lit; camera push-in 1.0 to 0.9 + drift, tilt 1.5deg"
+        },
+        {
+          "t0": 7.7,
+          "t1": 9.7,
+          "action": "exit",
+          "detail": "Ball rolls off the frame along the pitch line, bars slide right and shutter out"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "carbon grain with faint pitch stripes and hairline white markings",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1.5deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "BALANCE"
+      ],
+      "prompt": "Vertical 9:16 composition on GoatLab charcoal #101412 with carbon grain, warm white #edf0e6 typography, lime #c5ed74 for Rayo Vallecano de Madrid, slate #8ca6bf for Athletic Club, and the lower quarter held permanently for yellow Spanish subtitles. The EDITORIAL variant uses an illustrative football pitch seen from above: hairline centre circle, penalty boxes and a curved ball path drawn with a lime trail that whips toward one goal mouth, rebounds, and exits frame; the Spanish words 'GOLES' then 'BALANCE' snap in with rhythmic emphasis. No axes, no counts, no sample claims in this variant — pure football illustration. The STATISTICAL variant dissolves the pitch into a paired bar chart: four bars on one shared zero baseline, all in unit 'goles', grouped as 'Goles a favor' and 'Goles recibidos' for both teams, values rendered only as {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}. Sample sizes stay attached in Spanish beneath each team name: 'muestra: {{home.n}} partidos' and 'muestra: {{away.n}} partidos', with 'source: Bzzoiro' above the chart and clear of the subtitles. Beats in seconds: 0–1.3 entry, 1.3–4.4 build, 4.4–7.7 main comparison, 7.7–9.7 exit. Bars grow with countUp, spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, stagger 50ms. One focal point: the pair of 'a favor' bars. Camera tilt stays at 1.5deg or less. The transition in is a wipe, editorial to statistical is a dissolve, and the transition out is a shutter. All labels are Spanish, the frame is 9:16, and only the catalog facts drive the statistical variant.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 13,
+      "kind": "clean-sheets",
+      "title": "Arcos en cero: escudo defensivo",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.3,
+          "action": "entry",
+          "detail": "Wipe opens the editorial shield scene; crest arcs draw in warm white on carbon-glow."
+        },
+        {
+          "t0": 1.3,
+          "t1": 2.9,
+          "action": "build",
+          "detail": "Six arcs lock with rhythmic pulses; kinetic Spanish typography stacks ARCOS EN CERO."
+        },
+        {
+          "t0": 2.9,
+          "t1": 6.2,
+          "action": "main",
+          "detail": "Dissolve to statistical variant: grouped count bars rise on a shared zero baseline with countUp and sample captions."
+        },
+        {
+          "t0": 6.2,
+          "t1": 8.2,
+          "action": "exit",
+          "detail": "Bars collapse into the shield silhouette, then shutter to black."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "carbon grain with a faint radial glow behind the shield",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "SOLIDEZ",
+        "ARCOS EN CERO"
+      ],
+      "prompt": "Vertical 9:16 film of roughly eight seconds built from an editorial scene then a statistical scene, both adapted to the narration. Editorial variant, Escudo defensivo: on carbon-glow charcoal #101412 a stylised shield of six arcs draws itself in warm white #edf0e6, lime #c5ed74 lighting the Athletic arc, slate #8ca6bf the Rayo arc; arcs snap with rhythmic pulses and one lime ring bursts while kinetic typography spells the Spanish words ARCOS EN CERO. No axes and no sample claims appear in this half. A dissolve transition hands over to the statistical variant, Arcos en cero comparados: grouped count bars on a shared zero baseline and a common scale measured in partidos, one group per team labelled in Spanish Rayo Vallecano de Madrid and Athletic Club, values {{home.clean}} and {{away.clean}}, with sample sizes {{home.n}} and {{away.n}} partidos locked beneath. A source annotation reads source: Bzzoiro, sample de 5 partidos recientes and stays visible throughout. Hierarchy keeps one focal point, the tallest bar; headline at 96px condensed, team labels at 44px uppercase, unit caption partidos at 32px, footnote at 26px warm white at reduced opacity. Bars count up with spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, stagger 60 milliseconds, countUp true. Beats: entry wipe 0.0-1.3, build shield 1.3-2.9, main bar comparison 2.9-6.2, exit 6.2-8.2. Camera push-in 1.0 to 0.9 with drift, tilt capped at 1 degree. Easing enter and exit ease-out, curve cubic-bezier(0.23,1,0.32,1). Background safeArea left64 right64 top120 bottom480 keeps the lower quarter clear for permanent yellow subtitles. Emphasis words: SOLIDEZ, ARCOS EN CERO. Exit transition collapses the bars into the shield, then shutter.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 14,
+      "kind": "head-to-head",
+      "title": "Duelo de cruces previos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.draws",
+        "h2h.awayWins",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.2,
+          "action": "entry",
+          "detail": "Stripe sweep opens the editorial duel; two crests slide in from opposite edges over carbon-grid charcoal."
+        },
+        {
+          "t0": 1.2,
+          "t1": 3,
+          "action": "build",
+          "detail": "Crests clash on the centre line with impact frames and Spanish kinetic words CRUCES PREVIOS."
+        },
+        {
+          "t0": 3,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Wipe to statistical variant: three grouped count bars rise from the shared zero baseline with total sample heading and source note."
+        },
+        {
+          "t0": 6.8,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Bars slide together behind the crests, then shutter out."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "thin carbon grid lines with a soft clash glow at centre",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve + parallax",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "CRUCES PREVIOS",
+        "BALANCE"
+      ],
+      "prompt": "Vertical 9:16 sequence of about nine seconds, opening on an editorial duel and resolving into a statistical history, both shaped by the spoken words. Editorial variant, Duelo de cruces: two crests slide in from left and right over carbon-grid charcoal #101412, warm white #edf0e6 chevrons clashing on the centre line, lime #c5ed74 marking Athletic and slate #8ca6bf marking Rayo; impact frames shake on a spring while Spanish kinetic typography stacks CRUCES PREVIOS and BALANCE, letters landing on a strict beat. No axes, no sample sizes and no invented match events appear in this half. A wipe transition moves to the statistical variant, Cruces previos: three grouped count bars, Rayo victorias {{h2h.homeWins}}, Empates {{h2h.draws}}, Athletic victorias {{h2h.awayWins}}, on a shared zero baseline with a common scale in partidos, under a heading Cruces previos: {{h2h.total}} partidos. Labels are Spanish and uppercase, with a source annotation source: Bzzoiro, sample de 48 partidos held on screen plus the honest note historial, no es una predicción. Hierarchy gives one focal point, the tallest bar; headline at 92px condensed, bar labels at 42px, sample caption at 28px, footnote at 26px in warm white at reduced opacity. countUp true with spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, stagger 70 milliseconds. Beats: entry stripe sweep 0.0-1.2, build crest clash 1.2-3.0, main comparison 3.0-6.8, exit 6.8-9.0. Camera orbit leve with parallax, tilt kept at 1 degree. Easing enter and exit ease-out, curve cubic-bezier(0.16,1,0.3,1). Background safeArea left64 right64 top120 bottom480 reserves the lower quarter for permanent yellow subtitles. Emphasis words: CRUCES PREVIOS, BALANCE. Out transition slides the bars together, then shutter.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 15,
+      "kind": "synthesis",
+      "title": "Tensión reciente: solidez y goles",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.wins",
+        "away.wins",
+        "home.losses",
+        "away.losses",
+        "home.ga",
+        "away.ga",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Wipe reveals two team panels parting on carbon-grain charcoal with Spanish team names fading in."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Narrative word stack builds with rhythmic emphasis while lime and slate trails sweep behind each crest."
+        },
+        {
+          "t0": 3.4,
+          "t1": 7.6,
+          "action": "main",
+          "detail": "Dissolve to statistical variant: two separate paired-bar blocks count partidos then goles recibidos, each on its own shared zero baseline with sample and source."
+        },
+        {
+          "t0": 7.6,
+          "t1": 9.8,
+          "action": "exit",
+          "detail": "Blocks compress into a single centred bar row, then collapse and shutter."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "carbon grain with a low lime-to-slate gradient sweep",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 75,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "tilt down + drift",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "SIN DERROTAS",
+        "GOLES EN CONTRA"
+      ],
+      "prompt": "Vertical 9:16 of about ten seconds alternating a creative montage with a grounded statistical read of the recent sample, matched to the narration. Editorial variant, Revelación de equipos: charcoal #101412 with carbon grain, two team panels wipe apart to reveal the Spanish team names Rayo Vallecano de Madrid and Athletic Club in warm white #edf0e6; lime #c5ed74 trails Athletic, slate #8ca6bf trails Rayo; a narrative word stack builds SIN DERROTAS and GOLES EN CONTRA, each word landing on a beat with scaleFrom 0.95 and rhythmic emphasis. No axes, no sample claims and no invented match events live in this half. A dissolve transition leads into the statistical variant, Tensión reciente: two separate paired-bar blocks that never mix units. Block one counts partidos with victorias {{home.wins}} and {{away.wins}} plus derrotas {{home.losses}} and {{away.losses}}; block two counts goles recibidos {{home.ga}} and {{away.ga}}. Each block holds its own shared zero baseline and its own scale in its own unit, with sample sizes {{home.n}} and {{away.n}} partidos beneath and a source annotation source: Bzzoiro, sample de 5 partidos recientes kept on screen. This is historical data only; no published model estimates are supplied, so none appear. Labels stay Spanish and uppercase, one focal point per block, headline 88px condensed, labels 42px, caption 28px, footnote 26px at reduced opacity. countUp true with spring damping 22, stiffness 180, mass 0.6, stagger 75 milliseconds. Beats: entry wipe 0.0-1.5, build reveals 1.5-3.4, main comparison 3.4-7.6, exit 7.6-9.8. Camera tilt down with drift, tilt capped at 2 degrees. Easing enter and exit ease-out, curve cubic-bezier(0.23,1,0.32,1). Background safeArea left64 right64 top120 bottom480 keeps the lower quarter for permanent yellow subtitles. Emphasis words: SIN DERROTAS, GOLES EN CONTRA. Exit transition collapses the blocks, then shutter.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 16,
+      "kind": "head-to-head",
+      "title": "Duelo de cruces previos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Stripe sweep reveals both crests facing across a diagonal lime seam; headline locks at top 120."
+        },
+        {
+          "t0": 1.6,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Spring settle of crests, seam snaps twice, slate axis and zero baseline draw in."
+        },
+        {
+          "t0": 3.4,
+          "t1": 6.6,
+          "action": "main",
+          "detail": "Three grouped bars count up from zero with 60ms stagger; tallest bar gains lime edge glow."
+        },
+        {
+          "t0": 6.6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Shutter collapse of chart back into the two crests and headline."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "faint grid plus carbon grain, midfield seam in lime",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTORIA",
+        "BALANCE"
+      ],
+      "prompt": "Vertical 9:16, eight-second piece in two acts: an editorial duel, then a statistical reading of head-to-head history. Act one: charcoal carbon-grain ground, warm white Spanish headline «CRUCES PREVIOS» locked at the top 120 safe area; Rayo Vallecano de Madrid crest enters from the left, Athletic Club from the right, a lime seam splitting the frame diagonally like a halfway line. Crests settle on a spring and the seam snaps twice in rhythmic emphasis, one focal point only. Act two begins on the transition dissolve: a single grouped count chart on one shared zero baseline with three warm white bars — victorias Rayo {{h2h.homeWins}}, victorias Athletic {{h2h.awayWins}} and empates {{h2h.draws}} — all in the unit partidos on one common scale, slate axis rule, Spanish labels centred beneath each bar, axis title repeating the unit. A slate caption above the baseline carries sample {{h2h.total}} cruces and source Bzzoiro so sample and source stay attached. Temporal stages: 0.0 to 1.6 entry stripe sweep of the crests; 1.6 to 3.4 build of headline, seam and axis; 3.4 to 6.6 main comparison where the tallest bar grows with a lime edge glow and a count-up from zero, bars staggered by 60ms; 6.6 to 8.0 exit shutter collapsing the chart into the crests. Background stays #101412 with grain texture; safe area left 64, right 64, top 120, bottom 480 reserved for permanent yellow subtitles. Camera push-in 1.0 to 0.9 with slow drift, tilt 1 degree. Editorial and statistical sections meet through the transition and share the same warm white type hierarchy. Emphasis words: CRUCES, HISTORIA, BALANCE. Historical counts describe the past only; no forecast is implied.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 17,
+      "kind": "clean-sheets",
+      "title": "Escudo de arcos en cero",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Lime rim light traces a stylised shield outline centre frame; kinetic Spanish letters punch in."
+        },
+        {
+          "t0": 1.4,
+          "t1": 3.2,
+          "action": "build",
+          "detail": "Team names slide left and right; baseline and unit axis title draw under the shield."
+        },
+        {
+          "t0": 3.2,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Two paired count bars rise from zero with 60ms stagger; taller bar lifts with lime cap glow."
+        },
+        {
+          "t0": 6.8,
+          "t1": 8.5,
+          "action": "exit",
+          "detail": "Bars retract into the shield, rim light flares once, frame settles."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft radial glow behind shield, carbon grain overlay",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "tilt down",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "CERO",
+        "DEFENSA"
+      ],
+      "prompt": "Vertical 9:16, eight and a half seconds opening on defensive energy: an editorial stylised shield, followed by a statistical count comparison of arcos en cero. Act one: charcoal glow ground, a slate shield outline drawn centre frame in warm white strokes, the Spanish words «ARCOS EN CERO» punching in letter by letter with kinetic rhythm while lime sparks travel the shield rim; Rayo Vallecano de Madrid and Athletic Club names sit left and right in slate, one focal point, with no axes and no sample claims in this editorial half. Act two enters on the wipe transition: two paired count bars on a single shared zero baseline — Rayo {{home.clean}} and Athletic {{away.clean}} — both in the unit partidos, one common scale, warm white bars with lime top caps, Spanish labels under each bar and the unit repeated on the axis title. Above the baseline a slate annotation holds sample sizes {{home.n}} and {{away.n}} partidos plus source Bzzoiro, keeping sample and source visible; counts stay counts and are never converted into rates. Temporal stages: 0.0 to 1.4 entry shield draw; 1.4 to 3.2 build of headline and team names; 3.2 to 6.8 main comparison with count-up from zero, stagger 60ms, the taller bar lifting with a lime glow; 6.8 to 8.5 exit collapse of the bars back into the shield. Background #101412, safe area left 64, right 64, top 120, bottom 480 held for permanent yellow subtitles. Camera tilt down with a two-degree maximum tilt and slow push. The transition between editorial and statistical sections is a clean dissolve sharing one focal point. Emphasis words: ARCOS, CERO, DEFENSA. Historical context only.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 18,
+      "kind": "goals",
+      "title": "Cancha y goles a favor y en contra",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Stripe sweep draws stylised pitch lines and the Spanish heading into the top safe area."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Lime ball traces two curved paths with impact pulses; zero baseline and unit axis fade in."
+        },
+        {
+          "t0": 3.6,
+          "t1": 7,
+          "action": "main",
+          "detail": "Four grouped bars count up from zero with 60ms stagger; tallest bar gains lime edge glow."
+        },
+        {
+          "t0": 7,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Shutter folds the chart back into the pitch illustration and ball at rest."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "carbon grain with faint slate pitch line work",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "FAVOR",
+        "CONTRA"
+      ],
+      "prompt": "Vertical 9:16, nine-second cut moving from an editorial football pitch illustration into a statistical paired-bar read of scoring. Act one: charcoal grain ground rendered as a stylised pitch in slate line work, warm white Spanish heading «GOLES A FAVOR Y EN CONTRA» at the top 120 safe area, a lime ball tracing two curved paths — one sweeping toward the Rayo Vallecano de Madrid goal mouth, one toward Athletic Club — with a soft impact pulse marking each finish; the motion is illustrative, with no axes, no sample claims and no invented match events in this editorial segment. Act two begins on the transition wipe: one grouped bar chart with four bars on a shared zero baseline — goles a favor Rayo {{home.gf}}, goles recibidos Rayo {{home.ga}}, goles a favor Athletic {{away.gf}}, goles recibidos Athletic {{away.ga}} — all in the unit goles, one common scale, warm white columns with lime caps for favour and slate caps for against, Spanish labels stacked under each bar, axis title repeating goles. A slate caption above the baseline carries sample {{home.n}} and {{away.n}} partidos plus source Bzzoiro. Temporal stages: 0.0 to 1.5 entry stripe sweep of the pitch lines; 1.5 to 3.6 build of heading and ball paths; 3.6 to 7.0 main comparison with count-up from zero, 60ms stagger, the tallest bar gaining a lime edge glow; 7.0 to 9.0 exit shutter that folds the chart into the pitch. Background #101412; safe area left 64, right 64, top 120, bottom 480 reserved for permanent yellow subtitles. Camera fixed plus parallax, tilt 0 degree. Editorial and statistical halves share one focal point and the same warm white hierarchy through the transition. Emphasis words: GOLES, FAVOR, CONTRA.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 19,
+      "kind": "form",
+      "title": "Kinetic form rhythm · Rayo vs Athletic",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.wins",
+        "home.draws",
+        "home.losses",
+        "away.wins",
+        "away.draws",
+        "away.losses",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.3,
+          "action": "entry",
+          "detail": "Wipe reveals charcoal carbon-grain; Spanish title 'Forma reciente' slams in, warm white, letters staggered 60ms."
+        },
+        {
+          "t0": 1.3,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Editorial kinetic typography: three stacked narration lines snap in, lime underline pulse on each."
+        },
+        {
+          "t0": 3.4,
+          "t1": 6.6,
+          "action": "main",
+          "detail": "Statistical transition dissolve: grouped count bars grow from a shared zero baseline for both teams."
+        },
+        {
+          "t0": 6.6,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars hold, sample note pulses, frame collapses into a lime seam."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine carbon grain with faint slate diagonal scratch top-right",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "DERROTAS",
+        "EMPATES"
+      ],
+      "prompt": "Vertical 9:16 frame for an 8-second clip of Rayo Vallecano de Madrid versus Athletic Club. Editorial presentation: kinetic typography of the Spanish narration, three giant warm-white lines stacked centre-frame over charcoal carbon-grain, each line snapping in letter by letter with a lime rhythm pulse on DERROTAS and EMPATES, plus a thin slate diagonal slash; no axes, no sample claims. Statistical presentation: grouped count bars titled 'Forma reciente' in Spanish, one group per team under team names, three bars each for victorias, empates and derrotas — {{home.wins}}, {{home.draws}}, {{home.losses}} for Rayo Vallecano de Madrid and {{away.wins}}, {{away.draws}}, {{away.losses}} for Athletic Club, all sharing one zero baseline and one common scale in partidos. Because both groups rest on a sample of {{home.n}} and {{away.n}} partidos, add the source and sample line 'Muestra: últimos {{home.n}} partidos · source: Bzzoiro' under the axis. Temporal stages: 0–1.3 wipe entry and Spanish title; 1.3–3.4 editorial build with staggered narration words; 3.4–6.6 transition dissolve into the statistical bars counting up in warm white with lime team accents; 6.6–8.0 exit collapse. Typography: heavy grotesk headline, medium labels, slate unit caption 'partidos'. One focal point: the bar group. Camera push-in 1.0 to 0.9 with drift and a 1deg tilt max. Lower quarter stays clear for permanent yellow subtitles.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "stagger-reveal",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "stagger-reveal",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 20,
+      "kind": "clean-sheets",
+      "title": "Shield of clean sheets · Athletic wall",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Stripe sweep brings a stylised shield outline in slate, seam glowing lime, Spanish eyebrow 'Defensas'."
+        },
+        {
+          "t0": 1.4,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Editorial beat: shield splits into two halves, defensive energy rings pulse outward on the narration."
+        },
+        {
+          "t0": 3.6,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Transition fade to statistical paired count bars of arcos en cero on one shared zero baseline."
+        },
+        {
+          "t0": 6.8,
+          "t1": 8.2,
+          "action": "exit",
+          "detail": "Shield reassembles behind the bars, frame shutter closes on the sample note."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft charcoal glow behind shield, subtle grain overlay",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "1.5deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "SIN GOLES"
+      ],
+      "prompt": "Vertical 9:16 clip of roughly 8 seconds. Editorial presentation: defensive energy built around a stylised shield in slate on charcoal, its vertical seam glowing lime; the shield splits into two halves as the Spanish narration lands, concentric impact rings pulse outward and warm-white words ARCOS and SIN GOLES punch in with rhythmic emphasis — purely editorial, no axes, no counts, no sample claims. Statistical presentation: paired count bars titled 'Arcos en cero' in Spanish, two rows — Rayo Vallecano de Madrid showing {{home.clean}} and Athletic Club showing {{away.clean}} — sharing one zero baseline, one common scale measured in partidos, with plain Spanish labels and no conversion of counts into rates. Attach the source and sample annotation directly beneath: 'Muestra: {{home.n}} y {{away.n}} partidos · source: Bzzoiro'. Temporal stages: 0–1.4 stripe sweep entry with Spanish eyebrow; 1.4–3.6 editorial build of the split shield and pulses; 3.6–6.8 transition fade into the statistical bars counting up, lime fill for Athletic, slate for Rayo; 6.8–8.2 shutter exit closing on the sample note. Typography: condensed heavy display for the shield word, medium grotesk for Spanish labels, slate caption 'partidos'. Single focal point is the shield-anchored bar pair. Camera fixed plus parallax with a 1.5deg tilt max. The lower quarter remains permanently reserved for yellow subtitles in 9:16.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 21,
+      "kind": "synthesis",
+      "title": "Historial que pesa · grounded tension",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total",
+        "home.wins",
+        "away.wins"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Wipe splits the screen vertically: Spanish team names revealed left and right, warm white on charcoal grain."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Editorial narrative emphasis: phrases rise and stack, lime keyword flashes between the two reveals."
+        },
+        {
+          "t0": 3.6,
+          "t1": 7,
+          "action": "main",
+          "detail": "Transition dissolve to a horizontal stacked bar of cruces previos plus a paired recent-form readout."
+        },
+        {
+          "t0": 7,
+          "t1": 8.5,
+          "action": "exit",
+          "detail": "Bars hold with the source and sample note, then the frame slides up behind the subtitle band."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "faint slate grid, charcoal grain, subtle lime corner glow",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTORIAL"
+      ],
+      "prompt": "Vertical 9:16 clip of about 8.5 seconds summarising one grounded statistical tension for Rayo Vallecano de Madrid versus Athletic Club. Editorial presentation: team reveals and narrative emphasis — the Spanish team names slide in from opposite edges over charcoal grid, warm-white narration phrases stack centre-frame, lime flares on CRUCES and HISTORIAL; purely editorial, with no axes, no invented events. Statistical presentation: a horizontal stacked bar titled 'Cruces previos' in Spanish sharing one partidos scale with segments {{h2h.homeWins}} for Rayo Vallecano de Madrid, {{h2h.draws}} for empates and {{h2h.awayWins}} for Athletic Club, anchored by the total {{h2h.total}} cruces; beneath it a compact paired readout of recent form victorias {{home.wins}} and {{away.wins}}. Same unit throughout: partidos. Source and sample annotation stays attached: 'Muestra: {{h2h.total}} cruces previos · form sample Bzzoiro' — historical data is presented as history, never as a forecast, and no model estimate is shown since none is published. Temporal stages: 0–1.5 stripe sweep entry; 1.5–3.6 editorial build with stacked Spanish phrases; 3.6–7.0 transition wipe into the statistical stacked bar growing left to right with count-up and staggered segments; 7.0–8.5 slide exit. Focal point: the stacked bar. Type: heavy display headline, medium grotesk Spanish labels, slate unit caption 'partidos'. Camera orbit leve with a 1deg tilt max. The lower quarter is permanently reserved for yellow subtitles in 9:16.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 22,
+      "kind": "goals",
+      "title": "Paired goal flow: Rayo vs Athletic",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Charcoal field, pitch outline and Spanish title wipe in from the left edge."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Zero baseline, tick marks and Spanish team labels rise with 60ms stagger."
+        },
+        {
+          "t0": 3.4,
+          "t1": 8.2,
+          "action": "main",
+          "detail": "Four grouped bars grow with count-up while the ball path traces; the larger bar takes a lime rim."
+        },
+        {
+          "t0": 8.2,
+          "t1": 10,
+          "action": "exit",
+          "detail": "Bars and pitch lines collapse toward the central comparison lockup."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine diagonal grain with a faint lime haze behind the pitch",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "SALIDA"
+      ],
+      "prompt": "Vertical 9:16, about ten seconds. Editorial variant: an illustrative football pitch in thin lime strokes on charcoal, a ball path arcing to the far corner, Spanish kinetic labels GOLES A FAVOR and GOLES RECIBIDOS snapping in with rhythmic word emphasis. Statistical variant: grouped paired bars on one shared zero baseline, a pair for Rayo Vallecano de Madrid and a pair for Athletic Club, each pair showing goles a favor beside goles recibidos, lime for scoring and slate for conceding, warm white tick labels in Spanish, plus a Spanish annotation carrying the sample size and the source provider so the sample context travels with the numbers. Bar heights resolve at render from {{home.gf}}, {{home.ga}}, {{away.gf}} and {{away.ga}}, all sharing one goles scale so the two teams stay directly comparable. Beats: entry 0.0–1.5 pitch outline and title wipe in; build 1.5–3.4 baseline, ticks and team labels rise with 60ms stagger; main 3.4–8.2 the four bars grow with count-up while the ball path traces; exit 8.2–10.0 collapse into a single focal bar group. Enter easing ease-out on cubic-bezier(0.23,1,0.32,1), spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, camera push-in 1.0 to 0.9 with drift and tilt 1deg maximum. Transition design: in wipe, editorial to statistical dissolve, out collapse, keeping one transition vocabulary. The lower quarter stays reserved for permanent yellow subtitles, so charts sit above it, and one focal point only: the paired bar comparison. Both the editorial and the statistical cut describe the same recorded sample from the catalog source; nothing here predicts the match and no axis value is invented.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 23,
+      "kind": "head-to-head",
+      "title": "Historic duel in previous crossings",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.draws",
+        "h2h.awayWins",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Two shields slide in from opposite edges; Spanish title CRUCES PREVIOS snaps to centre."
+        },
+        {
+          "t0": 1.4,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Horizontal axis, unit label in partidos and Spanish category labels rise with 60ms stagger."
+        },
+        {
+          "t0": 3.6,
+          "t1": 8.4,
+          "action": "main",
+          "detail": "Stacked outcome segments grow with count-up while shields nudge forward and the largest segment takes a lime rim."
+        },
+        {
+          "t0": 8.4,
+          "t1": 10,
+          "action": "exit",
+          "detail": "Shields and bar retract into the title lockup and the frame shutter-closes."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft lime glow behind the title, slate glow behind the away shield",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTORIA"
+      ],
+      "prompt": "Vertical 9:16, about ten seconds. Editorial variant: both sides presented as a visual duel — Rayo Vallecano de Madrid on the left in slate, Athletic Club on the right in lime, shields facing each other, Spanish title CRUCES PREVIOS pulsing between them with rhythmic emphasis on the narration keyword. Statistical variant: a horizontal stacked outcome bar on a shared zero baseline showing victorias de Rayo, empates and victorias de Athletic, warm white Spanish labels, tick marks in the same unit of partidos, plus a Spanish sample annotation giving total cruces and the source provider. Segment widths resolve at render from {{h2h.homeWins}}, {{h2h.draws}} and {{h2h.awayWins}}, with {{h2h.total}} shown as the sample. Beats: entry 0.0–1.4 shields slide in from both edges and the title snaps; build 1.4–3.6 axis, unit label and category labels rise with 60ms stagger; main 3.6–8.4 the stacked segments grow with count-up while the duelling shields nudge forward; exit 8.4–10.0 the composition collapses into the title lockup. Enter easing ease-out on cubic-bezier(0.16,1,0.3,1), spring damping 22, stiffness 180, mass 0.6, scaleFrom 0.95, camera fixed with parallax and tilt 0deg. Transition plan: in stripe sweep, editorial to statistical fade, out shutter, one consistent transition language. Background stays carbon-glow with safe area left 64, right 64, top 120, bottom 480, so the permanent yellow subtitles in the lower quarter never collide with the chart. One focal point holds: the stacked bar. Historical record only — neither the editorial nor the statistical version forecasts anything, and the source and sample note stays visible in Spanish.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 24,
+      "kind": "synthesis",
+      "title": "Clean-sheet tension: two samples",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Spanish headline ARCOS EN CERO snaps in over a gridded charcoal field with lime diagonals."
+        },
+        {
+          "t0": 1.6,
+          "t1": 3.8,
+          "action": "build",
+          "detail": "Both crests reveal from opposite bands and the two dial rings draw in with 80ms stagger."
+        },
+        {
+          "t0": 3.8,
+          "t1": 8.6,
+          "action": "main",
+          "detail": "Counts tick up with count-up, rings close, and a contrast pulse holds one beat."
+        },
+        {
+          "t0": 8.6,
+          "t1": 10,
+          "action": "exit",
+          "detail": "Elements slide upward and collapse just above the subtitle band."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "subtle grid with lime diagonal accent lines",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 80,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "SOLIDEZ"
+      ],
+      "prompt": "Vertical 9:16, adapted to the spoken lines across roughly ten seconds. Editorial variant: team reveals with narrative emphasis — the Rayo Vallecano de Madrid crest wipes up from the lower band, then Athletic Club answers from the top, and the Spanish headline ARCOS EN CERO lands between them with a hard emphasis pulse. Statistical variant: two large count dials side by side, each showing kept clean sheets inside its own sample of matches, with a plain Spanish note carrying sample and source, counts expressed as numbers of partidos and never converted into rates. Values resolve at render from {{home.clean}}, {{away.clean}}, {{home.n}} and {{away.n}} in one shared unit. Beats: entry 0.0–1.6 gridded charcoal field and Spanish title snap in; build 1.6–3.8 crests reveal and dial rings draw; main 3.8–8.6 both counts tick up with count-up, rings close, contrast pulse; exit 8.6–10.0 elements slide up and collapse just above the subtitle band. Enter easing ease-out on cubic-bezier(0.23,1,0.32,1), spring damping 22, stiffness 180, mass 0.6, stagger 80ms, scaleFrom 0.95, camera fixed with parallax and tilt 2deg maximum. Transition rules: in wipe, editorial to statistical dissolve, out slide, one transition family across the pair. The lower quarter stays permanently reserved for yellow subtitles. One focal point: the paired dial contrast. Both the editorial and the statistical cut describe only the recorded catalog source with its sample attached in Spanish; nothing predicts the coming match and no count is treated as a rate. Should a requested figure be missing, an honest Spanish 'Datos no disponibles' title sequence replaces the dials.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 25,
+      "kind": "synthesis",
+      "title": "Tensión defensiva: goles concedidos y arcos en cero",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.ga",
+        "away.ga",
+        "home.clean",
+        "away.clean",
+        "home.losses",
+        "away.losses",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Stripe sweep reveals charcoal ground; two team slabs slide in from opposite edges with lime seam pulse."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.5,
+          "action": "build",
+          "detail": "Kinetic type stacks RAYO VALLECANO DE MADRID and ATHLETIC CLUB, seam tightens, emphasis word scales from 0.95."
+        },
+        {
+          "t0": 3.5,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Dissolve to statistical panels: paired bars grow from a shared zero baseline with count-up numerals and source caption."
+        },
+        {
+          "t0": 6.5,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars retract to a single lime rule; title holds, then collapse out while subtitles persist."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine carbon grain with faint diagonal ash sweep, no patterns behind numerals",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "DERROTAS",
+        "ARCOS",
+        "GOLES"
+      ],
+      "prompt": "Build an 8-second vertical 9:16 piece with two named variants, editorial and statistical, that alternate cleanly. The editorial variant opens as team reveals on GoatLab charcoal #101412: a warm white #edf0e6 slab slides from the left carrying RAYO VALLECANO DE MADRID in condensed uppercase, a slate #8ca6bf slab mirrors from the right carrying ATHLETIC CLUB, and a lime #c5ed74 seam pulses between them. Kinetic type stacks the Spanish phrase CERO ARCOS, springing from 0.95 to full size; no axes, no sample claims, no invented match events appear in this variant. The transition into the statistical variant is a dissolve onto two stacked panels with one focal point each. Panel one is GOLES RECIBIDOS, in unit goles: Rayo {{home.ga}} against Athletic {{away.ga}}, horizontal bars sharing one zero baseline and one identical scale. Panel two is ARCOS EN CERO, in unit partidos: Rayo {{home.clean}} against Athletic {{away.clean}}, on its own scale, never merged with the goals scale. Small lime caption chips carry the context DERROTAS Rayo {{home.losses}} and Athletic {{away.losses}}. Spanish labels stay legible at 9:16, with a permanent annotation reading source Bzzoiro and muestra de {{home.n}} y {{away.n}} partidos attached beneath each panel. Entry transition: stripe sweep; transition out: collapse. Beats are entry 0–1.5s slab reveal, build 1.5–3.5s kinetic seam, main 3.5–6.5s panel comparison with count-up bars staggered 60ms, exit 6.5–8.0s retract to a lime rule. Camera push-in from 1.0 to 0.9 with a gentle drift, tilt 1deg. Easing in and out is cubic-bezier(0.23,1,0.32,1). Reserve the lower quarter for permanent yellow subtitles. Emphasis words: DERROTAS, ARCOS, GOLES.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 26,
+      "kind": "goals",
+      "title": "Corte de goles: a favor y en contra",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Illustrative football pitch draws itself in white lines on charcoal, ball spins to centre circle, title wipes on."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.5,
+          "action": "build",
+          "detail": "Ball paths arc from the centre toward two goalmouths, leaving lime and slate trails that end as markers."
+        },
+        {
+          "t0": 3.5,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Transition to statistical paired bars: for and against for each team on one shared zero baseline, Spanish units and source caption."
+        },
+        {
+          "t0": 6.5,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Trails fade, pitch lines collapse into a single lime rule, frame releases the subtitle band."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "subtle stadium grid fading toward edges, centre kept clean for the pitch drawing",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "tilt down",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "A FAVOR",
+        "EN CONTRA"
+      ],
+      "prompt": "This vertical 9:16 sequence runs about 9 seconds and pairs an editorial variant with a statistical variant. The editorial variant is an illustrative football pitch: thin warm white #edf0e6 lines draw themselves across GoatLab charcoal #101412 inside the safe area, the centre circle rotates, and a ball arcs toward a goalmouth leaving a lime #c5ed74 trail, then a second arc in slate #8ca6bf peels the other way. Big Spanish words GOLES, A FAVOR, EN CONTRA snap on rhythmically with a spring from 0.95; no axes, no sample claims and no invented match events are shown here. A wipe is the entry transition, and a fade is the transition into the statistical variant: two horizontal grouped bar pairs on the same charcoal ground, labelled in Spanish as GOLES A FAVOR (unit goles) with Rayo {{home.gf}} and Athletic {{away.gf}}, and GOLES RECIBIDOS (unit goles) with Rayo {{home.ga}} and Athletic {{away.ga}}. Both pairs share one zero baseline and one identical scale so the comparison is honest. Numerals count up while bars grow with a 70ms stagger, and the focal point stays on the paired comparison. A compact annotation in Spanish reads source Bzzoiro and muestra de {{home.n}} y {{away.n}} partidos, anchored beside the bars. Emphasis lands on EN CONTRA as a lime underline sweeps beneath the larger bar. Camera is a tilt down with a slight push, tilt 1deg, easing cubic-bezier(0.16,1,0.3,1) entering and ease-out on exit. Beats: entry 0–1.5s pitch draw, build 1.5–3.5s ball paths, main 3.5–6.5s statistical bars, exit 6.5–9.0s shutter collapse to a lime rule. Keep the lower quarter reserved for permanent yellow subtitles. Emphasis words: GOLES, A FAVOR, EN CONTRA.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "pitch-run",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 27,
+      "kind": "clean-sheets",
+      "title": "Escudo defensivo: arcos en cero",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "A stylised shield outline strokes on in warm white, splits down the middle into lime and slate halves, title wipes in."
+        },
+        {
+          "t0": 1.5,
+          "t1": 3.5,
+          "action": "build",
+          "detail": "Ripple waves cross the shield; the Spanish word ARCOS lands with a spring pulse and a lime seam flashes."
+        },
+        {
+          "t0": 3.5,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Fade to statistical panel: two count bars in partidos on a shared zero baseline, count-up numerals, source and sample annotation."
+        },
+        {
+          "t0": 6.5,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Shield halves clamp shut over the bars, then the whole mark collapses to a thin lime rule as subtitles persist."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft radial glow behind the shield, grain overlay, edges darkened for legibility",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "CERO",
+        "DEFENSA"
+      ],
+      "prompt": "An 8-second vertical 9:16 clip built from an editorial variant and a statistical variant, both framed inside the safe area with the lower quarter permanently held for yellow subtitles. The editorial variant is pure defensive energy: a stylised shield strokes on in warm white #edf0e6 against GoatLab charcoal #101412, then splits into a lime #c5ed74 half and a slate #8ca6bf half with a bright seam. Ripple waves sweep across the shield while the Spanish word ARCOS drops in with a spring from 0.95, then CERO, then DEFENSA — rhythmic, kinetic, no axes, no sample claims and no invented match events. The entry transition is a wipe; the transition into the statistical variant is a dissolve. The statistical variant places a compact horizontal count chart on the same charcoal ground: label ARCOS EN CERO in Spanish, unit partidos, with Rayo Vallecano de Madrid at {{home.clean}} and Athletic Club at {{away.clean}}, both bars growing from one shared zero baseline on one identical scale so counts are compared as counts. Numerals count up with a 50ms stagger while bars extend. A small permanent annotation reads source Bzzoiro and muestra de {{home.n}} y {{away.n}} partidos, keeping the sample size attached to the source at all times. Emphasis: a lime underline sweeps under the larger bar while the word DEFENSA pulses once at half width. Camera is fixed plus parallax, tilt 0deg, easing cubic-bezier(0.23,1,0.32,1) on entry and ease-out on exit. Beats: entry 0–1.5s shield stroke and split, build 1.5–3.5s ripples and kinetic Spanish type, main 3.5–6.5s statistical comparison, exit 6.5–8.0s slide-out to a thin lime rule. Emphasis words: ARCOS, CERO, DEFENSA.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 28,
+      "kind": "clean-sheets",
+      "title": "Escudo en cero · arcos limpios",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "away.clean",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Wipe opens the 9:16 frame; two shield halves slide from opposite edges and lock with a spring; kinetic Spanish words ARCOS EN CERO assemble letter by letter."
+        },
+        {
+          "t0": 1.6,
+          "t1": 3.4,
+          "action": "build",
+          "detail": "Shockwave ring pulses once from the shield centre, lime half lifts in scale, then a dissolve is the transition into the statistical variant."
+        },
+        {
+          "t0": 3.4,
+          "t1": 6.4,
+          "action": "main",
+          "detail": "Grouped count bars rise from a shared zero baseline to {{home.clean}} and {{away.clean}} with countUp; sample and source annotations stay static beneath each bar."
+        },
+        {
+          "t0": 6.4,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Taller bar pulses and label flashes lime, bars collapse to the baseline, shield reassembles and the frame shutters out."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine warm grain with a faint lime rim light behind the shield",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "CERO"
+      ],
+      "prompt": "Vertical 9:16, roughly 8 seconds, adapted to the narration. Editorial variant 'Escudo en cero': a stylised shield of angular chevrons owns the centre of the frame on GoatLab charcoal, warm white linework, lime reserved for Athletic Club, slate for Rayo Vallecano de Madrid, faint carbon-grain texture behind. Entry 0.0–1.6s: both shield halves slide from opposite edges and lock with the spring; kinetic Spanish words 'ARCOS EN CERO' assemble letter by letter with staggered beats. Build 1.6–3.4s: a shockwave ring pulses once, the lime half lifts in scale, then a dissolve is the transition into the statistical variant. Statistical 3.4–6.4s: a grouped count chart on the same shared zero baseline and one common scale measured in partidos; Rayo's bar resolves from {{home.clean}}, Athletic's from {{away.clean}}; Spanish chart title 'Arcos en cero · últimos partidos', category labels 'Rayo Vallecano de Madrid' and 'Athletic Club' below the axis, unit 'partidos' on the axis. Counts animate with countUp; sample and source annotations stay static and attached: 'Muestra: {{home.n}} partidos · Fuente: Bzzoiro' and 'Muestra: {{away.n}} partidos · Fuente: Bzzoiro'. Counts remain counts, no rates are derived. Emphasis: the taller bar pulses and its label flashes lime while keywords 'ARCOS' and 'CERO' carry the emphasis in the Spanish yellow subtitle band. Exit 6.4–8.0s: bars collapse to the baseline, shield reassembles, shutter out. The transition out reuses the opening wipe; safeArea left64 right64 top120 bottom480 keeps the subtitle band clear. Camera: push-in 1.0 to 0.9 plus drift, tilt 1deg. Lower quarter permanently reserved for Spanish subtitles. One focal point only: the shield, then the taller bar.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "glow-pulse",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 29,
+      "kind": "head-to-head",
+      "title": "Duelo de banderas · cruces previos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Banner wipes enter from both edges of the 9:16 stage; slate and lime flags cross like lances and snap apart; Spanish words CRUCES PREVIOS slam in with 60ms stagger."
+        },
+        {
+          "t0": 1.8,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Banners grind against each other with grain sparks and rhythmic pulses, then a dissolve is the transition into the statistical variant."
+        },
+        {
+          "t0": 3.6,
+          "t1": 7,
+          "action": "main",
+          "detail": "Stacked horizontal bar builds segment by segment from {{h2h.homeWins}}, {{h2h.awayWins}} and {{h2h.draws}} on one shared zero baseline up to the total sample, with countUp on the segment labels."
+        },
+        {
+          "t0": 7,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Largest segment lifts and flashes lime, banners cross once more, segments collapse to the baseline and the frame slides out."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "subtle carbon grid with slate and lime light bleed at the edges",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "HISTÓRICO"
+      ],
+      "prompt": "Vertical 9:16, about 9 seconds. Editorial variant 'Duelo de banderas': two vertical banners, slate for Rayo Vallecano de Madrid and lime for Athletic Club, rush toward the centre of a GoatLab charcoal stage, cross like lances and snap apart with a hard spring; no statistical axes, no sample claims, no invented match events. Entry 0.0–1.8s: banner wipes enter from both edges, Spanish words 'CRUCES PREVIOS' slam in with rhythmic stagger. Build 1.8–3.6s: the banners grind against each other with grain sparks, then a dissolve is the transition into the statistical variant. Statistical 3.6–7.0s: a stacked horizontal bar of head-to-head outcomes on one shared zero baseline, common scale measured in partidos from zero to the total sample; segments labelled in Spanish: 'Rayo Vallecano de Madrid · victorias en cruces' from {{h2h.homeWins}}, 'Athletic Club · victorias en cruces' from {{h2h.awayWins}}, 'Empates en cruces' from {{h2h.draws}}, chart title 'Cruces previos · histórico'. Sample and source sit directly under the bar: 'Muestra: {{h2h.total}} partidos · Fuente: Bzzoiro', with the caution 'Histórico, no es un pronóstico' in small warm white type. Segments build with countUp while the sample annotation stays static. Emphasis 7.0–9.0s: the largest segment lifts and flashes lime, Spanish keywords 'CRUCES' and 'HISTÓRICO' anchor the yellow subtitle band, then segments collapse to the baseline, banners cross once and the frame slides out. Camera: orbit leve, tilt 2deg maximum. Lower quarter stays reserved for permanent Spanish subtitles. One focal point: the crossing point of the two banners.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "duel-collide",
+        "porque": "énfasis del dato que pide la narración"
+      }
+    },
+    {
+      "n": 30,
+      "kind": "synthesis",
+      "title": "Balance de goles · tensión ofensiva",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "away.gf",
+        "away.ga",
+        "home.n",
+        "away.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Charcoal curtains split from the centre of the 9:16 frame; Rayo Vallecano de Madrid reveals in slate, Athletic Club in lime; kinetic Spanish typography lands GOLES A FAVOR."
+        },
+        {
+          "t0": 1.8,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Goal-mouth silhouettes flash and the second phrase GOLES RECIBIDOS hits with rhythmic emphasis; a dissolve is the transition into the statistical variant."
+        },
+        {
+          "t0": 3.6,
+          "t1": 7.2,
+          "action": "main",
+          "detail": "Two paired bar groups rise on a shared zero baseline in goles: {{home.gf}} against {{away.gf}}, then {{home.ga}} against {{away.ga}}, with countUp while sample and source notes stay static."
+        },
+        {
+          "t0": 7.2,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Largest bar lifts and its label flashes slate, keywords hold the subtitle band, bars collapse and the curtains close as the frame shutters out."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft warm glow behind the centre split with fine charcoal grain",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "wipe",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "BALANCE"
+      ],
+      "prompt": "Vertical 9:16, about 9 seconds. Editorial variant 'Revelado narrativo': two full-height charcoal curtains split from the centre to reveal each side, Rayo Vallecano de Madrid announced first in slate, Athletic Club in lime, kinetic Spanish typography reading 'GOLES A FAVOR' then 'GOLES RECIBIDOS' with a hard rhythmic emphasis on one word; no statistical axes appear in this half, no sample claims, no invented match events. Entry 0.0–1.8s: curtains wipe open, team names snap in with the spring. Build 1.8–3.6s: goal-mouth silhouettes flash and the narration keyword lands; a wipe is the transition into the statistical variant. Statistical 3.6–7.2s: four count bars in two pairs on one shared zero baseline and one common scale measured in goles — 'Goles a favor' {{home.gf}} against {{away.gf}}, then 'Goles recibidos' {{home.ga}} against {{away.ga}}; Spanish labels name each team beneath its bar, axis unit 'goles', chart title 'Balance de goles · últimos partidos'. Sample and source annotations remain permanently attached: 'Muestra: {{home.n}} partidos · Fuente: Bzzoiro' and 'Muestra: {{away.n}} partidos · Fuente: Bzzoiro'. This is historical data only, no forecast. Counts animate with countUp while annotations stay static. Emphasis 7.2–9.0s: the largest bar lifts, its 'Goles recibidos' label flashes slate while keywords 'GOLES' and 'BALANCE' hold the Spanish yellow subtitle band, then bars collapse, curtains close and the frame shutters out. Camera: fixed + parallax, tilt 1deg. Lower quarter reserved for permanent Spanish subtitles. One focal point: the second pair of bars.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "camera-push",
+        "porque": "énfasis del dato que pide la narración"
+      }
     }
   ]
 }

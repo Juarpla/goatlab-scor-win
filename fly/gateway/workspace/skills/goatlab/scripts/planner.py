@@ -92,6 +92,8 @@ def validate(plan, source):
         graphics = scene.get("graphics", [])
         if not isinstance(graphics, list) or len(graphics) > 4:
             raise ValueError("máximo cuatro gráficos por escena")
+        used_motion = set()
+        last_motion_presentation = None
         for graphic in graphics:
             if graphic.get("kind") not in {"label", "stat", "bars", "ring", "line", "title"} | MOTION_KINDS:
                 raise ValueError("gráfico desconocido")
@@ -101,7 +103,9 @@ def validate(plan, source):
             number(graphic.get("y", .13), 0, .65, "graphic.y")
             if graphic['kind'] in MOTION_KINDS:
                 if plan['version'] != 4: raise ValueError('motion requiere plan version 4')
-                prompt = next((p for p in source.get('motionPrompts', []) if p.get('n') == graphic.get('motionPromptNumber')), None)
+                motion_n = graphic.get('motionPromptNumber')
+                if not isinstance(motion_n, int) or isinstance(motion_n, bool) or not 1 <= motion_n <= 30: raise ValueError('motionPromptNumber debe ser 1-30')
+                prompt = next((p for p in source.get('motionPrompts', []) if p.get('n') == motion_n), None)
                 if not prompt or prompt.get('kind') != graphic['kind']: raise ValueError('Motion Prompt inexistente o incompatible')
                 refs = graphic.get('factIds', [])
                 if not isinstance(refs, list) or len(refs) > 8 or any(not isinstance(r, str) or r not in facts or r not in prompt.get('factIds', []) for r in refs) or len(set(refs)) != len(refs):
@@ -109,6 +113,12 @@ def validate(plan, source):
                 presentation = graphic.get('presentation','statistical')
                 if presentation not in ('editorial','statistical'): raise ValueError('presentación de motion desconocida')
                 if presentation == 'editorial' and refs: raise ValueError('motion editorial no admite cifras')
+                if motion_n in used_motion and not graphic.get('reuseJustification'):
+                    raise ValueError('Motion Prompt repetido sin reuseJustification')
+                used_motion.add(motion_n)
+                if last_motion_presentation == 'statistical' and presentation == 'statistical':
+                    raise ValueError('no dos statistical consecutivos; alterna editorial/statistical')
+                last_motion_presentation = presentation
                 selected = [facts[r] for r in refs]
                 for fact in selected:
                     number(fact.get('value'), 0, 1e6, 'motion.value')
@@ -156,6 +166,10 @@ def validate(plan, source):
             obj.pop('text',None)
     if abs(cursor - span) > .03:
         raise ValueError("las escenas deben cubrir span completo")
+    by_n = {p.get('n'): p for p in source.get('motionPrompts', []) if isinstance(p, dict)}
+    sigs = {by_n[g.get('motionPromptNumber')].get('signature_move') for s in scenes for g in s.get('graphics', []) if g.get('kind') in MOTION_KINDS and isinstance(by_n.get(g.get('motionPromptNumber')), dict) and by_n[g.get('motionPromptNumber')].get('signature_move')}
+    if len(sigs) > 2:
+        raise ValueError('máximo 2 signature moves por video; alterna editorial/statistical en su lugar')
     return plan
 
 
@@ -214,15 +228,21 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
                     'clean-sheets': r'arco|porter[ií]a|valla', 'head-to-head': r'cara a cara|cruces?|entre ellos|enfrentamientos?',
                     'synthesis': r'clave|balance|estad[ií]stic|resumen'}
         statistical = False
+        used = set(source.get('usedMotionNumbers', []) or [])
         for i, scene in enumerate(scenes):
             indices = [j for j,w in enumerate(words) if scene['start'] <= w['start'] < scene['end']-.3]
             if not indices: continue
             text = ' '.join(words[j]['word'] for j in indices).lower()
-            prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('kind') == kind and re.search(patterns[kind], text)), None)
+            prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('n') not in used and p.get('kind') == kind and re.search(patterns[kind], text)), None)
+            if not prompt:
+                prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('kind') == kind and re.search(patterns[kind], text)), None)
             matched = bool(prompt)
+            if not prompt and i % 3 == 0:
+                prompt = next((p for p in source.get('motionPrompts',[]) if p.get('n') not in used and p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
             if not prompt and i % 3 == 0:
                 prompt = next((p for p in source.get('motionPrompts',[]) if p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
             if not prompt: continue
+            used.add(prompt['n'])
             refs = [r for r in prompt.get('factIds',[]) if not r.endswith('.n') and r in {f['id'] for f in source.get('facts',[])}][:8]
             presentation = 'statistical' if matched and refs and not statistical else 'editorial'
             statistical = presentation == 'statistical'

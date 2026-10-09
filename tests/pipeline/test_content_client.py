@@ -37,7 +37,7 @@ class ContentTests(unittest.TestCase):
         old_video=self.pack('video-prompts',['push-in','tracking','orbit','pull-out','focus-transition'])
         self.assertFalse(valid(old_video,'video-prompts','a-b'))
         self.assertFalse(valid(self.pack('motion-prompts',['form']),'motion-prompts','a-b'))
-        self.assertFalse(valid(self.pack('motion-prompts',['form']*11),'motion-prompts','a-b'))
+        self.assertFalse(valid(self.pack('motion-prompts',['form']*31),'motion-prompts','a-b'))
         self.assertFalse(valid(self.pack('motion-prompts',['form','invented']),'motion-prompts','a-b'))
     def test_clip_plan_cannot_reference_an_unknown_clip_or_out_of_range_fragment(self):
         source={'span':4,'words':[{'word':'Datos','start':0,'end':1}],'assets':[],'clips':[{'duration':6}]}

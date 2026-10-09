@@ -2,7 +2,7 @@
 
 Produce un plan JSON de montaje version 4 a partir de la voz temporizada. La voz
 es la narración; los Image Prompts y Video Prompts describen el banco Agnes.
-Los Motion Prompts (entre dos y diez, los que el modelo haya redactado) dirigen
+Los Motion Prompts (entre dos y treinta, los que el modelo haya redactado) dirigen
 gráficos pertinentes al argumento de ese audio: el montaje siempre lleva motion
 gráfico, en pantalla completa o como overlays transparentes sobre fotos y vídeos.
 Compón escenas contiguas que cubran exactamente [0,span]. El motor añade el cierre
@@ -42,7 +42,7 @@ El motor silencia los clips y conserva el tiempo global de la voz.
 
 Selecciona una entrada de motionPrompts cuyo tema aparezca en la voz:
 form, goals, clean-sheets, head-to-head o synthesis. Cada gráfico identifica
-motionPromptNumber (n original), factIds y wordStart/wordEnd (fragmento hablado
+motionPromptNumber (1-30, no repetir el mismo Nº entre escenas sin reuseJustification; alterna editorial/statistical, nunca dos statistical seguidos) (n original), factIds y wordStart/wordEnd (fragmento hablado
 pertinente de 1–10 palabras). At es un segundo ABSOLUTO de la composición (no un desplazamiento relativo).
 At y duration permanecen dentro de la escena.
 Máximo ocho referencias por gráfico, todas presentes en ese Motion Prompt y facts.
@@ -64,7 +64,7 @@ Un tema estadístico explícito sin datos puede mostrar Datos no disponibles. No
 Ejemplo:
 ```json
 {"version":4,"scenes":[{"start":0,"end":6,"transition":"fade","layers":[],
-"graphics":[{"kind":"goals","motionPromptNumber":2,"factIds":["home.gf","away.gf"],
+"graphics":[{"kind":"goals","motionPromptNumber (1-30, no repetir el mismo Nº entre escenas sin reuseJustification; alterna editorial/statistical, nunca dos statistical seguidos)":2,"factIds":["home.gf","away.gf"],
 "wordStart":0,"wordEnd":4,"at":0.5,"duration":5.5}]}]}
 ```
 
@@ -78,3 +78,5 @@ Objects opcionales: hasta tres tarjetas de profundidad, kind cube/card/prism,
 x 0.08–0.7, y 0.08–0.55, size 80–360, rotateX ±35, rotateY/spin ±180. Las etiquetas
 opcionales usan 1–6 palabras mediante wordStart/wordEnd. El motor aporta marca,
 música, subtítulos y cierre. Los planes guardados 1–3 siguen aceptados.
+
+Calidad: tras el render aplica el gate visual de `references/qa.md` (capa 1 determinística a los 10 clips, capa 2 visión en muestra hero + 1 azar, capa 3 auto-ajuste máx 2 pasadas).

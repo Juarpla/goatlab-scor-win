@@ -71,6 +71,8 @@ jobs:
           LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
           SCRIPT_TOP_N: ${{ vars.SCRIPT_TOP_N }}
           SCRIPT_PROVIDER_ORDER: ${{ vars.SCRIPT_PROVIDER_ORDER || 'OPENCODE_GO_FALLBACK_MODEL,OPENCODE_GO_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL' }}
+          MOTION_PROVIDER_ORDER: ${{ vars.MOTION_PROVIDER_ORDER || 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL' }}
+          MOTION_REASONING_EFFORT: ${{ vars.MOTION_REASONING_EFFORT }}
       - name: Lint de guiones
         run: node scripts/check-compliance.mjs
       - name: Validar prompts

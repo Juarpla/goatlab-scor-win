@@ -21,15 +21,15 @@ def valid(data, category, match_id):
     rows = data.get('scripts' if category == 'scripts' else 'prompts')
     if not isinstance(rows, list):
         return False
-    # Motion: el modelo decide la cantidad de escenas (2-10). Imágenes y vídeo, exacto.
+    # Motion v4: banco hasta 30 para no repetir entre los 10 clips.
     if category == 'motion-prompts':
-        if not 2 <= len(rows) <= 10:
+        if not 2 <= len(rows) <= 30:
             return False
     elif len(rows) != CATEGORIES[category][1]:
         return False
     if category == 'scripts':
         return all(isinstance(r, dict) and r.get('n', i+1) == i+1 and isinstance(r.get('narration'), str) and r['narration'].strip() for i, r in enumerate(rows))
-    if data.get('version') != 1 or data.get('category') != category:
+    if data.get('version') not in (1, 2) or data.get('category') != category:
         return False
     facts = {f['id'] for f in data.get('facts', []) if isinstance(f, dict) and isinstance(f.get('id'), str)}
     for i, r in enumerate(rows):
