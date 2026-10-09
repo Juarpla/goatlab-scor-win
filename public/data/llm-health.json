@@ -1,151 +1,6 @@
 {
-  "updatedAt": "2026-10-09T18:38:58.075Z",
+  "updatedAt": "2026-10-09T18:57:56.163Z",
   "runs": [
-    {
-      "at": "2026-09-30T16:25:43.966Z",
-      "task": "shorts",
-      "matchId": "ukraine-vs-hungary-2026-10-05",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "guion 10: guion de 112 palabras supera el techo de 50s (~110)",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6203,
-            "outputTokens": 5598
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 73377
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6342,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 64575
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta la CTA a goatlab.win en la narración; guion 4: falta la CTA a goatlab.win en la narración; guion 5: falta la CTA a goatlab.win en la narración; guion 6: falta la CTA a goatlab.win en la narración; guion 7: falta la CTA a goatlab.win en la narración; guion 8: falta la CTA a goatlab.win en la narración",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 5796,
-            "outputTokens": 1231
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15231
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 429",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 213
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6203,
-        "outputTokens": 6272
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "33db731c-7e2d-4000-96d4-cd76c7432827"
-    },
-    {
-      "at": "2026-09-30T16:26:48.563Z",
-      "task": "shorts",
-      "matchId": "northern-ireland-vs-georgia-2026-10-05",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6180,
-        "outputTokens": 5200
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "c3620db8-7167-4bd4-a9d1-d66b6fa22873"
-    },
-    {
-      "at": "2026-09-30T16:27:57.277Z",
-      "task": "shorts",
-      "matchId": "italy-vs-turkiye-2026-10-05",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6236,
-        "outputTokens": 5551
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "9f9c34c9-e542-4525-b9a5-1836d607848b"
-    },
-    {
-      "at": "2026-09-30T16:29:00.286Z",
-      "task": "shorts",
-      "matchId": "france-vs-belgium-2026-10-05",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6205,
-        "outputTokens": 5810
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "85bde928-e9ee-469b-b847-0b6ad818e393"
-    },
-    {
-      "at": "2026-09-30T16:30:36.054Z",
-      "task": "shorts",
-      "matchId": "kazakhstan-vs-faroe-islands-2026-10-06",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6209,
-        "outputTokens": 7544
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "84de5a1a-723f-45ae-a203-70e215392982"
-    },
     {
       "at": "2026-09-30T16:32:02.667Z",
       "task": "shorts",
@@ -5197,6 +5052,179 @@
       "maxTokens": 12000,
       "batchSize": 1,
       "callId": "74fdfe4e-8348-441b-9359-9f6778b047bd"
+    },
+    {
+      "at": "2026-10-09T18:41:26.790Z",
+      "task": "shorts",
+      "matchId": "arsenal-vs-leeds-united-2026-10-10",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7428,
+        "outputTokens": 10487
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "84ba107a-be82-4875-a7d7-ef3381bdb109"
+    },
+    {
+      "at": "2026-10-09T18:44:53.383Z",
+      "task": "shorts",
+      "matchId": "rayo-vallecano-vs-athletic-club-2026-10-10",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 7525,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 149798
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 7044,
+        "outputTokens": 9223
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "4f5b1d5b-8521-4d15-9877-3420b9d0bf94"
+    },
+    {
+      "at": "2026-10-09T18:46:37.836Z",
+      "task": "shorts",
+      "matchId": "ipswich-town-vs-fulham-2026-10-10",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7344,
+        "outputTokens": 9493
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "dd17114a-b48b-4c83-9ee0-0c8520f45fa5"
+    },
+    {
+      "at": "2026-10-09T18:55:41.901Z",
+      "task": "shorts",
+      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 7249,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 96387
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6864,
+        "outputTokens": 8567
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "012fff63-0efb-4da5-bb5d-23cc98f79613"
+    },
+    {
+      "at": "2026-10-09T18:57:54.159Z",
+      "task": "shorts",
+      "matchId": "chelsea-vs-bournemouth-2026-10-10",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6838,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 62126
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta AFC Bournemouth; guion 1: 10 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta AFC Bournemouth; guion 2: 9 cifras, máximo 3; guion 2: falta el antecedente asignado",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7151,
+            "outputTokens": 1317
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11550
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 53 palabras, mínimo 55; guion 3: falta el sustantivo asignado; guion 7: falta el sustantivo asignado; guion 9: falta el sustantivo asignado; guion 10: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6674,
+            "outputTokens": 5558
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 144072
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7194,
+        "outputTokens": 7667
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "5e844cc0-02bf-455f-be70-7f2ad5de0497"
     }
   ]
 }
