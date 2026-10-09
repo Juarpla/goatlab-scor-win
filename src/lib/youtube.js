@@ -694,10 +694,12 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
     if (words < MIN_WORDS) errors.push(`${label}: ${words} palabras, mínimo ${MIN_WORDS}`);
     const pick = facts?.picks?.[i] ?? null;
     if (pick) {
-      for (const [field, name] of [['bridge', 'puente'], ['noun', 'sustantivo'], ['antecedent', 'antecedente'], ['verdict', 'pronóstico'], ['call', 'llamada']]) {
+      for (const [field, name, ended] of [['bridge', 'puente', false], ['noun', 'sustantivo', false], ['antecedent', 'antecedente', true], ['verdict', 'pronóstico', true], ['call', 'llamada', false]]) {
         const value = String(pick[field] ?? '').trim();
         if (!value) errors.push(`${label}: falta ${name} asignado`);
-        else if (!text.includes(value)) errors.push(`${label}: falta el ${name} asignado`);
+        // Antecedente y pronóstico cierran frase: el punto obliga la pieza
+        // entera y evita recortes silenciosos («por la mínima» fuera).
+        else if (!(ended ? text.includes(value + '.') : text.includes(value))) errors.push(`${label}: falta el ${name} asignado`);
       }
       if (pick.player && !text.includes(pick.player)) errors.push(`${label}: falta ${pick.player}`);
       if (numbersInText(hook).length) errors.push(`${label}: el gancho no lleva cifras`);

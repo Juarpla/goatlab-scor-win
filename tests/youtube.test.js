@@ -347,6 +347,12 @@ test('borrador con piezas pasa; sin pronóstico, con cifras de más o con cero, 
   const nameless = structuredClone(scripts);
   nameless[2] = { ...nameless[2], narration: nameless[2].narration.replace(' Con Estrella Uno en la cancha.', '') };
   assert.ok(acceptYoutubeDraft({ scripts: nameless, lede }, { facts, published: false }).some(e => /Estrella Uno/.test(e)));
+  const clipped = structuredClone(scripts);
+  clipped[2] = { ...clipped[2], narration: clipped[2].narration.replace(`${facts.picks[2].antecedent}.`, 'El historial promedia 2,5 goles.') };
+  assert.ok(acceptYoutubeDraft({ scripts: clipped, lede }, { facts, published: false }).some(e => /antecedente/.test(e)));
+  const clippedScore = structuredClone(scripts);
+  clippedScore[2] = { ...clippedScore[2], narration: clippedScore[2].narration.replace(`${facts.picks[2].verdict}.`, 'la victoria de Alpha en casa.') };
+  assert.ok(acceptYoutubeDraft({ scripts: clippedScore, lede }, { facts, published: false }).some(e => /pronóstico/.test(e)));
 });
 
 test('plantilla con probabilidad lleva picks válidos y pasa compliance', () => {
