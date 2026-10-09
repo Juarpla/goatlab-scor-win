@@ -287,10 +287,12 @@ const deferred = [];
 let leftForNext = 0;
 /** Probabilidades del partido para el pick (null si no hay archivo). */
 async function loadProbability(matchId) {
+  const file = join('public/data/match-probabilities', `${matchId}.json`);
   try {
-    return JSON.parse(await readFile(join('public/data/match-probabilities', `${matchId}.json`), 'utf8'));
+    return JSON.parse(await readFile(file, 'utf8'));
   } catch (error) {
     if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error;
+    console.warn(`shorts: sin probabilidades para ${matchId} (${error.code ?? 'JSON inválido'}); pick sin cálculo`);
     return null;
   }
 }
@@ -298,6 +300,7 @@ try {
   for (const match of pending) {
     const matchId = match.webId ?? match.id;
     const facts = scriptFacts(match, scorers, await loadProbability(match.id));
+    console.log(`shorts: ${matchId} picks ${facts.picks.filter(pick => pick).length}/10`);
     const file = join(dir, `${matchId}.json`);
     try {
       const drafted = await draftMatch(match, { breaker, skill, published, facts, deferTransport: true });
