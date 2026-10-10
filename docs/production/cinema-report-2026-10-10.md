@@ -57,13 +57,15 @@ El banco original del piloto contiene cuatro imágenes y cero clips disponibles.
 
 **Problemas encontrados y corregidos:** la guía JSON confundía el formato; el razonamiento de los modelos agotaba tiempo o truncaba la respuesta; el límite de movimientos rechazaba planes; la transcripción deformaba Bournemouth/GoatLab; cuatro comparaciones verticales no cabían; la medición de layout se hacía antes de fijar dimensiones; el endpoint descartaba metadatos opcionales. Se corrigieron formato, presupuesto, fragmentos preindexados, sesgo de transcripción compatible con Voxtral, grid 2×2, medición tras fuentes y persistencia.
 
+**Incidencia de publicación:** una publicación de la versión anterior reemplazó temporalmente el endpoint de contexto. Se restauró desde la versión integrada y se comprobó por HTTP desde el sitio y el Gateway. Mantener los cambios en main evita que los siguientes builds vuelvan al contrato antiguo.
+
 **Límites que siguen:** Mistral tiene cuota insuficiente en la prueba; la visión juzga seis fotogramas y no escucha audio; algunas observaciones sobre fases de fade/stagger son ambiguas; hay titulares de frase hablada poco pulidos y escenas con mucho espacio vacío. Las imágenes generadas contienen texto/emblemas imperfectos y no sustituyen material deportivo auténtico. Se revisaron fotogramas y propiedades temporales/técnicas, pero falta una evaluación humana completa de los cinco videos con sonido para certificar ritmo y acabado cinematográfico.
 
 Los edit-input originales habían sido purgados. Se recuperaron los cinco audios y la serie; el replay legado se reconstruyó con sus transcripciones y los quince prompts originales. Es una reproducción documentada, no una recuperación exacta de cada archivo temporal antiguo.
 
 ## Despliegue y operación
 
-Contexto público publicado. Gateway y Render activos con `GOATLAB_CINEMA_V5=1` y revisión `cinema-v5-active-20261010`; Render confirma `editPlanVersion=5` en `/healthz`. Los cambios están aislados en `codex/goatlab-cinema-v5` y la PR #1; la integración de Actions se verifica con sus checks antes de incorporarlos a main.
+Contexto público publicado. Gateway y Render activos con `GOATLAB_CINEMA_V5=1` y revisión `cinema-v5-active-20261010`; Render confirma `editPlanVersion=5` en `/healthz`. La [PR #1](https://github.com/Juarpla/goatlab-scor-win/pull/1) se integró en `main` con los checks de GitHub y Cloudflare aprobados. Se sincronizó el checkout local sin mezclar modificaciones ajenas. Una comprobación desde el Gateway desplegado confirmó descargas HTTP de guiones, Image Prompts, Video Prompts y los 22 hechos; no solicitó motion prompts.
 
 La bandera `GOATLAB_CINEMA_V5` permite volver al flujo compatible versión 4 sin borrar trabajos pendientes. Los planes antiguos siguen admitidos. Para rollback operativo, volver a `0` en ambos servicios y desplegar sus configuraciones; conservar reportes, ledger y recursos. La limpieza normal de trabajos temporales sigue vigente.
 
