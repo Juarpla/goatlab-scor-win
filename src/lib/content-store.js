@@ -1,3 +1,4 @@
+import {productionContext} from './production-context.js';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { CONTENT_CATEGORIES, contentUrl, validateContent } from './match-content.js';
 import { esName } from './teams.js';
@@ -19,6 +20,12 @@ export function matchContent(match, category) {
 export function contentIndex() {
   return { version: 1, matches: contentMatches().filter(m => m.status === 'NS' && Date.parse(m.kickoff) > Date.now()).map(match => ({
     matchId: match.matchId, home: match.home, away: match.away, competition: match.competition, kickoff: match.kickoff,
-    content: Object.fromEntries(Object.keys(CONTENT_CATEGORIES).map(category => [category, { status: matchContent(match, category) ? 'ready' : 'pending', url: contentUrl(match.matchId, category), jsonUrl: contentUrl(match.matchId, category, true) }])),
+    content: Object.fromEntries(Object.keys(CONTENT_CATEGORIES).filter(category => category !== 'motion-prompts').map(category => [category, { status: matchContent(match, category) ? 'ready' : 'pending', url: contentUrl(match.matchId, category), jsonUrl: contentUrl(match.matchId, category, true) }])),
   })).filter(m => m.content.scripts.status === 'ready') };
+}
+
+export function matchProduction(match) {
+  const live=productionContext(match,{publication:matchContent(match,"scripts")?"ready":"pending"});
+  const saved=read(`public/data/production-context/${match.matchId}.json`);
+  return live.facts.length || !saved ? live : saved;
 }

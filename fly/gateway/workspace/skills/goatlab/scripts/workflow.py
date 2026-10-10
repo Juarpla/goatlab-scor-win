@@ -169,7 +169,7 @@ class Workflow:
             match = script["matchId"]
             self.db.execute("INSERT INTO series(id,chat,match_id,payload,created) VALUES(?,?,?,?,?)",
                             (sid, chat, match, json.dumps(script), self.clock()))
-            media_body = {"matchId": match, "readerVersion": 1, "content": script.get("content", {}),
+            media_body = {"matchId": match, "readerVersion": 1, "content": script.get("content", {}), "production": script.get("production"),
                           "match": {k: script.get(k) for k in ('matchId','home','away','competition','kickoff')}}
             self.task("media:" + match, "media", media_body)
             self.db.execute("UPDATE tasks SET status='queued',next_at=0,payload=?,error=NULL WHERE id=? AND status IN ('cancelled','failed','done')",
@@ -208,7 +208,8 @@ class Workflow:
                 "home": script.get("home", ""), "away": script.get("away", ""),
                 "matchLabel": script.get("match") or f'{script.get("home", "")} contra {script.get("away", "")}',
                 "motionPrompts": (script.get("content", {}).get("motion-prompts") or {}).get("prompts", []),
-                "contentFacts": (script.get("content", {}).get("motion-prompts") or {}).get("facts", []),
+                "productionContext": script.get("production"),
+                "contentFacts": (script.get("production") or script.get("content", {}).get("motion-prompts") or {}).get("facts", []),
                 "hook": shot.get("hook", ""), "title": shot.get("title", ""), "audioFileId": file_id,
             })
             if n == 10:
@@ -306,6 +307,8 @@ def execute(task):
         env = {**os.environ, "GOATLAB_REPO": str(REPO), "MEDIA_ROLE": "consumer"}
         snapshot = out / f"{match}.content.json"
         content = dict(body.get("content", {}))
+        if body.get("production"):
+            content["production"] = body["production"]
         if body.get('match'):
             content['match'] = body['match']
         atomic_json(snapshot, content)

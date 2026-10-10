@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 // Prepare a bounded, immutable Remotion composition shared by local and Fly jobs.
 import { execFile } from 'node:child_process';
 import { copyFileSync, existsSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
@@ -32,14 +33,14 @@ export async function mediaDuration(file) {
   return Number(stdout.trim());
 }
 
-async function voiceTimes({ tmp, voiceFile, voiceSeconds, log }) {
+async function voiceTimes({ tmp, voiceFile, voiceSeconds, log, contextBias = [] }) {
   const flac = join(tmp, 'voice16k.flac');
   const wav = join(tmp, 'voice16k.wav');
   await Promise.all([
     run('ffmpeg', ['-y', '-loglevel', 'error', '-i', voiceFile, '-ac', '1', '-ar', '16000', flac]),
     run('ffmpeg', ['-y', '-loglevel', 'error', '-i', voiceFile, '-ac', '1', '-ar', '16000', '-c:a', 'pcm_s16le', wav]),
   ]);
-  const { provider, words, errors } = await transcribeWords({ flac, wav, voiceSeconds, log });
+  const { provider, words, errors } = await transcribeWords({ flac, wav, voiceSeconds, log, contextBias });
   const cues = cuesFromHeard(words);
   if (!cues.length) throw new Error('No se pudo transcribir el audio; se conservará para reintentar.');
   if (cues.some(w => w.end > voiceSeconds + .3)) throw new Error('transcripción fuera de la duración de la voz');
@@ -54,7 +55,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   home = '', away = '', matchLabel, log = () => {},
   cacheDir = process.env.PHOTO_CACHE_DIR || join(APP_ROOT, '.cache/shorts/photos'),
   planner = planEdit, transcriber = voiceTimes,
-  facts = [], clips = [], motionPrompts = [], mediaMinimum = 0, requestId, onStage = async () => {},
+  facts = [], clips = [], motionPrompts = [], productionContext = null, usedVariants = [], mediaMinimum = 0, requestId, onStage = async () => {},
 }) {
   const stages = {}, measure = async (label, fn) => {
     const at = Date.now();
@@ -68,14 +69,18 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   voiceFile = voice.file; voiceSeconds = voice.seconds;
   if (voice.changed) rmSync(cachedTranscript, { force: true });
   const total = voice.frames / FPS;
+  const contextBias=[...new Set([home,away,'GoatLab','goatlab.win',...home.split(/\s+/),...away.split(/\s+/)].filter(term=>term.length>2 && !/[\s,]/.test(term)))];
+  const contextHash=createHash('sha256').update(JSON.stringify(contextBias)).digest('hex');
   let timing;
   const transcriptFile = join(tmp, 'transcript.json');
   if (existsSync(transcriptFile)) {
     try { timing = JSON.parse(readFileSync(transcriptFile)); } catch { /* interrupted legacy write */ }
   }
+  if (timing && timing.contextHash !== contextHash) timing = undefined;
   if (!timing) {
-    timing = await measure('transcription', () => transcriber({ tmp, voiceFile, voiceSeconds, log }));
+    timing = await measure('transcription', () => transcriber({ tmp, voiceFile, voiceSeconds, log, contextBias }));
     if (!timing.words?.length) throw new Error('se requiere transcripción para renderizar');
+    timing.contextHash=contextHash;timing.contextBias=contextBias;
     writeJson(transcriptFile, timing);
   }
   if (!timing.words?.length || timing.words.some(w => !Number.isFinite(w.start) || !Number.isFinite(w.end) || w.end <= w.start || w.start < 0 || w.end > voiceSeconds + .3))
@@ -111,7 +116,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     });
   } finally { unpinClips(); }
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { planVersion: 4, clips: availableClips, motionPrompts, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { planVersion: process.env.GOATLAB_CINEMA_V5 === '1' ? 5 : 4, clips: availableClips, motionPrompts, requestId, productionContext, usedVariants, libraryVersion: 1, guideRevision: 2, directionHash: createHash('sha256').update(readFileSync(join(SKILL_ROOT,'references/cinema.md'))).update(readFileSync(join(SKILL_ROOT,'references/cinema-catalog.json'))).update(readFileSync(join(SKILL_ROOT,'scripts/cinema.py'))).update(readFileSync(join(SKILL_ROOT,'scripts/planner.py'))).digest('hex'), facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
@@ -121,7 +126,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
   writeJson(join(tmp, 'composition.json'), compositionProps({ frames: voice.frames, photos, clips: videos, words, plan, facts, motionPrompts, match: matchLabel }));
   writeJson(join(tmp, 'stages.json'), stages);
-  return { total, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages };
+  return { total, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages, transcriptionContext: {contextHash,contextBias} };
 }
 
 export async function planEdit(source, tmp, log = () => {}) {
@@ -135,10 +140,10 @@ export async function planEdit(source, tmp, log = () => {}) {
   try {
     const result = await run(process.env.PYTHON_BIN || 'python3', [join(SKILL_ROOT, 'scripts/planner.py'), '--input', input, '--out', output],
       { timeout: 250_000, maxBuffer: 1024 * 1024, env: process.env });
-    result.stderr.split('\n').filter(line=>line.startsWith('planner: ')).forEach(log);
+    result.stderr.split('\n').filter(line=>line.startsWith('planner: ')).forEach(line=>log(line));
   } catch (error) {
     const lines=String(error.stderr || 'planificador no disponible').split('\n');
-    lines.filter(line=>line.startsWith('planner: ')).forEach(log);
+    lines.filter(line=>line.startsWith('planner: ')).forEach(line=>log(line));
     throw new Error(`montaje: ${lines.filter(line=>!line.startsWith('planner: ')).join('\n').trim().slice(0, 400)}`);
   }
   return JSON.parse(readFileSync(output, 'utf8'));
@@ -183,5 +188,22 @@ export async function muxVoice({ silent, voiceFile, total, out, bedFile = bedPat
     ], { timeout: 5 * 60 * 1000 });
   } catch (e) {
     throw new Error(`ffmpeg: ${(e.stderr ?? e.message).split('\n').slice(-15).join('\n')}`);
+  }
+}
+
+/** Recover one invalid layout without another model call or a retry loop. */
+export async function renderWithFallback(tmp,out,options={}) {
+  const file=join(tmp,'composition.json'), props=JSON.parse(readFileSync(file,'utf8'));
+  try {await renderSilent(tmp,out,options);return {plan:props.plan,renderFallback:false};}
+  catch(error) {
+    if(props.plan.version!==5 || !String(error.message).includes('texto excede la zona segura'))throw error;
+    if(options.isCancelled?.())throw error;
+    const output=join(tmp,'layout-fallback.json');
+    await run(process.env.PYTHON_BIN||'python3',[join(SKILL_ROOT,'scripts/planner.py'),'--input',join(tmp,'edit-input.json'),'--out',output,'--local'],{timeout:10000,maxBuffer:1048576});
+    const plan={...JSON.parse(readFileSync(output,'utf8')),attempts:props.plan.attempts,priorModel:props.plan.model,fallbackReason:String(error.message).slice(0,300)};
+    const validated=compositionProps({...props,plan});
+    writeJson(file,validated);writeJson(join(tmp,'edit-plan.json'),plan);
+    await renderSilent(tmp,out,options);
+    return {plan,renderFallback:true};
   }
 }

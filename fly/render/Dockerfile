@@ -32,16 +32,17 @@ COPY fly/render/package.json fly/render/package-lock.json ./
 RUN npm ci --omit=dev --no-audit --no-fund \
   && node --input-type=module -e 'import {ensureBrowser} from "@remotion/renderer"; await ensureBrowser();' \
   && /opt/whisper/whisper-cli --help > /dev/null
-COPY src/lib/short-format.js src/lib/edit-plan.js src/lib/motion-data.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/render-queue.js ./src/lib/
+COPY src/lib/cinema-plan.js src/lib/cinema-catalog.json src/lib/short-format.js src/lib/edit-plan.js src/lib/motion-data.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/render-queue.js ./src/lib/
 COPY fly/gateway/workspace/skills/goatlab/ ./goatlab-skill/
-COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs fly/render/clip-cache.mjs fly/render/voice-policy.mjs fly/render/remotion-build.mjs fly/render/remotion-render.mjs ./fly/render/
+COPY fly/render/visual-qa.mjs fly/render/server.mjs fly/render/short-job.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs fly/render/clip-cache.mjs fly/render/voice-policy.mjs fly/render/remotion-build.mjs fly/render/remotion-render.mjs ./fly/render/
 COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt fly/render/assets/LiberationSans-Bold.ttf fly/render/assets/LiberationSans-OFL.txt ./fly/render/assets/
 
+COPY fly/gateway/workspace/skills/remotion-best-practices/ ./remotion-best-practices/
 COPY fly/render/remotion/ ./fly/render/remotion/
 RUN node fly/render/remotion-build.mjs
 
 ARG GOATLAB_REVISION=unknown
-ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_SKILL_DIR=/app/goatlab-skill PORT=3000 NODE_ENV=production \
+ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_SKILL_DIR=/app/goatlab-skill GOATLAB_REMOTION_SKILL_DIR=/app/remotion-best-practices PORT=3000 NODE_ENV=production \
     WHISPER_BIN=/opt/whisper/whisper-cli \
     WHISPER_MODEL=/opt/whisper/ggml-base.bin \
     RENDER_STATE_DIR=/data/render-jobs PHOTO_CACHE_DIR=/data/photo-cache

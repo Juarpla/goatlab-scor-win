@@ -11,8 +11,8 @@ async function videoBundle() {
 }
 
 /** Each job exposes only its copied media to Chromium on a loopback port. */
-export async function renderRemotion(tmp, out, { workers = 1, onProgress = () => {}, cancelSignal, isCancelled = () => false } = {}) {
-  const { selectComposition, renderMedia, makeCancelSignal } = await import('@remotion/renderer');
+export async function renderRemotion(tmp, out, { workers = 1, onProgress = () => {}, cancelSignal, isCancelled = () => false, stillFrames } = {}) {
+  const { selectComposition, renderMedia, renderStill, makeCancelSignal } = await import('@remotion/renderer');
   const props = JSON.parse(readFileSync(join(tmp, 'composition.json'), 'utf8'));
   if (!Number.isInteger(props.frames) || props.frames > MAX_FRAMES) throw new Error('composición supera 49,9 segundos');
   const allowed = new Set([props.font, props.brand, ...props.photos.flatMap(p => [p.src, p.backdrop, p.focusBlur]), ...props.clips.map(c => c.src)]);
@@ -33,6 +33,10 @@ export async function renderRemotion(tmp, out, { workers = 1, onProgress = () =>
     const serveUrl = await videoBundle();
     const composition = await selectComposition({ serveUrl, id: 'GoatLabShort', inputProps });
     if (composition.fps !== FPS || composition.durationInFrames !== props.frames) throw new Error('timeline Remotion inesperada');
+    if (stillFrames) {
+      for (const item of stillFrames) await renderStill({serveUrl,composition,inputProps,frame:item.frame,output:item.output,imageFormat:'jpeg'});
+      return;
+    }
     const cancellation = makeCancelSignal();
     if (isCancelled()) cancellation.cancel();
     const timeout = setTimeout(() => cancellation.cancel(), 20 * 60 * 1000);
