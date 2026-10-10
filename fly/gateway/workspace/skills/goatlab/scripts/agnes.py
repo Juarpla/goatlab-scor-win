@@ -255,6 +255,8 @@ class ImagePool:
 
 
 if __name__ == "__main__":
+    if os.environ.get('MEDIA_ROLE') != 'producer' or os.environ.get('GITHUB_ACTIONS') != 'true':
+        sys.exit('La generación de media pertenece exclusivamente a GitHub Actions')
     parser = argparse.ArgumentParser()
     parser.add_argument("--match", required=True)
     parser.add_argument("--index", type=int, required=True)

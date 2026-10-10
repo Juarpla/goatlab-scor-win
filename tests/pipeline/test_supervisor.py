@@ -71,7 +71,7 @@ class SupervisorTests(unittest.TestCase):
             self.assertEqual(calls[-1]['requestId'], ids[-1])
             flow.db.close()
 
-    def test_real_generator_never_searches_external_photos_and_finishes_graphics_bank_before_post(self):
+    def test_real_reader_enables_graphics_after_unavailable_r2_without_external_search_or_generation(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);data=root/'public/data';data.mkdir(parents=True)
             (data/'fixtures.json').write_text(json.dumps({'matches':[{'id':'a-b','webId':'a-b','home':'Spain','away':'Czechia','status':'NS','kickoff':'2030-10-03T18:00:00Z'}]}))
@@ -101,7 +101,9 @@ class SupervisorTests(unittest.TestCase):
                 while not calls and time.monotonic()<deadline:time.sleep(.05)
                 self.assertTrue(calls,'no render after the bank attempt')
                 body,progress=calls[0]
-                self.assertEqual(progress['phase'],'finished');self.assertEqual(body['assets'],[])
+                self.assertEqual(progress['phase'],'unavailable');self.assertEqual(body['assets'],[])
+                self.assertEqual(progress['readerVersion'], 1)
+                self.assertEqual(progress['ready'], True)
                 self.assertEqual(body['mediaMinimum'],0)
                 persisted=json.loads(flow.db.execute('SELECT payload FROM tasks WHERE id=?',(request,)).fetchone()[0])
                 self.assertEqual(persisted['assets'],[])

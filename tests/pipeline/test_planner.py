@@ -18,6 +18,18 @@ PLAN = {'version': 1, 'scenes': [{'start': 0, 'end': 5, 'layers': [{'asset': 0}]
 
 
 class PlannerTests(unittest.TestCase):
+    def test_fallback_limits_distinct_signature_moves_and_keeps_spoken_graphics(self):
+        source = {**SOURCE, 'span': 12, 'planVersion': 4, 'assets': [], 'facts': [],
+                  'words': [{'word': word, 'start': at, 'end': at+.4} for word, at in [('Racha', .5), ('victorias', 1), ('goles', 4.5), ('anotados', 5), ('arco', 8.5), ('cerrado', 9)]],
+                  'motionPrompts': [{'n': 1, 'kind': 'form', 'factIds': [], 'signature_move': 'camera-push'},
+                                    {'n': 2, 'kind': 'goals', 'factIds': [], 'signature_move': 'count-up-slam'},
+                                    {'n': 3, 'kind': 'clean-sheets', 'factIds': [], 'signature_move': 'glow-pulse'}]}
+        plan = local_plan(source)
+        validate(plan, source)
+        numbers = {g['motionPromptNumber'] for s in plan['scenes'] for g in s['graphics'] if 'motionPromptNumber' in g}
+        self.assertLessEqual(len(numbers), 2)
+        self.assertTrue(any(g['kind'] == 'title' for s in plan['scenes'] for g in s['graphics']))
+
     def test_local_titles_follow_sentence_boundaries_and_skip_connectives(self):
         words=[{'word':w,'start':.5+i*.35,'end':.8+i*.35} for i,w in enumerate(['El','espacio','cambia','el','partido.','Pero','nadie','lo','aprovecha.'])]
         source={**SOURCE,'span':4,'words':words,'assets':[]}

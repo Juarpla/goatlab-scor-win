@@ -72,6 +72,10 @@ export async function maintainMedia({ repo = process.env.GOATLAB_REPO || '.', di
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  if (process.env.MEDIA_ROLE !== 'producer' || process.env.GITHUB_ACTIONS !== 'true') {
+    console.error('El mantenimiento remoto pertenece exclusivamente a GitHub Actions');
+    process.exit(2);
+  }
   const options = { protectedMatches: [] };
   for (const arg of process.argv.slice(2)) {
     if (arg.startsWith('--match=')) options.protectedMatch = arg.slice(8);

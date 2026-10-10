@@ -229,19 +229,27 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
                     'synthesis': r'clave|balance|estad[ií]stic|resumen'}
         statistical = False
         used = set(source.get('usedMotionNumbers', []) or [])
+        signature_moves = set()
         for i, scene in enumerate(scenes):
             indices = [j for j,w in enumerate(words) if scene['start'] <= w['start'] < scene['end']-.3]
             if not indices: continue
             text = ' '.join(words[j]['word'] for j in indices).lower()
-            prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('n') not in used and p.get('kind') == kind and re.search(patterns[kind], text)), None)
+            eligible = [p for p in source.get('motionPrompts', []) if not p.get('signature_move') or p['signature_move'] in signature_moves or len(signature_moves) < 2]
+            prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in eligible if p.get('n') not in used and p.get('kind') == kind and re.search(patterns[kind], text)), None)
             if not prompt:
-                prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in source.get('motionPrompts', []) if p.get('kind') == kind and re.search(patterns[kind], text)), None)
+                prompt = next((p for kind in ('clean-sheets','head-to-head','goals','form','synthesis') for p in eligible if p.get('kind') == kind and re.search(patterns[kind], text)), None)
             matched = bool(prompt)
             if not prompt and i % 3 == 0:
-                prompt = next((p for p in source.get('motionPrompts',[]) if p.get('n') not in used and p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
+                prompt = next((p for p in eligible if p.get('n') not in used and p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
             if not prompt and i % 3 == 0:
-                prompt = next((p for p in source.get('motionPrompts',[]) if p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
+                prompt = next((p for p in eligible if p.get('kind') == ('head-to-head' if i == 0 else 'synthesis')),None)
             if not prompt: continue
+            signature = prompt.get('signature_move')
+            if signature and signature not in signature_moves and len(signature_moves) >= 2:
+                # Keep the spoken title/graphics already in this scene.
+                continue
+            if signature:
+                signature_moves.add(signature)
             used.add(prompt['n'])
             refs = [r for r in prompt.get('factIds',[]) if not r.endswith('.n') and r in {f['id'] for f in source.get('facts',[])}][:8]
             presentation = 'statistical' if matched and refs and not statistical else 'editorial'

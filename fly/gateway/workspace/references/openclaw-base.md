@@ -77,36 +77,13 @@ Fuentes: [ClawHub](https://docs.openclaw.ai/clawhub),
 [Xiaomi MiMo](https://docs.openclaw.ai/providers/xiaomi),
 [OpenCode Go](https://opencode.ai/docs/go/).
 
-## Agnes gratuito
+## Banco audiovisual
 
-| Recurso | RPM efectivo gratuito |
-|---|---:|
-| Imagen 1K | 10 |
-| Imagen 2K | 5 |
-| Imagen 3K / 4K | 1 |
-| Video | 1 |
-
-Las claves del mismo tipo comparten límites. No hay una cuota diaria numérica
-gratuita publicada aquí; 4.000 imágenes y 500 segundos/día son del Token Plan
-pagado. No asumir capacidad ilimitada.
-
-Se conserva `agnes-image-2.5-flash`, 2K y 9:16: dimensiones reales verificadas,
-cuatro inicios/60 s incluidos reintentos, una generación simultánea y quince slots
-existentes por encuentro. Quince es un límite del proyecto. Conservar caché y
-presupuesto al reiniciar, respetar `Retry-After` y no repetir resultados inciertos.
-Los bancos audiovisuales solo usan imágenes Agnes, gráficos propios y recursos
-de marca existentes. Las fotos externas antiguas quedan excluidas.
-
-Video `agnes-video-2.5-flash` es asíncrono: `POST /v1/videos` crea la tarea y
-`GET /agnesapi?video_id=…&model_name=agnes-video-2.5-flash` consulta el resultado.
-Un inicio/minuto no equivale a un video completado/minuto. Admite 720P, 4–12 s y
-n=1; 9:16 produce 720×1280. El precio cero es promocional. Verificar precio y
-acceso de la cuenta antes de habilitarlo. La producción utiliza hasta dos clips de seis segundos compartidos por partido,
-a partir de dos prompts publicados. El presupuesto total de preparación es quince minutos.
-
-Fuentes: [cuotas](https://wiki.agnes-ai.com/en/docs/tokenplan),
-[imagen](https://wiki.agnes-ai.com/en/docs/agnes-image-25-flash),
-[video](https://wiki.agnes-ai.com/en/docs/agnes-video-25-flash).
+Gateway consulta las cuatro imágenes y los dos clips del partido publicados en
+R2 por GitHub Actions. Para consulta, fallos de acceso, banco parcial y reintentos,
+lee `../skills/goatlab/references/media.md`. Render utiliza los Motion Prompts
+publicados para ejecutar los gráficos y montar la voz. Las imágenes y clips
+mantienen Agnes como origen; la producción y las cuotas se operan en Actions.
 
 ## Despliegue y recuperación
 

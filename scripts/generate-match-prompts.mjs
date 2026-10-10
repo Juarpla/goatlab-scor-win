@@ -1,3 +1,4 @@
+if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de prompts pertenece a GitHub Actions');
 import { readFile, readdir, mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors } from '../src/lib/match-content.js';

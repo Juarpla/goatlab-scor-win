@@ -7,23 +7,24 @@ montaje. [Dirección artística](creative.md) es la referencia del planificador.
 ## Flujo y persistencia
 
 OpenClaw lee el índice y cuatro JSON públicos de goatlab.win. Cada serie conserva
-el contenido utilizado. El banco de cuatro imágenes y hasta dos clips pertenece
-al partido y se reutiliza entre audios y chats hasta su caducidad. La preparación
-usa un presupuesto efímero de cincuenta minutos por corrida, limitado a kickoff + 24 h; al terminar publica .ready con
-el material conseguido, incluso sin imágenes. Los Motion Prompts se aplican por audio.
+el contenido utilizado. Actions produce el banco de cuatro imágenes y dos clips
+Agnes y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
+lector independiente, verifica metadatos, prompts, checksum y acceso público,
+y publica su banco local listo en un máximo de 90 segundos. Un banco parcial o
+vacío permite montar los audios con gráficos. Los Motion Prompts se aplican por audio.
 
-Image 2.5 Flash: 2K, 9:16, doce inicios por minuto y una solicitud simultánea.
-Video 2.5 Flash: 720P, 9:16, seis segundos, un inicio cada 30 segundos y una tarea
-simultánea. Hasta cinco ordinales por partido, deteniéndose al recuperar dos clips compatibles. Respeta Retry-After,
-cancelaciones y caducidad. Un resultado incierto conserva su identidad y no
-provoca una nueva generación. Nginx publica imágenes y MP4, únicamente.
+Gateway utiliza `MEDIA_ROLE=consumer`; el generador y sus CLI Agnes exigen
+`MEDIA_ROLE=producer` y `GITHUB_ACTIONS=true`. Reintentar media consulta R2,
+sin POST Agnes, PUT/DELETE R2 ni cambios en el estado privado de cuotas. Gateway
+limpia solo la caché local de lectura; los artefactos antiguos de generación se
+conservan para recuperar resultados en Actions. Los detalles del productor están
+en `AGNES-STATE.md` y el workflow `3-media-creation`.
 
-El JSON privado de R2 gobierna admisión y cuotas de Actions y Fly; SQLite y archivos de tareas conservan recuperación local,
-cancelación e idempotencia. Render replica sus registros en /render-ledger del
-Gateway y los restaura al arrancar. Entregas delivering se recuperan como
-delivery-unknown: verificar Telegram antes de reintentar. Tras éxito se purgan
-los archivos del montaje; el marcador mínimo se conserva 24 h. Los trabajos
-activos protegen medios contra limpieza. Cachés de fotos y clips: 128 MB cada una.
+Render replica sus registros en /render-ledger de Gateway y los restaura al
+arrancar. Cada guardado incluye updatedAt; durante trabajos activos se confirma
+cada 30 segundos. Telegram indica estado pendiente de actualización tras 90
+segundos sin confirmación. Entregas delivering se recuperan como delivery-unknown:
+verificar Telegram antes de reintentar. Los trabajos activos protegen sus medios.
 Gateway se apaga tras diez minutos idle y Render tras quince; los trabajos activos
 impiden el apagado. Una réplica por aplicación y una captura a la vez.
 
@@ -37,7 +38,7 @@ con value, unit, source y sampleSize cuando existe. Cada Motion Prompt conserva
 n, kind, prompt y factIds. Respuesta de aceptación: {jobId,status,duplicate}.
 GET /healthz expone workflowProtocol 2, editPlanVersion 4, renderEngine remotion,
 maxSeconds 49.9 y revision. Versiones de planes 1–3 siguen siendo compatibles.
-El registro del trabajo incluye voiceRate y originalVoiceSeconds para auditoría.
+El registro del trabajo incluye updatedAt, voiceRate y originalVoiceSeconds para auditoría.
 
 ## Voz y salida
 
@@ -73,7 +74,7 @@ Para acceso web y transporte Telegram, leer
 
 ## Activación del estado compartido
 
-Actions y Fly reutilizan `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` y `R2_ACCOUNT_ID`
+Actions mantiene `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` y `R2_ACCOUNT_ID`
 para media y estado del mismo proyecto. Mantener `R2_STATE_BUCKET=app-states` y
 `R2_STATE_KEY=goatlab/agnes-state.json`. Los overrides de credenciales `R2_STATE_*`
 son opcionales y exigen una pareja completa cuando se usan. Bucket Standard privado, sin r2.dev ni dominio.
@@ -83,7 +84,7 @@ JSON por stdin/stdout; importar el firmador no ejecuta CLI.
 El procedimiento autoritativo del repositorio es `AGNES-STATE.md`: suspender productores
 antiguos, importar SQLite/tareas conocidas y recursos existentes, bloquear legacy
 incierto y cerrar cuota del día de corte; inicializar con If-None-Match, comprobar CAS
-real y habilitar ambos consumidores después. Rollback conserva el JSON y detiene nuevas
+real y habilitar el productor de Actions después. Rollback conserva el JSON y detiene nuevas
 creaciones. La protección frente a intentos perdidos comienza en ese corte.
 
 Actions ejecuta mantenimiento y `media:check` con Node antes de instalar dependencias.

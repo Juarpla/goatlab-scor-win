@@ -2,6 +2,11 @@ import { maintainMedia } from '../fly/gateway/workspace/skills/goatlab/scripts/m
 import { readFile, writeFile, rename } from 'node:fs/promises';
 import { addUsage } from '../src/lib/r2-usage.js';
 
+if (process.env.MEDIA_ROLE !== 'producer' || process.env.GITHUB_ACTIONS !== 'true') {
+  console.error('El mantenimiento remoto pertenece exclusivamente a GitHub Actions');
+  process.exit(2);
+}
+
 const match = process.argv.slice(2).find(value => value.startsWith('--match='))?.slice(8);
 try {
   const result = await maintainMedia({ protectedMatch: match });

@@ -85,18 +85,21 @@ class Workflow:
                         self.db.execute("UPDATE audios SET file_id='' WHERE id=?", (task['id'],))
         if not out.exists():
             return
-        # Only the shared maintenance client may retire banks, after remote proof.
-        try:
-            command = ['node', str(SKILL / 'scripts/maintain-media.mjs'),
-                       '--repo=' + str(REPO), '--out=' + str(out)]
-            command.extend('--protect=' + match for match in sorted(needed))
-            result = subprocess.run(command, capture_output=True, text=True, check=False,
-                                    timeout=120, env=os.environ)
-            report = json.loads(result.stdout) if result.returncode == 0 else {}
-            for match in report.get('deletedIds', []):
+        # Gateway retires only its reader cache. Actions owns remote maintenance.
+        for path in out.glob('*.progress.json'):
+            match = path.name.removesuffix('.progress.json')
+            if match in needed or path.stat().st_mtime > self.clock()-86400:
+                continue
+            try:
+                metadata = json.loads(path.read_text())
+                if metadata.get('readerVersion') != 1 or metadata.get('legacyArtifacts'):
+                    continue  # Preserve legacy producer artifacts for recovery in Actions.
+                for suffix in ('.json', '.progress.json', '.ready', '.content.json', '.log'):
+                    (out / (match+suffix)).unlink(missing_ok=True)
+                shutil.rmtree(out / 'gen' / match, ignore_errors=True)
                 self.db.execute("DELETE FROM tasks WHERE id=? AND status!='running'", ('media:'+match,))
-        except (OSError, ValueError, subprocess.SubprocessError):
-            pass
+            except (OSError, ValueError):
+                continue
         pending = self.state / 'pending'
         for path in pending.glob('*/*.json'):
             if path.stat().st_mtime <= self.clock()-86400:
@@ -105,6 +108,33 @@ class Workflow:
     def task(self, key, kind, payload):
         self.db.execute("INSERT OR IGNORE INTO tasks(id,kind,payload,created) VALUES(?,?,?,?)",
                         (key, kind, json.dumps(payload), self.clock()))
+
+    def recover_media(self):
+        """One-time transition of active producer tasks into read-only bank queries."""
+        for row in self.db.execute("SELECT * FROM tasks WHERE kind='media' AND status!='cancelled'").fetchall():
+            body = json.loads(row['payload'])
+            if body.get('readerVersion') == 1:
+                continue
+            series = self.db.execute('SELECT payload FROM series WHERE match_id=? AND active=1 AND created>? ORDER BY created DESC LIMIT 1',
+                                     (body['matchId'], self.clock()-86400)).fetchone()
+            if not series:
+                continue
+            script = json.loads(series[0])
+            body.update(readerVersion=1, content=script.get('content', body.get('content', {})),
+                        match={k: script.get(k) for k in ('matchId','home','away','competition','kickoff')})
+            self.db.execute("UPDATE tasks SET payload=?,status='queued',attempts=0,next_at=0,error=NULL WHERE id=?",
+                            (json.dumps(body), row['id']))
+
+    def refresh_pending_media(self, match, records=()):
+        accepted = {r.get('requestId') for r in records}
+        for row in self.db.execute("SELECT id,payload FROM tasks WHERE kind='render' AND status IN ('queued','failed')").fetchall():
+            body = json.loads(row['payload'])
+            if body.get('matchId') != match or row['id'] in accepted:
+                continue
+            body['contentFacts'] = body.get('contentFacts') or body.get('facts', [])
+            for field in ('assets','attribution','facts','clips'):
+                body.pop(field, None)
+            self.db.execute('UPDATE tasks SET payload=? WHERE id=?', (json.dumps(body), row['id']))
 
     def current(self, chat):
         return self.db.execute("SELECT * FROM series WHERE chat=? AND active=1 AND created>?", (chat_id(chat), self.clock()-86400)).fetchone()
@@ -139,8 +169,11 @@ class Workflow:
             match = script["matchId"]
             self.db.execute("INSERT INTO series(id,chat,match_id,payload,created) VALUES(?,?,?,?,?)",
                             (sid, chat, match, json.dumps(script), self.clock()))
-            self.task("media:" + match, "media", {"matchId": match, "content": script.get("content", {})})
-            self.db.execute("UPDATE tasks SET status='queued',next_at=0 WHERE id=? AND status='cancelled'", ("media:"+match,))
+            media_body = {"matchId": match, "readerVersion": 1, "content": script.get("content", {}),
+                          "match": {k: script.get(k) for k in ('matchId','home','away','competition','kickoff')}}
+            self.task("media:" + match, "media", media_body)
+            self.db.execute("UPDATE tasks SET status='queued',next_at=0,payload=?,error=NULL WHERE id=? AND status IN ('cancelled','failed','done')",
+                            (json.dumps(media_body), "media:"+match))
             self.db.execute("COMMIT")
             return {"seriesId": sid, "matchId": match, "scripts": script["scripts"], "missingCategories": script.get("missingCategories", [])}
         except Exception:
@@ -269,15 +302,16 @@ def execute(task):
     if task["kind"] == "render" and body.get("expiresAt", time.time()*1000+1) <= time.time()*1000:
         raise ValueError("solicitud caducada")
     if task["kind"] == "media":
-        ready = out / f"{match}.ready"
         out.mkdir(parents=True, exist_ok=True)
-        env = {**os.environ, "GOATLAB_REPO": str(REPO), "AGNES_STATE_DB": str(STATE / "agnes.sqlite")}
-        from common import atomic_json
+        env = {**os.environ, "GOATLAB_REPO": str(REPO), "MEDIA_ROLE": "consumer"}
         snapshot = out / f"{match}.content.json"
-        atomic_json(snapshot, body.get("content", {}))
+        content = dict(body.get("content", {}))
+        if body.get('match'):
+            content['match'] = body['match']
+        atomic_json(snapshot, content)
         with (out / f"{match}.log").open("a") as log:
-            subprocess.run(["node", str(SKILL / "scripts/generate-media-pack.mjs"), f"--match={match}", f"--out={out}", f"--content={snapshot}"],
-                           cwd=REPO, env=env, stdout=log, stderr=log, check=True)
+            subprocess.run(["node", str(SKILL / "scripts/read-media-bank.mjs"), f"--match={match}", f"--out={out}", f"--content={snapshot}"],
+                           cwd=REPO, env=env, stdout=log, stderr=log, check=True, timeout=110)
         return {"ready": True}
     if task["kind"] == "cancel":
         return worker_post("/render/cancel", body)
@@ -303,6 +337,7 @@ def supervise():
     flow.import_pending(STATE / "pending")
     flow.db.execute("UPDATE tasks SET status='queued' WHERE status='running'")
     flow.cleanup()
+    flow.recover_media()
     stopping = False
     def stop(*_):
         nonlocal stopping
@@ -323,11 +358,6 @@ def supervise():
                 flow.cleanup(protected)
                 flow.release_media(protected)
                 (STATE / ".cleanup-request").unlink(missing_ok=True)
-                if not any(t["kind"] == "media" for t in futures.values()):
-                    from agnes import ImagePool
-                    pool_state = ImagePool(STATE / "agnes.sqlite")
-                    pool_state.cleanup()
-                    pool_state.db.close()
                 last_cleanup = time.time()
             for future, task in list(futures.items()):
                 if not future.done():
@@ -344,6 +374,9 @@ def supervise():
                     status = "done" if result is not None else "queued"
                     flow.db.execute("UPDATE tasks SET status=?,result=?,next_at=? WHERE id=?",
                                     (status, json.dumps(result), time.time() + 3, task["id"]))
+                    if task['kind']=='media' and result is not None:
+                        from render_ledger import Ledger
+                        flow.refresh_pending_media(json.loads(task['payload'])['matchId'], Ledger(STATE/'render-ledger').records())
                 except Exception as error:
                     if current == "cancelled":
                         continue
@@ -360,7 +393,7 @@ def supervise():
                             "SELECT DISTINCT chat FROM series WHERE match_id=? AND active=1", (body["matchId"],))]
                         for chat in chats:
                             try:
-                                text = "❌ Imágenes: no se pudo completar la generación. Puedes pedir reintentar imágenes." if task["kind"] == "media" else "No pude enviar un trabajo a Render. Puedes pedir reintentar el video."
+                                text = "No pude consultar el banco en R2. Puedes pedir reintentar imágenes." if task["kind"] == "media" else "No pude enviar un trabajo a Render. Puedes pedir reintentar el video."
                                 telegram("sendMessage", {"chat_id": chat, "text": text})
                             except Exception:
                                 print("workflow: aviso de fallo no entregado", file=sys.stderr)
@@ -385,6 +418,9 @@ def supervise():
                     if task["kind"] == "render":
                         body = json.loads(task["payload"])
                         if render_running or first_by_chat.get(str(body['chatId'])) != task['id']:
+                            continue
+                        media_task = flow.db.execute('SELECT status FROM tasks WHERE id=?', ('media:'+body['matchId'],)).fetchone()
+                        if media_task and media_task[0] in ('queued','running'):
                             continue
                         if not (Path(os.environ.get("MEDIA_PACK_DIR", str(STATE / "media-pack"))) / f'{body["matchId"]}.ready').exists():
                             continue
@@ -481,7 +517,7 @@ def main():
                 body=json.loads(row[0])
                 for field in ('assets','attribution','facts','clips'):body.pop(field,None)
                 flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(json.dumps(body),key))
-        flow.db.execute("UPDATE tasks SET status='queued',attempts=0,next_at=0 WHERE id=? AND status IN ('failed','done')", (key,))
+        flow.db.execute("UPDATE tasks SET status='queued',attempts=0,next_at=0,error=NULL WHERE id=? AND status IN ('failed','done')", (key,))
         result = {"retry": key}
     else:
         series = flow.current(args.chat)

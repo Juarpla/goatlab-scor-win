@@ -6,6 +6,18 @@ import { join } from 'node:path';
 import { JobStore } from '../fly/render/job-store.mjs';
 const body = { chatId: '1', matchId: 'match', requestId: 'stable', audioFileId: 'voice', assets: [] };
 
+test('saving confirms stage freshness without restarting the stage or resubmitting', t => {
+  const dir = mkdtempSync(join(tmpdir(), 'goatlab-freshness-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  let now = 1000;
+  const store = new JobStore(dir, { clock: () => now });
+  const { job } = store.accept(body);
+  job.status = 'working'; job.stageStartedAt = now; store.save(job);
+  now = 31000; store.save(job);
+  assert.equal(job.updatedAt, 31000); assert.equal(job.stageStartedAt, 1000);
+  assert.equal(store.accept(body).duplicate, true); assert.equal(job.attempts, 1);
+});
+
 test('queued and interrupted jobs survive restart; repeated POST is idempotent', t => {
   const dir = mkdtempSync(join(tmpdir(), 'goatlab-jobs-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));

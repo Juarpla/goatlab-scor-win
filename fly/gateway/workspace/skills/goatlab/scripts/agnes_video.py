@@ -409,6 +409,8 @@ class VideoPool:
 
 
 if __name__=='__main__':
+    if os.environ.get('MEDIA_ROLE') != 'producer' or os.environ.get('GITHUB_ACTIONS') != 'true':
+        raise SystemExit('La generación de media pertenece exclusivamente a GitHub Actions')
     parser=argparse.ArgumentParser(); parser.add_argument('--input',required=True); parser.add_argument('--out',required=True)
     args=parser.parse_args(); source=json.loads(Path(args.input).read_text())
     pool=VideoPool(Path(os.environ.get('AGNES_STATE_DB','agnes.sqlite')))

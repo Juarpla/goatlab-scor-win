@@ -76,6 +76,57 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn('narration', payload)
 
 class RecoveryVisibilityTests(unittest.TestCase):
+    def test_media_refresh_updates_unsubmitted_tasks_across_chats_without_touching_accepted_jobs(self):
+        with tempfile.TemporaryDirectory() as folder:
+            flow = Workflow(Path(folder)/'goatlab.sqlite')
+            self.addCleanup(flow.db.close)
+            flow.select('1', script()); flow.select('2', script())
+            ids = [flow.receive(chat, 'voice', 'event')['requestId'] for chat in ('1','2')]
+            for request in ids:
+                row = flow.db.execute('SELECT payload FROM tasks WHERE id=?', (request,)).fetchone()
+                body = {**json.loads(row[0]), 'assets': [{'id': 'old'}], 'clips': [], 'facts': [{'id': 'fact'}]}
+                flow.db.execute('UPDATE tasks SET payload=? WHERE id=?', (json.dumps(body), request))
+            flow.refresh_pending_media('a-b', [{'requestId': ids[0], 'status': 'done'}])
+            accepted = json.loads(flow.db.execute('SELECT payload FROM tasks WHERE id=?', (ids[0],)).fetchone()[0])
+            pending = json.loads(flow.db.execute('SELECT payload FROM tasks WHERE id=?', (ids[1],)).fetchone()[0])
+            self.assertIn('assets', accepted); self.assertNotIn('assets', pending)
+            self.assertEqual(pending['contentFacts'], [{'id': 'fact'}])
+            self.assertEqual(pending['requestId'], ids[1]); self.assertEqual(pending['audioFileId'], 'voice')
+
+    def test_legacy_media_recovery_preserves_audios_and_accepted_jobs_and_runs_once(self):
+        with tempfile.TemporaryDirectory() as folder:
+            flow = Workflow(Path(folder)/'goatlab.sqlite', clock=lambda: 1000)
+            self.addCleanup(flow.db.close)
+            flow.select('1', script()); flow.select('2', script())
+            request = flow.receive('1', 'voice', 'event')['requestId']
+            flow.db.execute("UPDATE tasks SET status='done',result=? WHERE id=?", (json.dumps({'jobId': 'accepted'}), request))
+            flow.db.execute("UPDATE tasks SET payload=?,status='failed' WHERE kind='media'", (json.dumps({'matchId': 'a-b'}),))
+            before = dict(flow.db.execute('SELECT * FROM tasks WHERE id=?', (request,)).fetchone())
+            flow.recover_media()
+            media = flow.db.execute("SELECT * FROM tasks WHERE kind='media'").fetchone()
+            self.assertEqual(media['status'], 'queued')
+            self.assertEqual(json.loads(media['payload'])['readerVersion'], 1)
+            self.assertEqual(dict(flow.db.execute('SELECT * FROM tasks WHERE id=?', (request,)).fetchone()), before)
+            self.assertEqual(flow.db.execute('SELECT file_id FROM audios WHERE id=?', (request,)).fetchone()[0], 'voice')
+            flow.db.execute("UPDATE tasks SET status='done' WHERE kind='media'")
+            flow.recover_media()
+            self.assertEqual(flow.db.execute("SELECT status FROM tasks WHERE kind='media'").fetchone()[0], 'done')
+
+    def test_media_executor_uses_only_reader_and_cleanup_never_calls_remote_maintenance(self):
+        import os
+        from unittest.mock import patch
+        from workflow import execute
+        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, {'MEDIA_PACK_DIR': folder}):
+            with patch('workflow.subprocess.run') as run:
+                self.assertTrue(execute({'kind': 'media', 'payload': json.dumps({'matchId': 'a-b'})})['ready'])
+                self.assertTrue(run.call_args.args[0][1].endswith('/read-media-bank.mjs'))
+                self.assertEqual(run.call_args.kwargs['env']['MEDIA_ROLE'], 'consumer')
+            flow = Workflow(Path(folder)/'goatlab.sqlite')
+            self.addCleanup(flow.db.close)
+            with patch('workflow.subprocess.run') as run:
+                flow.release_media()
+                run.assert_not_called()
+
     def test_status_distinguishes_submission_from_uncertain_delivery(self):
         from unittest.mock import patch
         from workflow import render_status

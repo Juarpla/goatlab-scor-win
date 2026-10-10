@@ -26,7 +26,7 @@ async function fixture(t, overrides = {}) {
   await writeFile(join(repo, 'public/data/youtube-scripts/a-b.json'), JSON.stringify({ ...buildYoutubeScripts(match), matchId: 'a-b', home: match.home, away: match.away, competition: match.competition, kickoff: match.kickoff }));
   await writeFile(join(repo, 'public/data/image-prompts/a-b.json'), JSON.stringify(images));
   await writeFile(join(repo, 'public/data/video-prompts/a-b.json'), JSON.stringify(videos));
-  const env = { GOATLAB_REPO: repo, MEDIA_PACK_DIR: dir, R2_PUBLIC_BASE: 'https://media.test', R2_ACCOUNT_ID: 'account', R2_ACCESS_KEY_ID: 'access', R2_SECRET_ACCESS_KEY: 'secret', AGNES_API_KEY: 'fake', ...overrides };
+  const env = { MEDIA_ROLE: 'producer', GITHUB_ACTIONS: 'true', GOATLAB_REPO: repo, MEDIA_PACK_DIR: dir, R2_PUBLIC_BASE: 'https://media.test', R2_ACCOUNT_ID: 'account', R2_ACCESS_KEY_ID: 'access', R2_SECRET_ACCESS_KEY: 'secret', AGNES_API_KEY: 'fake', ...overrides };
   const objects = new Map(), calls = [], provider = [];
   const addPhoto = ordinal => {
     const bytes = Buffer.from('photo-' + ordinal), meta = { model: 'agnes-image-2.5-flash', prompthash: hash(images.prompts[ordinal].prompt), sha256: hash(bytes), width: '1472', height: '2624' };

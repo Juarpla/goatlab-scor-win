@@ -44,6 +44,14 @@ function cleanup() {
   prunePhotoCache(cacheDir, { protectedUrls: [...jobs.values()].flatMap(j => j.assets ?? []).map(a => a.url), purgeUnused: true });
 }
 setInterval(cleanup, 300_000).unref();
+// Confirm long stages without changing their start or measured duration.
+setInterval(() => {
+  for (const id of protectedIds) {
+    const job = jobs.get(id);
+    if (job && ['working', 'delivering'].includes(job.status)) store.save(job);
+  }
+  store.flush().catch(() => console.log('render: confirmación de estado no disponible'));
+}, 30_000).unref();
 
 const tg = (method, body) =>
   fetch(`https://api.telegram.org/bot${BOT}/${method}`, {

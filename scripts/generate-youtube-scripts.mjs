@@ -1,3 +1,4 @@
+if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de guiones pertenece a GitHub Actions');
 /** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
  *  redactar-guiones-shorts. Un JSON válido ya existente no se toca.
  *  Sin --match, redacta el top N (input --top, SCRIPT_TOP_N o 5) del ranking

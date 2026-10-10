@@ -10,31 +10,44 @@ STAGES = {'voiceDownload':'descargando audio','transcription':'transcribiendo au
           'voiceAdjustment':'ajustando la voz','clips':'preparando clips','planning':'planificando el montaje','planningFallback':'montaje local con gráficos y animaciones','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video'}
 
 
-def progress_text(count, phase, jobs, created, now, received=0, target=15, clips=None, failures=()):
-    target = target if target in (10,15) else 10
-    count = min(target, max(0, count))
-    filled = count * 10 // target
-    lines=[f'📸 Imágenes: {count}/{target} · {count*100//target}%', '█'*filled+'░'*(10-filled)]
-    if clips is not None: lines.append(f'🎞 Clips: {min(3,max(0,clips))}/3')
-    if phase=='finished' and failures: lines.append('⚠️ '+ '; '.join(str(f)[:160] for f in failures[:4]))
-    if phase=='failed': lines.append('⚠️ Preparación interrumpida; se conserva el banco y el audio para reintentar.')
-    elif phase=='finished' and count==0: lines.append('Banco sin imágenes: los videos usarán motion graphics y animaciones.')
-    elif phase=='finished' and count<target: lines.append(f'Preparación finalizada con {count} imágenes disponibles.')
-    elif phase in ('generating','generating-clips','searching'): lines.append('Generando imágenes con Agnes…')
-    live=next((j for j in jobs if j.get('status') in ('working','delivering','queued')),None)
+def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=None, failures=()):
+    # Compatibility arguments remain accepted; the current bank is always 4+2.
+    count = min(4, max(0, count))
+    clips = min(2, max(0, clips or 0))
+    lines=[f'📸 Imágenes disponibles: {count}/4', f'🎞 Clips disponibles: {clips}/2']
+    if phase in ('failed','unavailable'):
+        lines.append('⚠️ No pude consultar el banco en R2. Puedes pedir reintentar imágenes.')
+        if failures: lines.append('; '.join(str(f)[:160] for f in failures[:4]))
+        lines.append('El montaje continúa con los recursos disponibles y gráficos.')
+    elif phase=='finished':
+        lines.append('Banco disponible.' if count==4 and clips==2 else 'Banco parcial; el montaje continúa con gráficos.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
+    else:
+        lines.append('Consultando el banco en R2…')
+    live=next((j for j in jobs if j.get('status') in ('working','delivering')),None)
+    queued=next((j for j in jobs if j.get('status')=='queued'),None)
     failed=next((j for j in jobs if j.get('status') in ('error','delivery-unknown')),None)
     done=sum(j.get('status')=='done' for j in jobs)
+    lines.append(f'🎙 Audios recibidos: {received}')
+    if failed:
+        if failed.get('status')=='delivery-unknown':
+            lines.append(f'⚠️ Video {failed.get("variant",0)+1}: entrega sin confirmar; verifica Telegram antes de reintentar.')
+        else:
+            lines.append(f'⚠️ Video {failed.get("variant",0)+1}: detenido; puedes pedir reintentarlo.')
+            if failed.get('error'): lines.append(str(failed['error'])[:300])
     if live:
-        lines.append(f'🎬 Video {live.get("variant",0)+1}: {STAGES.get(live.get("currentStage"),"en cola")}')
-    elif failed:
-        lines.append(f'⚠️ Video {failed.get("variant",0)+1}: detenido; puedes pedir reintentarlo.')
+        updated = live.get('updatedAt')
+        stale = not isinstance(updated, (int,float)) or now*1000-updated>90000
+        stage = 'Estado pendiente de actualización' if stale else STAGES.get(live.get('currentStage'),'preparando el montaje')
+        lines.append(f'🎬 Video {live.get("variant",0)+1}: {stage}')
+    elif queued:
+        lines.append(f'🎬 Video {queued.get("variant",0)+1}: en cola')
     else:
         pending=max(0,received-done)
-        lines.append(f'🎙 Audios recibidos: {received}')
-        lines.append(f'🎬 {pending} videos pendientes: '+('preparando el banco visual' if phase in ('searching','generating','generating-clips') else 'en cola') if pending else ('🎬 Esperando audios' if not jobs else f'🎬 Videos entregados: {done}'))
+        if pending and not failed:
+            lines.append(f'🎬 {pending} videos pendientes: '+('consultando el banco en R2' if phase=='consulting' else 'en cola'))
+        elif not failed:
+            lines.append('🎬 Esperando audios' if not jobs else f'🎬 Videos entregados: {done}')
     if any(j.get('planningFallback') or j.get('planModel')=='local-montage' for j in jobs): lines.append('Montaje de respaldo activo: gráficos y animaciones basados en tu audio.')
-    elapsed=max(0,int(now-created))
-    lines.append(f'⏱ Tiempo transcurrido: {elapsed//60:02d}:{elapsed%60:02d}')
     return '\n'.join(lines)
 
 
@@ -60,7 +73,7 @@ class ProgressReporter:
         for series in db.execute('SELECT * FROM series WHERE active=1 AND created>?',(now-86400,)).fetchall():
             path=Path(os.environ.get('MEDIA_PACK_DIR',str(self.flow.state/'media-pack')))/f'{series["match_id"]}.progress.json'
             try: media=json.loads(path.read_text())
-            except (OSError,ValueError): media={'count':0,'phase':'generating'}
+            except (OSError,ValueError): media={'count':0,'clips':0,'phase':'consulting'}
             audios=db.execute('SELECT id FROM audios WHERE series_id=? AND cancelled=0 ORDER BY ordinal',(series['id'],)).fetchall()
             jobs=[]
             for audio in audios:
@@ -72,11 +85,11 @@ class ProgressReporter:
                 elif pending and pending[0]=='failed': jobs.append({'status':'error','variant':json.loads(pending[1]).get('variant',0)})
             task=db.execute('SELECT status FROM tasks WHERE id=?',('media:'+series['match_id'],)).fetchone()
             if task and task[0]=='failed': media['phase']='failed'
-            text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now,len(audios),media.get('target',15),media.get('clips'),media.get('failures',[]))
+            elif task and task[0] in ('queued','running'): media['phase']='consulting'
+            text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now,len(audios),4,media.get('clips'),media.get('failures',[]))
             prior=db.execute('SELECT * FROM progress WHERE series_id=?',(series['id'],)).fetchone()
             if prior and prior['message_id'] is None:continue
             if prior and (now-prior['last_sent']<10 or prior['text']==text):continue
-            if prior and now-prior['last_sent']<30 and prior['text'].rsplit('\n',1)[0]==text.rsplit('\n',1)[0]:continue
             body={'chat_id':series['chat'],'text':text}
             method='sendMessage'
             if prior:

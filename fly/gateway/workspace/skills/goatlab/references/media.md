@@ -7,52 +7,43 @@ con ID, equipos traducidos, competición y kickoff; motion inválido usa `editin
 El top debe ser válido y tener como máximo siete horas. Una petición manual omite
 solamente su antigüedad y conserva el límite kickoff + 24 h.
 
-## Admisión y recuperación
+## Consulta y reintentos en Gateway
 
-La autoridad es el JSON privado `app-states/goatlab/agnes-state.json` en R2. SQLite
-es caché. Cada POST requiere una reserva nueva confirmada con CAS. Los slots
-partido/tipo/ordinal conservan identidad y consumo tras un reinicio o cambio de prompt.
-Estado ausente/corrupto/offline cierra nuevas solicitudes; los recursos ya guardados
-siguen reutilizándose. Los scripts aplican estos controles, sin intervención del agente.
+Gateway consulta objetos del prefijo `partidos/<id>/` mediante HEAD firmado para
+metadatos y GET público para comprobar acceso y checksum. Verifica los prompts y
+la identidad del partido; solo publica en su caché local los recursos compatibles.
+No consulta cuotas Agnes ni escribe o borra objetos de R2. La consulta tiene un
+límite de 90 segundos. Un 404 significa recurso ausente; 403, transporte y recursos
+inválidos se informan por separado. Si falla R2, conserva la caché compatible y
+continúa con gráficos. Banco parcial es un resultado válido, no una interrupción.
 
-Un 429 probado sin identificador devuelve cuota una sola vez y guarda `Retry-After`.
-Un 429 con ID, respuesta ilegible, transporte, timeout o 5xx conserva la reserva.
-Un vídeo con identificador se recupera mediante GET de ese mismo ID, con permisos
-compartidos de 60 s. La ventana de recuperación ante errores es de 60 s por corrida;
-la siguiente corrida puede retomar GET. Un resultado incierto sin ID queda bloqueado.
-Las respuestas de imagen guardadas localmente se recuperan con la misma identidad,
-sin otro POST. La pérdida del resultado puede dejar el banco parcial.
-
-Image Flash usa 2K 9:16, doce inicios/minuto y una solicitud simultánea. Video Flash
-usa 720×1280, seis segundos, un inicio cada 30 s y una tarea simultánea. El techo
-operativo diario es 4.000 imágenes y 360 segundos reservados, contado en el día UTC
-de la reserva. Cada vídeo dispone de cinco ordinales; un fallo terminal confirmado
-permite avanzar. El presupuesto conjunto es nuevo por corrida: 50 minutos por defecto,
-limitado además a kickoff + 24 horas. Se ignora el cronómetro de progresos antiguos.
-
-Para «reintenta fotos», ejecutar `retry --chat=<chat>`: reutiliza lo conseguido.
+Para «reintenta fotos», ejecutar `retry --chat=<chat>`: vuelve a consultar imágenes
+y clips publicados por Actions. Actualiza el banco de los montajes pendientes y
+conserva los trabajos ya aceptados y entregados.
 Para «reintenta el video 3», consultar `status --chat=<chat> --number=3` y ejecutar
 `retry --chat=<chat> --request=<requestId>` con su identificador original.
-`delivery-unknown` conserva el archivo y exige verificar Telegram antes de reenviar;
-`unavailable` no demuestra fallo. No pedir una grabación nueva por un fallo del servidor.
+`delivery-unknown` exige verificar Telegram antes de reenviar; `unavailable` no
+demuestra fallo. No pedir una grabación nueva por un fallo del servidor.
 
-## Publicación y conservación
+El progreso muestra imágenes disponibles sobre cuatro y clips sobre dos, sin
+cronómetro. Un estado de Render con más de 90 segundos sin confirmación se indica
+como pendiente de actualización, sin afirmar que continúa planificando ni que
+falló. Los errores de montaje y de consulta del banco se comunican separadamente.
 
-Un banco v2 completo tiene cuatro fotos y dos clips distintos con evidencia de prompt,
-modelo, referencia y disponibilidad R2. Un PUT fallido deja el intento parcial.
-R2 block permite lecturas y reutilización, con cero solicitudes Agnes y cero PUT de media;
-los controles privados siguen disponibles. Los drafts conservan un completo anterior
-si el nuevo intento queda parcial. La web sigue leyendo bancos legacy.
+## Producción y conservación en Actions
 
-La poda exige FT/AET/PEN con ambos marcadores finitos y más de una hora desde la
-primera detección válida del final. La evidencia terminal persiste aunque el fixture
-desaparezca; una corrección a NS/LIVE/PST invalida la autorización anterior.
-Salir del top o de la ventana conserva el contenido. Producción, generación pendiente
-o subida sin resolver impiden cerrar el partido. Primero se confirma el borrado del
-prefijo R2 exacto `partidos/<id>/`, y después se borran artefactos locales.
+GitHub Actions genera imágenes, clips y prompts, publica en R2 y realiza el
+mantenimiento remoto. La admisión, cuotas y recuperación Agnes mantienen el
+contrato de `AGNES-STATE.md`; Gateway utiliza `MEDIA_ROLE=consumer` y el productor
+exige `MEDIA_ROLE=producer` dentro de GitHub Actions. Actions reintenta a las
+02:15, 04:15 y 06:15 Lima, sin consultar ni encender Fly.
 
-Actions reintenta a las 02:15, 04:15 y 06:15 Lima, sin consultar ni encender Fly.
-Ver [deployment.md](deployment.md) para migración, secretos y comprobaciones.
+El banco completo mantiene las pruebas v2 de cuatro fotos y dos clips distintos.
+La generación parcial conserva un banco completo anterior. La poda remota sigue
+requiriendo final confirmado y protección de trabajos pendientes. Gateway limpia
+únicamente su caché de lectura, caducada y sin trabajos que la necesiten; conserva
+los artefactos antiguos de generación para recuperar sus resultados desde Actions.
+Ver [deployment.md](deployment.md) para despliegue y comprobaciones.
 
 ## Voz y motion graphics
 

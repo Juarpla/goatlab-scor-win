@@ -12,7 +12,9 @@ por listar partidos. El procedimiento y sus capacidades están dentro del skill.
 Para investigación web, consulta de skills/plugins, configuración del Gateway,
 proveedores o cuotas de Agnes, lee `references/openclaw-base.md`.
 
-Para el montaje, genera imágenes exclusivamente con Agnes AI. No busques ni
-descargues fotos externas ni las reutilices de bancos antiguos. Conserva los
-recursos de marca y React/Remotion/FFmpeg para motion graphics. Los clips Agnes se crean con los Video Prompts del partido: hasta dos clips
-compartidos, seis segundos, 9:16, con límites y recuperación persistente. El banco por partido son cuatro fotos y dos clips.
+Para el montaje, consulta el banco del partido en R2 mediante el workflow.
+GitHub Actions produce las cuatro imágenes y los dos clips Agnes, los prompts y
+el mantenimiento remoto. Gateway reutiliza esa media y Render ejecuta motion
+graphics con React/Remotion/FFmpeg a partir de los prompts publicados y la voz.
+Si el banco es parcial o no está disponible, continúa con gráficos y conserva los
+audios. Los reintentos de media vuelven a consultar R2; no generan recursos.

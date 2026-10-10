@@ -1,3 +1,4 @@
+if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de prompts pertenece a GitHub Actions');
 import { spawnSync } from 'node:child_process';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER } from '../src/lib/match-content.js';
 const raw = process.argv.slice(2), category = raw.find(a => a.startsWith('--category='))?.split('=')[1] ?? 'all';

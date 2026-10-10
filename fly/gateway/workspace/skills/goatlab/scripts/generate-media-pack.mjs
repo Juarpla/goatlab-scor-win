@@ -43,6 +43,7 @@ export function mediaSoftStop(runDeadline, kickoff) {
 }
 
 export async function generateMediaBanks({ args = {}, env = process.env, clock = Date.now, execImpl = execute, fetchImpl = fetch, transactImpl = transact, maintainImpl = maintainMedia, log = console.log } = {}) {
+  if (env.MEDIA_ROLE !== 'producer' || env.GITHUB_ACTIONS !== 'true') throw new Error('La generación de media pertenece exclusivamente a GitHub Actions');
   const started = clock(), runDeadline = mediaRunDeadline(started, env), runId = randomUUID();
   const repo = env.GOATLAB_REPO || '.', dir = args['--out'] || env.MEDIA_PACK_DIR || join(repo, 'public/data/media-pack');
   const results = [];
