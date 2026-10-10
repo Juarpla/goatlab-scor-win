@@ -65,6 +65,16 @@ test('checker accepts proven banks and reports missing inputs as pending without
   assert.equal(result.reason, 'complete');
   assert.equal(result.pending, 0);
 });
+test('checker accepts v2 documents without invalidating an unchanged proven bank', async t => {
+  const f = await fixture(t);
+  const { images, videos, value } = await f.complete();
+  for (const [imageVersion, videoVersion] of [[2, 2], [1, 2], [2, 1]]) {
+    await f.put('image-prompts/alpha-beta.json', { ...images, version: imageVersion });
+    await f.put('video-prompts/alpha-beta.json', { ...videos, version: videoVersion });
+    assert.equal(contentFingerprint(match(), { ...images, version: imageVersion }, { ...videos, version: videoVersion }), value.contentFingerprint);
+    assert.equal((await f.check()).complete, true);
+  }
+});
 test('legacy, partial, changed prompts and inconsistent input evidence keep a bank pending', async t => {
   const f = await fixture(t);
   const { value, images } = await f.complete();

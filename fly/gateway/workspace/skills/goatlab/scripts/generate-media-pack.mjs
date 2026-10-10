@@ -15,7 +15,7 @@ import { TOP_FILENAME, topFreshness, defaultTopN, effectiveIds, registerExtra } 
 import { transact } from './agnes-state.mjs';
 import { maintainMedia } from './maintain-media.mjs';
 import { reconcileVideoRecovery } from './reconcile-video-recovery.mjs';
-import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete } from '../lib/media-diagnostics.js';
+import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete, readyMediaLabels } from '../lib/media-diagnostics.js';
 
 const execute = (file, args, options={}) => new Promise((resolve,reject) => {
   const { onStderr, ...settings } = options;
@@ -144,6 +144,11 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     try { await state('heartbeat', { runId, matchId }); } catch(error) { authorityReady = false; failures.push('Estado de generación: heartbeat: ' + safeMediaMessage(error.message,env)); }
     const heartbeat = setInterval(() => { state('heartbeat', { runId, matchId }).catch(() => { authorityReady = false; }); }, 30_000); heartbeat.unref();
     const assets = [], clips = [], verifiedAssets = new Set(), verifiedClips = new Set();
+    const readyCounts = () => ({ images: verifiedAssets.size, clips: verifiedClips.size });
+    const logReady = (stage, detail = '') => {
+      const labels = readyMediaLabels(readyCounts());
+      log(`media: ${matchId}: ${labels.images} · ${labels.clips} (${stage})${detail ? '; ' + detail : ''}`);
+    };
     const publish = mediaPublisher({ dir, match, facts, prior: prev, draft: env.MEDIA_DRAFT === '1', clock: () => new Date(clock()).toISOString() });
     const extras = () => ({ clips, motionPrompts, failures, diagnostics, runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
       storageVerifiedAt: new Date(clock()).toISOString(), verifiedAssets: [...verifiedAssets], verifiedClips: [...verifiedClips] });
@@ -228,11 +233,23 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         if (remote || await putResource('video', ordinal, { file }, clip)) verifiedClips.add(clip.id);
       }
       if(r2ReadFailed) failures.push('R2: no se pudo verificar inventario; no se crean clips hasta confirmar los existentes');
+      logReady('inventario R2');
       await publish(assets, 'generating', extras());
-      const canGenerate = () => !!fingerprint && authorityReady && !!env.AGNES_API_KEY?.trim() && !r2blocked && !r2ReadFailed && deadline > clock()
-        && (!!args['--match'] || (match.status === 'NS' && Date.parse(match.kickoff) > clock()));
-      if (canGenerate() && env.AGNES_SKIP_IMAGES !== '1') for (const [ordinal, row] of imagePrompts.entries()) {
+      const canGenerate = () => {
+        const blockers = [];
+        if (!fingerprint) blockers.push('Huella de contenido inválida; revisar identidad, versión y prompts');
+        if (!authorityReady) blockers.push('Estado privado de generación no disponible; generación pausada');
+        if (!env.AGNES_API_KEY?.trim()) blockers.push('falta AGNES_API_KEY');
+        if (r2blocked) blockers.push('R2: subidas y generación pausadas; reutilización disponible');
+        if (r2ReadFailed) blockers.push('R2: inventario sin verificar; generación pausada');
+        if (deadline <= clock()) blockers.push('Generación: presupuesto de corrida agotado o plazo del partido vencido');
+        if (!args['--match'] && (match.status !== 'NS' || Date.parse(match.kickoff) <= clock())) blockers.push('Partido fuera de la ventana de generación; solo reutilización');
+        for (const reason of blockers) if (!failures.includes(reason)) failures.push(reason);
+        return blockers.length === 0;
+      };
+      if (env.AGNES_SKIP_IMAGES !== '1' && verifiedAssets.size < 4 && canGenerate()) for (const [ordinal, row] of imagePrompts.entries()) {
         if (assets.some(a => a.id === matchId + '-' + ordinal)) continue;
+        if (!canGenerate()) break;
         const timeout = Number(env.AGNES_TIMEOUT_SECONDS || 300);
         if (clock() + timeout * 1000 + 35_000 > deadline) { failures.push('Imágenes: presupuesto de corrida agotado'); break; }
         const promptFile = join(folder, ordinal + '.prompt.txt'); await writeFile(promptFile, row.prompt);
@@ -247,12 +264,15 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
             model: saved.model, prompt: saved.prompt, at: saved.at }), model: saved.model, width: saved.width, height: saved.height, prepared: true, promptHash: hash(saved.prompt), sha256: hash(bytes) };
           if (assetErrors(asset).length) throw new Error('Imagen inválida');
           assets.push(asset); summary.generated++;
-          if (await putResource('image', ordinal, saved, asset)) verifiedAssets.add(asset.id); else failures.push('R2: subida de imagen sin confirmar');
+          if (await putResource('image', ordinal, saved, asset)) {
+            verifiedAssets.add(asset.id);
+            logReady('subida de imagen confirmada');
+          } else failures.push('R2: subida de imagen sin confirmar');
           await publish(assets, 'generating', extras());
         } catch (error) { const reason = safeMediaMessage(error.stderr || error.message,env).trim(); failures.push('Imagen ' + (ordinal + 1) + ': ' + reason); if (/429|incierto|pausado|cuota/.test(reason)) break; }
       }
       await publish(assets, 'generating-clips', extras());
-      if (canGenerate() && env.AGNES_SKIP_VIDEO !== '1' && videoPrompts.length && assets.length && clips.length < 2) {
+      if (env.AGNES_SKIP_VIDEO !== '1' && verifiedClips.size < 2 && canGenerate() && videoPrompts.length && assets.length && clips.length < 2) {
         const input = join(folder, 'video-input.json'); await writeFile(input, JSON.stringify({ matchId, prompts: videoPrompts, images: assets, deadline: deadline / 1000, expiresAt, verifiedClips: clips.filter(c=>verifiedClips.has(c.id)).map(c=>c.file) }));
         try {
           const { stdout, stderr } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes_video.py'), '--input=' + input, '--out=' + folder],
@@ -273,16 +293,27 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
               failures.push('Clip recuperado de otra identidad; conservado sin publicar'); continue;
             }
             clips.push(clip); summary.generated++;
-            if (await putResource('video', saved.index, saved, clip)) verifiedClips.add(clip.id); else failures.push('R2: subida de clip sin confirmar');
+            if (await putResource('video', saved.index, saved, clip)) {
+              verifiedClips.add(clip.id);
+              logReady('subida de clip confirmada');
+              await publish(assets, 'generating-clips', extras());
+            } else failures.push('R2: subida de clip sin confirmar');
           }
         } catch (error) { failures.push('Clips: ' + safeMediaMessage(error.stderr || error.message,env)); }
       }
+      const complete = requestedMediaComplete({ ...readyCounts(), mode });
+      if (!complete) {
+        canGenerate();
+        if (!failures.some(reason => reason !== 'Motion Prompts no disponibles; montaje local disponible')) {
+          failures.push('Recursos incompletos; no se obtuvieron todos los recursos solicitados con verificación R2');
+        }
+      }
       const result = await publish(assets, 'finished', extras());
-      if (requestedMediaComplete({images:verifiedAssets.size,clips:verifiedClips.size,mode})) { summary.completed++; if(result.complete) summary.completedIds.push(matchId); } else summary.pending++;
+      if (complete) { summary.completed++; if(result.complete) summary.completedIds.push(matchId); } else summary.pending++;
       try { for (const line of (await readFile(operationsFile, 'utf8')).split('\n').filter(Boolean)) addOperations(JSON.parse(line)); } catch {}
       await rm(operationsFile, { force: true });
-      results.push({matchId,images:verifiedAssets.size,clips:verifiedClips.size,mode,failures,diagnostics,runUrl});
-      log('media: ' + matchId + ': ' + assets.length + '/4 imágenes, ' + clips.length + '/2 clips; ' + failures.join('; '));
+      results.push({matchId,...readyCounts(),mode,failures,diagnostics,runUrl});
+      logReady('final', failures.join('; '));
     } finally { clearInterval(heartbeat); try { await state('heartbeat', { runId, finished: true }); } catch {} }
   }
   try { await state('run-summary', Object.fromEntries(['runId', 'eligible', 'pending', 'generated', 'reused', 'completed'].map(key => [key, summary[key]]))); } catch {}

@@ -2,7 +2,7 @@
 import { createHash } from 'node:crypto';
 import { esName } from './teams.js';
 import { assetErrors } from './media.js';
-import { contentIdentityErrors } from './match-content.js';
+import { CONTENT_VERSION, contentIdentityErrors } from './match-content.js';
 
 const sha = value => createHash('sha256').update(value).digest('hex');
 const hash = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -30,7 +30,7 @@ export function contentFingerprint(match, imagePack, videoPack) {
     ['image-prompts', imagePack, 4, 'agnes-image-2.5-flash'],
     ['video-prompts', videoPack, 2, 'agnes-video-2.5-flash'],
   ]) {
-    if (!pack || pack.version !== 1 || pack.category !== category || contentIdentityErrors(pack, match).length
+    if (!pack || (pack.version !== CONTENT_VERSION && pack.version !== CONTENT_VERSION - 1) || pack.category !== category || contentIdentityErrors(pack, match).length
       || !Array.isArray(pack.prompts) || pack.prompts.length !== count
       || pack.prompts.some((row, index) => row?.n !== index + 1 || typeof row.prompt !== 'string' || !row.prompt.trim())) return null;
     const model = pack.generationModel ?? pack.model ?? fallback;

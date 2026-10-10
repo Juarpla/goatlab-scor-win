@@ -19,3 +19,11 @@ export function publicVideoDiagnostics(rows, env={}) {
 export function requestedMediaComplete({images,clips,mode}) {
   return (mode==='clips-only'||images>=4) && (mode==='images-only'||clips>=2);
 }
+
+/** Totals include existing and newly uploaded resources with confirmed R2 evidence. */
+export function readyMediaLabels({ images, clips }) {
+  return {
+    images: `${images}/4 imágenes listas; faltan ${Math.max(0, 4 - images)}`,
+    clips: `${clips}/2 clips listos; faltan ${Math.max(0, 2 - clips)}`,
+  };
+}

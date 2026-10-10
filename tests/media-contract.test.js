@@ -18,6 +18,18 @@ function bank() {
 }
 const options = value => ({ matchId: 'a-b', fingerprint: value.contentFingerprint, now });
 
+test('v1 and v2 prompt documents share fingerprints without accepting unsupported versions', () => {
+  const images = pack('image-prompts', 4), videos = pack('video-prompts', 2);
+  const expected = contentFingerprint(match, images, videos);
+  for (const imageVersion of [1, 2]) for (const videoVersion of [1, 2]) {
+    assert.equal(contentFingerprint(match, { ...images, version: imageVersion }, { ...videos, version: videoVersion }), expected);
+  }
+  for (const version of [undefined, 0, 3, '2']) {
+    assert.equal(contentFingerprint(match, { ...images, version }, videos), null);
+    assert.equal(contentFingerprint(match, images, { ...videos, version }), null);
+  }
+});
+
 test('fingerprint follows exact Agnes input and effective models, excluding editorial metadata', () => {
   const images = pack('image-prompts', 4), videos = pack('video-prompts', 2);
   const initial = contentFingerprint(match, images, videos);
