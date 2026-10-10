@@ -5547,5 +5547,402 @@
     "generatedAt": "2026-10-09T18:28:18.547Z",
     "inputKey": "v3|M|bz-601289|Red Bull Salzburg|AC Milan|europa|2026-10-15T16:45:00+00:0|NS\nP|1.74|1.19|0.492|0.258|0.25|0.561|0.585\nB|0.23|0.245|0.525|1.74|1.19|0.552|0.556|1-1|0.451\nB2|A|0.525|no|no\nH|2|0|1|1|3\nW||rain|6|\nT|15|Red Bull Salzburg|1|3||\nS|Haris Tabaković|Red Bull Salzburg|6|5\nS|Karim Konaté|Red Bull Salzburg|2|5\nR|2026-09-16|AC Milan|Benfica|0|2\nR|2026-09-17|Levski Sofia|Red Bull Salzburg|0|1\nHR|2022-11-02|AC Milan|Red Bull Salzburg|4|0\nHR|2022-09-06|Red Bull Salzburg|AC Milan|1|1",
     "materialKey": "M|bz-601289|Red Bull Salzburg|AC Milan|europa|2026-10-15T16:45:00+00:0|NS"
+  },
+  "bz-601271": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Lyon y Crystal Palace en jornada europea",
+        "bullets": [
+          "Olympique Lyonnais recibe a Crystal Palace el 15 de octubre de 2026 a las 16:45 en competición europea, con el encuentro aún sin comenzar (NS).",
+          "El clima reportado en la sede es nublado y 14 grados; el input no identifica el estadio ni la ciudad."
+        ],
+        "stats": [
+          {
+            "value": "16:45",
+            "label": "hora"
+          },
+          {
+            "value": "14",
+            "label": "grados"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson GoatLab y CatBoost Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab reparte 0.519 para el local, 0.259 para el empate y 0.222 para la visita, con goles esperados de 1.74 y 1.07.",
+          "Ese mismo bloque añade dos lecturas complementarias de 0.533 y 0.553 sin etiqueta explícita en el input.",
+          "CatBoost Bzzoiro reparte 0.409, 0.263 y 0.329, señala el 1-1 como marcador más probable y suma 0.528, 0.533 y 0.489.",
+          "B2 declara como mayor probabilidad la victoria local (0.409) y no ofrece estimación de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.519",
+            "label": "prob. local Poisson"
+          },
+          {
+            "value": "0.409",
+            "label": "prob. local CatBoost"
+          },
+          {
+            "value": "1.74",
+            "label": "goles esp. local"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones declaradas de ambos equipos",
+        "bullets": [
+          "Olympique Lyonnais figura en la posición 12 con 1 partido jugado y 3 puntos.",
+          "Crystal Palace figura en la posición 2 con 1 partido jugado y 3 puntos; el input no detalla la competición o grupo de cada tabla."
+        ],
+        "stats": [
+          {
+            "value": "12",
+            "label": "puesto Lyon"
+          },
+          {
+            "value": "2",
+            "label": "puesto Crystal Palace"
+          },
+          {
+            "value": "3",
+            "label": "puntos de cada equipo"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente del Crystal Palace",
+        "bullets": [
+          "Crystal Palace acumula 2V-1E-2D en sus cinco registros: 1-4 ante Manchester City, 3-2 en Fulham, 2-3 ante Ipswich, 4-0 ante Lech Poznan y 0-0 en Leeds.",
+          "El 4-0 ante Lech Poznan es el resultado más amplio del tramo; el input repite dos veces el 0-0 en Leeds."
+        ],
+        "stats": [
+          {
+            "value": "2V-1E-2D",
+            "label": "balance reciente Palace"
+          },
+          {
+            "value": "4-0",
+            "label": "victoria más amplia"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Puntos a vigilar en la lectura",
+        "bullets": [
+          "Las dos lecturas principales discrepan en la probabilidad local: 0.519 en Poisson GoatLab frente a 0.409 en CatBoost Bzzoiro, pese a compartir goles esperados de 1.74 y 1.07.",
+          "El input no incluye historial de cruces, forma del Lyon, bajas, alineaciones, goleadores ni bloque API-Football.",
+          "B2 alinea su mayor probabilidad con CatBoost (0.409) y deja sin declarar goles totales y ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.519",
+            "label": "prob. local Poisson"
+          },
+          {
+            "value": "0.409",
+            "label": "prob. local CatBoost"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin historial de cruces",
+        "detail": "No hay filas H/HR ni consenso M2, por lo que no puede contrastarse el balance previo entre ambos equipos."
+      },
+      {
+        "label": "Sin forma del Lyon",
+        "detail": "Los registros R solo cubren a Crystal Palace; no existen datos recientes del Olympique Lyonnais."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No se recibe bloque L ni onces probables, y la sede aparece sin nombre pese a indicarse el clima."
+      },
+      {
+        "label": "Sin bloque API-Football",
+        "detail": "No hay estimación A, de modo que la lectura de proveedores se limita a P, B y B2."
+      },
+      {
+        "label": "Tablas sin contexto",
+        "detail": "Las posiciones 12 y 2 con 1 partido y 3 puntos no precisan competición ni grupo de cada equipo."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Discrepancia clara en la probabilidad de victoria local entre Poisson GoatLab (0.519) y CatBoost Bzzoiro (0.409) con idénticos goles esperados (1.74 y 1.07); B2 (0.409) coincide con CatBoost. Las cifras 0.533 y 0.553 de P no se auditan por carecer de etiqueta en el input."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-10T06:02:29.232Z",
+    "inputKey": "v3|M|bz-601271|Olympique Lyonnais|Crystal Palace|europa|2026-10-15T16:45:00+00:0|NS\nP|1.74|1.07|0.519|0.259|0.222|0.533|0.553\nB|0.409|0.263|0.329|1.74|1.07|0.528|0.533|1-1|0.489\nB2|H|0.409|no|no\nW||cloudy|14|\nT|12|Olympique Lyonnais|1|3||\nT|2|Crystal Palace|1|3||\nR|2026-08-28|Crystal Palace FC|Manchester City FC|1|4\nR|2026-09-05|Fulham FC|Crystal Palace FC|2|3\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-17|Crystal Palace|Lech Poznan|4|0\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-09-20|Leeds|Crystal Palace|0|0",
+    "materialKey": "M|bz-601271|Olympique Lyonnais|Crystal Palace|europa|2026-10-15T16:45:00+00:0|NS"
+  },
+  "bz-601259": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "NK Celje - Omonia Nicosia, competición europea",
+        "bullets": [
+          "NK Celje y Omonia Nicosia se cruzan en competición europea el 15 de octubre de 2026 a las 16:45, con el partido registrado como no iniciado.",
+          "El encuentro llega con bloques de modelización de dos proveedores (Poisson GoatLab y CatBoost Bzzoiro) y con datos de forma reciente referidos a Omonia Nicosia."
+        ],
+        "stats": [
+          {
+            "value": "16:45",
+            "label": "hora registrada"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Reparto de probabilidades declarado",
+        "bullets": [
+          "Poisson GoatLab reparte el 1X2 en 38,5% local, 28% empate y 33,5% visitante, con 1,42 y 1,31 goles esperados, 51,4% de más de 2,5 goles y 56,6% de ambos anotan.",
+          "CatBoost Bzzoiro sitúa el 1X2 en 38,5% local, 27,2% empate y 34,3% visitante, con 1,42 y 1,31 goles esperados, 51% de más de 2,5 goles y 54,1% de ambos anotan.",
+          "El marcador modal de Bzzoiro es 1-1 con 53,4%; su estimación declarada B2 apunta a la victoria local con 38,5% y no incluye datos de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "38,5%",
+            "label": "victoria local (P y B)"
+          },
+          {
+            "value": "28%",
+            "label": "empate (Poisson GoatLab)"
+          },
+          {
+            "value": "56,6%",
+            "label": "ambos anotan (Poisson)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente aportada",
+        "bullets": [
+          "El bloque de forma recoge un 1-0 de Omonia Nicosia frente a Celta Vigo el 16 de septiembre de 2026.",
+          "No se incluyen resultados ni rachas de NK Celje en los datos de forma suministrados."
+        ],
+        "stats": [
+          {
+            "value": "1-0",
+            "label": "resultado de Omonia"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Línea de clasificación aportada",
+        "bullets": [
+          "El bloque de tabla contiene una única línea, referida a Omonia Nicosia, con los valores 14, 1 y 3 sin etiquetas que precisen su significado.",
+          "NK Celje no figura en el bloque de tabla y la posición concreta de Omonia Nicosia no queda identificada en el input."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "goleadores",
+        "title": "Registro de anotadores",
+        "bullets": [
+          "Loïs Diony, de Omonia Nicosia, es el único nombre del bloque de goleadores, con los valores 4 y 5.",
+          "No aparece ningún anotador de NK Celje en los datos de goleadores aportados."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "registro declarado"
+          },
+          {
+            "value": "5",
+            "label": "registro declarado"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin estimación de API-Football",
+        "detail": "No se aporta el bloque A, por lo que no hay distribución, probabilidad mayor, umbral de goles ni lectura cruda atribuidos a ese proveedor."
+      },
+      {
+        "label": "Sin historial de cruces",
+        "detail": "No hay bloque H/HR con enfrentamientos previos entre ambos equipos; solo consta un resultado reciente de Omonia Nicosia ante Celta Vigo."
+      },
+      {
+        "label": "Sin bajas confirmadas",
+        "detail": "No se incluye el bloque L, de modo que no hay información confirmada de ausencias para ninguno de los dos equipos."
+      },
+      {
+        "label": "Clima y sede incompletos",
+        "detail": "El bloque W solo aporta la cifra 5, sin unidades ni sede ni condiciones, por lo que no se integra como dato interpretable."
+      },
+      {
+        "label": "Tabla con campos sin etiquetar",
+        "detail": "Los valores 14, 1 y 3 de la línea de Omonia Nicosia no vienen acompañados de encabezados, por lo que no se les asigna un significado concreto."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los porcentajes de Poisson GoatLab y CatBoost Bzzoiro son coherentes entre sí (local 38,5% en ambos, empate 28% frente a 27,2%, visitante 33,5% frente a 34,3%) y con la máxima probabilidad declarada por B2 (victoria local, 38,5%). No se detectan desviaciones claras."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-10T06:03:51.789Z",
+    "inputKey": "v3|M|bz-601259|NK Celje|Omonia Nicosia|europa|2026-10-15T16:45:00+00:0|NS\nP|1.42|1.31|0.385|0.28|0.335|0.514|0.566\nB|0.385|0.272|0.343|1.42|1.31|0.51|0.541|1-1|0.534\nB2|H|0.385|no|no\nW|||5|\nT|14|Omonia Nicosia|1|3||\nS|Loïs Diony|Omonia Nicosia|4|5\nR|2026-09-16|Omonia Nicosia|Celta Vigo|1|0",
+    "materialKey": "M|bz-601259|NK Celje|Omonia Nicosia|europa|2026-10-15T16:45:00+00:0|NS"
+  },
+  "bz-601241": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama: Lech Poznań vs Bayer 04 Leverkusen",
+        "bullets": [
+          "Lech Poznań y Bayer 04 Leverkusen se enfrentan en competición europa el 2026-10-15 a las 16:45.",
+          "El partido figura con estado NS y sin resultado registrado.",
+          "El clima previsto en la sede es rain y 14."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-15",
+            "label": "Fecha"
+          },
+          {
+            "value": "europa",
+            "label": "Competición"
+          },
+          {
+            "value": "NS",
+            "label": "Estado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y estimaciones declaradas",
+        "bullets": [
+          "Poisson GoatLab registra 0.508, 0.253 y 0.239; además 1.8, 1.18, 0.572 y 0.589.",
+          "CatBoost Bzzoiro registra 0.205, 0.225 y 0.57; también 1.8, 1.18, 0.564, 0.56, 1-1 y 0.524.",
+          "B2 declara mayor probabilidad A con 0.57; goles totales no; ambos anotan no."
+        ],
+        "stats": [
+          {
+            "value": "0.508",
+            "label": "Poisson local"
+          },
+          {
+            "value": "0.57",
+            "label": "Bzzoiro visitante"
+          },
+          {
+            "value": "0.57",
+            "label": "B2 mayor probabilidad"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente de Lech Poznań",
+        "bullets": [
+          "El 2026-09-17, Crystal Palace venció 4-0 a Lech Poznan en el registro reciente.",
+          "Lech Poznan aparece como visitante en ese resultado."
+        ],
+        "stats": [
+          {
+            "value": "2026-09-17",
+            "label": "Fecha"
+          },
+          {
+            "value": "4-0",
+            "label": "Resultado"
+          },
+          {
+            "value": "Lech Poznan",
+            "label": "Visitante"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores registrados de Lech Poznań",
+        "bullets": [
+          "Patrik Wålemark (Lech Poznań) registra 4 y 5.",
+          "Allahyar Sayyadmanesh (Lech Poznań) registra 2 y 5.",
+          "Daniel Håkans (Lech Poznań) registra 2 y 5."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Wålemark"
+          },
+          {
+            "value": "2",
+            "label": "Sayyadmanesh"
+          },
+          {
+            "value": "2",
+            "label": "Håkans"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Tabla disponible: Bayer 04 Leverkusen",
+        "bullets": [
+          "En la tabla disponible, Bayer 04 Leverkusen figura 7º con 1 y 3.",
+          "La fila de tabla no incluye más equipos en el input."
+        ],
+        "stats": [
+          {
+            "value": "7º",
+            "label": "Posición Bayer"
+          },
+          {
+            "value": "1",
+            "label": "Registro 1"
+          },
+          {
+            "value": "3",
+            "label": "Registro 2"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin fila A",
+        "detail": "No hay estimación API-Football en el input; no se puede contrastar su distribución, mayor probabilidad, umbral de goles ni lectura cruda."
+      },
+      {
+        "label": "B2 codificado",
+        "detail": "B2 usa A|0.57|no|no; las etiquetas son abstractas y se reformulan como declaración del proveedor."
+      },
+      {
+        "label": "Tabla parcial",
+        "detail": "Solo aparece una fila de tabla para Bayer 04 Leverkusen con 7º, 1 y 3; no hay más equipos ni contexto de competición."
+      },
+      {
+        "label": "Sin historial H/HR",
+        "detail": "No se incluyen cruces previos ni historial de enfrentamientos entre Lech Poznań y Bayer 04 Leverkusen."
+      },
+      {
+        "label": "Sede sin estadio",
+        "detail": "W solo aporta rain y 14; no identifica estadio ni sede concreta."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "No se detectan desvíos claros: Poisson suma 1.000 y CatBoost suma 1.000; B2 0.57 coincide con la mayor probabilidad de B. Faltan A y H/HR para auditoría completa."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-10T06:05:31.206Z",
+    "inputKey": "v3|M|bz-601241|Lech Poznań|Bayer 04 Leverkusen|europa|2026-10-15T16:45:00+00:0|NS\nP|1.8|1.18|0.508|0.253|0.239|0.572|0.589\nB|0.205|0.225|0.57|1.8|1.18|0.564|0.56|1-1|0.524\nB2|A|0.57|no|no\nW||rain|14|\nT|7|Bayer 04 Leverkusen|1|3||\nS|Patrik Wålemark|Lech Poznań|4|5\nS|Allahyar Sayyadmanesh|Lech Poznań|2|5\nS|Daniel Håkans|Lech Poznań|2|5\nR|2026-09-17|Crystal Palace|Lech Poznan|4|0",
+    "materialKey": "M|bz-601241|Lech Poznań|Bayer 04 Leverkusen|europa|2026-10-15T16:45:00+00:0|NS"
   }
 }
