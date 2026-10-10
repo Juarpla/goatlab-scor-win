@@ -6790,5 +6790,453 @@
     "generatedAt": "2026-10-10T12:32:57.678Z",
     "inputKey": "v3|M|bz-601256|NEC Nijmegen|Levski Sofia|europa|2026-10-15T19:00:00+00:0|NS\nP|1.09|1.62|0.244|0.271|0.485|0.509|0.544\nB|0.5|0.257|0.243|1.09|1.62|0.546|0.554|1-1|0.392\nB2|H|0.5|no|no\nW|||19|\nR|2026-09-17|Juventus|NEC Nijmegen|5|0\nR|2026-09-17|Levski Sofia|Red Bull Salzburg|0|1",
     "materialKey": "M|bz-601256|NEC Nijmegen|Levski Sofia|europa|2026-10-15T19:00:00+00:0|NS"
+  },
+  "bz-601236": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama del cruce",
+        "bullets": [
+          "Jagiellonia Białystok recibe a FC Ararat-Armenia en competición europea el 2026-10-15 a las 19:00, con estado NS.",
+          "El clima se registra despejado y 13 grados; la sede aparece sin dato en el input.",
+          "No se dispone de historial de enfrentamientos, tabla clasificatoria ni bajas confirmadas en los datos recibidos."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-15",
+            "label": "Fecha"
+          },
+          {
+            "value": "19:00",
+            "label": "Hora"
+          },
+          {
+            "value": "13",
+            "label": "Grados y clima"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "P Poisson GoatLab: 0.538 local, 0.25 empate y 0.211 visitante; goles esperados 1.83 y 1.08; métricas adicionales 0.556 y 0.565.",
+          "B CatBoost Bzzoiro: 0.665 local, 0.204 empate y 0.131 visitante; goles esperados 1.83 y 1.08; métricas 0.586 y 0.522; marcador más probable 1-1 con 0.555.",
+          "B2, estimaciones declaradas del modelo Bzzoiro: mayor probabilidad H con 0.665; goles totales no y ambos anotan no."
+        ],
+        "stats": [
+          {
+            "value": "0.538",
+            "label": "P local"
+          },
+          {
+            "value": "0.665",
+            "label": "B/B2 local"
+          },
+          {
+            "value": "1-1",
+            "label": "Marcador B"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores",
+        "bullets": [
+          "Kajetan Szmyt, de Jagiellonia Białystok, registra 3 goles en 5 partidos.",
+          "Jesús Imaz, de Jagiellonia Białystok, suma 2 goles en 5 partidos.",
+          "Alexandros Malis, de FC Ararat-Armenia, acumula 1 gol en 3 partidos."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles Szmyt"
+          },
+          {
+            "value": "2",
+            "label": "Goles Imaz"
+          },
+          {
+            "value": "1",
+            "label": "Goles Malis"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Jagiellonia cayó 2-1 ante Olympiakos Piraeus el 2026-09-16.",
+          "Ararat-Armenia perdió 1-4 ante Sparta Praha el 2026-09-16."
+        ],
+        "stats": [
+          {
+            "value": "2-1",
+            "label": "Olympiakos-Jagiellonia"
+          },
+          {
+            "value": "1-4",
+            "label": "Ararat-Sparta"
+          },
+          {
+            "value": "2026-09-16",
+            "label": "Fecha reciente"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves del análisis",
+        "bullets": [
+          "La diferencia principal está en la probabilidad local: P asigna 0.538 y B/B2 asigna 0.665 al mismo desenlace.",
+          "Los goles esperados coinciden entre P y B en 1.83 para Jagiellonia y 1.08 para Ararat-Armenia.",
+          "B2 declara goles totales no y ambos anotan no, en contraste con las métricas adicionales de P y B."
+        ],
+        "stats": [
+          {
+            "value": "0.538",
+            "label": "P local"
+          },
+          {
+            "value": "0.665",
+            "label": "B/B2 local"
+          },
+          {
+            "value": "1.83",
+            "label": "Goles esperados local"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin historial",
+        "detail": "No hay filas H/HR de cruces previos en el input."
+      },
+      {
+        "label": "Sin tabla",
+        "detail": "No hay filas T con clasificación o puestos."
+      },
+      {
+        "label": "Sin API-Football",
+        "detail": "No hay filas A con distribución, mayor probabilidad o umbral de goles."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No hay filas M2 con porcentajes interpretativos externos."
+      },
+      {
+        "label": "Sin sede y bajas",
+        "detail": "No se aporta sede concreta ni filas L de bajas confirmadas."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Divergencia relevante entre P (local 0.538) y B/B2 (local 0.665) para el mismo partido; se marca para auditoría. El resto de datos se mantiene coherente con lo aportado."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-10T12:43:04.840Z",
+    "inputKey": "v3|M|bz-601236|Jagiellonia Białystok|FC Ararat-Armenia|europa|2026-10-15T19:00:00+00:0|NS\nP|1.83|1.08|0.538|0.25|0.211|0.556|0.565\nB|0.665|0.204|0.131|1.83|1.08|0.586|0.522|1-1|0.555\nB2|H|0.665|no|no\nW||clear|13|\nS|Kajetan Szmyt|Jagiellonia Białystok|3|5\nS|Jesús Imaz|Jagiellonia Białystok|2|5\nS|Alexandros Malis|FC Ararat-Armenia|1|3\nR|2026-09-16|Olympiakos Piraeus|Jagiellonia|2|1\nR|2026-09-16|Ararat-Armenia|Sparta Praha|1|4",
+    "materialKey": "M|bz-601236|Jagiellonia Białystok|FC Ararat-Armenia|europa|2026-10-15T19:00:00+00:0|NS"
+  },
+  "bz-601226": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Dinamo Zagreb y Anderlecht en jornada europea",
+        "bullets": [
+          "GNK Dinamo Zagreb recibe al RSC Anderlecht en la Europa League el 15 de octubre de 2026 a las 19:00 UTC, según el calendario registrado.",
+          "El recorte de tabla sitúa al GNK Dinamo Zagreb en la posición 17, con 1 partido y 1 punto contabilizados.",
+          "El registro de sede llega vacío y el clima previsto es lluvia con 7 grados."
+        ],
+        "stats": [
+          {
+            "value": "17",
+            "label": "Posición en tabla"
+          },
+          {
+            "value": "1",
+            "label": "Puntos registrados"
+          },
+          {
+            "value": "7",
+            "label": "Grados previstos"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Cálculos de Poisson y CatBoost Bzzoiro",
+        "bullets": [
+          "El modelo Poisson de GoatLab estima 1.62 goles esperados para el Dinamo Zagreb y 1.26 para el Anderlecht, con 0.447 de probabilidad para el local, 0.267 para el empate y 0.286 para el visitante.",
+          "La misma lectura sitúa en 0.549 la probabilidad de más de 2.5 goles y en 0.586 la de que ambos equipos anoten.",
+          "El CatBoost Bzzoiro declara 0.489-0.273-0.238 en el 1X2, 1.62 y 1.26 goles esperados, 0.527 para más de 2.5, 0.557 para ambos anotan y 1-1 como marcador más probable con 0.494.",
+          "Las estimaciones declaradas del Bzzoiro señalan al local con 0.489 como mayor probabilidad y no aportan cifras de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.447",
+            "label": "Prob. local Poisson"
+          },
+          {
+            "value": "0.489",
+            "label": "Prob. local Bzzoiro"
+          },
+          {
+            "value": "1-1",
+            "label": "Marcador más probable B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Cuatro cruces previos con dominio del Dinamo",
+        "bullets": [
+          "El historial registra 4 enfrentamientos: 0-0 el 13-12-2018 en Zagreb, 0-2 para el Dinamo el 04-10-2018 en Anderlecht, 0-1 el 02-12-2009 y 0-2 el 17-09-2009.",
+          "El resumen de historial consigna 4 partidos con 1.25 goles por encuentro, pero el detalle de cruces muestra tres victorias del Dinamo y un empate, sin triunfos del Anderlecht.",
+          "Ninguno de esos cuatro partidos registró goles de ambos equipos y ninguno superó los dos goles totales."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Cruces registrados"
+          },
+          {
+            "value": "1.25",
+            "label": "Goles por cruce"
+          },
+          {
+            "value": "0-2",
+            "label": "Resultado más repetido"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros listados: todos del Anderlecht",
+        "bullets": [
+          "Danylo Sikan aparece con 5 goles en 7 registros como máximo anotador de la lista proporcionada.",
+          "Mihajlo Cvetković suma 4 goles en 7 registros y Lukáš Ambros 2 goles en 7 registros.",
+          "Los tres nombres de la lista pertenecen al RSC Anderlecht; el recorte no incluye artilleros del GNK Dinamo Zagreb."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "Goles de Sikan"
+          },
+          {
+            "value": "4",
+            "label": "Goles de Cvetković"
+          },
+          {
+            "value": "2",
+            "label": "Goles de Ambros"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Puntos a vigilar en la lectura",
+        "bullets": [
+          "Las dos lecturas de modelo favorecen al local, con 0.447 en Poisson y 0.489 en CatBoost, y dejan el empate como segunda opción en ambas.",
+          "La expectativa de goles de los modelos (0.549 y 0.527 para más de 2.5) contrasta con los cuatro cruces previos, todos de 0-0, 0-1 o 0-2 y con 1.25 goles por partido.",
+          "La tabla solo recoge al Dinamo Zagreb en la posición 17; no hay fila del Anderlecht ni datos de forma reciente, bajas o consenso externo en el input."
+        ],
+        "stats": [
+          {
+            "value": "0.549",
+            "label": "Más de 2.5 Poisson"
+          },
+          {
+            "value": "0.527",
+            "label": "Más de 2.5 Bzzoiro"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma ni bajas",
+        "detail": "No hay registros de racha reciente, bajas confirmadas ni consenso externo para ninguno de los dos equipos."
+      },
+      {
+        "label": "Tabla incompleta",
+        "detail": "El recorte de tabla solo incluye al GNK Dinamo Zagreb; no consta la fila del RSC Anderlecht ni el significado completo de sus columnas."
+      },
+      {
+        "label": "Sede sin datos",
+        "detail": "El campo de sede llega vacío y el clima se limita a lluvia y 7 grados, sin más detalle."
+      },
+      {
+        "label": "Historial antiguo",
+        "detail": "Los cuatro cruces registrados datan de 2009 y 2018, por lo que describen contextos muy distintos al del partido."
+      },
+      {
+        "label": "Sin lectura API-Football",
+        "detail": "No se aporta la distribución del proveedor A, y las estimaciones B2 no incluyen goles totales ni ambos anotan."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El resumen de historial (4 partidos, 2-1-1) no coincide con el detalle de cruces, que da tres victorias del Dinamo y un empate; además las lecturas de goles (0.549 y 0.527 para más de 2.5) se desvían de un historial de 1.25 goles por cruce."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-10T12:44:51.647Z",
+    "inputKey": "v3|M|bz-601226|GNK Dinamo Zagreb|RSC Anderlecht|europa|2026-10-15T19:00:00+00:0|NS\nP|1.62|1.26|0.447|0.267|0.286|0.549|0.586\nB|0.489|0.273|0.238|1.62|1.26|0.527|0.557|1-1|0.494\nB2|H|0.489|no|no\nH|4|2|1|1|1.25\nW||rain|7|\nT|17|GNK Dinamo Zagreb|1|1||\nS|Danylo Sikan|RSC Anderlecht|5|7\nS|Mihajlo Cvetković|RSC Anderlecht|4|7\nS|Lukáš Ambros|RSC Anderlecht|2|7\nHR|2018-12-13|GNK Dinamo Zagreb|RSC Anderlecht|0|0\nHR|2018-10-04|RSC Anderlecht|GNK Dinamo Zagreb|0|2\nHR|2009-12-02|RSC Anderlecht|GNK Dinamo Zagreb|0|1\nHR|2009-09-17|GNK Dinamo Zagreb|RSC Anderlecht|0|2",
+    "materialKey": "M|bz-601226|GNK Dinamo Zagreb|RSC Anderlecht|europa|2026-10-15T19:00:00+00:0|NS"
+  },
+  "bz-601222": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Ferencváros recibe al Plzeň en jornada europea",
+        "bullets": [
+          "Partido de competición europea (identificador bz-601222) programado para el 15/10/2026 a las 19:00, con estado NS (no iniciado) y Ferencváros TC como local.",
+          "No se declara sede; el bloque meteorológico señala lluvia y un valor de 9, presumiblemente grados.",
+          "En la única fila de tabla disponible, Ferencváros TC figura en la posición 6 con registros de 1 y 3, sin datos del rival."
+        ],
+        "stats": [
+          {
+            "value": "15/10/2026",
+            "label": "Fecha del partido"
+          },
+          {
+            "value": "19:00",
+            "label": "Hora programada"
+          },
+          {
+            "value": "6",
+            "label": "Posición en tabla"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost: 62.3% frente a 48.6%",
+        "bullets": [
+          "El bloque Poisson GoatLab declara tasas de anotación de 2.05 y 0.93 y reparte 62.3% al local, 22.4% al empate y 15.3% a la visita.",
+          "El modelo CatBoost Bzzoiro sitúa al local en 48.6%, al empate en 26.4% y a la visita en 25.0%, con el mismo par de tasas (2.05 y 0.93) y marcador más probable 2-0 con 49.1%.",
+          "Las estimaciones declaradas de Bzzoiro fijan H como mayor probabilidad con 48.6% y no declaran lectura de goles totales ni de ambos anotan.",
+          "Los mercados complementarios aparecen en 57.2% y 53.7% en el bloque Poisson, y en 56.8% y 58.2% en el bloque CatBoost."
+        ],
+        "stats": [
+          {
+            "value": "62.3%",
+            "label": "Prob. local (Poisson)"
+          },
+          {
+            "value": "48.6%",
+            "label": "Prob. local (CatBoost)"
+          },
+          {
+            "value": "2-0",
+            "label": "Marcador más probable (B)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Tres cruces recientes con balance 1-1-1",
+        "bullets": [
+          "El historial registra 3 enfrentamientos, con 1 victoria, 1 empate y 1 derrota para Ferencváros.",
+          "El 25/09/2025 empataron 1-1 en Budapest; el 20/02/2025 el Plzeň ganó 3-0 como local; el 13/02/2025 el Ferencváros venció 1-0 en casa.",
+          "El bloque histórico agrega un valor de 2, coherente con los goles anotados por el conjunto húngaro en esos tres cruces."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Cruces registrados"
+          },
+          {
+            "value": "1-1",
+            "label": "Último cruce"
+          },
+          {
+            "value": "3-0",
+            "label": "Mayor goleada del historial"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Zachariassen y Joseph lideran con 4 goles",
+        "bullets": [
+          "Kristoffer Zachariassen (Ferencváros TC) suma 4 goles en 9 partidos.",
+          "Lenny Joseph (Ferencváros TC) registra 4 goles en 8 partidos.",
+          "Yusuf Bamidele (Ferencváros TC) acumula 3 goles en 9 partidos.",
+          "Los tres artilleros declarados pertenecen al mismo equipo, sin referencias de anotadores del Plzeň en el input."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Goles de Zachariassen"
+          },
+          {
+            "value": "4",
+            "label": "Goles de Joseph"
+          },
+          {
+            "value": "3",
+            "label": "Goles de Bamidele"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Lo que define la lectura del cruce",
+        "bullets": [
+          "La brecha entre ambos modelos en la probabilidad local (62.3% frente a 48.6%) es el eje de la discrepancia declarada.",
+          "La lluvia y un valor térmico de 9 añaden contexto de condiciones, sin sede especificada.",
+          "No hay datos de forma reciente, bajas confirmadas ni consenso externo para completar la lectura del choque."
+        ],
+        "stats": [
+          {
+            "value": "62.3%",
+            "label": "Local según Poisson"
+          },
+          {
+            "value": "48.6%",
+            "label": "Local según CatBoost"
+          },
+          {
+            "value": "9",
+            "label": "Valor térmico declarado"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin forma reciente",
+        "detail": "No se incluye bloque R de racha ni resultados previos más allá de los tres cruces del historial."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No se declaran bajas confirmadas (L), onces probables ni disponibilidad de jugadores."
+      },
+      {
+        "label": "Sin API ni consenso externo",
+        "detail": "No hay bloque A de API-Football ni lectura M2 de consenso interpretativo en el input."
+      },
+      {
+        "label": "Mercados sin etiqueta",
+        "detail": "Las cifras 0.572/0.537 y 0.568/0.582 no vienen etiquetadas; se leen como mercados de goles y ambos anotan."
+      },
+      {
+        "label": "Tabla incompleta",
+        "detail": "La fila de tabla solo cubre a Ferencváros TC (posición 6, con registros 1 y 3) y carece de datos del rival."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El bloque Poisson concede 62.3% al local y el CatBoost 48.6%, una diferencia de 13.7 puntos pese a declarar idénticas tasas de anotación (2.05 y 0.93). El 49.1% atribuido al marcador exacto 2-0 resulta elevado para un resultado único. B2 no declara goles totales ni ambos anotan."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-10T12:45:39.176Z",
+    "inputKey": "v3|M|bz-601222|Ferencváros TC|FC Viktoria Plzeň|europa|2026-10-15T19:00:00+00:0|NS\nP|2.05|0.93|0.623|0.224|0.153|0.572|0.537\nB|0.486|0.264|0.25|2.05|0.93|0.568|0.582|2-0|0.491\nB2|H|0.486|no|no\nH|3|1|1|1|2\nW||rain|9|\nT|6|Ferencváros TC|1|3||\nS|Kristoffer Zachariassen|Ferencváros TC|4|9\nS|Lenny Joseph|Ferencváros TC|4|8\nS|Yusuf Bamidele|Ferencváros TC|3|9\nHR|2025-09-25|Ferencváros TC|FC Viktoria Plzeň|1|1\nHR|2025-02-20|FC Viktoria Plzeň|Ferencváros TC|3|0\nHR|2025-02-13|Ferencváros TC|FC Viktoria Plzeň|1|0",
+    "materialKey": "M|bz-601222|Ferencváros TC|FC Viktoria Plzeň|europa|2026-10-15T19:00:00+00:0|NS"
   }
 }
