@@ -1,3 +1,4 @@
+import {reviewAndCorrect,motionMetrics} from './visual-qa.mjs';
 // Worker goatlab-render: voz + pool de fotos -> MP4 -> sendVideo por Telegram.
 // Remotion interpreta el plan por audio. FFmpeg normaliza y mezcla la voz.
 // Durable: POST /render encola un job; GET /jobs/:id recupera su estado.
@@ -16,7 +17,7 @@ import { JobStore } from './job-store.mjs';
 import { RemoteLedger } from './remote-ledger.mjs';
 import { warmPhotos, prunePhotoCache, pinPhotos } from './photo-cache.mjs';
 import { pruneClipCache } from './clip-cache.mjs';
-import { prepareShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
+import { prepareShort, renderSilent, renderWithFallback, muxVoice, mediaDuration, SKILL_ROOT } from './short-job.mjs';
 
 const run = promisify(execFile);
 const PORT = Number(process.env.PORT ?? 3000);
@@ -126,7 +127,7 @@ async function runJob(job) {
     const voiceSeconds = await mediaDuration(voiceFile);
 
     // 2. La transcripción ordena el pool y es el texto del video.
-    const { total, provider, stages, plan, voiceFile: adjustedVoiceFile, voiceRate, originalVoiceSeconds } = await measure('preparation', () => prepareShort({
+    let { total, provider, stages, plan, voiceFile: adjustedVoiceFile, voiceRate, originalVoiceSeconds, transcriptionContext, resources, directionHash } = await measure('preparation', () => prepareShort({
       tmp,
       voiceFile,
       voiceSeconds,
@@ -136,7 +137,7 @@ async function runJob(job) {
       away: job.away,
       matchLabel: job.matchLabel,
       log, cacheDir,
-      facts: job.facts ?? [], mediaMinimum: job.mediaMinimum ?? 2, requestId: job.requestId ?? job.id, onStage,
+      productionContext: job.productionContext, usedVariants: [...new Set([...(job.usedVariants ?? []), ...[...jobs.values()].filter(j=>j.id!==job.id && j.chatId===job.chatId && j.matchId===job.matchId).flatMap(j=>j.productionReport?.motion?.variants??[])])], facts: job.facts ?? [], mediaMinimum: job.mediaMinimum ?? 2, requestId: job.requestId ?? job.id, onStage,
     }));
     Object.assign(job.stages, stages);
     job.renderEngine = 'remotion';
@@ -148,7 +149,8 @@ async function runJob(job) {
     const silent = join(tmp, 'silent.mp4');
     const out = join(tmp, 'short.mp4');
     if (stopIfCancelled(job, log)) return;
-    await measure('capture', () => renderSilent(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
+    const capture=await measure('capture', () => renderWithFallback(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
+    plan=capture.plan;job.planModel=plan.model;job.planningFallback=Boolean(plan.fallback);
     if (stopIfCancelled(job, log)) return;
     await measure('mux', () => muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out }));
 
@@ -164,8 +166,23 @@ async function runJob(job) {
       throw new Error('se requiere H.264 a 30 fps y audio AAC');
     const dur = await mediaDuration(out);
     if (dur >= 50 || Math.abs(dur - total) > .1) throw new Error(`duración ${dur}s ≠ ${total}s`);
-    const sizeMb = statSync(out).size / 1_000_000;
+    let sizeMb = statSync(out).size / 1_000_000;
     if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
+
+    job.productionReport = {version:1, revision:process.env.GOATLAB_REVISION??'unknown', planVersion:plan.version, transcription:{provider, ...transcriptionContext}, context:{hash:job.productionContext?.hash,snapshotHash:job.productionContext?.snapshotHash,provenance:job.productionContext?.provenance,retrieval:job.productionContext?.retrieval}, factsUsed:(job.facts??[]).filter(f=>plan.scenes.some(s=>(s.factIds??[]).includes(f.id))), versions:{remotion:'4.0.533',fps:30,width:1080,height:1920,library:1}, models:plan.attempts??[], fallback:Boolean(plan.fallback), fallbackReason:plan.fallbackReason, priorModel:plan.priorModel, directionHash, resources:{...resources,usedImages:plan.version===5?new Set(plan.scenes.filter(s=>s.asset!=null).map(s=>s.asset)).size:undefined,usedClips:plan.version===5?new Set(plan.scenes.filter(s=>s.clip!=null).map(s=>s.clip)).size:undefined}, motion:motionMetrics(plan,total), stages:job.stages};
+    if (plan.version === 5) {
+      const qa=await measure('vision',()=>reviewAndCorrect({tmp,video:out,total,skillRoot:SKILL_ROOT,isCancelled:()=>job.cancelled,allowCorrection:!capture.renderFallback,
+        render:()=>measure('captureCorrection',()=>renderSilent(tmp,silent,{isCancelled:()=>job.cancelled})),
+        mux:()=>muxVoice({silent,voiceFile:adjustedVoiceFile,total,out})}));
+      if (statSync(out).size/1_000_000>=MAX_MB || Math.abs(await mediaDuration(out)-total)>.1) throw new Error('corrección supera límites técnicos');
+      job.productionReport.qa=qa;
+      store.save(job);
+      if (qa.severity==='severe') throw new Error('QA visual: defecto grave persistente; video retenido');
+    }
+
+    sizeMb = statSync(out).size / 1_000_000;
+    job.productionReport.output={duration:dur,sizeMb,format:'H.264/AAC',width:1080,height:1920,fps:30};
+    store.save(job);
 
     // 4. Envío. Un reemplazo del último audio llega a cancelar antes de publicarlo.
     if (stopIfCancelled(job, log)) return;
@@ -243,7 +260,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 4, renderEngine: 'remotion', maxSeconds: 49.9 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: process.env.GOATLAB_CINEMA_V5 === '1' ? 5 : 4, renderEngine: 'remotion', maxSeconds: 49.9 });
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
@@ -278,16 +295,20 @@ const server = createServer(async (req, res) => {
       if (!Array.isArray(b.assets) || b.assets.length > LEGACY_ASSETS_MAX) return json(400, { error: 'cantidad de fotos inválida' });
       const mediaMinimum = b.mediaMinimum ?? 2;
       if (![0, 1, 2, 4].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
+      if (b.facts == null && Array.isArray(b.productionContext?.facts)) b.facts=b.productionContext.facts;
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
       if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > LEGACY_CLIPS_MAX || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
       if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 30 || b.motionPrompts.some(p => !Number.isInteger(p?.n) || p.n < 1 || p.n > 30 || !['form','goals','clean-sheets','head-to-head','synthesis'].includes(p.kind) || typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
+      if (b.productionContext != null && (typeof b.productionContext !== 'object' || b.productionContext.version !== 1 || b.productionContext.matchId !== b.matchId || !Array.isArray(b.productionContext.facts) || b.productionContext.facts.length>64)) return json(400,{error:'contexto de producción inválido'});
+      if (b.usedVariants != null && (!Array.isArray(b.usedVariants) || b.usedVariants.length>64 || b.usedVariants.some(v=>typeof v!=='string'||v.length>80))) return json(400,{error:'variantes inválidas'});
+      if (b.libraryVersion != null && b.libraryVersion!==1) return json(400,{error:'biblioteca no soportada'});
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
       for (const asset of b.assets) if (asset?.source !== 'agnes' || !asset?.url || !/^https:\/\//.test(asset.url)) return json(400, { error: 'Solo se admiten imágenes generadas con Agnes' });
       const { job, duplicate } = store.accept({
         expiresAt: b.expiresAt, chatId: b.chatId, matchId: b.matchId, requestId: b.requestId, seriesId: b.seriesId,
-        variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
+        variant, productionContext:b.productionContext, usedVariants:b.usedVariants??[], libraryVersion:b.libraryVersion??1, directionVersion:b.directionVersion, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
         renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
         clips: (b.clips ?? []).slice(0, CLIPS_PER_MATCH), motionPrompts: b.motionPrompts ?? [], assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,

@@ -1,7 +1,6 @@
 // Tiempos por palabra de la voz: Mistral, luego whisper.cpp local.
 // Cada proveedor devuelve [{word, start, end}] en segundos. Si uno falla,
-// tarda demasiado o no oye nada, se pasa al siguiente. El texto final lo
-// pone el guion (src/lib/timing.js); aquí solo importan los tiempos.
+// tarda demasiado o no oye nada, se pasa al siguiente. El texto final se deriva de lo oído; el contexto solo orienta nombres propios.
 import { execFile } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { promisify } from 'node:util';
@@ -54,7 +53,7 @@ async function withTimeout(fetchImpl, url, init) {
 }
 
 // `language` y `timestamp_granularities` no se pueden combinar en Mistral.
-export async function mistral({ flac, env, fetchImpl }) {
+export async function mistral({ flac, env, fetchImpl, contextBias = [] }) {
   const key = env.MISTRAL_API_KEY;
   if (!key) throw new Error('sin MISTRAL_API_KEY');
   const base = (env.MISTRAL_BASE_URL ?? 'https://api.mistral.ai/v1').replace(/\/$/, '');
@@ -62,6 +61,7 @@ export async function mistral({ flac, env, fetchImpl }) {
   form.set('model', env.MISTRAL_STT_MODEL ?? 'voxtral-mini-latest');
   form.set('file', new Blob([readFileSync(flac)], { type: 'audio/flac' }), 'voice.flac');
   form.set('timestamp_granularities', 'word');
+  for (const term of contextBias.slice(0,100)) form.append('context_bias',term);
   const json = await withTimeout(fetchImpl, `${base}/audio/transcriptions`, {
     method: 'POST',
     headers: { authorization: `Bearer ${key}` },
@@ -70,13 +70,13 @@ export async function mistral({ flac, env, fetchImpl }) {
   return parseMistral(json);
 }
 
-export async function whisperLocal({ wav, env, runImpl = run }) {
+export async function whisperLocal({ wav, env, runImpl = run, contextBias = [] }) {
   const bin = env.WHISPER_BIN ?? 'whisper-cli';
   const model = env.WHISPER_MODEL ?? '/opt/whisper/ggml-base.bin';
   if (!existsSync(model)) throw new Error(`falta el modelo ${model}`);
   if (/\.en\.bin$/.test(model)) throw new Error('modelo .en: traduciría la voz en español');
   const outBase = wav.replace(/\.wav$/, '-whisper');
-  await runImpl(bin, ['-m', model, '-l', 'es', '-ml', '1', '-sow', '-ojf', '-of', outBase, '-np', wav], {
+  await runImpl(bin, ['-m', model, '-l', 'es', '-ml', '1', '-sow', '-ojf', '-of', outBase, '-np', ...(contextBias.length ? ['--prompt',contextBias.join(', ')] : []), wav], {
     timeout: 5 * 60 * 1000,
   });
   return parseWhisperCpp(JSON.parse(readFileSync(`${outBase}.json`, 'utf8')));
@@ -95,6 +95,7 @@ export async function transcribeWords({
   flac,
   wav,
   voiceSeconds,
+  contextBias = [],
   env = process.env,
   fetchImpl = fetch,
   runImpl = run,
@@ -104,7 +105,7 @@ export async function transcribeWords({
   const errors = [];
   for (const [name, fn] of providers) {
     try {
-      const words = await fn({ flac, wav, voiceSeconds, env, fetchImpl, runImpl });
+      const words = await fn({ flac, wav, voiceSeconds, env, fetchImpl, runImpl, contextBias });
       if (!words.length) throw new Error('sin palabras');
       return { provider: name, words, errors };
     } catch (e) {

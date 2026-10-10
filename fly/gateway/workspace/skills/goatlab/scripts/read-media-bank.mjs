@@ -8,7 +8,7 @@ try {
   const repo = process.env.GOATLAB_REPO || '.';
   const snapshot = await json(args['--content']) ?? {};
   const script = await json(join(repo, 'public/data/youtube-scripts', args['--match'] + '.json'));
-  const content = {};
+  const content = {production:snapshot.production ?? null};
   for (const category of ['image-prompts', 'video-prompts', 'motion-prompts']) content[category] = Object.hasOwn(snapshot, category) ? snapshot[category] : await json(join(repo, 'public/data', category, args['--match'] + '.json'));
   const identity = snapshot.match ?? script ?? content['image-prompts'] ?? content['video-prompts'];
   const result = await readMediaBank({ match: { ...identity, webId: args['--match'] }, content, dir: args['--out'] });

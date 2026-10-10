@@ -1,0 +1,418 @@
+{
+  "version": 1,
+  "match": "Chelsea FC vs AFC Bournemouth",
+  "source": "original five audio recordings; saved AI plans replayed after renderer repairs; no Telegram delivery",
+  "graphicsWeightedPercent": 74.6,
+  "videos": [
+    {
+      "ordinal": 1,
+      "replayed": true,
+      "total": 30.966666666666665,
+      "motion": {
+        "definition": "Escenas dominadas por gráficos; excluye subtítulos y cierre.",
+        "graphicSeconds": 23.97,
+        "graphicPercentOfVideo": 77.4,
+        "graphicPercentOfNarrative": 85.7,
+        "scenes": 7,
+        "variants": [
+          "protagonist/split",
+          "editorial/headline",
+          "primary-stat/number",
+          "comparison/bars",
+          "comparison/cards",
+          "encounter/masthead",
+          "resolution/takeaway"
+        ],
+        "distinctiveOccurrences": 2
+      },
+      "model": "opencode-go/mimo-v2.6-flash",
+      "fallback": false,
+      "attempts": [
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "stage": "planning",
+          "status": "ok",
+          "durationMs": 7577,
+          "httpStatus": 200,
+          "reason": null
+        }
+      ],
+      "qa": {
+        "severity": "minor",
+        "issues": [
+          "Frame 4: titular \"favor no...\" (fragmento del titular) queda parcialmente oculto tras el jugador azul, dificultando su lectura; parece un titular recortado por la imagen.",
+          "Frame 5: el titular \"Chelsea FC vs AFC Bournemouth / proyección se queda con la victoria del Chelsea\" se superpone sobre los jugadores con poco contraste en la parte izquierda, reduciendo legibilidad.",
+          "Frame 6: solo se muestra \"casa.\" como titular, fragmento muy corto que podría parecer texto incompleto (posible fade/stagger parcialmente revelado)."
+        ],
+        "repair": {
+          "fontScale": 0.85,
+          "captionBottom": 560
+        },
+        "model": "opencode-go/mimo-v2.6-flash",
+        "attempts": [
+          {
+            "model": "opencode-go/mimo-v2.6-flash",
+            "status": "ok"
+          }
+        ],
+        "frameTimes": [
+          2.2373333333333334,
+          6.152666666666667,
+          11.186666666666667,
+          16.220666666666666,
+          21.254666666666665,
+          25.729333333333333
+        ],
+        "renderCorrections": 0
+      },
+      "elapsedMs": 164815,
+      "stages": {
+        "voiceAdjustment": 8,
+        "photos": 3,
+        "clips": 0,
+        "planning": 3
+      },
+      "technical": {
+        "duration": 30.966667,
+        "sizeMb": 6.27,
+        "format": "H264/AAC",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      }
+    },
+    {
+      "ordinal": 2,
+      "replayed": true,
+      "total": 32.86666666666667,
+      "motion": {
+        "definition": "Escenas dominadas por gráficos; excluye subtítulos y cierre.",
+        "graphicSeconds": 22.4,
+        "graphicPercentOfVideo": 68.2,
+        "graphicPercentOfNarrative": 75,
+        "scenes": 8,
+        "variants": [
+          "protagonist/full",
+          "editorial/stack",
+          "encounter/duel",
+          "primary-stat/spotlight",
+          "comparison/bars",
+          "protagonist/split",
+          "primary-stat/number",
+          "resolution/statement"
+        ],
+        "distinctiveOccurrences": 2
+      },
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "fallback": false,
+      "attempts": [
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "stage": "planning",
+          "status": "validation",
+          "durationMs": 9740,
+          "httpStatus": 200,
+          "reason": "máximo dos movimientos distintivos ejecutados"
+        },
+        {
+          "model": "opencode-go/deepseek-v4.1-flash",
+          "stage": "planning",
+          "status": "ok",
+          "durationMs": 3652,
+          "httpStatus": 200,
+          "reason": null
+        }
+      ],
+      "qa": {
+        "severity": "minor",
+        "issues": [
+          "Fotograma 4: el rótulo 'GOATLAB · ANÁLISIS' en la esquina superior izquierda queda superpuesto con la bandera azul de Chelsea, reduciendo su legibilidad.",
+          "Fotograma 3 y 5: el titular editorial ('2.5 goles.', 'victoria del Chelsea en casa.') y la tarjeta de datos debajo aparecen con opacidad reducida/oscurecida, posiblemente por un fade aún parcialmente revelado; se ve leído pero apagado."
+        ],
+        "repair": {
+          "fontScale": 1,
+          "captionBottom": 540
+        },
+        "model": "opencode-go/mimo-v2.6-flash",
+        "attempts": [
+          {
+            "model": "opencode-go/mimo-v2.6-flash",
+            "status": "ok"
+          }
+        ],
+        "frameTimes": [
+          2.3893333333333335,
+          6.570666666666667,
+          11.946666666666667,
+          17.322666666666667,
+          22.698666666666668,
+          27.477333333333334
+        ],
+        "renderCorrections": 0
+      },
+      "elapsedMs": 170198,
+      "stages": {
+        "voiceAdjustment": 1,
+        "photos": 1,
+        "clips": 0,
+        "planning": 0
+      },
+      "technical": {
+        "duration": 32.866677,
+        "sizeMb": 12.03,
+        "format": "H264/AAC",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      }
+    },
+    {
+      "ordinal": 3,
+      "replayed": true,
+      "total": 33.4,
+      "motion": {
+        "definition": "Escenas dominadas por gráficos; excluye subtítulos y cierre.",
+        "graphicSeconds": 22.8,
+        "graphicPercentOfVideo": 68.3,
+        "graphicPercentOfNarrative": 75,
+        "scenes": 8,
+        "variants": [
+          "protagonist/split",
+          "encounter/duel",
+          "primary-stat/number",
+          "comparison/bars",
+          "protagonist/full",
+          "primary-stat/spotlight",
+          "editorial/stack",
+          "resolution/statement"
+        ],
+        "distinctiveOccurrences": 2
+      },
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "fallback": false,
+      "attempts": [
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "stage": "planning",
+          "status": "validation",
+          "durationMs": 24650,
+          "httpStatus": 200,
+          "reason": "máximo dos movimientos distintivos ejecutados"
+        },
+        {
+          "model": "opencode-go/deepseek-v4.1-flash",
+          "stage": "planning",
+          "status": "ok",
+          "durationMs": 5034,
+          "httpStatus": 200,
+          "reason": null
+        }
+      ],
+      "qa": {
+        "severity": "ok",
+        "issues": [],
+        "repair": {},
+        "model": "opencode-go/mimo-v2.6-flash",
+        "attempts": [
+          {
+            "model": "opencode-go/mimo-v2.6-flash",
+            "status": "ok"
+          }
+        ],
+        "frameTimes": [
+          2.432,
+          6.688,
+          12.16,
+          17.631999999999998,
+          23.104,
+          27.968
+        ],
+        "renderCorrections": 0
+      },
+      "elapsedMs": 222987,
+      "stages": {
+        "voiceAdjustment": 0,
+        "photos": 0,
+        "clips": 0,
+        "planning": 0
+      },
+      "technical": {
+        "duration": 33.40001,
+        "sizeMb": 8.78,
+        "format": "H264/AAC",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      }
+    },
+    {
+      "ordinal": 4,
+      "replayed": true,
+      "total": 34.13333333333333,
+      "motion": {
+        "definition": "Escenas dominadas por gráficos; excluye subtítulos y cierre.",
+        "graphicSeconds": 27.25,
+        "graphicPercentOfVideo": 79.8,
+        "graphicPercentOfNarrative": 87.5,
+        "scenes": 8,
+        "variants": [
+          "encounter/masthead",
+          "editorial/stack",
+          "primary-stat/spotlight",
+          "comparison/bars",
+          "protagonist/full",
+          "primary-stat/number",
+          "comparison/cards",
+          "resolution/statement"
+        ],
+        "distinctiveOccurrences": 2
+      },
+      "model": "opencode-go/mimo-v2.6-flash",
+      "fallback": false,
+      "attempts": [
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "stage": "planning",
+          "status": "ok",
+          "durationMs": 17395,
+          "httpStatus": 200,
+          "reason": null
+        }
+      ],
+      "qa": {
+        "severity": "minor",
+        "issues": [
+          "frame 4: el subtítulo 'Con' aparece a mitad del fotograma, no en la zona segura inferior",
+          "frame 6: el subtítulo 'cara' aparece a mitad del fotograma, no en la zona segura inferior",
+          "frame 1: el titular 'Chelsea y Bournemouth el arco' queda cortado en la parte inferior del encuadre"
+        ],
+        "repair": {
+          "fontScale": 0.9,
+          "captionBottom": 540
+        },
+        "model": "opencode-go/deepseek-v4.1-flash",
+        "attempts": [
+          {
+            "model": "opencode-go/mimo-v2.6-flash",
+            "status": "unavailable",
+            "reason": "TimeoutError"
+          },
+          {
+            "model": "opencode-go/deepseek-v4.1-flash",
+            "status": "ok"
+          }
+        ],
+        "frameTimes": [
+          2.490666666666667,
+          6.849333333333333,
+          12.453333333333333,
+          18.057333333333332,
+          23.66133333333333,
+          28.642666666666667
+        ],
+        "renderCorrections": 0
+      },
+      "elapsedMs": 105416,
+      "stages": {
+        "voiceAdjustment": 1,
+        "photos": 1,
+        "clips": 0,
+        "planning": 1
+      },
+      "technical": {
+        "duration": 34.133344,
+        "sizeMb": 3.89,
+        "format": "H264/AAC",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      }
+    },
+    {
+      "ordinal": 5,
+      "replayed": true,
+      "total": 32.93333333333333,
+      "motion": {
+        "definition": "Escenas dominadas por gráficos; excluye subtítulos y cierre.",
+        "graphicSeconds": 26.19,
+        "graphicPercentOfVideo": 79.5,
+        "graphicPercentOfNarrative": 87.5,
+        "scenes": 8,
+        "variants": [
+          "editorial/headline",
+          "encounter/masthead",
+          "primary-stat/number",
+          "comparison/bars",
+          "comparison/cards",
+          "protagonist/full",
+          "resolution/statement"
+        ],
+        "distinctiveOccurrences": 2
+      },
+      "model": "agnes/agnes-3.0-flash",
+      "fallback": false,
+      "attempts": [
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "stage": "planning",
+          "status": "validation",
+          "durationMs": 7516,
+          "httpStatus": 200,
+          "reason": "máximo dos movimientos distintivos ejecutados"
+        },
+        {
+          "model": "opencode-go/deepseek-v4.1-flash",
+          "stage": "planning",
+          "status": "validation",
+          "durationMs": 3917,
+          "httpStatus": 200,
+          "reason": "recurso inexistente"
+        },
+        {
+          "model": "agnes/agnes-3.0-flash",
+          "stage": "planning",
+          "status": "ok",
+          "durationMs": 16225,
+          "httpStatus": 200,
+          "reason": null
+        }
+      ],
+      "qa": {
+        "severity": "ok",
+        "issues": [],
+        "repair": {},
+        "model": "opencode-go/mimo-v2.6-flash",
+        "attempts": [
+          {
+            "model": "opencode-go/mimo-v2.6-flash",
+            "status": "ok"
+          }
+        ],
+        "frameTimes": [
+          2.3946666666666663,
+          6.585333333333333,
+          11.973333333333333,
+          17.36133333333333,
+          22.749333333333333,
+          27.538666666666664
+        ],
+        "renderCorrections": 0
+      },
+      "elapsedMs": 52266,
+      "stages": {
+        "voiceAdjustment": 1,
+        "photos": 1,
+        "clips": 0,
+        "planning": 0
+      },
+      "technical": {
+        "duration": 32.933344,
+        "sizeMb": 11.42,
+        "format": "H264/AAC",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      }
+    }
+  ]
+}

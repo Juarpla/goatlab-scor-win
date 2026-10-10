@@ -42,3 +42,7 @@ recepción, la transcripción y la identidad de marca permanecen verificables.
 
 Para instalar, desplegar o comprobar técnicamente este skill y su integración con
 Gateway/Render, lee [references/deployment.md](references/deployment.md).
+
+## Dirección cinematográfica
+
+Para montar cada audio, consulta [contrato ejecutable versión 5](references/cinema.md) y [catálogo](references/cinema-catalog.json). El planificador carga ambos explícitamente. Para desarrollar las composiciones usa [skills oficiales Remotion](../remotion-best-practices/SKILL.md), fijados en su archivo UPSTREAM. La bandera GOATLAB_CINEMA_V5 activa el contrato nuevo; el flujo anterior conserva sus reintentos. Los hechos provienen de production.json; Actions prepara medios y Gateway lee R2.
