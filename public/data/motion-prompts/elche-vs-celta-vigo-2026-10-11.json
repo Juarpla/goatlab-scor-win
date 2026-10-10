@@ -1,0 +1,1389 @@
+{
+  "version": 2,
+  "category": "motion-prompts",
+  "matchId": "elche-vs-celta-vigo-2026-10-11",
+  "home": "Elche CF",
+  "away": "RC Celta de Vigo",
+  "competition": "laliga",
+  "kickoff": "2026-10-11T12:00:00Z",
+  "venue": null,
+  "facts": [
+    {
+      "id": "home.n",
+      "label": "Elche CF · partidos",
+      "value": 5,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.n",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.wins",
+      "label": "Elche CF · victorias",
+      "value": 1,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.wins",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.draws",
+      "label": "Elche CF · empates",
+      "value": 1,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.draws",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.losses",
+      "label": "Elche CF · derrotas",
+      "value": 3,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.losses",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.gf",
+      "label": "Elche CF · goles a favor",
+      "value": 10,
+      "unit": "goles",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.gf",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.ga",
+      "label": "Elche CF · goles recibidos",
+      "value": 11,
+      "unit": "goles",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.ga",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.clean",
+      "label": "Elche CF · arcos en cero",
+      "value": 0,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:lastMatches.home.clean",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "home.player0.goals",
+      "label": "Fer Niño · goles",
+      "value": 5,
+      "unit": "goles",
+      "source": "scorers:laliga:Fer Niño",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "home.player1.goals",
+      "label": "Fernando Niño · goles",
+      "value": 5,
+      "unit": "goles",
+      "source": "scorers:laliga:Fernando Niño",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "away.player0.goals",
+      "label": "Pablo Durán · goles",
+      "value": 2,
+      "unit": "goles",
+      "source": "scorers:laliga:Pablo Durán",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "h2h.total",
+      "label": "Cruces previos",
+      "value": 32,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:h2h.total",
+      "provider": "Bzzoiro",
+      "sampleSize": 32
+    },
+    {
+      "id": "h2h.homeWins",
+      "label": "Elche CF · victorias en cruces",
+      "value": 10,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:h2h.homeWins",
+      "provider": "Bzzoiro",
+      "sampleSize": 32
+    },
+    {
+      "id": "h2h.awayWins",
+      "label": "RC Celta de Vigo · victorias en cruces",
+      "value": 14,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:h2h.awayWins",
+      "provider": "Bzzoiro",
+      "sampleSize": 32
+    },
+    {
+      "id": "h2h.draws",
+      "label": "Empates en cruces",
+      "value": 8,
+      "unit": "partidos",
+      "source": "fixtures:elche-vs-celta-vigo-2026-10-11:h2h.draws",
+      "provider": "Bzzoiro",
+      "sampleSize": 32
+    }
+  ],
+  "published": false,
+  "kinds": [
+    "form",
+    "goals",
+    "clean-sheets",
+    "head-to-head",
+    "synthesis"
+  ],
+  "instructionVersion": "af5a559d6ea384647fb4da0a210df0c0990cce90bb44fcee2cbcbe351abf272c",
+  "author": {
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash"
+  },
+  "generatedAt": "2026-10-10T06:41:03.457Z",
+  "prompts": [
+    {
+      "n": 1,
+      "kind": "form",
+      "title": "Forma reciente de Elche",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.wins",
+        "home.draws",
+        "home.losses",
+        "home.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Carbon grain breathes in, headline ELCHE rises with mask, lime underline extends"
+        },
+        {
+          "t0": 1.4,
+          "t1": 4,
+          "action": "build",
+          "detail": "Kinetic Spanish words FORMA and IMPULSO pulse rhythmically, grouped bars prepare offscreen"
+        },
+        {
+          "t0": 4,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Grouped count bars grow with staggered count-up, emphasis DERROTAS glows lime"
+        },
+        {
+          "t0": 6.8,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Whole composition collapses into lower quarter subtitle band"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine charcoal grain with soft lime dust",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "FORMA",
+        "DERROTAS"
+      ],
+      "prompt": "Vertical 9:16 sports motion piece for Elche CF versus RC Celta de Vigo. The editorial presentation is a kinetic typography burst: Spanish words ELCHE, FORMA and IMPULSO rise with mask translateY and opacity, set in warm white #edf0e6 with lime #c5ed74 accents on charcoal #101412 carbon-grain. Rhythmic stomp and short pauses follow spoken narration; no axes, no sample claims, no invented match events. The statistical presentation uses grouped count bars over a shared zero baseline for the available Elche form sample. Bars are labeled in Spanish: victorias, empates, derrotas, with units partidos. Values are resolved only by {{home.wins}}, {{home.draws}}, {{home.losses}}, and the sample total by {{home.n}}. The renderer attaches source and sample annotation from catalog metadata. If an away sample is unavailable, show a restrained Datos no disponibles title for that side, never a zero bar or implied value. Structure: entry beat 0.0-1.4s carbon glow and headline ELCHE; build 1.4-4.0s kinetic words and bar staging; main 4.0-6.8s staggered bars with emphasis on DERROTAS; exit 6.8-8.0s collapse into lower quarter subtitle band. Camera push-in 1.0 to 0.9 plus drift, tilt 0deg. Editorial-to-statistical transition is a dissolve. Signature move camera-push. Reveal mode sequential, countUp true, stagger 60ms, scale from 0.95. The lower quarter stays reserved for permanent yellow subtitles; safe area left64 right64 top120 bottom480. Transition out collapse. Emphasis words DERROTAS, FORMA. Use only transform scale and opacity; no width or height animation; no linear easing. Keep one focal point: first the word FORMA, then the grouped bars.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "main 4.0-6.8s",
+        "tecnica": "stagger-reveal with count-up slam on grouped bars",
+        "porque": "the narration introduces recent form, so a shared baseline makes wins, draws and losses readable without implying prediction"
+      }
+    },
+    {
+      "n": 2,
+      "kind": "goals",
+      "title": "Goles a favor y en contra",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "home.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Stylised pitch grid draws in, ball appears at midfield, Spanish headline GOLES rises"
+        },
+        {
+          "t0": 1.6,
+          "t1": 4.2,
+          "action": "build",
+          "detail": "Ball travels in three arcs with lime trail, ATAQUE pulses, no match events invented"
+        },
+        {
+          "t0": 4.2,
+          "t1": 7,
+          "action": "main",
+          "detail": "Paired bars spotlight with shared scale, focus scales 1.05 and glows lime"
+        },
+        {
+          "t0": 7,
+          "t1": 8.2,
+          "action": "exit",
+          "detail": "Shutter close to lower quarter subtitle band"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft carbon glow behind pitch grid",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "ATAQUE"
+      ],
+      "prompt": "Vertical 9:16 goals feature for Elche CF and RC Celta de Vigo. Editorial presentation: stylized football pitch in charcoal #101412 with lime #c5ed74 ball path, warm white #edf0e6 labels, Spanish headline GOLES and ATAQUE. A single ball travels from midfield to final third in three rhythmic arcs; players are abstract silhouettes, no real match events and no invented score. Statistical presentation: paired bars for Elche goals for and against, same unit goles, shared horizontal scale, zero baseline. Values resolved by {{home.gf}} and {{home.ga}}, sample size from {{home.n}}. Spanish labels goles a favor and goles recibidos, source and sample attached from catalog. Away goals data unavailable: render a restrained Datos no disponibles card, never invent away bars. Structure: entry 0.0-1.6s pitch grid draws in and ball appears; build 1.6-4.2s editorial ball path; main 4.2-7.0s statistical bars spotlight with focus scale 1.05 and lime glow; exit 7.0-8.2s shutter to lower quarter subtitles. Camera orbit leve with tilt 1deg. Editorial-to-statistical transition is wipe. Signature move pitch-run. Reveal mode spotlight, countUp true, stagger 50ms, scale from 0.95. Lower quarter reserved for permanent yellow subtitles; safe area left64 right64 top120 bottom480. Use scale and opacity only, no width animation, no linear easing. Emphasis GOLES, ATAQUE. Keep one focal point: moving ball first, then paired bars.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "spotlight",
+      "design_rationale": {
+        "beat": "main 4.2-7.0s",
+        "tecnica": "spotlight bars with lime glow and pitch-run path",
+        "porque": "goals for and against share the same unit, so a paired bar comparison stays honest while the pitch keeps football context"
+      }
+    },
+    {
+      "n": 3,
+      "kind": "head-to-head",
+      "title": "Cruces históricos Elche Celta",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Two team blocks slide from edges, lime left and slate right, Spanish CRUCES rises"
+        },
+        {
+          "t0": 1.5,
+          "t1": 4,
+          "action": "build",
+          "detail": "Blocks collide as duel, split apart, bars mount in shared zero baseline"
+        },
+        {
+          "t0": 4,
+          "t1": 7.2,
+          "action": "main",
+          "detail": "Sequential count-up across historical wins and draws, DUELO pulses warm white"
+        },
+        {
+          "t0": 7.2,
+          "t1": 8.5,
+          "action": "exit",
+          "detail": "Composition slides away to lower quarter subtitle band"
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "fine carbon grid with low contrast slate lines",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "DUELO"
+      ],
+      "prompt": "Vertical 9:16 head-to-head duel. Editorial presentation: both teams as a visual duel, Elche CF left with lime #c5ed74, RC Celta de Vigo right with slate #8ca6bf, warm white #edf0e6 typography on charcoal #101412 carbon-grid. Spanish words CRUCES, DUELO and HISTORIAL collide then separate; no forecast, no invented result. Statistical presentation: grouped bars of historical cruces outcomes using {{h2h.homeWins}}, {{h2h.awayWins}} and {{h2h.draws}}, total sample {{h2h.total}}. Same unit partidos, shared zero baseline, Spanish labels victorias Elche, victorias Celta, empates. Source and sample annotation from catalog; historical data is not a forecast. Structure: entry 0.0-1.5s two team blocks slide from edges; build 1.5-4.0s duel collision and bar mount; main 4.0-7.2s sequential count-up with emphasis DUELO; exit 7.2-8.5s slide to lower quarter subtitles. Camera fixed plus parallax, tilt 0deg. Editorial-to-statistical transition is dissolve. Signature move duel-collide. Reveal mode sequential, countUp true, stagger 70ms, scale from 0.95. Lower quarter reserved for permanent yellow subtitles; safe area left64 right64 top120 bottom480. Use transform scale and opacity only, no linear easing. Emphasis CRUCES, DUELO. Keep one focal point: first the duel collision, then the historical grouped bars.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build 1.5-4.0s",
+        "tecnica": "duel-collide transition into sequential count-up",
+        "porque": "the narration frames a historical matchup, so visual opposition leads naturally into published cruces counts without treating history as a forecast"
+      }
+    },
+    {
+      "n": 4,
+      "kind": "form",
+      "motionSystem": "carbon-v1",
+      "title": "Form Pulse: Wins, Draws, Losses",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "home.wins",
+        "home.draws",
+        "home.losses"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Kinetic typography assembles Elche CF and RC Celta de Vigo with mask rise on charcoal carbon-grain."
+        },
+        {
+          "t0": 1.4,
+          "t1": 4.8,
+          "action": "build",
+          "detail": "Grouped count bars mount from shared zero baseline with staggered count-up and Spanish labels."
+        },
+        {
+          "t0": 4.8,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Comparison pauses on Derrotas with lime-glow emphasis while sample annotation stays visible."
+        },
+        {
+          "t0": 6.8,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars and type collapse toward lower quarter, preserving subtitle safe area."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine charcoal grain with soft lime bloom",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "VICTORIAS",
+        "DERROTAS"
+      ],
+      "signature_move": "stagger-reveal",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "main",
+        "tecnica": "stagger-reveal plus count-up bars",
+        "porque": "The narration lists recent form, so grouped counts with sample labels keep the comparison grounded."
+      },
+      "prompt": "Vertical 9:16 motion prompt for Elche CF vs RC Celta de Vigo. Editorial presentation: kinetic typography and rhythmic emphasis. Open on charcoal #101412 carbon-grain with warm white #edf0e6 Spanish labels Elche CF and RC Celta de Vigo. A lime #c5ed74 word stack rises with mask, punching VICTORIAS, EMPATES, DERROTAS in sequence. Statistical presentation: grouped count bars on a shared zero baseline. Three bars for Elche CF use Spanish labels Victorias {{home.wins}}, Empates {{home.draws}}, Derrotas {{home.losses}}, all in partidos. A sample annotation reads muestra {{home.n}} partidos, and source treatment stays attached to the catalog provider. Bars grow from 0.95 scale with count-up, same unit, no rates. Emphasize DERROTAS with lime-glow, then VICTORIAS, but keep one focal point. Camera push-in 1.0 to 0.9 plus drift, tilt 0deg. Transition in wipe, editorial-to-statistical dissolve, out collapse. Reserve the lower quarter for permanent yellow subtitles. Motion: spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 60, scaleFrom 0.95. Easing enter ease-out, curve cubic-bezier(0.23,1,0.32,1), exit ease-out. If sample counts differ, keep each sample label attached to its own bar. Source and sample remain visible in small slate #8ca6bf text. No forecast, only recent sample. The editorial variant uses rhythmic type; the statistical variant uses grouped bars."
+    },
+    {
+      "n": 5,
+      "kind": "goals",
+      "motionSystem": "carbon-v1",
+      "title": "Goal Flow: For and Against",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "home.gf",
+        "home.ga"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Stylised pitch draws in lower half with warm white lines and slate shading."
+        },
+        {
+          "t0": 1.5,
+          "t1": 4.5,
+          "action": "build",
+          "detail": "Ball path travels from midfield to goal, defensive line pulses with lime energy."
+        },
+        {
+          "t0": 4.5,
+          "t1": 7,
+          "action": "main",
+          "detail": "Paired bars mount together, then spotlight scales the larger value with lime glow."
+        },
+        {
+          "t0": 7,
+          "t1": 8.5,
+          "action": "exit",
+          "detail": "Pitch and bars slide out, leaving subtitle safe area clean."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft lime glow behind pitch grid",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 40,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "tilt down",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "CONCEDIDOS"
+      ],
+      "signature_move": "pitch-run",
+      "revealMode": "spotlight",
+      "design_rationale": {
+        "beat": "main",
+        "tecnica": "pitch-run with spotlight paired bars",
+        "porque": "The narration contrasts attacking output and goals conceded, so the pitch path leads into a shared-scale pair."
+      },
+      "prompt": "Vertical 9:16 motion prompt for Elche CF goal flow. Editorial presentation: illustrative football pitch and ball path. Use charcoal #101412 carbon-glow, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf. Spanish labels Elche CF, Goles a favor, Goles en contra. A stylised pitch draws in the lower half while a ball travels from midfield toward goal, with a defensive line pulsing in lime. Statistical presentation: paired bars for {{home.gf}} and {{home.ga}}, both in goles, on a shared scale. Bars mount together, then spotlight focuses the larger value with lime glow and dims the other. Sample annotation reads muestra {{home.n}} partidos, and source treatment uses the catalog provider attached to each fact. Spanish axis label goles. No predictive claim, because historical goals are not a forecast. Camera tilt down, tilt 1deg. Transition in stripe sweep, editorial-to-statistical wipe, out slide. Reserve the lower quarter for permanent yellow subtitles. Motion: spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 40, scaleFrom 0.95. Easing enter ease-out, curve cubic-bezier(0.16,1,0.3,1), exit ease-out. Keep one focal point: the ball path may lead, but the paired bars own the comparison. Use Spanish labels for both values and keep the same unit. Source and sample stay visible in small slate text. The editorial variant is illustrative motion; the statistical variant is paired counts. No invented match events."
+    },
+    {
+      "n": 6,
+      "kind": "clean-sheets",
+      "motionSystem": "carbon-v1",
+      "title": "Defensive Wall: Clean Sheets and Sample",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "home.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Stylised shield assembles from slate and lime strokes on carbon-grid."
+        },
+        {
+          "t0": 1.5,
+          "t1": 4,
+          "action": "build",
+          "detail": "Clean-sheet count mounts with count-up while sample marker waits beside it."
+        },
+        {
+          "t0": 4,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Comparison holds clean sheets against sample size without converting counts to rates."
+        },
+        {
+          "t0": 6.5,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Shield seals and shutter transition clears lower quarter for subtitles."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "subtle grid with defensive lime pulse",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "fade",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "ARCOS",
+        "MURO"
+      ],
+      "signature_move": "count-up-slam",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build",
+        "tecnica": "count-up-slam with shield reveal",
+        "porque": "The narration frames defensive solidity, so the shield leads into a clean count and sample comparison."
+      },
+      "prompt": "Vertical 9:16 defensive wall for Elche CF. Editorial presentation: defensive energy and stylised shield. Use charcoal #101412 carbon-grid, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf. Spanish title Muro. A shield outline assembles with lime pulse and a goalkeeper silhouette, suggesting resistance without claiming a save. Statistical presentation: compare clean sheet count {{home.clean}} and sample size {{home.n}}, both in partidos, and never convert counts into rates. A single count bar for Arcos en cero mounts with count-up, while a separate sample marker shows Partidos. Source treatment uses the catalog provider attached to each fact, and sample stays visible. Emphasis ARCOS with bracket. Camera orbit leve, tilt 0deg. Transition in wipe, editorial-to-statistical fade, out shutter. Reserve the lower quarter for permanent yellow subtitles. Motion: spring damping 22, stiffness 180, mass 0.6, countUp true, staggerMs 70, scaleFrom 0.95. Easing enter ease-out, curve cubic-bezier(0.23,1,0.32,1), exit ease-out. Keep one focal point: the shield may frame the scene, but the count and sample own the comparison. Spanish labels stay compact and legible. The editorial variant uses defensive motion; the statistical variant uses count and sample. Source and sample remain attached. No predictive claim."
+    },
+    {
+      "n": 7,
+      "kind": "goals",
+      "title": "Elche CF: Goles a Favor y en Contra",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "home.n"
+      ],
+      "motionSystem": "carbon-v1",
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Editorial pitch fades in from charcoal; lime ball enters lower left with masked Spanish word rise."
+        },
+        {
+          "t0": 1.5,
+          "t1": 4,
+          "action": "build",
+          "detail": "Ball travels curved path; staggered labels mount without axes or sample claims."
+        },
+        {
+          "t0": 4,
+          "t1": 6.5,
+          "action": "main",
+          "detail": "Dissolve to statistical paired bars; values count up against shared zero baseline."
+        },
+        {
+          "t0": 6.5,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Lime emphasis glow peaks, then whole scene collapses vertically."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine carbon grain with faint pitch-line texture",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "ELCHE CF"
+      ],
+      "prompt": "Vertical 9:16 canvas in carbon-v1. Editorial variant: a stylised football pitch fills the frame, warm white lines on GoatLab charcoal. A lime ball rolls along a curved path from lower left to upper right; Spanish kinetic labels rise with mask reveals. No axes, no sample claims, no invented match events. The lower quarter stays clear for permanent yellow subtitles. Statistical variant: after a dissolve transition, mount two paired vertical bars on a shared zero baseline. Left bar represents {{home.gf}} goles a favor; right bar represents {{home.ga}} goles recibidos, both labelled in Spanish. Bars grow with sequential count-up; a slim source annotation reads Bzzoiro and muestra {{home.n}} partidos below the baseline. Common scale is fixed to the maximum of the two values. Camera pushes in from 1.0 to 0.9 with slight drift, tilt 0deg. Emphasis word GOLES gets a lime glow. Exit collapses vertically into the next scene. Typography uses warm white for values, slate for secondary labels, lime for focal accents. The editorial beat builds rhythm via ball path and staggered words; the statistical beat resolves the comparison with legible Spanish labels and source and sample context. Transition in is wipe; editorial to statistical is dissolve; out is collapse. Avoid predictive language. The ball path should feel fast but readable, with the pitch grid subtly parallaxing against the camera. Ensure the paired bars share one scale, never converting counts into rates. The final frame holds for a breath before collapse."
+    },
+    {
+      "n": 8,
+      "kind": "clean-sheets",
+      "title": "Elche CF: Arcos en Cero",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "home.n"
+      ],
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "spotlight",
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Stylised shield draws on with defensive energy; Spanish headline masks upward."
+        },
+        {
+          "t0": 1.6,
+          "t1": 4.2,
+          "action": "build",
+          "detail": "Shield pulses lime; lower quarter remains clear for yellow subtitles."
+        },
+        {
+          "t0": 4.2,
+          "t1": 6.8,
+          "action": "main",
+          "detail": "Spotlight statistical count block: {{home.clean}} focuses at scale 1.05, rest dims."
+        },
+        {
+          "t0": 6.8,
+          "t1": 8.2,
+          "action": "exit",
+          "detail": "Shield edge sweeps across, then scene slides away."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft carbon glow behind a low-contrast defensive grid",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 45,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "fade",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "ARCOS EN CERO",
+        "DEFENSA"
+      ],
+      "prompt": "Vertical 9:16 composition, carbon-v1. Editorial variant: defensive energy drives a stylised shield built from geometric slate and lime strokes. The shield breathes with a slow glow pulse while Spanish labels ARCOS EN CERO and DEFENSA rise with mask reveals. No statistical axes, no sample claims, no invented match events. Keep the lower quarter empty for permanent yellow subtitles. Statistical variant: transition to a spotlight count block. The number {{home.clean}} mounts at centre, then scales to 1.05 with lime glow while surrounding labels dim. A source annotation reads Bzzoiro and muestra {{home.n}} partidos, with Spanish text Elche CF · arcos en cero. This is a count comparison, never converted into rates. Camera orbits slightly, tilt 1deg, preserving a single focal point. Motion uses transform and opacity only, scaling from 0.95. Entry is stripe sweep, editorial to statistical is fade, exit is slide. Typography: warm white for the count, slate for secondary text, lime for the shield pulse and focus glow. The editorial beat communicates resilience without numbers; the statistical beat grounds it with one published count and its sample context. Hold enough time for the spoken phrase, then release with a clean slide. Avoid predictive claims and avoid filling the lower quarter with graphics."
+    },
+    {
+      "n": 9,
+      "kind": "head-to-head",
+      "title": "Elche CF vs RC Celta: Cruces Históricos",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws"
+      ],
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "revealMode": "sequential",
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Both team names arrive as opposing kinetic blocks in Spanish, separated by a lime seam."
+        },
+        {
+          "t0": 1.8,
+          "t1": 4.5,
+          "action": "build",
+          "detail": "Duel collage pushes forward; no historical values shown yet."
+        },
+        {
+          "t0": 4.5,
+          "t1": 7,
+          "action": "main",
+          "detail": "Dissolve to grouped bars: away wins, home wins, draws, with total sample."
+        },
+        {
+          "t0": 7,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Lime seam flashes, then scene shutters out."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "dark carbon grid with subtle rivalry seam",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "wipe",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "CRUCES",
+        "DUELO",
+        "HISTÓRICO"
+      ],
+      "prompt": "Vertical 9:16, carbon-v1. Editorial variant: both teams appear as a visual duel, Elche CF and RC Celta de Vigo as opposing kinetic blocks separated by a lime seam. Spanish labels CRUCES and DUELO rise with masked motion. No axes, no historical values, no invented match events. Lower quarter reserved for permanent yellow subtitles. Statistical variant: wipe transition into grouped historical bars. Three bars use Spanish labels: victorias de Elche CF as {{h2h.homeWins}}, victorias de RC Celta de Vigo as {{h2h.awayWins}}, and empates as {{h2h.draws}}. A common scale covers all three counts. Source annotation reads Bzzoiro and muestra total {{h2h.total}} partidos. This historical comparison is not a forecast; it only describes available past encounters. Bars mount sequentially with count-up, staggered from left to right. Camera pushes in from 1.0 to 0.9 with slight drift, tilt 0deg. Emphasis word HISTÓRICO gets a bracket outline. Exit shutters horizontally. Colours stay GoatLab charcoal, warm white for labels, slate for secondary text, lime for the winning count and seam. Typography keeps one focal point: first the duel, then the tallest bar. The editorial beat creates rivalry energy; the statistical beat resolves it with a shared unit, published source and sample attached to every bar. Transition in is wipe; editorial to statistical is wipe; out is shutter."
+    },
+    {
+      "n": 10,
+      "kind": "goals",
+      "title": "Elche: ruta de gol y doble barra",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.gf",
+        "home.ga",
+        "home.player0.goals",
+        "away.player0.goals"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.2,
+          "action": "entry",
+          "detail": "Carbon-grain base fades up; lime ball path enters from left edge with pitch-run, mask rises on Spanish headline."
+        },
+        {
+          "t0": 1.2,
+          "t1": 3.2,
+          "action": "build",
+          "detail": "Editorial pitch completes its arc; first bar mounts on shared baseline with count-up on {{home.gf}}."
+        },
+        {
+          "t0": 3.2,
+          "t1": 5.6,
+          "action": "main",
+          "detail": "Second bar settles at {{home.ga}}; spotlight card mounts {{home.player0.goals}} and {{away.player0.goals}} with source line."
+        },
+        {
+          "t0": 5.6,
+          "t1": 7,
+          "action": "exit",
+          "detail": "Bars collapse toward baseline, captions slide out, lower quarter remains clear for subtitles."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine grain, low contrast, soft vignette on the pitch illustration",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "1deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "GOLES",
+        "RUTA",
+        "GOLEADORES"
+      ],
+      "signature_move": "pitch-run",
+      "revealMode": "sequential",
+      "motionSystem": "carbon-v1",
+      "prompt": "Vertical 9:16, roughly seven seconds, two presentations on one continuous timeline. Editorial variant 'Ruta de gol': an illustrated football pitch drawn in warm white #edf0e6 over charcoal #101412 with a fine carbon-grain texture; a lime #c5ed74 ball path arcs across half the frame with pitch-run motion. A kinetic Spanish headline 'RUTA DE GOL' rises with a translateY mask, staggered 50 ms, followed by the Spanish line 'Elche CF · ataque y resistencia'. This editorial block carries no axes, no values and no invented match events. Statistical variant 'Doble barra': two horizontal bars on a shared zero baseline, same unit goles, equal half-width; lime fill for goals scored, slate #8ca6bf for goals conceded, Spanish labels sitting directly above each bar with a shared Spanish axis title 'goles · últimos partidos'. The values resolve as {{home.gf}} and {{home.ga}} with count-up staggered 60 ms, scale from 0.95, never from zero. The main comparison holds for two beats so the eye lands once and settles. Emphasis falls on the Spanish word GOLES in lime glow while both bars level out. A second spotlight card mounts below with {{home.player0.goals}} and {{away.player0.goals}}, Spanish label 'goleadores', plus a 12 px line reading source: Bzzoiro · sample: últimos partidos. A lime transition wipe bridges the editorial and the statistical block, and the exit collapses both bars back to the baseline. The lower quarter stays permanently free for the yellow Spanish subtitles; safeArea left64 right64 top120 bottom480. The camera pushes in from 1.0 to 0.9 with a light drift and a tilt of 1 degree, using one signature move only.",
+      "design_rationale": {
+        "beat": "main — bars level out on {{home.gf}} and {{home.ga}}",
+        "tecnica": "pitch-run plus sequential count-up on a shared baseline",
+        "porque": "la narración habla de ataque y resistencia, así que el recorrido del balón y las dos barras cuentan la misma idea sin inventar datos"
+      }
+    },
+    {
+      "n": 11,
+      "kind": "clean-sheets",
+      "title": "Elche: muro y conteo honesto",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.clean",
+        "home.n"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1,
+          "action": "entry",
+          "detail": "Stripe sweep reveals carbon-glow background; stylised shield outlines in warm white, Spanish word 'MURO' masks upward."
+        },
+        {
+          "t0": 1,
+          "t1": 2.6,
+          "action": "build",
+          "detail": "Shield locks with two lime impact ripples; statistical frame begins mounting its shared baseline."
+        },
+        {
+          "t0": 2.6,
+          "t1": 4.6,
+          "action": "main",
+          "detail": "Spotlight lifts the clean-sheet bar as {{home.clean}} counts up; the sample bar settles at {{home.n}} in slate, source line visible."
+        },
+        {
+          "t0": 4.6,
+          "t1": 6,
+          "action": "exit",
+          "detail": "Shutter closes, glows fade, subtitle band stays empty."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft lime glow behind the shield, deep charcoal edges",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "orbit leve",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "MURO",
+        "ARCOS",
+        "MUESTRA"
+      ],
+      "signature_move": "glow-pulse",
+      "revealMode": "spotlight",
+      "motionSystem": "carbon-v1",
+      "prompt": "Vertical 9:16, roughly six seconds. Editorial variant 'Muro' uses defensive energy: a stylised shield outlined in warm white #edf0e6 over charcoal #101412 with a carbon-glow bleed, and a lime #c5ed74 ripple each time the shield locks into place. The kinetic Spanish word 'MURO' rises with a translateY mask, followed by the Spanish caption 'Elche CF · arcos en cero'. This editorial block has no axes, no counts and no invented saves or results. Statistical variant 'Conteo honesto' keeps a single unit, partidos: two vertical bars share one zero baseline, lime for arcos en cero and slate #8ca6bf for the matches in the sample. Spanish labels sit beneath each bar with the shared Spanish axis title 'partidos', and a short caption states clearly that the comparison is a count against its own muestra, never a rate. Values resolve as {{home.clean}} and {{home.n}} with count-up staggered 70 ms and scale from 0.95. The reveal mode is spotlight: the clean-sheet bar lifts to 1.05 with a lime glow while the sample bar dims, so the number without context never reads alone. A 12 px line stays attached reading source: Bzzoiro · sample: últimos partidos. The emphasis word ARCOS pulses as an outline, once, on the beat. Transition from editorial to statistical is a dissolve; the entry is a stripe sweep and the exit shuts down with a shutter that closes from both edges. Camera orbits slightly with a tilt of 0 degrees, and only one signature move, glow-pulse, is used. The lower quarter remains permanently reserved for yellow Spanish subtitles and no graphic crosses it; safeArea left64 right64 top120 bottom480.",
+      "design_rationale": {
+        "beat": "main — spotlight on {{home.clean}} against {{home.n}}",
+        "tecnica": "glow-pulse with spotlight reveal and count-up",
+        "porque": "el habla destaca la defensa y su muestra, así que el brillo aísla el conteo y la barra apagada recuerda el tamaño de la muestra"
+      }
+    },
+    {
+      "n": 12,
+      "kind": "head-to-head",
+      "title": "Cruces: duelo visual Elche · Celta",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.4,
+          "action": "entry",
+          "detail": "Carbon-grid base wipes in; the two Spanish crest names press from opposite edges, kinetic 'DUELO' masks up."
+        },
+        {
+          "t0": 1.4,
+          "t1": 3.6,
+          "action": "build",
+          "detail": "Both halves collide once at centre; statistical frame mounts the shared baseline and its Spanish axis title."
+        },
+        {
+          "t0": 3.6,
+          "t1": 6.4,
+          "action": "main",
+          "detail": "Three bars grow staggered: {{h2h.homeWins}}, {{h2h.awayWins}}, {{h2h.draws}}; source and sample line locks under them."
+        },
+        {
+          "t0": 6.4,
+          "t1": 8,
+          "action": "exit",
+          "detail": "Bars slide off the lower third, grid dims, subtitle band untouched."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "thin lime grid lines fading at the edges, light vignette",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 55,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "fixed + parallax",
+        "tilt": "2deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "wipe",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "DUELO",
+        "HISTÓRICO",
+        "CRUCES"
+      ],
+      "signature_move": "duel-collide",
+      "revealMode": "spotlight",
+      "motionSystem": "carbon-v1",
+      "prompt": "Vertical 9:16, roughly eight seconds. Editorial variant 'Duelo' stages both sides as a visual duel: the Spanish names Elche CF and RC Celta de Vigo enter from opposite edges over charcoal #101412 with a thin lime grid, warm white type, lime #c5ed74 against slate #8ca6bf, and the two halves press into each other once at centre. A kinetic Spanish headline 'DUELO' rises with a translateY mask and a short stagger. This editorial block has no axes, no values and no match reconstruction. Statistical variant 'Cruces' mounts three horizontal bars on a single shared baseline, same unit partidos: lime for Elche CF, slate for RC Celta de Vigo, warm white for the draws, each with a Spanish label beside it and a Spanish axis title 'cruces previos · partidos'. Values animate as {{h2h.homeWins}}, {{h2h.awayWins}} and {{h2h.draws}} with count-up staggered 55 ms and scale from 0.95, never from zero. Historical context stays visible and honest: a 12 px line reads source: Bzzoiro · sample: {{h2h.total}} cruces and a Spanish caption states 'histórico, no pronóstico', so nothing reads as a forecast. The main comparison holds the two win bars longest before the draw bar resolves. Emphasis sits on the Spanish word HISTÓRICO in lime glow. Reveal mode is spotlight: the two win bars hold focus while the draw bar dims slightly. Transition from editorial to statistical is a wipe, the entry is a wipe, and the exit slides the bars off the lower third. Camera stays fixed with a light parallax and a tilt of 2 degrees, one signature move only, duel-collide. The lower quarter remains permanently free for yellow Spanish subtitles; safeArea left64 right64 top120 bottom480.",
+      "design_rationale": {
+        "beat": "main — three bars resolve on {{h2h.homeWins}}, {{h2h.awayWins}} y {{h2h.draws}}",
+        "tecnica": "duel-collide plus spotlight sobre un eje compartido",
+        "porque": "el audio presenta un historial entre rivales, así que el choque visual abre y las barras cierran con muestra y fuente visibles"
+      }
+    },
+    {
+      "n": 13,
+      "kind": "form",
+      "title": "Elche Form Rhythm — Kinetic Count Bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "home.wins",
+        "home.draws",
+        "home.losses"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.6,
+          "action": "entry",
+          "detail": "Kinetic Spanish labels enter with mask rise; carbon texture settles; camera begins push-in."
+        },
+        {
+          "t0": 1.6,
+          "t1": 4.2,
+          "action": "build",
+          "detail": "Editorial rhythm builds; statistical bars mount from shared zero baseline with sample annotation."
+        },
+        {
+          "t0": 4.2,
+          "t1": 7.4,
+          "action": "main",
+          "detail": "Grouped bars compare wins, draws and losses; tallest bar receives lime glow, rest dim to slate."
+        },
+        {
+          "t0": 7.4,
+          "t1": 9,
+          "action": "exit",
+          "detail": "Bars collapse to baseline; typography mask drops; permanent yellow subtitle zone stays clear."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grain",
+        "base": "#101412",
+        "texture": "fine charcoal grain with faint lime dust",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 60,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "dissolve",
+        "out": "collapse"
+      },
+      "emphasis_words": [
+        "DERROTAS"
+      ],
+      "prompt": "Design a 9:16 vertical motion block in carbon-v1 for Elche CF recent form. Two presentations share the same frame grammar. The editorial presentation uses kinetic typography: Spanish labels 'VICTORIAS', 'EMPATES', 'DERROTAS' enter as clipped mask rises with translateY and opacity, stacked on charcoal #101412, warm white #edf0e6 letterforms, lime #c5ed74 for the stressed syllable. Rhythmic emphasis alternates with a slate #8ca6bf line divider; no axes, no sample claims, no invented events. The statistical presentation dissolves in: grouped count bars, shared zero baseline, same unit partidos, Spanish team label 'Elche CF' and category labels 'Victorias', 'Empates', 'Derrotas'. Bars encode {{home.wins}}, {{home.draws}}, {{home.losses}}; sample size annotation uses {{home.n}} partidos. Only available home sample is shown; if away sample is absent, a Spanish note 'Muestra visitante no disponible' remains, never invented values. Source and sample metadata stay attached to bars; a small source line from the catalog provider is placed above the baseline. Entry animation is camera-push from 1.0 to 0.9 with slight drift; bars grow staggered sequentially with countUp, scale from 0.95, spring damping 22 stiffness 180 mass 0.6. Main comparison locks the eye on the tallest bar with lime glow; other bars dim to slate. Emphasis word 'DERROTAS' gets lime-glow treatment only. Transition: stripe sweep in, editorial-to-statistical dissolve, out collapse. Lower quarter is reserved for permanent yellow subtitles; safeArea left64 right64 top120 bottom480. Exit collapses bars into baseline while typography mask drops. The layout keeps one focal point in the upper two thirds, legible Spanish labels and no hardcoded values in prose.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "camera-push",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build to main",
+        "tecnica": "camera-push with staggered count bars",
+        "porque": "The slow push and sequential counting match the spoken rhythm of recent form without inventing rates."
+      }
+    },
+    {
+      "n": 14,
+      "kind": "clean-sheets",
+      "title": "Defensive Shield — Clean Sheets Count",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.n",
+        "home.clean"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.5,
+          "action": "entry",
+          "detail": "Stylised shield rotates into place; Spanish label rises with mask; carbon glow begins."
+        },
+        {
+          "t0": 1.5,
+          "t1": 4.5,
+          "action": "build",
+          "detail": "Editorial defensive energy builds; statistical numeral is prepared under spotlight."
+        },
+        {
+          "t0": 4.5,
+          "t1": 7.5,
+          "action": "main",
+          "detail": "Count and sample annotation lock; lime pulse traces shield rim; no rate or inferred zero."
+        },
+        {
+          "t0": 7.5,
+          "t1": 9.2,
+          "action": "exit",
+          "detail": "Shield collapses to center; numeral slides down; subtitle zone remains untouched."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.16,1,0.3,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-glow",
+        "base": "#101412",
+        "texture": "soft lime rim glow over charcoal carbon",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 50,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "stripe sweep",
+        "editorialToStatistical": "wipe",
+        "out": "shutter"
+      },
+      "emphasis_words": [
+        "ARCOS"
+      ],
+      "prompt": "Create a 9:16 vertical carbon-v1 entry for clean sheets. The editorial presentation uses defensive energy and a stylised shield: a slate #8ca6bf shield outline rotates into place, warm white #edf0e6 Spanish word 'ARCOS EN CERO' rises with mask, lime #c5ed74 pulse traces the rim. No statistical axes, no sample claims, no invented match events. The statistical presentation fades to a count display: one large numeral for {{home.clean}} and a smaller sample annotation {{home.n}} partidos, both on #101412 carbon-glow. Because the topic compares clean-sheet counts and sample sizes without converting counts into rates, the renderer must keep unit partidos and Spanish label 'Arcos en cero'; no rate, no fraction, no inferred zero. Only Elche CF clean-sheet count exists in catalog; if Celta count is absent, use Spanish 'Dato visitante no disponible' rather than inventing. Source and sample remain attached to the fact; a small source line appears under the numeral. Entry animation: shield scales from 0.95 with opacity, then numeral countUp under spotlight revealMode, all other layers dimmed. Camera push-in 1.0 to 0.9 plus drift, tilt 0deg. Main comparison is count versus sample size, not rate. Emphasis word 'ARCOS' receives outline-pulse only. Transition: stripe sweep in, editorial-to-statistical wipe, out shutter. Lower quarter reserved for permanent yellow subtitles; safeArea left64 right64 top120 bottom480. Exit: shield collapses to center, numeral slides down and fades. Keep one focal point, clear Spanish labels, and no hardcoded values in prose.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "glow-pulse",
+      "revealMode": "spotlight",
+      "design_rationale": {
+        "beat": "main",
+        "tecnica": "spotlight count-up with lime glow pulse",
+        "porque": "The shield and pulse frame clean sheets as defensive identity while count and sample stay honest."
+      }
+    },
+    {
+      "n": 15,
+      "kind": "head-to-head",
+      "title": "Historical Duel — H2H Count Bars",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws"
+      ],
+      "beats": [
+        {
+          "t0": 0,
+          "t1": 1.8,
+          "action": "entry",
+          "detail": "Team plates enter from opposite edges; Spanish 'DUELO' rises with mask; grid settles."
+        },
+        {
+          "t0": 1.8,
+          "t1": 4,
+          "action": "build",
+          "detail": "Visual duel intensifies; statistical bars prepare with total sample annotation."
+        },
+        {
+          "t0": 4,
+          "t1": 7.8,
+          "action": "main",
+          "detail": "Bars compare historical wins and draws; larger side gets lime glow, other dims to slate."
+        },
+        {
+          "t0": 7.8,
+          "t1": 9.5,
+          "action": "exit",
+          "detail": "Bars merge into central line and collapse; subtitle zone remains clear."
+        }
+      ],
+      "easing": {
+        "enter": "ease-out",
+        "curve": "cubic-bezier(0.23,1,0.32,1)",
+        "exit": "ease-out"
+      },
+      "background": {
+        "variant": "carbon-grid",
+        "base": "#101412",
+        "texture": "thin slate grid over charcoal carbon",
+        "safeArea": "left64 right64 top120 bottom480"
+      },
+      "motion": {
+        "spring": {
+          "damping": 22,
+          "stiffness": 180,
+          "mass": 0.6
+        },
+        "countUp": true,
+        "staggerMs": 70,
+        "scaleFrom": 0.95
+      },
+      "camera": {
+        "move": "push-in 1.0 to 0.9 + drift",
+        "tilt": "0deg"
+      },
+      "transition": {
+        "in": "wipe",
+        "editorialToStatistical": "dissolve",
+        "out": "slide"
+      },
+      "emphasis_words": [
+        "HISTORIAL"
+      ],
+      "prompt": "Build a 9:16 vertical carbon-v1 scene for historical head-to-head. The editorial presentation is a visual duel: two team plates, Elche CF and RC Celta de Vigo, enter from opposite edges on #101412 carbon-grid, warm white #edf0e6 names, lime #c5ed74 and slate #8ca6bf energy trails. Spanish word 'DUELO' rises with mask. No axes, no sample claims, no invented events. The statistical presentation dissolves to grouped count bars for available historical results: {{h2h.homeWins}}, {{h2h.awayWins}}, {{h2h.draws}}, all in same unit partidos, shared zero baseline, total sample {{h2h.total}} cruces previos. Spanish labels 'Victorias Elche CF', 'Victorias RC Celta de Vigo', 'Empates'; source and sample annotation stays attached. Historical data is not a forecast; no predictive text, no model estimate. Bars mount sequentially with countUp, scale from 0.95, stagger 70, spring damping 22 stiffness 180 mass 0.6. Main comparison highlights the larger side with lime glow while the other dims to slate; emphasis word 'HISTORIAL' gets bracket treatment only. Camera push-in 1.0 to 0.9 plus drift, tilt 0deg. Transition: wipe in, editorial-to-statistical dissolve, out slide. Lower quarter reserved for permanent yellow subtitles; safeArea left64 right64 top120 bottom480. Exit: bars merge into central line and collapse. Keep one focal point, legible Spanish labels, and no hardcoded values in prose.",
+      "motionSystem": "carbon-v1",
+      "signature_move": "duel-collide",
+      "revealMode": "sequential",
+      "design_rationale": {
+        "beat": "build to main",
+        "tecnica": "duel-collide plates into staggered historical bars",
+        "porque": "The visual duel matches the narration of two clubs while historical counts stay sample-bound and non-predictive."
+      }
+    }
+  ]
+}

@@ -1,582 +1,6 @@
 {
-  "updatedAt": "2026-10-10T06:05:40.147Z",
+  "updatedAt": "2026-10-10T07:24:41.595Z",
   "runs": [
-    {
-      "at": "2026-10-01T06:13:54.777Z",
-      "matchId": "bz-212663",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "space-bunny-free"
-      },
-      "usage": {
-        "inputTokens": 972,
-        "outputTokens": 7251
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "0b10c34b-ab3b-4859-bc13-c8bdaef6e92d"
-    },
-    {
-      "at": "2026-10-01T13:42:37.174Z",
-      "matchId": "bz-212662",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash-free",
-          "kind": "permanent",
-          "reason": "HTTP 400",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 131
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "space-bunny-free",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 943,
-            "outputTokens": 1227
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 17886
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 915,
-            "outputTokens": 6132
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 163369
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash-free",
-          "kind": "permanent",
-          "reason": "HTTP 400",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 134
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "space-bunny-free",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 943,
-            "outputTokens": 1332
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11741
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 943,
-        "outputTokens": 1332
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-01T13:45:53.994Z",
-      "matchId": "bz-212668",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 938,
-        "outputTokens": 1334
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "3c2e03c8-33fc-470f-8e1f-af9ba6678fc4"
-    },
-    {
-      "at": "2026-10-01T13:47:50.910Z",
-      "matchId": "bz-212667",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash-free",
-          "kind": "permanent",
-          "reason": "HTTP 400",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 147
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "space-bunny-free",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Formato no permitido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 978,
-            "outputTokens": 1145
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 9183
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 936,
-            "outputTokens": 5175
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 101997
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 936,
-        "outputTokens": 5175
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-01T14:17:48.253Z",
-      "matchId": "bz-212662",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "space-bunny-free"
-      },
-      "usage": {
-        "inputTokens": 952,
-        "outputTokens": 8546
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "7f826f8f-55ad-4004-9d5a-75b1d45409ff"
-    },
-    {
-      "at": "2026-10-01T14:30:55.451Z",
-      "matchId": "bz-212667",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash-free",
-          "kind": "permanent",
-          "reason": "HTTP 400",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 165
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "space-bunny-free",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 978,
-            "outputTokens": 1233
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11369
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": {
-        "provider": "WORKERS_AI",
-        "model": "@cf/zai-org/glm-4.7-flash"
-      },
-      "usage": {
-        "inputTokens": 936,
-        "outputTokens": 8165
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "7ff81005-62ad-4c1a-9262-524a85167204"
-    },
-    {
-      "at": "2026-10-01T14:31:00.880Z",
-      "matchId": "bz-212662",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1347,
-        "outputTokens": 2739
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "a40e666a-b22b-4346-8114-fdecb20d22a5"
-    },
-    {
-      "at": "2026-10-01T14:31:00.880Z",
-      "matchId": "bz-212667",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "a40e666a-b22b-4346-8114-fdecb20d22a5"
-    },
-    {
-      "at": "2026-10-01T22:48:41.598Z",
-      "matchId": "bz-212666",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "space-bunny-free"
-      },
-      "usage": {
-        "inputTokens": 952,
-        "outputTokens": 10728
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b6a3fc60-b51f-4f32-8529-0c63ca487396"
-    },
-    {
-      "at": "2026-10-01T22:51:25.154Z",
-      "matchId": "bz-212665",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "space-bunny-free"
-      },
-      "usage": {
-        "inputTokens": 952,
-        "outputTokens": 13532
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "dbe7a6f9-4914-49eb-b5ed-372a4721f128"
-    },
-    {
-      "at": "2026-10-01T22:59:11.221Z",
-      "matchId": "bz-212664",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "mimo-v2.6-flash-free",
-          "kind": "permanent",
-          "reason": "HTTP 400",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 161
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "space-bunny-free",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 983,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 143490
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 991,
-            "outputTokens": 1776
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11902
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "space-bunny-free"
-      },
-      "usage": {
-        "inputTokens": 983,
-        "outputTokens": 10458
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "06811e58-2cda-4200-a557-af9cd0ba8897"
-    },
-    {
-      "at": "2026-10-02T05:50:37.481Z",
-      "matchId": "bz-212675",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 923,
-        "outputTokens": 8722
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "3a67f0d0-288e-4787-9a08-880696c37f3c"
-    },
-    {
-      "at": "2026-10-02T05:51:22.301Z",
-      "matchId": "bz-212676",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1057,
-        "outputTokens": 7282
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "8f256b97-da40-4209-9a05-2500b013514d"
-    },
-    {
-      "at": "2026-10-02T05:51:52.657Z",
-      "matchId": "bz-212674",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1031,
-        "outputTokens": 4247
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "ba9f93c2-cbe6-4392-997e-b6e44aa3c967"
-    },
-    {
-      "at": "2026-10-02T12:49:12.532Z",
-      "matchId": "bz-212673",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1004,
-        "outputTokens": 5298
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "6eee6888-2ef8-449e-a02c-011c9679d642"
-    },
-    {
-      "at": "2026-10-02T12:50:05.037Z",
-      "matchId": "bz-212672",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 915,
-        "outputTokens": 8222
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "e87b0e9d-720f-45ef-b0a9-3422ff070b6f"
-    },
-    {
-      "at": "2026-10-02T12:50:36.251Z",
-      "matchId": "bz-212671",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 896,
-        "outputTokens": 4166
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "413f6a05-109a-4494-9ce6-beeca3af0544"
-    },
-    {
-      "at": "2026-10-02T13:33:06.226Z",
-      "matchId": "bz-212670",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1373,
-        "outputTokens": 9993
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "42bbff5c-121f-41a2-b36e-6667a234d662"
-    },
-    {
-      "at": "2026-10-02T13:33:06.226Z",
-      "matchId": "bz-212669",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "42bbff5c-121f-41a2-b36e-6667a234d662"
-    },
-    {
-      "at": "2026-10-02T13:34:21.890Z",
-      "matchId": "bz-212677",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 987,
-        "outputTokens": 8427
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "3f0b8108-c3b3-4918-90f1-19f1245b14e4"
-    },
     {
       "at": "2026-10-02T13:35:01.180Z",
       "matchId": "bz-212684",
@@ -5175,6 +4599,336 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "8fd0f812-4a31-4320-8b83-a46664df0461"
+    },
+    {
+      "at": "2026-10-10T06:08:50.701Z",
+      "task": "shorts",
+      "matchId": "elche-vs-celta-vigo-2026-10-11",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7228,
+        "outputTokens": 10017
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "ed7f29c2-859e-4da2-bde7-c2105a21a542"
+    },
+    {
+      "at": "2026-10-10T06:10:58.751Z",
+      "task": "shorts",
+      "matchId": "crystal-palace-vs-nottingham-forest-2026-10-11",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7289,
+        "outputTokens": 9188
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "6c9099a1-4c42-4dda-a44f-a5215d91f569"
+    },
+    {
+      "at": "2026-10-10T06:11:59.163Z",
+      "task": "shorts",
+      "matchId": "hull-city-vs-everton-2026-10-11",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7237,
+        "outputTokens": 9517
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "08ce0e72-6591-43ca-ade8-c444d254ecc0"
+    },
+    {
+      "at": "2026-10-10T06:15:57.630Z",
+      "task": "shorts",
+      "matchId": "real-sociedad-vs-deportivo-de-a-coruna-2026-10-11",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6850,
+        "outputTokens": 8225
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "4db9788c-fb8f-4e0c-801e-92087e9af629"
+    },
+    {
+      "at": "2026-10-10T06:18:32.890Z",
+      "task": "shorts",
+      "matchId": "liverpool-vs-manchester-city-2026-10-11",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7384,
+        "outputTokens": 9489
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "6d789afb-1215-4d1c-9ac6-ff5e7141a15a"
+    },
+    {
+      "at": "2026-10-10T06:19:29.604Z",
+      "task": "image-prompts",
+      "matchId": "elche-vs-celta-vigo-2026-10-11",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "Se requieren 4 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1341,
+            "outputTokens": 977
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26974
+        }
+      ],
+      "usage": {
+        "inputTokens": 1327,
+        "outputTokens": 1952
+      }
+    },
+    {
+      "at": "2026-10-10T06:20:01.965Z",
+      "task": "image-prompts",
+      "matchId": "crystal-palace-vs-nottingham-forest-2026-10-11",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1859,
+        "outputTokens": 1048
+      }
+    },
+    {
+      "at": "2026-10-10T06:20:25.437Z",
+      "task": "image-prompts",
+      "matchId": "hull-city-vs-everton-2026-10-11",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1771,
+        "outputTokens": 941
+      }
+    },
+    {
+      "at": "2026-10-10T06:21:27.536Z",
+      "task": "image-prompts",
+      "matchId": "real-sociedad-vs-deportivo-de-a-coruna-2026-10-11",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1462,
+        "outputTokens": 1237
+      }
+    },
+    {
+      "at": "2026-10-10T06:22:04.308Z",
+      "task": "image-prompts",
+      "matchId": "liverpool-vs-manchester-city-2026-10-11",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1841,
+        "outputTokens": 963
+      }
+    },
+    {
+      "at": "2026-10-10T06:22:19.687Z",
+      "task": "video-prompts",
+      "matchId": "elche-vs-celta-vigo-2026-10-11",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1237,
+        "outputTokens": 374
+      }
+    },
+    {
+      "at": "2026-10-10T06:22:39.964Z",
+      "task": "video-prompts",
+      "matchId": "crystal-palace-vs-nottingham-forest-2026-10-11",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1755,
+        "outputTokens": 350
+      }
+    },
+    {
+      "at": "2026-10-10T06:23:28.364Z",
+      "task": "video-prompts",
+      "matchId": "hull-city-vs-everton-2026-10-11",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1667,
+        "outputTokens": 535
+      }
+    },
+    {
+      "at": "2026-10-10T06:23:35.570Z",
+      "task": "video-prompts",
+      "matchId": "real-sociedad-vs-deportivo-de-a-coruna-2026-10-11",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1358,
+        "outputTokens": 386
+      }
+    },
+    {
+      "at": "2026-10-10T06:23:48.308Z",
+      "task": "video-prompts",
+      "matchId": "liverpool-vs-manchester-city-2026-10-11",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1737,
+        "outputTokens": 399
+      }
+    },
+    {
+      "at": "2026-10-10T06:41:03.460Z",
+      "task": "motion-prompts",
+      "matchId": "elche-vs-celta-vigo-2026-10-11",
+      "instructionVersion": "af5a559d6ea384647fb4da0a210df0c0990cce90bb44fcee2cbcbe351abf272c",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": null
+    },
+    {
+      "at": "2026-10-10T06:51:56.175Z",
+      "task": "motion-prompts",
+      "matchId": "crystal-palace-vs-nottingham-forest-2026-10-11",
+      "instructionVersion": "af5a559d6ea384647fb4da0a210df0c0990cce90bb44fcee2cbcbe351abf272c",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": null
+    },
+    {
+      "at": "2026-10-10T07:04:14.099Z",
+      "task": "motion-prompts",
+      "matchId": "hull-city-vs-everton-2026-10-11",
+      "instructionVersion": "af5a559d6ea384647fb4da0a210df0c0990cce90bb44fcee2cbcbe351abf272c",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": null
+    },
+    {
+      "at": "2026-10-10T07:11:44.192Z",
+      "task": "motion-prompts",
+      "matchId": "real-sociedad-vs-deportivo-de-a-coruna-2026-10-11",
+      "instructionVersion": "af5a559d6ea384647fb4da0a210df0c0990cce90bb44fcee2cbcbe351abf272c",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": null
+    },
+    {
+      "at": "2026-10-10T07:24:41.595Z",
+      "task": "motion-prompts",
+      "matchId": "liverpool-vs-manchester-city-2026-10-11",
+      "instructionVersion": "af5a559d6ea384647fb4da0a210df0c0990cce90bb44fcee2cbcbe351abf272c",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": null
     }
   ]
 }
