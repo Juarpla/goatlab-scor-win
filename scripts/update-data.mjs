@@ -44,6 +44,22 @@ const byKickoff = (a, b) => (a.kickoff < b.kickoff ? -1 : a.kickoff > b.kickoff 
 const isFinished = match => FINISHED_STATUSES.has(match.status);
 /** Permanece en la ventana: aún no venció, o ya tiene marcador numérico. */
 const alive = match => staysOnWall(match);
+/** Missing rows are not deletion notices. Keep known fixtures inside the wall window. */
+export function mergeCalendarWindow(previous, fresh, { date, days = 7, now = Date.now(), logger = console }) {
+  const end = new Date(`${date}T00:00:00Z`);
+  end.setUTCDate(end.getUTCDate() + days);
+  const endDate = end.toISOString().slice(0, 10);
+  const inWindow = match => {
+    const day = match.kickoff.slice(0, 10);
+    return day >= date && day < endDate;
+  };
+  const known = previous.filter(inWindow);
+  const merged = mergeFixtures(known, fresh.filter(inWindow));
+  const knownRows = new Set(known);
+  const preserved = merged.filter(match => knownRows.has(match) && staysOnWall(match, now));
+  if (preserved.length) logger.warn(`Calendario: se conservan ${preserved.length} encuentros conocidos ausentes de la consulta nueva; su ausencia no confirma una cancelación.`);
+  return merged;
+}
 function seasonOf(date, competition) {
   const day = new Date(`${date}T00:00:00Z`);
   const year = day.getUTCFullYear();
@@ -1398,7 +1414,8 @@ async function full() {
 
   // Enriquecimiento del día (stats/incidents vía enrichMatches) + ampliación de la ventana.
   const enrichments = await enrichMatches(result.matches.filter(match => match.kickoff.slice(0, 10) === today), { date: today, env: process.env });
-  const windowMatches = (await enrichWindow(result.matches.map(match => ({ ...match, ...(enrichments[match.id] ?? {}) })))).sort(byKickoff);
+  const fresh = await enrichWindow(result.matches.map(match => ({ ...match, ...(enrichments[match.id] ?? {}) })));
+  const windowMatches = mergeCalendarWindow(previousCalendar?.matches ?? [], fresh, { date: windowDate });
   // Predicciones de API-Football: contexto del narrador y dataset de evaluación.
   await captureProviderPredictions(windowMatches);
   // Odds AF pre-partido: % justos para la escalera/BTTS cuando Bzzoiro no alcanza.
@@ -1513,7 +1530,7 @@ async function refreshScores() {
   }
   const enrichments = await enrichMatches(result.matches, { date: today, env: process.env });
   const fresh = await enrichWindow(result.matches.map(match => ({ ...match, ...(enrichments[match.id] ?? {}) })));
-  const merged = mergeFixtures(previous.matches, fresh, [windowDate]);
+  const merged = mergeCalendarWindow(previous.matches, fresh, { date: windowDate });
   stampSlugs(merged, (await readJson('public/data/teams.json'))?.teams ?? {});
   const resultsBase = await readJson('public/data/results.json');
   const [scorersBase, standingsBase, weatherBase, historyBase] = await Promise.all([

@@ -106,6 +106,7 @@ export function mergeFixtures(previous, fresh, replacedDates = []) {
  */
 export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500, now = new Date() }) {
   const dates = dateWindow(date, days);
+  const requestedDates = new Set(dates);
   const errors = [];
   let provider = null;
   let delayed = true;
@@ -150,11 +151,14 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
   let fdDone = false;
   if (env.FOOTBALL_DATA_KEY && fdSpan.length) {
     try {
-      const data = await request(`https://api.football-data.org/v4/matches?dateFrom=${encodeURIComponent(fdSpan[0])}&dateTo=${encodeURIComponent(fdSpan[fdSpan.length - 1])}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl);
+      // FD v4 treats dateTo as exclusive, including for a single-day refresh.
+      const dateTo = shift(fdSpan[fdSpan.length - 1], 1);
+      const data = await request(`https://api.football-data.org/v4/matches?dateFrom=${encodeURIComponent(fdSpan[0])}&dateTo=${encodeURIComponent(dateTo)}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl);
       if (!Array.isArray(data.matches)) throw new Error('Formato inválido');
       // Normalize statuses to the API-Football vocabulary the rest of the site speaks.
       const FD_STATUS = { SCHEDULED: 'NS', TIMED: 'NS', IN_PLAY: 'LIVE', PAUSED: 'HT', FINISHED: 'FT', SUSPENDED: 'SUSP', POSTPONED: 'PST', CANCELLED: 'CANC', AWARDED: 'FT' };
       fdMatches = data.matches.flatMap(item => {
+        if (!requestedDates.has(item.utcDate?.slice(0, 10))) return [];
         const league = leagueByProviderId('fd', item.competition.code);
         return league ? [{
           id: `fd-${item.id}`, providerId: item.id, competition: league.id,

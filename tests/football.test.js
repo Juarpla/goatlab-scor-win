@@ -31,7 +31,7 @@ test('a 7-day window is one football-data request; API-Football only overlays to
   const fdCalls = calls.filter(url => url.includes('football-data'));
   assert.equal(fdCalls.length, 1);
   assert.equal(new URL(fdCalls[0]).searchParams.get('dateFrom'), '2026-09-16'); // only the dates API-Football cannot serve
-  assert.equal(new URL(fdCalls[0]).searchParams.get('dateTo'), '2026-09-20');
+  assert.equal(new URL(fdCalls[0]).searchParams.get('dateTo'), '2026-09-21');
   assert.equal(afCalls.length, 2); // today and tomorrow — the free plan rejects the rest
   assert.ok(afCalls.every(url => ['2026-09-14', '2026-09-15'].includes(new URL(url).searchParams.get('date'))));
   assert.equal(result.provider, 'API-Football + Football-Data.org');
@@ -157,7 +157,7 @@ test('Nations de hoy sigue en la ventana cuando API-Football falla', async () =>
   const fdCalls = calls.filter(url => url.includes('football-data'));
   assert.equal(fdCalls.length, 1);
   assert.equal(new URL(fdCalls[0]).searchParams.get('dateFrom'), '2026-09-21');
-  assert.equal(new URL(fdCalls[0]).searchParams.get('dateTo'), '2026-09-27');
+  assert.equal(new URL(fdCalls[0]).searchParams.get('dateTo'), '2026-09-28');
   assert.ok(result.matches.some(entry => entry.id === 'bz-3' && entry.competition === 'nations'));
   assert.ok(result.matches.some(entry => entry.id === 'fd-7' && entry.competition === 'premier'));
   assert.ok(warnings.some(message => message.startsWith('API-Football:')));
