@@ -1,25 +1,28 @@
 {
-  "id": "bz-604436",
-  "home": "Fluminense",
-  "away": "Palmeiras",
+  "id": "fd-576422",
+  "home": "Fluminense FC",
+  "away": "SE Palmeiras",
   "competition": "libertadores",
-  "kickoff": "2026-10-15T00:30:00+00:00",
+  "kickoff": "2026-10-15T00:30:00Z",
   "updatedAt": "2026-10-10T12:25:12.669Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.08,
-      "away": 1.11
+      "home": 2.07,
+      "away": 1.687
     },
-    "lambdaSource": "Bzzoiro-xG",
-    "lambdasBlend": null,
-    "firstGoalSource": "Bzzoiro-xG",
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.575,
+      "away": 1.399
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
-      "home": 0,
-      "away": 0
+      "home": 6,
+      "away": 6
     },
     "standings": {
-      "Fluminense": {
+      "Fluminense FC": {
         "position": 2,
         "team": "Fluminense",
         "teamId": 153,
@@ -38,25 +41,7 @@
         },
         "form": null
       },
-      "Palmeiras": {
-        "position": 2,
-        "team": "Palmeiras",
-        "teamId": 162,
-        "played": 6,
-        "won": 3,
-        "drawn": 2,
-        "lost": 1,
-        "goalsFor": null,
-        "goalsAgainst": null,
-        "goalDifference": null,
-        "points": 11,
-        "zone": {
-          "key": "playoff",
-          "label": "Playoffs",
-          "type": "playoff"
-        },
-        "form": null
-      }
+      "SE Palmeiras": null
     },
     "scorers": {
       "updatedAt": "2026-10-10T12:23:33.776Z",
@@ -66,7 +51,7 @@
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-15T00:30:00+00:00",
+      "sampledAt": "2026-10-15T00:30:00Z",
       "source": "bzzoiro"
     },
     "discipline": {
@@ -83,100 +68,100 @@
   },
   "markets": {
     "oneX2": {
-      "home": 0.333,
-      "draw": 0.319,
-      "away": 0.348
+      "home": 0.462,
+      "draw": 0.227,
+      "away": 0.311
     },
     "doubleChance": {
-      "12": 0.681,
-      "1X": 0.652,
-      "X2": 0.667
+      "12": 0.773,
+      "1X": 0.689,
+      "X2": 0.538
     },
     "dnb": {
-      "home": 0.489,
-      "away": 0.511
+      "home": 0.598,
+      "away": 0.402
     },
     "totals": {
-      "over15": 0.656,
-      "under15": 0.344,
-      "over25": 0.375,
-      "under25": 0.625,
-      "over35": 0.179,
-      "under35": 0.821
+      "over15": 0.897,
+      "under15": 0.103,
+      "over25": 0.724,
+      "under25": 0.276,
+      "over35": 0.517,
+      "under35": 0.483
     },
     "btts": {
-      "yes": 0.456,
-      "no": 0.544
+      "yes": 0.72,
+      "no": 0.28
     },
     "cleanSheet": {
-      "home": 0.33,
-      "away": 0.34
+      "home": 0.185,
+      "away": 0.126
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.148
+        "p": 0.09
       },
       {
-        "home": 0,
-        "away": 0,
-        "p": 0.125
-      },
-      {
-        "home": 0,
+        "home": 2,
         "away": 1,
-        "p": 0.111
+        "p": 0.084
       },
       {
-        "home": 1,
-        "away": 0,
-        "p": 0.107
+        "home": 2,
+        "away": 2,
+        "p": 0.071
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.074
+        "p": 0.069
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.058
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.19,
-    "noGoal": 0.112,
+    "lambdaTotal": 2.97,
+    "noGoal": 0.051,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.306
+        "p": 0.391
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.212
+        "p": 0.238
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.147
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.102
+        "p": 0.088
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.071
+        "p": 0.054
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.049
+        "p": 0.033
       }
     ],
-    "firstHome": 0.438,
-    "firstAway": 0.45
+    "firstHome": 0.503,
+    "firstAway": 0.446
   },
   "scorers": {
     "home": [
@@ -185,43 +170,24 @@
         "goals": 2,
         "matches": 9,
         "share": 0.5,
-        "rate": 0.54,
-        "anytime": 0.417,
-        "first": 0.247
+        "rate": 0.79,
+        "anytime": 0.545,
+        "first": 0.265
       },
       {
         "player": "John Kennedy",
         "goals": 2,
         "matches": 6,
         "share": 0.5,
-        "rate": 0.54,
-        "anytime": 0.417,
-        "first": 0.247
+        "rate": 0.79,
+        "anytime": 0.545,
+        "first": 0.265
       }
     ],
-    "away": [
-      {
-        "player": "Jhon Arias",
-        "goals": 3,
-        "matches": 10,
-        "share": 0.5,
-        "rate": 0.56,
-        "anytime": 0.426,
-        "first": 0.253
-      },
-      {
-        "player": "José Manuel López",
-        "goals": 3,
-        "matches": 10,
-        "share": 0.5,
-        "rate": 0.56,
-        "anytime": 0.426,
-        "first": 0.253
-      }
-    ]
+    "away": null
   },
   "hasScorers": true,
-  "method": "poisson-fallback-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
       "home": 0.34,
@@ -247,7 +213,7 @@
     },
     "confidence": 0.3534,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-10T12:24:33.862Z",
+    "capturedAt": "2026-10-10T12:24:33.985Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -400,7 +366,7 @@
       "historyRows": 203
     },
     "source": "GoatLab",
-    "expectedTotal": 4.8
+    "expectedTotal": 4.5
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -411,35 +377,35 @@
       "historyRows": 203
     },
     "source": "GoatLab",
-    "expectedTotal": 10.7
+    "expectedTotal": 10.3
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 11.72,
-      "shotsOnTarget": 3.7,
+      "shots": 12.16,
+      "shotsOnTarget": 3.69,
       "xg": 1.08,
-      "corners": 4.45,
-      "fouls": 12.97,
-      "yellowCards": 2.49,
-      "redCards": 0.57,
-      "offsides": 1.11,
-      "possession": 51.13
+      "corners": 4.77,
+      "fouls": 13.03,
+      "yellowCards": 2.48,
+      "redCards": 0.5,
+      "offsides": 1.21,
+      "possession": 51.42
     },
     "away": {
-      "shots": 15.33,
-      "shotsOnTarget": 4.75,
+      "shots": 13.45,
+      "shotsOnTarget": 3.99,
       "xg": 1.11,
-      "corners": 6.2,
-      "fouls": 12.95,
-      "yellowCards": 2.3,
-      "redCards": 0.43,
-      "offsides": 1.41,
-      "possession": 48.87
+      "corners": 5.56,
+      "fouls": 13,
+      "yellowCards": 2,
+      "redCards": 0.5,
+      "offsides": 1.6,
+      "possession": 48.58
     },
     "sample": {
       "home": 7,
-      "away": 5
+      "away": 2
     },
     "coverage": {
       "home": {
@@ -454,15 +420,15 @@
         "offsides": 7
       },
       "away": {
-        "possession": 5,
-        "shots": 5,
-        "shotsOnTarget": 5,
-        "xg": 5,
-        "corners": 5,
-        "fouls": 5,
-        "yellowCards": 5,
+        "possession": 2,
+        "shots": 2,
+        "shotsOnTarget": 2,
+        "xg": 2,
+        "corners": 2,
+        "fouls": 2,
+        "yellowCards": 2,
         "redCards": 1,
-        "offsides": 5
+        "offsides": 2
       }
     },
     "league": {
@@ -504,46 +470,46 @@
       "Bzzoiro"
     ],
     "xgSource": "Bzzoiro",
-    "shortSample": false,
+    "shortSample": true,
     "source": "Bzzoiro"
   },
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.244,
-      "draw": 0.108,
-      "away": 0.649
+      "home": 0.343,
+      "draw": 0.122,
+      "away": 0.535
     },
     "cardsDuel": {
-      "home": 0.44,
-      "draw": 0.187,
-      "away": 0.373
+      "home": 0.492,
+      "draw": 0.19,
+      "away": 0.318
     },
     "lastGoal": {
-      "home": 0.438,
-      "away": 0.45,
-      "noGoal": 0.112
+      "home": 0.503,
+      "away": 0.446,
+      "noGoal": 0.051
     },
     "cornerRace": {
       "3": {
-        "home": 0.349,
-        "away": 0.651
+        "home": 0.429,
+        "away": 0.571
       },
       "5": {
-        "home": 0.305,
-        "away": 0.695
+        "home": 0.407,
+        "away": 0.593
       },
       "7": {
-        "home": 0.272,
-        "away": 0.728
+        "home": 0.389,
+        "away": 0.611
       }
     },
     "cornerMargin": {
-      "home3plus": 0.093,
-      "home12": 0.15,
-      "level": 0.108,
-      "away12": 0.244,
-      "away3plus": 0.404
+      "home3plus": 0.15,
+      "home12": 0.193,
+      "level": 0.122,
+      "away12": 0.241,
+      "away3plus": 0.293
     },
     "source": "GoatLab"
   },
@@ -554,7 +520,7 @@
       "weathercode": null,
       "wind": 5.4,
       "condition": "cloudy",
-      "sampledAt": "2026-10-15T00:30:00+00:00",
+      "sampledAt": "2026-10-15T00:30:00Z",
       "source": "bzzoiro"
     },
     "venue": {
@@ -577,7 +543,7 @@
   },
   "context": {
     "home": {
-      "team": "Fluminense",
+      "team": "Fluminense FC",
       "recentSample": 5,
       "debut": false,
       "cleanSheets": {
@@ -606,37 +572,30 @@
       }
     },
     "away": {
-      "team": "Palmeiras",
-      "recentSample": 1,
+      "team": "SE Palmeiras",
+      "recentSample": 5,
       "debut": false,
       "cleanSheets": {
-        "value": 0,
-        "sample": 1
+        "value": 2,
+        "sample": 5
       },
-      "biggestWin": null,
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
       "unbeaten": {
-        "value": 0,
-        "sample": 1
+        "value": 5,
+        "sample": 5
       },
-      "season": {
-        "position": 2,
-        "played": 6,
-        "gf": null,
-        "ga": null,
-        "provider": null
-      },
-      "player": {
-        "name": "Jhon Arias",
-        "detail": "3 goles en 10 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "season": null,
+      "player": null
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": "No se observa desvío porcentual claro entre P (0.333/0.319/0.348), B (0.34/0.306/0.353) y B2 (0.353); B2 solo añade no/no.",
+    "flag": true,
+    "note": "P declara local 0.462 frente a 0.34 de B y 0.353 de B2; los goles esperados de P (2.07/1.687) superan a los de B (1.08/1.11). Posible desvío entre proveedores.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-10T12:30:08.864Z"
+    "generatedAt": "2026-10-10T12:30:08.871Z"
   }
 }

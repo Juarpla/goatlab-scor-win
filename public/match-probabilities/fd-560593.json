@@ -4,7 +4,7 @@
   "away": "Leeds United FC",
   "competition": "premier",
   "kickoff": "2026-10-10T11:30:00Z",
-  "updatedAt": "2026-10-09T18:25:01.381Z",
+  "updatedAt": "2026-10-10T12:25:12.669Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-09T13:07:44.255Z",
+      "updatedAt": "2026-10-10T12:23:58.499Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-09T13:07:44.255Z",
+      "updatedAt": "2026-10-10T12:23:58.499Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 202
+      "rows": 203
     },
     "venue": {
       "city": "Londres",
@@ -174,7 +174,7 @@
       {
         "player": "Bukayo Saka",
         "goals": 3,
-        "matches": 5,
+        "matches": 6,
         "share": 0.375,
         "rate": 0.55,
         "anytime": 0.423,
@@ -233,30 +233,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.685,
-      "draw": 0.193,
-      "away": 0.121,
+      "home": 0.6759999999999999,
+      "draw": 0.203,
+      "away": 0.122,
       "predicted": "H"
     },
     "xg": {
       "home": 1.8,
       "away": 0.95
     },
-    "over15": 0.753,
-    "over25": 0.522,
-    "over35": 0.301,
-    "btts": 0.44799999999999995,
+    "over15": 0.762,
+    "over25": 0.528,
+    "over35": 0.313,
+    "btts": 0.47,
     "score": "1-0",
     "cornersOver95": 0.45799999999999996,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.685,
+      "favoriteProb": 0.676,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6853,
+    "confidence": 0.6759,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-09T13:07:50.596Z",
+    "capturedAt": "2026-10-10T12:24:13.754Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -406,7 +406,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 202
+      "historyRows": 203
     },
     "source": "GoatLab",
     "expectedTotal": 3.9
@@ -417,7 +417,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 202
+      "historyRows": 203
     },
     "source": "GoatLab",
     "expectedTotal": 8.7
@@ -611,7 +611,7 @@
       },
       "player": {
         "name": "Bukayo Saka",
-        "detail": "3 goles en 5 partidos",
+        "detail": "3 goles en 6 partidos",
         "source": "líder del equipo en la temporada"
       }
     },
@@ -647,9 +647,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "P Poisson asigna 0.384 al local y 0.29 al visitante; B CatBoost eleva al local a 0.671 y baja al visitante a 0.123. La diferencia en el local supera 28 puntos porcentuales. B2 declara H con 0.671, en línea con B.",
+    "note": "Auditoría: P da 38.4% al local, B/B2 lo suben a 67.6% y 0.676; además P asigna 29.0% al visitante frente al 12.2% de B. La desviación es clara y se marca.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-05T15:33:38.815Z"
+    "generatedAt": "2026-10-10T12:28:19.187Z"
   }
 }
