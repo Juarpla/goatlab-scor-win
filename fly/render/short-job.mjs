@@ -126,7 +126,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
   writeJson(join(tmp, 'composition.json'), compositionProps({ frames: voice.frames, photos, clips: videos, words, plan, facts, motionPrompts, match: matchLabel }));
   writeJson(join(tmp, 'stages.json'), stages);
-  return { total, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages, transcriptionContext: {contextHash,contextBias} };
+  return { total, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages, directionHash:source.directionHash, resources:{receivedImages:assets.length,availableImages:photos.length,receivedClips:clips.length,availableClips:videos.length}, transcriptionContext: {contextHash,contextBias} };
 }
 
 export async function planEdit(source, tmp, log = () => {}) {

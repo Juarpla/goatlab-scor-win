@@ -127,7 +127,7 @@ async function runJob(job) {
     const voiceSeconds = await mediaDuration(voiceFile);
 
     // 2. La transcripción ordena el pool y es el texto del video.
-    let { total, provider, stages, plan, voiceFile: adjustedVoiceFile, voiceRate, originalVoiceSeconds, transcriptionContext } = await measure('preparation', () => prepareShort({
+    let { total, provider, stages, plan, voiceFile: adjustedVoiceFile, voiceRate, originalVoiceSeconds, transcriptionContext, resources, directionHash } = await measure('preparation', () => prepareShort({
       tmp,
       voiceFile,
       voiceSeconds,
@@ -169,7 +169,7 @@ async function runJob(job) {
     let sizeMb = statSync(out).size / 1_000_000;
     if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
 
-    job.productionReport = {version:1, revision:process.env.GOATLAB_REVISION??'unknown', planVersion:plan.version, transcription:{provider, ...transcriptionContext}, context:{hash:job.productionContext?.hash,snapshotHash:job.productionContext?.snapshotHash,provenance:job.productionContext?.provenance,retrieval:job.productionContext?.retrieval}, factsUsed:(job.facts??[]).filter(f=>plan.scenes.some(s=>(s.factIds??[]).includes(f.id))), versions:{remotion:'4.0.533',fps:30,width:1080,height:1920,library:1}, models:plan.attempts??[], fallback:Boolean(plan.fallback), resources:{images:job.assets.length,clips:(job.clips??[]).length}, motion:motionMetrics(plan,total), stages:job.stages};
+    job.productionReport = {version:1, revision:process.env.GOATLAB_REVISION??'unknown', planVersion:plan.version, transcription:{provider, ...transcriptionContext}, context:{hash:job.productionContext?.hash,snapshotHash:job.productionContext?.snapshotHash,provenance:job.productionContext?.provenance,retrieval:job.productionContext?.retrieval}, factsUsed:(job.facts??[]).filter(f=>plan.scenes.some(s=>(s.factIds??[]).includes(f.id))), versions:{remotion:'4.0.533',fps:30,width:1080,height:1920,library:1}, models:plan.attempts??[], fallback:Boolean(plan.fallback), fallbackReason:plan.fallbackReason, priorModel:plan.priorModel, directionHash, resources:{...resources,usedImages:plan.version===5?new Set(plan.scenes.filter(s=>s.asset!=null).map(s=>s.asset)).size:undefined,usedClips:plan.version===5?new Set(plan.scenes.filter(s=>s.clip!=null).map(s=>s.clip)).size:undefined}, motion:motionMetrics(plan,total), stages:job.stages};
     if (plan.version === 5) {
       const qa=await measure('vision',()=>reviewAndCorrect({tmp,video:out,total,skillRoot:SKILL_ROOT,isCancelled:()=>job.cancelled,allowCorrection:!capture.renderFallback,
         render:()=>measure('captureCorrection',()=>renderSilent(tmp,silent,{isCancelled:()=>job.cancelled})),
