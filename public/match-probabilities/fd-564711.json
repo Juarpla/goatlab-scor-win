@@ -1,0 +1,630 @@
+{
+  "id": "fd-564711",
+  "home": "Valencia CF",
+  "away": "Athletic Club",
+  "competition": "laliga",
+  "kickoff": "2026-10-17T19:00:00Z",
+  "updatedAt": "2026-10-11T12:40:58.609Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 0.72,
+      "away": 1.38
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.015,
+      "away": 1.305
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Valencia CF": {
+        "position": 20,
+        "team": "Valencia CF",
+        "played": 7,
+        "won": 1,
+        "drawn": 1,
+        "lost": 5,
+        "goalsFor": 4,
+        "goalsAgainst": 13,
+        "goalDifference": -9,
+        "points": 4,
+        "form": null
+      },
+      "Athletic Club": {
+        "position": 9,
+        "team": "Athletic Club",
+        "played": 6,
+        "won": 2,
+        "drawn": 2,
+        "lost": 2,
+        "goalsFor": 7,
+        "goalsAgainst": 6,
+        "goalDifference": 1,
+        "points": 8,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-11T12:40:11.007Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-17T19:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-11T12:40:11.007Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 212
+    },
+    "venue": {
+      "city": "Valencia",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.183,
+      "draw": 0.302,
+      "away": 0.515
+    },
+    "doubleChance": {
+      "12": 0.698,
+      "1X": 0.485,
+      "X2": 0.817
+    },
+    "dnb": {
+      "home": 0.262,
+      "away": 0.738
+    },
+    "totals": {
+      "over15": 0.633,
+      "under15": 0.367,
+      "over25": 0.35,
+      "under25": 0.65,
+      "over35": 0.161,
+      "under35": 0.839
+    },
+    "btts": {
+      "yes": 0.396,
+      "no": 0.604
+    },
+    "cleanSheet": {
+      "home": 0.252,
+      "away": 0.487
+    },
+    "exactScores": [
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.157
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.135
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.134
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.117
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.084
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.32,
+    "noGoal": 0.098,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.321
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.218
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.101
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.068
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.046
+      }
+    ],
+    "firstHome": 0.395,
+    "firstAway": 0.507
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Aaron Mayol",
+        "goals": 1,
+        "matches": 5,
+        "share": 0.25,
+        "rate": 0.25,
+        "anytime": 0.224,
+        "first": 0.109
+      }
+    ],
+    "away": [
+      {
+        "player": "Robert Navarro",
+        "goals": 2,
+        "matches": 6,
+        "share": 0.286,
+        "rate": 0.37,
+        "anytime": 0.311,
+        "first": 0.161
+      },
+      {
+        "player": "Aitor Paredes",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.143,
+        "rate": 0.19,
+        "anytime": 0.17,
+        "first": 0.08
+      },
+      {
+        "player": "Álex Berenguer",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.143,
+        "rate": 0.19,
+        "anytime": 0.17,
+        "first": 0.08
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.379,
+      "draw": 0.281,
+      "away": 0.341,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.31,
+      "away": 1.23
+    },
+    "over15": 0.7170000000000001,
+    "over25": 0.46799999999999997,
+    "over35": 0.24600000000000002,
+    "btts": 0.514,
+    "score": "1-1",
+    "cornersOver95": 0.489,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.379,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3787,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-11T12:40:45.935Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.373,
+      "draw": 0.293,
+      "away": 0.335
+    },
+    "doubleChance": {
+      "12": 0.707,
+      "1X": 0.665,
+      "X2": 0.627
+    },
+    "dnb": {
+      "home": 0.527,
+      "away": 0.473
+    },
+    "totals": {
+      "over15": 0.734,
+      "under15": 0.266,
+      "over25": 0.466,
+      "under25": 0.534,
+      "over35": 0.251,
+      "under35": 0.749
+    },
+    "btts": {
+      "yes": 0.529,
+      "no": 0.471
+    },
+    "cleanSheet": {
+      "home": 0.292,
+      "away": 0.27
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.115,
+        "share": 0.24731182795698922
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.092,
+        "share": 0.19784946236559137
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.091,
+        "share": 0.19569892473118275
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.084,
+        "share": 0.18064516129032257
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.083,
+        "share": 0.17849462365591395
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 118,
+    "homeWins": 45,
+    "draws": 34,
+    "awayWins": 39,
+    "avgTotalGoals": 2.5847457627118646,
+    "recent": [
+      {
+        "eventId": 1031,
+        "date": "2026-05-10T14:15:00+00:00",
+        "home": "Athletic Club",
+        "away": "Valencia",
+        "homeTeamId": 51,
+        "awayTeamId": 47,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 203340,
+        "date": "2026-02-04T20:00:00+00:00",
+        "home": "Valencia",
+        "away": "Athletic Club",
+        "homeTeamId": 47,
+        "awayTeamId": 51,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 735,
+        "date": "2025-09-20T19:00:00+00:00",
+        "home": "Valencia",
+        "away": "Athletic Club",
+        "homeTeamId": 47,
+        "awayTeamId": 51,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 305723,
+        "date": "2025-05-18T17:00:00+00:00",
+        "home": "Valencia",
+        "away": "Athletic Club",
+        "homeTeamId": 47,
+        "awayTeamId": 51,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 305374,
+        "date": "2024-08-28T17:00:00+00:00",
+        "home": "Athletic Club",
+        "away": "Valencia",
+        "homeTeamId": 51,
+        "awayTeamId": 47,
+        "homeScore": 1,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 212
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 212
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.7
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 11.72,
+      "shotsOnTarget": 3.96,
+      "xg": 1.31,
+      "corners": 4.74,
+      "fouls": 11.6,
+      "yellowCards": 1.97,
+      "redCards": 0.38,
+      "offsides": 2.43,
+      "possession": 48.72
+    },
+    "away": {
+      "shots": 14.44,
+      "shotsOnTarget": 4.71,
+      "xg": 1.23,
+      "corners": 4.97,
+      "fouls": 11.6,
+      "yellowCards": 2.04,
+      "redCards": 0.56,
+      "offsides": 1.89,
+      "possession": 51.28
+    },
+    "sample": {
+      "home": 7,
+      "away": 7
+    },
+    "coverage": {
+      "home": {
+        "possession": 7,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 7,
+        "fouls": 7,
+        "yellowCards": 7,
+        "redCards": 2,
+        "offsides": 7
+      },
+      "away": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 7,
+        "fouls": 6,
+        "yellowCards": 7,
+        "redCards": 2,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.4,
+      "shotsOnTarget": 4.74,
+      "xg": 1.47,
+      "corners": 4.86,
+      "fouls": 12.25,
+      "yellowCards": 2.18,
+      "redCards": 0.5,
+      "offsides": 2.09
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.406,
+      "draw": 0.129,
+      "away": 0.464
+    },
+    "cardsDuel": {
+      "home": 0.383,
+      "draw": 0.207,
+      "away": 0.41
+    },
+    "lastGoal": {
+      "home": 0.395,
+      "away": 0.507,
+      "noGoal": 0.098
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.478,
+        "away": 0.522
+      },
+      "5": {
+        "home": 0.471,
+        "away": 0.529
+      },
+      "7": {
+        "home": 0.465,
+        "away": 0.535
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.187,
+      "home12": 0.219,
+      "level": 0.129,
+      "away12": 0.235,
+      "away3plus": 0.23
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 9.5,
+      "condition": "rain",
+      "sampledAt": "2026-10-17T19:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Mestalla",
+      "city": "Valencia",
+      "capacity": 49430,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Valencia CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 20,
+        "played": 7,
+        "gf": 4,
+        "ga": 13,
+        "provider": null
+      },
+      "player": {
+        "name": "Aaron Mayol",
+        "detail": "1 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Athletic Club",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 4,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 9,
+        "played": 6,
+        "gf": 7,
+        "ga": 6,
+        "provider": null
+      },
+      "player": {
+        "name": "Robert Navarro",
+        "detail": "2 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}
