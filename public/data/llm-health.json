@@ -1,369 +1,6 @@
 {
-  "updatedAt": "2026-10-11T13:08:10.239Z",
+  "updatedAt": "2026-10-11T22:33:34.747Z",
   "runs": [
-    {
-      "at": "2026-10-03T11:49:55.738Z",
-      "matchId": "bz-212660",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 916,
-        "outputTokens": 3629
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "9907425a-0a23-4713-9316-e19625b8206d"
-    },
-    {
-      "at": "2026-10-03T12:14:07.527Z",
-      "matchId": "bz-212659",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 993,
-        "outputTokens": 6060
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "57b02006-b374-4dd9-8a4e-28fa0990a7ed"
-    },
-    {
-      "at": "2026-10-04T13:17:09.138Z",
-      "matchId": "fd-564706",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 1331,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 96012
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1380,
-            "outputTokens": 1324
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13284
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1306,
-            "outputTokens": 5164
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 108142
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 1331,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 86499
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1380,
-            "outputTokens": 1366
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12496
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1306,
-            "outputTokens": 6958
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 145163
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1306,
-        "outputTokens": 6958
-      },
-      "truncated": true,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-04T21:39:59.461Z",
-      "matchId": "fd-564706",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 1448,
-        "outputTokens": 7535
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "766d6483-6af2-4868-b508-9888207a4f4b"
-    },
-    {
-      "at": "2026-10-05T15:33:38.824Z",
-      "matchId": "fd-560593",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2111,
-        "outputTokens": 13456
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "743d879e-3303-4db7-8241-fe42951fab09"
-    },
-    {
-      "at": "2026-10-05T15:33:38.824Z",
-      "matchId": "fd-564698",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "743d879e-3303-4db7-8241-fe42951fab09"
-    },
-    {
-      "at": "2026-10-05T15:34:58.637Z",
-      "matchId": "fd-560592",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2042,
-        "outputTokens": 11968
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "3c67d890-e2d0-4c05-ad4f-325f5b5786b3"
-    },
-    {
-      "at": "2026-10-05T15:34:58.637Z",
-      "matchId": "fd-560595",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "3c67d890-e2d0-4c05-ad4f-325f5b5786b3"
-    },
-    {
-      "at": "2026-10-05T15:36:27.121Z",
-      "matchId": "fd-560599",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2034,
-        "outputTokens": 14225
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "99f744f8-445b-4af4-8482-cac1298db6b9"
-    },
-    {
-      "at": "2026-10-05T15:36:27.121Z",
-      "matchId": "fd-560601",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "99f744f8-445b-4af4-8482-cac1298db6b9"
-    },
-    {
-      "at": "2026-10-05T15:37:54.181Z",
-      "matchId": "fd-564699",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2059,
-        "outputTokens": 13080
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "1f094268-13ff-4e43-831d-df03e3cd1173"
-    },
-    {
-      "at": "2026-10-05T15:37:54.181Z",
-      "matchId": "fd-560600",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "1f094268-13ff-4e43-831d-df03e3cd1173"
-    },
-    {
-      "at": "2026-10-05T15:40:37.073Z",
-      "matchId": "fd-564700",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1291,
-        "outputTokens": 10873
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "9902f5de-7262-48e2-9390-50147658a5b4"
-    },
-    {
-      "at": "2026-10-05T15:41:26.873Z",
-      "matchId": "fd-564702",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1371,
-        "outputTokens": 7635
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "3d51a2fb-9c0a-4f94-bc73-25b4f149d996"
-    },
-    {
-      "at": "2026-10-05T15:41:33.518Z",
-      "matchId": "fd-564700",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2029,
-        "outputTokens": 16226
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "807fdbc3-b3de-48ff-87ca-ec92959db752"
-    },
     {
       "at": "2026-10-05T15:41:33.518Z",
       "matchId": "fd-564702",
@@ -4921,6 +4558,378 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "c8f869d5-f5cd-4bd1-9e26-3d3c4c291222"
+    },
+    {
+      "at": "2026-10-11T22:10:03.006Z",
+      "task": "shorts",
+      "matchId": "coventry-city-vs-newcastle-united-2026-10-12",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7222,
+        "outputTokens": 10061
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "65bc5337-4f93-4726-9933-b7b39e45a7c7"
+    },
+    {
+      "at": "2026-10-11T22:14:47.888Z",
+      "task": "shorts",
+      "matchId": "levante-ud-vs-sevilla-2026-10-12",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 7298,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 173426
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6886,
+        "outputTokens": 5854
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "d9ca1236-be29-4fdd-bdb4-c20b1c427560"
+    },
+    {
+      "at": "2026-10-11T22:22:49.957Z",
+      "task": "shorts",
+      "matchId": "sabah-fk-vs-sk-slavia-praha-2026-10-13",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 6630,
+        "outputTokens": 7050
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "9c147cbe-2d9b-43ce-a05a-9965ec6585b5"
+    },
+    {
+      "at": "2026-10-11T22:25:34.735Z",
+      "task": "shorts",
+      "matchId": "viking-fk-vs-bayern-munchen-2026-10-13",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 6679,
+        "outputTokens": 8789
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "a409bf61-d399-4090-9d9b-f9d4dbe7f64d"
+    },
+    {
+      "at": "2026-10-11T22:29:47.905Z",
+      "task": "shorts",
+      "matchId": "fd-575341",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55; guion 10: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4941,
+            "outputTokens": 3231
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 31611
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 5: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4791,
+            "outputTokens": 7683
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 110988
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 30 palabras, mínimo 55; guion 1: falta la CTA a goatlab.win en la narración; guion 2: 31 palabras, mínimo 55; guion 2: falta la CTA a goatlab.win en la narración; guion 3: 26 palabras, mínimo 55; guion 3: falta la CTA a goatlab.win en la narración; guion 4: 28 palabras, mínimo 55; guion 4: falta la CTA a goatlab.win en la narración",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4824,
+            "outputTokens": 1573
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13897
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4941,
+            "outputTokens": 4501
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 103671
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55; descripción: cifra 0.365 no está en los hechos; descripción: cifra 0.271 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4791,
+            "outputTokens": 3587
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 19136
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 32 palabras, mínimo 55; guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta Racing Club de Lens; guion 2: falta Sporting Clube de Portugal; guion 2: 28 palabras, mínimo 55; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta Racing Club de Lens; guion 3: falta Sporting Clube de Portugal",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4824,
+            "outputTokens": 1595
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15910
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 46 palabras, mínimo 55; guion 3: cifra 2.92 no está en los hechos; guion 3: 50 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4662,
+            "outputTokens": 6391
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 114452
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 4662,
+        "outputTokens": 6391
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-11T22:30:06.382Z",
+      "task": "image-prompts",
+      "matchId": "coventry-city-vs-newcastle-united-2026-10-12",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1798,
+        "outputTokens": 948
+      }
+    },
+    {
+      "at": "2026-10-11T22:30:48.012Z",
+      "task": "image-prompts",
+      "matchId": "levante-ud-vs-sevilla-2026-10-12",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "image-prompts 1: texto incompleto o formato ausente; image-prompts 1: faltan ambos equipos; image-prompts 1: falta realismo y carácter referencial; image-prompts 1: falta identidad de los equipos; image-prompts 2: texto incompleto o formato ausente; image-prompts 2: prompt repetido; image-prompts 2: faltan ambos equipos; image-prompts 2: falta realismo y carácter referencial",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1795,
+            "outputTokens": 853
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 19809
+        }
+      ],
+      "usage": {
+        "inputTokens": 1810,
+        "outputTokens": 3653
+      }
+    },
+    {
+      "at": "2026-10-11T22:31:02.967Z",
+      "task": "image-prompts",
+      "matchId": "fd-575341",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 443,
+        "outputTokens": 912
+      }
+    },
+    {
+      "at": "2026-10-11T22:31:31.541Z",
+      "task": "image-prompts",
+      "matchId": "sabah-fk-vs-sk-slavia-praha-2026-10-13",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1585,
+        "outputTokens": 953
+      }
+    },
+    {
+      "at": "2026-10-11T22:32:01.880Z",
+      "task": "image-prompts",
+      "matchId": "viking-fk-vs-bayern-munchen-2026-10-13",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1563,
+        "outputTokens": 809
+      }
+    },
+    {
+      "at": "2026-10-11T22:32:20.116Z",
+      "task": "video-prompts",
+      "matchId": "coventry-city-vs-newcastle-united-2026-10-12",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1694,
+        "outputTokens": 1681
+      }
+    },
+    {
+      "at": "2026-10-11T22:32:29.376Z",
+      "task": "video-prompts",
+      "matchId": "levante-ud-vs-sevilla-2026-10-12",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1691,
+        "outputTokens": 417
+      }
+    },
+    {
+      "at": "2026-10-11T22:32:38.469Z",
+      "task": "video-prompts",
+      "matchId": "fd-575341",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 339,
+        "outputTokens": 363
+      }
+    },
+    {
+      "at": "2026-10-11T22:33:18.162Z",
+      "task": "video-prompts",
+      "matchId": "sabah-fk-vs-sk-slavia-praha-2026-10-13",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1481,
+        "outputTokens": 397
+      }
+    },
+    {
+      "at": "2026-10-11T22:33:34.747Z",
+      "task": "video-prompts",
+      "matchId": "viking-fk-vs-bayern-munchen-2026-10-13",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1459,
+        "outputTokens": 379
+      }
     }
   ]
 }
