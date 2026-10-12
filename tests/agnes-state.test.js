@@ -148,3 +148,29 @@ test('recovery does not archive an active runner or a task with a known video ID
   const accepted=reduceAgnesState(first.state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'accepted',videoId:'known-task'}, {nowMs:now});
   assert.deepEqual(reduceAgnesState(accepted.state,'recover-uncertain',{}, {nowMs:now+31_000}).result.abandoned,[]);
 });
+
+test('legacy upload claims gain location and size only through compatible confirmation',()=>{
+  let {state,result}=reduceAgnesState(fresh(),'reserve',reserve(),{nowMs:now});
+  state=reduceAgnesState(state,'event',{attemptId:result.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:now}).state;
+  const input={matchId:'alpha-beta',kind:'image',ordinal:0,claimId:'old-upload',sha256:hash('media')};
+  state=reduceAgnesState(state,'uploadclaim',input,{nowMs:now}).state;
+  state=reduceAgnesState(state,'uploadconfirm',input,{nowMs:now}).state;
+  validateAgnesState(state);
+  for(const wrong of [{objectKey:'partidos/other/0.png',sizeBytes:5},{objectKey:'partidos/alpha-beta/1.png',sizeBytes:5},{objectKey:'partidos/alpha-beta/0.png',sizeBytes:0}])
+    assert.throws(()=>reduceAgnesState(state,'uploadconfirm',{...input,...wrong},{nowMs:now}),/ubicación/);
+  const verified={...input,objectKey:'partidos/alpha-beta/0.png',sizeBytes:5};
+  state=reduceAgnesState(state,'uploadconfirm',verified,{nowMs:now}).state;
+  assert.deepEqual(state.slots['alpha-beta:image:0'].uploadClaim,{id:'old-upload',sha256:input.sha256,confirmed:true,objectKey:verified.objectKey,sizeBytes:5});
+  assert.throws(()=>reduceAgnesState(state,'uploadconfirm',{...verified,sizeBytes:6},{nowMs:now}),/identidad/);
+  assert.equal(reduceAgnesState(state,'reserve',reserve(),{nowMs:now}).result.canPost,false);
+});
+test('recovery discovery is read-only and excludes expired and terminal failed tasks',()=>{
+  let {state,result}=reduceAgnesState(fresh(),'reserve',reserve({kind:'video',model:'agnes-video-2.5-flash',referenceHash:hash('reference')}),{nowMs:now});
+  state=reduceAgnesState(state,'event',{attemptId:result.attemptId,eventId:randomUUID(),type:'accepted',videoId:'provider-id'},{nowMs:now}).state;
+  const read=reduceAgnesState(state,'recoverable-videos',{},{nowMs:now});
+  assert.equal(read.changed,false);assert.deepEqual(read.result.tasks,[{matchId:'alpha-beta',ordinal:0,expiresAtMs:now+86_400_000}]);
+  assert.deepEqual(read.state,state);
+  assert.deepEqual(reduceAgnesState(state,'recoverable-videos',{},{nowMs:now+86_400_000}).result.tasks,[]);
+  state=reduceAgnesState(state,'event',{attemptId:result.attemptId,eventId:randomUUID(),type:'failed'},{nowMs:now}).state;
+  assert.deepEqual(reduceAgnesState(state,'recoverable-videos',{},{nowMs:now}).result.tasks,[]);
+});

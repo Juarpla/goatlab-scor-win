@@ -13,7 +13,7 @@ un timeout, 5xx o resultado con identificador la conserva. La reserva usa su dí
 UTC original, aunque la descarga termine al día siguiente.
 
 El adaptador Python llama al cliente Node mediante JSON por stdin/stdout.
-SQLite es una caché recuperable. La autoridad almacena hashes, identificadores
+SQLite es temporal y se reconstruye en cada corrida desde R2. La autoridad almacena hashes, identificadores
 de recuperación, reservas y reclamaciones; los reportes públicos son proyecciones
 saneadas. `public/data/agnes-quota.json` conserva máximos para observación y
 nunca autoriza solicitudes ni reconstruye un registro perdido.
@@ -94,7 +94,7 @@ Para rollback, detener nuevas generaciones y conservar el JSON privado. Los
 recursos publicados pueden seguir reutilizándose. Reparar y verificar la
 autoridad antes de reactivar; nunca borrar el registro ni sustituirlo por cuota
 vacía. Las reclamaciones de poda y subidas incompletas requieren confirmación,
-conservando los artefactos locales ante un resultado remoto incierto.
+manteniendo el recurso pendiente hasta verificar su publicación en R2.
 
 Referencias: [compatibilidad S3](https://developers.cloudflare.com/r2/api/s3/api/),
 [consistencia](https://developers.cloudflare.com/r2/reference/consistency/) y
@@ -114,12 +114,19 @@ distintos, identidad, fingerprint y almacenamiento comprobado. Los modos manuale
 pueden comprobar su subconjunto sin declarar completo un banco sin seis recursos.
 El mantenimiento sigue corriendo aunque no queden partidos elegibles.
 
-Actions conserva los resultados locales pendientes mediante `media-recovery.mjs`:
-una caché AES-256-GCM y un artifact cifrado de 30 días. La clave deriva del secreto S3 usado por el cliente de estado y se autentican los archivos y las rutas antes de restaurar. El límite
-es 128 MB y 1.024 archivos. GitHub puede eliminar cachés antiguas; una clave rotada
-requiere la anterior para recuperar esos archivos. Si se pierde un resultado sin
-identificador recuperable, se conserva el bloqueo. El JSON de autoridad no se
-incluye en esa caché ni en los reportes públicos.
+Actions continúa desde los objetos de `partidos/<id>/` y el JSON privado. Un
+recurso está listo sólo tras verificar en R2 nombre, tamaño, checksum e identidad.
+`completed` indica que Agnes terminó; `uploadClaim.confirmed` registra la publicación,
+con `objectKey` y `sizeBytes`. Los registros anteriores se completan al verificar sus objetos.
+Tras PUT se hace HEAD antes de confirmar el estado y eliminar los temporales del recurso.
+Los manifiestos y referencias de clips incluyen únicamente recursos verificados.
+
+Las tareas vigentes con `video_id` se consultan antes de crear otras, aunque estén
+fuera del top; esta fase sólo recupera y publica, con hasta 60 segundos por partido
+dentro del presupuesto global. GitHub conserva logs y reportes JSON, sin cachés ni
+artifacts de media entre corridas. Si una generación consumida perdió el resultado
+antes de llegar a R2 y no tiene un identificador recuperable, se informa del bloqueo
+y se conserva su consumo. La limpieza local fallida no repite la generación.
 
 La evidencia terminal en `finished-at.json` gobierna la poda de contenido. Los
 marcadores, kickoff y primera detección deben ser válidos; la frontera exacta de

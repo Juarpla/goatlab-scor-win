@@ -125,7 +125,7 @@ class ImagePool:
                     return result
                 raise ValueError("la imagen guardada no existe; restaurar el recurso antes de reintentar")
             if old and old["status"] == "used":
-                raise ValueError('imagen completada ausente; sin evidencia local compatible; restaurar el recurso o la respuesta cifrada; no se regenera')
+                raise ValueError('imagen completada ausente; sin evidencia local compatible; recuperar únicamente evidencia compatible; no se repite POST')
             if old and old["status"] in ("pending", "uncertain"):
                 raise ValueError("generación de resultado incierto; no se repite automáticamente")
             throttle = self.db.execute("SELECT until FROM throttle WHERE id=1").fetchone()
@@ -150,7 +150,7 @@ class ImagePool:
                     raise ValueError("encuentro caducado; generaciones cerradas")
                 remote = self.state.status(match, 'image', slot)
                 if remote and remote['state'] == 'completed':
-                    raise ValueError('imagen completada ausente; sin evidencia local compatible; restaurar el recurso o la respuesta cifrada; no se regenera')
+                    raise ValueError('imagen completada ausente; sin evidencia local compatible; recuperar únicamente evidencia compatible; no se repite POST')
                 while True:
                     admission = self.state.reserve(match, 'image', slot, prompt, model, deadline)
                     if admission.get('canPost'):
@@ -206,12 +206,6 @@ class ImagePool:
                     raise ValueError("Agnes timeout/red: resultado incierto, no se repite") from None
             # Keep the response before decoding/downloading: successful requests are not lost.
             recovery = out / f"{slot}.response.json"
-            encoded_result = json.dumps(result)
-            root = out.parent
-            cached_bytes = sum(p.stat().st_size for p in root.rglob('*') if p.is_file())
-            if cached_bytes + len(encoded_result.encode()) * 2 > 128_000_000:
-                self.db.execute("UPDATE images SET status='uncertain' WHERE match_id=? AND slot=?", (match,slot))
-                raise ValueError("caché de imágenes llena; resultado incierto")
             atomic_json(recovery, {'version': 1, 'matchId': match, 'ordinal': slot,
                                    'promptHash': hashlib.sha256(prompt.encode()).hexdigest(),
                                    'model': model, 'attemptId': attempt_id, 'result': result})

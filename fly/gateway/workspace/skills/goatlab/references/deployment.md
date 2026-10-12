@@ -16,8 +16,7 @@ vacío permite montar los audios con gráficos. Los Motion Prompts se aplican po
 Gateway utiliza `MEDIA_ROLE=consumer`; el generador y sus CLI Agnes exigen
 `MEDIA_ROLE=producer` y `GITHUB_ACTIONS=true`. Reintentar media consulta R2,
 sin POST Agnes, PUT/DELETE R2 ni cambios en el estado privado de cuotas. Gateway
-limpia solo la caché local de lectura; los artefactos antiguos de generación se
-conservan para recuperar resultados en Actions. Los detalles del productor están
+limpia la caché local de lectura; Actions continúa desde R2 y el estado privado. Los detalles del productor están
 en `AGNES-STATE.md` y el workflow `3-media-creation`.
 
 Render replica sus registros en /render-ledger de Gateway y los restaura al
@@ -88,12 +87,11 @@ real y habilitar el productor de Actions después. Rollback conserva el JSON y d
 creaciones. La protección frente a intentos perdidos comienza en ese corte.
 
 Actions ejecuta mantenimiento y `media:check` con Node antes de instalar dependencias.
-Los pendientes pasan preflight privado y recuperan la caché cifrada de resultados,
-sin conservar SQLite. AES-256-GCM deriva su clave del secreto S3 usado por el cliente de estado; rotarlo requiere
-conservar la clave anterior para recuperar archivos cifrados existentes. La caché de
-GitHub puede expirar; el artifact cifrado dura 30 días. El helper limita recuperación
-a 128 MB y 1.024 archivos. Sólo el archivo cifrado sale del runner. Nunca incluir gen,
-respuestas crudas, temporales o binarios en Git ni artifacts públicos de reportes.
+Los pendientes pasan preflight privado y verifican archivos y estados en R2.
+Tras PUT y HEAD compatible se confirma la publicación y se eliminan los temporales.
+Actions conserva logs y reportes JSON entre corridas. El contrato de recuperación
+y disponibilidad está en `AGNES-STATE.md`. Nunca incluir gen, respuestas crudas,
+temporales o binarios en Git ni artifacts públicos de reportes.
 
 La telemetría pública `_agnes-hourly.json` contiene fallos saneados y resúmenes con IDs
 de evento estables, deduplicación y ventana de 48 h. Los contadores R2 distinguen media

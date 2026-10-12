@@ -42,7 +42,7 @@ async function withPrompts(data,matchId){
   await writeFile(join(data,'image-prompts',`${matchId}.json`),JSON.stringify({...imagePromptsDoc(matchId),competition:fixture.competition,kickoff:fixture.kickoff}));
   await writeFile(join(data,'video-prompts',`${matchId}.json`),JSON.stringify({...videoPromptsDoc(matchId),competition:fixture.competition,kickoff:fixture.kickoff}));
 }
-test('a cached external bank is discarded without searches or image downloads',async t=>{
+test('unverified local and external resources stay unavailable without R2',async t=>{
   const root=await mkdtemp(join(tmpdir(),'agnes-bank-'));t.after(()=>rm(root,{recursive:true,force:true}));
   const data=join(root,'public/data'),out=join(root,'bank'); await mkdir(data,{recursive:true});await mkdir(join(out,'gen/a-b'),{recursive:true});
   const match={id:'a-b',webId:'a-b',home:'Alpha FC',away:'Beta FC',status:'NS',kickoff:new Date(Date.now()+3600_000).toISOString()};
@@ -53,7 +53,7 @@ test('a cached external bank is discarded without searches or image downloads',a
   await writeFile(join(data,'top.json'),JSON.stringify({version:1,generatedAt:new Date().toISOString(),ranking:[{id:'a-b'}],extra:[]}));
   await runBank(root,out,['--match=a-b']);
   const bank=JSON.parse(await readFile(join(out,'a-b.json')));
-  assert.equal(bank.assets.length,1);assert.equal(bank.assets[0].source,'agnes');
+  assert.equal(bank.assets.length,0);
   assert.equal(JSON.parse(await readFile(join(out,'a-b.progress.json'))).phase,'finished');
   assert.equal(AGNES_FREE_LIMITS.videoRpm,1);assert.equal(AGNES_FREE_LIMITS.dailyVideoSeconds,null);
   assert.equal(AGNES_TOKEN_LIMITS.plan,'starter');assert.equal(AGNES_TOKEN_LIMITS.dailyVideoSeconds,500);
@@ -86,7 +86,7 @@ test('an explicit snapshot wins over repo prompts for the same category',async t
   assert.ok(progress.failures.some(f=>f.includes('Image Prompts no disponibles')));
   assert.ok(!progress.failures.some(f=>f.includes('Video Prompts no disponibles')));
 });
-test('a cached bank is capped at four photos and two clips',async t=>{
+test('local photos and clips alone cannot certify an available bank',async t=>{
   const root=await mkdtemp(join(tmpdir(),'agnes-cap-'));t.after(()=>rm(root,{recursive:true,force:true}));
   const out=join(root,'bank');
   const data=await shortsRepo(root,['a-b']);
@@ -101,9 +101,9 @@ test('a cached bank is capped at four photos and two clips',async t=>{
   for(let i=0;i<3;i++)await writeFile(join(out,'gen','a-b',`clip-${i}.mp4`),'cached');
   await runBank(root,out);
   const bank=JSON.parse(await readFile(join(out,'a-b.json')));
-  assert.equal(bank.assets.length,4);
-  assert.deepEqual(bank.assets.map(a=>a.id),['a-b-0','a-b-1','a-b-2','a-b-3']);
-  assert.equal(bank.clips.length,2);
+  assert.equal(bank.assets.length,0);
+  assert.equal(bank.clips.length,0);
+  assert.equal(bank.bankStatus,'partial');
 });
 test('--match registers the id as a manual extra',async t=>{
   const root=await mkdtemp(join(tmpdir(),'agnes-extra-'));t.after(()=>rm(root,{recursive:true,force:true}));

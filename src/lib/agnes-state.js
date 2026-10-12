@@ -32,7 +32,8 @@ export function validateAgnesState(state) {
     const attempt=state.attempts[row.attemptId];
     if (key!==slotKey(row) || !uuid(row.attemptId) || !['uncertain','pending','completed','failed','rejected','abandoned'].includes(row.state) || !finite(row.expiresAtMs) || !finite(row.reservedUnits) || !/^\d{4}-\d{2}-\d{2}$/.test(row.reservedDay) || !state.quota[row.reservedDay] || typeof row.refunded!=='boolean' || !finite(row.pollNextAtMs) || (row.videoId!==null && !id(row.videoId)) || (row.state==='pending' && !row.videoId) || (row.state==='rejected' && (!row.refunded || row.videoId)) || !object(attempt) || attempt.slotKey!==key || !Array.isArray(attempt.eventIds) || attempt.state!==row.state || attempt.refunded!==row.refunded) throw new Error('slot Agnes corrupto');
     if (row.pollLease!==null && (!keys(row.pollLease,['owner','untilMs']) || !uuid(row.pollLease.owner) || !finite(row.pollLease.untilMs))) throw new Error('lease Agnes corrupto');
-    if (row.uploadClaim!==null && (!keys(row.uploadClaim,['id','sha256','confirmed']) || !uuid(row.uploadClaim.id) || !digest(row.uploadClaim.sha256) || typeof row.uploadClaim.confirmed!=='boolean')) throw new Error('subida Agnes corrupta');
+    if (row.uploadClaim!==null && (!keys(row.uploadClaim,['id','sha256','confirmed','objectKey','sizeBytes']) || !uuid(row.uploadClaim.id) || !digest(row.uploadClaim.sha256) || typeof row.uploadClaim.confirmed!=='boolean'
+      || ((row.uploadClaim.objectKey!==undefined || row.uploadClaim.sizeBytes!==undefined) && !validPublication(row,row.uploadClaim)))) throw new Error('subida Agnes corrupta');
   }
   for(const [attemptId,row] of Object.entries(state.attempts)) if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds']) || !state.slots[row.slotKey] || !['uncertain','pending','completed','failed','rejected','abandoned','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
   if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('single-flight Agnes corrupto');
@@ -77,6 +78,11 @@ function validateSlotInput(input) {
 }
 function pickIdentity(input) { return {matchId:input.matchId,kind:input.kind,ordinal:input.ordinal,promptHash:input.promptHash,model:input.model, ...(input.referenceHash ? {referenceHash:input.referenceHash} : {})}; }
 function sameIdentity(row,input) { return ['promptHash','model','referenceHash'].every(key => row[key] === input[key]); }
+function validPublication(row, value) {
+  const file = row.kind==='image' ? `${row.ordinal}\\.(?:png|jpg|webp)` : `clip-${row.ordinal}\\.mp4`;
+  return typeof value.objectKey==='string' && new RegExp(`^partidos/${row.matchId}/${file}$`).test(value.objectKey)
+    && Number.isSafeInteger(value.sizeBytes) && value.sizeBytes>0 && value.sizeBytes<=(row.kind==='image'?64_000_000:32_000_000);
+}
 function resultFor(row, reason) { return {canPost:false,reason,...(row ? {state:row.state,attemptId:row.attemptId,videoId:row.videoId ?? null} : {})}; }
 
 /** Pure transition. All production callers commit changed state through conditional R2 PUT. */
@@ -129,6 +135,10 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   }
   else if (operation === 'report') result = {quota:state.quota,failureEvents:state.failureEvents.filter(e => e.at >= nowMs-48*3_600_000).map(e=>({eventId:e.eventId,at:new Date(e.at).toISOString(),hourUTC:e.hourUTC,stage:e.stage,httpStatus:e.httpStatus,matchId:e.matchId})),runs:Object.values(state.summaries).filter(r=>r.at>=nowMs-48*3_600_000).map(r=>({runId:r.runId,at:new Date(r.at).toISOString(),eligible:r.eligible,pending:r.pending,generated:r.generated,reused:r.reused,completed:r.completed})),usage:{opsA:state.usage.opsA,opsB:state.usage.opsB},updatedAt:state.updatedAt};
   else if (operation === 'status') result = {slot:readSlot() ?? null,closed:state.matches[input.matchId]?.closed ?? false};
+  else if (operation === 'recoverable-videos') result = {tasks:Object.values(state.slots)
+    .filter(row=>row.kind==='video' && row.videoId && ['pending','completed'].includes(row.state)
+      && !row.uploadClaim?.confirmed && row.expiresAtMs>nowMs && !state.matches[row.matchId]?.closed)
+    .map(row=>({matchId:row.matchId,ordinal:row.ordinal,expiresAtMs:row.expiresAtMs}))};
   else if (operation === 'reserve') {
     validateSlotInput(input);
     if (!uuid(input.attemptId) || !finite(input.expiresAtMs)) throw new Error('intento inválido');
@@ -209,14 +219,19 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   } else if (operation === 'uploadclaim' || operation === 'uploadconfirm') {
     const row=readSlot();
     if (!row || row.state!=='completed' || !uuid(input.claimId) || !digest(input.sha256)) throw new Error('subida sin slot completado conocido');
+    const hasLocation=input.objectKey!==undefined || input.sizeBytes!==undefined;
+    if (hasLocation && !validPublication(row,input)) throw new Error('ubicación o tamaño de subida inválido');
+    if (hasLocation && row.uploadClaim?.objectKey && (row.uploadClaim.objectKey!==input.objectKey || row.uploadClaim.sizeBytes!==input.sizeBytes)) throw new Error('identidad de objeto R2 distinta');
     if (state.matches[input.matchId]?.closed) result={canPut:false,reason:'partido cerrado por poda'};
     else if (operation === 'uploadclaim') {
       if (row.uploadClaim && (row.uploadClaim.id!==input.claimId || row.uploadClaim.sha256!==input.sha256)) result={canPut:false,reason:'otra subida pendiente'};
       else if (row.uploadClaim) result={canPut:true,claimId:input.claimId};
-      else { row.uploadClaim={id:input.claimId,sha256:input.sha256,confirmed:false}; result=change({canPut:true,claimId:input.claimId}); }
+      else { row.uploadClaim={id:input.claimId,sha256:input.sha256,confirmed:false,...(hasLocation?{objectKey:input.objectKey,sizeBytes:input.sizeBytes}:{})}; result=change({canPut:true,claimId:input.claimId}); }
     } else {
       if (row.uploadClaim?.id!==input.claimId || row.uploadClaim.sha256!==input.sha256) throw new Error('confirmación de subida inválida');
-      row.uploadClaim.confirmed=true; result=change({saved:true});
+      row.uploadClaim.confirmed=true;
+      if (hasLocation) Object.assign(row.uploadClaim,{objectKey:input.objectKey,sizeBytes:input.sizeBytes});
+      result=change({saved:true});
     }
   } else if (operation === 'cleanupclaim' || operation === 'cleanupconfirm') {
     if (!id(input.matchId) || !uuid(input.claimId)) throw new Error('poda inválida');

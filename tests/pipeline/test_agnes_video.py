@@ -24,6 +24,20 @@ class VideoTests(unittest.TestCase):
         self.posts=[]
     def sleep(self,seconds):self.now+=seconds
 
+    def test_recovery_only_skips_unused_slots_and_never_posts(self):
+        self.state.seed('a-b', 3, prompt='Prompt 3')
+        calls = []
+        def call(url, body=None, **kwargs):
+            calls.append((url, body))
+            self.assertIsNone(body)
+            return {'status': 'completed', 'url': 'https://example.org/clip.mp4'}
+        result = self.bank(call, recover_only=True)
+        self.assertEqual(len(result['clips']), 1)
+        self.assertEqual(result['clips'][0]['file'], 'clip-3.mp4')
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(len(self.state.slots), 1)
+        self.assertEqual(result['failures'], [])
+
     def test_terminal_attempt_with_id_is_skipped_after_sqlite_loss(self):
         for terminal in ('failed', 'abandoned'):
             with self.subTest(terminal=terminal):

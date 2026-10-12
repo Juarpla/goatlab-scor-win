@@ -103,7 +103,7 @@ publican únicamente los manifiestos nuevos completos; preservan el completo
 anterior si el reintento es parcial. Progresos y reportes se publican aparte.
 
 Para configurar credenciales, realizar el corte coordinado, comprobar CAS o
-recuperar/retirar productores, seguir [AGNES-STATE.md](AGNES-STATE.md). Los recursos
-pendientes de Actions se conservan en una caché cifrada y un artifact cifrado de
-30 días; ninguno contiene el JSON de autoridad. La pérdida de un resultado sin
-identificador recuperable conserva el bloqueo y puede dejar el banco parcial.
+recuperar/retirar productores, seguir [AGNES-STATE.md](AGNES-STATE.md). La continuidad usa
+los archivos publicados en R2 y el JSON privado; los temporales se eliminan tras
+confirmar la subida. Una generación consumida perdida sin identificador recuperable
+conserva el bloqueo y puede dejar el banco parcial.

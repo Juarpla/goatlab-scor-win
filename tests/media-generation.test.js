@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, rm, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -42,7 +42,7 @@ async function fixture(t, overrides = {}) {
       const [, cmd, ...values] = argv; calls.push({ cmd, values });
       if (cmd === 'budget') return { stdout: JSON.stringify({ level: block ? 'block' : 'ok', operations: { media: { opsA: 1 } } }) };
       if (cmd === 'exists') {
-        const object = objects.get(values[0]); return { stdout: JSON.stringify({ found: object ? { meta: object.meta } : false, operations: { media: { opsB: 1 } } }) };
+        const object = objects.get(values[0]); return { stdout: JSON.stringify({ found: object ? { key: values[0], bytes: object.bytes.length, meta: object.meta } : false, operations: { media: { opsB: 1 } } }) };
       }
       if (cmd === 'put') {
         if (failPut) throw new Error('PUT failed');
@@ -269,7 +269,7 @@ test('failed PUT never publishes a complete bank even when four local results ex
   const f = await fixture(t, { AGNES_SKIP_VIDEO: '1' }); f.setFailPut(true);
   const result = await f.run(); assert.equal(result.completed, 0); assert.equal(result.pending, 1);
   const manifest = JSON.parse(await readFile(join(f.dir, 'a-b.json'), 'utf8'));
-  assert.equal(manifest.assets.length, 4); assert.equal(manifest.bankStatus, 'partial');
+  assert.equal(manifest.assets.length, 0); assert.equal(manifest.bankStatus, 'partial');
 });
 test('stale or corrupt top fails before provider calls', async t => {
   const f = await fixture(t);
@@ -309,4 +309,128 @@ test('images-only verification still leaves a bank partial until its two clips e
   const f=await fixture(t,{AGNES_SKIP_VIDEO:'1',MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<4;i++) f.addPhoto(i);
   const result=await f.run();assert.equal(result.completed,1);assert.equal(result.pending,0);assert.deepEqual(result.completedIds,[]);
   assert.equal(JSON.parse(await readFile(join(f.dir,'a-b.json'))).bankStatus,'partial');
+});
+
+test('publication verifies HEAD and stores the R2 identity before removing local media', async t => {
+  const f = await fixture(t);
+  const events = [];
+  const result = await f.run({ transactImpl: async (op, input) => {
+    events.push({op,input}); return f.transactImpl(op,input);
+  }});
+  assert.equal(result.completed, 1);
+  const confirms = events.filter(e=>e.op==='uploadconfirm');
+  assert.equal(confirms.length, 6);
+  for(const {input} of confirms) {
+    assert.match(input.objectKey, /^partidos\/a-b\/(?:[0-3]\.jpg|clip-[0-4]\.mp4)$/);
+    assert.ok(input.sizeBytes > 0);
+    const names = await readdir(join(f.dir,'gen','a-b'));
+    assert.ok(!names.includes(input.objectKey.split('/').at(-1)));
+  }
+  const commands=f.calls.map(c=>c.cmd);
+  for(let i=0;i<commands.length;i++) if(commands[i]==='put') assert.equal(commands[i+1],'exists');
+});
+for(const defect of ['missing','wrong-key','wrong-size','wrong-hash','wrong-model','wrong-prompt','wrong-dimensions']) {
+  test(`a successful PUT with ${defect} HEAD evidence remains unavailable`, async t => {
+    const f=await fixture(t,{AGNES_SKIP_VIDEO:'1'}); const confirmations=[];const uploaded=new Set();
+    const result=await f.run({execImpl:async(binary,argv,options)=>{
+      const response=await f.execImpl(binary,argv,options);
+      if(argv[1]==='put') uploaded.add(argv[3]);
+      if(argv[1]==='exists' && uploaded.has(argv[2])) {
+        const data=JSON.parse(response.stdout);
+        if(defect==='missing') data.found=false;
+        if(defect==='wrong-key') data.found.key='partidos/other/0.jpg';
+        if(defect==='wrong-size') data.found.bytes++;
+        if(defect==='wrong-hash') data.found.meta.sha256=hash('different');
+        if(defect==='wrong-model') data.found.meta.model='other';
+        if(defect==='wrong-prompt') data.found.meta.prompthash=hash('other');
+        if(defect==='wrong-dimensions') data.found.meta.width='12';
+        return {stdout:JSON.stringify(data)};
+      }
+      return response;
+    },transactImpl:async(op,input)=>{if(op==='uploadconfirm') confirmations.push(input);return f.transactImpl(op,input);}});
+    assert.equal(result.results[0].images,0);assert.equal(result.completed,0);
+    assert.equal(confirmations.length,0);
+    assert.ok((await readdir(join(f.dir,'gen','a-b'))).includes('0.jpg'));
+  });
+}
+test('an empty runner continues from two R2 images without regenerating them',async t=>{
+  const f=await fixture(t);f.addPhoto(0);f.addPhoto(1);
+  const result=await f.run();assert.equal(result.completed,1);
+  assert.equal(f.provider.filter(p=>p.endsWith('agnes.py')).length,2);
+  assert.equal(f.provider.filter(p=>p.endsWith('agnes_video.py')).length,1);
+  assert.equal((await readdir(join(f.dir,'gen','a-b'))).some(n=>/\.(?:jpg|png|mp4|response\.json|accepted\.json)$/.test(n)),false);
+});
+test('existing R2 objects reconcile missing upload confirmations without another PUT',async t=>{
+  const f=await fixture(t,{MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<4;i++)f.addPhoto(i);f.addClip(0);f.addClip(1);
+  const confirmed=[];
+  const result=await f.run({transactImpl:async(op,input)=>{if(op==='uploadconfirm')confirmed.push(input);return f.transactImpl(op,input);}});
+  assert.equal(result.completed,1);assert.equal(confirmed.length,6);
+  assert.equal(f.calls.some(c=>c.cmd==='put'),false);assert.equal(f.provider.length,0);
+});
+test('clips never use images whose publication failed',async t=>{
+  const f=await fixture(t);f.setFailPut(true);await f.run();
+  assert.equal(f.provider.some(p=>p.endsWith('agnes_video.py')),false);
+});
+
+test('a pending match outside selection is recovered before generation with no new POST',async t=>{
+  const f=await fixture(t);for(let i=0;i<4;i++)f.addPhoto(i);
+  const fixtures=JSON.parse(await readFile(join(f.repo,'public/data/fixtures.json')));
+  fixtures.matches[0].status='LIVE';await writeFile(join(f.repo,'public/data/fixtures.json'),JSON.stringify(fixtures));
+  const result=await f.run({args:{'--limit':'1'},transactImpl:async(op,input)=>{
+    if(op==='recoverable-videos')return {tasks:[{matchId:'a-b',ordinal:1,expiresAtMs:now+86_400_000}]};
+    return f.transactImpl(op,input);
+  },execImpl:async(binary,argv,options)=>{
+    if(argv[0].endsWith('agnes_video.py')) {
+      const input=JSON.parse(await readFile(argv.find(a=>a.startsWith('--input=')).slice(8)));
+      assert.equal(input.recoverOnly,true);assert.ok(input.deadline<=now/1000+60);
+    }
+    return f.execImpl(binary,argv,options);
+  }});
+  assert.equal(result.results[0].matchId,'a-b');assert.equal(result.results[0].clips,2);
+  assert.equal(f.provider.length,1);assert.ok(f.provider[0].endsWith('agnes_video.py'));
+});
+
+test('HEAD transport failure leaves the object unconfirmed and pauses new generation',async t=>{
+  const f=await fixture(t,{AGNES_SKIP_VIDEO:'1'});let uploaded=false;const confirms=[];
+  const result=await f.run({execImpl:async(binary,argv,options)=>{
+    if(argv[1]==='exists' && uploaded)throw new Error('HEAD unavailable');
+    const response=await f.execImpl(binary,argv,options);if(argv[1]==='put')uploaded=true;return response;
+  },transactImpl:async(op,input)=>{if(op==='uploadconfirm')confirms.push(input);return f.transactImpl(op,input);}});
+  assert.equal(result.results[0].images,0);assert.equal(confirms.length,0);
+  assert.equal(f.provider.length,1);
+});
+test('temporary cleanup failure keeps the verified resource ready and never causes another POST',async t=>{
+  const f=await fixture(t,{AGNES_SKIP_VIDEO:'1'});
+  const run=await f.run({execImpl:async(...args)=>{
+    const response=await f.execImpl(...args);
+    if(args[1][0].endsWith('agnes.py')) {
+      const out=args[1].find(a=>a.startsWith('--out=')).slice(6);
+      await mkdir(join(out,'0.response.json'),{recursive:true});
+    }
+    return response;
+  }});
+  assert.equal(run.results[0].images,4);assert.equal(run.completed,1);
+  assert.ok(f.logs.some(line=>line.includes('limpieza temporal pendiente')));
+  const calls=f.provider.length;f.env.MEDIA_RUN_BUDGET_MS='0';
+  const retry=await f.run();assert.equal(retry.results[0].images,4);assert.equal(f.provider.length,calls);
+});
+test('the workflow stores reports but never restores or archives media between runs',async()=>{
+  const workflow=await readFile(resolve('.github/workflows/media-bank.yml'),'utf8');
+  assert.ok(!/agnes-recovery|media-recovery|actions\/cache\/(?:save|restore)/.test(workflow));
+  assert.match(workflow,/name: goatlab-media-bank/);
+  assert.match(workflow,/rm -rf public\/data\/media-pack\/gen/);
+});
+
+test('confirmed publication removes orphaned atomic response files as well as binaries',async t=>{
+  const f=await fixture(t,{AGNES_SKIP_VIDEO:'1'});
+  await f.run({execImpl:async(...args)=>{
+    const response=await f.execImpl(...args);
+    if(args[1][0].endsWith('agnes.py')) {
+      const out=args[1].find(a=>a.startsWith('--out=')).slice(6);
+      const ordinal=args[1].find(a=>a.startsWith('--index=')).slice(8);
+      await writeFile(join(out,ordinal+'.response.json.42.tmp'),'private response');
+    }
+    return response;
+  }});
+  assert.equal((await readdir(join(f.dir,'gen','a-b'))).some(n=>n.endsWith('.tmp')),false);
 });

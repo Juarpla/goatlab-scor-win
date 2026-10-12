@@ -41,8 +41,8 @@ exige `MEDIA_ROLE=producer` dentro de GitHub Actions. Actions reintenta a las
 El banco completo mantiene las pruebas v2 de cuatro fotos y dos clips distintos.
 La generación parcial conserva un banco completo anterior. La poda remota sigue
 requiriendo final confirmado y protección de trabajos pendientes. Gateway limpia
-únicamente su caché de lectura, caducada y sin trabajos que la necesiten; conserva
-los artefactos antiguos de generación para recuperar sus resultados desde Actions.
+únicamente su caché de lectura, caducada y sin trabajos que la necesiten. Actions
+continúa desde R2 y elimina los temporales tras confirmar cada subida.
 Ver [deployment.md](deployment.md) para despliegue y comprobaciones.
 
 ## Voz y motion graphics

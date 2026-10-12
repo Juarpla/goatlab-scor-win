@@ -184,7 +184,7 @@ class VideoPool:
             details.append(f"clip {row['ordinal']+1}: etapa={record['stage']} modelo={record['model']} HTTP={record['httpStatus'] or 'sin respuesta'} requestId={record['requestId'] or 'no disponible'} intento={attempt} registrado={record['at']}; {record['body']}; siguiente: {following}")
         return details
 
-    def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None):
+    def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False):
         if not prompts or not images: return {'clips': [], 'failures': ['faltan prompts de video o imágenes de referencia']}
         if not os.environ.get('AGNES_API_KEY'): return {'clips': [], 'failures': ['falta AGNES_API_KEY']}
         out = Path(out); out.mkdir(parents=True, exist_ok=True)
@@ -225,6 +225,7 @@ class VideoPool:
                 prompt = prompts[ordinal % len(prompts)]
                 if self.clock() >= deadline or cancelled(): break
                 remote = remote_slots[ordinal]
+                if recover_only and (not remote or not remote.get('videoId') or remote['state'] not in ('pending','completed')): continue
                 attempt_id = remote.get('attemptId') if remote else None
                 accepted_path = out / f'clip-{ordinal}.accepted.json'
                 try: accepted = json.loads(accepted_path.read_text())
@@ -446,7 +447,8 @@ class VideoPool:
                         'attemptId': remote.get('attemptId') if remote else attempt_id, 'next': 'recuperar mediante GET del mismo video_id en otra corrida; no repetir POST'})
                     break
                 if len(clips)>=target: break
-        if len(clips) < target:
+        if recover_only and stop_reason: failures.insert(0, stop_reason)
+        if len(clips) < target and not recover_only:
             reason = 'cancelación' if cancelled() else stop_reason
             if not reason and self.clock() >= deadline: reason = 'plazo de generación agotado'
             if not reason and len(consumed) == 5:
@@ -495,5 +497,5 @@ if __name__=='__main__':
         with sqlite3.connect(state) as db:
             row=db.execute('SELECT status FROM tasks WHERE id=?', ('media:'+source['matchId'],)).fetchone()
             return bool(row and row[0]=='cancelled')
-    result=pool.bank(source['matchId'],source['prompts'],source['images'],args.out,source['deadline'],source['expiresAt'],cancelled=cancelled,verified=source.get('verifiedClips', []))
+    result=pool.bank(source['matchId'],source['prompts'],source['images'],args.out,source['deadline'],source['expiresAt'],cancelled=cancelled,verified=source.get('verifiedClips', []),recover_only=source.get('recoverOnly', False))
     print(json.dumps(result))
