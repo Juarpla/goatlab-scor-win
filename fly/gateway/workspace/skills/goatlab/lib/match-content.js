@@ -105,5 +105,7 @@ export function validateContent(data, category, matchId, { match = null } = {}) 
   if (category === 'scripts') return scriptStructureErrors(data, { matchId, match }).length === 0;
   if (!data || data.matchId !== matchId || !data.home || !data.away) return false;
   if (data.facts != null && (!Array.isArray(data.facts) || data.facts.length > 128 || data.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return false;
-  return data.version === CONTENT_VERSION && data.category === category && promptErrors(data, { published: data.published === true }).length === 0;
+  // Acepta v1 y v2: los bancos generados con CONTENT_VERSION 2 siguen vigentes.
+  if (data.version !== CONTENT_VERSION && data.version !== CONTENT_VERSION + 1) return false;
+  return data.category === category && promptErrors(data, { published: data.published === true }).length === 0;
 }

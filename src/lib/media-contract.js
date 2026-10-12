@@ -30,7 +30,8 @@ export function contentFingerprint(match, imagePack, videoPack) {
     ['image-prompts', imagePack, 4, 'agnes-image-2.5-flash'],
     ['video-prompts', videoPack, 2, 'agnes-video-2.5-flash'],
   ]) {
-    if (!pack || (pack.version !== CONTENT_VERSION && pack.version !== CONTENT_VERSION - 1) || pack.category !== category || contentIdentityErrors(pack, match).length
+    // Acepta v1 y v2: los bancos generados con CONTENT_VERSION 2 siguen vigentes.
+    if (!pack || (pack.version !== CONTENT_VERSION && pack.version !== CONTENT_VERSION + 1) || pack.category !== category || contentIdentityErrors(pack, match).length
       || !Array.isArray(pack.prompts) || pack.prompts.length !== count
       || pack.prompts.some((row, index) => row?.n !== index + 1 || typeof row.prompt !== 'string' || !row.prompt.trim())) return null;
     const model = pack.generationModel ?? pack.model ?? fallback;
