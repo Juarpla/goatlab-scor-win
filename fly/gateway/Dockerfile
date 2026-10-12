@@ -8,7 +8,7 @@ USER node
 COPY --chown=node:node fly/gateway/openclaw.json /home/node/.openclaw/openclaw.json
 COPY --chown=node:node fly/gateway/workspace/ /home/node/.openclaw/workspace/
 COPY --chown=node:node fly/gateway/idle-stop.mjs fly/gateway/idle-safety.mjs /home/node/
-COPY --chown=node:node fly/gateway/ui-access.mjs fly/gateway/runtime.mjs fly/gateway/model-config.mjs /home/node/
+COPY --chown=node:node fly/gateway/ui-access.mjs fly/gateway/runtime.mjs /home/node/
 ARG GOATLAB_REVISION=unknown
 ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_REPO=/home/node/goatlab GOATLAB_STATE_DIR=/data \
     GOATLAB_SKILL_DIR=/home/node/.openclaw/workspace/skills/goatlab

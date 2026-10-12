@@ -112,19 +112,3 @@ def add_quota(db, day, images=0, video_seconds=0.0):
     db.execute("INSERT INTO quota_use(day, images, video_seconds) VALUES(?,?,?)"
                " ON CONFLICT(day) DO UPDATE SET images=images+excluded.images,"
                " video_seconds=video_seconds+excluded.video_seconds", (day, images, video_seconds))
-
-
-def bounded_call(call, *args, timeout=30, **kwargs):
-    """Enforce wall time as well as the socket timeout, including slow responses."""
-    import signal
-    import threading
-    if threading.current_thread() is not threading.main_thread():
-        return call(*args, timeout=timeout, **kwargs)
-    previous = signal.getsignal(signal.SIGALRM)
-    def expired(*_): raise TimeoutError('presupuesto de llamada agotado')
-    signal.signal(signal.SIGALRM, expired)
-    signal.setitimer(signal.ITIMER_REAL, timeout)
-    try: return call(*args, timeout=timeout, **kwargs)
-    finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-        signal.signal(signal.SIGALRM, previous)

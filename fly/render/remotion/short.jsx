@@ -1,4 +1,3 @@
-import { CinemaScene } from './cinema.jsx';
 import React, { useEffect, useState } from 'react';
 import { AbsoluteFill, Img, OffthreadVideo, Sequence, useCurrentFrame, interpolate, Easing, spring, delayRender, continueRender, cancelRender } from 'remotion';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
@@ -145,7 +144,6 @@ function Graphic({ graphic, words, facts, prompts, frames, match }) {
 
 function Scene({ scene, photos, clips, words, facts, prompts, frames, match }) {
   const frame = useCurrentFrame();
-  if (scene.composition) return <CinemaScene scene={scene} photos={photos} clips={clips} words={words} facts={facts} match={match} frames={frames}/>;
   const motionGraphic = (scene.graphics ?? []).find(g => MOTION_KINDS.includes(g.kind));
   return <AbsoluteFill style={{ background: backgroundFor(motionGraphic), overflow: 'hidden' }}>
     {(scene.layers ?? []).map((layer, index) => <Photo key={index} photo={photos[layer.asset]} layer={{...layer,focusEffect:layer.focusEffect ?? (['focus','defocus'].includes(scene.transition)?scene.transition:'none')}} frames={frames} />)}
@@ -170,7 +168,7 @@ function Captions({ page, words, tweaks = {} }) {
   const fontScale = tweaks.fontScale ?? 1;
   return <div style={{ position: 'absolute', left: 64, right: 64, bottom: tweaks.captionBottom ?? 520, minHeight: 160, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'center', gap: '0 16px', textAlign: 'center', fontSize: 64 * fontScale, lineHeight: 1.22,
     color: CAPTION_FILL, WebkitTextStroke: '3px #000', paintOrder: 'stroke fill', textShadow: '0 4px 8px #000', background: '#101412cc', padding: '18px 28px', borderRadius: 18 }}>
-    {page.words.map(w => { const on = frame >= frameAt(w.start - page.start) ? 1 : 0; return <span key={w.index} style={{ display: 'inline-block', overflow: 'hidden', maxWidth: '100%' }}><span style={{ display: 'inline-block', maxWidth: '100%', transform: `translateY(${(1 - on) * 110}%)`, opacity: on, overflowWrap: 'anywhere' }}>{words[w.index].word}</span></span>; })}
+    {page.words.map(w => { const on = frame >= frameAt(w.start - page.start) ? 1 : 0; return <span key={w.index} style={{ display: 'inline-block', overflow: 'hidden', maxWidth: '100%' }}><span style={{ display: 'inline-block', transform: `translateY(${(1 - on) * 110}%)`, opacity: on, overflowWrap: 'anywhere' }}>{words[w.index].word}</span></span>; })}
   </div>;
 }
 

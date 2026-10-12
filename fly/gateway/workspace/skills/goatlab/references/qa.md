@@ -1,11 +1,34 @@
-# QA del montaje producido
+# QA visual de motion graphics (OpenClaw)
 
-Versión 5 valida el plan contra cinema-catalog.json antes del bundle. Comprueba timeline, fragmentos de voz, unidades, procedencia, recursos y máximo dos movimientos distintivos ejecutados. Remotion comprueba el ajuste del contenido cinematográfico dentro de la zona segura usando la fuente local cargada. FFprobe comprueba H.264/AAC, 1080×1920, 30 fps, duración menor de 50 segundos y peso menor de 45 MB.
+Tras el render y antes de Telegram, OpenClaw evalúa calidad profesional cinematográfica.
 
-Render extrae seis fotogramas de apertura, desarrollo y resolución. La cadena GOATLAB_VISION_MODELS hace hasta tres llamadas iniciales de 60 segundos. Cada petición utiliza un contexto nuevo. La respuesta clasifica ok/minor/severe y admite únicamente fontScale (0.8–1) y captionBottom (480–600) para corregir subtítulos. Se permite un render adicional y una llamada de comprobación. Si el defecto no admite esos controles o persiste grave, se retiene el video y continúa la cola. Una caída inicial de visión o defectos menores permiten entregar tras los gates deterministas. Si falla la comprobación de un defecto grave conocido, se retiene.
+## Capa 1 — determinística (script, 10 clips)
 
-productionReport conserva modelos, recursos, fallback, etapas, QA y presencia de gráficos por duración. Los reportes sobreviven a la purga de los archivos temporales y están limitados a 1000 registros. Una muestra de seis fotogramas no sustituye revisar los videos completos del piloto.
+`node scripts/check-motion-frames.mjs [--match=<id>]` valida el sistema carbon-v1
+y genera `public/data/motion-qa-manifest.json` con los frames a revisar por prompt
+(settled = fin de build, mid = mitad de main). Falla si: más de 4 signature moves
+en el banco, prompts sin `design_rationale`, o cualquier error del gate estricto.
 
-Los comandos check-motion-frames y motion-contact-sheet quedan como herramientas del legado. La aprobación de un prompt antiguo no constituye QA del video nuevo.
+## Capa 2 — visión (los 10 clips en 2 mosaicos, no muestra)
 
-La revisión recibe fotogramas aislados a la mitad de resolución, sus tiempos, transcripción y plan. Evalúa evidencia visible: no infiere retraso de audio desde imágenes estáticas. Los titulares y los fragmentos de subtítulos cumplen funciones distintas. La clasificación severe exige un defecto de lectura, recorte, solapamiento bloqueante o incoherencia factual observable; las preferencias estéticas son minor.
+OpenClaw deriva los tiempos del plan que acaba de montar por clip
+(`settled = at + duration * 0.7`, `mid = at + duration * 0.4` por motion graphic) y genera:
+
+`node scripts/motion-contact-sheet.mjs --tag=<matchId> --out=<dir> --shots "clip1.mp4@s,m;..."`
+
+Sale en segundos: `sheet-settled.jpg` + `sheet-mids.jpg` (hasta 12 clips por mosaico).
+La visión evalúa los 10 de una vez: overflow 1080x1920, safe-area (top 220 /
+bottom 420 libres), contraste lima-sobre-carbón, legibilidad de `emphasis_words`,
+subtítulos sin solape, look premium cinematográfico.
+Zoom puntual: si el mosaico marca un clip, `--zoom=<clip.mp4@t>` lo mira a tamaño
+completo en 1 llamada extra. La muestra (hero + 1 azar) queda solo como respaldo
+si el presupuesto de visión aprieta.
+Lo sistemático (tokens, fondos, tamaños) se corrige una vez y vale para los 10;
+lo del clip (nombres largos, 8 filas) solo en su clip (ver Capa 3).
+
+## Capa 3 — auto-ajuste (máx 2 pasadas por clip)
+
+Causa compartida → ajusta `motion-system`/tokens y re-renderiza afectados.
+Causa del clip → `plan.tweaks` (`captionBottom`, `fontScale`, `compact`) y
+re-renderiza ese clip. Si persiste tras 2 pasadas, publica con reporte, nunca
+bloquea los 10 por 1.

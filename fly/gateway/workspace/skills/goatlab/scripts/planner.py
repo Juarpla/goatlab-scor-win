@@ -12,9 +12,7 @@ import hashlib
 import socket
 from pathlib import Path
 
-from common import atomic_json, request_json, bounded_call
-from model_routes import routes
-import cinema
+from common import atomic_json, request_json
 
 MOVES = {"push", "pull", "pan-left", "pan-right", "rise", "drift", "tilt", "hold", "cut-in"}
 MOTION_KINDS = {'form', 'goals', 'clean-sheets', 'head-to-head', 'synthesis'}
@@ -29,7 +27,6 @@ def number(value, low, high, label):
 
 
 def validate(plan, source):
-    if source.get("planVersion") == 5: return cinema.validate(plan, source)
     span, assets, words = source["span"], source["assets"], source["words"]
     if not isinstance(plan, dict) or plan.get("version") not in (1, 2, 3, 4):
         raise ValueError("version debe ser 1, 2, 3 o 4")
@@ -196,8 +193,6 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
     """Narration-grounded fallback with an independent scene/caption timeline."""
     if not source.get('words'):
         raise ValueError('se requiere transcripción antes del montaje')
-    if source.get("planVersion") == 5:
-        return {**cinema.local_plan(source), "model":"local-montage", "fallback":True, "fallbackReason":reason, "attempts":attempts or []}
     span, words, assets = source['span'], source['words'], source.get('assets', [])
     count = max(1, min(64, math.ceil(span/4)))
     scenes=[]
@@ -269,23 +264,18 @@ def local_plan(source, reason="proveedores no disponibles", attempts=None):
             'fallbackReason':reason,'attempts':attempts or []}
 
 
-def create_plan(source, call=request_json, env=None, clock=time.monotonic, logger=None, reject_sink=None):
+def create_plan(source, call=request_json, env=None, clock=time.monotonic, logger=None):
     env = os.environ if env is None else env
     if not source.get("words"):
         raise ValueError("se requiere transcripción antes del montaje")
     guide = (Path(__file__).resolve().parents[1] / "references/creative.md").read_text()
-    if source.get("planVersion") == 5:
-        guide = (Path(__file__).resolve().parents[1] / "references/cinema.md").read_text() + "\n" + json.dumps(cinema.CATALOG)
-    official_root = Path(env.get("GOATLAB_REMOTION_SKILL_DIR", str(Path(__file__).resolve().parents[2]/"remotion-best-practices")))
-    upstream = official_root / 'UPSTREAM'
-    if upstream.exists(): guide += "\nRenderer capabilities follow the pinned official Remotion skill revision: " + upstream.read_text().strip() + ". Use only the supplied executable catalogue; return JSON, not implementation code."
-    planning_source = source
-    if source.get('planVersion') == 5:
-        planning_source = {**source, 'words':[{**word,'index':i} for i,word in enumerate(source['words'])],
-            'phrases':[{'start':scene['start'],'end':scene['end'],'wordStart':scene['wordStart'],'wordEnd':scene['wordEnd'],
-                        'text':' '.join(word['word'] for word in source['words'][scene['wordStart']:scene['wordEnd']])}
-                       for scene in cinema.local_plan(source)['scenes']]}
-    models = routes(env)
+    models = list(dict.fromkeys([
+        env.get("OPENCODE_GO_MODEL", "deepseek-v4.1-flash"),
+        env.get("OPENCODE_GO_FALLBACK_MODEL", "mimo-v2.6-flash"),
+    ]))
+    if not env.get("OPENCODE_GO_API_KEY"):
+        return local_plan(source, "configuración del proveedor no disponible")
+    url = env.get("OPENCODE_GO_BASE_URL", "https://opencode.ai/zen/go/v1").rstrip("/") + "/chat/completions"
     errors, attempts = [], []
     started = clock()
     # No Telegram identifiers or credentials enter provider routing headers.
@@ -293,27 +283,23 @@ def create_plan(source, call=request_json, env=None, clock=time.monotonic, logge
     session = str(uuid.uuid5(uuid.NAMESPACE_URL, 'goatlab:edit:'+str(identity)))
     per_call = max(1,min(90,int(env.get('EDIT_PLAN_TIMEOUT_SECONDS','90'))))
     budget = 240
-    def note(model, status, at, http=None, reason=None):
-        item={'model':model,'stage':'planning','status':status,'durationMs':round((clock()-at)*1000),'httpStatus':http,'reason':reason}
+    def note(model, status, at, http=None):
+        item={'model':model,'stage':'planning','status':status,'durationMs':round((clock()-at)*1000),'httpStatus':http}
         attempts.append(item)
         if logger: logger(item)
-    for index, route in enumerate(models):
-        model = route["id"]
-        if not route["key"]:
-            note(model,"unconfigured",clock(),reason="credencial ausente")
-            continue
-        messages = [{"role": "system", "content": guide}, {"role": "user", "content": json.dumps(planning_source, ensure_ascii=False)}]
-        for attempt in range(1):
-            remaining = budget - (clock()-started)
+    for index, model in enumerate(models):
+        messages = [{"role": "system", "content": guide}, {"role": "user", "content": json.dumps(source, ensure_ascii=False)}]
+        for attempt in range(2):
+            remaining = budget - (clock()-started) - (60 if index==0 and len(models)>1 else 0)
             if remaining <= 0:
                 errors.append(f'{model}: presupuesto de planificación agotado'); break
             content = ''
             at = clock()
             try:
-                result = bounded_call(call, route["url"], {"model": route["model"], "messages": messages, "max_tokens": 6000, "response_format": {"type":"json_object"}, **({"thinking":{"type":"disabled"}} if route["id"].startswith("opencode-go/") else {})},
-                              {"Authorization": "Bearer " + route["key"],
+                result = call(url, {"model": model, "messages": messages, "max_tokens": 14000},
+                              {"Authorization": "Bearer " + env["OPENCODE_GO_API_KEY"],
                                'User-Agent':'GoatLab/2.0', 'x-opencode-session':session},
-                              timeout=min(per_call,remaining/max(1,sum(bool(r["key"]) for r in models[index:]))))
+                              timeout=min(per_call,remaining))
                 choice = result["choices"][0]
                 if choice.get("finish_reason") == "length":
                     raise ValueError("plan truncado")
@@ -322,8 +308,7 @@ def create_plan(source, call=request_json, env=None, clock=time.monotonic, logge
                 note(model,'ok',at,200)
                 return {**plan, "model": model, 'attempts':attempts}
             except ValueError as error:
-                if reject_sink and content: reject_sink(model, content)
-                note(model,'validation',at,200,str(error))
+                note(model,'validation',at,200)
                 errors.append(f"{model}: {error}")
                 messages.append({"role": "assistant", "content": content or "{}"})
                 messages.append({"role": "user", "content": f"Corrige el JSON completo. Error de validación: {error}"})
@@ -350,14 +335,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True)
     parser.add_argument("--out", required=True)
-    parser.add_argument("--local", action="store_true")
     args = parser.parse_args()
     try:
-        source=json.loads(Path(args.input).read_text())
-        plan=local_plan(source, 'ajuste de texto del render') if args.local else create_plan(source,
-                    logger=lambda item: print('planner: '+json.dumps(item),file=sys.stderr),
-                    reject_sink=lambda model,content: atomic_json(Path(args.out).parent/('rejected-'+model.replace('/','-')+'.json'), {'model':model,'response':content}))
-        atomic_json(args.out,plan)
+        atomic_json(args.out, create_plan(json.loads(Path(args.input).read_text()),
+                    logger=lambda item: print('planner: '+json.dumps(item),file=sys.stderr)))
     except Exception as error:
         print(str(error) if isinstance(error, ValueError) else type(error).__name__, file=sys.stderr)
         sys.exit(1)

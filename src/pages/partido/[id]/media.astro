@@ -15,7 +15,7 @@ const statusLabel = !bank ? 'Sin banco' : bank.bankStatus === 'complete' ? 'Comp
     <a class="back" href={`/partido/${encodeURIComponent(id)}/`}>Volver al análisis del partido</a>
     <h1>{bank ? bank.match : id}<br/><span>banco de medios</span></h1>
     {bank && <nav aria-label="Contenido del encuentro">
-      {Object.entries(CONTENT_CATEGORIES).filter(([key]) => key !== 'motion-prompts').map(([key, value]) => <a href={contentUrl(bank.matchId, key)}>{value.label}</a>)}
+      {Object.entries(CONTENT_CATEGORIES).map(([key, value]) => <a href={contentUrl(bank.matchId, key)}>{value.label}</a>)}
       <a href={`/partido/${encodeURIComponent(bank.matchId)}/media`} aria-current="page">Media</a>
     </nav>}
     {!bank ? <section class="pending"><h2>Contenido en preparación</h2><p>Todavía no hay banco de medios para este partido.</p></section> : <>

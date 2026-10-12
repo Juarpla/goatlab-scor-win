@@ -64,7 +64,7 @@ Un tema estadístico explícito sin datos puede mostrar Datos no disponibles. No
 Ejemplo:
 ```json
 {"version":4,"scenes":[{"start":0,"end":6,"transition":"fade","layers":[],
-"graphics":[{"kind":"goals","motionPromptNumber":2,"factIds":["home.gf","away.gf"],
+"graphics":[{"kind":"goals","motionPromptNumber (1-30, no repetir el mismo Nº entre escenas sin reuseJustification; alterna editorial/statistical, nunca dos statistical seguidos)":2,"factIds":["home.gf","away.gf"],
 "wordStart":0,"wordEnd":4,"at":0.5,"duration":5.5}]}]}
 ```
 
@@ -80,5 +80,3 @@ opcionales usan 1–6 palabras mediante wordStart/wordEnd. El motor aporta marca
 música, subtítulos y cierre. Los planes guardados 1–3 siguen aceptados.
 
 Calidad: tras el render aplica el gate visual de `references/qa.md` (capa 1 determinística a los 10 clips, capa 2 visión en muestra hero + 1 azar, capa 3 auto-ajuste máx 2 pasadas).
-
-Límite legado: máximo dos signature moves distintos por video. El respaldo debe validarse con la misma regla. Para versión 5 consulta cinema.md; se cuenta cada movimiento distintivo ejecutado.

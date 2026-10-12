@@ -1,7 +1,8 @@
 // GoatLab gateway on Fly (app goatlab-gateway).
 // No secrets in this file: sensitive values are ${VAR} injected as Fly secrets.
-// model-config.mjs applies GOATLAB_AGENT_MODELS at each boot. Legacy model
-// selectors remain available to older content generators.
+// OPENCODE_GO_MODEL and OPENCODE_GO_FALLBACK_MODEL are model ids (no provider
+// prefix). start.sh defaults them when the Fly secret is unset.
+// See fly/gateway/fly.toml and `fly secrets set`.
 {
   gateway: {
     mode: "local",
@@ -50,16 +51,13 @@
   models: {
     mode: "merge",
     providers: {
-      agnes: { baseUrl: "https://apihub.agnes-ai.com/v1", apiKey: "${AGNES_API_KEY}", api: "openai-completions", models: [{ id: "agnes-3.0-flash", name: "Agnes 3.0 Flash", input: ["text"] }] },
-      mistral: { baseUrl: "https://api.mistral.ai/v1", apiKey: "${MISTRAL_API_KEY}", api: "openai-completions", models: [{ id: "mistral-small-2603", name: "Mistral Small 4", input: ["text", "image"] }] },
       "opencode-go": {
         baseUrl: "https://opencode.ai/zen/go/v1",
         apiKey: "${OPENCODE_GO_API_KEY}",
         api: "openai-completions",
-        headers: { "x-opencode-session": "goatlab-gateway", "User-Agent": "GoatLab-Gateway/3.0" },
         models: [
-          { id: "mimo-v2.6-flash", name: "MiMo V2.6 Flash", input: ["text", "image"] },
-          { id: "deepseek-v4.1-flash", name: "DeepSeek V4.1 Flash", input: ["text", "image"] },
+          { id: "${OPENCODE_GO_MODEL}", name: "${OPENCODE_GO_MODEL}" },
+          { id: "${OPENCODE_GO_FALLBACK_MODEL}", name: "${OPENCODE_GO_FALLBACK_MODEL}" },
         ],
       },
     },

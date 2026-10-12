@@ -1,5 +1,4 @@
 """Validated public content with a bounded cache; a series keeps its own snapshot."""
-import hashlib
 import json
 import os
 import time
@@ -56,7 +55,6 @@ class ContentClient:
         self.base = (os.environ.get('GOATLAB_CONTENT_BASE_URL', 'https://goatlab.win') if base is None else base).rstrip('/')
         self.fetch = fetch or self.download
         self.clock = clock
-        self.sources = {}
 
     def download(self, url):
         request = urllib.request.Request(url, headers={'User-Agent':'GoatLab-Content/1.0 (+https://goatlab.win)', 'Accept':'application/json'})
@@ -79,14 +77,11 @@ class ContentClient:
                 while files and size + len(json.dumps(data).encode()) > 3_000_000:
                     old = files.pop(0); size -= old.stat().st_size; old.unlink()
                 atomic_json(cache, data)
-                self.sources[key] = {"method":"http","url":self.base+path,"fetchedAt":self.clock()}
                 return data
             except (OSError, ValueError, TypeError): pass
         try:
             data = json.loads(cache.read_text())
-            if cache.stat().st_mtime >= self.clock()-86400 and validator(data):
-                self.sources[key] = {"method":"cache","url":self.base+path,"fetchedAt":cache.stat().st_mtime}
-                return data
+            if cache.stat().st_mtime >= self.clock()-86400 and validator(data): return data
         except (OSError, ValueError): pass
         return None
 
@@ -114,23 +109,8 @@ class ContentClient:
             except (OSError, ValueError): pass
         return rows
 
-    def production(self, match_id):
-        def valid_context(d):
-            return isinstance(d,dict) and d.get("version")==1 and d.get("matchId")==match_id and isinstance(d.get("facts"),list) and isinstance(d.get("hash"),str)
-        key=f"{match_id}-production"
-        data = self.cached(key, valid_context, f"/partido/{quote(match_id,safe='')}/production.json")
-        if not data:
-            try:
-                path=self.repo/'public/data/production-context'/f'{match_id}.json'
-                data=json.loads(path.read_text())
-                if not valid_context(data): return None
-                self.sources[key]={"method":"repository","path":str(path),"fetchedAt":path.stat().st_mtime}
-            except (OSError,ValueError): return None
-        return {**data,"retrieval":self.sources.get(key,{}),"snapshotHash":hashlib.sha256(json.dumps(data,sort_keys=True,ensure_ascii=False).encode()).hexdigest()}
-
     def package(self, match_id):
         script = self.get(match_id, 'scripts')
         if not script: raise ValueError('no hay diez guiones válidos para el partido')
-        content = {c:self.get(match_id, c) for c in KINDS if c != 'motion-prompts' or os.environ.get('GOATLAB_CINEMA_V5') != '1'}
-        production = self.production(match_id)
-        return {**script, 'content':content, 'production':production, 'sources':dict(self.sources), 'missingCategories':[c for c,d in content.items() if d is None]}
+        content = {c:self.get(match_id, c) for c in KINDS}
+        return {**script, 'content':content, 'missingCategories':[c for c,d in content.items() if d is None]}

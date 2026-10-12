@@ -31,6 +31,4 @@ jobs:
       - run: pnpm test
       - run: pnpm run lint:shorts
       - run: pnpm run lint:prompts
-      - name: Bundle Remotion reproducible
-        run: node fly/render/remotion-build.mjs
       - run: pnpm run build

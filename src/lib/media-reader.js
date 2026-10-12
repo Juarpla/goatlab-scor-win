@@ -162,7 +162,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
   // Repeated or mismatched objects cannot inflate availability.
   const distinct = rows => rows.filter((row, i) => rows.findIndex(other => other.sha256 === row.sha256 || other.id === row.id) === i);
   const photos = distinct(assets), videos = distinct(clips).filter(clip => photos.some(photo => hash(photo.url) === clip.referenceHash));
-  const bank = { ...buildManifest({ match, assets: photos }), clips: videos, facts: content.production?.facts ?? editingFacts(match), motionPrompts: motionPack?.prompts ?? [],
+  const bank = { ...buildManifest({ match, assets: photos }), clips: videos, facts: motionPack?.facts ?? editingFacts(match), motionPrompts: motionPack?.prompts ?? [],
     bankVersion: 2, bankStatus: 'complete', contentFingerprint: fingerprint, readerVersion: 1, legacyArtifacts,
     storageVerifiedAt: new Date(clock()).toISOString(), generatedAt: new Date(clock()).toISOString() };
   const complete = bankComplete(bank, { matchId, fingerprint, now: clock() });

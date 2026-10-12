@@ -1,4 +1,3 @@
-import {validateCinema} from './cinema-plan.js';
 /** Resolution-aware motion, shared by Remotion and legacy plan adapters. */
 import { FRAME_W, FRAME_H, FPS, MAX_FRAMES } from './short-format.js';
 import { MOTION_KINDS, resolveMotion } from './motion-data.js';
@@ -38,18 +37,12 @@ export function boundedMotion(layer, photo) {
 /** Validate the final immutable render input, including old plan versions 1–3. */
 export function compositionProps({ frames, photos = [], clips = [], words, plan, facts = [], motionPrompts = [], match = '' }) {
   if (!Number.isInteger(frames) || frames < 1 || frames > MAX_FRAMES) throw new Error('duración fuera de límite');
-  if (!words?.length || !plan?.scenes?.length || ![1,2,3,4,5].includes(plan.version)) throw new Error('se requiere transcripción y plan de edición');
+  if (!words?.length || !plan?.scenes?.length || ![1,2,3,4].includes(plan.version)) throw new Error('se requiere transcripción y plan de edición');
   const span = frames / FPS - 3;
-  if (plan.version === 5) validateCinema(plan,{span,words,photos,clips,facts});
   let cursor = 0;
   for (const scene of plan.scenes) {
     if (!Number.isFinite(scene.start) || !Number.isFinite(scene.end) || Math.abs(scene.start - cursor) > .03 || scene.end <= scene.start || scene.end > span + .03) throw new Error('timeline fuera de rango');
     cursor = scene.end;
-    if (plan.version === 5) {
-      for (const id of scene.factIds ?? []) if (!facts.some(f=>f.id===id && Number.isFinite(f.value))) throw new Error('hecho inexistente');
-      if (scene.asset != null && !photos[scene.asset]) throw new Error('imagen inexistente');
-      if (scene.clip != null && (!clips[scene.clip] || clips[scene.clip].duration < scene.end-scene.start)) throw new Error('clip inexistente o corto');
-    }
     for (const layer of scene.layers ?? []) if (!Number.isInteger(layer.asset) || !photos[layer.asset]) throw new Error('imagen inexistente');
     for (const layer of scene.clips ?? []) {
       const clip = clips[layer.clip], offset = layer.offset ?? 0, duration = layer.duration ?? scene.end - scene.start;

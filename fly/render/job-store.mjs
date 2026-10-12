@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { closeSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { closeSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 export function jobKey(body) {
@@ -38,14 +38,6 @@ export class JobStore {
     const fd = openSync(temp, 'w');
     try { writeFileSync(fd, JSON.stringify(job)); fsyncSync(fd); } finally { closeSync(fd); }
     renameSync(temp, target);
-    if (job.productionReport) {
-      const reports = join(this.dir,'production-reports'); mkdirSync(reports,{recursive:true});
-      const path = join(reports,`${job.id}.json`);
-      writeFileSync(path+'.tmp',JSON.stringify(job.productionReport)); renameSync(path+'.tmp',path);
-      const records=readdirSync(reports).filter(f=>f.endsWith('.json')).sort((a,b)=>statSync(join(reports,a)).mtimeMs-statSync(join(reports,b)).mtimeMs);
-      // Reports are compact and survive job TTL; cap disk usage by count.
-      while(records.length>1000) rmSync(join(reports,records.shift()),{force:true});
-    }
     this.ledger?.save(job);
     const directory = openSync(this.dir, 'r');
     try { fsyncSync(directory); } finally { closeSync(directory); }
@@ -74,7 +66,7 @@ export class JobStore {
     }
     rmSync(join(this.dir, job.id), { recursive: true, force: true });
     const kept = {};
-    for (const key of ['id', 'key', 'chatId', 'matchId', 'requestId', 'variant', 'status', 'cancelled', 'createdAt', 'updatedAt', 'expiresAt', 'messageId', 'stages', 'audioHash', 'renderEngine', 'voiceRate', 'originalVoiceSeconds', 'planModel', 'planningFallback', 'duration', 'sizeMb', 'seconds', 'productionReport']) kept[key] = job[key];
+    for (const key of ['id', 'key', 'chatId', 'matchId', 'requestId', 'variant', 'status', 'cancelled', 'createdAt', 'updatedAt', 'expiresAt', 'messageId', 'stages', 'audioHash', 'renderEngine', 'voiceRate', 'originalVoiceSeconds', 'planModel', 'planningFallback', 'duration', 'sizeMb', 'seconds']) kept[key] = job[key];
     kept.retainUntil = job.retainUntil ?? this.clock() + 86400_000;
     for (const key of Object.keys(job)) delete job[key];
     Object.assign(job, kept); this.save(job);
