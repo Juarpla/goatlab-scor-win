@@ -48,7 +48,9 @@ const CLUB_PREFIXES = new Set(['fc', 'cf', 'cd', 'ca', 'cr', 'rc', 'cs', 'afc', 
 const IGNORABLE_SUFFIXES = new Set(['fc', 'cf', 'afc', 'ud', 'cd']);
 /** Clave canónica para dedup y comparación: sin prefijos legales ni sufijos genéricos. */
 export function canonicalClubKey(name) {
-  const tokens = normalize(name).split(' ').filter(Boolean);
+  const aliases = {'racing club de lens':'lens','rc lens':'lens','sporting clube de portugal':'sporting cp'};
+  const normalized = normalize(name);
+  const tokens = (aliases[normalized] ?? normalized).split(' ').filter(Boolean);
   let start = 0;
   while (start < tokens.length && CLUB_PREFIXES.has(tokens[start])) start += 1;
   let end = tokens.length;
@@ -84,16 +86,19 @@ export function sameClub(a, b) {
  * Fuente: teams.json (scripts/build-teams.mjs). El pipeline resuelve por ID
  * antes que por nombre; el nombre queda como último recurso.
  */
-export function resolveCanonical(catalog, name) {
+export function resolveCanonical(catalog, name, {provider, providerId, competition} = {}) {
   const key = normalize(name);
   if (!key) return null;
   const teams = catalog?.teams ?? catalog ?? {};
-  if (teams[key]) return { key, ...teams[key] };
-  for (const [k, entry] of Object.entries(teams)) {
-    if (entry?.name && sameClub(entry.name, name)) return { key: k, ...entry };
-    if (Array.isArray(entry?.aliases) && entry.aliases.some(a => sameClub(a, name))) return { key: k, ...entry };
+  const entries = Object.entries(teams).filter(([,entry]) => !competition || entry.leagues?.includes(competition));
+  const unique = candidates => candidates.length === 1 ? {key:candidates[0][0], ...candidates[0][1]} : null;
+  if (provider && providerId != null) {
+    const byId = entries.filter(([,entry]) => String(entry[provider]?.id ?? entry[provider]) === String(providerId));
+    if (byId.length) return unique(byId);
   }
-  return null;
+  const exact = entries.filter(([slug,entry]) => normalize(slug)===key || [entry.name,entry.display,...(entry.aliases??[])].some(value => normalize(value)===key));
+  if (exact.length) return unique(exact);
+  return unique(entries.filter(([,entry]) => [entry.name,...(entry.aliases??[])].some(value => sameClub(value,name))));
 }
 export function providerTeamId(catalog, name, provider) {
   const hit = resolveCanonical(catalog, name);

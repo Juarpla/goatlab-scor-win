@@ -1,5 +1,5 @@
 /** Cliente R2 mínimo (stdlib, sin dependencias) para el banco de medios.
- *  Estructura: partidos/<matchId>/<0-3.jpg|png,clip-0-1.mp4>.
+ *  Estructura: partidos/<matchId>/<0-3.jpg|png,clip-1-2.mp4>.
  *  Env: R2_ACCOUNT_ID (o CLOUDFLARE_ACCOUNT_ID), R2_ACCESS_KEY_ID,
  *  R2_SECRET_ACCESS_KEY, R2_BUCKET (defecto goatlab), R2_PUBLIC_BASE.
  *  Nunca imprime credenciales: los comandos informativos devuelven JSON sin secretos. */
@@ -47,11 +47,19 @@ async function req(method, key, { body, contentType, headers: extra = {} } = {})
   return r;
 }
 
-export async function put(key, bytes, contentType, meta = {}) {
+export async function put(key, bytes, contentType, meta = {}, condition = {}) {
   const metaHeaders = Object.fromEntries(Object.entries(meta).filter(([, v]) => v != null).map(([k, v]) => [`x-amz-meta-${k}`, String(v).slice(0, 1500)]));
-  const r = await req('PUT', key, { body: bytes, contentType, headers: metaHeaders });
+  const r = await req('PUT', key, { body: bytes, contentType, headers: {...metaHeaders,...condition} });
   if (!r.ok) throw new Error(`R2 PUT ${r.status}: ${(await r.text()).slice(0, 160)}`);
   return { key, bytes: bytes.length };
+}
+export async function get(key, limit = 64_000_000) {
+  const response=await req('GET',key);
+  if(!response.ok)throw new Error(`R2 GET ${response.status}`);
+  if(Number(response.headers.get('content-length'))>limit)throw new Error('R2 objeto demasiado grande');
+  const chunks=[];let length=0;
+  for await(const chunk of response.body) {length+=chunk.length;if(length>limit)throw new Error('R2 objeto demasiado grande');chunks.push(Buffer.from(chunk));}
+  return Buffer.concat(chunks);
 }
 export async function exists(key) {
   const r = await req('HEAD', key);
@@ -59,7 +67,7 @@ export async function exists(key) {
   if (!r.ok) throw new Error(`R2 HEAD ${r.status}`);
   const meta = {};
   r.headers.forEach((v, k) => { if (k.startsWith('x-amz-meta-')) meta[k.slice(11)] = v; });
-  return { key, bytes: Number(r.headers.get('content-length') || 0), meta };
+  return { key, bytes: Number(r.headers.get('content-length') || 0), meta, etag:r.headers.get('etag') };
 }
 export async function del(key) {
   const r = await req('DELETE', key);

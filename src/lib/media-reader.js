@@ -29,6 +29,7 @@ async function cacheBytes(dir) {
 
 export async function readMediaBank({ match, content = {}, dir, env = process.env, fetchImpl = fetch, clock = Date.now }) {
   const matchId = match?.webId ?? match?.matchId ?? match?.id;
+  if (/^(?:fd|af|bz)-[0-9]+$/.test(matchId??''))throw new Error('identidad de equipos incompleta; falta código descriptivo');
   if (!ID.test(matchId ?? '')) throw new Error('partido inválido');
   match = { ...match, webId: matchId };
   await mkdir(dir, { recursive: true });
@@ -104,7 +105,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
     const row = compatible && rows?.find(r => {
       try { return new URL(r.url).pathname.split('/').at(-1) === file; } catch { return false; }
     });
-    if (!row || row.source !== 'agnes' || row.promptHash !== hash(expectedPrompt || '') || row.model !== model || !(await cached(file, row.sha256))) return;
+    if (!row || row.source !== 'agnes' || (kind==='video'?!videoPrompts.some(prompt=>hash(prompt.prompt)===row.promptHash):row.promptHash !== hash(expectedPrompt || '')) || row.model !== model || !(await cached(file, row.sha256))) return;
     if (kind === 'image' && !assetErrors(row).length) assets.push(row);
     if (kind === 'video' && assets.some(a => hash(a.url) === row.referenceHash)) clips.push(row);
   };
@@ -143,11 +144,17 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
       }
     }
     for (let ordinal = 0; ordinal < 5 && clips.length < CLIPS_PER_MATCH && videoPrompts.length; ordinal++) {
-      const file = `clip-${ordinal}.mp4`, prompt = videoPrompts[ordinal % videoPrompts.length].prompt;
+      const file = `clip-${ordinal}.mp4`;
+      let prompt=videoPrompts[ordinal % videoPrompts.length].prompt;
       const model = content['video-prompts'].generationModel ?? content['video-prompts'].model ?? 'agnes-video-2.5-flash';
       try {
         const meta = await head(file);
         if (!meta) continue;
+        if(meta.publicationindex!==undefined) {
+          const attempt=Number(meta.attemptordinal);
+          if(![1,2].includes(ordinal)||Number(meta.publicationindex)!==ordinal||!Number.isInteger(attempt)||attempt<0||attempt>4||!meta.attemptid)throw new Error('validation');
+          prompt=videoPrompts[attempt % videoPrompts.length].prompt;
+        }
         if (meta.prompthash !== hash(prompt) || meta.model !== model || !digest(meta.sha256) || !assets.some(a => hash(a.url) === meta.referencehash)
           || Number(meta.width) !== 720 || Number(meta.height) !== 1280 || !Number.isFinite(Number(meta.duration)) || Number(meta.duration) < 4 || Number(meta.duration) > 12.5) throw new Error('validation');
         await download(file, meta, 32_000_000, 'video/');

@@ -35,7 +35,7 @@ function inputEvidence(bank, images, videos, imageModel, videoModel, mode, match
     if (!/^[0-4]$/.test(suffix)) return false;
     const ordinal = Number(suffix), file = `clip-${ordinal}.mp4`;
     if ((clip.file !== undefined && clip.file !== file) || new URL(clip.url).pathname.split('/').at(-1) !== file
-      || clip.promptHash !== hash(videos.prompts[ordinal % videos.prompts.length].prompt) || clip.model !== videoModel) return false;
+      || !videos.prompts.some(prompt=>clip.promptHash===hash(prompt.prompt)) || clip.model !== videoModel) return false;
   }
   return true;
 }

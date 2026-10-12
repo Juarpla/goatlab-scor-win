@@ -50,14 +50,14 @@ export function slugify(name) {
 
 export function matchIn(name, candidates, claimed = null) {
   const sameLeague = candidates.filter(c => c.league === name.league);
-  const pools = name.league ? [sameLeague, candidates] : [candidates];
+  const pools = name.league ? [sameLeague] : [candidates];
   for (const pool of pools) {
-    const exact = pool.find(c => normalize(c.name) === normalize(name.name));
-    if (exact) return exact;
+    const exact = pool.filter(c => normalize(c.name) === normalize(name.name));
+    if (exact.length) return exact.length===1?exact[0]:null;
     // El puente tolerante no roba nombres exactos de otra fila de la liga.
-    const hit = pool.find(c => (sameClub(c.name, name.name) || sameTeam(c.name, name.name))
+    const hits = pool.filter(c => (sameClub(c.name, name.name) || sameTeam(c.name, name.name))
       && !(claimed?.has(`${name.league}|${normalize(c.name)}`) && normalize(c.name) !== normalize(name.name)));
-    if (hit) return hit;
+    if (hits.length === 1) return hits[0];
   }
   return null;
 }

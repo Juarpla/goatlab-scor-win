@@ -145,3 +145,27 @@ una hora conserva el partido. Una corrección a NS/LIVE/PST invalida el ancla.
 Media reclama primero el cierre compartido y borra el prefijo R2 exacto, con `/`
 final; sólo un éxito remoto confirmado autoriza el borrado local y su publicación.
 Resultados y evaluación histórica quedan fuera de este mantenimiento.
+
+## Identidad y nombres de publicación
+
+Los IDs del proveedor (`fd-*`, `af-*`, `bz-*`) siguen identificando fixtures,
+pero no son ubicaciones admitidas para nuevas generaciones o publicaciones.
+El catálogo resuelve primero IDs de equipo del proveedor dentro de la competición;
+los alias deben tener un único propietario. Una identidad ambigua detiene la
+publicación hasta corregir el catálogo.
+
+`ordinal` identifica uno de los cinco intentos de vídeo. El campo privado opcional
+`publicationIndex` asigna mediante CAS una de las dos posiciones de publicación:
+`clip-1.mp4` o `clip-2.mp4`. Los metadatos R2 `attemptordinal`, `attemptid` y
+`publicationindex` permiten verificar ambos conceptos sin cambiar el banco público.
+La asignación sobrevive a fallos de PUT, HEAD o reinicios y no consume cuota.
+
+La migración manual `media-naming-migration` comparte exclusión con el workflow de
+media. Un lease privado `maintenance` también bloquea reservas, consultas y
+publicaciones de otros procesos. La migración copia y comprueba los bytes y
+metadatos, cambia el estado por CAS y publica las referencias antes de retirar
+los objetos originales. `generationMatchId` y `referenceHash` conservan la
+identidad de las solicitudes originales; `publicationReferenceHash` registra la
+referencia actual cuando cambia la URL. `previousObjectKey` permite retomar la
+limpieza tras una interrupción. No se vuelven a solicitar recursos a Agnes ni se
+reinician intentos, cuotas o diagnósticos.

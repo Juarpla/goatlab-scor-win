@@ -39,7 +39,14 @@ export const slotKey = ({matchId, kind, ordinal}) => `${matchId}:${kind}:${ordin
 
 export function validateAgnesState(state) {
   if (!object(state) || state.version !== 1 || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(state.revision) || !isoUtc(state.updatedAt) || !object(state.limits) || !object(state.cutover) || !Array.isArray(state.cutover.legacyMatchIds)) throw new Error('autoridad Agnes inválida');
-  if (!keys(state,['version','revision','updatedAt','cutover','limits','quota','rates','matches','slots','attempts','runs','summaries','usage','activeVideoAttemptId','failureEvents']) || !keys(state.cutover,['atMs','legacyMatchIds']) || !keys(state.limits,['images','video_seconds','imageRpm','videoStartIntervalMs']) || !keys(state.rates,['imageStarts','imageThrottleUntil','videoNextAt']) || !keys(state.usage,['opsA','opsB'])) throw new Error('campos privados Agnes no admitidos');
+  if (!keys(state,['version','revision','updatedAt','cutover','limits','quota','rates','matches','slots','attempts','runs','summaries','usage','activeVideoAttemptId','failureEvents','maintenance']) || !keys(state.cutover,['atMs','legacyMatchIds']) || !keys(state.limits,['images','video_seconds','imageRpm','videoStartIntervalMs']) || !keys(state.rates,['imageStarts','imageThrottleUntil','videoNextAt']) || !keys(state.usage,['opsA','opsB'])) throw new Error('campos privados Agnes no admitidos');
+  if(state.maintenance!==undefined && state.maintenance!==null && (!keys(state.maintenance,['owner','untilMs']) || !uuid(state.maintenance.owner) || !finite(state.maintenance.untilMs))) throw new Error('exclusión de mantenimiento Agnes inválida');
+  const positions=new Set();
+  for (const row of Object.values(state.slots)) if(row.publicationIndex!==undefined) {
+    const key=row.matchId+':'+row.publicationIndex;
+    if(row.kind!=='video'||![1,2].includes(row.publicationIndex)||positions.has(key))throw new Error('posición de publicación Agnes inválida');
+    positions.add(key);
+  }
   for (const name of ['quota','rates','matches','slots','attempts','runs','summaries','usage']) if (!object(state[name])) throw new Error('autoridad Agnes inválida');
   for (const name of ['images','video_seconds','imageRpm','videoStartIntervalMs']) if (!finite(state.limits[name]) || state.limits[name] <= 0) throw new Error('límites Agnes inválidos');
   if (!Number.isSafeInteger(state.limits.images) || !Number.isInteger(state.limits.imageRpm) || state.limits.imageRpm>80 || state.limits.videoStartIntervalMs<12_000) throw new Error('límites Agnes inválidos');
@@ -50,15 +57,17 @@ export function validateAgnesState(state) {
   for (const [key,row] of Object.entries(state.slots)) {
     if (!object(row)) throw new Error('slot Agnes corrupto');
     if (row.state==='retired') {
-      if (!keys(row,['matchId','kind','ordinal','attemptId','state','expiresAtMs']) || key!==slotKey(row) || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.ordinal) || row.ordinal<0 || row.ordinal>=(row.kind==='image'?4:5) || !finite(row.expiresAtMs) || !uuid(row.attemptId) || state.attempts[row.attemptId]?.slotKey!==key || state.attempts[row.attemptId]?.state!=='retired') throw new Error('tombstone Agnes corrupto');
+      if (!keys(row,['matchId','kind','ordinal','attemptId','state','expiresAtMs','generationMatchId','publicationIndex']) || key!==slotKey(row) || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.ordinal) || row.ordinal<0 || row.ordinal>=(row.kind==='image'?4:5) || !finite(row.expiresAtMs) || !uuid(row.attemptId) || state.attempts[row.attemptId]?.slotKey!==key || state.attempts[row.attemptId]?.state!=='retired') throw new Error('tombstone Agnes corrupto');
       continue;
     }
     validateSlotInput(row);
-    if (!keys(row,['matchId','kind','ordinal','promptHash','model','referenceHash','attemptId','state','videoId','expiresAtMs','reservedDay','reservedUnits','refunded','pollNextAtMs','pollLease','uploadClaim'])) throw new Error('campos de slot Agnes no admitidos');
+    if (!keys(row,['matchId','kind','ordinal','promptHash','model','referenceHash','attemptId','state','videoId','expiresAtMs','reservedDay','reservedUnits','refunded','pollNextAtMs','pollLease','uploadClaim','publicationIndex','generationMatchId','publicationReferenceHash'])) throw new Error('campos de slot Agnes no admitidos');
+    if((row.generationMatchId!==undefined&&!id(row.generationMatchId)) || (row.publicationReferenceHash!==undefined&&!digest(row.publicationReferenceHash)))throw new Error('identidad de publicación inválida');
     const attempt=state.attempts[row.attemptId];
     if (key!==slotKey(row) || !uuid(row.attemptId) || !['uncertain','pending','completed','failed','rejected','abandoned'].includes(row.state) || !finite(row.expiresAtMs) || !finite(row.reservedUnits) || !/^\d{4}-\d{2}-\d{2}$/.test(row.reservedDay) || !state.quota[row.reservedDay] || typeof row.refunded!=='boolean' || !finite(row.pollNextAtMs) || (row.videoId!==null && !id(row.videoId)) || (row.state==='pending' && !row.videoId) || (row.state==='rejected' && (!row.refunded || row.videoId)) || !object(attempt) || attempt.slotKey!==key || !Array.isArray(attempt.eventIds) || attempt.state!==row.state || attempt.refunded!==row.refunded) throw new Error('slot Agnes corrupto');
     if (row.pollLease!==null && (!keys(row.pollLease,['owner','untilMs']) || !uuid(row.pollLease.owner) || !finite(row.pollLease.untilMs))) throw new Error('lease Agnes corrupto');
-    if (row.uploadClaim!==null && (!keys(row.uploadClaim,['id','sha256','confirmed','objectKey','sizeBytes']) || !uuid(row.uploadClaim.id) || !digest(row.uploadClaim.sha256) || typeof row.uploadClaim.confirmed!=='boolean'
+    if (row.uploadClaim!==null && (!keys(row.uploadClaim,['id','sha256','confirmed','objectKey','sizeBytes','publicationIndex','previousObjectKey']) || !uuid(row.uploadClaim.id) || !digest(row.uploadClaim.sha256) || typeof row.uploadClaim.confirmed!=='boolean'
+      || (row.uploadClaim.previousObjectKey!==undefined && !/^partidos\/[A-Za-z0-9_-]+\/(?:[0-3]\.(?:png|jpg|webp)|clip-[0-4]\.mp4)$/.test(row.uploadClaim.previousObjectKey))
       || ((row.uploadClaim.objectKey!==undefined || row.uploadClaim.sizeBytes!==undefined) && !validPublication(row,row.uploadClaim)))) throw new Error('subida Agnes corrupta');
   }
   for(const [attemptId,row] of Object.entries(state.attempts)) {
@@ -66,7 +75,7 @@ export function validateAgnesState(state) {
     if(row.diagnostics!==undefined)validateDiagnostics(row.diagnostics);
   }
   if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('single-flight Agnes corrupto');
-  for (const [matchId,row] of Object.entries(state.matches)) if (!id(matchId) || !keys(row,['closed','fenceRevision','expiresAtMs','cleanupConfirmed']) || typeof row.closed!=='boolean' || !finite(row.expiresAtMs) || (row.closed && !uuid(row.fenceRevision))) throw new Error('partido Agnes corrupto');
+  for (const [matchId,row] of Object.entries(state.matches)) if (!id(matchId) || !keys(row,['closed','fenceRevision','expiresAtMs','cleanupConfirmed','redirectTo']) || typeof row.closed!=='boolean' || (row.redirectTo!==undefined&&(!id(row.redirectTo)||!row.closed||!state.matches[row.redirectTo])) || !finite(row.expiresAtMs) || (row.closed && !uuid(row.fenceRevision))) throw new Error('partido Agnes corrupto');
   for(const [runId,row] of Object.entries(state.runs)) if(!uuid(runId) || !keys(row,['matchId','untilMs']) || !finite(row.untilMs) || (row.matchId!==null && !id(row.matchId))) throw new Error('corrida Agnes corrupta');
   for(const [runId,row] of Object.entries(state.summaries)) if(!uuid(runId) || !keys(row,['runId','at','eligible','pending','generated','reused','completed']) || row.runId!==runId || !finite(row.at) || ['eligible','pending','generated','reused','completed'].some(k=>!Number.isSafeInteger(row[k]) || row[k]<0)) throw new Error('resumen Agnes corrupto');
   for(const event of state.failureEvents) if(!keys(event,['eventId','at','hourUTC','stage','httpStatus','matchId']) || !digest(event.eventId) || !finite(event.at) || !Number.isInteger(event.hourUTC) || event.hourUTC<0 || event.hourUTC>23 || !['create','retrieve'].includes(event.stage) || !id(event.matchId) || (event.httpStatus!==null && (!Number.isInteger(event.httpStatus) || event.httpStatus<100 || event.httpStatus>599))) throw new Error('evento Agnes corrupto');
@@ -94,7 +103,7 @@ export function compactAgnesState(state, {nowMs}) {
   let changed=false;
   for (const [key,row] of Object.entries(state.slots)) {
     if (row.state==='retired' || row.expiresAtMs>nowMs-7*86_400_000 || (row.uploadClaim && !row.uploadClaim.confirmed)) continue;
-    state.slots[key]={matchId:row.matchId,kind:row.kind,ordinal:row.ordinal,attemptId:row.attemptId,state:'retired',expiresAtMs:row.expiresAtMs};
+    state.slots[key]={matchId:row.matchId,kind:row.kind,ordinal:row.ordinal,attemptId:row.attemptId,state:'retired',expiresAtMs:row.expiresAtMs,...(row.generationMatchId?{generationMatchId:row.generationMatchId}:{}),...(row.publicationIndex?{publicationIndex:row.publicationIndex}:{})};
     for (const [attemptId,attempt] of Object.entries(state.attempts)) if (attempt.slotKey===key) state.attempts[attemptId]={slotKey:key,state:'retired',refunded:attempt.refunded,eventIds:[]};
     if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
     changed=true;
@@ -108,8 +117,10 @@ function validateSlotInput(input) {
 function pickIdentity(input) { return {matchId:input.matchId,kind:input.kind,ordinal:input.ordinal,promptHash:input.promptHash,model:input.model, ...(input.referenceHash ? {referenceHash:input.referenceHash} : {})}; }
 function sameIdentity(row,input) { return ['promptHash','model','referenceHash'].every(key => row[key] === input[key]); }
 function validPublication(row, value) {
-  const file = row.kind==='image' ? `${row.ordinal}\\.(?:png|jpg|webp)` : `clip-${row.ordinal}\\.mp4`;
-  return typeof value.objectKey==='string' && new RegExp(`^partidos/${row.matchId}/${file}$`).test(value.objectKey)
+  const canonical=value.publicationIndex!==undefined;
+  if(canonical && (row.kind!=='video'||![1,2].includes(value.publicationIndex)||value.publicationIndex!==row.publicationIndex))return false;
+  const file = row.kind==='image' ? `${row.ordinal}\\.(?:png|jpg|webp)` : `clip-${canonical?value.publicationIndex:row.ordinal}\\.mp4`;
+  return typeof value.objectKey==='string' && [row.matchId,row.generationMatchId].filter(Boolean).some(matchId=>new RegExp(`^partidos/${matchId}/${file}$`).test(value.objectKey))
     && Number.isSafeInteger(value.sizeBytes) && value.sizeBytes>0 && value.sizeBytes<=(row.kind==='image'?64_000_000:32_000_000);
 }
 function resultFor(row, reason) { return {canPost:false,reason,...(row ? {state:row.state,attemptId:row.attemptId,videoId:row.videoId ?? null} : {})}; }
@@ -126,7 +137,56 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     if (!id(input.matchId) || !['image','video'].includes(input.kind) || !Number.isInteger(input.ordinal)) throw new Error('slot inválido');
     return state.slots[slotKey(input)];
   };
-  if (operation === 'health') result = {ready:true,version:1};
+  const maintenanceActive=state.maintenance?.untilMs>nowMs;
+  const requireMaintenance=()=>{if(!maintenanceActive||state.maintenance.owner!==input.owner)throw new Error('migración sin exclusión vigente');};
+  if(maintenanceActive && ['reserve','pollclaim','uploadclaim','uploadconfirm','cleanupclaim','cleanupconfirm','heartbeat'].includes(operation) && !input.finished) throw new Error('mantenimiento de nombres en curso; sin peticiones a Agnes');
+  if(operation==='maintenance-lock') {
+    if(!uuid(input.owner))throw new Error('propietario de migración inválido');
+    if(maintenanceActive && state.maintenance.owner!==input.owner || Object.values(state.runs).some(run=>run.untilMs>nowMs))throw new Error('generación o migración en curso');
+    state.maintenance={owner:input.owner,untilMs:nowMs+30*60_000};result=change({locked:true});
+  } else if(operation==='maintenance-unlock') {
+    requireMaintenance();state.maintenance=null;result=change({released:true});
+  } else if(operation==='migrate-match') {
+    requireMaintenance();
+    if(!id(input.from)||!id(input.to)||input.from===input.to)throw new Error('migración de partido inválida');
+    if(state.matches[input.from]?.redirectTo===input.to)result={saved:true};
+    else {
+      if(state.matches[input.to]||Object.values(state.slots).some(row=>row.matchId===input.to))throw new Error('partido destino existente');
+      state.matches[input.to]=state.matches[input.from]??{closed:false,fenceRevision:null,expiresAtMs:0};
+      state.matches[input.from]={closed:true,fenceRevision:input.owner,expiresAtMs:state.matches[input.to].expiresAtMs,redirectTo:input.to};
+      for(const [key,row] of Object.entries(state.slots))if(row.matchId===input.from) {
+        row.generationMatchId??=input.from;row.matchId=input.to;
+        const target=slotKey(row);state.slots[target]=row;delete state.slots[key];
+        for(const attempt of Object.values(state.attempts))if(attempt.slotKey===key)attempt.slotKey=target;
+      }
+      state.cutover.legacyMatchIds=state.cutover.legacyMatchIds.map(value=>value===input.from?input.to:value);
+      for(const event of state.failureEvents)if(event.matchId===input.from)event.matchId=input.to;
+      result=change({saved:true});
+    }
+  } else if(operation==='publication-slot') {
+    if(maintenanceActive && state.maintenance.owner!==input.owner)throw new Error('migración en curso');
+    const row=readSlot();
+    if(!row||row.kind!=='video'||row.state!=='completed')throw new Error('posición sin generación completada');
+    if(row.publicationIndex)result={publicationIndex:row.publicationIndex};
+    else {
+      const used=new Set(Object.values(state.slots).filter(slot=>slot.matchId===row.matchId).map(slot=>slot.publicationIndex));
+      const index=[1,2].find(index=>!used.has(index));
+      if(!index)throw new Error('dos posiciones de clips ya asignadas');
+      row.publicationIndex=index;result=change({publicationIndex:index});
+    }
+  } else if(operation==='relocate-publication') {
+    requireMaintenance();const row=readSlot();
+    if(!row||row.state!=='completed'||!validPublication(row,input)||!digest(input.sha256))throw new Error('publicación migrada inválida');
+    if(row.uploadClaim && row.uploadClaim.sha256!==input.sha256)throw new Error('hash de publicación migrada distinto');
+    if(input.referenceHash!==undefined) {if(!digest(input.referenceHash))throw new Error('referencia migrada inválida');row.publicationReferenceHash=input.referenceHash;}
+    const previousObjectKey=row.uploadClaim?.previousObjectKey??row.uploadClaim?.objectKey??input.sourceKey;
+    row.uploadClaim={...(previousObjectKey&&previousObjectKey!==input.objectKey?{previousObjectKey}:{}),id:row.uploadClaim?.id??'upload-'+input.sha256,sha256:input.sha256,confirmed:true,objectKey:input.objectKey,sizeBytes:input.sizeBytes,...(input.publicationIndex?{publicationIndex:input.publicationIndex}:{})};
+    result=change({saved:true});
+  } else if(operation==='cleanup-publication') {
+    requireMaintenance();const row=readSlot();
+    if(!row?.uploadClaim?.confirmed || row.uploadClaim.objectKey!==input.objectKey)throw new Error('publicación sin confirmar');
+    delete row.uploadClaim.previousObjectKey;result=change({saved:true});
+  } else if (operation === 'health') result = {ready:true,version:1};
   else if (operation === 'compact') {changed=compactAgnesState(state,{nowMs});result={saved:true,compacted:changed};}
   else if (operation === 'release-legacy') {
     if (input.confirm !== 'release-legacy') throw new Error('liberación legacy sin confirmar');
@@ -169,7 +229,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     result={attempts:Object.entries(state.attempts).filter(([,attempt])=>state.slots[attempt.slotKey]?.matchId===input.matchId).map(([attemptId,attempt])=>{
       const row=state.slots[attempt.slotKey];
       return {attemptId,kind:row.kind,ordinal:row.ordinal,state:attempt.state,diagnostics:attempt.diagnostics??null,
-        ...(row.attemptId===attemptId?{uploadClaim:row.uploadClaim??null,hasVideoId:!!row.videoId}:{})};
+        ...(row.attemptId===attemptId?{uploadClaim:row.uploadClaim??null,hasVideoId:!!row.videoId,publicationIndex:row.publicationIndex??null}:{})};
     })};
   } else if (operation === 'diagnostic') {
     const attempt=state.attempts[input.attemptId];
@@ -183,6 +243,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     .map(row=>({matchId:row.matchId,ordinal:row.ordinal,expiresAtMs:row.expiresAtMs}))};
   else if (operation === 'reserve') {
     validateSlotInput(input);
+    if (/^(?:fd|af|bz)-[0-9]+$/.test(input.matchId)) throw new Error('partido sin código descriptivo; publicación y generación pausadas');
     if (!uuid(input.attemptId) || !finite(input.expiresAtMs)) throw new Error('intento inválido');
     const key = slotKey(input), row = state.slots[key], previousAttempt = state.attempts[input.attemptId];
     const guard = input.guard;
@@ -268,11 +329,11 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     else if (operation === 'uploadclaim') {
       if (row.uploadClaim && (row.uploadClaim.id!==input.claimId || row.uploadClaim.sha256!==input.sha256)) result={canPut:false,reason:'otra subida pendiente'};
       else if (row.uploadClaim) result={canPut:true,claimId:input.claimId};
-      else { row.uploadClaim={id:input.claimId,sha256:input.sha256,confirmed:false,...(hasLocation?{objectKey:input.objectKey,sizeBytes:input.sizeBytes}:{})}; result=change({canPut:true,claimId:input.claimId}); }
+      else { row.uploadClaim={id:input.claimId,sha256:input.sha256,confirmed:false,...(input.publicationIndex?{publicationIndex:input.publicationIndex}:{}),...(hasLocation?{objectKey:input.objectKey,sizeBytes:input.sizeBytes}:{})}; result=change({canPut:true,claimId:input.claimId}); }
     } else {
       if (row.uploadClaim?.id!==input.claimId || row.uploadClaim.sha256!==input.sha256) throw new Error('confirmación de subida inválida');
       row.uploadClaim.confirmed=true;
-      if (hasLocation) Object.assign(row.uploadClaim,{objectKey:input.objectKey,sizeBytes:input.sizeBytes});
+      if (hasLocation) Object.assign(row.uploadClaim,{objectKey:input.objectKey,sizeBytes:input.sizeBytes,...(input.publicationIndex?{publicationIndex:input.publicationIndex}:{})});
       result=change({saved:true});
     }
   } else if (operation === 'cleanupclaim' || operation === 'cleanupconfirm') {

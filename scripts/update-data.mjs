@@ -902,13 +902,15 @@ async function captureAfTopScorers(matches, { cache = {} } = {}) {
  */
 function stampSlugs(matches, teams) {
   for (const match of matches) {
-    const homeSlug = resolveCanonical(teams, match.home)?.web ?? null;
-    const awaySlug = resolveCanonical(teams, match.away)?.web ?? null;
+    const provider = match.id?.split('-')[0];
+    const context = side => ({provider, providerId: match.teamIds?.[provider]?.[side], competition: match.competition});
+    const homeSlug = resolveCanonical(teams, match.home, context('home'))?.web ?? null;
+    const awaySlug = resolveCanonical(teams, match.away, context('away'))?.web ?? null;
     match.homeSlug = homeSlug;
     match.awaySlug = awaySlug;
     match.teamIds = { ...match.teamIds, web: { home: homeSlug, away: awaySlug } };
     match.webId = homeSlug && awaySlug && match.kickoff
-      ? webMatchId(teams, match.home, match.away, match.kickoff)
+      ? `${homeSlug}-vs-${awaySlug}-${String(match.kickoff).slice(0,10)}`
       : null;
   }
   return matches;

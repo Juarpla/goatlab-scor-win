@@ -41,14 +41,16 @@ async function fixture(t, overrides = {}) {
   await writeFile(join(repo, 'public/data/image-prompts/a-b.json'), JSON.stringify(images));
   await writeFile(join(repo, 'public/data/video-prompts/a-b.json'), JSON.stringify(videos));
   const env = { MEDIA_ROLE: 'producer', GITHUB_ACTIONS: 'true', GOATLAB_REPO: repo, MEDIA_PACK_DIR: dir, R2_PUBLIC_BASE: 'https://media.test', R2_ACCOUNT_ID: 'account', R2_ACCESS_KEY_ID: 'access', R2_SECRET_ACCESS_KEY: 'secret', AGNES_API_KEY: 'fake', ...overrides };
-  const objects = new Map(), calls = [], provider = [];
+  const objects = new Map(), calls = [], provider = [], positions=new Map();
+  const position=ordinal=>{if(!positions.has(ordinal))positions.set(ordinal,positions.size+1);return positions.get(ordinal);};
   const addPhoto = ordinal => {
     const bytes = Buffer.from('photo-' + ordinal), meta = { model: 'agnes-image-2.5-flash', prompthash: hash(images.prompts[ordinal].prompt), sha256: hash(bytes), width: '1472', height: '2624' };
     objects.set('partidos/a-b/' + ordinal + '.jpg', { bytes, meta });
   };
   const addClip = ordinal => {
     const bytes = Buffer.from('clip-' + ordinal), meta = { model: 'agnes-video-2.5-flash', prompthash: hash(videos.prompts[ordinal % 2].prompt), sha256: hash(bytes), referencehash: hash(env.R2_PUBLIC_BASE + '/partidos/a-b/' + ordinal % 4 + '.jpg'), width: '720', height: '1280', duration: '6' };
-    objects.set('partidos/a-b/clip-' + ordinal + '.mp4', { bytes, meta });
+    const index=position(ordinal);Object.assign(meta,{attemptordinal:String(ordinal),publicationindex:String(index),attemptid:'attempt-'+ordinal});
+    objects.set('partidos/a-b/clip-' + index + '.mp4', { bytes, meta });
   };
   let block = false, failPut = false;
   const execImpl = async (_binary, argv, options) => {
@@ -80,7 +82,9 @@ async function fixture(t, overrides = {}) {
     return { stdout: JSON.stringify({ clips, failures: [] }) };
   };
   const transactImpl = async (operation, input) => {
-    if (operation === 'status') return { slot: { state: 'completed', model: 'agnes-' + input.kind + '-2.5-flash', promptHash: hash((input.kind === 'image' ? images : videos).prompts[input.ordinal % (input.kind === 'image' ? 4 : 2)].prompt), referenceHash: hash(env.R2_PUBLIC_BASE + '/partidos/a-b/' + input.ordinal % 4 + '.jpg') } };
+    if(operation==='publication-slot')return {publicationIndex:position(input.ordinal)};
+    if(operation==='status'&&input.kind==='video'&&!positions.has(input.ordinal))return {slot:null};
+    if (operation === 'status') return { slot: { attemptId:'attempt-'+input.ordinal,publicationIndex:positions.get(input.ordinal),uploadClaim: input.kind==='video'&&positions.has(input.ordinal)&&objects.has('partidos/a-b/clip-'+positions.get(input.ordinal)+'.mp4')?{publicationIndex:positions.get(input.ordinal)}:null,state: 'completed', model: 'agnes-' + input.kind + '-2.5-flash', promptHash: hash((input.kind === 'image' ? images : videos).prompts[input.ordinal % (input.kind === 'image' ? 4 : 2)].prompt), referenceHash: hash(env.R2_PUBLIC_BASE + '/partidos/a-b/' + input.ordinal % 4 + '.jpg') } };
     return { canPut: true, saved: true };
   };
   const downloads = [], logs = [];
@@ -207,7 +211,7 @@ test('incompatible R2 metadata and rejected generated clips never increase ready
   const f = await fixture(t, { AGNES_SKIP_IMAGES: '1' });
   for (let ordinal = 0; ordinal < 4; ordinal++) f.addPhoto(ordinal);
   f.addClip(0);
-  f.objects.get('partidos/a-b/clip-0.mp4').meta.prompthash = hash('old prompt');
+  f.objects.get('partidos/a-b/clip-1.mp4').meta.prompthash = hash('old prompt');
   const result = await f.run({ execImpl: async (...args) => {
     const response = await f.execImpl(...args);
     if (!args[1][0].endsWith('agnes_video.py')) return response;
@@ -217,7 +221,8 @@ test('incompatible R2 metadata and rejected generated clips never increase ready
   } });
   assert.equal(result.results[0].clips, 0);
   assert.match(f.logs.at(-1), /0\/2 clips listos; faltan 2/);
-  assert.ok(result.results[0].failures.some(reason => /otra identidad/.test(reason)));
+  assert.ok(result.results[0].failures.some(reason => /identidad/.test(reason)));
+  assert.equal(f.provider.length,0);
 });
 test('heartbeat loss during image uploads prevents the next provider call', async t => {
   const f = await fixture(t, { AGNES_SKIP_VIDEO: '1' });
@@ -256,7 +261,7 @@ test('run budget is ephemeral and bounded by kickoff plus 24h, with invalid kick
   assert.equal(mediaSoftStop(now + 3_000_000, new Date(now - 86_400_000 + 1000).toISOString()), now + 1000);
   assert.equal(mediaSoftStop(now + 3_000_000, 'invalid'), 0);
 });
-test('R2 block reuses verified media, searches all five clip ordinals and makes zero provider calls or media PUTs', async t => {
+test('R2 block reuses the two publication positions with their original attempt ordinals and makes zero provider calls or media PUTs', async t => {
   const f = await fixture(t, { MEDIA_RUN_BUDGET_MS: '0' }); for (let i = 0; i < 4; i++) f.addPhoto(i); f.addClip(3); f.addClip(4); f.setBlock(true);
   const result = await f.run();
   assert.equal(f.provider.length, 0); assert.equal(f.calls.filter(c => c.cmd === 'put').length, 0);
@@ -265,7 +270,7 @@ test('R2 block reuses verified media, searches all five clip ordinals and makes 
   assert.equal(f.logs.filter(line => line.startsWith('media: a-b:')).length, 2);
   const manifest = JSON.parse(await readFile(join(f.dir, 'a-b.json'), 'utf8'));
   assert.equal(manifest.bankVersion, 2); assert.equal(manifest.bankStatus, 'complete');
-  assert.deepEqual(manifest.clips.map(c => c.file), ['clip-3.mp4', 'clip-4.mp4']);
+  assert.deepEqual(manifest.clips.map(c => c.file), ['clip-1.mp4', 'clip-2.mp4']);
   const progress = JSON.parse(await readFile(join(f.dir, 'a-b.progress.json'), 'utf8'));
   assert.equal(progress.verifiedImages, 4); assert.equal(progress.verifiedClips, 2);
 });
@@ -447,4 +452,25 @@ test('confirmed publication removes orphaned atomic response files as well as bi
     return response;
   }});
   assert.equal((await readdir(join(f.dir,'gen','a-b'))).some(n=>n.endsWith('.tmp')),false);
+});
+test('a fifth attempt publishes clip-1 and a recovered clip is not named after its attempt',async t=>{
+  const f=await fixture(t);for(let i=0;i<4;i++)f.addPhoto(i);
+  const result=await f.run({execImpl:async(binary,argv,options)=>{
+    const response=await f.execImpl(binary,argv,options);
+    if(!argv[0].endsWith('agnes_video.py'))return response;
+    const data=JSON.parse(response.stdout),out=argv.find(value=>value.startsWith('--out=')).slice(6);
+    const clip={...data.clips[0],index:4,file:'clip-4.mp4'};await writeFile(join(out,clip.file),'clip-4');
+    return {stdout:JSON.stringify({...data,clips:[clip]})};
+  }});
+  assert.equal(result.results[0].clips,1);
+  assert.ok(f.objects.has('partidos/a-b/clip-1.mp4'));assert.ok(!f.objects.has('partidos/a-b/clip-4.mp4'));
+  assert.equal(f.objects.get('partidos/a-b/clip-1.mp4').meta.attemptordinal,'4');
+  assert.equal(f.objects.get('partidos/a-b/clip-1.mp4').meta.publicationindex,'1');
+});
+test('provider-only match identifiers stop before media or provider publication',async t=>{
+  const f=await fixture(t);const path=join(f.repo,'public/data/fixtures.json');
+  const fixtures=JSON.parse(await readFile(path));fixtures.matches[0].webId=null;await writeFile(path,JSON.stringify(fixtures));
+  const result=await f.run({args:{'--match':'af-1'}});
+  assert.equal(result.pending,1);assert.equal(f.provider.length,0);assert.equal(f.calls.filter(call=>call.cmd==='put').length,0);
+  assert.match(result.results[0].failures[0],/código descriptivo/);
 });

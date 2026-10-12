@@ -131,6 +131,10 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     if(recoveryOnly) log('media: '+(match.webId ?? match.id)+': recuperar tarea existente antes de generar; sin POST');
     const matchId = match.webId ?? match.id;
     if (!ID.test(matchId)) continue;
+    if (/^(?:fd|af|bz)-[0-9]+$/.test(matchId)) {
+      log('media: '+matchId+': identidad de equipos incompleta o ambigua; falta código descriptivo; sin publicación ni POST');
+      results.push({matchId,images:0,clips:0,mode,failures:['Identidad de equipos incompleta o ambigua; falta código descriptivo'],diagnostics:[],resources:[],attempts:[]});continue;
+    }
     const pack = async category => snapshot?.[category] ?? await json(join(repo, 'public/data', category, matchId + '.json'));
     const imagePack = await pack('image-prompts'), videoPack = await pack('video-prompts'), motionPack = await pack('motion-prompts');
     const validPack = (pack, category) => validateContent(pack, category, matchId) && !contentIdentityErrors(pack, match).length;
@@ -164,6 +168,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     let authorityReady = true;
     try { await state('heartbeat', { runId, matchId }); } catch(error) { authorityReady = false; failures.push('Estado de generación: heartbeat: ' + safeMediaMessage(error.message,env)); }
     const heartbeat = setInterval(() => { state('heartbeat', { runId, matchId }).catch(() => { authorityReady = false; }); }, 30_000); heartbeat.unref();
+    const verifiedVideoOrdinals=new Set();
     const assets = [], clips = [], verifiedAssets = new Set(), verifiedClips = new Set();
     const readyCounts = () => ({ images: verifiedAssets.size, clips: verifiedClips.size });
     const logReady = (stage, detail = '') => {
@@ -171,7 +176,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       log(`media: ${matchId}: ${labels.images} · ${labels.clips} (${stage})${detail ? '; ' + detail : ''}`);
     };
     const publish = mediaPublisher({ dir, match, facts, prior: prev, draft: env.MEDIA_DRAFT === '1', clock: () => new Date(clock()).toISOString() });
-    const extras = () => ({ clips, motionPrompts, failures, diagnostics, runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
+    const extras = () => ({ clips:clips.sort((a,b)=>a.file.localeCompare(b.file)), motionPrompts, failures, diagnostics, runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
       storageVerifiedAt: new Date(clock()).toISOString(), verifiedAssets: [...verifiedAssets], verifiedClips: [...verifiedClips] });
     const cleanResource = async (file) => {
       const stem=file.replace(/\.[^.]+$/, '');
@@ -181,7 +186,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
           await rm(join(folder,name),{force:true});
       } catch(error) { log('media: '+matchId+': limpieza temporal pendiente: '+safeMediaMessage(error.message,env)); }
     };
-    const confirmStored = async (kind, ordinal, file, object, remote, sizeBytes) => {
+    const confirmStored = async (kind, ordinal, file, object, remote, sizeBytes, cleanupFile=file) => {
       const objectKey='partidos/'+matchId+'/'+file, meta=remote?.meta;
       if(!remote || remote.key!==objectKey || remote.bytes!==sizeBytes || !sizeBytes || !digest(object.sha256)
         || !meta || meta.sha256!==object.sha256 || meta.model!==object.model || meta.prompthash!==object.promptHash
@@ -193,17 +198,18 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       try {
         const {slot}=await state('status',{matchId,kind,ordinal});
         if(!slot || slot.state!=='completed' || slot.model!==object.model || slot.promptHash!==object.promptHash
-          || (kind==='video' && slot.referenceHash!==object.referenceHash)) return false;
+          || (kind==='video' && (slot.publicationReferenceHash??slot.referenceHash)!==object.referenceHash)) return false;
+        if(kind==='video' && slot.publicationIndex && (Number(meta.attemptordinal)!==ordinal || Number(meta.publicationindex)!==slot.publicationIndex || meta.attemptid!==slot.attemptId))return false;
         if(slot.uploadClaim?.confirmed && slot.uploadClaim.sha256===object.sha256 && slot.uploadClaim.objectKey===objectKey && slot.uploadClaim.sizeBytes===sizeBytes) {
-          await cleanResource(file);return true;
+          if(cleanupFile)await cleanResource(cleanupFile);return true;
         }
         const claimId=slot.uploadClaim?.id || 'upload-'+object.sha256;
-        const input={matchId,kind,ordinal,claimId,sha256:object.sha256,objectKey,sizeBytes};
+        const input={matchId,kind,ordinal,claimId,sha256:object.sha256,objectKey,sizeBytes,...(kind==='video'&&slot.publicationIndex?{publicationIndex:slot.publicationIndex}:{})};
         const claim=await state('uploadclaim',input);
         if(!claim.canPut) return false;
         const confirmation=await state('uploadconfirm',input);
         if(!confirmation.saved) return false;
-        await cleanResource(file);
+        if(cleanupFile)await cleanResource(cleanupFile);
         return true;
       } catch(error) { failures.push('R2: confirmación '+file+': '+safeMediaMessage(error.message,env));return false; }
     };
@@ -222,18 +228,25 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         const {slot}=await state('status', { matchId, kind, ordinal });
         attemptId=slot?.attemptId;
         if (!slot || slot.state !== 'completed' || slot.promptHash !== object.promptHash || slot.model !== object.model || (kind === 'video' && slot.referenceHash !== object.referenceHash)) return false;
-        const objectKey='partidos/'+matchId+'/'+saved.file;
+        const publicationFile=saved.publicationFile??saved.file;
+        const objectKey='partidos/'+matchId+'/'+publicationFile;
         const claimId = slot.uploadClaim?.id || 'upload-' + sha256;
-        const claim = await state('uploadclaim', { matchId, kind, ordinal, claimId, sha256,objectKey,sizeBytes:bytes.length });
+        const claim = await state('uploadclaim', { matchId, kind, ordinal, claimId, sha256,objectKey,sizeBytes:bytes.length,...(kind==='video'?{publicationIndex:slot.publicationIndex}:{}) });
         if (!claim.canPut) return false;
         const mime = kind === 'video' ? 'video/mp4' : saved.file.endsWith('.png') ? 'image/png' : saved.file.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
         const values = ['model=' + object.model, 'prompthash=' + object.promptHash, 'sha256=' + sha256, 'width=' + object.width, 'height=' + object.height];
-        if (kind === 'video') values.push('referencehash=' + object.referenceHash, 'duration=' + object.duration);
+        if (kind === 'video') values.push('referencehash=' + object.referenceHash, 'duration=' + object.duration, 'attemptordinal='+ordinal, 'publicationindex='+slot.publicationIndex, 'attemptid='+slot.attemptId);
+        if(kind==='video') {
+          const occupied=(await r2('exists',objectKey))?.found;
+          if(r2ReadFailed)return pendingPublication('HEAD previo fallido; destino sin verificar');
+          if(occupied && (occupied.meta?.attemptid!==slot.attemptId || occupied.meta?.sha256!==sha256 || Number(occupied.meta?.publicationindex)!==slot.publicationIndex))return pendingPublication('destino ocupado por otro recurso; no se sobrescribe');
+        }
         if (!(await r2('put', join(folder, saved.file), objectKey, mime, ...values))) return pendingPublication('PUT fallido; publicación pendiente');
         const {found}=(await r2('exists',objectKey)) ?? {};
-        const confirmed=await confirmStored(kind,ordinal,saved.file,object,found,bytes.length);
+        const confirmed=await confirmStored(kind,ordinal,publicationFile,object,found,bytes.length,null);
         if(confirmed) {
-          publishedFiles.add(saved.file);
+          publishedFiles.add(publicationFile);
+          await cleanResource(saved.file);
           try { await state('diagnostic',{attemptId:slot.attemptId,record:{id:randomUUID(),at:clock(),runId,runUrl:runUrl??'',
             stage:'publication-confirmed',method:'NONE',httpStatus:null,providerCode:'',message:'publicación verificada en R2',providerStatus:'published',progress:null,requestId:''}}); }
           catch(error) { log('media: '+matchId+': diagnóstico de publicación no guardado: '+safeMediaMessage(error.message,env)+'; no repetir POST'); }
@@ -285,24 +298,38 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         }
       }
       for (let ordinal = 0; ordinal < 5 && clips.length < 2; ordinal++) {
-        const file = 'clip-' + ordinal + '.mp4', path = join(folder, file), desired = videoPrompts[ordinal % Math.max(1, videoPrompts.length)]?.prompt;
+        if(!R2||!authorityReady)continue;
+        let videoSlot;try{videoSlot=(await state('status',{matchId,kind:'video',ordinal})).slot;}catch(error){r2ReadFailed=true;failures.push('R2: identidad privada no disponible; sin nuevas tareas');continue;}
+        if(!videoSlot || videoSlot.state!=='completed')continue;
+        const canonical=!!videoSlot.uploadClaim?.publicationIndex;
+        const file = canonical?'clip-'+videoSlot.publicationIndex+'.mp4':'clip-'+ordinal+'.mp4', path = join(folder, file), desired = videoPrompts[ordinal % Math.max(1, videoPrompts.length)]?.prompt;
         const prior = prev?.clips?.find(c => c.file === file && c.source === 'agnes');
         const saved = await json(join(folder, 'clip-' + ordinal + '.json'));
         const local = saved && saved.prompt === desired && saved.model === videoModel ? saved : prior;
         const found = await r2('exists', 'partidos/' + matchId + '/' + file), remote = found?.found;
         const meta = remote && typeof remote === 'object' ? remote.meta ?? {} : {};
+        if(canonical && (Number(meta.attemptordinal)!==ordinal || Number(meta.publicationindex)!==videoSlot.publicationIndex || meta.attemptid!==videoSlot.attemptId)) {failures.push('R2: identidad de publicación incompatible: '+file);r2ReadFailed=true;continue;}
+        if(!canonical && meta.publicationindex!==undefined && Number(meta.attemptordinal)!==ordinal)continue;
+        if(!canonical && (remote||local)) {failures.push('R2: clip con nombre antiguo; requiere migración verificada: '+file);r2ReadFailed=true;continue;}
         const promptHash = meta.prompthash || local?.promptHash || (local?.prompt ? hash(local.prompt) : null);
         const referenceHash = meta.referencehash || local?.referenceHash || (local?.reference ? hash(local.reference) : null);
         if (!desired || promptHash !== hash(desired) || !digest(referenceHash) || !assets.some(a => hash(a.url) === referenceHash)) continue;
         let bytes; try { bytes = await readFile(path); } catch {}
         if (remote && (!bytes || !digest(meta.sha256) || hash(bytes) !== meta.sha256)) bytes = await download(R2.base + '/partidos/' + encodeURIComponent(matchId) + '/' + file, path, 32_000_000);
         if (!bytes || (digest(meta.sha256) && hash(bytes) !== meta.sha256)) continue;
-        const clip = { id: matchId + '-clip-' + ordinal, source: 'agnes', file, url: base + '/' + encodeURIComponent(matchId) + '/' + file,
+        const clip = { id: matchId + '-clip-' + videoSlot.publicationIndex, source: 'agnes', file, url: base + '/' + encodeURIComponent(matchId) + '/' + file,
           width: Number(meta.width || local?.width), height: Number(meta.height || local?.height), duration: Number(meta.duration || local?.duration),
           model: meta.model || local?.model, promptHash, referenceHash, sha256: hash(bytes) };
         if (clip.model !== videoModel || clip.width !== 720 || clip.height !== 1280 || !Number.isFinite(clip.duration) || clip.duration < 4 || clip.duration > 12.5) continue;
         if (remote ? await confirmStored('video',ordinal,file,clip,remote,bytes.length) : await putResource('video',ordinal,{file},clip)) {
-          clips.push(clip); summary.reused++; verifiedClips.add(clip.id);
+          clips.push(clip); summary.reused++; verifiedClips.add(clip.id);verifiedVideoOrdinals.add(ordinal);
+        }
+      }
+      if(R2 && authorityReady)for(const index of [0,1,2,3,4]) {
+        const file='clip-'+index+'.mp4';
+        const remote=(await r2('exists','partidos/'+matchId+'/'+file))?.found;
+        if(remote && !clips.some(clip=>clip.file===file)) {
+          r2ReadFailed=true;failures.push('R2: clip existente sin identidad confirmada o con nombre antiguo: '+file+'; sin nuevas tareas');
         }
       }
       if(r2ReadFailed) failures.push('R2: no se pudo verificar inventario; no se crean clips hasta confirmar los existentes');
@@ -348,7 +375,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       await publish(assets, 'generating-clips', extras());
       const canRetrieve=authorityReady && !r2blocked && !r2ReadFailed && !!env.AGNES_API_KEY?.trim() && deadline>clock();
       if (env.AGNES_SKIP_VIDEO !== '1' && verifiedClips.size < 2 && (recoveryOnly ? canRetrieve : canGenerate()) && videoPrompts.length && assets.length && clips.length < 2) {
-        const input = join(folder, 'video-input.json'); await writeFile(input, JSON.stringify({ matchId, prompts: videoPrompts, images: assets, recoverOnly:recoveryOnly, deadline: (recoveryOnly ? Math.min(deadline,clock()+60_000) : deadline) / 1000, expiresAt, verifiedClips: clips.filter(c=>verifiedClips.has(c.id)).map(c=>c.file) }));
+        const input = join(folder, 'video-input.json'); await writeFile(input, JSON.stringify({ matchId, prompts: videoPrompts, images: assets, recoverOnly:recoveryOnly, deadline: (recoveryOnly ? Math.min(deadline,clock()+60_000) : deadline) / 1000, expiresAt, verifiedClips: [...verifiedVideoOrdinals].map(ordinal=>'clip-'+ordinal+'.mp4') }));
         try {
           const { stdout, stderr } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes_video.py'), '--input=' + input, '--out=' + folder],
             { env: childEnv, timeout: Math.max(1, deadline - clock() + 500), maxBuffer: 1024 * 1024, onStderr: chunk=>log(safeMediaMessage(chunk,env)) });
@@ -356,9 +383,10 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
           diagnostics=publicVideoDiagnostics(result.diagnostics,env);
           if(stderr && execImpl !== execute) log(safeMediaMessage(stderr,env));
           for (const saved of result.clips ?? []) {
-            if (clips.some(c => c.file === saved.file) || clips.length >= 2 || !/^clip-[0-4]\.mp4$/.test(saved.file)) continue;
+            if (verifiedVideoOrdinals.has(saved.index) || clips.length >= 2 || !/^clip-[0-4]\.mp4$/.test(saved.file)) continue;
             const bytes = await readFile(join(folder, saved.file));
-            const clip = { id: matchId + '-clip-' + saved.index, source: 'agnes', file: saved.file, url: base + '/' + encodeURIComponent(matchId) + '/' + saved.file,
+            let publicationIndex=saved.index,publicationFile=saved.file;
+            const clip = { id: matchId + '-clip-' + publicationIndex, source: 'agnes', file: publicationFile, url: base + '/' + encodeURIComponent(matchId) + '/' + publicationFile,
               width: saved.width, height: saved.height, duration: saved.duration, model: saved.model || videoModel, promptHash: saved.promptHash || hash(saved.prompt),
               referenceHash: saved.referenceHash || hash(saved.reference), sha256: hash(bytes) };
             const ordinal = Number(saved.file.match(/^clip-([0-4])\.mp4$/)[1]);
@@ -367,9 +395,12 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
               || !Number.isFinite(clip.duration) || clip.duration < 4 || clip.duration > 12.5) {
               failures.push('Clip recuperado de otra identidad; conservado sin publicar'); continue;
             }
+            ({publicationIndex}=await state('publication-slot',{matchId,kind:'video',ordinal:saved.index}));
+            publicationFile='clip-'+publicationIndex+'.mp4';
+            Object.assign(clip,{id:matchId+'-clip-'+publicationIndex,file:publicationFile,url:base+'/'+encodeURIComponent(matchId)+'/'+publicationFile});
             summary.generated++;
-            if (await putResource('video', saved.index, saved, clip)) {
-              clips.push(clip); verifiedClips.add(clip.id);
+            if (await putResource('video', saved.index, {...saved,publicationFile}, clip)) {
+              clips.push(clip); verifiedClips.add(clip.id);verifiedVideoOrdinals.add(saved.index);
               logReady('subida de clip confirmada');
               await publish(assets, 'generating-clips', extras());
             } else failures.push('R2: subida de clip sin confirmar');
@@ -404,7 +435,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
             attempt?.state==='completed'?'generación completada; resultado ausente en R2; no repetir POST':mode==='clips-only'?'imágenes omitidas por modo clips-only':omission});
       }
       for(let index=0;index<2;index++) {
-        const clip=clips[index];
+        const clip=clips.find(clip=>clip.file==='clip-'+(index+1)+'.mp4');
         resources.push({kind:'video',number:index+1,status:clip?(publishedFiles.has(clip.file)?'publicado en esta corrida':'reutilizado'):'pendiente',
           objectKey:clip?'partidos/'+matchId+'/'+clip.file:null,verified:!!clip,
           reason:clip?(publishedFiles.has(clip.file)?'subida y verificación R2 confirmadas':'verificado en R2; sin petición a Agnes'):mode==='images-only'?'clips omitidos por modo images-only':omission});

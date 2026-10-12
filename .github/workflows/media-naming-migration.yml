@@ -1,0 +1,55 @@
+name: media-naming-migration
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: goatlab-media
+  cancel-in-progress: false
+  queue: max
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: goatlab
+      R2_STATE_BUCKET: app-states
+      R2_STATE_KEY: goatlab/agnes-state.json
+      R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+      R2_NO_DOTENV: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Copiar, verificar y reconciliar nombres
+        run: |
+          mkdir -p .cache
+          node scripts/migrate-media-names.mjs --apply > .cache/media-naming-migration.json
+      - name: Publicar referencias antes de retirar nombres antiguos
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: migrate canonical match and clip publication names'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Retirar únicamente objetos ya migrados y verificados
+        run: node scripts/migrate-media-names.mjs --cleanup=.cache/media-naming-migration.json > .cache/media-naming-cleanup.json
+      - name: Diagnóstico JSON de migración
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: media-naming-migration
+          include-hidden-files: true
+          path: |
+            .cache/media-naming-migration.json
+            .cache/media-naming-cleanup.json
