@@ -44,3 +44,12 @@ class DiagnosticTests(unittest.TestCase):
                 'body': '{"data":[{"b64_json":"private-binary'})
         self.assertNotIn('private-binary', logs.getvalue())
         self.assertIn('503', logs.getvalue())
+
+    def test_stop_reason_keeps_state_and_progress_without_serializing_response(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            record = provider_diagnostic(object(), 'video', 'a-b', 0, {'stage': 'retrieve-stop', 'httpStatus': 200,
+                'body': 'tarea pendiente; plazo agotado; última consulta: {"response":"long payload"}',
+                'providerStatus': 'pending', 'progress': 15})
+        self.assertEqual(record['message'], 'tarea pendiente; plazo agotado')
+        self.assertEqual(record['providerStatus'], 'pending')
+        self.assertEqual(record['progress'], 15)

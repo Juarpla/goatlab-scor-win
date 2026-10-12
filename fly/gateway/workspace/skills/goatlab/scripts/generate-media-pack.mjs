@@ -390,7 +390,9 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       const priorResult=results.findIndex(row=>row.matchId===matchId);
       try { attempts = (await state('attempts',{matchId})).attempts ?? attempts; }
       catch(error) { failures.push('Historial final no disponible: '+safeMediaMessage(error.message,env)); }
-      const omission=recoveryOnly?'recuperación de tareas existentes; sin nuevas solicitudes':failures.filter(reason=>reason!=='Motion Prompts no disponibles; montaje local disponible').join('; ') || 'todavía no solicitado';
+      const omission=recoveryOnly?'recuperación de tareas existentes; sin nuevas solicitudes':failures
+        .filter(reason=>reason!=='Motion Prompts no disponibles; montaje local disponible'&&!/^clip \d+: etapa=/.test(reason))
+        .map(reason=>reason.split('; última consulta:')[0]).join('; ').slice(0,256) || 'todavía no solicitado';
       const resources=[];
       for(let ordinal=0;ordinal<4;ordinal++) {
         const asset=assets.find(asset=>asset.id===matchId+'-'+ordinal);

@@ -39,6 +39,8 @@ def provider_diagnostic(state, kind, match, ordinal, record):
     if payload.get('errorType'):
         message = str(payload['errorType']) + ': ' + str(message)
     stage = record.get('stage', '')
+    if stage == 'retrieve-stop':
+        message = str(message).split('; última consulta:', 1)[0]
     method = record.get('method') or ('POST' if stage in ('create', 'create-response') else 'GET' if stage in ('retrieve', 'retrieve-response') else 'NONE')
     compact = {'id': str(uuid.uuid4()), 'at': int(record.get('at', time.time()) * 1000),
                'runId': os.environ.get('AGNES_RUN_ID') or getattr(state, 'owner', 'local-run'),

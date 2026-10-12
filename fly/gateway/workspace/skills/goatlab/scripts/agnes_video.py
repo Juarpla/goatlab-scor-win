@@ -440,6 +440,7 @@ class VideoPool:
                         stop_reason += '; última consulta: ' + self.safe_detail(last_poll)
                     self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'retrieve-stop',
                         'httpStatus': last_poll.get('httpStatus') if last_poll else None, 'body': stop_reason, 'requestId': '', 'videoId': None,
+                        'providerStatus': last_poll.get('status') if last_poll else '', 'progress': last_poll.get('progress') if last_poll else None,
                         'attemptId': remote.get('attemptId') if remote else attempt_id, 'next': 'recuperar mediante GET del mismo video_id en otra corrida; no repetir POST'})
                     break
                 if len(clips)>=target: break
