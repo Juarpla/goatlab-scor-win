@@ -1,97 +1,6 @@
 {
-  "updatedAt": "2026-10-12T15:20:42.835Z",
+  "updatedAt": "2026-10-12T15:29:51.270Z",
   "runs": [
-    {
-      "at": "2026-10-05T17:13:28.291Z",
-      "task": "motion-prompts",
-      "matchId": "france-vs-belgium-2026-10-05",
-      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 3: porcentajes no publicados",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1926,
-            "outputTokens": 2585
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 54123
-        }
-      ],
-      "usage": {
-        "inputTokens": 1895,
-        "outputTokens": 8367
-      }
-    },
-    {
-      "at": "2026-10-05T17:18:02.026Z",
-      "task": "motion-prompts",
-      "matchId": "italy-vs-turkiye-2026-10-05",
-      "instructionVersion": "cefa688e95c7982885cb2de7afce8984c1aa1437752f51a96ccee14be11b079b",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 2: porcentajes no publicados; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan rótulos, transiciones o fuente; motion-prompts 5: porcentajes no publicados; motion-prompts 5: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1940,
-            "outputTokens": 2833
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 67428
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: porcentajes no publicados; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1944,
-            "outputTokens": 9094
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 56546
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren 5 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1984,
-            "outputTokens": 2295
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 43550
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: dirección insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: dirección insuficientemente detallada; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: dirección insuficientemente detallada; motion-prompts 3: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1829,
-            "outputTokens": 5568
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 106205
-        }
-      ],
-      "usage": null
-    },
     {
       "at": "2026-10-05T17:22:17.270Z",
       "task": "motion-prompts",
@@ -5033,6 +4942,137 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "9fc424e5-a43a-42fc-a2fc-b2739e0dac05"
+    },
+    {
+      "at": "2026-10-12T15:25:07.441Z",
+      "task": "shorts",
+      "matchId": "fd-575341",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55; descripción: cifra 0.365 no está en los hechos; descripción: cifra 0.271 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4943,
+            "outputTokens": 3079
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 46865
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4793,
+            "outputTokens": 4411
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 27561
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 40 palabras, mínimo 55; guion 1: falta la CTA a goatlab.win en la narración; guion 2: 31 palabras, mínimo 55; guion 2: falta la CTA a goatlab.win en la narración; guion 3: 27 palabras, mínimo 55; guion 3: falta la CTA a goatlab.win en la narración; guion 4: 30 palabras, mínimo 55; guion 4: falta la CTA a goatlab.win en la narración",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4826,
+            "outputTokens": 1786
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13875
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 3: cifra 2.92 no está en los hechos; guion 4: el cero no se escribe en dígitos; guion 8: cifra 27.1 no está en los hechos; guion 8: porcentajes bloqueados: evaluation.published es false",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4663,
+            "outputTokens": 6979
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 126090
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 4663,
+        "outputTokens": 6979
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-12T15:29:51.270Z",
+      "task": "motion-prompts",
+      "matchId": "sabah-fk-vs-sk-slavia-praha-2026-10-13",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 2: faltan rótulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2235,
+            "outputTokens": 2506
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 58626
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2271,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 86525
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2317,
+            "outputTokens": 2017
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14058
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 4: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2146,
+            "outputTokens": 4891
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 124449
+        }
+      ],
+      "usage": null
     }
   ]
 }
