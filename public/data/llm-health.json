@@ -1,97 +1,6 @@
 {
-  "updatedAt": "2026-10-12T15:57:28.568Z",
+  "updatedAt": "2026-10-12T19:42:23.443Z",
   "runs": [
-    {
-      "at": "2026-10-05T17:32:43.396Z",
-      "task": "motion-prompts",
-      "matchId": "italy-vs-turkiye-2026-10-05",
-      "instructionVersion": "eac46702f3685cf21019012d879369913587c0fac552f37f343aa605ad2fc1c5",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: porcentajes no publicados; motion-prompts 3: porcentajes no publicados; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: porcentajes no publicados; motion-prompts 4: faltan rótulos, transiciones o fuente; motion-prompts 5: porcentajes no publicados",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1968,
-            "outputTokens": 2664
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 40375
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: faltan rótulos, transiciones o fuente; motion-prompts 5: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1972,
-            "outputTokens": 9458
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 55314
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren 5 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2012,
-            "outputTokens": 4327
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 41094
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 5: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1857,
-            "outputTokens": 3314
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 62631
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-05T17:34:45.996Z",
-      "task": "motion-prompts",
-      "matchId": "italy-vs-turkiye-2026-10-05",
-      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "Se requieren 5 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1989,
-            "outputTokens": 2587
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 54337
-        }
-      ],
-      "usage": {
-        "inputTokens": 1993,
-        "outputTokens": 7869
-      }
-    },
     {
       "at": "2026-10-05T17:38:45.201Z",
       "task": "motion-prompts",
@@ -5091,6 +5000,41 @@
         "inputTokens": 2271,
         "outputTokens": 9364
       }
+    },
+    {
+      "at": "2026-10-12T19:42:10.796Z",
+      "matchId": "fd-560597",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2051,
+        "outputTokens": 18792
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "918d37cb-bf29-44d2-885b-75d49aec4d2e"
+    },
+    {
+      "at": "2026-10-12T19:42:10.796Z",
+      "matchId": "fd-564704",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "918d37cb-bf29-44d2-885b-75d49aec4d2e"
     }
   ]
 }
