@@ -6,8 +6,8 @@ import { mkdtemp,mkdir,writeFile,rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 test('public diagnostics redact credentials, IDs and signed URLs while preserving HTTP and cause',()=>{
-  const value=safeMediaMessage('HTTP 503 {"token":"secret with spaces","video_id":"private-id"} Bearer abc https://example.test/x?sig=123 api-secret',{AGNES_API_KEY:'api-secret'});
-  for(const secret of ['secret with spaces','private-id','abc','sig=123','api-secret']) assert.ok(!value.includes(secret));
+  const value=safeMediaMessage('HTTP 503 {"token":"secret with spaces","video_id":"private-id","taskId":"private-task","id":"private-generic","generation_id":"private-generation"} Bearer abc https://example.test/x?sig=123 api-secret',{AGNES_API_KEY:'api-secret'});
+  for(const secret of ['secret with spaces','private-id','private-task','private-generic','private-generation','abc','sig=123','api-secret']) assert.ok(!value.includes(secret));
   assert.ok(value.includes('HTTP 503'));
   assert.equal(publicVideoDiagnostics([{httpStatus:503,body:'provider unavailable',stage:'create'}])[0].message,'provider unavailable');
 });

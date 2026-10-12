@@ -63,6 +63,19 @@ class AgnesTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'incierto'):
             restored.generate('match', 0, 'prompt', Path(self.temp.name) / 'images', lambda *_: self.fail('must not regenerate'))
 
+    @patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}')
+    def test_completed_image_missing_after_restart_is_not_regenerated(self, _probe):
+        out = Path(self.temp.name) / 'images'
+        saved = self.pool.generate('match', 0, 'prompt', out, lambda *a, **kw: self.result())
+        Path(saved['path']).unlink()
+        restored = ImagePool(Path(self.temp.name) / 'fresh.sqlite', clock=lambda: self.now, state=self.state)
+        self.addCleanup(restored.db.close)
+        with self.assertRaisesRegex(ValueError, 'imagen completada ausente; sin evidencia local compatible'):
+            restored.generate('match', 0, 'prompt', out, lambda *a, **kw: self.fail('no duplicate POST'))
+        with self.assertRaisesRegex(ValueError, 'imagen completada ausente; sin evidencia local compatible'):
+            self.pool.generate('match', 0, 'prompt', out, lambda *a, **kw: self.fail('no duplicate POST'))
+        self.assertEqual(self.state.quota['1970-01-01']['images'], 1)
+
     def test_saved_response_recovers_after_probe_failure_and_sqlite_loss(self):
         out = Path(self.temp.name) / 'images'
         calls = []

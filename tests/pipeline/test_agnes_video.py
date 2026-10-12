@@ -23,6 +23,111 @@ class VideoTests(unittest.TestCase):
         self.prompts=[{'prompt':f'Prompt {i}'} for i in range(5)];self.images=[{'url':'https://example.org/image.jpg'}]
         self.posts=[]
     def sleep(self,seconds):self.now+=seconds
+
+    def test_terminal_attempt_with_id_is_skipped_after_sqlite_loss(self):
+        for terminal in ('failed', 'abandoned'):
+            with self.subTest(terminal=terminal):
+                match = terminal
+                self.state.seed(match, 0, video_id='terminal-id')
+                self.state.event(self.state.status(match, 'video', 0)['attemptId'], terminal)
+                self.state.seed(match, 1, video_id='verified-id', prompt='Prompt 1')
+                self.state.event(self.state.status(match, 'video', 1)['attemptId'], 'completed')
+                def call(url, body=None, **kwargs):
+                    self.assertNotIn('terminal-id', url)
+                    return self.success(url, body, **kwargs)
+                result = self.pool.bank(match, self.prompts, self.images, self.root / match,
+                    2000, 3000, call=call, download=self.download, verified=['clip-1.mp4'])
+                self.assertEqual(len(result['clips']), 1)
+                self.assertEqual(result['clips'][0]['file'], 'clip-2.mp4')
+                self.assertEqual(self.pool.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=0', (match,)).fetchone()[0], terminal)
+        self.assertEqual(len(self.posts), 2)
+
+    def test_exhausted_attempts_are_reported_even_after_sqlite_loss(self):
+        for ordinal in range(5):
+            self.state.seed('a-b', ordinal, prompt=f'Prompt {ordinal}')
+            self.state.event(self.state.status('a-b', 'video', ordinal)['attemptId'], 'abandoned')
+        result = self.bank(lambda *a, **k: self.fail('no provider calls'))
+        self.assertIn('cinco intentos consumidos (5/5)', '; '.join(result['failures']))
+        self.assertNotIn('plazo, cancelación', '; '.join(result['failures']))
+
+    def test_stale_terminal_tasks_do_not_occupy_available_attempts(self):
+        for ordinal in (3, 4):
+            self.state.seed('a-b', ordinal, video_id=f'failed-{ordinal}', prompt=f'Prompt {ordinal}')
+            self.state.event(self.state.status('a-b', 'video', ordinal)['attemptId'], 'failed')
+            self.pool.db.execute('INSERT INTO video_tasks VALUES(?,?,?,?,?,?,?,NULL)',
+                ('a-b', ordinal, 'pending', f'failed-{ordinal}', f'Prompt {ordinal}', self.images[0]['url'], 3000))
+        result = self.bank(self.success)
+        self.assertEqual(len(result['clips']), 2)
+        self.assertEqual(len(self.posts), 2)
+
+    def test_cancellation_and_deadline_have_distinct_reasons(self):
+        result = self.bank(self.success, cancelled=lambda: True)
+        self.assertIn('cancelación', '; '.join(result['failures']))
+        result = self.pool.bank('a-b', self.prompts, self.images, self.root, 1000, 3000, call=self.success)
+        self.assertIn('plazo de generación agotado', '; '.join(result['failures']))
+        self.assertEqual(len(self.posts), 0)
+
+    def test_poll_responses_are_bounded_and_pending_reason_survives_restart(self):
+        self.state.seed('a-b', 0)
+        def queued(url, **kwargs):
+            return {'status': 'queued', 'progress': 15, 'video_id': 'private-video',
+                'task_id': 'private-task', 'url': 'https://example.org/x?sig=private'}
+        result = self.pool.bank('a-b', self.prompts, self.images, self.root, 1010, 3000, call=queued)
+        polls = [d for d in result['diagnostics'] if d['stage'] == 'retrieve-response']
+        self.assertEqual(len(polls), 1)
+        self.assertEqual(polls[0]['httpStatus'], 200)
+        self.assertIn('queued', polls[0]['body'])
+        self.assertIn('15', polls[0]['body'])
+        detail = '; '.join(result['failures'])
+        self.assertIn('plazo de generación agotado', detail)
+        self.assertIn('queued', detail)
+        self.assertNotIn('private', json.dumps(result))
+        other = self.pool.bank('other', self.prompts, self.images, self.root / 'other', 2000, 3000, call=self.success)
+        self.assertIn('otra tarea pendiente', '; '.join(other['failures']))
+        self.assertEqual(len(self.posts), 0)
+        restored = VideoPool(self.root / 'fresh.sqlite', clock=lambda: self.now, sleep=self.sleep, state=self.state)
+        self.addCleanup(restored.db.close)
+        recovered = restored.bank('a-b', self.prompts, self.images, self.root, 2000, 3000,
+            call=self.success, download=self.download, verified=['clip-1.mp4'])
+        self.assertEqual(len(recovered['clips']), 1)
+        self.assertEqual(len(self.posts), 0)
+
+    def test_real_poll_observer_reports_http_and_final_progress_without_every_poll(self):
+        from common import request_json
+        from contextlib import contextmanager
+        self.state.seed('a-b', 0)
+        calls = []
+        @contextmanager
+        def response(request, **kwargs):
+            self.assertIsNone(request.data)
+            self.assertIn('video_id=old-id&model_name=agnes-video-2.5-flash', request.full_url)
+            calls.append(request)
+            value = io.BytesIO(json.dumps({'status': 'queued', 'progress': len(calls), 'task_id': 'private'}).encode())
+            value.status, value.headers = 200, {'X-Request-ID': 'req-poll'}
+            yield value
+        with patch('common.urllib.request.urlopen', response):
+            result = self.pool.bank('a-b', self.prompts, self.images, self.root, 1010, 3000, call=request_json)
+        polls = [d for d in result['diagnostics'] if d['stage'] == 'retrieve-response']
+        self.assertGreater(len(calls), 1)
+        self.assertEqual(len(polls), 1)
+        self.assertEqual(polls[0]['requestId'], 'req-poll')
+        self.assertEqual(json.loads(result['diagnostics'][-1]['body'].split('última consulta: ')[1])['progress'], len(calls))
+
+    def test_unknown_poll_status_and_repeated_errors_report_recovery_expiry(self):
+        self.state.seed('a-b', 0)
+        def unknown(url, **kwargs): return {'status': 'unexpected', 'progress': 7}
+        result = self.bank(unknown)
+        self.assertIn('ventana de recuperación de 60 s agotada', result['failures'][0])
+        self.assertIn('unexpected', result['failures'][0])
+        self.assertLessEqual(self.now, 1060)
+        def unavailable(url, **kwargs):
+            raise urllib.error.HTTPError(url, 503, 'down', {}, io.BytesIO(b'{"error":"down"}'))
+        second = self.bank(unavailable)
+        errors = [d for d in second['diagnostics'] if d['stage'] == 'retrieve']
+        self.assertEqual(len(errors), 1)
+        self.assertIn('503', second['failures'][0])
+        self.assertIn('ventana de recuperación', second['failures'][0])
+        self.assertEqual(len(self.posts), 0)
     def download(self,url,path,deadline):
         path.write_bytes(b'fixture')
         return {'path':str(path),'file':path.name,'width':720,'height':1280,'duration':6}

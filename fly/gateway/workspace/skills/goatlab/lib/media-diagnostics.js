@@ -4,7 +4,7 @@ export function safeMediaMessage(value, env = {}) {
   for(const [key,secret] of Object.entries(env)) if(secret && /(?:KEY|TOKEN|SECRET|PASSWORD)$/.test(key)) text=text.split(String(secret)).join('[redacted]');
   return text.replace(/https?:\/\/[^\s"<>]+/g,'[endpoint]')
     .replace(/(bearer\s+)[^\s"<>]+/gi,'$1[redacted]')
-    .replace(/("(?:token|api[_-]?key|secret|authorization|password|prompt|video[_-]?id)"\s*:\s*)"[^"\n]*"/gi,'$1"[redacted]"').slice(0,4096);
+    .replace(/("(?:token|api[_-]?key|secret|authorization|password|prompt|id|(?:video|task|result|generation)[_-]?id)"\s*:\s*)"[^"\n]*"/gi,'$1"[redacted]"').slice(0,4096);
 }
 export function publicVideoDiagnostics(rows, env={}) {
   return (Array.isArray(rows)?rows:[]).slice(-128).map(row=>({

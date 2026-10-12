@@ -125,7 +125,7 @@ class ImagePool:
                     return result
                 raise ValueError("la imagen guardada no existe; restaurar el recurso antes de reintentar")
             if old and old["status"] == "used":
-                raise ValueError("imagen liberada; el slot ya fue utilizado")
+                raise ValueError('imagen completada ausente; sin evidencia local compatible; restaurar el recurso o la respuesta cifrada; no se regenera')
             if old and old["status"] in ("pending", "uncertain"):
                 raise ValueError("generación de resultado incierto; no se repite automáticamente")
             throttle = self.db.execute("SELECT until FROM throttle WHERE id=1").fetchone()
@@ -148,6 +148,9 @@ class ImagePool:
                 self.take_slot(attempt_deadline, timeout+35)
                 if self.clock() >= (prior_match[0] if prior_match else deadline):
                     raise ValueError("encuentro caducado; generaciones cerradas")
+                remote = self.state.status(match, 'image', slot)
+                if remote and remote['state'] == 'completed':
+                    raise ValueError('imagen completada ausente; sin evidencia local compatible; restaurar el recurso o la respuesta cifrada; no se regenera')
                 while True:
                     admission = self.state.reserve(match, 'image', slot, prompt, model, deadline)
                     if admission.get('canPost'):

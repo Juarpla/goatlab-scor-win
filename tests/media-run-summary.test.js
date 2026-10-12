@@ -15,6 +15,8 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
     { matchId: 'photos', images: 4, clips: 0, mode: 'images-only', failures: [] },
     { matchId: 'clips', images: 1, clips: 2, mode: 'clips-only', failures: [] },
     { matchId: 'upload-failed', images: 3, clips: 1, mode: 'all', failures: ['Motion Prompts no disponibles; montaje local disponible', 'R2: subida sin confirmar api-secret'] },
+    { matchId: 'exhausted', images: 3, clips: 0, mode: 'all', failures: ['Imagen 1: imagen completada ausente; sin evidencia local compatible', 'faltan clips: cinco intentos consumidos (5/5)'] },
+    { matchId: 'pending', images: 4, clips: 0, mode: 'all', failures: [], diagnostics: [{ message: 'HTTP 200 solicitud aceptada' }, { message: 'tarea pendiente; ventana de recuperación de 60 s agotada; status=queued progress=15' }] },
   ];
   await writeFile(join(repo, '.cache/media-run.json'), JSON.stringify({ mode: 'all', pending: 2, results }));
   const summaryPath = join(repo, 'summary.md');
@@ -32,6 +34,9 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
   assert.match(row('upload-failed'), /3\/4 imágenes listas; faltan 1/);
   assert.match(row('upload-failed'), /R2: subida sin confirmar/);
   assert.doesNotMatch(summary, /api-secret/);
+  assert.match(row('exhausted'), /imagen completada ausente.*cinco intentos consumidos \(5\/5\)/);
+  assert.match(row('pending'), /tarea pendiente.*status=queued progress=15/);
+  assert.doesNotMatch(row('pending'), /solicitud aceptada/);
   const persisted = JSON.parse(await readFile(join(repo, '.cache/media-run.json'), 'utf8'));
   assert.deepEqual(persisted.results, results);
 });

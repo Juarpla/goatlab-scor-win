@@ -75,6 +75,8 @@ class FakeAgnesState:
 
     def pollclaim(self, match, ordinal):
         row = self.status(match, 'video', ordinal)
+        if row and row['state'] in ('failed', 'rejected', 'abandoned'):
+            return {'canPoll': False, 'reason': 'sin tarea recuperable vigente'}
         if not row or not row.get('videoId') or row.get('next_poll', 0) > self.clock():
             return {'canPoll': False, 'reason': 'Retry-After vigente o tarea no conocida'}
         return {'canPoll': True, 'videoId': row['videoId'], 'attemptId': row['attemptId']}

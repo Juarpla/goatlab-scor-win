@@ -112,7 +112,14 @@ class VideoPool:
         record={'at':self.clock(),'model':MODEL,'stage':stage,'httpStatus':error.code,
                 'body':raw[:2048],'requestId':request_id,'videoId':None,
                 'attemptId':attemptId,'next':next or self.error_next(stage,error.code,video_id,proven_rejected)}
-        self.diagnostic(match,ordinal,record)
+        if stage == 'retrieve':
+            self.last_retrieve_response = {'httpStatus': error.code, 'error': self.safe_detail(raw)}
+            signature = (match, ordinal, error.code, record['body'])
+            if signature != getattr(self, 'retrieve_error_signature', None):
+                self.diagnostic(match, ordinal, record)
+                self.retrieve_error_signature = signature
+        else:
+            self.diagnostic(match,ordinal,record)
         retry=retry_seconds(headers.get('Retry-After'));status=error.code;error.close()
         return status,retry,video_id,proven_rejected
 
@@ -155,14 +162,14 @@ class VideoPool:
     def safe_detail(value):
         def clean(item):
             if isinstance(item, dict):
-                return {key: '[redacted]' if re.search(r'token|key|secret|authorization|password|prompt|image|url|video.?id', str(key), re.I) else clean(val) for key, val in item.items()}
+                return {key: '[redacted]' if re.sub(r'[^a-z0-9]', '', str(key).lower()) in IDENTIFIER_KEYS or re.search(r'token|key|secret|authorization|password|prompt|image|url|video.?id', str(key), re.I) else clean(val) for key, val in item.items()}
             if isinstance(item, list): return [clean(val) for val in item[:10]]
             return item
         raw = json.dumps(clean(value), ensure_ascii=False, default=str) if not isinstance(value, str) else value
         for key, secret in os.environ.items():
             if secret and key.endswith(('_KEY', '_TOKEN', '_SECRET')):
                 raw = raw.replace(secret, '[redacted]')
-        raw = re.sub(r'(?i)("(?:token|api[_-]?key|secret|authorization|password|prompt|video[_-]?id)"\s*:\s*)"[^"\n]*"', r'\1"[redacted]"', raw)
+        raw = re.sub(r'(?i)("(?:token|api[_-]?key|secret|authorization|password|prompt|id|(?:video|task|result|generation)[_-]?id)"\s*:\s*)"[^"\n]*"', r'\1"[redacted]"', raw)
         raw = re.sub(r'(?i)(bearer\s+)[^\s"<>]+', r'\1[redacted]', raw)
         raw = re.sub(r'https?://[^\s"<>]+', '[endpoint]', raw)
         return raw[:2048]
@@ -200,14 +207,25 @@ class VideoPool:
             self.db.execute('DELETE FROM video_recovery WHERE match_id=?', (match,))
             target = max(0, min(2, len(prompts)) - len(verified))
             if not target: return {'clips': [], 'failures': [], 'diagnostics': prior_diagnostics}
+            # Count consumed attempts from the authority even with a fresh SQLite.
+            try:
+                remote_slots = [self.state.status(match, 'video', i) for i in range(5)]
+            except ValueError as error:
+                return {'clips': [], 'failures': [self.safe_detail(str(error))], 'diagnostics': prior_diagnostics}
+            consumed = {i for i, slot in enumerate(remote_slots) if slot and slot['state'] != 'rejected'}
+            consumed.update(int(name[5]) for name in verified if re.fullmatch(r'clip-[0-4]\.mp4', name))
+            consumed.update(row['ordinal'] for row in self.db.execute("SELECT ordinal FROM video_tasks WHERE match_id=? AND ordinal BETWEEN 0 AND 4 AND status!='limited'", (match,)) if remote_slots[row['ordinal']] is None)
+            # Clear stale cache occupancy before considering any available ordinal.
+            for i, slot in enumerate(remote_slots):
+                if slot and slot['state'] in ('failed', 'abandoned'):
+                    self.db.execute('UPDATE video_tasks SET status=? WHERE match_id=? AND ordinal=?', (slot['state'], match, i))
+            stop_reason = None
             for ordinal in range(5):
                 if f'clip-{ordinal}.mp4' in verified: continue
                 prompt = prompts[ordinal % len(prompts)]
                 if self.clock() >= deadline or cancelled(): break
-                try:
-                    remote = self.state.status(match, 'video', ordinal)
-                except ValueError as error:
-                    failures.append(str(error)); break
+                remote = remote_slots[ordinal]
+                attempt_id = remote.get('attemptId') if remote else None
                 accepted_path = out / f'clip-{ordinal}.accepted.json'
                 try: accepted = json.loads(accepted_path.read_text())
                 except (OSError, ValueError): accepted = None
@@ -222,11 +240,13 @@ class VideoPool:
                 if remote:
                     expected_prompt = hashlib.sha256(prompt['prompt'].encode()).hexdigest()
                     expected_reference = hashlib.sha256(images[ordinal%len(images)]['url'].encode()).hexdigest()
-                    if not remote.get('videoId') and (remote.get('promptHash') != expected_prompt or remote.get('model', MODEL) != MODEL or (remote.get('referenceHash') and remote['referenceHash'] != expected_reference)):
+                    if remote['state'] not in ('failed', 'abandoned') and not remote.get('videoId') and (remote.get('promptHash') != expected_prompt or remote.get('model', MODEL) != MODEL or (remote.get('referenceHash') and remote['referenceHash'] != expected_reference)):
                         failures.append('slot pertenece a otra versión de prompts o referencia'); break
                     cached = self.db.execute('SELECT status,result FROM video_tasks WHERE match_id=? AND ordinal=?', (match,ordinal)).fetchone()
                     if not (remote['state']=='completed' and cached and cached['status']=='done'):
-                        status = 'pending' if remote.get('videoId') else {'completed':'used','rejected':'limited'}.get(remote['state'],remote['state'])
+                        status = remote['state']
+                        if status not in ('failed', 'abandoned'):
+                            status = 'pending' if remote.get('videoId') else {'completed':'used','rejected':'limited'}.get(status, status)
                         self.db.execute('INSERT OR REPLACE INTO video_tasks VALUES(?,?,?,?,?,?,?,NULL)', (match,ordinal,status,remote.get('videoId'),prompt['prompt'],images[ordinal%len(images)]['url'],expires))
                 row = self.db.execute('SELECT * FROM video_tasks WHERE match_id=? AND ordinal=?', (match,ordinal)).fetchone()
                 if row and row['status']=='done':
@@ -247,11 +267,15 @@ class VideoPool:
                 self.db.execute('INSERT OR IGNORE INTO video_models VALUES(?,?,?)',(match,ordinal,MODEL))
                 if not video_id:
                     occupied = self.db.execute("SELECT COUNT(*) FROM video_tasks WHERE match_id=? AND status IN ('done','pending','uncertain')", (match,)).fetchone()[0]
-                    if occupied>=2: break
+                    if occupied>=2:
+                        stop_reason = 'dos tareas completadas o pendientes ocupan el banco; recuperar los recursos existentes'
+                        break
                     while not video_id and self.clock()<deadline and not cancelled():
                         rate = self.db.execute('SELECT next_at FROM video_rate WHERE id=1').fetchone()
                         wait=max(0,(rate[0] if rate else 0)-self.clock())
-                        if self.clock()+wait+1>=deadline: break
+                        if self.clock()+wait+1>=deadline:
+                            stop_reason = 'plazo de generación agotado; sin margen para respetar el ritmo de llamadas'
+                            break
                         if wait: self.sleep(wait)
                         if cancelled() or self.clock()+1>=deadline: break
                         try:
@@ -266,6 +290,7 @@ class VideoPool:
                             self.diagnostic(match,ordinal,{'at':self.clock(),'model':MODEL,'stage':'admission','httpStatus':None,'body':self.safe_detail(admission.get('reason','autoridad Agnes no concedió permiso')),'requestId':'','videoId':None,'attemptId':None,'next':'sin nueva solicitud; reutilizar evidencia o esperar ritmo/cuota'})
                             failures.append(admission.get('reason','autoridad Agnes no concedió permiso')); break
                         attempt_id = admission['attemptId']
+                        consumed.add(ordinal)
                         self.db.execute('INSERT OR REPLACE INTO video_tasks VALUES(?,?,?,NULL,?,?,?,NULL)', (match,ordinal,'uncertain',prompt['prompt'],reference,expires))
                         self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)', (self.clock()+start_interval()+0.1,))
                         result = None
@@ -292,6 +317,7 @@ class VideoPool:
                                 self.state.event(attempt_id, 'accepted', videoId=video_id)
                                 self.db.execute("UPDATE video_tasks SET status='pending',video_id=? WHERE match_id=? AND ordinal=?",(video_id,match,ordinal));self.recovery(match,deadline,ordinal)
                             elif status==429 and proven_rejected:
+                                consumed.discard(ordinal)
                                 self.state.event(attempt_id, 'hard-rejected-429', httpStatus=429, provenRejected=True, retryAfterMs=retry*1000)
                                 self.db.execute("UPDATE video_tasks SET status='limited' WHERE match_id=? AND ordinal=?",(match,ordinal))
                                 self.db.execute('INSERT OR REPLACE INTO video_rate VALUES(1,?)',(self.clock()+max(start_interval()+0.1,retry),))
@@ -319,23 +345,47 @@ class VideoPool:
                         state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                         if state and state[0] in ('failed','abandoned'): continue
                         break
+                last_poll, last_signature = None, None
+                self.retrieve_error_signature = None
+                poll_stop = None
+                def observe_poll(http_status, response_headers, payload):
+                    nonlocal last_poll, last_signature
+                    self.retrieve_error_signature = None
+                    last_poll = {'httpStatus': http_status, 'status': payload.get('status'), 'progress': payload.get('progress'), 'error': payload.get('error')} if isinstance(payload, dict) else {'httpStatus': http_status, 'response': payload}
+                    if isinstance(payload, dict) and payload.get('status') not in ('queued', 'in_progress', 'completed', 'failed'):
+                        last_poll['response'] = self.safe_detail(payload)
+                    signature = (http_status, self.safe_detail(last_poll.get('status')), self.safe_detail(last_poll.get('error')))
+                    if signature != last_signature:
+                        self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'retrieve-response', 'httpStatus': http_status,
+                            'requestId': self.safe_detail(str(response_headers.get('X-Request-ID') or response_headers.get('Request-ID') or '')[:200]),
+                            'videoId': None, 'attemptId': claim['attemptId'], 'body': self.safe_detail(last_poll),
+                            'next': 'interpretar estado de la tarea; conservar el identificador sin repetir POST'})
+                        last_signature = signature
                 while self.clock()<deadline and not cancelled():
                     recovery=self.db.execute('SELECT deadline,ordinal FROM video_recovery WHERE match_id=?',(match,)).fetchone()
                     limit=min(deadline,recovery[0]) if recovery and recovery[1]==ordinal else deadline
-                    if self.clock()>=limit: break
+                    if self.clock()>=limit:
+                        poll_stop = 'ventana de recuperación de 60 s agotada' if limit < deadline else 'plazo de generación agotado'
+                        break
                     try:
                         claim = self.state.pollclaim(match, ordinal)
                     except ValueError as error:
-                        failures.append(str(error)); break
+                        poll_stop = self.safe_detail(str(error)); break
                     if not claim.get('canPoll'):
-                        failures.append(claim.get('reason','recuperación remota no disponible')); break
+                        poll_stop = claim.get('reason','recuperación remota no disponible'); break
                     poll_rate=self.db.execute('SELECT next_at FROM video_poll_rate WHERE video_id=?',(video_id,)).fetchone()
                     wait=max(0,poll_rate[0]-self.clock()) if poll_rate else 0
-                    if self.clock()+wait>=limit: break
+                    if self.clock()+wait>=limit:
+                        poll_stop = 'Retry-After no cabe en la ventana de consulta'
+                        break
                     if wait: self.sleep(wait)
                     if cancelled() or self.clock()>=limit: break
                     try:
-                        result=call(self.task_url(video_id), headers=headers, timeout=min(15,max(.1,limit-self.clock())))
+                        if call is request_json:
+                            result=call(self.task_url(video_id), headers=headers, timeout=min(15,max(.1,limit-self.clock())), observe=observe_poll)
+                        else:
+                            result=call(self.task_url(video_id), headers=headers, timeout=min(15,max(.1,limit-self.clock())))
+                            observe_poll(200, {}, result)
                         if not isinstance(result,dict): raise ValueError('respuesta inválida')
                         status=result.get('status')
                         if status=='failed':
@@ -358,28 +408,52 @@ class VideoPool:
                         if status not in ('queued','in_progress'): limit=self.recovery(match,deadline,ordinal)
                     except urllib.error.HTTPError as error:
                         status,retry,_,_=self.error(match,ordinal,'retrieve',error,attemptId=claim['attemptId'])
+                        last_poll = self.last_retrieve_response
+                        last_signature = None
                         limit=self.recovery(match,deadline,ordinal)
                         if status==429:
                             try: self.state.event(claim['attemptId'], 'poll-throttle', httpStatus=429, retryAfterMs=retry*1000, stage='retrieve')
-                            except ValueError: break
+                            except ValueError as error:
+                                poll_stop = 'no se pudo persistir Retry-After: ' + self.safe_detail(str(error))
+                                break
                             self.db.execute('INSERT OR REPLACE INTO video_poll_rate VALUES(?,?)',(video_id,self.clock()+retry))
-                            if self.clock()+retry>=limit: break
+                            if self.clock()+retry>=limit:
+                                poll_stop = 'Retry-After no cabe en la ventana de recuperación'
+                                break
                             self.sleep(retry)
                         else:
                             try: self.state.event(claim['attemptId'], 'uncertain', httpStatus=status, stage='retrieve')
-                            except ValueError: break
+                            except ValueError as error:
+                                poll_stop = 'no se pudo persistir el error de consulta: ' + self.safe_detail(str(error))
+                                break
                     except (OSError,ValueError,subprocess.SubprocessError) as error:
                         self.transport(match,ordinal,'retrieve',video_id,error=error,attemptId=claim['attemptId'])
                         try: self.state.event(claim['attemptId'], 'uncertain', stage='retrieve')
                         except ValueError: pass
                         limit=self.recovery(match,deadline,ordinal)
-                    if self.clock()+2>=limit: break
+                    if self.clock()+2>=limit:
+                        poll_stop = 'ventana de recuperación de 60 s agotada' if limit < deadline else 'plazo de generación agotado'
+                        break
                     self.sleep(2)
                 state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                 if state[0]=='pending':
-                    failures.append(f'clip {ordinal+1}: recuperación vencida o tarea pendiente; montaje parcial');break
+                    reason = 'cancelación' if cancelled() else poll_stop or ('plazo de generación agotado' if self.clock() >= deadline else 'ventana de recuperación de 60 s agotada')
+                    stop_reason = f'clip {ordinal+1}: tarea pendiente; {reason}'
+                    if last_poll:
+                        stop_reason += '; última consulta: ' + self.safe_detail(last_poll)
+                    self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'retrieve-stop',
+                        'httpStatus': last_poll.get('httpStatus') if last_poll else None, 'body': stop_reason, 'requestId': '', 'videoId': None,
+                        'attemptId': remote.get('attemptId') if remote else attempt_id, 'next': 'recuperar mediante GET del mismo video_id en otra corrida; no repetir POST'})
+                    break
                 if len(clips)>=target: break
-        if len(clips) < target and not failures: failures.append('faltan clips: plazo, cancelación o cinco intentos consumidos')
+        if len(clips) < target:
+            reason = 'cancelación' if cancelled() else stop_reason
+            if not reason and self.clock() >= deadline: reason = 'plazo de generación agotado'
+            if not reason and len(consumed) == 5:
+                reason = 'cinco intentos consumidos (5/5); no se crean nuevas tareas'
+                if failures: reason += '; último motivo: ' + self.safe_detail(failures[-1])
+            if not reason: reason = failures[-1] if failures else 'recursos existentes sin recuperar; no se crean tareas duplicadas'
+            failures.insert(0, f'faltan clips: {reason}; intentos consumidos {len(consumed)}/5')
         if failures:
             failures.extend(self.failure_details(match))
         return {'clips':clips[:target],'failures':failures,'diagnostics':json.loads(diagnostics_path.read_text()) if diagnostics_path.exists() else prior_diagnostics}
