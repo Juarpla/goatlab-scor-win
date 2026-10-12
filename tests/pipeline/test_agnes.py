@@ -40,6 +40,31 @@ class AgnesTests(unittest.TestCase):
         self.assertGreaterEqual(self.now, 1060)
 
     @patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}')
+    def test_image_request_observation_has_http_without_recording_binary_and_never_reposts(self, _probe):
+        import contextlib
+        from common import request_json
+        observations, requests = [], []
+        def fail_persistence(attempt, record):
+            observations.append(record)
+            raise ValueError('R2 unavailable')
+        self.state.diagnostic = fail_persistence
+        @contextlib.contextmanager
+        def response(request, **kwargs):
+            requests.append(request)
+            value = io.BytesIO(json.dumps(self.result()).encode())
+            value.status, value.headers = 200, {'X-Request-ID': 'req-image'}
+            yield value
+        logs = io.StringIO()
+        with patch('common.urllib.request.urlopen', response), contextlib.redirect_stderr(logs):
+            self.pool.generate('match', 0, 'prompt', Path(self.temp.name) / 'images', request_json)
+        self.assertEqual(len(requests), 1)
+        self.assertEqual(observations[0]['httpStatus'], 200)
+        self.assertEqual(observations[0]['method'], 'POST')
+        self.assertNotIn(self.result()['data'][0]['b64_json'], logs.getvalue())
+        self.assertIn('no se pudo guardar diagnóstico', logs.getvalue())
+        self.pool.generate('match', 0, 'prompt', Path(self.temp.name) / 'images', lambda *a, **kw: self.fail('duplicate POST'))
+
+    @patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}')
     def test_generation_uses_2k_timeout_and_cache(self, _probe):
         calls = []
         def call(url, body, headers, timeout):

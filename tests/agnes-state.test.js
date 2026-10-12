@@ -8,6 +8,37 @@ const now=Date.parse('2026-10-09T06:00:00Z');
 const fresh=()=>createAgnesState({nowMs:now-86_400_000});
 const reserve=(extra={})=>({attemptId:randomUUID(),matchId:'alpha-beta',kind:'image',ordinal:0,promptHash:hash('prompt'),model:'agnes-image-2.5-flash',expiresAtMs:now+86_400_000,guard:{manual:true,kickoffMs:now},...extra});
 const env={R2_STATE_ACCOUNT_ID:'account',R2_STATE_ACCESS_KEY_ID:'test-key',R2_STATE_SECRET_ACCESS_KEY:'test-secret'};
+test('attempt diagnostics survive restart, stay bounded and never alter admission or quota',async()=>{
+  const remote=backend();let client=new AgnesStateClient({env,fetchImpl:remote.fetch.bind(remote)});
+  const input=reserve({kind:'video',model:'agnes-video-2.5-flash'});
+  await client.transact('reserve',input);
+  const quota=structuredClone(remote.state.quota);
+  const record={id:'post-1',at:now,runId:'run-1',stage:'create',method:'POST',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full',providerStatus:'',progress:null,requestId:'req-1'};
+  await client.transact('diagnostic',{attemptId:input.attemptId,record});
+  await client.transact('diagnostic',{attemptId:input.attemptId,record});
+  for(let i=0;i<24;i++)await client.transact('diagnostic',{attemptId:input.attemptId,record:{...record,id:'poll-'+i,stage:'retrieve-response',method:'GET',httpStatus:200,providerStatus:'queued',progress:i}});
+  client=new AgnesStateClient({env,fetchImpl:remote.fetch.bind(remote)});
+  const {attempts}=await client.transact('attempts',{matchId:input.matchId});
+  assert.equal(attempts[0].diagnostics.queryCount,24);
+  assert.ok(attempts[0].diagnostics.events.length<=8);
+  assert.equal(attempts[0].diagnostics.events[0].httpStatus,503);
+  assert.equal(attempts[0].diagnostics.events.at(-1).progress,23);
+  assert.deepEqual(remote.state.quota,quota);
+  assert.equal((await client.transact('reserve',input)).canPost,false);
+});
+test('diagnostic input is bounded, sanitized and cannot expose provider payload fields',()=>{
+  const input=reserve();let {state}=reduceAgnesState(fresh(),'reserve',input,{nowMs:now});
+  const record={id:'record-1',at:now,runId:'run-1',stage:'create',method:'POST',httpStatus:503,
+    message:'{"b64_json":"private-binary","video_id":"private-id","prompt":"private-prompt"} '+ 'x'.repeat(500),
+    runUrl:'https://example.test/signed?secret=value',providerCode:'video_queue_full'};
+  state=reduceAgnesState(state,'diagnostic',{attemptId:input.attemptId,record},{nowMs:now}).state;
+  const event=state.attempts[input.attemptId].diagnostics.events[0];
+  assert.ok(event.message.length<=256);
+  assert.equal(event.runUrl,'');
+  assert.doesNotMatch(JSON.stringify(event),/private-binary|private-id|private-prompt|secret=value/);
+  assert.throws(()=>reduceAgnesState(state,'diagnostic',{attemptId:input.attemptId,record:{...record,id:'bad-record',httpStatus:999}},{nowMs:now}),/diagnóstico/);
+  assert.equal(state.quota['2026-10-09'].images,1);
+});
 function backend(seed=fresh()) {
   let state=seed,etag='"1"',puts=0,loseAck=false;
   return {

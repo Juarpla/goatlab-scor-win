@@ -17,6 +17,7 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
     { matchId: 'upload-failed', images: 3, clips: 1, mode: 'all', failures: ['Motion Prompts no disponibles; montaje local disponible', 'R2: subida sin confirmar api-secret'] },
     { matchId: 'exhausted', images: 3, clips: 0, mode: 'all', failures: ['Imagen 1: imagen completada ausente; sin evidencia local compatible', 'faltan clips: cinco intentos consumidos (5/5)'] },
     { matchId: 'pending', images: 4, clips: 0, mode: 'all', failures: [], diagnostics: [{ message: 'HTTP 200 solicitud aceptada' }, { message: 'tarea pendiente; ventana de recuperación de 60 s agotada; status=queued progress=15' }] },
+    { matchId:'history',images:1,clips:0,failures:['cinco intentos consumidos'],resources:[{kind:'image',number:1,status:'reutilizado',objectKey:'partidos/history/0.jpg',reason:'verificado en R2; sin petición a Agnes'}],attempts:[{kind:'video',ordinal:0,state:'abandoned',attemptId:'attempt-1',diagnostics:{queryCount:0,events:[{at:1791819194640,runId:'older-run',stage:'create',method:'POST',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full',providerStatus:'',progress:null}]}}]},
   ];
   await writeFile(join(repo, '.cache/media-run.json'), JSON.stringify({ mode: 'all', pending: 2, results }));
   const summaryPath = join(repo, 'summary.md');
@@ -37,6 +38,11 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
   assert.match(row('exhausted'), /imagen completada ausente.*cinco intentos consumidos \(5\/5\)/);
   assert.match(row('pending'), /tarea pendiente.*status=queued progress=15/);
   assert.doesNotMatch(row('pending'), /solicitud aceptada/);
+  assert.match(summary,/Peticiones\/intentos/);
+  assert.match(summary,/503.*video_queue_full/);
+  assert.match(summary,/verificado en R2; sin petición a Agnes/);
+  assert.match(summary,/detalle original no conservado/);
+  assert.match(summary,/older-run/);
   const persisted = JSON.parse(await readFile(join(repo, '.cache/media-run.json'), 'utf8'));
   assert.deepEqual(persisted.results, results);
 });

@@ -1,4 +1,5 @@
 import json
+import contextlib
 import io
 import http.client
 import os
@@ -106,11 +107,13 @@ class VideoTests(unittest.TestCase):
         self.assertEqual(len(recovered['clips']), 1)
         self.assertEqual(len(self.posts), 0)
 
-    def test_real_poll_observer_reports_http_and_final_progress_without_every_poll(self):
+    def test_real_poll_observer_logs_every_request_and_keeps_only_last_repeated_response(self):
         from common import request_json
         from contextlib import contextmanager
         self.state.seed('a-b', 0)
         calls = []
+        observations = []
+        self.state.diagnostic = lambda attempt, record: observations.append(record)
         @contextmanager
         def response(request, **kwargs):
             self.assertIsNone(request.data)
@@ -119,11 +122,15 @@ class VideoTests(unittest.TestCase):
             value = io.BytesIO(json.dumps({'status': 'queued', 'progress': len(calls), 'task_id': 'private'}).encode())
             value.status, value.headers = 200, {'X-Request-ID': 'req-poll'}
             yield value
-        with patch('common.urllib.request.urlopen', response):
+        logs = io.StringIO()
+        with patch('common.urllib.request.urlopen', response), contextlib.redirect_stderr(logs):
             result = self.pool.bank('a-b', self.prompts, self.images, self.root, 1010, 3000, call=request_json)
         polls = [d for d in result['diagnostics'] if d['stage'] == 'retrieve-response']
         self.assertGreater(len(calls), 1)
         self.assertEqual(len(polls), 1)
+        self.assertEqual(len([r for r in observations if r['method'] == 'GET']), len(calls))
+        self.assertEqual(logs.getvalue().count('"method": "GET"'), len(calls))
+        self.assertNotIn('private', logs.getvalue())
         self.assertEqual(polls[0]['requestId'], 'req-poll')
         self.assertEqual(json.loads(result['diagnostics'][-1]['body'].split('última consulta: ')[1])['progress'], len(calls))
 

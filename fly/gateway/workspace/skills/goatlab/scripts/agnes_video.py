@@ -1,5 +1,6 @@
 """Durable single-flight image-to-video tasks. A lost POST is never repeated."""
 import argparse
+from agnes_diagnostics import provider_diagnostic
 import fcntl
 import hashlib
 import http.client
@@ -114,24 +115,25 @@ class VideoPool:
                 'attemptId':attemptId,'next':next or self.error_next(stage,error.code,video_id,proven_rejected)}
         if stage == 'retrieve':
             self.last_retrieve_response = {'httpStatus': error.code, 'error': self.safe_detail(raw)}
-            signature = (match, ordinal, error.code, record['body'])
-            if signature != getattr(self, 'retrieve_error_signature', None):
-                self.diagnostic(match, ordinal, record)
-                self.retrieve_error_signature = signature
-        else:
-            self.diagnostic(match,ordinal,record)
+        self.diagnostic(match,ordinal,record)
         retry=retry_seconds(headers.get('Retry-After'));status=error.code;error.close()
         return status,retry,video_id,proven_rejected
 
     def diagnostic(self, match, ordinal, record):
         record.update(matchId=match, ordinal=ordinal, code=('provider-http' if record.get('httpStatus') else 'transport-or-response'))
+        compact = provider_diagnostic(self.state, 'video', match, ordinal, record)
         record['body'] = self.safe_detail(record.get('body', ''))
+        signature = (match, ordinal, compact['stage'], compact['httpStatus'], compact['providerStatus'], compact['providerCode'])
+        repeated = compact['method'] == 'GET' and signature == getattr(self, 'last_diagnostic_signature', None)
+        self.last_diagnostic_signature = signature
         if getattr(self, 'diagnostic_out', None):
             path = self.diagnostic_out / 'video-diagnostics.json'
             try: history = json.loads(path.read_text())
             except (OSError, ValueError): history = []
+            if repeated and history: history.pop()
             atomic_json(path, (history + [record])[-128:])
-        print('agnes-video: ' + json.dumps(record, ensure_ascii=False), file=sys.stderr, flush=True)
+        if repeated:
+            self.db.execute('DELETE FROM video_errors WHERE id=(SELECT MAX(id) FROM video_errors)')
         self.db.execute('INSERT INTO video_errors(match_id,ordinal,metadata) VALUES(?,?,?)',(match,ordinal,json.dumps(record)))
         self.db.execute('DELETE FROM video_errors WHERE id NOT IN (SELECT id FROM video_errors ORDER BY id DESC LIMIT 128)')
 
@@ -346,22 +348,17 @@ class VideoPool:
                         state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                         if state and state[0] in ('failed','abandoned'): continue
                         break
-                last_poll, last_signature = None, None
-                self.retrieve_error_signature = None
+                last_poll = None
                 poll_stop = None
                 def observe_poll(http_status, response_headers, payload):
-                    nonlocal last_poll, last_signature
-                    self.retrieve_error_signature = None
+                    nonlocal last_poll
                     last_poll = {'httpStatus': http_status, 'status': payload.get('status'), 'progress': payload.get('progress'), 'error': payload.get('error')} if isinstance(payload, dict) else {'httpStatus': http_status, 'response': payload}
                     if isinstance(payload, dict) and payload.get('status') not in ('queued', 'in_progress', 'completed', 'failed'):
                         last_poll['response'] = self.safe_detail(payload)
-                    signature = (http_status, self.safe_detail(last_poll.get('status')), self.safe_detail(last_poll.get('error')))
-                    if signature != last_signature:
-                        self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'retrieve-response', 'httpStatus': http_status,
-                            'requestId': self.safe_detail(str(response_headers.get('X-Request-ID') or response_headers.get('Request-ID') or '')[:200]),
-                            'videoId': None, 'attemptId': claim['attemptId'], 'body': self.safe_detail(last_poll),
-                            'next': 'interpretar estado de la tarea; conservar el identificador sin repetir POST'})
-                        last_signature = signature
+                    self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'retrieve-response', 'httpStatus': http_status,
+                        'requestId': self.safe_detail(str(response_headers.get('X-Request-ID') or response_headers.get('Request-ID') or '')[:200]),
+                        'videoId': None, 'attemptId': claim['attemptId'], 'body': self.safe_detail(last_poll),
+                        'next': 'interpretar estado de la tarea; conservar el identificador sin repetir POST'})
                 while self.clock()<deadline and not cancelled():
                     recovery=self.db.execute('SELECT deadline,ordinal FROM video_recovery WHERE match_id=?',(match,)).fetchone()
                     limit=min(deadline,recovery[0]) if recovery and recovery[1]==ordinal else deadline
@@ -410,7 +407,6 @@ class VideoPool:
                     except urllib.error.HTTPError as error:
                         status,retry,_,_=self.error(match,ordinal,'retrieve',error,attemptId=claim['attemptId'])
                         last_poll = self.last_retrieve_response
-                        last_signature = None
                         limit=self.recovery(match,deadline,ordinal)
                         if status==429:
                             try: self.state.event(claim['attemptId'], 'poll-throttle', httpStatus=429, retryAfterMs=retry*1000, stage='retrieve')

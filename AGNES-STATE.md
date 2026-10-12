@@ -121,6 +121,17 @@ con `objectKey` y `sizeBytes`. Los registros anteriores se completan al verifica
 Tras PUT se hace HEAD antes de confirmar el estado y eliminar los temporales del recurso.
 Los manifiestos y referencias de clips incluyen únicamente recursos verificados.
 
+Los nuevos intentos guardan `diagnostics` en el estado privado: hasta ocho eventos
+compactos por intento y un contador de consultas. Se conserva creación, última
+consulta, interrupción y publicación; mensajes de hasta 256 caracteres sin prompts,
+binarios, credenciales ni URLs firmadas. Cada petición real aparece en logs con
+método, etapa y HTTP; las consultas repetidas actualizan su último registro persistido.
+Un fallo de diagnóstico no concede permisos, devuelve cuota ni repite POST.
+El summary separa los seis recursos de los cinco intentos de vídeo, incluye éxitos,
+reutilización R2 sin llamadas a Agnes e historial anterior con su corrida de origen.
+Los intentos anteriores sin diagnóstico indican «detalle original no conservado»;
+no se reconstruyen desde logs históricos.
+
 Las tareas vigentes con `video_id` se consultan antes de crear otras, aunque estén
 fuera del top; esta fase sólo recupera y publica, con hasta 60 segundos por partido
 dentro del presupuesto global. GitHub conserva logs y reportes JSON, sin cachés ni

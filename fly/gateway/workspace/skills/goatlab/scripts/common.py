@@ -41,12 +41,13 @@ def atomic_json(path, value):
         os.close(directory)
 
 
-def request_json(url, body=None, headers=None, timeout=30, observe=None):
+def request_json(url, body=None, headers=None, timeout=30, observe=None, observe_headers=None):
     request = urllib.request.Request(
         url, data=None if body is None else json.dumps(body).encode(),
         headers={"Content-Type": "application/json", **(headers or {})},
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:
+        if observe_headers is not None: observe_headers(response.status, response.headers)
         if observe is None: return json.load(response)
         raw = response.read(1_048_577)
         if len(raw) > 1_048_576: raise ValueError('respuesta excede 1 MB')

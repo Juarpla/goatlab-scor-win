@@ -95,3 +95,6 @@ class AgnesState:
 
     def pollclaim(self, match, ordinal):
         return self.call('pollclaim', {'matchId': match, 'kind': 'video', 'ordinal': ordinal, 'owner': self.owner})
+
+    def diagnostic(self, attempt_id, record):
+        return self.call('diagnostic', {'attemptId': attempt_id, 'record': record})

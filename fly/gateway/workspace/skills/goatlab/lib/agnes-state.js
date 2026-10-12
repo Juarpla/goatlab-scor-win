@@ -1,4 +1,5 @@
 import { randomUUID, createHash } from 'node:crypto';
+import { safeMediaMessage } from './media-diagnostics.js';
 
 export const AGNES_STATE_MAX_BYTES = 900_000;
 const dayAt = now => new Date(now).toISOString().slice(0, 10);
@@ -9,6 +10,31 @@ const uuid = value => typeof value === 'string' && /^[a-zA-Z0-9_-]{1,200}$/.test
 const digest = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const keys = (value, allowed) => object(value) && Object.keys(value).every(key=>allowed.includes(key));
 const isoUtc = value => typeof value==='string' && Number.isFinite(Date.parse(value)) && new Date(value).toISOString()===value;
+const diagnosticFields=['id','at','runId','runUrl','stage','method','httpStatus','providerCode','message','providerStatus','progress','requestId','next'];
+function validateDiagnostics(value) {
+  if(!keys(value,['events','queryCount']) || !Number.isSafeInteger(value.queryCount) || value.queryCount<0 || !Array.isArray(value.events) || value.events.length>8) throw new Error('diagnósticos Agnes corruptos');
+  for(const row of value.events) if(!keys(row,diagnosticFields) || !uuid(row.id) || !finite(row.at) || !uuid(row.runId)
+    || !['GET','POST','PUT','HEAD','NONE'].includes(row.method) || (row.httpStatus!==null && (!Number.isInteger(row.httpStatus) || row.httpStatus<100 || row.httpStatus>599))
+    || (row.progress!==null && (!finite(row.progress)||row.progress>100))
+    || !['stage','providerCode','message','providerStatus','requestId','runUrl','next'].every(key=>typeof row[key]==='string' && row[key].length<=(key==='runUrl'?512:key==='message'?256:128))) throw new Error('diagnóstico Agnes inválido');
+}
+function recordDiagnostic(attempt, input) {
+  const record=Object.fromEntries(diagnosticFields.map(key=>[key,input[key]??(['httpStatus','progress'].includes(key)?null:'')]));
+  for(const key of ['stage','providerCode','message','providerStatus','requestId','next']) record[key]=safeMediaMessage(record[key]).slice(0,key==='message'?256:128);
+  record.runUrl=/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/actions\/runs\/\d+$/.test(record.runUrl)?record.runUrl:'';
+  validateDiagnostics({events:[record],queryCount:0});
+  const diagnostics=attempt.diagnostics??={events:[],queryCount:0};
+  if(diagnostics.events.some(event=>event.id===record.id)) return false;
+  if(record.method==='GET' && record.stage.startsWith('retrieve'))diagnostics.queryCount++;
+  const previous=diagnostics.events.at(-1);
+  if(previous?.method==='GET' && record.method==='GET' && previous.stage===record.stage && previous.httpStatus===record.httpStatus && previous.providerStatus===record.providerStatus && previous.providerCode===record.providerCode) diagnostics.events.pop();
+  diagnostics.events.push(record);
+  while(diagnostics.events.length>8) {
+    const disposable=diagnostics.events.findIndex((event,index)=>index>0 && event.method==='GET');
+    diagnostics.events.splice(disposable>=0?disposable:1,1);
+  }
+  return true;
+}
 export const slotKey = ({matchId, kind, ordinal}) => `${matchId}:${kind}:${ordinal}`;
 
 export function validateAgnesState(state) {
@@ -35,7 +61,10 @@ export function validateAgnesState(state) {
     if (row.uploadClaim!==null && (!keys(row.uploadClaim,['id','sha256','confirmed','objectKey','sizeBytes']) || !uuid(row.uploadClaim.id) || !digest(row.uploadClaim.sha256) || typeof row.uploadClaim.confirmed!=='boolean'
       || ((row.uploadClaim.objectKey!==undefined || row.uploadClaim.sizeBytes!==undefined) && !validPublication(row,row.uploadClaim)))) throw new Error('subida Agnes corrupta');
   }
-  for(const [attemptId,row] of Object.entries(state.attempts)) if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds']) || !state.slots[row.slotKey] || !['uncertain','pending','completed','failed','rejected','abandoned','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
+  for(const [attemptId,row] of Object.entries(state.attempts)) {
+    if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds','diagnostics']) || !state.slots[row.slotKey] || !['uncertain','pending','completed','failed','rejected','abandoned','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
+    if(row.diagnostics!==undefined)validateDiagnostics(row.diagnostics);
+  }
   if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('single-flight Agnes corrupto');
   for (const [matchId,row] of Object.entries(state.matches)) if (!id(matchId) || !keys(row,['closed','fenceRevision','expiresAtMs','cleanupConfirmed']) || typeof row.closed!=='boolean' || !finite(row.expiresAtMs) || (row.closed && !uuid(row.fenceRevision))) throw new Error('partido Agnes corrupto');
   for(const [runId,row] of Object.entries(state.runs)) if(!uuid(runId) || !keys(row,['matchId','untilMs']) || !finite(row.untilMs) || (row.matchId!==null && !id(row.matchId))) throw new Error('corrida Agnes corrupta');
@@ -135,6 +164,19 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   }
   else if (operation === 'report') result = {quota:state.quota,failureEvents:state.failureEvents.filter(e => e.at >= nowMs-48*3_600_000).map(e=>({eventId:e.eventId,at:new Date(e.at).toISOString(),hourUTC:e.hourUTC,stage:e.stage,httpStatus:e.httpStatus,matchId:e.matchId})),runs:Object.values(state.summaries).filter(r=>r.at>=nowMs-48*3_600_000).map(r=>({runId:r.runId,at:new Date(r.at).toISOString(),eligible:r.eligible,pending:r.pending,generated:r.generated,reused:r.reused,completed:r.completed})),usage:{opsA:state.usage.opsA,opsB:state.usage.opsB},updatedAt:state.updatedAt};
   else if (operation === 'status') result = {slot:readSlot() ?? null,closed:state.matches[input.matchId]?.closed ?? false};
+  else if (operation === 'attempts') {
+    if(!id(input.matchId))throw new Error('partido inválido');
+    result={attempts:Object.entries(state.attempts).filter(([,attempt])=>state.slots[attempt.slotKey]?.matchId===input.matchId).map(([attemptId,attempt])=>{
+      const row=state.slots[attempt.slotKey];
+      return {attemptId,kind:row.kind,ordinal:row.ordinal,state:attempt.state,diagnostics:attempt.diagnostics??null,
+        ...(row.attemptId===attemptId?{uploadClaim:row.uploadClaim??null,hasVideoId:!!row.videoId}:{})};
+    })};
+  } else if (operation === 'diagnostic') {
+    const attempt=state.attempts[input.attemptId];
+    if(!attempt || attempt.state==='retired')throw new Error('diagnóstico sin intento vigente');
+    const saved=recordDiagnostic(attempt,input.record??{});
+    result=saved?change({saved:true}):{saved:true};
+  }
   else if (operation === 'recoverable-videos') result = {tasks:Object.values(state.slots)
     .filter(row=>row.kind==='video' && row.videoId && ['pending','completed'].includes(row.state)
       && !row.uploadClaim?.confirmed && row.expiresAtMs>nowMs && !state.matches[row.matchId]?.closed)

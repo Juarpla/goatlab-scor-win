@@ -47,6 +47,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
   const started = clock(), runDeadline = mediaRunDeadline(started, env), runId = randomUUID();
   const repo = env.GOATLAB_REPO || '.', dir = args['--out'] || env.MEDIA_PACK_DIR || join(repo, 'public/data/media-pack');
   const results = [];
+  const publishedByMatch = new Map();
   const runUrl = env.GITHUB_RUN_ID ? `https://github.com/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}` : null;
   const r2tool = join(repo, 'scripts/r2-media.mjs');
   const R2 = env.R2_PUBLIC_BASE && env.R2_ACCESS_KEY_ID && env.R2_SECRET_ACCESS_KEY && (env.R2_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID)
@@ -147,6 +148,11 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     const imageModel = env.AGNES_IMAGE_MODEL || 'agnes-image-2.5-flash', videoModel = 'agnes-video-2.5-flash';
     const fingerprint = contentFingerprint(match, { ...imagePack, generationModel: imageModel }, { ...videoPack, generationModel: videoModel });
     const failures = [];
+    if(!publishedByMatch.has(matchId))publishedByMatch.set(matchId,new Set());
+    const publishedFiles = publishedByMatch.get(matchId);
+    let attempts = [];
+    try { attempts = (await state('attempts',{matchId})).attempts ?? []; }
+    catch(error) { failures.push('Historial de intentos no disponible: '+safeMediaMessage(error.message,env)); }
     let diagnostics = [];
     try { diagnostics=publicVideoDiagnostics(await json(join(folder,'video-diagnostics.json')),env); } catch {}
     if (!imagePrompts.length) failures.push('Image Prompts no disponibles');
@@ -203,9 +209,18 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     };
     const putResource = async (kind, ordinal, saved, object) => {
       if (!R2 || r2blocked) return false;
+      let attemptId;
+      const pendingPublication=async reason=>{
+        failures.push('R2: '+saved.file+': '+reason);
+        if(attemptId)try { await state('diagnostic',{attemptId,record:{id:randomUUID(),at:clock(),runId,runUrl:runUrl??'',
+          stage:'publication-pending',method:'NONE',httpStatus:null,providerCode:'',message:safeMediaMessage(reason,env).slice(0,256),providerStatus:'publication-pending',progress:null,requestId:''}}); }
+        catch(error) {log('media: '+matchId+': diagnóstico de publicación no guardado: '+safeMediaMessage(error.message,env)+'; no repetir POST');}
+        return false;
+      };
       try {
         const bytes = await readFile(join(folder, saved.file)), sha256 = hash(bytes);
         const {slot}=await state('status', { matchId, kind, ordinal });
+        attemptId=slot?.attemptId;
         if (!slot || slot.state !== 'completed' || slot.promptHash !== object.promptHash || slot.model !== object.model || (kind === 'video' && slot.referenceHash !== object.referenceHash)) return false;
         const objectKey='partidos/'+matchId+'/'+saved.file;
         const claimId = slot.uploadClaim?.id || 'upload-' + sha256;
@@ -214,10 +229,17 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         const mime = kind === 'video' ? 'video/mp4' : saved.file.endsWith('.png') ? 'image/png' : saved.file.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
         const values = ['model=' + object.model, 'prompthash=' + object.promptHash, 'sha256=' + sha256, 'width=' + object.width, 'height=' + object.height];
         if (kind === 'video') values.push('referencehash=' + object.referenceHash, 'duration=' + object.duration);
-        if (!(await r2('put', join(folder, saved.file), objectKey, mime, ...values))) return false;
+        if (!(await r2('put', join(folder, saved.file), objectKey, mime, ...values))) return pendingPublication('PUT fallido; publicación pendiente');
         const {found}=(await r2('exists',objectKey)) ?? {};
-        return confirmStored(kind,ordinal,saved.file,object,found,bytes.length);
-      } catch(error) { failures.push('R2: publicación ' + kind + ' ' + (ordinal+1) + ': ' + safeMediaMessage(error.message,env)); return false; }
+        const confirmed=await confirmStored(kind,ordinal,saved.file,object,found,bytes.length);
+        if(confirmed) {
+          publishedFiles.add(saved.file);
+          try { await state('diagnostic',{attemptId:slot.attemptId,record:{id:randomUUID(),at:clock(),runId,runUrl:runUrl??'',
+            stage:'publication-confirmed',method:'NONE',httpStatus:null,providerCode:'',message:'publicación verificada en R2',providerStatus:'published',progress:null,requestId:''}}); }
+          catch(error) { log('media: '+matchId+': diagnóstico de publicación no guardado: '+safeMediaMessage(error.message,env)+'; no repetir POST'); }
+        }
+        return confirmed || pendingPublication('HEAD o confirmación incompatibles; publicación pendiente');
+      } catch(error) { return pendingPublication('publicación pendiente: '+safeMediaMessage(error.message,env)); }
     };
     try {
       const guardFile = join(folder, 'guard.json'), operationsFile = join(folder, 'operations-' + runId + '.jsonl');
@@ -308,7 +330,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         try {
           const { stdout } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes.py'), '--match=' + matchId, '--index=' + ordinal,
             '--expires-at=' + expiresAt, '--attempt-deadline=' + deadline / 1000, '--prompt-file=' + promptFile, '--out=' + folder],
-          { env: childEnv, timeout: Math.max(1, deadline - clock()), maxBuffer: 1024 * 1024 });
+          { env: childEnv, timeout: Math.max(1, deadline - clock()), maxBuffer: 1024 * 1024, onStderr:chunk=>log(safeMediaMessage(chunk,env)) });
           const saved = JSON.parse(stdout);
           if (saved.prompt !== row.prompt || saved.model !== imageModel || !/^[0-3]\.(jpg|png|webp)$/.test(saved.file)) throw new Error('Resultado incompatible');
           const bytes = await readFile(join(folder, saved.file));
@@ -366,7 +388,29 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       try { for (const line of (await readFile(operationsFile, 'utf8')).split('\n').filter(Boolean)) addOperations(JSON.parse(line)); } catch {}
       await rm(operationsFile, { force: true });
       const priorResult=results.findIndex(row=>row.matchId===matchId);
-      const report={matchId,...readyCounts(),mode,failures,diagnostics,runUrl};
+      try { attempts = (await state('attempts',{matchId})).attempts ?? attempts; }
+      catch(error) { failures.push('Historial final no disponible: '+safeMediaMessage(error.message,env)); }
+      const omission=recoveryOnly?'recuperación de tareas existentes; sin nuevas solicitudes':failures.filter(reason=>reason!=='Motion Prompts no disponibles; montaje local disponible').join('; ') || 'todavía no solicitado';
+      const resources=[];
+      for(let ordinal=0;ordinal<4;ordinal++) {
+        const asset=assets.find(asset=>asset.id===matchId+'-'+ordinal);
+        const attempt=attempts.filter(row=>row.kind==='image'&&row.ordinal===ordinal).at(-1);
+        const file=asset?.url.split('/').at(-1);
+        resources.push({kind:'image',number:ordinal+1,status:asset?(publishedFiles.has(file)?'publicado en esta corrida':'reutilizado'):attempt?'ausente':'pendiente',
+          objectKey:asset?'partidos/'+matchId+'/'+file:null,verified:!!asset,
+          reason:asset?(publishedFiles.has(file)?'subida y verificación R2 confirmadas':'verificado en R2; sin petición a Agnes'):
+            attempt?.state==='completed'?'generación completada; resultado ausente en R2; no repetir POST':mode==='clips-only'?'imágenes omitidas por modo clips-only':omission});
+      }
+      for(let index=0;index<2;index++) {
+        const clip=clips[index];
+        resources.push({kind:'video',number:index+1,status:clip?(publishedFiles.has(clip.file)?'publicado en esta corrida':'reutilizado'):'pendiente',
+          objectKey:clip?'partidos/'+matchId+'/'+clip.file:null,verified:!!clip,
+          reason:clip?(publishedFiles.has(clip.file)?'subida y verificación R2 confirmadas':'verificado en R2; sin petición a Agnes'):mode==='images-only'?'clips omitidos por modo images-only':omission});
+      }
+      for(const resource of resources)log('media-resource: '+matchId+': '+(resource.kind==='image'?'imagen ':'clip ')+resource.number+': '+resource.status+'; '+resource.reason+(resource.objectKey?'; '+resource.objectKey:''));
+      for(const attempt of attempts)log('media-attempt: '+JSON.stringify({matchId,kind:attempt.kind,ordinal:attempt.ordinal,state:attempt.state,
+        history:attempt.diagnostics?.events?.map(event=>({...event,origin:event.runId===runId?'corrida actual':'historial anterior'}))??'detalle original no conservado',queryCount:attempt.diagnostics?.queryCount??null}));
+      const report={matchId,...readyCounts(),mode,failures,diagnostics,runUrl,resources,attempts,recoveryOnly};
       if(priorResult<0) results.push(report); else results[priorResult]=report;
       logReady('final', failures.join('; '));
     } finally { clearInterval(heartbeat); try { await state('heartbeat', { runId, finished: true }); } catch {} }

@@ -9,6 +9,20 @@ import { generateMediaBanks, mediaRunDeadline, mediaSoftStop } from '../fly/gate
 import { buildYoutubeScripts } from '../src/lib/youtube.js';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const now = Date.parse('2026-10-08T20:00:00Z');
+test('fresh runner reports every R2 resource and remote HTTP history without provider requests',async t=>{
+  const f=await fixture(t);
+  for(let ordinal=0;ordinal<4;ordinal++)f.addPhoto(ordinal);
+  f.addClip(0);f.addClip(1);
+  const attempts=Array.from({length:5},(_,ordinal)=>({kind:'video',ordinal,state:ordinal<2?'completed':'abandoned',attemptId:'attempt-'+ordinal,
+    diagnostics:ordinal<2?null:{queryCount:0,events:[{id:'event-'+ordinal,at:now-60000,runId:'prior-run',runUrl:'',stage:'create',method:'POST',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full',providerStatus:'',progress:null,requestId:'req'}]}}));
+  const result=await f.run({transactImpl:async(op,input)=>op==='attempts'?{attempts}:f.transactImpl(op,input)});
+  assert.equal(f.provider.length,0);
+  assert.equal(result.results[0].resources.length,6);
+  assert.ok(result.results[0].resources.every(row=>row.verified&&row.status==='reutilizado'&&row.reason.includes('sin petición a Agnes')));
+  assert.equal(result.results[0].attempts[4].diagnostics.events[0].httpStatus,503);
+  assert.ok(f.logs.some(line=>line.includes('historial anterior')&&line.includes('video_queue_full')));
+  assert.ok(f.logs.some(line=>line.includes('clip 2: reutilizado')));
+});
 async function fixture(t, overrides = {}) {
   const repo = await mkdtemp(join(tmpdir(), 'goatlab-generation-')); t.after(() => rm(repo, { recursive: true, force: true }));
   const dir = join(repo, 'public/data/media-pack');

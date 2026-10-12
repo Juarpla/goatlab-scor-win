@@ -17,6 +17,7 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 from common import agnes_authority, atomic_json, database, request_json
+from agnes_diagnostics import provider_diagnostic
 
 MODEL = "agnes-image-2.5-flash"
 
@@ -163,22 +164,37 @@ class ImagePool:
                 attempt_id = admission['attemptId']
                 self.db.execute("INSERT OR REPLACE INTO images VALUES(?,?,?,NULL)", (match, slot, "pending"))
                 try:
+                    options = {'timeout': timeout}
+                    if call is request_json:
+                        options['observe_headers'] = lambda status, headers: provider_diagnostic(self.state, 'image', match, slot,
+                            {'at': self.clock(), 'attemptId': attempt_id, 'stage': 'create-response', 'httpStatus': status,
+                             'requestId': headers.get('X-Request-ID') or headers.get('Request-ID'), 'body': {'status': 'response-received'}})
                     result = call("https://apihub.agnes-ai.com/v1/images/generations", {
                         "model": model, "prompt": prompt, "size": size, "ratio": ratio,
                         "return_base64": True,
-                    }, {"Authorization": "Bearer " + key}, timeout=timeout)
+                    }, {"Authorization": "Bearer " + key}, **options)
                     self.state.event(attempt_id, 'completed')
+                    provider_diagnostic(self.state, 'image', match, slot, {'at': self.clock(), 'attemptId': attempt_id,
+                        'stage': 'generation-completed', 'httpStatus': None, 'body': {'status': 'completed'}})
                     break
                 except urllib.error.HTTPError as error:
+                    error_headers = error.headers or {}
+                    try:
+                        raw = error.read(4097)
+                        payload = json.loads(raw) if raw else {}
+                        decoded = True
+                    except (OSError, ValueError):
+                        raw, payload = b'', {}
+                        decoded = False
+                    provider_diagnostic(self.state, 'image', match, slot, {'at': self.clock(), 'attemptId': attempt_id,
+                        'stage': 'create', 'httpStatus': error.code, 'requestId': error_headers.get('X-Request-ID') or error_headers.get('Request-ID'), 'body': payload})
                     if error.code == 429:
                         try:
-                            raw = error.read(4097)
-                            payload = json.loads(raw) if raw else {}
                             def has_identifier(value):
                                 if isinstance(value, dict):
                                     return any(k in ('id', 'video_id', 'task_id', 'generation_id') and v for k, v in value.items()) or any(has_identifier(v) for v in value.values())
                                 return isinstance(value, list) and any(has_identifier(v) for v in value)
-                            rejected = len(raw) <= 4096 and not has_identifier(payload)
+                            rejected = decoded and len(raw) <= 4096 and not has_identifier(payload)
                         except (OSError, ValueError):
                             rejected = False
                         finally:
@@ -201,6 +217,8 @@ class ImagePool:
                     self.state.event(attempt_id, 'uncertain', httpStatus=error.code, stage='create')
                     raise ValueError(f"Agnes HTTP {error.code}") from None
                 except (TimeoutError, socket.timeout, urllib.error.URLError):
+                    provider_diagnostic(self.state, 'image', match, slot, {'at': self.clock(), 'attemptId': attempt_id,
+                        'stage': 'create', 'httpStatus': None, 'body': 'timeout/red: resultado incierto, no se repite'})
                     self.db.execute("UPDATE images SET status='uncertain' WHERE match_id=? AND slot=?", (match, slot))
                     self.state.event(attempt_id, 'uncertain', stage='create')
                     raise ValueError("Agnes timeout/red: resultado incierto, no se repite") from None

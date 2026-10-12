@@ -16,6 +16,39 @@ for(const row of report.results??[]) {
   const detail = complete && row.failures?.length ? '; ' + row.failures.join('; ') : '';
   summary+=`| ${safe(row.matchId)} | ${safe(labels.images)} | ${safe(labels.clips)} | ${safe(diagnosis + detail)} |\n`;
 }
+for(const row of report.results??[]) {
+  summary+=`\n### ${safe(row.matchId)}\n\n#### Recursos\n\n| Recurso | Disponibilidad | Objeto R2 | Verificación / motivo |\n| --- | --- | --- | --- |\n`;
+  const resources=row.resources??[
+    ...Array.from({length:4},(_,index)=>({kind:'image',number:index+1,status:'sin detalle individual',reason:'detalle original no conservado'})),
+    ...Array.from({length:2},(_,index)=>({kind:'video',number:index+1,status:'sin detalle individual',reason:'detalle original no conservado'})),
+  ];
+  for(const resource of resources) summary+=`| ${resource.kind==='image'?'Imagen':'Clip'} ${resource.number} | ${safe(resource.status)} | ${safe(resource.objectKey??'—')} | ${safe(resource.reason)} |\n`;
+  const attempts=row.attempts??[];
+  const used=new Set(attempts.filter(a=>a.kind==='video'&&a.state!=='rejected').map(a=>a.ordinal));
+  const countKnown=Array.isArray(row.attempts);
+  summary+=`\n#### Peticiones/intentos\n\n${countKnown?`Intentos de vídeo utilizados: ${used.size}/5 · Disponibles: ${5-used.size}/5.`:'Intentos de vídeo: detalle original no conservado.'}\n\n`;
+  summary+='Los intentos de vídeo son solicitudes; el banco requiere dos clips publicados.\n\n';
+  summary+='| Imagen / intento de vídeo | Resultado | Etapa / método | HTTP | Respuesta de Agnes / publicación | Fecha UTC | Origen / corrida |\n| --- | --- | --- | --- | --- | --- | --- |\n';
+  for(const attempt of attempts) {
+    const label=(attempt.kind==='image'?'Imagen ':'Intento de vídeo ')+(attempt.ordinal+1);
+    if(!attempt.diagnostics?.events?.length) {
+      summary+=`| ${label} | ${safe(attempt.state)} | — | desconocido | detalle original no conservado | — | historial anterior |\n`;
+      continue;
+    }
+    for(const event of attempt.diagnostics.events) {
+      const details=[event.providerCode,event.message,event.providerStatus?`estado=${event.providerStatus}`:'',event.progress!=null?`progreso=${event.progress}%`:'',event.next?`siguiente: ${event.next}`:''].filter(Boolean).join('; ')||'sin detalle de respuesta';
+      const origin=event.runId===report.runId?'corrida actual':'historial anterior';
+      const at=Number.isFinite(event.at)?new Date(event.at).toISOString():'—';
+      const source=/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/actions\/runs\/\d+$/.test(event.runUrl??'')?`[${safe(event.runId)}](${event.runUrl})`:safe(event.runId);
+      const http=event.httpStatus??(event.method==='NONE'?'—':'sin respuesta HTTP');
+      summary+=`| ${label} | ${safe(attempt.state)} | ${safe(event.stage)} / ${safe(event.method)} | ${http} | ${safe(details)} | ${at} | ${origin}: ${source} |\n`;
+    }
+  }
+  for(let ordinal=0;ordinal<5;ordinal++)if(!attempts.some(a=>a.kind==='video'&&a.ordinal===ordinal)) {
+    summary+=`| Intento de vídeo ${ordinal+1} | ${countKnown?'disponible; no solicitado':'desconocido'} | — | — | ${countKnown?safe(row.recoveryOnly?'recuperación sin nuevas tareas':row.failures?.join('; ')||'sin petición a Agnes'):'detalle original no conservado'} | — | — |\n`;
+  }
+  summary+='\n'+attempts.filter(a=>a.kind==='video'&&a.diagnostics).map(a=>`Consultas del intento ${a.ordinal+1}: ${a.diagnostics.queryCount}.`).join(' ')+'\n';
+}
 if(report.runUrl) summary+=`\n[Ver ejecución y logs en GitHub](${safe(report.runUrl)})\n`;
 await mkdir('.cache',{recursive:true});
 await writeFile('.cache/media-run.json',JSON.stringify(report,null,2));
