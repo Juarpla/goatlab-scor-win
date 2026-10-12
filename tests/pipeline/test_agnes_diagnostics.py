@@ -36,3 +36,11 @@ class DiagnosticTests(unittest.TestCase):
         self.assertIn('no se pudo guardar diagnóstico', logs.getvalue())
         self.assertIn('no repetir POST', logs.getvalue())
         self.assertIn('503', logs.getvalue())
+
+    def test_truncated_json_never_leaks_partial_binary_fields(self):
+        logs = io.StringIO()
+        with contextlib.redirect_stderr(logs):
+            provider_diagnostic(object(), 'video', 'a-b', 0, {'stage': 'create', 'httpStatus': 503,
+                'body': '{"data":[{"b64_json":"private-binary'})
+        self.assertNotIn('private-binary', logs.getvalue())
+        self.assertIn('503', logs.getvalue())

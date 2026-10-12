@@ -24,7 +24,8 @@ def provider_diagnostic(state, kind, match, ordinal, record):
         try:
             body = json.loads(body)
         except ValueError:
-            pass
+            if body.lstrip().startswith(('{', '[')):
+                body = 'respuesta JSON incompleta; detalle de payload omitido'
     payload = body if isinstance(body, dict) else {}
     error = payload.get('error')
     error = error if isinstance(error, dict) else {}

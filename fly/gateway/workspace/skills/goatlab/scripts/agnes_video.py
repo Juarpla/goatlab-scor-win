@@ -300,7 +300,7 @@ class VideoPool:
                         create_call = call
                         if call is request_json:
                             def create_call(*args, **kwargs):
-                                return request_json(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': self.safe_detail(payload)}))
+                                return request_json(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': payload}))
                         try:
                             result=create_call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':'Use <Picture 1> as the visual reference. '+prompt['prompt'],'mode':'reference','images':[reference],'seconds':'6','size':'720P','aspect_ratio':'9:16','n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
@@ -357,7 +357,7 @@ class VideoPool:
                         last_poll['response'] = self.safe_detail(payload)
                     self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'retrieve-response', 'httpStatus': http_status,
                         'requestId': self.safe_detail(str(response_headers.get('X-Request-ID') or response_headers.get('Request-ID') or '')[:200]),
-                        'videoId': None, 'attemptId': claim['attemptId'], 'body': self.safe_detail(last_poll),
+                        'videoId': None, 'attemptId': claim['attemptId'], 'body': last_poll,
                         'next': 'interpretar estado de la tarea; conservar el identificador sin repetir POST'})
                 while self.clock()<deadline and not cancelled():
                     recovery=self.db.execute('SELECT deadline,ordinal FROM video_recovery WHERE match_id=?',(match,)).fetchone()
