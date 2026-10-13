@@ -4,16 +4,16 @@
   "away": "Sporting Clube de Portugal",
   "competition": "champions",
   "kickoff": "2026-10-13T16:45:00Z",
-  "updatedAt": "2026-10-13T00:49:08.799Z",
+  "updatedAt": "2026-10-13T14:06:31.525Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.45,
-      "away": 1.45
+      "home": 1.67,
+      "away": 1.71
     },
-    "lambdaSource": "Media-liga",
+    "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
-    "firstGoalSource": "Media-liga",
+    "firstGoalSource": "Bzzoiro-xG",
     "sample": {
       "home": 0,
       "away": 0
@@ -59,22 +59,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-12T19:38:47.610Z",
+      "updatedAt": "2026-10-13T14:04:37.626Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-13T16:00",
-      "source": "open-meteo-forecast"
+      "sampledAt": "2026-10-13T16:45:00Z",
+      "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-12T19:38:47.610Z",
+      "updatedAt": "2026-10-13T14:04:37.626Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 218
+      "rows": 220
     },
     "venue": {
       "city": "Avellaneda",
@@ -83,100 +83,100 @@
   },
   "markets": {
     "oneX2": {
-      "home": 0.365,
-      "draw": 0.271,
-      "away": 0.365
+      "home": 0.368,
+      "draw": 0.247,
+      "away": 0.385
     },
     "doubleChance": {
-      "12": 0.729,
-      "1X": 0.635,
-      "X2": 0.635
+      "12": 0.753,
+      "1X": 0.615,
+      "X2": 0.632
     },
     "dnb": {
-      "home": 0.5,
-      "away": 0.5
+      "home": 0.489,
+      "away": 0.511
     },
     "totals": {
-      "over15": 0.797,
-      "under15": 0.203,
-      "over25": 0.554,
-      "under25": 0.446,
-      "over35": 0.33,
-      "under35": 0.67
+      "over15": 0.861,
+      "under15": 0.139,
+      "over25": 0.656,
+      "under25": 0.344,
+      "over35": 0.437,
+      "under35": 0.563
     },
     "btts": {
-      "yes": 0.597,
-      "no": 0.403
+      "yes": 0.675,
+      "no": 0.325
     },
     "cleanSheet": {
-      "home": 0.235,
-      "away": 0.235
+      "home": 0.181,
+      "away": 0.188
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.127
+        "p": 0.107
       },
       {
         "home": 1,
         "away": 2,
-        "p": 0.084
+        "p": 0.083
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.084
+        "p": 0.081
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.069
       },
       {
         "home": 0,
-        "away": 1,
-        "p": 0.068
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.068
+        "away": 2,
+        "p": 0.05
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.9,
-    "noGoal": 0.055,
+    "lambdaTotal": 3.38,
+    "noGoal": 0.034,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.383
+        "p": 0.431
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.236
+        "p": 0.245
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.14
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.09
+        "p": 0.079
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.055
+        "p": 0.045
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.034
+        "p": 0.026
       }
     ],
-    "firstHome": 0.472,
-    "firstAway": 0.472
+    "firstHome": 0.477,
+    "firstAway": 0.489
   },
   "scorers": {
     "home": [
@@ -185,9 +185,9 @@
         "goals": 1,
         "matches": 1,
         "share": 0.9,
-        "rate": 1.31,
-        "anytime": 0.729,
-        "first": 0.45
+        "rate": 1.5,
+        "anytime": 0.778,
+        "first": 0.445
       }
     ],
     "away": null
@@ -195,32 +195,114 @@
   "hasScorers": true,
   "method": "poisson-fallback-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.38,
+      "draw": 0.256,
+      "away": 0.364,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.67,
+      "away": 1.71
+    },
+    "over15": 0.81,
+    "over25": 0.602,
+    "over35": 0.401,
+    "btts": 0.628,
+    "score": "1-1",
+    "cornersOver95": 0.522,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.38,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3801,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-13T14:05:32.244Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.368,
+      "draw": 0.247,
+      "away": 0.385
+    },
+    "doubleChance": {
+      "12": 0.753,
+      "1X": 0.615,
+      "X2": 0.632
+    },
+    "dnb": {
+      "home": 0.489,
+      "away": 0.511
+    },
+    "totals": {
+      "over15": 0.861,
+      "under15": 0.139,
+      "over25": 0.656,
+      "under25": 0.344,
+      "over35": 0.437,
+      "under35": 0.563
+    },
+    "btts": {
+      "yes": 0.675,
+      "no": 0.325
+    },
+    "cleanSheet": {
+      "home": 0.181,
+      "away": 0.188
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.104,
+        "share": 0.2687338501291989
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.083,
+        "share": 0.2144702842377261
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.081,
+        "share": 0.20930232558139536
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.069,
+        "share": 0.17829457364341086
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.05,
+        "share": 0.12919896640826875
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
+    "totalMatches": 0,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "recent": [],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -236,10 +318,10 @@
     },
     "sample": {
       "scorers": 53,
-      "historyRows": 218
+      "historyRows": 220
     },
     "source": "GoatLab",
-    "expectedTotal": 3.6
+    "expectedTotal": 3.9
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -247,38 +329,38 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 218
+      "historyRows": 220
     },
     "source": "GoatLab",
-    "expectedTotal": 9.5
+    "expectedTotal": 9.2
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.5,
-      "shotsOnTarget": 5.22,
-      "xg": 1.64,
-      "corners": 4.76,
-      "fouls": 11.32,
-      "yellowCards": 1.8,
-      "redCards": 0.5,
-      "offsides": 2.04,
-      "possession": 51.36
+      "shots": 13.6,
+      "shotsOnTarget": 4.91,
+      "xg": 1.67,
+      "corners": 5,
+      "fouls": 11.85,
+      "yellowCards": 2.05,
+      "redCards": 0.52,
+      "offsides": 1.49,
+      "possession": 49.43
     },
     "away": {
-      "shots": 14.5,
-      "shotsOnTarget": 5.22,
-      "xg": 1.64,
-      "corners": 4.76,
-      "fouls": 11.32,
-      "yellowCards": 1.8,
-      "redCards": 0.5,
-      "offsides": 2.04,
-      "possession": 48.64
+      "shots": 13.1,
+      "shotsOnTarget": 4.95,
+      "xg": 1.71,
+      "corners": 4.18,
+      "fouls": 11.3,
+      "yellowCards": 1.87,
+      "redCards": 0.48,
+      "offsides": 1.72,
+      "possession": 50.57
     },
     "sample": {
       "home": 5,
-      "away": 0
+      "away": 5
     },
     "coverage": {
       "home": {
@@ -293,109 +375,108 @@
         "offsides": 5
       },
       "away": {
-        "possession": 0,
-        "shots": 0,
-        "shotsOnTarget": 0,
-        "xg": 0,
-        "corners": 0,
-        "fouls": 0,
-        "yellowCards": 0,
-        "redCards": 0,
-        "offsides": 0
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 2,
+        "offsides": 5
       }
     },
     "league": {
       "possession": 50,
-      "shots": 14.5,
-      "shotsOnTarget": 5.22,
-      "xg": 1.64,
-      "corners": 4.76,
-      "fouls": 11.32,
-      "yellowCards": 1.8,
+      "shots": 13.76,
+      "shotsOnTarget": 5.08,
+      "xg": 1.63,
+      "corners": 4.5,
+      "fouls": 11.64,
+      "yellowCards": 1.92,
       "redCards": 0.5,
-      "offsides": 2.04
+      "offsides": 1.9
     },
     "sources": {
       "home": {
-        "shots": "media",
-        "shotsOnTarget": "media",
-        "xg": "media",
-        "corners": "media",
-        "fouls": "media",
-        "yellowCards": "media",
-        "redCards": "media",
-        "offsides": "media",
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
         "possession": "Bzzoiro"
       },
       "away": {
-        "shots": "media",
-        "shotsOnTarget": "media",
-        "xg": "media",
-        "corners": "media",
-        "fouls": "media",
-        "yellowCards": "media",
-        "redCards": "media",
-        "offsides": "media",
-        "possession": "media"
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
       }
     },
     "origins": [
-      "media",
       "Bzzoiro"
     ],
-    "xgSource": "media",
-    "shortSample": true,
-    "source": "media+Bzzoiro"
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
   },
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.434,
-      "draw": 0.131,
-      "away": 0.434
+      "home": 0.541,
+      "draw": 0.129,
+      "away": 0.33
     },
     "cardsDuel": {
-      "home": 0.39,
-      "draw": 0.219,
-      "away": 0.39
+      "home": 0.431,
+      "draw": 0.209,
+      "away": 0.361
     },
     "lastGoal": {
-      "home": 0.472,
-      "away": 0.472,
-      "noGoal": 0.055
+      "home": 0.477,
+      "away": 0.489,
+      "noGoal": 0.034
     },
     "cornerRace": {
       "3": {
-        "home": 0.5,
-        "away": 0.5
+        "home": 0.583,
+        "away": 0.417
       },
       "5": {
-        "home": 0.5,
-        "away": 0.5
+        "home": 0.609,
+        "away": 0.391
       },
       "7": {
-        "home": 0.5,
-        "away": 0.5
+        "home": 0.629,
+        "away": 0.371
       }
     },
     "cornerMargin": {
-      "home3plus": 0.205,
-      "home12": 0.229,
-      "level": 0.131,
-      "away12": 0.229,
-      "away3plus": 0.205
+      "home3plus": 0.285,
+      "home12": 0.256,
+      "level": 0.129,
+      "away12": 0.197,
+      "away3plus": 0.133
     },
     "source": "GoatLab"
   },
   "weatherVenue": {
     "weather": {
-      "temp": 17.6,
-      "precipitation": 0,
-      "weathercode": 1,
-      "wind": 13.9,
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 47.8,
       "condition": null,
-      "sampledAt": "2026-10-13T16:00",
-      "source": "open-meteo-forecast"
+      "sampledAt": "2026-10-13T16:45:00Z",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": "Presidente Perón",

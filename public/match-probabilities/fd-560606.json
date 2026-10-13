@@ -1,0 +1,601 @@
+{
+  "id": "fd-560606",
+  "home": "Tottenham Hotspur FC",
+  "away": "Coventry City FC",
+  "competition": "premier",
+  "kickoff": "2026-10-19T19:00:00Z",
+  "updatedAt": "2026-10-13T14:06:31.525Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.26,
+      "away": 1.073
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.34,
+      "away": 1.347
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Tottenham Hotspur FC": {
+        "position": 19,
+        "team": "Tottenham Hotspur FC",
+        "played": 6,
+        "won": 0,
+        "drawn": 3,
+        "lost": 3,
+        "goalsFor": 3,
+        "goalsAgainst": 9,
+        "goalDifference": -6,
+        "points": 3,
+        "form": null
+      },
+      "Coventry City FC": {
+        "position": 14,
+        "team": "Coventry City FC",
+        "played": 6,
+        "won": 2,
+        "drawn": 0,
+        "lost": 4,
+        "goalsFor": 5,
+        "goalsAgainst": 11,
+        "goalDifference": -6,
+        "points": 6,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-13T14:05:17.328Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-19T19:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-13T14:05:17.328Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 220
+    },
+    "venue": {
+      "city": "Londres",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.393,
+      "draw": 0.306,
+      "away": 0.301
+    },
+    "doubleChance": {
+      "12": 0.694,
+      "1X": 0.699,
+      "X2": 0.607
+    },
+    "dnb": {
+      "home": 0.566,
+      "away": 0.434
+    },
+    "totals": {
+      "over15": 0.69,
+      "under15": 0.31,
+      "over25": 0.413,
+      "under25": 0.587,
+      "over35": 0.207,
+      "under35": 0.793
+    },
+    "btts": {
+      "yes": 0.484,
+      "no": 0.516
+    },
+    "cleanSheet": {
+      "home": 0.342,
+      "away": 0.284
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.144
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.11
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.109
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.091
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.083
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.69,
+    "noGoal": 0.068,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.361
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.231
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.147
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.094
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.06
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.038
+      }
+    ],
+    "firstHome": 0.465,
+    "firstAway": 0.467
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Conor Gallagher",
+        "goals": 1,
+        "matches": 6,
+        "share": 0.333,
+        "rate": 0.45,
+        "anytime": 0.36,
+        "first": 0.166
+      }
+    ],
+    "away": null
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.324,
+      "draw": 0.245,
+      "away": 0.431,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.42,
+      "away": 1.62
+    },
+    "over15": 0.795,
+    "over25": 0.5770000000000001,
+    "over35": 0.35200000000000004,
+    "btts": 0.583,
+    "score": "1-1",
+    "cornersOver95": 0.494,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.431,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.431,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-13T14:06:02.940Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.325,
+      "draw": 0.262,
+      "away": 0.413
+    },
+    "doubleChance": {
+      "12": 0.738,
+      "1X": 0.587,
+      "X2": 0.675
+    },
+    "dnb": {
+      "home": 0.441,
+      "away": 0.559
+    },
+    "totals": {
+      "over15": 0.818,
+      "under15": 0.182,
+      "over25": 0.586,
+      "under25": 0.414,
+      "over35": 0.362,
+      "under35": 0.638
+    },
+    "btts": {
+      "yes": 0.619,
+      "no": 0.381
+    },
+    "cleanSheet": {
+      "home": 0.198,
+      "away": 0.242
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.111,
+        "share": 0.2727272727272727
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.089,
+        "share": 0.21867321867321865
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.078,
+        "share": 0.19164619164619162
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.066,
+        "share": 0.16216216216216217
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.063,
+        "share": 0.1547911547911548
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 20,
+    "homeWins": 9,
+    "draws": 3,
+    "awayWins": 8,
+    "avgTotalGoals": 2.8,
+    "recent": [
+      {
+        "eventId": 230815,
+        "date": "2024-09-18T19:00:00+00:00",
+        "home": "Coventry City",
+        "away": "Tottenham Hotspur",
+        "homeTeamId": 203,
+        "awayTeamId": 9,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 424601,
+        "date": "2013-01-05T15:00:00+00:00",
+        "home": "Tottenham Hotspur",
+        "away": "Coventry City",
+        "homeTeamId": 9,
+        "awayTeamId": 203,
+        "homeScore": 3,
+        "awayScore": 0
+      },
+      {
+        "eventId": 512682,
+        "date": "2001-03-17T17:00:00+00:00",
+        "home": "Tottenham Hotspur",
+        "away": "Coventry City",
+        "homeTeamId": 9,
+        "awayTeamId": 203,
+        "homeScore": 3,
+        "awayScore": 0
+      },
+      {
+        "eventId": 512467,
+        "date": "2000-10-14T16:00:00+00:00",
+        "home": "Coventry City",
+        "away": "Tottenham Hotspur",
+        "homeTeamId": 203,
+        "awayTeamId": 9,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 515742,
+        "date": "2000-02-26T17:00:00+00:00",
+        "home": "Coventry City",
+        "away": "Tottenham Hotspur",
+        "homeTeamId": 203,
+        "awayTeamId": 9,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 220
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.8
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 220
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.9
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 15,
+      "shotsOnTarget": 4.61,
+      "xg": 1.42,
+      "corners": 5.56,
+      "fouls": 11.71,
+      "yellowCards": 1.86,
+      "redCards": 0.5,
+      "offsides": 2.36,
+      "possession": 55.31
+    },
+    "away": {
+      "shots": 13.12,
+      "shotsOnTarget": 4.3,
+      "xg": 1.62,
+      "corners": 4.33,
+      "fouls": 12.09,
+      "yellowCards": 1.91,
+      "redCards": 0.5,
+      "offsides": 1.86,
+      "possession": 44.69
+    },
+    "sample": {
+      "home": 7,
+      "away": 7
+    },
+    "coverage": {
+      "home": {
+        "possession": 7,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 7,
+        "fouls": 7,
+        "yellowCards": 7,
+        "redCards": 1,
+        "offsides": 7
+      },
+      "away": {
+        "possession": 7,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 7,
+        "fouls": 7,
+        "yellowCards": 6,
+        "redCards": 1,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.84,
+      "shotsOnTarget": 4.57,
+      "xg": 1.47,
+      "corners": 4.72,
+      "fouls": 11.45,
+      "yellowCards": 2.01,
+      "redCards": 0.5,
+      "offsides": 1.95
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.591,
+      "draw": 0.12,
+      "away": 0.29
+    },
+    "cardsDuel": {
+      "home": 0.383,
+      "draw": 0.214,
+      "away": 0.403
+    },
+    "lastGoal": {
+      "home": 0.465,
+      "away": 0.467,
+      "noGoal": 0.068
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.615,
+        "away": 0.385
+      },
+      "5": {
+        "home": 0.65,
+        "away": 0.35
+      },
+      "7": {
+        "home": 0.677,
+        "away": 0.323
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.339,
+      "home12": 0.252,
+      "level": 0.12,
+      "away12": 0.175,
+      "away3plus": 0.115
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 7.7,
+      "condition": null,
+      "sampledAt": "2026-10-19T19:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Tottenham Hotspur Stadium",
+      "city": "Londres",
+      "capacity": 62850,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Tottenham Hotspur FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 19,
+        "played": 6,
+        "gf": 3,
+        "ga": 9,
+        "provider": null
+      },
+      "player": {
+        "name": "Conor Gallagher",
+        "detail": "1 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Coventry City FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 5
+      },
+      "season": {
+        "position": 14,
+        "played": 6,
+        "gf": 5,
+        "ga": 11,
+        "provider": null
+      },
+      "player": null
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "Poisson GoatLab favorece al Tottenham (39.3%), pero CatBoost Bzzoiro y el modelo B2 sitúan al Coventry como mayor probabilidad (43.1% y 0.431); divergencia clara entre modelos.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-13T14:08:28.616Z"
+  }
+}
