@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "category": "motion-prompts",
+  "matchId": "inter-vs-brugge-kv-2026-10-13",
+  "home": "FC Internazionale Milano",
+  "away": "Club Brugge KV",
+  "competition": "champions",
+  "kickoff": "2026-10-13T19:00:00Z",
+  "venue": null,
+  "facts": [
+    {
+      "id": "home.player0.goals",
+      "label": "Carlos Augusto · goles",
+      "value": 1,
+      "unit": "goles",
+      "source": "scorers:champions:Carlos Augusto",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "away.n",
+      "label": "Club Brugge KV · partidos",
+      "value": 5,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.n",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.wins",
+      "label": "Club Brugge KV · victorias",
+      "value": 4,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.wins",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.draws",
+      "label": "Club Brugge KV · empates",
+      "value": 0,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.draws",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.losses",
+      "label": "Club Brugge KV · derrotas",
+      "value": 1,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.losses",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.gf",
+      "label": "Club Brugge KV · goles a favor",
+      "value": 13,
+      "unit": "goles",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.gf",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.ga",
+      "label": "Club Brugge KV · goles recibidos",
+      "value": 5,
+      "unit": "goles",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.ga",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.clean",
+      "label": "Club Brugge KV · arcos en cero",
+      "value": 2,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-brugge-kv-2026-10-13:lastMatches.away.clean",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    }
+  ],
+  "published": false,
+  "kinds": [
+    "form",
+    "goals",
+    "clean-sheets",
+    "head-to-head",
+    "synthesis"
+  ],
+  "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+  "author": {
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash"
+  },
+  "generatedAt": "2026-10-13T14:12:14.058Z",
+  "prompts": [
+    {
+      "n": 1,
+      "kind": "form",
+      "title": "Form Bars: Recent Sample",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.n",
+        "away.wins",
+        "away.draws",
+        "away.losses"
+      ],
+      "prompt": "9:16 vertical sports motion graphic. Reserve lower quarter for permanent yellow subtitles. Background GoatLab charcoal #101412 with warm white #edf0e6 typography, lime #c5ed74 accents, slate #8ca6bf secondary. Title English: 'Form Bars: Recent Sample'. Spanish labels: 'Forma reciente', 'Victorias', 'Empates', 'Derrotas', 'Muestra'. Editorial variant first: kinetic typography montage. A large Spanish headline 'FORMA RECIENTE' enters as a lime slash wipes across the frame. Three rhythmic text beats pulse with the voice: 'Victorias', 'Empates', 'Derrotas', each word landing on a downbeat, with small team crest silhouette for Club Brugge and a slate wave for Inter de Milán. No axes, no sample claims, no invented match events. Emphasise Club Brugge's recent rhythm through motion contrast: wins push upward, draws hover, losses cut downward. A quick transition wipes to statistical variant. Statistical variant: grouped count bars for Club Brugge's available recent sample. Shared zero baseline, common count scale, grouped bars for wins, draws and losses. Bar heights and end labels resolve from {{away.wins}}, {{away.draws}}, {{away.losses}}. Sample annotation uses {{away.n}} as the sample size, with Spanish text 'Muestra'. Source line reads source metadata attached to the catalog facts. Use Spanish labels 'Victorias', 'Empates', 'Derrotas'. Unequal samples: if only Club Brugge has a complete sample, show a slate placeholder column for Inter de Milán labelled 'Sin muestra comparable' without inventing zeros or values. Entry animation: baseline draws from left to right, bars grow from zero with slight overshoot, end labels count up from zero to the resolved values. Main comparison: grouped counts side by side, same unit from catalog. Emphasis: the tallest bar glows lime, others warm white; a thin slate rule marks the zero line. Camera: slow vertical push from lower third to centre, then settle. Transition: lime wipe. Exit: bars collapse to baseline, title remains for a beat. No forecast or predictive claim."
+    },
+    {
+      "n": 2,
+      "kind": "goals",
+      "title": "Goals For and Against: Brugge Profile",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.gf",
+        "away.ga",
+        "away.n"
+      ],
+      "prompt": "9:16 vertical sports motion graphic. Reserve lower quarter for permanent yellow subtitles. Background GoatLab charcoal #101412 with warm white #edf0e6 typography, lime #c5ed74 highlights, slate #8ca6bf structural lines. Title English: 'Goals For and Against: Brugge Profile'. Spanish labels: 'Goles a favor', 'Goles en contra', 'Muestra'. Editorial variant first: illustrative football pitch and ball path. A Spanish headline 'GOLES' enters as a lime ball travels across a stylised pitch drawn in slate lines. The ball path splits: one trail rises toward an attacking goal for 'Goles a favor', another trail returns toward a defensive goal for 'Goles en contra'. No statistical axes, no sample claims, no invented match events. Rhythmic camera pushes along the pitch as the voice names scoring and conceding. A quick transition wipes to statistical variant. Statistical variant: paired bars for Club Brugge's available recent sample, comparing goals for and goals against on a shared count scale with a zero baseline. Bar lengths and end labels resolve from {{away.gf}} and {{away.ga}}. Sample annotation uses {{away.n}} with Spanish text 'Muestra'; source line reads source metadata attached to the catalog facts. Use Spanish labels 'Goles a favor', 'Goles en contra'. If Inter de Milán has no comparable goals sample, show a slate placeholder panel labelled 'Sin muestra comparable' without inventing zeros or values. Entry animation: pitch lines fade to chart grid, paired bars grow from zero, ball becomes a lime marker that settles on the longer bar. Main comparison: goals for versus goals against, same unit from catalog. Emphasis: the larger resolved value glows lime; the smaller remains warm white; a thin slate rule holds the zero line. Camera: slight vertical rise, then lock. Transition: lime ball wipe. Exit: bars compress into a single horizontal slate line, title holds, subtitles remain."
+    },
+    {
+      "n": 3,
+      "kind": "clean-sheets",
+      "title": "Clean Sheets: Defensive Sample",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.clean",
+        "away.n"
+      ],
+      "prompt": "9:16 vertical sports motion graphic. Reserve lower quarter for permanent yellow subtitles. Background GoatLab charcoal #101412 with warm white #edf0e6 typography, lime #c5ed74 accents, slate #8ca6bf defensive lines. Title English: 'Clean Sheets: Defensive Sample'. Spanish labels: 'Arcos en cero', 'Muestra', 'Sin muestra comparable'. Editorial variant first: defensive energy and a stylised shield. A Spanish headline 'ARCOS EN CERO' enters as a slate shield forms from concentric line segments, then locks with a lime rim. Motion is compact and rhythmic: two beats for clean sheets, then a wider pulse for the full sample. No statistical axes, no sample claims, no invented match events. The shield vibrates on the voice emphasis, then dissolves. A quick transition wipes to statistical variant. Statistical variant: count bars for Club Brugge's clean sheet count and sample size, shown as separate bars on a shared count scale with zero baseline. Bar heights and end labels resolve from {{away.clean}} and {{away.n}}. Do not convert counts into rates. Source line reads source metadata attached to the catalog facts. Use Spanish labels 'Arcos en cero' and 'Muestra'. If Inter de Milán has no comparable clean sheet sample, show a slate placeholder column labelled 'Sin muestra comparable' without inventing zeros or values. Entry animation: shield outline becomes the y-axis frame, bars grow from zero, labels count up to resolved values. Main comparison: clean sheet count against available sample count, same count unit from catalog. Emphasis: clean sheet bar glows lime; sample bar stays slate; a warm white label clarifies that this is a count, not a rate. Camera: slow vertical push through the shield, then settle. Transition: shield split wipe. Exit: bars retract into baseline, shield outline remains for a beat, title fades under subtitles. No forecast or predictive claim."
+    }
+  ]
+}

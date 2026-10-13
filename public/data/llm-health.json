@@ -1,35 +1,6 @@
 {
-  "updatedAt": "2026-10-13T14:08:40.873Z",
+  "updatedAt": "2026-10-13T14:12:14.060Z",
   "runs": [
-    {
-      "at": "2026-10-06T08:22:27.517Z",
-      "task": "motion-prompts",
-      "matchId": "england-vs-czechia-2026-10-06",
-      "instructionVersion": "7b5f827b7f1a0f21fa315116e67e484636ee37e1ed3158393ca50f287d94ddea",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: presentaciones de motion inválidas; motion-prompts 2: presentaciones de motion inválidas; motion-prompts 3: presentaciones de motion inválidas; motion-prompts 4: presentaciones de motion inválidas; motion-prompts 5: presentaciones de motion inválidas",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2183,
-            "outputTokens": 4190
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 162699
-        }
-      ],
-      "usage": {
-        "inputTokens": 2185,
-        "outputTokens": 10841
-      }
-    },
     {
       "at": "2026-10-06T08:26:58.906Z",
       "task": "motion-prompts",
@@ -5084,6 +5055,35 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "3020c32b-4ff5-4dec-b5c3-b17b53eee903"
+    },
+    {
+      "at": "2026-10-13T14:12:14.060Z",
+      "task": "motion-prompts",
+      "matchId": "inter-vs-brugge-kv-2026-10-13",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 4: presentaciones de motion inválidas; motion-prompts 4: faltan rótulos, transiciones o fuente; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1588,
+            "outputTokens": 2503
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 100035
+        }
+      ],
+      "usage": {
+        "inputTokens": 1605,
+        "outputTokens": 9451
+      }
     }
   ]
 }
