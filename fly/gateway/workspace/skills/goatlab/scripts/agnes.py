@@ -85,6 +85,39 @@ class ImagePool:
             return
 
     def generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None, attempt_deadline=None):
+        if os.environ.get('AGNES_RESOURCE_RETRIES') != '3':
+            return self._generate(match, slot, prompt, out, call, size, ratio, expires_at, attempt_deadline)
+        counts = getattr(self, 'run_posts', {})
+        self.run_posts = counts
+        key = (match, slot)
+        def counted_call(*args, **kwargs):
+            counts[key] = counts.get(key, 0) + 1
+            if call is request_json:
+                kwargs['observe_headers'] = lambda status, headers: provider_diagnostic(self.state, 'image', match, slot,
+                    {'at': self.clock(), 'attemptId': self.active_attempt,
+                     'stage': 'create-response', 'httpStatus': status, 'body': {'status': 'response-received'},
+                     'requestId': headers.get('X-Request-ID') or headers.get('Request-ID')})
+            return call(*args, **kwargs)
+        while counts.get(key, 0) < 3:
+            remote = self.state.status(match, 'image', slot)
+            recovery = Path(out) / f'{slot}.response.json'
+            if remote and not recovery.exists():
+                self.state.renew(match, 'image', slot, remote['attemptId'])
+                self.db.execute('DELETE FROM images WHERE match_id=? AND slot=?', (match, slot))
+            before = counts.get(key, 0)
+            try:
+                return self._generate(match, slot, prompt, out, counted_call, size, ratio, expires_at, attempt_deadline)
+            except ValueError as error:
+                reason = str(error)
+                if counts.get(key, 0) == before or '503' in reason or 'incierto' in reason or 'timeout' in reason or 'HTTP 4' in reason and '429' not in reason:
+                    raise ValueError(f'POST en esta corrida {counts.get(key, 0)}/3; {reason}; reintentar en otra corrida') from None
+                if recovery.exists(): raise
+                if counts.get(key, 0) >= 3: raise ValueError('tres POST de imagen agotados en esta corrida; ' + reason) from None
+                if attempt_deadline is not None and self.clock() + 60 >= attempt_deadline: raise
+                self.sleep(60)
+        raise ValueError('tres POST de imagen agotados en esta corrida')
+
+    def _generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None, attempt_deadline=None):
         if slot not in range(4):
             raise ValueError("máximo cuatro imágenes por encuentro")
         if size not in {"1K", "2K"} or ratio not in {"1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"}:
@@ -139,7 +172,7 @@ class ImagePool:
             timeout = int(os.environ.get("AGNES_TIMEOUT_SECONDS", "300"))
             if not 60 <= timeout <= 360:
                 raise ValueError("AGNES_TIMEOUT_SECONDS debe estar entre 60 y 360")
-            for attempt in range(2):
+            for attempt in range(1 if os.environ.get('AGNES_RESOURCE_RETRIES') == '3' else 2):
                 workflow_db = Path(os.environ.get('GOATLAB_STATE_DIR', str(self.path.parent))) / 'goatlab.sqlite'
                 if workflow_db.exists():
                     import sqlite3
@@ -162,6 +195,7 @@ class ImagePool:
                         continue
                     raise ValueError(admission.get('reason', 'autoridad Agnes no concedió permiso'))
                 attempt_id = admission['attemptId']
+                self.active_attempt = attempt_id
                 self.db.execute("INSERT OR REPLACE INTO images VALUES(?,?,?,NULL)", (match, slot, "pending"))
                 try:
                     options = {'timeout': timeout}
@@ -208,13 +242,13 @@ class ImagePool:
                         self.state.event(attempt_id, 'hard-rejected-429', httpStatus=429, provenRejected=True,
                                          retryAfterMs=max(0, until-self.clock())*1000)
                         self.db.execute("INSERT OR REPLACE INTO throttle VALUES(1,?)", (until,))
-                        if attempt == 0:
+                        if attempt == 0 and os.environ.get('AGNES_RESOURCE_RETRIES') != '3':
                             continue
                         self.db.execute("UPDATE images SET status='limited' WHERE match_id=? AND slot=?", (match, slot))
                         raise ValueError("Agnes HTTP 429 repetido; generación detenida") from None
                     error.close()
                     self.db.execute("UPDATE images SET status='failed' WHERE match_id=? AND slot=?", (match, slot))
-                    self.state.event(attempt_id, 'uncertain', httpStatus=error.code, stage='create')
+                    self.state.event(attempt_id, 'failed' if os.environ.get('AGNES_RESOURCE_RETRIES') == '3' else 'uncertain', httpStatus=error.code, stage='create')
                     raise ValueError(f"Agnes HTTP {error.code}") from None
                 except (TimeoutError, socket.timeout, urllib.error.URLError):
                     provider_diagnostic(self.state, 'image', match, slot, {'at': self.clock(), 'attemptId': attempt_id,

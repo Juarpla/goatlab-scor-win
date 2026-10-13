@@ -23,6 +23,14 @@ class FakeAgnesState:
         self.attempts[attempt] = self.slots[(match, 'video', ordinal)]
         self.active = attempt
 
+    def renew(self, match, kind, ordinal, attempt_id):
+        row = self.status(match, kind, ordinal)
+        if not row or row['attemptId'] != attempt_id or row.get('videoId') and row['state'] in ('pending', 'uncertain'):
+            raise ValueError('recurso no renovable')
+        if self.active == attempt_id: self.active = None
+        del self.slots[(match, kind, ordinal)]
+        return {'saved': True}
+
     def reserve(self, match, kind, ordinal, prompt, model, expires, reference=None):
         key = (match, kind, ordinal)
         row = self.slots.get(key)
@@ -44,6 +52,7 @@ class FakeAgnesState:
         attempt = str(uuid.uuid4())
         row = {'state': 'uncertain', 'videoId': None, 'attemptId': attempt, 'promptHash': identity,
                'expires': expires, 'day': day, 'units': units, 'refunded': False, 'kind': kind, 'next_poll': 0}
+        if kind == 'video' and getattr(self, 'resource_number', None): row['publicationIndex'] = self.resource_number
         self.slots[key] = row
         self.attempts[attempt] = row
         if kind == 'video':

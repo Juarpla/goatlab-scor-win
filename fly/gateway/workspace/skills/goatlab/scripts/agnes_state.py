@@ -76,9 +76,15 @@ class AgnesState:
         value = {'attemptId': str(uuid.uuid4()), 'matchId': match, 'kind': kind, 'ordinal': ordinal,
                  'promptHash': hashlib.sha256(prompt.encode()).hexdigest(), 'model': model,
                  'expiresAtMs': expires * 1000, 'guard': self.guard(match, expires)}
+        if kind == 'video' and getattr(self, 'resource_number', None):
+            value['publicationIndex'] = self.resource_number
         if reference is not None:
             value['referenceHash'] = hashlib.sha256(reference.encode()).hexdigest()
         return self.call('reserve', value)
+
+    def renew(self, match, kind, ordinal, attempt_id):
+        return self.call('renew-resource', {'matchId': match, 'kind': kind, 'ordinal': ordinal,
+            'attemptId': attempt_id, 'owner': self.owner, 'verifiedAbsent': True})
 
     def status(self, match, kind, ordinal):
         return self.call('status', {'matchId': match, 'kind': kind, 'ordinal': ordinal}).get('slot')

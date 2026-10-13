@@ -205,3 +205,31 @@ test('recovery discovery is read-only and excludes expired and terminal failed t
   state=reduceAgnesState(state,'event',{attemptId:result.attemptId,eventId:randomUUID(),type:'failed'},{nowMs:now}).state;
   assert.deepEqual(reduceAgnesState(state,'recoverable-videos',{},{nowMs:now}).result.tasks,[]);
 });
+
+test('renew absent resource retains history and quota without a stored retry counter',()=>{
+  const input=reserve();let {state}=reduceAgnesState(fresh(),'reserve',input,{nowMs:now});
+  state=reduceAgnesState(state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:now}).state;
+  const quota=structuredClone(state.quota);
+  state=reduceAgnesState(state,'renew-resource',{...input,verifiedAbsent:true},{nowMs:now}).state;
+  assert.equal(state.version,2);
+  assert.deepEqual(state.quota,quota);
+  assert.equal(state.attempts[input.attemptId].identity.promptHash,input.promptHash);
+  const next=reduceAgnesState(state,'reserve',{...input,attemptId:randomUUID()},{nowMs:now});
+  assert.equal(next.result.canPost,true);
+  assert.equal(Object.keys(next.state.attempts).length,2);
+  assert.equal(next.state.quota['2026-10-09'].images,2);
+  assert.doesNotMatch(JSON.stringify(next.state),/postsThisRun|retryCount/);
+});
+test('renew refuses live video IDs, concurrent owners and unverified absence',()=>{
+  const input=reserve({kind:'video',model:'agnes-video-2.5-flash',publicationIndex:1});
+  let {state}=reduceAgnesState(fresh(),'reserve',input,{nowMs:now});
+  assert.throws(()=>reduceAgnesState(state,'renew-resource',input,{nowMs:now}),/no renovable/);
+  state=reduceAgnesState(state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'accepted',videoId:'same-id'},{nowMs:now}).state;
+  assert.throws(()=>reduceAgnesState(state,'renew-resource',{...input,verifiedAbsent:true},{nowMs:now}),/recuperar/);
+});
+test('resource projection only declares verified R2 objects ready',()=>{
+  const resources=[...Array.from({length:4},(_,i)=>({kind:'image',number:i+1,state:'pendiente',reason:'ausente'})),...Array.from({length:2},(_,i)=>({kind:'video',number:i+1,state:'pendiente',reason:'ausente'}))];
+  const {state}=reduceAgnesState(fresh(),'resource-status',{matchId:'alpha-beta',resources},{nowMs:now});
+  assert.equal(state.resources['alpha-beta:image:1'].state,'pendiente');
+  assert.throws(()=>reduceAgnesState(state,'resource-status',{matchId:'alpha-beta',resources:resources.map(r=>({...r,state:'listo'}))},{nowMs:now}),/estado de recurso/);
+});

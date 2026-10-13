@@ -39,6 +39,7 @@ jobs:
       # La llave debe ser de tipo Token Plan: las llaves Free comparten
       # otro pozo con 1 RPM de vídeo y se saturan con los clips.
       AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
+      AGNES_RESOURCE_RETRIES: '3'
       AGNES_IMAGE_MODEL: agnes-image-2.5-flash
       AGNES_IMAGE_RPM: '12'
       AGNES_VIDEO_START_INTERVAL: '30'

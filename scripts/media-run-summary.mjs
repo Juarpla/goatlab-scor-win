@@ -9,7 +9,7 @@ if(report.error) summary+=safe(report.error)+'\n\n';
 summary+='| Partido | Imágenes listas en R2 | Clips listos en R2 | Diagnóstico |\n| --- | --- | --- | --- |\n';
 for(const row of report.results??[]) {
   const complete = requestedMediaComplete({ ...row, mode: row.mode ?? report.mode });
-  const failures = [...new Set((row.failures ?? []).filter(reason => reason !== 'Motion Prompts no disponibles; montaje local disponible' && !/^clip \d+: etapa=/.test(reason)).map(reason=>reason.split('; última consulta:')[0]))];
+  const failures = [...new Set((row.failures ?? []).filter(reason => reason !== 'Motion Prompts no disponibles; montaje local disponible' && ! /^(?:clip|intento de vídeo) \d+: etapa=/.test(reason)).map(reason=>reason.split('; última consulta:')[0]))];
   const latest = row.diagnostics?.at(-1);
   const diagnosis = complete ? 'Verificado' : failures.join('; ') || latest?.message || 'Recursos incompletos; causa no registrada';
   const labels = readyMediaLabels(row);
@@ -24,13 +24,13 @@ for(const row of report.results??[]) {
   ];
   for(const resource of resources) summary+=`| ${resource.kind==='image'?'Imagen':'Clip'} ${resource.number} | ${safe(resource.status)} | ${safe(resource.objectKey??'—')} | ${safe(resource.reason)} |\n`;
   const attempts=row.attempts??[];
-  const used=new Set(attempts.filter(a=>a.kind==='video'&&a.state!=='rejected').map(a=>a.ordinal));
   const countKnown=Array.isArray(row.attempts);
-  summary+=`\n#### Peticiones/intentos\n\n${countKnown?`Intentos de vídeo utilizados: ${used.size}/5 · Disponibles: ${5-used.size}/5.`:'Intentos de vídeo: detalle original no conservado.'}\n\n`;
-  summary+='Los intentos de vídeo son solicitudes; el banco requiere dos clips publicados.\n\n';
+  summary+='\n#### Peticiones/intentos\n\nMáximo tres POST por imagen o clip en esta corrida. Se renuevan en otra corrida; los GET no consumen intentos.\n\n';
+  for(const resource of row.resources??[])summary+=`${resource.kind==='image'?'Imagen':'Clip'} ${resource.number}: ${resource.postsThisRun??0}/3 POST en esta corrida; estado=${resource.state??(resource.verified?'listo':'pendiente')}.\n`;
+  summary+='\n';
   summary+='| Imagen / intento de vídeo | Resultado | Etapa / método | HTTP | Respuesta de Agnes / publicación | Fecha UTC | Origen / corrida |\n| --- | --- | --- | --- | --- | --- | --- |\n';
   for(const attempt of attempts) {
-    const label=(attempt.kind==='image'?'Imagen ':'Intento de vídeo ')+(attempt.ordinal+1);
+    const label=(attempt.kind==='image'?'Imagen '+(attempt.ordinal+1):attempt.publicationIndex?'Clip '+attempt.publicationIndex:'Vídeo histórico')+' · solicitud '+safe(attempt.attemptId??'sin ID');
     if(!attempt.diagnostics?.events?.length) {
       summary+=`| ${label} | ${safe(attempt.state)} | — | desconocido | detalle original no conservado | — | historial anterior |\n`;
       continue;
@@ -43,9 +43,6 @@ for(const row of report.results??[]) {
       const http=event.httpStatus??(event.method==='NONE'?'—':'sin respuesta HTTP');
       summary+=`| ${label} | ${safe(attempt.state)} | ${safe(event.stage)} / ${safe(event.method)} | ${http} | ${safe(details)} | ${at} | ${origin}: ${source} |\n`;
     }
-  }
-  for(let ordinal=0;ordinal<5;ordinal++)if(!attempts.some(a=>a.kind==='video'&&a.ordinal===ordinal)) {
-    summary+=`| Intento de vídeo ${ordinal+1} | ${countKnown?'disponible; no solicitado':'desconocido'} | — | — | ${countKnown?safe(row.recoveryOnly?'recuperación sin nuevas tareas':row.failures?.join('; ')||'sin petición a Agnes'):'detalle original no conservado'} | — | — |\n`;
   }
   summary+='\n'+attempts.filter(a=>a.kind==='video'&&a.diagnostics).map(a=>`Consultas del intento ${a.ordinal+1}: ${a.diagnostics.queryCount}.`).join(' ')+'\n';
 }

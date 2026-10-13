@@ -169,6 +169,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     try { await state('heartbeat', { runId, matchId }); } catch(error) { authorityReady = false; failures.push('Estado de generación: heartbeat: ' + safeMediaMessage(error.message,env)); }
     const heartbeat = setInterval(() => { state('heartbeat', { runId, matchId }).catch(() => { authorityReady = false; }); }, 30_000); heartbeat.unref();
     const verifiedVideoOrdinals=new Set();
+    let runPosts={};
     const assets = [], clips = [], verifiedAssets = new Set(), verifiedClips = new Set();
     const readyCounts = () => ({ images: verifiedAssets.size, clips: verifiedClips.size });
     const logReady = (stage, detail = '') => {
@@ -257,7 +258,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     try {
       const guardFile = join(folder, 'guard.json'), operationsFile = join(folder, 'operations-' + runId + '.jsonl');
       await writeFile(guardFile, JSON.stringify(match));
-      const childEnv = { ...env, GOATLAB_REPO: repo, AGNES_STATE_DB: env.AGNES_STATE_DB || join(dir, 'agnes.sqlite'), AGNES_RUN_ID: runId,
+      const childEnv = { ...env, GOATLAB_REPO: repo, AGNES_STATE_DB: env.AGNES_STATE_DB || join(dir, 'agnes.sqlite'), AGNES_RUN_ID: runId, AGNES_RESOURCE_RETRIES: '3',
         AGNES_MANUAL: args['--match'] ? '1' : '0', AGNES_GUARD_FILE: guardFile, AGNES_OPERATIONS_FILE: operationsFile };
       for (let ordinal = 0; ordinal < 4; ordinal++) {
         const desired = imagePrompts[ordinal]?.prompt;
@@ -308,7 +309,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         const local = saved && saved.prompt === desired && saved.model === videoModel ? saved : prior;
         const found = await r2('exists', 'partidos/' + matchId + '/' + file), remote = found?.found;
         const meta = remote && typeof remote === 'object' ? remote.meta ?? {} : {};
-        if(canonical && (Number(meta.attemptordinal)!==ordinal || Number(meta.publicationindex)!==videoSlot.publicationIndex || meta.attemptid!==videoSlot.attemptId)) {failures.push('R2: identidad de publicación incompatible: '+file);r2ReadFailed=true;continue;}
+        if(canonical && remote && (Number(meta.attemptordinal)!==ordinal || Number(meta.publicationindex)!==videoSlot.publicationIndex || meta.attemptid!==videoSlot.attemptId)) {failures.push('R2: identidad de publicación incompatible: '+file);r2ReadFailed=true;continue;}
         if(!canonical && meta.publicationindex!==undefined && Number(meta.attemptordinal)!==ordinal)continue;
         if(!canonical && (remote||local)) {failures.push('R2: clip con nombre antiguo; requiere migración verificada: '+file);r2ReadFailed=true;continue;}
         const promptHash = meta.prompthash || local?.promptHash || (local?.prompt ? hash(local.prompt) : null);
@@ -379,7 +380,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         try {
           const { stdout, stderr } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes_video.py'), '--input=' + input, '--out=' + folder],
             { env: childEnv, timeout: Math.max(1, deadline - clock() + 500), maxBuffer: 1024 * 1024, onStderr: chunk=>log(safeMediaMessage(chunk,env)) });
-          const result = JSON.parse(stdout); failures.push(...(result.failures ?? []).map(message=>safeMediaMessage(message,env)));
+          const result = JSON.parse(stdout); runPosts=result.runPosts??runPosts; failures.push(...(result.failures ?? []).map(message=>safeMediaMessage(message,env)));
           diagnostics=publicVideoDiagnostics(result.diagnostics,env);
           if(stderr && execImpl !== execute) log(safeMediaMessage(stderr,env));
           for (const saved of result.clips ?? []) {
@@ -432,7 +433,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         resources.push({kind:'image',number:ordinal+1,status:asset?(publishedFiles.has(file)?'publicado en esta corrida':'reutilizado'):attempt?'ausente':'pendiente',
           objectKey:asset?'partidos/'+matchId+'/'+file:null,verified:!!asset,
           reason:asset?(publishedFiles.has(file)?'subida y verificación R2 confirmadas':'verificado en R2; sin petición a Agnes'):
-            attempt?.state==='completed'?'generación completada; resultado ausente en R2; no repetir POST':mode==='clips-only'?'imágenes omitidas por modo clips-only':omission});
+            attempt?.state==='completed'?'resultado ausente en R2; pendiente de recuperación o nueva generación':mode==='clips-only'?'imágenes omitidas por modo clips-only':omission});
       }
       for(let index=0;index<2;index++) {
         const clip=clips.find(clip=>clip.file==='clip-'+(index+1)+'.mp4');
@@ -440,10 +441,18 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
           objectKey:clip?'partidos/'+matchId+'/'+clip.file:null,verified:!!clip,
           reason:clip?(publishedFiles.has(clip.file)?'subida y verificación R2 confirmadas':'verificado en R2; sin petición a Agnes'):mode==='images-only'?'clips omitidos por modo images-only':omission});
       }
+      for(const resource of resources) {
+        const active=attempts.find(attempt=>attempt.kind===resource.kind && (resource.kind==='image'?attempt.ordinal+1===resource.number:attempt.publicationIndex===resource.number) && attempt.hasVideoId && attempt.state==='pending');
+        const publication=attempts.find(attempt=>attempt.kind===resource.kind && (resource.kind==='image'?attempt.ordinal+1===resource.number:attempt.publicationIndex===resource.number) && attempt.state==='completed' && attempt.uploadClaim);
+        resource.state=resource.verified?'listo':active?'generando':publication?'publicando':'pendiente';
+        const calls=attempts.filter(attempt=>attempt.kind===resource.kind && (resource.kind==='image'?attempt.ordinal+1===resource.number:attempt.publicationIndex===resource.number) && attempt.diagnostics?.events?.some(event=>event.runId===runId && event.method==='POST'));
+        resource.postsThisRun=resource.kind==='video'?runPosts[String(resource.number)]??calls.length:calls.length;
+      }
+      if(authorityReady)try{await state('resource-status',{matchId,resources});}catch(error){failures.push('Estado de recursos no guardado: '+safeMediaMessage(error.message,env));}
       for(const resource of resources)log('media-resource: '+matchId+': '+(resource.kind==='image'?'imagen ':'clip ')+resource.number+': '+resource.status+'; '+resource.reason+(resource.objectKey?'; '+resource.objectKey:''));
       for(const attempt of attempts)log('media-attempt: '+JSON.stringify({matchId,kind:attempt.kind,ordinal:attempt.ordinal,state:attempt.state,
         history:attempt.diagnostics?.events?.map(event=>({...event,origin:event.runId===runId?'corrida actual':'historial anterior'}))??'detalle original no conservado',queryCount:attempt.diagnostics?.queryCount??null}));
-      const report={matchId,...readyCounts(),mode,failures,diagnostics,runUrl,resources,attempts,recoveryOnly};
+      const report={matchId,...readyCounts(),mode,failures,diagnostics,runUrl,resources,attempts,recoveryOnly,retryPolicy:{maxPostsPerResource:3,scope:'run'}};
       if(priorResult<0) results.push(report); else results[priorResult]=report;
       logReady('final', failures.join('; '));
     } finally { clearInterval(heartbeat); try { await state('heartbeat', { runId, finished: true }); } catch {} }

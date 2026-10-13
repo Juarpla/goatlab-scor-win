@@ -127,7 +127,7 @@ consulta, interrupción y publicación; mensajes de hasta 256 caracteres sin pro
 binarios, credenciales ni URLs firmadas. Cada petición real aparece en logs con
 método, etapa y HTTP; las consultas repetidas actualizan su último registro persistido.
 Un fallo de diagnóstico no concede permisos, devuelve cuota ni repite POST.
-El summary separa los seis recursos de los cinco intentos de vídeo, incluye éxitos,
+El summary separa los seis recursos del historial de solicitudes, incluye éxitos,
 reutilización R2 sin llamadas a Agnes e historial anterior con su corrida de origen.
 Los intentos anteriores sin diagnóstico indican «detalle original no conservado»;
 no se reconstruyen desde logs históricos.
@@ -154,7 +154,7 @@ El catálogo resuelve primero IDs de equipo del proveedor dentro de la competici
 los alias deben tener un único propietario. Una identidad ambigua detiene la
 publicación hasta corregir el catálogo.
 
-`ordinal` identifica uno de los cinco intentos de vídeo. El campo privado opcional
+`ordinal` conserva la identidad de la posición interna y de las solicitudes anteriores; no limita el número acumulado de POST. El campo privado opcional
 `publicationIndex` asigna mediante CAS una de las dos posiciones de publicación:
 `clip-1.mp4` o `clip-2.mp4`. Los metadatos R2 `attemptordinal`, `attemptid` y
 `publicationindex` permiten verificar ambos conceptos sin cambiar el banco público.
@@ -169,3 +169,24 @@ identidad de las solicitudes originales; `publicationReferenceHash` registra la
 referencia actual cuando cambia la URL. `previousObjectKey` permite retomar la
 limpieza tras una interrupción. No se vuelven a solicitar recursos a Agnes ni se
 reinician intentos, cuotas o diagnósticos.
+
+## Reintentos por recurso y corrida
+
+El estado privado admite versiones 1 y 2. La versión 2 conserva un único estado
+operativo en `resources`: `pendiente`, `generando`, `publicando` o `listo`. Sólo
+la verificación de R2 permite `listo`. Los estados de proveedor permanecen
+como evidencia dentro de los intentos, junto con sus diagnósticos compactos.
+
+Cada corrida concede hasta tres POST por cada imagen y por cada clip pendiente.
+El contador sólo existe en memoria del productor; no se almacena un contador
+acumulado en R2. El historial y las cuotas anteriores no se borran ni se reinician.
+`renew-resource` archiva la identidad original antes de renovar una posición
+verificada como ausente, mediante CAS; una tarea vigente con ID debe recuperarse.
+Un 503 detiene ese recurso durante la corrida y permite continuar con los otros.
+Otra corrida vuelve a disponer de tres intentos. GET, PUT y HEAD no gastan POST.
+
+`pending`, `queued` e `in_progress` conservan el ID y se consultan con pausas de
+10, 20 y 30 segundos; 429 respeta Retry-After. Las respuestas repetidas aparecen
+en logs y se compactan en el estado. Los diagnósticos archivados se retienen
+durante la ventana actual de siete días y siguen sujetos al límite de 900 KB.
+Los temporales se eliminan tras publicación confirmada y al finalizar el job.

@@ -38,9 +38,13 @@ function recordDiagnostic(attempt, input) {
 export const slotKey = ({matchId, kind, ordinal}) => `${matchId}:${kind}:${ordinal}`;
 
 export function validateAgnesState(state) {
-  if (!object(state) || state.version !== 1 || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(state.revision) || !isoUtc(state.updatedAt) || !object(state.limits) || !object(state.cutover) || !Array.isArray(state.cutover.legacyMatchIds)) throw new Error('autoridad Agnes inválida');
-  if (!keys(state,['version','revision','updatedAt','cutover','limits','quota','rates','matches','slots','attempts','runs','summaries','usage','activeVideoAttemptId','failureEvents','maintenance']) || !keys(state.cutover,['atMs','legacyMatchIds']) || !keys(state.limits,['images','video_seconds','imageRpm','videoStartIntervalMs']) || !keys(state.rates,['imageStarts','imageThrottleUntil','videoNextAt']) || !keys(state.usage,['opsA','opsB'])) throw new Error('campos privados Agnes no admitidos');
+  if (!object(state) || ![1,2].includes(state.version) || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(state.revision) || !isoUtc(state.updatedAt) || !object(state.limits) || !object(state.cutover) || !Array.isArray(state.cutover.legacyMatchIds)) throw new Error('autoridad Agnes inválida');
+  if (!keys(state,['version','revision','updatedAt','cutover','limits','quota','rates','matches','slots','attempts','runs','summaries','usage','activeVideoAttemptId','failureEvents','maintenance','resources']) || !keys(state.cutover,['atMs','legacyMatchIds']) || !keys(state.limits,['images','video_seconds','imageRpm','videoStartIntervalMs']) || !keys(state.rates,['imageStarts','imageThrottleUntil','videoNextAt']) || !keys(state.usage,['opsA','opsB'])) throw new Error('campos privados Agnes no admitidos');
   if(state.maintenance!==undefined && state.maintenance!==null && (!keys(state.maintenance,['owner','untilMs']) || !uuid(state.maintenance.owner) || !finite(state.maintenance.untilMs))) throw new Error('exclusión de mantenimiento Agnes inválida');
+  if(state.resources!==undefined) {
+    if(!object(state.resources))throw new Error('recursos Agnes inválidos');
+    for(const [key,row] of Object.entries(state.resources))if(!keys(row,['matchId','kind','number','state','reason','objectKey','verifiedAt']) || key!==`${row.matchId}:${row.kind}:${row.number}` || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.number) || row.number<1 || row.number>(row.kind==='image'?4:2) || !['pendiente','generando','publicando','listo'].includes(row.state) || typeof row.reason!=='string' || row.reason.length>256 || (row.objectKey!==null && (typeof row.objectKey!=='string' || !row.objectKey.startsWith(`partidos/${row.matchId}/`))) || (row.verifiedAt!==null&&!isoUtc(row.verifiedAt)) || row.state==='listo'&&(!row.objectKey||!row.verifiedAt))throw new Error('estado de recurso Agnes inválido');
+  }
   const positions=new Set();
   for (const row of Object.values(state.slots)) if(row.publicationIndex!==undefined) {
     const key=row.matchId+':'+row.publicationIndex;
@@ -71,7 +75,8 @@ export function validateAgnesState(state) {
       || ((row.uploadClaim.objectKey!==undefined || row.uploadClaim.sizeBytes!==undefined) && !validPublication(row,row.uploadClaim)))) throw new Error('subida Agnes corrupta');
   }
   for(const [attemptId,row] of Object.entries(state.attempts)) {
-    if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds','diagnostics']) || !state.slots[row.slotKey] || !['uncertain','pending','completed','failed','rejected','abandoned','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
+    if(!uuid(attemptId) || !keys(row,['slotKey','state','refunded','eventIds','diagnostics','identity']) || (!state.slots[row.slotKey] && !row.identity) || !['uncertain','pending','completed','failed','rejected','abandoned','retired'].includes(row.state) || typeof row.refunded!=='boolean' || !Array.isArray(row.eventIds) || !row.eventIds.every(uuid)) throw new Error('intento Agnes corrupto');
+    if(row.identity) {validateSlotInput(row.identity);if(slotKey(row.identity)!==row.slotKey)throw new Error('identidad histórica Agnes inválida');}
     if(row.diagnostics!==undefined)validateDiagnostics(row.diagnostics);
   }
   if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('single-flight Agnes corrupto');
@@ -108,6 +113,8 @@ export function compactAgnesState(state, {nowMs}) {
     if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
     changed=true;
   }
+  for(const [attemptId,attempt] of Object.entries(state.attempts))if(attempt.identity?.expiresAtMs<nowMs-7*86_400_000 && state.slots[attempt.slotKey]?.attemptId!==attemptId){delete state.attempts[attemptId];changed=true;}
+  for(const [key,resource] of Object.entries(state.resources??{}))if(state.matches[resource.matchId]?.closed && state.matches[resource.matchId].expiresAtMs<nowMs-7*86_400_000){delete state.resources[key];changed=true;}
   return changed;
 }
 
@@ -139,7 +146,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   };
   const maintenanceActive=state.maintenance?.untilMs>nowMs;
   const requireMaintenance=()=>{if(!maintenanceActive||state.maintenance.owner!==input.owner)throw new Error('migración sin exclusión vigente');};
-  if(maintenanceActive && ['reserve','pollclaim','uploadclaim','uploadconfirm','cleanupclaim','cleanupconfirm','heartbeat'].includes(operation) && !input.finished) throw new Error('mantenimiento de nombres en curso; sin peticiones a Agnes');
+  if(maintenanceActive && ['reserve','renew-resource','resource-status','pollclaim','uploadclaim','uploadconfirm','cleanupclaim','cleanupconfirm','heartbeat'].includes(operation) && !input.finished) throw new Error('mantenimiento de nombres en curso; sin peticiones a Agnes');
   if(operation==='maintenance-lock') {
     if(!uuid(input.owner))throw new Error('propietario de migración inválido');
     if(maintenanceActive && state.maintenance.owner!==input.owner || Object.values(state.runs).some(run=>run.untilMs>nowMs))throw new Error('generación o migración en curso');
@@ -159,6 +166,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
         const target=slotKey(row);state.slots[target]=row;delete state.slots[key];
         for(const attempt of Object.values(state.attempts))if(attempt.slotKey===key)attempt.slotKey=target;
       }
+      for(const [key,row] of Object.entries(state.resources??{}))if(row.matchId===input.from){row.matchId=input.to;if(row.objectKey)row.objectKey=row.objectKey.replace(`partidos/${input.from}/`,`partidos/${input.to}/`);state.resources[`${row.matchId}:${row.kind}:${row.number}`]=row;delete state.resources[key];}
       state.cutover.legacyMatchIds=state.cutover.legacyMatchIds.map(value=>value===input.from?input.to:value);
       for(const event of state.failureEvents)if(event.matchId===input.from)event.matchId=input.to;
       result=change({saved:true});
@@ -186,7 +194,24 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     requireMaintenance();const row=readSlot();
     if(!row?.uploadClaim?.confirmed || row.uploadClaim.objectKey!==input.objectKey)throw new Error('publicación sin confirmar');
     delete row.uploadClaim.previousObjectKey;result=change({saved:true});
-  } else if (operation === 'health') result = {ready:true,version:1};
+  } else if (operation === 'resource-status') {
+    if(!id(input.matchId) || state.matches[input.matchId]?.closed || !Array.isArray(input.resources) || input.resources.length!==6)throw new Error('reconciliación de recursos inválida');
+    state.resources??={};
+    for(const row of input.resources) {
+      const key=`${input.matchId}:${row.kind}:${row.number}`;
+      state.resources[key]={matchId:input.matchId,kind:row.kind,number:row.number,state:row.state,reason:safeMediaMessage(row.reason).slice(0,256),objectKey:row.objectKey??null,verifiedAt:row.state==='listo'?new Date(nowMs).toISOString():null};
+    }
+    state.version=2;result=change({saved:true});
+  } else if (operation === 'renew-resource') {
+    const row=readSlot();
+    if(!row || row.attemptId!==input.attemptId || input.verifiedAbsent!==true || state.matches[input.matchId]?.closed
+      || Object.entries(state.runs).some(([owner,run])=>run.matchId===input.matchId && run.untilMs>nowMs && input.owner!==owner)
+      || (row.videoId && ['pending','uncertain'].includes(row.state))) throw new Error('recurso no renovable; recuperar tarea o verificar ausencia R2');
+    state.attempts[row.attemptId].identity={...pickIdentity(row),expiresAtMs:row.expiresAtMs,...(row.publicationIndex?{publicationIndex:row.publicationIndex}:{}),...(row.videoId?{videoId:row.videoId}:{}),...(row.uploadClaim?{uploadClaim:row.uploadClaim}:{})};
+    if(state.activeVideoAttemptId===row.attemptId)state.activeVideoAttemptId=null;
+    delete state.slots[slotKey(row)];state.version=2;
+    result=change({saved:true});
+  } else if (operation === 'health') result = {ready:true,version:state.version};
   else if (operation === 'compact') {changed=compactAgnesState(state,{nowMs});result={saved:true,compacted:changed};}
   else if (operation === 'release-legacy') {
     if (input.confirm !== 'release-legacy') throw new Error('liberación legacy sin confirmar');
@@ -226,9 +251,9 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   else if (operation === 'status') result = {slot:readSlot() ?? null,closed:state.matches[input.matchId]?.closed ?? false};
   else if (operation === 'attempts') {
     if(!id(input.matchId))throw new Error('partido inválido');
-    result={attempts:Object.entries(state.attempts).filter(([,attempt])=>state.slots[attempt.slotKey]?.matchId===input.matchId).map(([attemptId,attempt])=>{
-      const row=state.slots[attempt.slotKey];
-      return {attemptId,kind:row.kind,ordinal:row.ordinal,state:attempt.state,diagnostics:attempt.diagnostics??null,
+    result={attempts:Object.entries(state.attempts).filter(([,attempt])=>(attempt.identity??state.slots[attempt.slotKey])?.matchId===input.matchId).map(([attemptId,attempt])=>{
+      const row=attempt.identity??state.slots[attempt.slotKey];
+      return {attemptId,kind:row.kind,ordinal:row.ordinal,state:attempt.state,publicationIndex:row.publicationIndex??null,diagnostics:attempt.diagnostics??null,
         ...(row.attemptId===attemptId?{uploadClaim:row.uploadClaim??null,hasVideoId:!!row.videoId,publicationIndex:row.publicationIndex??null}:{})};
     })};
   } else if (operation === 'diagnostic') {
@@ -244,12 +269,14 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   else if (operation === 'reserve') {
     validateSlotInput(input);
     if (/^(?:fd|af|bz)-[0-9]+$/.test(input.matchId)) throw new Error('partido sin código descriptivo; publicación y generación pausadas');
+    if (input.publicationIndex!==undefined && (input.kind!=='video' || ![1,2].includes(input.publicationIndex))) throw new Error('posición de recurso inválida');
     if (!uuid(input.attemptId) || !finite(input.expiresAtMs)) throw new Error('intento inválido');
     const key = slotKey(input), row = state.slots[key], previousAttempt = state.attempts[input.attemptId];
     const guard = input.guard;
     const deny = reason => resultFor(row, reason);
     if (previousAttempt) result = deny('intento ya reservado; permiso no renovable');
     else if (state.matches[input.matchId]?.closed) result = deny('partido cerrado por poda');
+    else if (input.publicationIndex && Object.values(state.slots).some(slot=>slot.matchId===input.matchId && slot.publicationIndex===input.publicationIndex)) result=deny('posición de clip ocupada; recuperar recurso existente');
     else if (row && !sameIdentity(row,input)) result = deny('slot pertenece a otra versión de prompts');
     else if (row && row.state !== 'rejected') result = deny(row.state === 'uncertain' ? 'resultado incierto; no se repite' : 'slot ya utilizado');
     else if (!row && state.cutover.legacyMatchIds.includes(input.matchId)) result = deny('legacy_unknown; solo reutilización');
@@ -266,7 +293,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       else if (quota[quotaName]+units > state.limits[quotaName]) result = deny(input.kind==='image' ? 'cuota diaria de imágenes agotada' : 'cuota de vídeo diaria agotada');
       else {
         state.quota[day] = {...quota,[quotaName]:quota[quotaName]+units};
-        state.slots[key] = {...pickIdentity(input),attemptId:input.attemptId,state:'uncertain',videoId:null,expiresAtMs:input.expiresAtMs,reservedDay:day,reservedUnits:units,refunded:false,pollNextAtMs:0,pollLease:null,uploadClaim:null};
+        state.slots[key] = {...pickIdentity(input),...(input.publicationIndex?{publicationIndex:input.publicationIndex}:{}),attemptId:input.attemptId,state:'uncertain',videoId:null,expiresAtMs:input.expiresAtMs,reservedDay:day,reservedUnits:units,refunded:false,pollNextAtMs:0,pollLease:null,uploadClaim:null};
         state.attempts[input.attemptId] = {slotKey:key,state:'uncertain',refunded:false,eventIds:[]};
         const m = matchState(input.matchId); m.expiresAtMs = m.expiresAtMs ? Math.min(m.expiresAtMs,input.expiresAtMs) : input.expiresAtMs;
         if (input.kind === 'image') state.rates.imageStarts = [...state.rates.imageStarts.filter(t=>t>nowMs-60_000),nowMs];
