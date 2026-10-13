@@ -90,7 +90,7 @@ export function validateAgnesState(state) {
 
 export function createAgnesState({nowMs, legacyMatchIds = [], legacySlots = [], caps = {images:4000, video_seconds:360}}) {
   if (!finite(nowMs) || !legacyMatchIds.every(id) || !finite(caps.images) || !finite(caps.video_seconds)) throw new Error('bootstrap Agnes inválido');
-  const state = {version:1, revision:randomUUID(), updatedAt:new Date(nowMs).toISOString(), cutover:{atMs:nowMs,legacyMatchIds:[...new Set(legacyMatchIds)]}, limits:{images:caps.images,video_seconds:caps.video_seconds,imageRpm:12,videoStartIntervalMs:30_100}, quota:{[dayAt(nowMs)]:{images:caps.images,video_seconds:caps.video_seconds}}, rates:{imageStarts:[],imageThrottleUntil:0,videoNextAt:0}, matches:{}, slots:{}, attempts:{}, runs:{}, summaries:{},usage:{opsA:0,opsB:0},activeVideoAttemptId:null, failureEvents:[]};
+  const state = {version:1, revision:randomUUID(), updatedAt:new Date(nowMs).toISOString(), cutover:{atMs:nowMs,legacyMatchIds:[...new Set(legacyMatchIds)]}, limits:{images:caps.images,video_seconds:caps.video_seconds,imageRpm:80,videoStartIntervalMs:12_100}, quota:{[dayAt(nowMs)]:{images:caps.images,video_seconds:caps.video_seconds}}, rates:{imageStarts:[],imageThrottleUntil:0,videoNextAt:0}, matches:{}, slots:{}, attempts:{}, runs:{}, summaries:{},usage:{opsA:0,opsB:0},activeVideoAttemptId:null, failureEvents:[]};
   for (const row of legacySlots) {
     validateSlotInput(row);
     if (!['pending','uncertain','completed'].includes(row.state)) throw new Error('estado legacy inválido');
@@ -138,6 +138,9 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   if (!finite(nowMs)) throw new Error('reloj de autoridad inválido');
   const state = structuredClone(original);
   let changed = false, result;
+  // Upgrade only the previous defaults; preserve tasks, accounting and Retry-After deadlines.
+  if(state.limits.imageRpm===12){state.limits.imageRpm=80;changed=true;}
+  if(state.limits.videoStartIntervalMs===30_100){state.limits.videoStartIntervalMs=12_100;changed=true;}
   const change = value => { changed = true; return value; };
   const matchState = matchId => state.matches[matchId] ??= {closed:false,fenceRevision:null,expiresAtMs:0};
   const readSlot = () => {
@@ -289,7 +292,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       const retryAtMs = input.kind === 'image' ? Math.max(state.rates.imageThrottleUntil, state.rates.imageStarts.filter(t => t>nowMs-60_000).length >= state.limits.imageRpm ? state.rates.imageStarts.filter(t => t>nowMs-60_000).at(-state.limits.imageRpm)+60_050 : 0) : state.rates.videoNextAt;
       const day = dayAt(nowMs), quota = state.quota[day] ?? {images:0,video_seconds:0};
       const units = input.kind==='image' ? 1 : 6, quotaName = input.kind==='image' ? 'images' : 'video_seconds';
-      if (retryAtMs > nowMs) result = {...deny('Agnes está pausado por ritmo de llamadas'),retryAtMs};
+      if (retryAtMs > nowMs) result = {...deny(`Solicitud aplazada por el control de ritmo del generador; próxima admisión ${new Date(retryAtMs).toISOString()}; espera ${Math.ceil((retryAtMs-nowMs)/1000)} segundos`),retryAtMs,code:'rate-wait'};
       else {
         state.quota[day] = {...quota,[quotaName]:quota[quotaName]+units};
         state.slots[key] = {...pickIdentity(input),...(input.publicationIndex?{publicationIndex:input.publicationIndex}:{}),attemptId:input.attemptId,state:'uncertain',videoId:null,expiresAtMs:input.expiresAtMs,reservedDay:day,reservedUnits:units,refunded:false,pollNextAtMs:0,pollLease:null,uploadClaim:null};

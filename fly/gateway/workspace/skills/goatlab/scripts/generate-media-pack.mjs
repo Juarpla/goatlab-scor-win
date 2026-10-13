@@ -152,6 +152,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     const imageModel = env.AGNES_IMAGE_MODEL || 'agnes-image-2.5-flash', videoModel = 'agnes-video-2.5-flash';
     const fingerprint = contentFingerprint(match, { ...imagePack, generationModel: imageModel }, { ...videoPack, generationModel: videoModel });
     const failures = [];
+    const deferrals = [];
     if(!publishedByMatch.has(matchId))publishedByMatch.set(matchId,new Set());
     const publishedFiles = publishedByMatch.get(matchId);
     let attempts = [];
@@ -353,7 +354,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         if (assets.some(a => a.id === matchId + '-' + ordinal)) continue;
         if (!canGenerate()) break;
         const timeout = Number(env.AGNES_TIMEOUT_SECONDS || 300);
-        if (clock() + timeout * 1000 + 35_000 > deadline) { failures.push('Imágenes: presupuesto de corrida agotado'); break; }
+        if (clock() + timeout * 1000 + 35_000 > deadline) { failures.push('Imágenes: presupuesto de corrida agotado'); for(let number=ordinal+1;number<=4;number++)deferrals.push({kind:'image',number,code:'run-deadline'}); break; }
         const promptFile = join(folder, ordinal + '.prompt.txt'); await writeFile(promptFile, row.prompt);
         try {
           const { stdout } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes.py'), '--match=' + matchId, '--index=' + ordinal,
@@ -371,7 +372,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
             logReady('subida de imagen confirmada');
           } else failures.push('R2: subida de imagen sin confirmar');
           await publish(assets, 'generating', extras());
-        } catch (error) { const reason = safeMediaMessage(error.stderr || error.message,env).trim(); failures.push('Imagen ' + (ordinal + 1) + ': ' + reason); if (/429|incierto|pausado|cuota/.test(reason)) break; }
+        } catch (error) { const reason = safeMediaMessage(error.stderr || error.message,env).trim(); failures.push('Imagen ' + (ordinal + 1) + ': ' + reason); if(/Solicitud aplazada por el control de ritmo|presupuesto de preparación agotado/.test(reason))deferrals.push({kind:'image',number:ordinal+1,code:'rate-wait'}); if (/429|incierto|pausado|cuota/.test(reason)) break; }
       }
       await publish(assets, 'generating-clips', extras());
       const canRetrieve=authorityReady && !r2blocked && !r2ReadFailed && !!env.AGNES_API_KEY?.trim() && deadline>clock();
@@ -380,7 +381,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         try {
           const { stdout, stderr } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes_video.py'), '--input=' + input, '--out=' + folder],
             { env: childEnv, timeout: Math.max(1, deadline - clock() + 500), maxBuffer: 1024 * 1024, onStderr: chunk=>log(safeMediaMessage(chunk,env)) });
-          const result = JSON.parse(stdout); runPosts=result.runPosts??runPosts; failures.push(...(result.failures ?? []).map(message=>safeMediaMessage(message,env)));
+          const result = JSON.parse(stdout); deferrals.push(...(result.deferrals??[])); runPosts=result.runPosts??runPosts; failures.push(...(result.failures ?? []).map(message=>safeMediaMessage(message,env)));
           diagnostics=publicVideoDiagnostics(result.diagnostics,env);
           if(stderr && execImpl !== execute) log(safeMediaMessage(stderr,env));
           for (const saved of result.clips ?? []) {
@@ -455,7 +456,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       for(const resource of resources)log('media-resource: '+matchId+': '+(resource.kind==='image'?'imagen ':'clip ')+resource.number+': '+resource.status+'; '+resource.reason+(resource.objectKey?'; '+resource.objectKey:''));
       for(const attempt of attempts)log('media-attempt: '+JSON.stringify({matchId,kind:attempt.kind,ordinal:attempt.ordinal,state:attempt.state,
         history:attempt.diagnostics?.events?.map(event=>({...event,origin:event.runId===runId?'corrida actual':'historial anterior'}))??'detalle original no conservado',queryCount:attempt.diagnostics?.queryCount??null}));
-      const report={matchId,...readyCounts(),mode,failures,diagnostics,runUrl,resources,attempts,recoveryOnly,retryPolicy:{maxPostsPerResource:3,scope:'run'}};
+      const report={matchId,...readyCounts(),mode,failures,diagnostics,runUrl,resources,attempts,deferrals,recoveryOnly,retryPolicy:{maxPostsPerResource:3,scope:'run'}};
       if(priorResult<0) results.push(report); else results[priorResult]=report;
       logReady('final', failures.join('; '));
     } finally { clearInterval(heartbeat); try { await state('heartbeat', { runId, finished: true }); } catch {} }

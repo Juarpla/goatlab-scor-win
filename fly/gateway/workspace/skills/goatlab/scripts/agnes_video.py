@@ -44,11 +44,11 @@ def response_identifiers(payload):
 
 
 def start_interval():
-    """Starter operative pace: one start every 30s, below the 5 RPM provider tier."""
+    """TokenPlan effective pace: at most five starts/min."""
     try:
-        return max(12.0, min(120.0, float(os.environ.get('AGNES_VIDEO_START_INTERVAL', '30'))))
+        return max(12.1, min(120.0, float(os.environ.get('AGNES_VIDEO_START_INTERVAL', '12.1'))))
     except (TypeError, ValueError):
-        return 30.0
+        return 12.1
 
 
 class VideoPool:
@@ -120,7 +120,7 @@ class VideoPool:
         return status,retry,video_id,proven_rejected
 
     def diagnostic(self, match, ordinal, record):
-        record.update(matchId=match, ordinal=ordinal, code=('provider-http' if record.get('httpStatus') else 'transport-or-response'))
+        record.update(matchId=match, ordinal=ordinal, resourceNumber=getattr(self.state,'resource_number',ordinal+1), runId=os.environ.get('AGNES_RUN_ID') or getattr(self.state,'owner','local-run'), code=record.get('code') or ('provider-http' if record.get('httpStatus') else 'transport-or-response'))
         compact = provider_diagnostic(self.state, 'video', match, ordinal, record)
         record['body'] = self.safe_detail(record.get('body', ''))
         signature = (match, ordinal, compact['stage'], compact['httpStatus'], compact['providerStatus'], compact['providerCode'])
@@ -257,6 +257,7 @@ class VideoPool:
             if not any(clip['index'] == ordinal for clip in clips):
                 failures.append(f'Clip {number}: pendiente; POST en esta corrida {counts.get(key, 0)}/3; reintentar en otra corrida')
         return {'clips': clips, 'failures': failures, 'diagnostics': diagnostics,
+                'deferrals': [{'kind':'video','number':number,'code':'run-deadline'} for number, ordinal in assignments if self.clock()>=deadline and not any(clip['index']==ordinal for clip in clips)],
                 'runPosts': {str(number): count for (bank, number), count in counts.items() if bank == match}}
 
     def _bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False, candidate_ordinals=None):
@@ -363,7 +364,7 @@ class VideoPool:
                             retry_at = admission.get('retryAtMs', 0)/1000
                             if retry_at > self.clock() and retry_at+1 < deadline:
                                 self.sleep(retry_at-self.clock()); continue
-                            self.diagnostic(match,ordinal,{'at':self.clock(),'model':MODEL,'stage':'admission','httpStatus':None,'body':self.safe_detail(admission.get('reason','autoridad Agnes no concedió permiso')),'requestId':'','videoId':None,'attemptId':None,'next':'sin nueva solicitud; reutilizar evidencia o esperar ritmo/cuota'})
+                            self.diagnostic(match,ordinal,{'at':self.clock(),'model':MODEL,'stage':'admission','code':admission.get('code') or ('rate-wait' if 'pausado por ritmo' in admission.get('reason','') else 'admission-denied'),'retryAtMs':admission.get('retryAtMs'),'httpStatus':None,'body':self.safe_detail(admission.get('reason','autoridad Agnes no concedió permiso')),'requestId':'','videoId':None,'attemptId':None,'next':'sin nueva solicitud; reutilizar evidencia o esperar ritmo/cuota'})
                             failures.append(admission.get('reason','autoridad Agnes no concedió permiso')); break
                         attempt_id = admission['attemptId']
                         consumed.add(ordinal)

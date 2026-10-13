@@ -134,3 +134,17 @@ class ResourceRetries(unittest.TestCase):
             result=self.bank(self.pool(),request_json)
         self.assertEqual(len(requests),6)
         self.assertEqual(result['runPosts'],{'1':3,'2':3})
+
+    def test_tokenplan_creation_pace_and_rate_admission_survive_empty_sqlite(self):
+        times=[]
+        def reject(url, body=None, **kwargs):
+            times.append(self.now)
+            raise urllib.error.HTTPError(url,503,'queue',{},io.BytesIO(b'{"code":"video_queue_full"}'))
+        self.bank(self.pool(),reject)
+        self.assertEqual(len(times),2)
+        self.assertGreaterEqual(times[1]-times[0],12.1)
+        self.assertLess(times[1]-times[0],13)
+        (self.root/'video.sqlite').unlink()
+        self.bank(self.pool(),reject)
+        self.assertEqual(len(times),4)
+        self.assertGreaterEqual(times[2]-times[1],12.1-1e-6)

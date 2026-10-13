@@ -242,7 +242,7 @@ class VideoTests(unittest.TestCase):
     def test_two_successes_are_shared_and_not_regenerated(self):
         first=self.bank(self.success);self.assertEqual(len(first['clips']),2);self.assertEqual(len(self.posts),2)
         second=self.bank(self.success);self.assertEqual(len(second['clips']),2);self.assertEqual(len(self.posts),2)
-        self.assertGreaterEqual(self.now,1030)
+        self.assertGreaterEqual(self.now,1012.1)
     def test_lost_posts_are_archived_and_bounded_after_restart(self):
         def lost(url,body=None,headers=None,**kwargs):self.posts.append(body);raise TimeoutError()
         self.bank(lost)
@@ -369,7 +369,7 @@ class VideoTests(unittest.TestCase):
             self.posts.append(body)
             raise urllib.error.HTTPError(url,503,'unavailable',{'X-Request-ID':'req-1'},io.BytesIO(b'{"detail":"Bearer fake-secret","api_key":"fake-secret","url":"https://example.org/x?sig=secret"}'))
         with patch.dict(os.environ,{'AGNES_API_KEY':'fake-secret'}): result=self.bank(unavailable)
-        self.assertEqual(len(self.posts),5);self.assertGreaterEqual(self.now,1120)
+        self.assertEqual(len(self.posts),5);self.assertGreaterEqual(self.now,1048.4)
         event=json.loads(self.pool.db.execute('select metadata from video_errors').fetchone()[0])
         self.assertEqual(event['httpStatus'],503);self.assertEqual(event['requestId'],'req-1');self.assertEqual(event['stage'],'create')
         self.assertNotIn('fake-secret',event['body']);self.assertNotIn('sig=secret',event['body'])

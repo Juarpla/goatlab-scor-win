@@ -55,7 +55,7 @@ class FakeAgnesState:
         self.attempts[attempt] = row
         if kind == 'video':
             self.active = attempt
-            self.next_video = self.clock() + 30.1
+            self.next_video = self.clock() + 12.1
         return {'canPost': True, 'attemptId': attempt}
 
     def event(self, attempt_id, event_type, **extra):

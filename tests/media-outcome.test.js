@@ -51,3 +51,30 @@ test('legacy accepted task without a publication index remains recoverable and n
   report.results[0].recoveryOnly=true;
   assert.equal(mediaRunOutcome(report).status,'deferred');
 });
+
+// Regression for the actual workflow's combination of successful media and omissions.
+test('last workflow log stays deferred with informational failures and an admission without HTTP',()=>{
+  const report=fixture();
+  const lens=report.results[0];lens.matchId='lens';lens.resources[4].verified=true;
+  lens.failures=['intento de vídeo 2: HTTP 503','Clip 2: pendiente; POST en esta corrida 1/3; reintentar en otra corrida'];
+  const sabah=structuredClone(lens);sabah.matchId='sabah';sabah.resources[4].verified=false;
+  sabah.attempts=sabah.attempts.slice(0,1);
+  sabah.failures=['Agnes está pausado por ritmo de llamadas'];
+  sabah.diagnostics=[{runId:'now',stage:'admission',ordinal:1,code:'rate-wait',httpStatus:null}];
+  const viking=structuredClone(fixture().results[0]);viking.matchId='viking';
+  const inter=structuredClone(viking);inter.matchId='inter';inter.resources.forEach(r=>r.verified=true);
+  const villarreal=structuredClone(viking);villarreal.matchId='villarreal';
+  villarreal.attempts=[{kind:'video',publicationIndex:1,hasVideoId:true,state:'pending'}];
+  villarreal.failures=['Clip 1: pendiente; POST en esta corrida 1/3; reintentar en otra corrida','otra tarea pendiente o incierta'];
+  report.results=[lens,sabah,viking,inter,villarreal];
+  const outcome=mediaRunOutcome(report);
+  assert.equal(outcome.exitCode,0);assert.equal(outcome.errors.length,0);assert.equal(outcome.deferred.length,7);
+  assert.equal(outcome.deferred.find(r=>r.matchId==='sabah'&&r.number===2).code,'rate-wait');
+  assert.equal(outcome.deferred.find(r=>r.matchId==='sabah'&&r.number===2).httpStatus,null);
+  villarreal.failures.push('R2: HEAD fallido');assert.equal(mediaRunOutcome(report).exitCode,2);
+});
+test('omission texts alone cannot excuse an unknown missing resource',()=>{
+  const report=fixture();report.results[0].attempts=[];
+  report.results[0].failures=['Clip 1: pendiente; POST en esta corrida 0/3; reintentar en otra corrida'];
+  assert.equal(mediaRunOutcome(report).exitCode,2);
+});

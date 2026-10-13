@@ -9,6 +9,7 @@ export function safeMediaMessage(value, env = {}) {
 export function publicVideoDiagnostics(rows, env={}) {
   return (Array.isArray(rows)?rows:[]).slice(-128).map(row=>({
     at: Number(row.at)||0, matchId: String(row.matchId??''), ordinal:Number(row.ordinal)||0,
+    runId: safeMediaMessage(row.runId,env), resourceNumber:Number(row.resourceNumber)||null, retryAtMs:Number(row.retryAtMs)||null,
     stage: safeMediaMessage(row.stage,env), code:safeMediaMessage(row.code,env),
     httpStatus: Number.isInteger(row.httpStatus)?row.httpStatus:null,
     message:safeMediaMessage(row.body,env), requestId:safeMediaMessage(row.requestId,env),
@@ -43,7 +44,7 @@ export function mediaRunOutcome(report) {
       if(message==='R2: subidas y generación pausadas; reutilización disponible'&&requestedMediaComplete({...row,mode}))continue;
       if(mode==='clips-only'&&message==='Image Prompts no disponibles'||mode==='images-only'&&message==='Video Prompts no disponibles')continue;
       const infrastructure=/R2:|Estado (?:privado|de generación|de recursos)|Historial .*no disponible|falta AGNES_API_KEY|(?:Image|Video) Prompts no disponibles|identidad.*(?:incompleta|ambigua)|Kickoff inválido|Huella de contenido inválida|otra identidad|Resultado incompatible|Imagen inválida/i.test(message);
-      const explained=/HTTP \d{3}|"httpStatus"\s*:\s*\d{3}|Recursos incompletos|tarea pendiente|otra tarea pendiente o incierta|presupuesto de corrida agotado|plazo de generación agotado|ventana de recuperación|^(?:clip|intento de vídeo) \d+: etapa=/.test(message);
+      const explained=/Solicitud aplazada por el control de ritmo|Agnes está pausado por ritmo de llamadas|(?:clip|intento de vídeo) \d+: pendiente; POST en esta corrida|HTTP \d{3}|"httpStatus"\s*:\s*\d{3}|Recursos incompletos|tarea pendiente|otra tarea pendiente o incierta|presupuesto de preparación agotado|presupuesto de corrida agotado|plazo de generación agotado|ventana de recuperación|^(?:clip|intento de vídeo) \d+: etapa=/i.test(message);
       if(infrastructure||!explained)errors.push({matchId:row.matchId,code:'execution-error',message});
     }
     for(const kind of ['image','video']) {
@@ -57,12 +58,15 @@ export function mediaRunOutcome(report) {
         const current=own.filter(a=>a.diagnostics?.events?.some(e=>e.runId===report.runId)).at(-1);
         const events=current?.diagnostics?.events?.filter(e=>e.runId===report.runId)??[];
         const latestHttp=events.filter(e=>e.httpStatus!=null).at(-1);
+        const admission=(row.diagnostics??[]).findLast(e=>e.runId===report.runId&&e.stage==='admission'&&(e.resourceNumber??e.ordinal+1)===number&&kind==='video');
         const live=own.find(a=>a.hasVideoId&&a.state==='pending');
         let code;
         if(events.some(e=>e.stage==='publication-pending'))code='publication-error';
         else if(latestHttp&&[429,503].includes(latestHttp.httpStatus))code='provider-'+latestHttp.httpStatus;
         else if(latestHttp&&latestHttp.httpStatus>=400)code='provider-error';
         else if(live)code='task-active';
+        else if(admission?.code==='rate-wait')code='rate-wait';
+        else if((row.deferrals??[]).some(d=>d.kind===kind&&d.number===number&&['rate-wait','run-deadline'].includes(d.code)))code=(row.deferrals??[]).find(d=>d.kind===kind&&d.number===number).code;
         else if(kind==='video'&&!row.recoveryOnly&&!current&&liveVideos.length)code='blocked-by-active-task';
         else if(kind==='image'&&!current&&(row.attempts??[]).some(a=>a.kind==='image'&&a.diagnostics?.events?.filter(e=>e.runId===report.runId&&e.httpStatus!=null).at(-1)?.httpStatus===429)&&(row.failures??[]).some(m=>m.includes('429')))code='provider-429';
         else if(row.recoveryOnly&&!own.some(a=>a.hasVideoId))continue;
@@ -70,7 +74,7 @@ export function mediaRunOutcome(report) {
         const detail={matchId:row.matchId,kind,number,code,httpStatus:latestHttp?.httpStatus??null,
           providerCode:latestHttp?.providerCode??'',message:resource?.reason??'Recurso solicitado sin verificación R2',
           ...(code==='blocked-by-active-task'?{blockedBy:liveVideos}:{} )};
-        if(['provider-429','provider-503','task-active','blocked-by-active-task'].includes(code))deferred.push(detail);
+        if(['provider-429','provider-503','task-active','blocked-by-active-task','rate-wait','run-deadline'].includes(code))deferred.push(detail);
         else errors.push(detail);
       }
     }

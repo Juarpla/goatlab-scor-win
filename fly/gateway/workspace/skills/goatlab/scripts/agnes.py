@@ -23,11 +23,11 @@ MODEL = "agnes-image-2.5-flash"
 
 
 def image_rpm():
-    """Starter operative pace: 12 starts/min, far below the 80 RPM provider tier for 2K."""
+    """TokenPlan effective pace for 2K: 80 starts/min."""
     try:
-        return max(1, min(80, int(os.environ.get("AGNES_IMAGE_RPM", "12"))))
+        return max(1, min(80, int(os.environ.get("AGNES_IMAGE_RPM", "80"))))
     except (TypeError, ValueError):
-        return 12
+        return 80
 
 
 def retry_seconds(value, now=None):

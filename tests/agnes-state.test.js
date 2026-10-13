@@ -243,3 +243,39 @@ test('legacy image and video ceilings do not reject new provider requests',()=>{
     assert.ok(state.quota['2026-10-09'][kind==='image'?'images':'video_seconds']>state.limits[kind==='image'?'images':'video_seconds']);
   }
 });
+
+test('legacy pace upgrade preserves task identity, accounting and cooldown across restart',()=>{
+  let state=reduceAgnesState(fresh(),'reserve',reserve({kind:'video',model:'agnes-video-2.5-flash'}),{nowMs:now}).state;
+  state.limits.imageRpm=12;state.limits.videoStartIntervalMs=30_100;
+  const before=structuredClone(state);
+  const migrated=reduceAgnesState(state,'health',{}, {nowMs:now+1});
+  assert.equal(migrated.changed,true);state=migrated.state;
+  assert.equal(state.limits.imageRpm,80);assert.equal(state.limits.videoStartIntervalMs,12_100);
+  for(const key of ['slots','attempts','quota','rates'])assert.deepEqual(state[key],before[key]);
+  assert.equal(reduceAgnesState(state,'health',{}, {nowMs:now+2}).changed,false);
+});
+test('TokenPlan image admission permits 80 starts then reports the next admission time',()=>{
+  let state=fresh();
+  for(let i=0;i<80;i++){
+    const next=reduceAgnesState(state,'reserve',reserve({matchId:'team-'+i}),{nowMs:now});
+    assert.equal(next.result.canPost,true);state=reduceAgnesState(next.state,'event',{attemptId:next.result.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:now}).state;
+  }
+  const blocked=reduceAgnesState(state,'reserve',reserve({matchId:'team-next'}),{nowMs:now});
+  assert.equal(blocked.result.canPost,false);assert.equal(blocked.result.code,'rate-wait');
+  assert.equal(blocked.result.retryAtMs,now+60_050);assert.match(blocked.result.reason,/próxima admisión.*espera 61 segundos/);
+  assert.equal(reduceAgnesState(blocked.state,'reserve',reserve({matchId:'team-next'}),{nowMs:now+60_050}).result.canPost,true);
+});
+
+test('five video starts fit a minute and sixth waits without reopening attempts',()=>{
+  let state=fresh();
+  for(let i=0;i<5;i++){
+    const at=now+i*12_100;
+    const input=reserve({matchId:'video-'+i,kind:'video',model:'agnes-video-2.5-flash'});
+    const next=reduceAgnesState(state,'reserve',input,{nowMs:at});assert.equal(next.result.canPost,true);
+    state=reduceAgnesState(next.state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'abandoned'},{nowMs:at}).state;
+  }
+  const next=reserve({matchId:'video-next',kind:'video',model:'agnes-video-2.5-flash'});
+  const blocked=reduceAgnesState(state,'reserve',next,{nowMs:now+60_000});
+  assert.equal(blocked.result.code,'rate-wait');assert.equal(blocked.result.retryAtMs,now+60_500);
+  assert.equal(reduceAgnesState(blocked.state,'reserve',next,{nowMs:now+60_500}).result.canPost,true);
+});

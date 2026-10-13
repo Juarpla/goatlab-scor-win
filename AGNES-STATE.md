@@ -203,3 +203,11 @@ estado privado, HTTP 402/401 y causas no identificadas mantienen código 2;
 tienen prioridad aunque existan otros recursos pospuestos. Un rechazo histórico
 no justifica el resultado de la corrida actual. La publicación selectiva sigue
 exigiendo bancos completos; no se publica un banco parcial por terminar en 0.
+
+El ritmo efectivo de la clave TokenPlan es 80 creaciones/minuto para imágenes 2K
+y una creación de vídeo cada 12,1 segundos (máximo cinco/minuto). Los antiguos
+valores 12 y 30,1 segundos se migran mediante CAS sin reiniciar tareas, cuota
+registrada ni fechas de Retry-After. Una admisión aplazada identifica el control
+local, la próxima fecha permitida y la espera; no representa una respuesta HTTP.
+Las omisiones de ritmo y las tareas vigentes se reportan como pendientes, con
+código 0; un fallo real de R2 o del estado sigue produciendo código 2.

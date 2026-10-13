@@ -35,7 +35,7 @@ class AgnesTests(unittest.TestCase):
     def test_rate_limit_shared_across_pools(self):
         other = ImagePool(self.path, clock=lambda: self.now, sleep=self.sleep, state=self.state)
         self.addCleanup(other.db.close)
-        for _ in range(12): self.pool.take_slot()
+        for _ in range(80): self.pool.take_slot()
         other.take_slot()
         self.assertGreaterEqual(self.now, 1060)
 
