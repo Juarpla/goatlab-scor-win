@@ -178,7 +178,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       log(`media: ${matchId}: ${labels.images} · ${labels.clips} (${stage})${detail ? '; ' + detail : ''}`);
     };
     const publish = mediaPublisher({ dir, match, facts, prior: prev, draft: env.MEDIA_DRAFT === '1', clock: () => new Date(clock()).toISOString() });
-    const extras = () => ({ clips:clips.sort((a,b)=>a.file.localeCompare(b.file)), motionPrompts, failures, diagnostics, runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
+    const extras = () => ({ clips:clips.sort((a,b)=>a.file.localeCompare(b.file)), motionPrompts, failures, diagnostics:diagnostics.map(({runId:_runId,resourceNumber:_resourceNumber,retryAtMs:_retryAtMs,...event})=>event), runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
       storageVerifiedAt: new Date(clock()).toISOString(), verifiedAssets: [...verifiedAssets], verifiedClips: [...verifiedClips] });
     const cleanResource = async (file) => {
       const stem=file.replace(/\.[^.]+$/, '');
