@@ -4,7 +4,7 @@
   "away": "Sporting Clube de Portugal",
   "competition": "champions",
   "kickoff": "2026-10-13T16:45:00Z",
-  "updatedAt": "2026-10-12T19:39:50.966Z",
+  "updatedAt": "2026-10-13T00:49:08.799Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -19,14 +19,50 @@
       "away": 0
     },
     "standings": {
-      "Racing Club de Lens": null,
-      "Sporting Clube de Portugal": null
+      "Racing Club de Lens": {
+        "position": 11,
+        "team": "RC Lens",
+        "teamId": 99,
+        "played": 1,
+        "won": 1,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 3,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "Sporting Clube de Portugal": {
+        "position": 6,
+        "team": "Sporting CP",
+        "teamId": 22,
+        "played": 1,
+        "won": 1,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 3,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
     },
     "scorers": {
       "updatedAt": "2026-10-12T19:38:47.610Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
-      "scorerSource": null
+      "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
@@ -143,10 +179,20 @@
     "firstAway": 0.472
   },
   "scorers": {
-    "home": null,
+    "home": [
+      {
+        "player": "Abdallah Sima",
+        "goals": 1,
+        "matches": 1,
+        "share": 0.9,
+        "rate": 1.31,
+        "anytime": 0.729,
+        "first": 0.45
+      }
+    ],
     "away": null
   },
-  "hasScorers": false,
+  "hasScorers": true,
   "method": "poisson-fallback-v1",
   "provider": {
     "oneX2": null,
@@ -217,7 +263,7 @@
       "yellowCards": 1.8,
       "redCards": 0.5,
       "offsides": 2.04,
-      "possession": 50
+      "possession": 51.36
     },
     "away": {
       "shots": 14.5,
@@ -228,23 +274,23 @@
       "yellowCards": 1.8,
       "redCards": 0.5,
       "offsides": 2.04,
-      "possession": 50
+      "possession": 48.64
     },
     "sample": {
-      "home": 0,
+      "home": 5,
       "away": 0
     },
     "coverage": {
       "home": {
-        "possession": 0,
-        "shots": 0,
-        "shotsOnTarget": 0,
-        "xg": 0,
-        "corners": 0,
-        "fouls": 0,
-        "yellowCards": 0,
-        "redCards": 0,
-        "offsides": 0
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 3,
+        "offsides": 5
       },
       "away": {
         "possession": 0,
@@ -279,7 +325,7 @@
         "yellowCards": "media",
         "redCards": "media",
         "offsides": "media",
-        "possession": "media"
+        "possession": "Bzzoiro"
       },
       "away": {
         "shots": "media",
@@ -294,11 +340,12 @@
       }
     },
     "origins": [
-      "media"
+      "media",
+      "Bzzoiro"
     ],
     "xgSource": "media",
     "shortSample": true,
-    "source": "media"
+    "source": "media+Bzzoiro"
   },
   "dominance": {
     "method": "dominance-v1",
@@ -385,8 +432,18 @@
         "value": 1,
         "sample": 1
       },
-      "season": null,
-      "player": null
+      "season": {
+        "position": 11,
+        "played": 1,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Abdallah Sima",
+        "detail": "1 goles en 1 partidos",
+        "source": "líder del equipo en la temporada"
+      }
     },
     "away": {
       "team": "Sporting Clube de Portugal",
@@ -404,7 +461,13 @@
         "value": 1,
         "sample": 1
       },
-      "season": null,
+      "season": {
+        "position": 6,
+        "played": 1,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
       "player": null
     }
   },
