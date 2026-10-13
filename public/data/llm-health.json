@@ -1,21 +1,6 @@
 {
-  "updatedAt": "2026-10-12T20:06:17.382Z",
+  "updatedAt": "2026-10-13T00:54:13.010Z",
   "runs": [
-    {
-      "at": "2026-10-06T00:14:46.555Z",
-      "task": "motion-prompts",
-      "matchId": "scotland-vs-slovenia-2026-10-06",
-      "instructionVersion": "9220e07f11c33c61e335d5cd2b696bfd7523eb2e1235942ee56f13be1773bff8",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1969,
-        "outputTokens": 4308
-      }
-    },
     {
       "at": "2026-10-06T08:15:05.377Z",
       "task": "motion-prompts",
@@ -5060,6 +5045,68 @@
         "inputTokens": 2333,
         "outputTokens": 8749
       }
+    },
+    {
+      "at": "2026-10-13T00:54:13.010Z",
+      "task": "motion-prompts",
+      "matchId": "inter-vs-brugge-kv-2026-10-13",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: presentaciones de motion inválidas; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: presentaciones de motion inválidas; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: presentaciones de motion inválidas; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: presentaciones de motion inválidas; motion-prompts 4: faltan rótulos, transiciones o fuente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1588,
+            "outputTokens": 3376
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 75904
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1605,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 82662
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1610,
+            "outputTokens": 2298
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 28338
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: texto incompleto o formato ausente; motion-prompts 1: dirección insuficientemente detallada; motion-prompts 2: texto incompleto o formato ausente; motion-prompts 2: dirección insuficientemente detallada; motion-prompts 3: texto incompleto o formato ausente; motion-prompts 3: dirección insuficientemente detallada; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 4: texto incompleto o formato ausente",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1531,
+            "outputTokens": 3836
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 43403
+        }
+      ],
+      "usage": null
     }
   ]
 }
