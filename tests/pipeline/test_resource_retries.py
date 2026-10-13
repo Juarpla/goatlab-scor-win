@@ -124,3 +124,13 @@ class ResourceRetries(unittest.TestCase):
         self.bank(pool,self.rejected(503))
         self.assertEqual(self.state.status('a-b','video',3)['publicationIndex'],1)
         self.assertEqual(len(self.posts),2)
+    def test_real_http_adapter_counts_all_posts_and_limits_them(self):
+        from common import request_json
+        requests=[]
+        def unavailable(request, **kwargs):
+            requests.append(request)
+            raise urllib.error.HTTPError(request.full_url,500,'busy',{},io.BytesIO(b'{"code":"busy"}'))
+        with patch('common.urllib.request.urlopen',unavailable):
+            result=self.bank(self.pool(),request_json)
+        self.assertEqual(len(requests),6)
+        self.assertEqual(result['runPosts'],{'1':3,'2':3})

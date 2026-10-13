@@ -373,7 +373,7 @@ class VideoPool:
                         create_call = call
                         if call is request_json or getattr(call, 'provider', False):
                             def create_call(*args, **kwargs):
-                                return request_json(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': payload}))
+                                return call(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': payload}))
                         try:
                             result=create_call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':'Use <Picture 1> as the visual reference. '+prompt['prompt'],'mode':'reference','images':[reference],'seconds':'6','size':'720P','aspect_ratio':'9:16','n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
