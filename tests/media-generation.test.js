@@ -119,7 +119,8 @@ test('ready totals combine R2 inventory and confirmed new uploads in logs, progr
   assert.equal(result.completed, 1);
   assert.ok(f.logs.some(line => line.includes('3/4 imágenes listas; faltan 1 · 1/2 clips listos; faltan 1')));
   assert.ok(f.logs.some(line => line.includes('4/4 imágenes listas; faltan 0 · 1/2 clips listos; faltan 1')));
-  assert.match(f.logs.at(-1), /4\/4 imágenes listas; faltan 0 · 2\/2 clips listos; faltan 0/);
+  assert.ok(f.logs.some(line=>/4\/4 imágenes listas; faltan 0 · 2\/2 clips listos; faltan 0/.test(line)));
+  assert.equal(result.outcome.status,'complete');
   const report = JSON.parse(await readFile(join(f.repo, '.cache/media-run.json'), 'utf8'));
   const progress = JSON.parse(await readFile(join(f.dir, 'a-b.progress.json'), 'utf8'));
   assert.equal(report.results[0].images, progress.verifiedImages);
@@ -266,7 +267,8 @@ test('R2 block reuses the two publication positions with their original attempt 
   const result = await f.run();
   assert.equal(f.provider.length, 0); assert.equal(f.calls.filter(c => c.cmd === 'put').length, 0);
   assert.equal(result.completed, 1); assert.equal(result.reused, 6);
-  assert.match(f.logs.at(-1), /4\/4 imágenes listas; faltan 0 · 2\/2 clips listos; faltan 0/);
+  assert.ok(f.logs.some(line=>/4\/4 imágenes listas; faltan 0 · 2\/2 clips listos; faltan 0/.test(line)));
+  assert.equal(result.outcome.status,'complete');
   assert.equal(f.logs.filter(line => line.startsWith('media: a-b:')).length, 2);
   const manifest = JSON.parse(await readFile(join(f.dir, 'a-b.json'), 'utf8'));
   assert.equal(manifest.bankVersion, 2); assert.equal(manifest.bankStatus, 'complete');
@@ -473,4 +475,27 @@ test('provider-only match identifiers stop before media or provider publication'
   const result=await f.run({args:{'--match':'af-1'}});
   assert.equal(result.pending,1);assert.equal(f.provider.length,0);assert.equal(f.calls.filter(call=>call.cmd==='put').length,0);
   assert.match(result.results[0].failures[0],/código descriptivo/);
+});
+
+
+test('current provider saturation persists in report and summary without an execution failure',async t=>{
+  const f=await fixture(t);for(let i=0;i<4;i++)f.addPhoto(i);
+  let runId,called=false;
+  const result=await f.run({
+    transactImpl:async(op,input)=>{
+      if(op==='heartbeat')runId=input.runId;
+      if(op==='attempts')return {attempts:called?[1,2].map(publicationIndex=>({kind:'video',ordinal:publicationIndex-1,publicationIndex,state:'abandoned',diagnostics:{events:[{runId,method:'POST',stage:'create',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full'}]}})):[]};
+      return f.transactImpl(op,input);
+    },
+    execImpl:async(binary,args,options)=>{
+      if(args[0].endsWith('agnes_video.py')){called=true;return {stdout:JSON.stringify({clips:[],failures:['clip 1: HTTP 503','clip 2: HTTP 503'],runPosts:{'1':1,'2':1}})};}
+      return f.execImpl(binary,args,options);
+    },
+  });
+  assert.equal(result.pending,1);assert.equal(result.completed,0);assert.equal(result.outcome.exitCode,0);
+  const publication=JSON.parse(await readFile(join(f.repo,'.cache/media-publication.json'),'utf8'));
+  assert.equal(publication.allow_commit,false);
+  const summary=spawnSync(process.execPath,[resolve('scripts/media-run-summary.mjs')],{cwd:f.repo,encoding:'utf8'});
+  assert.equal(summary.status,0);assert.match(summary.stdout,/finalizado con recursos pendientes por condiciones temporales/);
+  assert.match(summary.stdout,/503.*video_queue_full/);assert.match(summary.stdout,/0\/2 clips listos/);
 });

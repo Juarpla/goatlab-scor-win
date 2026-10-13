@@ -43,8 +43,6 @@ jobs:
       AGNES_IMAGE_MODEL: agnes-image-2.5-flash
       AGNES_IMAGE_RPM: '12'
       AGNES_VIDEO_START_INTERVAL: '30'
-      AGNES_DAILY_VIDEO_SECONDS_CAP: '360'
-      AGNES_DAILY_IMAGE_CAP: '4000'
       AGNES_SKIP_IMAGES: ${{ inputs.mode == 'clips-only' && '1' || '' }}
       AGNES_SKIP_VIDEO: ${{ inputs.mode == 'images-only' && '1' || '' }}
       R2_STATE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

@@ -290,7 +290,6 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       const day = dayAt(nowMs), quota = state.quota[day] ?? {images:0,video_seconds:0};
       const units = input.kind==='image' ? 1 : 6, quotaName = input.kind==='image' ? 'images' : 'video_seconds';
       if (retryAtMs > nowMs) result = {...deny('Agnes está pausado por ritmo de llamadas'),retryAtMs};
-      else if (quota[quotaName]+units > state.limits[quotaName]) result = deny(input.kind==='image' ? 'cuota diaria de imágenes agotada' : 'cuota de vídeo diaria agotada');
       else {
         state.quota[day] = {...quota,[quotaName]:quota[quotaName]+units};
         state.slots[key] = {...pickIdentity(input),...(input.publicationIndex?{publicationIndex:input.publicationIndex}:{}),attemptId:input.attemptId,state:'uncertain',videoId:null,expiresAtMs:input.expiresAtMs,reservedDay:day,reservedUnits:units,refunded:false,pollNextAtMs:0,pollLease:null,uploadClaim:null};

@@ -15,7 +15,7 @@ import { TOP_FILENAME, topFreshness, defaultTopN, effectiveIds, registerExtra } 
 import { transact } from './agnes-state.mjs';
 import { maintainMedia } from './maintain-media.mjs';
 import { reconcileVideoRecovery } from './reconcile-video-recovery.mjs';
-import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete, readyMediaLabels } from '../lib/media-diagnostics.js';
+import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../lib/media-diagnostics.js';
 
 const execute = (file, args, options={}) => new Promise((resolve,reject) => {
   const { onStderr, ...settings } = options;
@@ -474,12 +474,13 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
   await rename(temporary, publicationPath);
   if (env.GITHUB_OUTPUT) await appendFile(env.GITHUB_OUTPUT, 'allow_commit=' + publication.allow_commit + '\ncomplete_ids=' + JSON.stringify(publication.complete_ids) + '\ndeleted_ids=' + JSON.stringify(publication.deleted_ids) + '\n');
   const report={ ...summary, operations, results, mode: env.AGNES_SKIP_VIDEO === '1' ? 'images-only' : env.AGNES_SKIP_IMAGES === '1' ? 'clips-only' : 'all', runUrl };
+  report.outcome=mediaRunOutcome(report);
   await writeFile(join(repo,'.cache/media-run.json'), JSON.stringify(report,null,2));
   return report;
 }
 
 export async function runMediaCli() {
-  try { const result = await generateMediaBanks({ args: parseMediaArgs(process.argv.slice(2)) }); console.log(JSON.stringify(result)); if(result.pending>0) { console.error('media: faltan recursos solicitados; revisar diagnóstico por partido'); process.exitCode=2; } }
+  try { const result = await generateMediaBanks({ args: parseMediaArgs(process.argv.slice(2)) }); console.log(JSON.stringify(result)); if(result.outcome.status==='deferred')console.log('media: finalizado con recursos pendientes por condiciones temporales; código 0; consultar summary'); if(result.outcome.exitCode) { console.error('media: faltan recursos solicitados o fallo de ejecución; revisar diagnóstico por partido'); process.exitCode=result.outcome.exitCode; } }
   catch (error) { console.error('media: ' + safeMediaMessage(error.message,process.env)); process.exitCode = 2; }
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) await runMediaCli();

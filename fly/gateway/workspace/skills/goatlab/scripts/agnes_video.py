@@ -432,7 +432,8 @@ class VideoPool:
                         'requestId': self.safe_detail(str(response_headers.get('X-Request-ID') or response_headers.get('Request-ID') or '')[:200]),
                         'videoId': None, 'attemptId': claim['attemptId'], 'body': last_poll,
                         'next': 'interpretar estado de la tarea; conservar el identificador sin repetir POST'})
-                poll_delay = 10
+                poll_step = 0
+                poll_intervals = (15, 40, 75, 90)
                 while self.clock()<deadline and not cancelled():
                     recovery=self.db.execute('SELECT deadline,ordinal FROM video_recovery WHERE match_id=?',(match,)).fetchone()
                     limit=min(deadline,recovery[0]) if recovery and recovery[1]==ordinal else deadline
@@ -508,12 +509,12 @@ class VideoPool:
                         try: self.state.event(claim['attemptId'], 'uncertain', stage='retrieve')
                         except ValueError: pass
                         limit=self.recovery(match,deadline,ordinal)
-                    interval = poll_delay if os.environ.get('AGNES_RESOURCE_RETRIES') == '3' else 2
+                    interval = poll_intervals[min(poll_step, 3)] if os.environ.get('AGNES_RESOURCE_RETRIES') == '3' else 2
                     if self.clock()+interval>=limit:
                         poll_stop = 'ventana de recuperación de 60 s agotada' if limit < deadline else 'plazo de generación agotado'
                         break
                     self.sleep(interval)
-                    poll_delay = min(30, poll_delay+10)
+                    poll_step += 1
                 state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                 if state[0]=='pending':
                     reason = 'cancelación' if cancelled() else poll_stop or ('plazo de generación agotado' if self.clock() >= deadline else 'ventana de recuperación de 60 s agotada')

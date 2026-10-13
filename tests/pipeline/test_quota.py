@@ -37,7 +37,7 @@ class QuotaTests(unittest.TestCase):
         return {'path': str(path), 'file': path.name, 'width': 720, 'height': 1280, 'duration': 6}
 
     @patch('agnes.subprocess.check_output', return_value=b'{"streams":[{"width":1472,"height":2624}]}')
-    def test_image_quota_is_recorded_and_enforced(self, _probe):
+    def test_image_usage_is_recorded_without_local_daily_block(self, _probe):
         pool = self.images()
         self.addCleanup(pool.db.close)
         result = {'data': [{'b64_json': base64.b64encode(b'\x89PNGtest').decode()}]}
@@ -45,10 +45,10 @@ class QuotaTests(unittest.TestCase):
         self.assertEqual(self.state.quota['1970-01-01']['images'], 1)
         self.state.caps['images'] = 1
         with patch.dict(os.environ, {'AGNES_DAILY_IMAGE_CAP': '9999'}):
-            with self.assertRaisesRegex(ValueError, 'cuota diaria de im\xe1genes'):
-                pool.generate('m', 1, 'prompt', self.root / 'images', lambda *a, **k: self.fail('capped'))
+            pool.generate('m', 1, 'prompt', self.root / 'images', lambda *a, **k: result)
+        self.assertEqual(self.state.quota['1970-01-01']['images'], 2)
 
-    def test_video_quota_blocks_creation_and_records_seconds(self):
+    def test_video_usage_records_seconds_without_local_daily_block(self):
         pool = self.videos()
         self.addCleanup(pool.db.close)
         prompts, images = [{'prompt': 'Prompt 0'}], [{'url': 'https://example.org/image.jpg'}]
@@ -66,9 +66,9 @@ class QuotaTests(unittest.TestCase):
         self.state.caps['video_seconds'] = 6
         with patch.dict(os.environ, {'AGNES_DAILY_VIDEO_SECONDS_CAP': '9999'}):
             capped = pool.bank('c-d', prompts, images, self.root, 2000, 3000, call=success, download=self.download)
-            self.assertEqual(len(capped['clips']), 0)
-            self.assertIn('cuota de v\xeddeo diaria', capped['failures'][0])
-        self.assertEqual(len(posts), 1)
+            self.assertEqual(len(capped['clips']), 1)
+        self.assertEqual(len(posts), 2)
+        self.assertEqual(self.state.quota['1970-01-01']['video_seconds'], 12)
 
     def test_quota_ledger_is_shared_between_images_and_clips(self):
         image_pool = self.images()

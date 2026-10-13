@@ -1,10 +1,13 @@
 import { readFile, mkdir, writeFile, appendFile } from 'node:fs/promises';
-import { safeMediaMessage, requestedMediaComplete, readyMediaLabels } from '../src/lib/media-diagnostics.js';
+import { safeMediaMessage, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../src/lib/media-diagnostics.js';
 let report;
 try { report=JSON.parse(await readFile('.cache/media-run.json','utf8')); }
 catch { report={mode:process.env.AGNES_SKIP_VIDEO==='1'?'images-only':process.env.AGNES_SKIP_IMAGES==='1'?'clips-only':'all',results:[],pending:1,error:'No se completó la generación. Revisar mantenimiento, comprobación y preflight en esta ejecución.'}; }
 const safe=value=>safeMediaMessage(value,process.env).replace(/[\r\n|]/g,' ').replace(/[<>]/g,'');
-let summary=`## Banco de medios\n\nModo: ${safe(report.mode)} · Resultado: ${report.pending ? 'faltan recursos solicitados' : 'recursos solicitados verificados'}\n\n`;
+const outcome=report.outcome??mediaRunOutcome(report);
+const outcomeLabel=outcome.status==='deferred'?'finalizado con recursos pendientes por condiciones temporales':outcome.status==='error'?'fallo de ejecución; revisar diagnóstico':'recursos solicitados verificados';
+let summary=`## Banco de medios\n\nModo: ${safe(report.mode)} · Resultado: ${outcomeLabel}\n\n`;
+if(outcome.deferred.length)summary+='Recursos pospuestos: '+outcome.deferred.map(item=>safe(item.matchId)+' · '+(item.kind==='image'?'imagen ':'clip ')+item.number+' · '+safe(item.code)+(item.blockedBy?' · bloqueado por '+item.blockedBy.map(task=>safe(task.matchId)+' / '+safe(task.attemptId)).join(', '):'')).join('; ')+'. Los pendientes no cuentan como listos en R2.\n\n';
 if(report.error) summary+=safe(report.error)+'\n\n';
 summary+='| Partido | Imágenes listas en R2 | Clips listos en R2 | Diagnóstico |\n| --- | --- | --- | --- |\n';
 for(const row of report.results??[]) {

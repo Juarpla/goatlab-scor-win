@@ -56,8 +56,8 @@ se emitirán otras llaves.
 
    Se pueden repetir `--sqlite` y `--snapshot` para incluir evidencia adicional.
    La salida normal contiene solo cantidades. El seed privado conserva tareas
-   conocidas y bloquea el resto de slots del conjunto legacy. La cuota del día
-   de corte queda cerrada; la capacidad nueva comienza el siguiente día UTC.
+   conocidas y bloquea el resto de slots del conjunto legacy. Los totales del día
+   de corte se conservan como estimación histórica; no bloquean solicitudes.
 
 5. Con los secrets cargados en el entorno, crear explícitamente el registro:
 
@@ -179,14 +179,27 @@ como evidencia dentro de los intentos, junto con sus diagnósticos compactos.
 
 Cada corrida concede hasta tres POST por cada imagen y por cada clip pendiente.
 El contador sólo existe en memoria del productor; no se almacena un contador
-acumulado en R2. El historial y las cuotas anteriores no se borran ni se reinician.
+acumulado en R2. El historial y los totales anteriores no se borran ni se reinician.
+Los totales diarios son informativos: no hay un límite diario preventivo local.
+Agnes decide la disponibilidad de cuota; sus respuestas se muestran con HTTP,
+código y mensaje reales, sin inferir agotamiento diario a partir de un 402.
 `renew-resource` archiva la identidad original antes de renovar una posición
 verificada como ausente, mediante CAS; una tarea vigente con ID debe recuperarse.
 Un 503 detiene ese recurso durante la corrida y permite continuar con los otros.
 Otra corrida vuelve a disponer de tres intentos. GET, PUT y HEAD no gastan POST.
 
 `pending`, `queued` e `in_progress` conservan el ID y se consultan con pausas de
-10, 20 y 30 segundos; 429 respeta Retry-After. Las respuestas repetidas aparecen
+15, 40 y 75 segundos, y después 90 segundos entre consultas; 429 respeta
+Retry-After si exige una espera mayor. Las respuestas repetidas aparecen
 en logs y se compactan en el estado. Los diagnósticos archivados se retienen
 durante la ventana actual de siete días y siguen sujetos al límite de 900 KB.
 Los temporales se eliminan tras publicación confirmada y al finalizar el job.
+
+El reporte de ejecución distingue `complete`, `deferred` y `error`. Un 503/429
+de la corrida actual, una tarea aceptada todavía activa o un clip bloqueado
+por ella dejan recursos pendientes y código de salida 0. Los recursos siguen
+requiriendo verificación R2 para contar como listos. Fallos de R2, identidad,
+estado privado, HTTP 402/401 y causas no identificadas mantienen código 2;
+tienen prioridad aunque existan otros recursos pospuestos. Un rechazo histórico
+no justifica el resultado de la corrida actual. La publicación selectiva sigue
+exigiendo bancos completos; no se publica un banco parcial por terminar en 0.

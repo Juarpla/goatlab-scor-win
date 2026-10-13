@@ -70,7 +70,7 @@ class ResourceRetries(unittest.TestCase):
             return {'status': 'pending', 'progress': 0} if len(queried)<5 else {'status': 'completed', 'url': 'https://example.org/v.mp4'}
         result = self.bank(self.pool(), call, verified=['clip-1.mp4'])
         self.assertEqual(len(result['clips']), 1)
-        self.assertGreaterEqual(queried[-1]-queried[0], 90)
+        self.assertEqual([b-a for a,b in zip(queried,queried[1:])], [15,40,75,90])
         self.assertEqual(result['runPosts'], {})
     def test_failed_task_retries_same_resource_up_to_three(self):
         def call(url, body=None, **kwargs):

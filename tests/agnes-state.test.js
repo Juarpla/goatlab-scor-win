@@ -101,9 +101,9 @@ test('lost reservation ACK remains consumed and never regrants to its owner',asy
   assert.equal((await client.transact('reserve',reserve())).canPost,false);
   assert.equal(remote.puts,1);
 });
-test('bootstrap day quota is conservative and new UTC day admits capacity',()=>{
+test('historical daily totals never block admission, including bootstrap day',()=>{
   const state=createAgnesState({nowMs:now});
-  assert.equal(reduceAgnesState(state,'reserve',reserve(),{nowMs:now}).result.canPost,false);
+  assert.equal(reduceAgnesState(state,'reserve',reserve(),{nowMs:now}).result.canPost,true);
   assert.equal(reduceAgnesState(state,'reserve',reserve({expiresAtMs:now+2*86_400_000,guard:{manual:true,kickoffMs:now+86_400_000}}),{nowMs:now+86_400_000}).result.canPost,true);
 });
 test('429 refund is idempotent and a new attempt is counted once on the original day',()=>{
@@ -232,4 +232,14 @@ test('resource projection only declares verified R2 objects ready',()=>{
   const {state}=reduceAgnesState(fresh(),'resource-status',{matchId:'alpha-beta',resources},{nowMs:now});
   assert.equal(state.resources['alpha-beta:image:1'].state,'pendiente');
   assert.throws(()=>reduceAgnesState(state,'resource-status',{matchId:'alpha-beta',resources:resources.map(r=>({...r,state:'listo'}))},{nowMs:now}),/estado de recurso/);
+});
+
+test('legacy image and video ceilings do not reject new provider requests',()=>{
+  for(const kind of ['image','video']) {
+    const seed=createAgnesState({nowMs:now});
+    const input=reserve({kind,model:'agnes-'+kind+'-2.5-flash'});
+    const {state,result}=reduceAgnesState(seed,'reserve',input,{nowMs:now});
+    assert.equal(result.canPost,true);
+    assert.ok(state.quota['2026-10-09'][kind==='image'?'images':'video_seconds']>state.limits[kind==='image'?'images':'video_seconds']);
+  }
 });

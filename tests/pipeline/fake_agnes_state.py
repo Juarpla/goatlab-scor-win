@@ -46,8 +46,6 @@ class FakeAgnesState:
         day = quota_day(self.clock())
         quota = self.quota.setdefault(day, {'images': 0, 'video_seconds': 0})
         name, units = ('images', 1) if kind == 'image' else ('video_seconds', 6)
-        if quota[name] + units > self.caps[name]:
-            return {'canPost': False, 'reason': 'cuota diaria de imágenes agotada' if kind == 'image' else 'cuota de vídeo diaria agotada'}
         quota[name] += units
         attempt = str(uuid.uuid4())
         row = {'state': 'uncertain', 'videoId': None, 'attemptId': attempt, 'promptHash': identity,
