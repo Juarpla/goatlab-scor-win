@@ -423,7 +423,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       try { attempts = (await state('attempts',{matchId})).attempts ?? attempts; }
       catch(error) { failures.push('Historial final no disponible: '+safeMediaMessage(error.message,env)); }
       const omission=recoveryOnly?'recuperación de tareas existentes; sin nuevas solicitudes':failures
-        .filter(reason=>reason!=='Motion Prompts no disponibles; montaje local disponible'&&!/^clip \d+: etapa=/.test(reason))
+        .filter(reason=>reason!=='Motion Prompts no disponibles; montaje local disponible'&&!/^(?:clip|intento de vídeo) \d+: etapa=/.test(reason))
         .map(reason=>reason.split('; última consulta:')[0]).join('; ').slice(0,256) || 'todavía no solicitado';
       const resources=[];
       for(let ordinal=0;ordinal<4;ordinal++) {
@@ -447,6 +447,9 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         resource.state=resource.verified?'listo':active?'generando':publication?'publicando':'pendiente';
         const calls=attempts.filter(attempt=>attempt.kind===resource.kind && (resource.kind==='image'?attempt.ordinal+1===resource.number:attempt.publicationIndex===resource.number) && attempt.diagnostics?.events?.some(event=>event.runId===runId && event.method==='POST'));
         resource.postsThisRun=resource.kind==='video'?runPosts[String(resource.number)]??calls.length:calls.length;
+        const own=attempts.filter(attempt=>attempt.kind===resource.kind && (resource.kind==='image'?attempt.ordinal+1===resource.number:attempt.publicationIndex===resource.number)).at(-1);
+        const rejected=own?.diagnostics?.events?.findLast(event=>event.runId===runId && event.method==='POST' && event.httpStatus===503);
+        if(!resource.verified && rejected)resource.reason='HTTP 503'+(rejected.providerCode?': '+rejected.providerCode:'')+'; sin más POST para este recurso en esta corrida; reintentar en otra corrida';
       }
       if(authorityReady)try{await state('resource-status',{matchId,resources});}catch(error){failures.push('Estado de recursos no guardado: '+safeMediaMessage(error.message,env));}
       for(const resource of resources)log('media-resource: '+matchId+': '+(resource.kind==='image'?'imagen ':'clip ')+resource.number+': '+resource.status+'; '+resource.reason+(resource.objectKey?'; '+resource.objectKey:''));

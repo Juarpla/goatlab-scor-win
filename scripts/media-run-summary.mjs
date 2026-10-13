@@ -9,7 +9,7 @@ if(report.error) summary+=safe(report.error)+'\n\n';
 summary+='| Partido | Imágenes listas en R2 | Clips listos en R2 | Diagnóstico |\n| --- | --- | --- | --- |\n';
 for(const row of report.results??[]) {
   const complete = requestedMediaComplete({ ...row, mode: row.mode ?? report.mode });
-  const failures = [...new Set((row.failures ?? []).filter(reason => reason !== 'Motion Prompts no disponibles; montaje local disponible' && ! /^(?:clip|intento de vídeo) \d+: etapa=/.test(reason)).map(reason=>reason.split('; última consulta:')[0]))];
+  const failures = [...new Set((row.failures ?? []).filter(reason => reason !== 'Motion Prompts no disponibles; montaje local disponible' && !/^(?:clip|intento de vídeo) \d+: etapa=/.test(reason)).map(reason=>reason.split('; última consulta:')[0]))];
   const latest = row.diagnostics?.at(-1);
   const diagnosis = complete ? 'Verificado' : failures.join('; ') || latest?.message || 'Recursos incompletos; causa no registrada';
   const labels = readyMediaLabels(row);

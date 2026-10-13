@@ -239,7 +239,7 @@ class VideoPool:
                 result = self._bank(match, prompts, images, out, deadline, expires, counted_call, download, cancelled,
                                     verified, False, candidate_ordinals=[ordinal])
                 diagnostics = result.get('diagnostics', [])
-                messages = result.get('failures', [])
+                messages = [re.sub(r'^clip (\d+):', r'intento de vídeo \1:', message) for message in result.get('failures', [])]
                 clips.extend(result.get('clips', []))
                 if result.get('clips'): break
                 failures.extend(messages)
