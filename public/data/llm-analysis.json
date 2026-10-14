@@ -7874,5 +7874,409 @@
     "generatedAt": "2026-10-14T11:50:00.574Z",
     "inputKey": "v3|M|fd-575361|Manchester City FC|PAE AEK|champions|2026-10-20T19:00:00Z|NS\nP|1.45|1.45|0.365|0.271|0.365|0.554|0.597\nW|13||7|\nT|9|Manchester City FC|1|3||\nS|Erling Haaland|Manchester City FC|2|1\nR|2026-08-28|Crystal Palace FC|Manchester City FC|1|4\nR|2026-09-05|Manchester City FC|Coventry City FC|1|0\nR|2026-09-08|FC Porto|Manchester City FC|0|2\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-09-13|Manchester United FC|Manchester City FC|0|1\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3",
     "materialKey": "M|fd-575361|Manchester City FC|PAE AEK|champions|2026-10-20T19:00:00Z|NS"
+  },
+  "fd-575362": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Stuttgart y Atlético en cruce de Champions",
+        "bullets": [
+          "VfB Stuttgart recibe al Club Atlético de Madrid en partido de Champions fijado para el 2026-10-20 a las 19:00 UTC, con estado NS (no iniciado).",
+          "El pronóstico meteorológico registrado indica lluvia y viento de magnitud 3, sin sede detallada en el feed.",
+          "GoatLab no formula recomendaciones: las cifras de Poisson y de CatBoost Bzzoiro son lecturas atribuidas a sus proveedores."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-20",
+            "label": "fecha (UTC)"
+          },
+          {
+            "value": "NS",
+            "label": "estado del partido"
+          },
+          {
+            "value": "3",
+            "label": "viento registrado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson GoatLab y CatBoost Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab: 0.493 local, 0.233 empate, 0.274 visitante, con 2.02 y 1.48 en goles esperados y 0.679 tanto en el umbral de goles como en ambos anotan.",
+          "CatBoost Bzzoiro: 0.514 local, 0.214 empate, 0.272 visitante, 2.02 y 1.48 en goles esperados, 0.661 en umbral de goles y 0.629 en ambos anotan, con 1-1 como marcador más probable.",
+          "B2 declara mayor probabilidad para el local (H) con 0.514 y no declara goles totales ni ambos anotan.",
+          "Ambos proveedores otorgan al local la mayor probabilidad y sitúan el empate por debajo de 0.24."
+        ],
+        "stats": [
+          {
+            "value": "0.493",
+            "label": "Poisson: local"
+          },
+          {
+            "value": "0.514",
+            "label": "Bzzoiro: local"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador probable Bzzoiro"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente registrada",
+        "bullets": [
+          "Atlético: 5 victorias y 1 derrota en 6 partidos listados, con 4-0 a Osasuna, 2-1 al Real Madrid, 2-0 al Manchester United y 2-1 en Alavés.",
+          "La única derrota del tramo es 1-2 ante Liverpool FC; el 4-0 a Osasuna y el 3-0 en Real Sociedad son los resultados más amplios.",
+          "Stuttgart registra un único resultado en el feed: 3-1 ante Viking FK el 2026-09-09."
+        ],
+        "stats": [
+          {
+            "value": "5 victorias",
+            "label": "Atlético en 6 partidos"
+          },
+          {
+            "value": "3-0",
+            "label": "Atlético en Real Sociedad"
+          },
+          {
+            "value": "3-1",
+            "label": "Stuttgart vs Viking FK"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posición registrada de Stuttgart",
+        "bullets": [
+          "VfB Stuttgart aparece en la posición 8 de la tabla con 1 partido y 3 puntos según el bloque T.",
+          "El feed no incluye la fila del Club Atlético de Madrid ni de otros equipos, por lo que no permite comparar la clasificación."
+        ],
+        "stats": [
+          {
+            "value": "8",
+            "label": "posición de Stuttgart"
+          },
+          {
+            "value": "3",
+            "label": "puntos registrados"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros registrados",
+        "bullets": [
+          "Ermedin Demirović (VfB Stuttgart) figura con 3 goles en el bloque S.",
+          "No hay registros de goleadores del Club Atlético de Madrid en el feed."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "goles de Demirović"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Bloques ausentes",
+        "detail": "El feed no incluye el bloque A de API-Football, el historial H/HR ni el consenso externo M2, por lo que no hay lecturas adicionales de proveedor ni cruces previos."
+      },
+      {
+        "label": "B2 incompleto",
+        "detail": "Las estimaciones declaradas de Bzzoiro marcan 'no' en goles totales y ambos anotan, sin umbrales numéricos asociados."
+      },
+      {
+        "label": "Tabla parcial",
+        "detail": "Solo consta la fila del VfB Stuttgart (posición 8, 1 partido, 3 puntos); falta la del Atlético y la del resto del grupo."
+      },
+      {
+        "label": "Goleadores parciales",
+        "detail": "El bloque S solo recoge a Ermedin Demirović con 3 goles y no incluye artilleros del Club Atlético de Madrid."
+      },
+      {
+        "label": "Valor sin etiqueta",
+        "detail": "El bloque B incorpora 0.528 sin etiqueta declarada en el feed; se deja sin interpretar para no forzar una lectura."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los porcentajes de Poisson GoatLab (0.493/0.233/0.274) y de CatBoost Bzzoiro (0.514/0.214/0.272) resultan coherentes entre sí y con los goles esperados declarados (2.02 y 1.48); no se detectan desvíos claros que marcar."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-14T12:05:23.260Z",
+    "inputKey": "v3|M|fd-575362|VfB Stuttgart|Club Atlético de Madrid|champions|2026-10-20T19:00:00Z|NS\nP|2.02|1.48|0.493|0.233|0.274|0.679|0.679\nB|0.514|0.214|0.272|2.02|1.48|0.661|0.629|1-1|0.528\nB2|H|0.514|no|no\nW||rain|3|\nT|8|VfB Stuttgart|1|3||\nS|Ermedin Demirović|VfB Stuttgart|3|1\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-09-09|Liverpool FC|Club Atlético de Madrid|2|1\nR|2026-09-13|Real Sociedad de Fútbol|Club Atlético de Madrid|0|3\nR|2026-09-16|Club Atlético de Madrid|CA Osasuna|4|0\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0",
+    "materialKey": "M|fd-575362|VfB Stuttgart|Club Atlético de Madrid|champions|2026-10-20T19:00:00Z|NS"
+  },
+  "fd-575364": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "AS Roma - ŠK Slovan Bratislava, contexto del cruce",
+        "bullets": [
+          "Cruce AS Roma - ŠK Slovan Bratislava en champions, programado para 2026-10-20 a las 19:00 UTC y con estado NS (no iniciado).",
+          "Condiciones declaradas en sede: lluvia y 10 de temperatura; el input no identifica el estadio del partido.",
+          "No se declaran alineaciones, bajas confirmadas ni disponibilidad de jugadores para ninguno de los dos equipos."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-20",
+            "label": "Fecha programada"
+          },
+          {
+            "value": "19:00",
+            "label": "Hora declarada (UTC)"
+          },
+          {
+            "value": "10",
+            "label": "Temperatura declarada"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Cálculos declarados de Poisson y CatBoost",
+        "bullets": [
+          "Poisson GoatLab declara 2.33 goles esperados para AS Roma y 0.99 para ŠK Slovan Bratislava, con 66.4% local, 19.9% empate y 13.7% visitante.",
+          "El mismo cálculo añade dos lecturas de 64.4% y 57.6% que el input no etiqueta de forma explícita.",
+          "CatBoost Bzzoiro declara 70.4% local, 17.2% empate y 12.4% visitante, con 2.33 y 0.99 goles esperados, 62.8%, 55.1% y marcador más probable 2-0 asociado a 0.468.",
+          "B2, estimaciones declaradas del proveedor, sitúa la mayor probabilidad en el local con 70.4% y no declara valores para goles totales ni para ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "66.4%",
+            "label": "Local (Poisson GoatLab)"
+          },
+          {
+            "value": "70.4%",
+            "label": "Local (CatBoost Bzzoiro)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Precedentes entre Roma y Slovan",
+        "bullets": [
+          "El agregado H declara 2 partidos, 0 victorias, 1 empate, 1 derrota y 1.5, sin precisar la métrica del último valor.",
+          "El 2011-08-25, AS Roma y ŠK Slovan Bratislava empataron 1-1 en el partido registrado en Roma.",
+          "El 2011-08-18, ŠK Slovan Bratislava se impuso 1-0 a AS Roma en el otro precedente registrado."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Precedentes declarados"
+          },
+          {
+            "value": "1-1",
+            "label": "Roma-Slovan (2011-08-25)"
+          },
+          {
+            "value": "1-0",
+            "label": "Slovan-Roma (2011-08-18)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes declarados",
+        "bullets": [
+          "ŠK Slovan Bratislava aparece con una derrota 6-1 frente a Paris Saint-Germain FC el 2026-09-09.",
+          "AS Roma registra un empate 1-1 ante Fenerbahçe SK el 2026-09-10.",
+          "El input solo aporta un resultado reciente por equipo, sin secuencia más amplia de partidos."
+        ],
+        "stats": [
+          {
+            "value": "6-1",
+            "label": "PSG - Slovan (2026-09-09)"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Registro de anotadores declarado",
+        "bullets": [
+          "La tabla S identifica a Andraž Šporar, de ŠK Slovan Bratislava, con 1 y 4 como cifras declaradas, sin especificar su significado.",
+          "No se declaran goleadores ni cifras ofensivas del lado de AS Roma en el input."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "Valor declarado de Šporar"
+          },
+          {
+            "value": "4",
+            "label": "Segundo valor declarado"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Etiquetas no declaradas",
+        "detail": "En P, los valores 0.644 y 0.576, y en B los 0.628, 0.551 y 0.468, no vienen etiquetados; se reportan como lecturas declaradas del proveedor, sin reinterpretación."
+      },
+      {
+        "label": "Métrica del historial",
+        "detail": "H declara 2, 0, 1, 1 y 1.5 sin precisar la métrica del último valor ni el equipo de referencia del agregado."
+      },
+      {
+        "label": "Sede no indicada",
+        "detail": "W aporta lluvia y 10 como condiciones, pero el input no identifica estadio ni ciudad del encuentro."
+      },
+      {
+        "label": "Cifras de goleadores sin detalle",
+        "detail": "S registra 1 y 4 para Andraž Šporar sin indicar si corresponden a goles, partidos, minutos u otra métrica."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Divergencia moderada en la probabilidad local: Poisson GoatLab 66.4% frente a 70.4% de CatBoost Bzzoiro y B2, cuatro puntos de diferencia. El 0.468 ligado al marcador 2-0 en B resulta alto para un resultado exacto y carece de etiqueta declarada."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-14T12:06:15.869Z",
+    "inputKey": "v3|M|fd-575364|AS Roma|ŠK Slovan Bratislava|champions|2026-10-20T19:00:00Z|NS\nP|2.33|0.99|0.664|0.199|0.137|0.644|0.576\nB|0.704|0.172|0.124|2.33|0.99|0.628|0.551|2-0|0.468\nB2|H|0.704|no|no\nH|2|0|1|1|1.5\nW||rain|10|\nS|Andraž Šporar|ŠK Slovan Bratislava|1|4\nR|2026-09-09|Paris Saint-Germain FC|ŠK Slovan Bratislava|6|1\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nHR|2011-08-25|AS Roma|ŠK Slovan Bratislava|1|1\nHR|2011-08-18|ŠK Slovan Bratislava|AS Roma|1|0",
+    "materialKey": "M|fd-575364|AS Roma|ŠK Slovan Bratislava|champions|2026-10-20T19:00:00Z|NS"
+  },
+  "fd-575366": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Napoli recibe al Bodø/Glimt en Champions",
+        "bullets": [
+          "Encuentro de Champions entre SSC Napoli y FK Bodø/Glimt, con horario 2026-10-20T19:00:00Z y estado NS.",
+          "La sede y el detalle climático del bloque W solo aportan el valor 27; el resto de los campos llega vacío."
+        ],
+        "stats": [
+          {
+            "value": "NS",
+            "label": "estado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost muy próximos entre sí",
+        "bullets": [
+          "Poisson GoatLab reparte 1.68 goles locales y 1.69 visitantes, con 0.374 local, 0.247 empate y 0.379 visitante.",
+          "Ese mismo modelo registra 0.654 en el umbral de goles y 0.673 en ambos anotan.",
+          "CatBoost Bzzoiro publica 0.38, 0.229 y 0.391, con 1.68 y 1.69 goles, 0.638 de umbral, 0.624 en ambos anotan y 1-1 al 0.466 como marcador más probable.",
+          "Bzzoiro declara mayor probabilidad 0.391 con marca A, y 'no' tanto en goles totales como en ambos anotan; la lectura climática disponible es 27."
+        ],
+        "stats": [
+          {
+            "value": "0.374",
+            "label": "Poisson local"
+          },
+          {
+            "value": "0.391",
+            "label": "CatBoost mayor prob."
+          },
+          {
+            "value": "0.466",
+            "label": "1-1 en CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Rrahmani figura en el bloque de artilleros",
+        "bullets": [
+          "Amir Rrahmani (SSC Napoli) es el único nombre del bloque S, con los valores 1 y 2 registrados a su lado.",
+          "No hay más artilleros listados ni desglose por equipo rival en el input."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "registro goleador 1"
+          },
+          {
+            "value": "2",
+            "label": "registro goleador 2"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Tres derrotas en los últimos registros",
+        "bullets": [
+          "SSC Napoli cayó 0-1 ante Arsenal FC el 2026-09-09 y perdió 1-3 frente a Villarreal CF el 2026-10-13.",
+          "FK Bodø/Glimt fue derrotado 5-0 por FC Bayern München el 2026-09-10.",
+          "Los tres partidos del bloque R terminaron con marcador en contra para los equipos implicados."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "Napoli vs Arsenal"
+          },
+          {
+            "value": "5-0",
+            "label": "Bayern vs Bodø/Glimt"
+          },
+          {
+            "value": "1-3",
+            "label": "Villarreal vs Napoli"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Lo que hay que mirar en este cruce",
+        "bullets": [
+          "Los dos modelos sitúan la mayor probabilidad entre 0.374 y 0.391, sin ventaja local pronunciada.",
+          "Los goles esperados coinciden en 1.68 y 1.69, coherentes con ambos anotan de 0.673 y 0.624.",
+          "Faltan datos de bajas, clasificación, historial directo y estimación externa para completar el contexto."
+        ],
+        "stats": [
+          {
+            "value": "1.68",
+            "label": "goles locales Poisson"
+          },
+          {
+            "value": "1.69",
+            "label": "goles visitantes Poisson"
+          },
+          {
+            "value": "0.624",
+            "label": "ambos anotan CatBoost"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin tabla ni historial directo",
+        "detail": "No se reciben bloques T, H ni HR: no hay clasificación, puestos ni cruces previos entre SSC Napoli y FK Bodø/Glimt."
+      },
+      {
+        "label": "Sin bajas ni estimación externa",
+        "detail": "Ausentes los bloques L (bajas confirmadas), A (estimación API-Football) y M2 (consenso externo), por lo que no se pueden contrastar lecturas de terceros."
+      },
+      {
+        "label": "Campos climáticos y de sede incompletos",
+        "detail": "El bloque W solo aporta el valor 27; temperatura, sede y demás campos llegan vacíos, así que no se puede precisar su significado."
+      },
+      {
+        "label": "Lectura de los dos últimos campos de P",
+        "detail": "Los valores 0.654 y 0.673 se han interpretado como umbral de goles y ambos anotan, por no venir etiquetados en la entrada."
+      },
+      {
+        "label": "Registro de goleador ambiguo",
+        "detail": "El bloque S ofrece solo a Amir Rrahmani con los números 1 y 2 sin indicar si corresponden a goles, partidos u otra métrica."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El 0.466 de 1-1 en CatBoost es muy superior al 0.229 de empate del mismo modelo y al 0.247 de Poisson, así que debe leerse como reparto interno de marcadores y no como probabilidad absoluta. También se marca que Poisson da 0.374 local frente a 0.379 visitante con 1.68 y 1.69 goles, un cruce práctica"
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-10-14T12:08:07.167Z",
+    "inputKey": "v3|M|fd-575366|SSC Napoli|FK Bodø/Glimt|champions|2026-10-20T19:00:00Z|NS\nP|1.68|1.69|0.374|0.247|0.379|0.654|0.673\nB|0.38|0.229|0.391|1.68|1.69|0.638|0.624|1-1|0.466\nB2|A|0.391|no|no\nW|||27|\nS|Amir Rrahmani|SSC Napoli|1|2\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-09-10|FC Bayern München|FK Bodø/Glimt|5|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1",
+    "materialKey": "M|fd-575366|SSC Napoli|FK Bodø/Glimt|champions|2026-10-20T19:00:00Z|NS"
   }
 }
