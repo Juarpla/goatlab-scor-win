@@ -1,146 +1,6 @@
 {
-  "updatedAt": "2026-10-14T12:23:20.623Z",
+  "updatedAt": "2026-10-14T17:35:07.200Z",
   "runs": [
-    {
-      "at": "2026-10-07T14:14:09.550Z",
-      "matchId": "fd-564704",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "72b1909a-9e2c-413c-8a23-c03e25d5c6a0"
-    },
-    {
-      "at": "2026-10-07T14:18:57.328Z",
-      "task": "shorts",
-      "matchId": "ipswich-town-vs-fulham-2026-10-10",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180003
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2671,
-        "outputTokens": 8376
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "572cf128-e15b-483c-98a8-f535d9c8b53d"
-    },
-    {
-      "at": "2026-10-07T14:21:53.673Z",
-      "task": "shorts",
-      "matchId": "chelsea-vs-bournemouth-2026-10-10",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 2631,
-        "outputTokens": 11995
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "1914e621-d904-43d8-9877-606797a91e07"
-    },
-    {
-      "at": "2026-10-07T14:22:16.092Z",
-      "task": "image-prompts",
-      "matchId": "ipswich-town-vs-fulham-2026-10-10",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1885,
-        "outputTokens": 920
-      }
-    },
-    {
-      "at": "2026-10-07T14:22:54.126Z",
-      "task": "image-prompts",
-      "matchId": "chelsea-vs-bournemouth-2026-10-10",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1800,
-        "outputTokens": 1041
-      }
-    },
-    {
-      "at": "2026-10-07T14:23:04.344Z",
-      "task": "video-prompts",
-      "matchId": "ipswich-town-vs-fulham-2026-10-10",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1781,
-        "outputTokens": 394
-      }
-    },
-    {
-      "at": "2026-10-07T14:23:12.559Z",
-      "task": "video-prompts",
-      "matchId": "chelsea-vs-bournemouth-2026-10-10",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1696,
-        "outputTokens": 376
-      }
-    },
-    {
-      "at": "2026-10-07T14:24:42.531Z",
-      "task": "motion-prompts",
-      "matchId": "ipswich-town-vs-fulham-2026-10-10",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2565,
-        "outputTokens": 4415
-      }
-    },
     {
       "at": "2026-10-07T14:25:54.878Z",
       "task": "motion-prompts",
@@ -5367,6 +5227,173 @@
       "maxTokens": 12000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-14T17:24:53.149Z",
+      "task": "shorts",
+      "matchId": "as-roma-vs-real-madrid-2026-10-14",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6933,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 137885
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6529,
+        "outputTokens": 11619
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "4bc510ac-a9b8-4d0c-ac6e-b8df23e8420f"
+    },
+    {
+      "at": "2026-10-14T17:26:32.540Z",
+      "task": "shorts",
+      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7068,
+        "outputTokens": 8277
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "462260b1-c831-4944-9f73-1da6a56dca07"
+    },
+    {
+      "at": "2026-10-14T17:26:53.092Z",
+      "task": "image-prompts",
+      "matchId": "as-roma-vs-real-madrid-2026-10-14",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1635,
+        "outputTokens": 876
+      }
+    },
+    {
+      "at": "2026-10-14T17:27:43.349Z",
+      "task": "image-prompts",
+      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1908,
+        "outputTokens": 955
+      }
+    },
+    {
+      "at": "2026-10-14T17:27:58.181Z",
+      "task": "video-prompts",
+      "matchId": "as-roma-vs-real-madrid-2026-10-14",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1531,
+        "outputTokens": 403
+      }
+    },
+    {
+      "at": "2026-10-14T17:28:18.368Z",
+      "task": "video-prompts",
+      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "Se requieren 2 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1804,
+            "outputTokens": 366
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10958
+        }
+      ],
+      "usage": {
+        "inputTokens": 1768,
+        "outputTokens": 1334
+      }
+    },
+    {
+      "at": "2026-10-14T17:32:16.510Z",
+      "task": "motion-prompts",
+      "matchId": "as-roma-vs-real-madrid-2026-10-14",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        }
+      ],
+      "usage": {
+        "inputTokens": 2295,
+        "outputTokens": 7029
+      }
+    },
+    {
+      "at": "2026-10-14T17:35:07.200Z",
+      "task": "motion-prompts",
+      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2576,
+        "outputTokens": 8859
+      }
     }
   ]
 }
