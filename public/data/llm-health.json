@@ -1,36 +1,6 @@
 {
-  "updatedAt": "2026-10-13T23:41:37.100Z",
+  "updatedAt": "2026-10-14T05:13:30.114Z",
   "runs": [
-    {
-      "at": "2026-10-07T06:36:01.943Z",
-      "task": "image-prompts",
-      "matchId": "rayo-vallecano-vs-athletic-club-2026-10-10",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1950,
-        "outputTokens": 921
-      }
-    },
-    {
-      "at": "2026-10-07T06:36:26.816Z",
-      "task": "image-prompts",
-      "matchId": "aston-villa-vs-brentford-2026-10-10",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1867,
-        "outputTokens": 964
-      }
-    },
     {
       "at": "2026-10-07T06:37:07.528Z",
       "task": "image-prompts",
@@ -5168,6 +5138,134 @@
         "inputTokens": 2496,
         "outputTokens": 3350
       }
+    },
+    {
+      "at": "2026-10-14T05:07:32.895Z",
+      "task": "shorts",
+      "matchId": "feyenoord-vs-como-2026-10-14",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6740,
+            "outputTokens": 8475
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 97022
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6394,
+            "outputTokens": 5548
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 33633
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 10 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: falta el antecedente asignado",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6599,
+            "outputTokens": 1854
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 18495
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 2: falta Como 1907; guion 3: falta Como 1907; guion 3: falta Anastasios Douvikas; guion 4: falta Como 1907; guion 4: falta Anastasios Douvikas; guion 5: cifra 1907 no está en los hechos; guion 5: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6276,
+            "outputTokens": 7088
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 104968
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6276,
+        "outputTokens": 7088
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-14T05:13:30.112Z",
+      "task": "shorts",
+      "matchId": "fd-575357",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "guion 1: 53 palabras, mínimo 55; guion 5: 52 palabras, mínimo 55; guion 6: 52 palabras, mínimo 55; guion 7: 52 palabras, mínimo 55; guion 8: 52 palabras, mínimo 55; guion 9: 53 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4853,
+            "outputTokens": 2869
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 97999
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 4723,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 84314
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 31 palabras, mínimo 55; guion 1: falta la CTA a goatlab.win en la narración; guion 2: cifra 38 no está en los hechos; guion 2: cifra 38 no está en los hechos; guion 2: 34 palabras, mínimo 55; guion 2: falta la CTA a goatlab.win en la narración; guion 2: porcentajes bloqueados: evaluation.published es false; guion 3: 27 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 4740,
+            "outputTokens": 2480
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26135
+        }
+      ],
+      "ok": {
+        "provider": "WORKERS_AI",
+        "model": "@cf/zai-org/glm-4.7-flash"
+      },
+      "usage": {
+        "inputTokens": 4589,
+        "outputTokens": 5563
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "2d35d69e-3726-4777-91f8-734d1af0b660"
     }
   ]
 }
