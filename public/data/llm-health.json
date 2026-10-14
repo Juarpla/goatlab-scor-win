@@ -1,35 +1,6 @@
 {
-  "updatedAt": "2026-10-14T11:50:12.254Z",
+  "updatedAt": "2026-10-14T11:57:11.021Z",
   "runs": [
-    {
-      "at": "2026-10-07T06:43:10.274Z",
-      "task": "motion-prompts",
-      "matchId": "arsenal-vs-leeds-united-2026-10-10",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 2: porcentajes no publicados",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2542,
-            "outputTokens": 4392
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 93321
-        }
-      ],
-      "usage": {
-        "inputTokens": 2545,
-        "outputTokens": 7319
-      }
-    },
     {
       "at": "2026-10-07T06:45:10.658Z",
       "task": "motion-prompts",
@@ -5270,6 +5241,75 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "45934e96-882e-4a8e-aace-139527aaba1b"
+    },
+    {
+      "at": "2026-10-14T11:57:11.019Z",
+      "task": "shorts",
+      "matchId": "feyenoord-vs-como-2026-10-14",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6724,
+            "outputTokens": 8797
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 134652
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6389,
+            "outputTokens": 8375
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 94895
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 13 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6583,
+            "outputTokens": 1760
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16463
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta Como 1907; guion 2: 50 palabras, mínimo 55; guion 3: cifra 1907 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6268,
+            "outputTokens": 7554
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 125939
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6268,
+        "outputTokens": 7554
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
