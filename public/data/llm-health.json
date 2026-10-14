@@ -1,25 +1,6 @@
 {
-  "updatedAt": "2026-10-14T12:08:15.233Z",
+  "updatedAt": "2026-10-14T12:23:20.623Z",
   "runs": [
-    {
-      "at": "2026-10-07T14:14:09.550Z",
-      "matchId": "fd-560597",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2049,
-        "outputTokens": 17167
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "72b1909a-9e2c-413c-8a23-c03e25d5c6a0"
-    },
     {
       "at": "2026-10-07T14:14:09.550Z",
       "matchId": "fd-564704",
@@ -5277,6 +5258,115 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "c3cf8b2e-aaf6-4e0c-89e9-5c9a45165cff"
+    },
+    {
+      "at": "2026-10-14T12:23:20.620Z",
+      "task": "shorts",
+      "matchId": "feyenoord-vs-como-2026-10-14",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180004
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6389,
+            "outputTokens": 9503
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65110
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 9 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6583,
+            "outputTokens": 1328
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10497
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6389,
+            "outputTokens": 7362
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 52003
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 11 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: 8 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6583,
+            "outputTokens": 1562
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15846
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6583,
+        "outputTokens": 1562
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
