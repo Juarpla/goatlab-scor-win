@@ -4,6 +4,7 @@ import Icon from '../components/Icon.astro';
 import MatchCard from '../components/MatchCard.astro';
 import AdSlot from '../components/AdSlot.astro';
 import { competitions, staysOnWall } from '../lib/football.js';
+import { matchDay } from '../lib/teams.js';
 import { matchForm } from '../lib/form.js';
 import fixtures from '../../public/data/fixtures.json';
 import results from '../../public/data/results.json';
@@ -16,7 +17,7 @@ const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { 
 const dayLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'short', day: 'numeric', month: 'short' });
 // La ventana de siete días. Sin marcador, sale a los 115'. Con marcador, se queda y la tarjeta lo muestra.
 const rows = matches.filter(match => staysOnWall(match)).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
-const days = [...new Set(rows.map(match => match.kickoff.slice(0, 10)))];
+const days = [...new Set(rows.map(match => matchDay(match.kickoff)))];
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 // Orden del muro, distinto del array global: LaLiga y Premier primero.
 const wallCompetitions = ['laliga', 'premier', 'champions', 'europa', 'libertadores', 'nations'].map(id => competitions.find(c => c.id === id)).filter(Boolean);

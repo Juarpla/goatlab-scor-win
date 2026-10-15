@@ -10,7 +10,7 @@ import {
 } from '../src/lib/bzzoiro.js';
 import { locateMatch } from '../src/lib/venues.js';
 import { fetchKickoffWeather } from '../src/lib/weather.js';
-import { normalize, resolveCanonical, webMatchId, canonicalClubKey, sameClub } from '../src/lib/teams.js';
+import { normalize, resolveCanonical, matchDay, canonicalClubKey, sameClub } from '../src/lib/teams.js';
 import { mapMarketProbs } from '../src/lib/odds.js';
 import { withFailover, extractJson, hasTransportFailure, hasTruncatedFailure, createProviderBreaker } from '../src/lib/llm.js';
 import { adoptAnalyses, findAnalysis, analysisIsFresh, buildAnalysisKey, buildMaterialKey, parseBatchAnalyses } from '../src/lib/analysis.js';
@@ -50,7 +50,7 @@ export function mergeCalendarWindow(previous, fresh, { date, days = 7, now = Dat
   end.setUTCDate(end.getUTCDate() + days);
   const endDate = end.toISOString().slice(0, 10);
   const inWindow = match => {
-    const day = match.kickoff.slice(0, 10);
+    const day = matchDay(match.kickoff);
     return day >= date && day < endDate;
   };
   const known = previous.filter(inWindow);
@@ -910,7 +910,7 @@ function stampSlugs(matches, teams) {
     match.awaySlug = awaySlug;
     match.teamIds = { ...match.teamIds, web: { home: homeSlug, away: awaySlug } };
     match.webId = homeSlug && awaySlug && match.kickoff
-      ? `${homeSlug}-vs-${awaySlug}-${String(match.kickoff).slice(0,10)}`
+      ? `${homeSlug}-vs-${awaySlug}-${matchDay(match.kickoff)}`
       : null;
   }
   return matches;

@@ -36,6 +36,12 @@ test('partial responses update tolerant twins without duplicating or removing mi
   assert.equal(merged.includes(previous[0]), true);
 });
 
+test('a kickoff after 19:00 Lima belongs to the Lima day, not the UTC date', () => {
+  const evening = { ...previous[0], id: 'bz-604436', kickoff: '2026-10-15T00:30:00+00:00', status: 'FT', homeScore: 1, awayScore: 2 };
+  const merged = mergeCalendarWindow([evening], [evening], { date: '2026-10-15', now: Date.parse('2026-10-15T11:41:17.158Z'), logger: { warn() {} } });
+  assert.equal(merged.some(match => match.id === 'bz-604436'), false);
+});
+
 test('retention respects seven-day boundaries and the existing score/expiry policy', () => {
   const scored = { ...previous[0], kickoff: '2026-10-10T08:00:00Z' };
   const stale = { ...previous[1], kickoff: '2026-10-10T08:00:00Z' };

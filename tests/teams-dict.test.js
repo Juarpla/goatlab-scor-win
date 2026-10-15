@@ -31,12 +31,21 @@ test('resolveCanonical tolera variantes de proveedor sin cruzar clubes', () => {
   assert.equal(resolveCanonical(catalog, 'Manchester United')?.web === resolveCanonical(catalog, 'Manchester City')?.web, false);
 });
 
+test('PAE AEK resuelve a AEK Athens por nombre y por id de Football-Data', () => {
+  assert.equal(resolveCanonical(catalog, 'PAE AEK')?.web, 'aek-athens');
+  assert.equal(resolveCanonical(catalog, 'PAE AEK', { provider: 'fd', providerId: 1899, competition: 'champions' })?.web, 'aek-athens');
+  assert.equal(webSlug(catalog, 'PAE AEK'), 'aek-athens');
+});
+
 test('webSlug y webMatchId usan home-vs-away-fecha con fallback honesto', () => {
   assert.equal(webSlug(catalog, 'Sevilla'), 'sevilla');
   assert.equal(webSlug(catalog, 'Club Inexistente ZZ'), null);
   assert.equal(
     webMatchId(catalog, 'Real Madrid CF', 'Barcelona', '2026-10-26T20:00:00Z'),
     'real-madrid-vs-barcelona-2026-10-26');
+  assert.equal(
+    webMatchId(catalog, 'Fluminense', 'Palmeiras', '2026-10-15T00:30:00+00:00'),
+    'fluminense-vs-palmeiras-2026-10-14');
   assert.equal(slugify('Real Betis Balompié'), 'real-betis-balompie');
 });
 

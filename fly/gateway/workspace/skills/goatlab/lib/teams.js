@@ -41,8 +41,8 @@ export function esName(name) {
   const key = String(name ?? '').trim();
   return COUNTRY_ES[key] ?? key;
 }
-/** Prefijos legales de proveedor que no distinguen club («FC Barcelona» = «Barcelona»). */
-const CLUB_PREFIXES = new Set(['fc', 'cf', 'cd', 'ca', 'cr', 'rc', 'cs', 'afc', 'rcd', 'club']);
+/** Prefijos legales de proveedor que no distinguen club («FC Barcelona» = «Barcelona», «PAE AEK» = «AEK»). */
+const CLUB_PREFIXES = new Set(['fc', 'cf', 'cd', 'ca', 'cr', 'rc', 'cs', 'afc', 'rcd', 'club', 'pae']);
 /** Sufijos genéricos que sí pueden omitirse («Sevilla FC» = «Sevilla», «Levante UD» = «Levante»).
  *  «sc»/«ec» NO se omiten: distinguen (Barcelona ≠ Barcelona SC). */
 const IGNORABLE_SUFFIXES = new Set(['fc', 'cf', 'afc', 'ud', 'cd']);
@@ -113,12 +113,17 @@ export function webSlug(catalog, name) {
   const hit = resolveCanonical(catalog, name);
   return hit?.web ?? hit?.key ?? null;
 }
-/** ID web de un encuentro: home-vs-away-fecha (`real-madrid-vs-barcelona-2026-10-26`). */
+/** Día civil del kickoff en Lima. A las 19:00 el instante UTC ya es el día siguiente. */
+export function matchDay(kickoff) {
+  const at = Date.parse(kickoff);
+  if (!Number.isFinite(at)) return String(kickoff ?? '').slice(0, 10);
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(at));
+}
+/** ID web de un encuentro: home-vs-away-fecha de Lima (`real-madrid-vs-barcelona-2026-10-26`). */
 export function webMatchId(catalog, home, away, kickoff) {
   const homeSlug = webSlug(catalog, home) ?? slugify(home);
   const awaySlug = webSlug(catalog, away) ?? slugify(away);
-  const date = String(kickoff ?? '').slice(0, 10);
-  return `${homeSlug}-vs-${awaySlug}-${date}`;
+  return `${homeSlug}-vs-${awaySlug}-${matchDay(kickoff)}`;
 }
 export function slugify(name) {
   return normalize(name).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'equipo';
