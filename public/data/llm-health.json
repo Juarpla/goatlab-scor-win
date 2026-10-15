@@ -1,39 +1,6 @@
 {
-  "updatedAt": "2026-10-15T11:27:18.098Z",
+  "updatedAt": "2026-10-15T11:30:32.362Z",
   "runs": [
-    {
-      "at": "2026-10-09T18:38:58.072Z",
-      "task": "shorts",
-      "matchId": "sunderland-vs-brighton-hove-albion-2026-10-10",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7249,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 174397
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6864,
-        "outputTokens": 7468
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "74fdfe4e-8348-441b-9359-9f6778b047bd"
-    },
     {
       "at": "2026-10-09T18:41:26.790Z",
       "task": "shorts",
@@ -4980,6 +4947,35 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "7528a107-7ec0-4221-84d6-4eddc3352fdb"
+    },
+    {
+      "at": "2026-10-15T11:30:32.362Z",
+      "task": "motion-prompts",
+      "matchId": "torreense-vs-sunderland-2026-10-15",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2048,
+            "outputTokens": 2808
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 93782
+        }
+      ],
+      "usage": {
+        "inputTokens": 2063,
+        "outputTokens": 8347
+      }
     }
   ]
 }
