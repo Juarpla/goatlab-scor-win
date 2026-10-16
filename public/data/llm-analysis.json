@@ -8371,5 +8371,387 @@
     "generatedAt": "2026-10-16T16:48:20.642Z",
     "inputKey": "v3|M|bz-601234|Jagiellonia Białystok|RSC Anderlecht|europa|2026-10-22T19:00:00+00:0|NS\nP|1.67|1.24|0.463|0.264|0.273|0.556|0.588\nB|0.481|0.247|0.272|1.67|1.24|0.549|0.559|1-1|0.451\nB2|H|0.481|no|no\nW||rain|18|\nT|17|Jagiellonia Białystok|2|3||\nS|Kajetan Szmyt|Jagiellonia Białystok|3|6\nS|Jesús Imaz|Jagiellonia Białystok|2|6\nS|Danylo Sikan|RSC Anderlecht|5|8\nS|Mihajlo Cvetković|RSC Anderlecht|4|8\nS|Lukáš Ambros|RSC Anderlecht|2|8\nR|2026-09-16|Olympiakos Piraeus|Jagiellonia|2|1\nR|2026-10-15|Jagiellonia Białystok|FC Ararat-Armenia|3|1\nR|2026-10-15|GNK Dinamo Zagreb|RSC Anderlecht|1|0",
     "materialKey": "M|bz-601234|Jagiellonia Białystok|RSC Anderlecht|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601220": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Plzeň y Levski, duelo europeo pendiente",
+        "bullets": [
+          "FC Viktoria Plzeň y Levski Sofia se enfrentan el 2026-10-22 a las 19:00 en el marco de la competición europea, con el partido aún sin comenzar.",
+          "El parte meteorológico señala lluvia y una temperatura de 10 grados, sin sede ni ciudad detalladas en el input.",
+          "No se aportan datos de clasificación, cruces previos ni contexto de grupo para este encuentro."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-22",
+            "label": "fecha del partido"
+          },
+          {
+            "value": "19:00",
+            "label": "hora de inicio"
+          },
+          {
+            "value": "10",
+            "label": "grados previstos"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Dos cálculos apuntan al visitante",
+        "bullets": [
+          "El Poisson de GoatLab reparte 23.4% para la victoria local, 26.6% para el empate y 50% para el triunfo visitante, con 51.9% de superar 2.5 goles y 54.8% de que ambos anoten.",
+          "El CatBoost Bzzoiro ofrece cifras próximas: 22.4% local, 24.8% empate y 52.8% visitante, con 1.08 y 1.67 como goles esperados, 51.6% de superar 2.5 goles y 52.9% de ambos anotan.",
+          "Ambos modelos coinciden en señalar al conjunto visitante como favorito y el marcador 1-1 aparece como referencia dentro del bloque Bzzoiro.",
+          "El valor 0.433 ligado al 1-1 en el bloque Bzzoiro se desvía de la lectura Poisson, que con esos goles esperados otorga a ese marcador una probabilidad muy inferior."
+        ],
+        "stats": [
+          {
+            "value": "23.4%",
+            "label": "victoria local (Poisson)"
+          },
+          {
+            "value": "50%",
+            "label": "victoria visitante (Poisson)"
+          },
+          {
+            "value": "52.8%",
+            "label": "victoria visitante (Bzzoiro)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Tres resultados recientes de referencia",
+        "bullets": [
+          "2026-09-17: Levski Sofia cayó 0-1 ante Red Bull Salzburg en su encuentro más antiguo del listado.",
+          "2026-10-15: FC Viktoria Plzeň perdió 1-2 en su visita al Ferencváros TC.",
+          "2026-10-15: Levski Sofia empató 1-1 en campo del NEC Nijmegen; el registro repite fecha con otro partido del mismo día."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "Levski ante Salzburg"
+          },
+          {
+            "value": "1-2",
+            "label": "Plzeň en Ferencváros"
+          },
+          {
+            "value": "1-1",
+            "label": "Levski en NEC"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Lo que conviene mirar del cruce",
+        "bullets": [
+          "El consenso de los dos modelos sitúa al visitante por delante, mientras el local queda en torno a una cuarta parte de probabilidad de victoria.",
+          "Denis Višinský, de FC Viktoria Plzeň, es el único anotador listado, con 2 y 4 como cifras declaradas en el bloque de goleadores.",
+          "El modelo Bzzoiro no declara estimaciones de goles totales ni de ambos anotan en su bloque B2, a diferencia de sus otras salidas.",
+          "Las condiciones de lluvia y 10 grados, unidas a la ausencia de sede confirmada, forman el contexto ambiental declarado."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles de Višinský (listado)"
+          },
+          {
+            "value": "10",
+            "label": "grados con lluvia"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sede no informada",
+        "detail": "El bloque W solo aporta lluvia y temperatura; no consta recinto ni ciudad del encuentro."
+      },
+      {
+        "label": "Sin tabla ni historial",
+        "detail": "No se aportan clasificación, cruces previos entre ambos ni datos de forma más allá de tres resultados recientes."
+      },
+      {
+        "label": "B2 parcial",
+        "detail": "El bloque B2 declara mayor probabilidad y su valor asociado, pero deja goles totales y ambos anotan sin estimación."
+      },
+      {
+        "label": "Doble registro en 2026-10-15",
+        "detail": "Levski Sofia aparece en dos filas con la misma fecha, correspondientes a encuentros distintos, lo que dificulta fijar su secuencia."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El 0.433 asociado al marcador 1-1 en el bloque Bzzoiro no se corresponde con la probabilidad de ese resultado derivada de los goles esperados declarados (1.08 y 1.67), bastante menor; se marca como posible métrica acumulada o de otro tipo."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T21:20:50.032Z",
+    "inputKey": "v3|M|bz-601220|FC Viktoria Plzeň|Levski Sofia|europa|2026-10-22T19:00:00+00:0|NS\nP|1.08|1.67|0.234|0.266|0.5|0.519|0.548\nB|0.224|0.248|0.528|1.08|1.67|0.516|0.529|1-1|0.433\nB2|A|0.528|no|no\nW||rain|10|\nS|Denis Višinský|FC Viktoria Plzeň|2|4\nR|2026-09-17|Levski Sofia|Red Bull Salzburg|0|1\nR|2026-10-15|Ferencváros TC|FC Viktoria Plzeň|2|1\nR|2026-10-15|NEC Nijmegen|Levski Sofia|1|1",
+    "materialKey": "M|bz-601220|FC Viktoria Plzeň|Levski Sofia|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601207": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Celtic recibe a Celta Vigo en jornada europea",
+        "bullets": [
+          "Celtic actúa como local ante Celta Vigo el 22 de octubre de 2026 a las 19:00 UTC, en partido de competición europea (identificador bz-601207).",
+          "El estado del partido es previo al inicio (NS), por lo que todos los datos corresponden a proyecciones y no a resultados.",
+          "Ambos equipos llegan con partidos del 15 de octubre: Celtic cayó ante Benfica y Celta Vigo ante Juventus."
+        ],
+        "stats": [
+          {
+            "value": "19:00 UTC",
+            "label": "Hora de inicio"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: favoritismo local en Poisson y CatBoost",
+        "bullets": [
+          "Poisson GoatLab estima 0.657 para Celtic, 0.206 para el empate y 0.138 para Celta Vigo, con 2.24 y 0.95 goles esperados por equipo.",
+          "CatBoost Bzzoiro otorga 0.698 a Celtic, 0.178 al empate y 0.123 a Celta Vigo, con la misma expectativa de goles (2.24 y 0.95).",
+          "CatBoost Bzzoiro señala el 2-0 como marcador más probable, con 0.531, y registra lecturas complementarias de 0.605 y 0.536; Poisson añade 0.618 y 0.557 sin descriptor explícito.",
+          "La estimación declarada del modelo Bzzoiro apunta a la victoria local como mayor probabilidad, 0.698, y no declara lecturas de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.657",
+            "label": "Prob. local Poisson GoatLab"
+          },
+          {
+            "value": "0.698",
+            "label": "Prob. local CatBoost Bzzoiro"
+          },
+          {
+            "value": "2.24",
+            "label": "Goles esperados local"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Rachas recientes: Celtic encadena derrotas",
+        "bullets": [
+          "Celtic perdió 1-3 en casa ante Ferencvarosi TC el 17 de septiembre y 4-1 en campo del Benfica el 15 de octubre, con siete goles encajados en esos dos partidos.",
+          "Celta Vigo empató 1-1 con Malaga, cayó 0-1 ante Omonia Nicosia, goleó 5-0 a Racing Santander y perdió 1-2 con Juventus en su serie más reciente.",
+          "El registro reciente de Celta Vigo combina una victoria, un empate y dos derrotas, con un triunfo amplio en casa como resultado más destacado."
+        ],
+        "stats": [
+          {
+            "value": "1-3",
+            "label": "Celtic-Ferencvarosi (17 sep)"
+          },
+          {
+            "value": "4-1",
+            "label": "Benfica-Celtic (15 oct)"
+          },
+          {
+            "value": "5-0",
+            "label": "Celta-Racing (19 sep)"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves: goles esperados y contraste de forma",
+        "bullets": [
+          "Los dos modelos coinciden en una expectativa de 2.24 goles para Celtic y 0.95 para Celta Vigo, con ventaja local sostenida en las tres lecturas de probabilidad.",
+          "El contraste entre ese favoritismo local y las dos derrotas recientes de Celtic, con siete goles encajados, es el principal punto de atención del cruce.",
+          "La ausencia de historial de enfrentamientos, clasificación, goleadores, bajas confirmadas y consenso externo reduce el contraste de escenarios disponibles."
+        ],
+        "stats": [
+          {
+            "value": "2.24",
+            "label": "Goles esperados Celtic"
+          },
+          {
+            "value": "0.95",
+            "label": "Goles esperados Celta Vigo"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Clima y sede incompletos",
+        "detail": "El bloque W solo aporta un valor numérico (10) sin condición meteorológica, temperatura ni sede confirmadas, por lo que no puede contextualizarse el entorno del partido."
+      },
+      {
+        "label": "Sin historial de cruces",
+        "detail": "No se recibieron filas H/HR, por lo que no existe registro de enfrentamientos previos entre Celtic y Celta Vigo."
+      },
+      {
+        "label": "Sin tabla ni goleadores",
+        "detail": "No hay datos de clasificación (T) ni de máximos anotadores (S) para situar el rendimiento y la posición de ambos equipos."
+      },
+      {
+        "label": "Sin bajas ni consenso externo",
+        "detail": "Faltan el bloque L de bajas confirmadas, el M2 de consenso externo y la estimación A de API-Football."
+      },
+      {
+        "label": "Lecturas complementarias sin etiquetar",
+        "detail": "Los valores 0.618 y 0.557 (Poisson) y 0.605 y 0.536 (CatBoost) aparecen sin descriptor explícito en el input, por lo que se citan sin asignarles significado."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Los porcentajes de victoria local (0.657 Poisson y 0.698 CatBoost) contrastan con la forma reciente de Celtic: dos derrotas en septiembre y octubre, con siete goles encajados. La proyección es internamente coherente, pero la forma no acompaña ese favoritismo."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T21:21:27.548Z",
+    "inputKey": "v3|M|bz-601207|Celtic|Celta Vigo|europa|2026-10-22T19:00:00+00:0|NS\nP|2.24|0.95|0.657|0.206|0.138|0.618|0.557\nB|0.698|0.178|0.123|2.24|0.95|0.605|0.536|2-0|0.531\nB2|H|0.698|no|no\nW|||10|\nR|2026-09-13|Celta Vigo|Malaga|1|1\nR|2026-09-16|Omonia Nicosia|Celta Vigo|1|0\nR|2026-09-17|Celtic|Ferencvarosi TC|1|3\nR|2026-09-19|Celta Vigo|Racing Santander|5|0\nR|2026-10-15|Benfica|Celtic|4|1\nR|2026-10-15|Celta Vigo|Juventus|1|2",
+    "materialKey": "M|bz-601207|Celtic|Celta Vigo|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601197": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Bournemouth vs AC Milan en Europa",
+        "bullets": [
+          "Partido de Europa entre Bournemouth y AC Milan, programado para 2026-10-22 a las 19:00, con estado NS.",
+          "W registra 15 como dato térmico; no se declaran sede ni clima completos.",
+          "No hay alineaciones confirmadas ni estimaciones de API-Football o consenso externo en el input."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-22",
+            "label": "fecha"
+          },
+          {
+            "value": "19:00",
+            "label": "hora"
+          },
+          {
+            "value": "15",
+            "label": "dato térmico"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de P, B y B2",
+        "bullets": [
+          "P Poisson GoatLab declara 0.394, 0.270 y 0.336 como probabilidades, con 1.52 y 1.39 en las dos primeras cifras y además 0.556 y 0.598.",
+          "CatBoost Bzzoiro declara 0.403, 0.255 y 0.342; 1.52 y 1.39; 0.548 y 0.565; marcador 1-1 y 0.438.",
+          "B2 atribuye a Bzzoiro H con 0.403 y respuestas no/no en goles totales y ambos anotan; coincide con la mayor probabilidad local de B."
+        ],
+        "stats": [
+          {
+            "value": "0.394",
+            "label": "P local"
+          },
+          {
+            "value": "0.403",
+            "label": "B local"
+          },
+          {
+            "value": "1.52",
+            "label": "goles esperados"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones declaradas",
+        "bullets": [
+          "Bournemouth figura 5 con 2 y 6 en la tabla declarada.",
+          "AC Milan figura 16 con 2 y 3.",
+          "La tabla aporta solo esas cifras por equipo; no se explicitan todos los campos."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "puesto Bournemouth"
+          },
+          {
+            "value": "16",
+            "label": "puesto AC Milan"
+          },
+          {
+            "value": "6",
+            "label": "cifra Bournemouth"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Registros de goleadores",
+        "bullets": [
+          "Rayan (Bournemouth) aparece con 2 y 2 en el registro de goleadores.",
+          "Alphadjo Cisse (AC Milan) aparece con 3 y 2."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "cifra mayor Cisse"
+          },
+          {
+            "value": "2",
+            "label": "Rayan"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Newcastle 2-2 Bournemouth; Bournemouth 2-2 Brentford; Real Sociedad 1-2 Bournemouth; Bournemouth 0-1 Liverpool; Chelsea 5-1 Bournemouth; Bournemouth 3-0 Sturm Graz.",
+          "AC Milan 0-2 Benfica; Salzburgo 0-4 AC Milan.",
+          "En la muestra, Bournemouth alterna empates, victorias y derrotas; AC Milan suma una derrota y una victoria."
+        ],
+        "stats": [
+          {
+            "value": "2-2",
+            "label": "Newcastle-Bournemouth"
+          },
+          {
+            "value": "5-1",
+            "label": "Chelsea-Bournemouth"
+          },
+          {
+            "value": "0-4",
+            "label": "Salzburgo-Milan"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A",
+        "detail": "No se incluye estimación API-Football, distribución, mayor probabilidad ni umbral de goles."
+      },
+      {
+        "label": "Sin historial",
+        "detail": "No hay bloques H/HR de cruces previos entre Bournemouth y AC Milan."
+      },
+      {
+        "label": "Sin bajas",
+        "detail": "No se declaran bajas confirmadas ni alineaciones."
+      },
+      {
+        "label": "Sin M2",
+        "detail": "No hay consenso externo en porcentaje interpretativo para contrastar."
+      },
+      {
+        "label": "Tabla parcial",
+        "detail": "La tabla solo aporta puesto, equipo y dos cifras; no se explicitan todos los campos."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "P y B son coherentes en 1X2 y goles esperados. B2 declara H 0.403, alineado con B, pero sus respuestas no/no contrastan de forma condicional con 0.548 y 0.565 de B y el marcador 1-1; sin etiquetas de mercado no se puede confirmar una desviación."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T21:22:11.739Z",
+    "inputKey": "v3|M|bz-601197|Bournemouth|AC Milan|europa|2026-10-22T19:00:00+00:0|NS\nP|1.52|1.39|0.394|0.27|0.336|0.556|0.598\nB|0.403|0.255|0.342|1.52|1.39|0.548|0.565|1-1|0.438\nB2|H|0.403|no|no\nW|||15|\nT|5|Bournemouth|2|6||\nT|16|AC Milan|2|3||\nS|Rayan|Bournemouth|2|2\nS|Alphadjo Cisse|AC Milan|3|2\nR|2026-09-05|Newcastle United FC|AFC Bournemouth|2|2\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-16|AC Milan|Benfica|0|2\nR|2026-09-17|Real Sociedad|Bournemouth|1|2\nR|2026-09-20|AFC Bournemouth|Liverpool FC|0|1\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-15|Red Bull Salzburg|AC Milan|0|4",
+    "materialKey": "M|bz-601197|Bournemouth|AC Milan|europa|2026-10-22T19:00:00+00:0|NS"
   }
 }
