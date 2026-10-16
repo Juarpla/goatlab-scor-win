@@ -7530,5 +7530,437 @@
     "generatedAt": "2026-10-16T11:21:08.526Z",
     "inputKey": "v3|M|bz-601213|FC Ararat-Armenia|AZ Alkmaar|europa|2026-10-22T16:45:00+00:0|NS\nP|1.26|1.49|0.309|0.278|0.414|0.519|0.567\nB|0.307|0.262|0.431|1.26|1.49|0.515|0.543|1-1|0.543\nB2|A|0.431|no|no\nW||cloudy|7|\nT|20|AZ Alkmaar|2|3||\nR|2026-09-16|Ararat-Armenia|Sparta Praha|1|4\nR|2026-09-16|Sunderland|AZ Alkmaar|1|0\nR|2026-10-15|Jagiellonia Białystok|FC Ararat-Armenia|3|1\nR|2026-10-15|AZ Alkmaar|Hapoel Be'er Sheva|2|1",
     "materialKey": "M|bz-601213|FC Ararat-Armenia|AZ Alkmaar|europa|2026-10-22T16:45:00+00:0|NS"
+  },
+  "bz-601309": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "TSG Hoffenheim vs Olympique Lyonnais en Europa",
+        "bullets": [
+          "Partido de Europa entre TSG Hoffenheim y Olympique Lyonnais el 2026-10-22 a las 19:00 UTC, con estado NS.",
+          "El clima reportado en la sede es lluvia y 24°C; la sede no se detalla en el input.",
+          "Olympique Lyonnais aparece en la tabla en 8ª posición con registros 2 y 6 sin etiquetas completas."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-22",
+            "label": "fecha"
+          },
+          {
+            "value": "24°C",
+            "label": "temperatura"
+          },
+          {
+            "value": "8ª",
+            "label": "posición Lyon"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas de Poisson GoatLab y Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab: 35.7% local, 26.4% empate y 37.9% visitante; parámetros 1.49 y 1.54; 58.3% y 62.0% en lecturas de goles.",
+          "CatBoost Bzzoiro: 35.9% local, 24.7% empate y 39.4% visitante; parámetros 1.49 y 1.54; 57.4% y 58.3%; marcador más probable 1-1; 0.57 adicional.",
+          "B2 de Bzzoiro declara A con 0.394; para goles totales y ambos equipos marcan registra no."
+        ],
+        "stats": [
+          {
+            "value": "35.7%",
+            "label": "local Poisson"
+          },
+          {
+            "value": "39.4%",
+            "label": "visitante Bzzoiro"
+          },
+          {
+            "value": "1-1",
+            "label": "marcador Bzzoiro"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes directos con empates",
+        "bullets": [
+          "Historial: 3 partidos, 0 victorias locales, 3 empates, 0 victorias visitantes y 4.67 goles por partido.",
+          "2024-11-07: TSG Hoffenheim 2-2 Olympique Lyonnais.",
+          "2018-11-07: Olympique Lyonnais 2-2 TSG Hoffenheim; 2018-10-23: TSG Hoffenheim 3-3 Olympique Lyonnais."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "partidos"
+          },
+          {
+            "value": "4.67",
+            "label": "goles por partido"
+          },
+          {
+            "value": "2-2",
+            "label": "resultado repetido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posición de Olympique Lyonnais",
+        "bullets": [
+          "En la fila de tabla, Olympique Lyonnais figura en 8ª posición con los valores 2 y 6.",
+          "El input no etiqueta si los valores 2 y 6 corresponden a partidos jugados, puntos u otro registro.",
+          "No se recibe fila de tabla para TSG Hoffenheim."
+        ],
+        "stats": [
+          {
+            "value": "8ª",
+            "label": "posición Lyon"
+          },
+          {
+            "value": "2",
+            "label": "dato tabla"
+          },
+          {
+            "value": "6",
+            "label": "dato tabla"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes de ambos equipos",
+        "bullets": [
+          "2026-10-15: TSG Hoffenheim 2-3 Beşiktaş JK.",
+          "2026-10-15: Olympique Lyonnais 3-2 Crystal Palace.",
+          "Ambos partidos recientes se registran en la misma fecha, previa al cruce de Europa."
+        ],
+        "stats": [
+          {
+            "value": "2-3",
+            "label": "Hoffenheim reciente"
+          },
+          {
+            "value": "3-2",
+            "label": "Lyon reciente"
+          },
+          {
+            "value": "2026-10-15",
+            "label": "fecha reciente"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin bloque A",
+        "detail": "No se recibió fila A de API-Football, por lo que no hay distribución ni umbral de goles de ese proveedor para contrastar."
+      },
+      {
+        "label": "B2 ambiguo",
+        "detail": "La fila B2 usa A, 0.394 y valores no para goles totales y ambos equipos marcan; el input no explicita etiquetas ni umbral."
+      },
+      {
+        "label": "Tabla incompleta",
+        "detail": "Solo hay una fila de tabla para Olympique Lyonnais y sin encabezados claros; no se puede reconstruir la clasificación completa."
+      },
+      {
+        "label": "Sin goleadores ni bajas",
+        "detail": "No se recibieron bloques S de goleadores ni L de bajas confirmadas."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No hay bloque M2 de consenso externo en porcentaje interpretativo."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T11:35:46.272Z",
+    "inputKey": "v3|M|bz-601309|TSG Hoffenheim|Olympique Lyonnais|europa|2026-10-22T19:00:00+00:0|NS\nP|1.49|1.54|0.357|0.264|0.379|0.583|0.62\nB|0.359|0.247|0.394|1.49|1.54|0.574|0.583|1-1|0.57\nB2|A|0.394|no|no\nH|3|0|3|0|4.67\nW||rain|24|\nT|8|Olympique Lyonnais|2|6||\nR|2026-10-15|TSG Hoffenheim|Beşiktaş JK|2|3\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nHR|2024-11-07|TSG Hoffenheim|Olympique Lyonnais|2|2\nHR|2018-11-07|Olympique Lyonnais|TSG Hoffenheim|2|2\nHR|2018-10-23|TSG Hoffenheim|Olympique Lyonnais|3|3",
+    "materialKey": "M|bz-601309|TSG Hoffenheim|Olympique Lyonnais|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601277": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Omonia y Benfica, duelo europeo en Nicosia",
+        "bullets": [
+          "Partido de competición europea del 2026-10-22 a las 19:00, con Omonia Nicosia como local y Benfica como visitante; el estado declarado es NS (no iniciado).",
+          "Ambos equipos llegan con 6 puntos tras 2 jornadas segun la tabla del input, de modo que el cruce enfrenta a dos equipos con el mismo botin acumulado.",
+          "El registro de resultados recientes de los dos conjuntos corresponde a las mismas fechas de septiembre y octubre de 2026."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-22",
+            "label": "Fecha del partido"
+          },
+          {
+            "value": "6",
+            "label": "Puntos Omonia"
+          },
+          {
+            "value": "6",
+            "label": "Puntos Benfica"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson GoatLab y CatBoost Bzzoiro",
+        "bullets": [
+          "GoatLab (Poisson) fija goles esperados de 1.23 para Omonia y 1.39 para Benfica, con 0.319 de victoria local, 0.287 de empate y 0.394 de victoria visitante.",
+          "El mismo bloque situa en 0.487 la probabilidad de mas de 2.5 goles y en 0.544 la de que ambos equipos anoten.",
+          "CatBoost Bzzoiro declara 0.318, 0.274 y 0.409, goles esperados identicos (1.23 y 1.39), 0.485 de mas de 2.5 goles, 0.524 de ambos anotan y marcador mas probable 1-1.",
+          "La estimacion B2 de Bzzoiro senala la victoria visitante como resultado de mayor probabilidad con 0.409 y no aporta lecturas de goles totales ni de ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.394",
+            "label": "Victoria visitante GoatLab"
+          },
+          {
+            "value": "0.409",
+            "label": "Victoria visitante Bzzoiro"
+          },
+          {
+            "value": "0.487",
+            "label": "Mas de 2.5 goles GoatLab"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificacion: puestos 3 y 6",
+        "bullets": [
+          "Benfica figura en el puesto 3 con 2 partidos jugados y 6 puntos, mientras Omonia Nicosia aparece en el puesto 6 con 2 partidos y 6 puntos.",
+          "La igualdad de puntos con puestos distintos apunta a criterios de desempate por diferencia de goles, no detallados en el input."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Puesto Benfica"
+          },
+          {
+            "value": "6",
+            "label": "Puesto Omonia"
+          },
+          {
+            "value": "2",
+            "label": "Partidos jugados"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros declarados de ambos equipos",
+        "bullets": [
+          "Lois Diony (Omonia Nicosia) acumula 4 goles en 6 partidos segun el bloque de goleadores.",
+          "En Benfica destacan Vangelis Pavlidis con 7 goles en 8 partidos, Rafa Silva con 4 en 8 y Gianluca Prestianni con 3 en 6."
+        ],
+        "stats": [
+          {
+            "value": "7",
+            "label": "Goles Pavlidis (8 partidos)"
+          },
+          {
+            "value": "4",
+            "label": "Goles Diony (6 partidos)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente de ambos equipos",
+        "bullets": [
+          "Omonia Nicosia gano 1-0 a Celta Vigo el 2026-09-16 y vencio por 0-3 en campo del NK Celje el 2026-10-15.",
+          "Benfica se impuso 0-2 en campo del AC Milan el 2026-09-16 y supero 4-1 al Celtic el 2026-10-15.",
+          "Los cuatro resultados registrados son victorias, dos de ellas a domicilio, con una serie identica de dos triunfos para cada equipo."
+        ],
+        "stats": [
+          {
+            "value": "1-0",
+            "label": "Omonia - Celta Vigo"
+          },
+          {
+            "value": "0-3",
+            "label": "NK Celje - Omonia"
+          },
+          {
+            "value": "4-1",
+            "label": "Benfica - Celtic"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin datos de sede y clima",
+        "detail": "El bloque W no aporta estadio ni condiciones; el campo meteorologico figura como unknown y el valor 6 queda sin unidad ni etiqueta interpretable."
+      },
+      {
+        "label": "Sin bloque A ni historial",
+        "detail": "No se incluye estimacion de API-Football (A) ni bloque H/HR de historial, por lo que no hay datos de cruces previos entre Omonia y Benfica."
+      },
+      {
+        "label": "B2 sin goles ni ambos anotan",
+        "detail": "La estimacion declarada de Bzzoiro solo aporta la mayor probabilidad (victoria visitante 0.409) y marca no en goles totales y en ambos anotan."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No hay bloque L de bajas confirmadas ni informacion de onces, por lo que no pueden valorarse ausencias."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El 0.518 que el bloque B asocia al marcador 1-1 se desvia de los goles esperados declarados (1.23 y 1.39), que situarian ese resultado en torno a 0.12; podria corresponder a otra etiqueta de campo. El resto de probabilidades resulta coherente con esos goles esperados."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T11:36:32.401Z",
+    "inputKey": "v3|M|bz-601277|Omonia Nicosia|Benfica|europa|2026-10-22T19:00:00+00:0|NS\nP|1.23|1.39|0.319|0.287|0.394|0.487|0.544\nB|0.318|0.274|0.409|1.23|1.39|0.485|0.524|1-1|0.518\nB2|A|0.409|no|no\nW||unknown|6|\nT|6|Omonia Nicosia|2|6||\nT|3|Benfica|2|6||\nS|Loïs Diony|Omonia Nicosia|4|6\nS|Vangelis Pavlidis|Benfica|7|8\nS|Rafa Silva|Benfica|4|8\nS|Gianluca Prestianni|Benfica|3|6\nR|2026-09-16|Omonia Nicosia|Celta Vigo|1|0\nR|2026-09-16|AC Milan|Benfica|0|2\nR|2026-10-15|NK Celje|Omonia Nicosia|0|3\nR|2026-10-15|Benfica|Celtic|4|1",
+    "materialKey": "M|bz-601277|Omonia Nicosia|Benfica|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601266": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Olympiacos recibe al Sparta Praga en Europa",
+        "bullets": [
+          "Cruce de la competición europea: Olympiacos FC contra AC Sparta Praga, con el partido programado para 2026-10-22 a las 19:00 UTC y estado sin iniciar.",
+          "El parte climático no aporta lectura: condición registrada como desconocida, con sede identificada con valor 3.",
+          "Ambos conjuntos llegan situados en la zona media de la clasificación de su grupo."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-22",
+            "label": "fecha del partido"
+          },
+          {
+            "value": "3",
+            "label": "valor de sede"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost coinciden en el local",
+        "bullets": [
+          "El modelo Poisson GoatLab proyecta 1.79 goles esperados para el local y 0.88 para el visitante, con 0.578 de local, 0.251 de empate y 0.171 de visitante.",
+          "Los dos indicadores de goles del mismo modelo quedan en 0.499 y 0.498, es decir, prácticamente divididos al 50%.",
+          "CatBoost Bzzoiro declara 0.61 de local, 0.231 de empate y 0.159 de visitante, con 1.79 y 0.88 goles respectivos, y señala 1-0 como marcador más probable con 0.553.",
+          "Las estimaciones declaradas del modelo Bzzoiro sitúan al local como mayor probabilidad con 0.61, y registran respuesta negativa tanto en goles totales como en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.578",
+            "label": "local según Poisson"
+          },
+          {
+            "value": "0.61",
+            "label": "local según CatBoost"
+          },
+          {
+            "value": "1.79",
+            "label": "goles esperados local"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Sparta a dos puntos del Olympiacos",
+        "bullets": [
+          "Olympiacos FC ocupa el puesto 9 con 6 puntos en 2 jornadas disputadas.",
+          "AC Sparta Praha aparece en el puesto 11 con 4 puntos en 2 jornadas disputadas."
+        ],
+        "stats": [
+          {
+            "value": "9",
+            "label": "puesto Olympiacos"
+          },
+          {
+            "value": "11",
+            "label": "puesto Sparta"
+          },
+          {
+            "value": "6",
+            "label": "puntos Olympiacos"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha previa de ambos equipos",
+        "bullets": [
+          "Olympiacos FC se impuso 0-1 ante Olympique de Marseille el 2026-10-15, con gol en contra cero.",
+          "AC Sparta Praha firmó 1-1 frente a Lillestrøm SK el 2026-10-15, repartiendo puntos en casa de visita."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "último resultado Olympiacos"
+          },
+          {
+            "value": "1-1",
+            "label": "último resultado Sparta"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Qué vigilar en este cruce",
+        "bullets": [
+          "Tobias Kvalvagnes Guddal, del AC Sparta Praha, suma 2 goles en 2 apariciones según el bloque de artilleros.",
+          "Los modelos convergen en local favorito pero dividen los umbrales de goles: 0.499 y 0.498 en Poisson frente a 0.497 y 0.492 en CatBoost.",
+          "La coincidencia exacta de 1.79 y 0.88 goles entre Poisson y CatBoost respalda una lectura de mayor producción ofensiva del local."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles de Guddal"
+          },
+          {
+            "value": "0.499",
+            "label": "umbral Poisson"
+          },
+          {
+            "value": "0.497",
+            "label": "umbral CatBoost"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin historial de cruces",
+        "detail": "No se aportó bloque de enfrentamientos directos entre Olympiacos FC y AC Sparta Praha, por lo que la lectura carece de precedentes previos."
+      },
+      {
+        "label": "Sin lectura API-Football",
+        "detail": "No figura la distribución declarada por el proveedor externo, con lo que no hay contraste de goles ni de probabilidad dominante desde esa fuente."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No hay información de lesionados, sanciones ni once probables de ningún equipo."
+      },
+      {
+        "label": "Clima desconocido",
+        "detail": "La condición meteorológica se registra como desconocida, sin datos de temperatura ni viento que permitan evaluar su impacto."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se incluyó bloque de consenso interpretativo externo, de modo que solo se trabajan los dos modelos internos."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "El valor 0.553 asociado al marcador 1-0 en CatBoost resulta elevado para la probabilidad de un marcador concreto y podría corresponder a otra métrica del modelo; su lectura queda pendiente de verificación en la fuente. Además, las marcas 0.497 y 0.492 están muy cerca de 0.5, por lo que los 'no' decl"
+    },
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "mimo-v2.6-flash",
+    "generatedAt": "2026-10-16T11:38:09.939Z",
+    "inputKey": "v3|M|bz-601266|Olympiacos FC|AC Sparta Praha|europa|2026-10-22T19:00:00+00:0|NS\nP|1.79|0.88|0.578|0.251|0.171|0.499|0.498\nB|0.61|0.231|0.159|1.79|0.88|0.497|0.492|1-0|0.553\nB2|H|0.61|no|no\nW||unknown|3|\nT|9|Olympiacos FC|2|6||\nT|11|AC Sparta Praha|2|4||\nS|Tobias Kvalvagnes Guddal|AC Sparta Praha|2|2\nR|2026-10-15|Olympique de Marseille|Olympiacos FC|0|1\nR|2026-10-15|AC Sparta Praha|Lillestrøm SK|1|1",
+    "materialKey": "M|bz-601266|Olympiacos FC|AC Sparta Praha|europa|2026-10-22T19:00:00+00:0|NS"
   }
 }
