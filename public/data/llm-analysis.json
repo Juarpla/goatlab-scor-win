@@ -7962,5 +7962,414 @@
     "generatedAt": "2026-10-16T11:38:09.939Z",
     "inputKey": "v3|M|bz-601266|Olympiacos FC|AC Sparta Praha|europa|2026-10-22T19:00:00+00:0|NS\nP|1.79|0.88|0.578|0.251|0.171|0.499|0.498\nB|0.61|0.231|0.159|1.79|0.88|0.497|0.492|1-0|0.553\nB2|H|0.61|no|no\nW||unknown|3|\nT|9|Olympiacos FC|2|6||\nT|11|AC Sparta Praha|2|4||\nS|Tobias Kvalvagnes Guddal|AC Sparta Praha|2|2\nR|2026-10-15|Olympique de Marseille|Olympiacos FC|0|1\nR|2026-10-15|AC Sparta Praha|Lillestrøm SK|1|1",
     "materialKey": "M|bz-601266|Olympiacos FC|AC Sparta Praha|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601258": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Celje vs Salzburgo en Europa",
+        "bullets": [
+          "NK Celje y Red Bull Salzburg se enfrentan en competición europea el 2026-10-22 a las 19:00 (hora base del dato).",
+          "El partido aparece con estado NS, sin marcador ni eventos registrados en el input.",
+          "No se aportan datos de sede ni clima más allá de una fila W con campos vacíos y un valor 5."
+        ],
+        "stats": [
+          {
+            "value": "2026-10-22",
+            "label": "fecha"
+          },
+          {
+            "value": "19:00",
+            "label": "hora base"
+          },
+          {
+            "value": "NS",
+            "label": "estado"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson GoatLab y CatBoost Bzzoiro",
+        "bullets": [
+          "Poisson GoatLab registra 1.68 y 1.58 en dos valores de referencia y probabilidades de 0.395 local, 0.252 empate y 0.353 visitante.",
+          "CatBoost Bzzoiro registra 0.404 local, 0.235 empate y 0.361 visitante, con 1.68 y 1.58 en los mismos dos valores.",
+          "En indicadores agregados, P anota 0.632 y 0.656; B anota 0.619 y 0.611, con marcador 1-1 y 0.479 como lectura adicional.",
+          "B2 declara H como mayor probabilidad con 0.404 y 'no' en goles totales y ambos anotan; esto difiere de los indicadores numéricos de P y B."
+        ],
+        "stats": [
+          {
+            "value": "0.395",
+            "label": "local P"
+          },
+          {
+            "value": "0.404",
+            "label": "local B"
+          },
+          {
+            "value": "0.632",
+            "label": "indicador P"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes de los cruces",
+        "bullets": [
+          "Red Bull Salzburg ganó 0-1 en campo de Levski Sofia el 2026-09-17.",
+          "El 2026-10-15, NK Celje perdió 0-3 como local ante Omonia Nicosia.",
+          "Ese mismo 2026-10-15, Red Bull Salzburg cayó 0-4 como local frente a AC Milan."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "Levski-Salzburgo"
+          },
+          {
+            "value": "0-3",
+            "label": "Celje-Omonia"
+          },
+          {
+            "value": "0-4",
+            "label": "Salzburgo-Milan"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores de Salzburgo en los datos",
+        "bullets": [
+          "Haris Tabaković (Red Bull Salzburg) aparece con 6 y 6 en los registros S.",
+          "Karim Konaté (Red Bull Salzburg) aparece con 2 y 5 en los registros S.",
+          "No se aportan goleadores de NK Celje en las filas S."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Tabaković dato 1"
+          },
+          {
+            "value": "6",
+            "label": "Tabaković dato 2"
+          },
+          {
+            "value": "2",
+            "label": "Konaté dato 1"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Cobertura y límites del input",
+        "bullets": [
+          "El input no incluye H/HR de enfrentamientos previos, tabla T, estimación A, consenso externo M2, bajas L ni alineaciones.",
+          "La fila W llega con campos vacíos y un valor 5, sin sede ni clima interpretables.",
+          "La lectura principal se apoya en P, B, B2, S y R; la posible desalineación de B2 queda señalada en auditoría."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "valor en fila W"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin H/HR",
+        "detail": "No hay historial de enfrentamientos previos ni filas H/HR en el input."
+      },
+      {
+        "label": "Sin tabla T",
+        "detail": "No se aporta clasificación, puestos, puntos ni diferencia de goles."
+      },
+      {
+        "label": "Sin A ni M2",
+        "detail": "No hay estimación API-Football ni consenso externo M2."
+      },
+      {
+        "label": "B2 desalineado",
+        "detail": "B2 declara no en goles totales y ambos anotan, mientras P y B registran 0.632/0.656 y 0.619/0.611 en indicadores numéricos compatibles con esas variables."
+      },
+      {
+        "label": "W incompleta",
+        "detail": "La fila de clima y sede tiene campos vacíos y un valor 5 sin contexto interpretable."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Posible desalineación: B2 declara 'no' en goles totales y ambos anotan, mientras P y B muestran 0.632/0.656 y 0.619/0.611, cifras que suelen asociarse a esas variables. El input no permite resolver la discrepancia."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T16:46:46.611Z",
+    "inputKey": "v3|M|bz-601258|NK Celje|Red Bull Salzburg|europa|2026-10-22T19:00:00+00:0|NS\nP|1.68|1.58|0.395|0.252|0.353|0.632|0.656\nB|0.404|0.235|0.361|1.68|1.58|0.619|0.611|1-1|0.479\nB2|H|0.404|no|no\nW|||5|\nS|Haris Tabaković|Red Bull Salzburg|6|6\nS|Karim Konaté|Red Bull Salzburg|2|5\nR|2026-09-17|Levski Sofia|Red Bull Salzburg|0|1\nR|2026-10-15|NK Celje|Omonia Nicosia|0|3\nR|2026-10-15|Red Bull Salzburg|AC Milan|0|4",
+    "materialKey": "M|bz-601258|NK Celje|Red Bull Salzburg|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601249": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Lillestrøm y Real Sociedad en Europa",
+        "bullets": [
+          "Partido de competición europea entre Lillestrøm SK y Real Sociedad, con ID bz-601249, programado para 2026-10-22 a las 19:00 y estado NS.",
+          "El clima en W registra lluvia y 12; el campo de sede aparece vacío.",
+          "El bloque R muestra actividad reciente de Real Sociedad y un 1-1 de Lillestrøm SK ante AC Sparta Praha el 2026-10-15."
+        ],
+        "stats": [
+          {
+            "value": "bz-601249",
+            "label": "ID del partido"
+          },
+          {
+            "value": "2026-10-22",
+            "label": "Fecha"
+          },
+          {
+            "value": "19:00",
+            "label": "Hora"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson, CatBoost y B2",
+        "bullets": [
+          "Poisson GoatLab registra 1.59, 1.31, 0.428, 0.268, 0.304, 0.554 y 0.593; en el orden ofrecido, 0.428 es la cifra más alta de las tres primeras probabilidades.",
+          "CatBoost Bzzoiro declara 0.441, 0.252 y 0.306, junto a 1.59, 1.31, 0.547, 0.562, marcador 1-1 y 0.535.",
+          "B2, estimación declarada de Bzzoiro, señala H como mayor probabilidad con 0.441 y responde no en goles totales y no en ambos anotan.",
+          "Auditoría: B2 declara no en goles totales y ambos anotan, mientras B contiene 0.547 y 0.562; sin etiquetas explícitas no se confirma desviación."
+        ],
+        "stats": [
+          {
+            "value": "0.428",
+            "label": "P primera probabilidad"
+          },
+          {
+            "value": "0.441",
+            "label": "B/B2 primera probabilidad"
+          },
+          {
+            "value": "1.59",
+            "label": "Parámetro de goles P/B"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Thomas Lehne Olsen en S",
+        "bullets": [
+          "Thomas Lehne Olsen, de Lillestrøm SK, aparece en S con 3 y 3.",
+          "No hay más nombres ni cifras de goleadores en el input; la Real Sociedad no tiene artilleros listados en S."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Lehne Olsen en S"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente disponible",
+        "bullets": [
+          "Real Sociedad: 0-3 ante Atlético (2026-09-13), 1-2 ante Bournemouth (2026-09-17) y 2-3 en Valencia (2026-09-20).",
+          "Real Sociedad: 3-2 ante RC Deportivo (2026-10-11) y 1-1 ante Royale Union Saint-Gilloise (2026-10-15).",
+          "Lillestrøm SK registra 1-1 ante AC Sparta Praha el 2026-10-15; no hay más partidos suyos en R.",
+          "R incluye dos veces el Valencia-Real Sociedad 2-3 del 2026-09-20 con variantes de nombre."
+        ],
+        "stats": [
+          {
+            "value": "0-3",
+            "label": "Real Sociedad-Atlético"
+          },
+          {
+            "value": "2-3",
+            "label": "Valencia-Real Sociedad"
+          },
+          {
+            "value": "1-1",
+            "label": "Sparta-Lillestrøm"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves del cruce",
+        "bullets": [
+          "Las condiciones registradas en W son lluvia y 12, sin sede informada.",
+          "Real Sociedad llega con resultados recientes variados; Lillestrøm solo muestra el 1-1 ante Sparta Praha.",
+          "Los modelos P y B sitúan 0.428 y 0.441 como primeras probabilidades; B2 añade H con 0.441.",
+          "La ausencia de A, H, T, M2 y L reduce el contraste a los bloques M, P, B, B2, W, S y R."
+        ],
+        "stats": [
+          {
+            "value": "12",
+            "label": "Temperatura W"
+          },
+          {
+            "value": "0.428",
+            "label": "P primera probabilidad"
+          },
+          {
+            "value": "0.441",
+            "label": "B/B2 primera probabilidad"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A",
+        "detail": "No aparece estimación API-Football; no hay distribución, mayor probabilidad, umbral de goles ni lectura cruda para contrastar."
+      },
+      {
+        "label": "Sin H, T, M2 ni L",
+        "detail": "Faltan historial de cruces, tabla, consenso externo y bajas confirmadas; la lectura se limita a los bloques presentes."
+      },
+      {
+        "label": "Etiquetas P y B",
+        "detail": "Las cifras de P y B no vienen con nombres de campo, por lo que no se asignan significados no declarados."
+      },
+      {
+        "label": "B2 frente a B",
+        "detail": "B2 declara no en goles totales y ambos anotan, mientras B incluye 0.547 y 0.562; no hay etiquetas para confirmar si hay desviación."
+      },
+      {
+        "label": "Sede vacía en W",
+        "detail": "W registra lluvia y 12, pero el campo de sede aparece vacío."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Posible desviación no confirmada: B2 señala no en goles totales y ambos anotan, mientras B contiene 0.547 y 0.562. Sin etiquetas explícitas no se puede verificar si los campos son comparables."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T16:47:45.623Z",
+    "inputKey": "v3|M|bz-601249|Lillestrøm SK|Real Sociedad|europa|2026-10-22T19:00:00+00:0|NS\nP|1.59|1.31|0.428|0.268|0.304|0.554|0.593\nB|0.441|0.252|0.306|1.59|1.31|0.547|0.562|1-1|0.535\nB2|H|0.441|no|no\nW||rain|12|\nS|Thomas Lehne Olsen|Lillestrøm SK|3|3\nR|2026-09-13|Real Sociedad de Fútbol|Club Atlético de Madrid|0|3\nR|2026-09-17|Real Sociedad|Bournemouth|1|2\nR|2026-09-20|Valencia CF|Real Sociedad de Fútbol|2|3\nR|2026-09-20|Valencia|Real Sociedad|2|3\nR|2026-10-11|Real Sociedad de Fútbol|RC Deportivo La Coruña|3|2\nR|2026-10-15|AC Sparta Praha|Lillestrøm SK|1|1\nR|2026-10-15|Royale Union Saint-Gilloise|Real Sociedad|1|1",
+    "materialKey": "M|bz-601249|Lillestrøm SK|Real Sociedad|europa|2026-10-22T19:00:00+00:0|NS"
+  },
+  "bz-601234": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Jagiellonia y Anderlecht en jornada europea",
+        "bullets": [
+          "Jagiellonia Białystok recibe al RSC Anderlecht en competición europea, con inicio previsto el 2026-10-22 a las 19:00 según el bloque de partido.",
+          "La tabla facilitada sitúa a Jagiellonia en la posición 17, con las cifras 2 y 3 declaradas sin etiqueta explícita y sin fila para el conjunto belga.",
+          "El bloque meteorológico describe lluvia y una magnitud de 18 sin unidad declarada, y no identifica estadio ni ciudad."
+        ],
+        "stats": [
+          {
+            "value": "17",
+            "label": "posición declarada del local"
+          },
+          {
+            "value": "2026-10-22",
+            "label": "fecha del partido"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades declaradas por proveedores",
+        "bullets": [
+          "El cálculo Poisson de GoatLab otorga 0.463 al triunfo local, 0.264 al empate y 0.273 a la victoria visitante, con expectativas de gol de 1.67 y 1.24.",
+          "El modelo CatBoost de Bzzoiro declara 0.481, 0.247 y 0.272 para local, empate y visitante, con las mismas expectativas de gol de 1.67 y 1.24.",
+          "La estimación declarada de Bzzoiro (B2) señala como resultado más probable la victoria local con 0.481 y no detalla goles totales ni ambos anotan.",
+          "Ambos bloques incluyen cifras complementarias (0.556 y 0.588 en Poisson; 0.549 y 0.559 en CatBoost) sin etiqueta explícita, y CatBoost apunta 1-1 como marcador más probable junto a 0.451."
+        ],
+        "stats": [
+          {
+            "value": "0.463",
+            "label": "victoria local (Poisson)"
+          },
+          {
+            "value": "0.481",
+            "label": "victoria local (CatBoost)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes de ambos equipos",
+        "bullets": [
+          "Jagiellonia cayó 2-1 en su visita al Olympiakos Piraeus el 2026-09-16.",
+          "El 2026-10-15 el conjunto polaco se impuso 3-1 al FC Ararat-Armenia en condición de local.",
+          "Anderlecht perdió 1-0 en su visita al GNK Dinamo Zagreb el 2026-10-15."
+        ],
+        "stats": [
+          {
+            "value": "1-0",
+            "label": "Dinamo Zagreb vs Anderlecht"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Aportes anotadores declarados",
+        "bullets": [
+          "Danylo Sikan encabeza la relación de Anderlecht con 5 goles en 8 partidos.",
+          "Mihajlo Cvetković acumula 4 goles en 8 encuentros y Lukáš Ambros 2 en 8 en el conjunto belga.",
+          "En Jagiellonia, Kajetan Szmyt registra 3 goles en 6 partidos y Jesús Imaz 2 en 6."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "goles de Sikan (8 partidos)"
+          },
+          {
+            "value": "4",
+            "label": "goles de Cvetković (8)"
+          },
+          {
+            "value": "3",
+            "label": "goles de Szmyt (6)"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Lecturas y vacíos de información",
+        "bullets": [
+          "La diferencia de goles esperados (1.67 frente a 1.24) y las probabilidades de ambos modelos apuntan a una ventaja local moderada y no extrema.",
+          "El registro meteorológico se limita a lluvia y la cifra 18, sin unidad ni sede confirmada, lo que acota la interpretación del entorno.",
+          "No se aportan historial de cruces, bajas confirmadas, estimaciones de API-Football ni consenso externo en porcentaje."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sede sin identificar",
+        "detail": "El bloque W no declara estadio ni ciudad, y la magnitud 18 aparece sin unidad, por lo que el contexto de sede y clima queda incompleto."
+      },
+      {
+        "label": "Sin historial de cruces",
+        "detail": "No hay bloque H/HR con enfrentamientos previos entre Jagiellonia y Anderlecht."
+      },
+      {
+        "label": "Sin lecturas de API-Football",
+        "detail": "No se incluye bloque A, de modo que faltan distribución, umbral de goles y lectura cruda del proveedor."
+      },
+      {
+        "label": "Tabla incompleta",
+        "detail": "Solo aparece una fila de clasificación, con las cifras 2 y 3 sin etiqueta explícita y sin datos del rival."
+      },
+      {
+        "label": "Etiquetas de probabilidades ausentes",
+        "detail": "Las cifras 0.556 y 0.588 (Poisson) y 0.549 y 0.559 (CatBoost) no llevan rótulo, así que no se reformulan ni se les asigna significado."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Las probabilidades de ambos modelos suman 1.000 y coinciden en el orden local-empate-visitante; B2 replica el 0.481 del bloque B. No se detectan desvíos claros, aunque varias cifras complementarias y las de la tabla llegan sin etiqueta explícita."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-16T16:48:20.642Z",
+    "inputKey": "v3|M|bz-601234|Jagiellonia Białystok|RSC Anderlecht|europa|2026-10-22T19:00:00+00:0|NS\nP|1.67|1.24|0.463|0.264|0.273|0.556|0.588\nB|0.481|0.247|0.272|1.67|1.24|0.549|0.559|1-1|0.451\nB2|H|0.481|no|no\nW||rain|18|\nT|17|Jagiellonia Białystok|2|3||\nS|Kajetan Szmyt|Jagiellonia Białystok|3|6\nS|Jesús Imaz|Jagiellonia Białystok|2|6\nS|Danylo Sikan|RSC Anderlecht|5|8\nS|Mihajlo Cvetković|RSC Anderlecht|4|8\nS|Lukáš Ambros|RSC Anderlecht|2|8\nR|2026-09-16|Olympiakos Piraeus|Jagiellonia|2|1\nR|2026-10-15|Jagiellonia Białystok|FC Ararat-Armenia|3|1\nR|2026-10-15|GNK Dinamo Zagreb|RSC Anderlecht|1|0",
+    "materialKey": "M|bz-601234|Jagiellonia Białystok|RSC Anderlecht|europa|2026-10-22T19:00:00+00:0|NS"
   }
 }
