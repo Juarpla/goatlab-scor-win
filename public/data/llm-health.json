@@ -1,76 +1,6 @@
 {
-  "updatedAt": "2026-10-16T21:22:18.923Z",
+  "updatedAt": "2026-10-16T21:33:07.613Z",
   "runs": [
-    {
-      "at": "2026-10-10T12:31:59.316Z",
-      "matchId": "bz-601312",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1255,
-        "outputTokens": 7150
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "3bb48e93-dc73-4b86-ab18-5c3f3be5aa64"
-    },
-    {
-      "at": "2026-10-10T12:31:59.316Z",
-      "matchId": "bz-601304",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "3bb48e93-dc73-4b86-ab18-5c3f3be5aa64"
-    },
-    {
-      "at": "2026-10-10T12:32:57.684Z",
-      "matchId": "bz-601273",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1231,
-        "outputTokens": 6983
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "1b318305-b3c6-4751-8515-3519104a6324"
-    },
-    {
-      "at": "2026-10-10T12:32:57.684Z",
-      "matchId": "bz-601256",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "1b318305-b3c6-4751-8515-3519104a6324"
-    },
     {
       "at": "2026-10-10T12:43:04.840Z",
       "matchId": "bz-601236",
@@ -5034,6 +4964,117 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "ad9cbf06-fa36-496e-a3c0-b53255c938f4"
+    },
+    {
+      "at": "2026-10-16T21:31:38.379Z",
+      "task": "shorts",
+      "matchId": "manchester-city-vs-ipswich-town-2026-10-17",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "mimo-v2.6-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6996,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 45884
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 8 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Ipswich Town FC; guion 2: el cero no se escribe en dígitos; guion 2: el cero no se escribe en dígitos; guion 2: 7 cifras, máximo 3; guion 2: 50 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7353,
+            "outputTokens": 1158
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13525
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "usage": {
+        "inputTokens": 7448,
+        "outputTokens": 5282
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "2e0c0110-12ea-4e98-b81b-c9d0aadd1458"
+    },
+    {
+      "at": "2026-10-16T21:32:00.381Z",
+      "task": "image-prompts",
+      "matchId": "manchester-city-vs-ipswich-town-2026-10-17",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1881,
+        "outputTokens": 1113
+      }
+    },
+    {
+      "at": "2026-10-16T21:32:08.486Z",
+      "task": "video-prompts",
+      "matchId": "manchester-city-vs-ipswich-town-2026-10-17",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1777,
+        "outputTokens": 385
+      }
+    },
+    {
+      "at": "2026-10-16T21:33:07.613Z",
+      "task": "motion-prompts",
+      "matchId": "manchester-city-vs-ipswich-town-2026-10-17",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "mimo-v2.6-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2561,
+        "outputTokens": 3336
+      }
     }
   ]
 }
