@@ -1,241 +1,6 @@
 {
-  "updatedAt": "2026-10-18T05:02:13.073Z",
+  "updatedAt": "2026-10-18T11:04:33.931Z",
   "runs": [
-    {
-      "at": "2026-10-12T15:16:46.468Z",
-      "matchId": "fd-560609",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "7b349038-821b-4b21-9553-8134e9fe58d8"
-    },
-    {
-      "at": "2026-10-12T15:18:37.935Z",
-      "matchId": "fd-560604",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2056,
-        "outputTokens": 16173
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9c5992ff-0f2a-4e9f-8c71-91cf99f4b043"
-    },
-    {
-      "at": "2026-10-12T15:18:37.935Z",
-      "matchId": "fd-560605",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9c5992ff-0f2a-4e9f-8c71-91cf99f4b043"
-    },
-    {
-      "at": "2026-10-12T15:20:29.537Z",
-      "matchId": "fd-564712",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2056,
-        "outputTokens": 14140
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9fc424e5-a43a-42fc-a2fc-b2739e0dac05"
-    },
-    {
-      "at": "2026-10-12T15:20:29.537Z",
-      "matchId": "fd-560608",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9fc424e5-a43a-42fc-a2fc-b2739e0dac05"
-    },
-    {
-      "at": "2026-10-12T15:25:07.441Z",
-      "task": "shorts",
-      "matchId": "fd-575341",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55; descripción: cifra 0.365 no está en los hechos; descripción: cifra 0.271 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 4943,
-            "outputTokens": 3079
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 46865
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 5: 54 palabras, mínimo 55; guion 6: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 4793,
-            "outputTokens": 4411
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 27561
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 40 palabras, mínimo 55; guion 1: falta la CTA a goatlab.win en la narración; guion 2: 31 palabras, mínimo 55; guion 2: falta la CTA a goatlab.win en la narración; guion 3: 27 palabras, mínimo 55; guion 3: falta la CTA a goatlab.win en la narración; guion 4: 30 palabras, mínimo 55; guion 4: falta la CTA a goatlab.win en la narración",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 4826,
-            "outputTokens": 1786
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13875
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 3: cifra 2.92 no está en los hechos; guion 4: el cero no se escribe en dígitos; guion 8: cifra 27.1 no está en los hechos; guion 8: porcentajes bloqueados: evaluation.published es false",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 4663,
-            "outputTokens": 6979
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 126090
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 4663,
-        "outputTokens": 6979
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-12T15:29:51.270Z",
-      "task": "motion-prompts",
-      "matchId": "sabah-fk-vs-sk-slavia-praha-2026-10-13",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 2: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2235,
-            "outputTokens": 2506
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 58626
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2271,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 86525
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2317,
-            "outputTokens": 2017
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14058
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 4: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2146,
-            "outputTokens": 4891
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 124449
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-12T15:42:50.467Z",
-      "matchId": "fd-564714",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1353,
-        "outputTokens": 11112
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "fbf01458-ef52-4d98-90ec-e1f0f0548bc2"
-    },
     {
       "at": "2026-10-12T15:45:21.402Z",
       "matchId": "fd-564709",
@@ -5828,6 +5593,146 @@
         }
       ],
       "usage": null
+    },
+    {
+      "at": "2026-10-18T10:58:22.608Z",
+      "matchId": "fd-560614",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2097,
+        "outputTokens": 16207
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "0f93553c-9398-43c5-b045-f196c813886b"
+    },
+    {
+      "at": "2026-10-18T10:58:22.608Z",
+      "matchId": "fd-564718",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "0f93553c-9398-43c5-b045-f196c813886b"
+    },
+    {
+      "at": "2026-10-18T10:59:44.973Z",
+      "matchId": "fd-560618",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1955,
+        "outputTokens": 12484
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "6251f445-2db9-462a-ba5c-4daed7545740"
+    },
+    {
+      "at": "2026-10-18T10:59:44.973Z",
+      "matchId": "fd-560616",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "6251f445-2db9-462a-ba5c-4daed7545740"
+    },
+    {
+      "at": "2026-10-18T11:01:05.106Z",
+      "matchId": "fd-564727",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2038,
+        "outputTokens": 11363
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "5c8a9e17-2f2e-41b4-ac06-f203e102c077"
+    },
+    {
+      "at": "2026-10-18T11:01:05.106Z",
+      "matchId": "fd-560617",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "5c8a9e17-2f2e-41b4-ac06-f203e102c077"
+    },
+    {
+      "at": "2026-10-18T11:04:20.210Z",
+      "matchId": "fd-564722",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2042,
+        "outputTokens": 16484
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "057859a2-798a-4817-9d20-8c1fdac4510d"
+    },
+    {
+      "at": "2026-10-18T11:04:20.210Z",
+      "matchId": "fd-564724",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "057859a2-798a-4817-9d20-8c1fdac4510d"
     }
   ]
 }

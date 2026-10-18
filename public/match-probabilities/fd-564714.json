@@ -4,7 +4,7 @@
   "away": "Real Sociedad de Fútbol",
   "competition": "laliga",
   "kickoff": "2026-10-18T16:30:00Z",
-  "updatedAt": "2026-10-18T04:44:03.278Z",
+  "updatedAt": "2026-10-18T10:56:38.752Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,7 +13,7 @@
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 1.525,
+      "home": 1.52,
       "away": 1.425
     },
     "firstGoalSource": "Blend Poisson+xG",
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-17T10:33:53.765Z",
+      "updatedAt": "2026-10-18T10:55:35.855Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-17T10:33:53.765Z",
+      "updatedAt": "2026-10-18T10:55:35.855Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 256
+      "rows": 265
     },
     "venue": {
       "city": "Málaga",
@@ -133,7 +133,7 @@
   },
   "firstGoal": {
     "lambdaTotal": 2.95,
-    "noGoal": 0.052,
+    "noGoal": 0.053,
     "bands": [
       {
         "from": 0,
@@ -143,7 +143,7 @@
       {
         "from": 15,
         "to": 30,
-        "p": 0.238
+        "p": 0.237
       },
       {
         "from": 30,
@@ -166,7 +166,7 @@
         "p": 0.033
       }
     ],
-    "firstHome": 0.49,
+    "firstHome": 0.489,
     "firstAway": 0.458
   },
   "scorers": {
@@ -177,7 +177,7 @@
         "matches": 4,
         "share": 0.5,
         "rate": 0.76,
-        "anytime": 0.534,
+        "anytime": 0.532,
         "first": 0.258
       }
     ],
@@ -206,64 +206,64 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.295,
-      "draw": 0.26899999999999996,
-      "away": 0.436,
+      "home": 0.29,
+      "draw": 0.271,
+      "away": 0.44,
       "predicted": "A"
     },
     "xg": {
-      "home": 1.7,
+      "home": 1.69,
       "away": 1.24
     },
-    "over15": 0.757,
+    "over15": 0.7559999999999999,
     "over25": 0.534,
     "over35": 0.326,
-    "btts": 0.574,
+    "btts": 0.58,
     "score": "1-1",
-    "cornersOver95": 0.53,
+    "cornersOver95": 0.5329999999999999,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.436,
+      "favoriteProb": 0.44,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4359,
+    "confidence": 0.4395,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-17T10:34:17.069Z",
+    "capturedAt": "2026-10-18T10:55:56.708Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.471,
-      "draw": 0.261,
-      "away": 0.268
+      "home": 0.468,
+      "draw": 0.262,
+      "away": 0.27
     },
     "doubleChance": {
-      "12": 0.739,
-      "1X": 0.732,
-      "X2": 0.529
+      "12": 0.738,
+      "1X": 0.73,
+      "X2": 0.532
     },
     "dnb": {
-      "home": 0.637,
-      "away": 0.363
+      "home": 0.634,
+      "away": 0.366
     },
     "totals": {
-      "over15": 0.803,
-      "under15": 0.197,
-      "over25": 0.563,
-      "under25": 0.437,
-      "over35": 0.339,
-      "under35": 0.661
+      "over15": 0.801,
+      "under15": 0.199,
+      "over25": 0.561,
+      "under25": 0.439,
+      "over35": 0.337,
+      "under35": 0.663
     },
     "btts": {
-      "yes": 0.592,
-      "no": 0.408
+      "yes": 0.591,
+      "no": 0.409
     },
     "cleanSheet": {
       "home": 0.289,
-      "away": 0.183
+      "away": 0.185
     },
     "exactScores": [
       {
@@ -379,10 +379,10 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 256
+      "historyRows": 265
     },
     "source": "GoatLab",
-    "expectedTotal": 4.6
+    "expectedTotal": 4.7
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -390,32 +390,32 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 256
+      "historyRows": 265
     },
     "source": "GoatLab",
-    "expectedTotal": 10.6
+    "expectedTotal": 10.7
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.22,
+      "shots": 13.21,
       "shotsOnTarget": 4.44,
-      "xg": 1.7,
-      "corners": 5.13,
-      "fouls": 12.21,
-      "yellowCards": 2.51,
-      "redCards": 0.53,
+      "xg": 1.69,
+      "corners": 5.15,
+      "fouls": 12.17,
+      "yellowCards": 2.53,
+      "redCards": 0.52,
       "offsides": 1.65,
       "possession": 50.34
     },
     "away": {
-      "shots": 13.91,
+      "shots": 13.9,
       "shotsOnTarget": 5.01,
       "xg": 1.24,
-      "corners": 5.49,
-      "fouls": 12.49,
-      "yellowCards": 2.12,
-      "redCards": 0.53,
+      "corners": 5.51,
+      "fouls": 12.45,
+      "yellowCards": 2.14,
+      "redCards": 0.52,
       "offsides": 1.84,
       "possession": 49.66
     },
@@ -449,14 +449,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.51,
-      "shotsOnTarget": 4.74,
-      "xg": 1.48,
-      "corners": 4.89,
-      "fouls": 12.45,
-      "yellowCards": 2.23,
-      "redCards": 0.53,
-      "offsides": 2.04
+      "shots": 13.49,
+      "shotsOnTarget": 4.73,
+      "xg": 1.47,
+      "corners": 4.94,
+      "fouls": 12.36,
+      "yellowCards": 2.27,
+      "redCards": 0.52,
+      "offsides": 2.03
     },
     "sources": {
       "home": {
@@ -499,13 +499,13 @@
     },
     "cardsDuel": {
       "home": 0.476,
-      "draw": 0.189,
-      "away": 0.336
+      "draw": 0.188,
+      "away": 0.337
     },
     "lastGoal": {
-      "home": 0.49,
+      "home": 0.489,
       "away": 0.458,
-      "noGoal": 0.052
+      "noGoal": 0.053
     },
     "cornerRace": {
       "3": {
@@ -513,20 +513,20 @@
         "away": 0.532
       },
       "5": {
-        "home": 0.458,
-        "away": 0.542
+        "home": 0.459,
+        "away": 0.541
       },
       "7": {
-        "home": 0.45,
-        "away": 0.55
+        "home": 0.451,
+        "away": 0.549
       }
     },
     "cornerMargin": {
-      "home3plus": 0.187,
+      "home3plus": 0.188,
       "home12": 0.208,
       "level": 0.123,
-      "away12": 0.23,
-      "away3plus": 0.252
+      "away12": 0.229,
+      "away3plus": 0.253
     },
     "source": "GoatLab"
   },

@@ -1,0 +1,618 @@
+{
+  "id": "fd-564727",
+  "home": "Real Racing Club de Santander",
+  "away": "RCD Espanyol de Barcelona",
+  "competition": "laliga",
+  "kickoff": "2026-10-24T14:15:00Z",
+  "updatedAt": "2026-10-18T10:56:38.752Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.71,
+      "away": 1.993
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.83,
+      "away": 1.617
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Real Racing Club de Santander": {
+        "position": 15,
+        "team": "Real Racing Club de Santander",
+        "played": 8,
+        "won": 2,
+        "drawn": 2,
+        "lost": 4,
+        "goalsFor": 13,
+        "goalsAgainst": 23,
+        "goalDifference": -10,
+        "points": 8,
+        "form": null
+      },
+      "RCD Espanyol de Barcelona": {
+        "position": 12,
+        "team": "RCD Espanyol de Barcelona",
+        "played": 9,
+        "won": 2,
+        "drawn": 2,
+        "lost": 5,
+        "goalsFor": 11,
+        "goalsAgainst": 12,
+        "goalDifference": -1,
+        "points": 8,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-18T10:55:35.855Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": null,
+    "discipline": {
+      "updatedAt": "2026-10-18T10:55:35.855Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 265
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.328,
+      "draw": 0.231,
+      "away": 0.441
+    },
+    "doubleChance": {
+      "12": 0.769,
+      "1X": 0.559,
+      "X2": 0.672
+    },
+    "dnb": {
+      "home": 0.427,
+      "away": 0.573
+    },
+    "totals": {
+      "over15": 0.892,
+      "under15": 0.108,
+      "over25": 0.715,
+      "under25": 0.285,
+      "over35": 0.506,
+      "under35": 0.494
+    },
+    "btts": {
+      "yes": 0.716,
+      "no": 0.284
+    },
+    "cleanSheet": {
+      "home": 0.136,
+      "away": 0.181
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.092
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.084
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.072
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.072
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.056
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.45,
+    "noGoal": 0.032,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.437
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.246
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.139
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.078
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.044
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.025
+      }
+    ],
+    "firstHome": 0.514,
+    "firstAway": 0.454
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Yassir Zabiri",
+        "goals": 7,
+        "matches": 8,
+        "share": 0.538,
+        "rate": 0.98,
+        "anytime": 0.626,
+        "first": 0.285
+      }
+    ],
+    "away": [
+      {
+        "player": "Roberto Fernández",
+        "goals": 6,
+        "matches": 9,
+        "share": 0.545,
+        "rate": 0.88,
+        "anytime": 0.586,
+        "first": 0.255
+      },
+      {
+        "player": "Álex Calatrava",
+        "goals": 1,
+        "matches": 9,
+        "share": 0.091,
+        "rate": 0.15,
+        "anytime": 0.137,
+        "first": 0.043
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.555,
+      "draw": 0.22399999999999998,
+      "away": 0.221,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.95,
+      "away": 1.24
+    },
+    "over15": 0.815,
+    "over25": 0.605,
+    "over35": 0.381,
+    "btts": 0.584,
+    "score": "1-1",
+    "cornersOver95": 0.542,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.555,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.5548,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-18T10:56:23.293Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.529,
+      "draw": 0.24,
+      "away": 0.231
+    },
+    "doubleChance": {
+      "12": 0.76,
+      "1X": 0.769,
+      "X2": 0.471
+    },
+    "dnb": {
+      "home": 0.696,
+      "away": 0.304
+    },
+    "totals": {
+      "over15": 0.837,
+      "under15": 0.163,
+      "over25": 0.618,
+      "under25": 0.382,
+      "over35": 0.395,
+      "under35": 0.605
+    },
+    "btts": {
+      "yes": 0.619,
+      "no": 0.381
+    },
+    "cleanSheet": {
+      "home": 0.289,
+      "away": 0.142
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.121,
+        "share": 0.28205128205128205
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.097,
+        "share": 0.2261072261072261
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.078,
+        "share": 0.18181818181818182
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.07,
+        "share": 0.1631701631701632
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.063,
+        "share": 0.14685314685314685
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 56,
+    "homeWins": 15,
+    "draws": 17,
+    "awayWins": 24,
+    "avgTotalGoals": 2.4642857142857144,
+    "recent": [
+      {
+        "eventId": 248731,
+        "date": "2024-02-10T20:00:00+00:00",
+        "home": "Real Racing Club",
+        "away": "Espanyol",
+        "homeTeamId": 1400,
+        "awayTeamId": 53,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 248466,
+        "date": "2023-08-19T17:00:00+00:00",
+        "home": "Espanyol",
+        "away": "Real Racing Club",
+        "homeTeamId": 53,
+        "awayTeamId": 1400,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 439832,
+        "date": "2012-03-19T20:00:00+00:00",
+        "home": "Espanyol",
+        "away": "Real Racing Club",
+        "homeTeamId": 53,
+        "awayTeamId": 1400,
+        "homeScore": 3,
+        "awayScore": 1
+      },
+      {
+        "eventId": 439633,
+        "date": "2011-10-22T16:00:00+00:00",
+        "home": "Real Racing Club",
+        "away": "Espanyol",
+        "homeTeamId": 1400,
+        "awayTeamId": 53,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 453065,
+        "date": "2011-04-03T15:00:00+00:00",
+        "home": "Espanyol",
+        "away": "Real Racing Club",
+        "homeTeamId": 53,
+        "awayTeamId": 1400,
+        "homeScore": 1,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 265
+    },
+    "source": "GoatLab",
+    "expectedTotal": 5.1
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 265
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10.2
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 12.81,
+      "shotsOnTarget": 4.89,
+      "xg": 1.95,
+      "corners": 5,
+      "fouls": 12.37,
+      "yellowCards": 2.5,
+      "redCards": 0.54,
+      "offsides": 1.85,
+      "possession": 50.73
+    },
+    "away": {
+      "shots": 13.93,
+      "shotsOnTarget": 4.98,
+      "xg": 1.24,
+      "corners": 5.15,
+      "fouls": 13.88,
+      "yellowCards": 2.56,
+      "redCards": 0.56,
+      "offsides": 2.57,
+      "possession": 49.27
+    },
+    "sample": {
+      "home": 8,
+      "away": 9
+    },
+    "coverage": {
+      "home": {
+        "possession": 8,
+        "shots": 8,
+        "shotsOnTarget": 8,
+        "xg": 8,
+        "corners": 8,
+        "fouls": 8,
+        "yellowCards": 8,
+        "redCards": 2,
+        "offsides": 8
+      },
+      "away": {
+        "possession": 9,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 9,
+        "fouls": 9,
+        "yellowCards": 9,
+        "redCards": 3,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.49,
+      "shotsOnTarget": 4.75,
+      "xg": 1.47,
+      "corners": 4.87,
+      "fouls": 12.31,
+      "yellowCards": 2.3,
+      "redCards": 0.53,
+      "offsides": 2.08
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.418,
+      "draw": 0.127,
+      "away": 0.455
+    },
+    "cardsDuel": {
+      "home": 0.398,
+      "draw": 0.182,
+      "away": 0.419
+    },
+    "lastGoal": {
+      "home": 0.514,
+      "away": 0.454,
+      "noGoal": 0.032
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.486,
+        "away": 0.514
+      },
+      "5": {
+        "home": 0.482,
+        "away": 0.518
+      },
+      "7": {
+        "home": 0.478,
+        "away": 0.522
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.2,
+      "home12": 0.219,
+      "level": 0.127,
+      "away12": 0.228,
+      "away3plus": 0.227
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": null,
+      "condition": null,
+      "sampledAt": null,
+      "source": null
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Real Racing Club de Santander",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 15,
+        "played": 8,
+        "gf": 13,
+        "ga": 23,
+        "provider": null
+      },
+      "player": {
+        "name": "Yassir Zabiri",
+        "detail": "7 goles en 8 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "RCD Espanyol de Barcelona",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 12,
+        "played": 9,
+        "gf": 11,
+        "ga": 12,
+        "provider": null
+      },
+      "player": {
+        "name": "Roberto Fernández",
+        "detail": "6 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "Discrepancia entre modelos: el Poisson GoatLab señala al Espanyol como desenlace más probable (44,1% visitante frente a 32,8% local), mientras el CatBoost Bzzoiro y la estimación declarada B2 apuntan a la victoria del Racing (55,5%).",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-18T11:01:05.094Z"
+  }
+}

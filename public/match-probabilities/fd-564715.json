@@ -4,7 +4,7 @@
   "away": "Real Racing Club de Santander",
   "competition": "laliga",
   "kickoff": "2026-10-18T12:00:00Z",
-  "updatedAt": "2026-10-18T04:44:03.278Z",
+  "updatedAt": "2026-10-18T10:56:38.752Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 2.147
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.015,
-      "away": 1.874
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,22 +47,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-17T10:33:53.765Z",
+      "updatedAt": "2026-10-18T10:55:35.855Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-18T12:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-18T12:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-17T10:33:53.765Z",
+      "updatedAt": "2026-10-18T10:55:35.855Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 256
+      "rows": 265
     },
     "venue": {
       "city": "Pamplona",
@@ -132,13 +129,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.89,
-    "noGoal": 0.02,
+    "lambdaTotal": 4.49,
+    "noGoal": 0.011,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.477
+        "p": 0.527
       },
       {
         "from": 15,
@@ -148,26 +145,26 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.13
+        "p": 0.118
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.068
+        "p": 0.056
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.036
+        "p": 0.026
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.019
+        "p": 0.013
       }
     ],
-    "firstHome": 0.508,
-    "firstAway": 0.472
+    "firstHome": 0.516,
+    "firstAway": 0.473
   },
   "scorers": {
     "home": [
@@ -176,9 +173,9 @@
         "goals": 6,
         "matches": 8,
         "share": 0.75,
-        "rate": 1.51,
-        "anytime": 0.779,
-        "first": 0.388
+        "rate": 1.76,
+        "anytime": 0.827,
+        "first": 0.391
       }
     ],
     "away": [
@@ -187,174 +184,41 @@
         "goals": 7,
         "matches": 8,
         "share": 0.538,
-        "rate": 1.01,
-        "anytime": 0.635,
-        "first": 0.259
+        "rate": 1.16,
+        "anytime": 0.685,
+        "first": 0.257
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.47200000000000003,
-      "draw": 0.258,
-      "away": 0.27,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.69,
-      "away": 1.6
-    },
-    "over15": 0.797,
-    "over25": 0.5870000000000001,
-    "over35": 0.382,
-    "btts": 0.611,
-    "score": "1-1",
-    "cornersOver95": 0.508,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.472,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4725,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-17T10:34:15.717Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.394,
-      "draw": 0.251,
-      "away": 0.356
-    },
-    "doubleChance": {
-      "12": 0.749,
-      "1X": 0.644,
-      "X2": 0.606
-    },
-    "dnb": {
-      "home": 0.525,
-      "away": 0.475
-    },
-    "totals": {
-      "over15": 0.85,
-      "under15": 0.15,
-      "over25": 0.639,
-      "under25": 0.361,
-      "over35": 0.417,
-      "under35": 0.583
-    },
-    "btts": {
-      "yes": 0.661,
-      "no": 0.339
-    },
-    "cleanSheet": {
-      "home": 0.202,
-      "away": 0.185
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.106,
-        "share": 0.26972010178117045
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.085,
-        "share": 0.2162849872773537
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.081,
-        "share": 0.20610687022900764
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.068,
-        "share": 0.17302798982188294
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.053,
-        "share": 0.13486005089058523
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 41,
-    "homeWins": 11,
-    "draws": 12,
-    "awayWins": 18,
-    "avgTotalGoals": 2.4878048780487805,
-    "recent": [
-      {
-        "eventId": 219311,
-        "date": "2026-07-24T17:30:00+00:00",
-        "home": "Osasuna",
-        "away": "Real Racing Club",
-        "homeTeamId": 58,
-        "awayTeamId": 1400,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 401950,
-        "date": "2015-03-07T17:15:00+00:00",
-        "home": "Real Racing Club",
-        "away": "Osasuna",
-        "homeTeamId": 1400,
-        "awayTeamId": 58,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 401717,
-        "date": "2014-10-04T16:15:00+00:00",
-        "home": "Osasuna",
-        "away": "Real Racing Club",
-        "homeTeamId": 58,
-        "awayTeamId": 1400,
-        "homeScore": 0,
-        "awayScore": 2
-      },
-      {
-        "eventId": 439931,
-        "date": "2012-05-13T18:00:00+00:00",
-        "home": "Real Racing Club",
-        "away": "Osasuna",
-        "homeTeamId": 1400,
-        "awayTeamId": 58,
-        "homeScore": 2,
-        "awayScore": 4
-      },
-      {
-        "eventId": 439739,
-        "date": "2012-01-15T15:00:00+00:00",
-        "home": "Osasuna",
-        "away": "Real Racing Club",
-        "homeTeamId": 58,
-        "awayTeamId": 1400,
-        "homeScore": 0,
-        "awayScore": 2
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -370,10 +234,10 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 256
+      "historyRows": 265
     },
     "source": "GoatLab",
-    "expectedTotal": 4.7
+    "expectedTotal": 4.8
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -381,7 +245,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 256
+      "historyRows": 265
     },
     "source": "GoatLab",
     "expectedTotal": 10.2
@@ -390,24 +254,24 @@
     "method": "stats-ratings-v2",
     "home": {
       "shots": 13.07,
-      "shotsOnTarget": 5.08,
-      "xg": 1.69,
-      "corners": 5.35,
-      "fouls": 13.28,
-      "yellowCards": 2.47,
+      "shotsOnTarget": 5.07,
+      "xg": 1.62,
+      "corners": 5.37,
+      "fouls": 13.24,
+      "yellowCards": 2.48,
       "redCards": 0.52,
       "offsides": 2.42,
       "possession": 49.15
     },
     "away": {
-      "shots": 13,
-      "shotsOnTarget": 4.65,
-      "xg": 1.6,
-      "corners": 4.85,
-      "fouls": 13.06,
-      "yellowCards": 2.25,
+      "shots": 12.99,
+      "shotsOnTarget": 4.64,
+      "xg": 1.46,
+      "corners": 4.87,
+      "fouls": 13.03,
+      "yellowCards": 2.27,
       "redCards": 0.56,
-      "offsides": 1.86,
+      "offsides": 1.85,
       "possession": 50.85
     },
     "sample": {
@@ -440,12 +304,12 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.51,
-      "shotsOnTarget": 4.76,
-      "xg": 1.48,
-      "corners": 4.82,
-      "fouls": 12.4,
-      "yellowCards": 2.26,
+      "shots": 13.49,
+      "shotsOnTarget": 4.75,
+      "xg": 1.47,
+      "corners": 4.87,
+      "fouls": 12.31,
+      "yellowCards": 2.3,
       "redCards": 0.53,
       "offsides": 2.08
     },
@@ -488,14 +352,14 @@
       "away": 0.376
     },
     "cardsDuel": {
-      "home": 0.445,
+      "home": 0.443,
       "draw": 0.188,
-      "away": 0.367
+      "away": 0.369
     },
     "lastGoal": {
-      "home": 0.508,
-      "away": 0.472,
-      "noGoal": 0.02
+      "home": 0.516,
+      "away": 0.473,
+      "noGoal": 0.011
     },
     "cornerRace": {
       "3": {
@@ -507,8 +371,8 @@
         "away": 0.44
       },
       "7": {
-        "home": 0.572,
-        "away": 0.428
+        "home": 0.571,
+        "away": 0.429
       }
     },
     "cornerMargin": {
@@ -522,13 +386,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 9.8,
-      "condition": "unknown",
-      "sampledAt": "2026-10-18T12:00:00Z",
-      "source": "bzzoiro"
+      "temp": 13.4,
+      "precipitation": 0,
+      "weathercode": 3,
+      "wind": 23.1,
+      "condition": null,
+      "sampledAt": "2026-10-18T12:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "El Sadar",
