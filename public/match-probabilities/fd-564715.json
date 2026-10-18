@@ -4,7 +4,7 @@
   "away": "Real Racing Club de Santander",
   "competition": "laliga",
   "kickoff": "2026-10-18T12:00:00Z",
-  "updatedAt": "2026-10-18T10:56:38.752Z",
+  "updatedAt": "2026-10-18T11:20:26.440Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 2.147
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.01,
+      "away": 1.874
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 6,
       "away": 6
@@ -129,13 +132,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 4.49,
-    "noGoal": 0.011,
+    "lambdaTotal": 3.88,
+    "noGoal": 0.021,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.527
+        "p": 0.477
       },
       {
         "from": 15,
@@ -145,25 +148,25 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.118
+        "p": 0.131
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.056
+        "p": 0.068
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.026
+        "p": 0.036
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.013
+        "p": 0.019
       }
     ],
-    "firstHome": 0.516,
+    "firstHome": 0.507,
     "firstAway": 0.473
   },
   "scorers": {
@@ -173,9 +176,9 @@
         "goals": 6,
         "matches": 8,
         "share": 0.75,
-        "rate": 1.76,
-        "anytime": 0.827,
-        "first": 0.391
+        "rate": 1.51,
+        "anytime": 0.779,
+        "first": 0.389
       }
     ],
     "away": [
@@ -184,41 +187,174 @@
         "goals": 7,
         "matches": 8,
         "share": 0.538,
-        "rate": 1.16,
-        "anytime": 0.685,
-        "first": 0.257
+        "rate": 1.01,
+        "anytime": 0.635,
+        "first": 0.26
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.474,
+      "draw": 0.259,
+      "away": 0.267,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.68,
+      "away": 1.6
+    },
+    "over15": 0.799,
+    "over25": 0.589,
+    "over35": 0.38299999999999995,
+    "btts": 0.61,
+    "score": "1-1",
+    "cornersOver95": 0.512,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.474,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4742,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-18T11:20:11.241Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.391,
+      "draw": 0.251,
+      "away": 0.358
+    },
+    "doubleChance": {
+      "12": 0.749,
+      "1X": 0.642,
+      "X2": 0.609
+    },
+    "dnb": {
+      "home": 0.523,
+      "away": 0.477
+    },
+    "totals": {
+      "over15": 0.849,
+      "under15": 0.151,
+      "over25": 0.637,
+      "under25": 0.363,
+      "over35": 0.415,
+      "under35": 0.585
+    },
+    "btts": {
+      "yes": 0.659,
+      "no": 0.341
+    },
+    "cleanSheet": {
+      "home": 0.202,
+      "away": 0.186
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.106,
+        "share": 0.26972010178117045
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.085,
+        "share": 0.2162849872773537
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.081,
+        "share": 0.20610687022900764
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.068,
+        "share": 0.17302798982188294
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.053,
+        "share": 0.13486005089058523
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "totalMatches": 41,
+    "homeWins": 11,
+    "draws": 12,
+    "awayWins": 18,
+    "avgTotalGoals": 2.4878048780487805,
+    "recent": [
+      {
+        "eventId": 219311,
+        "date": "2026-07-24T17:30:00+00:00",
+        "home": "Osasuna",
+        "away": "Real Racing Club",
+        "homeTeamId": 58,
+        "awayTeamId": 1400,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 401950,
+        "date": "2015-03-07T17:15:00+00:00",
+        "home": "Real Racing Club",
+        "away": "Osasuna",
+        "homeTeamId": 1400,
+        "awayTeamId": 58,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 401717,
+        "date": "2014-10-04T16:15:00+00:00",
+        "home": "Osasuna",
+        "away": "Real Racing Club",
+        "homeTeamId": 58,
+        "awayTeamId": 1400,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 439931,
+        "date": "2012-05-13T18:00:00+00:00",
+        "home": "Real Racing Club",
+        "away": "Osasuna",
+        "homeTeamId": 1400,
+        "awayTeamId": 58,
+        "homeScore": 2,
+        "awayScore": 4
+      },
+      {
+        "eventId": 439739,
+        "date": "2012-01-15T15:00:00+00:00",
+        "home": "Osasuna",
+        "away": "Real Racing Club",
+        "homeTeamId": 58,
+        "awayTeamId": 1400,
+        "homeScore": 0,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -255,7 +391,7 @@
     "home": {
       "shots": 13.07,
       "shotsOnTarget": 5.07,
-      "xg": 1.62,
+      "xg": 1.68,
       "corners": 5.37,
       "fouls": 13.24,
       "yellowCards": 2.48,
@@ -266,7 +402,7 @@
     "away": {
       "shots": 12.99,
       "shotsOnTarget": 4.64,
-      "xg": 1.46,
+      "xg": 1.6,
       "corners": 4.87,
       "fouls": 13.03,
       "yellowCards": 2.27,
@@ -357,9 +493,9 @@
       "away": 0.369
     },
     "lastGoal": {
-      "home": 0.516,
+      "home": 0.507,
       "away": 0.473,
-      "noGoal": 0.011
+      "noGoal": 0.021
     },
     "cornerRace": {
       "3": {
