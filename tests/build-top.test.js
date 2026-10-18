@@ -28,6 +28,18 @@ test('build-top writes relevance ranking while conserving extras without termina
   assert.deepEqual(top.extra, ['y-y', 'gone']);
   assert.ok(top.ranking.every(r => r.id && r.kickoff));
 });
+test('build-top omits a provider-only id that still lacks a descriptive code', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'goatlab-top-unnamed-')); t.after(() => rm(root, { recursive: true, force: true }));
+  const kickoff = new Date(Date.now() + 3600_000).toISOString();
+  const matches = [
+    { id: 'fd-9', webId: null, home: 'PAE AEK', away: 'Shakhtar', status: 'NS', kickoff },
+    { id: 'af-2', webId: 'alpha-vs-beta-2026-10-14', home: 'Alpha', away: 'Beta', status: 'NS', kickoff },
+  ];
+  await mkdir(join(root, 'public/data'), { recursive: true });
+  await writeFile(join(root, 'public/data/fixtures.json'), JSON.stringify({ matches }));
+  const top = await buildTop({ repo: root });
+  assert.deepEqual(top.ranking.map(row => row.id), ['alpha-vs-beta-2026-10-14']);
+});
 test('build-top retires a confirmed snapshot extra only beyond its grace', async t => {
   const root = await mkdtemp(join(tmpdir(), 'goatlab-top-grace-')); t.after(() => rm(root, { recursive: true, force: true }));
   const now = Date.parse('2026-10-08T22:00:00Z');

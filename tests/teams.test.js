@@ -115,5 +115,6 @@ test('sameClub tolerates provider naming differences without cross-matching', as
   assert.equal(sameClub('Manchester United', 'Manchester City'), false);
   assert.equal(sameClub('Real Madrid', 'Real Betis'), false);
   assert.equal(sameClub('Brighton & Hove Albion', 'Brighton'), true);
+  assert.equal(sameClub('PAE AEK', 'AEK Athens'), true);
   assert.equal(sameClub('', 'Leeds'), false);
 });

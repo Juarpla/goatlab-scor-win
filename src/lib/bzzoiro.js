@@ -7,7 +7,7 @@
  */
 import { normalize } from './teams.js';
 const BASE = 'https://sports.bzzoiro.com/api/v2';
-const DROP_TOKENS = new Set(['fc', 'cf', 'sc', 'afc', 'club', 'the']);
+const DROP_TOKENS = new Set(['fc', 'cf', 'sc', 'afc', 'club', 'the', 'pae']);
 const TOKEN_ALIASES = { utd: 'united', psg: 'paris', 'saint-germain': 'saint germain' };
 
 export function teamTokens(name) {

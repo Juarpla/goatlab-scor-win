@@ -5,9 +5,9 @@ import { resolveChain } from '../src/lib/llm.js';
 import { compositionProps } from '../src/lib/edit-plan.js';
 
 const env = { OPENCODE_GO_API_KEY:'a', MISTRAL_API_KEY:'b', WORKERS_AI_API_KEY:'c', CLOUDFLARE_ACCOUNT_ID:'d', SCRIPT_PROVIDER_ORDER:CONTENT_PROVIDER_ORDER };
-test('content priority starts with MiMo and keeps the independent analysis default',()=>{
+test('content priority starts with GLM and keeps the independent analysis default',()=>{
   const chain=resolveChain(env,console,{orderVar:'SCRIPT_PROVIDER_ORDER'});
-  assert.deepEqual(chain.map(p=>p.model),['mimo-v2.6-flash','deepseek-v4.1-flash','ministral-8b-2512','@cf/zai-org/glm-4.7-flash']);
+  assert.deepEqual(chain.map(p=>p.model),['glm-5.3-flash','deepseek-v4.1-flash','ministral-8b-2512','@cf/zai-org/glm-4.7-flash']);
   assert.equal(resolveChain(env)[0].id,'MISTRAL');
 });
 function images(){return{version:1,category:'image-prompts',matchId:'alpha-beta',home:'Alpha',away:'Beta',prompts:CONTENT_CATEGORIES['image-prompts'].kinds.map((kind,i)=>({n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(3)} ${kind==='stadium'?'Stadium, flags and team crests.':kind==='supporters'?'Both groups of supporters.':''}`}))};}

@@ -3,7 +3,8 @@ import tempfile
 import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts'))
-from content_client import ContentClient
+from datetime import datetime, timezone
+from content_client import ContentClient, list_text, match_summary, order_matches
 from planner import validate
 
 class ContentTests(unittest.TestCase):
@@ -47,3 +48,29 @@ class ContentTests(unittest.TestCase):
         with self.assertRaises(ValueError):validate(plan,source)
         plan['scenes'][0]['clips'][0]['clip']=1
         with self.assertRaises(ValueError):validate(plan,source)
+
+    def test_telegram_list_uses_lima_day_and_drops_started_matches(self):
+        now = datetime(2026, 10, 15, 16, 53, tzinfo=timezone.utc).timestamp()
+        matches = [
+            {'matchId': 'flu', 'home': 'Fluminense', 'away': 'Palmeiras', 'competition': 'libertadores', 'kickoff': '2026-10-15T00:30:00+00:00'},
+            {'matchId': 'later', 'home': 'Alpha', 'away': 'Beta', 'competition': 'premier', 'kickoff': '2026-10-16T15:00:00Z'},
+            {'matchId': 'est', 'home': 'Estudiantes de La Plata', 'away': 'Flamengo', 'competition': 'libertadores', 'kickoff': '2026-10-16T00:30:00+00:00'},
+            {'matchId': 'afternoon', 'home': 'Gamma', 'away': 'Delta', 'competition': 'laliga', 'kickoff': '2026-10-15T20:00:00Z'},
+        ]
+        ordered = order_matches(matches, now)
+        self.assertEqual([match['matchId'] for match in ordered], ['afternoon', 'est', 'later'])
+        text = list_text(ordered, {'libertadores': 'Libertadores', 'premier': 'Premier League', 'laliga': 'LaLiga'})
+        self.assertEqual(text, '\n'.join([
+            'Jueves 15 de octubre',
+            '1. Gamma vs Delta · LaLiga · 15:00',
+            '2. Estudiantes de La Plata vs Flamengo · Libertadores · 19:30',
+            '',
+            'Viernes 16 de octubre',
+            '3. Alpha vs Beta · Premier League · 10:00',
+        ]))
+        self.assertNotIn('Fluminense', text)
+        self.assertNotIn('16 de octubre\n2.', text)
+        summary = match_summary(ordered[1], 2, {'libertadores': 'Libertadores'})
+        self.assertEqual(summary['day'], 'Jueves 15 de octubre')
+        self.assertEqual(summary['time'], '19:30')
+        self.assertNotIn('kickoff', summary)

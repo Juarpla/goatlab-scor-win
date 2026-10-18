@@ -8,8 +8,11 @@ Si hay varios audios en un turno, procésalos en orden de llegada, uno por llama
    renueva el acceso web y envía la bienvenida con `⚽ Goatlab`. El agente no
    ejecuta herramientas ni repite la bienvenida por ese comando.
 2. `/goatlab`: `list --chat=<chat>`. La herramienta actualiza los datos una vez y
-   conserva la lista mostrada. Presenta número, encuentro, competición y hora;
-   si falla o está vacía, informa el error y termina ese paso. Sin botones.
+   conserva la lista mostrada. Si `sent` es true, la lista ya salió a Telegram:
+   no envíes otro mensaje con los partidos. Si es false, envía `text` tal cual,
+   en un solo mensaje. Cada partido va en su línea, separado por la fecha de Lima
+   y ordenado por hora. No reordenes, no uses otra fecha y no juntes días distintos.
+   Si falla o `text` está vacío, informa el error y termina ese paso. Sin botones.
 3. Número elegido: `select --chat=<chat> --number=<n>`. Los JSON de Scripts, Image Prompts, Video Prompts y Motion Prompts se consultan
    desde goatlab.win y se guardan con la serie. La consulta del banco R2 queda programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,

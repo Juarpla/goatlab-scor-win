@@ -28,7 +28,7 @@ export class LlmPermanentError extends Error {
 const openCodeGo = {
   keyVar: 'OPENCODE_GO_API_KEY',
   requires: [],
-  baseUrl: () => 'https://opencode.ai/zen/go/v1',
+  baseUrl: () => 'https://opencode.ai/inference/go/openai/v1',
   extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }),
 };
 export const providers = {
@@ -38,7 +38,7 @@ export const providers = {
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
   OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
   // Mismo gateway y misma clave. Solo cambia el modelo. Ninguno manda reasoning_effort.
-  OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'mimo-v2.6-flash', ...openCodeGo },
+  OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'glm-5.3-flash', ...openCodeGo },
 };
 const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
 export function resolveChain(env = runtimeEnv(), logger = console, { orderVar } = {}) {

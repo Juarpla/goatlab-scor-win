@@ -200,7 +200,9 @@ class PortableSkillTests(unittest.TestCase):
             def call(*args):
                 return json.loads(subprocess.check_output([sys.executable,str(root/'skill/scripts/goatlab.py'),*args],env=env,cwd=root))
             call('reset','--chat=1')
-            self.assertEqual(call('list','--chat=1')[0]['matchId'],'a-b')
+            listed = call('list','--chat=1')
+            self.assertEqual(listed['matches'][0]['matchId'],'a-b')
+            self.assertIn('1. A vs B', listed['text'])
             flow = Workflow(root/'state/goatlab.sqlite')
             self.addCleanup(flow.db.close)
             self.assertEqual(flow.db.execute('SELECT COUNT(*) FROM tasks').fetchone()[0],0)

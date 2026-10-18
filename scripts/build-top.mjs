@@ -5,13 +5,17 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { rankMatches } from '../src/lib/teams.js';
-import { TOP_FILENAME, TOP_VERSION, defaultTopN, pruneExtra } from '../src/lib/top.js';
+import { TOP_FILENAME, TOP_VERSION, defaultTopN, pruneExtra, providerOnlyId } from '../src/lib/top.js';
 
 export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = process.env, now = Date.now() } = {}) {
   const dataDir = `${repo}/public/data`;
   const fixtures = JSON.parse(await readFile(`${dataDir}/fixtures.json`, 'utf8'));
   const matches = fixtures.matches ?? [];
-  const ranked = rankMatches(matches.filter(m => m?.status === 'NS'));
+  const upcoming = matches.filter(m => m?.status === 'NS');
+  for (const match of upcoming.filter(match => providerOnlyId(match.webId ?? match.id))) {
+    console.log(`top: omitido ${match.webId ?? match.id}; falta código descriptivo`);
+  }
+  const ranked = rankMatches(upcoming.filter(m => !providerOnlyId(m.webId ?? m.id)));
   let prev = null;
   try {
     prev = JSON.parse(await readFile(`${dataDir}/${TOP_FILENAME}`, 'utf8'));

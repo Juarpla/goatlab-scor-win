@@ -86,12 +86,14 @@ class PlannerTests(unittest.TestCase):
     def test_http_status_is_preserved_and_both_models_use_validated_local_plan(self):
         calls,logs=[],[]
         def denied(url,body,headers,timeout):
-            calls.append(body['model'])
+            calls.append((url,body['model']))
             raise urllib.error.HTTPError(url,400,'bad request',{},io.BytesIO(b'private prompt'))
         result=create_plan(SOURCE,call=denied,env={'OPENCODE_GO_API_KEY':'test'},logger=logs.append)
         self.assertTrue(result['fallback']);validate(result,SOURCE)
         self.assertIn('HTTP 400',result['fallbackReason'])
         self.assertEqual(len(calls),2)
+        self.assertEqual([model for _,model in calls], ['deepseek-v4.1-flash', 'glm-5.3-flash'])
+        self.assertTrue(all(url == 'https://opencode.ai/inference/go/openai/v1/chat/completions' for url,_ in calls))
         self.assertNotIn('private prompt',result['fallbackReason'])
         self.assertTrue(all(log['httpStatus']==400 for log in logs))
 
@@ -104,7 +106,7 @@ class PlannerTests(unittest.TestCase):
         self.assertTrue(result['fallback'])
         self.assertEqual(now[0],240)
         self.assertTrue(all(timeout<=90 for _,timeout in calls))
-        self.assertIn('mimo-v2.6-flash',[model for model,_ in calls])
+        self.assertIn('glm-5.3-flash',[model for model,_ in calls])
 
     def test_motion_scenes_and_catalog_charts_validate_without_photo_layers(self):
         plan=copy.deepcopy(PLAN);plan['version']=2

@@ -469,12 +469,25 @@ test('a fifth attempt publishes clip-1 and a recovered clip is not named after i
   assert.equal(f.objects.get('partidos/a-b/clip-1.mp4').meta.attemptordinal,'4');
   assert.equal(f.objects.get('partidos/a-b/clip-1.mp4').meta.publicationindex,'1');
 });
-test('provider-only match identifiers stop before media or provider publication',async t=>{
-  const f=await fixture(t);const path=join(f.repo,'public/data/fixtures.json');
-  const fixtures=JSON.parse(await readFile(path));fixtures.matches[0].webId=null;await writeFile(path,JSON.stringify(fixtures));
-  const result=await f.run({args:{'--match':'af-1'}});
-  assert.equal(result.pending,1);assert.equal(f.provider.length,0);assert.equal(f.calls.filter(call=>call.cmd==='put').length,0);
-  assert.match(result.results[0].failures[0],/código descriptivo/);
+test('provider-only match identifiers are omitted without failing the rest of the run',async t=>{
+  const f=await fixture(t);
+  for(let ordinal=0;ordinal<4;ordinal++)f.addPhoto(ordinal);
+  f.addClip(0);f.addClip(1);
+  const fixturesPath=join(f.repo,'public/data/fixtures.json');
+  const fixtures=JSON.parse(await readFile(fixturesPath));
+  fixtures.matches.push({...fixtures.matches[0],id:'fd-9',webId:null});
+  await writeFile(fixturesPath,JSON.stringify(fixtures));
+  const topPath=join(f.repo,'public/data/top.json');
+  const top=JSON.parse(await readFile(topPath));
+  top.ranking.push({id:'fd-9'});
+  await writeFile(topPath,JSON.stringify(top));
+  const result=await f.run();
+  assert.equal(result.completed,1);assert.equal(result.pending,0);assert.equal(result.outcome.exitCode,0);
+  assert.equal(result.results.some(row=>row.matchId==='fd-9'),false);
+  assert.equal(f.provider.length,0);assert.equal(f.calls.filter(call=>call.cmd==='put').length,0);
+  assert.ok(f.logs.some(line=>line.includes('fd-9')&&line.includes('omitido')));
+  const manual=await f.run({args:{'--match':'fd-9'}});
+  assert.equal(manual.results.length,0);assert.equal(manual.outcome.exitCode,0);assert.equal(f.provider.length,0);
 });
 
 

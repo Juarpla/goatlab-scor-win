@@ -3,9 +3,15 @@ import json
 import os
 import time
 import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote, urlparse
+from zoneinfo import ZoneInfo
 from common import atomic_json
+
+LIMA = ZoneInfo('America/Lima')
+WEEKDAYS = ('lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo')
+MONTHS = ('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre')
 
 CATEGORIES = {'scripts': ('youtube-scripts', 10), 'image-prompts': ('image-prompts', 4), 'video-prompts': ('video-prompts', 2), 'motion-prompts': ('motion-prompts', None)}
 KINDS = {
@@ -47,6 +53,83 @@ def valid(data, category, match_id):
         if category == 'motion-prompts' and not (isinstance(r.get('factIds'), list) and all(f in facts for f in r['factIds'])):
             return False
     return True
+
+
+def parse_kickoff(value):
+    if not isinstance(value, str) or not value.strip():
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(LIMA)
+
+
+def competition_names(repo):
+    try:
+        data = json.loads((Path(repo) / 'public/data/leagues.json').read_text())
+        leagues = data.get('leagues') if isinstance(data, dict) else None
+        return {key: row.get('name') or key for key, row in (leagues or {}).items() if isinstance(row, dict)}
+    except (OSError, ValueError, AttributeError):
+        return {}
+
+
+def order_matches(matches, now=None):
+    """Upcoming matches first, by kickoff. A Lima evening is not the next UTC day."""
+    moment = datetime.fromtimestamp(time.time() if now is None else now, tz=timezone.utc).astimezone(LIMA)
+    dated, undated = [], []
+    for match in matches:
+        local = parse_kickoff(match.get('kickoff'))
+        if local is None:
+            undated.append(match)
+            continue
+        if local <= moment:
+            continue
+        dated.append((local, match))
+    dated.sort(key=lambda item: item[0])
+    ordered = [match for _, match in dated] + undated
+    return ordered
+
+
+def match_summary(match, number, names=None):
+    """Agent-facing row. The Lima day replaces the UTC date prefix of the kickoff."""
+    local = parse_kickoff(match.get('kickoff'))
+    labels = names or {}
+    row = {
+        'number': number,
+        'matchId': match.get('matchId'),
+        'home': match.get('home'),
+        'away': match.get('away'),
+        'competition': labels.get(match.get('competition')) or match.get('competition'),
+    }
+    if local is not None:
+        row['day'] = f'{WEEKDAYS[local.weekday()].capitalize()} {local.day} de {MONTHS[local.month - 1]}'
+        row['time'] = local.strftime('%H:%M')
+    return row
+
+
+def list_text(matches, names=None):
+    """One block per Lima date, one match per line, chronological across the list."""
+    lines, current = [], None
+    labels = names or {}
+    for index, match in enumerate(matches, 1):
+        local = parse_kickoff(match.get('kickoff'))
+        home, away = match.get('home') or '', match.get('away') or ''
+        if local is None:
+            lines.append(f'{index}. {home} vs {away}')
+            continue
+        day = f'{WEEKDAYS[local.weekday()].capitalize()} {local.day} de {MONTHS[local.month - 1]}'
+        if day != current:
+            if lines:
+                lines.append('')
+            lines.append(day)
+            current = day
+        competition = labels.get(match.get('competition')) or match.get('competition') or ''
+        tail = f' · {competition} · {local.strftime("%H:%M")}' if competition else f' · {local.strftime("%H:%M")}'
+        lines.append(f'{index}. {home} vs {away}{tail}')
+    return '\n'.join(lines)
 
 
 class ContentClient:

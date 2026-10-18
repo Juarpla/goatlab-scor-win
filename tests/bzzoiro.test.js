@@ -26,6 +26,7 @@ test('sameTeam matches full names, accents and abbreviations', () => {
   assert.equal(sameTeam('Manchester United', 'Man Utd'), true);
   assert.equal(sameTeam('Atlético Madrid', 'Atletico Madrid'), true);
   assert.equal(sameTeam('Liverpool FC', 'Liverpool'), true);
+  assert.equal(sameTeam('PAE AEK', 'AEK Athens'), true);
   assert.equal(sameTeam('Manchester United', 'Manchester City'), false);
   assert.equal(sameTeam('Arsenal', 'Chelsea'), false);
   assert.equal(sameTeam('', 'Arsenal'), false);

@@ -243,11 +243,11 @@ def create_plan(source, call=request_json, env=None, clock=time.monotonic, logge
     guide = (Path(__file__).resolve().parents[1] / "references/creative.md").read_text()
     models = list(dict.fromkeys([
         env.get("OPENCODE_GO_MODEL", "deepseek-v4.1-flash"),
-        env.get("OPENCODE_GO_FALLBACK_MODEL", "mimo-v2.6-flash"),
+        env.get("OPENCODE_GO_FALLBACK_MODEL", "glm-5.3-flash"),
     ]))
     if not env.get("OPENCODE_GO_API_KEY"):
         return local_plan(source, "configuración del proveedor no disponible")
-    url = env.get("OPENCODE_GO_BASE_URL", "https://opencode.ai/zen/go/v1").rstrip("/") + "/chat/completions"
+    url = env.get("OPENCODE_GO_BASE_URL", "https://opencode.ai/inference/go/openai/v1").rstrip("/") + "/chat/completions"
     errors, attempts = [], []
     started = clock()
     # No Telegram identifiers or credentials enter provider routing headers.

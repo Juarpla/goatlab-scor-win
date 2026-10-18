@@ -6,6 +6,11 @@ import { buildPruneContext, resolvePruneMatch, pruneDue } from './pruning.js';
 export const TOP_FILENAME = 'top.json';
 export const TOP_VERSION = 1;
 
+/** Id interno de proveedor (`fd-575357`). No es código descriptivo y no entra en la cola. */
+export function providerOnlyId(id) {
+  return /^(?:fd|af|bz)-[0-9]+$/.test(id ?? '');
+}
+
 /** Manual requests bypass age only; malformed or future rankings still fail closed. */
 export function topFreshness(top, { now = Date.now(), env = {}, manual = false } = {}) {
   const result = (valid, reason, ageHours = null, stale = false) => ({ valid, reason, ageHours, stale });

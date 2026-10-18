@@ -11,7 +11,7 @@ import { editingFacts } from '../lib/match-facts.js';
 import { validateContent, contentIdentityErrors, scriptStructureErrors } from '../lib/match-content.js';
 import { mediaPublisher } from '../lib/media-progress.js';
 import { contentFingerprint } from '../lib/media-contract.js';
-import { TOP_FILENAME, topFreshness, defaultTopN, effectiveIds, registerExtra } from '../lib/top.js';
+import { TOP_FILENAME, topFreshness, defaultTopN, effectiveIds, registerExtra, providerOnlyId } from '../lib/top.js';
 import { transact } from './agnes-state.mjs';
 import { maintainMedia } from './maintain-media.mjs';
 import { reconcileVideoRecovery } from './reconcile-video-recovery.mjs';
@@ -131,9 +131,9 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     if(recoveryOnly) log('media: '+(match.webId ?? match.id)+': recuperar tarea existente antes de generar; sin POST');
     const matchId = match.webId ?? match.id;
     if (!ID.test(matchId)) continue;
-    if (/^(?:fd|af|bz)-[0-9]+$/.test(matchId)) {
-      log('media: '+matchId+': identidad de equipos incompleta o ambigua; falta código descriptivo; sin publicación ni POST');
-      results.push({matchId,images:0,clips:0,mode,failures:['Identidad de equipos incompleta o ambigua; falta código descriptivo'],diagnostics:[],resources:[],attempts:[]});continue;
+    if (providerOnlyId(matchId)) {
+      log('media: '+matchId+': identidad de equipos incompleta o ambigua; falta código descriptivo; omitido');
+      continue;
     }
     const pack = async category => snapshot?.[category] ?? await json(join(repo, 'public/data', category, matchId + '.json'));
     const imagePack = await pack('image-prompts'), videoPack = await pack('video-prompts'), motionPack = await pack('motion-prompts');

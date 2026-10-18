@@ -471,12 +471,19 @@ def main():
     if args.command == "list":
         if (REPO / ".git").exists():
             subprocess.run(["git", "pull", "--ff-only"], cwd=REPO, check=True, stdout=sys.stderr)
-        from content_client import ContentClient
+        from content_client import ContentClient, competition_names, list_text, match_summary, order_matches
         scripts = ContentClient(REPO, STATE).list()
+        scripts = order_matches(scripts, flow.clock())
         if not scripts:
-            raise ValueError("no hay guiones disponibles")
+            raise ValueError("no hay partidos pendientes")
         flow.db.execute("INSERT OR REPLACE INTO choices(chat,payload,created) VALUES(?,?,?)", (args.chat, json.dumps(scripts), flow.clock()))
-        result = [{"number": i + 1, **{k: s.get(k) for k in ["matchId", "match", "home", "away", "competition", "kickoff"]}} for i, s in enumerate(scripts)]
+        names = competition_names(REPO)
+        text = list_text(scripts, names)
+        sent = False
+        if os.environ.get("TELEGRAM_BOT_TOKEN"):
+            telegram("sendMessage", {"chat_id": args.chat, "text": text})
+            sent = True
+        result = {"text": text, "sent": sent, "matches": [match_summary(script, i + 1, names) for i, script in enumerate(scripts)]}
     elif args.command == "select":
         row = flow.db.execute("SELECT payload FROM choices WHERE chat=?", (args.chat,)).fetchone()
         if not row or not args.number or not 1 <= args.number <= len(json.loads(row[0])):

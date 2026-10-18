@@ -65,17 +65,18 @@ Telegram con enlace y tarea que resolvería. Instalar solo cuando el usuario lo
 solicite y fijar la versión revisada. React/Remotion y FFmpeg siguen siendo el
 motor de motion graphics dirigido por OpenClaw.
 
-DeepSeek y MiMo se consumen mediante OpenCode Go con su clave y endpoint.
-Conservar esa ruta y el fallback configurado. Las cuotas, credenciales, IDs y
-parámetros de APIs directas no se trasladan al proxy. MiMo en esta integración
-omite los parámetros no admitidos. Consultar documentación cuando se cambien.
+DeepSeek es el modelo principal y GLM el respaldo, ambos mediante OpenCode Go.
+Usar su endpoint `https://opencode.ai/inference/go/openai/v1`; Console sin `/go/`
+consume saldo por separado. Las cuotas, credenciales, IDs y parámetros de APIs
+directas no se trasladan al proxy. Identificar el cliente y conservar un
+`x-opencode-session` estable por conversación. Consultar documentación cuando
+se cambien modelos o rutas.
 
 Fuentes: [ClawHub](https://docs.openclaw.ai/clawhub),
 [Gateway](https://docs.openclaw.ai/gateway),
 [proveedores](https://docs.openclaw.ai/providers),
 [DeepSeek](https://docs.openclaw.ai/providers/deepseek),
-[Xiaomi MiMo](https://docs.openclaw.ai/providers/xiaomi),
-[OpenCode Go](https://opencode.ai/docs/go/).
+[OpenCode Go](https://opencode.ai/v2/docs/console/go/).
 
 ## Banco audiovisual
 

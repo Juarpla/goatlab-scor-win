@@ -135,11 +135,11 @@ test('workers AI construye URL con account id y usa glm-4.7-flash', async () => 
   assert.ok(calls[0].url === 'https://api.cloudflare.com/client/v4/accounts/abc123/ai/v1/chat/completions');
   assert.equal(calls[0].body.temperature, 0);
 });
-test('opencode go construye URL zen/go sin duplicar chat/completions', async () => {
+test('opencode go construye URL inference/go sin duplicar chat/completions', async () => {
   const calls = [];
   const oEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'mimo-v2.6-flash' };
   await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
-  assert.ok(calls[0] === 'https://opencode.ai/zen/go/v1/chat/completions');
+  assert.ok(calls[0] === 'https://opencode.ai/inference/go/openai/v1/chat/completions');
 });
 test('deepseek pide temperatura cero y deja el esfuerzo en el default', async () => {
   const calls = [];
@@ -173,9 +173,27 @@ test('el fallback de OpenCode Go reusa la clave y entra en el orden por defecto'
   }, logger);
   assert.deepEqual(chain.map(p => p.id), ['MISTRAL', 'WORKERS_AI', 'OPENCODE_GO', 'OPENCODE_GO_FALLBACK']);
   assert.equal(chain[2].model, 'deepseek-v4.1-flash');
-  assert.equal(chain[3].model, 'mimo-v2.6-flash');
+  assert.equal(chain[3].model, 'glm-5.3-flash');
   assert.equal(chain[3].keyVar, 'OPENCODE_GO_API_KEY');
   assert.equal(chain[0].model, 'ministral-8b-2512');
+});
+test('DeepSeek falla y GLM responde por Go con la misma sesión y credencial', async () => {
+  const calls = [];
+  const result = await withFailover([{ role: 'user', content: 'OK' }], {
+    env: { OPENCODE_GO_API_KEY: 'test-go' }, logger,
+    fetchImpl: async (url, init) => {
+      calls.push({ url, headers: init.headers, body: JSON.parse(init.body) });
+      return calls.length === 1 ? new Response('', { status: 503 }) : response('OK');
+    },
+  });
+  assert.equal(result.provider, 'OPENCODE_GO_FALLBACK');
+  assert.equal(result.model, 'glm-5.3-flash');
+  assert.deepEqual(calls.map(call => call.body.model), ['deepseek-v4.1-flash', 'glm-5.3-flash']);
+  assert.ok(calls.every(call => call.url === 'https://opencode.ai/inference/go/openai/v1/chat/completions'));
+  assert.ok(calls.every(call => call.headers.authorization === 'Bearer test-go'));
+  assert.ok(calls.every(call => call.headers['user-agent'] === 'GoatLab/1.0'));
+  assert.ok(calls[0].headers['x-opencode-session']);
+  assert.equal(calls[0].headers['x-opencode-session'], calls[1].headers['x-opencode-session']);
 });
 test('un orden en blanco usa la cadena por defecto', () => {
   const chain = resolveChain({ MISTRAL_API_KEY: 'a', LLM_PROVIDER_ORDER: '   ' }, logger);
