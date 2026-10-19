@@ -1,251 +1,6 @@
 {
-  "updatedAt": "2026-10-19T13:03:30.166Z",
+  "updatedAt": "2026-10-19T22:35:23.067Z",
   "runs": [
-    {
-      "at": "2026-10-14T12:05:23.260Z",
-      "matchId": "fd-575362",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1048,
-        "outputTokens": 7208
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "a4762567-d960-4dbc-a544-8712f56c1d85"
-    },
-    {
-      "at": "2026-10-14T12:06:15.869Z",
-      "matchId": "fd-575364",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 981,
-        "outputTokens": 6313
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "beb62384-cdd5-4b43-aebc-8a84fc0c0948"
-    },
-    {
-      "at": "2026-10-14T12:08:07.167Z",
-      "matchId": "fd-575366",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 968,
-        "outputTokens": 3673
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "c3cf8b2e-aaf6-4e0c-89e9-5c9a45165cff"
-    },
-    {
-      "at": "2026-10-14T12:23:20.620Z",
-      "task": "shorts",
-      "matchId": "feyenoord-vs-como-2026-10-14",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180004
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6389,
-            "outputTokens": 9503
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 65110
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 9 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6583,
-            "outputTokens": 1328
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10497
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6389,
-            "outputTokens": 7362
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 52003
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 11 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: 8 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6583,
-            "outputTokens": 1562
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15846
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6583,
-        "outputTokens": 1562
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-14T17:24:53.149Z",
-      "task": "shorts",
-      "matchId": "as-roma-vs-real-madrid-2026-10-14",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6933,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 137885
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6529,
-        "outputTokens": 11619
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "4bc510ac-a9b8-4d0c-ac6e-b8df23e8420f"
-    },
-    {
-      "at": "2026-10-14T17:26:32.540Z",
-      "task": "shorts",
-      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 7068,
-        "outputTokens": 8277
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "462260b1-c831-4944-9f73-1da6a56dca07"
-    },
-    {
-      "at": "2026-10-14T17:26:53.092Z",
-      "task": "image-prompts",
-      "matchId": "as-roma-vs-real-madrid-2026-10-14",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1635,
-        "outputTokens": 876
-      }
-    },
-    {
-      "at": "2026-10-14T17:27:43.349Z",
-      "task": "image-prompts",
-      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1908,
-        "outputTokens": 955
-      }
-    },
     {
       "at": "2026-10-14T17:27:58.181Z",
       "task": "video-prompts",
@@ -5711,6 +5466,176 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "1f433f35-5a10-4097-9fa5-3d22f1c01ef8"
+    },
+    {
+      "at": "2026-10-19T22:30:00.853Z",
+      "task": "shorts",
+      "matchId": "liverpool-vs-villarreal-2026-10-20",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6701,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65929
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6835,
+        "outputTokens": 5477
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "8497987d-01cb-4207-b00e-30b9624e0338"
+    },
+    {
+      "at": "2026-10-19T22:31:23.341Z",
+      "task": "shorts",
+      "matchId": "porto-vs-psv-eindhoven-2026-10-20",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 5932,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 60263
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6041,
+        "outputTokens": 6663
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "ae1b72e7-713a-4fad-b3bd-1d4fce93c17c"
+    },
+    {
+      "at": "2026-10-19T22:31:50.396Z",
+      "task": "image-prompts",
+      "matchId": "liverpool-vs-villarreal-2026-10-20",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1677,
+        "outputTokens": 5258
+      }
+    },
+    {
+      "at": "2026-10-19T22:32:12.947Z",
+      "task": "image-prompts",
+      "matchId": "porto-vs-psv-eindhoven-2026-10-20",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1247,
+        "outputTokens": 4450
+      }
+    },
+    {
+      "at": "2026-10-19T22:32:23.781Z",
+      "task": "video-prompts",
+      "matchId": "liverpool-vs-villarreal-2026-10-20",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1574,
+        "outputTokens": 1967
+      }
+    },
+    {
+      "at": "2026-10-19T22:32:32.933Z",
+      "task": "video-prompts",
+      "matchId": "porto-vs-psv-eindhoven-2026-10-20",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1144,
+        "outputTokens": 1911
+      }
+    },
+    {
+      "at": "2026-10-19T22:34:24.004Z",
+      "task": "motion-prompts",
+      "matchId": "liverpool-vs-villarreal-2026-10-20",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2346,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 68717
+        }
+      ],
+      "usage": {
+        "inputTokens": 2480,
+        "outputTokens": 10133
+      }
+    },
+    {
+      "at": "2026-10-19T22:35:23.067Z",
+      "task": "motion-prompts",
+      "matchId": "porto-vs-psv-eindhoven-2026-10-20",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1874,
+        "outputTokens": 10647
+      }
     }
   ]
 }
