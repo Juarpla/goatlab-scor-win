@@ -1,75 +1,6 @@
 {
-  "updatedAt": "2026-10-18T21:09:23.703Z",
+  "updatedAt": "2026-10-19T04:56:52.852Z",
   "runs": [
-    {
-      "at": "2026-10-14T05:07:32.895Z",
-      "task": "shorts",
-      "matchId": "feyenoord-vs-como-2026-10-14",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 5 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6740,
-            "outputTokens": 8475
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 97022
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6394,
-            "outputTokens": 5548
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 33633
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 10 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos; guion 2: falta el antecedente asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6599,
-            "outputTokens": 1854
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 18495
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 2: falta Como 1907; guion 3: falta Como 1907; guion 3: falta Anastasios Douvikas; guion 4: falta Como 1907; guion 4: falta Anastasios Douvikas; guion 5: cifra 1907 no está en los hechos; guion 5: 54 palabras, mínimo 55",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6276,
-            "outputTokens": 7088
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 104968
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6276,
-        "outputTokens": 7088
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-10-14T05:13:30.112Z",
       "task": "shorts",
@@ -5844,6 +5775,35 @@
         }
       ],
       "usage": null
+    },
+    {
+      "at": "2026-10-19T04:56:52.852Z",
+      "task": "motion-prompts",
+      "matchId": "paris-saint-germain-vs-barcelona-2026-10-20",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2501,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 179130
+        }
+      ],
+      "usage": {
+        "inputTokens": 2607,
+        "outputTokens": 7353
+      }
     }
   ]
 }
