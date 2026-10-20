@@ -4,7 +4,7 @@
   "away": "Villarreal CF",
   "competition": "champions",
   "kickoff": "2026-10-20T19:00:00Z",
-  "updatedAt": "2026-10-20T05:01:07.387Z",
+  "updatedAt": "2026-10-20T11:26:15.454Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.38
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.895,
-      "away": 1.345
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -62,22 +59,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-19T12:56:52.827Z",
+      "updatedAt": "2026-10-20T11:25:03.846Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-20T19:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-20T19:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-19T12:56:52.827Z",
+      "updatedAt": "2026-10-20T11:25:03.846Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 273
+      "rows": 275
     },
     "venue": {
       "city": "Liverpool",
@@ -144,42 +141,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.24,
-    "noGoal": 0.039,
+    "lambdaTotal": 2.91,
+    "noGoal": 0.054,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.417
+        "p": 0.384
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.243
+        "p": 0.237
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.142
+        "p": 0.146
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.083
+        "p": 0.09
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.048
+        "p": 0.055
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.028
+        "p": 0.034
       }
     ],
-    "firstHome": 0.562,
-    "firstAway": 0.399
+    "firstHome": 0.497,
+    "firstAway": 0.448
   },
   "scorers": {
     "home": [
@@ -188,18 +185,18 @@
         "goals": 3,
         "matches": 2,
         "share": 0.75,
-        "rate": 1.42,
-        "anytime": 0.759,
-        "first": 0.439
+        "rate": 1.15,
+        "anytime": 0.683,
+        "first": 0.394
       },
       {
         "player": "Alexis Mac Allister",
         "goals": 1,
         "matches": 2,
         "share": 0.25,
-        "rate": 0.47,
-        "anytime": 0.377,
-        "first": 0.146
+        "rate": 0.38,
+        "anytime": 0.318,
+        "first": 0.131
       }
     ],
     "away": [
@@ -208,164 +205,41 @@
         "goals": 2,
         "matches": 2,
         "share": 0.9,
-        "rate": 1.21,
-        "anytime": 0.702,
-        "first": 0.374
+        "rate": 1.24,
+        "anytime": 0.711,
+        "first": 0.427
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.629,
-      "draw": 0.204,
-      "away": 0.166,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.26,
-      "away": 1.31
-    },
-    "over15": 0.836,
-    "over25": 0.6559999999999999,
-    "over35": 0.447,
-    "btts": 0.607,
-    "score": "2-1",
-    "cornersOver95": 0.564,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.629,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.6294,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-20T05:00:41.074Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.58,
-      "draw": 0.215,
-      "away": 0.206
-    },
-    "doubleChance": {
-      "12": 0.785,
-      "1X": 0.794,
-      "X2": 0.42
-    },
-    "dnb": {
-      "home": 0.738,
-      "away": 0.262
-    },
-    "totals": {
-      "over15": 0.88,
-      "under15": 0.12,
-      "over25": 0.692,
-      "under25": 0.308,
-      "over35": 0.478,
-      "under35": 0.522
-    },
-    "btts": {
-      "yes": 0.662,
-      "no": 0.338
-    },
-    "cleanSheet": {
-      "home": 0.27,
-      "away": 0.104
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.115,
-        "share": 0.279126213592233
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.092,
-        "share": 0.2233009708737864
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.072,
-        "share": 0.17475728155339804
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.071,
-        "share": 0.17233009708737862
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.062,
-        "share": 0.15048543689320387
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 4,
-    "homeWins": 3,
-    "draws": 0,
-    "awayWins": 1,
-    "avgTotalGoals": 2.75,
-    "recent": [
-      {
-        "eventId": 319166,
-        "date": "2022-05-03T19:00:00+00:00",
-        "home": "Villarreal",
-        "away": "Liverpool FC",
-        "homeTeamId": 41,
-        "awayTeamId": 1,
-        "homeScore": 2,
-        "awayScore": 3
-      },
-      {
-        "eventId": 319165,
-        "date": "2022-04-27T19:00:00+00:00",
-        "home": "Liverpool FC",
-        "away": "Villarreal",
-        "homeTeamId": 1,
-        "awayTeamId": 41,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 376350,
-        "date": "2016-05-05T19:05:00+00:00",
-        "home": "Liverpool FC",
-        "away": "Villarreal",
-        "homeTeamId": 1,
-        "awayTeamId": 41,
-        "homeScore": 3,
-        "awayScore": 0
-      },
-      {
-        "eventId": 376348,
-        "date": "2016-04-28T19:05:00+00:00",
-        "home": "Villarreal",
-        "away": "Liverpool FC",
-        "homeTeamId": 41,
-        "awayTeamId": 1,
-        "homeScore": 1,
-        "awayScore": 0
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -381,7 +255,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 273
+      "historyRows": 275
     },
     "source": "GoatLab",
     "expectedTotal": 4.3
@@ -392,7 +266,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 273
+      "historyRows": 275
     },
     "source": "GoatLab",
     "expectedTotal": 10.8
@@ -402,7 +276,7 @@
     "home": {
       "shots": 14.5,
       "shotsOnTarget": 4.87,
-      "xg": 2.26,
+      "xg": 1.58,
       "corners": 5.31,
       "fouls": 12.1,
       "yellowCards": 2.32,
@@ -413,7 +287,7 @@
     "away": {
       "shots": 14.16,
       "shotsOnTarget": 5.15,
-      "xg": 1.31,
+      "xg": 1.7,
       "corners": 5.53,
       "fouls": 10.73,
       "yellowCards": 1.97,
@@ -504,9 +378,9 @@
       "away": 0.337
     },
     "lastGoal": {
-      "home": 0.562,
-      "away": 0.399,
-      "noGoal": 0.039
+      "home": 0.497,
+      "away": 0.448,
+      "noGoal": 0.054
     },
     "cornerRace": {
       "3": {
@@ -533,13 +407,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 7.8,
-      "condition": "rain",
-      "sampledAt": "2026-10-20T19:00:00Z",
-      "source": "bzzoiro"
+      "temp": 10.7,
+      "precipitation": 0.3,
+      "weathercode": 51,
+      "wind": 10.1,
+      "condition": null,
+      "sampledAt": "2026-10-20T19:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Anfield",
