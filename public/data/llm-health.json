@@ -1,193 +1,6 @@
 {
-  "updatedAt": "2026-10-20T11:27:37.061Z",
+  "updatedAt": "2026-10-20T17:43:58.465Z",
   "runs": [
-    {
-      "at": "2026-10-14T17:28:18.368Z",
-      "task": "video-prompts",
-      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "Se requieren 2 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1804,
-            "outputTokens": 366
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10958
-        }
-      ],
-      "usage": {
-        "inputTokens": 1768,
-        "outputTokens": 1334
-      }
-    },
-    {
-      "at": "2026-10-14T17:32:16.510Z",
-      "task": "motion-prompts",
-      "matchId": "as-roma-vs-real-madrid-2026-10-14",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180003
-        }
-      ],
-      "usage": {
-        "inputTokens": 2295,
-        "outputTokens": 7029
-      }
-    },
-    {
-      "at": "2026-10-14T17:35:07.200Z",
-      "task": "motion-prompts",
-      "matchId": "sk-slovan-bratislava-vs-vfb-stuttgart-2026-10-14",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2576,
-        "outputTokens": 8859
-      }
-    },
-    {
-      "at": "2026-10-14T21:50:14.487Z",
-      "task": "shorts",
-      "matchId": "fluminense-vs-palmeiras-2026-10-15",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 7397,
-        "outputTokens": 8022
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "7d61b468-b169-4048-b566-b9596ec72736"
-    },
-    {
-      "at": "2026-10-14T21:52:36.049Z",
-      "task": "shorts",
-      "matchId": "fluminense-vs-palmeiras-2026-10-15",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 7166,
-        "outputTokens": 10316
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "3bfee724-0f1f-4472-b90e-6aad21f8cbc7"
-    },
-    {
-      "at": "2026-10-14T21:54:31.481Z",
-      "task": "shorts",
-      "matchId": "torreense-vs-sunderland-2026-10-15",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 6730,
-        "outputTokens": 9679
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "6a84abdd-ad6a-4ce0-8bc2-c5f72a33bf39"
-    },
-    {
-      "at": "2026-10-14T21:57:54.087Z",
-      "task": "shorts",
-      "matchId": "royale-union-saint-gilloise-vs-real-sociedad-2026-10-15",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6265,
-        "outputTokens": 7003
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "8639f38b-bd92-4217-ab35-7ff2773f899e"
-    },
-    {
-      "at": "2026-10-14T22:02:10.153Z",
-      "task": "shorts",
-      "matchId": "red-bull-salzburg-vs-ac-milan-2026-10-15",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6529,
-        "outputTokens": 6882
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "7f7f5547-1cd6-4236-960e-f659a7da32fd"
-    },
     {
       "at": "2026-10-14T22:02:32.574Z",
       "task": "image-prompts",
@@ -5639,6 +5452,361 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "4cafa191-28af-46b6-b485-7cef6abb114f"
+    },
+    {
+      "at": "2026-10-20T17:32:52.484Z",
+      "task": "shorts",
+      "matchId": "manchester-city-vs-aek-athens-2026-10-20",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6431,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 59758
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 503",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 387
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 10 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta PAE AEK; guion 3: falta PAE AEK; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6749,
+            "outputTokens": 1164
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9938
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6431,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 106305
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 503",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 466
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta PAE AEK; guion 2: 54 palabras, mínimo 55; guion 3: falta PAE AEK; guion 4: 6 cifras, máximo 3; guion 4: falta Erling Haaland",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6749,
+            "outputTokens": 1081
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8940
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6749,
+        "outputTokens": 1081
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-20T17:37:49.376Z",
+      "task": "shorts",
+      "matchId": "vfb-stuttgart-vs-atletico-madrid-2026-10-20",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6224,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 84490
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 503",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 469
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Club Atlético de Madrid; guion 1: 6 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Club Atlético de Madrid; guion 2: falta el puente asignado; guion 3: falta Club Atlético de Madrid",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6528,
+            "outputTokens": 1322
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10619
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6224,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 101344
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 503",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 397
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Club Atlético de Madrid; guion 1: 8 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Club Atlético de Madrid; guion 2: falta el puente asignado; guion 2: falta el antecedente asignado",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6528,
+            "outputTokens": 1422
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15150
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6528,
+        "outputTokens": 1422
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-20T17:38:21.648Z",
+      "task": "image-prompts",
+      "matchId": "manchester-city-vs-aek-athens-2026-10-20",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1484,
+        "outputTokens": 5722
+      }
+    },
+    {
+      "at": "2026-10-20T17:39:26.376Z",
+      "task": "image-prompts",
+      "matchId": "vfb-stuttgart-vs-atletico-madrid-2026-10-20",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 995,
+        "outputTokens": 1441
+      }
+    },
+    {
+      "at": "2026-10-20T17:39:37.463Z",
+      "task": "video-prompts",
+      "matchId": "manchester-city-vs-aek-athens-2026-10-20",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1381,
+        "outputTokens": 2014
+      }
+    },
+    {
+      "at": "2026-10-20T17:39:45.901Z",
+      "task": "video-prompts",
+      "matchId": "vfb-stuttgart-vs-atletico-madrid-2026-10-20",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 892,
+        "outputTokens": 1594
+      }
+    },
+    {
+      "at": "2026-10-20T17:40:43.583Z",
+      "task": "motion-prompts",
+      "matchId": "manchester-city-vs-aek-athens-2026-10-20",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2129,
+        "outputTokens": 10767
+      }
+    },
+    {
+      "at": "2026-10-20T17:43:58.465Z",
+      "task": "motion-prompts",
+      "matchId": "vfb-stuttgart-vs-atletico-madrid-2026-10-20",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1610,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 69556
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1686,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 54845
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1714,
+            "outputTokens": 2487
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26971
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: dirección insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: dirección insuficientemente detallada; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: dirección insuficientemente detallada; motion-prompts 3: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1603,
+            "outputTokens": 3108
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 43504
+        }
+      ],
+      "usage": null
     }
   ]
 }
