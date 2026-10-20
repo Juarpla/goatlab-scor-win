@@ -1,80 +1,6 @@
 {
-  "updatedAt": "2026-10-20T17:43:58.465Z",
+  "updatedAt": "2026-10-20T21:47:43.712Z",
   "runs": [
-    {
-      "at": "2026-10-14T22:02:32.574Z",
-      "task": "image-prompts",
-      "matchId": "fluminense-vs-palmeiras-2026-10-15",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1871,
-        "outputTokens": 895
-      }
-    },
-    {
-      "at": "2026-10-14T22:03:01.785Z",
-      "task": "image-prompts",
-      "matchId": "fluminense-vs-palmeiras-2026-10-15",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1415,
-        "outputTokens": 903
-      }
-    },
-    {
-      "at": "2026-10-14T22:03:46.881Z",
-      "task": "image-prompts",
-      "matchId": "torreense-vs-sunderland-2026-10-15",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1410,
-        "outputTokens": 1658
-      }
-    },
-    {
-      "at": "2026-10-14T22:04:52.393Z",
-      "task": "image-prompts",
-      "matchId": "royale-union-saint-gilloise-vs-real-sociedad-2026-10-15",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "Se requieren 4 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1495,
-            "outputTokens": 961
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 49222
-        }
-      ],
-      "usage": {
-        "inputTokens": 1487,
-        "outputTokens": 4490
-      }
-    },
     {
       "at": "2026-10-14T22:05:14.661Z",
       "task": "image-prompts",
@@ -5804,6 +5730,180 @@
           },
           "retryAfterMs": 0,
           "latencyMs": 43504
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-10-20T21:42:37.810Z",
+      "task": "shorts",
+      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6460,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 60158
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 5: artículo delante de Real Madrid CF",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6589,
+            "outputTokens": 5959
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23247
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta RB Leipzig; guion 2: 7 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 3: falta RB Leipzig; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6864,
+            "outputTokens": 1321
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12053
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6460,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 145106
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6589,
+        "outputTokens": 11443
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "576d73fc-c3b3-4a5a-8eaf-86c0e2971df3"
+    },
+    {
+      "at": "2026-10-20T21:43:12.233Z",
+      "task": "image-prompts",
+      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1596,
+        "outputTokens": 6595
+      }
+    },
+    {
+      "at": "2026-10-20T21:43:14.069Z",
+      "task": "video-prompts",
+      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1493,
+        "outputTokens": 365
+      }
+    },
+    {
+      "at": "2026-10-20T21:47:43.712Z",
+      "task": "motion-prompts",
+      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2253,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 81104
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2378,
+            "outputTokens": 3318
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 18641
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2466,
+            "outputTokens": 2962
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25172
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 1: dirección insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: dirección insuficientemente detallada; motion-prompts 3: dirección insuficientemente detallada; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 4: dirección insuficientemente detallada; motion-prompts 5: dirección insuficientemente detallada; motion-prompts 5: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2246,
+            "outputTokens": 4210
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 144660
         }
       ],
       "usage": null
