@@ -4,16 +4,16 @@
   "away": "FC Barcelona",
   "competition": "champions",
   "kickoff": "2026-10-20T19:00:00Z",
-  "updatedAt": "2026-10-20T11:26:15.454Z",
+  "updatedAt": "2026-10-20T11:49:00.633Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.45,
-      "away": 1.45
+      "home": 2.18,
+      "away": 1.71
     },
-    "lambdaSource": "Media-liga",
+    "lambdaSource": "Bzzoiro-xG",
     "lambdasBlend": null,
-    "firstGoalSource": "Media-liga",
+    "firstGoalSource": "Bzzoiro-xG",
     "sample": {
       "home": 0,
       "away": 0
@@ -83,100 +83,100 @@
   },
   "markets": {
     "oneX2": {
-      "home": 0.365,
-      "draw": 0.271,
-      "away": 0.365
+      "home": 0.481,
+      "draw": 0.22,
+      "away": 0.299
     },
     "doubleChance": {
-      "12": 0.729,
-      "1X": 0.635,
-      "X2": 0.635
+      "12": 0.78,
+      "1X": 0.701,
+      "X2": 0.519
     },
     "dnb": {
-      "home": 0.5,
-      "away": 0.5
+      "home": 0.617,
+      "away": 0.383
     },
     "totals": {
-      "over15": 0.797,
-      "under15": 0.203,
-      "over25": 0.554,
-      "under25": 0.446,
-      "over35": 0.33,
-      "under35": 0.67
+      "over15": 0.908,
+      "under15": 0.092,
+      "over25": 0.745,
+      "under25": 0.255,
+      "over35": 0.545,
+      "under35": 0.455
     },
     "btts": {
-      "yes": 0.597,
-      "no": 0.403
+      "yes": 0.734,
+      "no": 0.266
     },
     "cleanSheet": {
-      "home": 0.235,
-      "away": 0.235
+      "home": 0.181,
+      "away": 0.113
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.127
-      },
-      {
-        "home": 1,
-        "away": 2,
         "p": 0.084
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.084
+        "p": 0.083
       },
       {
-        "home": 0,
-        "away": 1,
-        "p": 0.068
+        "home": 2,
+        "away": 2,
+        "p": 0.071
       },
       {
         "home": 1,
-        "away": 0,
-        "p": 0.068
+        "away": 2,
+        "p": 0.065
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.06
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.9,
-    "noGoal": 0.055,
+    "lambdaTotal": 3.89,
+    "noGoal": 0.02,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.383
+        "p": 0.477
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.236
+        "p": 0.249
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.13
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.09
+        "p": 0.068
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.055
+        "p": 0.036
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.034
+        "p": 0.019
       }
     ],
-    "firstHome": 0.472,
-    "firstAway": 0.472
+    "firstHome": 0.549,
+    "firstAway": 0.431
   },
   "scorers": {
     "home": [
@@ -185,18 +185,18 @@
         "goals": 3,
         "matches": 2,
         "share": 0.5,
-        "rate": 0.73,
-        "anytime": 0.516,
-        "first": 0.25
+        "rate": 1.09,
+        "anytime": 0.664,
+        "first": 0.28
       },
       {
         "player": "Ousmane Dembélé",
         "goals": 3,
         "matches": 2,
         "share": 0.5,
-        "rate": 0.73,
-        "anytime": 0.516,
-        "first": 0.25
+        "rate": 1.09,
+        "anytime": 0.664,
+        "first": 0.28
       }
     ],
     "away": [
@@ -205,50 +205,183 @@
         "goals": 2,
         "matches": 2,
         "share": 0.5,
-        "rate": 0.73,
-        "anytime": 0.516,
-        "first": 0.25
+        "rate": 0.86,
+        "anytime": 0.575,
+        "first": 0.22
       },
       {
         "player": "Raphinha",
         "goals": 2,
         "matches": 1,
         "share": 0.5,
-        "rate": 0.73,
-        "anytime": 0.516,
-        "first": 0.25
+        "rate": 0.86,
+        "anytime": 0.575,
+        "first": 0.22
       }
     ]
   },
   "hasScorers": true,
   "method": "poisson-fallback-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.39399999999999996,
+      "draw": 0.213,
+      "away": 0.39299999999999996,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.18,
+      "away": 1.71
+    },
+    "over15": 0.909,
+    "over25": 0.792,
+    "over35": 0.601,
+    "btts": 0.773,
+    "score": "2-1",
+    "cornersOver95": 0.462,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.394,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3942,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-20T11:48:57.101Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.481,
+      "draw": 0.22,
+      "away": 0.299
+    },
+    "doubleChance": {
+      "12": 0.78,
+      "1X": 0.701,
+      "X2": 0.519
+    },
+    "dnb": {
+      "home": 0.617,
+      "away": 0.383
+    },
+    "totals": {
+      "over15": 0.908,
+      "under15": 0.092,
+      "over25": 0.745,
+      "under25": 0.255,
+      "over35": 0.545,
+      "under35": 0.455
+    },
+    "btts": {
+      "yes": 0.734,
+      "no": 0.266
+    },
+    "cleanSheet": {
+      "home": 0.181,
+      "away": 0.113
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.105,
+        "share": 0.2727272727272727
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.084,
+        "share": 0.2181818181818182
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.071,
+        "share": 0.1844155844155844
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.065,
+        "share": 0.16883116883116883
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.06,
+        "share": 0.15584415584415584
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "totalMatches": 13,
+    "homeWins": 5,
+    "draws": 3,
+    "awayWins": 5,
+    "avgTotalGoals": 4,
+    "recent": [
+      {
+        "eventId": 2101,
+        "date": "2025-10-01T19:00:00+00:00",
+        "home": "FC Barcelona",
+        "away": "Paris Saint-Germain",
+        "homeTeamId": 44,
+        "awayTeamId": 114,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 310076,
+        "date": "2024-04-16T19:00:00+00:00",
+        "home": "FC Barcelona",
+        "away": "Paris Saint-Germain",
+        "homeTeamId": 44,
+        "awayTeamId": 114,
+        "homeScore": 1,
+        "awayScore": 4
+      },
+      {
+        "eventId": 310074,
+        "date": "2024-04-10T19:00:00+00:00",
+        "home": "Paris Saint-Germain",
+        "away": "FC Barcelona",
+        "homeTeamId": 114,
+        "awayTeamId": 44,
+        "homeScore": 2,
+        "awayScore": 3
+      },
+      {
+        "eventId": 322868,
+        "date": "2021-03-10T20:00:00+00:00",
+        "home": "Paris Saint-Germain",
+        "away": "FC Barcelona",
+        "homeTeamId": 114,
+        "awayTeamId": 44,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 322858,
+        "date": "2021-02-16T20:00:00+00:00",
+        "home": "FC Barcelona",
+        "away": "Paris Saint-Germain",
+        "homeTeamId": 44,
+        "awayTeamId": 114,
+        "homeScore": 1,
+        "awayScore": 4
+      }
+    ],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -285,7 +418,7 @@
     "home": {
       "shots": 14.77,
       "shotsOnTarget": 6.02,
-      "xg": 1.94,
+      "xg": 2.18,
       "corners": 4.12,
       "fouls": 9.74,
       "yellowCards": 1.56,
@@ -296,7 +429,7 @@
     "away": {
       "shots": 17.01,
       "shotsOnTarget": 6.51,
-      "xg": 2.11,
+      "xg": 1.71,
       "corners": 5.39,
       "fouls": 10.75,
       "yellowCards": 1.85,
@@ -387,9 +520,9 @@
       "away": 0.448
     },
     "lastGoal": {
-      "home": 0.472,
-      "away": 0.472,
-      "noGoal": 0.055
+      "home": 0.549,
+      "away": 0.431,
+      "noGoal": 0.02
     },
     "cornerRace": {
       "3": {
