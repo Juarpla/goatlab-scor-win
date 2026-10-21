@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "category": "motion-prompts",
+  "matchId": "inter-vs-shakhtar-donetsk-2026-10-21",
+  "home": "FC Internazionale Milano",
+  "away": "FK Shakhtar Donetsk",
+  "competition": "champions",
+  "kickoff": "2026-10-21T19:00:00Z",
+  "venue": null,
+  "facts": [
+    {
+      "id": "home.player0.goals",
+      "label": "Lautaro Martínez · goles",
+      "value": 2,
+      "unit": "goles",
+      "source": "scorers:champions:Lautaro Martínez",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "away.player0.goals",
+      "label": "Gleiker Mendoza · goles",
+      "value": 2,
+      "unit": "goles",
+      "source": "scorers:champions:Gleiker Mendoza",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "h2h.total",
+      "label": "Cruces previos",
+      "value": 7,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-shakhtar-donetsk-2026-10-21:h2h.total",
+      "provider": "Bzzoiro",
+      "sampleSize": 7
+    },
+    {
+      "id": "h2h.homeWins",
+      "label": "FC Internazionale Milano · victorias en cruces",
+      "value": 3,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-shakhtar-donetsk-2026-10-21:h2h.homeWins",
+      "provider": "Bzzoiro",
+      "sampleSize": 7
+    },
+    {
+      "id": "h2h.awayWins",
+      "label": "FK Shakhtar Donetsk · victorias en cruces",
+      "value": 0,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-shakhtar-donetsk-2026-10-21:h2h.awayWins",
+      "provider": "Bzzoiro",
+      "sampleSize": 7
+    },
+    {
+      "id": "h2h.draws",
+      "label": "Empates en cruces",
+      "value": 4,
+      "unit": "partidos",
+      "source": "fixtures:inter-vs-shakhtar-donetsk-2026-10-21:h2h.draws",
+      "provider": "Bzzoiro",
+      "sampleSize": 7
+    }
+  ],
+  "published": false,
+  "kinds": [
+    "form",
+    "goals",
+    "clean-sheets",
+    "head-to-head",
+    "synthesis"
+  ],
+  "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+  "author": {
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "glm-5.3-flash"
+  },
+  "generatedAt": "2026-10-21T05:12:36.097Z",
+  "prompts": [
+    {
+      "n": 1,
+      "kind": "goals",
+      "title": "Scoring Duel",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.player0.goals",
+        "away.player0.goals"
+      ],
+      "prompt": "Vertical 9:16 scene, about 6–10 seconds, charcoal #101412 background with a subtle vignette; the lower quarter stays reserved for permanent yellow subtitles throughout. Editorial variant first: an illustrative football pitch drawn in warm white #edf0e6 line art fills the frame top-to-bottom; a lime #c5ed74 ball leaves the bottom edge, tracing a curved path toward the goal at the top while the Spanish label 'Lautaro Martínez · FC Internazionale Milano' snaps in with kinetic weight; the path then resets and a slate #8ca6bf ball traces a mirrored route as 'Gleiker Mendoza · FK Shakhtar Donetsk' appears. Camera performs a slow push-in toward the goal; the two paths cross at mid-frame as the emphasis beat, with a soft flash on impact. A wipe transition hands over to the statistical variant: paired vertical bars on a shared zero baseline and one common scale measured in goles, the home bar in lime and the away bar in slate, heights resolved from {{home.player0.goals}} and {{away.player0.goals}}. Spanish axis label 'Goles' with its unit caption sits beside the baseline; each bar carries its player name and team so the comparison is unambiguous. Bars rise with a spring ease, then a lime highlight pulse marks the main comparison between the two counts. A source caption 'Fuente: Tabla de goleadores' sits under the chart; these scorer facts carry no sample size, so no sample badge is drawn. Exit: the bars settle, the pitch ghost returns at low opacity, and the frame fades to charcoal, handing focus back to the narration. Keep one focal point on the bar pair, generous margins, warm white condensed grotesque typography, slate for secondary metadata, legible Spanish labels at every size, and no decorative clutter anywhere."
+    },
+    {
+      "n": 2,
+      "kind": "head-to-head",
+      "title": "Head-to-Head History",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.draws",
+        "h2h.awayWins"
+      ],
+      "prompt": "Vertical 9:16 block of about 6–10 seconds on a charcoal #101412 base, with the lower quarter permanently reserved for yellow subtitles. Editorial variant: a visual duel — the frame splits along a diagonal seam, FC Internazionale Milano revealed on the left through lime #c5ed74 light streaks under the Spanish caption 'Inter', FK Shakhtar Donetsk revealed on the right through slate #8ca6bf streaks under 'Shakhtar'; a warm white #edf0e6 seam crackles down the center as both sides push toward each other, while the camera drifts laterally to sell the confrontation and the Spanish heading 'Cruces previos' stamps in at the top. A flash transition cuts to the statistical variant: three horizontal bars on a shared zero baseline and one common scale in partidos — 'Victorias Inter' driven by {{h2h.homeWins}} in lime, 'Empates' driven by {{h2h.draws}} in warm white, 'Victorias Shakhtar' driven by {{h2h.awayWins}} in slate — each bar growing left-to-right with staggered spring easing. Beneath the stack, a sample annotation reads 'Muestra: {{h2h.total}} partidos' beside the source line 'Fuente: Bzzoiro', and a slate disclaimer tag states 'Historial, no es pronóstico'. The emphasis beat outlines the draw bar with a lime pulse because it anchors the historical balance, while the away bar simply renders at its resolved length without embellishment. The camera holds static for chart legibility, then eases out for the exit: bars retract to the baseline, the duel seam flashes once, and the composition dissolves to charcoal. Temporal stages run reveal, clash, chart build, emphasis, retract. Typography is condensed warm white, Spanish labels stay legible at small sizes, the bar stack remains the single focal point, and no predictive wording appears anywhere in the scene."
+    },
+    {
+      "n": 3,
+      "kind": "synthesis",
+      "title": "Synthesis: Even Present, Tight Past",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "home.player0.goals",
+        "away.player0.goals",
+        "h2h.draws",
+        "h2h.total"
+      ],
+      "prompt": "Vertical 9:16 closing block, roughly 6–10 seconds, on a charcoal #101412 base; the lower quarter remains reserved for permanent yellow subtitles. Editorial variant: team reveals and narrative emphasis — first FC Internazionale Milano emerges from darkness as lime #c5ed74 particles converge into its Spanish nameplate, then FK Shakhtar Donetsk forms from slate #8ca6bf particles on the opposite side; between them a warm white #edf0e6 thread draws itself from past meetings toward the present fixture, while the camera pulls back slowly to frame both names under the Spanish heading 'El presente se escribe hoy'. A soft luminance transition moves into the statistical variant: two stacked mini-panels sharing one grid. The upper panel shows paired scorer bars on a common scale in goles, lime for the home marksman resolved from {{home.player0.goals}} and slate for the away marksman resolved from {{away.player0.goals}}, labelled 'Goleadores' with the source caption 'Fuente: Tabla de goleadores' and no sample badge, since these scorer facts carry no sample size. The lower panel shows a single horizontal track in partidos: a warm white fill grows to {{h2h.draws}} inside a slate outline spanning {{h2h.total}} partidos, labelled 'Empates en cruces previos', with source 'Fuente: Bzzoiro' and sample note 'Muestra: {{h2h.total}} partidos'. The emphasis beat pulses both panels once in lime to state the grounded tension — even leading scorers, draw-heavy history — while a slate tag reads 'Historial, no es pronóstico'. Exit: the panels slide apart vertically, particles re-form briefly and fade to charcoal, closing the montage. Warm white condensed typography, one focal point per panel, legible Spanish labels throughout, temporal stages of reveal, thread, chart build, emphasis and fade, and no predictive claims anywhere."
+    }
+  ]
+}
