@@ -1,22 +1,6 @@
 {
-  "updatedAt": "2026-10-21T11:50:16.040Z",
+  "updatedAt": "2026-10-21T12:12:00.031Z",
   "runs": [
-    {
-      "at": "2026-10-15T11:25:03.616Z",
-      "matchId": "fd-575373",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0b9bbd93-e6b1-45a2-8628-f75ef6157a93"
-    },
     {
       "at": "2026-10-15T11:26:02.560Z",
       "matchId": "fd-575370",
@@ -6310,6 +6294,121 @@
       "usage": {
         "inputTokens": 6676,
         "outputTokens": 1408
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-21T12:12:00.028Z",
+      "task": "shorts",
+      "matchId": "como-vs-manchester-united-2026-10-21",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6309,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 73335
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6412,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 46387
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 10 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Manchester United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6676,
+            "outputTokens": 1400
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12034
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6309,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 70435
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6412,
+            "outputTokens": 7092
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 27895
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Manchester United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6676,
+            "outputTokens": 1309
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11806
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6676,
+        "outputTokens": 1309
       },
       "truncated": true,
       "maxTokens": 12000,
