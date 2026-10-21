@@ -7,8 +7,8 @@ dirige hasta dos audios a la vez (`GOATLAB_MAX_DIRECTORS=2`). Cada video respond
 al audio original y trae «Me gusta» / «No me gusta». Esas marcas quedan en
 `director-memory` y vuelven a la autoría como preferencias, no como reglas.
 
-La máquina de Render sigue en shared-cpu-2x con 4 GB y `RENDER_WORKERS=1`.
-La tabla de abajo es para elegir si cambia. El detector de texto queda en aviso
+La máquina de Render sigue en shared-cpu-2x con 4 GB y `RENDER_WORKERS=2`.
+El detector de texto queda en aviso
 (`LAYOUT_CHECK` por defecto `advisory`). El botón «Rehacer» sigue fuera de este cambio.
 
 Fecha: 21 de octubre de 2026.
@@ -45,9 +45,8 @@ performance-2x no superó a shared-cpu-2x. performance-4x capturó unas 1,6
 veces más rápido que shared con 2 workers y cuesta unas 5 veces más por
 hora. En este fixture, el tiempo ahorrado no compensa el precio.
 
-La configuración que está en producción es la primera fila (`RENDER_WORKERS=1`).
-No cambio la máquina ni los workers hasta que elijas una fila. Tampoco corrí
-`--photo-max=1080` ni `REMOTION_GL`: el plan los deja para la CPU ganadora.
+Producción quedó en la segunda fila: shared-cpu-2x, 4 GB y `RENDER_WORKERS=2`.
+La máquina no cambió. `--photo-max=1080` y `REMOTION_GL` siguen sin medirse.
 
 ## Punto de partida
 
