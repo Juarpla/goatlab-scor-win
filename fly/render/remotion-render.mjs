@@ -16,7 +16,7 @@ async function videoBundle() {
 
 /** Each job exposes only its copied media to Chromium on a loopback port. */
 export async function renderRemotion(tmp, out, { workers = 1, onProgress = () => {}, cancelSignal, isCancelled = () => false } = {}) {
-  const { selectComposition, renderMedia, makeCancelSignal } = await import('@remotion/renderer');
+  const { selectComposition, renderMedia, renderStill, openBrowser, makeCancelSignal } = await import('@remotion/renderer');
   const props = JSON.parse(readFileSync(join(tmp, 'composition.json'), 'utf8'));
   if (!Number.isInteger(props.frames) || props.frames > MAX_FRAMES) throw new Error('composición supera 55 segundos');
   const authored = props.plan?.version === 5;
@@ -44,18 +44,36 @@ export async function renderRemotion(tmp, out, { workers = 1, onProgress = () =>
     createReadStream(path).pipe(res);
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
   try {
     const base = `http://127.0.0.1:${server.address().port}/`;
     const inputProps = { ...props, font: base + props.font, brand: base + props.brand,
       photos: props.photos.map(p => ({ ...p, src: base + p.src, backdrop: base + p.backdrop, focusBlur: base + p.focusBlur })),
       clips: props.clips.map(c => ({ ...c, src: base + c.src })) };
     const serveUrl = authored ? base + 'bundle/index.html' : await videoBundle();
-    const composition = await selectComposition({ serveUrl, id: 'GoatLabShort', inputProps });
+    browser = await openBrowser('chrome');
+    const composition = await selectComposition({ serveUrl, id: 'GoatLabShort', inputProps, puppeteerInstance: browser });
     if (composition.fps !== FPS || composition.durationInFrames !== props.frames) throw new Error('timeline Remotion inesperada');
     const cancellation = makeCancelSignal();
     if (isCancelled()) cancellation.cancel();
     const timeout = setTimeout(() => cancellation.cancel(), 20 * 60 * 1000);
-    try { await renderMedia({ serveUrl, composition, inputProps, codec: 'h264', pixelFormat: 'yuv420p', crf: 18,
-      outputLocation: out, concurrency: Math.max(1, Math.min(2, Number(workers) || 1)), muted: true, onProgress: progress => { if (isCancelled()) cancellation.cancel(); onProgress(progress); }, cancelSignal: cancelSignal ?? cancellation.cancelSignal }); } finally { clearTimeout(timeout); }
-  } finally { await new Promise(resolve => server.close(resolve)); }
+    try {
+      if (authored) {
+        // Cheap execution checks catch JSX/hooks/media failures before a full encode.
+        const last = Math.max(0, props.contentFrames - 1);
+        for (const frame of [...new Set([0, Math.floor(last / 2), last])]) {
+          if (isCancelled()) cancellation.cancel();
+          await renderStill({ serveUrl, composition, inputProps, puppeteerInstance: browser,
+            frame, scale: .25, output: null, imageFormat: 'jpeg', timeoutInMilliseconds: 15_000,
+            cancelSignal: cancelSignal ?? cancellation.cancelSignal });
+        }
+      }
+      await renderMedia({ serveUrl, composition, inputProps, puppeteerInstance: browser,
+        codec: 'h264', pixelFormat: 'yuv420p', crf: 20, x264Preset: 'veryfast', disallowParallelEncoding: false,
+        ffmpegOverride: ({ args }) => ['-threads', '2', ...args.slice(0, -1), '-threads', '2', args.at(-1)],
+        outputLocation: out, concurrency: Math.max(1, Math.min(2, Number(workers) || 1)), muted: true,
+        onProgress: progress => { if (isCancelled()) cancellation.cancel(); onProgress(progress); },
+        cancelSignal: cancelSignal ?? cancellation.cancelSignal });
+    } finally { clearTimeout(timeout); }
+  } finally { await browser?.close({ silent: true }); await new Promise(resolve => server.close(resolve)); }
 }

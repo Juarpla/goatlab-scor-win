@@ -39,14 +39,14 @@ test('revision transitions reject old approvals, duplicate captures and incomple
   assert.throws(()=>approveCandidate(job,current),/cancelado/);
 });
 
-test('three candidates exhaust two corrections; replacement generations invalidate decisions', () => {
+test('two candidates exhaust one technical correction; generations invalidate decisions', () => {
   const job=fresh();
-  for(let i=0;i<3;i++){submitPlan(job,input(job),()=>{});candidate(job);}
-  assert.throws(()=>submitPlan(job,input(job),()=>{}),/dos correcciones/);
+  for(let i=0;i<2;i++){submitPlan(job,input(job),()=>{});candidate(job);}
+  assert.throws(()=>submitPlan(job,input(job),()=>{}),/corrección técnica/);
   assert.throws(()=>approveCandidate(job,{...approval(job),generation:0}),/generación obsoleta/);
   assert.equal(digest({b:1,a:2}),digest({a:2,b:1}));
   const times=reviewTimes(plan,15);
-  assert.ok(times.includes(0));assert.ok(times.includes(13.5));assert.ok(times.every(t=>t>=0&&t<15));
+  assert.equal(times.length,8);assert.ok(times.includes(14.5));assert.ok(times.every(t=>t>=0&&t<15));
 });
 
 test('OpenClaw receives actual image attachments and uses GLM if the primary turn fails', async t => {
@@ -86,6 +86,7 @@ test('an unfinished native turn is admitted again after the Gateway runtime rest
   const env={OPENCODE_GO_MODEL:'primary',OPENCODE_GO_FALLBACK_MODEL:'primary',GOATLAB_GATEWAY_INSTANCE:'boot-one'};
   await assert.rejects(nativeDecision({env,call:async method=>{
     if(method==='agent')return {runId:'lost-on-restart'};
+    if(method==='chat.abort')return {};
     throw Error('interrupted turn');
   }})(base),/interrupted/);
   const methods=[];
@@ -101,11 +102,11 @@ test('cold-start Gateway readiness is retried before changing creative models',a
   const models=[];let attempts=0;
   const result=await nativeDecision({env:{OPENCODE_GO_MODEL:'primary',OPENCODE_GO_FALLBACK_MODEL:'backup'},wait:async()=>{},call:async(method,params)=>{
     assert.equal(method,'agent');models.push(params.model);
-    if(++attempts<3)throw Error('native idle RPC unavailable');
+    if(++attempts<2)throw Error('native idle RPC unavailable');
     const path=params.message.match(/archivo (.+?), mediante/)[1];writeFileSync(path,JSON.stringify({notes:'Gateway listo'}));
     return {runId:'ready'};
   }})({directory:directory(t),key:'cold-start',message:'Planifica',sessionKey:'agent:main:cold-start'});
-  assert.equal(result.notes,'Gateway listo');assert.deepEqual(models,['primary','primary','primary']);
+  assert.equal(result.notes,'Gateway listo');assert.deepEqual(models,['primary','primary']);
 });
 
 function harness({reviseUntil=0,cancelAtReview=false,rejectCorrectionOnce=false}={}) {
@@ -137,13 +138,17 @@ function harness({reviseUntil=0,cancelAtReview=false,rejectCorrectionOnce=false}
   return {job,events,seen,worker,decide};
 }
 
-test('director reviews a correction, approves the exact candidate and resumes without delivering twice', async t => {
+test('advisory suggestions deliver the same candidate without a second render or verdict', async t => {
   const h=harness({reviseUntil:1}),dir=directory(t),body={requestId:'one-audio',expiresAt:Date.now()+3600_000};
   const result=await directVideo(body,{...h,directory:dir});
-  assert.equal(result.status,'done');assert.equal(h.job.revision,2);
+  assert.equal(result.status,'done');assert.equal(h.job.revision,1);
   assert.equal(h.events.filter(p=>p==='/render/approve').length,1);
-  assert.equal(h.job.approval.videoHash,'video-2');
-  assert.ok(JSON.parse(readFileSync(join(dir,'state.json'))).history.length>=5);
+  assert.equal(h.job.approval.videoHash,'video-1');
+  assert.equal(h.job.approval.reviewPolicy,'advisory');
+  assert.equal(h.job.approval.reviewDecision,'revise');
+  assert.equal(h.seen.filter(k=>k.includes(':review-')).length,1);
+  assert.equal(h.seen.filter(k=>k.includes(':verdict-')).length,0);
+  assert.equal(JSON.parse(readFileSync(join(dir,'state.json'))).history.length,2);
   await directVideo(body,{...h,directory:dir});
   assert.equal(h.events.filter(p=>p==='/render/approve').length,1);
 });
@@ -162,19 +167,37 @@ test('a JSX runtime failure returns its diagnostic to OpenClaw before another ca
   assert.equal(h.job.approval.videoHash,'video-2');
 });
 
-test('exhausted reviews and cancellation never deliver an automatic replacement', async t => {
-  for(const options of [{reviseUntil:9},{cancelAtReview:true}]) {
-    const h=harness(options);
-    const result=await directVideo({requestId:'audio',expiresAt:Date.now()+3600_000},{...h,directory:directory(t)});
-    assert.ok(['error','cancelled'].includes(result.status));
-    assert.equal(h.events.includes('/render/approve'),false);
-    assert.ok(h.job.revision<=3);
-  }
+test('cancellation during advisory review never delivers',async t=>{
+  const h=harness({cancelAtReview:true});
+  const result=await directVideo({requestId:'cancelled',expiresAt:Date.now()+3600_000},{...h,directory:directory(t)});
+  assert.equal(result.status,'cancelled');assert.equal(h.events.includes('/render/approve'),false);
 });
 
-test('a technical error in a corrected plan goes back to OpenClaw without replacing the reviewed video',async t=>{
-  const h=harness({reviseUntil:1,rejectCorrectionOnce:true});
-  const result=await directVideo({requestId:'technical-correction',expiresAt:Date.now()+3600_000},{...h,directory:directory(t)});
-  assert.equal(result.status,'done');assert.equal(h.job.revision,2);
-  assert.equal(h.seen.filter(key=>key.includes(':verdict-1:1:video-1')).length,2);
+test('unavailable visual models do not block a technically valid video or claim to have reviewed images',async t=>{
+  const h=harness(),decide=async args=>{
+    if(args.key.includes(':review-'))throw Error('both visual providers unavailable');
+    return h.decide(args);
+  };
+  const result=await directVideo({requestId:'no-vision',expiresAt:Date.now()+3600_000},{...h,decide,directory:directory(t)});
+  assert.equal(result.status,'done');assert.equal(h.job.revision,1);
+  assert.equal(h.job.approval.reviewStatus,'unavailable');
+  assert.deepEqual(h.job.approval.reviewedFrames,[]);
+  assert.match(h.job.approval.reviewError,/providers unavailable/);
+});
+
+test('stage budgets send high for authoring and low for review, aborting a timed-out primary before fallback',async t=>{
+  let clock=0;const calls=[];
+  const decide=nativeDecision({now:()=>clock,env:{OPENCODE_GO_MODEL:'primary',OPENCODE_GO_FALLBACK_MODEL:'backup'},wait:async()=>{},call:async(method,params)=>{
+    calls.push({method,...params});
+    if(method==='chat.abort')return {aborted:true};
+    if(method==='agent.wait'){clock+=300000;return {status:'timeout'};}
+    if(params.model==='primary')return {runId:'hung-primary'};
+    const path=params.message.match(/archivo (.+?), mediante/)[1];writeFileSync(path,JSON.stringify({notes:'Backup terminado'}));return {runId:'backup'};
+  }});
+  await decide({directory:directory(t),key:'authoring',message:'Crea',sessionKey:'agent:main:author'});
+  const primary=calls.find(c=>c.method==='agent');assert.equal(primary.thinking,'high');assert.equal(primary.timeout,240);
+  assert.ok(calls.findIndex(c=>c.method==='chat.abort')<calls.findIndex(c=>c.model==='backup'));
+  calls.length=0;clock=0;
+  await decide({directory:directory(t),key:'review',message:'Revisa',purpose:'review',sessionKey:'agent:main:review'});
+  const review=calls.find(c=>c.method==='agent');assert.equal(review.thinking,'low');assert.equal(review.timeout,60);
 });

@@ -1,5 +1,9 @@
 # Libertad creativa y límites del flujo de video
 
+**Actualización:** la revisión ahora es orientativa (hasta ocho imágenes), usa low y no veta entregas ni dispara renders. La autoría usa high; hay una corrección técnica. Remotion pasa a 4.0.537. El [informe de optimización](VIDEO-OPTIMIZATION-REPORT.md) describe el contrato vigente y la alternativa de revisión manual.
+
+**Registro histórico:** las secciones siguientes documentan la primera implementación y sus pruebas, antes de esta optimización; sus cifras de revisión y correcciones ya no son la política vigente.
+
 Implementación del 21 de octubre de 2026. Este reporte describe el camino nuevo de composiciones JSX (plan 5); los planes 1–4 se conservan para compatibilidad manual, no como montaje de respaldo.
 
 ## Qué decide OpenClaw

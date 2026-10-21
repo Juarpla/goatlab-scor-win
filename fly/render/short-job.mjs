@@ -112,7 +112,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     });
   } finally { unpinClips(); }
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { planVersion: 5, frames: voice.frames, fps: FPS, endcardSeconds: DIRECTOR_ENDCARD_SECONDS, clips: availableClips, motionPrompts, requestId, facts, span: total - DIRECTOR_ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { brand: { name: 'GoatLab', url: 'goatlab.win' }, planVersion: 5, frames: voice.frames, fps: FPS, endcardSeconds: DIRECTOR_ENDCARD_SECONDS, clips: availableClips, motionPrompts, requestId, facts, span: total - DIRECTOR_ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };

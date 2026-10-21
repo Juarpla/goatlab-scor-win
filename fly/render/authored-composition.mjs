@@ -49,7 +49,7 @@ export function authoredProps(prepared, plan) {
   validateAuthoredPlan(plan, prepared.frames);
   return { frames: prepared.frames, contentFrames: prepared.frames - DIRECTOR_ENDCARD_SECONDS * FPS,
     photos: prepared.photos, clips: prepared.clips, words: prepared.words, facts: prepared.facts ?? [],
-    match: prepared.match ?? '', font: 'LiberationSans-Bold.ttf', brand: 'brand.svg', plan };
+    match: prepared.match ?? '', brandName: 'GoatLab', brandUrl: 'goatlab.win', font: 'LiberationSans-Bold.ttf', brand: 'brand.svg', plan };
 }
 
 // Source is bundled, never imported/evaluated in the Node process. Media wrappers

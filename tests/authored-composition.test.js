@@ -29,11 +29,15 @@ test('generated code cannot import host modules or trigger dynamic module loadin
   assert.match(compositionCsp(), /frame-src 'none'/);
 });
 
-test('uniform review samples cover authored code even when scene metadata is sparse', () => {
-  const times = reviewTimes(plan, 55);
-  for (let second = 0; second < 55; second += 2) assert.ok(times.includes(second));
-  assert.ok(times.includes(54));
-  assert.ok(times.every(time => time < 55));
+test('advisory samples stay bounded regardless of scenes and include the closing logo', () => {
+  for (const duration of [2.033333333, 12, 28.133333333, 55]) {
+    const times = reviewTimes(plan, duration);
+    assert.equal(times.length, 8);
+    assert.equal(new Set(times).size, 8);
+    assert.ok(times.some(t => t >= duration - 1));
+    assert.ok(times.every(t => t >= 0 && t < duration));
+    assert.deepEqual(times, reviewTimes({ scenes: Array.from({ length: 100 }, () => ({ start: 0, end: 1 })) }, duration));
+  }
 });
 
 test('creative memory stays within a chat and excludes the current request', t => {

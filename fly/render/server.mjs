@@ -17,7 +17,8 @@ import { warmPhotos, prunePhotoCache, pinPhotos } from './photo-cache.mjs';
 import { pruneClipCache } from './clip-cache.mjs';
 import { prepareShort, composeShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
 
-import { WORKFLOW_PROTOCOL, submitPlan, approveCandidate, digest, reviewTimes } from './creative-job.mjs';
+import { WORKFLOW_PROTOCOL, submitPlan, approveCandidate, digest } from './creative-job.mjs';
+import { extractReviewFrames } from './review-frames.mjs';
 
 const run = promisify(execFile);
 const PORT = Number(process.env.PORT ?? 3000);
@@ -162,19 +163,12 @@ async function runJob(job) {
       const sizeMb = statSync(out).size / 1_000_000;
       if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
 
-      const frames = await measure('reviewFrames', async () => {
-        const entries = [];
-        for (const [index, time] of reviewTimes(job.plan, dur).entries()) {
-          if (stopIfCancelled(job, log)) return [];
-          const name = `review-${job.revision}-${index}.jpg`;
-          await run('ffmpeg', ['-y', '-loglevel', 'error', '-ss', String(time), '-i', out, '-frames:v', '1', '-q:v', '2', join(tmp, name)], { timeout: 30_000 });
-          entries.push({ name, time });
-        }
-        return entries;
-      });
+      let reviewError = null;
+      const frames = await measure('reviewFrames', () => extractReviewFrames({ file: out, tmp, plan: job.plan, duration: dur, revision: job.revision }))
+        .catch(error => { reviewError = String(error.message).slice(0, 1000); log('revisión orientativa no disponible'); return []; });
       if (stopIfCancelled(job, log)) return;
       Object.assign(job, { status: 'awaiting-review', currentStage: 'reviewing', duration: dur, sizeMb,
-        candidate: { revision: job.revision, planHash: job.planHash, videoHash: digest(readFileSync(out)), frames } });
+        candidate: { revision: job.revision, planHash: job.planHash, videoHash: digest(readFileSync(out)), frames, reviewError } });
       store.save(job); await store.flush();
       return;
     }
@@ -259,7 +253,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1, reviewPolicy: 'advisory', reviewFrameLimit: 8 });
     const artifact = req.url?.match(/^\/jobs\/(job-[a-f0-9]{32})\/artifacts\/(\d+)\/(\d+)\/([\w.-]+\.jpg)$/);
     if (req.method === 'GET' && artifact) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });

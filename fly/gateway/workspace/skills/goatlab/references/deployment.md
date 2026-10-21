@@ -118,7 +118,7 @@ del mismo MP4; no se vuelve a renderizar después de aprobar. GET
 /jobs/:id/artifacts/:generation/:revision/:name sirve JPEGs autenticados (revisión
 0 para fotos fuente). POST /render/fail registra un fallo del director. Todas las
 operaciones salvo health requieren Bearer RENDER_SECRET. Hay tres candidatos como
-máximo por generación, ningún montaje local y ninguna entrega sin aprobación.
+máximo por generación en el contrato histórico. Ahora hay dos candidatos (una corrección técnica); la revisión es orientativa y no dispara capturas. La autorización por hash protege el archivo a entregar, no actúa como veto artístico.
 
 Antes de activar: comprobar ledger y terminar trabajos antiguos; desplegar Render
 y después Gateway con CREATIVE_DIRECTOR_ENABLED=0. Ejecutar la prueba nativa de
@@ -149,3 +149,26 @@ cantidad. El productor de Actions sigue teniendo su presupuesto de cuatro fotos 
 dos clips por partido: disponibilidad del banco no equivale a cuota de montaje.
 El pipeline admite cero recursos y permite no usar parte del banco. El reporte
 CREATIVE-FREEDOM-REPORT.md en la raíz documenta los límites restantes y pruebas.
+
+
+## Optimización de octubre de 2026
+
+Render usa Remotion 4.0.537, preflight de tres fotogramas, un navegador compartido
+para preflight/captura, H.264 veryfast/CRF 20 y codificación paralela. Concurrencia
+de captura 1 por defecto y hilos de FFmpeg limitados a 2. El formato final sigue
+siendo 1080×1920, 30 fps, H.264/AAC, <=55 s y <45 MB.
+
+Una pasada de FFmpeg extrae hasta ocho JPEG 540×960. Gateway hace una revisión
+low sin reenviar el código completo ni abrir un turno de dictamen. Autoría y
+reparación técnica usan high. Ambas definiciones de modelo declaran reasoning y
+compatibilidad explícita con reasoning_effort low/high/max de OpenCode Go.
+
+POST /render/approve admite reviewPolicy:advisory y reviewStatus:completed o
+unavailable. completed registra los nombres realmente inspeccionados; unavailable
+exige reviewError y reviewedFrames vacío. Se conserva el hash exacto y la
+protección de generación. Las sugerencias o indisponibilidad visual no impiden
+la entrega. Se conserva el contrato estricto antiguo para llamadas heredadas.
+
+Health anuncia reviewPolicy:advisory y reviewFrameLimit:8. Validar con suites
+cortas, un render sintético de dos segundos y captura de payload sin inferencia;
+no reenviar audios reales como prueba de despliegue.
