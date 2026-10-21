@@ -9,14 +9,14 @@ test('motion resolves original facts, common scale and honest missing data', () 
     const data=resolveMotion(graphic,[fact],[prompt]);
     assert.deepEqual(data.facts,[fact]); assert.equal(data.max,3); assert.match(data.notes[0],/5 partidos/);
     assert.deepEqual(resolveMotion({...graphic,factIds:[]},[],[{...prompt,factIds:[]}]).facts,[]);
-    assert.throws(()=>resolveMotion({...graphic,factIds:['invented']},[fact],[prompt]),/ajeno/);
+    assert.throws(()=>resolveMotion({...graphic,factIds:['invented']},[fact],[prompt]),/inválido/);
   }
 });
-test('motion refuses mismatched directions and incompatible comparison units', () => {
-  const graphic={kind:'goals',motionPromptNumber:2,factIds:[fact.id,'away.n']};
-  const prompts=[{n:2,kind:'goals',factIds:graphic.factIds}];
-  assert.throws(()=>resolveMotion(graphic,[fact,{...fact,id:'away.n',unit:'partidos'}],prompts),/unidades/);
-  assert.throws(()=>resolveMotion({...graphic,motionPromptNumber:3},[],prompts),/inexistente/);
+test('the director can choose comparisons and graphics without prescribed motion prompts', () => {
+  const graphic={kind:'goals',factIds:[fact.id,'away.n']};
+  const resolved=resolveMotion(graphic,[fact,{...fact,id:'away.n',unit:'partidos'}],[]);
+  assert.equal(resolved.facts.length,2);
+  assert.equal(resolveMotion({kind:'goals',presentation:'editorial',factIds:[]},[],[]).presentation,'editorial');
 });
 
 test('editorial presentations need no catalog and retain statistical legacy defaults', () => {

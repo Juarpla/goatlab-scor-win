@@ -18,23 +18,24 @@ Flujo: elegir partido → mostrar los diez guiones originales → recibir audios
 orden y en silencio → entrega automática de MP4. Gateway consulta el banco de
 cuatro imágenes y dos clips publicado por GitHub Actions en R2. Después Render
 monta los audios recibidos, uno a la vez, con la media disponible y motion graphics
-React/Remotion guiados por los Motion Prompts publicados. Un banco parcial o vacío
+React/Remotion dirigidos y revisados por OpenClaw. Un banco parcial o vacío
 continúa con gráficos; no esperes diez audios. La producción de imágenes, clips y
 prompts y el mantenimiento remoto pertenecen exclusivamente a GitHub Actions.
 El webhook registra los audios de una serie activa con los identificadores
 originales de Telegram; no inventes `file_id` ni uses una ruta local como tal.
 El código actualiza un mensaje de progreso; no confirmes cada audio ni inventes
-porcentajes. No modifiques archivos del servidor ni solicites tokens administrativos
-durante una serie: informa el fallo y usa el reintento documentado.
+porcentajes. Durante una serie, los turnos internos del director escriben
+únicamente los archivos de decisión indicados en [references/director.md](references/director.md).
+Para otros cambios del servidor: informa el fallo y usa el reintento documentado.
 
 La voz es la fuente del texto del video. Los guiones son para leer y grabar;
-muéstralos completos y literalmente. Cada audio tiene un montaje propio, decidido
-por el planificador a partir de su transcripción. El usuario solo envía audios.
+muéstralos completos y literalmente. Cada audio tiene un montaje propio decidido
+y revisado por OpenClaw a partir de su transcripción y los fotogramas del candidato. El usuario solo envía audios.
 
 Para errores de media, recuperación de tareas, solicitudes de reintento o poda, lee
-[references/media.md](references/media.md). Para cambios en la dirección artística,
-consulta `{baseDir}/references/creative.md`; es la misma referencia usada por el
-planificador de Render. Los scripts son responsables de límites y validación.
+[references/media.md](references/media.md). Para planificar, revisar o corregir
+un candidato, lee [references/director.md](references/director.md). Para cambios
+en la dirección artística, consulta `{baseDir}/references/creative.md`.
 
 Mantén la música existente, subtítulos amarillos con borde negro y cierre con el
 logo y `goatlab.win` según [references/brand.md](references/brand.md). La creatividad está en la composición; la secuencia de

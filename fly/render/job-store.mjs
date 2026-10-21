@@ -66,7 +66,7 @@ export class JobStore {
     }
     rmSync(join(this.dir, job.id), { recursive: true, force: true });
     const kept = {};
-    for (const key of ['id', 'key', 'chatId', 'matchId', 'requestId', 'variant', 'status', 'cancelled', 'createdAt', 'updatedAt', 'expiresAt', 'messageId', 'stages', 'audioHash', 'renderEngine', 'voiceRate', 'originalVoiceSeconds', 'planModel', 'planningFallback', 'duration', 'sizeMb', 'seconds']) kept[key] = job[key];
+    for (const key of ['id', 'key', 'chatId', 'matchId', 'requestId', 'variant', 'status', 'cancelled', 'createdAt', 'updatedAt', 'expiresAt', 'messageId', 'stages', 'audioHash', 'renderEngine', 'voiceRate', 'originalVoiceSeconds', 'planModel', 'duration', 'sizeMb', 'seconds', 'workflowProtocol', 'attempts', 'revision', 'planHash', 'approval', 'candidate']) kept[key] = job[key];
     kept.retainUntil = job.retainUntil ?? this.clock() + 86400_000;
     for (const key of Object.keys(job)) delete job[key];
     Object.assign(job, kept); this.save(job);
@@ -81,6 +81,8 @@ export class JobStore {
     if (prior && prior.status !== 'cancelled' && ((prior.audioHash ?? createHash("sha256").update(JSON.stringify([prior.audioFileId, prior.audioUrl])).digest("hex")) !== audioHash || prior.matchId !== body.matchId))
       throw new Error('requestId ya pertenece a otro audio');
     if (prior && prior.status !== 'error') return { job: prior, duplicate: true };
+    // Replaying an outbox submission must not silently retry a failed video.
+    if (prior && prior.workflowProtocol === 3 && prior.retryToken === body.retryToken) return { job: prior, duplicate: true };
     const id = prior?.id ?? `job-${createHash('sha256').update(key).digest('hex').slice(0, 32)}`;
     const job = { ...body, expiresAt, audioHash, id, key, variant: Number(body.variant ?? 0), status: 'queued', cancelled: false,
       attempts: (prior?.attempts ?? 0) + 1, createdAt: prior?.createdAt ?? this.clock(), stages: {} };
@@ -102,11 +104,11 @@ export class JobStore {
       this.byKey.set(key, id);
     }
     job.cancelled = true;
-    if (job.status === 'queued') job.status = 'cancelled';
+    if (job.status !== 'working') job.status = 'cancelled';
     this.save(job);
     return true;
   }
 
-  directory(job) { const path = join(this.dir, job.id); mkdirSync(path, { recursive: true }); return path; }
+  directory(job) { const path = join(this.dir, job.id, `generation-${job.attempts ?? 1}`); mkdirSync(path, { recursive: true }); return path; }
   pending() { return [...this.jobs.values()].filter(job => job.status === 'queued' && !job.cancelled); }
 }

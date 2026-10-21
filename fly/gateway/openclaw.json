@@ -56,8 +56,8 @@
         apiKey: "${OPENCODE_GO_API_KEY}",
         api: "openai-completions",
         models: [
-          { id: "${OPENCODE_GO_MODEL}", name: "${OPENCODE_GO_MODEL}" },
-          { id: "${OPENCODE_GO_FALLBACK_MODEL}", name: "${OPENCODE_GO_FALLBACK_MODEL}" },
+          { id: "${OPENCODE_GO_MODEL}", name: "${OPENCODE_GO_MODEL}", input: ["text", "image"], maxTokens: 32768 },
+          { id: "${OPENCODE_GO_FALLBACK_MODEL}", name: "${OPENCODE_GO_FALLBACK_MODEL}", input: ["text", "image"], maxTokens: 32768 },
         ],
       },
     },

@@ -1,7 +1,7 @@
 // Render local: media-pack + voz -> MP4 1080x1920 vía Remotion.
-// Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg [--variant=N] [--out=salida.mp4]
+// Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg --plan=plan.json [--variant=N] [--out=salida.mp4]
 // Mismo camino que el worker: tiempos por palabra (Mistral, whisper.cpp),
-// fotos reducidas, plantilla fija y voz mezclada. Requiere Node 22, ffmpeg,
+// fotos reducidas, plan de OpenClaw y voz mezclada. Requiere Node 22, ffmpeg,
 // ffprobe y `npm install` en fly/render (Remotion + React).
 import { execFile } from 'node:child_process';
 import { mkdirSync, readFileSync, existsSync, rmSync, cpSync, statSync } from 'node:fs';
@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { FRAME_W, FRAME_H, FPS } from '../src/lib/short-format.js';
+import { FRAME_W, FRAME_H, FPS, MAX_SECONDS } from '../src/lib/short-format.js';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../fly/render/short-job.mjs';
 
 const run = promisify(execFile);
@@ -40,6 +40,7 @@ const match = args.match ?? fail('falta --match=<webId>');
 const audio = args.audio ?? fail('falta --audio=<voz> (los tiempos de cada palabra salen de la voz)');
 if (!existsSync(audio)) fail(`audio no existe: ${audio}`);
 const variant = Number(args.variant ?? 0);
+if (!args.plan || !existsSync(args.plan)) fail('falta --plan=<plan JSON aprobado por OpenClaw>');
 
 if (!(await has('ffmpeg'))) fail('ffmpeg no está en PATH');
 if (!(await has('ffprobe'))) fail('ffprobe no está en PATH');
@@ -70,7 +71,7 @@ try {
     voiceFile,
     voiceSeconds,
     assets, clips: media.clips ?? [], facts: media.facts ?? [], motionPrompts: media.motionPrompts ?? [],
-    variant,
+    variant, plan: load(args.plan),
     home: media.home ?? '',
     away: media.away ?? '',
     matchLabel: media.match,
@@ -81,7 +82,7 @@ try {
   await renderSilent(tmp, silent);
   lap('remotion');
   const finalOut = join(tmp, 'with-audio.mp4');
-  await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut });
+  await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut, music: load(args.plan).version === 5 ? load(args.plan).music === true : true });
   cpSync(finalOut, out);
   if (args.keep) cpSync(join(tmp, 'composition.json'), out.replace(/\.mp4$/, '.json'));
 } catch (e) {
@@ -94,6 +95,6 @@ const probe = JSON.parse(
 const v = probe.streams.find((s) => s.codec_type === 'video');
 if (!v || v.width !== FRAME_W || v.height !== FRAME_H) fail(`video inesperado: ${v?.width}x${v?.height}`);
 const [num, den] = v.r_frame_rate.split('/').map(Number);
-if (v.codec_name !== 'h264' || Math.abs(num / den - FPS) > .01 || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac') || Number(probe.format.duration) >= 50 || statSync(out).size >= 45_000_000) fail('MP4 fuera del contrato de formato, duración o tamaño');
+if (v.codec_name !== 'h264' || Math.abs(num / den - FPS) > .01 || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac') || Number(probe.format.duration) > MAX_SECONDS || statSync(out).size >= 45_000_000) fail('MP4 fuera del contrato de formato, duración o tamaño');
 rmSync(tmp, { recursive: true, force: true });
 lap(`listo ${out} (${v.width}x${v.height}, variante ${variant})`);

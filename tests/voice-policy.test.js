@@ -11,10 +11,11 @@ const run = promisify(execFile);
 test('strict frame budget preserves a short voice and caps acceleration at ten percent', () => {
   assert.equal(voicePolicy(45).rate, 1);
   assert.equal(voicePolicy(VOICE_SECONDS).frames, MAX_FRAMES);
-  assert.ok(voicePolicy(48).rate > 1);
+  assert.ok(voicePolicy(54).rate > 1);
   assert.equal(voicePolicy(VOICE_SECONDS * 1.1).rate, 1.1);
-  assert.throws(() => voicePolicy(51), error => error.code === 'VOICE_TOO_LONG');
-  for (const invalid of [NaN, Infinity, 0, 4.9]) assert.throws(() => voicePolicy(invalid));
+  assert.throws(() => voicePolicy(59), error => error.code === 'VOICE_TOO_LONG');
+  assert.equal(voicePolicy(4.9).rate, 1);
+  for (const invalid of [NaN, Infinity, 0, -1]) assert.throws(() => voicePolicy(invalid));
 });
 test('real audio adjustment fits, retains pitch and reuses its persisted policy', async t => {
   const tmp = await mkdtemp(join(tmpdir(), 'goatlab-voice-')); t.after(() => rm(tmp, { recursive: true, force: true }));

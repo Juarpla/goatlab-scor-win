@@ -7,11 +7,11 @@ USER node
 # Config pública (sin secrets: el config referencia ${VAR} que Fly inyecta).
 COPY --chown=node:node fly/gateway/openclaw.json /home/node/.openclaw/openclaw.json
 COPY --chown=node:node fly/gateway/workspace/ /home/node/.openclaw/workspace/
-COPY --chown=node:node fly/gateway/idle-stop.mjs fly/gateway/idle-safety.mjs /home/node/
+COPY --chown=node:node fly/gateway/idle-stop.mjs fly/gateway/idle-safety.mjs fly/gateway/creative-director.mjs /home/node/
 COPY --chown=node:node fly/gateway/ui-access.mjs fly/gateway/runtime.mjs /home/node/
 ARG GOATLAB_REVISION=unknown
 ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_REPO=/home/node/goatlab GOATLAB_STATE_DIR=/data \
-    GOATLAB_SKILL_DIR=/home/node/.openclaw/workspace/skills/goatlab
+    GOATLAB_SKILL_DIR=/home/node/.openclaw/workspace/skills/goatlab GOATLAB_DIRECTOR_SCRIPT=/home/node/creative-director.mjs
 
 # Repo goatlab (scripts + datos) para el skill /goatlab. Público, sin secrets.
 RUN git clone --depth 1 https://github.com/Juarpla/goatlab-scor-win.git /home/node/goatlab

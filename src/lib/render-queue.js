@@ -51,7 +51,7 @@ export function photoFailureText(log) {
 /** Aviso al chat cuando un audio no se puede renderizar. No reenvía el archivo. */
 export function audioFailureText(n, error) {
   const raw = String(error ?? '').split('\n')[0].trim();
-  if (/aceleraci[oó]n|acelerándolo|Graba hasta 45/i.test(raw)) return `El audio ${n} supera el límite del Short. Graba hasta 45 segundos y pide sustituir ese audio; conservaré los demás vídeos de la serie.`;
+  if (/aceleraci[oó]n|acelerándolo|Graba hasta (?:45|50)/i.test(raw)) return `El audio ${n} supera el límite del Short. Graba hasta 50 segundos y pide sustituir ese audio; conservaré los demás vídeos de la serie.`;
   if (/getFile|file_id|chat not found|descarga|HTTP/i.test(raw))
     return `El video ${n} no se pudo completar por un problema del servicio o de identificación. Se conserva el audio para reintentar.`;
   const corrupt = /invalid data found when processing input|moov atom not found|corrupt(?:ed)? audio/i.test(raw);

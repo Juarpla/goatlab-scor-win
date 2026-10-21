@@ -49,11 +49,12 @@ Ver [deployment.md](deployment.md) para despliegue y comprobaciones.
 
 React y Remotion ejecutan los gráficos según el plan de cada voz. El sistema
 conserva todas las palabras y ajusta la velocidad solo cuando hace falta, hasta
-un 10%, manteniendo el tono. La voz disponible es 45.9 segundos dentro de un MP4
-máximo de 49.9 segundos. Si Render informa VOICE_TOO_LONG, explica que debe grabar
-hasta 45 segundos y sustituir ese audio; reintentar el mismo archivo no lo resuelve.
+un 10%, manteniendo el tono. La voz disponible es 53 segundos dentro de un MP4
+máximo de 55 segundos. Si Render informa VOICE_TOO_LONG, explica que debe grabar
+hasta 50 segundos y sustituir ese audio; reintentar el mismo archivo no lo resuelve.
 
-El motion alterna presentation editorial y statistical según la voz. Editorial
-utiliza tipografía, duelos entre equipos, recorridos ilustrativos y energía sin
-necesitar datos verificados. Statistical resuelve cifras del catálogo. Sin datos
-pertinentes, el montaje puede ser totalmente creativo. Mantener subtítulos legibles.
+OpenClaw escribe la composición JSX de cada audio. Las familias editoriales y
+estadísticas anteriores son referencias históricas del motor, no un catálogo que
+el nuevo código deba usar. Elige libremente media o gráficos, con cifras del
+catálogo cuando corresponda. Para el contrato vigente de composición consulta
+[creative.md](creative.md).

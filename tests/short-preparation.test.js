@@ -3,28 +3,22 @@ import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { planEdit, prepareShort } from '../fly/render/short-job.mjs';
+import { composeShort, prepareShort } from '../fly/render/short-job.mjs';
 
-test('provider failure replaces a stale plan with a validated local montage', async t => {
+test('Render requires a director plan and cannot replace it with an automatic montage', t => {
   const tmp = mkdtempSync(join(tmpdir(), 'goatlab-plan-'));
-  const key = process.env.OPENCODE_GO_API_KEY;
-  process.env.OPENCODE_GO_API_KEY = '';
-  t.after(() => { rmSync(tmp, { recursive: true, force: true }); if (key === undefined) delete process.env.OPENCODE_GO_API_KEY; else process.env.OPENCODE_GO_API_KEY = key; });
-  writeFileSync(join(tmp, 'edit-input.json'), '{}');
-  writeFileSync(join(tmp, 'edit-plan.json'), JSON.stringify({ stale: true }));
-  const source = { span: 6, words: [{ word: 'Hola', start: .5, end: 1 }], assets: [] };
-  const plan=await planEdit(source,tmp);
-  assert.equal(plan.model,'local-montage');assert.equal(plan.fallback,true);
-  assert.equal(plan.scenes.at(-1).end,source.span);
-  assert.ok(plan.scenes.every(s=>!s.layers.length && s.graphics.length));
-  assert.deepEqual(await planEdit(source,tmp),plan);
+  t.after(() => rmSync(tmp, { recursive: true, force: true }));
+  writeFileSync(join(tmp, 'prepared.json'), JSON.stringify({ frames:270, photos:[], clips:[], words:[{word:'Hola',start:.5,end:1}] }));
+  assert.throws(() => composeShort(tmp, undefined), /plan de edición/);
+  assert.equal(existsSync(join(tmp, 'composition.json')), false);
+  const plan = {version:4, scenes:[{start:0,end:6,layers:[],graphics:[]}]};
+  assert.deepEqual(composeShort(tmp, plan).plan, plan);
 });
 
 test('empty cached transcription cannot produce a video without subtitles', async t => {
   const tmp = mkdtempSync(join(tmpdir(), 'goatlab-transcript-'));
   t.after(() => rmSync(tmp, { recursive: true, force: true }));
   writeFileSync(join(tmp, 'transcript.json'), JSON.stringify({ words: [] }));
-  let planned = false;
-  await assert.rejects(prepareShort({ tmp, voiceSeconds: 6, planner: () => { planned = true; } }), /transcripción vacía/);
-  assert.equal(planned, false);
+  await assert.rejects(prepareShort({ tmp, voiceSeconds: 6 }), /transcripción vacía/);
+  assert.equal(existsSync(join(tmp,'composition.json')), false);
 });

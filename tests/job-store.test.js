@@ -6,6 +6,16 @@ import { join } from 'node:path';
 import { JobStore } from '../fly/render/job-store.mjs';
 const body = { chatId: '1', matchId: 'match', requestId: 'stable', audioFileId: 'voice', assets: [] };
 
+test('replaying a failed director submission is idempotent; an explicit retry starts a new generation',t=>{
+  const dir=mkdtempSync(join(tmpdir(),'goatlab-retry-'));t.after(()=>rmSync(dir,{recursive:true,force:true}));
+  const store=new JobStore(dir),request={...body,workflowProtocol:3,retryToken:'original'};
+  const {job}=store.accept(request);job.status='error';store.save(job);
+  assert.equal(store.accept(request).duplicate,true);assert.equal(job.attempts,1);
+  const retry=store.accept({...request,retryToken:'explicit-retry'});
+  assert.equal(retry.duplicate,false);assert.equal(retry.job.attempts,2);assert.equal(retry.job.status,'queued');
+  assert.equal(store.accept({...request,retryToken:'explicit-retry'}).duplicate,true);
+});
+
 test('saving confirms stage freshness without restarting the stage or resubmitting', t => {
   const dir = mkdtempSync(join(tmpdir(), 'goatlab-freshness-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));

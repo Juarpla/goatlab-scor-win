@@ -203,7 +203,7 @@ class Workflow:
             shot = script["scripts"][n - 1]
             self.task(aid, "render", {
                 "expiresAt": int((series["created"] + 86400) * 1000),
-                "requestId": aid, "seriesId": series["id"], "chatId": str(chat),
+                "requestId": aid, "retryToken": uuid.uuid4().hex, "seriesId": series["id"], "chatId": str(chat),
                 "matchId": series["match_id"], "variant": n - 1,
                 "home": script.get("home", ""), "away": script.get("away", ""),
                 "matchLabel": script.get("match") or f'{script.get("home", "")} contra {script.get("away", "")}',
@@ -275,8 +275,8 @@ class Workflow:
 def worker_post(path, body):
     url = os.environ.get("WORKER_URL", "https://goatlab-render.fly.dev").rstrip("/")
     headers = {"Authorization": "Bearer " + os.environ.get("RENDER_SECRET", "")}
-    # Gateway is deployed first. Never submit to a worker with the old contract.
-    if request_json(url + "/healthz", headers=headers, timeout=15).get("workflowProtocol") != 2:
+    # Render is deployed first; the director requires its preparation/review contract.
+    if request_json(url + "/healthz", headers=headers, timeout=15).get("workflowProtocol") != 3:
         return None
     return request_json(url + path, body, headers)
 
@@ -289,9 +289,20 @@ def render_status(audio):
     try:
         url = os.environ.get('WORKER_URL', 'https://goatlab-render.fly.dev').rstrip('/')
         job = request_json(url + '/jobs/' + result['jobId'], headers={'Authorization': 'Bearer ' + os.environ.get('RENDER_SECRET', '')}, timeout=10)
-        audio['render'] = {key: job.get(key) for key in ['id', 'status', 'error', 'stages', 'messageId', 'creditsError']}
+        audio['render'] = {key: job.get(key) for key in ['id', 'status', 'currentStage', 'error', 'stages', 'messageId', 'creditsError', 'attempts', 'revision', 'planModel', 'timing']}
     except Exception:
         audio['render'] = {'id': result['jobId'], 'status': 'unavailable'}
+    request = audio.get('requestId')
+    if request:
+        try:
+            path = STATE/'director'/hashlib.sha256(request.encode()).hexdigest()/'state.json'
+            director = json.loads(path.read_text())
+            audio['director'] = {'generation': director.get('generation'), 'error': director.get('error'),
+                'turns': [{'generation': t.get('generation'), 'stage': t['stage'], 'model': t['result'].get('requestedModel'),
+                           'decision': t['result'].get('decision'), 'notes': t['result'].get('notes','')[:1000]}
+                          for t in director.get('history', [])[-6:]]}
+        except (OSError, ValueError, KeyError):
+            pass
     return audio
 
 
@@ -322,7 +333,16 @@ def execute(task):
     if 'assets' not in body:
         body.update(assets=[a for a in manifest["assets"] if a.get('source') == 'agnes'], attribution=manifest.get("attribution", ""), facts=body.pop("contentFacts", None) or manifest.get('facts',[]), clips=manifest.get("clips", []), mediaMinimum=0)
     body['assets'] = [a for a in body.get('assets', []) if a.get('source') == 'agnes']
-    return worker_post("/render", body)
+    if os.environ.get('CREATIVE_DIRECTOR_ENABLED') != '1':
+        return None
+    url = os.environ.get('WORKER_URL', 'https://goatlab-render.fly.dev').rstrip('/')
+    health = request_json(url+'/healthz', headers={'Authorization':'Bearer '+os.environ.get('RENDER_SECRET','')}, timeout=15)
+    if health.get('workflowProtocol') != 3 or health.get('authoredCompositions') is not True:
+        return None
+    director = os.environ.get('GOATLAB_DIRECTOR_SCRIPT', str(SKILL.parents[2]/'creative-director.mjs'))
+    result = subprocess.run(['node', director], input=json.dumps(body), text=True, capture_output=True,
+                            timeout=max(1, (body['expiresAt']/1000-time.time())+30), check=True)
+    return json.loads(result.stdout)
 
 
 def supervise():
@@ -416,6 +436,8 @@ def supervise():
                     if task["kind"] == "media" and media_running:
                         continue
                     if task["kind"] == "render":
+                        if os.environ.get('CREATIVE_DIRECTOR_ENABLED') != '1':
+                            continue
                         body = json.loads(task["payload"])
                         if render_running or first_by_chat.get(str(body['chatId'])) != task['id']:
                             continue
@@ -462,7 +484,7 @@ def main():
     if args.command == "busy":
         pending = flow.db.execute("SELECT COUNT(*) FROM tasks WHERE status='running' OR (status='queued' AND kind IN ('media','cancel'))").fetchone()[0]
         from render_ledger import Ledger
-        remote_busy = any(r.get("status") in ("queued","working","delivering") for r in Ledger(STATE / "render-ledger").records())
+        remote_busy = any(r.get("status") in ("queued","working","awaiting-plan","awaiting-review","delivering") for r in Ledger(STATE / "render-ledger").records())
         print(json.dumps({"busy": bool(pending) or remote_busy}))
         return
     if not args.chat:
@@ -517,11 +539,12 @@ def main():
                 raise ValueError("el trabajo no pertenece a la serie")
             from render_ledger import Ledger
             remote=next((r for r in Ledger(STATE/'render-ledger').records() if r.get('requestId')==key),None)
-            if remote and remote.get('status') in ('done','delivering','delivery-unknown','working','queued'):
+            if remote and remote.get('status') in ('done','delivering','delivery-unknown','working','queued','awaiting-plan','awaiting-review'):
                 raise ValueError('no se reintenta una entrega completada, incierta o en curso')
             row=flow.db.execute('SELECT payload FROM tasks WHERE id=?',(key,)).fetchone()
             if row:
                 body=json.loads(row[0])
+                body['retryToken'] = uuid.uuid4().hex
                 for field in ('assets','attribution','facts','clips'):body.pop(field,None)
                 flow.db.execute('UPDATE tasks SET payload=? WHERE id=?',(json.dumps(body),key))
         flow.db.execute("UPDATE tasks SET status='queued',attempts=0,next_at=0,error=NULL WHERE id=? AND status IN ('failed','done')", (key,))

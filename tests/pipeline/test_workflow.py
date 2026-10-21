@@ -219,7 +219,7 @@ class DeploymentCompatibilityTests(unittest.TestCase):
         with patch('workflow.request_json', return_value={'ok':True}) as call:
             self.assertIsNone(worker_post('/render',{'requestId':'stable'}))
             self.assertEqual(call.call_count,1)
-        with patch('workflow.request_json',side_effect=[{'ok':True,'workflowProtocol':2},{'jobId':'stable'}]) as call:
+        with patch('workflow.request_json',side_effect=[{'ok':True,'workflowProtocol':3},{'jobId':'stable'}]) as call:
             self.assertEqual(worker_post('/render',{'requestId':'stable'}),{'jobId':'stable'})
             self.assertEqual(call.call_count,2)
 

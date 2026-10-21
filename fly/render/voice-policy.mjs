@@ -20,12 +20,12 @@ export async function adjustVoice({ tmp, voiceFile, voiceSeconds }) {
   // rate when that is possible, rather than clipping the end of the recording.
   if (actual > VOICE_SECONDS + .0001) {
     const rate = policy.rate * actual / (VOICE_SECONDS - .01);
-    if (rate > 1.1) throw Object.assign(new Error('El audio ajustado no cabe sin superar la aceleración máxima del 10%. Graba hasta 45 segundos y sustituye este audio.'), { code: 'VOICE_TOO_LONG' });
+    if (rate > 1.1) throw Object.assign(new Error('El audio ajustado no cabe sin superar la aceleración máxima del 10%. Graba hasta 50 segundos y sustituye este audio.'), { code: 'VOICE_TOO_LONG' });
     await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', voiceFile, '-vn', '-af', `atempo=${rate}`, '-ar', '44100', '-ac', '1', '-c:a', 'pcm_s16le', `${output}.tmp.wav`], { timeout: 60000 });
     const result = await run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', `${output}.tmp.wav`]);
     policy.rate = rate; policy.seconds = Number(result.stdout.trim());
   } else policy.seconds = actual;
-  if (!Number.isFinite(policy.seconds) || policy.seconds > VOICE_SECONDS + .0001) throw Object.assign(new Error('El audio ajustado supera el tiempo disponible. Sustituye este audio por una grabación de hasta 45 segundos.'), { code: 'VOICE_TOO_LONG' });
+  if (!Number.isFinite(policy.seconds) || policy.seconds > VOICE_SECONDS + .0001) throw Object.assign(new Error('El audio ajustado supera el tiempo disponible. Sustituye este audio por una grabación de hasta 50 segundos.'), { code: 'VOICE_TOO_LONG' });
   const final = voicePolicy(policy.seconds);
   renameSync(`${output}.tmp.wav`, output);
   const result = { version: 1, fingerprint, originalSeconds: voiceSeconds, seconds: policy.seconds, rate: policy.rate, frames: final.frames };

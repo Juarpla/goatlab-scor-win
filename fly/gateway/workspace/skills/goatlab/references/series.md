@@ -16,7 +16,7 @@ Si hay varios audios en un turno, procésalos en orden de llegada, uno por llama
 3. Número elegido: `select --chat=<chat> --number=<n>`. Los JSON de Scripts, Image Prompts, Video Prompts y Motion Prompts se consultan
    desde goatlab.win y se guardan con la serie. La consulta del banco R2 queda programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,
-   sin esperar. Manda los 10 audios. Graba hasta 45 segundos por audio.» Después: «📸 Estoy consultando las imágenes y clips publicados en R2.
+   sin esperar. Manda los 10 audios. Graba hasta 50 segundos por audio.» Después: «📸 Estoy consultando las imágenes y clips publicados en R2.
    Ya puedes mandar los audios; el montaje usará los recursos disponibles y gráficos.»
    Si `missingCategories` no está vacío, informa cuáles faltan y que el montaje
    utilizará el material disponible.

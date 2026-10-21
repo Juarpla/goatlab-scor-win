@@ -1,7 +1,8 @@
 // One lifecycle: a failed/restarted Gateway must destroy all UI credentials.
 import { spawn } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 const env = { ...process.env,
+  GOATLAB_GATEWAY_INSTANCE: randomUUID(),
   OPENCLAW_GATEWAY_PASSWORD: process.env.OPENCLAW_GATEWAY_PASSWORD || process.env.OPENCLAW_GATEWAY_TOKEN || randomBytes(32).toString('hex'),
 };
 delete env.OPENCLAW_GATEWAY_TOKEN; // trusted-proxy rejects a shared token.

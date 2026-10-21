@@ -1,22 +1,23 @@
-// Worker goatlab-render: voz + pool de fotos -> MP4 -> sendVideo por Telegram.
+// Render prepares audio/media, executes OpenClaw plans, and delivers approved candidates.
 // Remotion interpreta el plan por audio. FFmpeg normaliza y mezcla la voz.
 // Durable: POST /render encola un job; GET /jobs/:id recupera su estado.
 // El gateway manda un POST por audio apenas llega; la cola renderiza de a uno
 // y avisa al chat si un Short falla. Node 22. Sin OpenMontage y sin Rust.
 import { execFile } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { createReadStream, existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { FRAME_W, FRAME_H } from '../../src/lib/short-format.js';
-import { ASSETS_PER_MATCH, CLIPS_PER_MATCH, LEGACY_ASSETS_MAX, LEGACY_CLIPS_MAX } from '../../src/lib/media.js';
+import { FRAME_W, FRAME_H, MAX_SECONDS } from '../../src/lib/short-format.js';
 import { audioFailureText } from '../../src/lib/render-queue.js';
 import { telegramCaption } from '../../src/lib/youtube.js';
 import { JobStore } from './job-store.mjs';
 import { RemoteLedger } from './remote-ledger.mjs';
 import { warmPhotos, prunePhotoCache, pinPhotos } from './photo-cache.mjs';
 import { pruneClipCache } from './clip-cache.mjs';
-import { prepareShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
+import { prepareShort, composeShort, renderSilent, muxVoice, mediaDuration } from './short-job.mjs';
+
+import { WORKFLOW_PROTOCOL, submitPlan, approveCandidate, digest, reviewTimes } from './creative-job.mjs';
 
 const run = promisify(execFile);
 const PORT = Number(process.env.PORT ?? 3000);
@@ -113,66 +114,81 @@ async function runJob(job) {
   const measure = async (name, fn) => { const at = Date.now(); await onStage(name); try { return await fn(); } finally { await onStage(name, Date.now()-at); } };
   try {
     if (job.assets.some(asset => asset.source !== 'agnes')) throw new Error('El banco contiene imágenes externas; inicia una serie nueva con /start.');
-    // 1. Voz: desde Telegram (file_id) o URL directa (pruebas).
-    const voiceFile = join(tmp, 'voice.ogg');
-    await measure('voiceDownload', async () => {
-      if (existsSync(voiceFile)) return;
-      if (job.audioFileId) {
-        const f = await tg('getFile', { file_id: job.audioFileId });
-        await download(`https://api.telegram.org/file/bot${BOT}/${f.file_path}`, voiceFile);
-      } else await download(job.audioUrl, voiceFile);
-    });
-    if (stopIfCancelled(job, log)) return;
-    const voiceSeconds = await mediaDuration(voiceFile);
+    if (job.operation === 'prepare') {
+      const voiceFile = join(tmp, 'voice.ogg');
+      await measure('voiceDownload', async () => {
+        if (existsSync(voiceFile)) return;
+        if (job.audioFileId) {
+          const f = await tg('getFile', { file_id: job.audioFileId });
+          await download(`https://api.telegram.org/file/bot${BOT}/${f.file_path}`, voiceFile);
+        } else await download(job.audioUrl, voiceFile);
+      });
+      if (stopIfCancelled(job, log)) return;
+      const prepared = await measure('preparation', async () => prepareShort({
+        tmp, voiceFile, voiceSeconds: await mediaDuration(voiceFile), assets: job.assets, clips: job.clips ?? [], motionPrompts: job.motionPrompts ?? [],
+        variant: job.variant, home: job.home, away: job.away, matchLabel: job.matchLabel, log, cacheDir,
+        facts: job.facts ?? [], requestId: job.requestId ?? job.id, onStage,
+      }));
+      Object.assign(job, { prepared: true, voiceRate: prepared.voiceRate, originalVoiceSeconds: prepared.originalVoiceSeconds,
+        timing: prepared.provider, status: 'awaiting-plan', currentStage: 'planning' });
+      store.save(job); await store.flush();
+      return;
+    }
+    const prepared = JSON.parse(readFileSync(join(tmp, 'prepared.json'), 'utf8'));
+    const { total, voiceFile: adjustedVoiceFile, provider } = prepared;
+    const out = join(tmp, `candidate-${job.revision}.mp4`);
+    if (job.operation === 'render') {
+      composeShort(tmp, job.plan);
+      const silent = join(tmp, 'silent.mp4');
+      if (stopIfCancelled(job, log)) return;
+      if (!existsSync(out)) {
+        await measure('capture', () => renderSilent(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
+        if (stopIfCancelled(job, log)) return;
+        await measure('mux', () => muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out, music: job.plan.version === 5 ? job.plan.music === true : true }));
+      }
 
-    // 2. La transcripción ordena el pool y es el texto del video.
-    const { total, provider, stages, plan, voiceFile: adjustedVoiceFile, voiceRate, originalVoiceSeconds } = await measure('preparation', () => prepareShort({
-      tmp,
-      voiceFile,
-      voiceSeconds,
-      assets: job.assets, clips: job.clips ?? [], motionPrompts: job.motionPrompts ?? [],
-      variant: job.variant,
-      home: job.home,
-      away: job.away,
-      matchLabel: job.matchLabel,
-      log, cacheDir,
-      facts: job.facts ?? [], mediaMinimum: job.mediaMinimum ?? 2, requestId: job.requestId ?? job.id, onStage,
-    }));
-    Object.assign(job.stages, stages);
-    job.renderEngine = 'remotion';
-    job.voiceRate = voiceRate; job.originalVoiceSeconds = originalVoiceSeconds;
-    job.planModel = plan.model;
-    job.planningFallback = Boolean(plan.fallback);
-    store.save(job);
-    job.timing = provider;
-    const silent = join(tmp, 'silent.mp4');
-    const out = join(tmp, 'short.mp4');
-    if (stopIfCancelled(job, log)) return;
-    await measure('capture', () => renderSilent(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
-    if (stopIfCancelled(job, log)) return;
-    await measure('mux', () => muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out }));
+      // 3. Verificación: 1080x1920, duración ≈ plan, peso < 45MB.
+      const probe = JSON.parse(
+        (await run('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_streams', out])).stdout,
+      );
+      const v = probe.streams.find((s) => s.codec_type === 'video');
+      if (!v || v.width !== FRAME_W || v.height !== FRAME_H)
+        throw new Error(`video inesperado: ${v?.width}x${v?.height}`);
+      const [numerator, denominator] = String(v.avg_frame_rate).split('/').map(Number);
+      if (Math.abs(numerator / denominator - 30) > .01 || v.codec_name !== 'h264' || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac'))
+        throw new Error('se requiere H.264 a 30 fps y audio AAC');
+      const dur = await mediaDuration(out);
+      if (!Number.isFinite(dur) || dur > MAX_SECONDS || Math.abs(dur - total) > .1) throw new Error(`duración ${dur}s ≠ ${total}s`);
+      const sizeMb = statSync(out).size / 1_000_000;
+      if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
 
-    // 3. Verificación: 1080x1920, duración ≈ plan, peso < 45MB.
-    const probe = JSON.parse(
-      (await run('ffprobe', ['-v', 'quiet', '-print_format', 'json', '-show_streams', out])).stdout,
-    );
-    const v = probe.streams.find((s) => s.codec_type === 'video');
-    if (!v || v.width !== FRAME_W || v.height !== FRAME_H)
-      throw new Error(`video inesperado: ${v?.width}x${v?.height}`);
-    const [numerator, denominator] = String(v.avg_frame_rate).split('/').map(Number);
-    if (Math.abs(numerator / denominator - 30) > .01 || v.codec_name !== 'h264' || !probe.streams.some(s => s.codec_type === 'audio' && s.codec_name === 'aac'))
-      throw new Error('se requiere H.264 a 30 fps y audio AAC');
-    const dur = await mediaDuration(out);
-    if (dur >= 50 || Math.abs(dur - total) > .1) throw new Error(`duración ${dur}s ≠ ${total}s`);
-    const sizeMb = statSync(out).size / 1_000_000;
-    if (sizeMb >= MAX_MB) throw new Error(`MP4 de ${sizeMb.toFixed(1)}MB alcanza el límite de ${MAX_MB}MB`);
-
+      const frames = await measure('reviewFrames', async () => {
+        const entries = [];
+        for (const [index, time] of reviewTimes(job.plan, dur).entries()) {
+          if (stopIfCancelled(job, log)) return [];
+          const name = `review-${job.revision}-${index}.jpg`;
+          await run('ffmpeg', ['-y', '-loglevel', 'error', '-ss', String(time), '-i', out, '-frames:v', '1', '-q:v', '2', join(tmp, name)], { timeout: 30_000 });
+          entries.push({ name, time });
+        }
+        return entries;
+      });
+      if (stopIfCancelled(job, log)) return;
+      Object.assign(job, { status: 'awaiting-review', currentStage: 'reviewing', duration: dur, sizeMb,
+        candidate: { revision: job.revision, planHash: job.planHash, videoHash: digest(readFileSync(out)), frames } });
+      store.save(job); await store.flush();
+      return;
+    }
+    // Only the exact candidate reviewed by OpenClaw may be delivered.
+    if (!job.approval || job.approval.generation !== job.attempts || job.approval.revision !== job.revision ||
+        job.approval.planHash !== job.planHash || job.approval.videoHash !== digest(readFileSync(out)))
+      throw new Error('el MP4 no coincide con la aprobación de OpenClaw');
+    const dur = job.duration, sizeMb = job.sizeMb;
     // 4. Envío. Un reemplazo del último audio llega a cancelar antes de publicarlo.
     if (stopIfCancelled(job, log)) return;
     job.status = 'delivering';
     store.save(job);
     await store.flush();
-    const musicCredit = readFileSync(new URL('./assets/bed.txt', import.meta.url), 'utf8');
+    const musicCredit = job.plan?.version === 5 && job.plan.music !== true ? '' : readFileSync(new URL('./assets/bed.txt', import.meta.url), 'utf8');
     const messageId = await measure('delivery', () => sendVideo(job.chatId, out, telegramCaption({ ...job, musicCredit })));
     const seconds = Math.round((Date.now() - started) / 1000);
     Object.assign(job, { status: 'done', messageId, duration: dur, sizeMb, seconds });
@@ -197,7 +213,7 @@ async function runJob(job) {
     Object.assign(job, { status: job.status === 'delivering' ? 'delivery-unknown' : job.cancelled ? 'cancelled' : 'error', error: String(e.message ?? e).slice(0, 500), errorCode: e.code ?? null });
     store.save(job);
     log(`error: ${job.error}`);
-    if (job.cancelled) return;
+    if (job.cancelled || job.operation === 'render') return;
     await tg('sendMessage', {
       chat_id: job.chatId,
       text: job.status === 'delivery-unknown' ? `El envío del video ${job.variant + 1} no quedó confirmado. Se conserva el MP4; no se reenviará automáticamente.` : audioFailureText(job.variant + 1, job.error),
@@ -243,13 +259,60 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: 2, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 4, renderEngine: 'remotion', maxSeconds: 49.9 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1 });
+    const artifact = req.url?.match(/^\/jobs\/(job-[a-f0-9]{32})\/artifacts\/(\d+)\/(\d+)\/([\w.-]+\.jpg)$/);
+    if (req.method === 'GET' && artifact) {
+      if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
+      const job = jobs.get(artifact[1]);
+      if (!job || job.cancelled || job.expiresAt <= Date.now() || Number(artifact[2]) !== job.attempts) return json(404, { error: 'artefacto obsoleto' });
+      const revision = Number(artifact[3]), name = artifact[4];
+      const prepared = existsSync(join(store.directory(job), 'prepared.json')) ? JSON.parse(readFileSync(join(store.directory(job), 'prepared.json'))) : null;
+      const allowed = revision === 0 ? prepared?.photos?.some(photo => photo.src === name) : revision === job.revision && job.candidate?.frames.some(frame => frame.name === name);
+      if (!allowed || !existsSync(join(store.directory(job), name))) return json(404, { error: 'artefacto inexistente' });
+      lastWork = Date.now();
+      res.writeHead(200, { 'content-type': 'image/jpeg', 'cache-control': 'no-store' });
+      return createReadStream(join(store.directory(job), name)).pipe(res);
+    }
+    const context = req.url?.match(/^\/jobs\/(job-[a-f0-9]{32})\/context$/);
+    if (req.method === 'GET' && context) {
+      if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
+      const job = jobs.get(context[1]);
+      if (!job || job.cancelled || job.expiresAt <= Date.now()) return json(404, { error: 'contexto inexistente' });
+      const file = join(store.directory(job), 'prepared.json');
+      if (!existsSync(file)) return json(409, { error: 'contexto pendiente de preparación' });
+      const prepared = JSON.parse(readFileSync(file));
+      lastWork = Date.now();
+      return json(200, { generation: job.attempts, revision: job.revision, source: prepared.source,
+        photos: prepared.photos.map(photo => photo.src), frames: prepared.frames, total: prepared.total });
+    }
+    if (req.method === 'POST' && ['/render/plan', '/render/approve', '/render/fail'].includes(req.url)) {
+      if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
+      const b = JSON.parse(await readBody(req)), job = jobs.get(b.jobId);
+      if (!job) return json(404, { error: 'job inexistente' });
+      if (protectedIds.has(job.id)) return json(409, { error: 'operación en curso; consulta el estado' });
+      if (req.url === '/render/fail') {
+        if (b.generation !== job.attempts || job.cancelled || ['done', 'delivering', 'delivery-unknown'].includes(job.status)) return json(409, { error: 'trabajo obsoleto' });
+        job.status = 'error'; job.error = String(b.reason || 'OpenClaw no pudo aprobar el video').slice(0, 500);
+        job.currentStage = 'directorError'; job.errorCode = 'DIRECTOR_STOPPED'; store.save(job); await store.flush();
+        await tg('sendMessage', { chat_id: job.chatId, text: audioFailureText(job.variant + 1, job.error) }).catch(() => {});
+        return json(200, { jobId: job.id, status: job.status });
+      }
+      const result = req.url === '/render/plan'
+        ? submitPlan(job, b, plan => composeShort(store.directory(job), plan))
+        : approveCandidate(job, b);
+      store.save(job); await store.flush();
+      if (job.status === 'queued') schedule(job);
+      return json(202, { jobId: job.id, status: job.status, revision: job.revision, planHash: job.planHash, ...result });
+    }
     const m = req.url?.match(/^\/jobs\/([\w-]+)$/);
     if (req.method === 'GET' && m) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
       cleanup();
       const job = jobs.get(m[1]);
-      if (job) lastWork = Date.now();
+      if (job) {
+        lastWork = Date.now();
+        if (['awaiting-plan', 'awaiting-review'].includes(job.status)) store.save(job);
+      }
       return job ? json(200, job) : json(404, { error: 'job inexistente' });
     }
     if (req.method === 'POST' && req.url === '/render/cancel') {
@@ -274,23 +337,23 @@ const server = createServer(async (req, res) => {
       if (!b.audioFileId && !b.audioUrl) return json(400, { error: 'falta audioFileId o audioUrl' });
       if (!/^-?[1-9][0-9]{0,19}$/.test(String(b.chatId))) return json(400, { error: 'chatId debe ser el identificador numérico de Telegram' });
       if (b.audioFileId && !/^[A-Za-z0-9_-]{16,256}$/.test(b.audioFileId)) return json(400, { error: 'audioFileId no admite rutas locales' });
-      // Bancos antiguos traen hasta 10 fotos: se aceptan y se recortan al guardar.
-      if (!Array.isArray(b.assets) || b.assets.length > LEGACY_ASSETS_MAX) return json(400, { error: 'cantidad de fotos inválida' });
-      const mediaMinimum = b.mediaMinimum ?? 2;
-      if (![0, 1, 2, 4].includes(mediaMinimum) || b.assets.length < mediaMinimum) return json(400, { error: 'mínimo de fotos inválido' });
+      if (!Array.isArray(b.assets)) return json(400, { error: 'assets requiere una lista' });
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
-      if (b.clips != null && (!Array.isArray(b.clips) || b.clips.length > LEGACY_CLIPS_MAX || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration < 4 || c.duration > 12.5))) return json(400, { error: 'clips inválidos' });
-      if (b.motionPrompts != null && (!Array.isArray(b.motionPrompts) || b.motionPrompts.length > 10 || b.motionPrompts.some(p => !Number.isInteger(p?.n) || p.n < 1 || p.n > 10 || !['form','goals','clean-sheets','head-to-head','synthesis'].includes(p.kind) || typeof p?.prompt !== 'string' || p.prompt.length > 12000 || !Array.isArray(p.factIds) || p.factIds.some(id => !(b.facts ?? []).some(f => f.id === id))))) return json(400, { error: 'motion prompts inválidos' });
+      if (b.clips != null && (!Array.isArray(b.clips) || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration <= 0))) return json(400, { error: 'clips inválidos' });
+      if (b.motionPrompts != null && !Array.isArray(b.motionPrompts)) return json(400, { error: 'motionPrompts requiere una lista' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
+      if (b.retryToken != null && (typeof b.retryToken !== 'string' || !/^[A-Za-z0-9-]{1,80}$/.test(b.retryToken))) return json(400, { error: 'retryToken inválido' });
       for (const asset of b.assets) if (asset?.source !== 'agnes' || !asset?.url || !/^https:\/\//.test(asset.url)) return json(400, { error: 'Solo se admiten imágenes generadas con Agnes' });
+      if (b.workflowProtocol !== WORKFLOW_PROTOCOL) return json(409, { error: 'se requiere OpenClaw director y workflowProtocol 3' });
       const { job, duplicate } = store.accept({
         expiresAt: b.expiresAt, chatId: b.chatId, matchId: b.matchId, requestId: b.requestId, seriesId: b.seriesId,
         variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
+        workflowProtocol: WORKFLOW_PROTOCOL, operation: 'prepare', revision: 0, retryToken: b.retryToken,
         renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
-        clips: (b.clips ?? []).slice(0, CLIPS_PER_MATCH), motionPrompts: b.motionPrompts ?? [], assets: b.assets.slice(0, ASSETS_PER_MATCH), facts: b.facts ?? [], mediaMinimum,
+        clips: b.clips ?? [], motionPrompts: b.motionPrompts ?? [], assets: b.assets, facts: b.facts ?? [],
       });
       await store.flush();
       if (job.status === 'queued' && !protectedIds.has(job.id)) schedule(job);
@@ -305,7 +368,17 @@ const server = createServer(async (req, res) => {
 for (const job of jobs.values()) if (["done", "cancelled"].includes(job.status)) store.release(job);
 cleanup();
 await store.flush();
-for (const job of store.pending()) schedule(job);
+for (const job of jobs.values()) {
+  if (['done', 'cancelled', 'error', 'delivery-unknown'].includes(job.status)) continue;
+  if (job.workflowProtocol !== WORKFLOW_PROTOCOL) {
+    job.status = 'error'; job.error = 'Trabajo antiguo; pide reintentar con OpenClaw director'; store.save(job); continue;
+  }
+  if (job.prepared && !existsSync(join(store.directory(job), 'prepared.json'))) {
+    job.attempts++; job.revision = 0; job.plan = null; job.planHash = null; job.candidate = null; job.approval = null;
+    job.prepared = false; job.operation = 'prepare'; job.status = 'queued'; store.save(job);
+  }
+  if (job.status === 'queued') schedule(job);
+}
 
 server.listen(PORT, () => console.log(`render: http://localhost:${server.address().port}`));
 

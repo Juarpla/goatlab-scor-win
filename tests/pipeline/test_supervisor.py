@@ -24,10 +24,12 @@ class SupervisorTests(unittest.TestCase):
             flow.db.execute("UPDATE tasks SET status='done' WHERE kind='media'")
             # A task interrupted before the worker accepted it must be recovered.
             flow.db.execute("UPDATE tasks SET status='running' WHERE id=?", (ids[0],))
+            director=root/'director.mjs'
+            director.write_text("import http from 'node:http';let input='';for await(const chunk of process.stdin) input+=chunk;const data=JSON.stringify({...JSON.parse(input),workflowProtocol:3});const r=http.request(process.env.WORKER_URL+'/render',{method:'POST',headers:{'content-type':'application/json','content-length':Buffer.byteLength(data)}},res=>{let out='';res.on('data',c=>out+=c);res.on('end',()=>console.log(out))});r.end(data);")
             calls = []
             class Worker(BaseHTTPRequestHandler):
                 def do_GET(self):
-                    self.send_response(200); self.end_headers(); self.wfile.write(b'{"ok":true,"workflowProtocol":2}')
+                    self.send_response(200); self.end_headers(); self.wfile.write(b'{"ok":true,"workflowProtocol":3,"authoredCompositions":true}')
                 def do_POST(self):
                     body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
                     calls.append(body)
@@ -38,7 +40,7 @@ class SupervisorTests(unittest.TestCase):
             server = ThreadingHTTPServer(('127.0.0.1', 0), Worker)
             thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
             self.addCleanup(server.server_close); self.addCleanup(server.shutdown)
-            env = {**os.environ, 'GOATLAB_STATE_DIR': directory, 'WORKER_URL': f'http://127.0.0.1:{server.server_port}', 'RENDER_SECRET': 'test'}
+            env = {**os.environ, 'GOATLAB_STATE_DIR': directory, 'WORKER_URL': f'http://127.0.0.1:{server.server_port}', 'RENDER_SECRET': 'test', 'CREATIVE_DIRECTOR_ENABLED':'1', 'GOATLAB_DIRECTOR_SCRIPT':str(director)}
             script = Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts/workflow.py'
             def start():
                 return subprocess.Popen([sys.executable, str(script), 'supervise'], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
@@ -81,11 +83,13 @@ class SupervisorTests(unittest.TestCase):
             flow=Workflow(root/'goatlab.sqlite')
             flow.select('1',{'matchId':'a-b','scripts':[{'hook':'Gancho'} for _ in range(10)]})
             request=flow.receive('1','voice','event')['requestId']
+            director=root/'director.mjs'
+            director.write_text("import http from 'node:http';let input='';for await(const chunk of process.stdin) input+=chunk;const data=JSON.stringify({...JSON.parse(input),workflowProtocol:3});const r=http.request(process.env.WORKER_URL+'/render',{method:'POST',headers:{'content-type':'application/json','content-length':Buffer.byteLength(data)}},res=>{let out='';res.on('data',c=>out+=c);res.on('end',()=>console.log(out))});r.end(data);")
             calls=[]
             class Worker(BaseHTTPRequestHandler):
                 def log_message(self,*_):pass
                 def do_GET(self):
-                    self.send_response(200);self.end_headers();self.wfile.write(b'{"workflowProtocol":2}')
+                    self.send_response(200);self.end_headers();self.wfile.write(b'{"workflowProtocol":3,"authoredCompositions":true}')
                 def do_POST(self):
                     body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
                     progress=json.loads((root/'media-pack/a-b.progress.json').read_text())
@@ -93,7 +97,7 @@ class SupervisorTests(unittest.TestCase):
                     self.send_response(200);self.end_headers();self.wfile.write(json.dumps({'jobId':'accepted'}).encode())
             server=ThreadingHTTPServer(('127.0.0.1',0),Worker)
             threading.Thread(target=server.serve_forever,daemon=True).start()
-            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':''}
+            env={**os.environ,'GOATLAB_STATE_DIR':str(root),'GOATLAB_REPO':str(root),'WORKER_URL':f'http://127.0.0.1:{server.server_port}','RENDER_SECRET':'test','NODE_OPTIONS':f'--import={preload}','AGNES_API_KEY':'','TELEGRAM_BOT_TOKEN':'','CREATIVE_DIRECTOR_ENABLED':'1','GOATLAB_DIRECTOR_SCRIPT':str(director)}
             script=Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts/workflow.py'
             process=subprocess.Popen([sys.executable,str(script),'supervise'],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
             try:

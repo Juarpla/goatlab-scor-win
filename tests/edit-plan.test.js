@@ -16,7 +16,7 @@ test('movement stays inside native image resolution and crop margins', () => {
 test('render input rejects gaps, overruns and nonexistent photos', () => {
   const input={frames:270,photos:[],words:[{word:'Datos',start:.5,end:1}],plan:{version:4,scenes:[{start:0,end:6,layers:[],graphics:[]}]}};
   assert.equal(compositionProps(input).frames,270);
-  assert.throws(()=>compositionProps({...input,frames:1500}),/límite/);
+  assert.throws(()=>compositionProps({...input,frames:1651}),/límite/);
   assert.throws(()=>compositionProps({...input,plan:{...input.plan,scenes:[{start:1,end:6}]}}),/timeline/);
   assert.throws(()=>compositionProps({...input,plan:{...input.plan,scenes:[{start:0,end:6,layers:[{asset:0}]}]}}),/imagen/);
 });

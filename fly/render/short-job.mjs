@@ -4,7 +4,8 @@ import { copyFileSync, existsSync, readFileSync, renameSync, rmSync, writeFileSy
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { ENDCARD_SECONDS, FONT_FILE, FPS, LEAD_SECONDS } from '../../src/lib/short-format.js';
+import { DIRECTOR_ENDCARD_SECONDS, FONT_FILE, FPS, LEAD_SECONDS } from '../../src/lib/short-format.js';
+import { authoredProps } from './authored-composition.mjs';
 import { adjustVoice } from './voice-policy.mjs';
 import { renderRemotion } from './remotion-render.mjs';
 import { compositionProps } from '../../src/lib/edit-plan.js';
@@ -53,7 +54,7 @@ async function voiceTimes({ tmp, voiceFile, voiceSeconds, log }) {
 export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], variant = 0,
   home = '', away = '', matchLabel, log = () => {},
   cacheDir = process.env.PHOTO_CACHE_DIR || join(APP_ROOT, '.cache/shorts/photos'),
-  planner = planEdit, transcriber = voiceTimes,
+  plan, transcriber = voiceTimes,
   facts = [], clips = [], motionPrompts = [], mediaMinimum = 0, requestId, onStage = async () => {},
 }) {
   const stages = {}, measure = async (label, fn) => {
@@ -111,37 +112,26 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     });
   } finally { unpinClips(); }
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { planVersion: 4, clips: availableClips, motionPrompts, requestId, facts, span: total - ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { planVersion: 5, frames: voice.frames, fps: FPS, endcardSeconds: DIRECTOR_ENDCARD_SECONDS, clips: availableClips, motionPrompts, requestId, facts, span: total - DIRECTOR_ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
-  const plan = await measure('planning', () => planner(source, tmp, log));
-  if (plan.fallback) await onStage('planningFallback');
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
-  writeJson(join(tmp, 'composition.json'), compositionProps({ frames: voice.frames, photos, clips: videos, words, plan, facts, motionPrompts, match: matchLabel }));
+  const prepared = { total, frames: voice.frames, photos, clips: videos, words, facts, motionPrompts, match: matchLabel,
+    source, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, stages };
+  writeJson(join(tmp, 'prepared.json'), prepared);
+  if (plan) composeShort(tmp, plan);
   writeJson(join(tmp, 'stages.json'), stages);
-  return { total, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, plan, stages };
+  return { ...prepared, plan };
 }
 
-export async function planEdit(source, tmp, log = () => {}) {
-  const input = join(tmp, 'edit-input.json'), output = join(tmp, 'edit-plan.json');
-  const serialized = JSON.stringify(source);
-  if (existsSync(input) && existsSync(output) && readFileSync(input, 'utf8') === serialized)
-    return JSON.parse(readFileSync(output, 'utf8'));
-  // Invalidate the old plan before changing its input, including failed retries.
-  rmSync(output, { force: true });
-  writeJson(input, source);
-  try {
-    const result = await run(process.env.PYTHON_BIN || 'python3', [join(SKILL_ROOT, 'scripts/planner.py'), '--input', input, '--out', output],
-      { timeout: 250_000, maxBuffer: 1024 * 1024, env: process.env });
-    result.stderr.split('\n').filter(line=>line.startsWith('planner: ')).forEach(log);
-  } catch (error) {
-    const lines=String(error.stderr || 'planificador no disponible').split('\n');
-    lines.filter(line=>line.startsWith('planner: ')).forEach(log);
-    throw new Error(`montaje: ${lines.filter(line=>!line.startsWith('planner: ')).join('\n').trim().slice(0, 400)}`);
-  }
-  return JSON.parse(readFileSync(output, 'utf8'));
+/** Render executes the director's plan; it has no creative model or local fallback. */
+export function composeShort(tmp, plan) {
+  const prepared = JSON.parse(readFileSync(join(tmp, 'prepared.json'), 'utf8'));
+  const props = plan?.version === 5 ? authoredProps(prepared, plan) : compositionProps({ ...prepared, plan });
+  writeJson(join(tmp, 'composition.json'), props);
+  return props;
 }
 
 export async function renderSilent(tmp, out, { workers = process.env.RENDER_WORKERS || 1, onProgress, cancelSignal, isCancelled } = {}) {
@@ -170,7 +160,13 @@ export function voiceBedGraph(total) {
 }
 
 /** Voz con 0.5 s de entrada y música de fondo; el video se copia. */
-export async function muxVoice({ silent, voiceFile, total, out, bedFile = bedPath() }) {
+export async function muxVoice({ silent, voiceFile, total, out, bedFile = bedPath(), music = true }) {
+  if (!music) {
+    await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', silent, '-i', voiceFile, '-filter_complex',
+      `[1:a]aresample=44100,aformat=channel_layouts=stereo,adelay=${LEAD_SECONDS * 1000}|${LEAD_SECONDS * 1000},loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=0:${Number(total)}[voice]`,
+      '-map', '0:v', '-map', '[voice]', '-c:v', 'copy', '-c:a', 'aac', '-t', String(total), '-movflags', '+faststart', out], { timeout: 300_000 });
+    return;
+  }
   if (!existsSync(bedFile)) throw new Error(`falta la música de fondo: ${bedFile}`);
   try {
     await run('ffmpeg', [
@@ -178,7 +174,7 @@ export async function muxVoice({ silent, voiceFile, total, out, bedFile = bedPat
       '-stream_loop', '-1', '-i', bedFile,
       '-filter_complex', voiceBedGraph(total),
       '-map', '0:v', '-map', '[aout]',
-      '-c:v', 'copy', '-c:a', 'aac', '-movflags', '+faststart',
+      '-c:v', 'copy', '-c:a', 'aac', '-t', String(total), '-movflags', '+faststart',
       out,
     ], { timeout: 5 * 60 * 1000 });
   } catch (e) {

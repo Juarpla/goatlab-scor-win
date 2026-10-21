@@ -1,80 +1,73 @@
-# Dirección artística GoatLab — Remotion
+# Composición original por video
 
-Produce un plan JSON de montaje version 4 a partir de la voz temporizada. La voz
-es la narración; los Image Prompts y Video Prompts describen el banco Agnes.
-Los Motion Prompts (entre dos y diez, los que el modelo haya redactado) dirigen
-gráficos pertinentes al argumento de ese audio: el montaje siempre lleva motion
-gráfico, en pantalla completa o como overlays transparentes sobre fotos y vídeos.
-Compón escenas contiguas que cubran exactamente [0,span]. El motor añade el cierre
-fuera de span. Decide ritmo, entradas, salidas y énfasis según las frases escuchadas.
+OpenClaw es el director, autor React y revisor visual. Los turnos de autoría
+precargan las skills `remotion-create` y `remotion-markup` desde el workspace.
+Úsalas para componer y animar; consulta referencias específicas cuando aporten
+al trabajo. La tarea termina al guardar la composición, no al leer guías. Este
+contrato describe el entorno de producción existente. Render ya está instalado
+y exporta automáticamente: usa el archivo de decisión del turno, sin iniciar
+Studio, instalar paquetes ni crear un proyecto nuevo en el Gateway.
 
-## Composición
+## Dirección
 
-Estilo editorial deportivo: fondo carbón #101412, blanco #edf0e6, acentos lima
-#c5ed74 y azul gris #8ca6bf. Un punto de atención por escena; alterna imágenes,
-clips y análisis con cortes normalmente cada 2–5 segundos. Una comparación puede
-ocupar 6–10 segundos cuando la voz lo permita. Reserva el cuarto inferior para los
-subtítulos amarillos; títulos y cifras viven arriba y al centro. Evita superponer
-rostros, títulos y gráficos. Las imágenes y clips son ilustraciones referenciales.
+Diseña una composición propia para la voz temporizada. Prefiere motion sin panel
+de fondo cuando deja ver bien las fotos y clips: texto cinético, palabras que
+caen, trazos SVG, cifras y tarjetas flotantes. Usa pantallas divididas de dos,
+tres o más regiones cuando ayuden a narrar. Puedes combinar recursos, cambiar
+encuadres, tipografía, colores, movimientos, transiciones y densidad por escena.
+La referencia del usuario muestra texto cinético (00–03 s), escritura progresiva
+(03–04 s), tarjetas flotantes (04–05 s), video en un recuadro (07/17 s), cuadrícula
+(15 s) y barrido desenfocado (16 s). Son ideas disponibles, no una secuencia ni
+cuotas. La voz y el contenido mandan; explica el concepto en notes.
 
-Entrega solo JSON. Los textos informativos se extraen de la voz o del catálogo
-facts. Los componentes React resuelven valores, unidades, fuente y muestra para
-estadísticas. El motion editorial es ilustrativo y no requiere hechos verificados.
-Entrega un plan compacto: normalmente 6–12 escenas, sin repetir instrucciones.
+El inventario es material disponible: elige cualquier subconjunto, repite un
+recurso si tiene sentido o trabaja solo con gráficos. Los Motion Prompts son
+inspiración opcional. Usa facts para cifras reales y distingue la ilustración
+de evidencia del partido. Consulta los montajes recientes adjuntos para variar
+la composición; no copies una plantilla cambiando solo texto o colores.
 
-## Contrato de escenas
+El único elemento editorial agregado por el motor es el logo GoatLab durante
+el último segundo. El total es como máximo 55 segundos. Música es una decisión
+booleana del plan; Render mezcla la voz y, si eliges music:true, su cama musical.
+Los subtítulos, títulos y avisos visuales son parte de tu composición: decide
+cuándo y cómo dibujarlos a partir de words. La legibilidad se evalúa visualmente,
+sin cuotas de gráficos, cortes, fotos, clips ni subtítulos obligatorios.
 
-Cada escena tiene start/end en segundos, transition, accent, layers, clips,
-graphics y objects opcionales. Máximo 64 escenas; cada una dura al menos 0.3 s.
-Hasta cuatro imágenes y dos clips por escena; usa sus índices del inventario.
-Layers admiten asset, box {x,y,w,h}, move, focus {x,y}, from/to {x,y,scale,rotation},
-ease y focusEffect. Box cabe en 1×1, w/h ≥0.15. Movimientos: push, pull, pan-left,
-pan-right, rise, drift, tilt, hold, cut-in. Transiciones: cut, fade, slide, wipe,
-iris, focus, defocus. Ease: none, power1.inOut, power2.inOut, power3.out, sine.inOut.
-From/to: x/y ±0.25, escala 1–1.5, rotación ±5 grados; el motor limita el recorte
-por la resolución real. FocusEffect: none, focus, defocus, pulse.
+## Entrega ejecutable
 
-Clips: [{"clip":0,"offset":1,"duration":3}]. Offset y duración corresponden al
-archivo fuente. Duration ≤ escena; offset + duration ≤ duración del recurso.
-El motor silencia los clips y conserva el tiempo global de la voz.
+Guarda {"plan":{"version":5,"code":"módulo JSX","scenes":[{"start":0,"end":span}],"music":false},"notes":"concepto y composición"}.
+Code es JavaScript con JSX y export default de un componente React. Recibe props:
+photos [{src,backdrop,focusBlur,width,height}], clips [{src,width,height,duration}],
+words [{word,start,end}], facts, match, frames y contentFrames. Los recursos llegan
+con URLs locales. El lienzo es 1080×1920 a 30 fps. El componente ocupa contentFrames;
+el cierre lo aporta el motor. scenes indica tiempos absolutos para muestrear la
+revisión, no impone tipo de escena, cantidad ni una estructura visual concreta.
+Declara todos los cambios relevantes; se añaden muestras uniformes independientes.
 
-## Motion graphics
+Imports disponibles: React desde 'react'; desde 'remotion': AbsoluteFill,
+Sequence, Series, Freeze, Loop, Img, OffthreadVideo, Html5Video, Video,
+useCurrentFrame, useVideoConfig, interpolate, interpolateColors, spring, Easing,
+random y getInputProps. Usa Img donde una referencia nueva diga CanvasImage;
+Video es el adaptador local de OffthreadVideo. Usa APIs de Remotion 4.0.533;
+no uses Interactive ni Easing.spring de versiones posteriores: spring es función.
+Puedes escribir helpers, SVG, estilos inline, máscaras CSS, degradados,
+transformaciones y filtros sin limitarte a familias de gráficos prediseñadas.
 
-Selecciona una entrada de motionPrompts cuyo tema aparezca en la voz:
-form, goals, clean-sheets, head-to-head o synthesis. Cada gráfico identifica
-motionPromptNumber (n original), factIds y wordStart/wordEnd (fragmento hablado
-pertinente de 1–10 palabras). At es un segundo ABSOLUTO de la composición (no un desplazamiento relativo).
-At y duration permanecen dentro de la escena.
-Máximo ocho referencias por gráfico, todas presentes en ese Motion Prompt y facts.
-Usa familias form para victorias/empates/derrotas, goals para goles a favor y
-recibidos, clean-sheets para arcos en cero, head-to-head para cruces previos y
-synthesis para tarjetas estadísticas. Mantén unidades iguales en comparaciones.
-Indica presentation: editorial o statistical. Si falta presentation, los planes
-anteriores mantienen statistical. En editorial, factIds es [] y wordStart/wordEnd
-elige el texto de la voz: form usa tipografía cinética; goals, un recorrido
-ilustrativo del balón; clean-sheets, energía defensiva; head-to-head, duelo de
-ambos equipos; synthesis, presentación y énfasis. No hay cifras, ejes ni fuentes
-obligatorias. Las animaciones son referenciales y no prueban que una jugada ocurrió.
-En statistical usa exclusivamente hechos del catálogo y unidades compatibles.
-Busca un bloque editorial y otro statistical cuando la voz y los datos lo permitan,
-alternándolos con imágenes y clips; no impongas un tema ajeno a la narración.
-Cuando no haya estadísticas pertinentes, construye un montaje creativo completo.
-Un tema estadístico explícito sin datos puede mostrar Datos no disponibles. No obliga a incluir los cinco temas en cada audio.
+Anima por frame con useCurrentFrame/interpolate/spring. El marco carga una fuente
+local; puedes elegir fuentes de sistema. Dibuja media usando las URLs recibidas,
+recorta con cajas y overflow:hidden, distribuye con flex/grid/posición absoluta.
+Respeta la resolución nativa según el efecto buscado y revisa el resultado.
+Los imports, red externa, carga dinámica, DOM global y APIs Node no forman parte
+de esta interfaz. El código se compila por revisión y ejecuta en Chromium; los
+recursos deben proceder de este trabajo. Un error técnico vuelve con su diagnóstico
+para que corrijas el código, sin sustituirlo por un montaje automático.
 
-Ejemplo:
-```json
-{"version":4,"scenes":[{"start":0,"end":6,"transition":"fade","layers":[],
-"graphics":[{"kind":"goals","motionPromptNumber":2,"factIds":["home.gf","away.gf"],
-"wordStart":0,"wordEnd":4,"at":0.5,"duration":5.5}]}]}
-```
+## Revisión
 
-También existen label, stat, title y bars con fragmento wordStart/wordEnd o
-factIds del catálogo; ring y line son decoración geométrica. Máximo cuatro
-gráficos por escena. At/duration están dentro de la escena; x 0–0.8, y 0–0.65.
-Los informativos legacy usan x ≤0.35, y ≤0.4 y hasta cuatro referencias. Las cifras
-provienen del catálogo; usa los componentes motion para estadísticas nuevas.
-
-Objects opcionales: hasta tres tarjetas de profundidad, kind cube/card/prism,
-x 0.08–0.7, y 0.08–0.55, size 80–360, rotateX ±35, rotateY/spin ±180. Las etiquetas
-opcionales usan 1–6 palabras mediante wordStart/wordEnd. El motor aporta marca,
-música, subtítulos y cierre. Los planes guardados 1–3 siguen aceptados.
+Revisa los fotogramas reales, incluidas superposiciones y el cierre. Describe
+segundos/escenas y cambios concretos. Evalúa legibilidad, encuadre y coherencia
+con la narración. La diversidad y transparencia son preferencias, no condiciones
+para rechazar un candidato. No afirmes haber escuchado audio ni evaluado el
+movimiento continuo a partir de imágenes. Para corregir, devuelve el plan version:5
+completo con code actualizado. Hay tres candidatos por generación; se entrega
+únicamente el archivo exacto aprobado.

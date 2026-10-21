@@ -68,23 +68,30 @@ configurada por `SCRIPT_PROVIDER_ORDER`, independiente del análisis deportivo.
 Cada partido tiene `/scripts`, `/image-prompts`, `/video-prompts` y `/motion-prompts`
 con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
 para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
-partido, genera un banco compartido de 4 imágenes y hasta 2 clips Agnes, y monta
-los gráficos según la voz. La preparación tiene un presupuesto nuevo por corrida de 50 minutos (`MEDIA_RUN_BUDGET_MS`), limitado además a kickoff + 24 horas, con entrega
+partido y consulta el banco compartido de 4 imágenes y hasta 2 clips Agnes
+producido por GitHub Actions. Dirige el montaje según la voz y revisa el resultado. La preparación tiene un presupuesto nuevo por corrida de 50 minutos (`MEDIA_RUN_BUDGET_MS`), limitado además a kickoff + 24 horas, con entrega
 parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts`.
 
 
-El montaje usa React y Remotion en Fly.io: la IA entrega un plan validado version
-4 y los componentes dibujan forma reciente, goles, arcos en cero, cara a cara y
-síntesis. La presentación editorial añade tipografía cinética, duelos y recorridos
-ilustrativos; la estadística utiliza hechos del catálogo. Se alternan cuando la
-voz y los datos lo permiten. Las versiones 1–3 se adaptan. La voz manda los
-tiempos; los clips Agnes se silencian. El render final mide como máximo 49.9 s.
-Recomendación de grabación: hasta 45 s; ajuste automático de velocidad hasta
-1.10 conservando el tono. Si no cabe, se solicita sustituir ese audio.
+El montaje usa React y Remotion en Fly.io: OpenClaw escribe una composición JSX
+original por audio (plan version 5), con las skills remotion-create y
+remotion-markup. Puede combinar tipografía cinética, SVG, overlays transparentes,
+tarjetas, fotos y clips en regiones libres. No hay cuotas de uso de media ni un
+catálogo obligatorio de gráficos. Render compila el código por revisión y entrega
+solo el MP4 aprobado. Las versiones 1–4 conservan su camino de compatibilidad;
+no son un respaldo automático. El nuevo cierre muestra únicamente el logo durante
+un segundo y el total, incluido ese cierre, mide como máximo 55 s. OpenClaw decide
+subtítulos y presencia de música; Render conserva la voz y la transcripción.
+Recomendación de grabación: hasta 50 s; presupuesto técnico de voz 53 s y ajuste
+hasta 1.10 conservando el tono. Consulta [el reporte de libertad creativa y
+restricciones](CREATIVE-FREEDOM-REPORT.md).
 
 Instalar el worker con npm ci --prefix fly/render y preparar el bundle con
 node fly/render/remotion-build.mjs. El render local usa el mismo camino:
-node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo>.
+node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo> --plan=<plan.json>.
+Render transcribe con Mistral y Whisper; OpenClaw concentra DeepSeek/GLM para
+dirección y revisión visual. El MP4 solo se entrega después de aprobar su revisión
+y su huella. Hay hasta dos correcciones; no existe un montaje automático de respaldo.
 
 Los cinco intentos de Agnes Video Flash emparejan prompts e imágenes distintas
 antes de reutilizarlas. Una tarea incierta con identificador tiene hasta 60 s de

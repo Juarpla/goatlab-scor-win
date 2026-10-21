@@ -17,7 +17,7 @@ RUN curl -fL --connect-timeout 30 --max-time 600 --retry 1 -o /opt/whisper/ggml-
 FROM node:22-bookworm-slim
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    ffmpeg python3 ca-certificates fonts-dejavu-core libgomp1 \
+    ffmpeg ca-certificates fonts-dejavu-core libgomp1 \
     libasound2 libatk-bridge2.0-0 libatk1.0-0 libcairo2 libcups2 libdbus-1-3 \
     libdrm2 libexpat1 libfontconfig1 libgbm1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 \
     libpango-1.0-0 libpangocairo-1.0-0 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 \
@@ -33,8 +33,8 @@ RUN npm ci --omit=dev --no-audit --no-fund \
   && node --input-type=module -e 'import {ensureBrowser} from "@remotion/renderer"; await ensureBrowser();' \
   && /opt/whisper/whisper-cli --help > /dev/null
 COPY src/lib/short-format.js src/lib/edit-plan.js src/lib/motion-data.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/render-queue.js ./src/lib/
-COPY fly/gateway/workspace/skills/goatlab/ ./goatlab-skill/
-COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs fly/render/clip-cache.mjs fly/render/voice-policy.mjs fly/render/remotion-build.mjs fly/render/remotion-render.mjs ./fly/render/
+COPY fly/gateway/workspace/skills/goatlab/assets/ ./goatlab-skill/assets/
+COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/creative-job.mjs fly/render/authored-composition.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs fly/render/clip-cache.mjs fly/render/voice-policy.mjs fly/render/remotion-build.mjs fly/render/remotion-render.mjs ./fly/render/
 COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt fly/render/assets/LiberationSans-Bold.ttf fly/render/assets/LiberationSans-OFL.txt ./fly/render/assets/
 
 COPY fly/render/remotion/ ./fly/render/remotion/

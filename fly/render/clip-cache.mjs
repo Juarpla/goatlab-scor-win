@@ -30,7 +30,7 @@ export async function cachedClip(clip,dir,{fetchImpl=fetch}={}){
       await run('ffmpeg',['-y','-loglevel','error','-i',raw,'-map','0:v:0','-an','-c:v','copy','-movflags','+faststart',temp],{timeout:30000});
       const{stdout}=await run('ffprobe',['-v','error','-select_streams','v:0','-show_entries','stream=width,height:format=duration','-of','json',temp],{timeout:15000});
       const probe=JSON.parse(stdout),stream=probe.streams?.[0],duration=Number(probe.format?.duration);
-      if(!(stream?.width>0&&stream?.height>0&&duration>0&&duration<=12.5))throw new Error('clip inválido');
+      if(!(stream?.width>0&&stream?.height>0&&Number.isFinite(duration)&&duration>0))throw new Error('clip inválido');
       renameSync(temp,file);const info={width:stream.width,height:stream.height,duration};writeFileSync(meta,JSON.stringify(info));return{path:file,...info};
     }finally{rmSync(raw,{force:true});rmSync(temp,{force:true});}
   })();pending.set(id,work);try{return await work;}finally{pending.delete(id);}

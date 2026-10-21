@@ -1,5 +1,5 @@
 /** Resolution-aware motion, shared by Remotion and legacy plan adapters. */
-import { FRAME_W, FRAME_H, FPS, MAX_FRAMES } from './short-format.js';
+import { FRAME_W, FRAME_H, FPS, MAX_FRAMES, ENDCARD_SECONDS } from './short-format.js';
 import { MOTION_KINDS, resolveMotion } from './motion-data.js';
 
 const moves = {
@@ -38,17 +38,33 @@ export function boundedMotion(layer, photo) {
 export function compositionProps({ frames, photos = [], clips = [], words, plan, facts = [], motionPrompts = [], match = '' }) {
   if (!Number.isInteger(frames) || frames < 1 || frames > MAX_FRAMES) throw new Error('duración fuera de límite');
   if (!words?.length || !plan?.scenes?.length || ![1,2,3,4].includes(plan.version)) throw new Error('se requiere transcripción y plan de edición');
-  const span = frames / FPS - 3;
+  const span = frames / FPS - ENDCARD_SECONDS;
   let cursor = 0;
-  for (const scene of plan.scenes) {
+  const finite = (value, path) => {
+    if (typeof value === 'number' && !Number.isFinite(value)) throw new Error(`${path}: número no finito`);
+    if (Array.isArray(value)) value.forEach((v, i) => finite(v, `${path}[${i}]`));
+    else if (value && typeof value === 'object') Object.entries(value).forEach(([k, v]) => finite(v, `${path}.${k}`));
+  };
+  finite(plan, 'plan');
+  for (const [index, scene] of plan.scenes.entries()) {
+    const path = `scenes[${index}]`;
+    if (!scene || typeof scene !== 'object') throw new Error(`${path}: escena inválida`);
+    for (const key of ['layers', 'clips', 'graphics', 'objects']) if (scene[key] !== undefined && !Array.isArray(scene[key])) throw new Error(`${path}.${key}: requiere una lista`);
     if (!Number.isFinite(scene.start) || !Number.isFinite(scene.end) || Math.abs(scene.start - cursor) > .03 || scene.end <= scene.start || scene.end > span + .03) throw new Error('timeline fuera de rango');
+    if (Math.round(scene.end * FPS) <= Math.round(scene.start * FPS)) throw new Error(`${path}: escena menor que un fotograma`);
     cursor = scene.end;
     for (const layer of scene.layers ?? []) if (!Number.isInteger(layer.asset) || !photos[layer.asset]) throw new Error('imagen inexistente');
     for (const layer of scene.clips ?? []) {
       const clip = clips[layer.clip], offset = layer.offset ?? 0, duration = layer.duration ?? scene.end - scene.start;
       if (!Number.isInteger(layer.clip) || !clip || !Number.isFinite(offset) || !Number.isFinite(duration) || offset < 0 || duration <= 0 || offset + duration > clip.duration + .001 || duration > scene.end - scene.start + .001) throw new Error('recorte de clip inválido');
     }
-    for (const graphic of scene.graphics ?? []) {
+    for (const [graphicIndex, graphic] of (scene.graphics ?? []).entries()) {
+      const at = `${path}.graphics[${graphicIndex}]`;
+      if (!graphic || !['label', 'stat', 'bars', 'ring', 'line', 'title', ...MOTION_KINDS].includes(graphic.kind)) throw new Error(`${at}.kind: componente inexistente`);
+      if (!Number.isFinite(graphic.at) || !Number.isFinite(graphic.duration) || graphic.duration <= 0 || graphic.at < scene.start || graphic.at + graphic.duration > scene.end + .03) throw new Error(`${at}: tiempo fuera de escena`);
+      if (graphic.wordStart !== undefined || graphic.wordEnd !== undefined) {
+        if (!Number.isInteger(graphic.wordStart) || !Number.isInteger(graphic.wordEnd) || graphic.wordStart < 0 || graphic.wordEnd <= graphic.wordStart || graphic.wordEnd > words.length) throw new Error(`${at}: fragmento de voz inexistente`);
+      }
       if (MOTION_KINDS.includes(graphic.kind)) resolveMotion(graphic, facts, motionPrompts);
       else for (const id of graphic.factIds ?? []) if (!facts.some(f => f.id === id && Number.isFinite(f.value))) throw new Error('hecho inexistente');
     }

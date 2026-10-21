@@ -7,7 +7,7 @@ from pathlib import Path
 from common import request_json
 
 STAGES = {'voiceDownload':'descargando audio','transcription':'transcribiendo audio','photos':'preparando fotos',
-          'voiceAdjustment':'ajustando la voz','clips':'preparando clips','planning':'planificando el montaje','planningFallback':'montaje local con gráficos y animaciones','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video'}
+          'voiceAdjustment':'ajustando la voz','clips':'preparando clips','planning':'planificando el montaje con OpenClaw','reviewing':'OpenClaw revisa el resultado','reviewFrames':'preparando revisión visual','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video aprobado'}
 
 
 def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=None, failures=()):
@@ -23,7 +23,7 @@ def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=
         lines.append('Banco disponible.' if count==4 and clips==2 else 'Banco parcial; el montaje continúa con gráficos.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
     else:
         lines.append('Consultando el banco en R2…')
-    live=next((j for j in jobs if j.get('status') in ('working','delivering')),None)
+    live=next((j for j in jobs if j.get('status') in ('working','awaiting-plan','awaiting-review','delivering')),None)
     queued=next((j for j in jobs if j.get('status')=='queued'),None)
     failed=next((j for j in jobs if j.get('status') in ('error','delivery-unknown')),None)
     done=sum(j.get('status')=='done' for j in jobs)
@@ -47,7 +47,6 @@ def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=
             lines.append(f'🎬 {pending} videos pendientes: '+('consultando el banco en R2' if phase=='consulting' else 'en cola'))
         elif not failed:
             lines.append('🎬 Esperando audios' if not jobs else f'🎬 Videos entregados: {done}')
-    if any(j.get('planningFallback') or j.get('planModel')=='local-montage' for j in jobs): lines.append('Montaje de respaldo activo: gráficos y animaciones basados en tu audio.')
     return '\n'.join(lines)
 
 

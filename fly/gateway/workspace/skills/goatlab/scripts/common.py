@@ -1,4 +1,4 @@
-"""Small standard-library helpers shared by the Gateway tools and planner."""
+"""Small standard-library helpers shared by the Gateway tools."""
 import json
 import os
 import sqlite3

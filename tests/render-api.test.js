@@ -20,7 +20,7 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     });
     return { url, async stop() { const exited = once(process, 'exit'); process.kill(); await exited; } };
   }
-  const body = { expiresAt: Date.now()+3600_000, requestId: 'stable-cancelled', chatId: '1', matchId: 'a-b', matchLabel: 'A contra B', hook: 'Gancho', audioFileId: 'telegram_valid_voice_id', assets: [{ source:'agnes', url: 'https://example.test/0.jpg' }, { source:'agnes', url: 'https://example.test/1.jpg' }] };
+  const body = { workflowProtocol: 3, expiresAt: Date.now()+3600_000, requestId: 'stable-cancelled', chatId: '1', matchId: 'a-b', matchLabel: 'A contra B', hook: 'Gancho', audioFileId: 'telegram_valid_voice_id', assets: [{ source:'agnes', url: 'https://example.test/0.jpg' }, { source:'agnes', url: 'https://example.test/1.jpg' }] };
   const send = (app, path, value, authorized = true) => fetch(app.url + path, { method: value ? 'POST' : 'GET', headers: authorized ? { authorization: 'Bearer secret', 'content-type': 'application/json' } : {}, body: value ? JSON.stringify(value) : undefined });
   let app = await start();
   try {
@@ -40,19 +40,19 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     assert.equal((await send(app, `/jobs/${job.jobId}`, undefined, false)).status, 401);
     assert.equal((await (await send(app, `/jobs/${job.jobId}`)).json()).status, 'cancelled');
     assert.equal((await send(app, '/render', { ...body, variant: 10 })).status, 400);
-    assert.equal((await send(app, '/render', { ...body, mediaMinimum: 8 })).status,400);
+    assert.equal((await send(app, '/render', { ...body, mediaMinimum: 8 })).status,202);
     assert.equal((await send(app, '/render', { ...body, facts: [{id:'fake',value:3}] })).status,400);
     assert.equal((await send(app, '/render', { ...body, expiresAt: Date.now()-1 })).status, 410);
     assert.equal((await send(app, '/render', { ...body, expiresAt: undefined })).status, 400);
     assert.equal((await send(app, '/render', { ...body, chatId: 'telegram:1' })).status,400);
     assert.equal((await send(app, '/render', { ...body, audioFileId: '/workspace/voice.ogg' })).status,400);
     assert.equal((await send(app, '/render', { ...body, assets:body.assets.map(a=>({...a,source:'external'})) })).status,400);
-    // Un banco antiguo (10 fotos + 3 clips) se acepta y se guarda recortado al contrato 4+2.
-    const legacy={...body, requestId:'legacy-ten-photos', assets:Array.from({length:10},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.jpg`})), clips:Array.from({length:3},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.mp4`,duration:6}))};
+    // Un banco amplio se conserva completo sin cuotas de montaje.
+    const legacy={...body, requestId:'legacy-ten-photos', assets:Array.from({length:11},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.jpg`})), clips:Array.from({length:7},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.mp4`,duration:6}))};
     assert.equal((await send(app, '/render', legacy)).status,202);
     const { readdirSync, readFileSync } = await import('node:fs');
     const saved=readdirSync(state).filter(f=>/^job-[a-f0-9]+\.json$/.test(f)).map(f=>JSON.parse(readFileSync(join(state,f),'utf8'))).find(j=>j.requestId==='legacy-ten-photos');
     assert.ok(saved, 'el trabajo legacy queda persistido');
-    assert.equal(saved.assets.length,4);assert.equal(saved.clips.length,2);
+    assert.equal(saved.assets.length,11);assert.equal(saved.clips.length,7);
   } finally { await app.stop(); }
 });
