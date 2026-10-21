@@ -1,76 +1,6 @@
 {
-  "updatedAt": "2026-10-21T12:12:00.031Z",
+  "updatedAt": "2026-10-21T17:26:44.177Z",
   "runs": [
-    {
-      "at": "2026-10-15T11:26:02.560Z",
-      "matchId": "fd-575370",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1641,
-        "outputTokens": 7905
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6fbf22ff-19ee-41cc-9927-d3a72bcdc2fe"
-    },
-    {
-      "at": "2026-10-15T11:26:02.560Z",
-      "matchId": "fd-575376",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6fbf22ff-19ee-41cc-9927-d3a72bcdc2fe"
-    },
-    {
-      "at": "2026-10-15T11:27:03.813Z",
-      "matchId": "fd-575372",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1654,
-        "outputTokens": 13304
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "7528a107-7ec0-4221-84d6-4eddc3352fdb"
-    },
-    {
-      "at": "2026-10-15T11:27:03.813Z",
-      "matchId": "fd-575374",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "7528a107-7ec0-4221-84d6-4eddc3352fdb"
-    },
     {
       "at": "2026-10-15T11:30:32.362Z",
       "task": "motion-prompts",
@@ -6414,6 +6344,98 @@
       "maxTokens": 12000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-21T17:23:38.488Z",
+      "task": "shorts",
+      "matchId": "brugge-kv-vs-lens-2026-10-21",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6175,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65183
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6272,
+        "outputTokens": 11136
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "02be1e42-6e68-4486-b16a-bf1eb5e66444"
+    },
+    {
+      "at": "2026-10-21T17:24:17.261Z",
+      "task": "image-prompts",
+      "matchId": "brugge-kv-vs-lens-2026-10-21",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1384,
+        "outputTokens": 7216
+      }
+    },
+    {
+      "at": "2026-10-21T17:24:45.793Z",
+      "task": "video-prompts",
+      "matchId": "brugge-kv-vs-lens-2026-10-21",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1281,
+        "outputTokens": 2160
+      }
+    },
+    {
+      "at": "2026-10-21T17:26:44.177Z",
+      "task": "motion-prompts",
+      "matchId": "brugge-kv-vs-lens-2026-10-21",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2017,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 77486
+        }
+      ],
+      "usage": {
+        "inputTokens": 2095,
+        "outputTokens": 7273
+      }
     }
   ]
 }
