@@ -23,7 +23,7 @@ def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=
         lines.append('Banco disponible.' if count==4 and clips==2 else 'Banco parcial; el montaje continúa con gráficos.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
     else:
         lines.append('Consultando el banco en R2…')
-    live=next((j for j in jobs if j.get('status') in ('working','awaiting-plan','awaiting-review','delivering')),None)
+    live=[j for j in jobs if j.get('status') in ('working','awaiting-plan','awaiting-review','delivering')][:3]
     queued=next((j for j in jobs if j.get('status')=='queued'),None)
     failed=next((j for j in jobs if j.get('status') in ('error','delivery-unknown')),None)
     done=sum(j.get('status')=='done' for j in jobs)
@@ -35,10 +35,11 @@ def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=
             lines.append(f'⚠️ Video {failed.get("variant",0)+1}: detenido; puedes pedir reintentarlo.')
             if failed.get('error'): lines.append(str(failed['error'])[:300])
     if live:
-        updated = live.get('updatedAt')
-        stale = not isinstance(updated, (int,float)) or now*1000-updated>90000
-        stage = 'Estado pendiente de actualización' if stale else STAGES.get(live.get('currentStage'),'preparando el montaje')
-        lines.append(f'🎬 Video {live.get("variant",0)+1}: {stage}')
+        for item in live:
+            updated = item.get('updatedAt')
+            stale = not isinstance(updated, (int,float)) or now*1000-updated>90000
+            stage = 'Estado pendiente de actualización' if stale else STAGES.get(item.get('currentStage'),'preparando el montaje')
+            lines.append(f'🎬 Video {item.get("variant",0)+1}: {stage}')
     elif queued:
         lines.append(f'🎬 Video {queued.get("variant",0)+1}: en cola')
     else:

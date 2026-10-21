@@ -47,6 +47,7 @@ test('HTTP cancellation survives process restart and duplicate POST cannot start
     assert.equal((await send(app, '/render', { ...body, chatId: 'telegram:1' })).status,400);
     assert.equal((await send(app, '/render', { ...body, audioFileId: '/workspace/voice.ogg' })).status,400);
     assert.equal((await send(app, '/render', { ...body, assets:body.assets.map(a=>({...a,source:'external'})) })).status,400);
+    assert.equal((await send(app, '/render', { ...body, requestId: 'bad-reply', audioMessageId: '288' })).status, 400);
     // Un banco amplio se conserva completo sin cuotas de montaje.
     const legacy={...body, requestId:'legacy-ten-photos', assets:Array.from({length:11},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.jpg`})), clips:Array.from({length:7},(_,i)=>({source:'agnes',url:`https://example.test/legacy-${i}.mp4`,duration:6}))};
     assert.equal((await send(app, '/render', legacy)).status,202);

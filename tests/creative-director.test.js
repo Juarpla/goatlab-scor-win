@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { directVideo, nativeDecision } from '../fly/gateway/creative-director.mjs';
+import { directVideo, nativeDecision, designMemory, remember } from '../fly/gateway/creative-director.mjs';
 import { submitPlan, approveCandidate, digest, reviewTimes } from '../fly/render/creative-job.mjs';
 import { compositionProps } from '../src/lib/edit-plan.js';
 
@@ -200,4 +200,36 @@ test('stage budgets send high for authoring and low for review, aborting a timed
   calls.length=0;clock=0;
   await decide({directory:directory(t),key:'review',message:'Revisa',purpose:'review',sessionKey:'agent:main:review'});
   const review=calls.find(c=>c.method==='agent');assert.equal(review.thinking,'low');assert.equal(review.timeout,60);
+});
+
+test('authoring requests the preview bytes and records how long the turn took', async t => {
+  const h = harness();
+  const dir = directory(t);
+  const seen = [];
+  let clock = 1000;
+  const worker = async (path, body, binary) => {
+    if (path.endsWith('/context')) return { generation: 1, revision: h.job.revision, source: { span: 12, words: [{ word: 'Gol', start: .5, end: 1 }] }, photos: ['0.jpg'], previews: ['preview-0.jpg'], frames: 450, total: 15 };
+    if (binary) return Buffer.from(path.includes('preview-') ? 'small-preview' : 'real-render-frame');
+    return h.worker(path, body, binary);
+  };
+  const decide = async request => { clock += 2500; seen.push(request); return h.decide(request); };
+  await directVideo({ requestId: 'preview-audio', chatId: '1', expiresAt: clock + 3_600_000 }, { ...h, worker, decide, directory: dir, now: () => clock });
+  const authoring = seen.find(request => request.key.includes(':plan-'));
+  assert.equal(authoring.images[0].name, '0.jpg');
+  assert.equal(authoring.images[0].bytes.toString(), 'small-preview');
+  assert.match(authoring.message, /Preferencias del usuario/);
+  assert.equal(JSON.parse(readFileSync(join(dir, 'state.json'), 'utf8')).history[0].ms, 2500);
+});
+
+test('design memory keeps liked and rejected concepts apart and merges a later concept', t => {
+  const root = directory(t);
+  remember(root, '7', { requestId: 'a'.repeat(32), rating: -1, reason: 'texto cortado', concept: null });
+  const merged = remember(root, '7', { requestId: 'a'.repeat(32), concept: 'cierre con cifra', matchId: 'a-b', at: 5 });
+  remember(root, '7', { requestId: 'b'.repeat(32), rating: 1, concept: 'subtitulos grandes', at: 9 });
+  const memory = designMemory(root, root, '7', 'c'.repeat(32));
+  assert.equal(memory.disliked[0].reason, 'texto cortado');
+  assert.equal(memory.disliked[0].concept, 'cierre con cifra');
+  assert.equal(memory.liked[0].concept, 'subtitulos grandes');
+  assert.equal(merged.items.length, 1);
+  assert.equal(designMemory(root, root, '7', 'b'.repeat(32)).liked.length, 0);
 });

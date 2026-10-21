@@ -1,4 +1,5 @@
 """Trusted Telegram identifiers. Voice intake bypasses the language model."""
+import json
 import os
 import re
 from pathlib import Path
@@ -23,8 +24,63 @@ def file_id(value):
     return value
 
 
+def record_feedback(state, chat, request_id, rating=None, reason=None, callback_id=None, prompt_id=None):
+    from common import atomic_json
+    path = Path(state) / 'director-memory' / f'{chat}.json'
+    data = {'items': [], 'prompts': {}, 'callbacks': []}
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, ValueError):
+        pass
+    callbacks = data.setdefault('callbacks', [])
+    if callback_id and callback_id in callbacks:
+        return {'duplicate': True, **data}
+    if callback_id:
+        callbacks.append(callback_id)
+        data['callbacks'] = callbacks[-200:]
+    items = data.setdefault('items', [])
+    item = next((entry for entry in items if entry.get('requestId') == request_id), None)
+    if item is None:
+        item = {'requestId': request_id, 'rating': rating, 'concept': None}
+        items.append(item)
+    if rating is not None:
+        item['rating'] = rating
+    if reason is not None:
+        item['reason'] = str(reason)[:500]
+    data['items'] = items[-60:]
+    if prompt_id:
+        data.setdefault('prompts', {})[str(prompt_id)] = request_id
+    atomic_json(path, data)
+    return data
+
+
 def ingest(update, state):
     from workflow import Workflow
+    allowed = set(os.environ.get('TELEGRAM_ALLOWED_USERS', '').split(','))
+    query = update.get('callback_query')
+    if query and str(query.get('data') or '').startswith('fb:'):
+        sender = str(query.get('from', {}).get('id'))
+        message = query.get('message') or {}
+        if sender not in allowed or message.get('chat', {}).get('type') != 'private':
+            return {'ignored': True}
+        parts = str(query.get('data')).split(':')
+        if len(parts) != 3 or parts[1] not in ('up', 'down') or not re.fullmatch(r'[a-f0-9]{32}', parts[2]):
+            return {'ignored': True}
+        chat = chat_id(message.get('chat', {}).get('id'))
+        rating = 1 if parts[1] == 'up' else -1
+        stored = record_feedback(state, chat, parts[2], rating, callback_id=query.get('id'))
+        from common import telegram
+        try:
+            telegram('answerCallbackQuery', {'callback_query_id': query.get('id'), 'text': 'Anotado'})
+        except Exception:
+            pass
+        if rating == -1 and not stored.get('duplicate'):
+            try:
+                sent = telegram('sendMessage', {'chat_id': chat, 'text': '¿Qué no te gustó? Responde a este mensaje; es opcional.', 'reply_markup': {'force_reply': True}})
+                record_feedback(state, chat, parts[2], prompt_id=sent.get('message_id'))
+            except Exception:
+                pass
+        return {'ok': True}
     message = update.get('message', {})
     if not message: return None  # native inline-button handling
     voice = message.get('voice') or message.get('audio')
@@ -35,6 +91,16 @@ def ingest(update, state):
         return {'ignored': True}
     chat = chat_id(message.get('chat', {}).get('id'))
     if message.get('chat', {}).get('type') != 'private': return {'ignored': True}
+    reply = (message.get('reply_to_message') or {}).get('message_id')
+    if message.get('text') and reply:
+        memory = Path(state) / 'director-memory' / f'{chat}.json'
+        try:
+            request = json.loads(memory.read_text()).get('prompts', {}).get(str(reply))
+        except (OSError, ValueError):
+            request = None
+        if request:
+            record_feedback(state, chat, request, reason=message.get('text'))
+            return {'ok': True}
     if start:
         event = update.get('update_id')
         if isinstance(event, bool) or not isinstance(event, int) or event < 0:

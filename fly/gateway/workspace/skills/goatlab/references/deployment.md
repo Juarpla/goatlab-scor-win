@@ -172,3 +172,20 @@ la entrega. Se conserva el contrato estricto antiguo para llamadas heredadas.
 Health anuncia reviewPolicy:advisory y reviewFrameLimit:8. Validar con suites
 cortas, un render sintético de dos segundos y captura de payload sin inferencia;
 no reenviar audios reales como prueba de despliegue.
+
+## Carriles, presupuesto y benchmark (octubre 2026)
+
+Render separa un carril ligero (preparar y entregar) de un carril pesado (una
+sola captura). Gateway admite GOATLAB_MAX_DIRECTORS autorías a la vez; el valor
+de producción es 2. Cada video se responde al audio original y lleva botones de
+valoración. Las valoraciones se guardan en director-memory del chat.
+
+La captura registra bundleMs, preflightMs, captureMs y captureFps en job.metrics.
+CAPTURE_BUDGET_MS (18 min) y CAPTURE_CALIBRATION proyectan el tiempo desde el
+preflight. LAYOUT_CHECK admite off, advisory y strict; producción queda en
+advisory hasta revisar videos reales. REMOTION_GL queda vacío: el valor se elige
+con el benchmark de scripts/benchmark-shorts.mjs --fixture.
+
+La máquina sigue en shared-cpu-2x y 4 GB hasta elegir otra con la tabla de
+tiempos. RENDER_WORKERS sigue en 1. La concurrencia de Remotion no pasa del
+número de CPU.

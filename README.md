@@ -91,7 +91,7 @@ node fly/render/remotion-build.mjs. El render local usa el mismo camino:
 node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo> --plan=<plan.json>.
 Render transcribe con Mistral y Whisper; OpenClaw concentra DeepSeek/GLM para
 dirección y revisión visual. El MP4 solo se entrega después de aprobar su revisión
-y su huella. La revisión visual es orientativa, con hasta ocho fotogramas y una llamada. Hay una corrección técnica; las sugerencias no disparan renders ni bloquean la entrega. Consulta [las optimizaciones y la evaluación de revisión manual](VIDEO-OPTIMIZATION-REPORT.md). No existe un montaje automático de respaldo.
+y su huella. La revisión visual es orientativa, con hasta ocho fotogramas y una llamada. Hay una corrección técnica; las sugerencias no disparan renders ni bloquean la entrega. Preparación y entrega no esperan detrás de la captura, y Gateway puede dirigir dos audios a la vez. Consulta [las optimizaciones y la evaluación de revisión manual](VIDEO-OPTIMIZATION-REPORT.md). No existe un montaje automático de respaldo.
 
 Los cinco intentos de Agnes Video Flash emparejan prompts e imágenes distintas
 antes de reutilizarlas. Una tarea incierta con identificador tiene hasta 60 s de

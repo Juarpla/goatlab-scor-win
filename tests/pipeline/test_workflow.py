@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
-from workflow import Workflow
+from workflow import Workflow, runnable_renders
 
 
 def script():
@@ -267,3 +267,32 @@ class IdleCleanupTests(unittest.TestCase):
                 http.assert_not_called()
             self.assertTrue((media/'a-b.json').exists())
             self.assertEqual(flow.db.execute('SELECT file_id FROM audios WHERE id=?',(request,)).fetchone()[0],'')
+
+
+class DirectorSlots(unittest.TestCase):
+    def row(self, ident, chat):
+        return {'id': ident, 'kind': 'render', 'payload': json.dumps({'chatId': chat})}
+
+    def test_two_same_chat_audios_start_and_the_third_waits(self):
+        rows = [self.row(name, '1') for name in ('a', 'b', 'c')]
+        pending = {'1': ['a', 'b', 'c']}
+        self.assertEqual(runnable_renders(rows, [], [], pending, 2), ['a', 'b'])
+
+    def test_a_failed_audio_occupies_the_first_slot(self):
+        rows = [self.row('q1', '1')]
+        pending = {'1': ['failed', 'q1']}
+        self.assertEqual(runnable_renders(rows, [], [], pending, 1), [])
+        self.assertEqual(runnable_renders(rows, [], [], pending, 2), ['q1'])
+
+    def test_one_chat_cannot_take_the_global_slots_of_another(self):
+        running = [{'id': 'a1', 'kind': 'render'}, {'id': 'a2', 'kind': 'render'}]
+        self.assertEqual(runnable_renders([self.row('b1', '2')], running, [], {'2': ['b1']}, 2), [])
+
+    def test_received_audio_keeps_the_telegram_message_id(self):
+        with tempfile.TemporaryDirectory() as folder:
+            flow = Workflow(Path(folder) / 'goatlab.sqlite')
+            self.addCleanup(flow.db.close)
+            flow.select('1', script())
+            flow.receive('1', 'AwACAgEAA_real_voice_id', '288')
+            body = json.loads(flow.db.execute("SELECT payload FROM tasks WHERE kind='render'").fetchone()[0])
+            self.assertEqual(body['audioMessageId'], 288)

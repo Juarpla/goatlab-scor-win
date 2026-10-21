@@ -27,6 +27,8 @@ test('generated code cannot import host modules or trigger dynamic module loadin
   assert.throws(() => validateAuthoredPlan({ ...plan, code: 'export default () => <div>' }, 1650), SyntaxError);
   assert.match(compositionCsp(), /default-src 'none'/);
   assert.match(compositionCsp(), /frame-src 'none'/);
+  validateAuthoredPlan({ ...plan, code: "import {Captions} from 'goatlab-kit';export default ()=>null" }, 1650);
+  assert.throws(() => validateAuthoredPlan({ ...plan, code: "import {Unknown} from 'goatlab-kit';export default ()=>null" }, 1650), /goatlab-kit/);
 });
 
 test('advisory samples stay bounded regardless of scenes and include the closing logo', () => {

@@ -1,5 +1,16 @@
 # Optimización del flujo de video y evaluación de revisión manual
 
+## Carriles y autoría en paralelo
+
+Render prepara y entrega por un carril ligero y captura de uno en uno. Gateway
+dirige hasta dos audios a la vez (`GOATLAB_MAX_DIRECTORS=2`). Cada video responde
+al audio original y trae «Me gusta» / «No me gusta». Esas marcas quedan en
+`director-memory` y vuelven a la autoría como preferencias, no como reglas.
+
+La máquina de Render sigue en shared-cpu-2x con 4 GB y `RENDER_WORKERS=1`.
+La tabla de benchmark decide si cambia. El detector de texto queda en aviso
+(`LAYOUT_CHECK` por defecto `advisory`). El botón «Rehacer» sigue fuera de este cambio.
+
 Fecha: 21 de octubre de 2026.
 
 ## Punto de partida

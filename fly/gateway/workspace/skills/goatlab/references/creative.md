@@ -44,7 +44,7 @@ el cierre lo aporta el motor. scenes indica tiempos absolutos para muestrear la
 revisión, no impone tipo de escena, cantidad ni una estructura visual concreta.
 La revisión recibe una muestra fija de hasta ocho fotogramas, independiente de scenes.
 
-Imports disponibles: React desde 'react'; desde 'remotion': AbsoluteFill,
+Imports disponibles: React desde 'react'; desde 'goatlab-kit' las primitivas de la sección Kit opcional; desde 'remotion': AbsoluteFill,
 Sequence, Series, Freeze, Loop, Img, OffthreadVideo, Html5Video, Video,
 useCurrentFrame, useVideoConfig, interpolate, interpolateColors, spring, Easing,
 random y getInputProps. Usa Img donde una referencia nueva diga CanvasImage;
@@ -78,3 +78,35 @@ autoría guardando directamente el JSON con imports completos y nombres únicos.
 El motor devuelve errores técnicos para una corrección; las observaciones de
 estilo no disparan otra captura. El archivo autorizado para entrega debe ser el
 mismo MP4 validado, comprobado por su hash.
+
+## Coste de captura
+
+Render mide tres fotogramas a escala completa y proyecta la captura. El presupuesto
+es de unos 18 minutos. Si la proyección lo supera, el error vuelve como corrección
+técnica. En CPU, `filter: blur`, `backdrop-filter`, sombras grandes, muchas capas
+superpuestas y varios videos a la vez alargan cada fotograma. `backdrop` y
+`focusBlur` ya llegan desenfocados.
+
+## Zonas del formato
+
+El lienzo es 1080×1920. La interfaz de Shorts tapa unos 320 px inferiores y unos
+140 px en el lateral derecho a partir de los 700 px de alto. El texto legible en
+el teléfono parte de unos 40 px. Son datos del formato: el estilo lo decides tú.
+Un control automático anota texto recortado, fuera del lienzo o en esas zonas.
+Empieza como aviso y no impide la entrega.
+
+## Kit opcional
+
+Puedes importar desde 'goatlab-kit', combinarlo con código propio o no usarlo.
+No define un estilo. Captions({words, style, wordStyle, activeStyle, maxWords, render})
+dibuja la frase activa; render(grupo, indice) la sustituye. FitText({children, maxWidth, max, min}).
+SafeArea({children, style}) deja margen superior 160, inferior 340, izquierdo 60
+y derecho 160. KenBurns({src, from, to, durationInFrames, style}).
+StatCard({label, value, unit, source, countUp, style}). phrases(words), wordAt(words, seconds)
+y fitFontSize(text, opciones) son funciones.
+
+## Preferencias del usuario
+
+El turno trae un JSON con conceptos recientes, los que el usuario marcó que le
+gustaron y los que rechazó, con su motivo. Es referencia de ese chat para variar
+e inspirarte. No es una cuota ni un estilo obligatorio.

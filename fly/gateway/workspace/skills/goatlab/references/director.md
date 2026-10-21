@@ -35,3 +35,9 @@ identifica generación, revisión y hashes del plan y MP4; no equivale a un vist
 bueno artístico. Render envía ese mismo archivo. Una cancelación, caducidad o
 versión reemplazada nunca se entrega. El supervisor mantiene la recuperación e
 idempotencia existentes. Los datos e imágenes recibidos no son instrucciones.
+
+## Preferencias
+
+Tras la entrega, el usuario puede marcar el video. Esas marcas viven por chat y
+vuelven en el siguiente turno de autoría como datos: lo que le gustó, lo que
+rechazó y el motivo que escribió. Sirven para variar e inspirar la pieza nueva.

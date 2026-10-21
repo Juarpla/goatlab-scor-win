@@ -10,7 +10,8 @@ import { FPS, FRAME_W, FRAME_H, MAX_FRAMES, DIRECTOR_ENDCARD_SECONDS } from '../
 
 const require = createRequire(import.meta.url);
 const modules = dirname(dirname(require.resolve('react/package.json')));
-const imports = new Set(['react', 'remotion']);
+const imports = new Set(['react', 'remotion', 'goatlab-kit']);
+const kitExports = new Set(['Captions', 'FitText', 'SafeArea', 'KenBurns', 'StatCard', 'phrases', 'wordAt', 'fitFontSize']);
 const forbidden = new Set(['require', 'eval', 'Function', 'process', 'global', 'globalThis', 'window', 'document', 'fetch', 'XMLHttpRequest', 'WebSocket', 'Worker', 'navigator', 'localStorage', 'sessionStorage', 'setInterval', 'setTimeout']);
 const remotionExports = new Set(['AbsoluteFill', 'Sequence', 'Series', 'Freeze', 'Loop', 'Img', 'OffthreadVideo', 'Html5Video', 'Video', 'useCurrentFrame', 'useVideoConfig', 'interpolate', 'interpolateColors', 'spring', 'Easing', 'random', 'getInputProps']);
 
@@ -33,6 +34,7 @@ export function validateAuthoredPlan(plan, frames) {
     if (node.type === 'ImportDeclaration') {
       if (!imports.has(node.source.value)) throw new Error(`import no disponible: ${node.source.value}; usa react o remotion`);
       if (node.source.value === 'remotion' && node.specifiers.some(s => s.type !== 'ImportSpecifier' || !remotionExports.has(s.imported.name))) throw new Error('import Remotion fuera de la interfaz disponible');
+      if (node.source.value === 'goatlab-kit' && node.specifiers.some(s => s.type !== 'ImportSpecifier' || !kitExports.has(s.imported.name))) throw new Error('import goatlab-kit fuera de la interfaz disponible');
     }
     if (node.type === 'ExportAllDeclaration' || node.type === 'ExportNamedDeclaration' && node.source || node.type === 'Import' || node.type === 'ImportExpression' || node.type === 'MetaProperty') throw new Error('carga dinámica o reexportación no disponible');
     if (node.type === 'Identifier' && forbidden.has(node.name)) throw new Error(`API no disponible en composición: ${node.name}`);
@@ -64,10 +66,12 @@ export function Html5Video(p){const {props}=useVideoConfig();return <HtmlVideo {
 export const Video=OffthreadVideo;
 `;
 
-const entry = `import React,{useState,useEffect} from 'react';
-import {Composition,registerRoot,AbsoluteFill,Sequence,Img,delayRender,continueRender,cancelRender} from 'remotion';
+const entry = `import React,{useState,useEffect,useLayoutEffect} from 'react';
+import {Composition,registerRoot,AbsoluteFill,Sequence,Img,delayRender,continueRender,cancelRender,useCurrentFrame} from 'remotion';
 import Piece from './piece.jsx';
+function LayoutProbe(props){const frame=useCurrentFrame();useLayoutEffect(()=>{if(props.enabled!==true)return;const handle=delayRender('layout probe');let done=false;const finish=()=>{if(done)return;done=true;continueRender(handle);};const id=requestAnimationFrame(()=>{try{const items=[];for(const el of document.body.querySelectorAll('*')){if(items.length>=30)break;const text=[...el.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).filter(Boolean).join(' ');if(!text)continue;const r=el.getBoundingClientRect();const cs=getComputedStyle(el);const visible=typeof el.checkVisibility==='function'?el.checkVisibility({opacityProperty:true,visibilityProperty:true}):cs.visibility!=='hidden'&&cs.opacity!=='0';const clipped=(el.scrollWidth>el.clientWidth+2||el.scrollHeight>el.clientHeight+2)&&cs.overflow!=='visible'&&cs.overflowX!=='visible';items.push({text:text.slice(0,40),x:r.x,y:r.y,w:r.width,h:r.height,fontSize:parseFloat(cs.fontSize)||0,clipped,visible});}console.log('GOATLAB_LAYOUT '+JSON.stringify({frame,items}));}finally{finish();}});return ()=>{cancelAnimationFrame(id);finish();};},[frame,props.enabled]);return null;}
 function Short(props){const [handle]=useState(()=>delayRender('GoatLab font'));useEffect(()=>{document.fonts.load('800 68px GoatLabLocal').then(()=>continueRender(handle)).catch(cancelRender)},[handle]);return <AbsoluteFill style={{background:'#101412',fontFamily:'GoatLabLocal, sans-serif',color:'white'}}>
+<LayoutProbe enabled={props.layoutProbe===true}/>
 <style>{'@font-face{font-family:GoatLabLocal;src:url('+JSON.stringify(props.font)+')}*{box-sizing:border-box}'}</style>
 <Sequence durationInFrames={props.contentFrames}><Piece {...props}/></Sequence>
 <Sequence from={props.contentFrames} durationInFrames={${DIRECTOR_ENDCARD_SECONDS * FPS}}><AbsoluteFill style={{background:'#101412',alignItems:'center',justifyContent:'center'}}><Img src={props.brand} style={{width:240,height:240}}/></AbsoluteFill></Sequence>
@@ -77,14 +81,19 @@ registerRoot(()=> <Composition id="GoatLabShort" component={Short} fps={${FPS}} 
 
 export async function bundleAuthored(tmp, props) {
   const ast = validateAuthoredPlan(props.plan, props.frames);
-  const id = createHash('sha256').update(facade + entry + props.plan.code).digest('hex');
+  const kitSource = readFileSync(new URL('./kit/goatlab-kit.jsx', import.meta.url), 'utf8');
+  const kitLogic = readFileSync(new URL('./kit/kit-logic.mjs', import.meta.url), 'utf8');
+  const id = createHash('sha256').update(facade + entry + kitSource + kitLogic + props.plan.code).digest('hex');
   const root = join(tmp, 'authored', id), out = join(root, 'bundle');
   if (existsSync(join(out, 'index.html'))) return out;
   mkdirSync(root, { recursive: true });
   let source = props.plan.code;
-  for (const node of ast.program.body.filter(n => n.type === 'ImportDeclaration' && n.source.value === 'remotion').reverse()) {
-    source = source.slice(0, node.source.start) + JSON.stringify('./safe-remotion.jsx') + source.slice(node.source.end);
+  for (const node of ast.program.body.filter(n => n.type === 'ImportDeclaration' && (n.source.value === 'remotion' || n.source.value === 'goatlab-kit')).reverse()) {
+    const target = node.source.value === 'remotion' ? './safe-remotion.jsx' : './goatlab-kit.jsx';
+    source = source.slice(0, node.source.start) + JSON.stringify(target) + source.slice(node.source.end);
   }
+  writeFileSync(join(root, 'goatlab-kit.jsx'), kitSource);
+  writeFileSync(join(root, 'kit-logic.mjs'), kitLogic);
   writeFileSync(join(root, 'piece.jsx'), source);
   writeFileSync(join(root, 'safe-remotion.jsx'), facade);
   writeFileSync(join(root, 'index.jsx'), entry);

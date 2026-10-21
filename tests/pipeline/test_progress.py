@@ -20,6 +20,9 @@ class ProgressTests(unittest.TestCase):
     def test_stale_and_queued_jobs_never_claim_active_planning(self):
         job = {'status': 'working', 'variant': 3, 'currentStage': 'planning', 'updatedAt': 1000000}
         self.assertIn('Video 4: planificando', progress_text(4, 'finished', [job], 1000, 1080, clips=2))
+        two = progress_text(4, 'finished', [job, {'status': 'delivering', 'variant': 1, 'currentStage': 'delivery', 'updatedAt': 1000000}], 1000, 1080, clips=2)
+        self.assertIn('Video 4: planificando', two)
+        self.assertIn('Video 2: enviando', two)
         self.assertIn('Estado pendiente de actualización', progress_text(4, 'finished', [job], 1000, 1091, clips=2))
         self.assertNotIn('planificando', progress_text(4, 'finished', [{**job, 'status': 'queued'}], 1000, 1080, clips=2))
 

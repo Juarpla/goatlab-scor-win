@@ -22,6 +22,22 @@ SKILL = Path(__file__).resolve().parents[1]
 ROOT = next((p for p in SKILL.parents if (p / "public/data").exists()), Path.cwd())
 REPO = Path(os.environ.get("GOATLAB_REPO", str(ROOT)))
 STATE = Path(os.environ.get("GOATLAB_STATE_DIR", str(REPO / ".cache/goatlab")))
+MAX_DIRECTORS = max(1, int(os.environ.get("GOATLAB_MAX_DIRECTORS", "2")))
+FINAL_RENDER = ("done", "cancelled", "error", "delivery-unknown")
+
+
+def runnable_renders(rows, running_tasks, awaiting_ids, pending_by_chat, max_directors):
+    """Queued render rows that may start. A failed or running task occupies one per-chat slot."""
+    active = len([task for task in running_tasks if task.get("kind") == "render"]) + len(awaiting_ids)
+    allowed = []
+    for row in rows:
+        if active + len(allowed) >= max_directors:
+            break
+        chat = str(json.loads(row["payload"])["chatId"])
+        if row["id"] not in pending_by_chat.get(chat, [])[:max_directors]:
+            continue
+        allowed.append(row["id"])
+    return allowed
 
 
 class Workflow:
@@ -210,6 +226,7 @@ class Workflow:
                 "motionPrompts": (script.get("content", {}).get("motion-prompts") or {}).get("prompts", []),
                 "contentFacts": (script.get("content", {}).get("motion-prompts") or {}).get("facts", []),
                 "hook": shot.get("hook", ""), "title": shot.get("title", ""), "audioFileId": file_id,
+                "audioMessageId": int(event) if str(event).isdigit() else None,
             })
             if n == 10:
                 self.db.execute("UPDATE series SET closed=1 WHERE id=?", (series["id"],))
@@ -289,7 +306,7 @@ def render_status(audio):
     try:
         url = os.environ.get('WORKER_URL', 'https://goatlab-render.fly.dev').rstrip('/')
         job = request_json(url + '/jobs/' + result['jobId'], headers={'Authorization': 'Bearer ' + os.environ.get('RENDER_SECRET', '')}, timeout=10)
-        audio['render'] = {key: job.get(key) for key in ['id', 'status', 'currentStage', 'error', 'stages', 'messageId', 'creditsError', 'attempts', 'revision', 'planModel', 'timing']}
+        audio['render'] = {key: job.get(key) for key in ['id', 'status', 'currentStage', 'error', 'stages', 'metrics', 'messageId', 'creditsError', 'attempts', 'revision', 'planModel', 'timing']}
     except Exception:
         audio['render'] = {'id': result['jobId'], 'status': 'unavailable'}
     request = audio.get('requestId')
@@ -298,7 +315,7 @@ def render_status(audio):
             path = STATE/'director'/hashlib.sha256(request.encode()).hexdigest()/'state.json'
             director = json.loads(path.read_text())
             audio['director'] = {'generation': director.get('generation'), 'error': director.get('error'),
-                'turns': [{'generation': t.get('generation'), 'stage': t['stage'], 'model': t['result'].get('requestedModel'),
+                'turns': [{'generation': t.get('generation'), 'stage': t['stage'], 'ms': t.get('ms'), 'model': t['result'].get('requestedModel'),
                            'decision': t['result'].get('decision'), 'notes': t['result'].get('notes','')[:1000]}
                           for t in director.get('history', [])[-6:]]}
         except (OSError, ValueError, KeyError):
@@ -366,7 +383,7 @@ def supervise():
     signal.signal(signal.SIGINT, stop)
     futures = {}
     last_cleanup = 0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_DIRECTORS + 2) as pool:
         while not stopping or futures:
             if reporter and not stopping and time.time()>=reporter.next:
                 from render_ledger import Ledger
@@ -424,14 +441,14 @@ def supervise():
                 by_request={r.get('requestId'):r for r in records}
                 # Accepted HTTP submissions remain active until their durable delivery result.
                 accepted=flow.db.execute("SELECT id FROM tasks WHERE kind='render' AND status='done'").fetchall()
-                awaiting=any(by_request.get(t['id'],{}).get('status') not in ('done','cancelled','error','delivery-unknown') for t in accepted)
-                render_running = awaiting or any(t["kind"] == "render" for t in futures.values())
-                first_by_chat = {}
+                running_ids={task['id'] for task in futures.values()}
+                awaiting_ids=[t['id'] for t in accepted if by_request.get(t['id'],{}).get('status') not in FINAL_RENDER and t['id'] not in running_ids]
+                pending_by_chat={}
                 for pending in flow.db.execute("SELECT id,payload FROM tasks WHERE kind='render' AND status IN ('queued','running','failed') ORDER BY rowid"):
-                    first_by_chat.setdefault(str(json.loads(pending['payload'])['chatId']), pending['id'])
+                    pending_by_chat.setdefault(str(json.loads(pending['payload'])['chatId']), []).append(pending['id'])
                 rows = flow.db.execute("SELECT * FROM tasks WHERE status='queued' AND next_at<=? ORDER BY CASE kind WHEN 'cancel' THEN 0 WHEN 'media' THEN 1 ELSE 2 END,rowid", (time.time(),)).fetchall()
                 for task in rows:
-                    if len(futures) >= 3:
+                    if len(futures) >= MAX_DIRECTORS + 2:
                         break
                     if task["kind"] == "media" and media_running:
                         continue
@@ -439,7 +456,7 @@ def supervise():
                         if os.environ.get('CREATIVE_DIRECTOR_ENABLED') != '1':
                             continue
                         body = json.loads(task["payload"])
-                        if render_running or first_by_chat.get(str(body['chatId'])) != task['id']:
+                        if task['id'] not in runnable_renders([task], list(futures.values()), awaiting_ids, pending_by_chat, MAX_DIRECTORS):
                             continue
                         media_task = flow.db.execute('SELECT status FROM tasks WHERE id=?', ('media:'+body['matchId'],)).fetchone()
                         if media_task and media_task[0] in ('queued','running'):
@@ -455,7 +472,6 @@ def supervise():
                     flow.db.execute("UPDATE tasks SET status='running' WHERE id=?", (task["id"],))
                     futures[pool.submit(execute, dict(task))] = dict(task)
                     media_running |= task["kind"] == "media"
-                    render_running |= task["kind"] == "render"
             busy = STATE / ".busy"
             if futures:
                 busy.touch()

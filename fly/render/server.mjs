@@ -1,8 +1,8 @@
 // Render prepares audio/media, executes OpenClaw plans, and delivers approved candidates.
 // Remotion interpreta el plan por audio. FFmpeg normaliza y mezcla la voz.
 // Durable: POST /render encola un job; GET /jobs/:id recupera su estado.
-// El gateway manda un POST por audio apenas llega; la cola renderiza de a uno
-// y avisa al chat si un Short falla. Node 22. Sin OpenMontage y sin Rust.
+// El gateway manda un POST por audio apenas llega. Hay una captura a la vez;
+// preparación y entrega van por un carril ligero. Avisa al chat si un Short falla.
 import { execFile } from 'node:child_process';
 import { createReadStream, existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
@@ -19,6 +19,7 @@ import { prepareShort, composeShort, renderSilent, muxVoice, mediaDuration } fro
 
 import { WORKFLOW_PROTOCOL, submitPlan, approveCandidate, digest } from './creative-job.mjs';
 import { extractReviewFrames } from './review-frames.mjs';
+import { createLanes, laneFor } from './lanes.mjs';
 
 const run = promisify(execFile);
 const PORT = Number(process.env.PORT ?? 3000);
@@ -35,7 +36,7 @@ if(ledger) await ledger.restore(stateDir);
 const store = new JobStore(stateDir, { ledger });
 const jobs = store.jobs;
 const cacheDir = process.env.PHOTO_CACHE_DIR || '/data/photo-cache';
-let tail = Promise.resolve(); // una sola captura activa
+const enqueue = createLanes();
 const IDLE_MS = 15 * 60_000;
 let lastWork = Date.now();
 let inflight = 0;
@@ -76,12 +77,14 @@ async function download(url, file) {
   renameSync(`${file}.tmp`, file);
 }
 
-async function sendVideo(chatId, file, cap) {
+async function sendVideo(chatId, file, cap, { replyTo, buttons } = {}) {
   const form = new FormData();
   form.set('chat_id', String(chatId));
   form.set('video', new Blob([readFileSync(file)], { type: 'video/mp4' }), 'short.mp4');
   form.set('caption', cap);
   form.set('supports_streaming', 'true');
+  if (replyTo) form.set('reply_parameters', JSON.stringify({ message_id: Number(replyTo), allow_sending_without_reply: true }));
+  if (buttons) form.set('reply_markup', JSON.stringify(buttons));
   const r = await fetch(`https://api.telegram.org/bot${BOT}/sendVideo`, {
     method: 'POST',
     signal: AbortSignal.timeout(120_000),
@@ -142,8 +145,9 @@ async function runJob(job) {
       composeShort(tmp, job.plan);
       const silent = join(tmp, 'silent.mp4');
       if (stopIfCancelled(job, log)) return;
+      let metrics;
       if (!existsSync(out)) {
-        await measure('capture', () => renderSilent(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
+        metrics = await measure('capture', () => renderSilent(tmp, silent, { isCancelled: () => job.cancelled || job.expiresAt <= Date.now() }));
         if (stopIfCancelled(job, log)) return;
         await measure('mux', () => muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out, music: job.plan.version === 5 ? job.plan.music === true : true }));
       }
@@ -167,8 +171,9 @@ async function runJob(job) {
       const frames = await measure('reviewFrames', () => extractReviewFrames({ file: out, tmp, plan: job.plan, duration: dur, revision: job.revision }))
         .catch(error => { reviewError = String(error.message).slice(0, 1000); log('revisión orientativa no disponible'); return []; });
       if (stopIfCancelled(job, log)) return;
+      job.metrics = { ...(metrics ?? {}), muxMs: job.stages.mux, reviewFramesMs: job.stages.reviewFrames };
       Object.assign(job, { status: 'awaiting-review', currentStage: 'reviewing', duration: dur, sizeMb,
-        candidate: { revision: job.revision, planHash: job.planHash, videoHash: digest(readFileSync(out)), frames, reviewError } });
+        candidate: { revision: job.revision, planHash: job.planHash, videoHash: digest(readFileSync(out)), frames, reviewError, layoutNotes: job.metrics.layout ?? [] } });
       store.save(job); await store.flush();
       return;
     }
@@ -183,7 +188,8 @@ async function runJob(job) {
     store.save(job);
     await store.flush();
     const musicCredit = job.plan?.version === 5 && job.plan.music !== true ? '' : readFileSync(new URL('./assets/bed.txt', import.meta.url), 'utf8');
-    const messageId = await measure('delivery', () => sendVideo(job.chatId, out, telegramCaption({ ...job, musicCredit })));
+    const buttons = /^[a-f0-9]{32}$/.test(String(job.requestId || '')) ? { inline_keyboard: [[{ text: 'Me gusta', callback_data: `fb:up:${job.requestId}` }, { text: 'No me gusta', callback_data: `fb:down:${job.requestId}` }]] } : undefined;
+    const messageId = await measure('delivery', () => sendVideo(job.chatId, out, telegramCaption({ ...job, musicCredit }), { replyTo: job.audioMessageId, buttons }));
     const seconds = Math.round((Date.now() - started) / 1000);
     Object.assign(job, { status: 'done', messageId, duration: dur, sizeMb, seconds });
     job.currentStage='done';
@@ -235,7 +241,7 @@ function schedule(job) {
   const allowedAssets = job.assets.filter(asset => asset.source === 'agnes');
   const unpin = pinPhotos(allowedAssets);
   const warming = warmPhotos(allowedAssets, cacheDir).catch(() => {});
-  tail = tail.then(async () => {
+  enqueue(laneFor(job), async () => {
     await warming;
     if (job.expiresAt <= Date.now()) job.cancelled = true;
     if (job.cancelled) { job.status = 'cancelled'; return; }
@@ -253,7 +259,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1, reviewPolicy: 'advisory', reviewFrameLimit: 8 });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1, reviewPolicy: 'advisory', reviewFrameLimit: 8, lanes: ['light', 'heavy'] });
     const artifact = req.url?.match(/^\/jobs\/(job-[a-f0-9]{32})\/artifacts\/(\d+)\/(\d+)\/([\w.-]+\.jpg)$/);
     if (req.method === 'GET' && artifact) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
@@ -261,7 +267,7 @@ const server = createServer(async (req, res) => {
       if (!job || job.cancelled || job.expiresAt <= Date.now() || Number(artifact[2]) !== job.attempts) return json(404, { error: 'artefacto obsoleto' });
       const revision = Number(artifact[3]), name = artifact[4];
       const prepared = existsSync(join(store.directory(job), 'prepared.json')) ? JSON.parse(readFileSync(join(store.directory(job), 'prepared.json'))) : null;
-      const allowed = revision === 0 ? prepared?.photos?.some(photo => photo.src === name) : revision === job.revision && job.candidate?.frames.some(frame => frame.name === name);
+      const allowed = revision === 0 ? prepared?.photos?.some(photo => photo.src === name) || prepared?.previews?.includes(name) : revision === job.revision && job.candidate?.frames.some(frame => frame.name === name);
       if (!allowed || !existsSync(join(store.directory(job), name))) return json(404, { error: 'artefacto inexistente' });
       lastWork = Date.now();
       res.writeHead(200, { 'content-type': 'image/jpeg', 'cache-control': 'no-store' });
@@ -277,7 +283,7 @@ const server = createServer(async (req, res) => {
       const prepared = JSON.parse(readFileSync(file));
       lastWork = Date.now();
       return json(200, { generation: job.attempts, revision: job.revision, source: prepared.source,
-        photos: prepared.photos.map(photo => photo.src), frames: prepared.frames, total: prepared.total });
+        photos: prepared.photos.map(photo => photo.src), previews: prepared.previews ?? [], frames: prepared.frames, total: prepared.total });
     }
     if (req.method === 'POST' && ['/render/plan', '/render/approve', '/render/fail'].includes(req.url)) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });
@@ -340,13 +346,14 @@ const server = createServer(async (req, res) => {
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
       if (b.retryToken != null && (typeof b.retryToken !== 'string' || !/^[A-Za-z0-9-]{1,80}$/.test(b.retryToken))) return json(400, { error: 'retryToken inválido' });
       for (const asset of b.assets) if (asset?.source !== 'agnes' || !asset?.url || !/^https:\/\//.test(asset.url)) return json(400, { error: 'Solo se admiten imágenes generadas con Agnes' });
+      if (b.audioMessageId != null && (!Number.isInteger(b.audioMessageId) || b.audioMessageId <= 0)) return json(400, { error: 'audioMessageId inválido' });
       if (b.workflowProtocol !== WORKFLOW_PROTOCOL) return json(409, { error: 'se requiere OpenClaw director y workflowProtocol 3' });
       const { job, duplicate } = store.accept({
         expiresAt: b.expiresAt, chatId: b.chatId, matchId: b.matchId, requestId: b.requestId, seriesId: b.seriesId,
         variant, matchLabel: b.matchLabel, title: String(b.title ?? ''), hook: b.hook,
         home: String(b.home ?? ''), away: String(b.away ?? ''),
         workflowProtocol: WORKFLOW_PROTOCOL, operation: 'prepare', revision: 0, retryToken: b.retryToken,
-        renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, attribution: String(b.attribution ?? ''),
+        renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, audioMessageId: b.audioMessageId ?? null, attribution: String(b.attribution ?? ''),
         clips: b.clips ?? [], motionPrompts: b.motionPrompts ?? [], assets: b.assets, facts: b.facts ?? [],
       });
       await store.flush();

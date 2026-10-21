@@ -62,8 +62,9 @@ class SupervisorTests(unittest.TestCase):
                 wait_for(lambda: len(calls) == 10)
                 wait_for(lambda: flow.db.execute("SELECT COUNT(*) FROM tasks WHERE kind='render' AND status='done'").fetchone()[0] == 10)
             finally: stop(process)
-            self.assertEqual([b['requestId'] for b in calls], ids)
-            self.assertEqual([b['variant'] for b in calls], list(range(10)))
+            # Two directors may post adjacent audios before either HTTP call returns.
+            self.assertEqual(sorted(b['requestId'] for b in calls), sorted(ids))
+            self.assertEqual(sorted(b['variant'] for b in calls), list(range(10)))
             self.assertTrue(all(b['assets'][0]['width'] == 1472 and b['attribution'] for b in calls))
             # Simulate the crash window after POST acceptance but before outbox commit.
             flow.db.execute("UPDATE tasks SET status='running',next_at=0 WHERE id=?", (ids[-1],))

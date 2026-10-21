@@ -81,22 +81,27 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   }
   if (!timing.words?.length || timing.words.some(w => !Number.isFinite(w.start) || !Number.isFinite(w.end) || w.end <= w.start || w.start < 0 || w.end > voiceSeconds + .3))
     throw new Error('transcripción vacía o fuera de la duración de la voz');
-  const photos = [];
-  const available = [];
+  const photos = [], previews = [], available = [];
   const unpin = pinPhotos(assets);
   try {
   const warmed = await measure('photos', () => warmPhotos(assets, cacheDir, log));
-  warmed.forEach((photo, i) => {
-    if (!photo) return;
+  for (let i = 0; i < warmed.length; i++) {
+    const photo = warmed[i];
+    if (!photo) continue;
     const src = `${photos.length}.jpg`;
     copyFileSync(photo.path, join(tmp, src));
     const backdrop = `${photos.length}-back.jpg`;
     copyFileSync(photo.backdrop, join(tmp, backdrop));
     const focusBlur = `${photos.length}-focus.jpg`;
     copyFileSync(photo.focusBlur, join(tmp, focusBlur));
+    const preview = `preview-${src}`;
+    try {
+      await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(tmp, src), '-vf', 'scale=576:-2', '-frames:v', '1', '-q:v', '5', join(tmp, preview)], { timeout: 30_000 });
+      previews.push(preview);
+    } catch { /* authoring falls back to the full photo */ }
     photos.push({ src, backdrop, focusBlur, width: photo.width, height: photo.height, subject: assets[i].subject ?? null, generated: assets[i].source === 'agnes' });
     available.push({ ...assets[i], width: photo.width, height: photo.height });
-  });
+  }
   } finally { unpin(); }
   if (photos.length < assets.length) log(`media: ${photos.length}/${assets.length} fotos disponibles; se completará con gráficos`);
   const videos = [], availableClips = [];
@@ -118,7 +123,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
-  const prepared = { total, frames: voice.frames, photos, clips: videos, words, facts, motionPrompts, match: matchLabel,
+  const prepared = { total, frames: voice.frames, photos, previews, clips: videos, words, facts, motionPrompts, match: matchLabel,
     source, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, stages };
   writeJson(join(tmp, 'prepared.json'), prepared);
   if (plan) composeShort(tmp, plan);
