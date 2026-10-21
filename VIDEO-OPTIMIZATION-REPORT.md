@@ -8,10 +8,46 @@ al audio original y trae «Me gusta» / «No me gusta». Esas marcas quedan en
 `director-memory` y vuelven a la autoría como preferencias, no como reglas.
 
 La máquina de Render sigue en shared-cpu-2x con 4 GB y `RENDER_WORKERS=1`.
-La tabla de benchmark decide si cambia. El detector de texto queda en aviso
+La tabla de abajo es para elegir si cambia. El detector de texto queda en aviso
 (`LAYOUT_CHECK` por defecto `advisory`). El botón «Rehacer» sigue fuera de este cambio.
 
 Fecha: 21 de octubre de 2026.
+
+## Benchmark de máquinas (fixture, 21 oct 2026)
+
+Medido en `iad` con la imagen
+`registry.fly.io/goatlab-render:deployment-01M5G38NXSQ409FDTAP95KAZQ2`
+(`7b9bd2a`). El comando fue `node scripts/benchmark-shorts.mjs --fixture`,
+con `LAYOUT_CHECK=off` y el presupuesto de captura desactivado. El fixture
+tiene 330 fotogramas (11 s): fotos sintéticas, desenfoques, un clip de 4 s,
+una ficha y el logo. No es el JSX del 21 de octubre, que ya no estaba en el
+servidor. Aquel video tardó 15 min 38 s en capturar; estas cifras sirven para
+comparar máquinas, no para predecir ese video.
+
+Las máquinas temporales se borraron al terminar. Producción no se tocó.
+
+Tarifas usadas (Fly, `iad`, octubre 2026): shared-cpu-2x con 4 GB ≈ $0,0353/h
+(base de 512 MB más RAM extra); performance-2x con 4 GB = $0,0917/h;
+performance-4x con 8 GB = $0,1833/h. El coste es tarifa × `captureMs`. Un
+video de 55 s se proyecta como 5× la captura de este fixture (1650/330).
+
+| Máquina | Workers | Captura 11 s | fps | Coste captura 11 s | Proyección 55 s | Coste proyección |
+|---|---:|---:|---:|---:|---:|---:|
+| shared-cpu-2x, 4 GB | 1 | 38,7 s | 8,5 | $0,00038 | 3 min 14 s | $0,0019 |
+| shared-cpu-2x, 4 GB | 2 | 28,1 s | 11,7 | $0,00028 | 2 min 21 s | $0,0014 |
+| performance-2x, 4 GB | 2 | 32,6 s | 10,1 | $0,00083 | 2 min 43 s | $0,0042 |
+| performance-4x, 8 GB | 4 | 17,8 s | 18,5 | $0,00091 | 1 min 29 s | $0,0045 |
+
+La fila de 2 workers en shared es la segunda pasada de la misma máquina
+(el bundle ya estaba caliente, 251 ms). `captureMs` no incluye el bundle.
+Las otras filas pagaron un arranque en frío (bundle 11–14 s). Aun así,
+performance-2x no superó a shared-cpu-2x. performance-4x capturó unas 1,6
+veces más rápido que shared con 2 workers y cuesta unas 5 veces más por
+hora. En este fixture, el tiempo ahorrado no compensa el precio.
+
+La configuración que está en producción es la primera fila (`RENDER_WORKERS=1`).
+No cambio la máquina ni los workers hasta que elijas una fila. Tampoco corrí
+`--photo-max=1080` ni `REMOTION_GL`: el plan los deja para la CPU ganadora.
 
 ## Punto de partida
 
@@ -52,9 +88,10 @@ misma instancia de Gateway.
 
 **Render.** Usa Remotion 4.0.537 con codificación paralela, `x264Preset: veryfast`
 y CRF 20. Comparte un solo navegador para la selección, el preflight y la captura.
-Antes de la captura completa, comprueba tres fotogramas a escala 0.25 (inicio,
-mitad y final del contenido). Así, un error de JSX, hooks o medios falla en
-segundos y no después de capturar todo. FFmpeg queda limitado a dos hilos.
+Antes de la captura completa, el preflight mide fotogramas a escala 1 (un
+calentamiento y tres muestras) y proyecta la captura. Si la proyección supera
+`CAPTURE_BUDGET_MS` (18 min), Render devuelve `CAPTURE_BUDGET` y esa pasada
+cuenta como la corrección técnica. FFmpeg usa al menos dos hilos.
 
 **Razonamiento.** `openclaw.json` declara `reasoning: true` y
 `supportsReasoningEffort` con `low`/`high`/`max` para ambos modelos de OpenCode Go.
@@ -69,9 +106,9 @@ real que OpenCode Go recibe `reasoning_effort` con el valor esperado.
 - Un render sintético local de 2 s con JSX produjo H.264 1080×1920.
 - No se usaron audios reales ni llamadas a modelos.
 
-**Pendiente de medir:** el tiempo real de captura con `veryfast` en la máquina
-de Fly. Lo mostrará el campo `stages` del primer trabajo real (`capture`,
-`mux`, `reviewFrames`).
+**Pendiente de medir con un audio real:** un video de unos 20 s. El `stages` de
+ese trabajo (`capture`, `mux`, `reviewFrames`) y `job.metrics` se comparan con
+la prueba de arriba. El benchmark de máquinas, más arriba, usa un fixture.
 
 ## Evaluación: eliminar la revisión y/o la autoría
 

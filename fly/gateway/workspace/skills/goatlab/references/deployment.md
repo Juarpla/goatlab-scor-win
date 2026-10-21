@@ -186,6 +186,8 @@ preflight. LAYOUT_CHECK admite off, advisory y strict; producción queda en
 advisory hasta revisar videos reales. REMOTION_GL queda vacío: el valor se elige
 con el benchmark de scripts/benchmark-shorts.mjs --fixture.
 
-La máquina sigue en shared-cpu-2x y 4 GB hasta elegir otra con la tabla de
-tiempos. RENDER_WORKERS sigue en 1. La concurrencia de Remotion no pasa del
-número de CPU.
+La máquina sigue en shared-cpu-2x y 4 GB hasta que se elija otra fila de la
+tabla en VIDEO-OPTIMIZATION-REPORT.md. RENDER_WORKERS sigue en 1. La
+concurrencia de Remotion no pasa del número de CPU. El fixture de 330 fotogramas
+no justificó pasar a performance-2x; performance-4x capturó más rápido y costó
+más por segundo. Esa elección queda fuera de este documento.
