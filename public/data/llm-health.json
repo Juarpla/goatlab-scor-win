@@ -1,500 +1,6 @@
 {
-  "updatedAt": "2026-10-21T17:26:44.177Z",
+  "updatedAt": "2026-10-21T22:22:03.554Z",
   "runs": [
-    {
-      "at": "2026-10-15T11:30:32.362Z",
-      "task": "motion-prompts",
-      "matchId": "torreense-vs-sunderland-2026-10-15",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2048,
-            "outputTokens": 2808
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 93782
-        }
-      ],
-      "usage": {
-        "inputTokens": 2063,
-        "outputTokens": 8347
-      }
-    },
-    {
-      "at": "2026-10-15T21:33:08.107Z",
-      "task": "shorts",
-      "matchId": "estudiantes-de-la-plata-vs-flamengo-2026-10-15",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 7384,
-        "outputTokens": 9087
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "f509f71a-4dd0-4a00-a778-b7f4c3eaf28b"
-    },
-    {
-      "at": "2026-10-15T21:36:00.043Z",
-      "task": "shorts",
-      "matchId": "deportivo-de-a-coruna-vs-levante-ud-2026-10-16",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7263,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 124898
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6871,
-        "outputTokens": 8018
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "76b7a922-c725-458b-b55e-8d29a4e06396"
-    },
-    {
-      "at": "2026-10-15T21:40:23.750Z",
-      "task": "shorts",
-      "matchId": "everton-vs-chelsea-2026-10-17",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6955,
-        "outputTokens": 7732
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "36bc0d43-d86b-496d-843e-48792d1ed926"
-    },
-    {
-      "at": "2026-10-15T21:48:00.338Z",
-      "task": "shorts",
-      "matchId": "brentford-vs-liverpool-2026-10-17",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "usage": {
-        "inputTokens": 7229,
-        "outputTokens": 11644
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "bfa5851e-acef-46ca-90a1-fe47eeba4667"
-    },
-    {
-      "at": "2026-10-15T21:52:00.137Z",
-      "task": "shorts",
-      "matchId": "espanyol-vs-atletico-madrid-2026-10-17",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 4: falta Roberto Fernández",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6800,
-            "outputTokens": 8628
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 51287
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: falta el antecedente asignado; guion 2: falta RCD Espanyol de Barcelona; guion 2: falta el antecedente asignado; guion 3: falta RCD Espanyol de Barcelona; guion 3: falta el sustantivo asignado; guion 3: falta el antecedente asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7102,
-            "outputTokens": 1241
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 22290
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 3: falta RCD Espanyol de Barcelona; guion 6: 6 cifras, máximo 3; guion 6: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6714,
-            "outputTokens": 6255
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 89102
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6800,
-        "outputTokens": 11279
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "af686e81-c9a5-49c4-b7b4-21a5543283d1"
-    },
-    {
-      "at": "2026-10-15T21:52:17.833Z",
-      "task": "image-prompts",
-      "matchId": "estudiantes-de-la-plata-vs-flamengo-2026-10-15",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1935,
-        "outputTokens": 887
-      }
-    },
-    {
-      "at": "2026-10-15T21:52:43.035Z",
-      "task": "image-prompts",
-      "matchId": "deportivo-de-a-coruna-vs-levante-ud-2026-10-16",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1438,
-        "outputTokens": 1216
-      }
-    },
-    {
-      "at": "2026-10-15T21:52:59.091Z",
-      "task": "image-prompts",
-      "matchId": "everton-vs-chelsea-2026-10-17",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1806,
-        "outputTokens": 862
-      }
-    },
-    {
-      "at": "2026-10-15T21:53:57.573Z",
-      "task": "image-prompts",
-      "matchId": "espanyol-vs-atletico-madrid-2026-10-17",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "image-prompts 4: falta presentación, banderas o escudos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1481,
-            "outputTokens": 1216
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 35556
-        }
-      ],
-      "usage": {
-        "inputTokens": 1441,
-        "outputTokens": 4118
-      }
-    },
-    {
-      "at": "2026-10-15T21:54:54.017Z",
-      "task": "image-prompts",
-      "matchId": "brentford-vs-liverpool-2026-10-17",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1830,
-        "outputTokens": 1758
-      }
-    },
-    {
-      "at": "2026-10-15T21:55:06.524Z",
-      "task": "video-prompts",
-      "matchId": "estudiantes-de-la-plata-vs-flamengo-2026-10-15",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1831,
-        "outputTokens": 412
-      }
-    },
-    {
-      "at": "2026-10-15T21:55:19.424Z",
-      "task": "video-prompts",
-      "matchId": "deportivo-de-a-coruna-vs-levante-ud-2026-10-16",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1334,
-        "outputTokens": 382
-      }
-    },
-    {
-      "at": "2026-10-15T21:55:29.627Z",
-      "task": "video-prompts",
-      "matchId": "everton-vs-chelsea-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1702,
-        "outputTokens": 394
-      }
-    },
-    {
-      "at": "2026-10-15T21:55:44.924Z",
-      "task": "video-prompts",
-      "matchId": "espanyol-vs-atletico-madrid-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "Se requieren 2 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1377,
-            "outputTokens": 372
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7813
-        }
-      ],
-      "usage": {
-        "inputTokens": 1341,
-        "outputTokens": 1259
-      }
-    },
-    {
-      "at": "2026-10-15T21:55:55.501Z",
-      "task": "video-prompts",
-      "matchId": "brentford-vs-liverpool-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1726,
-        "outputTokens": 390
-      }
-    },
-    {
-      "at": "2026-10-15T21:58:39.390Z",
-      "task": "motion-prompts",
-      "matchId": "estudiantes-de-la-plata-vs-flamengo-2026-10-15",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2615,
-        "outputTokens": 5255
-      }
-    },
-    {
-      "at": "2026-10-15T21:59:46.498Z",
-      "task": "motion-prompts",
-      "matchId": "deportivo-de-a-coruna-vs-levante-ud-2026-10-16",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2088,
-        "outputTokens": 4795
-      }
-    },
-    {
-      "at": "2026-10-15T22:02:37.236Z",
-      "task": "motion-prompts",
-      "matchId": "everton-vs-chelsea-2026-10-17",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2486,
-        "outputTokens": 5074
-      }
-    },
-    {
-      "at": "2026-10-15T22:08:51.965Z",
-      "task": "motion-prompts",
-      "matchId": "espanyol-vs-atletico-madrid-2026-10-17",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 2: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2137,
-            "outputTokens": 4607
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 68496
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2114,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 112793
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2157,
-            "outputTokens": 2831
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 34750
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2037,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 158687
-        }
-      ],
-      "usage": null
-    },
     {
       "at": "2026-10-15T22:12:16.665Z",
       "task": "motion-prompts",
@@ -6435,6 +5941,526 @@
       "usage": {
         "inputTokens": 2095,
         "outputTokens": 7273
+      }
+    },
+    {
+      "at": "2026-10-21T21:52:40.445Z",
+      "task": "shorts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6842,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 128304
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6954,
+        "outputTokens": 5072
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "e971e64c-2422-4210-9468-0f64b75f8b5a"
+    },
+    {
+      "at": "2026-10-21T21:54:31.733Z",
+      "task": "shorts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6618,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 87756
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6718,
+        "outputTokens": 6175
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "b72caeb4-07ee-4c5d-bc84-fe8ad5c3bd36"
+    },
+    {
+      "at": "2026-10-21T21:57:12.155Z",
+      "task": "shorts",
+      "matchId": "sk-sturm-graz-vs-olympique-de-marseille-2026-10-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6134,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 120363
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6236,
+        "outputTokens": 11609
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "0a99ce5e-75fe-4fb2-8c5e-e1857a17008f"
+    },
+    {
+      "at": "2026-10-21T21:59:24.818Z",
+      "task": "shorts",
+      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6069,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 116089
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6193,
+        "outputTokens": 4207
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "91edcf11-b693-4762-9ff1-1577965c3619"
+    },
+    {
+      "at": "2026-10-21T22:08:05.156Z",
+      "task": "shorts",
+      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6462,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 173030
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6559,
+            "outputTokens": 5289
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 20003
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 2: 9 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 3: 9 cifras, máximo 3; guion 3: falta el llamada asignado; guion 3: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6777,
+            "outputTokens": 1435
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14692
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 3: falta OFI Crete; guion 4: 4 cifras, máximo 3; guion 4: falta Taxiarchis Fountas; guion 5: 4 cifras, máximo 3; guion 6: falta OFI Crete",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6455,
+            "outputTokens": 4721
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 74519
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6462,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 111382
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6559,
+            "outputTokens": 9790
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 36274
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 3: falta OFI Crete; guion 4: falta OFI Crete; guion 4: 10 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: falta OFI Crete",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6777,
+            "outputTokens": 1317
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11790
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: falta Taxiarchis Fountas; guion 4: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6455,
+            "outputTokens": 4600
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 78644
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6455,
+        "outputTokens": 4600
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-21T22:08:31.998Z",
+      "task": "image-prompts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1754,
+        "outputTokens": 5601
+      }
+    },
+    {
+      "at": "2026-10-21T22:08:59.415Z",
+      "task": "image-prompts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1343,
+        "outputTokens": 4915
+      }
+    },
+    {
+      "at": "2026-10-21T22:09:22.410Z",
+      "task": "image-prompts",
+      "matchId": "sk-sturm-graz-vs-olympique-de-marseille-2026-10-22",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1674,
+        "outputTokens": 4381
+      }
+    },
+    {
+      "at": "2026-10-21T22:10:00.769Z",
+      "task": "image-prompts",
+      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1525,
+        "outputTokens": 6776
+      }
+    },
+    {
+      "at": "2026-10-21T22:10:30.249Z",
+      "task": "image-prompts",
+      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1511,
+        "outputTokens": 6332
+      }
+    },
+    {
+      "at": "2026-10-21T22:10:47.796Z",
+      "task": "video-prompts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1651,
+        "outputTokens": 1572
+      }
+    },
+    {
+      "at": "2026-10-21T22:10:58.424Z",
+      "task": "video-prompts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1240,
+        "outputTokens": 1519
+      }
+    },
+    {
+      "at": "2026-10-21T22:11:11.184Z",
+      "task": "video-prompts",
+      "matchId": "sk-sturm-graz-vs-olympique-de-marseille-2026-10-22",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1571,
+        "outputTokens": 2097
+      }
+    },
+    {
+      "at": "2026-10-21T22:11:23.344Z",
+      "task": "video-prompts",
+      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1422,
+        "outputTokens": 1950
+      }
+    },
+    {
+      "at": "2026-10-21T22:11:32.822Z",
+      "task": "video-prompts",
+      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1408,
+        "outputTokens": 1512
+      }
+    },
+    {
+      "at": "2026-10-21T22:14:03.639Z",
+      "task": "motion-prompts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2429,
+        "outputTokens": 11158
+      }
+    },
+    {
+      "at": "2026-10-21T22:16:28.590Z",
+      "task": "motion-prompts",
+      "matchId": "palmeiras-vs-fluminense-2026-10-21",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1994,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 81688
+        }
+      ],
+      "usage": {
+        "inputTokens": 2075,
+        "outputTokens": 9850
+      }
+    },
+    {
+      "at": "2026-10-21T22:17:55.805Z",
+      "task": "motion-prompts",
+      "matchId": "sk-sturm-graz-vs-olympique-de-marseille-2026-10-22",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2325,
+        "outputTokens": 10271
+      }
+    },
+    {
+      "at": "2026-10-21T22:19:48.086Z",
+      "task": "motion-prompts",
+      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2152,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 62266
+        }
+      ],
+      "usage": {
+        "inputTokens": 2230,
+        "outputTokens": 7171
+      }
+    },
+    {
+      "at": "2026-10-21T22:22:03.554Z",
+      "task": "motion-prompts",
+      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2150,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 74474
+        }
+      ],
+      "usage": {
+        "inputTokens": 2234,
+        "outputTokens": 9939
       }
     }
   ]

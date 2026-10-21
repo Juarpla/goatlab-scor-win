@@ -1,0 +1,242 @@
+{
+  "version": 1,
+  "category": "motion-prompts",
+  "matchId": "palmeiras-vs-fluminense-2026-10-21",
+  "home": "SE Palmeiras",
+  "away": "Fluminense FC",
+  "competition": "libertadores",
+  "kickoff": "2026-10-22T00:30:00Z",
+  "venue": null,
+  "facts": [
+    {
+      "id": "home.player0.goals",
+      "label": "José Manuel López · goles",
+      "value": 4,
+      "unit": "goles",
+      "source": "scorers:libertadores:José Manuel López",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "home.player1.goals",
+      "label": "Jhon Arias · goles",
+      "value": 3,
+      "unit": "goles",
+      "source": "scorers:libertadores:Jhon Arias",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "away.n",
+      "label": "Fluminense FC · partidos",
+      "value": 5,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.n",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.wins",
+      "label": "Fluminense FC · victorias",
+      "value": 2,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.wins",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.draws",
+      "label": "Fluminense FC · empates",
+      "value": 0,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.draws",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.losses",
+      "label": "Fluminense FC · derrotas",
+      "value": 3,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.losses",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.gf",
+      "label": "Fluminense FC · goles a favor",
+      "value": 9,
+      "unit": "goles",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.gf",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.ga",
+      "label": "Fluminense FC · goles recibidos",
+      "value": 6,
+      "unit": "goles",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.ga",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.clean",
+      "label": "Fluminense FC · arcos en cero",
+      "value": 1,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:lastMatches.away.clean",
+      "provider": "Bzzoiro",
+      "sampleSize": 5
+    },
+    {
+      "id": "away.player0.goals",
+      "label": "Agustín Canobbio · goles",
+      "value": 2,
+      "unit": "goles",
+      "source": "scorers:libertadores:Agustín Canobbio",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "away.player1.goals",
+      "label": "John Kennedy · goles",
+      "value": 2,
+      "unit": "goles",
+      "source": "scorers:libertadores:John Kennedy",
+      "provider": "Tabla de goleadores",
+      "sampleSize": null
+    },
+    {
+      "id": "h2h.total",
+      "label": "Cruces previos",
+      "value": 48,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:h2h.total",
+      "provider": "Bzzoiro",
+      "sampleSize": 48
+    },
+    {
+      "id": "h2h.homeWins",
+      "label": "SE Palmeiras · victorias en cruces",
+      "value": 22,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:h2h.homeWins",
+      "provider": "Bzzoiro",
+      "sampleSize": 48
+    },
+    {
+      "id": "h2h.awayWins",
+      "label": "Fluminense FC · victorias en cruces",
+      "value": 18,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:h2h.awayWins",
+      "provider": "Bzzoiro",
+      "sampleSize": 48
+    },
+    {
+      "id": "h2h.draws",
+      "label": "Empates en cruces",
+      "value": 8,
+      "unit": "partidos",
+      "source": "fixtures:palmeiras-vs-fluminense-2026-10-21:h2h.draws",
+      "provider": "Bzzoiro",
+      "sampleSize": 48
+    }
+  ],
+  "published": false,
+  "kinds": [
+    "form",
+    "goals",
+    "clean-sheets",
+    "head-to-head",
+    "synthesis"
+  ],
+  "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+  "author": {
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash"
+  },
+  "generatedAt": "2026-10-21T22:16:28.587Z",
+  "prompts": [
+    {
+      "n": 1,
+      "kind": "form",
+      "title": "Fluminense Recent Form Check",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.n",
+        "away.wins",
+        "away.draws",
+        "away.losses"
+      ],
+      "prompt": "Vertical 9:16 composition on GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf. Reserve the lower quarter for permanent yellow subtitles. Editorial variant: kinetic typography and rhythmic emphasis. Spanish labels 'FORMA RECIENTE' and 'FLUMINENSE FC' enter as bold warm-white slabs; 'VICTORIAS', 'EMPATES' and 'DERROTAS' snap in on a three-beat rhythm, using lime for the first word, slate for the second and warm white on charcoal for the third. No statistical axes, no sample claims and no invented match events in this variant; motion is pure type, thin lime rules and a slow camera push from half width to full width. Transition into the statistical variant is a match cut on the last word, where the type collapses to the chart baseline. Statistical variant: grouped horizontal count bars for the available recent sample, with Spanish labels 'VICTORIAS', 'EMPATES' and 'DERROTAS' and values rendered from {{away.wins}}, {{away.draws}} and {{away.losses}}. All bars share one common scale and a shared zero baseline; units are partidos. A top-left heading reads 'FORMA RECIENTE · FLUMINENSE FC'. A source/sample strip in small slate type reads 'Fuente: Bzzoiro · muestra {{away.n}} partidos'. A muted Spanish note, 'SE Palmeiras: muestra no disponible', sits below the chart with no axis and no zero value, identifying that samples are not equal. Temporal stages are entry, main comparison, emphasis and exit: the baseline draws left to right, bars grow in sequence from the baseline, emphasis lands on the greatest rendered bar after entry, and the sample strip remains fixed. Camera holds a locked vertical frame, then a gentle push toward the labels for the main comparison of wins and losses. Exit retracts bars into the baseline; transition is a soft charcoal wipe to the next scene."
+    },
+    {
+      "n": 2,
+      "kind": "goals",
+      "title": "Fluminense Goals For and Against",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.gf",
+        "away.ga",
+        "away.n"
+      ],
+      "prompt": "Vertical 9:16 frame using GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf, with the lower quarter reserved for permanent yellow subtitles. Editorial variant: an illustrative football pitch drawn in thin warm-white lines, with a stylised ball path sweeping from the defensive third toward the attacking third. Spanish labels 'GOLES A FAVOR' and 'GOLES RECIBIDOS' appear as floating sports headings; lime traces one path and slate traces the other, but no statistical axes, no sample claims and no invented match events are shown. The ball moves with a smooth ease, leaving a short trail, while the camera performs a gentle vertical drift along the pitch. Transition into the statistical variant is a ball-path wipe that becomes the zero baseline. Statistical variant: paired horizontal bars for SE Fluminense FC goals, rendered from {{away.gf}} and {{away.ga}}, with Spanish labels 'GOLES A FAVOR', 'GOLES RECIBIDOS' and 'FLUMINENSE FC'. Both bars use the same common scale, a shared zero baseline, and units goles. A source/sample strip in small slate type reads 'Fuente: Bzzoiro · muestra {{away.n}} partidos'. A muted Spanish side note reads 'SE Palmeiras: goles no disponibles', with no axis and no zero bar, so the missing team data is not invented. Temporal stages are entry, main comparison, emphasis and exit: bars grow from the baseline in sequence, the heading locks at the top, and emphasis brightens the longer rendered bar before the sample strip settles. Camera stays vertical, then pushes slightly toward the bar labels. Exit slides the bars back to the baseline; transition is a lime edge wipe into the next scene."
+    },
+    {
+      "n": 3,
+      "kind": "clean-sheets",
+      "title": "Fluminense Clean-Sheet Count",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.clean",
+        "away.n"
+      ],
+      "prompt": "Vertical 9:16 layout on GoatLab charcoal #101412 with warm white #edf0e6, lime #c5ed74 and slate #8ca6bf; keep the lower quarter for permanent yellow subtitles. Editorial variant: defensive energy built around a stylised shield. Spanish labels 'ARCOS EN CERO', 'FLUMINENSE FC' and 'DEFENSA' form a tight sports hierarchy. The shield draws itself in warm-white linework, then a lime pulse travels across the surface like a clearance, with slate dust particles settling behind it. This editorial block has no statistical axes, no sample claims and no invented match events; it is a graphic mood piece with a slow camera push from full width to a closer shield crop. Transition into the statistical variant is a shield-edge wipe that becomes a chart frame. Statistical variant: a single raw count bar for clean sheets rendered from {{away.clean}}, with Spanish labels 'ARCOS EN CERO' and 'FLUMINENSE FC'. The count bar uses a shared zero baseline and common scale, units partidos. A separate source/sample chip reads 'Fuente: Bzzoiro · muestra {{away.n}} partidos' in small slate type; the sample size stays a separate annotation and is not converted into a rate. Temporal stages are entry, main comparison, emphasis and exit: the baseline draws first, the count bar grows from it, the sample chip fades in without forming a second bar, and emphasis holds on the label while the camera locks. Exit lifts the shield silhouette over the bar; transition is a restrained charcoal dissolve to the next scene."
+    },
+    {
+      "n": 4,
+      "kind": "head-to-head",
+      "title": "Historical Head-to-Head Duel",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "h2h.total",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.draws"
+      ],
+      "prompt": "Vertical 9:16 duel composition using GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf, with the lower quarter reserved for permanent yellow subtitles. Editorial variant: both teams presented as a visual duel. Spanish labels 'SE PALMEIRAS' and 'FLUMINENSE FC' enter from opposite edges, separated by a thin lime seam; warm-white crest-like geometric marks pulse once, then settle. This editorial block has no statistical axes, no sample claims and no invented match events, only a tense split-screen standoff, slow lateral camera drift and a rhythmic double beat on the team names. Transition into the statistical variant is the lime seam stretching into a stacked horizontal bar. Statistical variant: a stacked horizontal bar showing historical head-to-head outcomes rendered from {{h2h.homeWins}}, {{h2h.awayWins}} and {{h2h.draws}}, with total sample {{h2h.total}}. Spanish labels are 'VICTORIAS SE PALMEIRAS', 'VICTORIAS FLUMINENSE FC', 'EMPATES' and 'CRUCES PREVIOS'. All segments share one common scale and a shared zero baseline; units are partidos. A source/sample strip reads 'Fuente: Bzzoiro · muestra {{h2h.total}} partidos'. An on-screen Spanish note reads 'Historial, no pronóstico'. Temporal stages are entry, main comparison, emphasis and exit: segments grow left to right from the baseline, the win segments receive the main comparison focus, draws sit as the neutral middle, and emphasis lifts the two win labels before the source/sample strip locks. Camera holds the bar horizontally, then eases back to reveal the full sample. Exit collapses the bar back into the seam; transition is a slate wipe to the next scene."
+    },
+    {
+      "n": 5,
+      "kind": "synthesis",
+      "title": "Recent Form Meets Historical Edge",
+      "presentations": [
+        "editorial",
+        "statistical"
+      ],
+      "factIds": [
+        "away.wins",
+        "away.losses",
+        "away.n",
+        "h2h.homeWins",
+        "h2h.awayWins",
+        "h2h.total"
+      ],
+      "prompt": "Vertical 9:16 synthesis on GoatLab charcoal #101412, warm white #edf0e6, lime #c5ed74 and slate #8ca6bf, with the lower quarter reserved for permanent yellow subtitles. Editorial variant: team reveals and narrative emphasis. Spanish headings 'FORMA RECIENTE' and 'HISTORIAL DE CRUCES' appear as separate chapters; 'FLUMINENSE FC' rises in warm white while 'SE PALMEIRAS' answers from the opposite side. The motion is composed, not predictive: kinetic type, thin lime rules and a slow camera push, with no statistical axes, no sample claims and no invented match events in this editorial block. Transition into the statistical variant is a chapter-card split that becomes two chart panels. Statistical variant: two separate panels, each with its own common scale and shared zero baseline, because the samples are not equal. Panel one uses Spanish labels 'VICTORIAS' and 'DERROTAS' with bars rendered from {{away.wins}} and {{away.losses}}, plus a sample chip reading 'muestra {{away.n}} partidos'. Panel two uses Spanish labels 'VICTORIAS SE PALMEIRAS' and 'VICTORIAS FLUMINENSE FC' with bars rendered from {{h2h.homeWins}} and {{h2h.awayWins}}, plus a sample chip reading 'muestra {{h2h.total}} partidos'. A small source strip reads 'Fuente: Bzzoiro'; the published model flag is false, so no model estimate is used, only historical counts. An on-screen Spanish note reads 'Muestras distintas: no comparar conteos directamente'. Temporal stages are entry, main comparison, emphasis and exit: panel one bars grow, the transition carries the lime rule across, panel two bars grow on their own baseline, emphasis frames the contrast between recent sample and historical duel, and the source/sample chips remain attached. Camera eases back to show both panels without merging their scales. Exit folds both panels into a single warm-white line; transition is a charcoal fade to black."
+    }
+  ]
+}
