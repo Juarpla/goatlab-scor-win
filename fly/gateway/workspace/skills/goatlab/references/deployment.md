@@ -159,8 +159,8 @@ de captura 1 por defecto y hilos de FFmpeg limitados a 2. El formato final sigue
 siendo 1080×1920, 30 fps, H.264/AAC, <=55 s y <45 MB.
 
 Una pasada de FFmpeg extrae hasta ocho JPEG 540×960. Gateway hace una revisión
-low sin reenviar el código completo ni abrir un turno de dictamen. Autoría y
-reparación técnica usan high. Ambas definiciones de modelo declaran reasoning y
+sin reenviar el código completo ni abrir un turno de dictamen. Autoría, reparación
+técnica y revisión usan max. Ambas definiciones de modelo declaran reasoning y
 compatibilidad explícita con reasoning_effort low/high/max de OpenCode Go.
 
 POST /render/approve admite reviewPolicy:advisory y reviewStatus:completed o
@@ -184,9 +184,27 @@ La captura registra bundleMs, preflightMs, captureMs y captureFps en job.metrics
 CAPTURE_BUDGET_MS (18 min) y CAPTURE_CALIBRATION proyectan el tiempo desde el
 preflight. LAYOUT_CHECK admite off, advisory y strict; producción queda en
 advisory hasta revisar videos reales. REMOTION_GL queda vacío: el valor se elige
-con el benchmark de scripts/benchmark-shorts.mjs --fixture.
+con composiciones reales y comparaciones aisladas; el fixture solo valida el mecanismo.
 
 La máquina sigue en shared-cpu-2x y 4 GB. RENDER_WORKERS es 2: en el fixture
 de 330 fotogramas esa fila capturó más rápido que un solo worker y que
 performance-2x. La concurrencia de Remotion no pasa del número de CPU.
 performance-4x capturó más rápido y costó más por segundo; no está en producción.
+
+
+## Dirección visual y corpus de evaluación
+
+Render debe anunciar visualStyles y cinemaKit en /healthz antes de desplegar
+el Gateway que pide visualStyle en cada nueva autoría. Los planes guardados
+anteriores son compatibles sin etiqueta. Telegram muestra el enfoque elegido
+y director-memory conserva estilo, métricas, conceptos y votos.
+
+La captura añade renderedDoneIn, encodedDoneIn, resolvedConcurrency,
+parallelEncoding y slowestFrames. captureMs incluye render y codificación;
+las métricas paralelas se consultan por separado.
+
+Render retiene hasta tres muestras locales durante 24 h y 384 MB en
+/data/render-jobs/evaluation. Su categoría inferida requiere comprobación visual.
+Para medir fotos, comparar herramientas o resumir los siguientes seis videos
+con sus votos, seguir VIDEO-CINEMATIC-REPORT.md del repositorio. Las muestras
+se pierden si se sustituye la máquina y no cambian automáticamente la configuración.

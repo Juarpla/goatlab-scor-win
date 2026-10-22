@@ -1,7 +1,9 @@
 // Benchmark a saved composition, or a synthetic 10s authored short, on the production Remotion path.
-import { copyFileSync, existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { cpus, totalmem, tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve, sep } from 'node:path';
+import { copyRenderInput, benchmarkSchedule } from '../fly/render/render-input.mjs';
+import { photoProfile } from '../fly/render/photo-normalization.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
@@ -12,11 +14,12 @@ const repo = fileURLToPath(new URL('..', import.meta.url));
 const flag = name => process.argv.find(arg => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const list = (name, fallback) => (flag(name) || fallback).split(',').filter(Boolean);
 const input = flag('input');
-const runs = Math.min(5, Math.max(1, Number(flag('runs') || (process.argv.includes('--fixture') ? 1 : 3))));
+const runs = Number(flag('runs') || 3);
+if (!Number.isInteger(runs) || runs < 1 || runs > 5) throw new Error('runs debe estar entre 1 y 5 (repeticiones calientes más una fría)');
 
 async function fixtureDir(photoMax) {
   const tmp = mkdtempSync(join(tmpdir(), 'goatlab-bench-'));
-  const height = photoMax >= 1400 ? 2624 : 1920;
+  const height = photoProfile(photoMax).maxHeight;
   const photos = [];
   for (let i = 0; i < 4; i++) {
     const src = `${i}.jpg`;
@@ -38,26 +41,56 @@ async function fixtureDir(photoMax) {
 }
 
 if (!input && !process.argv.includes('--fixture')) throw new Error('falta --input=<carpeta> o --fixture');
-const photos = list('photo-max', '1472');
-const workers = list('workers', '1');
+if (input && process.argv.includes('--fixture')) throw new Error('elige --input o --fixture');
+const photos = list('photo-max', '1472,1280,1080').map(Number);
+photos.forEach(photoProfile);
+const workers = list('workers', '2').map(Number);
+if (workers.some(n => !Number.isInteger(n) || n < 1)) throw new Error('workers debe ser un entero positivo');
 const gls = list('gl', 'default');
-for (const photoMax of photos.map(Number)) {
-  const fixture = process.argv.includes('--fixture') ? await fixtureDir(photoMax) : null;
-  for (const count of workers) {
-    for (const gl of gls) {
-      if (gl === 'default') delete process.env.REMOTION_GL;
-      else process.env.REMOTION_GL = gl;
-      for (let i = 0; i < runs; i++) {
-        const dir = fixture ? fixture.tmp : input;
-        if (fixture) {
-          const { writeFileSync } = await import('node:fs');
-          writeFileSync(join(dir, 'composition.json'), JSON.stringify(fixture.props));
-        }
-        const at = Date.now();
-        const metrics = await renderSilent(dir, join(dir, `benchmark-${photoMax}-${count}-${gl}-${i}.mp4`), { workers: Number(count) });
-        console.log(JSON.stringify({ run: i + 1, engine: 'remotion', photoMax, workers: Number(count), gl, cpus: cpus().length, memMb: Math.round(totalmem() / 1e6), seconds: (Date.now() - at) / 1000, ...metrics }));
-      }
-    }
+const configurations = photos.flatMap(photoMax => workers.flatMap(workers => gls.map(gl => ({ photoMax, workers, gl }))));
+const root = mkdtempSync(join(tmpdir(), 'goatlab-bench-run-'));
+const directories = new Map(), results = [];
+let fixture;
+try {
+  if (!input) {
+    fixture = await fixtureDir(1472);
+    const { writeFileSync } = await import('node:fs');
+    writeFileSync(join(fixture.tmp, 'composition.json'), JSON.stringify(fixture.props));
   }
+  const source = input ? resolve(input) : fixture.tmp;
+  const output = flag('output-dir') ? resolve(flag('output-dir')) : null;
+  if (output === source || output?.startsWith(source + sep)) throw new Error('output-dir debe estar fuera de la composición original');
+  if (output) mkdirSync(output, { recursive: true });
+  for (const config of configurations) {
+    const key = `${config.photoMax}-${config.workers}-${config.gl}`;
+    const dir = join(root, key);
+    const props = await copyRenderInput(source, dir, { photoMax: config.photoMax });
+    directories.set(key, { dir, photoSizes: props.photos.map(({ width, height }) => ({ width, height })) });
+  }
+  for (const config of benchmarkSchedule(configurations, runs)) {
+    const key = `${config.photoMax}-${config.workers}-${config.gl}`;
+    const { dir, photoSizes } = directories.get(key);
+    if (config.gl === 'default') delete process.env.REMOTION_GL;
+    else process.env.REMOTION_GL = config.gl;
+    const out = join(dir, 'benchmark.mp4');
+    const at = Date.now();
+    const metrics = await renderSilent(dir, out, { workers: config.workers });
+    const video = output && config.run === 1 ? join(output, `${key}.mp4`) : undefined;
+    if (video) copyFileSync(out, video);
+    const row = { type: 'run', ...config, requestedWorkers: config.workers, video, fixture: !input, photoSizes, seconds: (Date.now() - at) / 1000, ...metrics };
+    results.push(row);
+    console.log(JSON.stringify(row));
+    rmSync(out, { force: true });
+  }
+  const median = values => { const sorted = [...values].sort((a, b) => a - b); const i = Math.floor(sorted.length / 2); return sorted.length % 2 ? sorted[i] : (sorted[i - 1] + sorted[i]) / 2; };
+  for (const config of configurations) {
+    const warm = results.filter(r => r.phase === 'warm-bundle' && r.photoMax === config.photoMax && r.requestedWorkers === config.workers && r.gl === config.gl);
+    const baseline = results.filter(r => r.phase === 'warm-bundle' && r.photoMax === 1472 && r.requestedWorkers === config.workers && r.gl === config.gl);
+    const captureMs = median(warm.map(r => r.captureMs));
+    const speedup = baseline.length ? 1 - captureMs / median(baseline.map(r => r.captureMs)) : null;
+    console.log(JSON.stringify({ type: 'summary', ...config, samples: warm.length, captureMs, improvement: speedup, performanceCandidate: speedup !== null && speedup >= .15, visualReviewRequired: true, fixture: !input }));
+  }
+} finally {
+  rmSync(root, { recursive: true, force: true });
   if (fixture) rmSync(fixture.tmp, { recursive: true, force: true });
 }

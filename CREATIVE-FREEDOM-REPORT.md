@@ -1,6 +1,6 @@
 # Libertad creativa y límites del flujo de video
 
-**Actualización:** la revisión ahora es orientativa (hasta ocho imágenes), usa low y no veta entregas ni dispara renders. La autoría usa high; hay una corrección técnica. Remotion pasa a 4.0.537. El [informe de optimización](VIDEO-OPTIMIZATION-REPORT.md) describe el contrato vigente y la alternativa de revisión manual.
+**Actualización:** la revisión ahora es orientativa (hasta ocho imágenes) y no veta entregas ni dispara renders. Autoría, reparación y revisión usan max; hay una corrección técnica. Remotion pasa a 4.0.537. El [informe de optimización](VIDEO-OPTIMIZATION-REPORT.md) describe el contrato vigente y la alternativa de revisión manual.
 
 **Registro histórico:** las secciones siguientes documentan la primera implementación y sus pruebas, antes de esta optimización; sus cifras de revisión y correcciones ya no son la política vigente.
 

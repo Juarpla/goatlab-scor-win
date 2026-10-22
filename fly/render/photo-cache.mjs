@@ -4,6 +4,8 @@ import { closeSync, openSync, writeSync, readdirSync, statSync, existsSync, mkdi
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 const run = promisify(execFile);
+import { PHOTO_PROFILE, imageDimensions, normalizePhoto, photoCacheSuffix } from './photo-normalization.mjs';
+export { imageDimensions } from './photo-normalization.mjs';
 const inProgress = new Map();
 const leases = new Map();
 export function pinPhotos(assets) {
@@ -39,17 +41,10 @@ export function prunePhotoCache(dir, { protectedUrls = [], maxBytes = CACHE_BYTE
   return total;
 }
 
-export async function imageDimensions(file) {
-  const { stdout } = await run('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'json', file]);
-  const stream = JSON.parse(stdout).streams?.[0];
-  if (!(stream?.width > 0 && stream?.height > 0)) throw new Error('foto sin dimensiones válidas');
-  return { width: stream.width, height: stream.height };
-}
-
 /** URL-addressed cache shared across all Shorts; two downloads at most at once. */
-export async function cachedPhoto(asset, cacheDir, { fetchImpl = fetch } = {}) {
+export async function cachedPhoto(asset, cacheDir, { fetchImpl = fetch, profile = PHOTO_PROFILE } = {}) {
   mkdirSync(cacheDir, { recursive: true });
-  const key = createHash('sha256').update(asset.url).digest('hex');
+  const key = createHash('sha256').update(asset.url).digest('hex') + photoCacheSuffix(profile);
   const file = join(cacheDir, `${key}.jpg`), meta = join(cacheDir, `${key}.json`), backdrop = join(cacheDir, `${key}-back.jpg`), focusBlur = join(cacheDir, `${key}-focus.jpg`);
   if (existsSync(file) && existsSync(meta) && existsSync(backdrop) && existsSync(focusBlur)) return { path: file, backdrop, focusBlur, ...JSON.parse(readFileSync(meta)), cached: true };
   if (inProgress.has(file)) return inProgress.get(file);
@@ -71,13 +66,7 @@ export async function cachedPhoto(asset, cacheDir, { fetchImpl = fetch } = {}) {
         writeSync(fd, chunk);
       }
       } finally { closeSync(fd); }
-      const input = await imageDimensions(raw);
-      // Keep 2K portrait detail, avoiding the previous width-only reduction.
-      const factor = Math.min(1, 1472 / input.width, 2624 / input.height);
-      const width = Math.max(2, Math.floor(input.width * factor / 2) * 2);
-      const height = Math.max(2, Math.floor(input.height * factor / 2) * 2);
-      await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw, '-vf', `scale=${width}:${height}:flags=lanczos`, '-frames:v', '1', '-q:v', '2', temp], { timeout: 60_000 });
-      const dimensions = await imageDimensions(temp);
+      const dimensions = await normalizePhoto(raw, temp, profile);
       await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', temp, '-vf', 'scale=270:480:force_original_aspect_ratio=increase,crop=270:480,gblur=sigma=12', '-frames:v', '1', '-q:v', '4', `${backdrop}.tmp.jpg`], { timeout: 60_000 });
       await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', temp, '-vf', "scale='max(2,trunc(iw/8)*2)':'max(2,trunc(ih/8)*2)',gblur=sigma=8", '-frames:v', '1', '-q:v', '4', `${focusBlur}.tmp.jpg`], { timeout: 60_000 });
       writeFileSync(`${meta}.tmp`, JSON.stringify(dimensions));

@@ -8,10 +8,12 @@ import { fileURLToPath } from 'node:url';
 import { bundle } from '@remotion/bundler';
 import { FPS, FRAME_W, FRAME_H, MAX_FRAMES, DIRECTOR_ENDCARD_SECONDS } from '../../src/lib/short-format.js';
 
+import { isVisualStyle } from '../../src/lib/visual-style.js';
+
 const require = createRequire(import.meta.url);
 const modules = dirname(dirname(require.resolve('react/package.json')));
 const imports = new Set(['react', 'remotion', 'goatlab-kit']);
-const kitExports = new Set(['Captions', 'FitText', 'SafeArea', 'KenBurns', 'StatCard', 'phrases', 'wordAt', 'fitFontSize']);
+const kitExports = new Set(['Captions', 'FitText', 'SafeArea', 'KenBurns', 'StatCard', 'CameraMove', 'ColorWash', 'FilmGrain', 'phrases', 'wordAt', 'fitFontSize']);
 const forbidden = new Set(['require', 'eval', 'Function', 'process', 'global', 'globalThis', 'window', 'document', 'fetch', 'XMLHttpRequest', 'WebSocket', 'Worker', 'navigator', 'localStorage', 'sessionStorage', 'setInterval', 'setTimeout']);
 const remotionExports = new Set(['AbsoluteFill', 'Sequence', 'Series', 'Freeze', 'Loop', 'Img', 'OffthreadVideo', 'Html5Video', 'Video', 'useCurrentFrame', 'useVideoConfig', 'interpolate', 'interpolateColors', 'spring', 'Easing', 'random', 'getInputProps']);
 
@@ -21,6 +23,7 @@ export function validateAuthoredPlan(plan, frames) {
   if (Buffer.byteLength(plan.code) > 200_000) throw new Error('code supera 200 KB');
   if (!Number.isInteger(frames) || frames <= DIRECTOR_ENDCARD_SECONDS * FPS || frames > MAX_FRAMES) throw new Error('duración fuera de límite');
   if (plan.music !== undefined && typeof plan.music !== 'boolean') throw new Error('music requiere boolean');
+  if (plan.visualStyle !== undefined && !isVisualStyle(plan.visualStyle)) throw new Error('visualStyle requiere editorial, documentary o trailer');
   const span = frames / FPS - DIRECTOR_ENDCARD_SECONDS;
   if (!Array.isArray(plan.scenes) || !plan.scenes.length) throw new Error('scenes requiere tiempos para la revisión visual');
   for (const scene of plan.scenes) {
@@ -83,7 +86,8 @@ export async function bundleAuthored(tmp, props) {
   const ast = validateAuthoredPlan(props.plan, props.frames);
   const kitSource = readFileSync(new URL('./kit/goatlab-kit.jsx', import.meta.url), 'utf8');
   const kitLogic = readFileSync(new URL('./kit/kit-logic.mjs', import.meta.url), 'utf8');
-  const id = createHash('sha256').update(facade + entry + kitSource + kitLogic + props.plan.code).digest('hex');
+  const grainTexture = readFileSync(new URL('./kit/grain-texture.mjs', import.meta.url), 'utf8');
+  const id = createHash('sha256').update(facade + entry + kitSource + kitLogic + grainTexture + props.plan.code).digest('hex');
   const root = join(tmp, 'authored', id), out = join(root, 'bundle');
   if (existsSync(join(out, 'index.html'))) return out;
   mkdirSync(root, { recursive: true });
@@ -94,6 +98,7 @@ export async function bundleAuthored(tmp, props) {
   }
   writeFileSync(join(root, 'goatlab-kit.jsx'), kitSource);
   writeFileSync(join(root, 'kit-logic.mjs'), kitLogic);
+  writeFileSync(join(root, 'grain-texture.mjs'), grainTexture);
   writeFileSync(join(root, 'piece.jsx'), source);
   writeFileSync(join(root, 'safe-remotion.jsx'), facade);
   writeFileSync(join(root, 'index.jsx'), entry);

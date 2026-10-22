@@ -1,5 +1,9 @@
 # Optimización del flujo de video y evaluación de revisión manual
 
+La ampliación de dirección visual, herramientas opcionales, conservación de muestras
+y comandos de comparación se describe en [VIDEO-CINEMATIC-REPORT.md](VIDEO-CINEMATIC-REPORT.md).
+Las mediciones históricas de este informe no son resultados del kit nuevo.
+
 ## Carriles y autoría en paralelo
 
 Render prepara y entrega por un carril ligero y captura de uno en uno. Gateway
@@ -68,12 +72,12 @@ H.264 a 30 fps, 1080×1920 y menos de 45 MB.
 
 **Revisión orientativa.** Una sola pasada de FFmpeg extrae 8 JPEG de 540×960
 con una muestra fija, que incluye el cierre. Gateway hace **una** llamada visual
-con razonamiento `low` y un presupuesto de 60 s por modelo. `approve` y `revise`
+con razonamiento `max` y un presupuesto de 60 s por modelo. `approve` y `revise`
 entregan ambos el mismo MP4. Si la revisión falla, la entrega se registra como
 `reviewStatus: unavailable`, sin afirmar que hubo inspección. Ya no existe el
 dictamen final ni las correcciones visuales automáticas.
 
-**Autoría.** Usa razonamiento `high`, con 240 s por turno y 15 s de margen.
+**Autoría.** Usa razonamiento `max`, con 240 s por turno y 15 s de margen.
 Hay un candidato inicial y una única corrección técnica (`MAX_CANDIDATES = 2`).
 Un plan inválido admite dos intentos, y el segundo usa directamente GLM. El turno
 recibe GoatLab y `goatlab.win` como datos oficiales (también en los props
@@ -94,7 +98,7 @@ cuenta como la corrección técnica. FFmpeg usa al menos dos hilos.
 
 **Razonamiento.** `openclaw.json` declara `reasoning: true` y
 `supportsReasoningEffort` con `low`/`high`/`max` para ambos modelos de OpenCode Go.
-Cada turno envía `thinking` explícito. Conviene confirmar en el primer registro
+Cada turno envía `thinking: max`. Conviene confirmar en el primer registro
 real que OpenCode Go recibe `reasoning_effort` con el valor esperado.
 
 **Verificación sin pruebas largas:**
@@ -140,7 +144,7 @@ Sin autoría, alguien tiene que decidir el montaje. Las alternativas son:
    existe un montaje automático de respaldo»), recogida en
    `CREATIVE-FREEDOM-REPORT.md`.
 2. **Autoría solo bajo demanda.** Por defecto se entrega una plantilla, y un
-   botón de Telegram pide una versión original con OpenClaw (`high`).
+   botón de Telegram pide una versión original con OpenClaw (`max`).
 
 **Recomendación:** empezar con A y medir. Si la captura sigue dominando o la
 autoría falla a menudo, implementar B.2 como «modo rápido» mediante una opción
@@ -186,7 +190,7 @@ por serie, sin eliminar la autoría.
 
 ### Coste por rehacer
 
-Una llamada de autoría `high` y una captura completa, sin transcripción ni
+Una llamada de autoría `max` y una captura completa, sin transcripción ni
 descarga de medios. La revisión depende de si se adopta la opción A.
 
 ### Orden sugerido

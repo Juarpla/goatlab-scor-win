@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H, MAX_SECONDS } from '../../src/lib/short-format.js';
 import { audioFailureText } from '../../src/lib/render-queue.js';
-import { telegramCaption } from '../../src/lib/youtube.js';
+import { telegramCaptionDetails } from '../../src/lib/youtube.js';
 import { JobStore } from './job-store.mjs';
 import { RemoteLedger } from './remote-ledger.mjs';
 import { warmPhotos, prunePhotoCache, pinPhotos } from './photo-cache.mjs';
@@ -20,6 +20,7 @@ import { prepareShort, composeShort, renderSilent, muxVoice, mediaDuration } fro
 import { WORKFLOW_PROTOCOL, submitPlan, approveCandidate, digest } from './creative-job.mjs';
 import { extractReviewFrames } from './review-frames.mjs';
 import { createLanes, laneFor } from './lanes.mjs';
+import { pruneEvaluationCorpus, retainEvaluation } from './evaluation-corpus.mjs';
 
 const run = promisify(execFile);
 const PORT = Number(process.env.PORT ?? 3000);
@@ -35,6 +36,7 @@ const ledger=process.env.RENDER_LEDGER_URL ? new RemoteLedger(process.env.RENDER
 if(ledger) await ledger.restore(stateDir);
 const store = new JobStore(stateDir, { ledger });
 const jobs = store.jobs;
+const evaluationDir = join(stateDir, 'evaluation');
 const cacheDir = process.env.PHOTO_CACHE_DIR || '/data/photo-cache';
 const enqueue = createLanes();
 const IDLE_MS = 15 * 60_000;
@@ -43,6 +45,7 @@ let inflight = 0;
 const protectedIds = new Set();
 function cleanup() {
   store.cleanup(protectedIds);
+  pruneEvaluationCorpus(evaluationDir);
   pruneClipCache(join(cacheDir, '../clip-cache'), { protectedUrls: [...jobs.values()].flatMap(j => j.clips ?? []).map(c => c.url), purgeUnused: true });
   prunePhotoCache(cacheDir, { protectedUrls: [...jobs.values()].flatMap(j => j.assets ?? []).map(a => a.url), purgeUnused: true });
 }
@@ -189,14 +192,19 @@ async function runJob(job) {
     await store.flush();
     const musicCredit = job.plan?.version === 5 && job.plan.music !== true ? '' : readFileSync(new URL('./assets/bed.txt', import.meta.url), 'utf8');
     const buttons = /^[a-f0-9]{32}$/.test(String(job.requestId || '')) ? { inline_keyboard: [[{ text: 'Me gusta', callback_data: `fb:up:${job.requestId}` }, { text: 'No me gusta', callback_data: `fb:down:${job.requestId}` }]] } : undefined;
-    const messageId = await measure('delivery', () => sendVideo(job.chatId, out, telegramCaption({ ...job, musicCredit }), { replyTo: job.audioMessageId, buttons }));
+    const caption = telegramCaptionDetails({ ...job, musicCredit });
+    const messageId = await measure('delivery', () => sendVideo(job.chatId, out, caption.caption, { replyTo: job.audioMessageId, buttons }));
     const seconds = Math.round((Date.now() - started) / 1000);
     Object.assign(job, { status: 'done', messageId, duration: dur, sizeMb, seconds });
     job.currentStage='done';
     store.save(job);
+    try {
+      job.evaluation = await retainEvaluation(evaluationDir, tmp, job);
+      store.save(job);
+    } catch (error) { log(`muestra de evaluación no disponible: ${String(error.message).slice(0, 180)}`); }
     rmSync(tmp, { recursive: true, force: true });
     const credits = [musicCredit.trim(), String(job.attribution ?? '').trim()].filter(Boolean).join('\n');
-    if ([String(job.title ?? '').slice(0, 220), String(job.hook ?? ''), credits].join('\n').length > 1024) {
+    if (caption.creditsOverflow) {
       const form = new FormData();
       form.set('chat_id', String(job.chatId));
       form.set('document', new Blob([credits], { type: 'text/plain' }), 'goatlab-creditos.txt');
@@ -259,7 +267,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(obj));
   };
   try {
-    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1, reviewPolicy: 'advisory', reviewFrameLimit: 8, lanes: ['light', 'heavy'] });
+    if (req.url === '/healthz') return json(200, { ok: true, workflowProtocol: WORKFLOW_PROTOCOL, revision: process.env.GOATLAB_REVISION ?? 'unknown', editPlanVersion: 5, renderEngine: 'remotion', maxSeconds: MAX_SECONDS, authoredCompositions: true, endcardSeconds: 1, reviewPolicy: 'advisory', reviewFrameLimit: 8, lanes: ['light', 'heavy'], visualStyles: ['editorial', 'documentary', 'trailer'], cinemaKit: ['CameraMove', 'ColorWash'], experimentalKit: ['FilmGrain'] });
     const artifact = req.url?.match(/^\/jobs\/(job-[a-f0-9]{32})\/artifacts\/(\d+)\/(\d+)\/([\w.-]+\.jpg)$/);
     if (req.method === 'GET' && artifact) {
       if (req.headers.authorization !== `Bearer ${SECRET}`) return json(401, { error: 'no autorizado' });

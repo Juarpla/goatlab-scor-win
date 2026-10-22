@@ -16,7 +16,9 @@ import { transcribeWords } from './transcribe.mjs';
 
 const run = promisify(execFile);
 export { LEAD_SECONDS };
-export const PHOTO_MAX_W = 1472;
+import { PHOTO_PROFILE } from './photo-normalization.mjs';
+export { PHOTO_PROFILE };
+export const PHOTO_MAX_W = PHOTO_PROFILE.maxWidth;
 export const BED_VOLUME_DB = -18;
 const BED_FADE_IN = 0.5;
 const BED_FADE_OUT = 1;

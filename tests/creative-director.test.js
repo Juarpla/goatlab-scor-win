@@ -124,7 +124,7 @@ function harness({reviseUntil=0,cancelAtReview=false,rejectCorrectionOnce=false}
     if(path==='/render/fail'){job.status='error';job.error=body.reason;return {};}
     return structuredClone(job);
   };
-  const authoredPlan={version:5,code:"import React from 'react';export default function Piece(){return <div/>}",scenes:plan.scenes};
+  const authoredPlan={version:5,visualStyle:'documentary',code:"import React from 'react';export default function Piece(){return <div/>}",scenes:plan.scenes};
   const decide=async request=>{
     seen.push(request.key);
     if(request.key.includes(':plan-'))return {plan:authoredPlan,notes:'Dirección narrativa'};
@@ -185,7 +185,7 @@ test('unavailable visual models do not block a technically valid video or claim 
   assert.match(h.job.approval.reviewError,/providers unavailable/);
 });
 
-test('stage budgets send high for authoring and low for review, aborting a timed-out primary before fallback',async t=>{
+test('stage budgets send max for authoring and review, aborting a timed-out primary before fallback',async t=>{
   let clock=0;const calls=[];
   const decide=nativeDecision({now:()=>clock,env:{OPENCODE_GO_MODEL:'primary',OPENCODE_GO_FALLBACK_MODEL:'backup'},wait:async()=>{},call:async(method,params)=>{
     calls.push({method,...params});
@@ -195,11 +195,11 @@ test('stage budgets send high for authoring and low for review, aborting a timed
     const path=params.message.match(/archivo (.+?), mediante/)[1];writeFileSync(path,JSON.stringify({notes:'Backup terminado'}));return {runId:'backup'};
   }});
   await decide({directory:directory(t),key:'authoring',message:'Crea',sessionKey:'agent:main:author'});
-  const primary=calls.find(c=>c.method==='agent');assert.equal(primary.thinking,'high');assert.equal(primary.timeout,240);
+  const primary=calls.find(c=>c.method==='agent');assert.equal(primary.thinking,'max');assert.equal(primary.timeout,240);
   assert.ok(calls.findIndex(c=>c.method==='chat.abort')<calls.findIndex(c=>c.model==='backup'));
   calls.length=0;clock=0;
   await decide({directory:directory(t),key:'review',message:'Revisa',purpose:'review',sessionKey:'agent:main:review'});
-  const review=calls.find(c=>c.method==='agent');assert.equal(review.thinking,'low');assert.equal(review.timeout,60);
+  const review=calls.find(c=>c.method==='agent');assert.equal(review.thinking,'max');assert.equal(review.timeout,60);
 });
 
 test('authoring requests the preview bytes and records how long the turn took', async t => {

@@ -11,11 +11,11 @@ import { digest } from '../fly/render/creative-job.mjs';
 test('real HTTP worker protects artifacts and only sends the exact approved MP4, once', async t => {
   const state=mkdtempSync(join(tmpdir(),'goatlab-creative-api-'));
   t.after(()=>rmSync(state,{recursive:true,force:true}));
-  const mock=join(state,'offline.mjs'),sent=join(state,'sent.txt');
-  writeFileSync(mock,`import {appendFileSync} from 'node:fs';globalThis.fetch=async(url,init)=>{if(!String(url).startsWith('https://api.telegram.org/botoffline/'))throw Error('external HTTP forbidden');if(String(url).endsWith('/sendVideo'))appendFileSync(${JSON.stringify(sent)},'video\\n');return {ok:true,json:async()=>({ok:true,result:{message_id:42}})}};`);
+  const mock=join(state,'offline.mjs'),sent=join(state,'sent.txt'),caption=join(state,'caption.txt');
+  writeFileSync(mock,`import {appendFileSync} from 'node:fs';globalThis.fetch=async(url,init)=>{if(!String(url).startsWith('https://api.telegram.org/botoffline/'))throw Error('external HTTP forbidden');if(String(url).endsWith('/sendVideo')){appendFileSync(${JSON.stringify(sent)},'video\\n');appendFileSync(${JSON.stringify(caption)},init.body.get('caption'));}return {ok:true,json:async()=>({ok:true,result:{message_id:42}})}};`);
   let store=new JobStore(state);
   const {job}=store.accept({workflowProtocol:3,requestId:'reviewed-audio',chatId:'1',matchId:'a-b',assets:[],audioFileId:'voice',expiresAt:Date.now()+3600_000});
-  Object.assign(job,{prepared:true,revision:1,status:'awaiting-review',operation:'render',planHash:'plan-1',duration:9,sizeMb:.1,
+  Object.assign(job,{visualStyle:'documentary',prepared:true,revision:1,status:'awaiting-review',operation:'render',planHash:'plan-1',duration:9,sizeMb:.1,
     candidate:{revision:1,videoHash:digest('approved-mp4'),frames:[{name:'review-1-0.jpg',time:1}]}});
   store.save(job);
   const dir=store.directory(job);
@@ -59,10 +59,14 @@ test('real HTTP worker protects artifacts and only sends the exact approved MP4,
     while((await (await request(app,`/jobs/${job.id}`)).json()).status!=='done'&&Date.now()<deadline)await new Promise(r=>setTimeout(r,20));
     assert.equal((await (await request(app,`/jobs/${job.id}`)).json()).status,'done');
     assert.equal(readFileSync(sent,'utf8'),'video\n');
+    assert.match(readFileSync(caption,'utf8'),/Dirección visual: Documental deportivo/);
+    assert.equal((await (await request(app,`/jobs/${job.id}`)).json()).visualStyle,'documentary');
   }finally{await app.stop()}
   app=await start();
   try{
     assert.equal((await (await request(app,`/jobs/${job.id}`)).json()).status,'done');
     assert.equal(readFileSync(sent,'utf8'),'video\n');
+    assert.match(readFileSync(caption,'utf8'),/Dirección visual: Documental deportivo/);
+    assert.equal((await (await request(app,`/jobs/${job.id}`)).json()).visualStyle,'documentary');
   }finally{await app.stop()}
 });

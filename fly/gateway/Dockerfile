@@ -8,6 +8,7 @@ USER node
 COPY --chown=node:node fly/gateway/openclaw.json /home/node/.openclaw/openclaw.json
 COPY --chown=node:node fly/gateway/workspace/ /home/node/.openclaw/workspace/
 COPY --chown=node:node fly/gateway/idle-stop.mjs fly/gateway/idle-safety.mjs fly/gateway/creative-director.mjs /home/node/
+COPY --chown=node:node src/lib/visual-style.js /home/node/visual-style.js
 COPY --chown=node:node fly/gateway/ui-access.mjs fly/gateway/runtime.mjs /home/node/
 ARG GOATLAB_REVISION=unknown
 ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_REPO=/home/node/goatlab GOATLAB_STATE_DIR=/data \
@@ -15,6 +16,9 @@ ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_REPO=/home/node/goatlab GOATLAB
 
 # Repo goatlab (scripts + datos) para el skill /goatlab. Público, sin secrets.
 RUN git clone --depth 1 https://github.com/Juarpla/goatlab-scor-win.git /home/node/goatlab
+COPY --chown=node:node scripts/report-video-styles.mjs /home/node/goatlab/scripts/
+COPY --chown=node:node src/lib/visual-style.js /home/node/goatlab/src/lib/
+COPY --chown=node:node VIDEO-CINEMATIC-REPORT.md /home/node/goatlab/
 
 COPY fly/gateway/nginx.conf /etc/nginx/nginx.conf
 COPY fly/gateway/start.sh /home/node/start.sh

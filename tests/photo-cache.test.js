@@ -38,3 +38,23 @@ test('cache cleanup respects active photos, removes unused files and stays withi
   assert.ok(existsSync(file));
   unpin(); assert.equal(prunePhotoCache(dir,{purgeUnused:true}),0);
 });
+
+test('cache profiles isolate normalization versions and dimensions while protecting URL leases', async t => {
+  const { PHOTO_PROFILE } = await import('../fly/render/photo-normalization.mjs');
+  const { pinPhotos, prunePhotoCache } = await import('../fly/render/photo-cache.mjs');
+  const dir = mkdtempSync(join(tmpdir(), 'goatlab-photo-profile-')); t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const input = join(dir, 'small.png');
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=c=green:s=128x128', '-frames:v', '1', input]);
+  const bytes = readFileSync(input), asset = { url: 'https://example.test/versioned' }; let calls = 0;
+  const options = { fetchImpl: async () => { calls++; return new Response(bytes); } };
+  const a = await cachedPhoto(asset, dir, options);
+  const b = await cachedPhoto(asset, dir, { ...options, profile: { ...PHOTO_PROFILE, version: 2 } });
+  const c = await cachedPhoto(asset, dir, { ...options, profile: { ...PHOTO_PROFILE, maxWidth: 1080, maxHeight: 1920 } });
+  assert.equal(new Set([a.path, b.path, c.path]).size, 3);
+  assert.equal(calls, 3);
+  assert.equal((await cachedPhoto(asset, dir, options)).cached, true);
+  const unpin = pinPhotos([asset]);
+  prunePhotoCache(dir, { purgeUnused: true });
+  for (const photo of [a, b, c]) assert.equal((await imageDimensions(photo.path)).width, 128);
+  unpin(); assert.equal(prunePhotoCache(dir, { purgeUnused: true }), 0);
+});

@@ -10,15 +10,23 @@ Studio, instalar paquetes ni crear un proyecto nuevo en el Gateway.
 
 ## Dirección
 
-Diseña una composición propia para la voz temporizada. Prefiere motion sin panel
-de fondo cuando deja ver bien las fotos y clips: texto cinético, palabras que
-caen, trazos SVG, cifras y tarjetas flotantes. Usa pantallas divididas de dos,
-tres o más regiones cuando ayuden a narrar. Puedes combinar recursos, cambiar
-encuadres, tipografía, colores, movimientos, transiciones y densidad por escena.
-La referencia del usuario muestra texto cinético (00–03 s), escritura progresiva
-(03–04 s), tarjetas flotantes (04–05 s), video en un recuadro (07/17 s), cuadrícula
-(15 s) y barrido desenfocado (16 s). Son ideas disponibles, no una secuencia ni
-cuotas. La voz y el contenido mandan; explica el concepto en notes.
+Diseña una composición propia para la voz temporizada. Elige una dirección para
+este audio y declárala en plan.visualStyle:
+
+- editorial: libre/editorial; composición experimental, tipografía expresiva y
+  gráficos que expliquen la narración.
+- documentary: documental deportivo; imágenes protagonistas, encuadres sostenidos,
+  movimientos contenidos y datos puntuales.
+- trailer: tráiler deportivo; contrastes de escala, pausas de tensión y cortes
+  ligados a los momentos fuertes de la voz.
+
+Son intenciones de dirección, con composición original por audio. Elige según la
+narración y las preferencias; puedes combinar recursos de los tres enfoques y
+nombrar el predominante. Las escenas siguen el sentido y las pausas de las frases:
+alterna planos amplios y detalles cuando aporten, y deja respirar a la imagen.
+Texto cinético, trazos SVG, pantallas divididas y tarjetas son recursos opcionales.
+En notes explica el concepto, su relación con la voz y una diferencia concreta
+frente a los recientes: encuadre, ritmo, tipografía, paleta o uso del material.
 
 El inventario es material disponible: elige cualquier subconjunto, repite un
 recurso si tiene sentido o trabaja solo con gráficos. Los Motion Prompts son
@@ -35,8 +43,9 @@ sin cuotas de gráficos, cortes, fotos, clips ni subtítulos obligatorios.
 
 ## Entrega ejecutable
 
-Guarda {"plan":{"version":5,"code":"módulo JSX","scenes":[{"start":0,"end":span}],"music":false},"notes":"concepto y composición"}.
-Code es JavaScript con JSX y export default de un componente React. Recibe props:
+Guarda {"plan":{"version":5,"visualStyle":"editorial|documentary|trailer","code":"módulo JSX","scenes":[{"start":0,"end":span}],"music":false},"notes":"concepto y composición"}.
+visualStyle contiene uno de los tres valores de Dirección; Telegram lo muestra
+en el mensaje, fuera del video. Code es JavaScript con JSX y export default de un componente React. Recibe props:
 photos [{src,backdrop,focusBlur,width,height}], clips [{src,width,height,duration}],
 words [{word,start,end}], facts, match, frames, contentFrames, brandName y brandUrl. Los recursos llegan
 con URLs locales. El lienzo es 1080×1920 a 30 fps. El componente ocupa contentFrames;
@@ -64,8 +73,8 @@ para que corrijas el código, sin sustituirlo por un montaje automático.
 
 ## Revisión orientativa
 
-La autoría y las correcciones técnicas usan razonamiento high. La revisión usa
-low y recibe hasta ocho imágenes en una sola llamada. Guarda observaciones
+Autoría, correcciones técnicas y revisión usan razonamiento max. La revisión
+recibe hasta ocho imágenes en una sola llamada. Guarda observaciones
 breves con decision approve o revise; ambas permiten entregar el MP4 válido.
 Las sugerencias estéticas quedan como informe: el usuario decide si pide rehacerlo.
 Una revisión no disponible se registra como tal y permite la entrega técnica.
@@ -102,7 +111,15 @@ No define un estilo. Captions({words, style, wordStyle, activeStyle, maxWords, r
 dibuja la frase activa; render(grupo, indice) la sustituye. FitText({children, maxWidth, max, min}).
 SafeArea({children, style}) deja margen superior 160, inferior 340, izquierdo 60
 y derecho 160. KenBurns({src, from, to, durationInFrames, style}).
-StatCard({label, value, unit, source, countUp, style}). phrases(words), wordAt(words, seconds)
+StatCard({label, value, unit, source, countUp, style}).
+CameraMove({children, from, to, durationInFrames, startFrame, style}) mueve y acerca
+fotos, clips o grupos; from/to contienen scale, x e y en píxeles y la curva es suave.
+Úsalo dentro de una Sequence para reiniciar el movimiento por escena.
+ColorWash({colors, opacity}) superpone uno o dos colores; úsalo sobre el material,
+con el texto en otra capa encima. Match es texto: los colores son decisiones
+artísticas, no datos oficiales del equipo. Cámara y velo son opcionales y también
+consumen tiempo de captura; mide y elige según la pieza.
+phrases(words), wordAt(words, seconds)
 y fitFontSize(text, opciones) son funciones.
 
 ## Preferencias del usuario

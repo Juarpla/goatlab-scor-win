@@ -10,6 +10,7 @@ import { bundleDir, buildVideoBundle } from './remotion-build.mjs';
 import { FPS, MAX_FRAMES } from '../../src/lib/short-format.js';
 import { projectCapture, budgetError } from './capture-budget.mjs';
 import { classifyLayout, layoutMessages } from './layout-check.mjs';
+import { recordRenderStart, recordRenderProgress } from './render-metrics.mjs';
 
 let prepared;
 async function videoBundle() {
@@ -60,7 +61,8 @@ export async function renderRemotion(tmp, out, { workers = 1, onProgress = () =>
   let browser;
   const concurrency = Math.max(1, Math.min(cpus().length, Number(workers) || 1));
   const threads = String(Math.max(2, Math.floor(cpus().length / 2)));
-  const metrics = { bundleMs, preflightMs: [], captureMs: 0, frames: props.frames, captureFps: 0, workers: concurrency, cpus: cpus().length, memMb: Math.round(totalmem() / 1e6), layout: [] };
+  // captureMs is wall time inside renderMedia, including encoding, retained for compatibility.
+  const metrics = { renderedDoneIn: null, encodedDoneIn: null, resolvedConcurrency: null, parallelEncoding: null, slowestFrames: [], bundleMs, preflightMs: [], captureMs: 0, frames: props.frames, captureFps: 0, workers: concurrency, cpus: cpus().length, memMb: Math.round(totalmem() / 1e6), layout: [] };
   try {
     const base = `http://127.0.0.1:${server.address().port}/`;
     const inputProps = { ...props, font: base + props.font, brand: base + props.brand,
@@ -109,12 +111,14 @@ export async function renderRemotion(tmp, out, { workers = 1, onProgress = () =>
         if (mode !== 'off') metrics.layout = layoutMessages(layout);
       }
       const captureAt = Date.now();
-      await renderMedia({ serveUrl, composition, inputProps, puppeteerInstance: browser,
+      const result = await renderMedia({ serveUrl, composition, inputProps, puppeteerInstance: browser,
         codec: 'h264', pixelFormat: 'yuv420p', crf: 20, x264Preset: 'veryfast', disallowParallelEncoding: false,
         ffmpegOverride: ({ args }) => ['-threads', threads, ...args.slice(0, -1), '-threads', threads, args.at(-1)],
         outputLocation: out, concurrency, muted: true,
-        onProgress: progress => { if (isCancelled()) cancellation.cancel(); onProgress(progress); },
+        onStart: start => recordRenderStart(metrics, start),
+        onProgress: progress => { recordRenderProgress(metrics, progress); if (isCancelled()) cancellation.cancel(); onProgress(progress); },
         cancelSignal: cancelSignal ?? cancellation.cancelSignal });
+      metrics.slowestFrames = result.slowestFrames;
       metrics.captureMs = Date.now() - captureAt;
       metrics.captureFps = metrics.captureMs > 0 ? Number((props.frames / (metrics.captureMs / 1000)).toFixed(2)) : 0;
     } finally { clearTimeout(timeout); }

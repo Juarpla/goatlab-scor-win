@@ -32,11 +32,11 @@ COPY fly/render/package.json fly/render/package-lock.json ./
 RUN npm ci --omit=dev --no-audit --no-fund \
   && node --input-type=module -e 'import {ensureBrowser} from "@remotion/renderer"; await ensureBrowser();' \
   && /opt/whisper/whisper-cli --help > /dev/null
-COPY src/lib/short-format.js src/lib/edit-plan.js src/lib/motion-data.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/render-queue.js ./src/lib/
+COPY src/lib/short-format.js src/lib/edit-plan.js src/lib/motion-data.js src/lib/timing.js src/lib/media.js src/lib/teams.js src/lib/compliance.js src/lib/youtube.js src/lib/visual-style.js src/lib/render-queue.js ./src/lib/
 COPY fly/gateway/workspace/skills/goatlab/assets/ ./goatlab-skill/assets/
-COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/creative-job.mjs fly/render/review-frames.mjs fly/render/lanes.mjs fly/render/capture-budget.mjs fly/render/layout-check.mjs fly/render/authored-composition.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs fly/render/clip-cache.mjs fly/render/voice-policy.mjs fly/render/remotion-build.mjs fly/render/remotion-render.mjs ./fly/render/
+COPY fly/render/server.mjs fly/render/short-job.mjs fly/render/creative-job.mjs fly/render/review-frames.mjs fly/render/lanes.mjs fly/render/capture-budget.mjs fly/render/layout-check.mjs fly/render/authored-composition.mjs fly/render/transcribe.mjs fly/render/job-store.mjs fly/render/remote-ledger.mjs fly/render/photo-cache.mjs fly/render/photo-normalization.mjs fly/render/render-input.mjs fly/render/render-metrics.mjs fly/render/evaluation-corpus.mjs fly/render/clip-cache.mjs fly/render/voice-policy.mjs fly/render/remotion-build.mjs fly/render/remotion-render.mjs ./fly/render/
 COPY fly/render/kit/ ./fly/render/kit/
-COPY scripts/benchmark-shorts.mjs ./scripts/benchmark-shorts.mjs
+COPY scripts/benchmark-shorts.mjs scripts/benchmark-cinema-kit.mjs ./scripts/
 COPY scripts/bench/ ./scripts/bench/
 COPY fly/render/assets/bed.mp3 fly/render/assets/bed.txt fly/render/assets/LiberationSans-Bold.ttf fly/render/assets/LiberationSans-OFL.txt ./fly/render/assets/
 

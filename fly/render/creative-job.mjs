@@ -24,6 +24,7 @@ export function submitPlan(job, input, validate) {
   job.plan = input.plan;
   job.planHash = planHash;
   job.planModel = input.model;
+  job.visualStyle = input.plan.visualStyle;
   job.candidate = null;
   job.approval = null;
   job.error = null;

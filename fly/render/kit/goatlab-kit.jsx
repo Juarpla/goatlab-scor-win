@@ -1,6 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, interpolate } from './safe-remotion.jsx';
-import { phrases, wordAt, fitFontSize } from './kit-logic.mjs';
+import { phrases, wordAt, fitFontSize, cameraAt, grainPosition } from './kit-logic.mjs';
+import { GRAIN_TEXTURE } from './grain-texture.mjs';
 
 export { phrases, wordAt, fitFontSize };
 
@@ -50,4 +51,26 @@ export function StatCard({ label, value, unit, source, countUp = true, style }) 
       {source ? <div style={{ fontSize: 22, opacity: .75 }}>{source}</div> : null}
     </div>
   );
+}
+
+/** Put images/clips inside this wrapper and keep captions in a separate layer. */
+export function CameraMove({ children, from, to, durationInFrames, startFrame = 0, style }) {
+  const frame = useCurrentFrame();
+  const config = useVideoConfig();
+  const { scale, x, y } = cameraAt(frame, { from, to, durationInFrames: durationInFrames ?? config.durationInFrames, startFrame });
+  return <AbsoluteFill style={{ overflow: 'hidden', ...style }}><AbsoluteFill style={{ transformOrigin: 'center', transform: `translate(${x}px, ${y}px) scale(${scale})` }}>{children}</AbsoluteFill></AbsoluteFill>;
+}
+
+/** Overlay the media layer, below text. Colors are artistic choices, not team metadata. */
+export function ColorWash({ colors = ['#183449', '#412319'], opacity = .08 }) {
+  const palette = Array.isArray(colors) ? colors.slice(0, 2) : [colors];
+  const background = palette.length > 1 ? `linear-gradient(135deg, ${palette[0]}, ${palette[1]})` : palette[0];
+  return <AbsoluteFill style={{ pointerEvents: 'none', background, opacity: Math.max(0, Math.min(1, opacity)) }} />;
+}
+
+/** Experimental: expose to the director only after a real visual/performance comparison. */
+export function FilmGrain({ opacity = .025, seed = 0 }) {
+  const frame = useCurrentFrame();
+  const { x, y } = grainPosition(frame, seed);
+  return <AbsoluteFill style={{ pointerEvents: 'none', opacity: Math.max(0, Math.min(1, opacity)), backgroundImage: `url(${GRAIN_TEXTURE})`, backgroundRepeat: 'repeat', backgroundPosition: `${x}px ${y}px` }} />;
 }

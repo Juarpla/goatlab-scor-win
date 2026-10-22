@@ -1,3 +1,4 @@
+import { VISUAL_STYLES, isVisualStyle } from './visual-style.js';
 /**
  * Guiones de Shorts (<50s). Estructura por guion: gancho del modelo +
  * piezas asignadas por código (puente, antecedente, sustantivo, pronóstico,
@@ -639,16 +640,22 @@ export function shortTitle({ home, away, n, hook, players = [] } = {}) {
 }
 
 /** Pie de Telegram: título y gancho. Sin título, solo el gancho. */
-export function telegramCaption({ title, hook, attribution, musicCredit } = {}) {
+export function telegramCaptionDetails({ title, hook, attribution, musicCredit, visualStyle } = {}) {
   const head = String(title ?? '').trim();
   const line = String(hook ?? '').trim();
-  const text = head && line && head !== line ? `${head}\n${line}` : (head || line);
-  if (!attribution && !musicCredit) return text.slice(0, 1000);
+  const copy = head && line && head !== line ? `${head}\n${line}` : (head || line);
+  const direction = isVisualStyle(visualStyle) ? `Dirección visual: ${VISUAL_STYLES[visualStyle]}` : '';
+  const text = [direction, copy].filter(Boolean).join('\n');
+  if (!attribution && !musicCredit) return { caption: text.slice(0, 1000), creditsOverflow: false };
   const credits = String(attribution ?? '').trim();
   const complete = [text.slice(0, 220), String(musicCredit ?? '').trim(), credits].filter(Boolean).join('\n');
-  if (complete.length <= 1024) return complete;
+  if (complete.length <= 1024) return { caption: complete, creditsOverflow: false };
   const ai = credits.split('\n').filter(line => /generad|Agnes|inteligencia artificial/i.test(line)).join('\n');
-  return [text.slice(0, 220), String(musicCredit ?? '').trim(), ai.slice(0, 400), 'Créditos completos en el archivo adjunto.'].filter(Boolean).join('\n').slice(0, 1024);
+  return { caption: [text.slice(0, 220), String(musicCredit ?? '').trim(), ai.slice(0, 400), 'Créditos completos en el archivo adjunto.'].filter(Boolean).join('\n').slice(0, 1024), creditsOverflow: true };
+}
+
+export function telegramCaption(input = {}) {
+  return telegramCaptionDetails(input).caption;
 }
 
 /**

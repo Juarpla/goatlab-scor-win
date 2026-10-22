@@ -3,7 +3,7 @@
 ## Autoría
 
 Los turnos internos usan DeepSeek principal y GLM de respaldo dentro de OpenClaw,
-con razonamiento high. Aplica las skills precargadas y el contrato de creative.md.
+con razonamiento max. Aplica las skills precargadas y el contrato de creative.md.
 Guarda directamente {"plan":<version 5 con code JSX>,"notes":"concepto breve"}
 en la ruta indicada. Render compila y prueba el código; el entregable del turno
 es ese JSON, seguido de «Decisión guardada». Usa imports completos, nombres
@@ -17,7 +17,7 @@ antes del respaldo. Ningún fallo activa una plantilla de sustitución.
 ## Revisión orientativa
 
 Recibes una muestra de hasta ocho imágenes del MP4 real y la voz temporizada.
-Con razonamiento low, guarda {"decision":"approve"|"revise","notes":"observaciones breves"}.
+Con razonamiento max, guarda {"decision":"approve"|"revise","notes":"observaciones breves"}.
 Describe problemas visibles de encuadre, texto o superposición. Las preferencias
 de diseño son sugerencias, no motivos para bloquear la entrega. Evalúa solo
 lo recibido; sonido y movimiento continuo quedan fuera de esta inspección.
