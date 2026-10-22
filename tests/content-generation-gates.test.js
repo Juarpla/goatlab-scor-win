@@ -135,7 +135,20 @@ test('scripts: rejected regeneration preserves the prior file without temporary 
 });
 test('scripts: probability file feeds calc-backed picks into the saved draft', async t => {
   const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };
-  const prob = { markets: { oneX2: { home: 0.6, draw: 0.25, away: 0.15 }, exactScores: [{ home: 2, away: 0, p: 0.2 }] } };
+  const prob = {
+    markets: { oneX2: { home: 0.6, draw: 0.25, away: 0.15 }, exactScores: [{ home: 2, away: 0, p: 0.2 }] },
+    inputs: { lambdas: { home: 1.8, away: 0.4 } },
+    firstGoal: { firstHome: 0.7, firstAway: 0.2, noGoal: 0.1, bands: [{ from: 0, to: 15, p: 0.4 }] },
+    statsForecast: {
+      home: { corners: 6.2, fouls: 14.2, yellowCards: 2.4, redCards: 0.2 },
+      away: { corners: 3.4, fouls: 13.6, yellowCards: 1.8, redCards: 0.1 },
+      league: { fouls: 11 },
+      sources: {
+        home: { corners: 'Bzzoiro', fouls: 'Bzzoiro', yellowCards: 'Bzzoiro', redCards: 'Bzzoiro' },
+        away: { corners: 'Bzzoiro', fouls: 'Bzzoiro', yellowCards: 'Bzzoiro', redCards: 'Bzzoiro' },
+      },
+    },
+  };
   const facts = scriptFacts(probMatch, null, prob);
   assert.ok(facts.picks.every(pick => pick));
   const content = {
@@ -156,7 +169,10 @@ test('scripts: probability file feeds calc-backed picks into the saved draft', a
   assert.equal(result.status, 0, result.stderr);
   const saved = JSON.parse(await readFile(file, 'utf8'));
   assert.deepEqual(scriptStructureErrors(saved, { matchId: match.webId, match: probMatch }), []);
-  assert.ok(saved.scripts.every(script => script.pick && script.pick.verdict.includes('la victoria de Alpha en casa')));
-  assert.ok(saved.scripts[2].pick.verdict.includes('por 2'));
-  assert.ok(saved.scripts[2].narration.includes(saved.scripts[2].pick.verdict));
+  assert.equal(saved.scripts[0].pick.verdict, 'la victoria de Alpha en casa');
+  assert.equal(saved.scripts[4].pick.verdict, '10 córners, 6 de Alpha y 4 de Beta');
+  assert.equal(saved.scripts[9].pick.verdict, '14 faltas de Alpha y 14 faltas de Beta, 1 penal y sin tarjeta roja');
+  assert.ok(saved.scripts[8].pick.verdict.includes('por 2'));
+  assert.ok(saved.scripts[8].narration.includes(saved.scripts[8].pick.verdict));
+  assert.equal(saved.scripts.filter(script => script.pick?.verdict.includes('la victoria de Alpha en casa')).length, 2);
 });

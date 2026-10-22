@@ -37,7 +37,7 @@ El gancho es una sola frase, la que cabe en una respiración. Lleva la tensión 
 - `bridge`: «Quédate con este dato.» / «Este es el dato que manda.» / «Acá está la clave.» / «Guarda este número.» o «Guarda esta lectura.».
 - `antecedent`: un antecedente, con una o dos cifras como máximo, o solo palabras.
 - `noun`: «La proyección» / «El análisis final» / «El diagnóstico final» / «La lectura».
-- `verdict`: el resultado explícito («la victoria de {equipo} en casa / de visita», «el empate», con marcador del cálculo cuando el ángulo es de goles). El equipo nunca va solo: siempre con su resultado.
+- `verdict`: la afirmación de esa fila, pegada tal cual. El guion 1 dice quién gana, sin marcador. El 9 dice quién gana y el marcador. Los demás se la juegan con un entero que puede ocurrir en la cancha (goles por equipo, córners, tiros, amarillas, faltas, penal, roja o el tramo del primer gol). El equipo va con su cifra o con su resultado, nunca solo. El dígito 0 no se escribe: «sin córners», «sin penal», «sin tarjeta roja», «sin goles». No se dice «aproximadamente» ni se copia un decimal.
 - `call`: la llamada de esa fila.
 - `player`: en los guiones 3, 4, 7 y 9, el nombre a mencionar una vez, como ambiente («Con {nombre} en la cancha»), sin decir que es el goleador, sin prometer que va a marcar, sin cifras pegadas al nombre.
 
@@ -83,19 +83,19 @@ Títulos y hashtags los estampa el guardado. Si redactas a mano, las frases est�
 Cada ángulo trae su pieza en `facts.picks[n-1]` (puente, antecedente, sustantivo, pronóstico, llamada y, en 3/4/7/9, jugador). El antecedente ya elige el hilo del ángulo; tu gancho lo presiente sin contarlo y tu tejido lo conecta con el pronóstico. Si la pieza es null, el guion usa el tema de reserva.
 
 1. Quién llega mejor. Gancho: la contradicción entre rachas (más `gf` con menos `wins`, mismos goles con rachas opuestas, `wins` iguales). Si no hay formulario, tema «la forma de los dos».
-2. Cara a cara. Gancho: si el historial manda o se rompe. Las victorias se dicen con el nombre del equipo. Si no hay campo, tema «el cara a cara».
-3. Si habrá goles. Gancho: si el partido se abre o se queda corto. El pronóstico trae marcador del cálculo. Jugador: solo el nombre, como ambiente. Si no hay promedio ni formularios, tema «el promedio de goles».
-4. Arco en cero. Gancho: si esa puerta sigue cerrada. «Mejor cierra» es quien tiene más `clean`; si empatan, habla del empate y no de un mejor. Jugador: solo el nombre, como ambiente. Si faltan los dos formularios, tema «el arco en cero».
-5. La visita. Gancho: si la visita alcanza para inquietar a quien recibe. Si faltan las dos formas, tema «la visita».
-6. El último cruce. Gancho: si el recuerdo se repite o se da vuelta. Si `last` es null, dilo y deja la escena fuera.
-7. Lo que encajan. Gancho: si el primer gol vale más que la racha. Jugador: solo el nombre, como ambiente. Si falta un formulario, tema «lo que encajan».
-8. Los empates. Gancho: si el cruce vuelve a quedarse a la mitad. Si no hay forma y el cara a cara es null, tema «los empates».
-9. Marcar y ganar. Gancho: si el gol llega suelto o para decidir. «Marca más y gana menos» solo cuando las dos cosas se cumplen en `facts`. El pronóstico trae marcador del cálculo. Jugador: solo el nombre, como ambiente. Si falta un formulario, tema «marcar y ganar».
-10. Desde el pitazo. Gancho: la respuesta no cabe en el nombre del partido. Si el cara a cara es null, esa ausencia también forma parte de la espera.
+2. Cara a cara. Gancho: si el historial manda o se rompe. Las victorias se dicen con el nombre del equipo. Si no hay campo, el pronóstico igual se la juega con los tiros enteros de cada equipo o, si no están, con el total de goles del cálculo. Si tampoco hay eso, tema «el cara a cara».
+3. Si habrá goles. Gancho: si el partido se abre o se queda corto. El pronóstico trae los goles enteros de cada equipo, no la victoria. Jugador: solo el nombre, como ambiente. Si no hay goles del cálculo, tema «el promedio de goles».
+4. Arco en cero. Gancho: si esa puerta sigue cerrada. «Mejor cierra» es quien tiene más `clean`; si empatan, el pronóstico dice el empate del arco y no nombra un mejor. Jugador: solo el nombre, como ambiente. Si faltan los dos formularios, tema «el arco en cero».
+5. Córners. Gancho: si el balón quieto se va a sentir. El pronóstico trae el total y el reparto entero. Si no hay ritmo de córners, tema «los córners».
+6. El último cruce. Gancho: si el recuerdo se repite o se da vuelta. Si `last` es null, el pronóstico trae las amarillas enteras de cada equipo. Si tampoco hay amarillas, dilo y deja la escena fuera.
+7. Lo que encajan. Gancho: si el primer gol vale más que la racha. El pronóstico dice qué equipo lo mete y si cae antes de los 15 minutos, en el primer tiempo o en el segundo. Jugador: solo el nombre, como ambiente, sin decir que es quien lo mete. Si no hay primer gol, tema «lo que encajan».
+8. Los empates. Gancho: si el cruce vuelve a quedarse a la mitad. El pronóstico dice si marcan los dos o si uno se queda sin marcar. Si no hay forma y el cara a cara es null, tema «los empates».
+9. Marcar y ganar. Gancho: si el gol llega suelto o para decidir. «Marca más y gana menos» solo cuando las dos cosas se cumplen en `facts`. El pronóstico trae la victoria y el marcador. Es el único guion que junta las dos. Jugador: solo el nombre, como ambiente. Si falta un formulario, tema «marcar y ganar».
+10. Faltas. Gancho: si el partido se ensucia. El pronóstico trae las faltas enteras de cada equipo, el penal (sin penal, 1 penal o 2 penales) y la roja (sin tarjeta roja, o de qué equipo). Si no hay ritmo de faltas, tema «las faltas».
 
 ## Antes de soltar el JSON
 
-Recorre los 10 contra el hueso, las piezas, las reglas y el ángulo de su fila. Verifica: gancho sin cifras y distinto en los diez; puente, antecedente, sustantivo, pronóstico y llamada pegados tal cual; jugador solo en 3/4/7/9, solo el nombre y sin promesas; como máximo 3 cifras por narración; mínimo 55 palabras; `verdict` con resultado explícito, nunca el equipo solo. Corrige el que falle y vuelve a emitir el objeto completo. `n` va de 1 a 10, sin saltos.
+Recorre los 10 contra el hueso, las piezas, las reglas y el ángulo de su fila. Verifica: gancho sin cifras y distinto en los diez; puente, antecedente, sustantivo, pronóstico y llamada pegados tal cual; jugador solo en 3/4/7/9, solo el nombre y sin promesas; como máximo 3 cifras por narración; mínimo 55 palabras; el pronóstico es el de esa fila, entero cuando trae cifra, nunca un decimal y nunca el equipo solo. Corrige el que falle y vuelve a emitir el objeto completo. `n` va de 1 a 10, sin saltos.
 
 ```json
 {"lede":"...","scripts":[{"n":1,"hook":"...","narration":"..."},{"n":2,"hook":"...","narration":"..."},{"n":3,"hook":"...","narration":"..."},{"n":4,"hook":"...","narration":"..."},{"n":5,"hook":"...","narration":"..."},{"n":6,"hook":"...","narration":"..."},{"n":7,"hook":"...","narration":"..."},{"n":8,"hook":"...","narration":"..."},{"n":9,"hook":"...","narration":"..."},{"n":10,"hook":"...","narration":"..."}]}

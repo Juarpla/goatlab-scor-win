@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict, commitSplit, penaltyCount } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -128,7 +128,10 @@ test('scriptFacts no lleva porcentajes y missingScripts solo pide los que faltan
   assert.equal(JSON.stringify(youtubeUserPayload({ published: false, facts })).includes('oneX2'), false);
   assert.equal(facts.probability, null);
   assert.equal(facts.picks.length, 10);
-  assert.ok(facts.picks.every(pick => pick && pick.bridge && pick.noun && pick.antecedent && pick.verdict && pick.call));
+  assert.ok(facts.picks.filter(Boolean).length >= 4);
+  assert.ok(facts.picks.filter(Boolean).every(pick => pick.bridge && pick.noun && pick.antecedent && pick.verdict && pick.call));
+  assert.equal(facts.picks[4], null);
+  assert.equal(facts.picks[9], null);
   assert.deepEqual(
     missingScripts(
       [{ webId: 'a' }, { webId: 'b' }],
@@ -273,31 +276,68 @@ const richProb = {
     cleanSheet: { home: 0.4, away: 0.2 },
     exactScores: [{ home: 2, away: 1, p: 0.12 }, { home: 1, away: 0, p: 0.1 }, { home: 1, away: 1, p: 0.09 }],
   },
-  firstGoal: { bands: [{ from: 0, to: 15, p: 0.35 }], noGoal: 0.03 },
+  inputs: { lambdas: { home: 1.6, away: 1.1 } },
+  firstGoal: {
+    bands: [{ from: 0, to: 15, p: 0.35 }, { from: 45, to: 60, p: 0.1 }],
+    noGoal: 0.03,
+    firstHome: 0.62,
+    firstAway: 0.35,
+  },
   provider: { xg: { home: 1.9, away: 1.1 } },
+  statsForecast: {
+    home: { corners: 4.56, fouls: 11.9, yellowCards: 1.76, redCards: 0.17, shots: 13.45 },
+    away: { corners: 5.24, fouls: 12.45, yellowCards: 2.04, redCards: 0.17, shots: 13.5 },
+    league: { fouls: 12.44 },
+    sources: {
+      home: { corners: 'Bzzoiro', fouls: 'Bzzoiro', yellowCards: 'Bzzoiro', redCards: 'Bzzoiro', shots: 'Bzzoiro' },
+      away: { corners: 'Bzzoiro', fouls: 'Bzzoiro', yellowCards: 'Bzzoiro', redCards: 'Bzzoiro', shots: 'Bzzoiro' },
+    },
+  },
 };
 const richScorers = { nations: { scorers: [{ player: 'Estrella Uno', team: 'Alpha', value: 4, matches: 5 }] } };
 
-test('buildPicks asigna diez piezas con veredicto explícito y rotación', () => {
+test('el entero que se dice suma el total y no deja el decimal', () => {
+  assert.deepEqual(commitSplit(11.9, 12.45), { home: 12, away: 12, total: 24 });
+  assert.deepEqual(commitSplit(4.56, 5.24), { home: 5, away: 5, total: 10 });
+  assert.deepEqual(commitSplit(0.17, 0.17), { home: 0, away: 0, total: 0 });
+  assert.deepEqual(commitSplit(1.6, 1.1), { home: 2, away: 1, total: 3 });
+  assert.equal(penaltyCount(12, 12, 12.44), 0);
+  assert.equal(penaltyCount(14, 14, 11), 1);
+  assert.equal(penaltyCount(20, 18, 11), 2);
+});
+
+test('buildPicks asigna una afirmación por ángulo y enteros en córners y faltas', () => {
   const facts = scriptFacts(richMatch, richScorers, richProb);
   assert.equal(facts.picks.length, 10);
   assert.ok(facts.picks.every(pick => pick && pick.bridge && pick.noun && pick.antecedent && pick.verdict && pick.call));
   assert.ok(new Set(facts.picks.map(pick => pick.noun)).size > 1);
   assert.ok(new Set(facts.picks.map(pick => pick.bridge)).size > 1);
-  for (const pick of facts.picks) {
-    assert.ok(/la victoria de Alpha en casa|el empate/.test(pick.verdict), pick.verdict);
-  }
-  assert.ok(facts.picks[2].verdict.includes('2 a 1'));
-  assert.ok(facts.picks[8].verdict.includes('2 a 1'));
+  assert.equal(facts.picks[0].verdict, 'la victoria de Alpha en casa');
+  assert.equal(facts.picks[1].verdict, 'el peso del cara a cara de Alpha');
+  assert.equal(facts.picks[2].verdict, '2 goles de Alpha y 1 gol de Beta');
+  assert.equal(facts.picks[4].verdict, '10 córners, 5 de Alpha y 5 de Beta');
+  assert.equal(facts.picks[6].verdict, 'el primer gol de Alpha antes de los 15 minutos');
+  assert.equal(facts.picks[7].verdict, 'que marquen los dos');
+  assert.equal(facts.picks[8].verdict, 'la victoria de Alpha en casa 2 a 1');
+  assert.equal(facts.picks[9].verdict, '12 faltas de Alpha y 12 faltas de Beta, sin penal y sin tarjeta roja');
+  assert.equal(facts.picks.filter(pick => /la victoria de Alpha en casa/.test(pick.verdict)).length, 2);
   assert.equal(facts.picks[0].player, null);
   assert.equal(facts.picks[2].player, 'Estrella Uno');
   assert.equal(facts.picks[3].player, 'Estrella Uno');
   assert.equal(facts.picks[6].player, 'Estrella Uno');
   assert.equal(facts.picks[8].player, 'Estrella Uno');
   const bare = scriptFacts(richMatch);
-  assert.ok(bare.picks.every(pick => pick && pick.player == null));
+  assert.ok(bare.picks.filter(Boolean).every(pick => pick.player == null));
+  assert.equal(bare.picks[4], null);
   assert.deepEqual(matchVerdict({}), null);
   assert.deepEqual(scriptFacts({ id: 'z', home: 'A', away: 'B', competition: 'nations' }).picks, Array(10).fill(null));
+});
+
+test('sin historial el guion 2 igual suelta un entero', () => {
+  const noH2h = { ...richMatch, h2h: null };
+  const facts = scriptFacts(noH2h, null, richProb);
+  assert.equal(facts.picks[1].verdict, '13 tiros de Alpha y 14 tiros de Beta');
+  assert.equal(facts.picks[5].verdict, '2 amarillas de Alpha y 2 amarillas de Beta');
 });
 
 function assembleDraft(facts) {
@@ -316,7 +356,7 @@ function assembleDraft(facts) {
   return hooks.map((hook, i) => {
     const pick = facts.picks[i];
     const tissue = i % 2
-      ? 'El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada.'
+      ? 'El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada esta noche.'
       : 'Nadie regala nada cuando el ambiente aprieta de este modo en la cancha.';
     const playerBit = pick.player ? ` Con ${pick.player} en la cancha.` : '';
     return { hook, narration: `${hook} ${pick.bridge} ${pick.antecedent}.${playerBit} ${tissue} ${pick.noun} se queda con ${pick.verdict}. ${pick.call}` };

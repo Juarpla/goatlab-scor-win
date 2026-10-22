@@ -74,9 +74,13 @@ const CALLS = [
 const RESERVE_TEXT = 'La muestra todavía es corta y conviene decirlo: sin serie reciente ni cruces previos, no hay antecedente que sostener. El análisis espera los datos. Cuando esa serie aparezca, la lectura va a poder afirmarse. Mientras tanto, la previa se cuenta con calma.';
 /** Guiones que pueden nombrar jugadores (solo el nombre, sin promesas). */
 const PLAYER_NS = new Set([3, 4, 7, 9]);
-/** Guiones de goles: el pronóstico lleva el marcador del cálculo. */
-const SCORE_NS = new Set([3, 9]);
 const MAX_FIGURES = 3;
+/** Faltas por encima de un partido normal que abren 1 penal, y las que abren 2. */
+const FOULS_ABOVE_FOR_ONE = 4;
+const FOULS_ABOVE_FOR_TWO = 12;
+/** Partido normal cuando la liga no trae su media de faltas. */
+const NORMAL_FOULS = 24;
+const TEAM_SOURCES = new Set(['Bzzoiro', 'AF']);
 const MIN_WORDS = 55;
 const rotationOf = id => [...String(id ?? '')].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % NOUNS.length;
 const comma = value => String(value).replace('.', ',');
@@ -145,6 +149,106 @@ function outcomeText(verdict, home, away, withScore) {
   return frag ? `la victoria de ${team} ${venue} ${frag}` : `la victoria de ${team} ${venue}`;
 }
 
+/**
+ * Enteros que pueden ocurrir en la cancha. El total es el redondeo de la
+ * suma; cada lado arranca en su parte entera y el resto va al de mayor
+ * fracción. Si empatan la fracción, al de mayor ritmo; si siguen iguales, al local.
+ */
+export function commitSplit(homeRate, awayRate) {
+  const home = finite(homeRate);
+  const away = finite(awayRate);
+  if (home == null || away == null || home < 0 || away < 0) return null;
+  const total = Math.max(0, Math.round(home + away));
+  let homeCount = Math.floor(home);
+  let awayCount = Math.floor(away);
+  let left = total - homeCount - awayCount;
+  const order = [
+    { side: 'home', frac: home - homeCount, rate: home },
+    { side: 'away', frac: away - awayCount, rate: away },
+  ];
+  while (left > 0) {
+    order.sort((a, b) => b.frac - a.frac || b.rate - a.rate || (a.side === 'home' ? -1 : 1));
+    const pick = order[0];
+    if (pick.side === 'home') homeCount += 1;
+    else awayCount += 1;
+    pick.frac = -1;
+    left -= 1;
+  }
+  return { home: homeCount, away: awayCount, total: homeCount + awayCount };
+}
+
+/**
+ * Penales que se dicen, a partir de las faltas ya enteras.
+ * No hay acta de penales. Un partido normal son dos medias de liga
+ * (o 24 faltas). Cuatro por encima: 1 penal. Doce por encima: 2.
+ */
+export function penaltyCount(homeFouls, awayFouls, leaguePerTeam = null) {
+  const total = homeFouls + awayFouls;
+  const league = finite(leaguePerTeam);
+  const normal = league != null ? Math.round(league * 2) : NORMAL_FOULS;
+  const extra = total - normal;
+  if (extra >= FOULS_ABOVE_FOR_TWO) return 2;
+  if (extra >= FOULS_ABOVE_FOR_ONE) return 1;
+  return 0;
+}
+
+function forecastSplit(probability, metric) {
+  const forecast = probability?.statsForecast;
+  const home = finite(forecast?.home?.[metric]);
+  const away = finite(forecast?.away?.[metric]);
+  if (home == null || away == null) return null;
+  const sourceOk = side => {
+    const src = forecast?.sources?.[side]?.[metric];
+    if (TEAM_SOURCES.has(src)) return true;
+    return metric === 'redCards' && src === 'regla';
+  };
+  if (!sourceOk('home') || !sourceOk('away')) return null;
+  return commitSplit(home, away);
+}
+
+function positiveCounts(entries) {
+  const out = {};
+  for (const [key, value] of Object.entries(entries)) {
+    if (Number.isFinite(value) && value > 0) out[key] = value;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+function goalSplitOf(probability, verdict) {
+  const lambdas = probability?.inputs?.lambdas ?? probability?.lambdas ?? null;
+  if (finite(lambdas?.home) != null && finite(lambdas?.away) != null) return commitSplit(lambdas.home, lambdas.away);
+  const score = verdict?.score;
+  if (score && Number.isFinite(score.home) && Number.isFinite(score.away)) {
+    return { home: score.home, away: score.away, total: score.home + score.away };
+  }
+  return null;
+}
+
+function claim(text, counts = null) {
+  return text ? { text, counts: counts ?? null } : null;
+}
+
+function goalsPhrase(split, home, away) {
+  const bit = (n, name) => n === 0 ? `sin goles de ${name}` : n === 1 ? `1 gol de ${name}` : `${n} goles de ${name}`;
+  if (split.total === 0) return 'sin goles';
+  return `${bit(split.home, home)} y ${bit(split.away, away)}`;
+}
+
+function cornerPhrase(split, home, away) {
+  if (split.total === 0) return 'sin córners';
+  const total = split.total === 1 ? '1 córner' : `${split.total} córners`;
+  if (split.home === 0) return `${total} de ${away}`;
+  if (split.away === 0) return `${total} de ${home}`;
+  const side = n => (n === 1 ? '1' : String(n));
+  return `${total}, ${side(split.home)} de ${home} y ${side(split.away)} de ${away}`;
+}
+
+function pairPhrase(split, home, away, one, many) {
+  const bit = (n, name) => n === 0 ? `sin ${many} de ${name}` : n === 1 ? `1 ${one} de ${name}` : `${n} ${many} de ${name}`;
+  if (split.total === 0) return `sin ${many}`;
+  return `${bit(split.home, home)} y ${bit(split.away, away)}`;
+}
+
 /** Un antecedente por ángulo: una frase, como máximo dos cifras. */
 function angleAntecedent(n, { home: H, away: A, homeForm, awayForm, h2h, probability }) {
   const totals = probability?.markets?.totals ?? null;
@@ -186,7 +290,7 @@ function angleAntecedent(n, { home: H, away: A, homeForm, awayForm, h2h, probabi
       return best ? `${best[0]} dejó el arco en cero en ${best[1]} de ${best[2]}` : 'sin arcos en cero en la serie reciente';
     }
     case 5:
-      return formClause(awayForm, A) ?? 'la visita llega sin serie reciente';
+      return 'el balón quieto marca el pulso del partido';
     case 6: {
       const last = h2h?.last;
       if (last && Number.isFinite(last.homeScore) && Number.isFinite(last.awayScore)) {
@@ -198,6 +302,7 @@ function angleAntecedent(n, { home: H, away: A, homeForm, awayForm, h2h, probabi
         if (Math.min(hs, as) === 0) return `${winner} goleó el último por ${max}`;
         return `${winner} ganó el último por ${hs} a ${as}`;
       }
+      if (forecastSplit(probability, 'yellowCards')) return 'la amarilla entra en la cuenta de los dos';
       return 'no hay último cruce que pese';
     }
     case 7: {
@@ -224,41 +329,136 @@ function angleAntecedent(n, { home: H, away: A, homeForm, awayForm, h2h, probabi
       return 'marcar no alcanzó para ganar últimamente';
     }
     default: {
+      if (forecastSplit(probability, 'fouls')) return 'el contacto va a mandar en el medio';
       if (homeForm && awayForm) return `los dos traen ${Math.max(homeForm.n, awayForm.n)} partidos recientes`;
       return 'la serie reciente está por escribirse';
     }
   }
 }
 
-/** Matiz del ángulo sobre el veredicto, solo con respaldo en los datos. */
-function angleQualifier(n, { homeForm, awayForm, probability }, verdict) {
-  if (n === 4) {
-    const hc = homeForm?.clean ?? 0, ac = awayForm?.clean ?? 0;
-    if (hc === 0 && ac === 0) return '';
-    const cleanSide = hc >= ac ? 'home' : 'away';
-    return verdict.side === cleanSide ? ', con el arco en cero como candado' : '';
+function openingCall(probability, home, away, antecedentFigures) {
+  const race = probability?.firstGoal;
+  const fh = finite(race?.firstHome);
+  const fa = finite(race?.firstAway);
+  if (fh == null || fa == null || fh === fa) return null;
+  const team = fh > fa ? home : away;
+  const bands = Array.isArray(race.bands) ? race.bands : [];
+  const top = bands.reduce((best, band) => (finite(band?.p) != null && band.p > (finite(best?.p) ?? -1) ? band : best), null);
+  const noGoal = finite(race.noGoal) ?? 0;
+  if (top && finite(top.p) != null && top.p < noGoal) return claim('el partido se queda sin gol');
+  let when = 'en el partido';
+  let counts = null;
+  if (top) {
+    if (top.from === 0 && top.to === 15 && antecedentFigures < 3) {
+      when = 'antes de los 15 minutos';
+      counts = { minute: 15 };
+    } else if (Number(top.to) <= 45) when = 'en el primer tiempo';
+    else when = 'en el segundo tiempo';
   }
-  if (n === 7) {
-    const early = finite(probability?.firstGoal?.bands?.[0]?.p);
-    return early != null && early >= 0.3 ? ', con el primer gol cayendo temprano' : '';
+  return claim(`el primer gol de ${team} ${when}`, counts);
+}
+
+function disciplineCall(probability, home, away) {
+  const fouls = forecastSplit(probability, 'fouls');
+  if (!fouls) return null;
+  const reds = forecastSplit(probability, 'redCards');
+  const penalties = penaltyCount(fouls.home, fouls.away, probability?.statsForecast?.league?.fouls);
+  const pen = penalties <= 0 ? 'sin penal' : penalties === 1 ? '1 penal' : `${penalties} penales`;
+  let red = 'sin tarjeta roja';
+  if (reds && reds.total > 0) {
+    if (reds.home > 0 && reds.away === 0) red = reds.home === 1 ? `1 tarjeta roja de ${home}` : `${reds.home} tarjetas rojas de ${home}`;
+    else if (reds.away > 0 && reds.home === 0) red = reds.away === 1 ? `1 tarjeta roja de ${away}` : `${reds.away} tarjetas rojas de ${away}`;
+    else red = pairPhrase(reds, home, away, 'tarjeta roja', 'tarjetas rojas');
   }
-  if (n === 8) {
-    const draw = finite(probability?.markets?.oneX2?.draw);
-    return draw != null && draw >= 0.3 && verdict.side !== 'draw' ? ', pero el empate asoma' : '';
+  const foulsLine = pairPhrase(fouls, home, away, 'falta', 'faltas');
+  let text = `${foulsLine}, ${pen} y ${red}`;
+  if (numbersInText(text).length > MAX_FIGURES && reds?.total > 0) {
+    const name = (reds.home ?? 0) >= (reds.away ?? 0) ? home : away;
+    red = `con expulsión de ${name}`;
+    text = `${foulsLine}, ${pen} y ${red}`;
   }
-  if (n === 10) {
-    const xg = probability?.provider?.xg;
-    const sum = finite(xg?.home) != null && finite(xg?.away) != null ? finite(xg.home) + finite(xg.away) : null;
-    if (sum == null) return '';
-    return sum >= 2.8 ? ', con arranque abierto' : ', con arranque trabado';
+  if (numbersInText(text).length > MAX_FIGURES && penalties > 0) {
+    text = `${foulsLine}, con penal y ${red}`;
   }
-  return '';
+  return claim(text, positiveCounts({
+    foulsHome: fouls.home,
+    foulsAway: fouls.away,
+    penalties,
+    redsHome: reds?.home ?? 0,
+    redsAway: reds?.away ?? 0,
+  }));
+}
+
+/** El pronóstico de cada fila: una afirmación, con enteros cuando el ángulo los tiene. */
+function angleVerdict(n, ctx) {
+  const { home, away, homeForm, awayForm, h2h, probability, verdict } = ctx;
+  switch (n) {
+    case 1:
+      return verdict ? claim(outcomeText(verdict, home, away, false)) : null;
+    case 2: {
+      if (h2h?.total > 0) {
+        if (h2h.homeWins === h2h.awayWins) return claim('un cara a cara parejo');
+        return claim(`el peso del cara a cara de ${h2h.homeWins > h2h.awayWins ? home : away}`);
+      }
+      const shots = forecastSplit(probability, 'shots');
+      if (shots) return claim(pairPhrase(shots, home, away, 'tiro', 'tiros'), positiveCounts({ shotsHome: shots.home, shotsAway: shots.away }));
+      const goals = goalSplitOf(probability, verdict);
+      if (!goals) return null;
+      if (goals.total === 0) return claim('sin goles');
+      if (goals.total === 1) return claim('1 gol', { goals: 1 });
+      return claim(`${goals.total} goles`, { goals: goals.total });
+    }
+    case 3: {
+      const goals = goalSplitOf(probability, verdict);
+      return goals ? claim(goalsPhrase(goals, home, away), positiveCounts({ goalsHome: goals.home, goalsAway: goals.away })) : null;
+    }
+    case 4: {
+      if (!homeForm && !awayForm) return null;
+      const hc = homeForm?.clean ?? 0;
+      const ac = awayForm?.clean ?? 0;
+      if (hc === 0 && ac === 0) return claim('que el arco no se cierre');
+      if (hc === ac) return claim('el arco en cero empatado');
+      return claim(`el arco en cero de ${hc > ac ? home : away}`);
+    }
+    case 5: {
+      const corners = forecastSplit(probability, 'corners');
+      if (!corners) return null;
+      return claim(cornerPhrase(corners, home, away), positiveCounts({
+        corners: corners.total, cornersHome: corners.home, cornersAway: corners.away,
+      }));
+    }
+    case 6: {
+      const last = h2h?.last;
+      if (last && Number.isFinite(last.homeScore) && Number.isFinite(last.awayScore)) {
+        if (last.homeScore === last.awayScore) return claim('que el último cruce se repita en el empate');
+        const winner = last.homeScore > last.awayScore ? last.home : last.away;
+        return claim(`que ${winner} repita el último golpe`);
+      }
+      const yellows = forecastSplit(probability, 'yellowCards');
+      return yellows ? claim(pairPhrase(yellows, home, away, 'amarilla', 'amarillas'), positiveCounts({ yellowsHome: yellows.home, yellowsAway: yellows.away })) : null;
+    }
+    case 7:
+      return openingCall(probability, home, away, numbersInText(angleAntecedent(7, ctx)).length);
+    case 8: {
+      const yes = finite(probability?.markets?.btts?.yes);
+      if (yes != null) return claim(yes >= 0.5 ? 'que marquen los dos' : 'que uno se quede sin marcar');
+      if (!homeForm && !awayForm && !h2h) return null;
+      const draws = (homeForm?.draws ?? 0) + (awayForm?.draws ?? 0) + (h2h?.draws ?? 0);
+      return claim(draws > 0 ? 'que el empate vuelva' : 'que el empate no entre');
+    }
+    case 9:
+      return verdict ? claim(outcomeText(verdict, home, away, true)) : null;
+    case 10:
+      return disciplineCall(probability, home, away);
+    default:
+      return null;
+  }
 }
 
 /**
- * Las diez piezas asignadas (una por guion) o diez nulos cuando no hay
- * veredicto: sin forma, sin historial y sin probabilidades no hay pronóstico
- * y el skill usa sus temas de reserva.
+ * Las diez piezas asignadas, una afirmación por guion. Si el ángulo no tiene
+ * con qué comprometerse, esa pieza queda en null y el skill usa la reserva.
+ * Los enteros del pronóstico viajan en `counts` para que el lint los acepte.
  */
 export function buildPicks(match, scorers = null, probability = null) {
   const base = baseFacts(match, scorers);
@@ -266,23 +466,25 @@ export function buildPicks(match, scorers = null, probability = null) {
   const offset = rotationOf(match?.webId ?? match?.id);
   return Array.from({ length: 10 }, (_, i) => {
     const n = i + 1;
-    if (!verdict) return null;
     const ctx = { ...base, probability, verdict };
     const antecedent = angleAntecedent(n, ctx);
-    if (!antecedent) return null;
+    const spoken = angleVerdict(n, ctx);
+    if (!antecedent || !spoken?.text) return null;
     const bridgeSlot = (offset + n - 1) % (BRIDGES.length + 1);
     const bridge = bridgeSlot < BRIDGES.length
       ? BRIDGES[bridgeSlot]
       : (/\d/.test(antecedent) ? BRIDGE_NUMBER : BRIDGE_WORDS);
-    return {
+    const pick = {
       n,
       bridge,
       noun: NOUNS[(offset + n) % NOUNS.length],
       antecedent: cap(antecedent),
-      verdict: outcomeText(verdict, base.home, base.away, SCORE_NS.has(n)) + angleQualifier(n, ctx, verdict),
+      verdict: spoken.text,
       player: PLAYER_NS.has(n) ? (playerNames(base)[0] ?? null) : null,
       call: CALLS[i],
     };
+    if (spoken.counts) pick.counts = spoken.counts;
+    return pick;
   });
 }
 
@@ -587,12 +789,12 @@ function clickLine(n, { home, away, names }) {
     `${vs}: el historial que no te cuentan`,
     pair ? `${pair}: ¿quién marca en ${vs}?` : `${vs}: ¿se abre el marcador?`,
     pair ? `${pair}: ¿aguanta el arco en ${vs}?` : `¿Quién cierra el arco en ${vs}?`,
-    `${away} llega a ${home}: ¿alcanza la visita?`,
+    `${vs}: ¿cuántos córners caen?`,
     `${vs}: ¿se repite el último golpe?`,
     pair ? `${pair} ${who.length > 1 ? 'pueden' : 'puede'} decidir ${vs}` : `${vs}: el primer gol lo cambia`,
     `${vs}: cuidado, puede terminar en empate`,
     pair ? `${pair} en ${vs}` : `${vs}: marcar no es ganar`,
-    `${vs}: lo único que importa al pitazo`,
+    `${vs}: faltas, penal y roja`,
   ];
   return lines[(Math.max(1, Number(n) || 1) - 1) % lines.length];
 }
