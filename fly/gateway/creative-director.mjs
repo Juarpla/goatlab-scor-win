@@ -10,6 +10,35 @@ const save = (path, value) => { writeFileSync(`${path}.tmp`, JSON.stringify(valu
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const jsonFile = path => existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
 
+/** Models sometimes write the composition with literal line breaks inside JSON strings. */
+const escapeControlsInStrings = text => {
+  let out = '', inString = false, escape = false;
+  for (const char of text) {
+    if (inString) {
+      if (escape) { out += char; escape = false; continue; }
+      if (char === '\\') { out += char; escape = true; continue; }
+      if (char === '"') { out += char; inString = false; continue; }
+      if (char === '\n') { out += '\\n'; continue; }
+      if (char === '\r') { out += '\\r'; continue; }
+      if (char === '\t') { out += '\\t'; continue; }
+      if (char < ' ') continue;
+      out += char;
+      continue;
+    }
+    if (char === '"') inString = true;
+    out += char;
+  }
+  return out;
+};
+
+const parseJsonValue = text => {
+  try { return JSON.parse(text); }
+  catch {
+    try { return JSON.parse(escapeControlsInStrings(text)); }
+    catch { return undefined; }
+  }
+};
+
 const matchingBrace = (text, start) => {
   let depth = 0, inString = false, escape = false;
   for (let i = start; i < text.length; i++) {
@@ -39,10 +68,8 @@ export function jsonObjectsFromText(text) {
     if (start < 0) break;
     const end = matchingBrace(text, start);
     if (end < 0) break;
-    try {
-      const value = JSON.parse(text.slice(start, end + 1));
-      if (value && typeof value === 'object' && !Array.isArray(value)) objects.push(value);
-    } catch { /* the next brace may still be the decision */ }
+    const value = parseJsonValue(text.slice(start, end + 1));
+    if (value && typeof value === 'object' && !Array.isArray(value)) objects.push(value);
     i = end + 1;
   }
   return objects;
@@ -134,8 +161,10 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
       const runPath = path + '.run';
       let run;
       const readDecision = () => {
-        try { return jsonFile(path); }
-        catch (error) { if (error instanceof SyntaxError) return null; throw error; }
+        if (!existsSync(path)) return null;
+        const value = parseJsonValue(readFileSync(path, 'utf8'));
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+        return value;
       };
       try {
         await assertCurrent();

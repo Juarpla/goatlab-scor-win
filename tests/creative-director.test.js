@@ -301,6 +301,20 @@ test('a plan already in the transcript is kept when the turn outlasts the budget
   assert.equal(result.requestedModel, 'primary');
 });
 
+test('a composition file with raw line breaks inside the JSON string still counts', async t => {
+  const decide = nativeDecision({ env: { OPENCODE_GO_MODEL: 'primary', OPENCODE_GO_FALLBACK_MODEL: 'backup' }, call: async (method, params) => {
+    if (method !== 'agent') throw new Error(method);
+    const path = params.message.match(/archivo (.+?), mediante/)[1];
+    writeFileSync(path, '{"notes":"con salto","plan":{"version":5,"code":"line1\nline2"}}');
+    return { runId: 'raw-newline' };
+  }});
+  const result = await decide({ directory: directory(t), key: 'raw', message: 'Planifica', sessionKey: 'agent:director:raw', validate: value => {
+    if (!value.plan?.code?.includes('line1')) throw new Error('plan incompleto');
+  }});
+  assert.equal(result.plan.code, 'line1\nline2');
+  assert.equal(result.requestedModel, 'primary');
+});
+
 test('design memory keeps liked and rejected concepts apart and merges a later concept', t => {
   const root = directory(t);
   remember(root, '7', { requestId: 'a'.repeat(32), rating: -1, reason: 'texto cortado', concept: null });
