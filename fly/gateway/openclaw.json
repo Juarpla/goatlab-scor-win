@@ -52,11 +52,11 @@
       {
         id: "director",
         workspace: "/home/node/.openclaw/workspace",
-        // Authoring only answers with the composition. Shell and file tools
-        // spend the whole reasoning budget exploring the disk.
+        // Write is available. Search and shell tools made the model hunt for
+        // a way to save the file until the reasoning budget ran out.
         tools: {
-          profile: "minimal",
-          deny: ["browser", "exec", "process", "read", "write", "edit", "ls", "apply_patch", "web_search", "web_fetch", "code_execution"],
+          profile: "coding",
+          deny: ["browser", "exec", "process", "read", "edit", "ls", "apply_patch", "web_search", "web_fetch", "code_execution", "tool_search"],
         },
       },
     ],

@@ -183,7 +183,7 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
               try {
                 accepted = await call('agent', { sessionKey, provider: 'opencode-go', model, deliver: false, disableMessageTool: true,
               idempotencyKey: run.id, timeout: seconds, thinking,
-              message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura, y repite ese mismo JSON completo en la respuesta final. No cambies otros archivos. No ejecutes comandos ni leas el disco: las guías ya vienen en el mensaje. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos. La respuesta final es ese JSON; no la sustituyas por un acuse.`,
+              message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura, y repite ese mismo JSON completo en la respuesta final. No cambies otros archivos. La herramienta de escritura ya está disponible: no busques herramientas, no ejecutes comandos y no leas el disco. Las guías ya vienen en el mensaje. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos. La respuesta final es ese JSON; no la sustituyas por un acuse.`,
               attachments: images.map(image => ({ type: 'image', mimeType: 'image/jpeg', fileName: image.name, content: image.bytes.toString('base64') })),
                 }, { timeoutMs: 30_000 });
               } catch (error) {
