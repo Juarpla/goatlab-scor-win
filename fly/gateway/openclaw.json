@@ -36,7 +36,9 @@
     profiles: { openclaw: { cdpPort: 18800 } },
   },
   plugins: { entries: { browser: { enabled: true } } },
-  tools: { alsoAllow: ["browser"] },
+  // Direct tool schemas. Tool Search hid write behind tool_search, and the
+  // director spent the whole reasoning budget hunting for a file tool.
+  tools: { alsoAllow: ["browser"], toolSearch: false },
   agents: {
     defaults: {
       workspace: "/home/node/.openclaw/workspace",
