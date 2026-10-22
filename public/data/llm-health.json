@@ -1,41 +1,6 @@
 {
-  "updatedAt": "2026-10-22T12:03:41.378Z",
+  "updatedAt": "2026-10-22T12:17:30.217Z",
   "runs": [
-    {
-      "at": "2026-10-16T11:20:04.485Z",
-      "matchId": "bz-601238",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1306,
-        "outputTokens": 5952
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9f888665-be03-465c-b89c-ed29036fdec1"
-    },
-    {
-      "at": "2026-10-16T11:20:04.485Z",
-      "matchId": "bz-601228",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9f888665-be03-465c-b89c-ed29036fdec1"
-    },
     {
       "at": "2026-10-16T11:21:08.532Z",
       "matchId": "bz-601224",
@@ -6807,6 +6772,157 @@
       "usage": {
         "inputTokens": 6307,
         "outputTokens": 4238
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-22T12:11:29.064Z",
+      "task": "shorts",
+      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6319,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 72204
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6438,
+        "outputTokens": 4208
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "f7539138-f005-4bf4-a65f-437c2ad9f307"
+    },
+    {
+      "at": "2026-10-22T12:17:30.214Z",
+      "task": "shorts",
+      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6459,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 74508
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6554,
+            "outputTokens": 9539
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 38882
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 8 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 2: 5 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 3: falta OFI Crete; guion 3: falta el sustantivo asignado",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6764,
+            "outputTokens": 1278
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11538
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6452,
+            "outputTokens": 5285
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 170438
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6459,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 147508
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 7 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6554,
+            "outputTokens": 6488
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 49117
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 3: falta OFI Crete; guion 3: falta el sustantivo asignado; guion 4: 6 cifras, máximo 3; guion 4: falta el sustantivo asignado",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6764,
+            "outputTokens": 1158
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11631
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 500",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 152892
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6764,
+        "outputTokens": 1158
       },
       "truncated": true,
       "maxTokens": 12000,
