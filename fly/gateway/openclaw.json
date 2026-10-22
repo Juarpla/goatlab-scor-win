@@ -71,9 +71,9 @@
         apiKey: "${OPENCODE_GO_API_KEY}",
         api: "openai-completions",
         models: [
-          { id: "${OPENCODE_GO_MODEL}", name: "${OPENCODE_GO_MODEL}", input: ["text", "image"], reasoning: true, maxTokens: 32768,
+          { id: "${OPENCODE_GO_MODEL}", name: "${OPENCODE_GO_MODEL}", input: ["text", "image"], reasoning: true, maxTokens: 131072,
             compat: { supportsReasoningEffort: true, supportedReasoningEfforts: ["low", "high", "max"], reasoningEffortMap: { off: "low", low: "low", high: "high", max: "max" } } },
-          { id: "${OPENCODE_GO_FALLBACK_MODEL}", name: "${OPENCODE_GO_FALLBACK_MODEL}", input: ["text", "image"], reasoning: true, maxTokens: 32768,
+          { id: "${OPENCODE_GO_FALLBACK_MODEL}", name: "${OPENCODE_GO_FALLBACK_MODEL}", input: ["text", "image"], reasoning: true, maxTokens: 131072,
             compat: { supportsReasoningEffort: true, supportedReasoningEfforts: ["low", "high", "max"], reasoningEffortMap: { off: "low", low: "low", high: "high", max: "max" } } },
         ],
       },

@@ -153,7 +153,9 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
     const models = [...new Set([env.OPENCODE_GO_MODEL || 'deepseek-v4.1-flash', env.OPENCODE_GO_FALLBACK_MODEL || 'glm-5.3-flash'])];
     if (preferFallback) models.reverse();
     const errors = [];
-    const seconds = purpose === 'review' ? 60 : 240;
+    // Max reasoning shares this budget with the composition. 32k tokens ended
+    // inside the trace, before the model could write the plan.
+    const seconds = purpose === 'review' ? 60 : 900;
     const thinking = 'max';
     const instanceId = env.GOATLAB_GATEWAY_INSTANCE || 'local';
     for (const model of models) {
