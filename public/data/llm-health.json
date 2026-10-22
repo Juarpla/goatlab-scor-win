@@ -1,240 +1,6 @@
 {
-  "updatedAt": "2026-10-21T22:22:03.554Z",
+  "updatedAt": "2026-10-22T05:27:31.085Z",
   "runs": [
-    {
-      "at": "2026-10-15T22:12:16.665Z",
-      "task": "motion-prompts",
-      "matchId": "brentford-vs-liverpool-2026-10-17",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: porcentajes no publicados; motion-prompts 3: porcentajes no publicados",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2510,
-            "outputTokens": 4043
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 140631
-        }
-      ],
-      "usage": {
-        "inputTokens": 2519,
-        "outputTokens": 11135
-      }
-    },
-    {
-      "at": "2026-10-16T04:46:13.455Z",
-      "task": "shorts",
-      "matchId": "fulham-vs-hull-city-2026-10-17",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180004
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6825,
-        "outputTokens": 10271
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "a1268de8-1df4-4daa-87b3-86f6cbd2b3b9"
-    },
-    {
-      "at": "2026-10-16T04:46:36.059Z",
-      "task": "image-prompts",
-      "matchId": "fulham-vs-hull-city-2026-10-17",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1788,
-        "outputTokens": 892
-      }
-    },
-    {
-      "at": "2026-10-16T04:46:47.224Z",
-      "task": "video-prompts",
-      "matchId": "fulham-vs-hull-city-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1684,
-        "outputTokens": 407
-      }
-    },
-    {
-      "at": "2026-10-16T04:52:49.382Z",
-      "task": "motion-prompts",
-      "matchId": "espanyol-vs-atletico-madrid-2026-10-17",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 3: porcentajes no publicados",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2137,
-            "outputTokens": 6585
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 117348
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 5: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2114,
-            "outputTokens": 6351
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 42634
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2157,
-            "outputTokens": 3327
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 49684
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2037,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 152430
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-16T04:54:55.484Z",
-      "task": "motion-prompts",
-      "matchId": "fulham-vs-hull-city-2026-10-17",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 5: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2462,
-            "outputTokens": 4612
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 74797
-        }
-      ],
-      "usage": {
-        "inputTokens": 2466,
-        "outputTokens": 9187
-      }
-    },
-    {
-      "at": "2026-10-16T11:17:04.083Z",
-      "matchId": "bz-604437",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1851,
-        "outputTokens": 13019
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9cf8d2cf-2433-4998-ba83-e05cbfb6d134"
-    },
-    {
-      "at": "2026-10-16T11:17:04.083Z",
-      "matchId": "fd-576424",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "9cf8d2cf-2433-4998-ba83-e05cbfb6d134"
-    },
-    {
-      "at": "2026-10-16T11:18:13.611Z",
-      "matchId": "bz-601297",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1250,
-        "outputTokens": 10632
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "21fa1f57-4d1a-45b2-86f5-6ab01115d9bc"
-    },
     {
       "at": "2026-10-16T11:18:13.611Z",
       "matchId": "bz-601296",
@@ -6461,6 +6227,390 @@
       "usage": {
         "inputTokens": 2234,
         "outputTokens": 9939
+      }
+    },
+    {
+      "at": "2026-10-22T05:13:12.766Z",
+      "task": "shorts",
+      "matchId": "juventus-vs-stade-rennais-2026-10-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6416,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 69413
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 6546,
+        "outputTokens": 6483
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "632b9acc-4b6d-49cc-b7dc-41bcb311dce3"
+    },
+    {
+      "at": "2026-10-22T05:16:13.269Z",
+      "task": "shorts",
+      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6459,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 72982
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6554,
+            "outputTokens": 5853
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 41121
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 4: 10 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 8 cifras, máximo 3; guion 5: el gancho no lleva cifras; guion 6: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6763,
+            "outputTokens": 1255
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13287
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6452,
+            "outputTokens": 4929
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 82806
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6459,
+            "outputTokens": 3648
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 98238
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6554,
+            "outputTokens": 5081
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 31701
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 10 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 2: 54 palabras, mínimo 55; guion 2: el gancho no lleva cifras; guion 3: falta OFI Crete; guion 3: falta el sustantivo asignado",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6763,
+            "outputTokens": 1228
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10351
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 500",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 40210
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6763,
+        "outputTokens": 1228
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-22T05:22:10.637Z",
+      "task": "shorts",
+      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6314,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 117126
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6433,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 68838
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 8 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta Sunderland; guion 2: 54 palabras, mínimo 55; guion 3: falta Sunderland; guion 3: falta el pronóstico asignado; guion 4: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6599,
+            "outputTokens": 1099
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8495
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6314,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 78681
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 6433,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 82843
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta Sunderland; guion 2: 53 palabras, mínimo 55; guion 3: falta Sunderland; guion 4: 8 cifras, máximo 3; guion 4: falta el llamada asignado; guion 4: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6599,
+            "outputTokens": 1070
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15842
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6599,
+        "outputTokens": 1070
+      },
+      "truncated": true,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-22T05:22:49.164Z",
+      "task": "image-prompts",
+      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1448,
+        "outputTokens": 5653
+      }
+    },
+    {
+      "at": "2026-10-22T05:23:19.886Z",
+      "task": "image-prompts",
+      "matchId": "juventus-vs-stade-rennais-2026-10-22",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1480,
+        "outputTokens": 6080
+      }
+    },
+    {
+      "at": "2026-10-22T05:23:49.051Z",
+      "task": "video-prompts",
+      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "Se requieren 2 prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1345,
+            "outputTokens": 363
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 20040
+        }
+      ],
+      "usage": {
+        "inputTokens": 1401,
+        "outputTokens": 963
+      }
+    },
+    {
+      "at": "2026-10-22T05:23:58.291Z",
+      "task": "video-prompts",
+      "matchId": "juventus-vs-stade-rennais-2026-10-22",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1377,
+        "outputTokens": 1539
+      }
+    },
+    {
+      "at": "2026-10-22T05:26:23.719Z",
+      "task": "motion-prompts",
+      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2087,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 78948
+        }
+      ],
+      "usage": {
+        "inputTokens": 2164,
+        "outputTokens": 11098
+      }
+    },
+    {
+      "at": "2026-10-22T05:27:31.085Z",
+      "task": "motion-prompts",
+      "matchId": "juventus-vs-stade-rennais-2026-10-22",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2125,
+        "outputTokens": 11518
       }
     }
   ]
