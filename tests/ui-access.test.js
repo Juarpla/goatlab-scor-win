@@ -71,6 +71,15 @@ test('restart, origin checks, route escapes and failed welcome retries remain cl
   assert.equal(f.forwarded.length,0);
   await f.control('/start',{chat:'1',event:3});assert.equal(f.resets.length,2); // Telegram may randomize update ids after a week without events
 });
+test('a same-origin form can sign in when the browser sends Origin null',async t=>{
+  const f=await fixture(t);
+  await f.control('/start',{chat:'1',event:1});
+  const code=f.welcomes[0][2];
+  const post=(headers)=>fetch(f.base+'/access',{method:'POST',redirect:'manual',headers:{'x-goatlab-client-ip':'203.0.113.21','content-type':'application/x-www-form-urlencoded',...headers},body:new URLSearchParams({code})});
+  assert.equal((await post({'sec-fetch-site':'same-origin',origin:'null'})).status,303);
+  assert.equal((await post({origin:'https://attacker.test','sec-fetch-site':'cross-site'})).status,403);
+  assert.equal((await post({'sec-fetch-site':'cross-site'})).status,403);
+});
 test('only user RPC actions count as activity, including split and fragmented frames',()=>{
   const seen=[];const observe=activityFrames(()=>seen.push(true));
   const frame=(text,opcode=1,fin=true)=> {

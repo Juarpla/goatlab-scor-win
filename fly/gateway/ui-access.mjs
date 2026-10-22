@@ -84,6 +84,13 @@ export function createUiAccess({ origin, owner, controlSecret, upstream = 'http:
       'x-forwarded-user': `telegram:${owner}`, 'x-openclaw-scopes': SCOPES };
   }
   function validOrigin(req) { return req.headers.origin === expected.origin; }
+  // The access page sends Referrer-Policy: no-referrer, so a normal form POST
+  // arrives with Origin "null" or absent. Sec-Fetch-Site still marks it same-origin.
+  function loginOrigin(req) {
+    if (validOrigin(req)) return true;
+    const origin = req.headers.origin;
+    return req.headers['sec-fetch-site'] === 'same-origin' && (origin === undefined || origin === 'null');
+  }
   function targetUrl(req) {
     const target = new URL(req.url, upstream);
     if (!req.url.startsWith('/') || target.origin !== new URL(upstream).origin) throw new Error('target');
@@ -113,10 +120,10 @@ export function createUiAccess({ origin, owner, controlSecret, upstream = 'http:
       if (req.url === '/access' && req.method === 'GET') {
         res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store',
           'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'", 'referrer-policy': 'no-referrer' });
-        return res.end('<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>OpenClaw</title><style>body{font:18px system-ui;max-width:32rem;margin:12vh auto;padding:1.5rem;background:#10151c;color:#f3f5f7}input,button{font:inherit;padding:.7rem;box-sizing:border-box;width:100%;margin:.6rem 0}button{cursor:pointer}label{display:block}</style><h1>OpenClaw</h1><p>Envía /start por Telegram y pega aquí el código que recibas.</p><form action="/access" method="post"><label>Código de acceso<input name="code" type="password" required autocomplete="off" maxlength="64"></label><button>Entrar</button></form></html>');
+        return res.end('<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>OpenClaw</title><style>body{font:18px system-ui;max-width:32rem;margin:12vh auto;padding:1.5rem;background:#10151c;color:#f3f5f7}input,button{font:inherit;padding:.7rem;box-sizing:border-box;width:100%;margin:.6rem 0}button{cursor:pointer}label{display:block}</style><h1>OpenClaw</h1><p>Envía /start por Telegram y pega aquí el código que recibas.</p><form action="/access" method="post" referrerpolicy="strict-origin"><label>Código de acceso<input name="code" type="password" required autocomplete="off" maxlength="64"></label><button>Entrar</button></form></html>');
       }
       if (req.url === '/access' && req.method === 'POST') {
-        if (!validOrigin(req) || req.headers['content-type']?.split(';')[0] !== 'application/x-www-form-urlencoded') return reply(res, 403, { error: 'origin' });
+        if (!loginOrigin(req) || req.headers['content-type']?.split(';')[0] !== 'application/x-www-form-urlencoded') return reply(res, 403, { error: 'origin' });
         const ip = clientIp(req), time = now();
         for (const [key, value] of attempts) if (time - value.at > 60_000) attempts.delete(key);
         const count = attempts.get(ip) ?? { at: time, count: 0 };

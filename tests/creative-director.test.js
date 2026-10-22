@@ -195,7 +195,7 @@ test('stage budgets send max for authoring and review, aborting a timed-out prim
     const path=params.message.match(/archivo (.+?), mediante/)[1];writeFileSync(path,JSON.stringify({notes:'Backup terminado'}));return {runId:'backup'};
   }});
   await decide({directory:directory(t),key:'authoring',message:'Crea',sessionKey:'agent:main:author'});
-  const primary=calls.find(c=>c.method==='agent');assert.equal(primary.thinking,'max');assert.equal(primary.timeout,900);
+  const primary=calls.find(c=>c.method==='agent');assert.equal(primary.thinking,'max');assert.equal(primary.timeout,1800);
   assert.ok(calls.findIndex(c=>c.method==='chat.abort')<calls.findIndex(c=>c.model==='backup'));
   calls.length=0;clock=0;
   await decide({directory:directory(t),key:'review',message:'Revisa',purpose:'review',sessionKey:'agent:main:review'});

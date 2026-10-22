@@ -155,7 +155,7 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
     const errors = [];
     // Max reasoning shares this budget with the composition. 32k tokens ended
     // inside the trace, before the model could write the plan.
-    const seconds = purpose === 'review' ? 60 : 900;
+    const seconds = purpose === 'review' ? 60 : 1800;
     const thinking = 'max';
     const instanceId = env.GOATLAB_GATEWAY_INSTANCE || 'local';
     for (const model of models) {
@@ -187,9 +187,9 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
               idempotencyKey: run.id, timeout: seconds, thinking,
               message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura, y repite ese mismo JSON completo en la respuesta final. No cambies otros archivos. La herramienta de escritura ya está disponible: no busques herramientas, no ejecutes comandos y no leas el disco. Las guías ya vienen en el mensaje. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos. La respuesta final es ese JSON; no la sustituyas por un acuse.`,
               attachments: images.map(image => ({ type: 'image', mimeType: 'image/jpeg', fileName: image.name, content: image.bytes.toString('base64') })),
-                }, { timeoutMs: 30_000 });
+                }, { timeoutMs: 120_000 });
               } catch (error) {
-                if (!/native idle RPC (timeout|unavailable|closed)/.test(error.message) || admissionTries >= 2 || now() >= run.createdAt + 30_000) throw error;
+                if (!/native idle RPC (timeout|unavailable|closed)/.test(error.message) || admissionTries >= 2 || now() >= run.createdAt + 240_000) throw error;
                 run.lastRpcError = error.message.slice(0, 200); save(runPath, run);
                 await wait(1_000);
               }
