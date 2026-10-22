@@ -207,3 +207,48 @@ export function rankMatches(matches) {
 export function heroMatch(matches) {
   return rankMatches(matches)[0] ?? null;
 }
+
+function listedIndex(name, list, exact) {
+  if (exact < list.length) return exact;
+  const fuzzy = list.findIndex(team => sameClub(name, team));
+  return fuzzy === -1 ? list.length : fuzzy;
+}
+
+function shiftDay(day, amount) {
+  const [year, month, date] = day.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, date + amount)).toISOString().slice(0, 10);
+}
+
+/**
+ * Orden del top de guiones y media. Un club de la lista que juega hoy o
+ * mañana, en hora de Lima, va primero aunque el fixture firme «FC» o «CF».
+ * Si en esos dos días no hay ninguno, el cupo pasa a las selecciones. El
+ * resto entra por saque inicial. Más allá de mañana, la lista no salta la cola.
+ * Devuelve los partidos ya ordenados y cuántos ocupan ese cupo reservado.
+ */
+export function contentRanking(matches, now = Date.now()) {
+  const upcoming = (matches ?? []).filter(match => match && !FINISHED.has(match.status));
+  if (!upcoming.length) return { ranked: [], priorityCount: 0 };
+  const today = matchDay(new Date(now).toISOString());
+  const tomorrow = shiftDay(today, 1);
+  const clubIndex = name => listedIndex(name, PRIORITY_TEAMS, priorityIndex(name));
+  const nationIndex = name => listedIndex(name, NATIONS_PRIORITY, nationsPriorityIndex(name));
+  const inWindow = match => {
+    const day = matchDay(match.kickoff);
+    return day === today || day === tomorrow;
+  };
+  const window = upcoming.filter(inWindow);
+  const useClubs = window.some(match => clubIndex(match.home) < PRIORITY_TEAMS.length || clubIndex(match.away) < PRIORITY_TEAMS.length);
+  const index = useClubs ? clubIndex : nationIndex;
+  const list = useClubs ? PRIORITY_TEAMS : NATIONS_PRIORITY;
+  const reserved = match => inWindow(match) && (index(match.home) < list.length || index(match.away) < list.length);
+  const score = match => {
+    const home = index(match.home);
+    const away = index(match.away);
+    const both = home < list.length && away < list.length ? 10 : 0;
+    return (list.length - Math.min(home, away)) * 100 + both - Date.parse(match.kickoff) / 1e11;
+  };
+  const priority = upcoming.filter(reserved).sort((a, b) => score(b) - score(a));
+  const rest = upcoming.filter(match => !reserved(match)).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+  return { ranked: [...priority, ...rest], priorityCount: priority.length };
+}

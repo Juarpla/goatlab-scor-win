@@ -1,8 +1,9 @@
 import { buildPruneContext, resolvePruneMatch, pruneDue } from './pruning.js';
 
-/** Top-5 por relevancia como dato compartido: se calcula en 1-update-data y
- *  todos los consumidores (guiones, prompts, banco de medios) leen el mismo.
- *  `extra` protege peticiones manuales (--match o top ampliado) de la poda. */
+/** Top de guiones, prompts y banco como dato compartido: se calcula en
+ *  1-update-data y todos leen el mismo. `priority` es el piso de clubes o
+ *  selecciones que juegan hoy o mañana. `extra` protege peticiones manuales
+ *  (--match o top ampliado) de la poda. */
 export const TOP_FILENAME = 'top.json';
 export const TOP_VERSION = 1;
 
@@ -40,9 +41,18 @@ export function rankingIds(top) {
   return (top?.ranking ?? []).map(r => r?.id).filter(Boolean);
 }
 
-/** Conjunto efectivo: ranking.slice(0, n) ∪ extra, sin duplicados. */
+/** El piso `priority` no se recorta cuando hoy y mañana traen más partidos de la lista que el corte pedido. */
+export function selectionCount(top, n) {
+  const requested = Number(n);
+  const ask = Number.isFinite(requested) && requested > 0 ? Math.floor(requested) : 0;
+  const priority = Number(top?.priority);
+  const floor = Number.isFinite(priority) && priority > 0 ? Math.floor(priority) : 0;
+  return Math.max(ask, floor);
+}
+
+/** Conjunto efectivo: ranking.slice(0, corte) ∪ extra, sin duplicados. */
 export function effectiveIds(top, n) {
-  const keep = new Set([...rankingIds(top).slice(0, Math.max(0, n)), ...(top?.extra ?? [])]);
+  const keep = new Set([...rankingIds(top).slice(0, selectionCount(top, n)), ...(top?.extra ?? [])]);
   return [...keep];
 }
 

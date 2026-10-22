@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { TOP_FILENAME, TOP_VERSION, defaultTopN, effectiveIds, liveIds, rankingIds, registerExtra, pruneExtra } from '../src/lib/top.js';
+import { TOP_FILENAME, TOP_VERSION, defaultTopN, effectiveIds, selectionCount, liveIds, rankingIds, registerExtra, pruneExtra } from '../src/lib/top.js';
 import { observeFinishedMatches, PRUNE_GRACE_MS } from '../src/lib/pruning.js';
 
 test('top constants and default N', () => {
@@ -13,6 +13,10 @@ test('effective set is top slice plus manual extras without duplicates', () => {
   assert.deepEqual(rankingIds(top), ['a', 'b', 'c']);
   assert.deepEqual(effectiveIds(top, 2), ['a', 'b', 'c', 'x']);
   assert.deepEqual(effectiveIds({ ranking: [], extra: [] }, 5), []);
+  const wide = { n: 7, priority: 6, ranking: ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map(id => ({ id })), extra: ['x'] };
+  assert.equal(selectionCount(wide, 5), 6);
+  assert.deepEqual(effectiveIds(wide, 5), ['a', 'b', 'c', 'd', 'e', 'f', 'x']);
+  assert.equal(selectionCount({ priority: 2 }, 8), 8);
 });
 test('manual ids are registered once; a legacy NS set cannot prove a finish', () => {
   const first = registerExtra({ ranking: [], extra: ['x'] }, ['y', 'x']);

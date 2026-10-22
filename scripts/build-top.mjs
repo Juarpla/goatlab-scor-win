@@ -1,10 +1,10 @@
-/** Top-5 como dato: ranking completo de partidos NS por relevancia, escrito por
- *  1-update-data tras refrescar datos. Guiones, prompts y banco leen el mismo
- *  archivo, así nunca divergen. Uso: node scripts/build-top.mjs
+/** Top de contenido: partidos NS, con cupo para la lista que juega hoy o
+ *  mañana en Lima. Lo escribe 1-update-data. Guiones, prompts y banco leen
+ *  el mismo archivo. Uso: node scripts/build-top.mjs
  *  (respeta GOATLAB_REPO; conserva extra hasta final confirmado más gracia). */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { rankMatches } from '../src/lib/teams.js';
+import { contentRanking } from '../src/lib/teams.js';
 import { TOP_FILENAME, TOP_VERSION, defaultTopN, pruneExtra, providerOnlyId } from '../src/lib/top.js';
 
 export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = process.env, now = Date.now() } = {}) {
@@ -15,7 +15,7 @@ export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = p
   for (const match of upcoming.filter(match => providerOnlyId(match.webId ?? match.id))) {
     console.log(`top: omitido ${match.webId ?? match.id}; falta código descriptivo`);
   }
-  const ranked = rankMatches(upcoming.filter(m => !providerOnlyId(m.webId ?? m.id)));
+  const { ranked, priorityCount } = contentRanking(upcoming.filter(m => !providerOnlyId(m.webId ?? m.id)), now);
   let prev = null;
   try {
     prev = JSON.parse(await readFile(`${dataDir}/${TOP_FILENAME}`, 'utf8'));
@@ -29,7 +29,8 @@ export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = p
   const out = {
     version: TOP_VERSION,
     generatedAt: new Date(now).toISOString(),
-    n: defaultTopN(env),
+    n: Math.max(defaultTopN(env), priorityCount),
+    priority: priorityCount,
     ranking: ranked.map(m => ({ id: m.webId ?? m.id, home: m.home ?? null, away: m.away ?? null, kickoff: m.kickoff ?? null })),
     extra: top.extra,
   };

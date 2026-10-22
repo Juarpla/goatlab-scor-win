@@ -28,6 +28,27 @@ test('build-top writes relevance ranking while conserving extras without termina
   assert.deepEqual(top.extra, ['y-y', 'gone']);
   assert.ok(top.ranking.every(r => r.id && r.kickoff));
 });
+test('build-top reserves tomorrow for a listed club and keeps a later classic in kickoff order', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'goatlab-top-window-')); t.after(() => rm(root, { recursive: true, force: true }));
+  const now = Date.parse('2026-10-22T15:00:00Z');
+  const soon = index => `2026-10-22T${16 + index}:45:00Z`;
+  const matches = [
+    { id: 'early-1', home: 'Sturm', away: 'Marseille', status: 'NS', kickoff: soon(0) },
+    { id: 'early-2', home: 'Union', away: 'Hapoel', status: 'NS', kickoff: soon(1) },
+    { id: 'early-3', home: 'OFI', away: 'Leverkusen', status: 'NS', kickoff: soon(2) },
+    { id: 'early-4', home: 'Lech', away: 'Sunderland', status: 'NS', kickoff: soon(3) },
+    { id: 'early-5', home: 'Juventus', away: 'Rennes', status: 'NS', kickoff: soon(4) },
+    { id: 'barca', home: 'FC Barcelona', away: 'Getafe CF', status: 'NS', kickoff: '2026-10-23T20:00:00Z' },
+    { id: 'classic', home: 'FC Barcelona', away: 'Real Madrid CF', status: 'NS', kickoff: '2026-10-25T20:00:00Z' },
+  ];
+  await mkdir(join(root, 'public/data'), { recursive: true });
+  await writeFile(join(root, 'public/data/fixtures.json'), JSON.stringify({ matches }));
+  const top = await buildTop({ repo: root, now });
+  assert.equal(top.priority, 1);
+  assert.equal(top.n, 5);
+  assert.equal(top.ranking[0].id, 'barca');
+  assert.equal(top.ranking.at(-1).id, 'classic');
+});
 test('build-top omits a provider-only id that still lacks a descriptive code', async t => {
   const root = await mkdtemp(join(tmpdir(), 'goatlab-top-unnamed-')); t.after(() => rm(root, { recursive: true, force: true }));
   const kickoff = new Date(Date.now() + 3600_000).toISOString();

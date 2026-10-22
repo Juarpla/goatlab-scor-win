@@ -9,7 +9,7 @@ on:
         required: false
         type: string
       limit:
-        description: 'Tope de partidos por corrida (vacío = 5)'
+        description: 'Tope de partidos por corrida. Vacío = los que marca top.json'
         required: false
         type: string
       mode:
@@ -34,7 +34,7 @@ jobs:
     env:
       MEDIA_ROLE: producer
       MATCH: ${{ inputs.match }}
-      LIMIT: ${{ inputs.limit || '5' }}
+      LIMIT: ${{ inputs.limit }}
       MEDIA_DRAFT: '1'
       # La llave debe ser de tipo Token Plan: las llaves Free comparten
       # otro pozo con 1 RPM de vídeo y se saturan con los clips.
