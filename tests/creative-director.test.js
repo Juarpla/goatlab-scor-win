@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { directVideo, nativeDecision, designMemory, remember } from '../fly/gateway/creative-director.mjs';
@@ -220,6 +220,68 @@ test('authoring requests the preview bytes and records how long the turn took', 
   assert.match(authoring.message, /Preferencias del usuario/);
   assert.equal(JSON.parse(readFileSync(join(dir, 'state.json'), 'utf8')).history[0].ms, 2500);
 });
+
+test('a finished turn reply is saved when OpenClaw did not write the decision file', async t => {
+  const dir = directory(t);
+  const methods = [];
+  const decide = nativeDecision({ env: { OPENCODE_GO_MODEL: 'primary', OPENCODE_GO_FALLBACK_MODEL: 'backup' }, call: async method => {
+    methods.push(method);
+    if (method === 'agent') return { runId: 'reply-turn' };
+    if (method === 'agent.wait') return { status: 'ok', terminalReply: { disposition: 'visible', text: 'Composición lista.\n{"notes":"desde la respuesta","plan":{"version":5}}' } };
+    throw new Error('transcript down');
+  }});
+  const result = await decide({ directory: dir, key: 'reply', message: 'Planifica', sessionKey: 'agent:main:reply', validate: value => {
+    if (value.plan?.version !== 5) throw new Error('plan incompleto');
+  }});
+  assert.equal(result.notes, 'desde la respuesta');
+  assert.equal(result.requestedModel, 'primary');
+  assert.deepEqual(methods, ['agent', 'agent.wait', 'sessions.get', 'chat.history']);
+  const saved = readdirDecision(dir);
+  assert.equal(saved.notes, 'desde la respuesta');
+});
+
+test('the session transcript supplies the plan when the reply is only an acknowledgement', async t => {
+  const decide = nativeDecision({ env: { OPENCODE_GO_MODEL: 'primary', OPENCODE_GO_FALLBACK_MODEL: 'backup' }, call: async method => {
+    if (method === 'agent') return { runId: 'transcript-turn' };
+    if (method === 'agent.wait') return { status: 'ok', terminalReply: { disposition: 'visible', text: 'Decisión guardada' } };
+    if (method === 'sessions.get') return { messages: [
+      { role: 'user', content: 'Escribe {"plan":{"version":5' },
+      { role: 'assistant', content: [{ type: 'text', text: '{"notes":"transcripción","plan":{"version":5,"code":"export default () => null"}}' }] },
+    ] };
+    if (method === 'chat.history') return { messages: [] };
+    throw new Error(method);
+  }});
+  const result = await decide({ directory: directory(t), key: 'transcript', message: 'Planifica', sessionKey: 'agent:main:transcript', validate: value => {
+    if (typeof value.plan?.code !== 'string') throw new Error('sin código');
+  }});
+  assert.equal(result.notes, 'transcripción');
+  assert.equal(result.requestedModel, 'primary');
+});
+
+test('a finished turn without a decision still falls back to the second model', async t => {
+  const models = [];
+  const decide = nativeDecision({ env: { OPENCODE_GO_MODEL: 'primary', OPENCODE_GO_FALLBACK_MODEL: 'backup' }, call: async (method, params) => {
+    if (method === 'agent') {
+      models.push(params.model);
+      if (params.model === 'backup') {
+        const path = params.message.match(/archivo (.+?), mediante/)[1];
+        writeFileSync(path, JSON.stringify({ notes: 'respaldo' }));
+      }
+      return { runId: params.model };
+    }
+    if (method === 'agent.wait') return { status: 'ok', terminalReply: { disposition: 'visible', text: 'sin json' } };
+    if (method === 'sessions.get' || method === 'chat.history') return { messages: [] };
+    throw new Error(method);
+  }});
+  const result = await decide({ directory: directory(t), key: 'empty-reply', message: 'Planifica', sessionKey: 'agent:main:empty' });
+  assert.equal(result.notes, 'respaldo');
+  assert.deepEqual(models, ['primary', 'backup']);
+});
+
+function readdirDecision(dir) {
+  const name = readdirSync(dir).find(entry => entry.endsWith('.decision.json'));
+  return JSON.parse(readFileSync(join(dir, name), 'utf8'));
+}
 
 test('design memory keeps liked and rejected concepts apart and merges a later concept', t => {
   const root = directory(t);

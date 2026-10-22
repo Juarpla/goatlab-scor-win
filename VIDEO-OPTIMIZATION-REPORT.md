@@ -7,7 +7,7 @@ Las mediciones históricas de este informe no son resultados del kit nuevo.
 ## Carriles y autoría en paralelo
 
 Render prepara y entrega por un carril ligero y captura de uno en uno. Gateway
-dirige hasta dos audios a la vez (`GOATLAB_MAX_DIRECTORS=2`). Cada video responde
+dirige un audio a la vez (`GOATLAB_MAX_DIRECTORS=1`). Cada video responde
 al audio original y trae «Me gusta» / «No me gusta». Esas marcas quedan en
 `director-memory` y vuelven a la autoría como preferencias, no como reglas.
 

@@ -22,7 +22,7 @@ SKILL = Path(__file__).resolve().parents[1]
 ROOT = next((p for p in SKILL.parents if (p / "public/data").exists()), Path.cwd())
 REPO = Path(os.environ.get("GOATLAB_REPO", str(ROOT)))
 STATE = Path(os.environ.get("GOATLAB_STATE_DIR", str(REPO / ".cache/goatlab")))
-MAX_DIRECTORS = max(1, int(os.environ.get("GOATLAB_MAX_DIRECTORS", "2")))
+MAX_DIRECTORS = max(1, int(os.environ.get("GOATLAB_MAX_DIRECTORS", "1")))
 FINAL_RENDER = ("done", "cancelled", "error", "delivery-unknown")
 
 

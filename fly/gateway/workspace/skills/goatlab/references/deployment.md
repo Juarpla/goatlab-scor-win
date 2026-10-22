@@ -177,7 +177,8 @@ no reenviar audios reales como prueba de despliegue.
 
 Render separa un carril ligero (preparar y entregar) de un carril pesado (una
 sola captura). Gateway admite GOATLAB_MAX_DIRECTORS autorías a la vez; el valor
-de producción es 2. Cada video se responde al audio original y lleva botones de
+de producción es 1, para que el razonamiento max deje libre el gateway local.
+Cada video se responde al audio original y lleva botones de
 valoración. Las valoraciones se guardan en director-memory del chat.
 
 La captura registra bundleMs, preflightMs, captureMs y captureFps en job.metrics.

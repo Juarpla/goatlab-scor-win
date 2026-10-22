@@ -10,6 +10,99 @@ const save = (path, value) => { writeFileSync(`${path}.tmp`, JSON.stringify(valu
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const jsonFile = path => existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
 
+const matchingBrace = (text, start) => {
+  let depth = 0, inString = false, escape = false;
+  for (let i = start; i < text.length; i++) {
+    const char = text[i];
+    if (inString) {
+      if (escape) escape = false;
+      else if (char === '\\') escape = true;
+      else if (char === '"') inString = false;
+      continue;
+    }
+    if (char === '"') inString = true;
+    else if (char === '{') depth++;
+    else if (char === '}') {
+      depth--;
+      if (depth === 0) return i;
+    }
+  }
+  return -1;
+};
+
+/** Outermost JSON objects in a model reply or tool argument. Prose around them is ignored. */
+export function jsonObjectsFromText(text) {
+  if (typeof text !== 'string' || !text.includes('{')) return [];
+  const objects = [];
+  for (let i = 0; i < text.length;) {
+    const start = text.indexOf('{', i);
+    if (start < 0) break;
+    const end = matchingBrace(text, start);
+    if (end < 0) break;
+    try {
+      const value = JSON.parse(text.slice(start, end + 1));
+      if (value && typeof value === 'object' && !Array.isArray(value)) objects.push(value);
+    } catch { /* the next brace may still be the decision */ }
+    i = end + 1;
+  }
+  return objects;
+}
+
+const collectTexts = (value, out, depth = 0) => {
+  if (value == null || depth > 8 || out.length > 80) return;
+  if (typeof value === 'string') { out.push(value); return; }
+  if (Array.isArray(value)) { for (const item of value) collectTexts(item, out, depth + 1); return; }
+  if (typeof value !== 'object') return;
+  for (const [key, item] of Object.entries(value)) {
+    if (key === 'thinking' || key === 'reasoning' || key === 'reasoning_content') continue;
+    collectTexts(item, out, depth + 1);
+  }
+};
+
+const transcriptMessages = payload => {
+  const messages = payload?.messages || payload?.result?.messages;
+  return Array.isArray(messages) ? messages : [];
+};
+
+/** Decision-shaped objects from a finished turn. User prompts and reasoning traces stay out. */
+export function decisionCandidates(...sources) {
+  const texts = [];
+  for (const source of sources) {
+    const messages = transcriptMessages(source);
+    if (messages.length) {
+      for (const message of messages) {
+        const role = message?.role || message?.type;
+        if (role === 'user' || role === 'system') continue;
+        collectTexts(message, texts);
+      }
+    } else collectTexts(source, texts);
+  }
+  return texts.flatMap(jsonObjectsFromText).filter(value => value.plan || value.decision || typeof value.notes === 'string');
+}
+
+/** The file remains the checkpoint. A finished turn's own JSON is the same decision. */
+async function decisionFromTurn(call, sessionKey, completed, validate, path) {
+  if (completed?.status !== 'ok' && completed?.status !== 'error') return null;
+  const pages = [completed];
+  const read = async (method, params) => {
+    try { pages.push(await call(method, params, { timeoutMs: 15_000 })); }
+    catch { /* a missing transcript still leaves the terminal reply */ }
+  };
+  await read('sessions.get', { key: sessionKey, limit: 40 });
+  await read('chat.history', { sessionKey, limit: 20, maxChars: 500_000 });
+  const candidates = decisionCandidates(...pages);
+  let rejection;
+  for (let i = candidates.length - 1; i >= 0; i--) {
+    try {
+      validate(candidates[i]);
+      save(path, candidates[i]);
+      return candidates[i];
+    } catch (error) { rejection ??= error; }
+  }
+  if (rejection) throw rejection;
+  return null;
+}
+
 export function authoringKnowledge(skillRoot = process.env.GOATLAB_SKILL_DIR || fileURLToPath(new URL('./workspace/skills/goatlab', import.meta.url))) {
   return ['remotion-create', 'remotion-markup'].map(name => `\nSkill ${name}, contenido precargado del archivo versionado (ya disponible, no requiere otra lectura):\n${readFileSync(join(skillRoot, '..', name, 'SKILL.md'), 'utf8')}`).join('\n');
 }
@@ -61,7 +154,7 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
               try {
                 accepted = await call('agent', { sessionKey, provider: 'opencode-go', model, deliver: false, disableMessageTool: true,
               idempotencyKey: run.id, timeout: seconds, thinking,
-              message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura. No cambies otros archivos. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos y finaliza el turno respondiendo «Decisión guardada».`,
+              message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura, y repite ese mismo JSON completo en la respuesta final. No cambies otros archivos. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos. La respuesta final es ese JSON; no la sustituyas por un acuse.`,
               attachments: images.map(image => ({ type: 'image', mimeType: 'image/jpeg', fileName: image.name, content: image.bytes.toString('base64') })),
                 }, { timeoutMs: 30_000 });
               } catch (error) {
@@ -90,8 +183,15 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
               await wait(500); continue;
             }
             result = readDecision();
+            if (!result && (completed?.status === 'ok' || completed?.status === 'error')) {
+              run.settled = true; save(runPath, run);
+              result = await decisionFromTurn(call, sessionKey, completed, validate, path);
+            }
             if (result) break;
-            if (['ok', 'error', 'cancelled'].includes(completed.status)) throw new Error('OpenClaw terminó sin guardar una decisión');
+            if (['ok', 'error', 'cancelled'].includes(completed.status)) {
+              run.settled = true; save(runPath, run);
+              throw new Error('OpenClaw terminó sin guardar una decisión');
+            }
             await wait(250);
           }
           result ||= readDecision();
@@ -103,7 +203,7 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
         validate(result);
         return { ...result, requestedModel: model };
       } catch (error) {
-        if (run?.runId && !run.cancelledAt) {
+        if (run?.runId && !run.cancelledAt && !run.settled) {
           // A fallback must never queue behind a still-running primary turn.
           try {
             await call('chat.abort', { sessionKey, runId: run.runId }, { timeoutMs: 10_000 });
