@@ -217,6 +217,7 @@ test('authoring requests the preview bytes and records how long the turn took', 
   const authoring = seen.find(request => request.key.includes(':plan-'));
   assert.equal(authoring.images[0].name, '0.jpg');
   assert.equal(authoring.images[0].bytes.toString(), 'small-preview');
+  assert.match(authoring.sessionKey, /^agent:director:goatlab:/);
   assert.match(authoring.message, /Preferencias del usuario/);
   assert.equal(JSON.parse(readFileSync(join(dir, 'state.json'), 'utf8')).history[0].ms, 2500);
 });
@@ -282,6 +283,23 @@ function readdirDecision(dir) {
   const name = readdirSync(dir).find(entry => entry.endsWith('.decision.json'));
   return JSON.parse(readFileSync(join(dir, name), 'utf8'));
 }
+
+test('a plan already in the transcript is kept when the turn outlasts the budget', async t => {
+  let clock = 0;
+  const decide = nativeDecision({ now: () => clock, env: { OPENCODE_GO_MODEL: 'primary', OPENCODE_GO_FALLBACK_MODEL: 'backup' }, call: async method => {
+    if (method === 'agent') return { runId: 'slow-turn' };
+    if (method === 'agent.wait') { clock += 300000; return { status: 'timeout' }; }
+    if (method === 'sessions.get') return { messages: [{ role: 'assistant', content: '{"notes":"al cierre","plan":{"version":5}}' }] };
+    if (method === 'chat.history') return { messages: [] };
+    if (method === 'chat.abort') return { aborted: true };
+    throw new Error(method);
+  }});
+  const result = await decide({ directory: directory(t), key: 'late', message: 'Planifica', sessionKey: 'agent:director:late', validate: value => {
+    if (value.plan?.version !== 5) throw new Error('plan incompleto');
+  }});
+  assert.equal(result.notes, 'al cierre');
+  assert.equal(result.requestedModel, 'primary');
+});
 
 test('design memory keeps liked and rejected concepts apart and merges a later concept', t => {
   const root = directory(t);

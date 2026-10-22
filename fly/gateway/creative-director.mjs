@@ -154,7 +154,7 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
               try {
                 accepted = await call('agent', { sessionKey, provider: 'opencode-go', model, deliver: false, disableMessageTool: true,
               idempotencyKey: run.id, timeout: seconds, thinking,
-              message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura, y repite ese mismo JSON completo en la respuesta final. No cambies otros archivos. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos. La respuesta final es ese JSON; no la sustituyas por un acuse.`,
+              message: `${message}\n\nCompleta este turno escribiendo únicamente el resultado JSON solicitado en el archivo ${path}, mediante la herramienta de escritura, y repite ese mismo JSON completo en la respuesta final. No cambies otros archivos. No ejecutes comandos ni leas el disco: las guías ya vienen en el mensaje. Render se encarga de compilar y comprobar el código. Guarda directamente el JSON con imports completos. La respuesta final es ese JSON; no la sustituyas por un acuse.`,
               attachments: images.map(image => ({ type: 'image', mimeType: 'image/jpeg', fileName: image.name, content: image.bytes.toString('base64') })),
                 }, { timeoutMs: 30_000 });
               } catch (error) {
@@ -195,6 +195,15 @@ export function nativeDecision({ call = callNative, env = process.env, wait = sl
             await wait(250);
           }
           result ||= readDecision();
+          let recoveredLate = false;
+          if (!result) {
+            try { result = await decisionFromTurn(call, sessionKey, { status: 'ok' }, validate, path); recoveredLate = Boolean(result); }
+            catch (error) { if (!/informe visual incompleto|plan incompleto|composición JSX|visualStyle/.test(error.message)) throw error; }
+          }
+          if (recoveredLate && run?.runId && !run.cancelledAt) {
+            try { await call('chat.abort', { sessionKey, runId: run.runId }, { timeoutMs: 10_000 }); run.cancelledAt = now(); save(runPath, run); }
+            catch { /* the saved decision stands even if the finished turn is already gone */ }
+          }
           if (!result) throw new Error('OpenClaw no escribió una decisión válida');
           run.decisionSavedAt = now(); save(runPath, run);
         }
@@ -238,7 +247,7 @@ export async function directVideo(body, { worker, decide, directory, wait = slee
   const decision = async (key, message, images = [], validate = () => {}, preferFallback = false) => {
     const startedAt = now();
     const turn = await decide({ directory, key: `${jobId}:${generation}:${key}`, message, images,
-      sessionKey: `agent:main:goatlab:${hash(body.requestId).slice(0, 32)}:${generation}`, assertCurrent, validate, preferFallback, purpose: key.startsWith('review-') ? 'review' : 'authoring' });
+      sessionKey: `agent:director:goatlab:${hash(body.requestId).slice(0, 32)}:${generation}`, assertCurrent, validate, preferFallback, purpose: key.startsWith('review-') ? 'review' : 'authoring' });
     validate(turn);
     state.history.push({ generation, stage: key, at: now(), startedAt, ms: now() - startedAt, purpose: key.startsWith('review-') ? 'review' : 'authoring', result: turn }); persist();
     return turn;
@@ -400,7 +409,7 @@ export async function probeVision(imagePath, { root = join(process.env.GOATLAB_S
   for (const model of ['deepseek-v4.1-flash', 'glm-5.3-flash']) {
     const key = `vision-${model}-${hash(bytes)}-${randomUUID()}`;
     const result = await nativeDecision({ call, env: { OPENCODE_GO_MODEL: model, OPENCODE_GO_FALLBACK_MODEL: model } })({
-      directory: root, key, sessionKey: `agent:main:goatlab:vision-probe:${hash(key).slice(0, 24)}`,
+      directory: root, key, sessionKey: `agent:director:goatlab:vision-probe:${hash(key).slice(0, 24)}`,
       images: [{ name: 'vision-probe.jpg', bytes }],
       message: 'Prueba de entrada visual. Describe exclusivamente lo que observas en la imagen adjunta, sin identificar personas ni inferir el tema por este texto. Escribe {"description":"descripción concreta", "visibleText":["números o palabras legibles"], "colors":["colores principales"]}. Si no ves la imagen, declara ese fallo.',
       validate: result => { if (typeof result.description !== 'string' || !Array.isArray(result.visibleText) || !Array.isArray(result.colors)) throw new Error('prueba visual incompleta'); },

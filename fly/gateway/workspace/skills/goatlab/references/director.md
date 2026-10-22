@@ -4,10 +4,11 @@
 
 Los turnos internos usan DeepSeek principal y GLM de respaldo dentro de OpenClaw,
 con razonamiento max. Aplica las skills precargadas y el contrato de creative.md.
-Guarda directamente {"plan":<version 5 con code JSX>,"notes":"concepto breve"}
-en la ruta indicada y repite ese mismo JSON completo en la respuesta final.
-Render compila y prueba el código. Si el archivo no queda escrito, Gateway
-toma el JSON del turno terminado. Usa imports completos, nombres
+Responde con {"plan":<version 5 con code JSX>,"notes":"concepto breve"}.
+El turno del director no ejecuta comandos ni lee el disco: las guías ya están
+en el mensaje. Repite ese mismo JSON completo en la respuesta final. Render
+compila y prueba el código. Si el archivo no queda escrito, Gateway toma el
+JSON del turno. Usa imports completos, nombres
 únicos y los datos oficiales de marca: GoatLab y goatlab.win.
 
 Un error técnico de Render vuelve con su diagnóstico. Hay un candidato inicial

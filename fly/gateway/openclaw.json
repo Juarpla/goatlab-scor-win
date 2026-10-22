@@ -47,6 +47,19 @@
       // No per-model params. OpenClaw does not substitute ${VAR} in object keys,
       // so a fixed override would keep pointing at a retired model id.
     },
+    list: [
+      { id: "main" },
+      {
+        id: "director",
+        workspace: "/home/node/.openclaw/workspace",
+        // Authoring only answers with the composition. Shell and file tools
+        // spend the whole reasoning budget exploring the disk.
+        tools: {
+          profile: "minimal",
+          deny: ["browser", "exec", "process", "read", "write", "edit", "ls", "apply_patch", "web_search", "web_fetch", "code_execution"],
+        },
+      },
+    ],
   },
   models: {
     mode: "merge",
