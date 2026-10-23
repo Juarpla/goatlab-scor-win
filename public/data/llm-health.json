@@ -1,95 +1,6 @@
 {
-  "updatedAt": "2026-10-23T05:18:00.956Z",
+  "updatedAt": "2026-10-23T21:40:06.087Z",
   "runs": [
-    {
-      "at": "2026-10-17T16:01:46.296Z",
-      "task": "image-prompts",
-      "matchId": "brighton-hove-albion-vs-crystal-palace-2026-10-18",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "validation",
-          "reason": "image-prompts 2: falta identidad de los equipos; image-prompts 4: falta presentación, banderas o escudos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2010,
-            "outputTokens": 876
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 28284
-        }
-      ],
-      "usage": {
-        "inputTokens": 1997,
-        "outputTokens": 2203
-      }
-    },
-    {
-      "at": "2026-10-17T16:02:08.382Z",
-      "task": "video-prompts",
-      "matchId": "newcastle-united-vs-aston-villa-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1775,
-        "outputTokens": 402
-      }
-    },
-    {
-      "at": "2026-10-17T16:02:19.463Z",
-      "task": "video-prompts",
-      "matchId": "real-betis-vs-barcelona-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1779,
-        "outputTokens": 398
-      }
-    },
-    {
-      "at": "2026-10-17T16:02:28.527Z",
-      "task": "video-prompts",
-      "matchId": "valencia-vs-athletic-club-2026-10-17",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1708,
-        "outputTokens": 377
-      }
-    },
-    {
-      "at": "2026-10-17T16:02:40.995Z",
-      "task": "video-prompts",
-      "matchId": "osasuna-vs-real-racing-club-2026-10-18",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "mimo-v2.6-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1693,
-        "outputTokens": 376
-      }
-    },
     {
       "at": "2026-10-17T16:02:54.366Z",
       "task": "video-prompts",
@@ -7085,6 +6996,124 @@
       "usage": {
         "inputTokens": 2447,
         "outputTokens": 11175
+      }
+    },
+    {
+      "at": "2026-10-23T21:34:55.463Z",
+      "task": "shorts",
+      "matchId": "coventry-city-vs-fulham-2026-10-24",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180003
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 7049,
+        "outputTokens": 9816
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "87561223-0389-4506-917d-a8c4fee817a9"
+    },
+    {
+      "at": "2026-10-23T21:35:47.930Z",
+      "task": "image-prompts",
+      "matchId": "coventry-city-vs-fulham-2026-10-24",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1732,
+        "outputTokens": 7121
+      }
+    },
+    {
+      "at": "2026-10-23T21:35:53.097Z",
+      "task": "video-prompts",
+      "matchId": "coventry-city-vs-fulham-2026-10-24",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1629,
+        "outputTokens": 409
+      }
+    },
+    {
+      "at": "2026-10-23T21:38:32.209Z",
+      "task": "motion-prompts",
+      "matchId": "rayo-vallecano-vs-elche-2026-10-24",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "Se requieren entre 2 y 10 Motion Prompts",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2469,
+            "outputTokens": 3240
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 99026
+        }
+      ],
+      "usage": {
+        "inputTokens": 2575,
+        "outputTokens": 10935
+      }
+    },
+    {
+      "at": "2026-10-23T21:40:06.087Z",
+      "task": "motion-prompts",
+      "matchId": "coventry-city-vs-fulham-2026-10-24",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 12000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 2401,
+            "outputTokens": 12000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 63898
+        }
+      ],
+      "usage": {
+        "inputTokens": 2468,
+        "outputTokens": 4843
       }
     }
   ]
