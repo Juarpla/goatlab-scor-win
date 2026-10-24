@@ -1,55 +1,6 @@
 {
-  "updatedAt": "2026-10-24T11:13:56.174Z",
+  "updatedAt": "2026-10-24T11:16:19.003Z",
   "runs": [
-    {
-      "at": "2026-10-17T21:04:15.775Z",
-      "task": "video-prompts",
-      "matchId": "leeds-united-vs-manchester-united-2026-10-18",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "WORKERS_AI",
-        "model": "@cf/zai-org/glm-4.7-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 144
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 331
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "No se encontró JSON válido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1848,
-            "outputTokens": 367
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 5135
-        }
-      ],
-      "usage": {
-        "inputTokens": 1709,
-        "outputTokens": 1619
-      }
-    },
     {
       "at": "2026-10-17T21:04:20.279Z",
       "task": "video-prompts",
@@ -6806,6 +6757,21 @@
         }
       ],
       "usage": null
+    },
+    {
+      "at": "2026-10-24T11:16:19.003Z",
+      "task": "motion-prompts",
+      "matchId": "barcelona-vs-real-madrid-2026-10-25",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2394,
+        "outputTokens": 2421
+      }
     }
   ]
 }
