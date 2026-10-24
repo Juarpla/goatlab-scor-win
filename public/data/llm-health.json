@@ -1,537 +1,6 @@
 {
-  "updatedAt": "2026-10-24T11:16:19.003Z",
+  "updatedAt": "2026-10-24T21:05:33.413Z",
   "runs": [
-    {
-      "at": "2026-10-17T21:04:20.279Z",
-      "task": "video-prompts",
-      "matchId": "celta-vigo-vs-deportivo-alaves-2026-10-18",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 110
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 108
-        }
-      ],
-      "usage": {
-        "inputTokens": 1314,
-        "outputTokens": 373
-      }
-    },
-    {
-      "at": "2026-10-17T21:05:57.818Z",
-      "task": "motion-prompts",
-      "matchId": "bournemouth-vs-sunderland-2026-10-18",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 154
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 127
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2519,
-            "outputTokens": 2982
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 32968
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: texto incompleto o formato ausente; motion-prompts 1: dirección insuficientemente detallada; motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: texto incompleto o formato ausente; motion-prompts 2: dirección insuficientemente detallada; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2329,
-            "outputTokens": 3953
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 64219
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-17T21:08:17.726Z",
-      "task": "motion-prompts",
-      "matchId": "leeds-united-vs-manchester-united-2026-10-18",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 114
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 115
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2653,
-            "outputTokens": 2704
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 36671
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2487,
-            "outputTokens": 4217
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 102992
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-17T21:10:09.888Z",
-      "task": "motion-prompts",
-      "matchId": "celta-vigo-vs-deportivo-alaves-2026-10-18",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 181
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 115
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2086,
-            "outputTokens": 3249
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 42374
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1980,
-            "outputTokens": 5055
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 69486
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-18T04:46:36.817Z",
-      "task": "shorts",
-      "matchId": "bournemouth-vs-sunderland-2026-10-18",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 153
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 105
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: falta Sunderland AFC; guion 1: 8 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Sunderland AFC; guion 2: 11 cifras, máximo 3; guion 2: falta el antecedente asignado; guion 2: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7115,
-            "outputTokens": 1422
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 16706
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 4: falta Marcus Tavernier; guion 7: falta Marcus Tavernier; guion 10: falta el pronóstico asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6688,
-            "outputTokens": 6880
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 80705
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6688,
-        "outputTokens": 6880
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-18T04:53:53.421Z",
-      "task": "shorts",
-      "matchId": "leeds-united-vs-manchester-united-2026-10-18",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 80
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 68
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: 54 palabras, mínimo 55; guion 1: falta el antecedente asignado; guion 1: falta el llamada asignado; guion 1: el gancho no lleva cifras; guion 1: falta la CTA a goatlab.win en la narración; guion 2: 8 cifras, máximo 3; guion 2: 48 palabras, mínimo 55",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7328,
-            "outputTokens": 1354
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14918
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 90
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 144
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: falta el sustantivo asignado; guion 3: falta Manchester United FC; guion 4: falta Manchester United FC; guion 5: el gancho no lleva cifras; guion 6: falta Manchester United FC; guion 6: 6 cifras, máximo 3; guion 6: el gancho no lleva cifras; guion 7: falta Manchester United FC",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7328,
-            "outputTokens": 1188
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15069
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6880,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 102750
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6880,
-        "outputTokens": 12000
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-18T04:55:48.338Z",
-      "task": "shorts",
-      "matchId": "celta-vigo-vs-deportivo-alaves-2026-10-18",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 71
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 80
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 50 palabras, mínimo 55; guion 1: falta el antecedente asignado; guion 2: falta Deportivo Alavés; guion 2: 54 palabras, mínimo 55; guion 2: falta el antecedente asignado; guion 3: falta Deportivo Alavés; guion 3: falta el sustantivo asignado; guion 3: falta el antecedente asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7095,
-            "outputTokens": 1405
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12839
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6707,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 110479
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 84
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 90
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta Deportivo Alavés; guion 2: 5 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 3: falta Deportivo Alavés; guion 3: falta el puente asignado; guion 4: 8 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7095,
-            "outputTokens": 1337
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 19960
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: falta el pronóstico asignado; guion 2: falta el pronóstico asignado; guion 3: falta el pronóstico asignado; guion 4: falta el pronóstico asignado; guion 5: falta el pronóstico asignado; guion 6: falta el pronóstico asignado; guion 7: falta el pronóstico asignado; guion 8: falta el pronóstico asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6707,
-            "outputTokens": 7630
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 94783
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6707,
-        "outputTokens": 7630
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-18T04:56:47.045Z",
-      "task": "image-prompts",
-      "matchId": "celta-vigo-vs-deportivo-alaves-2026-10-18",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "WORKERS_AI",
-        "model": "@cf/zai-org/glm-4.7-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "mimo-v2.6-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 117
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 81
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "image-prompts 4: falta presentación, banderas o escudos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1417,
-            "outputTokens": 1427
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 21632
-        }
-      ],
-      "usage": {
-        "inputTokens": 1335,
-        "outputTokens": 2610
-      }
-    },
     {
       "at": "2026-10-18T04:57:49.245Z",
       "task": "motion-prompts",
@@ -6771,6 +6240,173 @@
       "usage": {
         "inputTokens": 2394,
         "outputTokens": 2421
+      }
+    },
+    {
+      "at": "2026-10-24T20:59:33.609Z",
+      "task": "shorts",
+      "matchId": "athletic-club-vs-getafe-2026-10-25",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 4: falta Álex Berenguer",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7110,
+            "outputTokens": 2510
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 34688
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 7226,
+        "outputTokens": 6815
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "73784b2f-cfc5-4305-b85b-93cbc6693789"
+    },
+    {
+      "at": "2026-10-24T21:00:19.095Z",
+      "task": "shorts",
+      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "usage": {
+        "inputTokens": 7186,
+        "outputTokens": 3193
+      },
+      "truncated": false,
+      "maxTokens": 12000,
+      "batchSize": 1,
+      "callId": "9c19bb92-ebc6-4ca7-83d1-317ffcfb1d79"
+    },
+    {
+      "at": "2026-10-24T21:00:39.172Z",
+      "task": "image-prompts",
+      "matchId": "athletic-club-vs-getafe-2026-10-25",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1703,
+        "outputTokens": 675
+      }
+    },
+    {
+      "at": "2026-10-24T21:00:54.721Z",
+      "task": "image-prompts",
+      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1809,
+        "outputTokens": 657
+      }
+    },
+    {
+      "at": "2026-10-24T21:00:56.988Z",
+      "task": "video-prompts",
+      "matchId": "athletic-club-vs-getafe-2026-10-25",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1600,
+        "outputTokens": 396
+      }
+    },
+    {
+      "at": "2026-10-24T21:01:10.989Z",
+      "task": "video-prompts",
+      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1706,
+        "outputTokens": 2090
+      }
+    },
+    {
+      "at": "2026-10-24T21:02:08.373Z",
+      "task": "motion-prompts",
+      "matchId": "athletic-club-vs-getafe-2026-10-25",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "motion-prompts 2: los marcadores no coinciden con factIds",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2372,
+            "outputTokens": 3203
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11478
+        }
+      ],
+      "usage": {
+        "inputTokens": 2472,
+        "outputTokens": 7899
+      }
+    },
+    {
+      "at": "2026-10-24T21:05:33.413Z",
+      "task": "motion-prompts",
+      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
+      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        }
+      ],
+      "usage": {
+        "inputTokens": 2582,
+        "outputTokens": 4162
       }
     }
   ]
