@@ -1,11 +1,12 @@
+import { normalizeScriptTitles } from '../src/lib/script-titles.js';
+import { readContentSelection } from '../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de guiones pertenece a GitHub Actions');
 /** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
  *  redactar-guiones-shorts. Un JSON válido ya existente no se toca.
  *  Sin --match, redacta el top N (input --top, SCRIPT_TOP_N o 5) del ranking
- *  guardado en public/data/top.json (lo escribe 1-update-data). En corrida
- *  poda los JSONs terminales cuando vence la gracia desde su primera detección.
+ *  guardado en public/data/top.json (lo escribe 1-update-data). La poda pertenece a la actualización de data.
  *  --match o top ampliado registran el partido como extra protegido. */
-import { mkdir, readdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../src/lib/llm.js';
 import {
@@ -23,8 +24,7 @@ import {
 import { CONTENT_PROVIDER_ORDER, scriptStructureErrors } from '../src/lib/match-content.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { esName } from '../src/lib/teams.js';
-import { rankMatches } from '../src/lib/teams.js';
-import { TOP_FILENAME, defaultTopN, effectiveIds, registerExtra, topFreshness } from '../src/lib/top.js';
+import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../src/lib/top.js';
 import { checkDescription } from '../src/lib/compliance.js';
 import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
 
@@ -49,7 +49,7 @@ const topRaw = args.has('--top') ? args.get('--top') : process.env.SCRIPT_TOP_N;
 const top = onlyMatch ? null : (positiveInt(topRaw) ?? topDefault);
 const manualTop = top != null && topRaw != null && String(topRaw).trim() !== '' && top > topDefault;
 
-const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
+const { fixtures, top: selectedTop } = await readContentSelection();
 const now = Date.now();
 let ledger = null;
 try { ledger = JSON.parse(await readFile('public/data/finished-at.json', 'utf8')); }
@@ -59,19 +59,8 @@ const requested = onlyMatch ? resolvePruneMatch(onlyMatch, pruneContext) : null;
 const protectedId = onlyMatch ? (requested?.webId ?? requested?.id ?? onlyMatch) : null;
 
 const allNs = selectMatches(fixtures.matches, {});
-const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > now);
-const liveRanked = rankMatches(futureNs).map(m => m.webId ?? m.id);
 await mkdir(dir, { recursive: true });
-for (const file of await readdir(dir)) {
-  if (!/^[A-Za-z0-9][A-Za-z0-9_-]*\.json$/.test(file)) continue;
-  const match = resolvePruneMatch(file.slice(0, -5), pruneContext);
-  if ((match?.webId ?? match?.id) === protectedId || !pruneDue(match, pruneContext.seen, now)) continue;
-  await rm(join(dir, file));
-  console.log(`shorts: poda ${file}`);
-}
-let topFile = null;
-try { topFile = JSON.parse(await readFile(join('public/data', TOP_FILENAME), 'utf8')); }
-catch (error) { if (error.code !== 'ENOENT') topFile = {}; }
+let topFile = selectedTop;
 const freshness = topFreshness(topFile, { now, env: process.env, manual: !!onlyMatch });
 if (!freshness.valid) {
   console.error(`shorts: top.json rechazado (${freshness.reason})`);
@@ -82,31 +71,31 @@ async function saveTopFile() {
 }
 let matches;
 if (onlyMatch) {
-  matches = selectMatches(fixtures.matches, { onlyMatch });
-  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [protectedId]);
-  if (registered.added.length) {
+  matches = contentMatches(topFile, fixtures.matches, { onlyMatch });
+  if (!matches.length && requested) matches = [requested];
+  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [...(matches.length ? [protectedId] : [])]);
+  if (registered.added.length && !process.env.CONTENT_SELECTION_FILE) {
     topFile = registered.top;
     await saveTopFile();
     console.log(`shorts: extra manual ${registered.added.join(', ')}`);
   }
 } else {
-  if (manualTop) {
-    const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, liveRanked.slice(topDefault, top));
-    if (registered.added.length) {
+  if (process.env.CONTENT_AUTOMATIC !== '1' && manualTop) {
+    const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, (topFile.ranking ?? []).slice(topDefault, top).map(m => m.id));
+    if (registered.added.length && !process.env.CONTENT_SELECTION_FILE) {
       topFile = registered.top;
       await saveTopFile();
       console.log(`shorts: extras manuales ${registered.added.join(', ')}`);
     }
   }
-  const wanted = new Set(effectiveIds(topFile, top));
-  matches = futureNs.filter(m => wanted.has(m.webId ?? m.id)).sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
-  if (limitRaw != null) matches = matches.slice(0, Math.max(1, Number(limitRaw)));
+  matches = contentMatches(topFile, fixtures.matches, { automatic: process.env.CONTENT_AUTOMATIC === '1', n: top, limit: limitRaw, now });
 }
-if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS [top.json]`);
-if (!onlyMatch) matches = matches.filter(match => !pruneDue(match, pruneContext.seen, now));
+if (process.env.CONTENT_AUTOMATIC === '1') console.log(`shorts: ${matches.length} partidos del top automático (máximo 5) [top.json]`);
+else if (top != null) console.log(`shorts: top ${top} de ${allNs.length} partidos NS [top.json]`);
+if (!onlyMatch && process.env.CONTENT_AUTOMATIC !== '1') matches = matches.filter(match => !pruneDue(match, pruneContext.seen, now));
 if (!matches.length) {
-  console.error('shorts: sin partidos NS para generar');
-  process.exit(1);
+  console.log('shorts: sin partidos NS para generar');
+  process.exit(process.env.CONTENT_AUTOMATIC === '1' ? 0 : 1);
 }
 
 const pending = [];
@@ -116,7 +105,14 @@ for (const match of matches) {
   try {
     const existing = JSON.parse(await readFile(join(dir, `${matchId}.json`), 'utf8'));
     const errors = scriptStructureErrors(existing, { matchId, match });
-    if (!errors.length) continue;
+    if (!errors.length) {
+      const normalized = normalizeScriptTitles(existing);
+      if (JSON.stringify(normalized.scripts) !== JSON.stringify(existing.scripts)) {
+        await writeFile(join(dir, `${matchId}.json`), JSON.stringify(normalized, null, 2));
+        console.log(`shorts: ${matchId}: títulos actualizados; narraciones conservadas`);
+      }
+      continue;
+    }
     console.log(`shorts: ${matchId} corrupto; pendiente (${errors.slice(0, 3).join('; ')})`);
   } catch (error) {
     if (error.code !== 'ENOENT') console.log(`shorts: ${matchId} ilegible; pendiente`);

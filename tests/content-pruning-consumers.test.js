@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { buildTop } from '../scripts/build-top.mjs';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, access, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -29,19 +30,22 @@ async function fixture(t, consumer, matches, ledger) {
 }
 
 for (const consumer of scripts) {
-  test(`${consumer.category}: maintenance prunes only proven terminal artifacts before an empty partial batch exits`, async t => {
+  test(`${consumer.category}: generation preserves artifacts; data refresh prunes only proven terminal artifacts`, async t => {
     const due = match('due'), grace = match('grace'), absent = match('absent');
     const retained = [grace, match('ns', 'NS', { kickoff: stamp(3600_000) }), match('live', '1H'), match('postponed', 'PST'), match('cancelled', 'CANC'), match('no-score', 'FT', { homeScore: null })];
     const all = [due, ...retained];
     const ledger = { version: 1, seen: Object.fromEntries([...all, absent].map(m => [m.webId, stamp(m.webId === 'grace' ? -30 * 60_000 : -2 * 3600_000)])), snapshots: Object.fromEntries([...all, absent].map(m => [m.webId, { ...m, ids: [m.id, m.webId] }])) };
-    const { directory, run } = await fixture(t, consumer, all, ledger);
+    const { cwd, directory, run } = await fixture(t, consumer, all, ledger);
     for (const name of [...all.map(m => m.webId), 'absent', 'unknown', '_agnes-hourly']) await writeFile(join(directory, `${name}.json`), '{}');
     const result = run(['--limit=1', '--force']);
     assert.equal(result.error, undefined);
+    assert.equal(await exists(join(directory, 'due.json')), true);
+    assert.equal(await exists(join(directory, 'absent.json')), true);
+    await buildTop({ repo: cwd, now: NOW });
     assert.equal(await exists(join(directory, 'due.json')), false);
     assert.equal(await exists(join(directory, 'absent.json')), false);
     for (const name of [...retained.map(m => m.webId), 'unknown', '_agnes-hourly']) assert.equal(await exists(join(directory, `${name}.json`)), true, name);
-    assert.match(result.stdout, /poda due\.json/);
+    assert.doesNotMatch(result.stdout, /poda/);
     assert.doesNotMatch(result.stderr, /ERR_MODULE_NOT_FOUND|ENOENT|No hay proveedores/);
   });
 
@@ -72,7 +76,7 @@ function validPrompts(category, matchId) {
 }
 
 for (const consumer of scripts) {
-  test(`${consumer.category}: manual provider alias protects canonical and alias files while maintenance continues`, async t => {
+  test(`${consumer.category}: manual provider alias preserves canonical, alias and unrelated existing files`, async t => {
     const requested = match('manual'), other = match('other');
     const ledger = { version: 1, seen: { manual: stamp(-2 * 3600_000), other: stamp(-2 * 3600_000) }, snapshots: Object.fromEntries([requested, other].map(m => [m.webId, { ...m, ids: [m.id, m.webId] }])) };
     const { cwd, data, directory, run } = await fixture(t, consumer, [requested, other], ledger);
@@ -87,7 +91,7 @@ for (const consumer of scripts) {
     const result = run(['--match=provider-manual']);
     assert.equal(await exists(join(directory, 'manual.json')), true);
     assert.equal(await exists(join(directory, 'provider-manual.json')), true);
-    assert.equal(await exists(join(directory, 'other.json')), false);
+    assert.equal(await exists(join(directory, 'other.json')), true);
     assert.deepEqual(JSON.parse(await readFile(join(data, 'top.json'), 'utf8')).extra, ['manual']);
     if (consumer.category !== 'scripts') {
       assert.equal(result.status, 0, result.stderr);

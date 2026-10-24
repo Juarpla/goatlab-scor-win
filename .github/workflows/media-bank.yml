@@ -9,7 +9,7 @@ on:
         required: false
         type: string
       limit:
-        description: 'Tope de partidos por corrida. Vacío = los que marca top.json'
+        description: 'Tope de partidos por corrida. Vacío = selección manual del ranking y extras'
         required: false
         type: string
       mode:
@@ -22,8 +22,9 @@ on:
     types: [completed]
 permissions:
   contents: write
+  actions: read
 concurrency:
-  group: goatlab-media
+  group: goatlab-content-pipeline
   cancel-in-progress: false
   queue: max
 jobs:
@@ -32,6 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
+      CONTENT_AUTOMATIC: ${{ github.event_name != 'workflow_dispatch' && '1' || '0' }}
+      CONTENT_SELECTION_FILE: ${{ github.event_name != 'workflow_dispatch' && '.cache/content-selection.json' || '' }}
       MEDIA_ROLE: producer
       MATCH: ${{ inputs.match }}
       LIMIT: ${{ inputs.limit }}
@@ -63,12 +66,34 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - name: Mantenimiento conservador
-        run: |
-          mkdir -p .cache
-          args=()
-          if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
-          node scripts/maintain-media.mjs "${args[@]}" > .cache/media-maintenance.json
+      - name: Identificar corrida de scripting
+        if: github.event_name != 'workflow_dispatch'
+        id: scripting
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let runId = context.payload.workflow_run?.id;
+            if (!runId) {
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner, repo: context.repo.repo,
+                workflow_id: 'youtube-scripts.yml', branch: 'main',
+                event: 'workflow_run', status: 'success', per_page: 1
+              });
+              runId = data.workflow_runs[0]?.id;
+            }
+            if (!runId) throw new Error('No hay una selección automática de scripting completada');
+            core.setOutput('run-id', String(runId));
+      - name: Recuperar selección e inputs de scripting
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/download-artifact@v4
+        with:
+          name: goatlab-content-selection
+          run-id: ${{ steps.scripting.outputs.run-id }}
+          github-token: ${{ github.token }}
+          path: .
+      - name: Aplicar intención automática o manual de scripting
+        if: github.event_name != 'workflow_dispatch'
+        run: node scripts/content-selection.mjs --activate-media
       - name: Comprobar banco
         id: check
         run: |

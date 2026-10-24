@@ -1,9 +1,10 @@
+import { readContentSelection } from '../src/lib/content-selection.js';
 /** Read-only scheduler gate: public evidence only, with no provider or storage calls. */
 import { readFile, appendFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { topFreshness, effectiveIds, defaultTopN } from '../src/lib/top.js';
+import { contentMatches, topFreshness, defaultTopN } from '../src/lib/top.js';
 import { bankComplete, contentFingerprint } from '../src/lib/media-contract.js';
 import { contentIdentityErrors, scriptStructureErrors, validateContent } from '../src/lib/match-content.js';
 
@@ -44,13 +45,10 @@ export async function checkMediaComplete({ repo = process.cwd(), args = {}, env 
   args = options(args);
   const data = join(repo, 'public/data');
   const bankDirectory = args['--out'] || env.MEDIA_PACK_DIR || join(data, 'media-pack');
-  let top = null;
-  try { top = JSON.parse(await readFile(join(data, 'top.json'), 'utf8')); }
-  catch (error) { if (error.code !== 'ENOENT') top = {}; }
+  const { top, fixtures } = await readContentSelection({ repo, env });
   const freshness = topFreshness(top, { now, env, manual: !!args['--match'] });
   const result = { complete: false, reason: '', eligible: 0, pending: 0, top_age_h: freshness.ageHours, top_stale: freshness.stale, exitCode: 0 };
   if (!freshness.valid) return { ...result, reason: `top-${freshness.reason}`, exitCode: 2 };
-  const fixtures = await json(join(data, 'fixtures.json'));
   if (!fixtures || !Array.isArray(fixtures.matches)) return { ...result, reason: 'fixtures-invalid', exitCode: 2 };
   let matches;
   const requested = args['--match'];
@@ -65,11 +63,7 @@ export async function checkMediaComplete({ repo = process.cwd(), args = {}, env 
     }
     if (!matches.length) return { ...result, reason: 'match-unavailable', pending: 1 };
   } else {
-    const wanted = new Set(effectiveIds(top, defaultTopN(env)));
-    matches = fixtures.matches.filter(match => match?.status === 'NS' && Date.parse(match.kickoff) > now && wanted.has(match.webId ?? match.id))
-      .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    const limit = Number(args['--limit']);
-    if (args['--limit'] != null && Number.isFinite(limit) && limit >= 1) matches = matches.slice(0, Math.floor(limit));
+    matches = contentMatches(top, fixtures.matches, { automatic: env.CONTENT_AUTOMATIC === '1', n: defaultTopN(env), limit: args['--limit'], now });
   }
   const mode = env.AGNES_SKIP_IMAGES === '1' ? 'clips-only' : env.AGNES_SKIP_VIDEO === '1' ? 'images-only' : 'all';
   const imageModel = env.AGNES_IMAGE_MODEL || 'agnes-image-2.5-flash';

@@ -3,6 +3,8 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { checkScript, checkDescription, checkMediaManifest, isMediaManifestFile } from '../src/lib/compliance.js';
 import { attentionPlayers, hashtagLine, playersInNarration, shortTitle } from '../src/lib/youtube.js';
+const selectionFile = process.argv.find(arg => arg.startsWith('--selection='))?.slice(12);
+const selectionIds = selectionFile ? new Set(JSON.parse(await readFile(selectionFile, 'utf8')).ids) : null;
 
 function clickErrors(data) {
   const named = { home: data.home, away: data.away };
@@ -27,7 +29,7 @@ function clickErrors(data) {
 const dir = 'public/data/youtube-scripts';
 let files = [];
 try {
-  files = (await readdir(dir)).filter(f => f.endsWith('.json'));
+  files = (await readdir(dir)).filter(f => f.endsWith('.json') && (!selectionIds || selectionIds.has(f.slice(0, -5))));
 } catch {
   console.log('lint:shorts: sin guiones todavía, ok');
   process.exit(0);
@@ -58,7 +60,7 @@ console.log(`lint:shorts: ${files.length} archivos, ${failures} fallos (publishe
 const mediaDir = 'public/data/media-pack';
 let mediaFiles = [];
 try {
-  mediaFiles = (await readdir(mediaDir)).filter(isMediaManifestFile);
+  mediaFiles = (await readdir(mediaDir)).filter(isMediaManifestFile).filter(f => !selectionIds || selectionIds.has(f.slice(0,-5)));
 } catch {
   console.log('lint:shorts: sin media-pack todavía, ok');
   process.exit(failures ? 1 : 0);

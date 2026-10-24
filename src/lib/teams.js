@@ -219,36 +219,62 @@ function shiftDay(day, amount) {
   return new Date(Date.UTC(year, month - 1, date + amount)).toISOString().slice(0, 10);
 }
 
-/**
- * Orden del top de guiones y media. Un club de la lista que juega hoy o
- * mañana, en hora de Lima, va primero aunque el fixture firme «FC» o «CF».
- * Si en esos dos días no hay ninguno, el cupo pasa a las selecciones. El
- * resto entra por saque inicial. Más allá de mañana, la lista no salta la cola.
- * Devuelve los partidos ya ordenados y cuántos ocupan ese cupo reservado.
+/** Editorial hierarchy for content production; the homepage keeps its own hero ranking. */
+export const CONTENT_TEAMS = Object.freeze([
+  'Barcelona', 'Real Madrid', 'Paris Saint Germain', 'Atletico Madrid', 'Liverpool',
+  'Manchester United', 'Arsenal', 'Manchester City', 'Chelsea', 'Bayern Munich',
+  'Tottenham', 'Dortmund', 'Flamengo', 'Palmeiras',
+]);
+const CONTENT_ALIASES = { 'atletico de madrid': 'atletico madrid', 'bayern munchen': 'bayern munich', 'bayern': 'bayern munich', 'borussia dortmund': 'dortmund', 'se palmeiras': 'palmeiras', 'sociedade esportiva palmeiras': 'palmeiras', 'tottenham hotspur': 'tottenham', 'brighton hove albion': 'brighton' };
+export function contentTeamKey(name) {
+  const key = canonicalClubKey(name);
+  return CONTENT_ALIASES[key] ?? key;
+}
+const contentTeamIndex = name => {
+  const key = contentTeamKey(name);
+  const i = CONTENT_TEAMS.findIndex(team => contentTeamKey(team) === key);
+  return i < 0 ? CONTENT_TEAMS.length : i;
+};
+const CONTENT_RIVALRIES = [
+  ['Bayern Munich', 'Dortmund'], ['Flamengo', 'Palmeiras'], ['Real Madrid', 'Atletico Madrid'],
+  ['Arsenal', 'Tottenham'], ['Liverpool', 'Manchester United'], ['Manchester City', 'Manchester United'],
+  ['Chelsea', 'Tottenham'], ['Barcelona', 'Espanyol'],
+];
+function editorialAttraction(match, useNations = false) {
+  const round = normalize(match.round ?? match.stage ?? match.phase);
+  // Exact final stages only: never promote a quarter-final or semi-final as a final.
+  if (/^(?:final|finals|the final|gran final)(?: (?:leg )?[12]| ida| vuelta)?$/.test(round)) return 0;
+  const isPair = pair => pair.every(team => [match.home, match.away].some(name => contentTeamKey(name) === contentTeamKey(team)));
+  if (match.derby === true || match.isDerby === true || CONTENT_RIVALRIES.some(isPair)) return 1;
+  if ([match.home, match.away].every(name => contentTeamIndex(name) < CONTENT_TEAMS.length || (useNations && nationsPriorityIndex(name) < NATIONS_PRIORITY.length))) return 2;
+  return 3;
+}
+
+/** Barcelona/Madrid reserve their next known fixture at any distance.
+ * Other slots prefer today/tomorrow in Lima, then editorial attraction, hierarchy and kickoff.
+ * Keep one next fixture per team; a shared Barcelona/Madrid fixture occupies one slot.
  */
 export function contentRanking(matches, now = Date.now()) {
-  const upcoming = (matches ?? []).filter(match => match && !FINISHED.has(match.status));
-  if (!upcoming.length) return { ranked: [], priorityCount: 0 };
-  const today = matchDay(new Date(now).toISOString());
-  const tomorrow = shiftDay(today, 1);
-  const clubIndex = name => listedIndex(name, PRIORITY_TEAMS, priorityIndex(name));
-  const nationIndex = name => listedIndex(name, NATIONS_PRIORITY, nationsPriorityIndex(name));
-  const inWindow = match => {
-    const day = matchDay(match.kickoff);
-    return day === today || day === tomorrow;
-  };
-  const window = upcoming.filter(inWindow);
-  const useClubs = window.some(match => clubIndex(match.home) < PRIORITY_TEAMS.length || clubIndex(match.away) < PRIORITY_TEAMS.length);
-  const index = useClubs ? clubIndex : nationIndex;
-  const list = useClubs ? PRIORITY_TEAMS : NATIONS_PRIORITY;
-  const reserved = match => inWindow(match) && (index(match.home) < list.length || index(match.away) < list.length);
-  const score = match => {
-    const home = index(match.home);
-    const away = index(match.away);
-    const both = home < list.length && away < list.length ? 10 : 0;
-    return (list.length - Math.min(home, away)) * 100 + both - Date.parse(match.kickoff) / 1e11;
-  };
-  const priority = upcoming.filter(reserved).sort((a, b) => score(b) - score(a));
-  const rest = upcoming.filter(match => !reserved(match)).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-  return { ranked: [...priority, ...rest], priorityCount: priority.length };
+  const id = match => match.webId ?? match.id;
+  const byTime = (a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff) || String(id(a)).localeCompare(String(id(b)));
+  const seen = new Set();
+  const upcoming = (matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > now && !/^(?:fd|af|bz)-[0-9]+$/.test(id(m) ?? ''))
+    .sort(byTime).filter(m => { if (!id(m) || seen.has(id(m))) return false; seen.add(id(m)); return true; });
+  const nearest = new Map();
+  for (const match of upcoming) for (const team of [match.home, match.away]) {
+    const key = contentTeamKey(team);
+    if (key && !nearest.has(key)) nearest.set(key, match);
+  }
+  const mandatory = [...new Set(CONTENT_TEAMS.slice(0, 2).map(team => nearest.get(contentTeamKey(team))).filter(Boolean))];
+  const required = new Set(mandatory);
+  const candidates = upcoming.filter(m => !required.has(m) && [m.home, m.away].every(team => nearest.get(contentTeamKey(team)) === m));
+  const today = matchDay(new Date(now).toISOString()), tomorrow = shiftDay(today, 1);
+  const inWindow = m => [today, tomorrow].includes(matchDay(m.kickoff));
+  const hasClub = upcoming.some(m => inWindow(m) && [m.home, m.away].some(name => contentTeamIndex(name) < CONTENT_TEAMS.length));
+  const index = hasClub ? contentTeamIndex : name => listedIndex(name, NATIONS_PRIORITY, nationsPriorityIndex(name));
+  const count = hasClub ? CONTENT_TEAMS.length : NATIONS_PRIORITY.length;
+  const rank = m => Math.min(index(m.home), index(m.away));
+  candidates.sort((a,b) => Number(!inWindow(a)) - Number(!inWindow(b))
+    || editorialAttraction(a, !hasClub) - editorialAttraction(b, !hasClub) || rank(a) - rank(b) || byTime(a,b));
+  return { ranked: [...mandatory, ...candidates], priorityCount: mandatory.length + candidates.filter(m => inWindow(m) && rank(m) < count).length };
 }

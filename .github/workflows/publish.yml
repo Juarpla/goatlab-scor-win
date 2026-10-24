@@ -11,8 +11,9 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: goatlab-publish
+  group: goatlab-content-pipeline
   cancel-in-progress: false
+  queue: max
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -72,6 +73,18 @@ jobs:
           ANALYSIS_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_RETRY_MAX_TOKENS }}
           ANALYSIS_BATCH_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_MAX_TOKENS }}
           ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
+      - name: Purgar media tras actualizar data
+        continue-on-error: true # conservar data disponible aunque el almacén remoto no responda
+        run: node scripts/maintain-media.mjs
+        env:
+          MEDIA_ROLE: producer
+          R2_STATE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_STATE_BUCKET: app-states
+          R2_STATE_KEY: goatlab/agnes-state.json
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_BUCKET: goatlab
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       - uses: actions/upload-artifact@v4
         with:
           name: goatlab-data
@@ -90,6 +103,7 @@ jobs:
             git commit -m "chore: update data"
             # main pudo avanzar (push manual) mientras corría el workflow:
             # rebase + reintentos en vez de fallar con "fetch first".
+            pushed=false
             for i in 1 2 3; do
               git fetch origin
               if ! git rebase --autostash origin/main; then
@@ -98,9 +112,11 @@ jobs:
                 exit 1
               fi
               if git push origin HEAD:main; then
+                pushed=true
                 break
               fi
               echo "Push rechazado, reintento $i/3"
               sleep 10
             done
+            if [ "$pushed" != "true" ]; then exit 1; fi
           fi

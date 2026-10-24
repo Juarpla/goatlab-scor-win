@@ -1,3 +1,4 @@
+import { readContentSelection } from '../lib/content-selection.js';
 /** One ephemeral run budget; durable provider admission and verified R2 publication. */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -11,9 +12,8 @@ import { editingFacts } from '../lib/match-facts.js';
 import { validateContent, contentIdentityErrors, scriptStructureErrors } from '../lib/match-content.js';
 import { mediaPublisher } from '../lib/media-progress.js';
 import { contentFingerprint } from '../lib/media-contract.js';
-import { TOP_FILENAME, topFreshness, defaultTopN, effectiveIds, registerExtra, providerOnlyId } from '../lib/top.js';
+import { TOP_FILENAME, contentMatches, topFreshness, defaultTopN, registerExtra, providerOnlyId } from '../lib/top.js';
 import { transact } from './agnes-state.mjs';
-import { maintainMedia } from './maintain-media.mjs';
 import { reconcileVideoRecovery } from './reconcile-video-recovery.mjs';
 import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../lib/media-diagnostics.js';
 
@@ -42,7 +42,7 @@ export function mediaSoftStop(runDeadline, kickoff) {
   return Number.isFinite(at) ? Math.min(runDeadline, at + 86_400_000) : 0;
 }
 
-export async function generateMediaBanks({ args = {}, env = process.env, clock = Date.now, execImpl = execute, fetchImpl = fetch, transactImpl = transact, maintainImpl = maintainMedia, log = console.log } = {}) {
+export async function generateMediaBanks({ args = {}, env = process.env, clock = Date.now, execImpl = execute, fetchImpl = fetch, transactImpl = transact, log = console.log } = {}) {
   if (env.MEDIA_ROLE !== 'producer' || env.GITHUB_ACTIONS !== 'true') throw new Error('La generación de media pertenece exclusivamente a GitHub Actions');
   const started = clock(), runDeadline = mediaRunDeadline(started, env), runId = randomUUID();
   const repo = env.GOATLAB_REPO || '.', dir = args['--out'] || env.MEDIA_PACK_DIR || join(repo, 'public/data/media-pack');
@@ -85,12 +85,11 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       return bytes;
     } catch { return null; }
   };
-  const fixtures = await json(join(repo, 'public/data/fixtures.json'));
+  const { fixtures, top: selectedTop } = await readContentSelection({ repo, env });
   await mkdir(dir, { recursive: true });
-  const maintenance = await maintainImpl({ repo, dir, protectedMatch: args['--match'], now: clock(), transactImpl: state,
-    r2Impl: prefix => r2('del-prefix', prefix) });
+  // Generation is additive. Only 1-update-data runs terminal-artifact maintenance.
   const topDefault = defaultTopN(env);
-  let top = await json(join(repo, 'public/data', TOP_FILENAME));
+  let top = selectedTop;
   const freshness = topFreshness(top, { now: clock(), env, manual: !!args['--match'] });
   if (!freshness.valid) throw new Error('Top no disponible: ' + freshness.reason);
   let matches;
@@ -102,22 +101,21 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     }
     if (matches.length && !args['--content']) {
       const registered = registerExtra(top ?? { ranking: [], extra: [] }, matches.map(m => m.webId ?? m.id));
-      if (registered.added.length) { top = registered.top; await writeFile(join(repo, 'public/data', TOP_FILENAME), JSON.stringify(top, null, 2)); }
+      if (registered.added.length && !env.CONTENT_SELECTION_FILE) { top = registered.top; await writeFile(join(repo, 'public/data', TOP_FILENAME), JSON.stringify(top, null, 2)); }
     }
   } else {
-    const wanted = new Set(effectiveIds(top, topDefault));
-    matches = (fixtures?.matches ?? []).filter(m => wanted.has(m.webId ?? m.id) && m.status === 'NS' && Date.parse(m.kickoff) > clock()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    if (args['--limit'] != null) matches = matches.slice(0, Math.max(1, Number(args['--limit'])));
+    matches = contentMatches(top, fixtures?.matches, { automatic: env.CONTENT_AUTOMATIC === '1', n: topDefault, limit: args['--limit'], now: clock() });
   }
   const snapshot = args['--content'] ? await json(args['--content']) : {};
   const mode = env.AGNES_SKIP_IMAGES === '1' ? 'clips-only' : env.AGNES_SKIP_VIDEO === '1' ? 'images-only' : 'all';
-  const summary = { runId, eligible: 0, pending: 0, generated: 0, reused: 0, completed: 0, completedIds: [], deletedIds: maintenance.deletedIds ?? [] };
+  const summary = { runId, eligible: 0, pending: 0, generated: 0, reused: 0, completed: 0, completedIds: [], deletedIds: [] };
   const budget = R2 ? await r2('budget') : null;
   const r2blocked = !R2 || !budget || budget.level === 'block';
   const recoveryMatches=[];
   if(R2 && env.AGNES_SKIP_VIDEO!=='1' && clock()<runDeadline) {
     const {tasks=[]}=await state('recoverable-videos',{});
     for(const matchId of new Set(tasks.map(task=>task.matchId))) {
+      if (env.CONTENT_AUTOMATIC === '1' && !matches.some(m => (m.webId ?? m.id) === matchId)) continue;
       const match=(fixtures?.matches ?? []).find(m=>(m.webId ?? m.id)===matchId);
       const script=match ? null : await json(join(repo,'public/data/youtube-scripts',matchId+'.json'));
       const identity=match ?? (script && !scriptStructureErrors(script,{matchId}).length ? {...script,id:matchId,webId:matchId} : null);

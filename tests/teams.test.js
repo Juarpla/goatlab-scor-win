@@ -96,7 +96,7 @@ test('rankMatches uses nation ranking when no priority club is playing', () => {
 
 const windowNow = Date.parse('2026-10-22T15:00:00Z');
 
-test('a listed club tomorrow leads the content top even with a legal prefix', () => {
+test('nearest Barcelona and Madrid fixtures lead regardless of dates and legal prefixes', () => {
   const soon = index => `2026-10-22T${16 + index}:45:00Z`;
   const matches = [
     match('a', 'Sturm', 'Marseille', soon(0)),
@@ -108,10 +108,10 @@ test('a listed club tomorrow leads the content top even with a legal prefix', ()
     match('classic', 'FC Barcelona', 'Real Madrid CF', '2026-10-25T20:00:00Z'),
   ];
   const { ranked, priorityCount } = contentRanking(matches, windowNow);
-  assert.equal(priorityCount, 1);
+  assert.equal(priorityCount, 2);
   assert.equal(ranked[0].id, 'barca');
-  assert.deepEqual(ranked.slice(1, 6).map(item => item.id), ['a', 'b', 'c', 'd', 'e']);
-  assert.equal(ranked.at(-1).id, 'classic');
+  assert.deepEqual(ranked.slice(2, 7).map(item => item.id), ['a', 'b', 'c', 'd', 'e']);
+  assert.equal(ranked[1].id, 'classic');
   assert.equal(rankMatches(matches)[0].id, 'a');
 });
 
@@ -132,7 +132,7 @@ test('every listed club playing today or tomorrow stays ahead of the fill', () =
   ];
   const { ranked, priorityCount } = contentRanking(matches, windowNow);
   assert.equal(priorityCount, 7);
-  assert.deepEqual(ranked.map(item => item.id), ['barca', 'mad', 'psg', 'ars', 'liv', 'city', 'derby', 'early']);
+  assert.deepEqual(ranked.map(item => item.id), ['barca', 'mad', 'derby', 'psg', 'liv', 'ars', 'city', 'early']);
 });
 
 test('nations reserve the content slots only when no listed club plays in the window', () => {

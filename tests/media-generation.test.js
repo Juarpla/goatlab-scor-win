@@ -512,3 +512,12 @@ test('current provider saturation persists in report and summary without an exec
   assert.equal(summary.status,0);assert.match(summary.stdout,/finalizado con recursos pendientes por condiciones temporales/);
   assert.match(summary.stdout,/503.*video_queue_full/);assert.match(summary.stdout,/0\/2 clips listos/);
 });
+
+test('manual media generation never runs terminal maintenance or deletes another bank', async t => {
+  const f = await fixture(t);
+  const other = join(f.dir, 'another-match.json');
+  await writeFile(other, '{"preserve":true}');
+  const result = await f.run({ args: { '--match': 'a-b' }, maintainImpl: async () => { throw new Error('Generation must not perform maintenance'); } });
+  assert.deepEqual(result.deletedIds, []);
+  assert.equal(await readFile(other, 'utf8'), '{"preserve":true}');
+});

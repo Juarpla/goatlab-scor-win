@@ -50,22 +50,23 @@ for (const consumer of consumers) {
     }
   });
 
-  test(`${consumer.category}: stale top maintains terminal artifacts before rejecting`, async t => {
+  test(`${consumer.category}: stale top preserves terminal artifacts when rejecting`, async t => {
     const { data, directory, run } = await fixture(t, consumer, { ...top, generatedAt: stamp(-8 * 3600_000) });
     const finished = { ...match, id: 'provider-finished', webId: 'finished', kickoff: stamp(-5 * 3600_000), status: 'FT', homeScore: 1, awayScore: 0 };
     await writeFile(join(data, 'finished-at.json'), JSON.stringify({ version: 1, seen: { finished: stamp(-2 * 3600_000) }, snapshots: { finished: { ...finished, ids: [finished.id, finished.webId] } } }));
     await writeFile(join(directory, 'finished.json'), '{}');
     const result = await run();
     assert.equal(result.status, 2, result.stderr);
-    assert.match(result.stdout, /poda finished.json/);
+    assert.doesNotMatch(result.stdout, /poda/);
     assert.match(result.stderr, /rechazado \(stale\)/);
-    assert.deepEqual(await readdir(directory), []);
+    assert.deepEqual(await readdir(directory), ['finished.json']);
   });
 
   test(`${consumer.category}: authoritative empty ranking does not select live fixtures`, async t => {
     const { run } = await fixture(t, consumer, { ...top, ranking: [] });
     const result = await run();
     assert.equal(result.status, consumer.emptyExit, result.stderr);
+    assert.equal((await run([], { CONTENT_AUTOMATIC: '1' })).status, 0);
     assert.doesNotMatch(result.stderr, /evaluation-report|No hay proveedores/);
   });
 }

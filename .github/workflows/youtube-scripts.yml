@@ -26,13 +26,21 @@ on:
 # no bloquea el deploy de probabilidades.
 permissions:
   contents: write
+  actions: read
 concurrency:
-  group: goatlab-shorts
+  group: goatlab-content-pipeline
   cancel-in-progress: false
+  queue: max
 jobs:
   shorts:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    env:
+      CONTENT_SELECTION_FILE: .cache/content-selection.json
+      MATCH: ${{ inputs.match }}
+      TOP: ${{ inputs.top }}
+      SCRIPT_TOP_N: ${{ vars.SCRIPT_TOP_N }}
+      CONTENT_AUTOMATIC: ${{ github.event_name != 'workflow_dispatch' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,6 +52,8 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Fijar selección compartida
+        run: node scripts/content-selection.mjs
       - name: Preparar categorías independientes
         id: scripts
         continue-on-error: true # los JSON válidos se commitean aunque otro partido falle
@@ -72,9 +82,9 @@ jobs:
           SCRIPT_TOP_N: ${{ vars.SCRIPT_TOP_N }}
           SCRIPT_PROVIDER_ORDER: ${{ vars.SCRIPT_PROVIDER_ORDER || 'OPENCODE_GO_FALLBACK_MODEL,OPENCODE_GO_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL' }}
       - name: Lint de guiones
-        run: node scripts/check-compliance.mjs
+        run: node scripts/check-compliance.mjs --selection=.cache/content-selection.json
       - name: Validar prompts
-        run: node scripts/check-match-prompts.mjs
+        run: node scripts/check-match-prompts.mjs --selection=.cache/content-selection.json
       - name: Commit de contenido
         if: always() && steps.scripts.outcome != 'skipped'
         run: |
@@ -87,6 +97,7 @@ jobs:
             echo "Sin cambios de guiones que commitear"
           else
             git commit -m "chore: update youtube scripts"
+            pushed=false
             for i in 1 2 3; do
               git fetch origin
               if ! git rebase --autostash origin/main; then
@@ -95,9 +106,27 @@ jobs:
                 exit 1
               fi
               if git push origin HEAD:main; then
+                pushed=true
                 break
               fi
               echo "Push rechazado, reintento $i/3"
               sleep 10
             done
+            if [ "$pushed" != "true" ]; then exit 1; fi
           fi
+      - name: Publicar selección e inputs para media
+        uses: actions/upload-artifact@v4
+        with:
+          name: goatlab-content-selection
+          include-hidden-files: true
+          if-no-files-found: error
+          path: |
+            .cache/content-selection.json
+            public/data/youtube-scripts/*.json
+            public/data/image-prompts/*.json
+            public/data/video-prompts/*.json
+            public/data/motion-prompts/*.json
+          retention-days: 7
+      - name: Comprobar resultado de generación
+        if: always() && steps.scripts.outcome == 'failure'
+        run: exit 1

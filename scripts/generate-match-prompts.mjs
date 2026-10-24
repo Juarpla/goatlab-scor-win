@@ -1,12 +1,12 @@
+import { readContentSelection } from '../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de prompts pertenece a GitHub Actions');
-import { readFile, readdir, mkdir, writeFile, rename, rm } from 'node:fs/promises';
+import { readFile, mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors } from '../src/lib/match-content.js';
 import { withFailover, extractJson } from '../src/lib/llm.js';
-import { selectMatches } from '../src/lib/youtube.js';
-import { rankMatches, esName } from '../src/lib/teams.js';
+import { esName } from '../src/lib/teams.js';
 import { editingFacts } from '../src/lib/match-facts.js';
-import { TOP_FILENAME, defaultTopN, effectiveIds, registerExtra, topFreshness } from '../src/lib/top.js';
+import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../src/lib/top.js';
 import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
@@ -14,7 +14,7 @@ const category = args['--category'];
 const spec = CONTENT_CATEGORIES[category];
 if (!spec?.kinds) throw new Error('Usa --category=image-prompts|video-prompts|motion-prompts');
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
-const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
+const { fixtures, top: selectedTop } = await readContentSelection();
 const onlyMatch = args['--match'];
 const now = Date.now();
 let ledger = null;
@@ -28,20 +28,9 @@ const topDefault = defaultTopN(process.env);
 const topRaw = args['--match'] ? null : (args['--top'] || process.env.SCRIPT_TOP_N);
 const top = onlyMatch ? null : (Number.isFinite(Number(topRaw)) && Number(topRaw) >= 1 ? Math.floor(Number(topRaw)) : topDefault);
 const manualTop = top != null && topRaw != null && String(topRaw).trim() !== '' && top > topDefault;
-const futureNs = (fixtures.matches ?? []).filter(m => m?.status === 'NS' && Date.parse(m.kickoff) > now);
-const liveRanked = rankMatches(futureNs).map(m => m.webId ?? m.id);
 const dir = `public/data/${spec.directory}`;
 await mkdir(dir, { recursive: true });
-for (const name of await readdir(dir)) {
-  if (!/^[A-Za-z0-9][A-Za-z0-9_-]*\.json$/.test(name)) continue;
-  const match = resolvePruneMatch(name.slice(0, -5), pruneContext);
-  if ((match?.webId ?? match?.id) === protectedId || !pruneDue(match, pruneContext.seen, now)) continue;
-  await rm(`${dir}/${name}`);
-  console.log(`${category}: poda ${name}`);
-}
-let topFile = null;
-try { topFile = JSON.parse(await readFile(`public/data/${TOP_FILENAME}`, 'utf8')); }
-catch (error) { if (error.code !== 'ENOENT') topFile = {}; }
+let topFile = selectedTop;
 const freshness = topFreshness(topFile, { now, env: process.env, manual: !!onlyMatch });
 if (!freshness.valid) {
   console.error(`${category}: top.json rechazado (${freshness.reason})`);
@@ -52,7 +41,8 @@ async function saveTopFile() {
 }
 let matches;
 if (onlyMatch) {
-  matches = selectMatches(fixtures.matches, { onlyMatch });
+  matches = contentMatches(topFile, fixtures.matches, { onlyMatch });
+  if (!matches.length && requested) matches = [requested];
   // --match manual: también vale para un partido ya jugado (FT) que haga falta rehacer.
   if (!matches.length) matches = (fixtures.matches ?? []).filter(m => m.id === onlyMatch || m.webId === onlyMatch);
   if (!matches.length) {
@@ -62,26 +52,24 @@ if (onlyMatch) {
       console.log(`${category}: ${onlyMatch} fuera de fixtures; identidad del guión`);
     } catch (e) { if (e.code !== 'ENOENT') throw e; }
   }
-  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [protectedId]);
-  if (registered.added.length) {
+  const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, [...(matches.length ? [protectedId] : [])]);
+  if (registered.added.length && !process.env.CONTENT_SELECTION_FILE) {
     topFile = registered.top;
     await saveTopFile();
     console.log(`${category}: extra manual ${registered.added.join(', ')}`);
   }
 } else {
-  if (manualTop) {
-    const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, liveRanked.slice(topDefault, top));
-    if (registered.added.length) {
+  if (process.env.CONTENT_AUTOMATIC !== '1' && manualTop) {
+    const registered = registerExtra(topFile ?? { ranking: [], extra: [] }, (topFile.ranking ?? []).slice(topDefault, top).map(m => m.id));
+    if (registered.added.length && !process.env.CONTENT_SELECTION_FILE) {
       topFile = registered.top;
       await saveTopFile();
       console.log(`${category}: extras manuales ${registered.added.join(', ')}`);
     }
   }
-  const wanted = new Set(effectiveIds(topFile, top));
-  matches = futureNs.filter(m => wanted.has(m.webId ?? m.id)).sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
-  if (limitRaw != null) matches = matches.slice(0, Math.max(1, Number(limitRaw)));
+  matches = contentMatches(topFile, fixtures.matches, { automatic: process.env.CONTENT_AUTOMATIC === '1', n: top, limit: limitRaw, now });
 }
-if (!onlyMatch) matches = matches.filter(match => !pruneDue(match, pruneContext.seen, now));
+if (!onlyMatch && process.env.CONTENT_AUTOMATIC !== '1') matches = matches.filter(match => !pruneDue(match, pruneContext.seen, now));
 if (!matches.length) {
   console.log(`${category}: sin partidos para generar`);
   process.exit(0);

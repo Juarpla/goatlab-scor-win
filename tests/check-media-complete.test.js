@@ -172,3 +172,17 @@ test('CLI emits the same stable fields to stdout and GITHUB_OUTPUT and exits two
   assert.match(bad.stdout, /complete=false\nreason=top-invalid/);
   assert.match(mediaCheckOutput({ complete: false, reason: 'top-missing', eligible: 0, pending: 0, top_age_h: null, top_stale: false }), /top_age_h=\ntop_stale=false\n$/);
 });
+
+test('automatic gate selects exactly the shared five despite extras, priority, env and limit', async t => {
+  const matches = Array.from({ length: 7 }, (_, i) => ({ ...match(), id: `auto-${i}`, webId: `auto-${i}` }));
+  const f = await fixture(t, matches);
+  await f.put('top.json', { version: 1, generatedAt: stamp(0), n: 7, priority: 7, ranking: matches.map(m => ({ id: m.webId })), extra: [matches[6].webId] });
+  const result = await f.check({ '--limit': '1' }, { CONTENT_AUTOMATIC: '1', SCRIPT_TOP_N: '20' });
+  assert.equal(result.eligible, 5);
+  await f.put('fixtures.json', { matches: matches.slice(0, 3) });
+  assert.equal((await f.check({}, { CONTENT_AUTOMATIC: '1' })).eligible, 3);
+  await f.put('fixtures.json', { matches: [] });
+  const empty = await f.check({}, { CONTENT_AUTOMATIC: '1' });
+  assert.equal(empty.reason, 'no-eligible');
+  assert.equal(empty.complete, true);
+});

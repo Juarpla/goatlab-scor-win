@@ -14,8 +14,8 @@ test('effective set is top slice plus manual extras without duplicates', () => {
   assert.deepEqual(effectiveIds(top, 2), ['a', 'b', 'c', 'x']);
   assert.deepEqual(effectiveIds({ ranking: [], extra: [] }, 5), []);
   const wide = { n: 7, priority: 6, ranking: ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map(id => ({ id })), extra: ['x'] };
-  assert.equal(selectionCount(wide, 5), 6);
-  assert.deepEqual(effectiveIds(wide, 5), ['a', 'b', 'c', 'd', 'e', 'f', 'x']);
+  assert.equal(selectionCount(wide, 5), 5);
+  assert.deepEqual(effectiveIds(wide, 5), ['a', 'b', 'c', 'd', 'e', 'x']);
   assert.equal(selectionCount({ priority: 2 }, 8), 8);
 });
 test('manual ids are registered once; a legacy NS set cannot prove a finish', () => {
@@ -32,4 +32,15 @@ test('manual extras survive unknown, LIVE and terminal grace, then retire from s
   const live = { id: 'af-live', webId: 'live', status: 'LIVE' };
   assert.deepEqual(pruneExtra(top, [live, terminal], ledger, now).extra, top.extra);
   assert.deepEqual(pruneExtra(top, [live], ledger, now + 1).extra, ['live', 'unknown']);
+});
+
+test('automatic selection caps at five, ignores priority/extras and accepts fewer available', async () => {
+  const { automaticMatches } = await import('../src/lib/top.js');
+  const now = Date.parse('2026-10-24T00:00:00Z');
+  const matches = Array.from({ length: 8 }, (_, i) => ({ id: `match-${i}`, status: 'NS', kickoff: '2026-10-25T00:00:00Z' }));
+  const top = { n: 20, priority: 8, ranking: matches.map(({ id }) => ({ id })), extra: ['manual'] };
+  assert.deepEqual(automaticMatches(top, matches, now).map(m => m.id), matches.slice(0, 5).map(m => m.id));
+  assert.equal(automaticMatches({ ...top, ranking: top.ranking.slice(0, 4) }, matches, now).length, 4);
+  assert.deepEqual(automaticMatches(top, [], now), []);
+  assert.deepEqual(automaticMatches(top, matches.map((m, i) => i === 0 ? { ...m, status: 'FT' } : m), now).map(m => m.id), matches.slice(1, 5).map(m => m.id));
 });
