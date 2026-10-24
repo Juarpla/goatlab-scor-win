@@ -4,7 +4,7 @@
   "away": "Everton FC",
   "competition": "premier",
   "kickoff": "2026-10-24T14:00:00Z",
-  "updatedAt": "2026-10-24T10:49:47.271Z",
+  "updatedAt": "2026-10-24T11:14:12.556Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 0.92
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.68,
+      "away": 0.83
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 6,
       "away": 6
@@ -129,18 +132,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.45,
-    "noGoal": 0.086,
+    "lambdaTotal": 2.51,
+    "noGoal": 0.081,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.335
+        "p": 0.342
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.223
+        "p": 0.225
       },
       {
         "from": 30,
@@ -150,21 +153,21 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.098
+        "p": 0.097
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.065
+        "p": 0.064
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.044
+        "p": 0.042
       }
     ],
-    "firstHome": 0.571,
-    "firstAway": 0.343
+    "firstHome": 0.615,
+    "firstAway": 0.304
   },
   "scorers": {
     "home": [
@@ -173,27 +176,27 @@
         "goals": 3,
         "matches": 7,
         "share": 0.273,
-        "rate": 0.42,
-        "anytime": 0.341,
-        "first": 0.17
+        "rate": 0.46,
+        "anytime": 0.368,
+        "first": 0.183
       },
       {
         "player": "Bruno Guimarães",
         "goals": 2,
         "matches": 6,
         "share": 0.182,
-        "rate": 0.28,
-        "anytime": 0.243,
-        "first": 0.114
+        "rate": 0.31,
+        "anytime": 0.263,
+        "first": 0.122
       },
       {
         "player": "Kai Havertz",
         "goals": 2,
         "matches": 7,
         "share": 0.182,
-        "rate": 0.28,
-        "anytime": 0.243,
-        "first": 0.114
+        "rate": 0.31,
+        "anytime": 0.263,
+        "first": 0.122
       }
     ],
     "away": [
@@ -202,59 +205,192 @@
         "goals": 3,
         "matches": 7,
         "share": 0.375,
-        "rate": 0.35,
-        "anytime": 0.292,
-        "first": 0.141
+        "rate": 0.31,
+        "anytime": 0.267,
+        "first": 0.124
       },
       {
         "player": "Kiernan Dewsbury-Hall",
         "goals": 2,
         "matches": 7,
         "share": 0.25,
-        "rate": 0.23,
-        "anytime": 0.205,
-        "first": 0.094
+        "rate": 0.21,
+        "anytime": 0.187,
+        "first": 0.083
       },
       {
         "player": "Ainsley Maitland-Niles",
         "goals": 1,
         "matches": 5,
         "share": 0.125,
-        "rate": 0.12,
-        "anytime": 0.109,
-        "first": 0.047
+        "rate": 0.1,
+        "anytime": 0.099,
+        "first": 0.041
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.6559999999999999,
+      "draw": 0.21600000000000003,
+      "away": 0.128,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.83,
+      "away": 0.74
+    },
+    "over15": 0.745,
+    "over25": 0.503,
+    "over35": 0.284,
+    "btts": 0.465,
+    "score": "1-0",
+    "cornersOver95": 0.455,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.656,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6563,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-24T11:14:08.929Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.623,
+      "draw": 0.242,
+      "away": 0.135
+    },
+    "doubleChance": {
+      "12": 0.758,
+      "1X": 0.865,
+      "X2": 0.377
+    },
+    "dnb": {
+      "home": 0.822,
+      "away": 0.178
+    },
+    "totals": {
+      "over15": 0.737,
+      "under15": 0.263,
+      "over25": 0.474,
+      "under25": 0.526,
+      "over35": 0.257,
+      "under35": 0.743
+    },
+    "btts": {
+      "yes": 0.449,
+      "no": 0.551
+    },
+    "cleanSheet": {
+      "home": 0.477,
+      "away": 0.16
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.16,
+        "share": 0.27397260273972607
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.128,
+        "share": 0.21917808219178084
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.114,
+        "share": 0.19520547945205483
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.095,
+        "share": 0.16267123287671234
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.087,
+        "share": 0.14897260273972604
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 0
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "totalMatches": 69,
+    "homeWins": 41,
+    "draws": 16,
+    "awayWins": 12,
+    "avgTotalGoals": 2.7681159420289854,
+    "recent": [
+      {
+        "eventId": 294,
+        "date": "2026-03-14T17:30:00+00:00",
+        "home": "Arsenal",
+        "away": "Everton",
+        "homeTeamId": 18,
+        "awayTeamId": 20,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 167,
+        "date": "2025-12-20T20:00:00+00:00",
+        "home": "Everton",
+        "away": "Arsenal",
+        "homeTeamId": 20,
+        "awayTeamId": 18,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 306952,
+        "date": "2025-04-05T11:30:00+00:00",
+        "home": "Everton",
+        "away": "Arsenal",
+        "homeTeamId": 20,
+        "awayTeamId": 18,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 306802,
+        "date": "2024-12-14T15:00:00+00:00",
+        "home": "Arsenal",
+        "away": "Everton",
+        "homeTeamId": 18,
+        "awayTeamId": 20,
+        "homeScore": 0,
+        "awayScore": 0
+      },
+      {
+        "eventId": 312493,
+        "date": "2024-05-19T15:00:00+00:00",
+        "home": "Arsenal",
+        "away": "Everton",
+        "homeTeamId": 18,
+        "awayTeamId": 20,
+        "homeScore": 2,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -291,7 +427,7 @@
     "home": {
       "shots": 13.56,
       "shotsOnTarget": 4.52,
-      "xg": 1.5,
+      "xg": 1.83,
       "corners": 4.8,
       "fouls": 11.51,
       "yellowCards": 1.9,
@@ -302,7 +438,7 @@
     "away": {
       "shots": 12.87,
       "shotsOnTarget": 4.19,
-      "xg": 1.25,
+      "xg": 0.74,
       "corners": 4.37,
       "fouls": 11.36,
       "yellowCards": 2.06,
@@ -393,9 +529,9 @@
       "away": 0.427
     },
     "lastGoal": {
-      "home": 0.571,
-      "away": 0.343,
-      "noGoal": 0.086
+      "home": 0.615,
+      "away": 0.304,
+      "noGoal": 0.081
     },
     "cornerRace": {
       "3": {
