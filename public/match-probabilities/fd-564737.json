@@ -1,0 +1,633 @@
+{
+  "id": "fd-564737",
+  "home": "Villarreal CF",
+  "away": "RCD Espanyol de Barcelona",
+  "competition": "laliga",
+  "kickoff": "2026-10-30T20:00:00Z",
+  "updatedAt": "2026-10-24T10:49:47.271Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.8,
+      "away": 1.073
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.865,
+      "away": 1.067
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Villarreal CF": {
+        "position": 12,
+        "team": "Villarreal CF",
+        "played": 9,
+        "won": 2,
+        "drawn": 3,
+        "lost": 4,
+        "goalsFor": 13,
+        "goalsAgainst": 13,
+        "goalDifference": 0,
+        "points": 9,
+        "form": null
+      },
+      "RCD Espanyol de Barcelona": {
+        "position": 16,
+        "team": "RCD Espanyol de Barcelona",
+        "played": 9,
+        "won": 2,
+        "drawn": 2,
+        "lost": 5,
+        "goalsFor": 11,
+        "goalsAgainst": 12,
+        "goalDifference": -1,
+        "points": 8,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-24T10:49:25.660Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-30T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-24T10:49:25.660Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 314
+    },
+    "venue": {
+      "city": "Vila-real",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.533,
+      "draw": 0.253,
+      "away": 0.214
+    },
+    "doubleChance": {
+      "12": 0.747,
+      "1X": 0.786,
+      "X2": 0.467
+    },
+    "dnb": {
+      "home": 0.714,
+      "away": 0.286
+    },
+    "totals": {
+      "over15": 0.792,
+      "under15": 0.208,
+      "over25": 0.548,
+      "under25": 0.452,
+      "over35": 0.324,
+      "under35": 0.676
+    },
+    "btts": {
+      "yes": 0.56,
+      "no": 0.44
+    },
+    "cleanSheet": {
+      "home": 0.342,
+      "away": 0.165
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.098
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.092
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.091
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.067
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.93,
+    "noGoal": 0.053,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.387
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.237
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.145
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.089
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.055
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.034
+      }
+    ],
+    "firstHome": 0.602,
+    "firstAway": 0.345
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Pape Gueye",
+        "goals": 3,
+        "matches": 9,
+        "share": 0.231,
+        "rate": 0.43,
+        "anytime": 0.35,
+        "first": 0.147
+      },
+      {
+        "player": "Alberto Moleiro",
+        "goals": 2,
+        "matches": 9,
+        "share": 0.154,
+        "rate": 0.29,
+        "anytime": 0.25,
+        "first": 0.098
+      },
+      {
+        "player": "Georges Mikautadze",
+        "goals": 2,
+        "matches": 9,
+        "share": 0.154,
+        "rate": 0.29,
+        "anytime": 0.25,
+        "first": 0.098
+      }
+    ],
+    "away": [
+      {
+        "player": "Roberto Fernández",
+        "goals": 6,
+        "matches": 9,
+        "share": 0.545,
+        "rate": 0.58,
+        "anytime": 0.441,
+        "first": 0.198
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.594,
+      "draw": 0.22399999999999998,
+      "away": 0.182,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.93,
+      "away": 1.06
+    },
+    "over15": 0.789,
+    "over25": 0.5660000000000001,
+    "over35": 0.34,
+    "btts": 0.547,
+    "score": "1-1",
+    "cornersOver95": 0.517,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.594,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.5938,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-24T10:49:43.887Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.566,
+      "draw": 0.24,
+      "away": 0.194
+    },
+    "doubleChance": {
+      "12": 0.76,
+      "1X": 0.806,
+      "X2": 0.434
+    },
+    "dnb": {
+      "home": 0.745,
+      "away": 0.255
+    },
+    "totals": {
+      "over15": 0.81,
+      "under15": 0.19,
+      "over25": 0.574,
+      "under25": 0.426,
+      "over35": 0.35,
+      "under35": 0.65
+    },
+    "btts": {
+      "yes": 0.569,
+      "no": 0.431
+    },
+    "cleanSheet": {
+      "home": 0.346,
+      "away": 0.145
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.124,
+        "share": 0.26495726495726496
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.099,
+        "share": 0.21153846153846154
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.094,
+        "share": 0.20085470085470084
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.087,
+        "share": 0.18589743589743588
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.064,
+        "share": 0.13675213675213674
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 50,
+    "homeWins": 21,
+    "draws": 21,
+    "awayWins": 8,
+    "avgTotalGoals": 2.38,
+    "recent": [
+      {
+        "eventId": 920,
+        "date": "2026-02-09T20:00:00+00:00",
+        "home": "Villarreal",
+        "away": "Espanyol",
+        "homeTeamId": 41,
+        "awayTeamId": 53,
+        "homeScore": 4,
+        "awayScore": 1
+      },
+      {
+        "eventId": 805,
+        "date": "2025-11-08T20:00:00+00:00",
+        "home": "Espanyol",
+        "away": "Villarreal",
+        "homeTeamId": 53,
+        "awayTeamId": 41,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 305613,
+        "date": "2025-04-27T14:15:00+00:00",
+        "home": "Villarreal",
+        "away": "Espanyol",
+        "homeTeamId": 41,
+        "awayTeamId": 53,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 305418,
+        "date": "2024-09-26T17:00:00+00:00",
+        "home": "Espanyol",
+        "away": "Villarreal",
+        "homeTeamId": 53,
+        "awayTeamId": 41,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 316139,
+        "date": "2023-04-27T17:30:00+00:00",
+        "home": "Villarreal",
+        "away": "Espanyol",
+        "homeTeamId": 41,
+        "awayTeamId": 53,
+        "homeScore": 4,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 314
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.8
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 314
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.6
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.23,
+      "shotsOnTarget": 5.25,
+      "xg": 1.93,
+      "corners": 5.37,
+      "fouls": 11.04,
+      "yellowCards": 2.21,
+      "redCards": 0.38,
+      "offsides": 2.21,
+      "possession": 53.18
+    },
+    "away": {
+      "shots": 13.29,
+      "shotsOnTarget": 4.25,
+      "xg": 1.06,
+      "corners": 4.22,
+      "fouls": 13.31,
+      "yellowCards": 2.55,
+      "redCards": 0.44,
+      "offsides": 2.3,
+      "possession": 46.82
+    },
+    "sample": {
+      "home": 10,
+      "away": 9
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 3,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 9,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 9,
+        "fouls": 9,
+        "yellowCards": 9,
+        "redCards": 3,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.67,
+      "shotsOnTarget": 4.8,
+      "xg": 1.48,
+      "corners": 4.83,
+      "fouls": 12.27,
+      "yellowCards": 2.26,
+      "redCards": 0.41,
+      "offsides": 2.06
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.582,
+      "draw": 0.122,
+      "away": 0.296
+    },
+    "cardsDuel": {
+      "home": 0.347,
+      "draw": 0.186,
+      "away": 0.467
+    },
+    "lastGoal": {
+      "home": 0.602,
+      "away": 0.345,
+      "noGoal": 0.053
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.611,
+        "away": 0.389
+      },
+      "5": {
+        "home": 0.645,
+        "away": 0.355
+      },
+      "7": {
+        "home": 0.671,
+        "away": 0.329
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.327,
+      "home12": 0.255,
+      "level": 0.122,
+      "away12": 0.18,
+      "away3plus": 0.116
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 5.2,
+      "condition": "rain",
+      "sampledAt": "2026-10-30T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Estadio de la Cerámica",
+      "city": "Vila-real",
+      "capacity": 23000,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Villarreal CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 12,
+        "played": 9,
+        "gf": 13,
+        "ga": 13,
+        "provider": null
+      },
+      "player": {
+        "name": "Pape Gueye",
+        "detail": "3 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "RCD Espanyol de Barcelona",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 16,
+        "played": 9,
+        "gf": 11,
+        "ga": 12,
+        "provider": null
+      },
+      "player": {
+        "name": "Roberto Fernández",
+        "detail": "6 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "Se marca la probabilidad 0.517 asociada al marcador 1-1 en B por ser muy alta frente a las probabilidades 1X2 y a una lectura de marcador exacto. B2 no declara goles totales ni ambos marcan. El resto de probabilidades P/B/B2 es coherente entre sí.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-24T10:50:41.769Z"
+  }
+}

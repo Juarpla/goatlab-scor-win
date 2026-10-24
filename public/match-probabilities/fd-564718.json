@@ -4,7 +4,7 @@
   "away": "Elche CF",
   "competition": "laliga",
   "kickoff": "2026-10-24T12:00:00Z",
-  "updatedAt": "2026-10-24T04:46:29.230Z",
+  "updatedAt": "2026-10-24T10:49:47.271Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.687
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.655,
-      "away": 1.394
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,22 +47,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-23T11:30:07.456Z",
+      "updatedAt": "2026-10-24T10:49:25.660Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-24T12:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-24T12:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-23T11:30:07.456Z",
+      "updatedAt": "2026-10-24T10:49:25.660Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 311
+      "rows": 314
     },
     "venue": {
       "city": "Madrid",
@@ -132,42 +129,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.05,
-    "noGoal": 0.047,
+    "lambdaTotal": 3.31,
+    "noGoal": 0.037,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.398
+        "p": 0.424
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.24
+        "p": 0.244
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.144
+        "p": 0.141
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.087
+        "p": 0.081
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.052
+        "p": 0.047
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.031
+        "p": 0.027
       }
     ],
-    "firstHome": 0.517,
-    "firstAway": 0.436
+    "firstHome": 0.472,
+    "firstAway": 0.491
   },
   "scorers": {
     "home": [
@@ -176,9 +173,9 @@
         "goals": 7,
         "matches": 9,
         "share": 0.583,
-        "rate": 0.96,
-        "anytime": 0.619,
-        "first": 0.316
+        "rate": 0.94,
+        "anytime": 0.611,
+        "first": 0.285
       },
       {
         "player": "Álvaro García",
@@ -186,8 +183,8 @@
         "matches": 8,
         "share": 0.25,
         "rate": 0.41,
-        "anytime": 0.339,
-        "first": 0.136
+        "anytime": 0.333,
+        "first": 0.122
       }
     ],
     "away": [
@@ -196,183 +193,50 @@
         "goals": 5,
         "matches": 9,
         "share": 0.455,
-        "rate": 0.63,
-        "anytime": 0.47,
-        "first": 0.208
+        "rate": 0.77,
+        "anytime": 0.536,
+        "first": 0.232
       },
       {
         "player": "Fer Niño",
         "goals": 5,
         "matches": 9,
         "share": 0.455,
-        "rate": 0.63,
-        "anytime": 0.47,
-        "first": 0.208
+        "rate": 0.77,
+        "anytime": 0.536,
+        "first": 0.232
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.5329999999999999,
-      "draw": 0.251,
-      "away": 0.21600000000000003,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.69,
-      "away": 1.1
-    },
-    "over15": 0.748,
-    "over25": 0.517,
-    "over35": 0.306,
-    "btts": 0.536,
-    "score": "1-1",
-    "cornersOver95": 0.512,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.533,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.5334,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-23T11:30:20.404Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.5,
-      "draw": 0.264,
-      "away": 0.236
-    },
-    "doubleChance": {
-      "12": 0.736,
-      "1X": 0.764,
-      "X2": 0.5
-    },
-    "dnb": {
-      "home": 0.679,
-      "away": 0.321
-    },
-    "totals": {
-      "over15": 0.779,
-      "under15": 0.221,
-      "over25": 0.528,
-      "under25": 0.472,
-      "over35": 0.306,
-      "under35": 0.694
-    },
-    "btts": {
-      "yes": 0.555,
-      "no": 0.445
-    },
-    "cleanSheet": {
-      "home": 0.333,
-      "away": 0.185
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.12,
-        "share": 0.25586353944562895
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.096,
-        "share": 0.2046908315565032
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.092,
-        "share": 0.19616204690831554
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.088,
-        "share": 0.18763326226012791
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.073,
-        "share": 0.1556503198294243
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 23,
-    "homeWins": 5,
-    "draws": 4,
-    "awayWins": 14,
-    "avgTotalGoals": 2.739130434782609,
-    "recent": [
-      {
-        "eventId": 986,
-        "date": "2026-04-03T19:00:00+00:00",
-        "home": "Rayo Vallecano",
-        "away": "Elche",
-        "homeTeamId": 40,
-        "awayTeamId": 55,
-        "homeScore": 1,
-        "awayScore": 0
-      },
-      {
-        "eventId": 858,
-        "date": "2025-12-21T17:30:00+00:00",
-        "home": "Elche",
-        "away": "Rayo Vallecano",
-        "homeTeamId": 55,
-        "awayTeamId": 40,
-        "homeScore": 4,
-        "awayScore": 0
-      },
-      {
-        "eventId": 316142,
-        "date": "2023-04-29T14:15:00+00:00",
-        "home": "Elche",
-        "away": "Rayo Vallecano",
-        "homeTeamId": 55,
-        "awayTeamId": 40,
-        "homeScore": 4,
-        "awayScore": 0
-      },
-      {
-        "eventId": 315900,
-        "date": "2022-10-03T19:00:00+00:00",
-        "home": "Rayo Vallecano",
-        "away": "Elche",
-        "homeTeamId": 40,
-        "awayTeamId": 55,
-        "homeScore": 2,
-        "awayScore": 1
-      },
-      {
-        "eventId": 319835,
-        "date": "2022-02-18T20:00:00+00:00",
-        "home": "Elche",
-        "away": "Rayo Vallecano",
-        "homeTeamId": 55,
-        "awayTeamId": 40,
-        "homeScore": 2,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -388,7 +252,7 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 311
+      "historyRows": 314
     },
     "source": "GoatLab",
     "expectedTotal": 4.6
@@ -399,7 +263,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 311
+      "historyRows": 314
     },
     "source": "GoatLab",
     "expectedTotal": 10.3
@@ -407,25 +271,25 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.45,
-      "shotsOnTarget": 4.71,
-      "xg": 1.69,
+      "shots": 14.44,
+      "shotsOnTarget": 4.7,
+      "xg": 1.59,
       "corners": 5.11,
-      "fouls": 12.62,
-      "yellowCards": 2.23,
-      "redCards": 0.46,
+      "fouls": 12.63,
+      "yellowCards": 2.22,
+      "redCards": 0.44,
       "offsides": 2.45,
       "possession": 50.46
     },
     "away": {
-      "shots": 13.56,
+      "shots": 13.55,
       "shotsOnTarget": 4.74,
-      "xg": 1.1,
+      "xg": 1.4,
       "corners": 5.15,
-      "fouls": 12.87,
+      "fouls": 12.88,
       "yellowCards": 2.33,
-      "redCards": 0.49,
-      "offsides": 1.67,
+      "redCards": 0.47,
+      "offsides": 1.66,
       "possession": 49.54
     },
     "sample": {
@@ -458,14 +322,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.63,
-      "shotsOnTarget": 4.82,
+      "shots": 13.62,
+      "shotsOnTarget": 4.8,
       "xg": 1.48,
       "corners": 4.85,
-      "fouls": 12.29,
-      "yellowCards": 2.28,
-      "redCards": 0.44,
-      "offsides": 2.05
+      "fouls": 12.3,
+      "yellowCards": 2.27,
+      "redCards": 0.42,
+      "offsides": 2.04
     },
     "sources": {
       "home": {
@@ -506,14 +370,14 @@
       "away": 0.442
     },
     "cardsDuel": {
-      "home": 0.386,
+      "home": 0.384,
       "draw": 0.193,
-      "away": 0.422
+      "away": 0.424
     },
     "lastGoal": {
-      "home": 0.517,
-      "away": 0.436,
-      "noGoal": 0.047
+      "home": 0.472,
+      "away": 0.491,
+      "noGoal": 0.037
     },
     "cornerRace": {
       "3": {
@@ -540,13 +404,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 8.3,
-      "condition": "unknown",
-      "sampledAt": "2026-10-24T12:00:00Z",
-      "source": "bzzoiro"
+      "temp": 15.5,
+      "precipitation": 0,
+      "weathercode": 3,
+      "wind": 6.3,
+      "condition": null,
+      "sampledAt": "2026-10-24T12:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Campo de Vallecas",
