@@ -9,7 +9,10 @@ COPY --chown=node:node fly/gateway/openclaw.json /home/node/.openclaw/openclaw.j
 COPY --chown=node:node fly/gateway/workspace/ /home/node/.openclaw/workspace/
 COPY --chown=node:node fly/gateway/idle-stop.mjs fly/gateway/idle-safety.mjs fly/gateway/creative-director.mjs /home/node/
 COPY --chown=node:node src/lib/visual-style.js /home/node/visual-style.js
+# The skill imports this module locally as well as from the cloned repository.
+COPY --chown=node:node src/lib/visual-style.js /home/node/.openclaw/workspace/skills/goatlab/lib/visual-style.js
 COPY --chown=node:node fly/gateway/ui-access.mjs fly/gateway/runtime.mjs /home/node/
+COPY --chown=node:node fly/gateway/conversation-retention.mjs fly/gateway/retention-supervisor.mjs /home/node/
 ARG GOATLAB_REVISION=unknown
 ENV GOATLAB_REVISION=${GOATLAB_REVISION} GOATLAB_REPO=/home/node/goatlab GOATLAB_STATE_DIR=/data \
     GOATLAB_SKILL_DIR=/home/node/.openclaw/workspace/skills/goatlab GOATLAB_DIRECTOR_SCRIPT=/home/node/creative-director.mjs

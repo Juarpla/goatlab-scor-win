@@ -8,6 +8,15 @@ on:
 permissions:
   contents: read
 jobs:
+  gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: OpenClaw retention, startup and access
+        run: node --test tests/conversation-retention.test.js tests/gateway-runtime.test.js tests/ui-access.test.js tests/idle-safety.test.js
   test:
     runs-on: ubuntu-latest
     steps:

@@ -35,13 +35,25 @@
     tabCleanup: { enabled: true },
     profiles: { openclaw: { cdpPort: 18800 } },
   },
-  plugins: { entries: { browser: { enabled: true } } },
+  plugins: { slots: { memory: "none" }, entries: { browser: { enabled: true }, "memory-core": { enabled: false } } },
+  // Avoid creating indefinite cross-conversation paraphrases of expiring chats.
+  memory: { search: { enabled: false, rememberAcrossConversations: false } },
   // Direct tool schemas. Tool Search hid write behind tool_search, and the
   // director spent the whole reasoning budget hunting for a file tool.
   tools: { alsoAllow: ["browser"], toolSearch: false },
+  // No scheduled model jobs. This does not disable GoatLab's render queue,
+  // the idle supervisor, or native SQLite/session maintenance.
+  cron: { enabled: false },
+  // Fixed lifetime is enforced offline by retention-supervisor.mjs, including
+  // the main session and archives. Native inactivity archival is not a TTL.
   agents: {
+    ownership: "explicit",
     defaults: {
+      compaction: { memoryFlush: { enabled: false } },
       workspace: "/home/node/.openclaw/workspace",
+      systemAgent: { agentId: "main" },
+      sessionStore: { agentId: "main" },
+      authInheritance: { agentId: "main" },
       model: {
         primary: "opencode-go/${OPENCODE_GO_MODEL}",
         fallbacks: ["opencode-go/${OPENCODE_GO_FALLBACK_MODEL}"],
@@ -49,10 +61,9 @@
       // No per-model params. OpenClaw does not substitute ${VAR} in object keys,
       // so a fixed override would keep pointing at a retired model id.
     },
-    list: [
-      { id: "main" },
-      {
-        id: "director",
+    entries: {
+      main: { workspace: "/home/node/.openclaw/workspace" },
+      director: {
         workspace: "/home/node/.openclaw/workspace",
         // Write is available. Search and shell tools made the model hunt for
         // a way to save the file until the reasoning budget ran out.
@@ -61,8 +72,9 @@
           deny: ["browser", "exec", "process", "read", "edit", "ls", "apply_patch", "web_search", "web_fetch", "code_execution", "tool_search"],
         },
       },
-    ],
+    },
   },
+  bindings: [{ agentId: "main", match: { channel: "telegram", accountId: "*" } }],
   models: {
     mode: "merge",
     providers: {

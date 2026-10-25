@@ -1,12 +1,21 @@
 app = "goatlab-gateway"
 primary_region = "iad"
+kill_signal = "SIGTERM"
+kill_timeout = "30s"
 
 [build]
+  # Fly resolves this relative to fly.toml; the deploy context is the repo root.
   dockerfile = "Dockerfile"
 
 [env]
   OPENCLAW_STATE_DIR = "/data"
   OPENCLAW_CONFIG_PATH = "/home/node/.openclaw/openclaw.json"
+  # Trace the actual pending bootstrap/SQLite phase on cold starts.
+  OPENCLAW_GATEWAY_STARTUP_TRACE = "1"
+  # Observe slow cold starts without interrupting SQLite admission.
+  GOATLAB_GATEWAY_STARTUP_TIMEOUT_MS = "0"
+  # Physical expiry needs the local retention supervisor to keep running.
+  GOATLAB_IDLE_STOP_ENABLED = "0"
   OPENCODE_GO_MODEL = "deepseek-v4.1-flash"
   OPENCODE_GO_FALLBACK_MODEL = "glm-5.3-flash"
   # Both models verified with image attachments through the native OpenClaw Gateway.
@@ -28,6 +37,8 @@ primary_region = "iad"
 [mounts]
   source = "goatlab_state"
   destination = "/data"
+  scheduled_snapshots = false
+  snapshot_retention = 1
 
 [[vm]]
   size = "shared-cpu-2x"
@@ -38,13 +49,13 @@ primary_region = "iad"
   force_https = true
   auto_stop_machines = false
   auto_start_machines = true
-  min_machines_running = 0
-  kill_timeout = "30s"
+  min_machines_running = 1
 
   [[http_service.checks]]
-    grace_period = "60s"
+    # Fly caps service-check grace at one minute; startup itself has no watchdog.
+    grace_period = "1m"
     interval = "30s"
     method = "GET"
-    path = "/healthz"
+    path = "/startupz"
     protocol = "http"
     timeout = "5s"

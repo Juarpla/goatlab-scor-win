@@ -4,4 +4,4 @@
 export OPENCODE_GO_MODEL="${OPENCODE_GO_MODEL:-deepseek-v4.1-flash}"
 export OPENCODE_GO_FALLBACK_MODEL="${OPENCODE_GO_FALLBACK_MODEL:-glm-5.3-flash}"
 
-exec node /home/node/runtime.mjs
+exec node /home/node/retention-supervisor.mjs
