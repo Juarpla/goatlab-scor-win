@@ -28,7 +28,7 @@ test('automatic snapshot fixes the same five for every consumer even if main cha
 });
 test('manual provider ID stays additive, activates the same downstream request and preserves old artifacts',async t=>{
  const f=await fixture(t);const preserved=[];
- for(const category of ['youtube-scripts','media-pack','image-prompts','video-prompts','motion-prompts']){
+ for(const category of ['youtube-scripts','media-pack','image-prompts','video-prompts']){
   const path=join(f.data,category,'existing.json');await mkdir(join(f.data,category));await writeFile(path,'{"old":"untouched"}');preserved.push(path);
  }
  const result=f.run({CONTENT_AUTOMATIC:'0',MATCH:'af-7'});assert.equal(result.status,0,result.stderr);

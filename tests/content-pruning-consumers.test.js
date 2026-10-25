@@ -9,7 +9,7 @@ import { CONTENT_CATEGORIES, validateContent } from '../src/lib/match-content.js
 
 const scripts = [
   { category: 'scripts', directory: 'youtube-scripts', script: resolve('scripts/generate-youtube-scripts.mjs') },
-  ...['image-prompts', 'video-prompts', 'motion-prompts'].map(category => ({ category, directory: category, script: resolve('scripts/generate-match-prompts.mjs') })),
+  ...['image-prompts', 'video-prompts'].map(category => ({ category, directory: category, script: resolve('scripts/generate-match-prompts.mjs') })),
 ];
 const NOW = Date.now();
 const stamp = offset => new Date(NOW + offset).toISOString();
@@ -63,12 +63,9 @@ function validPrompts(category, matchId) {
   const kinds = CONTENT_CATEGORIES[category].kinds;
   const prompts = kinds.map((kind, index) => ({
     n: index + 1, kind, title: kind,
-    ...(category === 'motion-prompts' ? { factIds: [] } : {}),
     prompt: category === 'image-prompts'
       ? `Referential photorealistic illustration of Alpha and Beta football teams in realistic uniforms, vertical 9:16. ${kind} Stadium, supporters, flags and team crests. ${'Natural lighting and realistic anatomy. '.repeat(5)}`
-      : category === 'video-prompts'
-        ? `A 6-second camera movement for the reference image, vertical 9:16. ${kind}. ${'Maintain the original realistic scene and consistent lighting. '.repeat(5)}`
-        : `Vertical 9:16 Spanish source sample transition ${kind}. ${'Detailed editorial and statistical composition with timing and readable labels. '.repeat(18)}`,
+      : `A 6-second camera movement for the reference image, vertical 9:16. ${kind}. ${'Maintain the original realistic scene and consistent lighting. '.repeat(5)}`,
   }));
   const data = { version: 1, category, matchId, home: 'Alpha', away: 'Beta', competition: 'nations', kickoff: match(matchId).kickoff, prompts };
   assert.equal(validateContent(data, category, matchId), true);

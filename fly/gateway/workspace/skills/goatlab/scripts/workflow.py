@@ -223,8 +223,6 @@ class Workflow:
                 "matchId": series["match_id"], "variant": n - 1,
                 "home": script.get("home", ""), "away": script.get("away", ""),
                 "matchLabel": script.get("match") or f'{script.get("home", "")} contra {script.get("away", "")}',
-                "motionPrompts": (script.get("content", {}).get("motion-prompts") or {}).get("prompts", []),
-                "contentFacts": (script.get("content", {}).get("motion-prompts") or {}).get("facts", []),
                 "hook": shot.get("hook", ""), "title": shot.get("title", ""), "audioFileId": file_id,
                 "audioMessageId": int(event) if str(event).isdigit() else None,
             })

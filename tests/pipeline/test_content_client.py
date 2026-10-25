@@ -20,25 +20,24 @@ class ContentTests(unittest.TestCase):
     def pack(category, kinds):
         prompt=('Vertical 9:16 referential composition with legible labels. '*8)
         rows=[{'n':i+1,'kind':k,'title':k,'prompt':prompt} for i,k in enumerate(kinds)]
-        if category=='motion-prompts':
-            for r in rows: r.update(factIds=[],presentations=['editorial','statistical'])
         return {'version':1,'category':category,'matchId':'a-b','home':'A','away':'B','facts':[],'prompts':rows}
 
-    def test_prompt_contract_is_four_photos_two_clips_and_flexible_motion(self):
+    def test_prompt_contract_is_four_photos_two_clips(self):
         from content_client import valid
         image=self.pack('image-prompts',['ball-duel','goal-action','supporters','stadium'])
         video=self.pack('video-prompts',['push-in','tracking'])
-        motion=self.pack('motion-prompts',['goals','synthesis','form'])
-        for category,data in [('image-prompts',image),('video-prompts',video),('motion-prompts',motion)]:
+        for category,data in [('image-prompts',image),('video-prompts',video)]:
             self.assertTrue(valid(data,category,'a-b'), category)
         # El contrato antiguo (10 fotos / 5 clips) se rechaza: mismo fallo que rompió Croacia.
         old_image=self.pack('image-prompts',['ball-duel','pressing','passing','dribbling','crossing','defending','aerial-duel','goal-action','supporters','stadium'])
         self.assertFalse(valid(old_image,'image-prompts','a-b'))
         old_video=self.pack('video-prompts',['push-in','tracking','orbit','pull-out','focus-transition'])
         self.assertFalse(valid(old_video,'video-prompts','a-b'))
-        self.assertFalse(valid(self.pack('motion-prompts',['form']),'motion-prompts','a-b'))
-        self.assertFalse(valid(self.pack('motion-prompts',['form']*11),'motion-prompts','a-b'))
-        self.assertFalse(valid(self.pack('motion-prompts',['form','invented']),'motion-prompts','a-b'))
+    def test_retired_category_is_not_requested(self):
+        from content_client import KINDS, valid
+        self.assertNotIn('motion-prompts', KINDS)
+        self.assertFalse(valid({}, 'motion-prompts', 'a-b'))
+
     def test_telegram_list_uses_lima_day_and_drops_started_matches(self):
         now = datetime(2026, 10, 15, 16, 53, tzinfo=timezone.utc).timestamp()
         matches = [

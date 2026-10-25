@@ -134,18 +134,17 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       continue;
     }
     const pack = async category => snapshot?.[category] ?? await json(join(repo, 'public/data', category, matchId + '.json'));
-    const imagePack = await pack('image-prompts'), videoPack = await pack('video-prompts'), motionPack = await pack('motion-prompts');
+    const imagePack = await pack('image-prompts'), videoPack = await pack('video-prompts');
     const validPack = (pack, category) => validateContent(pack, category, matchId) && !contentIdentityErrors(pack, match).length;
     const imagePrompts = validPack(imagePack, 'image-prompts') ? imagePack.prompts : [];
     const videoPrompts = validPack(videoPack, 'video-prompts') ? videoPack.prompts : [];
-    const motionPrompts = validPack(motionPack, 'motion-prompts') ? motionPack.prompts : [];
     const script = await json(join(repo, 'public/data/youtube-scripts', matchId + '.json'));
     if (!recoveryOnly && !args['--match'] && (scriptStructureErrors(script, { matchId, match }).length || !imagePrompts.length || !videoPrompts.length)) { log('media: ' + matchId + ': sin guión o prompts válidos; omitido'); continue; }
     summary.eligible++;
     const folder = join(dir, 'gen', matchId); await mkdir(folder, { recursive: true });
     const prev = await json(join(dir, matchId + '.json'));
     const scorers = await json(join(repo, 'public/data/scorers.json'));
-    const facts = motionPrompts.length ? motionPack.facts : editingFacts(match, scorers);
+    const facts = editingFacts(match, scorers);
     const deadline = mediaSoftStop(runDeadline, match.kickoff), expiresAt = (Date.parse(match.kickoff) + 86_400_000) / 1000;
     const imageModel = env.AGNES_IMAGE_MODEL || 'agnes-image-2.5-flash', videoModel = 'agnes-video-2.5-flash';
     const fingerprint = contentFingerprint(match, { ...imagePack, generationModel: imageModel }, { ...videoPack, generationModel: videoModel });
@@ -160,7 +159,6 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     try { diagnostics=publicVideoDiagnostics(await json(join(folder,'video-diagnostics.json')),env); } catch {}
     if (!imagePrompts.length) failures.push('Image Prompts no disponibles');
     if (!videoPrompts.length) failures.push('Video Prompts no disponibles');
-    if (!motionPrompts.length) failures.push('Motion Prompts no disponibles; montaje local disponible');
     if (!Number.isFinite(Date.parse(match.kickoff))) failures.push('Kickoff inválido; solo reutilización');
     if (!env.AGNES_API_KEY?.trim()) failures.push('falta AGNES_API_KEY');
     if (r2blocked) failures.push('R2: subidas y generación pausadas; reutilización disponible');
@@ -176,7 +174,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       log(`media: ${matchId}: ${labels.images} · ${labels.clips} (${stage})${detail ? '; ' + detail : ''}`);
     };
     const publish = mediaPublisher({ dir, match, facts, prior: prev, draft: env.MEDIA_DRAFT === '1', clock: () => new Date(clock()).toISOString() });
-    const extras = () => ({ clips:clips.sort((a,b)=>a.file.localeCompare(b.file)), motionPrompts, failures, diagnostics:diagnostics.map(({runId:_runId,resourceNumber:_resourceNumber,retryAtMs:_retryAtMs,...event})=>event), runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
+    const extras = () => ({ clips:clips.sort((a,b)=>a.file.localeCompare(b.file)), failures, diagnostics:diagnostics.map(({runId:_runId,resourceNumber:_resourceNumber,retryAtMs:_retryAtMs,...event})=>event), runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
       storageVerifiedAt: new Date(clock()).toISOString(), verifiedAssets: [...verifiedAssets], verifiedClips: [...verifiedClips] });
     const cleanResource = async (file) => {
       const stem=file.replace(/\.[^.]+$/, '');
@@ -410,7 +408,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       const complete = requestedMediaComplete({ ...readyCounts(), mode });
       if (!complete) {
         canGenerate();
-        if (!failures.some(reason => reason !== 'Motion Prompts no disponibles; montaje local disponible')) {
+        if (!failures.length) {
           failures.push('Recursos incompletos; no se obtuvieron todos los recursos solicitados con verificación R2');
         }
       }
@@ -422,7 +420,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       try { attempts = (await state('attempts',{matchId})).attempts ?? attempts; }
       catch(error) { failures.push('Historial final no disponible: '+safeMediaMessage(error.message,env)); }
       const omission=recoveryOnly?'recuperación de tareas existentes; sin nuevas solicitudes':failures
-        .filter(reason=>reason!=='Motion Prompts no disponibles; montaje local disponible'&&!/^(?:clip|intento de vídeo) \d+: etapa=/.test(reason))
+        .filter(reason=>!/^(?:clip|intento de vídeo) \d+: etapa=/.test(reason))
         .map(reason=>reason.split('; última consulta:')[0]).join('; ').slice(0,256) || 'todavía no solicitado';
       const resources=[];
       for(let ordinal=0;ordinal<4;ordinal++) {

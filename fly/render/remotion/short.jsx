@@ -34,8 +34,8 @@ function Photo({ photo, layer, frames }) {
   </div>;
 }
 
-function MotionChart({ graphic, facts, prompts, frames }) {
-  const frame = useCurrentFrame(), data = resolveMotion(graphic, facts, prompts);
+function MotionChart({ graphic, facts, frames }) {
+  const frame = useCurrentFrame(), data = resolveMotion(graphic, facts);
   const enter = tween(frame, 12), exit = 1 - tween(frame - frames + 9, 9);
   const isSummary = graphic.kind === 'synthesis';
   const rows = data.facts.filter(f => !f.id.endsWith('.n') && f.id !== 'h2h.total').slice(0, 8);
@@ -89,13 +89,13 @@ function MotionChart({ graphic, facts, prompts, frames }) {
   </div>;
 }
 
-function Graphic({ graphic, words, facts, prompts, frames, match }) {
+function Graphic({ graphic, words, facts, frames, match }) {
   const frame = useCurrentFrame();
   if (MOTION_KINDS.includes(graphic.kind) && graphic.presentation === 'editorial') {
-    resolveMotion(graphic,facts,prompts);
+    resolveMotion(graphic,facts);
     return <EditorialMotion graphic={graphic} words={words} frames={frames} match={match} />;
   }
-  if (MOTION_KINDS.includes(graphic.kind)) return <MotionChart graphic={graphic} facts={facts} prompts={prompts} frames={frames} />;
+  if (MOTION_KINDS.includes(graphic.kind)) return <MotionChart graphic={graphic} facts={facts} frames={frames} />;
   const refs = (graphic.factIds ?? []).map(id => facts.find(f => f.id === id));
   if (refs.some(f => !f)) throw new Error('hecho inexistente');
   const phrase = refs.length ? refs.map(f => `${f.label}: ${f.value} ${f.unit}`).join(' · ') : words.slice(graphic.wordStart ?? 0, graphic.wordEnd ?? 0).map(w => w.word).join(' ');
@@ -109,7 +109,7 @@ function Graphic({ graphic, words, facts, prompts, frames, match }) {
   </div>;
 }
 
-function Scene({ scene, photos, clips, words, facts, prompts, frames, match }) {
+function Scene({ scene, photos, clips, words, facts, frames, match }) {
   const frame = useCurrentFrame();
   return <AbsoluteFill style={{ background: 'radial-gradient(ellipse at 80% 10%,#273d31,#101412 70%)', overflow: 'hidden' }}>
     {(scene.layers ?? []).map((layer, index) => <Photo key={index} photo={photos[layer.asset]} layer={{...layer,focusEffect:layer.focusEffect ?? (['focus','defocus'].includes(scene.transition)?scene.transition:'none')}} frames={frames} />)}
@@ -118,7 +118,7 @@ function Scene({ scene, photos, clips, words, facts, prompts, frames, match }) {
     </Sequence>)}
     <div style={{ position: 'absolute', top: 115, left: 70, width: 90, height: 6, background: scene.accent ?? lime }} />
     {(scene.graphics ?? []).map((graphic, index) => <Sequence key={index} from={frameAt(graphic.at - scene.start)} durationInFrames={Math.max(1, frameAt(graphic.duration))} layout="none">
-      <Graphic match={match} graphic={graphic} words={words} facts={facts} prompts={prompts} frames={frameAt(graphic.duration)} />
+      <Graphic match={match} graphic={graphic} words={words} facts={facts} frames={frameAt(graphic.duration)} />
     </Sequence>)}
     {(scene.objects ?? []).map((object, index) => <div key={index} style={{ position: 'absolute', top: (object.y ?? .35) * 1920, left: (object.x ?? .35) * 1080,
       width: object.size ?? 150, minHeight: object.size ?? 150, padding: 20, background: '#284438', border: `2px solid ${lime}`, fontSize: 35,
@@ -136,7 +136,7 @@ function Captions({ page, words }) {
   </div>;
 }
 
-export function GoatLabShort({ frames, font, brand, photos, clips, words, facts = [], motionPrompts = [], plan, match }) {
+export function GoatLabShort({ frames, font, brand, photos, clips, words, facts = [], plan, match }) {
   const frame = useCurrentFrame();
   const [fontHandle] = useState(() => delayRender('GoatLab font'));
   useEffect(() => { document.fonts.load(`800 68px "${FONT_FAMILY}"`).then(() => continueRender(fontHandle)).catch(cancelRender); }, [font, fontHandle]);
@@ -150,7 +150,7 @@ export function GoatLabShort({ frames, font, brand, photos, clips, words, facts 
       const overlap=next && next.transition !== 'cut' ? Math.min(8,length,frameAt(next.end)-frameAt(next.start)) : 0;
       const presentation=next?.transition==='slide'?slide():next?.transition==='wipe'?wipe():next?.transition==='iris'?iris({width:1080,height:1920}):fade();
       return length > 0 ? [<TransitionSeries.Sequence key={`scene-${index}`} durationInFrames={length+overlap}>
-        <Scene match={match} scene={scene} photos={photos} clips={clips} words={words} facts={facts} prompts={motionPrompts} frames={length} />
+        <Scene match={match} scene={scene} photos={photos} clips={clips} words={words} facts={facts} frames={length} />
       </TransitionSeries.Sequence>, ...(overlap>0 ? [<TransitionSeries.Transition key={`transition-${index}`} presentation={presentation} timing={linearTiming({durationInFrames:overlap})}/>] : [])] : [];
     })}</TransitionSeries>
     {(photos.length > 0 || clips.length > 0) && frame < endStart && <div style={{ position: 'absolute', top: 42, right: 55, color: white, background: '#101412dd', padding: '10px 16px', fontSize: 23 }}>Ilustración con IA</div>}

@@ -36,7 +36,7 @@ export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = p
     extra: top.extra,
   };
   const context = buildPruneContext(matches, finished);
-  for (const category of ['youtube-scripts', 'image-prompts', 'video-prompts', 'motion-prompts']) {
+  for (const category of ['youtube-scripts', 'image-prompts', 'video-prompts']) {
     const dir = `${dataDir}/${category}`;
     let files;
     try { files = await readdir(dir); } catch (error) { if (error.code === 'ENOENT') continue; throw error; }

@@ -26,7 +26,7 @@ export function legacyMatchIds(documents = [], sqlite = {}) {
     for (const name of ['matches', 'ranking', 'extra']) if (document[name] !== undefined && !Array.isArray(document[name])) throw new Error('Documento de identidad legado inválido');
     for (const name of ['seen', 'snapshots']) if (document[name] !== undefined && (!document[name] || typeof document[name] !== 'object' || Array.isArray(document[name]))) throw new Error('Documento de identidad legado inválido');
     match(document);
-    for (const category of ['scripts', 'image-prompts', 'video-prompts', 'motion-prompts']) {
+    for (const category of ['scripts', 'image-prompts', 'video-prompts']) {
       match(document?.[category]);
       match(document?.content?.[category]);
     }
@@ -147,7 +147,7 @@ export async function collectLegacy({ repo = '.', sqlitePaths = [], snapshots = 
     const document = await readJson(join(data, name), true);
     if (document) documents.push(document);
   }
-  for (const category of ['youtube-scripts', 'image-prompts', 'video-prompts', 'motion-prompts', 'media-pack']) {
+  for (const category of ['youtube-scripts', 'image-prompts', 'video-prompts', 'media-pack']) {
     let names;
     try { names = await readdir(join(data, category)); } catch (error) { if (error.code === 'ENOENT') continue; throw error; }
     for (const name of names) {

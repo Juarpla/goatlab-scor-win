@@ -43,7 +43,10 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
   const validPack = category => validateContent(content[category], category, matchId) && !contentIdentityErrors(content[category], match).length;
   const imagePrompts = validPack('image-prompts') ? content['image-prompts'].prompts : [];
   const videoPrompts = validPack('video-prompts') ? content['video-prompts'].prompts : [];
-  const motionPack = validPack('motion-prompts') ? content['motion-prompts'] : null;
+  // Photo/video packs already carry the immutable catalog assembled by Actions.
+  // A Telegram snapshot may contain only match identity, without recent form.
+  const factsCategory = ['image-prompts', 'video-prompts'].find(category => validPack(category) && content[category].facts?.length);
+  const facts = factsCategory ? content[factsCategory].facts : editingFacts(match);
   const compatible = fingerprint && prior?.matchId === matchId && prior?.contentFingerprint === fingerprint;
   const startedProgress = { count: compatible ? prior.assets?.length ?? 0 : 0, clips: compatible ? prior.clips?.length ?? 0 : 0,
     target: ASSETS_PER_MATCH, phase: 'consulting', readerVersion: 1, updatedAt: new Date(clock()).toISOString() };
@@ -169,7 +172,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
   // Repeated or mismatched objects cannot inflate availability.
   const distinct = rows => rows.filter((row, i) => rows.findIndex(other => other.sha256 === row.sha256 || other.id === row.id) === i);
   const photos = distinct(assets), videos = distinct(clips).filter(clip => photos.some(photo => hash(photo.url) === clip.referenceHash));
-  const bank = { ...buildManifest({ match, assets: photos }), clips: videos, facts: motionPack?.facts ?? editingFacts(match), motionPrompts: motionPack?.prompts ?? [],
+  const bank = { ...buildManifest({ match, assets: photos }), clips: videos, facts,
     bankVersion: 2, bankStatus: 'complete', contentFingerprint: fingerprint, readerVersion: 1, legacyArtifacts,
     storageVerifiedAt: new Date(clock()).toISOString(), generatedAt: new Date(clock()).toISOString() };
   const complete = bankComplete(bank, { matchId, fingerprint, now: clock() });

@@ -1,12 +1,11 @@
 /** Public content contract shared by Actions, Astro and the portable GoatLab skill. */
 import { esName } from './teams.js';
 export const CONTENT_VERSION = 1;
-export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_FALLBACK_MODEL,OPENCODE_GO_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
+export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export const CONTENT_CATEGORIES = Object.freeze({
   scripts: { label: 'Scripts', directory: 'youtube-scripts', count: 10 },
   'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 4, kinds: ['ball-duel', 'goal-action', 'supporters', 'stadium'] },
   'video-prompts': { label: 'Video Prompts', directory: 'video-prompts', count: 2, kinds: ['push-in', 'tracking'] },
-  'motion-prompts': { label: 'Motion Prompts', directory: 'motion-prompts', count: 5, kinds: ['form', 'goals', 'clean-sheets', 'head-to-head', 'synthesis'] },
 });
 export function contentUrl(matchId, category, json = false) {
   if (!CONTENT_CATEGORIES[category]) throw new Error('Categoría desconocida');
@@ -50,6 +49,7 @@ export function scriptStructureErrors(data, { matchId = null, match = null } = {
     if (script?.n !== index + 1) errors.push(`${label}: número incorrecto`);
     for (const field of ['title', 'hook', 'narration']) if (!nonempty(script?.[field])) errors.push(`${label}: ${field} vacío o inválido`);
     if (!Number.isInteger(script?.words) || script.words <= 0) errors.push(`${label}: words debe ser un entero positivo`);
+    if (data.editorialVersion === 2 && (!nonempty(script?.projection) || !String(script?.narration ?? '').includes(script.projection))) errors.push(`${label}: proyección editorial ausente de la narración`);
     // El pick solo existe desde la mejora antecedente+pronóstico; los JSONs
     // viejos sin pick siguen válidos, pero un pick presente debe tener forma.
     if (script?.pick != null) {
@@ -63,20 +63,14 @@ export function scriptStructureErrors(data, { matchId = null, match = null } = {
 export function promptErrors(data, { category = data?.category, home = data?.home, away = data?.away, facts = data?.facts ?? [], published = false } = {}) {
   const spec = CONTENT_CATEGORIES[category];
   if (!spec?.kinds) return ['Categoría de prompts desconocida'];
-  // Motion: el modelo decide la cantidad de escenas (2-10), no hay número fijo.
-  if (category === 'motion-prompts') {
-    if (!data || !Array.isArray(data.prompts) || data.prompts.length < 2 || data.prompts.length > 10) return ['Se requieren entre 2 y 10 Motion Prompts'];
-  } else if (!data || !Array.isArray(data.prompts) || data.prompts.length !== spec.count) return [`Se requieren ${spec.count} prompts`];
-  const known = new Set(facts.map(f => f.id));
+  if (!data || !Array.isArray(data.prompts) || data.prompts.length !== spec.count) return [`Se requieren ${spec.count} prompts`];
   const errors = [];
   const seen = new Set();
   for (const [i, row] of data.prompts.entries()) {
     const text = String(row?.prompt ?? '').trim();
     const label = `${category} ${i + 1}`;
     if (row?.n !== i + 1) errors.push(`${label}: número incorrecto`);
-    if (category === 'motion-prompts') {
-      if (!spec.kinds.includes(row?.kind)) errors.push(`${label}: escena fuera del catálogo`);
-    } else if (row?.kind !== spec.kinds[i]) errors.push(`${label}: escena incorrecta`);
+    if (row?.kind !== spec.kinds[i]) errors.push(`${label}: escena incorrecta`);
     if (typeof row?.title !== 'string' || !row.title.trim() || row.title.length > 160) errors.push(`${label}: título inválido`);
     if (text.length < 180 || text.length > 12000 || !/9\s*:\s*16/.test(text)) errors.push(`${label}: texto incompleto o formato ausente`);
     if (seen.has(text.toLowerCase())) errors.push(`${label}: prompt repetido`);
@@ -89,15 +83,6 @@ export function promptErrors(data, { category = data?.category, home = data?.hom
       if (row.kind === 'stadium' && (!/stadium/i.test(text) || !/flag/i.test(text) || !/crest|emblem|badge|logo/i.test(text))) errors.push(`${label}: falta presentación, banderas o escudos`);
     }
     if (category === 'video-prompts' && (!/6\s*(?:-| )?second/i.test(text) || !/image|picture/i.test(text) || !/camera/i.test(text))) errors.push(`${label}: faltan duración, imagen de referencia o cámara`);
-    if (category === 'motion-prompts') {
-      if (row.presentations != null && (!Array.isArray(row.presentations) || row.presentations.length !== 2 || row.presentations[0] !== 'editorial' || row.presentations[1] !== 'statistical' || !/editorial/i.test(text) || !/statistical/i.test(text))) errors.push(`${label}: presentaciones de motion inválidas`);
-      if (text.split(/\s+/).length < 150) errors.push(`${label}: dirección insuficientemente detallada`);
-      if (!Array.isArray(row.factIds) || row.factIds.some(id => !known.has(id)) || new Set(row.factIds).size !== row.factIds.length) errors.push(`${label}: referencia de hechos inválida`);
-      const refs = [...text.matchAll(/\{\{([^{}]+)\}\}/g)].map(m => m[1]);
-      if (refs.some(id => !known.has(id) || !row.factIds?.includes(id)) || row.factIds?.some(id => !refs.includes(id))) errors.push(`${label}: los marcadores no coinciden con factIds`);
-      if (!published && /%|percent(?:age)?/i.test(text)) errors.push(`${label}: porcentajes no publicados`);
-      if (!/Spanish/i.test(text) || !/transition/i.test(text) || !/source|sample/i.test(text)) errors.push(`${label}: faltan rótulos, transiciones o fuente`);
-    }
   }
   return errors;
 }

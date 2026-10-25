@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict, commitSplit, penaltyCount } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, normalizeYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict, commitSplit, penaltyCount } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -405,4 +405,60 @@ test('plantilla con probabilidad lleva picks válidos y pasa compliance', () => 
     assert.ok(script.words <= 110);
   }
   assert.deepEqual(checkDescription(out.description, { matchId: out.matchId }), []);
+});
+
+test('editorial voice can rewrite all pieces and forecast new numbers within the duration', () => {
+  const facts = { home: 'Alpha', away: 'Beta', homeForm: { n: 5, wins: 2 }, picks: [{ bridge: 'OLD BRIDGE', antecedent: 'OLD FACT', noun: 'OLD NOUN', verdict: 'OLD RESULT', call: 'OLD CALL' }] };
+  const scripts = Array.from({ length: 10 }, (_, i) => {
+    const hook = `Alpha contra Beta: la tensión cambia al mirar el detalle ${['local','visitante','ofensivo','defensivo','aéreo','reciente','inicial','parejo','decisivo','físico'][i]}.`;
+    const projection = 'Mi lectura apunta a 7 córners para Alpha.';
+    return { n: i + 1, hook, projection, narration: `${hook} Aunque la forma da una pista, el partido puede tomar otro camino si Beta obliga a defender más cerca del arco. Por eso, yo miraría los espacios que deja quien persigue el resultado y cómo responde el rival. ${projection} La lectura completa está en goatlab.win.` };
+  });
+  const draft = { scripts, lede: 'Alpha recibe a Beta con una pregunta abierta. La forma sugiere un partido cambiante.' };
+  const validate = value => acceptYoutubeDraft(value, { facts, published: false, editorial: true });
+  assert.deepEqual(validate(draft), []);
+  const accented = structuredClone(draft);
+  accented.scripts[0].projection = accented.scripts[0].projection.replace('Mi lectura apunta a', 'Para mí habrá');
+  accented.scripts[0].narration = accented.scripts[0].narration.replace(scripts[0].projection, accented.scripts[0].projection);
+  assert.deepEqual(validate(accented), []);
+  assert.ok(acceptYoutubeDraft(draft, { facts }).some(e => /asignado/.test(e)));
+  const missing = structuredClone(draft); delete missing.scripts[0].projection;
+  assert.ok(validate(missing).some(e => /proyección/.test(e)));
+  const historical = structuredClone(draft); historical.scripts[0].narration += ' Alpha ganó 8 partidos.';
+  assert.ok(validate(historical).some(e => /cifra 8/.test(e)));
+  const unrelated = structuredClone(draft); unrelated.scripts[0].projection = 'Mi lectura apunta a 9 córners para Beta.';
+  assert.ok(validate(unrelated).some(e => /frase completa/.test(e)));
+  const zero = structuredClone(draft);
+  zero.scripts[0].projection = zero.scripts[0].projection.replace('7', '0');
+  zero.scripts[0].narration = zero.scripts[0].narration.replace('7', '0');
+  assert.ok(validate(zero).some(e => /rango/.test(e)));
+  const multi = structuredClone(draft);
+  multi.scripts[0].projection += ' Alpha ganó 8 partidos.';
+  multi.scripts[0].narration = multi.scripts[0].narration.replace(scripts[0].projection, multi.scripts[0].projection);
+  assert.ok(validate(multi).some(e => /frase completa/.test(e)));
+  const tooLong = structuredClone(draft); tooLong.scripts[0].narration += ' Más análisis.'.repeat(40);
+  assert.ok(validate(tooLong).some(e => /techo/.test(e)));
+  const percentage = structuredClone(draft); percentage.scripts[0].narration += ' Un 70%.';
+  assert.ok(validate(percentage).some(e => /porcentajes/.test(e)));
+});
+
+test('opinion openings and connectors do not become player names in titles', () => {
+  assert.deepEqual(playersInNarration('Veo un partido abierto. Espero goles. Creo que será parejo. Además, con Bruno Fernandes puede cambiar. Yo imagino otra salida.', { home: 'Alpha', away: 'Beta' }), ['Bruno Fernandes']);
+});
+
+test('editorial titles use the supplied player catalog instead of guessing from new prose', () => {
+  const narration = 'Marcar no será suficiente. Atacar puede dejar espacios a Neymar y Bruno Fernandes.';
+  const names = { home: 'Alpha', away: 'Beta', knownPlayers: ['Neymar', 'Bruno Fernandes', 'Lamine Yamal'] };
+  assert.deepEqual(playersInNarration(narration, names), ['Neymar', 'Bruno Fernandes']);
+  assert.deepEqual(attentionPlayers([{ n: 9, narration }], names), ['Neymar', 'Bruno Fernandes']);
+  assert.deepEqual(playersInNarration(narration, { ...names, knownPlayers: [] }), []);
+});
+
+test('hook normalization is shared by production and benchmarks and never adds it twice', () => {
+  const draft = { lede: ' Alpha y Beta. ', scripts: [{ hook: 'Un cruce que cambia todo.', narration: 'Alpha recibe a Beta. Mi lectura apunta a un empate. Consulta goatlab.win.' }] };
+  const normalized = normalizeYoutubeDraft(draft);
+  assert.ok(normalized.scripts[0].narration.startsWith('Un cruce que cambia todo. Alpha'));
+  assert.deepEqual(normalizeYoutubeDraft(normalized), normalized);
+  assert.equal(draft.scripts[0].narration.startsWith('Alpha'), true);
+  assert.equal(normalizeYoutubeDraft(null), null);
 });

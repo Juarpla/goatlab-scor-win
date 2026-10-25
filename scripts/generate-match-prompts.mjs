@@ -3,7 +3,7 @@ if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de pr
 import { readFile, mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors } from '../src/lib/match-content.js';
-import { withFailover, extractJson } from '../src/lib/llm.js';
+import { CONTENT_LLM_LIMITS, withFailover, extractJson } from '../src/lib/llm.js';
 import { esName } from '../src/lib/teams.js';
 import { editingFacts } from '../src/lib/match-facts.js';
 import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../src/lib/top.js';
@@ -12,7 +12,7 @@ import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruni
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
 const category = args['--category'];
 const spec = CONTENT_CATEGORIES[category];
-if (!spec?.kinds) throw new Error('Usa --category=image-prompts|video-prompts|motion-prompts');
+if (!spec?.kinds) throw new Error('Usa --category=image-prompts|video-prompts');
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const { fixtures, top: selectedTop } = await readContentSelection();
 const onlyMatch = args['--match'];
@@ -88,20 +88,14 @@ for (const match of matches) {
   const home = esName(match.home), away = esName(match.away);
   const facts = editingFacts(match, scorers);
   const identity = { matchId, home, away, competition: match.competition, kickoff: match.kickoff, venue: match.venue ?? null, facts, published, kinds: spec.kinds };
-  const validationHints = category === 'motion-prompts' ? {
-    allowedFactIds: facts.map(f => f.id),
-    references: 'Use exact catalog IDs, e.g. {{home.wins}}, never {{fact.home.wins}}. factIds must list exactly the unique IDs actually used in prompt text, not all available IDs. No placeholders for team names, source, sample, timing or labels unless their exact ID exists in the catalog.',
-    presentations: 'Each entry needs presentations: ["editorial","statistical"] and both named variants in its prompt text. Never write % or percent even for layout when published=false.',
-  } : undefined;
   let result, error;
   console.log(`${category}: preparando ${matchId}`);
   try {
-    result = await withFailover([{ role: 'system', content: guide }, { role: 'user', content: JSON.stringify({ ...identity, validationHints }) }], {
-      orderVar: 'SCRIPT_PROVIDER_ORDER', maxTokens: 12000, timeoutMs: 180000,
+    result = await withFailover([{ role: 'system', content: guide }, { role: 'user', content: JSON.stringify(identity) }], {
+      orderVar: 'SCRIPT_PROVIDER_ORDER', ...CONTENT_LLM_LIMITS,
       validate: text => {
         const draft = extractJson(text);
         const errors = promptErrors(draft, { category, home, away, facts, published });
-        if (category === 'motion-prompts' && !draft.prompts?.every(p => Array.isArray(p.presentations) && p.presentations.join(',') === 'editorial,statistical')) errors.push('Cada Motion Prompt requiere las dos presentaciones');
         if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
         return draft;
       },

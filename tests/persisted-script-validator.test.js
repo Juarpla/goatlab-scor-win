@@ -37,7 +37,7 @@ test('each saved narration needs numbering, title, hook, text and positive integ
 
 test('translated fixture identity is reusable by scripts and every prompt category', () => {
   const data = scriptData();
-  for (const category of ['scripts', 'image-prompts', 'video-prompts', 'motion-prompts']) {
+  for (const category of ['scripts', 'image-prompts', 'video-prompts']) {
     assert.deepEqual(contentIdentityErrors({ ...data, category }, match), []);
   }
   for (const override of [{ matchId: 'af-1' }, { home: 'Spain' }, { away: 'Netherlands' }, { competition: 'other' }, { kickoff: '2026-10-09T19:00:00Z' }]) {
@@ -67,4 +67,17 @@ test('scripts sin pick siguen válidos; un pick presente debe tener forma', () =
     assert.ok(scriptStructureErrors(broken, { matchId: match.webId }).length, `pick.${field} vacío`);
     assert.equal(validateContent(broken, 'scripts', match.webId), false);
   }
+});
+
+test('editorial files preserve their own projected sentence and legacy scripts stay reusable', () => {
+  const data = { ...scriptData(), editorialVersion: 2 };
+  assert.ok(scriptStructureErrors(data).some(error => /proyección editorial/.test(error)));
+  for (const script of data.scripts) {
+    script.projection = 'Mi lectura apunta a un empate.';
+    script.narration += ' ' + script.projection;
+  }
+  assert.deepEqual(scriptStructureErrors(data), []);
+  data.scripts[0].projection = 'Una frase ajena.';
+  assert.ok(scriptStructureErrors(data).some(error => /proyección editorial/.test(error)));
+  assert.deepEqual(scriptStructureErrors(scriptData()), []);
 });

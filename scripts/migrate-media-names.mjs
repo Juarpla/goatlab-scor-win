@@ -51,7 +51,7 @@ export async function rewriteContent({repo='.',moves=[]}={}) {
     return updated;
   };
   const files=[];
-  for(const category of ['image-prompts','video-prompts','motion-prompts','youtube-scripts','media-pack']) {
+  for(const category of ['image-prompts','video-prompts','youtube-scripts','media-pack']) {
     for(const suffix of category==='media-pack'?['.json','.progress.json']:['.json']) {
       const source=join(repo,'public/data',category,FROM+suffix),target=join(repo,'public/data',category,TO+suffix);
       let data;try{data=JSON.parse(await readFile(source,'utf8'));}catch(error){if(error.code==='ENOENT')continue;throw error;}

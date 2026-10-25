@@ -83,15 +83,20 @@ test('scripts: manual ID bypasses only age and valid persisted scripts skip gene
 
 async function model(t, content) {
   let calls = 0;
+  const requests = [];
   const server = createServer((request, response) => {
     calls += 1;
-    request.resume();
-    response.writeHead(200, { 'content-type': 'application/json' });
-    response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(content) } }] }));
+    let body = '';
+    request.on('data', chunk => { body += chunk; });
+    request.on('end', () => {
+      requests.push(JSON.parse(body));
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(content) } }] }));
+    });
   });
   await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
   t.after(() => new Promise(resolveClose => server.close(resolveClose)));
-  return { calls: () => calls, env: { SCRIPT_PROVIDER_ORDER: 'MISTRAL_MODEL', MISTRAL_API_KEY: 'test-only', MISTRAL_BASE_URL: `http://127.0.0.1:${server.address().port}/v1` } };
+  return { requests, calls: () => calls, env: { SCRIPT_PROVIDER_ORDER: 'MISTRAL_MODEL', MISTRAL_API_KEY: 'test-only', MISTRAL_BASE_URL: `http://127.0.0.1:${server.address().port}/v1` } };
 }
 async function scriptGuide({ cwd, data }) {
   await writeFile(join(data, 'evaluation-report.json'), JSON.stringify({ published: false }));
@@ -103,7 +108,7 @@ function draft() {
   const phrases = ['abren el análisis', 'comparan sus ritmos', 'buscan continuidad', 'presentan sus fortalezas', 'preparan el encuentro', 'muestran sus contrastes', 'exploran el contexto', 'ponen a prueba su lectura', 'conservan sus matices', 'cierran la previa'];
   return { lede: 'Alpha y Beta presentan un contraste de ritmos antes del cruce.', scripts: phrases.map(phrase => {
     const hook = `Alpha y Beta ${phrase}.`;
-    return { hook, narration: `${hook} Los antecedentes aportan contexto y ayudan a explicar las tendencias de cada equipo. La información disponible conserva sus límites y el análisis espera los datos con calma. La previa se cuenta sin prisa y con la muestra por delante. La tensión del cruce sostiene la espera. Consulta la lectura completa en goatlab.win.` };
+    return { hook, projection: 'Mi lectura apunta a un partido parejo.', narration: `${hook} Mi lectura apunta a un partido parejo. Los antecedentes aportan contexto y ayudan a explicar las tendencias de cada equipo. La información disponible conserva sus límites y el análisis espera los datos con calma. La previa se cuenta sin prisa y con la muestra por delante. La tensión del cruce sostiene la espera. Consulta la lectura completa en goatlab.win.` };
   }) };
 }
 test('scripts: unreadable, incomplete and mismatched stored scripts are regenerated atomically', async t => {
@@ -134,7 +139,7 @@ test('scripts: rejected regeneration preserves the prior file without temporary 
   assert.equal(await readFile(file, 'utf8'), old);
   assert.deepEqual(await readdir(f.directory), ['upcoming.json']);
 });
-test('scripts: probability file feeds calc-backed picks into the saved draft', async t => {
+test('scripts: probability informs the editorial prompt while saving the model projection', async t => {
   const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };
   const prob = {
     markets: { oneX2: { home: 0.6, draw: 0.25, away: 0.15 }, exactScores: [{ home: 2, away: 0, p: 0.2 }] },
@@ -156,7 +161,7 @@ test('scripts: probability file feeds calc-backed picks into the saved draft', a
     lede: 'Alpha recibe a Beta con la serie reciente a la vista.',
     scripts: facts.picks.map((pick, i) => {
       const hook = `Alpha y Beta abren el análisis número ${['uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'][i]}.`;
-      return { hook, narration: `${hook} ${pick.bridge} ${pick.antecedent}. El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada esta noche cuando el ambiente aprieta. ${pick.noun} se queda con ${pick.verdict}. ${pick.call}` };
+      return { hook, projection: `Mi lectura se inclina por ${pick.verdict}.`, narration: `${hook} ${pick.bridge} ${pick.antecedent}. El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada esta noche cuando el ambiente aprieta. Mi lectura se inclina por ${pick.verdict}. ${pick.call}` };
     }),
   };
   const service = await model(t, content);
@@ -170,10 +175,11 @@ test('scripts: probability file feeds calc-backed picks into the saved draft', a
   assert.equal(result.status, 0, result.stderr);
   const saved = JSON.parse(await readFile(file, 'utf8'));
   assert.deepEqual(scriptStructureErrors(saved, { matchId: match.webId, match: probMatch }), []);
-  assert.equal(saved.scripts[0].pick.verdict, 'la victoria de Alpha en casa');
-  assert.equal(saved.scripts[4].pick.verdict, '10 córners, 6 de Alpha y 4 de Beta');
-  assert.equal(saved.scripts[9].pick.verdict, '14 faltas de Alpha y 14 faltas de Beta, 1 penal y sin tarjeta roja');
-  assert.ok(saved.scripts[8].pick.verdict.includes('por 2'));
-  assert.ok(saved.scripts[8].narration.includes(saved.scripts[8].pick.verdict));
-  assert.equal(saved.scripts.filter(script => script.pick?.verdict.includes('la victoria de Alpha en casa')).length, 2);
+  const payload = JSON.parse(service.requests[0].messages[1].content.split('\n').slice(1).join('\n'));
+  assert.equal(payload.facts.picks[0].verdict, 'la victoria de Alpha en casa');
+  assert.equal(payload.facts.picks[4].verdict, '10 córners, 6 de Alpha y 4 de Beta');
+  assert.equal(saved.editorialVersion, 2);
+  assert.equal(saved.scripts[0].pick, undefined);
+  assert.equal(saved.scripts[0].projection, content.scripts[0].projection);
+  assert.ok(saved.scripts[8].narration.includes(saved.scripts[8].projection));
 });

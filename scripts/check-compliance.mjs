@@ -7,7 +7,7 @@ const selectionFile = process.argv.find(arg => arg.startsWith('--selection='))?.
 const selectionIds = selectionFile ? new Set(JSON.parse(await readFile(selectionFile, 'utf8')).ids) : null;
 
 function clickErrors(data) {
-  const named = { home: data.home, away: data.away };
+  const named = { home: data.home, away: data.away, knownPlayers: data.playerNames };
   const errors = [];
   for (const script of data.scripts ?? []) {
     const players = [3, 4, 7, 9].includes(Number(script.n))

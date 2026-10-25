@@ -16,8 +16,9 @@ test('HTTP error falls through exactly once and keeps temperature zero', async (
   assert.equal(mistralBody.temperature, 0);
   assert.ok(!('reasoning_effort' in mistralBody));
   assert.equal(opencodeBody.model, 'deepseek-v4.1-flash');
-  assert.equal(opencodeBody.temperature, 0);
-  assert.ok(!('reasoning_effort' in opencodeBody));
+  assert.ok(!('temperature' in opencodeBody));
+  assert.equal(opencodeBody.reasoning_effort, 'max');
+  assert.deepEqual(opencodeBody.thinking, { type: 'enabled' });
   assert.ok(calls[1].init.headers['x-opencode-session']);
 });
 test('caller validation failure and empty responses are aggregated', async () => {
@@ -141,13 +142,13 @@ test('opencode go construye URL inference/go sin duplicar chat/completions', asy
   await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
   assert.ok(calls[0] === 'https://opencode.ai/inference/go/openai/v1/chat/completions');
 });
-test('deepseek pide temperatura cero y deja el esfuerzo en el default', async () => {
+test('deepseek pide razonamiento máximo sin temperatura ignorada', async () => {
   const calls = [];
   const deepseekEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_FALLBACK_MODEL', OPENCODE_GO_FALLBACK_MODEL: 'deepseek-v4.1-flash' };
   await withFailover([], { env: deepseekEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
   assert.equal(calls[0].model, 'deepseek-v4.1-flash');
-  assert.equal(calls[0].temperature, 0);
-  assert.ok(!('reasoning_effort' in calls[0]));
+  assert.ok(!('temperature' in calls[0]));
+  assert.equal(calls[0].reasoning_effort, 'max');
 });
 test('orderVar gana sobre LLM_PROVIDER_ORDER', () => {
   const chain = resolveChain({
@@ -228,4 +229,80 @@ test('razonamiento sin respuesta y finish length es truncado', async () => {
   }).catch(e => e);
   assert.equal(hasTruncatedFailure(error), true);
   assert.equal(hasTransportFailure(error), true);
+});
+
+test('GLM fallback receives maximum reasoning and success records latency', async () => {
+  const calls = [];
+  const result = await withFailover([], {
+    env: { OPENCODE_GO_API_KEY: 'test', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL' },
+    logger, fetchImpl: async (_url, init) => {
+      calls.push(JSON.parse(init.body));
+      return calls.length === 1 ? new Response('', { status: 503 }) : response('{"ok":true}');
+    }, validate: extractJson,
+  });
+  assert.equal(result.model, 'glm-5.3-flash');
+  assert.equal(calls[1].reasoning_effort, 'max');
+  assert.deepEqual(calls[1].thinking, { type: 'enabled' });
+  assert.ok(result.latencyMs >= 0);
+});
+
+test('timeout while reading the response body remains a retryable transport failure', async () => {
+  const result = await withFailover([], { env, logger, fetchImpl: async () => ({ ok: true, json: async () => { throw new DOMException('timed out reading body', 'TimeoutError'); } }) }).catch(error => error);
+  assert.equal(hasTransportFailure(result), true);
+  assert.ok(result.details.every(d => d.kind === 'transport'));
+});
+
+function sse(events, { split = false } = {}) {
+  const bytes = new TextEncoder().encode(events.map(event => typeof event === 'string' ? event : `data: ${JSON.stringify(event)}\r\n\r\n`).join(''));
+  return new Response(new ReadableStream({ start(controller) {
+    if (split) for (let i = 0; i < bytes.length; i += 7) controller.enqueue(bytes.slice(i, i + 7));
+    else controller.enqueue(bytes);
+    controller.close();
+  } }), { headers: { 'content-type': 'text/event-stream; charset=utf-8' } });
+}
+const streamingEnv = { OPENCODE_GO_API_KEY: 'test', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL' };
+test('streaming preserves spaces and split UTF-8, ignores reasoning and retains final usage', async () => {
+  const result = await withFailover([], { env: streamingEnv, logger, maxTokens: 131072, validate: extractJson, fetchImpl: async (_url, init) => {
+    const body = JSON.parse(init.body);
+    assert.equal(body.stream, true);
+    assert.deepEqual(body.stream_options, { include_usage: true });
+    return sse([
+      ': keep-alive\n\n',
+      { choices: [{ delta: { reasoning_content: 'private reasoning' } }] },
+      { choices: [{ delta: { content: '{"text":"Acá' } }] },
+      { choices: [{ delta: { content: ' está el fútbol"}' }, finish_reason: 'stop' }] },
+      { choices: [], usage: { prompt_tokens: 5, completion_tokens: 40000 } },
+      'data: [DONE]\n\n',
+    ], { split: true });
+  } });
+  assert.deepEqual(result.value, { text: 'Acá está el fútbol' });
+  assert.deepEqual(result.usage, { inputTokens: 5, outputTokens: 40000 });
+  assert.equal(result.finishReason, 'stop');
+});
+test('streaming rejects disconnection and token exhaustion as retryable transport failures', async () => {
+  for (const events of [
+    [{ choices: [{ delta: { content: '{"ok":true}' }, finish_reason: 'stop' }] }],
+    [{ choices: [{ delta: { content: '{"ok":true}' }, finish_reason: 'length' }] }, 'data: [DONE]\n\n'],
+    [{ error: { message: 'provider diagnostic' } }, 'data: [DONE]\n\n'],
+  ]) {
+    const error = await withFailover([], { env: streamingEnv, logger, fetchImpl: async () => sse(events) }).catch(error => error);
+    assert.equal(hasTransportFailure(error), true);
+    assert.doesNotMatch(error.message, /provider diagnostic/);
+  }
+});
+
+test('configured deadline aborts an SSE response even after headers and keepalive arrive', { timeout: 3000 }, async t => {
+  const { createServer } = await import('node:http');
+  const server = createServer((_req, res) => {
+    res.writeHead(200, { 'content-type': 'text/event-stream' });
+    res.write(': keepalive\n\n');
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => { server.closeAllConnections(); return new Promise(resolve => server.close(resolve)); });
+  const result = await withFailover([], { logger, timeoutMs: 60, env: {
+    MISTRAL_API_KEY: 'test', MISTRAL_MODEL: 'deepseek-v4.1-flash', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL',
+    MISTRAL_BASE_URL: `http://127.0.0.1:${server.address().port}/v1`,
+  } }).catch(error => error);
+  assert.equal(hasTransportFailure(result), true);
+  assert.equal(result.details.length, 1);
 });

@@ -107,3 +107,19 @@ test('consumer CLI entrypoints reject production before reading inputs or creden
     assert.equal(result.stdout, '');
   }
 });
+
+test('graphics retain verified facts from photo/video packs without motion content', async t => {
+  const f = await fixture(t);
+  const fact = { id: 'home.gf', label: 'Alpha · goles', value: 7, unit: 'goles', source: 'fixtures:a-b', sampleSize: 5 };
+  f.content['image-prompts'].facts = [fact];
+  await f.run();
+  let bank = JSON.parse(await readFile(join(f.dir, 'a-b.json')));
+  assert.deepEqual(bank.facts, [fact]);
+  assert.equal(bank.motionPrompts, undefined);
+  // Reject an identity-mismatched pack, using the video pack's catalog instead.
+  f.content['image-prompts'].home = 'Wrong team';
+  f.content['video-prompts'].facts = [{ ...fact, value: 3 }];
+  await f.run();
+  bank = JSON.parse(await readFile(join(f.dir, 'a-b.json')));
+  assert.equal(bank.facts[0].value, 3);
+});

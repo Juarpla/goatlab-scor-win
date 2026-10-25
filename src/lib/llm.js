@@ -37,7 +37,7 @@ export const providers = {
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
   OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
-  // Mismo gateway y misma clave. Solo cambia el modelo. Ninguno manda reasoning_effort.
+  // Mismo gateway y misma clave. Solo cambia el modelo.
   OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'glm-5.3-flash', ...openCodeGo },
 };
 const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
@@ -56,11 +56,54 @@ export function resolveChain(env = runtimeEnv(), logger = console, { orderVar } 
     return [{ ...provider, id, model: env[`${id}_MODEL`]?.trim() || provider.defaultModel }];
   });
 }
-/** MiMo rechaza temperature y reasoning_effort (HTTP 400). El resto pide temperature 0 y deja el esfuerzo en el default del proveedor. */
+/** Maximum reasoning is model-specific; other providers retain their own wire format. */
 function requestExtras(model) {
   const name = String(model ?? '').toLowerCase();
   if (name.startsWith('mimo-')) return {};
+  if (/^(?:deepseek-v4|glm-5\.3)/.test(name)) return { thinking: { type: 'enabled' }, reasoning_effort: 'max', stream: true, stream_options: { include_usage: true } };
   return { temperature: 0 };
+}
+// Reasoning and the answer share the output budget. Content jobs use these
+// together so a slow primary gets time to finish before failover.
+export const CONTENT_LLM_LIMITS = Object.freeze({ maxTokens: 131_072, timeoutMs: 600_000 });
+/** Consume SSE as it arrives so Node's five-minute header timeout cannot
+ * interrupt long reasoning. The fetch signal still bounds the entire body. */
+async function readCompletion(res) {
+  if (!res.headers?.get?.('content-type')?.includes('text/event-stream')) return res.json();
+  const decoder = new TextDecoder();
+  let pending = '', event = [], content = '', finishReason = null, usage = null, done = false;
+  const flush = () => {
+    if (!event.length) return;
+    const data = event.join('\n'); event = [];
+    if (data.trim() === '[DONE]') { done = true; return; }
+    let chunk;
+    try { chunk = JSON.parse(data); } catch { throw new Error('Evento de streaming JSON inválido'); }
+    if (chunk.error) throw new Error('El proveedor interrumpió el streaming');
+    if (chunk.usage) usage = chunk.usage;
+    const choice = chunk.choices?.[0];
+    const delta = choice?.delta?.content;
+    if (typeof delta === 'string') content += delta;
+    else if (Array.isArray(delta)) content += delta.map(part => typeof part === 'string' ? part : part?.text ?? '').join('');
+    if (choice?.finish_reason) finishReason = choice.finish_reason;
+  };
+  const line = value => {
+    if (!value.trim()) flush();
+    else if (value.startsWith('data:')) event.push(value.slice(5).trimStart());
+  };
+  for await (const bytes of res.body) {
+    pending += decoder.decode(bytes, { stream: true });
+    let newline;
+    while ((newline = pending.indexOf('\n')) >= 0) {
+      line(pending.slice(0, newline).replace(/\r$/, ''));
+      pending = pending.slice(newline + 1);
+    }
+    if (done) break;
+  }
+  pending += decoder.decode();
+  if (pending) line(pending.replace(/\r$/, ''));
+  flush();
+  if (!done) throw new Error('Streaming incompleto');
+  return { choices: [{ message: { content }, finish_reason: finishReason }], usage };
 }
 function textFromContent(content) {
   if (typeof content === 'string') return content.trim();
@@ -97,7 +140,9 @@ export async function callProvider(provider, messages, { env = runtimeEnv(), fet
     if ([400, 401, 403, 404, 422].includes(res.status)) throw new LlmPermanentError(`HTTP ${res.status}`, { provider: provider.id });
     throw new LlmTransportError(`HTTP ${res.status}`, { provider: provider.id, retryAfterMs: parseRetryAfter(res.headers?.get?.('retry-after')) });
   }
-  const body = await res.json();
+  let body;
+  try { body = await readCompletion(res); }
+  catch (error) { throw new LlmTransportError(error?.message ?? 'Respuesta JSON inválida', { provider: provider.id }); }
   const content = textFromMessage(body?.choices?.[0]?.message);
   const usage = normalizeUsage(body?.usage);
   const finishReason = body?.choices?.[0]?.finish_reason ?? null;
@@ -199,7 +244,7 @@ export async function withFailover(messages, options = {}) {
       continue;
     }
     breaker?.note(provider.id, { kind: 'ok' });
-    return { value, provider: provider.id, model: provider.model, usage: call.usage, finishReason: call.finishReason, callId: sessionId, failures: details };
+    return { value, provider: provider.id, model: provider.model, usage: call.usage, finishReason: call.finishReason, latencyMs: Date.now() - started, callId: sessionId, failures: details };
   }
   const aggregate = new AggregateError(failures, failures.length ? failures.map(e => e.message).join('; ') : details.length ? `No hay proveedores LLM disponibles (fusible): ${details.map(d => `${d.provider} (${d.kind})`).join(', ')}` : 'No hay proveedores LLM configurados');
   aggregate.details = details;

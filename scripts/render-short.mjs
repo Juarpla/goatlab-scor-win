@@ -70,7 +70,7 @@ try {
     tmp,
     voiceFile,
     voiceSeconds,
-    assets, clips: media.clips ?? [], facts: media.facts ?? [], motionPrompts: media.motionPrompts ?? [],
+    assets, clips: media.clips ?? [], facts: media.facts ?? [],
     variant, plan: load(args.plan),
     home: media.home ?? '',
     away: media.away ?? '',

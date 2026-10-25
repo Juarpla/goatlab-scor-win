@@ -1,9 +1,8 @@
 import { VISUAL_STYLES, isVisualStyle } from './visual-style.js';
 /**
- * Guiones de Shorts (<50s). Estructura por guion: gancho del modelo +
- * piezas asignadas por código (puente, antecedente, sustantivo, pronóstico,
- * llamada) + tejido del modelo. buildYoutubeScripts arma la misma estructura
- * como plantilla de prueba. Sin porcentajes mientras el gate de publicación
+ * Guiones de Shorts (<50s). El modelo escribe una lectura propia por ángulo.
+ * Las piezas calculadas orientan el análisis y conservan las plantillas antiguas.
+ * Sin porcentajes mientras el gate de publicación
  * siga cerrado (ver COMPLIANCE.md).
  */
 import { DISCLAIMER, checkScript, checkText } from './compliance.js';
@@ -560,7 +559,7 @@ function importantPlayers(match, scorers) {
   return { home, away };
 }
 
-function playerNames(facts) {
+export function playerNames(facts) {
   return [facts?.players?.home, facts?.players?.away]
     .flatMap(side => side ?? [])
     .map(row => row?.name)
@@ -600,8 +599,7 @@ function baseFacts(match, scorers = null) {
 }
 
 /**
- * Hechos + piezas asignadas + probabilidades del partido (el modelo solo
- * puede citar las cifras de su pieza; el lint lo verifica).
+ * Hechos + referencias por ángulo + probabilidades para la lectura editorial.
  */
 export function scriptFacts(match, scorers = null, probability = null) {
   return { ...baseFacts(match, scorers), probability: probability ?? null, picks: buildPicks(match, scorers, probability) };
@@ -658,6 +656,16 @@ export function cleanLede(lede) {
     .replace(/Más data:\s*/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+/** Some models return the hook separately. The published narration reads it too. */
+export function normalizeYoutubeDraft(draft) {
+  if (!draft || typeof draft !== 'object' || Array.isArray(draft)) return draft;
+  return { ...draft, lede: cleanLede(draft.lede), scripts: Array.isArray(draft.scripts) ? draft.scripts.map(script => {
+    const hook = String(script?.hook ?? '').trim();
+    const narration = String(script?.narration ?? '').trim();
+    return { ...script, hook, narration: hook && narration && !narration.startsWith(hook) ? `${hook} ${narration}` : narration };
+  }) : draft.scripts };
 }
 
 export function competitionTag(competition) {
@@ -718,6 +726,8 @@ const NAME_STOP = new Set([
   'hay', 'la', 'las', 'lo', 'los', 'mas', 'más', 'mientras', 'ni', 'ojo', 'para', 'pero',
   'por', 'que', 'qué', 'quien', 'quién', 'si', 'sin', 'sobre', 'su', 'sus', 'tambien',
   'también', 'toda', 'todas', 'todavia', 'todavía', 'todo', 'todos', 'un', 'una', 'y',
+  'yo', 'veo', 'creo', 'espero', 'proyecto', 'imagino', 'además', 'quizá', 'quizás',
+  'ahora', 'entonces', 'incluso', 'esa', 'justamente', 'ojo', 'desde', 'según',
 ]);
 
 function teamWords(home, away) {
@@ -740,7 +750,8 @@ function isNameToken(word, teams) {
 }
 
 /** Nombres propios de la narración que no son los equipos. */
-export function playersInNarration(narration, { home, away } = {}) {
+export function playersInNarration(narration, { home, away, knownPlayers } = {}) {
+  if (Array.isArray(knownPlayers)) return collapseNames(knownPlayers.filter(name => typeof name === 'string' && name.trim() && String(narration ?? '').includes(name)));
   const teams = teamWords(home, away);
   const found = [];
   let buf = [];
@@ -767,13 +778,13 @@ function collapseNames(names) {
 }
 
 /** Hasta cuatro jugadores de los guiones 3, 4, 7 y 9, goles y creación primero. */
-export function attentionPlayers(scripts, { home, away } = {}) {
+export function attentionPlayers(scripts, { home, away, knownPlayers } = {}) {
   const order = [3, 9, 7, 4];
   const ranked = [];
   for (const n of order) {
     const script = (scripts ?? []).find(item => Number(item?.n) === n);
     if (!script) continue;
-    for (const name of playersInNarration(script.narration, { home, away })) {
+    for (const name of playersInNarration(script.narration, { home, away, knownPlayers })) {
       if (!ranked.includes(name)) ranked.push(name);
     }
   }
@@ -861,12 +872,11 @@ export function telegramCaption(input = {}) {
 }
 
 /**
- * Rechaza un borrador del modelo si no se puede leer en voz alta,
- * inventa cifras o rompe el gate. Con pieza asignada también exige sus
- * textos tal cual, gancho sin cifras, tope de 3 cifras y piso de 55
- * palabras. Devuelve la lista de fallos.
+ * Valida duración, datos y publicación. El modo editorial permite cifras
+ * nuevas en una frase de proyección explícita; el resto conserva el gate
+ * factual. Las piezas literales se validan solo en borradores antiguos.
  */
-export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
+export function acceptYoutubeDraft(draft, { facts, published = false, editorial = false } = {}) {
   const errors = [];
   const scripts = draft?.scripts;
   if (!Array.isArray(scripts) || scripts.length !== 10) errors.push('hacen falta 10 guiones');
@@ -892,9 +902,20 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
       const mentioned = hook.includes(name) || narration.includes(name);
       if (mentioned && !PLAYER_SCRIPT_INDEXES.has(i)) errors.push(`${label}: ${name} va en un guion de jugadores`);
     }
-    const text = `${hook} ${narration}`;
+    const text = narration;
+    const projection = editorial ? String(script?.projection ?? '').trim() : '';
+    if (editorial) {
+      // Only an explicit, standalone opinion may introduce forecast numbers.
+      // The rest of the narration still has to use numbers from the facts.
+      if (!projection || !/^(?:Mi (?:lectura|pronóstico|proyección)|Yo (?:veo|creo|imagino|espero)|Me imagino|Veo|Creo que|Espero|Proyecto|Para mí)(?=\s|[,:])/i.test(projection)) errors.push(`${label}: falta una proyección marcada como opinión`);
+      const projectionAt = narration.indexOf(projection);
+      if (projection && (projectionAt < 0 || projectionAt !== narration.lastIndexOf(projection) || (projectionAt > 0 && !/[.!?]\s*$/.test(narration.slice(0, projectionAt))) || !/[.!?]$/.test(projection) || /[.!?]\s+\S/.test(projection))) errors.push(`${label}: la proyección debe ser una frase completa de la narración, una sola vez`);
+      for (const n of numbersInText(projection)) if (!Number.isInteger(n) || n < 1 || n > 90) errors.push(`${label}: proyección fuera de rango`);
+      if (numbersInText(hook).length) errors.push(`${label}: el gancho no lleva cifras`);
+    }
     const figures = numbersInText(text);
-    for (const n of figures) {
+    const factualText = editorial && projection ? text.replace(projection, '') : text;
+    for (const n of numbersInText(factualText)) {
       if (n === 0) errors.push(`${label}: el cero no se escribe en dígitos`);
       else if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);
     }
@@ -902,7 +923,7 @@ export function acceptYoutubeDraft(draft, { facts, published = false } = {}) {
     const words = narration.split(/\s+/).filter(Boolean).length;
     if (words < MIN_WORDS) errors.push(`${label}: ${words} palabras, mínimo ${MIN_WORDS}`);
     const pick = facts?.picks?.[i] ?? null;
-    if (pick) {
+    if (pick && !editorial) {
       for (const [field, name, ended] of [['bridge', 'puente', false], ['noun', 'sustantivo', false], ['antecedent', 'antecedente', true], ['verdict', 'pronóstico', true], ['call', 'llamada', false]]) {
         const value = String(pick[field] ?? '').trim();
         if (!value) errors.push(`${label}: falta ${name} asignado`);

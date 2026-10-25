@@ -82,8 +82,8 @@ Fuentes: [ClawHub](https://docs.openclaw.ai/clawhub),
 
 Gateway consulta las cuatro imágenes y los dos clips del partido publicados en
 R2 por GitHub Actions. Para consulta, fallos de acceso, banco parcial y reintentos,
-lee `../skills/goatlab/references/media.md`. Render utiliza los Motion Prompts
-publicados para ejecutar los gráficos y montar la voz. Las imágenes y clips
+lee `../skills/goatlab/references/media.md`. OpenClaw dirige los gráficos con
+el catálogo de hechos del partido y Render ejecuta la composición con la voz. Las imágenes y clips
 mantienen Agnes como origen; la producción y las cuotas se operan en Actions.
 
 ## Despliegue y recuperación

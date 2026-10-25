@@ -35,7 +35,7 @@ export function boundedMotion(layer, photo) {
 }
 
 /** Validate the final immutable render input, including old plan versions 1–3. */
-export function compositionProps({ frames, photos = [], clips = [], words, plan, facts = [], motionPrompts = [], match = '' }) {
+export function compositionProps({ frames, photos = [], clips = [], words, plan, facts = [], match = '' }) {
   if (!Number.isInteger(frames) || frames < 1 || frames > MAX_FRAMES) throw new Error('duración fuera de límite');
   if (!words?.length || !plan?.scenes?.length || ![1,2,3,4].includes(plan.version)) throw new Error('se requiere transcripción y plan de edición');
   const span = frames / FPS - ENDCARD_SECONDS;
@@ -65,10 +65,10 @@ export function compositionProps({ frames, photos = [], clips = [], words, plan,
       if (graphic.wordStart !== undefined || graphic.wordEnd !== undefined) {
         if (!Number.isInteger(graphic.wordStart) || !Number.isInteger(graphic.wordEnd) || graphic.wordStart < 0 || graphic.wordEnd <= graphic.wordStart || graphic.wordEnd > words.length) throw new Error(`${at}: fragmento de voz inexistente`);
       }
-      if (MOTION_KINDS.includes(graphic.kind)) resolveMotion(graphic, facts, motionPrompts);
+      if (MOTION_KINDS.includes(graphic.kind)) resolveMotion(graphic, facts);
       else for (const id of graphic.factIds ?? []) if (!facts.some(f => f.id === id && Number.isFinite(f.value))) throw new Error('hecho inexistente');
     }
   }
   if (Math.abs(cursor - span) > .03) throw new Error('timeline incompleta');
-  return { frames, photos, clips, words, plan, facts, motionPrompts, match, font: 'LiberationSans-Bold.ttf', brand: 'brand.svg' };
+  return { frames, photos, clips, words, plan, facts, match, font: 'LiberationSans-Bold.ttf', brand: 'brand.svg' };
 }

@@ -29,8 +29,8 @@ En notes explica el concepto, su relación con la voz y una diferencia concreta
 frente a los recientes: encuadre, ritmo, tipografía, paleta o uso del material.
 
 El inventario es material disponible: elige cualquier subconjunto, repite un
-recurso si tiene sentido o trabaja solo con gráficos. Los Motion Prompts son
-inspiración opcional. Usa facts para cifras reales y distingue la ilustración
+recurso si tiene sentido o trabaja solo con gráficos. Usa facts para cifras
+reales y distingue la ilustración
 de evidencia del partido. Consulta los montajes recientes adjuntos para variar
 la composición; no copies una plantilla cambiando solo texto o colores.
 

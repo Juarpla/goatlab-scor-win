@@ -132,7 +132,7 @@ async function runJob(job) {
       });
       if (stopIfCancelled(job, log)) return;
       const prepared = await measure('preparation', async () => prepareShort({
-        tmp, voiceFile, voiceSeconds: await mediaDuration(voiceFile), assets: job.assets, clips: job.clips ?? [], motionPrompts: job.motionPrompts ?? [],
+        tmp, voiceFile, voiceSeconds: await mediaDuration(voiceFile), assets: job.assets, clips: job.clips ?? [],
         variant: job.variant, home: job.home, away: job.away, matchLabel: job.matchLabel, log, cacheDir,
         facts: job.facts ?? [], requestId: job.requestId ?? job.id, onStage,
       }));
@@ -348,7 +348,6 @@ const server = createServer(async (req, res) => {
       if (!Array.isArray(b.assets)) return json(400, { error: 'assets requiere una lista' });
       if (b.facts != null && (!Array.isArray(b.facts) || b.facts.length > 128 || b.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return json(400, { error: 'hechos inválidos' });
       if (b.clips != null && (!Array.isArray(b.clips) || b.clips.some(c => c?.source !== 'agnes' || typeof c.url !== 'string' || !/^https:\/\//.test(c.url) || !Number.isFinite(c.duration) || c.duration <= 0))) return json(400, { error: 'clips inválidos' });
-      if (b.motionPrompts != null && !Array.isArray(b.motionPrompts)) return json(400, { error: 'motionPrompts requiere una lista' });
       const variant = Number(b.variant ?? 0);
       if (!Number.isInteger(variant) || variant < 0 || variant > 9) return json(400, { error: 'variant fuera de rango' });
       if (b.requestId && (typeof b.requestId !== 'string' || b.requestId.length > 128)) return json(400, { error: 'requestId inválido' });
@@ -362,7 +361,7 @@ const server = createServer(async (req, res) => {
         home: String(b.home ?? ''), away: String(b.away ?? ''),
         workflowProtocol: WORKFLOW_PROTOCOL, operation: 'prepare', revision: 0, retryToken: b.retryToken,
         renderEngine: 'remotion', audioFileId: b.audioFileId, audioUrl: b.audioUrl, audioMessageId: b.audioMessageId ?? null, attribution: String(b.attribution ?? ''),
-        clips: b.clips ?? [], motionPrompts: b.motionPrompts ?? [], assets: b.assets, facts: b.facts ?? [],
+        clips: b.clips ?? [], assets: b.assets, facts: b.facts ?? [],
       });
       await store.flush();
       if (job.status === 'queued' && !protectedIds.has(job.id)) schedule(job);

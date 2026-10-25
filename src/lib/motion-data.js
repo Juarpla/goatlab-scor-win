@@ -1,7 +1,7 @@
 /** Resolve chart data from the immutable catalog; never accept model-authored values. */
 export const MOTION_KINDS = ['form', 'goals', 'clean-sheets', 'head-to-head', 'synthesis'];
 export const MOTION_TITLES = { form: 'FORMA RECIENTE', goals: 'GOLES A FAVOR / RECIBIDOS', 'clean-sheets': 'ARCOS EN CERO', 'head-to-head': 'CARA A CARA', synthesis: 'CLAVES DEL PARTIDO' };
-export function resolveMotion(graphic, facts = [], prompts = []) {
+export function resolveMotion(graphic, facts = []) {
   if (!MOTION_KINDS.includes(graphic.kind)) throw new Error('motion desconocido');
   const presentation = graphic.presentation ?? 'statistical';
   if (!['editorial','statistical'].includes(presentation)) throw new Error('presentación de motion desconocida');

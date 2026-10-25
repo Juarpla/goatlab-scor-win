@@ -60,12 +60,22 @@ Las decisiones del producto están en PRODUCT.md. El diseño se construirá dire
 ### Contenido audiovisual
 
 `pnpm content` prepara los guiones y prompts del top 5 configurable. Admite
-`--category=all|scripts|image-prompts|video-prompts|motion-prompts`, `--match=<webId>`,
+`--category=all|scripts|image-prompts|video-prompts`, `--match=<webId>`,
 `--top=N` y `--force`. Las categorías se guardan de forma independiente y conservan
-el contenido válido existente. Prioridad: MiMo → DeepSeek → Mistral → Workers AI,
+el contenido válido existente. Tanto en local como en GitHub Actions, la prioridad es
+DeepSeek V4.1 Flash → GLM-5.3-Flash → Mistral → Workers AI,
 configurada por `SCRIPT_PROVIDER_ORDER`, independiente del análisis deportivo.
+DeepSeek y GLM usan razonamiento `max`, hasta 131072 tokens y 10 minutos por intento.
+Los diez guiones conservan sus temas y 55–100 palabras (techo 110); el modelo
+redacta con libertad y guarda su escenario futuro en `projection`, identificado
+como opinión en la narración. Las cifras históricas siguen saliendo de los datos.
+Motion Prompts se retiró; los gráficos reciben el catálogo de hechos directamente.
 
-Cada partido tiene `/scripts`, `/image-prompts`, `/video-prompts` y `/motion-prompts`
+Para medir latencia y validar borradores sin publicarlos:
+`node --env-file=.env scripts/benchmark-content-llm.mjs --match=<webId> --runs=2`.
+Los resultados y textos se guardan en `.cache/content-llm-benchmark/`.
+
+Cada partido tiene `/scripts`, `/image-prompts` y `/video-prompts`
 con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
 para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
 partido y consulta el banco compartido de 4 imágenes y hasta 2 clips Agnes

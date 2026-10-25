@@ -6,12 +6,12 @@ plan sea ejecutable y el MP4 no supere 55 s. [Dirección artística](creative.md
 
 ## Flujo y persistencia
 
-OpenClaw lee el índice y cuatro JSON públicos de goatlab.win. Cada serie conserva
+OpenClaw lee el índice y tres JSON públicos de goatlab.win. Cada serie conserva
 el contenido utilizado. Actions produce el banco de cuatro imágenes y dos clips
 Agnes y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
 lector independiente, verifica metadatos, prompts, checksum y acceso público,
 y publica su banco local listo en un máximo de 90 segundos. Un banco parcial o
-vacío permite montar los audios con gráficos. Los Motion Prompts se aplican por audio.
+vacío permite montar los audios con gráficos. OpenClaw compone los gráficos por audio con el catálogo de hechos.
 
 Gateway utiliza `MEDIA_ROLE=consumer`; el generador y sus CLI Agnes exigen
 `MEDIA_ROLE=producer` y `GITHUB_ACTIONS=true`. Reintentar media consulta R2,
@@ -31,10 +31,10 @@ impiden el apagado. Una réplica por aplicación y una captura a la vez.
 
 POST /render, POST /render/cancel y GET /jobs/:id usan Bearer RENDER_SECRET.
 Se conservan requestId, seriesId, chatId, matchId, matchLabel, variant 0–9,
-audioFileId o audioUrl, expiresAt, assets, clips, facts y motionPrompts.
+audioFileId o audioUrl, expiresAt, assets, clips y facts.
 Solo se admiten medios Agnes. Los gráficos usan referencias del catálogo facts,
-con value, unit, source y sampleSize cuando existe. Cada Motion Prompt conserva
-n, kind, prompt y factIds. Respuesta de aceptación: {jobId,status,duplicate}.
+con value, unit, source y sampleSize cuando existe. El banco conserva el catálogo
+de los paquetes de imágenes o video y OpenClaw decide los gráficos por audio. Respuesta de aceptación: {jobId,status,duplicate}.
 GET /healthz expone workflowProtocol 3, editPlanVersion 5, renderEngine remotion,
 maxSeconds 55 y revision. Versiones de planes 1–4 siguen siendo compatibles.
 El registro del trabajo incluye updatedAt, voiceRate y originalVoiceSeconds para auditoría.

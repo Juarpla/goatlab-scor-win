@@ -7,7 +7,7 @@ import { attentionPlayers, playersInNarration, shortTitle, youtubeCopy } from '.
 const { match, category } = Astro.props;
 const data = matchContent(match, category);
 const spec = CONTENT_CATEGORIES[category];
-const named = { home: match.home, away: match.away };
+const named = { home: match.home, away: match.away, knownPlayers: data?.playerNames };
 let description = '';
 let entries = data?.prompts ?? [];
 if (category === 'scripts' && data) {
@@ -22,7 +22,6 @@ const introductions = {
   scripts: 'Diez guiones para leer y grabar. La descripción está lista para copiar en YouTube.',
   'image-prompts': 'Diez escenas referenciales para crear las imágenes del encuentro: ocho acciones de juego, las hinchadas y la presentación en el estadio.',
   'video-prompts': 'Cinco formas de dar movimiento a las imágenes. El banco compartido utiliza hasta tres clips de seis segundos.',
-  'motion-prompts': 'Cinco direcciones de motion graphics para explicar los datos del encuentro. El montaje selecciona las que acompañan tu voz.',
 };
 ---
 <Layout title={`${match.home} contra ${match.away}: ${spec.label} | GoatLab`} description={introductions[category]} canonical={`https://goatlab.win${contentUrl(match.matchId, category)}`}>

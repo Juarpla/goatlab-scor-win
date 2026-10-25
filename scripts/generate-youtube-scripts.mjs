@@ -8,13 +8,15 @@ if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de gu
  *  --match o top ampliado registran el partido como extra protegido. */
 import { mkdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
 import { join } from 'node:path';
-import { createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../src/lib/llm.js';
+import { CONTENT_LLM_LIMITS, createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../src/lib/llm.js';
 import {
   acceptYoutubeDraft,
   buildDescription,
   cleanLede,
+  normalizeYoutubeDraft,
   attentionPlayers,
   playersInNarration,
+  playerNames,
   shortTitle,
   countWords,
   scriptFacts,
@@ -32,8 +34,8 @@ process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const dir = 'public/data/youtube-scripts';
 const healthPath = 'public/data/llm-health.json';
 const skillPath = '.agents/skills/redactar-guiones-shorts/SKILL.md';
-const SCRIPT_MAX_TOKENS = 12_000;
-const SCRIPT_TIMEOUT_MS = 180_000;
+const SCRIPT_MAX_TOKENS = CONTENT_LLM_LIMITS.maxTokens;
+const SCRIPT_TIMEOUT_MS = CONTENT_LLM_LIMITS.timeoutMs;
 const LLM_HEALTH_MAX = 200;
 const args = new Map(process.argv.slice(2).map(a => a.split('=')));
 const onlyMatch = args.get('--match');
@@ -162,20 +164,13 @@ function failureDetails(error) {
 }
 
 function validateDraft(content, match, { published, facts, matchId }) {
-  const draft = extractJson(content);
-  for (const script of draft?.scripts ?? []) {
-    const hook = String(script?.hook ?? '').trim();
-    const narration = String(script?.narration ?? '').trim();
-    if (hook && narration && !narration.startsWith(hook)) {
-      script.narration = `${hook} ${narration}`;
-    }
-  }
+  const draft = normalizeYoutubeDraft(extractJson(content));
   const lede = cleanLede(draft?.lede);
   const home = esName(match.home);
   const away = esName(match.away);
+  const knownPlayers = playerNames(facts);
   const numbered = (draft?.scripts ?? []).map((script, i) => ({ ...script, n: i + 1 }));
-  const players = attentionPlayers(numbered, { home, away });
-  const pickOf = i => (Array.isArray(facts?.picks) ? facts.picks[i] : null) ?? null;
+  const players = attentionPlayers(numbered, { home, away, knownPlayers });
   const description = buildDescription({
     lede,
     matchId,
@@ -185,7 +180,7 @@ function validateDraft(content, match, { published, facts, matchId }) {
     players,
   });
   const errors = [
-    ...acceptYoutubeDraft({ ...draft, lede }, { facts, published }),
+    ...acceptYoutubeDraft({ ...draft, lede }, { facts, published, editorial: true }),
     ...checkDescription(description, { matchId }),
   ];
   if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
@@ -193,13 +188,12 @@ function validateDraft(content, match, { published, facts, matchId }) {
     const narration = String(script.narration).trim();
     const hook = String(script.hook).trim();
     const n = i + 1;
-    const named = [3, 4, 7, 9].includes(n) ? playersInNarration(narration, { home, away }) : [];
+    const named = [3, 4, 7, 9].includes(n) ? playersInNarration(narration, { home, away, knownPlayers }) : [];
     const entry = { n, hook, title: shortTitle({ home, away, n, hook, players: named }), narration, words: countWords(narration) };
-    const pick = pickOf(i);
-    if (pick) entry.pick = { bridge: pick.bridge, noun: pick.noun, antecedent: pick.antecedent, verdict: pick.verdict, player: pick.player ?? null, call: pick.call };
+    entry.projection = String(script.projection).trim();
     return entry;
   });
-  return { scripts, description };
+  return { scripts, description, playerNames: knownPlayers };
 }
 
 function errorText(error) {
@@ -231,7 +225,7 @@ async function draftMatch(match, { breaker, skill, published, facts, priorFailur
     });
     noteLlmHealth({
       at: new Date().toISOString(), task: 'shorts', matchId, attempts, failures: [...priorFailures, ...(drafted.failures ?? [])].slice(0, 8),
-      ok: { provider: drafted.provider, model: drafted.model }, usage: drafted.usage, truncated: false, maxTokens: SCRIPT_MAX_TOKENS, batchSize: 1, callId: drafted.callId,
+      ok: { provider: drafted.provider, model: drafted.model, latencyMs: drafted.latencyMs }, usage: drafted.usage, truncated: false, maxTokens: SCRIPT_MAX_TOKENS, batchSize: 1, callId: drafted.callId,
     });
     return drafted;
   } catch (error) {
@@ -258,12 +252,14 @@ async function saveDraft(match, drafted) {
     matchId,
     providerId: match.id,
     scripts: value.scripts,
+    playerNames: value.playerNames,
     description: value.description,
     home: esName(match.home),
     away: esName(match.away),
     competition: match.competition,
     kickoff: match.kickoff,
     author: { provider, model },
+    editorialVersion: 2,
     instructionVersion: createHash('sha256').update(skill).digest('hex'),
     generatedAt: new Date().toISOString(),
   };

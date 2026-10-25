@@ -57,7 +57,7 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
   home = '', away = '', matchLabel, log = () => {},
   cacheDir = process.env.PHOTO_CACHE_DIR || join(APP_ROOT, '.cache/shorts/photos'),
   plan, transcriber = voiceTimes,
-  facts = [], clips = [], motionPrompts = [], mediaMinimum = 0, requestId, onStage = async () => {},
+  facts = [], clips = [], mediaMinimum = 0, requestId, onStage = async () => {},
 }) {
   const stages = {}, measure = async (label, fn) => {
     const at = Date.now();
@@ -119,13 +119,13 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     });
   } finally { unpinClips(); }
   const words = shiftWords(timing.words, LEAD_SECONDS);
-  const source = { brand: { name: 'GoatLab', url: 'goatlab.win' }, planVersion: 5, frames: voice.frames, fps: FPS, endcardSeconds: DIRECTOR_ENDCARD_SECONDS, clips: availableClips, motionPrompts, requestId, facts, span: total - DIRECTOR_ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
+  const source = { brand: { name: 'GoatLab', url: 'goatlab.win' }, planVersion: 5, frames: voice.frames, fps: FPS, endcardSeconds: DIRECTOR_ENDCARD_SECONDS, clips: availableClips, requestId, facts, span: total - DIRECTOR_ENDCARD_SECONDS, words, variant, home, away, match: matchLabel,
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
   copyFileSync(join(HERE, 'assets', FONT_FILE), join(tmp, FONT_FILE));
   copyFileSync(join(SKILL_ROOT, 'assets/brand.svg'), join(tmp, 'brand.svg'));
-  const prepared = { total, frames: voice.frames, photos, previews, clips: videos, words, facts, motionPrompts, match: matchLabel,
+  const prepared = { total, frames: voice.frames, photos, previews, clips: videos, words, facts, match: matchLabel,
     source, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, stages };
   writeJson(join(tmp, 'prepared.json'), prepared);
   if (plan) composeShort(tmp, plan);

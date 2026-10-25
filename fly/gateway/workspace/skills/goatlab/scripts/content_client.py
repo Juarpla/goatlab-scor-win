@@ -13,44 +13,33 @@ LIMA = ZoneInfo('America/Lima')
 WEEKDAYS = ('lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo')
 MONTHS = ('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre')
 
-CATEGORIES = {'scripts': ('youtube-scripts', 10), 'image-prompts': ('image-prompts', 4), 'video-prompts': ('video-prompts', 2), 'motion-prompts': ('motion-prompts', None)}
+CATEGORIES = {'scripts': ('youtube-scripts', 10), 'image-prompts': ('image-prompts', 4), 'video-prompts': ('video-prompts', 2)}
 KINDS = {
     'image-prompts': ['ball-duel','goal-action','supporters','stadium'],
     'video-prompts': ['push-in','tracking'],
-    'motion-prompts': ['form','goals','clean-sheets','head-to-head','synthesis'],
 }
 
 
 def valid(data, category, match_id):
-    if not isinstance(data, dict) or data.get('matchId') != match_id or not data.get('home') or not data.get('away'):
+    if category not in CATEGORIES or not isinstance(data, dict) or data.get('matchId') != match_id or not data.get('home') or not data.get('away'):
         return False
     rows = data.get('scripts' if category == 'scripts' else 'prompts')
     if not isinstance(rows, list):
         return False
-    # Motion: el modelo decide la cantidad de escenas (2-10). Imágenes y vídeo, exacto.
-    if category == 'motion-prompts':
-        if not 2 <= len(rows) <= 10:
-            return False
-    elif len(rows) != CATEGORIES[category][1]:
+    if len(rows) != CATEGORIES[category][1]:
         return False
     if category == 'scripts':
         return all(isinstance(r, dict) and r.get('n', i+1) == i+1 and isinstance(r.get('narration'), str) and r['narration'].strip() for i, r in enumerate(rows))
     if data.get('version') != 1 or data.get('category') != category:
         return False
-    facts = {f['id'] for f in data.get('facts', []) if isinstance(f, dict) and isinstance(f.get('id'), str)}
     for i, r in enumerate(rows):
         if not isinstance(r, dict) or r.get('n') != i+1:
             return False
-        if category == 'motion-prompts':
-            if r.get('kind') not in KINDS[category]:
-                return False
-        elif r.get('kind') != KINDS[category][i]:
+        if r.get('kind') != KINDS[category][i]:
             return False
         if not (r.get('presentations') is None or r['presentations'] == ['editorial','statistical']):
             return False
         if not (isinstance(r.get('prompt'), str) and 180 <= len(r['prompt']) <= 12000 and '9:16' in r['prompt'] and isinstance(r.get('title'), str)):
-            return False
-        if category == 'motion-prompts' and not (isinstance(r.get('factIds'), list) and all(f in facts for f in r['factIds'])):
             return False
     return True
 
@@ -169,6 +158,7 @@ class ContentClient:
         return None
 
     def get(self, match_id, category):
+        if category not in CATEGORIES: raise ValueError('categoría desconocida')
         if not match_id or Path(match_id).name != match_id or match_id in {'.','..'}: raise ValueError('partido inválido')
         data = self.cached(f'{match_id}-{category}', lambda d:valid(d, category, match_id), f'/partido/{quote(match_id, safe="")}/{category}.json')
         if data: return data
