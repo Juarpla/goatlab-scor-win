@@ -1,54 +1,6 @@
 {
-  "updatedAt": "2026-10-25T17:09:39.413Z",
+  "updatedAt": "2026-10-25T21:15:03.961Z",
   "runs": [
-    {
-      "at": "2026-10-18T16:09:53.539Z",
-      "task": "shorts",
-      "matchId": "sabah-fk-vs-borussia-dortmund-2026-10-20",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6310,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 64141
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6420,
-        "outputTokens": 5756
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "0dc9b4aa-3791-4119-a3cf-11e2d673bc59"
-    },
-    {
-      "at": "2026-10-18T16:10:26.426Z",
-      "task": "image-prompts",
-      "matchId": "malaga-vs-real-sociedad-2026-10-18",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1752,
-        "outputTokens": 6254
-      }
-    },
     {
       "at": "2026-10-18T16:10:53.469Z",
       "task": "image-prompts",
@@ -6095,6 +6047,92 @@
         "inputTokens": 1873,
         "outputTokens": 1482
       }
+    },
+    {
+      "at": "2026-10-25T21:02:20.470Z",
+      "matchId": "fd-560627",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": {
+        "inputTokens": 1347,
+        "outputTokens": 1079
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "2344acd7-e931-4e25-acf9-3c067da01221"
+    },
+    {
+      "at": "2026-10-25T21:14:56.009Z",
+      "matchId": "fd-560628",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1351,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 89049
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1406,
+            "outputTokens": 1832
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15953
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1311,
+            "outputTokens": 5177
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 169847
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "usage": {
+        "inputTokens": 1318,
+        "outputTokens": 13663
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "f6fb9efb-10e4-455e-9005-7d423440d63d"
     }
   ]
 }
