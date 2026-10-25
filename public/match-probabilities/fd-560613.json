@@ -4,7 +4,7 @@
   "away": "Newcastle United FC",
   "competition": "premier",
   "kickoff": "2026-10-25T14:00:00Z",
-  "updatedAt": "2026-10-25T04:53:56.174Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,18 +12,15 @@
       "away": 1.457
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.865,
-      "away": 1.404
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
     },
     "standings": {
       "Crystal Palace FC": {
-        "position": 14,
+        "position": 16,
         "team": "Crystal Palace FC",
         "played": 7,
         "won": 2,
@@ -36,7 +33,7 @@
         "form": null
       },
       "Newcastle United FC": {
-        "position": 11,
+        "position": 14,
         "team": "Newcastle United FC",
         "played": 7,
         "won": 2,
@@ -50,18 +47,18 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-25T14:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-25T14:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -132,42 +129,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.27,
-    "noGoal": 0.038,
+    "lambdaTotal": 3.53,
+    "noGoal": 0.029,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.42
+        "p": 0.444
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.244
+        "p": 0.247
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.141
+        "p": 0.137
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.082
+        "p": 0.076
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.048
+        "p": 0.042
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.028
+        "p": 0.024
       }
     ],
-    "firstHome": 0.549,
-    "firstAway": 0.413
+    "firstHome": 0.57,
+    "firstAway": 0.401
   },
   "scorers": {
     "home": [
@@ -176,18 +173,18 @@
         "goals": 2,
         "matches": 7,
         "share": 0.222,
-        "rate": 0.41,
-        "anytime": 0.339,
-        "first": 0.127
+        "rate": 0.46,
+        "anytime": 0.368,
+        "first": 0.13
       },
       {
         "player": "Anan Khalaili",
         "goals": 1,
         "matches": 7,
         "share": 0.111,
-        "rate": 0.21,
-        "anytime": 0.187,
-        "first": 0.063
+        "rate": 0.23,
+        "anytime": 0.205,
+        "first": 0.065
       }
     ],
     "away": [
@@ -196,183 +193,50 @@
         "goals": 2,
         "matches": 3,
         "share": 0.2,
-        "rate": 0.28,
-        "anytime": 0.245,
-        "first": 0.086
+        "rate": 0.29,
+        "anytime": 0.253,
+        "first": 0.083
       },
       {
         "player": "Joe Willock",
         "goals": 2,
         "matches": 7,
         "share": 0.2,
-        "rate": 0.28,
-        "anytime": 0.245,
-        "first": 0.086
+        "rate": 0.29,
+        "anytime": 0.253,
+        "first": 0.083
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.33299999999999996,
-      "draw": 0.26,
-      "away": 0.40700000000000003,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.66,
-      "away": 1.35
-    },
-    "over15": 0.8079999999999999,
-    "over25": 0.606,
-    "over35": 0.38299999999999995,
-    "btts": 0.64,
-    "score": "1-1",
-    "cornersOver95": 0.488,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.407,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4067,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-24T10:49:42.495Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.437,
-      "draw": 0.262,
-      "away": 0.301
-    },
-    "doubleChance": {
-      "12": 0.738,
-      "1X": 0.699,
-      "X2": 0.563
-    },
-    "dnb": {
-      "home": 0.592,
-      "away": 0.408
-    },
-    "totals": {
-      "over15": 0.813,
-      "under15": 0.187,
-      "over25": 0.579,
-      "under25": 0.421,
-      "over35": 0.355,
-      "under35": 0.645
-    },
-    "btts": {
-      "yes": 0.611,
-      "no": 0.389
-    },
-    "cleanSheet": {
-      "home": 0.259,
-      "away": 0.19
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.115,
-        "share": 0.2731591448931116
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.092,
-        "share": 0.2185273159144893
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.075,
-        "share": 0.17814726840855105
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.071,
-        "share": 0.168646080760095
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.068,
-        "share": 0.16152019002375295
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 34,
-    "homeWins": 7,
-    "draws": 10,
-    "awayWins": 17,
-    "avgTotalGoals": 2.176470588235294,
-    "recent": [
-      {
-        "eventId": 318,
-        "date": "2026-04-12T13:00:00+00:00",
-        "home": "Crystal Palace",
-        "away": "Newcastle United",
-        "homeTeamId": 14,
-        "awayTeamId": 4,
-        "homeScore": 2,
-        "awayScore": 1
-      },
-      {
-        "eventId": 198,
-        "date": "2026-01-04T15:00:00+00:00",
-        "home": "Newcastle United",
-        "away": "Crystal Palace",
-        "homeTeamId": 4,
-        "awayTeamId": 14,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 306941,
-        "date": "2025-04-16T18:30:00+00:00",
-        "home": "Newcastle United",
-        "away": "Crystal Palace",
-        "homeTeamId": 4,
-        "awayTeamId": 14,
-        "homeScore": 5,
-        "awayScore": 0
-      },
-      {
-        "eventId": 306773,
-        "date": "2024-11-30T15:00:00+00:00",
-        "home": "Crystal Palace",
-        "away": "Newcastle United",
-        "homeTeamId": 14,
-        "awayTeamId": 4,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 312409,
-        "date": "2024-04-24T19:00:00+00:00",
-        "home": "Crystal Palace",
-        "away": "Newcastle United",
-        "homeTeamId": 14,
-        "awayTeamId": 4,
-        "homeScore": 2,
-        "awayScore": 0
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -409,7 +273,7 @@
     "home": {
       "shots": 13.62,
       "shotsOnTarget": 4.27,
-      "xg": 1.66,
+      "xg": 1.42,
       "corners": 4.54,
       "fouls": 11.05,
       "yellowCards": 1.81,
@@ -420,7 +284,7 @@
     "away": {
       "shots": 14.09,
       "shotsOnTarget": 4.61,
-      "xg": 1.35,
+      "xg": 1.44,
       "corners": 5.04,
       "fouls": 10.9,
       "yellowCards": 2.07,
@@ -511,9 +375,9 @@
       "away": 0.446
     },
     "lastGoal": {
-      "home": 0.549,
-      "away": 0.413,
-      "noGoal": 0.038
+      "home": 0.57,
+      "away": 0.401,
+      "noGoal": 0.029
     },
     "cornerRace": {
       "3": {
@@ -540,13 +404,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 3.8,
+      "temp": 12.7,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 32,
       "condition": null,
-      "sampledAt": "2026-10-25T14:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-25T14:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Selhurst Park",
@@ -584,7 +448,7 @@
         "sample": 5
       },
       "season": {
-        "position": 14,
+        "position": 16,
         "played": 7,
         "gf": 9,
         "ga": 17,
@@ -613,7 +477,7 @@
         "sample": 5
       },
       "season": {
-        "position": 11,
+        "position": 14,
         "played": 7,
         "gf": 10,
         "ga": 14,

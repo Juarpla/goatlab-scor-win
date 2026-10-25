@@ -4,7 +4,7 @@
   "away": "AFC Bournemouth",
   "competition": "premier",
   "kickoff": "2026-10-25T14:00:00Z",
-  "updatedAt": "2026-10-25T04:53:56.174Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,18 +12,15 @@
       "away": 1.61
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.31,
-      "away": 1.53
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
     },
     "standings": {
       "Manchester United FC": {
-        "position": 13,
+        "position": 15,
         "team": "Manchester United FC",
         "played": 7,
         "won": 1,
@@ -36,7 +33,7 @@
         "form": null
       },
       "AFC Bournemouth": {
-        "position": 15,
+        "position": 17,
         "team": "AFC Bournemouth",
         "played": 7,
         "won": 1,
@@ -50,18 +47,18 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-25T14:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-25T14:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -132,42 +129,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.84,
-    "noGoal": 0.058,
+    "lambdaTotal": 2.6,
+    "noGoal": 0.074,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.377
+        "p": 0.352
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.235
+        "p": 0.228
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.148
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.091
+        "p": 0.096
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.057
+        "p": 0.062
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.035
+        "p": 0.04
       }
     ],
-    "firstHome": 0.434,
-    "firstAway": 0.507
+    "firstHome": 0.352,
+    "firstAway": 0.573
   },
   "scorers": {
     "home": [
@@ -176,18 +173,18 @@
         "goals": 4,
         "matches": 7,
         "share": 0.4,
-        "rate": 0.52,
-        "anytime": 0.408,
-        "first": 0.185
+        "rate": 0.4,
+        "anytime": 0.327,
+        "first": 0.152
       },
       {
         "player": "Bruno Fernandes",
         "goals": 3,
         "matches": 7,
         "share": 0.3,
-        "rate": 0.39,
-        "anytime": 0.325,
-        "first": 0.138
+        "rate": 0.3,
+        "anytime": 0.257,
+        "first": 0.114
       }
     ],
     "away": [
@@ -196,192 +193,59 @@
         "goals": 4,
         "matches": 7,
         "share": 0.444,
-        "rate": 0.68,
-        "anytime": 0.493,
-        "first": 0.239
+        "rate": 0.71,
+        "anytime": 0.511,
+        "first": 0.275
       },
       {
         "player": "Evanilson",
         "goals": 2,
         "matches": 7,
         "share": 0.222,
-        "rate": 0.34,
-        "anytime": 0.288,
-        "first": 0.12
+        "rate": 0.36,
+        "anytime": 0.301,
+        "first": 0.137
       },
       {
         "player": "Alex Scott",
         "goals": 1,
         "matches": 5,
         "share": 0.111,
-        "rate": 0.17,
-        "anytime": 0.156,
-        "first": 0.06
+        "rate": 0.18,
+        "anytime": 0.164,
+        "first": 0.069
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.434,
-      "draw": 0.26,
-      "away": 0.306,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.63,
-      "away": 1.45
-    },
-    "over15": 0.797,
-    "over25": 0.579,
-    "over35": 0.37,
-    "btts": 0.615,
-    "score": "1-1",
-    "cornersOver95": 0.479,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.434,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4336,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-24T10:49:43.195Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.409,
-      "draw": 0.26,
-      "away": 0.331
-    },
-    "doubleChance": {
-      "12": 0.74,
-      "1X": 0.669,
-      "X2": 0.591
-    },
-    "dnb": {
-      "home": 0.553,
-      "away": 0.447
-    },
-    "totals": {
-      "over15": 0.823,
-      "under15": 0.177,
-      "over25": 0.594,
-      "under25": 0.406,
-      "over35": 0.371,
-      "under35": 0.629
-    },
-    "btts": {
-      "yes": 0.626,
-      "no": 0.374
-    },
-    "cleanSheet": {
-      "home": 0.235,
-      "away": 0.196
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.111,
-        "share": 0.2727272727272727
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.089,
-        "share": 0.21867321867321865
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.079,
-        "share": 0.1941031941031941
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.064,
-        "share": 0.15724815724815724
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.064,
-        "share": 0.15724815724815724
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 18,
-    "homeWins": 9,
-    "draws": 5,
-    "awayWins": 4,
-    "avgTotalGoals": 3.3333333333333335,
-    "recent": [
-      {
-        "eventId": 305,
-        "date": "2026-03-20T20:00:00+00:00",
-        "home": "Bournemouth",
-        "away": "Manchester United",
-        "homeTeamId": 2,
-        "awayTeamId": 17,
-        "homeScore": 2,
-        "awayScore": 2
-      },
-      {
-        "eventId": 160,
-        "date": "2025-12-15T20:00:00+00:00",
-        "home": "Manchester United",
-        "away": "Bournemouth",
-        "homeTeamId": 17,
-        "awayTeamId": 2,
-        "homeScore": 4,
-        "awayScore": 4
-      },
-      {
-        "eventId": 306989,
-        "date": "2025-04-27T13:00:00+00:00",
-        "home": "Bournemouth",
-        "away": "Manchester United",
-        "homeTeamId": 2,
-        "awayTeamId": 17,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 306820,
-        "date": "2024-12-22T14:00:00+00:00",
-        "home": "Manchester United",
-        "away": "Bournemouth",
-        "homeTeamId": 17,
-        "awayTeamId": 2,
-        "homeScore": 0,
-        "awayScore": 3
-      },
-      {
-        "eventId": 312448,
-        "date": "2024-04-13T16:30:00+00:00",
-        "home": "Bournemouth",
-        "away": "Manchester United",
-        "homeTeamId": 2,
-        "awayTeamId": 17,
-        "homeScore": 2,
-        "awayScore": 2
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -418,7 +282,7 @@
     "home": {
       "shots": 13.68,
       "shotsOnTarget": 4.36,
-      "xg": 1.63,
+      "xg": 1.42,
       "corners": 4.95,
       "fouls": 11.39,
       "yellowCards": 1.89,
@@ -429,7 +293,7 @@
     "away": {
       "shots": 13.51,
       "shotsOnTarget": 4.69,
-      "xg": 1.45,
+      "xg": 1.62,
       "corners": 4.28,
       "fouls": 11.85,
       "yellowCards": 2.31,
@@ -520,9 +384,9 @@
       "away": 0.48
     },
     "lastGoal": {
-      "home": 0.434,
-      "away": 0.507,
-      "noGoal": 0.058
+      "home": 0.352,
+      "away": 0.573,
+      "noGoal": 0.074
     },
     "cornerRace": {
       "3": {
@@ -549,13 +413,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 4.8,
+      "temp": 11.3,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 39.6,
       "condition": null,
-      "sampledAt": "2026-10-25T14:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-25T14:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Old Trafford",
@@ -590,7 +454,7 @@
         "sample": 5
       },
       "season": {
-        "position": 13,
+        "position": 15,
         "played": 7,
         "gf": 10,
         "ga": 10,
@@ -619,7 +483,7 @@
         "sample": 5
       },
       "season": {
-        "position": 15,
+        "position": 17,
         "played": 7,
         "gf": 9,
         "ga": 13,

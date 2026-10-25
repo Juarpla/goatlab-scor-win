@@ -4,7 +4,7 @@
   "away": "RCD Espanyol de Barcelona",
   "competition": "laliga",
   "kickoff": "2026-10-30T20:00:00Z",
-  "updatedAt": "2026-10-25T04:53:56.174Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,8 +13,8 @@
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 1.865,
-      "away": 1.067
+      "home": 1.875,
+      "away": 1.062
     },
     "firstGoalSource": "Blend Poisson+xG",
     "sample": {
@@ -23,34 +23,34 @@
     },
     "standings": {
       "Villarreal CF": {
-        "position": 12,
+        "position": 8,
         "team": "Villarreal CF",
-        "played": 9,
-        "won": 2,
+        "played": 10,
+        "won": 3,
         "drawn": 3,
         "lost": 4,
-        "goalsFor": 13,
-        "goalsAgainst": 13,
-        "goalDifference": 0,
-        "points": 9,
+        "goalsFor": 15,
+        "goalsAgainst": 14,
+        "goalDifference": 1,
+        "points": 12,
         "form": null
       },
       "RCD Espanyol de Barcelona": {
-        "position": 16,
+        "position": 18,
         "team": "RCD Espanyol de Barcelona",
-        "played": 9,
+        "played": 10,
         "won": 2,
         "drawn": 2,
-        "lost": 5,
-        "goalsFor": 11,
-        "goalsAgainst": 12,
-        "goalDifference": -1,
+        "lost": 6,
+        "goalsFor": 12,
+        "goalsAgainst": 14,
+        "goalDifference": -2,
         "points": 8,
         "form": null
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-24T10:49:25.660Z",
+      "updatedAt": "2026-10-25T11:15:18.462Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-24T10:49:25.660Z",
+      "updatedAt": "2026-10-25T11:15:18.462Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -132,7 +132,7 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.93,
+    "lambdaTotal": 2.94,
     "noGoal": 0.053,
     "bands": [
       {
@@ -163,51 +163,51 @@
       {
         "from": 75,
         "to": 90,
-        "p": 0.034
+        "p": 0.033
       }
     ],
-    "firstHome": 0.602,
-    "firstAway": 0.345
+    "firstHome": 0.605,
+    "firstAway": 0.342
   },
   "scorers": {
     "home": [
       {
+        "player": "Georges Mikautadze",
+        "goals": 3,
+        "matches": 10,
+        "share": 0.2,
+        "rate": 0.38,
+        "anytime": 0.313,
+        "first": 0.128
+      },
+      {
         "player": "Pape Gueye",
         "goals": 3,
-        "matches": 9,
-        "share": 0.231,
-        "rate": 0.43,
-        "anytime": 0.35,
-        "first": 0.147
+        "matches": 10,
+        "share": 0.2,
+        "rate": 0.38,
+        "anytime": 0.313,
+        "first": 0.128
       },
       {
         "player": "Alberto Moleiro",
         "goals": 2,
-        "matches": 9,
-        "share": 0.154,
-        "rate": 0.29,
-        "anytime": 0.25,
-        "first": 0.098
-      },
-      {
-        "player": "Georges Mikautadze",
-        "goals": 2,
-        "matches": 9,
-        "share": 0.154,
-        "rate": 0.29,
-        "anytime": 0.25,
-        "first": 0.098
+        "matches": 10,
+        "share": 0.133,
+        "rate": 0.25,
+        "anytime": 0.221,
+        "first": 0.085
       }
     ],
     "away": [
       {
         "player": "Roberto Fernández",
         "goals": 6,
-        "matches": 9,
-        "share": 0.545,
-        "rate": 0.58,
-        "anytime": 0.441,
-        "first": 0.198
+        "matches": 10,
+        "share": 0.5,
+        "rate": 0.53,
+        "anytime": 0.412,
+        "first": 0.181
       }
     ]
   },
@@ -215,95 +215,95 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.594,
-      "draw": 0.22399999999999998,
-      "away": 0.182,
+      "home": 0.602,
+      "draw": 0.222,
+      "away": 0.177,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.93,
-      "away": 1.06
+      "home": 1.95,
+      "away": 1.05
     },
-    "over15": 0.789,
-    "over25": 0.5660000000000001,
-    "over35": 0.34,
-    "btts": 0.547,
+    "over15": 0.79,
+    "over25": 0.5670000000000001,
+    "over35": 0.342,
+    "btts": 0.545,
     "score": "1-1",
-    "cornersOver95": 0.517,
+    "cornersOver95": 0.537,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.594,
+      "favoriteProb": 0.602,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.5938,
+    "confidence": 0.6016,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-24T10:49:43.887Z",
+    "capturedAt": "2026-10-25T11:15:40.633Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.566,
-      "draw": 0.24,
-      "away": 0.194
+      "home": 0.573,
+      "draw": 0.238,
+      "away": 0.189
     },
     "doubleChance": {
-      "12": 0.76,
-      "1X": 0.806,
-      "X2": 0.434
+      "12": 0.762,
+      "1X": 0.811,
+      "X2": 0.427
     },
     "dnb": {
-      "home": 0.745,
-      "away": 0.255
+      "home": 0.752,
+      "away": 0.248
     },
     "totals": {
-      "over15": 0.81,
-      "under15": 0.19,
-      "over25": 0.574,
-      "under25": 0.426,
-      "over35": 0.35,
-      "under35": 0.65
+      "over15": 0.811,
+      "under15": 0.189,
+      "over25": 0.577,
+      "under25": 0.423,
+      "over35": 0.353,
+      "under35": 0.647
     },
     "btts": {
-      "yes": 0.569,
-      "no": 0.431
+      "yes": 0.568,
+      "no": 0.432
     },
     "cleanSheet": {
-      "home": 0.346,
-      "away": 0.145
+      "home": 0.35,
+      "away": 0.142
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
         "p": 0.124,
-        "share": 0.26495726495726496
+        "share": 0.26382978723404255
       },
       {
         "home": 2,
         "away": 1,
         "p": 0.099,
-        "share": 0.21153846153846154
+        "share": 0.21063829787234042
       },
       {
         "home": 2,
         "away": 0,
-        "p": 0.094,
-        "share": 0.20085470085470084
+        "p": 0.095,
+        "share": 0.20212765957446807
       },
       {
         "home": 1,
         "away": 0,
         "p": 0.087,
-        "share": 0.18589743589743588
+        "share": 0.1851063829787234
       },
       {
         "home": 3,
         "away": 1,
-        "p": 0.064,
-        "share": 0.13675213675213674
+        "p": 0.065,
+        "share": 0.13829787234042554
       }
     ],
     "providerPick": {
@@ -391,7 +391,7 @@
       "historyRows": 314
     },
     "source": "GoatLab",
-    "expectedTotal": 4.8
+    "expectedTotal": 4.9
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -402,35 +402,35 @@
       "historyRows": 314
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 10
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.23,
-      "shotsOnTarget": 5.25,
-      "xg": 1.93,
-      "corners": 5.37,
-      "fouls": 11.04,
-      "yellowCards": 2.21,
-      "redCards": 0.38,
-      "offsides": 2.21,
-      "possession": 53.18
+      "shots": 14.77,
+      "shotsOnTarget": 5.3,
+      "xg": 1.95,
+      "corners": 5.71,
+      "fouls": 10.86,
+      "yellowCards": 2.27,
+      "redCards": 0.41,
+      "offsides": 2.23,
+      "possession": 53.65
     },
     "away": {
-      "shots": 13.29,
-      "shotsOnTarget": 4.25,
-      "xg": 1.06,
-      "corners": 4.22,
-      "fouls": 13.31,
-      "yellowCards": 2.55,
-      "redCards": 0.44,
-      "offsides": 2.3,
-      "possession": 46.82
+      "shots": 12.92,
+      "shotsOnTarget": 4.17,
+      "xg": 1.05,
+      "corners": 4.3,
+      "fouls": 13.58,
+      "yellowCards": 2.67,
+      "redCards": 0.43,
+      "offsides": 2.32,
+      "possession": 46.35
     },
     "sample": {
       "home": 10,
-      "away": 9
+      "away": 10
     },
     "coverage": {
       "home": {
@@ -445,27 +445,27 @@
         "offsides": 10
       },
       "away": {
-        "possession": 9,
-        "shots": 9,
-        "shotsOnTarget": 9,
-        "xg": 9,
-        "corners": 9,
-        "fouls": 9,
-        "yellowCards": 9,
-        "redCards": 3,
-        "offsides": 7
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 4,
+        "offsides": 8
       }
     },
     "league": {
       "possession": 50,
-      "shots": 13.67,
-      "shotsOnTarget": 4.8,
+      "shots": 13.71,
+      "shotsOnTarget": 4.79,
       "xg": 1.48,
-      "corners": 4.83,
-      "fouls": 12.27,
-      "yellowCards": 2.26,
+      "corners": 4.88,
+      "fouls": 12.3,
+      "yellowCards": 2.29,
       "redCards": 0.41,
-      "offsides": 2.06
+      "offsides": 2.07
     },
     "sources": {
       "home": {
@@ -501,40 +501,40 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.582,
-      "draw": 0.122,
-      "away": 0.296
+      "home": 0.612,
+      "draw": 0.116,
+      "away": 0.271
     },
     "cardsDuel": {
-      "home": 0.347,
-      "draw": 0.186,
-      "away": 0.467
+      "home": 0.339,
+      "draw": 0.182,
+      "away": 0.479
     },
     "lastGoal": {
-      "home": 0.602,
-      "away": 0.345,
+      "home": 0.605,
+      "away": 0.342,
       "noGoal": 0.053
     },
     "cornerRace": {
       "3": {
-        "home": 0.611,
-        "away": 0.389
+        "home": 0.63,
+        "away": 0.37
       },
       "5": {
-        "home": 0.645,
-        "away": 0.355
+        "home": 0.669,
+        "away": 0.331
       },
       "7": {
-        "home": 0.671,
-        "away": 0.329
+        "home": 0.699,
+        "away": 0.301
       }
     },
     "cornerMargin": {
-      "home3plus": 0.327,
-      "home12": 0.255,
-      "level": 0.122,
-      "away12": 0.18,
-      "away3plus": 0.116
+      "home3plus": 0.36,
+      "home12": 0.252,
+      "level": 0.116,
+      "away12": 0.166,
+      "away3plus": 0.105
     },
     "source": "GoatLab"
   },
@@ -584,15 +584,15 @@
         "sample": 5
       },
       "season": {
-        "position": 12,
-        "played": 9,
-        "gf": 13,
-        "ga": 13,
+        "position": 8,
+        "played": 10,
+        "gf": 15,
+        "ga": 14,
         "provider": null
       },
       "player": {
-        "name": "Pape Gueye",
-        "detail": "3 goles en 9 partidos",
+        "name": "Georges Mikautadze",
+        "detail": "3 goles en 10 partidos",
         "source": "líder del equipo en la temporada"
       }
     },
@@ -610,15 +610,15 @@
         "sample": 5
       },
       "season": {
-        "position": 16,
-        "played": 9,
-        "gf": 11,
-        "ga": 12,
+        "position": 18,
+        "played": 10,
+        "gf": 12,
+        "ga": 14,
         "provider": null
       },
       "player": {
         "name": "Roberto Fernández",
-        "detail": "6 goles en 9 partidos",
+        "detail": "6 goles en 10 partidos",
         "source": "líder del equipo en la temporada"
       }
     }

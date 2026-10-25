@@ -1,0 +1,630 @@
+{
+  "id": "fd-560629",
+  "home": "Hull City AFC",
+  "away": "Ipswich Town FC",
+  "competition": "premier",
+  "kickoff": "2026-10-31T15:00:00Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.44,
+      "away": 1.15
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.465,
+      "away": 1.355
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Hull City AFC": {
+        "position": 11,
+        "team": "Hull City AFC",
+        "played": 7,
+        "won": 2,
+        "drawn": 3,
+        "lost": 2,
+        "goalsFor": 8,
+        "goalsAgainst": 7,
+        "goalDifference": 1,
+        "points": 9,
+        "form": null
+      },
+      "Ipswich Town FC": {
+        "position": 10,
+        "team": "Ipswich Town FC",
+        "played": 8,
+        "won": 3,
+        "drawn": 1,
+        "lost": 4,
+        "goalsFor": 12,
+        "goalsAgainst": 16,
+        "goalDifference": -4,
+        "points": 10,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-25T11:15:32.161Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-31T15:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-25T11:15:32.161Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 314
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.425,
+      "draw": 0.286,
+      "away": 0.289
+    },
+    "doubleChance": {
+      "12": 0.714,
+      "1X": 0.711,
+      "X2": 0.575
+    },
+    "dnb": {
+      "home": 0.595,
+      "away": 0.405
+    },
+    "totals": {
+      "over15": 0.743,
+      "under15": 0.257,
+      "over25": 0.479,
+      "under25": 0.521,
+      "over35": 0.262,
+      "under35": 0.738
+    },
+    "btts": {
+      "yes": 0.534,
+      "no": 0.466
+    },
+    "cleanSheet": {
+      "home": 0.317,
+      "away": 0.237
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.137
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.096
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.089
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.087
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.078
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.82,
+    "noGoal": 0.06,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.375
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.234
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.146
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.092
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.057
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.036
+      }
+    ],
+    "firstHome": 0.489,
+    "firstAway": 0.452
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Mohamed Belloumi",
+        "goals": 3,
+        "matches": 7,
+        "share": 0.375,
+        "rate": 0.55,
+        "anytime": 0.423,
+        "first": 0.195
+      }
+    ],
+    "away": [
+      {
+        "player": "Emersonn",
+        "goals": 2,
+        "matches": 8,
+        "share": 0.167,
+        "rate": 0.23,
+        "anytime": 0.203,
+        "first": 0.08
+      },
+      {
+        "player": "Leif Davis",
+        "goals": 2,
+        "matches": 8,
+        "share": 0.167,
+        "rate": 0.23,
+        "anytime": 0.203,
+        "first": 0.08
+      },
+      {
+        "player": "Zian Flemming",
+        "goals": 2,
+        "matches": 6,
+        "share": 0.167,
+        "rate": 0.23,
+        "anytime": 0.203,
+        "first": 0.08
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.353,
+      "draw": 0.252,
+      "away": 0.395,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.49,
+      "away": 1.56
+    },
+    "over15": 0.797,
+    "over25": 0.5770000000000001,
+    "over35": 0.35200000000000004,
+    "btts": 0.5870000000000001,
+    "score": "1-1",
+    "cornersOver95": 0.473,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.395,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3953,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-25T11:15:42.712Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.353,
+      "draw": 0.263,
+      "away": 0.384
+    },
+    "doubleChance": {
+      "12": 0.737,
+      "1X": 0.616,
+      "X2": 0.647
+    },
+    "dnb": {
+      "home": 0.479,
+      "away": 0.521
+    },
+    "totals": {
+      "over15": 0.819,
+      "under15": 0.181,
+      "over25": 0.588,
+      "under25": 0.412,
+      "over35": 0.364,
+      "under35": 0.636
+    },
+    "btts": {
+      "yes": 0.623,
+      "no": 0.377
+    },
+    "cleanSheet": {
+      "home": 0.21,
+      "away": 0.225
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.107,
+        "share": 0.2661691542288557
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.086,
+        "share": 0.21393034825870644
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.082,
+        "share": 0.20398009950248755
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.064,
+        "share": 0.15920398009950248
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.063,
+        "share": 0.15671641791044774
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 19,
+    "homeWins": 11,
+    "draws": 4,
+    "awayWins": 4,
+    "avgTotalGoals": 2.5789473684210527,
+    "recent": [
+      {
+        "eventId": 4911,
+        "date": "2026-03-03T19:45:00+00:00",
+        "home": "Ipswich Town",
+        "away": "Hull City",
+        "homeTeamId": 200,
+        "awayTeamId": 204,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 3565,
+        "date": "2025-11-25T19:45:00+00:00",
+        "home": "Hull City",
+        "away": "Ipswich Town",
+        "homeTeamId": 204,
+        "awayTeamId": 200,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 309940,
+        "date": "2024-04-27T19:00:00+00:00",
+        "home": "Hull City",
+        "away": "Ipswich Town",
+        "homeTeamId": 204,
+        "awayTeamId": 200,
+        "homeScore": 3,
+        "awayScore": 3
+      },
+      {
+        "eventId": 309506,
+        "date": "2023-10-03T18:45:00+00:00",
+        "home": "Ipswich Town",
+        "away": "Hull City",
+        "homeTeamId": 200,
+        "awayTeamId": 204,
+        "homeScore": 3,
+        "awayScore": 0
+      },
+      {
+        "eventId": 280266,
+        "date": "2021-02-23T19:00:00+00:00",
+        "home": "Hull City",
+        "away": "Ipswich Town",
+        "homeTeamId": 204,
+        "awayTeamId": 200,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 314
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.9
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 314
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.4
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.43,
+      "shotsOnTarget": 4.36,
+      "xg": 1.49,
+      "corners": 4.64,
+      "fouls": 10.97,
+      "yellowCards": 2.23,
+      "redCards": 0.22,
+      "offsides": 1.58,
+      "possession": 46.84
+    },
+    "away": {
+      "shots": 12.9,
+      "shotsOnTarget": 4.42,
+      "xg": 1.56,
+      "corners": 4.73,
+      "fouls": 10.27,
+      "yellowCards": 1.65,
+      "redCards": 0.28,
+      "offsides": 2.17,
+      "possession": 53.16
+    },
+    "sample": {
+      "home": 8,
+      "away": 9
+    },
+    "coverage": {
+      "home": {
+        "possession": 8,
+        "shots": 8,
+        "shotsOnTarget": 8,
+        "xg": 8,
+        "corners": 8,
+        "fouls": 8,
+        "yellowCards": 8,
+        "redCards": 3,
+        "offsides": 8
+      },
+      "away": {
+        "possession": 9,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 9,
+        "fouls": 9,
+        "yellowCards": 9,
+        "redCards": 6,
+        "offsides": 9
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.61,
+      "shotsOnTarget": 4.4,
+      "xg": 1.43,
+      "corners": 4.7,
+      "fouls": 11.32,
+      "yellowCards": 2.02,
+      "redCards": 0.3,
+      "offsides": 1.98
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.422,
+      "draw": 0.132,
+      "away": 0.446
+    },
+    "cardsDuel": {
+      "home": 0.511,
+      "draw": 0.203,
+      "away": 0.286
+    },
+    "lastGoal": {
+      "home": 0.489,
+      "away": 0.452,
+      "noGoal": 0.06
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.491,
+        "away": 0.509
+      },
+      "5": {
+        "home": 0.488,
+        "away": 0.512
+      },
+      "7": {
+        "home": 0.486,
+        "away": 0.514
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.195,
+      "home12": 0.227,
+      "level": 0.132,
+      "away12": 0.234,
+      "away3plus": 0.212
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 11.2,
+      "condition": "cloudy",
+      "sampledAt": "2026-10-31T15:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Hull City AFC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 11,
+        "played": 7,
+        "gf": 8,
+        "ga": 7,
+        "provider": null
+      },
+      "player": {
+        "name": "Mohamed Belloumi",
+        "detail": "3 goles en 7 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Ipswich Town FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 10,
+        "played": 8,
+        "gf": 12,
+        "ga": 16,
+        "provider": null
+      },
+      "player": {
+        "name": "Emersonn",
+        "detail": "2 goles en 8 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": {
+    "flag": true,
+    "note": "P da 0.425 a Hull, pero B y B2 sitúan a Ipswich al frente con 0.395. Además, B2 declara 'no' en goles totales y ambos anotan, frente a 0.577 y 0.587 de B. La discrepancia entre modelos queda marcada para revisión; no se corrige ningún dato.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-25T11:23:48.682Z"
+  }
+}

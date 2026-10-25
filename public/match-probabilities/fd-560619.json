@@ -4,7 +4,7 @@
   "away": "Brentford FC",
   "competition": "premier",
   "kickoff": "2026-10-25T14:00:00Z",
-  "updatedAt": "2026-10-25T04:53:56.174Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,18 +12,15 @@
       "away": 1.303
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.33,
-      "away": 1.422
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
     },
     "standings": {
       "Hull City AFC": {
-        "position": 10,
+        "position": 11,
         "team": "Hull City AFC",
         "played": 7,
         "won": 2,
@@ -36,7 +33,7 @@
         "form": null
       },
       "Brentford FC": {
-        "position": 6,
+        "position": 7,
         "team": "Brentford FC",
         "played": 7,
         "won": 2,
@@ -50,7 +47,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +58,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -129,42 +126,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.75,
-    "noGoal": 0.064,
+    "lambdaTotal": 2.56,
+    "noGoal": 0.077,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.368
+        "p": 0.348
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.233
+        "p": 0.227
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.147
+        "p": 0.148
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.093
+        "p": 0.097
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.059
+        "p": 0.063
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.037
+        "p": 0.041
       }
     ],
-    "firstHome": 0.452,
-    "firstAway": 0.484
+    "firstHome": 0.454,
+    "firstAway": 0.469
   },
   "scorers": {
     "home": [
@@ -173,9 +170,9 @@
         "goals": 3,
         "matches": 7,
         "share": 0.375,
-        "rate": 0.5,
-        "anytime": 0.393,
-        "first": 0.181
+        "rate": 0.47,
+        "anytime": 0.377,
+        "first": 0.185
       }
     ],
     "away": [
@@ -184,192 +181,59 @@
         "goals": 3,
         "matches": 7,
         "share": 0.231,
-        "rate": 0.33,
-        "anytime": 0.28,
-        "first": 0.119
+        "rate": 0.3,
+        "anytime": 0.26,
+        "first": 0.118
       },
       {
         "player": "Keane Lewis-Potter",
         "goals": 2,
         "matches": 7,
         "share": 0.154,
-        "rate": 0.22,
-        "anytime": 0.197,
-        "first": 0.08
+        "rate": 0.2,
+        "anytime": 0.182,
+        "first": 0.078
       },
       {
         "player": "Vitaly Janelt",
         "goals": 2,
         "matches": 7,
         "share": 0.154,
-        "rate": 0.22,
-        "anytime": 0.197,
-        "first": 0.08
+        "rate": 0.2,
+        "anytime": 0.182,
+        "first": 0.078
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.20600000000000002,
-      "draw": 0.237,
-      "away": 0.556,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.4,
-      "away": 1.54
-    },
-    "over15": 0.7859999999999999,
-    "over25": 0.5720000000000001,
-    "over35": 0.35100000000000003,
-    "btts": 0.569,
-    "score": "1-1",
-    "cornersOver95": 0.519,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.556,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.5564,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-24T10:49:42.434Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.335,
-      "draw": 0.268,
-      "away": 0.397
-    },
-    "doubleChance": {
-      "12": 0.732,
-      "1X": 0.603,
-      "X2": 0.665
-    },
-    "dnb": {
-      "home": 0.458,
-      "away": 0.542
-    },
-    "totals": {
-      "over15": 0.803,
-      "under15": 0.197,
-      "over25": 0.563,
-      "under25": 0.437,
-      "over35": 0.339,
-      "under35": 0.661
-    },
-    "btts": {
-      "yes": 0.603,
-      "no": 0.397
-    },
-    "cleanSheet": {
-      "home": 0.214,
-      "away": 0.247
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.11,
-        "share": 0.2669902912621359
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.088,
-        "share": 0.2135922330097087
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.08,
-        "share": 0.1941747572815534
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.07,
-        "share": 0.16990291262135923
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.064,
-        "share": 0.1553398058252427
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 9,
-    "homeWins": 4,
-    "draws": 2,
-    "awayWins": 3,
-    "avgTotalGoals": 3.3333333333333335,
-    "recent": [
-      {
-        "eventId": 327294,
-        "date": "2020-02-01T12:30:00+00:00",
-        "home": "Hull City",
-        "away": "Brentford",
-        "homeTeamId": 204,
-        "awayTeamId": 16,
-        "homeScore": 1,
-        "awayScore": 5
-      },
-      {
-        "eventId": 326962,
-        "date": "2019-08-17T14:00:00+00:00",
-        "home": "Brentford",
-        "away": "Hull City",
-        "homeTeamId": 16,
-        "awayTeamId": 204,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 331190,
-        "date": "2019-02-23T15:00:00+00:00",
-        "home": "Brentford",
-        "away": "Hull City",
-        "homeTeamId": 16,
-        "awayTeamId": 204,
-        "homeScore": 5,
-        "awayScore": 1
-      },
-      {
-        "eventId": 331044,
-        "date": "2018-12-15T15:00:00+00:00",
-        "home": "Hull City",
-        "away": "Brentford",
-        "homeTeamId": 204,
-        "awayTeamId": 16,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 342796,
-        "date": "2018-05-06T11:30:00+00:00",
-        "home": "Brentford",
-        "away": "Hull City",
-        "homeTeamId": 16,
-        "awayTeamId": 204,
-        "homeScore": 1,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -406,7 +270,7 @@
     "home": {
       "shots": 13.38,
       "shotsOnTarget": 4.15,
-      "xg": 1.4,
+      "xg": 1.34,
       "corners": 4.93,
       "fouls": 10.8,
       "yellowCards": 2.15,
@@ -417,7 +281,7 @@
     "away": {
       "shots": 14.76,
       "shotsOnTarget": 4.66,
-      "xg": 1.54,
+      "xg": 1.57,
       "corners": 5.13,
       "fouls": 10.91,
       "yellowCards": 1.81,
@@ -508,9 +372,9 @@
       "away": 0.332
     },
     "lastGoal": {
-      "home": 0.452,
-      "away": 0.484,
-      "noGoal": 0.064
+      "home": 0.454,
+      "away": 0.469,
+      "noGoal": 0.077
     },
     "cornerRace": {
       "3": {
@@ -578,7 +442,7 @@
         "sample": 5
       },
       "season": {
-        "position": 10,
+        "position": 11,
         "played": 7,
         "gf": 8,
         "ga": 7,
@@ -607,7 +471,7 @@
         "sample": 5
       },
       "season": {
-        "position": 6,
+        "position": 7,
         "played": 7,
         "gf": 13,
         "ga": 8,

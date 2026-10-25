@@ -4,7 +4,7 @@
   "away": "Brighton & Hove Albion FC",
   "competition": "premier",
   "kickoff": "2026-10-25T14:00:00Z",
-  "updatedAt": "2026-10-25T04:53:56.174Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 2.223
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.625,
-      "away": 1.777
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,18 +47,18 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-10-25T14:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-25T14:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-24T10:49:36.438Z",
+      "updatedAt": "2026-10-25T11:15:32.161Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -132,42 +129,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.4,
-    "noGoal": 0.033,
+    "lambdaTotal": 3.84,
+    "noGoal": 0.021,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.433
+        "p": 0.473
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.245
+        "p": 0.249
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.139
+        "p": 0.131
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.079
+        "p": 0.069
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.045
+        "p": 0.036
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.025
+        "p": 0.019
       }
     ],
-    "firstHome": 0.462,
-    "firstAway": 0.505
+    "firstHome": 0.413,
+    "firstAway": 0.566
   },
   "scorers": {
     "home": [
@@ -177,8 +174,8 @@
         "matches": 6,
         "share": 0.556,
         "rate": 0.9,
-        "anytime": 0.595,
-        "first": 0.266
+        "anytime": 0.594,
+        "first": 0.235
       },
       {
         "player": "Víctor Muñoz",
@@ -186,8 +183,8 @@
         "matches": 7,
         "share": 0.222,
         "rate": 0.36,
-        "anytime": 0.303,
-        "first": 0.106
+        "anytime": 0.302,
+        "first": 0.094
       }
     ],
     "away": [
@@ -196,192 +193,59 @@
         "goals": 3,
         "matches": 7,
         "share": 0.13,
-        "rate": 0.23,
-        "anytime": 0.206,
-        "first": 0.068
+        "rate": 0.29,
+        "anytime": 0.251,
+        "first": 0.075
       },
       {
         "player": "Jack Hinshelwood",
         "goals": 3,
         "matches": 2,
         "share": 0.13,
-        "rate": 0.23,
-        "anytime": 0.206,
-        "first": 0.068
+        "rate": 0.29,
+        "anytime": 0.251,
+        "first": 0.075
       },
       {
         "player": "Pascal Groß",
         "goals": 3,
         "matches": 7,
         "share": 0.13,
-        "rate": 0.23,
-        "anytime": 0.206,
-        "first": 0.068
+        "rate": 0.29,
+        "anytime": 0.251,
+        "first": 0.075
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.451,
-      "draw": 0.25,
-      "away": 0.3,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.63,
-      "away": 1.33
-    },
-    "over15": 0.8170000000000001,
-    "over25": 0.62,
-    "over35": 0.389,
-    "btts": 0.633,
-    "score": "1-1",
-    "cornersOver95": 0.536,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.451,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4505,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-10-24T10:49:42.474Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.434,
-      "draw": 0.264,
-      "away": 0.302
-    },
-    "doubleChance": {
-      "12": 0.736,
-      "1X": 0.698,
-      "X2": 0.566
-    },
-    "dnb": {
-      "home": 0.59,
-      "away": 0.41
-    },
-    "totals": {
-      "over15": 0.806,
-      "under15": 0.194,
-      "over25": 0.568,
-      "under25": 0.432,
-      "over35": 0.344,
-      "under35": 0.656
-    },
-    "btts": {
-      "yes": 0.603,
-      "no": 0.397
-    },
-    "cleanSheet": {
-      "home": 0.264,
-      "away": 0.196
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.115,
-        "share": 0.2712264150943396
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.092,
-        "share": 0.21698113207547168
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.075,
-        "share": 0.17688679245283018
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.073,
-        "share": 0.17216981132075468
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.069,
-        "share": 0.16273584905660377
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 23,
-    "homeWins": 14,
-    "draws": 4,
-    "awayWins": 5,
-    "avgTotalGoals": 3.391304347826087,
-    "recent": [
-      {
-        "eventId": 306,
-        "date": "2026-03-21T12:45:00+00:00",
-        "home": "Brighton & Hove Albion",
-        "away": "Liverpool FC",
-        "homeTeamId": 5,
-        "awayTeamId": 1,
-        "homeScore": 2,
-        "awayScore": 1
-      },
-      {
-        "eventId": 204365,
-        "date": "2026-02-14T20:00:00+00:00",
-        "home": "Liverpool FC",
-        "away": "Brighton & Hove Albion",
-        "homeTeamId": 1,
-        "awayTeamId": 5,
-        "homeScore": 3,
-        "awayScore": 0
-      },
-      {
-        "eventId": 152,
-        "date": "2025-12-13T15:00:00+00:00",
-        "home": "Liverpool FC",
-        "away": "Brighton & Hove Albion",
-        "homeTeamId": 1,
-        "awayTeamId": 5,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 307019,
-        "date": "2025-05-19T19:00:00+00:00",
-        "home": "Brighton & Hove Albion",
-        "away": "Liverpool FC",
-        "homeTeamId": 5,
-        "awayTeamId": 1,
-        "homeScore": 3,
-        "awayScore": 2
-      },
-      {
-        "eventId": 306744,
-        "date": "2024-11-02T15:00:00+00:00",
-        "home": "Liverpool FC",
-        "away": "Brighton & Hove Albion",
-        "homeTeamId": 1,
-        "awayTeamId": 5,
-        "homeScore": 2,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -418,7 +282,7 @@
     "home": {
       "shots": 13.7,
       "shotsOnTarget": 4.34,
-      "xg": 1.63,
+      "xg": 1.43,
       "corners": 4.81,
       "fouls": 10.82,
       "yellowCards": 1.87,
@@ -429,7 +293,7 @@
     "away": {
       "shots": 15.3,
       "shotsOnTarget": 4.76,
-      "xg": 1.33,
+      "xg": 1.63,
       "corners": 5.09,
       "fouls": 11.22,
       "yellowCards": 1.95,
@@ -520,9 +384,9 @@
       "away": 0.41
     },
     "lastGoal": {
-      "home": 0.462,
-      "away": 0.505,
-      "noGoal": 0.033
+      "home": 0.413,
+      "away": 0.566,
+      "noGoal": 0.021
     },
     "cornerRace": {
       "3": {
@@ -549,13 +413,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 4.7,
+      "temp": 10.8,
+      "precipitation": 0,
+      "weathercode": 3,
+      "wind": 45,
       "condition": null,
-      "sampledAt": "2026-10-25T14:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-10-25T14:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Anfield",

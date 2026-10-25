@@ -1,0 +1,627 @@
+{
+  "id": "fd-564736",
+  "home": "Real Betis Balompié",
+  "away": "Málaga CF",
+  "competition": "laliga",
+  "kickoff": "2026-10-31T17:30:00Z",
+  "updatedAt": "2026-10-25T11:15:47.582Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 2.25,
+      "away": 1.227
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.025,
+      "away": 1.204
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Real Betis Balompié": {
+        "position": 4,
+        "team": "Real Betis Balompié",
+        "played": 9,
+        "won": 6,
+        "drawn": 1,
+        "lost": 2,
+        "goalsFor": 16,
+        "goalsAgainst": 14,
+        "goalDifference": 2,
+        "points": 19,
+        "form": null
+      },
+      "Málaga CF": {
+        "position": 20,
+        "team": "Málaga CF",
+        "played": 10,
+        "won": 0,
+        "drawn": 5,
+        "lost": 5,
+        "goalsFor": 7,
+        "goalsAgainst": 19,
+        "goalDifference": -12,
+        "points": 5,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-25T11:15:18.462Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-10-31T17:30:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-25T11:15:18.462Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 314
+    },
+    "venue": {
+      "city": "Sevilla",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.596,
+      "draw": 0.214,
+      "away": 0.19
+    },
+    "doubleChance": {
+      "12": 0.786,
+      "1X": 0.81,
+      "X2": 0.404
+    },
+    "dnb": {
+      "home": 0.758,
+      "away": 0.242
+    },
+    "totals": {
+      "over15": 0.87,
+      "under15": 0.13,
+      "over25": 0.675,
+      "under25": 0.325,
+      "over35": 0.458,
+      "under35": 0.542
+    },
+    "btts": {
+      "yes": 0.641,
+      "no": 0.359
+    },
+    "cleanSheet": {
+      "home": 0.293,
+      "away": 0.105
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.096
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.094
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.078
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.072
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.061
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.23,
+    "noGoal": 0.04,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.416
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.243
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.142
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.083
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.048
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.028
+      }
+    ],
+    "firstHome": 0.602,
+    "firstAway": 0.358
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Abdessamad Ezzalzouli",
+        "goals": 3,
+        "matches": 6,
+        "share": 0.188,
+        "rate": 0.38,
+        "anytime": 0.317,
+        "first": 0.118
+      },
+      {
+        "player": "Cucho Hernández",
+        "goals": 2,
+        "matches": 9,
+        "share": 0.125,
+        "rate": 0.25,
+        "anytime": 0.224,
+        "first": 0.078
+      },
+      {
+        "player": "Isco",
+        "goals": 2,
+        "matches": 9,
+        "share": 0.125,
+        "rate": 0.25,
+        "anytime": 0.224,
+        "first": 0.078
+      }
+    ],
+    "away": [
+      {
+        "player": "Adrián Niño",
+        "goals": 4,
+        "matches": 6,
+        "share": 0.571,
+        "rate": 0.69,
+        "anytime": 0.497,
+        "first": 0.213
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.531,
+      "draw": 0.239,
+      "away": 0.22899999999999998,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.8,
+      "away": 1.18
+    },
+    "over15": 0.7879999999999999,
+    "over25": 0.564,
+    "over35": 0.33799999999999997,
+    "btts": 0.561,
+    "score": "1-1",
+    "cornersOver95": 0.49200000000000005,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.531,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.5313,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-25T11:15:42.752Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.508,
+      "draw": 0.253,
+      "away": 0.239
+    },
+    "doubleChance": {
+      "12": 0.747,
+      "1X": 0.761,
+      "X2": 0.492
+    },
+    "dnb": {
+      "home": 0.68,
+      "away": 0.32
+    },
+    "totals": {
+      "over15": 0.809,
+      "under15": 0.191,
+      "over25": 0.572,
+      "under25": 0.428,
+      "over35": 0.348,
+      "under35": 0.652
+    },
+    "btts": {
+      "yes": 0.589,
+      "no": 0.411
+    },
+    "cleanSheet": {
+      "home": 0.307,
+      "away": 0.165
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.121,
+        "share": 0.27191011235955054
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.097,
+        "share": 0.21797752808988766
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.082,
+        "share": 0.18426966292134833
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.081,
+        "share": 0.18202247191011237
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.064,
+        "share": 0.14382022471910114
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 44,
+    "homeWins": 15,
+    "draws": 14,
+    "awayWins": 15,
+    "avgTotalGoals": 2.090909090909091,
+    "recent": [
+      {
+        "eventId": 347219,
+        "date": "2018-04-30T19:00:00+00:00",
+        "home": "Real Betis",
+        "away": "Málaga CF",
+        "homeTeamId": 56,
+        "awayTeamId": 1259,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 347028,
+        "date": "2017-12-18T20:00:00+00:00",
+        "home": "Málaga CF",
+        "away": "Real Betis",
+        "homeTeamId": 1259,
+        "awayTeamId": 56,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 362149,
+        "date": "2017-02-28T20:30:00+00:00",
+        "home": "Málaga CF",
+        "away": "Real Betis",
+        "homeTeamId": 1259,
+        "awayTeamId": 56,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 361956,
+        "date": "2016-09-23T18:45:00+00:00",
+        "home": "Real Betis",
+        "away": "Málaga CF",
+        "homeTeamId": 56,
+        "awayTeamId": 1259,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 381313,
+        "date": "2016-03-19T21:05:00+00:00",
+        "home": "Real Betis",
+        "away": "Málaga CF",
+        "homeTeamId": 56,
+        "awayTeamId": 1259,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 314
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.5
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 314
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10.1
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 15.6,
+      "shotsOnTarget": 5.77,
+      "xg": 1.8,
+      "corners": 5.04,
+      "fouls": 11.61,
+      "yellowCards": 2.11,
+      "redCards": 0.3,
+      "offsides": 1.61,
+      "possession": 50.27
+    },
+    "away": {
+      "shots": 12.98,
+      "shotsOnTarget": 4.64,
+      "xg": 1.18,
+      "corners": 5.09,
+      "fouls": 11.93,
+      "yellowCards": 2.39,
+      "redCards": 0.35,
+      "offsides": 2.08,
+      "possession": 49.73
+    },
+    "sample": {
+      "home": 10,
+      "away": 9
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 4,
+        "offsides": 9
+      },
+      "away": {
+        "possession": 9,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 9,
+        "fouls": 9,
+        "yellowCards": 9,
+        "redCards": 3,
+        "offsides": 9
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.71,
+      "shotsOnTarget": 4.84,
+      "xg": 1.47,
+      "corners": 4.85,
+      "fouls": 12.23,
+      "yellowCards": 2.26,
+      "redCards": 0.39,
+      "offsides": 2.03
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.43,
+      "draw": 0.127,
+      "away": 0.443
+    },
+    "cardsDuel": {
+      "home": 0.353,
+      "draw": 0.193,
+      "away": 0.455
+    },
+    "lastGoal": {
+      "home": 0.602,
+      "away": 0.358,
+      "noGoal": 0.04
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.495,
+        "away": 0.505
+      },
+      "5": {
+        "home": 0.494,
+        "away": 0.506
+      },
+      "7": {
+        "home": 0.493,
+        "away": 0.507
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.208,
+      "home12": 0.222,
+      "level": 0.127,
+      "away12": 0.225,
+      "away3plus": 0.217
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 13,
+      "condition": "clear",
+      "sampledAt": "2026-10-31T17:30:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Benito Villamarín",
+      "city": "Sevilla",
+      "capacity": 60721,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Real Betis Balompié",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 4,
+        "played": 9,
+        "gf": 16,
+        "ga": 14,
+        "provider": null
+      },
+      "player": {
+        "name": "Abdessamad Ezzalzouli",
+        "detail": "3 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Málaga CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 20,
+        "played": 10,
+        "gf": 7,
+        "ga": 19,
+        "provider": null
+      },
+      "player": {
+        "name": "Adrián Niño",
+        "detail": "4 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}
