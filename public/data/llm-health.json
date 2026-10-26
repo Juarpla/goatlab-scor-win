@@ -1,167 +1,6 @@
 {
-  "updatedAt": "2026-10-26T13:02:05.033Z",
+  "updatedAt": "2026-10-26T13:10:54.788Z",
   "runs": [
-    {
-      "at": "2026-10-18T20:54:53.819Z",
-      "task": "shorts",
-      "matchId": "fenerbahce-vs-sk-slavia-praha-2026-10-20",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "usage": {
-        "inputTokens": 6510,
-        "outputTokens": 3739
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "691034d3-9219-4682-9b43-7a7755700148"
-    },
-    {
-      "at": "2026-10-18T21:01:32.387Z",
-      "task": "shorts",
-      "matchId": "paris-saint-germain-vs-barcelona-2026-10-20",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6799,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 62662
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6913,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 49280
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 1: falta el puente asignado; guion 1: falta el sustantivo asignado; guion 1: falta el antecedente asignado; guion 2: falta FC Barcelona; guion 2: 7 cifras, máximo 3; guion 2: falta el puente asignado; guion 2: falta el antecedente asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7191,
-            "outputTokens": 1309
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10154
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6799,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 64592
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6913,
-        "outputTokens": 7527
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "28728b1d-9e9b-456f-9f1d-78e67ad27ab7"
-    },
-    {
-      "at": "2026-10-18T21:02:09.286Z",
-      "task": "image-prompts",
-      "matchId": "fenerbahce-vs-sk-slavia-praha-2026-10-20",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1766,
-        "outputTokens": 6377
-      }
-    },
-    {
-      "at": "2026-10-18T21:02:26.471Z",
-      "task": "image-prompts",
-      "matchId": "paris-saint-germain-vs-barcelona-2026-10-20",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1826,
-        "outputTokens": 686
-      }
-    },
-    {
-      "at": "2026-10-18T21:02:31.662Z",
-      "task": "video-prompts",
-      "matchId": "fenerbahce-vs-sk-slavia-praha-2026-10-20",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1663,
-        "outputTokens": 504
-      }
-    },
-    {
-      "at": "2026-10-18T21:02:40.725Z",
-      "task": "video-prompts",
-      "matchId": "paris-saint-germain-vs-barcelona-2026-10-20",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1723,
-        "outputTokens": 345
-      }
-    },
     {
       "at": "2026-10-18T21:03:36.152Z",
       "task": "motion-prompts",
@@ -6139,6 +5978,106 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "c0730d35-da4a-4570-81bf-937e4bcd6a54"
+    },
+    {
+      "at": "2026-10-26T13:04:29.341Z",
+      "task": "shorts",
+      "matchId": "real-racing-club-vs-real-madrid-2026-11-01",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 100436
+      },
+      "usage": {
+        "inputTokens": 6396,
+        "outputTokens": 16798
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "0e517b85-982a-4bf6-a525-2e4565f2c585"
+    },
+    {
+      "at": "2026-10-26T13:08:39.071Z",
+      "task": "shorts",
+      "matchId": "liverpool-vs-arsenal-2026-11-01",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 249724
+      },
+      "usage": {
+        "inputTokens": 6424,
+        "outputTokens": 47696
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "7e3c2a04-8bd1-4a49-bfe7-cbcbdba54322"
+    },
+    {
+      "at": "2026-10-26T13:09:11.589Z",
+      "task": "image-prompts",
+      "matchId": "real-racing-club-vs-real-madrid-2026-11-01",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1868,
+        "outputTokens": 4013
+      }
+    },
+    {
+      "at": "2026-10-26T13:10:24.834Z",
+      "task": "image-prompts",
+      "matchId": "liverpool-vs-arsenal-2026-11-01",
+      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1832,
+        "outputTokens": 11999
+      }
+    },
+    {
+      "at": "2026-10-26T13:10:42.351Z",
+      "task": "video-prompts",
+      "matchId": "real-racing-club-vs-real-madrid-2026-11-01",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1768,
+        "outputTokens": 3591
+      }
+    },
+    {
+      "at": "2026-10-26T13:10:54.788Z",
+      "task": "video-prompts",
+      "matchId": "liverpool-vs-arsenal-2026-11-01",
+      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1732,
+        "outputTokens": 1831
+      }
     }
   ]
 }
