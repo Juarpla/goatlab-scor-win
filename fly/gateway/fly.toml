@@ -14,8 +14,8 @@ kill_timeout = "30s"
   OPENCLAW_GATEWAY_STARTUP_TRACE = "1"
   # Observe slow cold starts without interrupting SQLite admission.
   GOATLAB_GATEWAY_STARTUP_TIMEOUT_MS = "0"
-  # Physical expiry needs the local retention supervisor to keep running.
-  GOATLAB_IDLE_STOP_ENABLED = "0"
+  # Stop after 10 idle minutes; expired conversations are purged before startup.
+  GOATLAB_IDLE_STOP_ENABLED = "1"
   OPENCODE_GO_MODEL = "deepseek-v4.1-flash"
   OPENCODE_GO_FALLBACK_MODEL = "glm-5.3-flash"
   # Both models verified with image attachments through the native OpenClaw Gateway.
@@ -47,9 +47,10 @@ kill_timeout = "30s"
 [http_service]
   internal_port = 3000
   force_https = true
+  # The idle supervisor protects active work and stops through the Machines API.
   auto_stop_machines = false
   auto_start_machines = true
-  min_machines_running = 1
+  min_machines_running = 0
 
   [[http_service.checks]]
     # Fly caps service-check grace at one minute; startup itself has no watchdog.

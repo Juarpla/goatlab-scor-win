@@ -48,11 +48,14 @@ manualmente con el Gateway en ejecución. La vista previa es de solo lectura:
 node /home/node/conversation-retention.mjs --dry-run
 ```
 
-Para mantener el supervisor en ejecución, el apagado por inactividad está
-**desactivado** y Fly mantiene una VM encendida. Esto aumenta el tiempo facturado
-respecto al apagado tras diez minutos. Si la máquina se detiene manualmente o hay
-una avería, no puede borrar físicamente datos mientras está apagada; la purga
-previa al siguiente arranque impide servir el historial vencido.
+El apagado tras **diez minutos sin actividad** está habilitado y Fly permite
+cero máquinas encendidas. El supervisor de inactividad espera a que no haya
+turnos ni tareas pendientes antes de detener la VM; el proxy de Fly la vuelve
+a encender cuando llega una solicitud. Fly no decide el apagado por su cuenta.
+Mientras la VM está apagada no se borran físicamente datos: las conversaciones
+que cumplan las 72 horas durante ese periodo se eliminan en la purga offline
+del siguiente arranque, antes de abrir el servicio. Mientras permanece encendida,
+el supervisor de retención sigue ejecutando los vencimientos.
 
 Los trabajos programados del modelo están desactivados (`cron.enabled=false`).
 La cola de render y su mantenimiento operativo siguen siendo independientes.

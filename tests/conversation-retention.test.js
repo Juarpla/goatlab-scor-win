@@ -150,6 +150,38 @@ if (Number(process.versions.node.split('.')[0]) < 24) {
     assert.deepEqual(JSON.parse(readFileSync(join(f.root, '.conversation-retention.json'), 'utf8')).sessions, {});
   });
 
+  test('startup purges conversations expired while stopped and preserves enabled idle shutdown', { timeout: 6000 }, async t => {
+    const f = fixture(t);
+    f.add('agent:main:main', 'expired-while-stopped', Date.now() - TTL_MS - 1000);
+    f.db.close();
+    const previous = process.env.GOATLAB_IDLE_STOP_ENABLED;
+    process.env.GOATLAB_IDLE_STOP_ENABLED = '1';
+    const runtime = join(f.root, 'startup-runtime.mjs');
+    const report = join(f.root, 'startup-report.json');
+    writeFileSync(runtime, `import { DatabaseSync } from 'node:sqlite';
+      import { writeFileSync } from 'node:fs';
+      const db = new DatabaseSync(${JSON.stringify(f.file)});
+      writeFileSync(${JSON.stringify(report)}, JSON.stringify({
+        sessions: db.prepare('SELECT current_session_id FROM session_nodes').all(),
+        idleStop: process.env.GOATLAB_IDLE_STOP_ENABLED,
+      }));
+      db.close();
+      setInterval(() => {}, 1000);`);
+    const controller = new AbortController();
+    const running = supervise({ root: f.root, runtime, workspaces: [], pollMs: 10,
+      signal: controller.signal, log: () => {} });
+    try {
+      const deadline = Date.now() + 4000;
+      while (!existsSync(report) && Date.now() < deadline) await new Promise(resolve => setTimeout(resolve, 10));
+      assert.deepEqual(JSON.parse(readFileSync(report, 'utf8')), { sessions: [], idleStop: '1' });
+    } finally {
+      controller.abort();
+      await running;
+      if (previous === undefined) delete process.env.GOATLAB_IDLE_STOP_ENABLED;
+      else process.env.GOATLAB_IDLE_STOP_ENABLED = previous;
+    }
+  });
+
   test('supervisor stops a live writer before purging and starts a new session without resurrection', async t => {
     const f = fixture(t);
     const expiry = Date.now() + 1200;

@@ -45,7 +45,7 @@ export async function supervise({ root = process.env.OPENCLAW_STATE_DIR || '/dat
       log(`[retention] offline sweep ${JSON.stringify(cleaned)}`);
       if (closing) break;
       child = spawn(process.execPath, [runtime], {
-        detached: true, stdio: 'inherit', env: { ...process.env, GOATLAB_IDLE_STOP_ENABLED: '0' },
+        detached: true, stdio: 'inherit', env: { ...process.env },
       });
       let failed = false;
       child.on('error', () => { failed = true; });

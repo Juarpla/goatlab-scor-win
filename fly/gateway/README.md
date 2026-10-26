@@ -18,8 +18,11 @@ reduce el estado que debe admitir SQLite; no demuestra por sí sola que nunca
 volverá a producirse un pico de memoria.
 
 `runtime.mjs` usa el launcher de la imagen `/app/openclaw.mjs` y espera un
-`/startupz` exitoso antes de recuperar tareas. El apagado por inactividad está desactivado para
-que el supervisor de retención pueda ejecutar los vencimientos.
+`/startupz` exitoso antes de recuperar tareas e iniciar el reloj de inactividad.
+El supervisor apaga la VM tras diez minutos sin interacción cuando no hay turnos
+ni tareas pendientes. Fly permite cero máquinas encendidas y la vuelve a iniciar
+al recibir una solicitud. Las conversaciones vencidas se purgan antes de abrir
+el servicio en cada arranque; mientras está encendida también se purgan al vencer.
 No interrumpe un arranque lento: `GOATLAB_GATEWAY_STARTUP_TIMEOUT_MS=0`
 desactiva el plazo de reinicio. Solo debe activarse con un presupuesto medido.
 La traza nativa identifica las fases del arranque. Fly comprueba
