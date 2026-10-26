@@ -12,33 +12,13 @@ import Layout from '../layouts/Layout.astro';
 <p><strong>Publicidad.</strong> Google y sus partners pueden utilizar cookies basadas en visitas a este sitio y a otros sitios de Internet. Los anuncios no personalizados también pueden necesitar almacenamiento para medición, frecuencia o seguridad; no significan «sin cookies». Consulta el <a href="https://policies.google.com/technologies/cookies" rel="noopener">uso de cookies de Google</a>.</p>
 <p>Las páginas de guiones, prompts y bancos de medios no cargan código de AdSense ni de su plataforma de consentimiento.</p>
 <h2>Cambiar tu decisión en este sitio</h2>
-<p>Si hay un mensaje de consentimiento disponible para tu región, puedes reabrirlo con este botón:</p>
-<p><button type="button" id="revoke-consent" class="primary-button" disabled>Revisar mi consentimiento</button></p>
-<p id="revoke-fallback" role="status">El mensaje de consentimiento no está disponible en este momento. Puede no corresponder a tu región o estar bloqueado por el navegador. Si has bloqueado los servicios de Google, revisa esa configuración para poder abrirlo.</p>
+<p>Si hay un mensaje de consentimiento disponible para tu región, puedes reabrirlo mediante «Revisar mi consentimiento» en el pie de la <a href="/">portada</a> o de las páginas de análisis. El botón se habilita cuando Google confirma que corresponde a tu visita.</p>
+<p>Si el mensaje no está disponible, puede no corresponder a tu región o estar bloqueado por el navegador. Revisa los bloqueadores que afecten a los servicios de Google.</p>
+<p>Esta página y la política de privacidad no cargan etiquetas publicitarias ni de Funding Choices, para que puedas leerlas sin el mensaje de consentimiento.</p>
 <h2>Otras preferencias y borrado</h2>
 <p>Puedes gestionar la personalización de Google en <a href="https://myadcenter.google.com/" rel="noopener">Mi centro de anuncios</a> y las opciones de otros proveedores participantes en <a href="https://optout.aboutads.info/" rel="noopener">YourAdChoices</a>. Estas opciones son independientes del consentimiento de GoatLab.</p>
 <p>Para consultar, borrar o bloquear cookies, usa los ajustes de privacidad del navegador. El borrado puede eliminar también tus preferencias y hacer que el mensaje vuelva a aparecer. Bloquear cookies puede impedir que se sirvan anuncios.</p>
 <h2>Contacto</h2>
 <p>Dudas sobre cookies y privacidad: <a href="mailto:contacto@scor.win">contacto@scor.win</a>. Más información en <a href="/privacidad/">Privacidad</a>.</p>
 </main>
-<script>
-  const btn = document.querySelector<HTMLButtonElement>('#revoke-consent');
-  const fallback = document.getElementById('revoke-fallback');
-  const consentWindow = window as Window & { googlefc?: { callbackQueue: Array<Record<string, () => void>>; showRevocationMessage?: () => void }; __tcfapi?: (command: string, version: number, callback: (data: { gdprApplies?: boolean }, success: boolean) => void) => void };
-  const googlefc = consentWindow.googlefc = consentWindow.googlefc || { callbackQueue: [] };
-  googlefc.callbackQueue = googlefc.callbackQueue || [];
-  googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
-    consentWindow.__tcfapi?.('addEventListener', 0, (data, success) => {
-      const available = success && data?.gdprApplies === true && typeof googlefc.showRevocationMessage === 'function';
-      if (btn) btn.disabled = !available;
-      if (fallback) fallback.hidden = available;
-    });
-  } });
-  btn?.addEventListener('click', () => {
-    googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
-      try { googlefc.showRevocationMessage?.(); }
-      catch { if (fallback) fallback.hidden = false; }
-    } });
-  });
-</script>
 </Layout>

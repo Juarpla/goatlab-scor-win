@@ -1,0 +1,24 @@
+<div>
+  <button type="button" id="revoke-consent" class="primary-button" disabled>Revisar mi consentimiento</button>
+  <span id="revoke-fallback" role="status">El mensaje de consentimiento no está disponible para esta visita. Consulta <a href="/cookies/">Cookies</a>.</span>
+</div>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('#revoke-consent');
+  const fallback = document.getElementById('revoke-fallback');
+  const consentWindow = window as Window & { googlefc?: { callbackQueue: Array<Record<string, () => void>>; showRevocationMessage?: () => void }; __tcfapi?: (command: string, version: number, callback: (data: { gdprApplies?: boolean }, success: boolean) => void) => void };
+  const googlefc = consentWindow.googlefc = consentWindow.googlefc || { callbackQueue: [] };
+  googlefc.callbackQueue = googlefc.callbackQueue || [];
+  googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+    consentWindow.__tcfapi?.('addEventListener', 0, (data, success) => {
+      const available = success && data?.gdprApplies === true && typeof googlefc.showRevocationMessage === 'function';
+      if (btn) btn.disabled = !available;
+      if (fallback) fallback.hidden = available;
+    });
+  } });
+  btn?.addEventListener('click', () => {
+    googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      try { googlefc.showRevocationMessage?.(); }
+      catch { if (fallback) fallback.hidden = false; }
+    } });
+  });
+</script>

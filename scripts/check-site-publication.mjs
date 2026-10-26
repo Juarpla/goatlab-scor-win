@@ -26,6 +26,12 @@ for (const file of sitemapFiles) {
 }
 const home = readFileSync(join(root, 'index.html'), 'utf8');
 assert.ok(home.includes('pagead/js/adsbygoogle.js'), 'Falta verificación de AdSense en la portada');
+for (const path of ['privacidad', 'cookies']) {
+  const html = readFileSync(join(root, path, 'index.html'), 'utf8');
+  assert.ok(!html.includes('pagead/js/adsbygoogle.js'), `${path}: carga publicidad en una política`);
+  assert.ok(!html.includes('fundingchoicesmessages.google.com'), `${path}: carga CMP en una política`);
+}
+assert.ok(home.includes('id="revoke-consent"'), 'Falta acceso para revisar consentimiento desde la portada');
 const signal = [...home.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(script => script.includes('function signalGooglefcPresent'));
 assert.ok(signal, 'Falta señal de presencia de la CMP');
 const frames = [];

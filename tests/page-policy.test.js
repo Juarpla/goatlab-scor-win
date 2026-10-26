@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isProductionPage, isIndexablePage } from '../src/lib/page-policy.js';
+import { isProductionPage, isIndexablePage, isAdvertisingPage } from '../src/lib/page-policy.js';
 
 test('herramientas y sus JSON quedan fuera de búsqueda con y sin barra final', () => {
   for (const category of ['scripts', 'image-prompts', 'video-prompts', 'media', 'youtube']) {
@@ -10,6 +10,17 @@ test('herramientas y sus JSON quedan fuera de búsqueda con y sin barra final', 
       assert.equal(isIndexablePage(url), false, url);
     }
   }
+});
+
+test('las políticas siguen indexables y no cargan publicidad ni CMP', () => {
+  for (const path of ['/privacidad', '/privacidad/', '/cookies', '/cookies/?lang=es']) {
+    assert.equal(isIndexablePage(path), true);
+    assert.equal(isAdvertisingPage(path), false);
+  }
+  assert.equal(isAdvertisingPage('/'), true);
+  assert.equal(isAdvertisingPage('/partido/sevilla-vs-osasuna-2026-10-26/'), true);
+  assert.equal(isAdvertisingPage('/partido/sevilla-vs-osasuna-2026-10-26/scripts/'), false);
+  assert.equal(isAdvertisingPage('/partido/fd-564721/'), false);
 });
 
 test('las páginas editoriales se indexan con su URL descriptiva', () => {

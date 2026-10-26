@@ -1,6 +1,6 @@
 ---
 import { AD_CLIENT, AD_SLOTS, ADS_ACTIVE } from '../config/ads';
-import { isIndexablePage } from '../lib/page-policy.js';
+import { isAdvertisingPage } from '../lib/page-policy.js';
 
 interface Props {
   compact?: boolean;
@@ -14,7 +14,7 @@ interface Props {
 
 const { compact = false, variant, slotKey, class: className } = Astro.props;
 const slotId = slotKey && /^\d+$/.test(slotKey) ? slotKey : AD_SLOTS[slotKey as keyof typeof AD_SLOTS] ?? '';
-const live = ADS_ACTIVE && /^\d+$/.test(slotId) && isIndexablePage(Astro.url.href);
+const live = ADS_ACTIVE && /^\d+$/.test(slotId) && isAdvertisingPage(Astro.url.href);
 const variantClass = variant === 'horizontal' ? 'ad-horizontal' : variant === 'vertical' ? 'ad-vertical' : variant === 'rect' ? 'ad-rect' : undefined;
 const adFormat = variant === 'vertical' ? 'vertical' : variant === 'rect' ? 'rectangle' : 'auto';
 ---
