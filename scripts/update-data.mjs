@@ -416,19 +416,13 @@ async function patchLlmReviews(matches) {
 }
 
 /**
- * Re-clava lecturas huérfanas al id vigente antes de podar o generar. El
- * `inputKey` se sella con los datos actuales para no regenerar lo adoptado.
+ * Re-clava lecturas huérfanas al id vigente antes de podar o generar.
+ * Conserva el input original para que la comprobación de vigencia siga siendo válida.
  * Devuelve el mapa en memoria (persistido si hubo adopciones).
  */
-async function migrateAnalyses(matches, { results, standings, scorers, weather }) {
+async function migrateAnalyses(matches) {
   const stored = await readJson('public/data/llm-analysis.json') ?? {};
-  const ctx = { results, standings, scorers, weather };
-  const { analyses, adopted } = adoptAnalyses(stored, matches, {
-    inputKeyFor: match => {
-      const markets = resolveMatchMarkets({ match, results, scorers: scorers?.[match.competition] ?? null, standings });
-      return buildAnalysisKey(match, markets, { ...ctx, market: match.marketConsensus ?? null });
-    },
-  });
+  const { analyses, adopted } = adoptAnalyses(stored, matches);
   if (adopted.length) {
     await writeJson('public/data/llm-analysis.json', analyses);
     console.log(`análisis: re-clavados ${adopted.map(row => `${row.from}→${row.to}`).join(', ')}.`);
@@ -443,9 +437,10 @@ export async function catchUpAnalyses(matches, analyses, { results, standings, s
   for (const match of matches) {
     if (isFinished(match)) continue;
     if (made >= budget) break;
-    if (findAnalysis(analyses, match)) continue;
     const markets = resolveMatchMarkets({ match, results, scorers: scorers?.[match.competition] ?? null, standings });
-    const entry = await generateAnalysis(match, markets, { ...ctx, market: match.marketConsensus ?? null });
+    const fullCtx = { ...ctx, market: match.marketConsensus ?? null };
+    if (analysisIsFresh(findAnalysis(analyses, match)?.entry, match, markets, fullCtx)) continue;
+    const entry = await generateAnalysis(match, markets, fullCtx);
     made += 1;
     if (entry) analyses[match.id] = entry;
     await sleepWithJitter(5_000, 3_000);
@@ -1446,14 +1441,14 @@ async function full() {
   const scorerFallback = await captureSquadScorers(aliveWindow, { scorersBase, catalog: teamsCatalog });
   await captureAfTopScorers(aliveWindow, { cache: scorerFallback });
   const scorersMerged = withScorerFallback(scorersBase, scorerFallback);
-  const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersMerged, weather });
+  const analyses = await migrateAnalyses(aliveWindow);
   const teamCtx = await updateTeamStats(aliveWindow, { historyRows: historyBase.rows ?? [] });
   await updateMatchProbabilities(generationMatches, { results, scorers: scorersMerged, standings: standingsBase, analyses, weather, history: historyBase.rows ?? [], teamCtx, pruneContext, now: pruneNow });
 
   await capturePredictions(windowMatches, results);
   try { await import('./evaluate-predictions.mjs'); } catch (error) { console.warn(`Evaluación no completada: ${error.message}`); }
 
-  // Análisis LLM para partidos no jugados; vigente si no cambió hora, estado ni bajas.
+  // Análisis LLM para partidos no jugados; vigente solo con el mismo input completo.
   // La poda se aplica al mapa en memoria para conservar las lecturas nuevas.
   const previous = analyses;
   const ctx = { results, standings: standingsBase, scorers: scorersMerged, weather };
@@ -1498,7 +1493,7 @@ async function analysisOnly() {
   const scorerFallbackOnly = await captureSquadScorers(aliveWindow, { scorersBase, catalog: teamsCatalogOnly });
   await captureAfTopScorers(aliveWindow, { cache: scorerFallbackOnly });
   const scorersMergedOnly = withScorerFallback(scorersBase, scorerFallbackOnly);
-  const analyses = await migrateAnalyses(aliveWindow, { results, standings: standingsBase, scorers: scorersMergedOnly, weather: weatherBase });
+  const analyses = await migrateAnalyses(aliveWindow);
   const teamCtxOnly = await updateTeamStats(aliveWindow, { historyRows: historyBase.rows ?? [], fetch: false });
   await updateMatchProbabilities(generationMatches, { results, scorers: scorersMergedOnly, standings: standingsBase, analyses, weather: weatherBase, history: historyBase.rows ?? [], teamCtx: teamCtxOnly, pruneContext, now: pruneNow });
   const previous = analyses;
@@ -1548,7 +1543,7 @@ async function refreshScores() {
   const scorerFallbackRefresh = await captureSquadScorers(merged, { scorersBase, catalog: teamsCatalogRefresh });
   await captureAfTopScorers(merged, { cache: scorerFallbackRefresh });
   const scorersMergedRefresh = withScorerFallback(scorersBase, scorerFallbackRefresh);
-  const analyses = await migrateAnalyses(merged, { results: resultsBase?.results ?? [], standings: standingsBase, scorers: scorersMergedRefresh, weather: weatherBase });
+  const analyses = await migrateAnalyses(merged);
   // El marcador final se registra antes de podar: el dataset de evaluación necesita los finalizados.
   await capturePredictions(merged, resultsBase?.results ?? []);
   const matches = merged.filter(alive);

@@ -17,14 +17,14 @@ import RadarDuel from '../../components/RadarDuel.astro';
 import TrendsStrip from '../../components/TrendsStrip.astro';
 import { storyTerm } from '../../lib/story-dictionary.js';
 import { normalizeReading } from '../../lib/reading.js';
-import { findAnalysis } from '../../lib/analysis.js';
+import { findFreshAnalysis } from '../../lib/analysis.js';
 import { competitions, matchPhase } from '../../lib/football.js';
 import { teamShort, teamCompact, teamEsDisplay } from '../../lib/teams.js';
 import { teamForm, bakedForm } from '../../lib/form.js';
 import { roundFecha, findStandingRow, topScorerFor } from '../../lib/series-crumbs.js';
 import { ensemble } from '../../lib/predictions.js';
 import { normalizeOneX2, deriveDoubleChance, deriveDnb, pickDecisive } from '../../lib/provider-markets.js';
-import { topScorerSplit } from '../../lib/probabilities.js';
+import { topScorerSplit, resolveMatchMarkets, withScorerFallback } from '../../lib/probabilities.js';
 import { locateMatch, competitionFallback, fallbackRegionLayout } from '../../lib/venues.js';
 import { teamColors } from '../../lib/team-colors.js';
 import fixtures from '../../../public/data/fixtures.json';
@@ -32,6 +32,8 @@ import analyses from '../../../public/data/llm-analysis.json';
 import results from '../../../public/data/results.json';
 import standingsData from '../../../public/data/standings.json';
 import scorersData from '../../../public/data/scorers.json';
+import scorerFallback from '../../../public/data/scorer-fallback.json';
+import weatherData from '../../../public/data/weather.json';
 import history from '../../../public/data/history-stats.json';
 import evaluation from '../../../public/data/evaluation-report.json';
 import '../../styles/partido.css';
@@ -63,7 +65,9 @@ const events = match.events;
 const phase = matchPhase(match);
 const finished = phase === 'finished';
 const statusLabel = finished ? 'Finalizado' : phase === 'live' ? 'En juego' : 'Programado';
-const ai = findAnalysis(analyses as Record<string, {summary:unknown;limitations:unknown}>, match)?.entry;
+const analysisScorers = withScorerFallback(scorersData, scorerFallback);
+const analysisMarkets = resolveMatchMarkets({ match, results: results.results, scorers: analysisScorers[match.competition] ?? null, standings: standingsData });
+const ai = findFreshAnalysis(analyses, match, analysisMarkets, { results: results.results, standings: standingsData, scorers: analysisScorers, weather: weatherData, market: match.marketConsensus ?? null })?.entry;
 /* Sin lectura LLM (fallo de proveedores o presupuesto), la vista cae al
    fallback de proveedores; `normalizeReading` decide lo mostrable. */
 const hasReading = Boolean(normalizeReading(ai));
@@ -449,7 +453,6 @@ const crumbsFor = side => {
    {!hasReading && <ProviderAdvice provider={prov} afPrediction={afPred} home={match.home} away={match.away}/>}
     <AdSlot variant="rect" slotKey="partidoCierre"/>
   <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} afPrediction={afPred} />
-<nav class="wrap" aria-label="Contenido audiovisual del partido" style="display:flex;flex-wrap:wrap;gap:20px;padding-block:32px"><a href={`/partido/${match.webId ?? match.id}/scripts`}>Scripts</a><a href={`/partido/${match.webId ?? match.id}/image-prompts`}>Image Prompts</a><a href={`/partido/${match.webId ?? match.id}/video-prompts`}>Video Prompts</a><a href={`/partido/${match.webId ?? match.id}/media`}>Media</a></nav>
 </main>
 <script>
  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];

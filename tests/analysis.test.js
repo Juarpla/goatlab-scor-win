@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { matchIdentity, entryIdentity, sameFixture, findAnalysis, adoptAnalyses, buildAnalysisKey, buildMaterialKey, analysisIsFresh, parseBatchAnalyses } from '../src/lib/analysis.js';
+import { matchIdentity, entryIdentity, sameFixture, findAnalysis, findFreshAnalysis, adoptAnalyses, buildAnalysisKey, buildMaterialKey, analysisIsFresh, parseBatchAnalyses } from '../src/lib/analysis.js';
 
 const v2Key = (id, home, away, kickoff) => `v2|M|${id}|${home}|${away}|laliga|${kickoff}|NS\nP|1.7|1.1|0.5|0.3|0.2|0.4|0.5`;
 const entry = overrides => ({ summary: [{ title: 't', bullets: ['a', 'b'] }], limitations: [{ label: 'l', detail: 'd' }], ...overrides });
@@ -8,6 +8,15 @@ const entry = overrides => ({ summary: [{ title: 't', bullets: ['a', 'b'] }], li
 const osasuna = { id: 'af-1570399', home: 'Osasuna', away: 'Rayo Vallecano', kickoff: '2026-09-19T12:00:00+00:00' };
 const legacy = entry({
   inputKey: v2Key('fd-564693', 'CA Osasuna', 'Rayo Vallecano de Madrid', '2026-09-19T12:00:00Z'),
+});
+
+test('una tabla nueva invalida la lectura aunque conserve la identidad y el materialKey antiguo', () => {
+  const match = { ...osasuna, competition: 'laliga', status: 'NS' };
+  const ctx = position => ({ standings: { laliga: { rows: [{ team: 'Osasuna', position, played: 9, points: 11 }] } } });
+  const inputKey = buildAnalysisKey(match, null, ctx(10));
+  const stored = { inputKey, materialKey: inputKey.slice(3).split('\n')[0] };
+  assert.equal(analysisIsFresh(stored, match, null, ctx(10)), true);
+  assert.equal(analysisIsFresh(stored, match, null, ctx(12)), false);
 });
 
 test('entryIdentity lee campos estampados y los dos formatos de inputKey', () => {
@@ -44,16 +53,17 @@ test('findAnalysis prioriza el id directo y luego rescata el gemelo huérfano', 
   assert.equal(findAnalysis(analyses, null), null);
 });
 
-test('adoptAnalyses re-clava, estampa identidad y sella el inputKey actual', () => {
+test('adoptAnalyses re-clava y conserva el input original sin certificar datos nuevos', () => {
   const analyses = { 'fd-564693': legacy, 'af-1557408': entry({ inputKey: 'v2|propia' }) };
   const brentford = { id: 'af-1557408', home: 'Brentford', away: 'Chelsea', kickoff: '2026-09-18T19:00:00+00:00', webId: 'brentford-vs-chelsea-2026-09-18' };
-  const { analyses: next, adopted } = adoptAnalyses(analyses, [osasuna, brentford], { inputKeyFor: match => `v2|${match.id}` });
+  const { analyses: next, adopted } = adoptAnalyses(analyses, [osasuna, brentford]);
   assert.deepEqual(adopted, [{ from: 'fd-564693', to: 'af-1570399' }]);
   assert.equal(next['fd-564693'], undefined);
   assert.equal(next['af-1570399'].rekeyedFrom, 'fd-564693');
   assert.equal(next['af-1570399'].home, 'Osasuna');
   assert.equal(next['af-1570399'].kickoff, osasuna.kickoff);
-  assert.equal(next['af-1570399'].inputKey, 'v2|af-1570399');
+  assert.equal(next['af-1570399'].inputKey, legacy.inputKey);
+  assert.equal(analysisIsFresh(next['af-1570399'], osasuna), false);
   assert.equal(next['af-1557408'].inputKey, 'v2|propia'); // la entrada directa no se toca
   assert.equal(analyses['fd-564693'], legacy); // puro: el mapa original queda intacto
 });
@@ -82,12 +92,12 @@ test('buildAnalysisKey sella v3 y es estable: generar == comparar (el full salta
   assert.equal(buildAnalysisKey(match, null, {}), stored.inputKey); // mismo input → se salta
 });
 
-test('buildMaterialKey ignora números y cambia con hora, estado o bajas', () => {
+test('buildMaterialKey incluye las cifras que puede citar la narrativa', () => {
   const match = { id: 'af-1', home: 'Osasuna', away: 'Rayo Vallecano', competition: 'laliga', kickoff: '2026-09-19T12:00:00Z', status: 'NS' };
   const markets = { lambdas: { home: 1.6, away: 1.1 }, markets: { oneX2: { home: 0.5, draw: 0.25, away: 0.25 }, totals: { over25: 0.6 }, btts: { yes: 0.4 } } };
   const base = buildMaterialKey(match, null, {});
-  assert.equal(buildMaterialKey(match, markets, { weather: { 'af-1': { temp: 18, condition: 'clear' } }, market: { oneX2: { home: 0.48 } } }), base);
-  assert.ok(base.startsWith('M|'));
+  assert.notEqual(buildMaterialKey(match, markets, { weather: { 'af-1': { temp: 18, condition: 'clear' } }, market: { oneX2: { home: 0.48 } } }), base);
+  assert.ok(base.startsWith('v3|M|'));
   assert.equal(base.includes('\n'), false);
   assert.notEqual(buildMaterialKey({ ...match, status: 'LIVE' }, null, {}), base);
   assert.notEqual(buildMaterialKey({ ...match, kickoff: '2026-09-19T14:00:00Z' }, null, {}), base);
@@ -97,17 +107,28 @@ test('buildMaterialKey ignora números y cambia con hora, estado o bajas', () =>
   assert.ok(withAbsence.includes('\nL|'));
 });
 
-test('analysisIsFresh conserva la lectura si solo se mueven los números', () => {
+test('analysisIsFresh retira la lectura cuando se mueven los números', () => {
   const match = { id: 'af-1', home: 'Osasuna', away: 'Rayo Vallecano', competition: 'laliga', kickoff: '2026-09-19T12:00:00Z', status: 'NS' };
   const stored = { inputKey: buildAnalysisKey(match, null, {}), materialKey: buildMaterialKey(match, null, {}) };
   const markets = { lambdas: { home: 1.2, away: 1.4 }, markets: { oneX2: { home: 0.3, draw: 0.3, away: 0.4 } } };
-  assert.equal(analysisIsFresh(stored, match, markets, {}), true);
+  assert.equal(analysisIsFresh(stored, match, markets, {}), false);
   assert.equal(analysisIsFresh(stored, { ...match, status: 'POSTP' }, null, {}), false);
   const legacy = { inputKey: buildAnalysisKey(match, null, {}) };
   assert.equal(analysisIsFresh(legacy, match, null, {}), true);
   assert.equal(analysisIsFresh(legacy, match, markets, {}), false);
   assert.equal(analysisIsFresh(null, match, null, {}), false);
   assert.equal(analysisIsFresh({}, match, null, {}), false);
+});
+
+test('findFreshAnalysis no entrega a la vista lecturas de otra versión de tabla, resultados o proveedor', () => {
+  const match = { ...osasuna, competition: 'laliga', status: 'NS' };
+  const ctx = { results: [{ id: 'r1', date: '2026-09-10', home: 'Osasuna', away: 'Sevilla', homeScore: 2, awayScore: 0 }] };
+  const stored = entry({ inputKey: buildAnalysisKey(match, null, ctx), materialKey: 'M|sello-antiguo' });
+  const analyses = { [match.id]: stored };
+  assert.equal(findFreshAnalysis(analyses, match, null, ctx)?.entry, stored);
+  assert.equal(findFreshAnalysis(analyses, match, null, { results: [{ ...ctx.results[0], homeScore: 1 }] }), null);
+  assert.equal(findFreshAnalysis(analyses, { ...match, modelPrediction: { oneX2: { home: 0.6, draw: 0.2, away: 0.2 } } }, null, ctx), null);
+  assert.equal(findFreshAnalysis({}, match, null, ctx), null);
 });
 
 test('parseBatchAnalyses reparte por matchId y reporta faltantes e inesperados', () => {

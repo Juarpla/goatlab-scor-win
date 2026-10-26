@@ -19,7 +19,7 @@
  * Tras la aprobación:
  * 1. Crea las unidades en AdSense y pega cada data-ad-slot en AD_SLOTS.
  * 2. ADS_ACTIVE se enciende solo cuando hay al menos un slot con ID.
- * 3. Cada <AdSlot/> sin slot sigue mostrando el marcador reservado.
+ * 3. Cada <AdSlot/> sin slot permanece oculto.
  */
 const cleaned = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID ?? '').trim().replace(/^ca-/i, '');
 
@@ -52,13 +52,13 @@ export type AdSlotKey = keyof typeof AD_SLOTS;
 
 /**
  * Verificación para revisión: basta el Publisher ID.
- * Carga adsbygoogle.js en <head> en todas las páginas.
+ * Carga adsbygoogle.js en <head> de las páginas editoriales indexables.
  */
 export const ADS_VERIFICATION = Boolean(AD_CLIENT);
 
 /**
  * Anuncios manuales: solo cuando hay al menos un slot con ID real.
  * Durante la revisión (solo Publisher ID + Auto Ads) es false a propósito:
- * los <AdSlot/> muestran el marcador reservado y no hacen push() vacío.
+ * los <AdSlot/> permanecen ocultos y no hacen push() vacío.
  */
 export const ADS_ACTIVE = Object.values(AD_SLOTS).some(Boolean);

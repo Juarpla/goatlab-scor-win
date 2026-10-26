@@ -3,7 +3,7 @@
  * La lectura: interpretación de IA en fichas con pizarra. Cada sección trae
  * su escena (kind) y sus cifras protagonistas (stats); el texto nunca se
  * reescribe, solo se resaltan las cifras que la sección declara. La auditoría
- * del LLM (limitations) no se imprime: vive solo en el JSON.
+ * del LLM (limitations) queda en el JSON para revisión editorial.
  */
 import ReadingScene from './ReadingScene.astro';
 import { normalizeReading, matchFigures, formatFigure } from '../lib/reading.js';
@@ -21,7 +21,8 @@ const hasFigures = Boolean(reading?.sections.some(section => section.stats.lengt
       <h3>La sabidurIA</h3>
       <span class="outline-label">Interpretación de IA</span>
     </div>
-    <p class="reading-note">{hasFigures ? 'Análisis preparado con IA a partir de los datos del partido. Las cifras grandes son las que la propia lectura cita; confróntalas con los capítulos de arriba.' : 'Análisis preparado con IA a partir de los datos del partido. Esta lectura aún no declara cifras protagonistas.'}</p>
+    <p class="reading-note">{hasFigures ? 'Análisis preparado con IA a partir de los datos del partido. Las cifras grandes son las que la propia lectura cita; confróntalas con los capítulos de arriba.' : 'Análisis preparado con IA a partir de los datos del partido. Esta lectura aún no declara cifras protagonistas.'} Puede contener errores y no sustituye a las fuentes deportivas. La cobertura depende de los datos disponibles; una ausencia de información no confirma que no haya bajas u otros cambios.</p>
+    {entry.generatedAt && <p class="reading-note">Preparado el <time datetime={entry.generatedAt}>{new Date(entry.generatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' })}</time> (Lima).</p>}
   </header>
   <div class="reading-grid">
     {reading.sections.map((section, index) => <article class={`reading-card${index === 0 ? ' is-lead' : ''}`} style={`--d:${(index * 0.12).toFixed(2)}s`}>

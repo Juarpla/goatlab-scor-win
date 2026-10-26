@@ -18,22 +18,14 @@ export function buildAnalysisKey(match, markets = null, ctx = {}) {
   return `v3|${toCompactInput(match, markets, ctx)}`;
 }
 
-/** Líneas que obligan a reescribir la lectura: identidad del partido (M) y bajas (L).
- *  Probabilidades, cuotas y clima quedan fuera: la tabla de números se actualiza sola. */
+/** La narrativa puede citar cualquier cifra del input: todos sus datos importan. */
 export function buildMaterialKey(match, markets = null, ctx = {}) {
-  return toCompactInput(match, markets, ctx)
-    .split('\n')
-    .filter(line => line.startsWith('M|') || line.startsWith('L|'))
-    .join('\n');
+  return buildAnalysisKey(match, markets, ctx);
 }
 
-/** Una lectura con `materialKey` sigue vigente si no cambió M ni L.
- *  Las guardadas antes de ese sello se comparan con el `inputKey` completo. */
+/** El sello antiguo M/L omitía tabla, forma y probabilidades. Nunca prueba vigencia. */
 export function analysisIsFresh(stored, match, markets = null, ctx = {}) {
   if (!stored || typeof stored !== 'object') return false;
-  if (typeof stored.materialKey === 'string' && stored.materialKey) {
-    return stored.materialKey === buildMaterialKey(match, markets, ctx);
-  }
   return typeof stored.inputKey === 'string' && stored.inputKey === buildAnalysisKey(match, markets, ctx);
 }
 
@@ -126,12 +118,18 @@ export function findAnalysis(analyses, match) {
   return null;
 }
 
+/** La vista y el generador comprueban exactamente el mismo input. */
+export function findFreshAnalysis(analyses, match, markets = null, ctx = {}) {
+  const found = findAnalysis(analyses, match);
+  return found && analysisIsFresh(found.entry, match, markets, ctx) ? found : null;
+}
+
 /**
  * Re-clava gemelos al id vigente y estampa identidad en la entrada. Puro:
- * devuelve un mapa nuevo. `inputKeyFor(match)` permite sellar la clave actual
- * para que el pipeline no regenere lo que acaba de adoptar.
+ * devuelve un mapa nuevo. Conserva el input original: cambiar un id no
+ * convierte una lectura antigua en una lectura de los datos actuales.
  */
-export function adoptAnalyses(analyses, matches, { inputKeyFor = null } = {}) {
+export function adoptAnalyses(analyses, matches) {
   const next = { ...(analyses ?? {}) };
   const adopted = [];
   for (const match of matches ?? []) {
@@ -146,10 +144,6 @@ export function adoptAnalyses(analyses, matches, { inputKeyFor = null } = {}) {
       webId: match.webId ?? found.entry.webId ?? null,
       rekeyedFrom: found.key,
     };
-    if (typeof inputKeyFor === 'function') {
-      const key = inputKeyFor(match, entry);
-      if (key) entry.inputKey = key;
-    }
     delete next[found.key];
     next[match.id] = entry;
     adopted.push({ from: found.key, to: match.id });
