@@ -1,112 +1,6 @@
 {
-  "updatedAt": "2026-10-26T13:10:54.788Z",
+  "updatedAt": "2026-10-26T22:56:40.526Z",
   "runs": [
-    {
-      "at": "2026-10-18T21:03:36.152Z",
-      "task": "motion-prompts",
-      "matchId": "sabah-fk-vs-borussia-dortmund-2026-10-20",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2158,
-        "outputTokens": 8842
-      }
-    },
-    {
-      "at": "2026-10-18T21:05:28.343Z",
-      "task": "motion-prompts",
-      "matchId": "fenerbahce-vs-sk-slavia-praha-2026-10-20",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2435,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 77623
-        }
-      ],
-      "usage": {
-        "inputTokens": 2581,
-        "outputTokens": 7076
-      }
-    },
-    {
-      "at": "2026-10-18T21:09:23.703Z",
-      "task": "motion-prompts",
-      "matchId": "paris-saint-germain-vs-barcelona-2026-10-20",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2501,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 68918
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2607,
-            "outputTokens": 11999
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 54293
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2658,
-            "outputTokens": 3090
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 51770
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2494,
-            "outputTokens": 3379
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 60374
-        }
-      ],
-      "usage": null
-    },
     {
       "at": "2026-10-19T04:56:52.852Z",
       "task": "motion-prompts",
@@ -6078,6 +5972,110 @@
         "inputTokens": 1732,
         "outputTokens": 1831
       }
+    },
+    {
+      "at": "2026-10-26T22:46:42.971Z",
+      "matchId": "fd-564737",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1346,
+        "outputTokens": 14616
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "bec78b22-6c64-48a3-8050-d565cd31b370"
+    },
+    {
+      "at": "2026-10-26T22:48:09.110Z",
+      "matchId": "fd-560626",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1327,
+        "outputTokens": 14101
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "4fe87498-3344-4268-9337-c4a30575b109"
+    },
+    {
+      "at": "2026-10-26T22:56:32.752Z",
+      "matchId": "fd-564730",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1348,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 88291
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1390,
+            "outputTokens": 1065
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7834
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1313,
+            "outputTokens": 5619
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 115143
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1348,
+        "outputTokens": 13761
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "1d2e7470-c701-4f3c-8607-b28b7b4d9565"
     }
   ]
 }
