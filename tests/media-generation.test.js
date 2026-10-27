@@ -76,6 +76,7 @@ async function fixture(t, overrides = {}) {
     }
     const clips = [];
     for (let ordinal = 0; ordinal < 2; ordinal++) {
+      position(ordinal);
       const file = 'clip-' + ordinal + '.mp4'; await writeFile(join(out, file), 'clip-' + ordinal);
       clips.push({ index: ordinal, file, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash', prompt: videos.prompts[ordinal].prompt, reference: env.R2_PUBLIC_BASE + '/partidos/a-b/' + ordinal + '.jpg', videoId: 'private-task', attemptId: 'private-attempt' });
     }
@@ -457,7 +458,14 @@ test('confirmed publication removes orphaned atomic response files as well as bi
 });
 test('a fifth attempt publishes clip-1 and a recovered clip is not named after its attempt',async t=>{
   const f=await fixture(t);for(let i=0;i<4;i++)f.addPhoto(i);
-  const result=await f.run({execImpl:async(binary,argv,options)=>{
+  const result=await f.run({transactImpl: async(op,input) => {
+    if(op==='status' && input.kind==='video' && input.ordinal===4) {
+      const existing=await f.transactImpl(op,{...input,ordinal:0});
+      return {slot:{...existing.slot,attemptId:'attempt-4',publicationIndex:1,uploadClaim:null}};
+    }
+    if(op==='publication-slot' && input.ordinal===4)return {publicationIndex:1};
+    return f.transactImpl(op,input);
+  },execImpl:async(binary,argv,options)=>{
     const response=await f.execImpl(binary,argv,options);
     if(!argv[0].endsWith('agnes_video.py'))return response;
     const data=JSON.parse(response.stdout),out=argv.find(value=>value.startsWith('--out=')).slice(6);
@@ -520,4 +528,28 @@ test('manual media generation never runs terminal maintenance or deletes another
   const result = await f.run({ args: { '--match': 'a-b' }, maintainImpl: async () => { throw new Error('Generation must not perform maintenance'); } });
   assert.deepEqual(result.deletedIds, []);
   assert.equal(await readFile(other, 'utf8'), '{"preserve":true}');
+});
+
+test('generation needs no video prompt document and preserves proven historical clips', async t => {
+  const f = await fixture(t);
+  for (let ordinal=0; ordinal<4; ordinal++) f.addPhoto(ordinal);
+  f.addClip(0); f.addClip(1);
+  await rm(join(f.repo, 'public/data/video-prompts'), { recursive: true });
+  const result = await f.run();
+  assert.equal(result.completed, 1);
+  assert.equal(result.reused, 6);
+  assert.equal(f.provider.length, 0);
+});
+
+test('new video input passes images and no generated prompts to the production adapter', async t => {
+  const f = await fixture(t);
+  await rm(join(f.repo, 'public/data/video-prompts'), { recursive: true });
+  let input;
+  const result = await f.run({execImpl: async(binary, argv, options) => {
+    if (argv[0].endsWith('agnes_video.py')) input = JSON.parse(await readFile(argv.find(a=>a.startsWith('--input=')).slice(8)));
+    return f.execImpl(binary, argv, options);
+  }});
+  assert.equal(result.completed, 1);
+  assert.equal(input.prompts, undefined);
+  assert.equal(input.images.length, 4);
 });

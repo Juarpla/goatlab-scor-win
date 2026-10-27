@@ -18,7 +18,8 @@ from pathlib import Path
 from common import agnes_authority, atomic_json, database, request_json
 from agnes import retry_seconds
 
-MODEL = 'agnes-video-2.5-flash'
+ANIMATION = json.loads((Path(__file__).resolve().parent.parent / 'lib/video-animation.json').read_text())
+MODEL = ANIMATION['model']
 CLIP_SECONDS = 6
 IDENTIFIER_KEYS = {'id', 'videoid', 'taskid', 'resultid', 'generationid'}
 
@@ -191,6 +192,7 @@ class VideoPool:
         return details
 
     def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False):
+        prompts = [{'prompt': ANIMATION['prompt']}] * (min(2, len(prompts)) or 2)
         if os.environ.get('AGNES_RESOURCE_RETRIES') != '3' or recover_only:
             return self._bank(match, prompts, images, out, deadline, expires, call, download, cancelled, verified, recover_only)
         verified = set(verified or [])
@@ -261,7 +263,7 @@ class VideoPool:
                 'runPosts': {str(number): count for (bank, number), count in counts.items() if bank == match}}
 
     def _bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False, candidate_ordinals=None):
-        if not prompts or not images: return {'clips': [], 'failures': ['faltan prompts de video o imágenes de referencia']}
+        if not images: return {'clips': [], 'failures': ['faltan imágenes de referencia']}
         if not os.environ.get('AGNES_API_KEY'): return {'clips': [], 'failures': ['falta AGNES_API_KEY']}
         out = Path(out); out.mkdir(parents=True, exist_ok=True)
         self.diagnostic_out = out
@@ -376,7 +378,7 @@ class VideoPool:
                             def create_call(*args, **kwargs):
                                 return call(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': payload}))
                         try:
-                            result=create_call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':'Use <Picture 1> as the visual reference. '+prompt['prompt'],'mode':'reference','images':[reference],'seconds':'6','size':'720P','aspect_ratio':'9:16','n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
+                            result=create_call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':ANIMATION['prompt'],'mode':ANIMATION['mode'],'first_frame':reference,'seconds':ANIMATION['seconds'],'size':ANIMATION['size'],'aspect_ratio':ANIMATION['aspect_ratio'],'n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
                             _, video_id = response_identifiers(result)
                             if not isinstance(video_id,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,200}',video_id): raise ValueError('sin video_id')
@@ -561,7 +563,22 @@ class VideoPool:
         path.with_suffix('.tmp').replace(path)
         probe = json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=width,height:format=duration','-of','json',str(path)], timeout=min(15,max(1,deadline-self.clock()))))
         stream = probe['streams'][0]; duration = float(probe['format']['duration'])
-        if stream['width']!=720 or stream['height']!=1280 or not 4<=duration<=12.5: raise ValueError('clip de dimensiones o duración inesperadas')
+        if not 4 <= duration <= 12.5 or not 0 < stream['width'] <= 4096 or not 0 < stream['height'] <= 4096 or not 1.5 <= stream['height'] / stream['width'] <= 2:
+            raise ValueError('clip de dimensiones o duración inesperadas')
+        if (stream['width'], stream['height']) != (720, 1280):
+            # Agnes can return 720x1260 despite aspect_ratio=9:16. Preserve its
+            # proportions and pad to the exact canvas required by the media bank.
+            normalized = path.with_suffix('.normalized.mp4')
+            try:
+                subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(path),
+                    '-vf', 'scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2,setsar=1',
+                    '-c:v', 'libx264', '-preset', 'fast', '-crf', '18', '-pix_fmt', 'yuv420p',
+                    '-c:a', 'aac', '-movflags', '+faststart', str(normalized)], check=True,
+                    timeout=max(.1, min(120, deadline-self.clock())), capture_output=True)
+                normalized.replace(path)
+            finally:
+                normalized.unlink(missing_ok=True)
+            stream = {'width': 720, 'height': 1280}
         return {'path':str(path.resolve()),'file':path.name,'width':stream['width'],'height':stream['height'],'duration':duration,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
@@ -578,5 +595,5 @@ if __name__=='__main__':
         with sqlite3.connect(state) as db:
             row=db.execute('SELECT status FROM tasks WHERE id=?', ('media:'+source['matchId'],)).fetchone()
             return bool(row and row[0]=='cancelled')
-    result=pool.bank(source['matchId'],source['prompts'],source['images'],args.out,source['deadline'],source['expiresAt'],cancelled=cancelled,verified=source.get('verifiedClips', []),recover_only=source.get('recoverOnly', False))
+    result=pool.bank(source['matchId'],[],source['images'],args.out,source['deadline'],source['expiresAt'],cancelled=cancelled,verified=source.get('verifiedClips', []),recover_only=source.get('recoverOnly', False))
     print(json.dumps(result))

@@ -1,4 +1,5 @@
 import json
+import subprocess
 import contextlib
 import io
 import http.client
@@ -10,7 +11,7 @@ import urllib.error
 from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts'))
-from agnes_video import VideoPool
+from agnes_video import VideoPool, ANIMATION
 from fake_agnes_state import FakeAgnesState
 
 class VideoTests(unittest.TestCase):
@@ -351,9 +352,9 @@ class VideoTests(unittest.TestCase):
             return {'status':'failed'} if 'id-1&' in url else {'status':'completed','url':'https://example.org/clip.mp4'}
         result=self.pool.bank('a-b',self.prompts,images,self.root,2000,3000,call=call,download=self.download)
         self.assertEqual(len(result['clips']),2)
-        self.assertEqual([p['images'][0] for p in self.posts],[i['url'] for i in images[:3]])
-        self.assertEqual([p['prompt'].split('reference. ')[1] for p in self.posts],[p['prompt'] for p in self.prompts[:3]])
-        self.assertTrue(all(p['model']=='agnes-video-2.5-flash' and p['mode']=='reference' for p in self.posts))
+        self.assertEqual([p['first_frame'] for p in self.posts],[i['url'] for i in images[:3]])
+        self.assertEqual([p['prompt'] for p in self.posts],[ANIMATION['prompt']] * 3)
+        self.assertTrue(all(p['model']=='agnes-video-2.5-flash' and p['mode']=='keyframe' for p in self.posts))
         self.assertEqual(self.pool.db.execute('select count(*) from video_models').fetchone()[0],3)
 
     def test_few_images_are_exhausted_before_reuse(self):
@@ -362,7 +363,7 @@ class VideoTests(unittest.TestCase):
             if body: self.posts.append(body);return {'video_id':f'id-{len(self.posts)}'}
             return {'status':'failed'}
         self.pool.bank('a-b',self.prompts,images,self.root,2000,3000,call=call,download=self.download)
-        self.assertEqual([p['images'][0] for p in self.posts],[images[i%2]['url'] for i in range(5)])
+        self.assertEqual([p['first_frame'] for p in self.posts],[images[i%2]['url'] for i in range(5)])
 
     def test_503_without_id_is_redacted_bounded_and_does_not_block_other_matches(self):
         def unavailable(url,body=None,**kwargs):
@@ -427,3 +428,27 @@ class VideoTests(unittest.TestCase):
     def test_malformed_creation_response_uses_at_most_five_attempts(self):
         def malformed(url,body=None,**kwargs): self.posts.append(body);return []
         self.bank(malformed);self.bank(self.success);self.assertEqual(len(self.posts),5)
+
+    def test_empty_prompt_list_uses_only_fixed_instruction_and_keyframe(self):
+        result = self.pool.bank('fixed', [], self.images, self.root/'fixed', 2000, 3000,
+                                call=self.success, download=self.download)
+        self.assertEqual(len(result['clips']), 2)
+        self.assertEqual(len(self.posts), 2)
+        for body in self.posts:
+            self.assertEqual(body['prompt'], ANIMATION['prompt'])
+            self.assertEqual(body['mode'], 'keyframe')
+            self.assertEqual(body['first_frame'], self.images[0]['url'])
+            self.assertNotIn('images', body)
+
+    def test_provider_portrait_is_padded_to_bank_canvas_without_stretching(self):
+        source = self.root/'source.mp4'
+        subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'color=c=green:s=720x1260:r=12:d=4',
+                        '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', str(source)], check=True)
+        output = self.root/'clip-0.mp4'
+        with patch('urllib.request.urlopen', return_value=io.BytesIO(source.read_bytes())):
+            saved = self.pool.download('https://example.org/video.mp4', output, 2000)
+        probe = json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0',
+                    '-show_entries','stream=width,height','-of','json',str(output)]))
+        self.assertEqual(probe['streams'][0], {'width':720,'height':1280})
+        self.assertEqual((saved['width'], saved['height']), (720,1280))
+        self.assertFalse(output.with_suffix('.normalized.mp4').exists())

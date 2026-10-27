@@ -12,7 +12,7 @@ import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruni
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
 const category = args['--category'];
 const spec = CONTENT_CATEGORIES[category];
-if (!spec?.kinds) throw new Error('Usa --category=image-prompts|video-prompts');
+if (!spec?.kinds) throw new Error('Usa --category=image-prompts');
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const { fixtures, top: selectedTop } = await readContentSelection();
 const onlyMatch = args['--match'];

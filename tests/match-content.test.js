@@ -31,3 +31,9 @@ test('retired motion category has no route or public contract', () => {
   assert.throws(() => contentUrl('alpha-beta', 'motion-prompts'), /desconocida/);
   assert.equal(validateContent({ category: 'motion-prompts' }, 'motion-prompts', 'alpha-beta'), false);
 });
+
+
+test('Video Prompts has no public content URL or generation category', () => {
+  assert.equal(CONTENT_CATEGORIES['video-prompts'], undefined);
+  assert.throws(() => contentUrl('alpha-beta', 'video-prompts'), /Categoría desconocida/);
+});

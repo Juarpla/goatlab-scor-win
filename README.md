@@ -60,7 +60,7 @@ Las decisiones del producto están en PRODUCT.md. El diseño se construirá dire
 ### Contenido audiovisual
 
 `pnpm content` prepara los guiones y prompts del top 5 configurable. Admite
-`--category=all|scripts|image-prompts|video-prompts`, `--match=<webId>`,
+`--category=all|scripts|image-prompts`, `--match=<webId>`,
 `--top=N` y `--force`. Las categorías se guardan de forma independiente y conservan
 el contenido válido existente. Tanto en local como en GitHub Actions, la prioridad es
 DeepSeek V4.1 Flash → GLM-5.3-Flash → Mistral → Workers AI,
@@ -75,7 +75,7 @@ Para medir latencia y validar borradores sin publicarlos:
 `node --env-file=.env scripts/benchmark-content-llm.mjs --match=<webId> --runs=2`.
 Los resultados y textos se guardan en `.cache/content-llm-benchmark/`.
 
-Cada partido tiene `/scripts`, `/image-prompts` y `/video-prompts`
+Cada partido tiene `/scripts` e `/image-prompts`
 con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
 para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
 partido y consulta el banco compartido de 4 imágenes y hasta 2 clips Agnes
@@ -124,3 +124,11 @@ recuperar/retirar productores, seguir [AGNES-STATE.md](AGNES-STATE.md). La conti
 los archivos publicados en R2 y el JSON privado; los temporales se eliminan tras
 confirmar la subida. Una generación consumida perdida sin identificador recuperable
 conserva el bloqueo y puede dejar el banco parcial.
+
+Los clips usan la frase fija «Animate this image with fast, precise, hyperrealistic movements.»
+de `src/lib/video-animation.json`, sincronizada con el consumidor portátil. No se
+generan documentos Video Prompts ni páginas de esa categoría. Agnes recibe la imagen
+como `first_frame` en modo `keyframe`, seis segundos, 720P y 9:16. Las reservas
+y las tareas aceptadas conservan sus hashes originales para recuperar y reutilizar
+clips anteriores sin repetir POST. La huella v3 incluye la política fija y las
+imágenes; un inventario anterior se vuelve a verificar antes de publicar la nueva huella.

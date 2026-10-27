@@ -1,5 +1,6 @@
 /** Public bank evidence; callers establish storage proofs before publishing. */
 import { createHash } from 'node:crypto';
+import animation from './video-animation.json' with { type: 'json' };
 import { esName } from './teams.js';
 import { assetErrors } from './media.js';
 import { CONTENT_VERSION, contentIdentityErrors } from './match-content.js';
@@ -19,7 +20,7 @@ const validPhotos = photos => Array.isArray(photos) && photos.length <= 4
   && ['id', 'url', 'sha256'].every(key => distinct(photos, key));
 
 /** Motion, author, generation dates and editorial titles do not affect Agnes input. */
-export function contentFingerprint(match, imagePack, videoPack) {
+export function contentFingerprint(match, imagePack) {
   const matchId = match?.webId ?? match?.id;
   const kickoff = time(match?.kickoff);
   if (!safeId(matchId) || typeof match?.home !== 'string' || !match.home.trim() || typeof match?.away !== 'string' || !match.away.trim()
@@ -28,7 +29,6 @@ export function contentFingerprint(match, imagePack, videoPack) {
   const inputs = [];
   for (const [category, pack, count, fallback] of [
     ['image-prompts', imagePack, 4, 'agnes-image-2.5-flash'],
-    ['video-prompts', videoPack, 2, 'agnes-video-2.5-flash'],
   ]) {
     // Acepta v1 y v2: los bancos generados con CONTENT_VERSION 2 siguen vigentes.
     if (!pack || (pack.version !== CONTENT_VERSION && pack.version !== CONTENT_VERSION + 1) || pack.category !== category || contentIdentityErrors(pack, match).length
@@ -38,7 +38,7 @@ export function contentFingerprint(match, imagePack, videoPack) {
     if (typeof model !== 'string' || !model.trim()) return null;
     inputs.push({ category, model, prompts: pack.prompts.map(row => row.prompt) });
   }
-  return sha(JSON.stringify({ version: 2, identity, inputs }));
+  return sha(JSON.stringify({ version: 3, identity, inputs, animation }));
 }
 
 /** Count alone never certifies a bank; fingerprints and storage/media evidence do. */

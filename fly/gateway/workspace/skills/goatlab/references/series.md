@@ -13,7 +13,7 @@ Si hay varios audios en un turno, procésalos en orden de llegada, uno por llama
    en un solo mensaje. Cada partido va en su línea, separado por la fecha de Lima
    y ordenado por hora. No reordenes, no uses otra fecha y no juntes días distintos.
    Si falla o `text` está vacío, informa el error y termina ese paso. Sin botones.
-3. Número elegido: `select --chat=<chat> --number=<n>`. Los JSON de Scripts, Image Prompts y Video Prompts se consultan
+3. Número elegido: `select --chat=<chat> --number=<n>`. Los JSON de Scripts e Image Prompts se consultan
    desde goatlab.win y se guardan con la serie. La consulta del banco R2 queda programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,
    sin esperar. Manda los 10 audios. Graba hasta 50 segundos por audio.» Después: «📸 Estoy consultando las imágenes y clips publicados en R2.

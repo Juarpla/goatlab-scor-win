@@ -22,7 +22,7 @@ function options(args) {
     return i < 0 ? [arg, true] : [arg.slice(0, i), arg.slice(i + 1)];
   }));
 }
-function inputEvidence(bank, images, videos, imageModel, videoModel, mode, matchId) {
+function inputEvidence(bank, images, imageModel, videoModel, mode, matchId) {
   // Photos can be adopted in a different order; their canonical IDs identify the prompt slot.
   for (const photo of bank.assets) {
     const ordinal = images.prompts.findIndex((_, index) => photo.id === `${matchId}-${index}`);
@@ -36,7 +36,7 @@ function inputEvidence(bank, images, videos, imageModel, videoModel, mode, match
     if (!/^[0-4]$/.test(suffix)) return false;
     const ordinal = Number(suffix), file = `clip-${ordinal}.mp4`;
     if ((clip.file !== undefined && clip.file !== file) || new URL(clip.url).pathname.split('/').at(-1) !== file
-      || !videos.prompts.some(prompt=>clip.promptHash===hash(prompt.prompt)) || clip.model !== videoModel) return false;
+      || !/^[a-f0-9]{64}$/.test(clip.promptHash) || clip.model !== videoModel) return false;
   }
   return true;
 }
@@ -73,18 +73,17 @@ export async function checkMediaComplete({ repo = process.cwd(), args = {}, env 
     result.eligible += 1;
     const matchId = match?.webId ?? match?.id;
     if (!safeId(matchId)) { result.pending += 1; continue; }
-    const [script, images, videos, bank] = await Promise.all([
+    const [script, images, bank] = await Promise.all([
       json(join(data, 'youtube-scripts', `${matchId}.json`)),
       json(join(data, 'image-prompts', `${matchId}.json`)),
-      json(join(data, 'video-prompts', `${matchId}.json`)),
       json(join(bankDirectory, `${matchId}.json`)),
     ]);
     const validPack = (pack, category) => validateContent(pack, category, matchId) && !contentIdentityErrors(pack, match).length;
-    const fingerprint = contentFingerprint(match, { ...images, generationModel: imageModel }, { ...videos, generationModel: videoModel });
+    const fingerprint = contentFingerprint(match, { ...images, generationModel: imageModel });
     // An explicitly limited mode certifies its subset, while the stored full-bank status stays partial.
     const candidate = mode !== 'all' && bank?.bankStatus === 'partial' ? { ...bank, bankStatus: 'complete' } : bank;
-    if (scriptStructureErrors(script, { matchId, match }).length || !validPack(images, 'image-prompts') || !validPack(videos, 'video-prompts')
-      || !bankComplete(candidate, { matchId, fingerprint, mode, now }) || !inputEvidence(candidate, images, videos, imageModel, videoModel, mode, matchId)) result.pending += 1;
+    if (scriptStructureErrors(script, { matchId, match }).length || !validPack(images, 'image-prompts')
+      || !bankComplete(candidate, { matchId, fingerprint, mode, now }) || !inputEvidence(candidate, images, imageModel, videoModel, mode, matchId)) result.pending += 1;
   }
   result.complete = result.pending === 0;
   result.reason = !result.eligible ? 'no-eligible' : result.complete ? 'complete' : 'pending';

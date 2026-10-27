@@ -5,7 +5,6 @@ export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MO
 export const CONTENT_CATEGORIES = Object.freeze({
   scripts: { label: 'Scripts', directory: 'youtube-scripts', count: 10 },
   'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 4, kinds: ['ball-duel', 'goal-action', 'supporters', 'stadium'] },
-  'video-prompts': { label: 'Video Prompts', directory: 'video-prompts', count: 2, kinds: ['push-in', 'tracking'] },
 });
 export function contentUrl(matchId, category, json = false) {
   if (!CONTENT_CATEGORIES[category]) throw new Error('Categoría desconocida');
@@ -61,7 +60,7 @@ export function scriptStructureErrors(data, { matchId = null, match = null } = {
   return errors;
 }
 export function promptErrors(data, { category = data?.category, home = data?.home, away = data?.away, facts = data?.facts ?? [], published = false } = {}) {
-  const spec = CONTENT_CATEGORIES[category];
+  const spec = CONTENT_CATEGORIES[category] ?? (category === 'video-prompts' ? { count: 2, kinds: ['push-in', 'tracking'] } : null);
   if (!spec?.kinds) return ['Categoría de prompts desconocida'];
   if (!data || !Array.isArray(data.prompts) || data.prompts.length !== spec.count) return [`Se requieren ${spec.count} prompts`];
   const errors = [];

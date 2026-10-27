@@ -26,7 +26,7 @@ test('v1 and v2 prompt documents share fingerprints without accepting unsupporte
   }
   for (const version of [undefined, 0, 3, '2']) {
     assert.equal(contentFingerprint(match, { ...images, version }, videos), null);
-    assert.equal(contentFingerprint(match, images, { ...videos, version }), null);
+    assert.equal(contentFingerprint(match, images, { ...videos, version }), expected);
   }
 });
 
@@ -39,7 +39,7 @@ test('fingerprint follows exact Agnes input and effective models, excluding edit
   assert.equal(contentFingerprint(match, metadata, videos), initial);
   assert.equal(contentFingerprint({ ...match, kickoff: '2026-10-09T18:00:00+00:00' }, images, videos), initial);
   assert.notEqual(contentFingerprint(match, { ...images, generationModel: 'another-image-model' }, videos), initial);
-  assert.notEqual(contentFingerprint(match, images, { ...videos, generationModel: 'another-video-model' }), initial);
+  assert.equal(contentFingerprint(match, images, { ...videos, generationModel: 'another-video-model' }), initial);
   const changed = structuredClone(images); changed.prompts[0].prompt += ' ';
   assert.notEqual(contentFingerprint(match, changed, videos), initial);
 });
@@ -49,7 +49,7 @@ test('invalid prompt identity or incomplete inputs cannot have a fingerprint', (
   for (const override of [{ matchId: 'other' }, { home: 'Other Home' }, { away: 'Other Away' }, { competition: 'other' }, { kickoff: '2026-10-09T19:00:00Z' }, { prompts: [] }, { generationModel: '' }]) {
     assert.equal(contentFingerprint(match, { ...images, ...override }, videos), null);
   }
-  assert.equal(contentFingerprint(match, images, null), null);
+  assert.equal(contentFingerprint(match, images, null), contentFingerprint(match, images));
   assert.equal(contentFingerprint({ ...match, kickoff: 'unknown' }, images, videos), null);
 });
 

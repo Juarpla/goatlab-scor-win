@@ -13,10 +13,9 @@ LIMA = ZoneInfo('America/Lima')
 WEEKDAYS = ('lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo')
 MONTHS = ('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre')
 
-CATEGORIES = {'scripts': ('youtube-scripts', 10), 'image-prompts': ('image-prompts', 4), 'video-prompts': ('video-prompts', 2)}
+CATEGORIES = {'scripts': ('youtube-scripts', 10), 'image-prompts': ('image-prompts', 4)}
 KINDS = {
     'image-prompts': ['ball-duel','goal-action','supporters','stadium'],
-    'video-prompts': ['push-in','tracking'],
 }
 
 

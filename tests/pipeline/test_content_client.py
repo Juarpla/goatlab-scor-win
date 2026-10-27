@@ -26,7 +26,7 @@ class ContentTests(unittest.TestCase):
         from content_client import valid
         image=self.pack('image-prompts',['ball-duel','goal-action','supporters','stadium'])
         video=self.pack('video-prompts',['push-in','tracking'])
-        for category,data in [('image-prompts',image),('video-prompts',video)]:
+        for category,data in [('image-prompts',image)]:
             self.assertTrue(valid(data,category,'a-b'), category)
         # El contrato antiguo (10 fotos / 5 clips) se rechaza: mismo fallo que rompió Croacia.
         old_image=self.pack('image-prompts',['ball-duel','pressing','passing','dribbling','crossing','defending','aerial-duel','goal-action','supporters','stadium'])
@@ -36,6 +36,7 @@ class ContentTests(unittest.TestCase):
     def test_retired_category_is_not_requested(self):
         from content_client import KINDS, valid
         self.assertNotIn('motion-prompts', KINDS)
+        self.assertNotIn('video-prompts', KINDS)
         self.assertFalse(valid({}, 'motion-prompts', 'a-b'))
 
     def test_telegram_list_uses_lima_day_and_drops_started_matches(self):

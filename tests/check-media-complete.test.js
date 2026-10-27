@@ -18,7 +18,7 @@ function match(id = 'alpha-beta', overrides = {}) {
 }
 function pack(m, category) {
   return { version: 1, category, matchId: m.webId, home: m.home, away: m.away, competition: m.competition, kickoff: m.kickoff,
-    prompts: CONTENT_CATEGORIES[category].kinds.map((kind, i) => ({ n: i + 1, kind, title: kind,
+    prompts: (CONTENT_CATEGORIES[category]?.kinds ?? ['push-in', 'tracking']).map((kind, i) => ({ n: i + 1, kind, title: kind,
       prompt: category === 'image-prompts'
         ? `Referential photorealistic illustration of Alpha and Beta football teams in realistic uniforms, vertical 9:16. ${kind} Stadium, supporters, flags and team crests. ${'Natural lighting and realistic anatomy. '.repeat(5)}`
         : `A 6-second camera movement for the reference image, vertical 9:16. ${kind}. ${'Maintain the original realistic scene and consistent lighting. '.repeat(5)}` })) };
@@ -78,7 +78,7 @@ test('checker accepts v2 documents without invalidating an unchanged proven bank
 test('legacy, partial, changed prompts and inconsistent input evidence keep a bank pending', async t => {
   const f = await fixture(t);
   const { value, images } = await f.complete();
-  for (const change of [b => delete b.bankVersion, b => { b.bankStatus = 'partial'; }, b => { b.contentFingerprint = hash('old'); }, b => { b.assets[0].promptHash = hash('wrong'); }, b => { b.assets[0].generated.model = 'different'; }, b => { b.clips[0].promptHash = hash('wrong'); }, b => { b.clips[0].referenceHash = hash('absent-photo'); }, b => { b.clips[0].duration = 13; }, b => { b.storageVerifiedAt = stamp(1); }]) {
+  for (const change of [b => delete b.bankVersion, b => { b.bankStatus = 'partial'; }, b => { b.contentFingerprint = hash('old'); }, b => { b.assets[0].promptHash = hash('wrong'); }, b => { b.assets[0].generated.model = 'different'; }, b => { b.clips[0].promptHash = 'invalid'; }, b => { b.clips[0].referenceHash = hash('absent-photo'); }, b => { b.clips[0].duration = 13; }, b => { b.storageVerifiedAt = stamp(1); }]) {
     const bad = structuredClone(value); change(bad);
     await f.put('media-pack/alpha-beta.json', bad);
     assert.equal((await f.check()).pending, 1);
@@ -185,4 +185,10 @@ test('automatic gate selects exactly the shared five despite extras, priority, e
   const empty = await f.check({}, { CONTENT_AUTOMATIC: '1' });
   assert.equal(empty.reason, 'no-eligible');
   assert.equal(empty.complete, true);
+});
+
+test('completion does not depend on the retired video document', async t => {
+  const f = await fixture(t); await f.complete();
+  await rm(join(f.data, 'video-prompts'), {recursive: true});
+  assert.equal((await f.check()).complete, true);
 });

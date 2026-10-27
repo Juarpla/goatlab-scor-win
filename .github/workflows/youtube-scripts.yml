@@ -14,7 +14,7 @@ on:
         description: 'Contenido que se debe preparar'
         type: choice
         default: all
-        options: [all, scripts, image-prompts, video-prompts]
+        options: [all, scripts, image-prompts]
       force:
         description: 'Reescribir aunque el JSON ya exista'
         type: boolean
@@ -90,7 +90,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for path in public/data/youtube-scripts public/data/image-prompts public/data/video-prompts public/data/llm-health.json public/data/top.json; do
+          for path in public/data/youtube-scripts public/data/image-prompts public/data/llm-health.json public/data/top.json; do
             if [ -e "$path" ]; then git add "$path"; fi
           done
           if git diff --cached --quiet; then
@@ -124,7 +124,6 @@ jobs:
             .cache/content-selection.json
             public/data/youtube-scripts/*.json
             public/data/image-prompts/*.json
-            public/data/video-prompts/*.json
           retention-days: 7
       - name: Comprobar resultado de generación
         if: always() && steps.scripts.outcome == 'failure'

@@ -9,7 +9,7 @@ import { CONTENT_CATEGORIES, validateContent } from '../src/lib/match-content.js
 
 const scripts = [
   { category: 'scripts', directory: 'youtube-scripts', script: resolve('scripts/generate-youtube-scripts.mjs') },
-  ...['image-prompts', 'video-prompts'].map(category => ({ category, directory: category, script: resolve('scripts/generate-match-prompts.mjs') })),
+  ...['image-prompts'].map(category => ({ category, directory: category, script: resolve('scripts/generate-match-prompts.mjs') })),
 ];
 const NOW = Date.now();
 const stamp = offset => new Date(NOW + offset).toISOString();

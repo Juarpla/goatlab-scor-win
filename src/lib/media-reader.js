@@ -8,6 +8,7 @@ import { normalizeAgnesImage } from './agnes.js';
 import { validateContent, contentIdentityErrors } from './match-content.js';
 import { contentFingerprint, bankComplete } from './media-contract.js';
 import { editingFacts } from './match-facts.js';
+import animation from './video-animation.json' with { type: 'json' };
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const digest = value => /^[a-f0-9]{64}$/.test(value ?? '');
@@ -39,13 +40,12 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
   const issues = [], assets = [], clips = [];
   const deadline = clock() + 90_000;
   const base = (env.R2_PUBLIC_BASE || env.MEDIA_GEN_BASE || '').replace(/\/$/, '');
-  const fingerprint = contentFingerprint(match, content['image-prompts'], content['video-prompts']);
+  const fingerprint = contentFingerprint(match, content['image-prompts']);
   const validPack = category => validateContent(content[category], category, matchId) && !contentIdentityErrors(content[category], match).length;
   const imagePrompts = validPack('image-prompts') ? content['image-prompts'].prompts : [];
-  const videoPrompts = validPack('video-prompts') ? content['video-prompts'].prompts : [];
   // Photo/video packs already carry the immutable catalog assembled by Actions.
   // A Telegram snapshot may contain only match identity, without recent form.
-  const factsCategory = ['image-prompts', 'video-prompts'].find(category => validPack(category) && content[category].facts?.length);
+  const factsCategory = ['image-prompts'].find(category => validPack(category) && content[category].facts?.length);
   const facts = factsCategory ? content[factsCategory].facts : editingFacts(match);
   const compatible = fingerprint && prior?.matchId === matchId && prior?.contentFingerprint === fingerprint;
   const startedProgress = { count: compatible ? prior.assets?.length ?? 0 : 0, clips: compatible ? prior.clips?.length ?? 0 : 0,
@@ -108,20 +108,20 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
     const row = compatible && rows?.find(r => {
       try { return new URL(r.url).pathname.split('/').at(-1) === file; } catch { return false; }
     });
-    if (!row || row.source !== 'agnes' || (kind==='video'?!videoPrompts.some(prompt=>hash(prompt.prompt)===row.promptHash):row.promptHash !== hash(expectedPrompt || '')) || row.model !== model || !(await cached(file, row.sha256))) return;
+    if (!row || row.source !== 'agnes' || (kind==='video'?!digest(row.promptHash):row.promptHash !== hash(expectedPrompt || '')) || row.model !== model || !(await cached(file, row.sha256))) return;
     if (kind === 'image' && !assetErrors(row).length) assets.push(row);
     if (kind === 'video' && assets.some(a => hash(a.url) === row.referenceHash)) clips.push(row);
   };
   let configured = false;
   try { const url = new URL(base); configured = url.protocol === 'https:' && !url.username && !url.password; } catch {}
   if (!configured) issue('bank', 0, 'configuration');
-  if (!imagePrompts.length || !videoPrompts.length) issue('bank', 0, 'prompts');
+  if (!imagePrompts.length) issue('bank', 0, 'prompts');
   if (!configured && compatible) {
     for (const [ordinal, row] of (prior.assets ?? []).slice(0, ASSETS_PER_MATCH).entries()) {
       try { await retain('image', ordinal, new URL(row.url).pathname.split('/').at(-1), row.query, row.model); } catch {}
     }
     for (const [ordinal, row] of (prior.clips ?? []).slice(0, CLIPS_PER_MATCH).entries()) {
-      try { await retain('video', ordinal, row.file, videoPrompts[ordinal % videoPrompts.length]?.prompt, row.model); } catch {}
+      try { await retain('video', ordinal, row.file, animation.prompt, row.model); } catch {}
     }
   }
   if (configured) {
@@ -146,19 +146,18 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
         }
       }
     }
-    for (let ordinal = 0; ordinal < 5 && clips.length < CLIPS_PER_MATCH && videoPrompts.length; ordinal++) {
+    for (let ordinal = 0; ordinal < 5 && clips.length < CLIPS_PER_MATCH; ordinal++) {
       const file = `clip-${ordinal}.mp4`;
-      let prompt=videoPrompts[ordinal % videoPrompts.length].prompt;
-      const model = content['video-prompts'].generationModel ?? content['video-prompts'].model ?? 'agnes-video-2.5-flash';
+      const prompt = animation.prompt;
+      const model = animation.model;
       try {
         const meta = await head(file);
         if (!meta) continue;
         if(meta.publicationindex!==undefined) {
           const attempt=Number(meta.attemptordinal);
           if(![1,2].includes(ordinal)||Number(meta.publicationindex)!==ordinal||!Number.isInteger(attempt)||attempt<0||attempt>4||!meta.attemptid)throw new Error('validation');
-          prompt=videoPrompts[attempt % videoPrompts.length].prompt;
         }
-        if (meta.prompthash !== hash(prompt) || meta.model !== model || !digest(meta.sha256) || !assets.some(a => hash(a.url) === meta.referencehash)
+        if (!digest(meta.prompthash) || meta.model !== model || !digest(meta.sha256) || !assets.some(a => hash(a.url) === meta.referencehash)
           || Number(meta.width) !== 720 || Number(meta.height) !== 1280 || !Number.isFinite(Number(meta.duration)) || Number(meta.duration) < 4 || Number(meta.duration) > 12.5) throw new Error('validation');
         await download(file, meta, 32_000_000, 'video/');
         clips.push({ id: `${matchId}-clip-${ordinal}`, source: 'agnes', file, url: publicUrl(file), width: 720, height: 1280,

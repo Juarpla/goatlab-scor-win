@@ -116,10 +116,18 @@ test('graphics retain verified facts from photo/video packs without motion conte
   let bank = JSON.parse(await readFile(join(f.dir, 'a-b.json')));
   assert.deepEqual(bank.facts, [fact]);
   assert.equal(bank.motionPrompts, undefined);
-  // Reject an identity-mismatched pack, using the video pack's catalog instead.
+  // Retired video documents cannot supply facts when the image identity is invalid.
   f.content['image-prompts'].home = 'Wrong team';
   f.content['video-prompts'].facts = [{ ...fact, value: 3 }];
   await f.run();
   bank = JSON.parse(await readFile(join(f.dir, 'a-b.json')));
-  assert.equal(bank.facts[0].value, 3);
+  assert.deepEqual(bank.facts, []);
+});
+
+test('R2 media consumption does not require video prompt content', async t => {
+  const f = await fixture(t);
+  delete f.content['video-prompts'];
+  for (let ordinal=0;ordinal<4;ordinal++) f.photo(ordinal);
+  f.clip(0); f.clip(1);
+  assert.equal((await f.run()).complete, true);
 });

@@ -211,3 +211,22 @@ registrada ni fechas de Retry-After. Una admisión aplazada identifica el contro
 local, la próxima fecha permitida y la espera; no representa una respuesta HTTP.
 Las omisiones de ritmo y las tareas vigentes se reportan como pendientes, con
 código 0; un fallo real de R2 o del estado sigue produciendo código 2.
+
+## Animación con una instrucción fija
+
+Los nuevos vídeos usan `video-animation.json`: una imagen como `first_frame`,
+modo `keyframe` y la frase «Animate this image with fast, precise, hyperrealistic
+movements.». No se producen ni se consumen documentos Video Prompts. La copia de
+la configuración en el skill se verifica con `sync-goatlab-skill.mjs --check`.
+El banco sigue ofreciendo cuatro imágenes y dos clips de seis segundos.
+
+La huella v3 depende de las imágenes, la identidad del partido y la configuración
+fija. Los bancos anteriores se revalidan desde R2 antes de publicar esa huella.
+Los clips existentes y las tareas aceptadas mantienen el promptHash y referenceHash
+de su reserva original; cambiar la instrucción no concede otra reserva ni invalida
+un clip confirmado. El lector valida el checksum, el modelo, la referencia a una
+foto retenida y los metadatos de publicación sin requerir el texto retirado.
+
+Agnes puede devolver 720×1260 incluso con `aspect_ratio=9:16`. El adaptador conserva
+las proporciones y añade márgenes para entregar el lienzo 720×1280 del banco; no
+estira la imagen. La normalización y la descarga usan el mismo presupuesto temporal.
