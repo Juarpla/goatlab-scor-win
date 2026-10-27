@@ -2,15 +2,17 @@
 
 El banco pertenece al partido y reúne cuatro imágenes y dos clips Agnes, reutilizables
 entre audios y chats. El montaje puede continuar con recursos parciales y gráficos.
-Las fotos externas se filtran. Los prompts publicados de imagen/vídeo deben coincidir
-con ID, equipos traducidos, competición y kickoff; motion inválido usa `editingFacts`.
+Las fotos externas se filtran. Los prompts publicados de imagen deben coincidir
+con ID, equipos traducidos, competición y kickoff. Los clips usan la configuración
+fija de `lib/video-animation.json`; el productor conserva los hashes originales de
+los clips anteriores. El catálogo de gráficos procede del paquete de imágenes o `editingFacts`.
 El top debe ser válido y tener como máximo siete horas. Una petición manual omite
 solamente su antigüedad y conserva el límite kickoff + 24 h.
 
 ## Consulta y reintentos en Gateway
 
 Gateway consulta objetos del prefijo `partidos/<id>/` mediante HEAD firmado para
-metadatos y GET público para comprobar acceso y checksum. Verifica los prompts y
+metadatos y GET público para comprobar acceso y checksum. Verifica los prompts de imagen y
 la identidad del partido; solo publica en su caché local los recursos compatibles.
 No consulta cuotas Agnes ni escribe o borra objetos de R2. La consulta tiene un
 límite de 90 segundos. Un 404 significa recurso ausente; 403, transporte y recursos
@@ -32,7 +34,7 @@ falló. Los errores de montaje y de consulta del banco se comunican separadament
 
 ## Producción y conservación en Actions
 
-GitHub Actions genera imágenes, clips y prompts, publica en R2 y realiza el
+GitHub Actions genera guiones, prompts de imagen y media, publica en R2 y realiza el
 mantenimiento remoto. La admisión, cuotas y recuperación Agnes mantienen el
 contrato de `AGNES-STATE.md`; Gateway utiliza `MEDIA_ROLE=consumer` y el productor
 exige `MEDIA_ROLE=producer` dentro de GitHub Actions. Actions reintenta a las
