@@ -15,6 +15,8 @@ from fake_agnes_state import FakeAgnesState
 
 class ResourceRetries(unittest.TestCase):
     def setUp(self):
+        target = patch('media_policy.CONFIG', {'mode':'freedom','matches':None,'clips':2})
+        target.start(); self.addCleanup(target.stop)
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -49,6 +51,25 @@ class ResourceRetries(unittest.TestCase):
         self.assertNotIn('5/5', '; '.join(result['failures']))
         self.bank(self.pool(), self.rejected(503))
         self.assertEqual(len(self.posts), 4)
+    def test_production_four_clips_preserve_verified_three_and_publish_only_fourth(self):
+        with patch('media_policy.CONFIG', {'mode':'freedom','matches':None,'clips':4}):
+            for i in range(3):
+                self.state.seed('a-b', i)
+                self.state.slots[('a-b','video',i)]['publicationIndex'] = i+1
+                self.state.event(self.state.status('a-b','video',i)['attemptId'], 'completed')
+            def call(url, body=None, **kwargs):
+                if body is not None:
+                    self.posts.append(body)
+                    return {'video_id':'fourth-task'}
+                return {'status':'completed','url':'https://example.org/fourth.mp4'}
+            result = self.pool().bank('a-b', [], self.images, self.root, 2000, 3000,
+                call=call, download=self.download, verified=[f'clip-{i}.mp4' for i in range(3)])
+            self.assertEqual(len(self.posts), 1)
+            self.assertEqual(result['runPosts'], {'4':1})
+            self.assertEqual(result['clips'][0]['index'], 3)
+            self.assertEqual(self.state.status('a-b','video',3)['publicationIndex'], 4)
+            self.assertEqual(len(self.state.slots), 4)
+
     def test_three_posts_per_clip_without_accumulated_budget(self):
         result = self.bank(self.pool(), self.rejected(500))
         self.assertEqual(len(self.posts), 6)

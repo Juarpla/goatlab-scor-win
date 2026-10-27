@@ -13,7 +13,7 @@ function pack(category, count) {
 }
 function bank() {
   const assets = Array.from({ length: 4 }, (_, index) => ({ ...normalizeAgnesImage({ matchId: 'a-b', index, publicUrl: `https://media.test/${index}.jpg`, at: new Date(now).toISOString() }), sha256: hash(`photo ${index}`) }));
-  const clips = Array.from({ length: 2 }, (_, index) => ({ id: `a-b-clip-${index}`, source: 'agnes', url: `https://media.test/clip-${index}.mp4`, model: 'agnes-video-2.5-flash', width: 720, height: 1280, duration: 6, sha256: hash(`clip ${index}`), promptHash: hash(`video prompt ${index}`), referenceHash: hash(assets[index].url) }));
+  const clips = Array.from({ length: 4 }, (_, index) => ({ id: `a-b-clip-${index}`, source: 'agnes', url: `https://media.test/clip-${index}.mp4`, model: 'agnes-video-2.5-flash', width: 720, height: 1280, duration: 6, sha256: hash(`clip ${index}`), promptHash: hash(`video prompt ${index}`), referenceHash: hash(assets[index%2].url) }));
   return { bankVersion: 2, bankStatus: 'complete', matchId: 'a-b', contentFingerprint: contentFingerprint(match, pack('image-prompts', 4), pack('video-prompts', 2)), storageVerifiedAt: new Date(now).toISOString(), assets, clips };
 }
 const options = value => ({ matchId: 'a-b', fingerprint: value.contentFingerprint, now });
@@ -103,16 +103,10 @@ test('mode-specific completion does not claim the missing other half', () => {
   assert.equal(bankComplete({ ...value, assets: [] }, { ...options(value), mode: 'clips-only' }), false);
 });
 
-test('trial needs three verified distinct clips and keeps the same content fingerprint', () => {
-  const value = bank(), matchId = 'levante-ud-vs-atletico-madrid-2026-10-31';
-  value.matchId = matchId;
-  const opts = { ...options(value), matchId };
-  assert.equal(bankComplete(value, opts), false);
-  value.clips.push({ ...value.clips[0], id:'clip-extra', url:'https://media.test/clip-3.mp4', sha256:hash('third clip') });
-  assert.equal(bankComplete(value, opts), true);
-  // Switching back to freedom accepts the stored third without discarding it.
-  value.matchId = 'a-b';
-  assert.equal(bankComplete(value, options(value)), true);
-  value.clips.push({ ...value.clips[0], id:'clip-fourth', url:'https://media.test/clip-4.mp4', sha256:hash('fourth') });
-  assert.equal(bankComplete(value, options(value)), false);
+test('freedom requires four distinct verified clips while historical banks remain partial', () => {
+  const value = bank();
+  for (const count of [2, 3]) assert.equal(bankComplete({...value, clips:value.clips.slice(0,count)}, options(value)),false);
+  assert.equal(bankComplete(value,options(value)),true);
+  value.clips.push({...value.clips[0],id:'fifth',url:'https://media.test/clip-5.mp4',sha256:hash('fifth')});
+  assert.equal(bankComplete(value,options(value)),false);
 });

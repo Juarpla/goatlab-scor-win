@@ -38,12 +38,12 @@ async function fixture(t) {
   const run = () => readMediaBank({ match, content, dir, env, fetchImpl, clock: () => now });
   return { dir, match, content, env, calls, objects, photo, clip, run, fail: value => { failure = value; }, corrupt: () => { corrupt = true; } };
 }
-test('reader verifies a complete 4+2 bank using only R2 reads without producer credentials', async t => {
+test('reader verifies a complete 4+4 bank using only R2 reads without producer credentials', async t => {
   const f = await fixture(t);
   for (let i=0; i<4; i++) f.photo(i);
-  f.clip(0); f.clip(1);
+  for(let i=0;i<4;i++) f.clip(i);
   const result = await f.run();
-  assert.equal(result.count, 4); assert.equal(result.clips, 2); assert.equal(result.complete, true);
+  assert.equal(result.count, 4); assert.equal(result.clips, 4); assert.equal(result.complete, true);
   assert.equal(result.phase, 'finished');
   const bank = JSON.parse(await readFile(join(f.dir, 'a-b.json')));
   assert.equal(bank.bankStatus, 'complete'); assert.equal(bank.assets.length, 4);
@@ -128,25 +128,25 @@ test('R2 media consumption does not require video prompt content', async t => {
   const f = await fixture(t);
   delete f.content['video-prompts'];
   for (let ordinal=0;ordinal<4;ordinal++) f.photo(ordinal);
-  f.clip(0); f.clip(1);
+  for(let i=0;i<4;i++) f.clip(i);
   assert.equal((await f.run()).complete, true);
 });
 
-test('reader carries canonical clip 3 through to the montage with checksum verification', async t => {
+test('reader carries canonical clip 4 through to the montage with checksum verification', async t => {
   const f = await fixture(t), matchId = 'levante-ud-vs-atletico-madrid-2026-10-31';
   f.match.webId = matchId;
   for (const pack of Object.values(f.content)) { pack.webId = matchId; pack.matchId = matchId; }
   for (let i=0; i<4; i++) f.photo(i);
-  for (let i=1; i<=3; i++) {
+  for (let i=1; i<=4; i++) {
     f.clip(i);
     Object.assign(f.objects.get(`clip-${i}.mp4`).meta, { publicationindex:String(i), attemptordinal:String(i-1), attemptid:'attempt-'+i,
       referencehash:hash(`https://media.test/partidos/${matchId}/${i%4}.png`) });
   }
   const result = await f.run();
-  assert.equal(result.complete, true); assert.equal(result.clips, 3); assert.equal(result.clipTarget, 3);
+  assert.equal(result.complete, true); assert.equal(result.clips, 4); assert.equal(result.clipTarget, 4);
   const bank = JSON.parse(await readFile(join(f.dir, matchId+'.json')));
-  assert.equal(bank.clips[2].file, 'clip-3.mp4');
-  f.objects.get('clip-3.mp4').meta.publicationindex = '4';
-  await rm(join(f.dir, 'gen', matchId, 'clip-3.mp4'));
+  assert.equal(bank.clips[3].file, 'clip-4.mp4');
+  f.objects.get('clip-4.mp4').meta.publicationindex = '5';
+  await rm(join(f.dir, 'gen', matchId, 'clip-4.mp4'));
   assert.equal((await f.run()).complete, false);
 });

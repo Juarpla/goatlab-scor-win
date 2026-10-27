@@ -16,7 +16,7 @@ function clip(file, url = `https://goatlab-gateway.fly.dev/media-gen/a-b/${file}
   return { id: `a-b-clip-0`, source: 'agnes', file, url, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash' };
 }
 
-test('readMediaBank sanea al contrato 4 fotos + 2 clips y conserva los fallos', async t => {
+test('readMediaBank conserva un banco histórico de dos clips como parcial', async t => {
   const dir = await mkdtemp(join(tmpdir(), 'media-bank-')); t.after(() => rm(dir, { recursive: true, force: true }));
   const assets = [asset('a-b-0'), asset('a-b-1'), asset('a-b-2'), asset('a-b-3'), asset('a-b-4'),
     { source: 'external', id: 'x', url: 'https://photos.test/x.jpg' },
@@ -29,6 +29,11 @@ test('readMediaBank sanea al contrato 4 fotos + 2 clips y conserva los fallos', 
   assert.equal(bank.assets.length, 4);
   assert.deepEqual(bank.assets.map(a => a.id), ['a-b-0', 'a-b-1', 'a-b-2', 'a-b-3']);
   assert.equal(bank.clips.length, 2);
+  assert.equal(bank.bankStatus, 'partial');
+  const four = [1,2,3,4].map(i=>clip(`clip-${i}.mp4`));
+  await writeFile(join(dir, 'a-b.json'), JSON.stringify({...bank,bankStatus:'complete',clips:four}));
+  assert.equal(readMediaBank('a-b',dir).clips.length,4);
+  assert.equal(readMediaBank('a-b',dir).bankStatus,'complete');
   assert.deepEqual(bank.failures, ['clip 1: HTTP 503']);
   assert.deepEqual(mediaBankIds(dir), ['a-b']);
 });

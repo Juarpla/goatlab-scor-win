@@ -218,10 +218,12 @@ Los nuevos vídeos usan `video-animation.json`: una imagen como `first_frame`,
 modo `keyframe` y la frase «Animate this image with fast, precise, hyperrealistic
 movements.». No se producen ni se consumen documentos Video Prompts. La copia de
 la configuración en el skill se verifica con `sync-goatlab-skill.mjs --check`.
-El banco ofrece cuatro imágenes y dos clips de seis segundos en freedom, o tres
-en clips-first para los partidos de `src/lib/montage-experiment.json`. El esquema
-acepta el tercer clip y sus reservas también después del rollback; cambiar el
-modo no borra el historial ni concede otra generación a un slot consumido.
+El banco ofrece cuatro imágenes y cuatro clips de seis segundos. El objetivo
+`clips` de `src/lib/montage-experiment.json` es independiente de la dirección
+editorial: freedom permite cualquier combinación de medios y gráficos. El esquema
+admite las cuatro posiciones de publicación; cambiar el modo conserva los bancos,
+las reservas y el historial privado de R2. Los bancos con dos o tres clips siguen
+siendo utilizables como parciales, y Actions genera solo los clips que faltan.
 
 La huella v3 depende de las imágenes, la identidad del partido y la configuración
 fija. Los bancos anteriores se revalidan desde R2 antes de publicar esa huella.

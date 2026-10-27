@@ -78,7 +78,7 @@ Los resultados y textos se guardan en `.cache/content-llm-benchmark/`.
 Cada partido tiene `/scripts` e `/image-prompts`
 con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
 para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
-partido y consulta el banco compartido de 4 imágenes y hasta 2 clips Agnes
+partido y consulta el banco compartido de 4 imágenes y hasta 4 clips Agnes
 producido por GitHub Actions. Dirige el montaje según la voz y revisa el resultado. La preparación tiene un presupuesto nuevo por corrida de 50 minutos (`MEDIA_RUN_BUDGET_MS`), limitado además a kickoff + 24 horas, con entrega
 parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts`.
 
@@ -114,7 +114,7 @@ La admisión y las cuotas de Agnes se comparten mediante un JSON privado en R2;
 SQLite queda como caché. Actions consulta R2 directamente y no enciende Fly.
 Los reintentos diarios de media se ejecutan a las 02:15, 04:15 y 06:15 Lima.
 Un banco completo evita instalar pnpm, Python y ffmpeg; el mantenimiento sigue
-corriendo. Cada banco v2 completo tiene cuatro imágenes y dos clips distintos,
+corriendo. Cada banco v2 completo tiene cuatro imágenes y cuatro clips distintos,
 identidad/fingerprint coherentes y disponibilidad comprobada en R2. Los drafts
 publican únicamente los manifiestos nuevos completos; preservan el completo
 anterior si el reintento es parcial. Progresos y reportes se publican aparte.

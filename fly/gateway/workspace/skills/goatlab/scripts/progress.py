@@ -15,7 +15,7 @@ def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=
     # Compatibility arguments remain accepted; the target follows the experiment.
     clip_limit = clip_target(match_id)
     count = min(4, max(0, count))
-    clips = min(3, max(0, clips or 0))
+    clips = min(4, max(0, clips or 0))
     lines=[f'📸 Imágenes disponibles: {count}/4', f'🎞 Clips disponibles: {clips}/{clip_limit}']
     if phase in ('failed','unavailable'):
         lines.append('⚠️ No pude consultar el banco en R2. Puedes pedir reintentar imágenes.')

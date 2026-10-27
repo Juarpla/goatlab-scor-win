@@ -16,8 +16,8 @@ necesario. El código conserva el estado y asigna el número de cada audio.
 
 Flujo: elegir partido → mostrar los diez guiones originales → recibir audios en
 orden y en silencio → entrega automática de MP4. Gateway consulta el banco de
-media publicado por GitHub Actions en R2. Su tamaño y dirección siguen el modo
-de prueba documentado en [references/media.md](references/media.md). Después Render
+media publicado por GitHub Actions en R2. Su inventario y la dirección editorial se configuran por separado,
+según lo documentado en [references/media.md](references/media.md). Después Render
 monta los audios recibidos, uno a la vez, con la media disponible y motion graphics
 React/Remotion dirigidos y revisados por OpenClaw. Un banco parcial o vacío
 continúa con gráficos; no esperes diez audios. La producción de imágenes, clips y

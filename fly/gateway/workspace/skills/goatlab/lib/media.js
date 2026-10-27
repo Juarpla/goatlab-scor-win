@@ -1,9 +1,9 @@
 /** Agnes-only per-match bank. Search adapters and stock-photo selection are retired. */
+import { mediaPolicy } from './media-policy.js';
 import { esName } from './teams.js';
 export const ASSETS_PER_MATCH = 4;
-export const CLIPS_PER_MATCH = 2;
-// Baseline counts remain compatible. media-policy.js selects two or three clips
-// for generation; readers retain up to three verified clips across rollback.
+export const CLIPS_PER_MATCH = mediaPolicy().clips;
+// Legacy constants describe historical banks; current capacity lives in media-policy.js.
 export const LEGACY_ASSETS_MAX = 10;
 export const LEGACY_CLIPS_MAX = 3;
 export const ASSETS_MIN = 0;

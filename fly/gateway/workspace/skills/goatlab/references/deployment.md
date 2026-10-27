@@ -7,7 +7,7 @@ plan sea ejecutable y el MP4 no supere 55 s. [Dirección artística](creative.md
 ## Flujo y persistencia
 
 OpenClaw lee el índice y los JSON de Scripts e Image Prompts de goatlab.win. Cada serie conserva
-el contenido utilizado. Actions produce el banco Agnes definido por el modo de prueba y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
+el contenido utilizado. Actions produce el banco Agnes definido por el objetivo de producción y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
 lector independiente, verifica metadatos, prompts de imagen, checksum y acceso público,
 y publica su banco local listo en un máximo de 90 segundos. Un banco parcial o
 vacío permite montar los audios con gráficos. OpenClaw compone los gráficos por audio con el catálogo de hechos.
@@ -145,7 +145,7 @@ de medios usan solo archivos del trabajo. No es un contenedor OS nuevo por pieza
 
 La API conserva todos los assets y clips recibidos sin mínimos ni recortes de
 cantidad. El productor de Actions sigue teniendo su presupuesto de cuatro fotos y
-dos clips por partido: disponibilidad del banco no equivale a cuota de montaje.
+cuatro clips por partido: disponibilidad del banco no equivale a cuota de montaje.
 El pipeline admite cero recursos y permite no usar parte del banco. El reporte
 CREATIVE-FREEDOM-REPORT.md en la raíz documenta los límites restantes y pruebas.
 

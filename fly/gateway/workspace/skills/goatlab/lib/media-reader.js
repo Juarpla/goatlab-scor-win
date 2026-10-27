@@ -156,7 +156,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
         if (!meta) continue;
         if(meta.publicationindex!==undefined) {
           const attempt=Number(meta.attemptordinal);
-          if(![1,2,3].includes(ordinal)||Number(meta.publicationindex)!==ordinal||!Number.isInteger(attempt)||attempt<0||attempt>4||!meta.attemptid)throw new Error('validation');
+          if(![1,2,3,4].includes(ordinal)||Number(meta.publicationindex)!==ordinal||!Number.isInteger(attempt)||attempt<0||attempt>4||!meta.attemptid)throw new Error('validation');
         }
         if (!digest(meta.prompthash) || meta.model !== model || !digest(meta.sha256) || !assets.some(a => hash(a.url) === meta.referencehash)
           || Number(meta.width) !== 720 || Number(meta.height) !== 1280 || !Number.isFinite(Number(meta.duration)) || Number(meta.duration) < 4 || Number(meta.duration) > 12.5) throw new Error('validation');

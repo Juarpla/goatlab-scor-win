@@ -219,7 +219,7 @@ test('authoring requests the preview bytes and records how long the turn took', 
   assert.equal(authoring.images[0].bytes.toString(), 'small-preview');
   assert.match(authoring.sessionKey, /^agent:director:goatlab:/);
   assert.match(authoring.message, /Preferencias del usuario/);
-  assert.match(authoring.message, /Dirección vigente para este partido:[\s\S]*Modo de prueba: prioriza los clips animados/);
+  assert.match(authoring.message, /Dirección vigente para este partido:[\s\S]*Modo de libertad completa/);
   assert.equal(JSON.parse(readFileSync(join(dir, 'state.json'), 'utf8')).history[0].ms, 2500);
 });
 

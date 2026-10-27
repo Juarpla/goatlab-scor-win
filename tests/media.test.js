@@ -5,7 +5,7 @@ import { normalizeAgnesImage } from '../src/lib/agnes.js';
 const image = i => normalizeAgnesImage({ matchId: 'a-b', index: i, publicUrl: `https://media.test/${i}.jpg` });
 test('only generated Agnes assets with provenance enter the shared bank', () => {
   assert.deepEqual(ALLOWED_SOURCES, ['agnes']); assert.equal(ASSETS_PER_MATCH, 4);
-  assert.equal(CLIPS_PER_MATCH, 2); assert.equal(LEGACY_ASSETS_MAX, 10); assert.equal(LEGACY_CLIPS_MAX, 3);
+  assert.equal(CLIPS_PER_MATCH, 4); assert.equal(LEGACY_ASSETS_MAX, 10); assert.equal(LEGACY_CLIPS_MAX, 3);
   assert.deepEqual(assetErrors(image(0)), []);
   for (const invalid of [{ ...image(0), source: 'external' }, { ...image(0), generated: {} }, { ...image(0), url: 'http://media.test/0.jpg' }]) assert.ok(assetErrors(invalid).length);
 });

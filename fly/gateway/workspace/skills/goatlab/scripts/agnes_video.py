@@ -194,7 +194,7 @@ class VideoPool:
 
     def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False):
         count = clip_target(match)
-        prompts = [{'prompt': ANIMATION['prompt']}] * (count if count == 3 else (min(count, len(prompts)) or count))
+        prompts = [{'prompt': ANIMATION['prompt']}] * (min(count, len(prompts)) or count)
         if os.environ.get('AGNES_RESOURCE_RETRIES') != '3' or recover_only:
             return self._bank(match, prompts, images, out, deadline, expires, call, download, cancelled, verified, recover_only)
         verified = set(verified or [])

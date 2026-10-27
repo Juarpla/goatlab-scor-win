@@ -28,7 +28,7 @@ function script(m) {
 }
 function bank(m, images, videos, imageModel = 'agnes-image-2.5-flash') {
   const assets = images.prompts.map((row, index) => ({ ...normalizeAgnesImage({ matchId: m.webId, index, publicUrl: `https://media.test/${m.webId}/${index}.jpg`, prompt: row.prompt, model: imageModel, at: stamp(0) }), sha256: hash(`image ${index}`), promptHash: hash(row.prompt), model: imageModel }));
-  const clips = videos.prompts.map((row, index) => ({ id: `${m.webId}-clip-${index}`, source: 'agnes', url: `https://media.test/${m.webId}/clip-${index}.mp4`, model: 'agnes-video-2.5-flash', width: 720, height: 1280, duration: 6, sha256: hash(`clip ${index}`), promptHash: hash(row.prompt), referenceHash: hash(assets[index].url) }));
+  const clips = Array.from({length:4},(_,i)=>videos.prompts[i%2]).map((row, index) => ({ id: `${m.webId}-clip-${index}`, source: 'agnes', url: `https://media.test/${m.webId}/clip-${index}.mp4`, model: 'agnes-video-2.5-flash', width: 720, height: 1280, duration: 6, sha256: hash(`clip ${index}`), promptHash: hash(row.prompt), referenceHash: hash(assets[index%2].url) }));
   return { matchId: m.webId, bankVersion: 2, bankStatus: 'complete', contentFingerprint: contentFingerprint(m, { ...images, generationModel: imageModel }, { ...videos, generationModel: 'agnes-video-2.5-flash' }), storageVerifiedAt: stamp(0), assets, clips };
 }
 async function fixture(t, matches = [match()]) {
@@ -150,7 +150,7 @@ test('images-only and clips-only validate their actual resources and effective i
 test('adopted clip ordinals three and four follow cycling prompts and retained reference evidence', async t => {
   const f = await fixture(t);
   const { value, videos } = await f.complete();
-  value.clips = [3, 4].map((ordinal, index) => ({ ...value.clips[index], id: `alpha-beta-clip-${ordinal}`, file: `clip-${ordinal}.mp4`, url: `https://media.test/alpha-beta/clip-${ordinal}.mp4`, promptHash: hash(videos.prompts[ordinal % 2].prompt), referenceHash: hash(value.assets[3 - index].url) }));
+  value.clips = [1, 2, 3, 4].map((ordinal, index) => ({ ...value.clips[index], id: `alpha-beta-clip-${ordinal}`, file: `clip-${ordinal}.mp4`, url: `https://media.test/alpha-beta/clip-${ordinal}.mp4`, promptHash: hash(videos.prompts[ordinal % 2].prompt), referenceHash: hash(value.assets[3 - index].url) }));
   await f.put('media-pack/alpha-beta.json', value);
   assert.equal((await f.check()).complete, true);
   const invalid = structuredClone(value); invalid.clips[0].file = 'clip-0.mp4';

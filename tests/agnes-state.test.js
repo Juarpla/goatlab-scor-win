@@ -228,7 +228,7 @@ test('renew refuses live video IDs, concurrent owners and unverified absence',()
   assert.throws(()=>reduceAgnesState(state,'renew-resource',{...input,verifiedAbsent:true},{nowMs:now}),/recuperar/);
 });
 test('resource projection only declares verified R2 objects ready',()=>{
-  const resources=[...Array.from({length:4},(_,i)=>({kind:'image',number:i+1,state:'pendiente',reason:'ausente'})),...Array.from({length:2},(_,i)=>({kind:'video',number:i+1,state:'pendiente',reason:'ausente'}))];
+  const resources=[...Array.from({length:4},(_,i)=>({kind:'image',number:i+1,state:'pendiente',reason:'ausente'})),...Array.from({length:4},(_,i)=>({kind:'video',number:i+1,state:'pendiente',reason:'ausente'}))];
   const {state}=reduceAgnesState(fresh(),'resource-status',{matchId:'alpha-beta',resources},{nowMs:now});
   assert.equal(state.resources['alpha-beta:image:1'].state,'pendiente');
   assert.throws(()=>reduceAgnesState(state,'resource-status',{matchId:'alpha-beta',resources:resources.map(r=>({...r,state:'listo'}))},{nowMs:now}),/estado de recurso/);
@@ -280,9 +280,9 @@ test('five video starts fit a minute and sixth waits without reopening attempts'
   assert.equal(reduceAgnesState(blocked.state,'reserve',next,{nowMs:now+60_500}).result.canPost,true);
 });
 
-test('trial admits three clips, persists third publication and refuses a fourth without resetting history', () => {
+test('freedom admits four clips, persists fourth publication and refuses a fifth without resetting history', () => {
   const matchId='levante-ud-vs-atletico-madrid-2026-10-31'; let state=fresh();
-  for(let ordinal=0;ordinal<3;ordinal++) {
+  for(let ordinal=0;ordinal<4;ordinal++) {
     const at=now+ordinal*60_000;
     const input=reserve({matchId,kind:'video',model:'agnes-video-2.5-flash',referenceHash:hash('photo'),ordinal,publicationIndex:ordinal+1});
     let change=reduceAgnesState(state,'reserve',input,{nowMs:at});
@@ -291,8 +291,8 @@ test('trial admits three clips, persists third publication and refuses a fourth 
     state=reduceAgnesState(state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:at}).state;
   }
   validateAgnesState(state);
-  assert.equal(Object.keys(state.attempts).length,3);
-  assert.equal(state.slots[matchId+':video:2'].publicationIndex,3);
-  const fourth=reduceAgnesState(state,'reserve',reserve({matchId,kind:'video',ordinal:3,model:'agnes-video-2.5-flash',referenceHash:hash('photo')}),{nowMs:now+240_000});
-  assert.equal(fourth.result.canPost,false); assert.match(fourth.result.reason,/máximo 3/);
+  assert.equal(Object.keys(state.attempts).length,4);
+  assert.equal(state.slots[matchId+':video:3'].publicationIndex,4);
+  const fifth=reduceAgnesState(state,'reserve',reserve({matchId,kind:'video',ordinal:4,model:'agnes-video-2.5-flash',referenceHash:hash('photo')}),{nowMs:now+240_000});
+  assert.equal(fifth.result.canPost,false); assert.match(fifth.result.reason,/máximo 4/);
 });

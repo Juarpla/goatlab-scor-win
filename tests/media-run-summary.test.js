@@ -11,9 +11,9 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
   await mkdir(join(repo, '.cache'));
   const results = [
     { matchId: 'missing', images: 0, clips: 0, mode: 'all', failures: [] },
-    { matchId: 'mixed', images: 4, clips: 2, mode: 'all', failures: [] },
+    { matchId: 'mixed', images: 4, clips: 4, mode: 'all', failures: [] },
     { matchId: 'photos', images: 4, clips: 0, mode: 'images-only', failures: [] },
-    { matchId: 'clips', images: 1, clips: 2, mode: 'clips-only', failures: [] },
+    { matchId: 'clips', images: 1, clips: 4, mode: 'clips-only', failures: [] },
     { matchId: 'upload-failed', images: 3, clips: 1, mode: 'all', failures: ['Motion Prompts no disponibles; montaje local disponible', 'R2: subida sin confirmar api-secret'] },
     { matchId: 'exhausted', images: 3, clips: 0, mode: 'all', failures: ['Imagen 1: imagen completada ausente; sin evidencia local compatible', 'faltan clips: cinco intentos consumidos (5/5)'] },
     { matchId: 'pending', images: 4, clips: 0, mode: 'all', failures: [], diagnostics: [{ message: 'HTTP 200 solicitud aceptada' }, { message: 'tarea pendiente; ventana de recuperación de 60 s agotada; status=queued progress=15' }] },
@@ -30,7 +30,7 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
   assert.match(row('missing'), /Recursos incompletos; causa no registrada/);
   assert.doesNotMatch(row('missing'), /Verificado/);
   assert.match(row('mixed'), /4\/4 imágenes listas; faltan 0/);
-  assert.match(row('mixed'), /2\/2 clips listos; faltan 0/);
+  assert.match(row('mixed'), /4\/4 clips listos; faltan 0/);
   for (const id of ['mixed', 'photos', 'clips']) assert.match(row(id), /Verificado/);
   assert.match(row('upload-failed'), /3\/4 imágenes listas; faltan 1/);
   assert.match(row('upload-failed'), /R2: subida sin confirmar/);

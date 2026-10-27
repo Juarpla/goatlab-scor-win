@@ -20,7 +20,7 @@ test('public diagnostics carry attempt and next action, marking missing history'
 });
 test('completion reflects exactly the requested mode',()=>{
   assert.equal(requestedMediaComplete({images:4,clips:0,mode:'images-only'}),true);
-  assert.equal(requestedMediaComplete({images:1,clips:2,mode:'clips-only'}),true);
+  assert.equal(requestedMediaComplete({images:1,clips:4,mode:'clips-only'}),true);
   assert.equal(requestedMediaComplete({images:4,clips:1,mode:'all'}),false);
 });
 test('accepted recovery is applied before unknown requests are archived',async t=>{

@@ -1,6 +1,6 @@
 # Medios y reintentos
 
-El banco pertenece al partido y reúne cuatro imágenes y dos o tres clips Agnes, reutilizables
+El banco pertenece al partido y reúne cuatro imágenes y cuatro clips Agnes, reutilizables
 entre audios y chats. El montaje puede continuar con recursos parciales y gráficos.
 Las fotos externas se filtran. Los prompts publicados de imagen deben coincidir
 con ID, equipos traducidos, competición y kickoff. Los clips usan la configuración
@@ -27,7 +27,7 @@ Para «reintenta el video 3», consultar `status --chat=<chat> --number=3` y eje
 `delivery-unknown` exige verificar Telegram antes de reenviar; `unavailable` no
 demuestra fallo. No pedir una grabación nueva por un fallo del servidor.
 
-El progreso muestra imágenes disponibles sobre cuatro y clips sobre el objetivo del modo, sin
+El progreso muestra imágenes disponibles sobre cuatro y clips sobre el objetivo de producción, sin
 cronómetro. Un estado de Render con más de 90 segundos sin confirmación se indica
 como pendiente de actualización, sin afirmar que continúa planificando ni que
 falló. Los errores de montaje y de consulta del banco se comunican separadamente.
@@ -41,8 +41,8 @@ exige `MEDIA_ROLE=producer` dentro de GitHub Actions. Actions reintenta a las
 02:15, 04:15 y 06:15 Lima, sin consultar ni encender Fly.
 
 El banco completo mantiene las pruebas v2 de identidad y almacenamiento; el objetivo
-de clips sigue `lib/montage-experiment.json`. La lectura conserva hasta tres clips
-verificados incluso al volver a freedom. Consulta [montage-experiment.md](montage-experiment.md)
+de clips sigue `lib/montage-experiment.json`. La lectura conserva hasta cuatro clips
+verificados en ambos modos editoriales. Consulta [montage-experiment.md](montage-experiment.md)
 para activar, comprobar o revertir la prueba.
 La generación parcial conserva un banco completo anterior. La poda remota sigue
 requiriendo final confirmado y protección de trabajos pendientes. Gateway limpia

@@ -20,7 +20,7 @@ test('the bank is persisted incrementally and becomes ready when its attempt fin
 const verifiedAt='2026-10-08T22:00:00.000Z';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const verifiedPhotos=photos.map((photo,index)=>({...photo,sha256:hash(`photo ${index}`)}));
-function verifiedExtra(){return{bankVersion:2,contentFingerprint:hash('content inputs'),storageVerifiedAt:verifiedAt,verifiedAssets:verifiedPhotos.map(photo=>photo.id),clips:[0,1].map(index=>({id:`a-b-clip-${index}`,source:'agnes',url:`https://example.test/clip-${index}.mp4`,model:'agnes-video-2.5-flash',width:720,height:1280,duration:6,sha256:hash(`clip ${index}`),promptHash:hash(`prompt ${index}`),referenceHash:hash(verifiedPhotos[index].url)})),verifiedClips:['a-b-clip-0','a-b-clip-1']};}
+function verifiedExtra(){return{bankVersion:2,contentFingerprint:hash('content inputs'),storageVerifiedAt:verifiedAt,verifiedAssets:verifiedPhotos.map(photo=>photo.id),clips:[0,1,2,3].map(index=>({id:`a-b-clip-${index}`,source:'agnes',url:`https://example.test/clip-${index}.mp4`,model:'agnes-video-2.5-flash',width:720,height:1280,duration:6,sha256:hash(`clip ${index}`),promptHash:hash(`prompt ${index}`),referenceHash:hash(verifiedPhotos[index].url)})),verifiedClips:[0,1,2,3].map(i=>'a-b-clip-'+i)};}
 
 test('completion requires current storage proofs and strips private verification inputs',async t=>{
  const {dir,match}=await fixture(t), publish=mediaPublisher({dir,match,clock:()=>verifiedAt});

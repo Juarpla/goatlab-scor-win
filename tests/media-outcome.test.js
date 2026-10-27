@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { mediaRunOutcome } from '../src/lib/media-diagnostics.js';
 const fixture=()=>({runId:'now',mode:'all',pending:1,results:[{matchId:'a-b',mode:'all',failures:[],resources:[
   ...Array.from({length:4},(_,i)=>({kind:'image',number:i+1,verified:true})),
-  ...[1,2].map(number=>({kind:'video',number,verified:false,reason:'pendiente'}))],attempts:[1,2].map(publicationIndex=>({kind:'video',publicationIndex,state:'abandoned',diagnostics:{events:[{runId:'now',method:'POST',stage:'create',httpStatus:503,providerCode:'video_queue_full'}]}}))}]});
+  ...[1,2,3,4].map(number=>({kind:'video',number,verified:false,reason:'pendiente'}))],attempts:[1,2,3,4].map(publicationIndex=>({kind:'video',publicationIndex,state:'abandoned',diagnostics:{events:[{runId:'now',method:'POST',stage:'create',httpStatus:503,providerCode:'video_queue_full'}]}}))}]});
 test('current POST 503 defers missing resources without claiming completeness',()=>{
   const report=fixture(),outcome=mediaRunOutcome(report);
-  assert.equal(outcome.exitCode,0);assert.equal(outcome.status,'deferred');assert.equal(outcome.deferred.length,2);
+  assert.equal(outcome.exitCode,0);assert.equal(outcome.status,'deferred');assert.equal(outcome.deferred.length,4);
   assert.equal(outcome.deferred[0].providerCode,'video_queue_full');assert.equal(report.pending,1);
 });
 test('429 is temporary but 402, auth failures and unknown causes require attention',()=>{
@@ -30,7 +30,7 @@ test('R2, identity and state failures outrank provider deferrals',()=>{
 test('live task and clips blocked behind it are deferred without a fabricated HTTP',()=>{
   const report=fixture();report.results[0].attempts=[{kind:'video',publicationIndex:1,hasVideoId:true,state:'pending',attemptId:'accepted-id'}];
   const outcome=mediaRunOutcome(report);
-  assert.equal(outcome.exitCode,0);assert.deepEqual(outcome.deferred.map(r=>r.code),['task-active','blocked-by-active-task']);
+  assert.equal(outcome.exitCode,0);assert.deepEqual(outcome.deferred.map(r=>r.code),['task-active',...Array(3).fill('blocked-by-active-task')]);
   assert.equal(outcome.deferred[1].httpStatus,null);
   assert.equal(outcome.deferred[1].blockedBy[0].attemptId,'accepted-id');
 });
@@ -58,7 +58,7 @@ test('last workflow log stays deferred with informational failures and an admiss
   const lens=report.results[0];lens.matchId='lens';lens.resources[4].verified=true;
   lens.failures=['intento de vídeo 2: HTTP 503','Clip 2: pendiente; POST en esta corrida 1/3; reintentar en otra corrida'];
   const sabah=structuredClone(lens);sabah.matchId='sabah';sabah.resources[4].verified=false;
-  sabah.attempts=sabah.attempts.slice(0,1);
+  sabah.attempts=sabah.attempts.filter(a=>a.publicationIndex!==2);
   sabah.failures=['Agnes está pausado por ritmo de llamadas'];
   sabah.diagnostics=[{runId:'now',stage:'admission',ordinal:1,code:'rate-wait',httpStatus:null}];
   const viking=structuredClone(fixture().results[0]);viking.matchId='viking';
@@ -68,7 +68,7 @@ test('last workflow log stays deferred with informational failures and an admiss
   villarreal.failures=['Clip 1: pendiente; POST en esta corrida 1/3; reintentar en otra corrida','otra tarea pendiente o incierta'];
   report.results=[lens,sabah,viking,inter,villarreal];
   const outcome=mediaRunOutcome(report);
-  assert.equal(outcome.exitCode,0);assert.equal(outcome.errors.length,0);assert.equal(outcome.deferred.length,7);
+  assert.equal(outcome.exitCode,0);assert.equal(outcome.errors.length,0);assert.equal(outcome.deferred.length,15);
   assert.equal(outcome.deferred.find(r=>r.matchId==='sabah'&&r.number===2).code,'rate-wait');
   assert.equal(outcome.deferred.find(r=>r.matchId==='sabah'&&r.number===2).httpStatus,null);
   villarreal.failures.push('R2: HEAD fallido');assert.equal(mediaRunOutcome(report).exitCode,2);

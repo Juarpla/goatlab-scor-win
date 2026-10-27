@@ -16,6 +16,8 @@ from fake_agnes_state import FakeAgnesState
 
 class VideoTests(unittest.TestCase):
     def setUp(self):
+        target = patch('media_policy.CONFIG', {'mode':'freedom','matches':None,'clips':2})
+        target.start(); self.addCleanup(target.stop)
         self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name);self.now=1000
         self.state=FakeAgnesState(lambda:self.now)
@@ -26,13 +28,13 @@ class VideoTests(unittest.TestCase):
         self.posts=[]
     def sleep(self,seconds):self.now+=seconds
 
-    def test_trial_generates_three_clips_then_reuses_without_new_post(self):
-        with patch('media_policy.CONFIG', {'mode':'clips-first', 'matches':['a-b']}):
-            result = self.bank(self.success)
-            self.assertEqual(len(result['clips']), 3)
-            self.assertEqual(len(self.posts), 3)
-            self.assertEqual(len(self.bank(self.success)['clips']), 3)
-            self.assertEqual(len(self.posts), 3)
+    def test_freedom_generates_four_clips_from_no_prompts_then_reuses(self):
+        with patch('media_policy.CONFIG', {'mode':'freedom', 'matches':None, 'clips':4}):
+            result = self.pool.bank('a-b', [], self.images, self.root, 2000, 3000, call=self.success, download=self.download)
+            self.assertEqual(len(result['clips']), 4)
+            self.assertEqual(len(self.posts), 4)
+            self.assertEqual(len(self.bank(self.success)['clips']), 4)
+            self.assertEqual(len(self.posts), 4)
 
     def test_recovery_only_skips_unused_slots_and_never_posts(self):
         self.state.seed('a-b', 3, prompt='Prompt 3')

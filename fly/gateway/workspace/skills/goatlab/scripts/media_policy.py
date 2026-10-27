@@ -1,4 +1,4 @@
-"""Match-scoped experiment shared with Actions and the creative director."""
+"""Production target shared with Actions, independent of editorial direction."""
 import json
 from pathlib import Path
 
@@ -7,4 +7,7 @@ CONFIG = json.loads((Path(__file__).resolve().parent.parent / 'lib/montage-exper
 def clip_target(match_id):
     if CONFIG.get('mode') not in ('freedom', 'clips-first') or not (CONFIG.get('matches') is None or isinstance(CONFIG['matches'], list)):
         raise ValueError('Configuración de prueba de montaje inválida')
-    return 3 if CONFIG['mode'] == 'clips-first' and (CONFIG['matches'] is None or match_id in CONFIG['matches']) else 2
+    count = CONFIG.get('clips', 4)
+    if type(count) is not int or not 1 <= count <= 4:
+        raise ValueError('Objetivo de clips inválido')
+    return count

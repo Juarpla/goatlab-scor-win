@@ -1,6 +1,6 @@
 /** Lector del banco de medios por partido para la ruta /partido/<id>/media.
  *  Lee los manifiestos que commitea el Action 3-media-creation y los sanea
- *  al banco de cuatro fotos y hasta tres clips, conservando los recursos tras rollback.
+ *  al banco de cuatro fotos y hasta cuatro clips, conservando los recursos tras rollback.
  *  Solo lectura en build (Astro estático); sin secrets ni red. */
 import { readdirSync, readFileSync } from 'node:fs';
 import { MAX_CLIPS_PER_MATCH, mediaPolicy } from './media-policy.js';
@@ -45,7 +45,8 @@ export function readMediaBank(matchId, dir = 'public/data/media-pack') {
     competition: manifest.competition ?? null,
     kickoff: manifest.kickoff ?? null,
     generatedAt: manifest.generatedAt ?? null,
-    bankStatus: manifest.bankStatus ?? (assets.length === ASSETS_PER_MATCH && clips.length >= mediaPolicy(matchId).clips ? 'complete' : 'partial'),
+    bankStatus: assets.length === ASSETS_PER_MATCH && clips.length >= mediaPolicy(matchId).clips
+      ? (manifest.bankStatus ?? 'complete') : 'partial',
     attribution: manifest.attribution ?? '',
     assets,
     clips,

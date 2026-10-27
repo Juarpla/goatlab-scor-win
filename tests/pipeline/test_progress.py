@@ -9,21 +9,21 @@ from workflow import Workflow
 from progress import ProgressReporter, progress_text
 
 class ProgressTests(unittest.TestCase):
-    def test_trial_progress_tracks_three_and_freedom_restores_two(self):
-        with patch('media_policy.CONFIG', {'mode':'clips-first', 'matches':['trial']}):
-            self.assertIn('Clips disponibles: 3/3', progress_text(4,'finished',[],0,0,clips=3,match_id='trial'))
+    def test_four_clips_are_available_in_both_editorial_modes(self):
+        with patch('media_policy.CONFIG', {'mode':'clips-first', 'matches':['trial'], 'clips':4}):
+            self.assertIn('Clips disponibles: 4/4', progress_text(4,'finished',[],0,0,clips=4,match_id='trial'))
             self.assertIn('Banco parcial', progress_text(4,'finished',[],0,0,clips=2,match_id='trial'))
-        with patch('media_policy.CONFIG', {'mode':'freedom', 'matches':['trial']}):
-            self.assertIn('Banco disponible', progress_text(4,'finished',[],0,0,clips=3,match_id='trial'))
+        with patch('media_policy.CONFIG', {'mode':'freedom', 'matches':['trial'], 'clips':4}):
+            self.assertIn('Banco disponible', progress_text(4,'finished',[],0,0,clips=4,match_id='trial'))
 
     def test_current_bank_targets_and_no_timer_or_generation_copy(self):
-        for clips in (0, 2):
+        for clips in (0, 2, 3, 4):
             text = progress_text(4, 'finished', [], 1000, 4000, target=4, clips=clips)
             self.assertIn('Imágenes disponibles: 4/4', text)
-            self.assertIn(f'Clips disponibles: {clips}/2', text)
+            self.assertIn(f'Clips disponibles: {clips}/4', text)
             for obsolete in ('Tiempo transcurrido', 'Generando', '40%', 'interrumpida'):
                 self.assertNotIn(obsolete, text)
-            self.assertIn('Banco disponible' if clips == 2 else 'Banco parcial', text)
+            self.assertIn('Banco disponible' if clips == 4 else 'Banco parcial', text)
 
     def test_stale_and_queued_jobs_never_claim_active_planning(self):
         job = {'status': 'working', 'variant': 3, 'currentStage': 'planning', 'updatedAt': 1000000}
