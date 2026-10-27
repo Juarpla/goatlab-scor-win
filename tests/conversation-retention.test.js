@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import fs from 'node:fs';
+import { syncBuiltinESMExports } from 'node:module';
 
 // OpenClaw's pinned image requires Node 24. The website still supports Node 22;
 // its job skips this suite, while the dedicated gateway CI job runs it on 24.
@@ -36,6 +38,81 @@ if (Number(process.versions.node.split('.')[0]) < 24) {
     writeFileSync(join(root, 'openclaw.json'), 'KEEP-CONFIG');
     return { root, file, sessions, db, add, options: { root, now, exclusive: true } };
   }
+
+  // Exercise the real sweep's Linux ownership guard on macOS as well as CI.
+  function procFixture(t, { status, target = '/dev/null', code, uid = 1001, realUid = uid }) {
+    const platform = Object.getOwnPropertyDescriptor(process, 'platform');
+    const originals = { readdirSync: fs.readdirSync, readFileSync: fs.readFileSync, readlinkSync: fs.readlinkSync };
+    const pid = String(process.pid + 1000000);
+    const reads = [];
+    Object.defineProperty(process, 'platform', { value: 'linux' });
+    t.mock.method(process, 'getuid', () => realUid);
+    t.mock.method(process, 'geteuid', () => uid);
+    t.mock.method(fs, 'readdirSync', (path, ...args) => path === '/proc' ? [pid]
+      : path === `/proc/${pid}/fd` ? ['0'] : originals.readdirSync(path, ...args));
+    t.mock.method(fs, 'readFileSync', (path, ...args) => path === `/proc/${pid}/status`
+      ? status : originals.readFileSync(path, ...args));
+    t.mock.method(fs, 'readlinkSync', (path, ...args) => {
+      if (path !== `/proc/${pid}/fd/0`) return originals.readlinkSync(path, ...args);
+      reads.push(path);
+      if (code) throw Object.assign(new Error(`${code}: permission denied, readlink '${path}'`), { code });
+      return target;
+    });
+    syncBuiltinESMExports();
+    t.after(() => {
+      t.mock.restoreAll();
+      syncBuiltinESMExports();
+      Object.defineProperty(process, 'platform', platform);
+    });
+    return reads;
+  }
+
+  test('a privileged helper with the runner real UID does not block offline retention', t => {
+    const f = fixture(t); f.db.close();
+    const reads = procFixture(t, { status: 'Name:\tsudo\nUid:\t1001\t0\t0\t0\n', code: 'EACCES' });
+    assert.doesNotThrow(() => sweep(f.options));
+    assert.deepEqual(reads, []);
+  });
+
+  test('a writer with the runtime effective UID blocks retention even with a different real UID', t => {
+    const f = fixture(t); f.db.close();
+    procFixture(t, { status: 'Uid:\t0\t1001\t1001\t1001\n', target: f.file });
+    assert.throws(() => sweep(f.options), /another process still owns OpenClaw storage/);
+    assert.equal(existsSync(join(f.root, '.conversation-retention.json')), false);
+  });
+
+  test('an unreadable process of the runtime user still blocks retention', t => {
+    const f = fixture(t); f.db.close();
+    procFixture(t, { status: 'Uid:\t1001\t1001\t1001\t1001\n', code: 'EACCES' });
+    assert.throws(() => sweep(f.options), { code: 'EACCES' });
+    assert.equal(existsSync(join(f.root, '.conversation-retention.json')), false);
+  });
+
+  test('a descriptor closed during ownership inspection does not block retention', t => {
+    const f = fixture(t); f.db.close();
+    procFixture(t, { status: 'Uid:\t1001\t1001\t1001\t1001\n', code: 'ENOENT' });
+    assert.doesNotThrow(() => sweep(f.options));
+  });
+
+  test('the supervisor effective UID selects its runtime processes', t => {
+    const f = fixture(t); f.db.close();
+    const reads = procFixture(t, { uid: 1001, realUid: 0,
+      status: 'Uid:\t0\t0\t0\t0\n', code: 'EACCES' });
+    assert.doesNotThrow(() => sweep(f.options));
+    assert.deepEqual(reads, []);
+  });
+
+  test('a root supervisor checks writers belonging to every effective UID', t => {
+    const f = fixture(t); f.db.close();
+    procFixture(t, { uid: 0, status: 'Uid:\t1001\t1001\t1001\t1001\n', target: f.file });
+    assert.throws(() => sweep(f.options), /another process still owns OpenClaw storage/);
+  });
+
+  test('an unrecognized process UID blocks retention instead of silently skipping a possible writer', t => {
+    const f = fixture(t); f.db.close();
+    procFixture(t, { status: 'Name:\tnode\n' });
+    assert.throws(() => sweep(f.options), /process UID/);
+  });
 
   test('expires active main and archived conversations at birth + 72h, preserving younger history and credentials', t => {
     const f = fixture(t);

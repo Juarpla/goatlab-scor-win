@@ -84,12 +84,17 @@ const referenceColumn = name => /(^|_)(session_id|session_key)$/.test(name)
 
 function assertNoOtherDatabaseOwner(root) {
   if (process.platform !== 'linux') return;
+  const runtimeUid = process.geteuid();
   for (const pid of readdirSync('/proc').filter(p => /^\d+$/.test(p) && Number(p) !== process.pid)) {
     // The image runs the native runtime as the same unprivileged uid. Root's
     // Fly agent/SSH processes are outside this owner and their fds are private.
+    // Uid lists real/effective/saved/filesystem IDs: sudo helpers can retain the
+    // runner's real UID while running as root. Inspect the effective owner.
     let status;
     try { status = readFileSync(`/proc/${pid}/status`, 'utf8'); } catch (error) { if (['ENOENT', 'ESRCH'].includes(error.code)) continue; throw error; }
-    if (process.getuid() !== 0 && Number(status.match(/^Uid:\s+(\d+)/m)?.[1]) !== process.getuid()) continue;
+    const uid = status.match(/^Uid:\s+\d+\s+(\d+)/m)?.[1];
+    if (uid === undefined) throw new Error(`offline retention cannot identify process UID: ${pid}`);
+    if (runtimeUid !== 0 && Number(uid) !== runtimeUid) continue;
     let fds;
     try { fds = readdirSync(`/proc/${pid}/fd`); } catch (error) { if (['ENOENT', 'ESRCH'].includes(error.code)) continue; throw error; }
     for (const fd of fds) {
