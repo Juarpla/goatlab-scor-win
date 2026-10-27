@@ -12,11 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
       - name: OpenClaw retention, startup and access
-        run: node --test tests/conversation-retention.test.js tests/gateway-runtime.test.js tests/ui-access.test.js tests/idle-safety.test.js
+        # Retention inspects /proc before touching SQLite. Give the tests their
+        # own PID namespace, like Fly, instead of inspecting protected runner
+        # services. Keep the tests unprivileged and the ownership guard enabled.
+        run: >-
+          docker run --rm --init --network none
+          --user "$(id -u):$(id -g)"
+          --volume "$PWD:/workspace:ro" --workdir /workspace
+          node:24-bookworm-slim
+          node --test tests/conversation-retention.test.js tests/gateway-runtime.test.js tests/ui-access.test.js tests/idle-safety.test.js
   test:
     runs-on: ubuntu-latest
     steps:
