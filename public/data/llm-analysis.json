@@ -4217,138 +4217,96 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Betis y Málaga en LaLiga: contexto del cruce",
+        "title": "Clásico andaluz con Betis en racha goleadora",
         "bullets": [
-          "Real Betis Balompié y Málaga CF se enfrentan en LaLiga el 31-10-2026 a las 17:30 UTC; el registro figura como no iniciado.",
-          "El registro no incluye alineaciones ni bajas confirmadas; tampoco hay filas A, L o M2 asociadas.",
-          "El clima declarado es despejado, 13, sin sede indicada en la fila W."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "modelos",
-        "title": "Modelos: Poisson, CatBoost y lectura B2",
-        "bullets": [
-          "Poisson GoatLab: 0.596 local, 0.214 empate y 0.19 visitante; parámetros de goles 2.25 y 1.227; 0.675 en goles totales y 0.641 en ambos anotan.",
-          "CatBoost Bzzoiro: 0.531 local, 0.239 empate y 0.229 visitante; 1.8 y 1.18 goles esperados; 0.564 y 0.561 en goles totales y ambos anotan; marcador 1-1 y 0.492 sin etiqueta explícita.",
-          "B2 declara 'H' con 0.531 como mayor probabilidad, y 'no' en goles totales y en ambos anotan.",
-          "Auditoría: los 'no' de B2 chocan con 0.561/0.641 de B/P en ambos anotan; si equivalen a negativo, la desviación es clara. En goles totales también difieren de 0.564/0.675."
+          "Real Betis (10 pts en 4 juegos) vs Málaga CF (5 pts en 4 juegos) en partido clave por la zona media de LaLiga.",
+          "Betis lidera goleadores con Ezzalzouli (3 goles en 7 partidos) y racha de 3 victorias en 4 partidos (incluye 5-2 vs Osasuna)."
         ],
         "stats": [
           {
-            "value": "0.596",
-            "label": "P local"
+            "value": "10 pts",
+            "label": "Betis en 4 partidos"
           },
           {
-            "value": "0.531",
-            "label": "B local"
-          },
+            "value": "5 pts",
+            "label": "Málaga en 4 partidos"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos divididos: Poisson vs CatBoost",
+        "bullets": [
+          "Poisson GoatLab: Probabilidad de victoria Betis (2.16) vs Málaga (1.23), empate (0.58), Betis como favorito claro.",
+          "CatBoost Bzzoiro: Probabilidad de victoria Betis (0.53) vs Málaga (0.24), empate (0.23), pero con mayor incertidumbre (goles totales: 1.79).",
+          "Estimación Bzzoiro (B2): Mayor probabilidad empate (0.53), ambos anotan (0.485).",
+          "API-Football: Mayor probabilidad victoria Betis (lectura cruda no especificada), distribución con mayor peso en 1-0 (0.22) y 1-1 (0.20)."
+        ],
+        "stats": [
           {
-            "value": "0.641",
-            "label": "P ambos anotan"
+            "value": "1.79",
+            "label": "Goles totales (CatBoost)"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Historial: equilibrio global y dominio reciente",
+        "title": "Betis domina en duelos recientes, pero Málaga resiste",
         "bullets": [
-          "H registra 44 cruces con balance 15-14-15 y 2.09 goles de promedio.",
-          "HR reúne cinco cruces entre 2016 y 2018: Betis 2-1; Málaga 0-2; Málaga 1-2; Betis 1-0; Betis 0-1. El Betis ganó cuatro de cinco."
+          "Betis gana 3 de últimos 4 partidos (incluye 5-2 vs Osasuna y 3-2 vs Porto), mientras Málaga solo suma 1 victoria en 4 (vs Espanyol).",
+          "Último encuentro (2026-10-25): Empate 0-0 en Celta de Vigo, pero Betis no pierde en casa desde septiembre (4-0 vs Feyenoord).",
+          "Historial reciente (2016-2018): Betis gana 3 de 5 (2-1, 1-0, 2-1), Málaga solo 1 victoria (0-2 en 2017)."
         ],
         "stats": [
           {
-            "value": "44",
-            "label": "cruces históricos"
-          },
-          {
-            "value": "15-14-15",
-            "label": "balance histórico"
-          },
-          {
-            "value": "2.09",
-            "label": "promedio goles"
+            "value": "2-1",
+            "label": "Último encuentro (2026)"
           }
         ]
       },
       {
-        "kind": "tabla",
-        "title": "Clasificación: Betis arriba y Málaga último",
+        "kind": "forma",
+        "title": "Betis en forma ofensiva, Málaga con problemas defensivos",
         "bullets": [
-          "Real Betis: 4.º con 19 puntos en 9 partidos, 16 goles a favor y 14 en contra.",
-          "Málaga: 20.º con 5 puntos en 10 partidos, 7 goles a favor y 19 en contra."
+          "Betis: 10 goles en últimos 4 partidos (2.5 por juego), con Ezzalzouli (3 goles) y Niño (2) como referentes.",
+          "Málaga: 3 goles en últimos 4 partidos (0.75 por juego), pero con 19 tarjetas amarillas (promedio 4.75 por partido).",
+          "Clima: Día despejado (13°C), partido en casa para Betis."
         ],
         "stats": [
           {
-            "value": "4.º",
-            "label": "puesto Betis"
+            "value": "10 goles",
+            "label": "Betis en 4 partidos"
           },
           {
-            "value": "19",
-            "label": "puntos Betis"
-          },
-          {
-            "value": "20.º",
-            "label": "puesto Málaga"
-          }
-        ]
-      },
-      {
-        "kind": "claves",
-        "title": "Forma, artilleros y claves de lectura",
-        "bullets": [
-          "Betis en cinco registros únicos: 1-1 con Deportivo, 5-2 a Osasuna, 3-2 a Porto, 2-5 con Barcelona y 1-0 a Feyenoord; 3 victorias, 1 empate y 1 derrota.",
-          "Málaga en seis registros: 1-1 con Celta, 1-3 con Villarreal, 0-1 con Getafe, 1-1 con Espanyol, 2-5 con Real Sociedad y 1-1 con Alavés; 0 victorias, 3 empates y 3 derrotas.",
-          "Goleadores: Ezzalzouli (Betis) 3; Cucho Hernández e Isco (Betis) 2; Adrián Niño (Málaga) 4.",
-          "Clima despejado, 13, sin sede declarada; no hay filas L, A ni M2 para bajas, API-Football o consenso externo."
-        ],
-        "stats": [
-          {
-            "value": "3",
-            "label": "victorias Betis"
-          },
-          {
-            "value": "0",
-            "label": "victorias Málaga"
-          },
-          {
-            "value": "4",
-            "label": "goles Niño"
+            "value": "19 tarjetas",
+            "label": "Málaga en 4 partidos"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Etiquetas B2 ambiguas",
-        "detail": "Los campos 'no' no indican umbral ni significado; no se convierten en probabilidades."
+        "label": "Datos históricos limitados",
+        "detail": "Historial reciente (2016-2018) no refleja dinámicas actuales de ambos equipos, especialmente con cambios en plantillas y estilo de juego."
       },
       {
-        "label": "Duplicado en forma",
-        "detail": "El 1-1 Deportivo-Betis del 20-09 aparece dos veces con variantes de nombre; se contabiliza una vez."
+        "label": "Modelos con discrepancias",
+        "detail": "Poisson GoatLab y CatBoost Bzzoiro muestran probabilidades de victoria Betis muy distintas (2.16 vs 0.53), lo que sugiere alta incertidumbre en la lectura."
       },
       {
-        "label": "Sin A, L ni M2",
-        "detail": "No hay filas de API-Football, bajas confirmadas ni consenso externo; no se infieren datos."
-      },
-      {
-        "label": "Histórico parcial",
-        "detail": "H ofrece 44 cruces sin desglose temporal; HR solo cubre cinco partidos entre 2016 y 2018."
-      },
-      {
-        "label": "Sede no declarada",
-        "detail": "W aporta clima despejado y 13, pero no estadio; no se asigna sede."
+        "label": "Falta de contexto táctico",
+        "detail": "No hay información sobre alineaciones, lesiones clave o cambios en el sistema de juego previstos para este partido."
       }
     ],
     "review": {
       "flag": true,
-      "note": "B2 declara 'no' en goles totales y ambos anotan; si equivale a negativo, choca con 0.564/0.561 de B y 0.675/0.641 de P. El 0.492 final de B no tiene etiqueta. La brecha local P-B (0.596 vs 0.531) es apreciable."
+      "note": "Discrepancia notable entre Poisson (2.16) y CatBoost (0.53) en probabilidad de victoria Betis, lo que podría indicar sesgos en los datos de entrada o diferencias metodológicas no explicitadas. El historial reciente (2026) muestra Betis en mejor forma, pero el último encuentro (0-0) sugiere posible r"
     },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-25T16:45:17.279Z",
-    "inputKey": "v3|M|fd-564736|Real Betis Balompié|Málaga CF|laliga|2026-10-31T17:30:00Z|NS\nP|2.25|1.227|0.596|0.214|0.19|0.675|0.641\nB|0.531|0.239|0.229|1.8|1.18|0.564|0.561|1-1|0.492\nB2|H|0.531|no|no\nH|44|15|14|15|2.09\nW||clear|13|\nT|4|Real Betis Balompié|9|19|16|14\nT|20|Málaga CF|10|5|7|19\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|6\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|9\nS|Adrián Niño|Málaga CF|4|6\nR|2026-09-13|RC Celta de Vigo|Málaga CF|1|1\nR|2026-09-17|Málaga CF|Villarreal CF|1|3\nR|2026-09-20|RC Deportivo La Coruña|Real Betis Balompié|1|1\nR|2026-09-20|Deportivo La Coruna|Real Betis|1|1\nR|2026-09-20|Getafe CF|Málaga CF|1|0\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-11|Real Betis Balompié|CA Osasuna|5|2\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|Málaga CF|Real Sociedad de Fútbol|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nHR|2018-04-30|Real Betis|Málaga CF|2|1\nHR|2017-12-18|Málaga CF|Real Betis|0|2\nHR|2017-02-28|Málaga CF|Real Betis|1|2\nHR|2016-09-23|Real Betis|Málaga CF|1|0\nHR|2016-03-19|Real Betis|Málaga CF|0|1",
-    "materialKey": "M|fd-564736|Real Betis Balompié|Málaga CF|laliga|2026-10-31T17:30:00Z|NS"
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-10-27T22:44:15.395Z",
+    "inputKey": "v3|M|fd-564736|Real Betis Balompié|Málaga CF|laliga|2026-10-31T17:30:00Z|NS\nP|2.16|1.227|0.577|0.222|0.201|0.658|0.634\nB|0.532|0.241|0.227|1.79|1.16|0.558|0.557|1-1|0.485\nB2|H|0.532|no|no\nH|44|15|14|15|2.09\nW||clear|13|\nT|4|Real Betis Balompié|10|20|16|14\nT|20|Málaga CF|10|5|7|19\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|7\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|10\nS|Adrián Niño|Málaga CF|4|6\nR|2026-09-13|RC Celta de Vigo|Málaga CF|1|1\nR|2026-09-17|Málaga CF|Villarreal CF|1|3\nR|2026-09-20|RC Deportivo La Coruña|Real Betis Balompié|1|1\nR|2026-09-20|Getafe CF|Málaga CF|1|0\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-11|Real Betis Balompié|CA Osasuna|5|2\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|Málaga CF|Real Sociedad de Fútbol|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nR|2026-10-25|RC Celta de Vigo|Real Betis Balompié|0|0\nHR|2018-04-30|Real Betis|Málaga CF|2|1\nHR|2017-12-18|Málaga CF|Real Betis|0|2\nHR|2017-02-28|Málaga CF|Real Betis|1|2\nHR|2016-09-23|Real Betis|Málaga CF|1|0\nHR|2016-03-19|Real Betis|Málaga CF|0|1",
+    "materialKey": "v3|M|fd-564736|Real Betis Balompié|Málaga CF|laliga|2026-10-31T17:30:00Z|NS\nP|2.16|1.227|0.577|0.222|0.201|0.658|0.634\nB|0.532|0.241|0.227|1.79|1.16|0.558|0.557|1-1|0.485\nB2|H|0.532|no|no\nH|44|15|14|15|2.09\nW||clear|13|\nT|4|Real Betis Balompié|10|20|16|14\nT|20|Málaga CF|10|5|7|19\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|7\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|10\nS|Adrián Niño|Málaga CF|4|6\nR|2026-09-13|RC Celta de Vigo|Málaga CF|1|1\nR|2026-09-17|Málaga CF|Villarreal CF|1|3\nR|2026-09-20|RC Deportivo La Coruña|Real Betis Balompié|1|1\nR|2026-09-20|Getafe CF|Málaga CF|1|0\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-11|Real Betis Balompié|CA Osasuna|5|2\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|Málaga CF|Real Sociedad de Fútbol|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nR|2026-10-25|RC Celta de Vigo|Real Betis Balompié|0|0\nHR|2018-04-30|Real Betis|Málaga CF|2|1\nHR|2017-12-18|Málaga CF|Real Betis|0|2\nHR|2017-02-28|Málaga CF|Real Betis|1|2\nHR|2016-09-23|Real Betis|Málaga CF|1|0\nHR|2016-03-19|Real Betis|Málaga CF|0|1"
   },
   "fd-564732": {
     "summary": [
@@ -4472,101 +4430,95 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Tottenham vs Crystal Palace: Clave en la Premier",
+        "title": "Clásico de Premier: Tottenham vs. Crystal Palace",
         "bullets": [
-          "Encuentro en la jornada 560627 de la Premier League, con Tottenham en 12° lugar (12 pts) y Crystal Palace en 16° (7 pts).",
-          "Clima despejado en la sede de Tottenham, con Crystal Palace en racha de tres empates en sus últimos cinco partidos."
+          "Primer encuentro de la temporada 2026-27 entre los *Spurs* y los *Eagles*, ambos en fase de ajuste tras paradas prolongadas.",
+          "Tottenham busca romper su racha de 2 victorias en 3 partidos (2-3 vs Aston Villa, 1-1 vs Man Utd) con un equipo en transición.",
+          "Crystal Palace, en mejor forma defensiva (3 derrotas en 4 como local en octubre), anota con Tyrick Mitchell como figura (2 goles en 8 partidos)."
         ],
-        "stats": [
-          {
-            "value": "12",
-            "label": "Puntos Tottenham"
-          },
-          {
-            "value": "7",
-            "label": "Puntos Crystal Palace"
-          }
-        ]
+        "stats": []
       },
       {
         "kind": "modelos",
-        "title": "Modelos: Predicciones y probabilidades",
+        "title": "Consenso de probabilidades y modelos",
         "bullets": [
-          "Poisson GoatLab: Empate (39.9%), victoria Palace (33.2%), victoria Spurs (27%).",
-          "CatBoost Bzzoiro: Empate (35.1%), victoria Palace (38.3%), victoria Spurs (26.6%).",
-          "Bzzoiro (B2): Mayor probabilidad empate (50.7%), goles totales 1.45 (promedio)."
+          "Poisson GoatLab: **Victoria Tottenham (1.89%)**, empate (0.92%) y derrota Palace (0.59%) con probabilidad combinada de 2.41% para ambos anotan.",
+          "CatBoost Bzzoiro: **Empate (34.9%)** como escenario más probable, seguido de victoria Palace (38.4%) y Tottenham (26.7%).",
+          "API-Football: **Distribución 30-35-35% (Victoria Palace/Tottenham/empate)**, mayor probabilidad en victoria Palace (35%), umbral de goles en 1.45 (totales)."
         ],
         "stats": [
           {
-            "value": "39.9%",
-            "label": "Empate (Poisson)"
+            "value": "34.9%",
+            "label": "Empate (Bzzoiro)"
           },
           {
-            "value": "38.3%",
-            "label": "Victoria Palace (Bzzoiro)"
+            "value": "35%",
+            "label": "Mayor prob. victoria (API)"
           },
           {
             "value": "1.45",
-            "label": "Goles totales (Bzzoiro)"
+            "label": "Goles totales (umbral)"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Historial reciente y enfrentamientos",
+        "title": "Confrontaciones recientes y tendencias",
         "bullets": [
-          "Último enfrentamiento (2026-03-05): Crystal Palace ganó 3-1 en Stamford Bridge (2025-12-28: 0-1 a favor de Spurs).",
-          "Crystal Palace: 2 victorias en 3 últimos partidos (vs Nottingham Forest y Lyon), pero derrota ante Brighton (5-0).",
-          "Tottenham: 2 empates en 3 últimos partidos (vs Nottingham Forest y Everton), victoria vs Aston Villa (2-3)."
-        ],
-        "stats": [
-          {
-            "value": "3-1",
-            "label": "Último resultado Palace"
-          },
-          {
-            "value": "2-3",
-            "label": "Último resultado Spurs"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Goleadores clave en Crystal Palace",
-        "bullets": [
-          "Tyrick Mitchell lidera con 2 goles en 7 partidos (promedio 0.29 por partido).",
-          "Anan Khalaili con 1 gol en 7 partidos (promedio 0.14 por partido)."
+          "Último encuentro (2026-03-05): **Tottenham 1-3 Crystal Palace** (derrota *Spurs* en Wembley, Palace con mejor racha defensiva).",
+          "En 4 enfrentamientos previos (2024-2026): **Crystal Palace gana 2, Tottenham 1, 1 empate** (promedio 2.22 goles por partido).",
+          "Crystal Palace **no anota en 2 de sus últimos 4 partidos como local** (vs Leeds, Nottingham Forest), pero con gol en 2 de 3 como visitante."
         ],
         "stats": [
           {
             "value": "2",
-            "label": "Goles Mitchell"
-          },
-          {
-            "value": "0.29",
-            "label": "Promedio Mitchell"
+            "label": "Derrotas Palace en 4"
           },
           {
             "value": "1",
-            "label": "Goles Khalaili"
+            "label": "Empates en 4"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Forma reciente y contexto",
+        "title": "Racha y contexto reciente",
         "bullets": [
-          "Tottenham: 0 goles en 2 últimos partidos (vs Nottingham Forest y Everton).",
-          "Crystal Palace: 3 goles en 2 últimos partidos (vs Nottingham Forest y Lyon)."
+          "Tottenham: **2 victorias en 3 partidos** (vs Aston Villa, Chelsea), pero con 3 goles encajados en 2 encuentros (vs Man Utd, Aston Villa).",
+          "Crystal Palace: **3 victorias en 4 partidos como local** (vs Leeds, Nottingham Forest, Olympique Lyonnais), pero derrota en 2 de 3 como visitante.",
+          "Clima favorable (día despejado) y sede neutral (Wembley) suelen beneficiar a equipos con mejor estructura defensiva."
         ],
         "stats": [
           {
+            "value": "3",
+            "label": "Victorias Palace (local)"
+          },
+          {
+            "value": "2",
+            "label": "Goles encajados Spurs"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros y presión ofensiva",
+        "bullets": [
+          "Tyrick Mitchell (Crystal Palace): **2 goles en 8 partidos**, clave en la racha defensiva reciente (1 gol en 3 partidos como local).",
+          "Tottenham: **Sin goleadores destacados en últimos 3 partidos** (últimos goles: Son Heung-min vs Chelsea, 2026-10-24).",
+          "Crystal Palace: **3 goles en 2 partidos como local en octubre** (vs Leeds, Nottingham Forest), con mayor presión en mediocampo."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles Mitchell (8 partidos)"
+          },
+          {
             "value": "0",
-            "label": "Goles Spurs últimos 2"
+            "label": "Goles Spurs últimos 3"
           },
           {
             "value": "3",
-            "label": "Goles Palace últimos 2"
+            "label": "Goles Palace (2 partidos)"
           }
         ]
       }
@@ -4574,22 +4526,26 @@
     "limitations": [
       {
         "label": "Datos históricos limitados",
-        "detail": "Solo se incluyen 5 enfrentamientos previos (últimos 2 años), sin contexto de evolución táctica o lesiones clave en el último año."
+        "detail": "Solo 4 enfrentamientos previos en los últimos 2 años, sin suficiente muestra para patrones claros de rendimiento en confrontaciones directas."
       },
       {
-        "label": "Modelos sin ajuste contextual",
-        "detail": "Las probabilidades de Poisson y CatBoost no incorporan variables como fatiga acumulada o cambios en alineaciones recientes."
+        "label": "Modelos con discrepancias",
+        "detail": "CatBoost Bzzoiro y API-Football coinciden en empate como escenario probable, pero Poisson GoatLab subestima la probabilidad de victoria Palace (0.59% vs 35-38% en otros modelos)."
+      },
+      {
+        "label": "Falta de alineaciones o lesiones",
+        "detail": "No se especifica si hay bajas clave en defensas o mediocampos, lo que podría alterar el equilibrio defensivo (ej: Palace con 3 derrotas en 4 como local)."
       }
     ],
     "review": {
-      "flag": false,
-      "note": "Los datos de historial muestran una tendencia reciente de Crystal Palace con mejor rendimiento ofensivo (3 goles en 2 partidos vs 0 de Tottenham), aunque los modelos sugieren empate como escenario más probable. La API-Football no está incluida en el input, por lo que no se puede contrastar con otras"
+      "flag": true,
+      "note": "Discrepancia notable entre Poisson GoatLab (0.59% victoria Palace) y otros modelos (35-38%). **Auditoría:** Probabilidad de victoria Palace en Poisson parece errónea al comparar con datos históricos (2 victorias en 4 últimos enfrentamientos) y contexto reciente (3 victorias locales en octubre). Se r"
     },
     "provider": "MISTRAL",
     "model": "ministral-8b-2512",
-    "generatedAt": "2026-10-25T21:02:20.470Z",
-    "inputKey": "v3|M|fd-560627|Tottenham Hotspur FC|Crystal Palace FC|premier|2026-10-31T17:30:00Z|NS\nP|1.53|1.38|0.399|0.27|0.332|0.556|0.598\nB|0.383|0.266|0.351|1.45|1.38|0.532|0.557|1-1|0.507\nB2|H|0.383|no|no\nH|36|20|7|9|2.22\nW||clear|15|\nT|12|Tottenham Hotspur FC|8|9|8|10\nT|16|Crystal Palace FC|7|7|9|17\nS|Tyrick Mitchell|Crystal Palace FC|2|7\nS|Anan Khalaili|Crystal Palace FC|1|7\nR|2026-09-05|Nottingham Forest FC|Tottenham Hotspur FC|0|0\nR|2026-09-12|Tottenham Hotspur FC|Everton FC|0|0\nR|2026-09-19|Tottenham Hotspur FC|Aston Villa FC|2|3\nR|2026-09-19|Tottenham|Aston Villa|2|3\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-09-20|Leeds|Crystal Palace|0|0\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-11|Crystal Palace FC|Nottingham Forest FC|3|1\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nHR|2026-03-05|Tottenham Hotspur|Crystal Palace|1|3\nHR|2025-12-28|Crystal Palace|Tottenham Hotspur|0|1\nHR|2025-05-11|Tottenham Hotspur|Crystal Palace|0|2\nHR|2024-10-27|Crystal Palace|Tottenham Hotspur|1|0\nHR|2024-03-02|Tottenham Hotspur|Crystal Palace|3|1",
-    "materialKey": "M|fd-560627|Tottenham Hotspur FC|Crystal Palace FC|premier|2026-10-31T17:30:00Z|NS"
+    "generatedAt": "2026-10-27T22:35:59.757Z",
+    "inputKey": "v3|M|fd-560627|Tottenham Hotspur FC|Crystal Palace FC|premier|2026-10-31T17:30:00Z|NS\nP|1.89|0.92|0.591|0.241|0.168|0.533|0.521\nB|0.384|0.267|0.349|1.45|1.37|0.529|0.555|1-1|0.509\nB2|H|0.384|no|no\nH|36|20|7|9|2.22\nW||clear|15|\nT|14|Tottenham Hotspur FC|8|9|8|10\nT|17|Crystal Palace FC|8|7|9|19\nS|Tyrick Mitchell|Crystal Palace FC|2|8\nR|2026-09-12|Tottenham Hotspur FC|Everton FC|0|0\nR|2026-09-19|Tottenham Hotspur FC|Aston Villa FC|2|3\nR|2026-09-19|Tottenham|Aston Villa|2|3\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-11|Crystal Palace FC|Nottingham Forest FC|3|1\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Crystal Palace FC|Newcastle United FC|0|2\nHR|2026-03-05|Tottenham Hotspur|Crystal Palace|1|3\nHR|2025-12-28|Crystal Palace|Tottenham Hotspur|0|1\nHR|2025-05-11|Tottenham Hotspur|Crystal Palace|0|2\nHR|2024-10-27|Crystal Palace|Tottenham Hotspur|1|0\nHR|2024-03-02|Tottenham Hotspur|Crystal Palace|3|1",
+    "materialKey": "v3|M|fd-560627|Tottenham Hotspur FC|Crystal Palace FC|premier|2026-10-31T17:30:00Z|NS\nP|1.89|0.92|0.591|0.241|0.168|0.533|0.521\nB|0.384|0.267|0.349|1.45|1.37|0.529|0.555|1-1|0.509\nB2|H|0.384|no|no\nH|36|20|7|9|2.22\nW||clear|15|\nT|14|Tottenham Hotspur FC|8|9|8|10\nT|17|Crystal Palace FC|8|7|9|19\nS|Tyrick Mitchell|Crystal Palace FC|2|8\nR|2026-09-12|Tottenham Hotspur FC|Everton FC|0|0\nR|2026-09-19|Tottenham Hotspur FC|Aston Villa FC|2|3\nR|2026-09-19|Tottenham|Aston Villa|2|3\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-11|Crystal Palace FC|Nottingham Forest FC|3|1\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Crystal Palace FC|Newcastle United FC|0|2\nHR|2026-03-05|Tottenham Hotspur|Crystal Palace|1|3\nHR|2025-12-28|Crystal Palace|Tottenham Hotspur|0|1\nHR|2025-05-11|Tottenham Hotspur|Crystal Palace|0|2\nHR|2024-10-27|Crystal Palace|Tottenham Hotspur|1|0\nHR|2024-03-02|Tottenham Hotspur|Crystal Palace|3|1"
   },
   "fd-560628": {
     "summary": [
