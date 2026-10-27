@@ -4,7 +4,7 @@
   "away": "Ipswich Town FC",
   "competition": "premier",
   "kickoff": "2026-10-31T15:00:00Z",
-  "updatedAt": "2026-10-27T05:14:58.924Z",
+  "updatedAt": "2026-10-27T12:02:16.078Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-26T12:48:48.703Z",
+      "updatedAt": "2026-10-27T12:02:06.648Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-26T12:48:48.703Z",
+      "updatedAt": "2026-10-27T12:02:06.648Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 330
+      "rows": 331
     },
     "venue": null
   },
@@ -212,7 +212,7 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.349,
+      "home": 0.35,
       "draw": 0.252,
       "away": 0.39799999999999996,
       "predicted": "A"
@@ -222,20 +222,20 @@
       "away": 1.56
     },
     "over15": 0.7959999999999999,
-    "over25": 0.575,
+    "over25": 0.5760000000000001,
     "over35": 0.35,
     "btts": 0.585,
     "score": "1-1",
-    "cornersOver95": 0.47200000000000003,
+    "cornersOver95": 0.473,
     "recommendations": {
       "favorite": "A",
       "favoriteProb": 0.398,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.3981,
+    "confidence": 0.3978,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-26T12:48:53.920Z",
+    "capturedAt": "2026-10-27T12:02:10.275Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -385,7 +385,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 330
+      "historyRows": 331
     },
     "source": "GoatLab",
     "expectedTotal": 3.8
@@ -396,7 +396,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 330
+      "historyRows": 331
     },
     "source": "GoatLab",
     "expectedTotal": 9.1
@@ -622,9 +622,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "P da 40.8% a Hull y 30.9% a Ipswich, mientras B y B2 dan 39.8% a Ipswich y 34.9% a Hull; la diferencia de 8.9 puntos en el visitante es clara. B2 no aporta goles totales ni ambos anotan, y no hay A ni M2 para contrastar.",
+    "note": "Se observa divergencia entre el Poisson de GoatLab, que da 40.8% a Hull, y Bzzoiro, que da 39.8% a Ipswich; B2 coincide con B en la visita. No hay error aritmético visible, pero la señal de resultado no es unánime.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T05:22:43.272Z"
+    "generatedAt": "2026-10-27T12:10:05.258Z"
   }
 }

@@ -4,7 +4,7 @@
   "away": "Brighton & Hove Albion FC",
   "competition": "premier",
   "kickoff": "2026-10-31T15:00:00Z",
-  "updatedAt": "2026-10-27T05:14:58.924Z",
+  "updatedAt": "2026-10-27T12:02:16.078Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-26T12:48:48.703Z",
+      "updatedAt": "2026-10-27T12:02:06.648Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-26T12:48:48.703Z",
+      "updatedAt": "2026-10-27T12:02:06.648Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 330
+      "rows": 331
     },
     "venue": {
       "city": "Mánchester",
@@ -233,9 +233,9 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.565,
-      "draw": 0.223,
-      "away": 0.212,
+      "home": 0.563,
+      "draw": 0.222,
+      "away": 0.215,
       "predicted": "H"
     },
     "xg": {
@@ -243,20 +243,20 @@
       "away": 1.15
     },
     "over15": 0.8220000000000001,
-    "over25": 0.628,
-    "over35": 0.39399999999999996,
+    "over25": 0.629,
+    "over35": 0.39299999999999996,
     "btts": 0.608,
     "score": "1-1",
     "cornersOver95": 0.511,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.565,
+      "favoriteProb": 0.563,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.5645,
+    "confidence": 0.5628,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-26T12:48:53.809Z",
+    "capturedAt": "2026-10-27T12:02:10.988Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -406,7 +406,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 330
+      "historyRows": 331
     },
     "source": "GoatLab",
     "expectedTotal": 3.6
@@ -417,7 +417,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 330
+      "historyRows": 331
     },
     "source": "GoatLab",
     "expectedTotal": 9.8
@@ -646,9 +646,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Se marca revisión: P inclina el signo a Brighton (0.423 frente a 0.36 local) y B a City (0.565 frente a 0.212); B2 declara 'no' en goles totales y ambos anotan mientras B reporta 0.628 y 0.608. El 0.511 junto a 1-1 no se asume como probabilidad de marcador exacto.",
+    "note": "Divergencia clara P-B en la mayor probabilidad: Poisson da 36.0% local y 42.3% visitante; CatBoost 56.3% local y 21.5% visitante. B2 coincide con CatBoost (H, 0.563).",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T05:21:39.798Z"
+    "generatedAt": "2026-10-27T12:06:35.449Z"
   }
 }
