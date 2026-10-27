@@ -28,10 +28,10 @@ Texto cinético, trazos SVG, pantallas divididas y tarjetas son recursos opciona
 En notes explica el concepto, su relación con la voz y una diferencia concreta
 frente a los recientes: encuadre, ritmo, tipografía, paleta o uso del material.
 
-El inventario es material disponible: elige cualquier subconjunto, repite un
-recurso si tiene sentido o trabaja solo con gráficos. Usa facts para cifras
-reales y distingue la ilustración
-de evidencia del partido. Consulta los montajes recientes adjuntos para variar
+La dirección vigente del partido se adjunta al turno desde `montage-experiment.json`:
+clips-first prioriza los vídeos disponibles; freedom conserva libertad completa.
+Sigue esa dirección manteniendo la composición original por audio. Usa facts para
+cifras reales y distingue la ilustración de evidencia del partido. Consulta los montajes recientes adjuntos para variar
 la composición; no copies una plantilla cambiando solo texto o colores.
 
 El único elemento editorial agregado por el motor es el logo GoatLab durante

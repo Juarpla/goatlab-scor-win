@@ -109,9 +109,9 @@ partido se limita además a kickoff + 24 h. `TOP_MAX_AGE_HOURS` vale siete por
 defecto y acepta cero. `--match` omite sólo el candado de antigüedad.
 
 `node scripts/check-media-complete.mjs` comprueba la evidencia pública sin
-Agnes, descargas ni HEAD. Un banco v2 completo requiere cuatro fotos y dos clips
+Agnes, descargas ni HEAD. Un banco v2 completo requiere cuatro fotos y los clips del modo activo
 distintos, identidad, fingerprint y almacenamiento comprobado. Los modos manuales
-pueden comprobar su subconjunto sin declarar completo un banco sin seis recursos.
+pueden comprobar su subconjunto sin declarar completo un banco sin todos los recursos requeridos por el modo.
 El mantenimiento sigue corriendo aunque no queden partidos elegibles.
 
 Actions continúa desde los objetos de `partidos/<id>/` y el JSON privado. Un
@@ -127,7 +127,7 @@ consulta, interrupción y publicación; mensajes de hasta 256 caracteres sin pro
 binarios, credenciales ni URLs firmadas. Cada petición real aparece en logs con
 método, etapa y HTTP; las consultas repetidas actualizan su último registro persistido.
 Un fallo de diagnóstico no concede permisos, devuelve cuota ni repite POST.
-El summary separa los seis recursos del historial de solicitudes, incluye éxitos,
+El summary separa los recursos del modo activo del historial de solicitudes, incluye éxitos,
 reutilización R2 sin llamadas a Agnes e historial anterior con su corrida de origen.
 Los intentos anteriores sin diagnóstico indican «detalle original no conservado»;
 no se reconstruyen desde logs históricos.
@@ -155,8 +155,8 @@ los alias deben tener un único propietario. Una identidad ambigua detiene la
 publicación hasta corregir el catálogo.
 
 `ordinal` conserva la identidad de la posición interna y de las solicitudes anteriores; no limita el número acumulado de POST. El campo privado opcional
-`publicationIndex` asigna mediante CAS una de las dos posiciones de publicación:
-`clip-1.mp4` o `clip-2.mp4`. Los metadatos R2 `attemptordinal`, `attemptid` y
+`publicationIndex` asigna mediante CAS una posición de publicación:
+`clip-1.mp4`, `clip-2.mp4` y, en la prueba, `clip-3.mp4`. Los metadatos R2 `attemptordinal`, `attemptid` y
 `publicationindex` permiten verificar ambos conceptos sin cambiar el banco público.
 La asignación sobrevive a fallos de PUT, HEAD o reinicios y no consume cuota.
 
@@ -218,7 +218,10 @@ Los nuevos vídeos usan `video-animation.json`: una imagen como `first_frame`,
 modo `keyframe` y la frase «Animate this image with fast, precise, hyperrealistic
 movements.». No se producen ni se consumen documentos Video Prompts. La copia de
 la configuración en el skill se verifica con `sync-goatlab-skill.mjs --check`.
-El banco sigue ofreciendo cuatro imágenes y dos clips de seis segundos.
+El banco ofrece cuatro imágenes y dos clips de seis segundos en freedom, o tres
+en clips-first para los partidos de `src/lib/montage-experiment.json`. El esquema
+acepta el tercer clip y sus reservas también después del rollback; cambiar el
+modo no borra el historial ni concede otra generación a un slot consumido.
 
 La huella v3 depende de las imágenes, la identidad del partido y la configuración
 fija. Los bancos anteriores se revalidan desde R2 antes de publicar esa huella.

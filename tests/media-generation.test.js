@@ -1,3 +1,4 @@
+import { mediaPolicy } from '../src/lib/media-policy.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, readdir } from 'node:fs/promises';
@@ -23,11 +24,11 @@ test('fresh runner reports every R2 resource and remote HTTP history without pro
   assert.ok(f.logs.some(line=>line.includes('historial anterior')&&line.includes('video_queue_full')));
   assert.ok(f.logs.some(line=>line.includes('clip 2: reutilizado')));
 });
-async function fixture(t, overrides = {}) {
+async function fixture(t, overrides = {}, matchId = 'a-b') {
   const repo = await mkdtemp(join(tmpdir(), 'goatlab-generation-')); t.after(() => rm(repo, { recursive: true, force: true }));
   const dir = join(repo, 'public/data/media-pack');
-  const match = { id: 'af-1', webId: 'a-b', home: 'Alpha', away: 'Beta', competition: 'nations', status: 'NS', kickoff: new Date(now + 86_400_000).toISOString() };
-  const images = { version: 1, category: 'image-prompts', matchId: 'a-b', ...match, home: 'Alpha', away: 'Beta', prompts: ['ball-duel', 'goal-action', 'supporters', 'stadium'].map((kind, index) => ({
+  const match = { id: 'af-1', webId: matchId, home: 'Alpha', away: 'Beta', competition: 'nations', status: 'NS', kickoff: new Date(now + 86_400_000).toISOString() };
+  const images = { version: 1, category: 'image-prompts', matchId: matchId, ...match, home: 'Alpha', away: 'Beta', prompts: ['ball-duel', 'goal-action', 'supporters', 'stadium'].map((kind, index) => ({
     n: index + 1, kind, title: kind, prompt: 'Referential photorealistic illustration of Alpha and Beta teams in realistic uniforms, vertical 9:16. ' + kind + ' Stadium flags and team crests. Supporters fans crowd. ' + 'Natural lighting with stable anatomy. '.repeat(6),
   })) };
   const videos = { ...images, category: 'video-prompts', prompts: ['push-in', 'tracking'].map((kind, index) => ({
@@ -36,21 +37,21 @@ async function fixture(t, overrides = {}) {
   await mkdir(dir, { recursive: true });
   for (const category of ['youtube-scripts', 'image-prompts', 'video-prompts']) await mkdir(join(repo, 'public/data', category), { recursive: true });
   await writeFile(join(repo, 'public/data/fixtures.json'), JSON.stringify({ matches: [match] }));
-  await writeFile(join(repo, 'public/data/top.json'), JSON.stringify({ version: 1, generatedAt: new Date(now).toISOString(), ranking: [{ id: 'a-b' }], extra: [] }));
-  await writeFile(join(repo, 'public/data/youtube-scripts/a-b.json'), JSON.stringify({ ...buildYoutubeScripts(match), matchId: 'a-b', home: match.home, away: match.away, competition: match.competition, kickoff: match.kickoff }));
-  await writeFile(join(repo, 'public/data/image-prompts/a-b.json'), JSON.stringify(images));
-  await writeFile(join(repo, 'public/data/video-prompts/a-b.json'), JSON.stringify(videos));
+  await writeFile(join(repo, 'public/data/top.json'), JSON.stringify({ version: 1, generatedAt: new Date(now).toISOString(), ranking: [{ id: matchId }], extra: [] }));
+  await writeFile(join(repo, `public/data/youtube-scripts/${matchId}.json`), JSON.stringify({ ...buildYoutubeScripts(match), matchId: matchId, home: match.home, away: match.away, competition: match.competition, kickoff: match.kickoff }));
+  await writeFile(join(repo, `public/data/image-prompts/${matchId}.json`), JSON.stringify(images));
+  await writeFile(join(repo, `public/data/video-prompts/${matchId}.json`), JSON.stringify(videos));
   const env = { MEDIA_ROLE: 'producer', GITHUB_ACTIONS: 'true', GOATLAB_REPO: repo, MEDIA_PACK_DIR: dir, R2_PUBLIC_BASE: 'https://media.test', R2_ACCOUNT_ID: 'account', R2_ACCESS_KEY_ID: 'access', R2_SECRET_ACCESS_KEY: 'secret', AGNES_API_KEY: 'fake', ...overrides };
   const objects = new Map(), calls = [], provider = [], positions=new Map();
   const position=ordinal=>{if(!positions.has(ordinal))positions.set(ordinal,positions.size+1);return positions.get(ordinal);};
   const addPhoto = ordinal => {
     const bytes = Buffer.from('photo-' + ordinal), meta = { model: 'agnes-image-2.5-flash', prompthash: hash(images.prompts[ordinal].prompt), sha256: hash(bytes), width: '1472', height: '2624' };
-    objects.set('partidos/a-b/' + ordinal + '.jpg', { bytes, meta });
+    objects.set(`partidos/${matchId}/` + ordinal + '.jpg', { bytes, meta });
   };
   const addClip = ordinal => {
-    const bytes = Buffer.from('clip-' + ordinal), meta = { model: 'agnes-video-2.5-flash', prompthash: hash(videos.prompts[ordinal % 2].prompt), sha256: hash(bytes), referencehash: hash(env.R2_PUBLIC_BASE + '/partidos/a-b/' + ordinal % 4 + '.jpg'), width: '720', height: '1280', duration: '6' };
+    const bytes = Buffer.from('clip-' + ordinal), meta = { model: 'agnes-video-2.5-flash', prompthash: hash(videos.prompts[ordinal % 2].prompt), sha256: hash(bytes), referencehash: hash(env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + ordinal % 4 + '.jpg'), width: '720', height: '1280', duration: '6' };
     const index=position(ordinal);Object.assign(meta,{attemptordinal:String(ordinal),publicationindex:String(index),attemptid:'attempt-'+ordinal});
-    objects.set('partidos/a-b/clip-' + index + '.mp4', { bytes, meta });
+    objects.set(`partidos/${matchId}/clip-` + index + '.mp4', { bytes, meta });
   };
   let block = false, failPut = false;
   const execImpl = async (_binary, argv, options) => {
@@ -75,17 +76,17 @@ async function fixture(t, overrides = {}) {
       return { stdout: JSON.stringify({ file, model: 'agnes-image-2.5-flash', prompt: images.prompts[ordinal].prompt, width: 1472, height: 2624, at: new Date(now).toISOString(), attemptId: 'private-attempt' }) };
     }
     const clips = [];
-    for (let ordinal = 0; ordinal < 2; ordinal++) {
+    for (let ordinal = 0; ordinal < mediaPolicy(matchId).clips; ordinal++) {
       position(ordinal);
       const file = 'clip-' + ordinal + '.mp4'; await writeFile(join(out, file), 'clip-' + ordinal);
-      clips.push({ index: ordinal, file, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash', prompt: videos.prompts[ordinal].prompt, reference: env.R2_PUBLIC_BASE + '/partidos/a-b/' + ordinal + '.jpg', videoId: 'private-task', attemptId: 'private-attempt' });
+      clips.push({ index: ordinal, file, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash', prompt: videos.prompts[ordinal % 2].prompt, reference: env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + ordinal + '.jpg', videoId: 'private-task', attemptId: 'private-attempt' });
     }
     return { stdout: JSON.stringify({ clips, failures: [] }) };
   };
   const transactImpl = async (operation, input) => {
     if(operation==='publication-slot')return {publicationIndex:position(input.ordinal)};
     if(operation==='status'&&input.kind==='video'&&!positions.has(input.ordinal))return {slot:null};
-    if (operation === 'status') return { slot: { attemptId:'attempt-'+input.ordinal,publicationIndex:positions.get(input.ordinal),uploadClaim: input.kind==='video'&&positions.has(input.ordinal)&&objects.has('partidos/a-b/clip-'+positions.get(input.ordinal)+'.mp4')?{publicationIndex:positions.get(input.ordinal)}:null,state: 'completed', model: 'agnes-' + input.kind + '-2.5-flash', promptHash: hash((input.kind === 'image' ? images : videos).prompts[input.ordinal % (input.kind === 'image' ? 4 : 2)].prompt), referenceHash: hash(env.R2_PUBLIC_BASE + '/partidos/a-b/' + input.ordinal % 4 + '.jpg') } };
+    if (operation === 'status') return { slot: { attemptId:'attempt-'+input.ordinal,publicationIndex:positions.get(input.ordinal),uploadClaim: input.kind==='video'&&positions.has(input.ordinal)&&objects.has(`partidos/${matchId}/clip-`+positions.get(input.ordinal)+'.mp4')?{publicationIndex:positions.get(input.ordinal)}:null,state: 'completed', model: 'agnes-' + input.kind + '-2.5-flash', promptHash: hash((input.kind === 'image' ? images : videos).prompts[input.ordinal % (input.kind === 'image' ? 4 : 2)].prompt), referenceHash: hash(env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + input.ordinal % 4 + '.jpg') } };
     return { canPut: true, saved: true };
   };
   const downloads = [], logs = [];
@@ -552,4 +553,23 @@ test('new video input passes images and no generated prompts to the production a
   assert.equal(result.completed, 1);
   assert.equal(input.prompts, undefined);
   assert.equal(input.images.length, 4);
+});
+
+test('trial adds only the missing third clip and preserves all verified R2 objects', async t => {
+  const matchId = 'levante-ud-vs-atletico-madrid-2026-10-31';
+  const f = await fixture(t, { AGNES_SKIP_IMAGES: '1' }, matchId);
+  for (let i=0; i<4; i++) f.addPhoto(i);
+  f.addClip(0); f.addClip(1);
+  const original = new Map([...f.objects].map(([key, object]) => [key, object.meta.sha256]));
+  const result = await f.run();
+  assert.equal(result.completed, 1);
+  assert.equal(result.generated, 1);
+  assert.equal(result.results[0].clips, 3);
+  assert.equal(f.provider.length, 1);
+  assert.ok(f.provider[0].endsWith('agnes_video.py'));
+  assert.equal(result.results[0].resources.length, 7);
+  for (const [key, checksum] of original) assert.equal(f.objects.get(key).meta.sha256, checksum);
+  assert.deepEqual(f.calls.filter(c => c.cmd === 'put').map(c => c.values[1]), ['partidos/'+matchId+'/clip-3.mp4']);
+  assert.equal((await f.run()).generated, 0);
+  assert.equal(f.provider.length, 1);
 });

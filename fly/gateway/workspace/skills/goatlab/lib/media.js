@@ -2,8 +2,8 @@
 import { esName } from './teams.js';
 export const ASSETS_PER_MATCH = 4;
 export const CLIPS_PER_MATCH = 2;
-// Bancos antiguos (pre 4+2) llegan con 10 fotos y 3 clips: se aceptan en la
-// puerta y se recortan al guardar. El contrato vivo es 4+2.
+// Baseline counts remain compatible. media-policy.js selects two or three clips
+// for generation; readers retain up to three verified clips across rollback.
 export const LEGACY_ASSETS_MAX = 10;
 export const LEGACY_CLIPS_MAX = 3;
 export const ASSETS_MIN = 0;

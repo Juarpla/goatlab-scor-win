@@ -80,7 +80,7 @@ Fuentes: [ClawHub](https://docs.openclaw.ai/clawhub),
 
 ## Banco audiovisual
 
-Gateway consulta las cuatro imágenes y los dos clips del partido publicados en
+Gateway consulta el banco del partido publicado en
 R2 por GitHub Actions. Para consulta, fallos de acceso, banco parcial y reintentos,
 lee `../skills/goatlab/references/media.md`. OpenClaw dirige los gráficos con
 el catálogo de hechos del partido y Render ejecuta la composición con la voz. Las imágenes y clips

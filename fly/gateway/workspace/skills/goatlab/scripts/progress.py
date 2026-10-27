@@ -5,22 +5,24 @@ import time
 import urllib.error
 from pathlib import Path
 from common import request_json
+from media_policy import clip_target
 
 STAGES = {'voiceDownload':'descargando audio','transcription':'transcribiendo audio','photos':'preparando fotos',
           'voiceAdjustment':'ajustando la voz','clips':'preparando clips','planning':'planificando el montaje con OpenClaw','reviewing':'OpenClaw revisa el resultado','reviewFrames':'preparando revisión visual','capture':'renderizando','mux':'mezclando audio y música','delivery':'enviando video aprobado'}
 
 
-def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=None, failures=()):
-    # Compatibility arguments remain accepted; the current bank is always 4+2.
+def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=None, failures=(), match_id=None):
+    # Compatibility arguments remain accepted; the target follows the experiment.
+    clip_limit = clip_target(match_id)
     count = min(4, max(0, count))
-    clips = min(2, max(0, clips or 0))
-    lines=[f'📸 Imágenes disponibles: {count}/4', f'🎞 Clips disponibles: {clips}/2']
+    clips = min(3, max(0, clips or 0))
+    lines=[f'📸 Imágenes disponibles: {count}/4', f'🎞 Clips disponibles: {clips}/{clip_limit}']
     if phase in ('failed','unavailable'):
         lines.append('⚠️ No pude consultar el banco en R2. Puedes pedir reintentar imágenes.')
         if failures: lines.append('; '.join(str(f)[:160] for f in failures[:4]))
         lines.append('El montaje continúa con los recursos disponibles y gráficos.')
     elif phase=='finished':
-        lines.append('Banco disponible.' if count==4 and clips==2 else 'Banco parcial; el montaje continúa con gráficos.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
+        lines.append('Banco disponible.' if count==4 and clips>=clip_limit else 'Banco parcial; el montaje continúa con gráficos.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
     else:
         lines.append('Consultando el banco en R2…')
     live=[j for j in jobs if j.get('status') in ('working','awaiting-plan','awaiting-review','delivering')][:3]
@@ -86,7 +88,7 @@ class ProgressReporter:
             task=db.execute('SELECT status FROM tasks WHERE id=?',('media:'+series['match_id'],)).fetchone()
             if task and task[0]=='failed': media['phase']='failed'
             elif task and task[0] in ('queued','running'): media['phase']='consulting'
-            text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now,len(audios),4,media.get('clips'),media.get('failures',[]))
+            text=progress_text(media.get('count',0),media.get('phase'),jobs,series['created'],now,len(audios),4,media.get('clips'),media.get('failures',[]),series['match_id'])
             prior=db.execute('SELECT * FROM progress WHERE series_id=?',(series['id'],)).fetchone()
             if prior and prior['message_id'] is None:continue
             if prior and (now-prior['last_sent']<10 or prior['text']==text):continue

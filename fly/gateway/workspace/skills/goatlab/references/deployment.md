@@ -7,8 +7,7 @@ plan sea ejecutable y el MP4 no supere 55 s. [Dirección artística](creative.md
 ## Flujo y persistencia
 
 OpenClaw lee el índice y los JSON de Scripts e Image Prompts de goatlab.win. Cada serie conserva
-el contenido utilizado. Actions produce el banco de cuatro imágenes y dos clips
-Agnes y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
+el contenido utilizado. Actions produce el banco Agnes definido por el modo de prueba y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
 lector independiente, verifica metadatos, prompts de imagen, checksum y acceso público,
 y publica su banco local listo en un máximo de 90 segundos. Un banco parcial o
 vacío permite montar los audios con gráficos. OpenClaw compone los gráficos por audio con el catálogo de hechos.

@@ -1,4 +1,5 @@
 import { randomUUID, createHash } from 'node:crypto';
+import { mediaPolicy, MAX_CLIPS_PER_MATCH } from './media-policy.js';
 import { safeMediaMessage } from './media-diagnostics.js';
 
 export const AGNES_STATE_MAX_BYTES = 900_000;
@@ -43,12 +44,12 @@ export function validateAgnesState(state) {
   if(state.maintenance!==undefined && state.maintenance!==null && (!keys(state.maintenance,['owner','untilMs']) || !uuid(state.maintenance.owner) || !finite(state.maintenance.untilMs))) throw new Error('exclusión de mantenimiento Agnes inválida');
   if(state.resources!==undefined) {
     if(!object(state.resources))throw new Error('recursos Agnes inválidos');
-    for(const [key,row] of Object.entries(state.resources))if(!keys(row,['matchId','kind','number','state','reason','objectKey','verifiedAt']) || key!==`${row.matchId}:${row.kind}:${row.number}` || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.number) || row.number<1 || row.number>(row.kind==='image'?4:2) || !['pendiente','generando','publicando','listo'].includes(row.state) || typeof row.reason!=='string' || row.reason.length>256 || (row.objectKey!==null && (typeof row.objectKey!=='string' || !row.objectKey.startsWith(`partidos/${row.matchId}/`))) || (row.verifiedAt!==null&&!isoUtc(row.verifiedAt)) || row.state==='listo'&&(!row.objectKey||!row.verifiedAt))throw new Error('estado de recurso Agnes inválido');
+    for(const [key,row] of Object.entries(state.resources))if(!keys(row,['matchId','kind','number','state','reason','objectKey','verifiedAt']) || key!==`${row.matchId}:${row.kind}:${row.number}` || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.number) || row.number<1 || row.number>(row.kind==='image'?4:MAX_CLIPS_PER_MATCH) || !['pendiente','generando','publicando','listo'].includes(row.state) || typeof row.reason!=='string' || row.reason.length>256 || (row.objectKey!==null && (typeof row.objectKey!=='string' || !row.objectKey.startsWith(`partidos/${row.matchId}/`))) || (row.verifiedAt!==null&&!isoUtc(row.verifiedAt)) || row.state==='listo'&&(!row.objectKey||!row.verifiedAt))throw new Error('estado de recurso Agnes inválido');
   }
   const positions=new Set();
   for (const row of Object.values(state.slots)) if(row.publicationIndex!==undefined) {
     const key=row.matchId+':'+row.publicationIndex;
-    if(row.kind!=='video'||![1,2].includes(row.publicationIndex)||positions.has(key))throw new Error('posición de publicación Agnes inválida');
+    if(row.kind!=='video'||![1,2,3].includes(row.publicationIndex)||positions.has(key))throw new Error('posición de publicación Agnes inválida');
     positions.add(key);
   }
   for (const name of ['quota','rates','matches','slots','attempts','runs','summaries','usage']) if (!object(state[name])) throw new Error('autoridad Agnes inválida');
@@ -125,7 +126,7 @@ function pickIdentity(input) { return {matchId:input.matchId,kind:input.kind,ord
 function sameIdentity(row,input) { return ['promptHash','model','referenceHash'].every(key => row[key] === input[key]); }
 function validPublication(row, value) {
   const canonical=value.publicationIndex!==undefined;
-  if(canonical && (row.kind!=='video'||![1,2].includes(value.publicationIndex)||value.publicationIndex!==row.publicationIndex))return false;
+  if(canonical && (row.kind!=='video'||![1,2,3].includes(value.publicationIndex)||value.publicationIndex!==row.publicationIndex))return false;
   const file = row.kind==='image' ? `${row.ordinal}\\.(?:png|jpg|webp)` : `clip-${canonical?value.publicationIndex:row.ordinal}\\.mp4`;
   return typeof value.objectKey==='string' && [row.matchId,row.generationMatchId].filter(Boolean).some(matchId=>new RegExp(`^partidos/${matchId}/${file}$`).test(value.objectKey))
     && Number.isSafeInteger(value.sizeBytes) && value.sizeBytes>0 && value.sizeBytes<=(row.kind==='image'?64_000_000:32_000_000);
@@ -181,8 +182,8 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     if(row.publicationIndex)result={publicationIndex:row.publicationIndex};
     else {
       const used=new Set(Object.values(state.slots).filter(slot=>slot.matchId===row.matchId).map(slot=>slot.publicationIndex));
-      const index=[1,2].find(index=>!used.has(index));
-      if(!index)throw new Error('dos posiciones de clips ya asignadas');
+      const index=Array.from({length:mediaPolicy(row.matchId).clips},(_,i)=>i+1).find(index=>!used.has(index));
+      if(!index)throw new Error('posiciones de clips del modo actual ya asignadas');
       row.publicationIndex=index;result=change({publicationIndex:index});
     }
   } else if(operation==='relocate-publication') {
@@ -198,7 +199,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     if(!row?.uploadClaim?.confirmed || row.uploadClaim.objectKey!==input.objectKey)throw new Error('publicación sin confirmar');
     delete row.uploadClaim.previousObjectKey;result=change({saved:true});
   } else if (operation === 'resource-status') {
-    if(!id(input.matchId) || state.matches[input.matchId]?.closed || !Array.isArray(input.resources) || input.resources.length!==6)throw new Error('reconciliación de recursos inválida');
+    if(!id(input.matchId) || state.matches[input.matchId]?.closed || !Array.isArray(input.resources) || input.resources.length!==4+mediaPolicy(input.matchId).clips)throw new Error('reconciliación de recursos inválida');
     state.resources??={};
     for(const row of input.resources) {
       const key=`${input.matchId}:${row.kind}:${row.number}`;
@@ -272,7 +273,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   else if (operation === 'reserve') {
     validateSlotInput(input);
     if (/^(?:fd|af|bz)-[0-9]+$/.test(input.matchId)) throw new Error('partido sin código descriptivo; publicación y generación pausadas');
-    if (input.publicationIndex!==undefined && (input.kind!=='video' || ![1,2].includes(input.publicationIndex))) throw new Error('posición de recurso inválida');
+    if (input.publicationIndex!==undefined && (input.kind!=='video' || ![1,2,3].includes(input.publicationIndex))) throw new Error('posición de recurso inválida');
     if (!uuid(input.attemptId) || !finite(input.expiresAtMs)) throw new Error('intento inválido');
     const key = slotKey(input), row = state.slots[key], previousAttempt = state.attempts[input.attemptId];
     const guard = input.guard;
@@ -287,7 +288,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     else if (!object(guard) || typeof guard.manual!=='boolean' || !finite(guard.kickoffMs) || input.expiresAtMs > guard.kickoffMs+86_400_000 || (!guard.manual && (!finite(guard.observedAtMs) || nowMs-guard.observedAtMs > 60_000 || guard.observedAtMs-nowMs > 5000 || guard.kickoffMs <= nowMs || !digest(guard.contextHash)))) result = deny('fixture vigente no verificado');
     else if (input.kind === 'video' && Object.values(state.slots).some(s=>s.kind==='video' && ['pending','uncertain'].includes(s.state) && s.expiresAtMs>nowMs)) result = deny('otra tarea pendiente o incierta');
     else if (input.kind === 'image' && Object.values(state.slots).some(s=>s.kind==='image' && s.state==='uncertain' && s.expiresAtMs>nowMs)) result = deny('otra imagen de resultado incierto; generación simultánea cerrada');
-    else if (input.kind === 'video' && Object.values(state.slots).filter(s => s.matchId===input.matchId && s.kind==='video' && ['pending','uncertain','completed'].includes(s.state)).length >= 2) result = deny('máximo dos clips por partido');
+    else if (input.kind === 'video' && Object.values(state.slots).filter(s => s.matchId===input.matchId && s.kind==='video' && ['pending','uncertain','completed'].includes(s.state)).length >= mediaPolicy(input.matchId).clips) result = deny('máximo '+mediaPolicy(input.matchId).clips+' clips por partido');
     else {
       const retryAtMs = input.kind === 'image' ? Math.max(state.rates.imageThrottleUntil, state.rates.imageStarts.filter(t => t>nowMs-60_000).length >= state.limits.imageRpm ? state.rates.imageStarts.filter(t => t>nowMs-60_000).at(-state.limits.imageRpm)+60_050 : 0) : state.rates.videoNextAt;
       const day = dayAt(nowMs), quota = state.quota[day] ?? {images:0,video_seconds:0};

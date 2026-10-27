@@ -1,3 +1,5 @@
+import { mediaPolicy } from './media-policy.js';
+
 /** Bounded public diagnostics: never publish provider credentials or signed URLs. */
 export function safeMediaMessage(value, env = {}) {
   let text=String(value ?? '');
@@ -17,15 +19,15 @@ export function publicVideoDiagnostics(rows, env={}) {
     next: safeMediaMessage(row.next ?? 'detalle original no conservado',env),
   }));
 }
-export function requestedMediaComplete({images,clips,mode}) {
-  return (mode==='clips-only'||images>=4) && (mode==='images-only'||clips>=2);
+export function requestedMediaComplete({images,clips,mode,matchId}) {
+  return (mode==='clips-only'||images>=4) && (mode==='images-only'||clips>=mediaPolicy(matchId).clips);
 }
 
 /** Totals include existing and newly uploaded resources with confirmed R2 evidence. */
-export function readyMediaLabels({ images, clips }) {
+export function readyMediaLabels({ images, clips, matchId }) {
   return {
     images: `${images}/4 imágenes listas; faltan ${Math.max(0, 4 - images)}`,
-    clips: `${clips}/2 clips listos; faltan ${Math.max(0, 2 - clips)}`,
+    clips: `${clips}/${mediaPolicy(matchId).clips} clips listos; faltan ${Math.max(0, mediaPolicy(matchId).clips - clips)}`,
   };
 }
 
@@ -50,7 +52,7 @@ export function mediaRunOutcome(report) {
     for(const kind of ['image','video']) {
       if(kind==='image'&&mode==='clips-only'||kind==='video'&&mode==='images-only')continue;
       // A recovery-only pass does not request new resources outside the selection.
-      const numbers=Array.from({length:kind==='image'?4:2},(_,i)=>i+1);
+      const numbers=Array.from({length:kind==='image'?4:mediaPolicy(row.matchId).clips},(_,i)=>i+1);
       for(const number of numbers) {
         const resource=row.resources?.find(r=>r.kind===kind&&r.number===number);
         if(resource?.verified)continue;

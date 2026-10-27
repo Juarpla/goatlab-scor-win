@@ -1,9 +1,10 @@
 /** Lector del banco de medios por partido para la ruta /partido/<id>/media.
  *  Lee los manifiestos que commitea el Action 3-media-creation y los sanea
- *  al contrato vivo 4 fotos + 2 clips (los bancos legacy llegan más grandes).
+ *  al banco de cuatro fotos y hasta tres clips, conservando los recursos tras rollback.
  *  Solo lectura en build (Astro estático); sin secrets ni red. */
 import { readdirSync, readFileSync } from 'node:fs';
-import { ASSETS_PER_MATCH, CLIPS_PER_MATCH } from './media.js';
+import { MAX_CLIPS_PER_MATCH, mediaPolicy } from './media-policy.js';
+import { ASSETS_PER_MATCH } from './media.js';
 
 const ID = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
 const HTTPS = /^https:\/\//;
@@ -35,7 +36,7 @@ export function readMediaBank(matchId, dir = 'public/data/media-pack') {
   const manifest = read(`${dir}/${matchId}.json`) ?? (progress ? {matchId,match:matchId,bankStatus:'partial',assets:[],clips:[]} : null);
   if (!manifest || manifest.matchId !== matchId) return null;
   const assets = (manifest.assets ?? []).map(validAsset).filter(Boolean).slice(0, ASSETS_PER_MATCH);
-  const clips = (manifest.clips ?? []).map(validClip).filter(Boolean).slice(0, CLIPS_PER_MATCH);
+  const clips = (manifest.clips ?? []).map(validClip).filter(Boolean).slice(0, MAX_CLIPS_PER_MATCH);
   return {
     matchId,
     match: manifest.match ?? `${manifest.home ?? ''} vs ${manifest.away ?? ''}`.trim(),
@@ -44,7 +45,7 @@ export function readMediaBank(matchId, dir = 'public/data/media-pack') {
     competition: manifest.competition ?? null,
     kickoff: manifest.kickoff ?? null,
     generatedAt: manifest.generatedAt ?? null,
-    bankStatus: manifest.bankStatus ?? (assets.length === ASSETS_PER_MATCH && clips.length === CLIPS_PER_MATCH ? 'complete' : 'partial'),
+    bankStatus: manifest.bankStatus ?? (assets.length === ASSETS_PER_MATCH && clips.length >= mediaPolicy(matchId).clips ? 'complete' : 'partial'),
     attribution: manifest.attribution ?? '',
     assets,
     clips,

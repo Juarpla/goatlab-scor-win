@@ -3,7 +3,8 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile, rename, rm, readdir, stat, open } from 'node:fs/promises';
 import { join } from 'node:path';
 import { signR2 } from './r2-signed.js';
-import { ASSETS_PER_MATCH, CLIPS_PER_MATCH, assetErrors, buildManifest } from './media.js';
+import { MAX_CLIPS_PER_MATCH, mediaPolicy } from './media-policy.js';
+import { ASSETS_PER_MATCH, assetErrors, buildManifest } from './media.js';
 import { normalizeAgnesImage } from './agnes.js';
 import { validateContent, contentIdentityErrors } from './match-content.js';
 import { contentFingerprint, bankComplete } from './media-contract.js';
@@ -120,7 +121,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
     for (const [ordinal, row] of (prior.assets ?? []).slice(0, ASSETS_PER_MATCH).entries()) {
       try { await retain('image', ordinal, new URL(row.url).pathname.split('/').at(-1), row.query, row.model); } catch {}
     }
-    for (const [ordinal, row] of (prior.clips ?? []).slice(0, CLIPS_PER_MATCH).entries()) {
+    for (const [ordinal, row] of (prior.clips ?? []).slice(0, MAX_CLIPS_PER_MATCH).entries()) {
       try { await retain('video', ordinal, row.file, animation.prompt, row.model); } catch {}
     }
   }
@@ -146,7 +147,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
         }
       }
     }
-    for (let ordinal = 0; ordinal < 5 && clips.length < CLIPS_PER_MATCH; ordinal++) {
+    for (let ordinal = 0; ordinal < 5 && clips.length < MAX_CLIPS_PER_MATCH; ordinal++) {
       const file = `clip-${ordinal}.mp4`;
       const prompt = animation.prompt;
       const model = animation.model;
@@ -155,7 +156,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
         if (!meta) continue;
         if(meta.publicationindex!==undefined) {
           const attempt=Number(meta.attemptordinal);
-          if(![1,2].includes(ordinal)||Number(meta.publicationindex)!==ordinal||!Number.isInteger(attempt)||attempt<0||attempt>4||!meta.attemptid)throw new Error('validation');
+          if(![1,2,3].includes(ordinal)||Number(meta.publicationindex)!==ordinal||!Number.isInteger(attempt)||attempt<0||attempt>4||!meta.attemptid)throw new Error('validation');
         }
         if (!digest(meta.prompthash) || meta.model !== model || !digest(meta.sha256) || !assets.some(a => hash(a.url) === meta.referencehash)
           || Number(meta.width) !== 720 || Number(meta.height) !== 1280 || !Number.isFinite(Number(meta.duration)) || Number(meta.duration) < 4 || Number(meta.duration) > 12.5) throw new Error('validation');
@@ -177,7 +178,7 @@ export async function readMediaBank({ match, content = {}, dir, env = process.en
   const complete = bankComplete(bank, { matchId, fingerprint, now: clock() });
   if (!complete) bank.bankStatus = 'partial';
   const failures = issues.map(row => row.code === 'access' ? `R2: acceso HTTP ${row.httpStatus}` : row.code === 'connection' ? 'R2: fallo de conexión' : row.code === 'validation' ? 'R2: recurso no compatible o inválido' : row.code === 'cache' ? 'Caché de media llena' : row.code === 'prompts' ? 'Prompts de media no disponibles o inválidos' : 'R2: dirección pública no configurada');
-  const progress = { count: bank.assets.length, target: ASSETS_PER_MATCH, clips: videos.length, complete, ready: true,
+  const progress = { count: bank.assets.length, target: ASSETS_PER_MATCH, clips: videos.length, clipTarget: mediaPolicy(matchId).clips, complete, ready: true,
     phase: issues.length ? 'unavailable' : 'finished', failures: [...new Set(failures)], diagnostics: issues,
     readerVersion: 1, legacyArtifacts, updatedAt: new Date(clock()).toISOString() };
   await atomic(join(dir, matchId + '.json'), bank);

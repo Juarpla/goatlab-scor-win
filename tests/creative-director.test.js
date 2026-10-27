@@ -213,12 +213,13 @@ test('authoring requests the preview bytes and records how long the turn took', 
     return h.worker(path, body, binary);
   };
   const decide = async request => { clock += 2500; seen.push(request); return h.decide(request); };
-  await directVideo({ requestId: 'preview-audio', chatId: '1', expiresAt: clock + 3_600_000 }, { ...h, worker, decide, directory: dir, now: () => clock });
+  await directVideo({ requestId: 'preview-audio', chatId: '1', matchId:'levante-ud-vs-atletico-madrid-2026-10-31', expiresAt: clock + 3_600_000 }, { ...h, worker, decide, directory: dir, now: () => clock });
   const authoring = seen.find(request => request.key.includes(':plan-'));
   assert.equal(authoring.images[0].name, '0.jpg');
   assert.equal(authoring.images[0].bytes.toString(), 'small-preview');
   assert.match(authoring.sessionKey, /^agent:director:goatlab:/);
   assert.match(authoring.message, /Preferencias del usuario/);
+  assert.match(authoring.message, /Dirección vigente para este partido:[\s\S]*Modo de prueba: prioriza los clips animados/);
   assert.equal(JSON.parse(readFileSync(join(dir, 'state.json'), 'utf8')).history[0].ms, 2500);
 });
 

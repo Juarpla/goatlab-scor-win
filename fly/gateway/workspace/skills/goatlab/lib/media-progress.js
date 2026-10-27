@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { rm } from 'node:fs/promises';
 import { ASSETS_PER_MATCH, buildManifest, assetErrors } from './media.js';
 import { checkMediaManifest } from './compliance.js';
+import { mediaPolicy } from './media-policy.js';
 import { bankComplete } from './media-contract.js';
 
 /** Publish valid packs before the producer finishes; every file replaces atomically. */
@@ -46,7 +47,7 @@ export function mediaPublisher({ dir, match, facts = [], target = ASSETS_PER_MAT
       ready = true;
     }
     if (preserve) ready = true;
-    await atomic('.progress.json', { count, target, clips: payload.clips?.length ?? 0, failures: payload.failures ?? [], diagnostics: payload.diagnostics ?? [], runUrl: payload.runUrl ?? null, mode: payload.mode ?? 'all', verifiedImages: assetProof.size, verifiedClips: clipProof.size, phase, ready, complete, updatedAt: generatedAt });
+    await atomic('.progress.json', { count, target, clipTarget: mediaPolicy(matchId).clips, clips: payload.clips?.length ?? 0, failures: payload.failures ?? [], diagnostics: payload.diagnostics ?? [], runUrl: payload.runUrl ?? null, mode: payload.mode ?? 'all', verifiedImages: assetProof.size, verifiedClips: clipProof.size, phase, ready, complete, updatedAt: generatedAt });
     return { count, ready, complete, publishable };
   };
 }

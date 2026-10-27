@@ -26,6 +26,14 @@ class VideoTests(unittest.TestCase):
         self.posts=[]
     def sleep(self,seconds):self.now+=seconds
 
+    def test_trial_generates_three_clips_then_reuses_without_new_post(self):
+        with patch('media_policy.CONFIG', {'mode':'clips-first', 'matches':['a-b']}):
+            result = self.bank(self.success)
+            self.assertEqual(len(result['clips']), 3)
+            self.assertEqual(len(self.posts), 3)
+            self.assertEqual(len(self.bank(self.success)['clips']), 3)
+            self.assertEqual(len(self.posts), 3)
+
     def test_recovery_only_skips_unused_slots_and_never_posts(self):
         self.state.seed('a-b', 3, prompt='Prompt 3')
         calls = []

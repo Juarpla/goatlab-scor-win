@@ -131,3 +131,22 @@ test('R2 media consumption does not require video prompt content', async t => {
   f.clip(0); f.clip(1);
   assert.equal((await f.run()).complete, true);
 });
+
+test('reader carries canonical clip 3 through to the montage with checksum verification', async t => {
+  const f = await fixture(t), matchId = 'levante-ud-vs-atletico-madrid-2026-10-31';
+  f.match.webId = matchId;
+  for (const pack of Object.values(f.content)) { pack.webId = matchId; pack.matchId = matchId; }
+  for (let i=0; i<4; i++) f.photo(i);
+  for (let i=1; i<=3; i++) {
+    f.clip(i);
+    Object.assign(f.objects.get(`clip-${i}.mp4`).meta, { publicationindex:String(i), attemptordinal:String(i-1), attemptid:'attempt-'+i,
+      referencehash:hash(`https://media.test/partidos/${matchId}/${i%4}.png`) });
+  }
+  const result = await f.run();
+  assert.equal(result.complete, true); assert.equal(result.clips, 3); assert.equal(result.clipTarget, 3);
+  const bank = JSON.parse(await readFile(join(f.dir, matchId+'.json')));
+  assert.equal(bank.clips[2].file, 'clip-3.mp4');
+  f.objects.get('clip-3.mp4').meta.publicationindex = '4';
+  await rm(join(f.dir, 'gen', matchId, 'clip-3.mp4'));
+  assert.equal((await f.run()).complete, false);
+});

@@ -102,3 +102,17 @@ test('mode-specific completion does not claim the missing other half', () => {
   assert.equal(bankComplete(clipsOnly, options(value)), false);
   assert.equal(bankComplete({ ...value, assets: [] }, { ...options(value), mode: 'clips-only' }), false);
 });
+
+test('trial needs three verified distinct clips and keeps the same content fingerprint', () => {
+  const value = bank(), matchId = 'levante-ud-vs-atletico-madrid-2026-10-31';
+  value.matchId = matchId;
+  const opts = { ...options(value), matchId };
+  assert.equal(bankComplete(value, opts), false);
+  value.clips.push({ ...value.clips[0], id:'clip-extra', url:'https://media.test/clip-3.mp4', sha256:hash('third clip') });
+  assert.equal(bankComplete(value, opts), true);
+  // Switching back to freedom accepts the stored third without discarding it.
+  value.matchId = 'a-b';
+  assert.equal(bankComplete(value, options(value)), true);
+  value.clips.push({ ...value.clips[0], id:'clip-fourth', url:'https://media.test/clip-4.mp4', sha256:hash('fourth') });
+  assert.equal(bankComplete(value, options(value)), false);
+});

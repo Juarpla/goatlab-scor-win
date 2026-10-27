@@ -17,6 +17,7 @@ import urllib.parse
 from pathlib import Path
 from common import agnes_authority, atomic_json, database, request_json
 from agnes import retry_seconds
+from media_policy import clip_target
 
 ANIMATION = json.loads((Path(__file__).resolve().parent.parent / 'lib/video-animation.json').read_text())
 MODEL = ANIMATION['model']
@@ -192,7 +193,8 @@ class VideoPool:
         return details
 
     def bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False):
-        prompts = [{'prompt': ANIMATION['prompt']}] * (min(2, len(prompts)) or 2)
+        count = clip_target(match)
+        prompts = [{'prompt': ANIMATION['prompt']}] * (count if count == 3 else (min(count, len(prompts)) or count))
         if os.environ.get('AGNES_RESOURCE_RETRIES') != '3' or recover_only:
             return self._bank(match, prompts, images, out, deadline, expires, call, download, cancelled, verified, recover_only)
         verified = set(verified or [])
@@ -204,9 +206,9 @@ class VideoPool:
         self.run_posts = counts
         clips, failures, diagnostics = [], [], []
         used_positions = {slots[i].get('publicationIndex') for i in protected if slots[i]}
-        positions = [number for number in (1, 2) if number not in used_positions]
+        positions = [number for number in range(1, clip_target(match)+1) if number not in used_positions]
         assignments = []
-        for number in positions[:max(0, 2-len(protected))]:
+        for number in positions[:max(0, clip_target(match)-len(protected))]:
             matching = [i for i in candidates if slots[i] and slots[i].get('publicationIndex') == number]
             unassigned = [i for i in candidates if not slots[i] or not slots[i].get('publicationIndex')]
             choices = matching or unassigned
@@ -283,7 +285,7 @@ class VideoPool:
             # The 60-second error recovery window belongs to this bank invocation.
             # Hourly runs may retrieve the same task again, but never recreate it.
             self.db.execute('DELETE FROM video_recovery WHERE match_id=?', (match,))
-            target = 1 if candidate_ordinals is not None else max(0, min(2, len(prompts)) - len(verified))
+            target = 1 if candidate_ordinals is not None else max(0, min(clip_target(match), len(prompts)) - len(verified))
             if not target: return {'clips': [], 'failures': [], 'diagnostics': prior_diagnostics}
             # Count consumed attempts from the authority even with a fresh SQLite.
             try:
@@ -346,8 +348,8 @@ class VideoPool:
                 self.db.execute('INSERT OR IGNORE INTO video_models VALUES(?,?,?)',(match,ordinal,MODEL))
                 if not video_id:
                     occupied = self.db.execute("SELECT COUNT(*) FROM video_tasks WHERE match_id=? AND status IN ('done','pending','uncertain')", (match,)).fetchone()[0]
-                    if occupied>=2:
-                        stop_reason = 'dos tareas completadas o pendientes ocupan el banco; recuperar los recursos existentes'
+                    if occupied>=clip_target(match):
+                        stop_reason = 'las tareas completadas o pendientes ocupan el banco; recuperar los recursos existentes'
                         break
                     while not video_id and self.clock()<deadline and not cancelled() and (candidate_ordinals is None or self.run_posts.get((match, self.state.resource_number), 0)<3):
                         rate = self.db.execute('SELECT next_at FROM video_rate WHERE id=1').fetchone()

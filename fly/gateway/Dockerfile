@@ -9,6 +9,8 @@ COPY --chown=node:node fly/gateway/openclaw.json /home/node/.openclaw/openclaw.j
 COPY --chown=node:node fly/gateway/workspace/ /home/node/.openclaw/workspace/
 COPY --chown=node:node fly/gateway/idle-stop.mjs fly/gateway/idle-safety.mjs fly/gateway/creative-director.mjs /home/node/
 COPY --chown=node:node src/lib/visual-style.js /home/node/visual-style.js
+# Keep the director relative import stable outside the repository checkout.
+COPY --chown=node:node src/lib/media-policy.js src/lib/montage-experiment.json /home/node/workspace/skills/goatlab/lib/
 # The skill imports this module locally as well as from the cloned repository.
 COPY --chown=node:node src/lib/visual-style.js /home/node/.openclaw/workspace/skills/goatlab/lib/visual-style.js
 COPY --chown=node:node fly/gateway/ui-access.mjs fly/gateway/runtime.mjs /home/node/

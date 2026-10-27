@@ -1,6 +1,6 @@
 # Medios y reintentos
 
-El banco pertenece al partido y reúne cuatro imágenes y dos clips Agnes, reutilizables
+El banco pertenece al partido y reúne cuatro imágenes y dos o tres clips Agnes, reutilizables
 entre audios y chats. El montaje puede continuar con recursos parciales y gráficos.
 Las fotos externas se filtran. Los prompts publicados de imagen deben coincidir
 con ID, equipos traducidos, competición y kickoff. Los clips usan la configuración
@@ -27,7 +27,7 @@ Para «reintenta el video 3», consultar `status --chat=<chat> --number=3` y eje
 `delivery-unknown` exige verificar Telegram antes de reenviar; `unavailable` no
 demuestra fallo. No pedir una grabación nueva por un fallo del servidor.
 
-El progreso muestra imágenes disponibles sobre cuatro y clips sobre dos, sin
+El progreso muestra imágenes disponibles sobre cuatro y clips sobre el objetivo del modo, sin
 cronómetro. Un estado de Render con más de 90 segundos sin confirmación se indica
 como pendiente de actualización, sin afirmar que continúa planificando ni que
 falló. Los errores de montaje y de consulta del banco se comunican separadamente.
@@ -40,7 +40,10 @@ contrato de `AGNES-STATE.md`; Gateway utiliza `MEDIA_ROLE=consumer` y el product
 exige `MEDIA_ROLE=producer` dentro de GitHub Actions. Actions reintenta a las
 02:15, 04:15 y 06:15 Lima, sin consultar ni encender Fly.
 
-El banco completo mantiene las pruebas v2 de cuatro fotos y dos clips distintos.
+El banco completo mantiene las pruebas v2 de identidad y almacenamiento; el objetivo
+de clips sigue `lib/montage-experiment.json`. La lectura conserva hasta tres clips
+verificados incluso al volver a freedom. Consulta [montage-experiment.md](montage-experiment.md)
+para activar, comprobar o revertir la prueba.
 La generación parcial conserva un banco completo anterior. La poda remota sigue
 requiriendo final confirmado y protección de trabajos pendientes. Gateway limpia
 únicamente su caché de lectura, caducada y sin trabajos que la necesiten. Actions
@@ -57,6 +60,6 @@ hasta 50 segundos y sustituir ese audio; reintentar el mismo archivo no lo resue
 
 OpenClaw escribe la composición JSX de cada audio. Las familias editoriales y
 estadísticas anteriores son referencias históricas del motor, no un catálogo que
-el nuevo código deba usar. Elige libremente media o gráficos, con cifras del
+el nuevo código deba usar. Sigue la dirección vigente adjunta al turno, con cifras del
 catálogo cuando corresponda. Para el contrato vigente de composición consulta
 [creative.md](creative.md).

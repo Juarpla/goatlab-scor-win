@@ -2,6 +2,7 @@
 import { createHash } from 'node:crypto';
 import animation from './video-animation.json' with { type: 'json' };
 import { esName } from './teams.js';
+import { mediaPolicy, MAX_CLIPS_PER_MATCH } from './media-policy.js';
 import { assetErrors } from './media.js';
 import { CONTENT_VERSION, contentIdentityErrors } from './match-content.js';
 
@@ -49,9 +50,9 @@ export function bankComplete(bank, { matchId, fingerprint, mode = 'all', now = D
   const verifiedAt = time(bank.storageVerifiedAt);
   if (!Number.isFinite(verifiedAt) || verifiedAt > now) return false;
   const photos = bank.assets, clips = bank.clips;
-  if (!validPhotos(photos) || !Array.isArray(clips) || clips.length > 2) return false;
+  if (!validPhotos(photos) || !Array.isArray(clips) || clips.length > MAX_CLIPS_PER_MATCH) return false;
   if (mode !== 'clips-only' && photos.length !== 4) return false;
-  if (mode !== 'images-only' && clips.length !== 2) return false;
+  if (mode !== 'images-only' && clips.length < mediaPolicy(matchId).clips) return false;
   const references = new Set(photos.map(photo => sha(photo.url)));
   return clips.every(clip => clip?.source === 'agnes' && safeId(clip.id) && https(clip.url) && hash(clip.sha256)
     && typeof clip.model === 'string' && !!clip.model.trim() && clip.width === 720 && clip.height === 1280

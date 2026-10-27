@@ -279,3 +279,20 @@ test('five video starts fit a minute and sixth waits without reopening attempts'
   assert.equal(blocked.result.code,'rate-wait');assert.equal(blocked.result.retryAtMs,now+60_500);
   assert.equal(reduceAgnesState(blocked.state,'reserve',next,{nowMs:now+60_500}).result.canPost,true);
 });
+
+test('trial admits three clips, persists third publication and refuses a fourth without resetting history', () => {
+  const matchId='levante-ud-vs-atletico-madrid-2026-10-31'; let state=fresh();
+  for(let ordinal=0;ordinal<3;ordinal++) {
+    const at=now+ordinal*60_000;
+    const input=reserve({matchId,kind:'video',model:'agnes-video-2.5-flash',referenceHash:hash('photo'),ordinal,publicationIndex:ordinal+1});
+    let change=reduceAgnesState(state,'reserve',input,{nowMs:at});
+    assert.equal(change.result.canPost,true); state=change.state;
+    state=reduceAgnesState(state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'accepted',videoId:'task-'+ordinal},{nowMs:at}).state;
+    state=reduceAgnesState(state,'event',{attemptId:input.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:at}).state;
+  }
+  validateAgnesState(state);
+  assert.equal(Object.keys(state.attempts).length,3);
+  assert.equal(state.slots[matchId+':video:2'].publicationIndex,3);
+  const fourth=reduceAgnesState(state,'reserve',reserve({matchId,kind:'video',ordinal:3,model:'agnes-video-2.5-flash',referenceHash:hash('photo')}),{nowMs:now+240_000});
+  assert.equal(fourth.result.canPost,false); assert.match(fourth.result.reason,/máximo 3/);
+});

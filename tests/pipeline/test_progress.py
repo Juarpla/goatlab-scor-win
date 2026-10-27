@@ -2,12 +2,20 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts'))
 from workflow import Workflow
 from progress import ProgressReporter, progress_text
 
 class ProgressTests(unittest.TestCase):
+    def test_trial_progress_tracks_three_and_freedom_restores_two(self):
+        with patch('media_policy.CONFIG', {'mode':'clips-first', 'matches':['trial']}):
+            self.assertIn('Clips disponibles: 3/3', progress_text(4,'finished',[],0,0,clips=3,match_id='trial'))
+            self.assertIn('Banco parcial', progress_text(4,'finished',[],0,0,clips=2,match_id='trial'))
+        with patch('media_policy.CONFIG', {'mode':'freedom', 'matches':['trial']}):
+            self.assertIn('Banco disponible', progress_text(4,'finished',[],0,0,clips=3,match_id='trial'))
+
     def test_current_bank_targets_and_no_timer_or_generation_copy(self):
         for clips in (0, 2):
             text = progress_text(4, 'finished', [], 1000, 4000, target=4, clips=clips)
