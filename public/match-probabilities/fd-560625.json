@@ -4,7 +4,7 @@
   "away": "Sunderland AFC",
   "competition": "premier",
   "kickoff": "2026-10-31T15:00:00Z",
-  "updatedAt": "2026-10-28T05:54:24.526Z",
+  "updatedAt": "2026-10-28T12:42:29.330Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-27T12:02:06.648Z",
+      "updatedAt": "2026-10-28T12:42:18.799Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-27T12:02:06.648Z",
+      "updatedAt": "2026-10-28T12:42:18.799Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -194,30 +194,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.541,
-      "draw": 0.242,
-      "away": 0.217,
-      "predicted": "H"
+      "home": 0.316,
+      "draw": 0.27899999999999997,
+      "away": 0.405,
+      "predicted": "A"
     },
     "xg": {
       "home": 1.78,
       "away": 1.11
     },
-    "over15": 0.775,
-    "over25": 0.545,
-    "over35": 0.319,
-    "btts": 0.546,
+    "over15": 0.7390000000000001,
+    "over25": 0.499,
+    "over35": 0.299,
+    "btts": 0.5539999999999999,
     "score": "1-1",
-    "cornersOver95": 0.455,
+    "cornersOver95": 0.45399999999999996,
     "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.541,
+      "favorite": "A",
+      "favoriteProb": 0.405,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.5409,
+    "confidence": 0.4052,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-27T12:02:10.853Z",
+    "capturedAt": "2026-10-28T12:42:22.909Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -604,9 +604,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Dos desvíos: B asigna 54,1% al triunfo local frente al 41,5% de Poisson (≈12,6 pp) y B2 declara «no» en goles totales y ambos anotan pese a que las cifras de B (0,545/0,546) rozan el 50%. Además, los 6 encajados de Coventry en tabla no cuadran con los 10 de sus resultados listados.",
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-10-27T05:19:42.028Z"
+    "note": "Bzzoiro declara 1,78 goles esperados para el Coventry y 1,11 para el Sunderland, pero asigna 40,5 % al Sunderland y 31,6 % al local; esa combinación es internamente llamativa frente a GoatLab, que da 41,5 % al Coventry.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-28T12:48:34.209Z"
   }
 }

@@ -1,0 +1,591 @@
+{
+  "id": "fd-575382",
+  "home": "Villarreal CF",
+  "away": "Paris Saint-Germain FC",
+  "competition": "champions",
+  "kickoff": "2026-11-03T20:00:00Z",
+  "updatedAt": "2026-10-28T12:42:29.330Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.89,
+      "away": 2.76
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.815,
+      "away": 2.35
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 3
+    },
+    "standings": {
+      "Villarreal CF": {
+        "position": 19,
+        "team": "Villarreal",
+        "teamId": 41,
+        "played": 3,
+        "won": 1,
+        "drawn": 0,
+        "lost": 2,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 3,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "Paris Saint-Germain FC": {
+        "position": 1,
+        "team": "Paris Saint-Germain",
+        "teamId": 114,
+        "played": 3,
+        "won": 3,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 9,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-28T12:41:39.029Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-03T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-28T12:41:39.029Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 331
+    },
+    "venue": {
+      "city": "Vila-real",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.254,
+      "draw": 0.188,
+      "away": 0.558
+    },
+    "doubleChance": {
+      "12": 0.812,
+      "1X": 0.442,
+      "X2": 0.746
+    },
+    "dnb": {
+      "home": 0.312,
+      "away": 0.688
+    },
+    "totals": {
+      "over15": 0.951,
+      "under15": 0.049,
+      "over25": 0.842,
+      "under25": 0.158,
+      "over35": 0.682,
+      "under35": 0.318
+    },
+    "btts": {
+      "yes": 0.8,
+      "no": 0.2
+    },
+    "cleanSheet": {
+      "home": 0.063,
+      "away": 0.151
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.069
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.065
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.063
+      },
+      {
+        "home": 2,
+        "away": 3,
+        "p": 0.06
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.055
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 4.17,
+    "noGoal": 0.016,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.501
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.25
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.125
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.062
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.031
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.016
+      }
+    ],
+    "firstHome": 0.429,
+    "firstAway": 0.555
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Georges Mikautadze",
+        "goals": 2,
+        "matches": 3,
+        "share": 0.9,
+        "rate": 1.63,
+        "anytime": 0.805,
+        "first": 0.392
+      }
+    ],
+    "away": [
+      {
+        "player": "Ferran Torres",
+        "goals": 3,
+        "matches": 3,
+        "share": 0.3,
+        "rate": 0.71,
+        "anytime": 0.506,
+        "first": 0.169
+      },
+      {
+        "player": "Ousmane Dembélé",
+        "goals": 3,
+        "matches": 3,
+        "share": 0.3,
+        "rate": 0.71,
+        "anytime": 0.506,
+        "first": 0.169
+      },
+      {
+        "player": "Désiré Doué",
+        "goals": 2,
+        "matches": 3,
+        "share": 0.2,
+        "rate": 0.47,
+        "anytime": 0.375,
+        "first": 0.113
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.342,
+      "draw": 0.218,
+      "away": 0.44,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.74,
+      "away": 1.94
+    },
+    "over15": 0.867,
+    "over25": 0.6920000000000001,
+    "over35": 0.483,
+    "btts": 0.66,
+    "score": "1-1",
+    "cornersOver95": 0.485,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.44,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.44,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-28T12:42:25.178Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.344,
+      "draw": 0.233,
+      "away": 0.424
+    },
+    "doubleChance": {
+      "12": 0.767,
+      "1X": 0.576,
+      "X2": 0.656
+    },
+    "dnb": {
+      "home": 0.448,
+      "away": 0.552
+    },
+    "totals": {
+      "over15": 0.89,
+      "under15": 0.11,
+      "over25": 0.711,
+      "under25": 0.289,
+      "over35": 0.502,
+      "under35": 0.498
+    },
+    "btts": {
+      "yes": 0.714,
+      "no": 0.286
+    },
+    "cleanSheet": {
+      "home": 0.144,
+      "away": 0.176
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.104,
+        "share": 0.26943005181347146
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.083,
+        "share": 0.2150259067357513
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.074,
+        "share": 0.19170984455958548
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.072,
+        "share": 0.1865284974093264
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.053,
+        "share": 0.13730569948186527
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 0,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": [],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.4
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 15.31,
+      "shotsOnTarget": 5.86,
+      "xg": 1.74,
+      "corners": 5.09,
+      "fouls": 10.73,
+      "yellowCards": 1.78,
+      "redCards": 0.14,
+      "offsides": 2.42,
+      "possession": 49.35
+    },
+    "away": {
+      "shots": 15.81,
+      "shotsOnTarget": 6.52,
+      "xg": 1.94,
+      "corners": 4.94,
+      "fouls": 10.48,
+      "yellowCards": 1.64,
+      "redCards": 0.19,
+      "offsides": 1.89,
+      "possession": 50.65
+    },
+    "sample": {
+      "home": 10,
+      "away": 6
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 4,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 6,
+        "redCards": 5,
+        "offsides": 6
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.82,
+      "shotsOnTarget": 5.75,
+      "xg": 1.74,
+      "corners": 4.84,
+      "fouls": 10.95,
+      "yellowCards": 1.74,
+      "redCards": 0.15,
+      "offsides": 2.28
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.455,
+      "draw": 0.128,
+      "away": 0.418
+    },
+    "cardsDuel": {
+      "home": 0.416,
+      "draw": 0.225,
+      "away": 0.358
+    },
+    "lastGoal": {
+      "home": 0.429,
+      "away": 0.555,
+      "noGoal": 0.016
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.514,
+        "away": 0.486
+      },
+      "5": {
+        "home": 0.518,
+        "away": 0.482
+      },
+      "7": {
+        "home": 0.522,
+        "away": 0.478
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.226,
+      "home12": 0.229,
+      "level": 0.128,
+      "away12": 0.22,
+      "away3plus": 0.198
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 7,
+      "condition": "clear",
+      "sampledAt": "2026-11-03T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Estadio de la Cerámica",
+      "city": "Vila-real",
+      "capacity": 23000,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Villarreal CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 2,
+        "sample": 5
+      },
+      "season": {
+        "position": 10,
+        "played": 10,
+        "gf": 15,
+        "ga": 14,
+        "provider": null
+      },
+      "player": {
+        "name": "Georges Mikautadze",
+        "detail": "3 goles en 10 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Paris Saint-Germain FC",
+      "recentSample": 3,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 3
+      },
+      "biggestWin": {
+        "value": 5,
+        "sample": 3
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 3
+      },
+      "season": {
+        "position": 1,
+        "played": 3,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Ferran Torres",
+        "detail": "3 goles en 3 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

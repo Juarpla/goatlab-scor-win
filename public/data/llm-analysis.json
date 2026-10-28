@@ -2886,24 +2886,24 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Panorama del cruce",
+        "title": "Panorama y posición",
         "bullets": [
-          "LaLiga, 30-10-2026 a las 20:00Z: Villarreal CF recibe a RCD Espanyol en un partido con estado NS; el registro meteorológico aportado es lluvia y 5, sin unidad indicada.",
-          "En la tabla, Villarreal figura 10º con 10 partidos, 12 puntos, 15 goles a favor y 14 en contra; Espanyol es 18º con 10 partidos, 8 puntos, 12 a favor y 14 en contra.",
-          "La diferencia de posición y puntos favorece al local; el visitante iguala en goles recibidos con 14 y llega con menor producción de puntos en la fila de clasificación."
+          "Villarreal CF y RCD Espanyol se miden en LaLiga el 30 de octubre de 2026 a las 20:00; el parte W indica lluvia y un valor 5 sin unidad especificada.",
+          "Villarreal figura 10º con 10 partidos, 12 puntos, 15 goles a favor y 14 en contra según la tabla suministrada.",
+          "Espanyol aparece 18º con 10 partidos, 8 puntos, 12 goles a favor y 14 en contra."
         ],
         "stats": [
           {
             "value": "10º",
-            "label": "puesto Villarreal"
+            "label": "posición Villarreal"
           },
           {
             "value": "18º",
-            "label": "puesto Espanyol"
+            "label": "posición Espanyol"
           },
           {
-            "value": "12",
-            "label": "puntos Villarreal"
+            "value": "8",
+            "label": "puntos Espanyol"
           }
         ]
       },
@@ -2911,41 +2911,42 @@
         "kind": "modelos",
         "title": "Modelos y probabilidades",
         "bullets": [
-          "Poisson GoatLab: probabilidad local 0.533, empate 0.253 y visitante 0.214; goles esperados 1.8 y 1.073; más de 2.5 goles 0.548 y ambos equipos marcan 0.56.",
-          "CatBoost Bzzoiro: probabilidad local 0.63, empate 0.207 y visitante 0.163; goles esperados 1.95 y 1.04; más de 2.5 goles 0.612, ambos equipos marcan 0.564 y marcador 1-1.",
-          "B2 declara H con 0.63 y 'no' en sus dos casillas binarias; el input no detalla sus etiquetas, por lo que se reporta sin reinterpretarlas. La lectura local de B y B2 supera la de P en 0.097."
+          "Poisson GoatLab otorga 53.3% al local, 25.3% al empate y 21.4% al visitante, con medias de goles 1.8 y 1.073.",
+          "El mismo cálculo Poisson sitúa en 54.8% la probabilidad de más de 2.5 goles y en 56.0% la de que ambos anoten.",
+          "CatBoost Bzzoiro otorga 65.6% al local, 19.6% al empate y 14.8% al visitante, con medias de goles 2.04 y 1.03.",
+          "Bzzoiro añade 62.9% para más de 2.5 goles, 56.3% para que ambos anoten y señala 1-1 como marcador; B2 declara local 65.6% y 'no' en goles totales y ambos anotan."
         ],
         "stats": [
           {
-            "value": "0.533",
-            "label": "local en P"
+            "value": "53.3%",
+            "label": "local Poisson"
           },
           {
-            "value": "0.63",
-            "label": "local en B/B2"
+            "value": "65.6%",
+            "label": "local Bzzoiro"
           },
           {
             "value": "1-1",
-            "label": "marcador B"
+            "label": "marcador Bzzoiro"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Historial de enfrentamientos",
+        "title": "Historial del cruce",
         "bullets": [
-          "Balance histórico: 50 partidos, 21 victorias locales, 21 empates, 8 victorias visitantes y 2.38 goles por partido de media.",
-          "Los cinco cruces recientes listados terminaron con triunfo de Villarreal: 4-1, 0-2, 1-0, 1-2 y 4-2.",
-          "Ese registro reciente es más favorable al local que la lectura de Poisson (0.533), mientras CatBoost y B2 elevan la ventaja local a 0.63."
+          "El historial H suma 50 cruces: 21 triunfos de Villarreal, 21 empates y 8 del Espanyol, con 2.38 goles por partido.",
+          "Los cinco HR recientes son todos triunfos de Villarreal: 4-1, 0-2, 1-0, 1-2 y 4-2.",
+          "El contraste es claro: el global está equilibrado en empates, pero la racha reciente del cruce favorece al local."
         ],
         "stats": [
           {
             "value": "50",
-            "label": "cruces históricos"
+            "label": "cruces historial"
           },
           {
             "value": "21",
-            "label": "victorias locales"
+            "label": "triunfos Villarreal"
           },
           {
             "value": "2.38",
@@ -2954,35 +2955,11 @@
         ]
       },
       {
-        "kind": "forma",
-        "title": "Forma reciente",
-        "bullets": [
-          "Villarreal: 3 victorias (3-1 Levante, 3-1 Napoli, 2-1 Valencia), 1 empate (0-0 Elche) y 2 derrotas (0-1 Real Madrid, 3-4 Liverpool) en seis registros.",
-          "Espanyol: 4 derrotas (1-2 Rayo, 1-3 Elche, 0-1 Atlético, 1-2 Racing) y 1 empate (1-1 Málaga) en cinco registros útiles; la fila duplicada Espanyol-Elche 1-3 se contabiliza una vez.",
-          "Espanyol no gana en esa muestra reciente, mientras Villarreal alterna triunfos con tropiezos y suma 3 victorias en seis."
-        ],
-        "stats": [
-          {
-            "value": "3",
-            "label": "victorias Villarreal"
-          },
-          {
-            "value": "4",
-            "label": "derrotas Espanyol"
-          },
-          {
-            "value": "1",
-            "label": "empate Espanyol"
-          }
-        ]
-      },
-      {
         "kind": "goleadores",
         "title": "Goleadores",
         "bullets": [
-          "Villarreal: Georges Mikautadze y Pape Gueye suman 3 goles en 10 partidos cada uno; Alberto Moleiro registra 2 en 10.",
-          "Espanyol: Roberto Fernández acumula 6 goles en 10 partidos y aparece como referencia ofensiva del visitante.",
-          "El máximo anotador listado del visitante (6) supera a los máximos locales (3), aunque el equipo local tiene mejor posición de tabla."
+          "En Villarreal, Georges Mikautadze y Pape Gueye suman 3 goles en 10 partidos cada uno; Alberto Moleiro registra 2 en 10.",
+          "En Espanyol, Roberto Fernández acumula 6 goles en 10 partidos y aparece como referencia ofensiva del bloque visitante."
         ],
         "stats": [
           {
@@ -2994,67 +2971,90 @@
             "label": "goles Mikautadze"
           },
           {
-            "value": "10",
-            "label": "partidos"
+            "value": "2",
+            "label": "goles Moleiro"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Villarreal suma 3 victorias, 1 empate y 2 derrotas en seis R recientes; marcadores desde su perspectiva: 3-1, 0-1, 3-1, 0-0, 3-4 y 2-1.",
+          "Espanyol acumula 0 victorias, 1 empate y 4 derrotas en sus cinco R únicos; el 1-3 ante Elche aparece duplicado en el input.",
+          "La forma reciente favorece a Villarreal: venció 2-1 en Valencia en su último R, mientras Espanyol cayó 2-1 en Racing."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "victorias Villarreal"
+          },
+          {
+            "value": "0",
+            "label": "victorias Espanyol"
+          },
+          {
+            "value": "4",
+            "label": "derrotas Espanyol"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Etiquetas B2",
-        "detail": "El input no explicita qué representan los dos 'no' de B2; no se convierten en más/menos goles ni en ambos equipos marcan."
+        "label": "Sin consenso M2",
+        "detail": "No se suministró bloque M2, por lo que no hay contraste con consenso externo para este cruce."
       },
       {
-        "label": "Clima sin unidad",
-        "detail": "El registro W indica lluvia y 5, pero no especifica unidad, sede ni viento; no se usa para ajustar probabilidades."
+        "label": "Alineaciones",
+        "detail": "No aparece bloque L de bajas confirmadas ni alineaciones; no es posible validar disponibilidad de jugadores."
       },
       {
-        "label": "Duplicado en forma",
-        "detail": "Espanyol-Elche 1-3 aparece dos veces con fechas y nombres equivalentes; se contabiliza una sola vez."
+        "label": "Clima incompleto",
+        "detail": "W solo indica lluvia y un valor 5 sin unidad ni sede; su efecto no puede cuantificarse."
       },
       {
-        "label": "Tabla interpretada",
-        "detail": "La fila T se lee como puesto, partidos, puntos, goles a favor y en contra; el input no incluye encabezados."
+        "label": "Tabla telegráfica",
+        "detail": "La lectura de posición, partidos, puntos y goles sigue el orden de los campos T; no hay desglose adicional."
       },
       {
-        "label": "Dispersión de modelos",
-        "detail": "P asigna 0.533 al local y B/B2 0.63; la diferencia de 0.097 se reporta sin corregirla."
+        "label": "Dato duplicado",
+        "detail": "En R, el Espanyol-Elche 1-3 del 18 de septiembre aparece dos veces; la forma se calculó con registros únicos."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Bandera activada por la diferencia de 0.097 entre P (0.533) y B/B2 (0.63) en la probabilidad local, y por la lectura 'no/no' de B2 frente a 0.612 y 0.564 de B; no se alteran los datos."
+      "note": "Divergencia clara entre modelos: Poisson da 53.3% al local y Bzzoiro/B2 65.6%; ambos favorecen a Villarreal y el 65.6% no puede contrastarse con M2 porque no fue suministrado."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T12:04:19.286Z",
-    "inputKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.63|0.207|0.163|1.95|1.04|0.612|0.564|1-1|0.533\nB2|H|0.63|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2",
-    "materialKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.63|0.207|0.163|1.95|1.04|0.612|0.564|1-1|0.533\nB2|H|0.63|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2"
+    "generatedAt": "2026-10-28T12:44:59.789Z",
+    "inputKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.656|0.196|0.148|2.04|1.03|0.629|0.563|1-1|0.548\nB2|H|0.656|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2",
+    "materialKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.656|0.196|0.148|2.04|1.03|0.629|0.563|1-1|0.548\nB2|H|0.656|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2"
   },
   "fd-560626": {
     "matchId": "fd-560626",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Panorama del cruce",
+        "title": "Panorama y posición",
         "bullets": [
-          "Premier League, 31-10-2026 a las 12:30Z: Chelsea FC y Manchester United FC se enfrentan con estado NS; el registro meteorológico aportado es nublado y 10, sin unidad indicada.",
-          "Chelsea figura 5º con 8 partidos, 13 puntos, 17 goles a favor y 15 en contra; Manchester United es 16º con 8 partidos, 7 puntos, 10 a favor y 13 en contra.",
-          "La tabla favorece a Chelsea en puntos y goles anotados; United llega con menor producción ofensiva y peor posición en la fila de clasificación."
+          "Chelsea FC y Manchester United FC se enfrentan en Premier League el 31 de octubre de 2026 a las 12:30; W indica nubosidad y un valor 10 sin unidad.",
+          "Chelsea aparece 5º con 8 partidos, 13 puntos, 17 goles a favor y 15 en contra en la tabla suministrada.",
+          "Manchester United figura 16º con 8 partidos, 7 puntos, 10 goles a favor y 13 en contra."
         ],
         "stats": [
           {
             "value": "5º",
-            "label": "puesto Chelsea"
-          },
-          {
-            "value": "16º",
-            "label": "puesto United"
+            "label": "posición Chelsea"
           },
           {
             "value": "13",
             "label": "puntos Chelsea"
+          },
+          {
+            "value": "16º",
+            "label": "posición Man United"
           }
         ]
       },
@@ -3062,41 +3062,42 @@
         "kind": "modelos",
         "title": "Modelos y probabilidades",
         "bullets": [
-          "Poisson GoatLab: probabilidad local 0.574, empate 0.235 y visitante 0.191; goles esperados 1.98 y 1.073; más de 2.5 goles 0.588 y ambos equipos marcan 0.577.",
-          "CatBoost Bzzoiro: probabilidad local 0.551, empate 0.24 y visitante 0.208; goles esperados 1.84 y 1.31; más de 2.5 goles 0.602, ambos equipos marcan 0.607 y marcador 1-1.",
-          "B2 declara H con 0.551 y 'no' en sus dos casillas binarias; el input no detalla sus etiquetas. P y B quedan próximos en la probabilidad local (0.574 y 0.551)."
+          "Poisson GoatLab otorga 57.4% al local, 23.5% al empate y 19.1% al visitante, con medias de goles 1.98 y 1.073.",
+          "Ese cálculo Poisson fija 58.8% para más de 2.5 goles y 57.7% para que ambos anoten.",
+          "CatBoost Bzzoiro otorga 51.9% al local, 24.3% al empate y 23.8% al visitante, con medias de goles 1.84 y 1.31.",
+          "Bzzoiro añade 60.6% para más de 2.5 goles, 61.9% para que ambos anoten y señala 1-1 como marcador; B2 declara local 51.9% y 'no' en goles totales y ambos anotan."
         ],
         "stats": [
           {
-            "value": "0.574",
-            "label": "local en P"
+            "value": "57.4%",
+            "label": "local Poisson"
           },
           {
-            "value": "0.551",
-            "label": "local en B/B2"
+            "value": "51.9%",
+            "label": "local Bzzoiro"
           },
           {
             "value": "1-1",
-            "label": "marcador B"
+            "label": "marcador Bzzoiro"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Historial de enfrentamientos",
+        "title": "Historial del cruce",
         "bullets": [
-          "Balance histórico: 79 partidos, 25 victorias locales, 29 empates, 25 victorias visitantes y 2.56 goles por partido de media.",
-          "Los cinco cruces recientes listados: Chelsea 0-1 United, United 2-1 Chelsea, Chelsea 1-0 United, United 1-1 Chelsea y Chelsea 4-3 United.",
-          "En esa muestra reciente hay 2 triunfos de cada equipo y 1 empate; el agregado histórico está equilibrado en victorias (25-25) con más empates (29)."
+          "El historial H reúne 79 cruces: 25 triunfos de Chelsea, 29 empates y 25 victorias de Manchester United, con 2.56 goles por partido.",
+          "Los cinco HR recientes están equilibrados: dos triunfos de Chelsea, dos de Manchester United y un empate.",
+          "Los marcadores HR recientes son 0-1, 2-1, 1-0, 1-1 y 4-3."
         ],
         "stats": [
           {
             "value": "79",
-            "label": "cruces históricos"
+            "label": "cruces historial"
           },
           {
-            "value": "25",
-            "label": "victorias locales"
+            "value": "29",
+            "label": "empates"
           },
           {
             "value": "2.56",
@@ -3105,35 +3106,11 @@
         ]
       },
       {
-        "kind": "forma",
-        "title": "Forma reciente",
-        "bullets": [
-          "Chelsea: 2 victorias, 1 empate y 3 derrotas en seis registros; marcadores 1-2 Arsenal, 2-2 Hull, 0-3 Brentford, 5-1 Bournemouth, 2-0 Everton y 0-2 Tottenham.",
-          "Manchester United: 0 victorias, 3 empates y 3 derrotas en seis registros; 1-1 Fulham, 1-1 Tottenham, 0-2 Atlético, 1-1 Leeds, 1-4 Como y 0-3 Bournemouth.",
-          "United no gana en la muestra reciente; Chelsea suma 2 victorias, 1 empate y 3 derrotas."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "victorias Chelsea"
-          },
-          {
-            "value": "3",
-            "label": "empates United"
-          },
-          {
-            "value": "0",
-            "label": "victorias United"
-          }
-        ]
-      },
-      {
         "kind": "goleadores",
         "title": "Goleadores",
         "bullets": [
-          "Chelsea: João Pedro suma 5 goles en 6 partidos; Morgan Rogers 4 en 8; Pedro Neto 3 en 8.",
-          "Manchester United: Bryan Mbeumo registra 4 goles en 8 partidos; Bruno Fernandes 3 en 8.",
-          "El máximo anotador listado del partido es João Pedro (5), por delante de Mbeumo (4) y Rogers (4)."
+          "Chelsea concentra en João Pedro a su máximo anotador: 5 goles en 6 partidos; Morgan Rogers suma 4 en 8 y Pedro Neto 3 en 8.",
+          "En Manchester United, Bryan Mbeumo registra 4 goles en 8 partidos y Bruno Fernandes 3 en 8."
         ],
         "stats": [
           {
@@ -3149,173 +3126,51 @@
             "label": "goles Bruno Fernandes"
           }
         ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Etiquetas B2",
-        "detail": "El input no explicita qué representan los dos 'no' de B2; no se convierten en más/menos goles ni en ambos equipos marcan."
-      },
-      {
-        "label": "Clima sin unidad",
-        "detail": "El registro W indica nublado y 10, pero no especifica unidad, sede ni viento; no se usa para ajustar probabilidades."
-      },
-      {
-        "label": "Tabla interpretada",
-        "detail": "La fila T se lee como puesto, partidos, puntos, goles a favor y en contra; el input no incluye encabezados."
-      },
-      {
-        "label": "Dispersión de goles esperados",
-        "detail": "P asigna 1.073 al visitante y B 1.31; la diferencia no se corrige."
-      },
-      {
-        "label": "B2 frente a B",
-        "detail": "B2 marca 'no/no' mientras B da 0.602 y 0.607 en sus casillas de goles y ambos equipos marcan si se leen así; el input no detalla etiquetas."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Bandera activada por la ambigüedad de B2 ('no/no') frente a 0.602 y 0.607 de B; en 1X2 P (0.574) y B (0.551) están próximos y no se corrige ningún porcentaje."
-    },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T12:04:19.299Z",
-    "inputKey": "v3|M|fd-560626|Chelsea FC|Manchester United FC|premier|2026-10-31T12:30:00Z|NS\nP|1.98|1.073|0.574|0.235|0.191|0.588|0.577\nB|0.551|0.24|0.208|1.84|1.31|0.602|0.607|1-1|0.485\nB2|H|0.551|no|no\nH|79|25|29|25|2.56\nW||cloudy|10|\nT|5|Chelsea FC|8|13|17|15\nT|16|Manchester United FC|8|7|10|13\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|4|8\nS|Pedro Neto|Chelsea FC|3|8\nS|Bryan Mbeumo|Manchester United FC|4|8\nS|Bruno Fernandes|Manchester United FC|3|8\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Fulham FC|Manchester United FC|1|1\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-21|Como 1907|Manchester United FC|4|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nHR|2026-04-18|Chelsea|Manchester United|0|1\nHR|2025-09-20|Manchester United|Chelsea|2|1\nHR|2025-05-16|Chelsea|Manchester United|1|0\nHR|2024-11-03|Manchester United|Chelsea|1|1\nHR|2024-04-04|Chelsea|Manchester United|4|3",
-    "materialKey": "v3|M|fd-560626|Chelsea FC|Manchester United FC|premier|2026-10-31T12:30:00Z|NS\nP|1.98|1.073|0.574|0.235|0.191|0.588|0.577\nB|0.551|0.24|0.208|1.84|1.31|0.602|0.607|1-1|0.485\nB2|H|0.551|no|no\nH|79|25|29|25|2.56\nW||cloudy|10|\nT|5|Chelsea FC|8|13|17|15\nT|16|Manchester United FC|8|7|10|13\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|4|8\nS|Pedro Neto|Chelsea FC|3|8\nS|Bryan Mbeumo|Manchester United FC|4|8\nS|Bruno Fernandes|Manchester United FC|3|8\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Fulham FC|Manchester United FC|1|1\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-21|Como 1907|Manchester United FC|4|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nHR|2026-04-18|Chelsea|Manchester United|0|1\nHR|2025-09-20|Manchester United|Chelsea|2|1\nHR|2025-05-16|Chelsea|Manchester United|1|0\nHR|2024-11-03|Manchester United|Chelsea|1|1\nHR|2024-04-04|Chelsea|Manchester United|4|3"
-  },
-  "fd-564730": {
-    "matchId": "fd-564730",
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Levante y Atlético: contexto de tabla",
-        "bullets": [
-          "Levante UD es 14º con 10 puntos en 10 jornadas, 16 goles a favor y 19 en contra; el Atlético es 2º con 25 puntos y 20:8.",
-          "El encuentro de LaLiga se registra con lluvia y 13 °C; la sede no aparece en el input."
-        ],
-        "stats": [
-          {
-            "value": "14º",
-            "label": "Puesto Levante"
-          },
-          {
-            "value": "2º",
-            "label": "Puesto Atlético"
-          },
-          {
-            "value": "25",
-            "label": "Puntos Atlético"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Poisson y CatBoost: lecturas del cruce",
-        "bullets": [
-          "Poisson GoatLab: 26.3% local, 25.5% empate y 48.1% visitante, con medias de goles 1.26 y 1.763; añade 58.2% y 60.4% sin etiqueta en el input.",
-          "CatBoost Bzzoiro: 19.5% local, 22.6% empate y 57.9% visitante; goles esperados 1.42-1.65 y marcador 1-1, con 0.499 en su última casilla.",
-          "B2 declara mayor probabilidad para A (visitante) con 0.579 y marca no en goles totales y ambos anotan; no hay lectura A de API-Football."
-        ],
-        "stats": [
-          {
-            "value": "26.3%",
-            "label": "Local Poisson"
-          },
-          {
-            "value": "57.9%",
-            "label": "Visitante CatBoost"
-          },
-          {
-            "value": "0.579",
-            "label": "B2 mayor prob."
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Historial: dominio rojiblanco",
-        "bullets": [
-          "En 31 cruces, Levante suma 7 victorias, 7 empates y 17 derrotas ante el Atlético, con 2.52 goles por partido.",
-          "Los cinco duelos recientes aportan dos triunfos del Atlético, dos empates y una victoria del Levante.",
-          "El último precedente, en enero de 2026, terminó 0-0 en casa del Levante."
-        ],
-        "stats": [
-          {
-            "value": "31",
-            "label": "Cruces totales"
-          },
-          {
-            "value": "17",
-            "label": "Victorias Atlético"
-          },
-          {
-            "value": "2.52",
-            "label": "Goles por partido"
-          }
-        ]
       },
       {
         "kind": "forma",
-        "title": "Racha reciente: Atlético más regular",
+        "title": "Forma reciente",
         "bullets": [
-          "Levante suma 1 victoria, 2 empates y 3 derrotas en sus últimos seis: 2-4 vs Barcelona, 1-3 en Villarreal y 3-3 vs Sevilla.",
-          "Completa con 1-1 en Deportivo, 3-1 vs Athletic y 1-2 en Real Sociedad; alterna resultados y concede con frecuencia.",
-          "El Atlético enlaza 5 victorias y 1 empate en sus últimos seis: 2-1 vs Real Madrid, 2-1 en Alavés, 2-0 vs Manchester United, 1-0 en Espanyol, 1-1 en Stuttgart y 1-0 vs Deportivo."
+          "Chelsea suma 2 victorias, 1 empate y 3 derrotas en seis R; marcadores desde su perspectiva: 1-2, 2-2, 0-3, 5-1, 2-0 y 0-2.",
+          "Manchester United acumula 0 victorias, 3 empates y 3 derrotas en seis R; marcadores desde su perspectiva: 1-1, 1-1, 0-2, 1-1, 1-4 y 0-3.",
+          "La forma reciente muestra a Chelsea con dos triunfos en sus últimos cuatro R y a Manchester United sin ganar en sus seis R."
         ],
         "stats": [
           {
-            "value": "5",
-            "label": "Victorias Atlético"
+            "value": "2",
+            "label": "victorias Chelsea"
           },
           {
-            "value": "3-3",
-            "label": "Empate Levante-Sevilla"
-          },
-          {
-            "value": "1-0",
-            "label": "Última victoria Atlético"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Goleadores: Brugué lidera al Levante",
-        "bullets": [
-          "Roger Brugué es el máximo anotador del Levante con 5 goles en 9 apariciones; Iván Romero suma 3 en 10 y Adrián de la Fuente 2 en 8.",
-          "El input no incluye goleadores del Atlético, por lo que no se puede comparar su reparto anotador."
-        ],
-        "stats": [
-          {
-            "value": "5",
-            "label": "Goles Brugué"
+            "value": "0",
+            "label": "victorias Man United"
           },
           {
             "value": "3",
-            "label": "Goles Iván Romero"
-          },
-          {
-            "value": "2",
-            "label": "Goles De la Fuente"
+            "label": "derrotas Man United"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin A ni M2",
-        "detail": "No hay lectura A de API-Football ni consenso externo M2 en el input; no se pueden contrastar con proveedores externos."
+        "label": "Sin consenso M2",
+        "detail": "No se suministró bloque M2, por lo que no hay contraste con consenso externo para este cruce."
       },
       {
-        "label": "B2 sin desglose",
-        "detail": "B2 solo aporta etiqueta y probabilidad; goles totales y ambos anotan aparecen como no, sin desglose adicional."
+        "label": "Alineaciones",
+        "detail": "No aparece bloque L de bajas confirmadas ni alineaciones; no es posible validar disponibilidad de jugadores."
       },
       {
-        "label": "Campos P sin etiqueta",
-        "detail": "P incluye 58.2% y 60.4% adicionales sin etiqueta; no se interpretan como mercados."
+        "label": "Clima incompleto",
+        "detail": "W solo indica nubosidad y un valor 10 sin unidad ni sede; su efecto no puede cuantificarse."
       },
       {
-        "label": "Goleadores y sede incompletos",
-        "detail": "No hay goleadores del Atlético ni sede; la comparación anotadora y el contexto de localía quedan incompletos."
+        "label": "B2 ambiguo",
+        "detail": "B2 declara local 51.9% y dos campos 'no' sin desglose de goles totales ni ambos anotan."
+      },
+      {
+        "label": "Modelos divergentes",
+        "detail": "P da 57.4% al local y B 51.9%; la diferencia es moderada y ambos favorecen a Chelsea, sin M2 para contraste."
       }
     ],
     "review": {
@@ -3324,78 +3179,407 @@
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T12:06:35.436Z",
-    "inputKey": "v3|M|fd-564730|Levante UD|Club Atlético de Madrid|laliga|2026-10-31T13:00:00Z|NS\nP|1.26|1.763|0.263|0.255|0.481|0.582|0.604\nB|0.195|0.226|0.579|1.42|1.65|0.618|0.589|1-1|0.499\nB2|A|0.579|no|no\nH|31|7|7|17|2.52\nW||rain|13|\nT|14|Levante UD|10|10|16|19\nT|2|Club Atlético de Madrid|10|25|20|8\nS|Roger Brugué|Levante UD|5|9\nS|Iván Romero|Levante UD|3|10\nS|Adrián de la Fuente|Levante UD|2|8\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Club Atlético de Madrid|RC Deportivo La Coruña|1|0\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nHR|2026-01-31|Levante UD|Atlético Madrid|0|0\nHR|2025-11-08|Atlético Madrid|Levante UD|3|1\nHR|2023-01-18|Levante UD|Atlético Madrid|0|2\nHR|2022-02-16|Atlético Madrid|Levante UD|0|1\nHR|2021-10-28|Levante UD|Atlético Madrid|2|2",
-    "materialKey": "v3|M|fd-564730|Levante UD|Club Atlético de Madrid|laliga|2026-10-31T13:00:00Z|NS\nP|1.26|1.763|0.263|0.255|0.481|0.582|0.604\nB|0.195|0.226|0.579|1.42|1.65|0.618|0.589|1-1|0.499\nB2|A|0.579|no|no\nH|31|7|7|17|2.52\nW||rain|13|\nT|14|Levante UD|10|10|16|19\nT|2|Club Atlético de Madrid|10|25|20|8\nS|Roger Brugué|Levante UD|5|9\nS|Iván Romero|Levante UD|3|10\nS|Adrián de la Fuente|Levante UD|2|8\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Club Atlético de Madrid|RC Deportivo La Coruña|1|0\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nHR|2026-01-31|Levante UD|Atlético Madrid|0|0\nHR|2025-11-08|Atlético Madrid|Levante UD|3|1\nHR|2023-01-18|Levante UD|Atlético Madrid|0|2\nHR|2022-02-16|Atlético Madrid|Levante UD|0|1\nHR|2021-10-28|Levante UD|Atlético Madrid|2|2"
+    "generatedAt": "2026-10-28T12:44:59.803Z",
+    "inputKey": "v3|M|fd-560626|Chelsea FC|Manchester United FC|premier|2026-10-31T12:30:00Z|NS\nP|1.98|1.073|0.574|0.235|0.191|0.588|0.577\nB|0.519|0.243|0.238|1.84|1.31|0.606|0.619|1-1|0.485\nB2|H|0.519|no|no\nH|79|25|29|25|2.56\nW||cloudy|10|\nT|5|Chelsea FC|8|13|17|15\nT|16|Manchester United FC|8|7|10|13\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|4|8\nS|Pedro Neto|Chelsea FC|3|8\nS|Bryan Mbeumo|Manchester United FC|4|8\nS|Bruno Fernandes|Manchester United FC|3|8\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Fulham FC|Manchester United FC|1|1\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-21|Como 1907|Manchester United FC|4|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nHR|2026-04-18|Chelsea|Manchester United|0|1\nHR|2025-09-20|Manchester United|Chelsea|2|1\nHR|2025-05-16|Chelsea|Manchester United|1|0\nHR|2024-11-03|Manchester United|Chelsea|1|1\nHR|2024-04-04|Chelsea|Manchester United|4|3",
+    "materialKey": "v3|M|fd-560626|Chelsea FC|Manchester United FC|premier|2026-10-31T12:30:00Z|NS\nP|1.98|1.073|0.574|0.235|0.191|0.588|0.577\nB|0.519|0.243|0.238|1.84|1.31|0.606|0.619|1-1|0.485\nB2|H|0.519|no|no\nH|79|25|29|25|2.56\nW||cloudy|10|\nT|5|Chelsea FC|8|13|17|15\nT|16|Manchester United FC|8|7|10|13\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|4|8\nS|Pedro Neto|Chelsea FC|3|8\nS|Bryan Mbeumo|Manchester United FC|4|8\nS|Bruno Fernandes|Manchester United FC|3|8\nR|2026-09-06|Arsenal FC|Chelsea FC|2|1\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Fulham FC|Manchester United FC|1|1\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Manchester United FC|Tottenham Hotspur FC|1|1\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-21|Como 1907|Manchester United FC|4|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nHR|2026-04-18|Chelsea|Manchester United|0|1\nHR|2025-09-20|Manchester United|Chelsea|2|1\nHR|2025-05-16|Chelsea|Manchester United|1|0\nHR|2024-11-03|Manchester United|Chelsea|1|1\nHR|2024-04-04|Chelsea|Manchester United|4|3"
   },
-  "fd-560625": {
+  "fd-564730": {
+    "matchId": "fd-564730",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Panorama del cruce",
+        "title": "Levante y Atlético: contexto de LaLiga",
         "bullets": [
-          "Duelo Premier League entre Coventry City y Sunderland el 31/10/2026 a las 15:00 UTC, aún sin jugar según el origen.",
-          "Ambos aparecen pegados en la zona baja según la tabla entregada: 19º y 20º, con 15 y 14 puntos tras 8 jornadas disputadas.",
-          "El bloque de clima y sede llega como unknown, por lo que no hay lectura solvente de condiciones externas para este partido."
+          "Encuentro de LaLiga previsto para el 31 de octubre de 2026 a las 13:00 UTC, con lluvia y 13 °C en el bloque W.",
+          "El Levante ocupa la 14.ª plaza y el Atlético la 2.ª; el detalle de puntos y goles se recoge en la sección de tabla.",
+          "Roger Brugué suma 5 goles en 9 partidos con el Levante; no se aportan goleadores del Atlético."
         ],
         "stats": [
           {
-            "value": "31/10",
-            "label": "fecha del duelo"
+            "value": "13 °C",
+            "label": "temperatura prevista"
           },
           {
-            "value": "19º y 20º",
-            "label": "puestos en tabla"
+            "value": "5",
+            "label": "goles Brugué"
           },
           {
-            "value": "unknown",
-            "label": "clima y sede"
+            "value": "9",
+            "label": "partidos Brugué"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Lectura de los modelos",
+        "title": "Modelos: probabilidad visitante y goles",
         "bullets": [
-          "Poisson GoatLab reparte 41,5% para el triunfo local, 27,3% al empate y 31,3% visitante, con 53,8% por encima de 2,5 goles y 58,2% para que ambos anoten.",
-          "CatBoost Bzzoiro inclina la lectura al triunfo de Coventry (54,1%) frente a 24,2% del empate y 21,7% visitante, con goles esperados 1,78-1,11 y umbrales de 0,545/0,546.",
-          "En su lectura declarada (B2), Bzzoiro mantiene la mayor probabilidad en el triunfo local (0,541) y marca «no» tanto en goles totales como en ambos anotan, con el 1-1 como marcador más probable."
+          "Poisson GoatLab calcula 1,26 goles esperados para el Levante y 1,763 para el Atlético, con 26,3 % para el local, 25,5 % para el empate y 48,1 % para el visitante.",
+          "CatBoost Bzzoiro asigna 19,6 % al Levante, 21,8 % al empate y 58,6 % al Atlético, con 1,42 y 1,65 goles esperados y 61,5 % para más de 2,5 goles.",
+          "En ambos anotan, GoatLab indica 60,4 % y Bzzoiro 59,2 %; B2 declara A como mayor probabilidad con 58,6 % y no en goles totales y ambos anotan; Bzzoiro añade un marcador de 1-1.",
+          "Las dos lecturas coinciden en dar al Atlético la mayor probabilidad; Bzzoiro eleva el porcentaje visitante a 58,6 %, frente al 48,1 % de GoatLab."
         ],
         "stats": [
           {
-            "value": "41,5%",
-            "label": "triunfo local en Poisson"
+            "value": "48,1 %",
+            "label": "visitante GoatLab"
           },
           {
-            "value": "54,1%",
-            "label": "triunfo local en Bzzoiro"
+            "value": "58,6 %",
+            "label": "visitante Bzzoiro"
           },
           {
-            "value": "1-1",
-            "label": "marcador más probable"
+            "value": "61,5 %",
+            "label": "más de 2,5 Bzzoiro"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Cruces previos",
+        "title": "Historial: 31 cruces y ventaja del Atlético",
         "bullets": [
-          "El historial agregado registra 20 cruces con 7 victorias de Coventry, 10 empates y 3 de Sunderland, con media de 2,5 goles por partido.",
-          "En los 5 duelos detallados (2023-2025): Coventry ganó 3-0 en casa y 0-3 fuera, Sunderland se impuso 1-2 a domicilio y quedaron 1-1 y 2-2; total de 15 goles (3,0 de media).",
-          "El peso del empate en el global (10 de 20 cruces) supera con claridad el rango 24,2-27,3% que los modelos asignan hoy a la igualada."
+          "El registro global suma 31 partidos, con 7 victorias del Levante, 7 empates y 17 del Atlético; el promedio es 2,52 goles por encuentro.",
+          "Los cinco cruces recientes incluyen dos triunfos del Atlético, dos empates y uno del Levante; el más reciente fue 0-0 en enero de 2026.",
+          "El Atlético ganó 3-1 en noviembre de 2025 y 2-0 en enero de 2023; el Levante firmó un 1-0 en febrero de 2022."
+        ],
+        "stats": [
+          {
+            "value": "31",
+            "label": "partidos registrados"
+          },
+          {
+            "value": "17",
+            "label": "victorias Atlético"
+          },
+          {
+            "value": "2,52",
+            "label": "goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Tabla: 10 puntos frente a 25",
+        "bullets": [
+          "El Levante es 14.º con 10 puntos en 10 partidos: 16 goles a favor y 19 en contra.",
+          "El Atlético es 2.º con 25 puntos en 10 partidos: 20 goles a favor y 8 en contra."
+        ],
+        "stats": [
+          {
+            "value": "10",
+            "label": "puntos Levante"
+          },
+          {
+            "value": "25",
+            "label": "puntos Atlético"
+          },
+          {
+            "value": "8",
+            "label": "goles contra Atlético"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma: Atlético invicto y Levante irregular",
+        "bullets": [
+          "El Atlético acumula 5 victorias y 1 empate en sus seis partidos listados.",
+          "Los resultados son 2-1 al Real Madrid, 2-1 al Alavés, 2-0 al Manchester United, 1-0 al Espanyol, 1-1 con Stuttgart y 1-0 al Deportivo.",
+          "El Levante suma 1 victoria, 2 empates y 3 derrotas en sus seis partidos listados.",
+          "Los resultados de la muestra son 2-4 con Barcelona, 1-3 con Villarreal, 3-3 con Sevilla, 1-1 con Deportivo, 3-1 al Athletic y 1-2 con Real Sociedad."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "victorias Atlético"
+          },
+          {
+            "value": "1",
+            "label": "victorias Levante"
+          },
+          {
+            "value": "3",
+            "label": "derrotas Levante"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Alineaciones y bajas",
+        "detail": "No se aportan alineaciones confirmadas ni bloque L de bajas; el análisis se limita a los datos suministrados."
+      },
+      {
+        "label": "Campos ambiguos B/B2",
+        "detail": "B2 usa 'no' en goles totales y ambos anotan; el valor 0,499 asociado al marcador 1-1 de B no se interpreta por falta de definición del campo."
+      },
+      {
+        "label": "Clima y sede",
+        "detail": "El bloque W solo indica lluvia y 13 °C, sin sede detallada ni otras variables meteorológicas."
+      },
+      {
+        "label": "Bloque A ausente",
+        "detail": "No se incluye bloque A de API-Football; no hay una lectura de distribución adicional que contrastar."
+      },
+      {
+        "label": "Muestra acotada",
+        "detail": "El historial reciente se limita a cinco cruces y la forma a los partidos listados, sin minutos ni contexto de competición."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "No se detecta un porcentaje que contradiga los datos; P y B difieren en magnitud (48,1 % frente a 58,6 % para el visitante), pero coinciden en la dirección."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-28T12:48:34.196Z",
+    "inputKey": "v3|M|fd-564730|Levante UD|Club Atlético de Madrid|laliga|2026-10-31T13:00:00Z|NS\nP|1.26|1.763|0.263|0.255|0.481|0.582|0.604\nB|0.196|0.218|0.586|1.42|1.65|0.615|0.592|1-1|0.499\nB2|A|0.586|no|no\nH|31|7|7|17|2.52\nW||rain|13|\nT|14|Levante UD|10|10|16|19\nT|2|Club Atlético de Madrid|10|25|20|8\nS|Roger Brugué|Levante UD|5|9\nS|Iván Romero|Levante UD|3|10\nS|Adrián de la Fuente|Levante UD|2|8\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Club Atlético de Madrid|RC Deportivo La Coruña|1|0\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nHR|2026-01-31|Levante UD|Atlético Madrid|0|0\nHR|2025-11-08|Atlético Madrid|Levante UD|3|1\nHR|2023-01-18|Levante UD|Atlético Madrid|0|2\nHR|2022-02-16|Atlético Madrid|Levante UD|0|1\nHR|2021-10-28|Levante UD|Atlético Madrid|2|2",
+    "materialKey": "v3|M|fd-564730|Levante UD|Club Atlético de Madrid|laliga|2026-10-31T13:00:00Z|NS\nP|1.26|1.763|0.263|0.255|0.481|0.582|0.604\nB|0.196|0.218|0.586|1.42|1.65|0.615|0.592|1-1|0.499\nB2|A|0.586|no|no\nH|31|7|7|17|2.52\nW||rain|13|\nT|14|Levante UD|10|10|16|19\nT|2|Club Atlético de Madrid|10|25|20|8\nS|Roger Brugué|Levante UD|5|9\nS|Iván Romero|Levante UD|3|10\nS|Adrián de la Fuente|Levante UD|2|8\nR|2026-09-13|Levante UD|FC Barcelona|2|4\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-09-20|Club Atlético de Madrid|Real Madrid CF|2|1\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-13|Club Atlético de Madrid|Manchester United FC|2|0\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Club Atlético de Madrid|RC Deportivo La Coruña|1|0\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nHR|2026-01-31|Levante UD|Atlético Madrid|0|0\nHR|2025-11-08|Atlético Madrid|Levante UD|3|1\nHR|2023-01-18|Levante UD|Atlético Madrid|0|2\nHR|2022-02-16|Atlético Madrid|Levante UD|0|1\nHR|2021-10-28|Levante UD|Atlético Madrid|2|2"
+  },
+  "fd-560625": {
+    "matchId": "fd-560625",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Coventry y Sunderland: duelo de zona baja",
+        "bullets": [
+          "Partido de Premier League previsto para el 31 de octubre de 2026 a las 15:00 UTC; el bloque W no precisa condición meteorológica y anota 13 °C.",
+          "Coventry City y Sunderland llegan en la parte baja; el detalle de puestos y goles se recoge en la sección de tabla.",
+          "Jack Rudoni registra 2 goles en 8 partidos con el Coventry; Brian Brobbey suma 3 en 6 con el Sunderland."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles Rudoni"
+          },
+          {
+            "value": "3",
+            "label": "goles Brobbey"
+          },
+          {
+            "value": "13 °C",
+            "label": "temperatura"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos: discrepancia en la probabilidad",
+        "bullets": [
+          "Poisson GoatLab otorga 41,5 % al Coventry, 27,3 % al empate y 31,3 % al Sunderland, con 1,53 y 1,303 goles esperados.",
+          "CatBoost Bzzoiro asigna 31,6 % al local, 27,9 % al empate y 40,5 % al visitante, con 1,78 y 1,11 goles esperados y 49,9 % para más de 2,5 goles.",
+          "En ambos anotan, GoatLab indica 58,2 % y Bzzoiro 55,4 %; B2 declara A como mayor probabilidad con 40,5 % y no en goles totales y ambos anotan; Bzzoiro añade un marcador de 1-1.",
+          "GoatLab sitúa al Coventry por delante en probabilidad; Bzzoiro y B2 sitúan al Sunderland como el lado más probable."
+        ],
+        "stats": [
+          {
+            "value": "41,5 %",
+            "label": "local GoatLab"
+          },
+          {
+            "value": "40,5 %",
+            "label": "visitante Bzzoiro"
+          },
+          {
+            "value": "49,9 %",
+            "label": "más de 2,5 Bzzoiro"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial: 20 cruces con muchos empates",
+        "bullets": [
+          "El registro global suma 20 partidos, con 7 victorias del Coventry, 10 empates y 3 del Sunderland; el promedio es 2,5 goles por encuentro.",
+          "En los cinco cruces recientes hay 2 victorias del Coventry, 2 empates y 1 del Sunderland; el más reciente fue 1-1 en mayo de 2025.",
+          "El Coventry ganó 3-0 en marzo de 2025 y 3-0 como visitante en diciembre de 2023; el Sunderland se impuso 2-1 en mayo de 2025."
         ],
         "stats": [
           {
             "value": "20",
-            "label": "cruces registrados"
+            "label": "partidos registrados"
           },
           {
             "value": "10",
-            "label": "empates históricos"
+            "label": "empates"
           },
           {
-            "value": "3,0",
-            "label": "goles por duelo reciente"
+            "value": "2,5",
+            "label": "goles por partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Tabla: Coventry 19.º y Sunderland 20.º",
+        "bullets": [
+          "El Coventry City es 19.º con 6 puntos en 8 partidos: 6 goles a favor y 15 en contra.",
+          "El Sunderland es 20.º con 5 puntos en 8 partidos: 6 goles a favor y 14 en contra."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "puntos Coventry"
+          },
+          {
+            "value": "5",
+            "label": "puntos Sunderland"
+          },
+          {
+            "value": "15",
+            "label": "goles contra Coventry"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma: rachas cortas y resultados mixtos",
+        "bullets": [
+          "El Coventry suma 2 victorias y 3 derrotas en los cinco partidos únicos listados; una fila del 0-1 ante Nottingham Forest aparece duplicada.",
+          "Los resultados del Coventry son 0-5 con Brighton, 0-1 a favor en Nottingham Forest, 4-1 a Newcastle, 1-3 con Tottenham y 0-1 con Fulham.",
+          "El Sunderland suma 1 victoria, 2 empates y 3 derrotas en sus seis partidos listados.",
+          "Los resultados del Sunderland son 3-5 con Manchester City, 0-2 con Brighton, 2-1 a favor en Torreense, 0-2 en Bournemouth, 1-1 con Lech Poznań y 0-0 con Leeds."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "victorias Coventry"
+          },
+          {
+            "value": "1",
+            "label": "victorias Sunderland"
+          },
+          {
+            "value": "3",
+            "label": "derrotas Sunderland"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Filas duplicadas",
+        "detail": "La fila Nottingham Forest 0-1 Coventry del 19-09-2026 aparece dos veces; se considera una sola vez en la lectura de forma."
+      },
+      {
+        "label": "Campos ambiguos B/B2",
+        "detail": "B2 usa 'no' en goles totales y ambos anotan; el valor 0,454 asociado al marcador 1-1 de B no se interpreta por falta de definición del campo."
+      },
+      {
+        "label": "Alineaciones y bajas",
+        "detail": "No se aportan alineaciones confirmadas ni bloque L de bajas; el análisis se ciñe a los datos disponibles."
+      },
+      {
+        "label": "Clima y sede",
+        "detail": "El bloque W no concreta condición meteorológica ni sede; solo indica 13 °C."
+      },
+      {
+        "label": "Bloque A ausente",
+        "detail": "No se incluye bloque A de API-Football; no hay una lectura de distribución adicional que contrastar."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Bzzoiro declara 1,78 goles esperados para el Coventry y 1,11 para el Sunderland, pero asigna 40,5 % al Sunderland y 31,6 % al local; esa combinación es internamente llamativa frente a GoatLab, que da 41,5 % al Coventry."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-28T12:48:34.209Z",
+    "inputKey": "v3|M|fd-560625|Coventry City FC|Sunderland AFC|premier|2026-10-31T15:00:00Z|NS\nP|1.53|1.303|0.415|0.273|0.313|0.538|0.582\nB|0.316|0.279|0.405|1.78|1.11|0.499|0.554|1-1|0.454\nB2|A|0.405|no|no\nH|20|7|10|3|2.5\nW||unknown|13|\nT|19|Coventry City FC|8|6|6|15\nT|20|Sunderland AFC|8|5|6|14\nS|Jack Rudoni|Coventry City FC|2|8\nS|Brian Brobbey|Sunderland AFC|3|6\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nHR|2025-05-13|Sunderland|Coventry City|1|1\nHR|2025-05-09|Coventry City|Sunderland|1|2\nHR|2025-03-15|Coventry City|Sunderland|3|0\nHR|2024-11-09|Sunderland|Coventry City|2|2\nHR|2023-12-23|Sunderland|Coventry City|0|3",
+    "materialKey": "v3|M|fd-560625|Coventry City FC|Sunderland AFC|premier|2026-10-31T15:00:00Z|NS\nP|1.53|1.303|0.415|0.273|0.313|0.538|0.582\nB|0.316|0.279|0.405|1.78|1.11|0.499|0.554|1-1|0.454\nB2|A|0.405|no|no\nH|20|7|10|3|2.5\nW||unknown|13|\nT|19|Coventry City FC|8|6|6|15\nT|20|Sunderland AFC|8|5|6|14\nS|Jack Rudoni|Coventry City FC|2|8\nS|Brian Brobbey|Sunderland AFC|3|6\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nHR|2025-05-13|Sunderland|Coventry City|1|1\nHR|2025-05-09|Coventry City|Sunderland|1|2\nHR|2025-03-15|Coventry City|Sunderland|3|0\nHR|2024-11-09|Sunderland|Coventry City|2|2\nHR|2023-12-23|Sunderland|Coventry City|0|3"
+  },
+  "fd-560623": {
+    "matchId": "fd-560623",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Manchester City-Brighton: contexto y modelos",
+        "bullets": [
+          "Manchester City y Brighton se enfrentan en la Premier League el 31 de octubre de 2026 a las 15:00; el partido figura como no iniciado.",
+          "La tabla sitúa a Manchester City en el puesto 1 y a Brighton en el puesto 3, ambos con 8 partidos disputados.",
+          "El registro meteorológico es incompleto: condición desconocida y viento de 6."
+        ],
+        "stats": [
+          {
+            "value": "1",
+            "label": "puesto City"
+          },
+          {
+            "value": "3",
+            "label": "puesto Brighton"
+          },
+          {
+            "value": "6",
+            "label": "viento"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Lectura de Poisson y Bzzoiro",
+        "bullets": [
+          "El cálculo Poisson de GoatLab reparte 0,36 local, 0,217 empate y 0,423 visitante; sus indicadores de goles son 0,78 y 0,768.",
+          "CatBoost Bzzoiro declara 0,575 local, 0,219 empate y 0,207 visitante; la fila consigna 1,76, 1,15, 0,635, 0,61, marcador 1-1 y 0,51.",
+          "B2 fija la mayor probabilidad en el local con 0,575 y marca no en goles totales y ambos anotan.",
+          "La discrepancia es clara: Poisson coloca al visitante por delante del local (0,423 frente a 0,36), mientras Bzzoiro y B2 inclinan la mayor probabilidad hacia el local."
+        ],
+        "stats": [
+          {
+            "value": "0,575",
+            "label": "local B2"
+          },
+          {
+            "value": "0,423",
+            "label": "visitante Poisson"
+          },
+          {
+            "value": "0,36",
+            "label": "local Poisson"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de enfrentamientos",
+        "bullets": [
+          "El bloque H reúne 20 enfrentamientos, con 13 victorias, 4 empates y 3 derrotas, y 3,3 goles de promedio.",
+          "En los cinco cruces recientes, Brighton suma 2 victorias, Manchester City 1 y 2 empates; el 0-4 de 2024 es la mayor victoria de City.",
+          "Los resultados recientes son 1-1, 2-1, 2-2, 2-1 y 0-4, con alternancia entre empates y triunfos locales."
+        ],
+        "stats": [
+          {
+            "value": "20",
+            "label": "cruces"
+          },
+          {
+            "value": "3,3",
+            "label": "goles por cruce"
+          },
+          {
+            "value": "2",
+            "label": "victorias Brighton recientes"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores de la muestra",
+        "bullets": [
+          "Erling Haaland lidera la relación con 9 goles; Rayan Cherki aporta 4 y Antoine Semenyo 2, todos en Manchester City.",
+          "En Brighton, Charalampos Kostoulas, Jack Hinshelwood y Pascal Groß registran 3 goles cada uno.",
+          "La nómina combina un referente local de alta producción con un reparto visitante más horizontal."
+        ],
+        "stats": [
+          {
+            "value": "9",
+            "label": "goles Haaland"
+          },
+          {
+            "value": "4",
+            "label": "goles Cherki"
+          },
+          {
+            "value": "3",
+            "label": "goles en Brighton"
           }
         ]
       },
@@ -3403,373 +3587,209 @@
         "kind": "forma",
         "title": "Forma reciente",
         "bullets": [
-          "Coventry firma un 2-3 entre victorias y derrotas en sus 5 últimos partidos de liga listados, con el 4-1 a Newcastle como mejor imagen y el 0-5 ante Brighton como peor.",
-          "Sunderland acumula 1-2-3 en victorias-empates-derrotas en sus 6 últimos compromisos, entre liga y otros cruces (Torreense 2-1, Lech Poznań 1-1), con derrotas ante Brighton (0-2) y Bournemouth (0-2).",
-          "En números: Coventry hizo 6 goles en esos 5 juegos de liga; Sunderland 3 en los 4 que aparecen y 0 en sus 3 más recientes, cerrando 0-0 ante Leeds."
-        ],
-        "stats": [
-          {
-            "value": "2-3",
-            "label": "balance reciente Coventry"
-          },
-          {
-            "value": "1-2-3",
-            "label": "balance reciente Sunderland"
-          },
-          {
-            "value": "0",
-            "label": "goles Sunderland en 3 liga"
-          }
-        ]
-      },
-      {
-        "kind": "claves",
-        "title": "Claves del duelo",
-        "bullets": [
-          "Referencias de gol: Brian Brobbey lidera a Sunderland con 3 goles en 6 presentaciones, mientras Jack Rudoni aporta 2 en 8 por Coventry.",
-          "La zona fina del cruce: los umbrales de goles y de ambos anotan se mueven entre 0,538-0,582 en Poisson y 0,545-0,546 en Bzzoiro, pegados a la frontera del 50%.",
-          "El historial empuja al empate (10 de 20 cruces) por encima del 24,2-27,3% que los modelos otorgan hoy a la igualada, con clima y sede declarados unknown."
+          "Manchester City suma 3 victorias y 2 derrotas en sus cinco registros: Liverpool 0-3 City, City 2-4 PSG, City 3-2 Ipswich, City 5-1 AEK y Aston Villa 2-1 City.",
+          "Brighton suma 4 victorias y 1 derrota: Coventry 0-5 Brighton, Brighton 3-0 Arsenal, Sunderland 0-2 Brighton, Brighton 5-0 Palace y Liverpool 2-0 Brighton; el 3-0 ante Arsenal se duplica.",
+          "El tramo de City incluye el 2-4 con PSG y el 2-1 de Aston Villa; Brighton encadena tres victorias y una derrota en sus últimos cuatro."
         ],
         "stats": [
           {
             "value": "3",
-            "label": "goles de Brobbey"
+            "label": "victorias City"
           },
           {
-            "value": "2",
-            "label": "goles de Rudoni"
+            "value": "4",
+            "label": "victorias Brighton"
           },
           {
-            "value": "10 de 20",
-            "label": "empates en el historial"
+            "value": "1",
+            "label": "derrota Brighton"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Clima y sede sin datos",
-        "detail": "El bloque W llega casi vacío y marcado como unknown; no se puede describir temperatura, cielo ni estadio, así que se omite ese plano del análisis."
+        "label": "Bajas no confirmadas",
+        "detail": "El input no contiene filas L; no hay bajas confirmadas para Manchester City ni Brighton."
       },
       {
-        "label": "Tabla sin etiquetas",
-        "detail": "Las columnas de la tabla no vienen etiquetadas; se leen como jornadas, goles y puntos, y los 6 encajados de Coventry no cuadran con los 10 de sus resultados listados."
+        "label": "Consenso externo ausente",
+        "detail": "No se incluyen filas M2, por lo que no hay consenso externo en porcentaje para este cruce."
       },
       {
-        "label": "Historial parcial",
-        "detail": "El agregado de 20 cruces (7-10-3, 2,5 goles) no viene desglosado; solo hay 5 duelos detallados entre 2023 y 2025."
+        "label": "Clima incompleto",
+        "detail": "La fila W solo indica condición desconocida y viento 6; no se aporta sede."
       },
       {
-        "label": "Números de B ambiguos",
-        "detail": "La fila numérica de B deja sin etiquetar 0,545/0,546 y el 0,455 final; la lectura de goles totales y ambos anotan se apoya en lo declarado por B2."
+        "label": "Duplicado en forma",
+        "detail": "El resultado Brighton 3-0 Arsenal aparece dos veces en R; se contabiliza una sola vez."
+      },
+      {
+        "label": "Campos de proveedor sin detalle",
+        "detail": "P y B incluyen indicadores numéricos de goles sin etiquetas explícitas; se citan como lecturas declaradas."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Dos desvíos: B asigna 54,1% al triunfo local frente al 41,5% de Poisson (≈12,6 pp) y B2 declara «no» en goles totales y ambos anotan pese a que las cifras de B (0,545/0,546) rozan el 50%. Además, los 6 encajados de Coventry en tabla no cuadran con los 10 de sus resultados listados."
-    },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-10-27T05:19:42.028Z",
-    "inputKey": "v3|M|fd-560625|Coventry City FC|Sunderland AFC|premier|2026-10-31T15:00:00Z|NS\nP|1.53|1.303|0.415|0.273|0.313|0.538|0.582\nB|0.541|0.242|0.217|1.78|1.11|0.545|0.546|1-1|0.455\nB2|H|0.541|no|no\nH|20|7|10|3|2.5\nW||unknown|13|\nT|19|Coventry City FC|8|6|6|15\nT|20|Sunderland AFC|8|5|6|14\nS|Jack Rudoni|Coventry City FC|2|8\nS|Brian Brobbey|Sunderland AFC|3|6\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nHR|2025-05-13|Sunderland|Coventry City|1|1\nHR|2025-05-09|Coventry City|Sunderland|1|2\nHR|2025-03-15|Coventry City|Sunderland|3|0\nHR|2024-11-09|Sunderland|Coventry City|2|2\nHR|2023-12-23|Sunderland|Coventry City|0|3",
-    "materialKey": "v3|M|fd-560625|Coventry City FC|Sunderland AFC|premier|2026-10-31T15:00:00Z|NS\nP|1.53|1.303|0.415|0.273|0.313|0.538|0.582\nB|0.541|0.242|0.217|1.78|1.11|0.545|0.546|1-1|0.455\nB2|H|0.541|no|no\nH|20|7|10|3|2.5\nW||unknown|13|\nT|19|Coventry City FC|8|6|6|15\nT|20|Sunderland AFC|8|5|6|14\nS|Jack Rudoni|Coventry City FC|2|8\nS|Brian Brobbey|Sunderland AFC|3|6\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nHR|2025-05-13|Sunderland|Coventry City|1|1\nHR|2025-05-09|Coventry City|Sunderland|1|2\nHR|2025-03-15|Coventry City|Sunderland|3|0\nHR|2024-11-09|Sunderland|Coventry City|2|2\nHR|2023-12-23|Sunderland|Coventry City|0|3"
-  },
-  "fd-560623": {
-    "matchId": "fd-560623",
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "City y Brighton: duelo de arriba",
-        "bullets": [
-          "Manchester City es 1º con 21 puntos en 8 jornadas, 20 goles a favor y 9 en contra; Brighton es 3º con 16 puntos, 23 a favor y 7 en contra.",
-          "El partido se juega con clima no definido y 6 °C; la sede no aparece en el input."
-        ],
-        "stats": [
-          {
-            "value": "1º",
-            "label": "Puesto City"
-          },
-          {
-            "value": "3º",
-            "label": "Puesto Brighton"
-          },
-          {
-            "value": "21",
-            "label": "Puntos City"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Poisson y CatBoost: lecturas opuestas",
-        "bullets": [
-          "Poisson GoatLab: 36.0% local, 21.7% empate y 42.3% visitante, con medias de goles 1.98 y 2.147; añade 78.0% y 76.8% sin etiqueta en el input.",
-          "CatBoost Bzzoiro: 56.3% local, 22.2% empate y 21.5% visitante; goles esperados 1.76-1.15 y marcador 1-1, con 0.511 en su última casilla.",
-          "B2 declara mayor probabilidad para H (local) con 0.563 y marca no en goles totales y ambos anotan; no hay lectura A de API-Football."
-        ],
-        "stats": [
-          {
-            "value": "36.0%",
-            "label": "Local Poisson"
-          },
-          {
-            "value": "56.3%",
-            "label": "Local CatBoost"
-          },
-          {
-            "value": "0.563",
-            "label": "B2 mayor prob."
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Historial: City manda, Brighton aprieta",
-        "bullets": [
-          "En 20 cruces, Manchester City suma 13 victorias, 4 empates y 3 derrotas ante Brighton, con 3.3 goles por partido.",
-          "Los cinco duelos recientes dejan una victoria del City, dos empates y dos triunfos del Brighton.",
-          "El último precedente, en enero de 2026, fue 1-1 en casa del City."
-        ],
-        "stats": [
-          {
-            "value": "20",
-            "label": "Cruces totales"
-          },
-          {
-            "value": "13",
-            "label": "Victorias City"
-          },
-          {
-            "value": "3.3",
-            "label": "Goles por partido"
-          }
-        ]
-      },
-      {
-        "kind": "forma",
-        "title": "Racha reciente: ambos enchufados",
-        "bullets": [
-          "City: 5-3 vs Sunderland, 3-0 en Liverpool, 2-4 vs PSG, 3-2 vs Ipswich, 5-1 vs AEK y 1-2 en Aston Villa; 4 victorias y 2 derrotas.",
-          "Brighton: 5-0 en Coventry, 3-0 vs Arsenal, 2-0 en Sunderland, 5-0 vs Crystal Palace y 0-2 en Liverpool; 4 victorias y 1 derrota."
-        ],
-        "stats": [
-          {
-            "value": "4",
-            "label": "Victorias City"
-          },
-          {
-            "value": "4",
-            "label": "Victorias Brighton"
-          },
-          {
-            "value": "5-0",
-            "label": "Mayor goleada Brighton"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Goleadores: Haaland y el reparto de Brighton",
-        "bullets": [
-          "Erling Haaland lidera al City con 9 goles en 8 partidos; Rayan Cherki suma 4 en 8 y Antoine Semenyo 2 en 7.",
-          "En Brighton, Charalampos Kostoulas, Jack Hinshelwood y Pascal Groß registran 3 goles cada uno, con 8, 3 y 8 apariciones respectivamente."
-        ],
-        "stats": [
-          {
-            "value": "9",
-            "label": "Goles Haaland"
-          },
-          {
-            "value": "4",
-            "label": "Goles Cherki"
-          },
-          {
-            "value": "3",
-            "label": "Goles Kostoulas"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Sin A ni M2",
-        "detail": "No hay lectura A de API-Football ni consenso externo M2; no se puede contrastar con proveedores externos."
-      },
-      {
-        "label": "Divergencia P-B",
-        "detail": "Poisson da 36.0% local y 42.3% visitante; CatBoost da 56.3% local y 21.5% visitante, una brecha de unos 20 puntos."
-      },
-      {
-        "label": "Clima y sede",
-        "detail": "El clima aparece como unknown y no se indica sede; el contexto ambiental queda incompleto."
-      },
-      {
-        "label": "Fila duplicada",
-        "detail": "Hay una fila duplicada de Brighton-Arsenal (3-0) en R; se contabiliza una sola vez."
-      },
-      {
-        "label": "B2 sin desglose",
-        "detail": "B2 solo aporta etiqueta y probabilidad; goles totales y ambos anotan aparecen como no, sin desglose adicional."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Divergencia clara P-B en la mayor probabilidad: Poisson da 36.0% local y 42.3% visitante; CatBoost 56.3% local y 21.5% visitante. B2 coincide con CatBoost (H, 0.563)."
+      "note": "Divergencia relevante: Poisson de GoatLab da 0,423 al visitante y 0,36 al local, mientras Bzzoiro y B2 sitúan al local en 0,575. No hay filas L ni M2 que expliquen la brecha; se reporta como discrepancia de modelos."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T12:06:35.449Z",
-    "inputKey": "v3|M|fd-560623|Manchester City FC|Brighton & Hove Albion FC|premier|2026-10-31T15:00:00Z|NS\nP|1.98|2.147|0.36|0.217|0.423|0.78|0.768\nB|0.563|0.222|0.215|1.76|1.15|0.629|0.608|1-1|0.511\nB2|H|0.563|no|no\nH|20|13|4|3|3.3\nW||unknown|6|\nT|1|Manchester City FC|8|21|20|9\nT|3|Brighton & Hove Albion FC|8|16|23|7\nS|Erling Haaland|Manchester City FC|9|8\nS|Rayan Cherki|Manchester City FC|4|8\nS|Antoine Semenyo|Manchester City FC|2|7\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|3|8\nS|Jack Hinshelwood|Brighton & Hove Albion FC|3|3\nS|Pascal Groß|Brighton & Hove Albion FC|3|8\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Manchester City FC|Paris Saint-Germain FC|2|4\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nHR|2026-01-07|Manchester City|Brighton & Hove Albion|1|1\nHR|2025-08-31|Brighton & Hove Albion|Manchester City|2|1\nHR|2025-03-15|Manchester City|Brighton & Hove Albion|2|2\nHR|2024-11-09|Brighton & Hove Albion|Manchester City|2|1\nHR|2024-04-25|Brighton & Hove Albion|Manchester City|0|4",
-    "materialKey": "v3|M|fd-560623|Manchester City FC|Brighton & Hove Albion FC|premier|2026-10-31T15:00:00Z|NS\nP|1.98|2.147|0.36|0.217|0.423|0.78|0.768\nB|0.563|0.222|0.215|1.76|1.15|0.629|0.608|1-1|0.511\nB2|H|0.563|no|no\nH|20|13|4|3|3.3\nW||unknown|6|\nT|1|Manchester City FC|8|21|20|9\nT|3|Brighton & Hove Albion FC|8|16|23|7\nS|Erling Haaland|Manchester City FC|9|8\nS|Rayan Cherki|Manchester City FC|4|8\nS|Antoine Semenyo|Manchester City FC|2|7\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|3|8\nS|Jack Hinshelwood|Brighton & Hove Albion FC|3|3\nS|Pascal Groß|Brighton & Hove Albion FC|3|8\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Manchester City FC|Paris Saint-Germain FC|2|4\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nHR|2026-01-07|Manchester City|Brighton & Hove Albion|1|1\nHR|2025-08-31|Brighton & Hove Albion|Manchester City|2|1\nHR|2025-03-15|Manchester City|Brighton & Hove Albion|2|2\nHR|2024-11-09|Brighton & Hove Albion|Manchester City|2|1\nHR|2024-04-25|Brighton & Hove Albion|Manchester City|0|4"
+    "generatedAt": "2026-10-28T12:51:06.109Z",
+    "inputKey": "v3|M|fd-560623|Manchester City FC|Brighton & Hove Albion FC|premier|2026-10-31T15:00:00Z|NS\nP|1.98|2.147|0.36|0.217|0.423|0.78|0.768\nB|0.575|0.219|0.207|1.76|1.15|0.635|0.61|1-1|0.51\nB2|H|0.575|no|no\nH|20|13|4|3|3.3\nW||unknown|6|\nT|1|Manchester City FC|8|21|20|9\nT|3|Brighton & Hove Albion FC|8|16|23|7\nS|Erling Haaland|Manchester City FC|9|8\nS|Rayan Cherki|Manchester City FC|4|8\nS|Antoine Semenyo|Manchester City FC|2|7\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|3|8\nS|Jack Hinshelwood|Brighton & Hove Albion FC|3|3\nS|Pascal Groß|Brighton & Hove Albion FC|3|8\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Manchester City FC|Paris Saint-Germain FC|2|4\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nHR|2026-01-07|Manchester City|Brighton & Hove Albion|1|1\nHR|2025-08-31|Brighton & Hove Albion|Manchester City|2|1\nHR|2025-03-15|Manchester City|Brighton & Hove Albion|2|2\nHR|2024-11-09|Brighton & Hove Albion|Manchester City|2|1\nHR|2024-04-25|Brighton & Hove Albion|Manchester City|0|4",
+    "materialKey": "v3|M|fd-560623|Manchester City FC|Brighton & Hove Albion FC|premier|2026-10-31T15:00:00Z|NS\nP|1.98|2.147|0.36|0.217|0.423|0.78|0.768\nB|0.575|0.219|0.207|1.76|1.15|0.635|0.61|1-1|0.51\nB2|H|0.575|no|no\nH|20|13|4|3|3.3\nW||unknown|6|\nT|1|Manchester City FC|8|21|20|9\nT|3|Brighton & Hove Albion FC|8|16|23|7\nS|Erling Haaland|Manchester City FC|9|8\nS|Rayan Cherki|Manchester City FC|4|8\nS|Antoine Semenyo|Manchester City FC|2|7\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|3|8\nS|Jack Hinshelwood|Brighton & Hove Albion FC|3|3\nS|Pascal Groß|Brighton & Hove Albion FC|3|8\nR|2026-09-13|Coventry City FC|Brighton & Hove Albion FC|0|5\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-09-20|Manchester City FC|Sunderland AFC|5|3\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Manchester City FC|Paris Saint-Germain FC|2|4\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nHR|2026-01-07|Manchester City|Brighton & Hove Albion|1|1\nHR|2025-08-31|Brighton & Hove Albion|Manchester City|2|1\nHR|2025-03-15|Manchester City|Brighton & Hove Albion|2|2\nHR|2024-11-09|Brighton & Hove Albion|Manchester City|2|1\nHR|2024-04-25|Brighton & Hove Albion|Manchester City|0|4"
   },
   "fd-560629": {
     "matchId": "fd-560629",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Hull e Ipswich, duelo de mitad de tabla",
+        "title": "Hull City-Ipswich: contexto y modelos",
         "bullets": [
-          "Hull City e Ipswich Town se enfrentan el 31 de octubre de 2026 a las 15:00 UTC en la Premier League; la fila W no incluye sede.",
-          "Hull City es 10º con 10 puntos, 9 goles a favor y 8 en contra en 8 jornadas; Ipswich Town es 12º con 10 puntos, 12 a favor y 16 en contra.",
-          "El clima previsto es nublado y 11 grados, sin datos de estadio."
+          "Hull City e Ipswich Town se miden en la Premier League el 31 de octubre de 2026 a las 15:00; el partido figura como no iniciado.",
+          "La tabla sitúa a Hull en el puesto 10 y a Ipswich en el puesto 12, ambos con 8 partidos disputados.",
+          "El registro meteorológico indica nubosidad y viento de 11; no se aporta sede."
         ],
         "stats": [
           {
-            "value": "10º",
-            "label": "Puesto Hull"
-          },
-          {
-            "value": "12º",
-            "label": "Puesto Ipswich"
-          },
-          {
             "value": "10",
-            "label": "Puntos Hull"
+            "label": "puesto Hull"
+          },
+          {
+            "value": "12",
+            "label": "puesto Ipswich"
+          },
+          {
+            "value": "11",
+            "label": "viento"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Poisson y Bzzoiro divergen en el favorito",
+        "title": "Lectura de Poisson y Bzzoiro",
         "bullets": [
-          "El Poisson de GoatLab otorga 40.8% a Hull, 28.3% al empate y 30.9% a Ipswich; con 1.44 y 1.227 goles esperados, 49.8% para más de 2.5 goles y 55.2% de ambos anotan.",
-          "CatBoost Bzzoiro inclina la balanza a Ipswich con 39.8%, frente a 35.0% de Hull y 25.2% de empate; añade 57.6% para más de 2.5 goles, 58.5% de ambos anotan y 1-1 como marcador modal.",
-          "B2 de Bzzoiro declara la victoria visitante como opción más probable con 39.8%; sus campos de goles totales y ambos anotan llegan con valor no, sin detalle adicional."
+          "El cálculo Poisson de GoatLab reparte 0,408 local, 0,283 empate y 0,309 visitante; los indicadores de goles anexos son 0,498 y 0,552.",
+          "CatBoost Bzzoiro declara 0,364 local, 0,275 empate y 0,361 visitante; la fila consigna 1,48, 1,56, 0,525, 0,577, marcador 1-1 y 0,473.",
+          "B2 señala local como mayor probabilidad (0,364) y marca no en goles totales y ambos anotan.",
+          "La etiqueta local es mínima: 0,364 frente a 0,361 visitante; Poisson amplía la ventaja local a 0,408 y baja al visitante a 0,309."
         ],
         "stats": [
           {
-            "value": "40.8%",
-            "label": "Hull Poisson"
+            "value": "0,364",
+            "label": "local B2"
           },
           {
-            "value": "39.8%",
-            "label": "Ipswich Bzzoiro"
+            "value": "0,361",
+            "label": "visitante Bzzoiro"
           },
           {
-            "value": "58.5%",
-            "label": "Ambos anotan B"
+            "value": "0,408",
+            "label": "local Poisson"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Ipswich domina los cruces recientes",
+        "title": "Historial de enfrentamientos",
         "bullets": [
-          "El historial acumulado registra 19 partidos, 11 victorias del lado local, 4 empates y 4 victorias visitantes, con 2.58 goles por partido.",
-          "En los cinco cruces recientes, Ipswich ganó 4 y empató 1: 1-0 y 3-0 como local, 2-0 y 1-0 como visitante, más un 3-3 en Hull.",
-          "El último antecedente es Ipswich 1-0 Hull del 3 de marzo de 2026; Hull no gana a Ipswich en esa muestra reciente."
+          "El bloque H reúne 19 enfrentamientos, con 11 victorias, 4 empates y 4 derrotas, y 2,58 goles de promedio.",
+          "En los cinco cruces recientes, Ipswich suma 4 victorias y 1 empate; Hull no registra triunfos en esa muestra.",
+          "Los resultados recientes son 1-0, 0-2, 3-3, 3-0 y 0-1, todos con Ipswich invicto."
         ],
         "stats": [
           {
             "value": "19",
-            "label": "Cruces registrados"
-          },
-          {
-            "value": "2.58",
-            "label": "Goles por partido"
+            "label": "cruces"
           },
           {
             "value": "4",
-            "label": "Victorias recientes Ipswich"
+            "label": "victorias Ipswich"
+          },
+          {
+            "value": "2,58",
+            "label": "goles por cruce"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Belloumi, referencia goleadora de Hull",
+        "title": "Goleadores de la muestra",
         "bullets": [
-          "Mohamed Belloumi es el máximo anotador de Hull en la muestra con 3 goles en 8 partidos.",
-          "Ipswich reparte su producción: Emersonn y Leif Davis suman 2 goles en 8 partidos cada uno, y Zian Flemming 2 en 6."
+          "Mohamed Belloumi encabeza la relación de Hull con 3 goles.",
+          "En Ipswich, Emersonn, Leif Davis y Zian Flemming registran 2 goles cada uno.",
+          "El reparto es bajo y compartido: 3 tantos para el líder local y 2 para tres jugadores visitantes."
         ],
         "stats": [
           {
             "value": "3",
-            "label": "Goles Belloumi"
+            "label": "goles Belloumi"
           },
           {
             "value": "2",
-            "label": "Goles Emersonn"
+            "label": "goles Emersonn"
           },
           {
             "value": "2",
-            "label": "Goles Flemming"
+            "label": "goles por jugador Ipswich"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Hull sin victorias; Ipswich alterna",
+        "title": "Forma reciente",
         "bullets": [
-          "Hull acumula 3 empates y 2 derrotas en sus últimos 5: 2-2 con Chelsea, 1-2 con Newcastle, 2-2 con Everton, 0-1 con Fulham y 1-1 con Brentford.",
-          "Ipswich suma 2 victorias, 1 empate y 2 derrotas: 3-2 en Crystal Palace, 0-1 en Everton, 2-1 a Fulham, 2-3 en Manchester City y 1-1 con Nottingham Forest."
+          "Hull acumula 3 empates y 2 derrotas en sus cinco registros: Chelsea 2-2 Hull, Newcastle 2-1 Hull, Hull 2-2 Everton, Fulham 1-0 Hull y Hull 1-1 Brentford.",
+          "Ipswich suma 2 victorias, 1 empate y 2 derrotas: Crystal Palace 2-3 Ipswich, Everton 1-0 Ipswich, Ipswich 2-1 Fulham, Manchester City 3-2 Ipswich e Ipswich 1-1 Nottingham Forest.",
+          "El balance de Hull es de tres igualadas y dos caídas; el de Ipswich, dos triunfos, un empate y dos derrotas."
         ],
         "stats": [
           {
             "value": "3",
-            "label": "Empates Hull"
+            "label": "empates Hull"
           },
           {
             "value": "2",
-            "label": "Victorias Ipswich"
+            "label": "victorias Ipswich"
           },
           {
-            "value": "5",
-            "label": "Partidos Hull"
+            "value": "2",
+            "label": "derrotas Ipswich"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin lectura API-Football",
-        "detail": "No hay fila A para este cruce; no se dispone de distribución, probabilidad mayor ni umbral de goles de API-Football."
+        "label": "Bajas no confirmadas",
+        "detail": "El input no contiene filas L; no hay bajas confirmadas para Hull City ni Ipswich Town."
       },
       {
-        "label": "B2 incompleto",
-        "detail": "Los campos de goles totales y ambos anotan de B2 llegan con valor no; no se distingue si es ausencia de dato o una negativa del modelo."
+        "label": "Consenso externo ausente",
+        "detail": "No se incluyen filas M2, por lo que no hay consenso externo en porcentaje para este cruce."
       },
       {
-        "label": "Campo B sin etiqueta",
-        "detail": "El valor 0.473 asociado al marcador 1-1 en la fila B no está etiquetado; se cita el 1-1 como marcador modal sin interpretar ese número."
+        "label": "Clima parcial",
+        "detail": "La fila W indica nubosidad y viento 11; no se aporta sede."
       },
       {
-        "label": "Sin bajas ni alineaciones",
-        "detail": "No hay fila L de bajas confirmadas ni alineaciones; el análisis no incorpora disponibilidad de jugadores."
+        "label": "Duplicados en forma",
+        "detail": "Newcastle-Hull 2-1 y Everton-Ipswich 1-0 aparecen dos veces en R; se cuentan una vez."
       },
       {
-        "label": "Duplicados en R",
-        "detail": "Algunos resultados de la forma reciente aparecen repetidos en el registro; se contabilizan una sola vez para las rachas."
+        "label": "Campos de proveedor sin detalle",
+        "detail": "P y B incluyen indicadores numéricos de goles sin etiquetas explícitas; se citan como lecturas declaradas."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Se observa divergencia entre el Poisson de GoatLab, que da 40.8% a Hull, y Bzzoiro, que da 39.8% a Ipswich; B2 coincide con B en la visita. No hay error aritmético visible, pero la señal de resultado no es unánime."
+      "note": "La etiqueta local de B2 (0,364) supera por 0,003 a la visitante (0,361), mientras B asigna más referencia de goles al visitante (1,56 frente a 1,48); Poisson da 0,408 al local y 0,309 al visitante. El margen es muy estrecho."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T12:10:05.258Z",
-    "inputKey": "v3|M|fd-560629|Hull City AFC|Ipswich Town FC|premier|2026-10-31T15:00:00Z|NS\nP|1.44|1.227|0.408|0.283|0.309|0.498|0.552\nB|0.35|0.252|0.398|1.48|1.56|0.576|0.585|1-1|0.473\nB2|A|0.398|no|no\nH|19|11|4|4|2.58\nW||cloudy|11|\nT|10|Hull City AFC|8|10|9|8\nT|12|Ipswich Town FC|8|10|12|16\nS|Mohamed Belloumi|Hull City AFC|3|8\nS|Emersonn|Ipswich Town FC|2|8\nS|Leif Davis|Ipswich Town FC|2|8\nS|Zian Flemming|Ipswich Town FC|2|6\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-19|Newcastle United FC|Hull City AFC|2|1\nR|2026-09-19|Newcastle|Hull City|2|1\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-17|Fulham FC|Hull City AFC|1|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Hull City AFC|Brentford FC|1|1\nHR|2026-03-03|Ipswich Town|Hull City|1|0\nHR|2025-11-25|Hull City|Ipswich Town|0|2\nHR|2024-04-27|Hull City|Ipswich Town|3|3\nHR|2023-10-03|Ipswich Town|Hull City|3|0\nHR|2021-02-23|Hull City|Ipswich Town|0|1",
-    "materialKey": "v3|M|fd-560629|Hull City AFC|Ipswich Town FC|premier|2026-10-31T15:00:00Z|NS\nP|1.44|1.227|0.408|0.283|0.309|0.498|0.552\nB|0.35|0.252|0.398|1.48|1.56|0.576|0.585|1-1|0.473\nB2|A|0.398|no|no\nH|19|11|4|4|2.58\nW||cloudy|11|\nT|10|Hull City AFC|8|10|9|8\nT|12|Ipswich Town FC|8|10|12|16\nS|Mohamed Belloumi|Hull City AFC|3|8\nS|Emersonn|Ipswich Town FC|2|8\nS|Leif Davis|Ipswich Town FC|2|8\nS|Zian Flemming|Ipswich Town FC|2|6\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-19|Newcastle United FC|Hull City AFC|2|1\nR|2026-09-19|Newcastle|Hull City|2|1\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-17|Fulham FC|Hull City AFC|1|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Hull City AFC|Brentford FC|1|1\nHR|2026-03-03|Ipswich Town|Hull City|1|0\nHR|2025-11-25|Hull City|Ipswich Town|0|2\nHR|2024-04-27|Hull City|Ipswich Town|3|3\nHR|2023-10-03|Ipswich Town|Hull City|3|0\nHR|2021-02-23|Hull City|Ipswich Town|0|1"
+    "generatedAt": "2026-10-28T12:51:06.122Z",
+    "inputKey": "v3|M|fd-560629|Hull City AFC|Ipswich Town FC|premier|2026-10-31T15:00:00Z|NS\nP|1.44|1.227|0.408|0.283|0.309|0.498|0.552\nB|0.364|0.275|0.361|1.48|1.56|0.525|0.577|1-1|0.473\nB2|H|0.364|no|no\nH|19|11|4|4|2.58\nW||cloudy|11|\nT|10|Hull City AFC|8|10|9|8\nT|12|Ipswich Town FC|8|10|12|16\nS|Mohamed Belloumi|Hull City AFC|3|8\nS|Emersonn|Ipswich Town FC|2|8\nS|Leif Davis|Ipswich Town FC|2|8\nS|Zian Flemming|Ipswich Town FC|2|6\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-19|Newcastle United FC|Hull City AFC|2|1\nR|2026-09-19|Newcastle|Hull City|2|1\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-17|Fulham FC|Hull City AFC|1|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Hull City AFC|Brentford FC|1|1\nHR|2026-03-03|Ipswich Town|Hull City|1|0\nHR|2025-11-25|Hull City|Ipswich Town|0|2\nHR|2024-04-27|Hull City|Ipswich Town|3|3\nHR|2023-10-03|Ipswich Town|Hull City|3|0\nHR|2021-02-23|Hull City|Ipswich Town|0|1",
+    "materialKey": "v3|M|fd-560629|Hull City AFC|Ipswich Town FC|premier|2026-10-31T15:00:00Z|NS\nP|1.44|1.227|0.408|0.283|0.309|0.498|0.552\nB|0.364|0.275|0.361|1.48|1.56|0.525|0.577|1-1|0.473\nB2|H|0.364|no|no\nH|19|11|4|4|2.58\nW||cloudy|11|\nT|10|Hull City AFC|8|10|9|8\nT|12|Ipswich Town FC|8|10|12|16\nS|Mohamed Belloumi|Hull City AFC|3|8\nS|Emersonn|Ipswich Town FC|2|8\nS|Leif Davis|Ipswich Town FC|2|8\nS|Zian Flemming|Ipswich Town FC|2|6\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-12|Crystal Palace FC|Ipswich Town FC|2|3\nR|2026-09-19|Newcastle United FC|Hull City AFC|2|1\nR|2026-09-19|Newcastle|Hull City|2|1\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-17|Fulham FC|Hull City AFC|1|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Hull City AFC|Brentford FC|1|1\nHR|2026-03-03|Ipswich Town|Hull City|1|0\nHR|2025-11-25|Hull City|Ipswich Town|0|2\nHR|2024-04-27|Hull City|Ipswich Town|3|3\nHR|2023-10-03|Ipswich Town|Hull City|3|0\nHR|2021-02-23|Hull City|Ipswich Town|0|1"
   },
   "fd-560630": {
     "matchId": "fd-560630",

@@ -1,0 +1,601 @@
+{
+  "id": "fd-575381",
+  "home": "Club Atlético de Madrid",
+  "away": "FC Bayern München",
+  "competition": "champions",
+  "kickoff": "2026-11-03T20:00:00Z",
+  "updatedAt": "2026-10-28T12:42:29.330Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.71,
+      "away": 1.763
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.685,
+      "away": 1.902
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 3
+    },
+    "standings": {
+      "Club Atlético de Madrid": null,
+      "FC Bayern München": {
+        "position": 14,
+        "team": "FC Bayern München",
+        "teamId": 79,
+        "played": 3,
+        "won": 1,
+        "drawn": 2,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 5,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-28T12:41:39.029Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-03T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-28T12:41:39.029Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 331
+    },
+    "venue": {
+      "city": "Madrid",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.368,
+      "draw": 0.242,
+      "away": 0.39
+    },
+    "doubleChance": {
+      "12": 0.758,
+      "1X": 0.61,
+      "X2": 0.632
+    },
+    "dnb": {
+      "home": 0.486,
+      "away": 0.514
+    },
+    "totals": {
+      "over15": 0.871,
+      "under15": 0.129,
+      "over25": 0.674,
+      "under25": 0.326,
+      "over35": 0.457,
+      "under35": 0.543
+    },
+    "btts": {
+      "yes": 0.688,
+      "no": 0.312
+    },
+    "cleanSheet": {
+      "home": 0.172,
+      "away": 0.181
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.103
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.082
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.08
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.07
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.048
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.59,
+    "noGoal": 0.028,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.45
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.247
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.136
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.075
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.041
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.023
+      }
+    ],
+    "firstHome": 0.457,
+    "firstAway": 0.516
+  },
+  "scorers": {
+    "home": null,
+    "away": [
+      {
+        "player": "Harry Kane",
+        "goals": 4,
+        "matches": 3,
+        "share": 0.667,
+        "rate": 1.27,
+        "anytime": 0.719,
+        "first": 0.353
+      },
+      {
+        "player": "Alphonso Davies",
+        "goals": 2,
+        "matches": 3,
+        "share": 0.333,
+        "rate": 0.63,
+        "anytime": 0.469,
+        "first": 0.176
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.305,
+      "draw": 0.214,
+      "away": 0.48100000000000004,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.66,
+      "away": 2.04
+    },
+    "over15": 0.868,
+    "over25": 0.6940000000000001,
+    "over35": 0.485,
+    "btts": 0.6579999999999999,
+    "score": "1-1",
+    "cornersOver95": 0.532,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.481,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4815,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-28T12:42:25.647Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.31,
+      "draw": 0.229,
+      "away": 0.461
+    },
+    "doubleChance": {
+      "12": 0.771,
+      "1X": 0.539,
+      "X2": 0.69
+    },
+    "dnb": {
+      "home": 0.402,
+      "away": 0.598
+    },
+    "totals": {
+      "over15": 0.892,
+      "under15": 0.108,
+      "over25": 0.714,
+      "under25": 0.286,
+      "over35": 0.506,
+      "under35": 0.494
+    },
+    "btts": {
+      "yes": 0.713,
+      "no": 0.287
+    },
+    "cleanSheet": {
+      "home": 0.13,
+      "away": 0.19
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.106,
+        "share": 0.27249357326478146
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.085,
+        "share": 0.21850899742930593
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.071,
+        "share": 0.1825192802056555
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.069,
+        "share": 0.17737789203084833
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.058,
+        "share": 0.14910025706940874
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 6,
+    "homeWins": 2,
+    "draws": 1,
+    "awayWins": 3,
+    "avgTotalGoals": 2,
+    "recent": [
+      {
+        "eventId": 322827,
+        "date": "2020-12-01T20:00:00+00:00",
+        "home": "Atlético Madrid",
+        "away": "FC Bayern München",
+        "homeTeamId": 54,
+        "awayTeamId": 79,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 322771,
+        "date": "2020-10-21T19:00:00+00:00",
+        "home": "FC Bayern München",
+        "away": "Atlético Madrid",
+        "homeTeamId": 79,
+        "awayTeamId": 54,
+        "homeScore": 4,
+        "awayScore": 0
+      },
+      {
+        "eventId": 357863,
+        "date": "2016-12-06T19:45:00+00:00",
+        "home": "FC Bayern München",
+        "away": "Atlético Madrid",
+        "homeTeamId": 79,
+        "awayTeamId": 54,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 357807,
+        "date": "2016-09-28T18:45:00+00:00",
+        "home": "Atlético Madrid",
+        "away": "FC Bayern München",
+        "homeTeamId": 54,
+        "awayTeamId": 79,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 373439,
+        "date": "2016-05-03T18:45:00+00:00",
+        "home": "FC Bayern München",
+        "away": "Atlético Madrid",
+        "homeTeamId": 79,
+        "awayTeamId": 54,
+        "homeScore": 2,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.3
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10.3
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.92,
+      "shotsOnTarget": 5.13,
+      "xg": 1.66,
+      "corners": 4.9,
+      "fouls": 10.64,
+      "yellowCards": 1.76,
+      "redCards": 0.2,
+      "offsides": 2.04,
+      "possession": 48.76
+    },
+    "away": {
+      "shots": 16.41,
+      "shotsOnTarget": 6.43,
+      "xg": 2.04,
+      "corners": 5.37,
+      "fouls": 11.07,
+      "yellowCards": 1.53,
+      "redCards": 0.13,
+      "offsides": 2.15,
+      "possession": 51.24
+    },
+    "sample": {
+      "home": 5,
+      "away": 6
+    },
+    "coverage": {
+      "home": {
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 1,
+        "offsides": 5
+      },
+      "away": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 6,
+        "redCards": 6,
+        "offsides": 6
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 15.18,
+      "shotsOnTarget": 5.8,
+      "xg": 1.81,
+      "corners": 4.88,
+      "fouls": 10.89,
+      "yellowCards": 1.72,
+      "redCards": 0.14,
+      "offsides": 2.25
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.38,
+      "draw": 0.125,
+      "away": 0.495
+    },
+    "cardsDuel": {
+      "home": 0.434,
+      "draw": 0.229,
+      "away": 0.337
+    },
+    "lastGoal": {
+      "home": 0.457,
+      "away": 0.516,
+      "noGoal": 0.028
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.457,
+        "away": 0.543
+      },
+      "5": {
+        "home": 0.444,
+        "away": 0.556
+      },
+      "7": {
+        "home": 0.433,
+        "away": 0.567
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.174,
+      "home12": 0.206,
+      "level": 0.125,
+      "away12": 0.236,
+      "away3plus": 0.26
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 4,
+      "condition": "clear",
+      "sampledAt": "2026-11-03T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Riyadh Air Metropolitano",
+      "city": "Madrid",
+      "capacity": 70460,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Club Atlético de Madrid",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 4,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 2,
+        "played": 10,
+        "gf": 20,
+        "ga": 8,
+        "provider": null
+      },
+      "player": null
+    },
+    "away": {
+      "team": "FC Bayern München",
+      "recentSample": 3,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 3
+      },
+      "biggestWin": {
+        "value": 5,
+        "sample": 3
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 3
+      },
+      "season": {
+        "position": 14,
+        "played": 3,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Harry Kane",
+        "detail": "4 goles en 3 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}
