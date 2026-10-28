@@ -1,118 +1,6 @@
 {
-  "updatedAt": "2026-10-28T13:17:49.733Z",
+  "updatedAt": "2026-10-28T22:55:32.839Z",
   "runs": [
-    {
-      "at": "2026-10-20T21:42:37.810Z",
-      "task": "shorts",
-      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6460,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 60158
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 5: artículo delante de Real Madrid CF",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6589,
-            "outputTokens": 5959
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 23247
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta RB Leipzig; guion 2: 7 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 3: falta RB Leipzig; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6864,
-            "outputTokens": 1321
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12053
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6460,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 145106
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6589,
-        "outputTokens": 11443
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "576d73fc-c3b3-4a5a-8eaf-86c0e2971df3"
-    },
-    {
-      "at": "2026-10-20T21:43:12.233Z",
-      "task": "image-prompts",
-      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1596,
-        "outputTokens": 6595
-      }
-    },
-    {
-      "at": "2026-10-20T21:43:14.069Z",
-      "task": "video-prompts",
-      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1493,
-        "outputTokens": 365
-      }
-    },
     {
       "at": "2026-10-20T21:47:43.712Z",
       "task": "motion-prompts",
@@ -6282,6 +6170,113 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "676b1970-67ba-416c-8712-cf79f1cf882a"
+    },
+    {
+      "at": "2026-10-28T22:45:18.079Z",
+      "matchId": "fd-560627",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "usage": {
+        "inputTokens": 1272,
+        "outputTokens": 9683
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "09d1dfb3-8534-4905-b9c7-ffba7ee809ea"
+    },
+    {
+      "at": "2026-10-28T22:47:28.400Z",
+      "matchId": "fd-564736",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1392,
+        "outputTokens": 14092
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "4cf1c4f7-deca-4ba6-8a9c-039773b46521"
+    },
+    {
+      "at": "2026-10-28T22:55:24.673Z",
+      "matchId": "fd-564732",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 15000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1368,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 136959
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1340,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 155314
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1417,
+            "outputTokens": 2003
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 17147
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1333,
+            "outputTokens": 5943
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 83955
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1368,
+        "outputTokens": 13370
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "6db9c988-5930-4439-9670-518e5abe622b"
     }
   ]
 }
