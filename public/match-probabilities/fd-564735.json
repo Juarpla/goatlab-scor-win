@@ -4,7 +4,7 @@
   "away": "RC Celta de Vigo",
   "competition": "laliga",
   "kickoff": "2026-10-31T15:15:00Z",
-  "updatedAt": "2026-10-28T12:42:29.330Z",
+  "updatedAt": "2026-10-28T13:09:50.493Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -605,9 +605,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "P y B/B2 discrepan de forma clara: P da 50.7% al Celta; B y B2, 43.8% al Rayo. El 0.477 junto a 1-1 no está etiquetado y se evita leerlo como resultado exacto. La tabla y S carecen de etiquetas de columna.",
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-27T12:36:19.535Z"
+    "note": "Los modelos divergen en el favorito: Poisson da 50.7% al Celta y CatBoost 40.6% al Rayo. Además, B2 declara 'no' a que ambos anoten pese al 51.6% del propio B y al 51.5% de Poisson. La fila T llega sin encabezados; solo se reportan posiciones con certeza.",
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-10-28T13:17:40.495Z"
   }
 }
