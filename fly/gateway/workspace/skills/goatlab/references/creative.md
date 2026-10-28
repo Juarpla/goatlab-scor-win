@@ -13,24 +13,33 @@ Studio, instalar paquetes ni crear un proyecto nuevo en el Gateway.
 Diseña una composición propia para la voz temporizada. Elige una dirección para
 este audio y declárala en plan.visualStyle:
 
-- editorial: libre/editorial; composición experimental, tipografía expresiva y
-  gráficos que expliquen la narración.
-- documentary: documental deportivo; imágenes protagonistas, encuadres sostenidos,
+Los tres enfoques usan la misma base de imágenes y clips protagonistas:
+
+- editorial: montaje expresivo del material deportivo, con encuadres y transiciones
+  originales; tipografía y datos como apoyo.
+- documentary: documental deportivo; fotos y clips con encuadres sostenidos,
   movimientos contenidos y datos puntuales.
-- trailer: tráiler deportivo; contrastes de escala, pausas de tensión y cortes
-  ligados a los momentos fuertes de la voz.
+- trailer: tráiler deportivo; fotos y clips con contrastes de escala, pausas de
+  tensión y cortes ligados a los momentos fuertes de la voz.
 
 Son intenciones de dirección, con composición original por audio. Elige según la
 narración y las preferencias; puedes combinar recursos de los tres enfoques y
 nombrar el predominante. Las escenas siguen el sentido y las pausas de las frases:
 alterna planos amplios y detalles cuando aporten, y deja respirar a la imagen.
 Texto cinético, trazos SVG, pantallas divididas y tarjetas son recursos opcionales.
-En notes explica el concepto, su relación con la voz y una diferencia concreta
-frente a los recientes: encuadre, ritmo, tipografía, paleta o uso del material.
+En notes explica cómo presentas el material y su relación con la voz. Identifica
+las fotos y los clips usados por su índice y cualquier limitación técnica encontrada.
+Varía encuadres, ritmo, transiciones, efectos y edición del material entre audios;
+los conceptos recientes sirven de contexto y se adaptan a la dirección vigente.
 
 La dirección vigente del partido se adjunta al turno desde `montage-experiment.json`:
-clips-first prioriza los vídeos disponibles; freedom conserva libertad completa.
-Sigue esa dirección manteniendo la composición original por audio. Usa facts para
+freedom mantiene libertad de edición sobre imágenes y clips protagonistas;
+clips-first da preferencia a los vídeos dentro de esa misma base visual. La dirección
+vigente prevalece sobre conceptos y preferencias históricos del chat. Los gráficos
+apoyan la narración con el material visible y reconocible. Elige libremente cómo
+presentar fotos y clips: transiciones, recortes, máscaras, movimiento, efectos y
+composición. Aprovecha también los bancos parciales; el montaje solo con gráficos
+se reserva a la ausencia de imágenes y clips utilizables. Usa facts para
 cifras reales y distingue la ilustración de evidencia del partido. Consulta los montajes recientes adjuntos para variar
 la composición; no copies una plantilla cambiando solo texto o colores.
 
@@ -39,7 +48,8 @@ el último segundo. El total es como máximo 55 segundos. Música es una decisi�
 booleana del plan; Render mezcla la voz y, si eliges music:true, su cama musical.
 Los subtítulos, títulos y avisos visuales son parte de tu composición: decide
 cuándo y cómo dibujarlos a partir de words. Marca oficial: GoatLab; URL oficial: goatlab.win. Usa estos datos para el texto dibujado aunque la transcripción confunda su pronunciación. La legibilidad se evalúa visualmente,
-sin cuotas de gráficos, cortes, fotos, clips ni subtítulos obligatorios.
+con imágenes y clips como base visual, sin porcentajes, número de cortes ni
+subtítulos obligatorios.
 
 ## Entrega ejecutable
 
@@ -94,7 +104,10 @@ Render mide tres fotogramas a escala completa y proyecta la captura. El presupue
 es de unos 18 minutos. Si la proyección lo supera, el error vuelve como corrección
 técnica. En CPU, `filter: blur`, `backdrop-filter`, sombras grandes, muchas capas
 superpuestas y varios videos a la vez alargan cada fotograma. `backdrop` y
-`focusBlur` ya llegan desenfocados.
+`focusBlur` ya llegan desenfocados. Ante un error de coste de captura, conserva
+el protagonismo de la media y simplifica primero filtros, capas y videos simultáneos;
+puedes secuenciar los clips. Si un recurso falla, documenta el fallo en notes y
+aprovecha el resto del banco.
 
 ## Zonas del formato
 
@@ -126,4 +139,5 @@ y fitFontSize(text, opciones) son funciones.
 
 El turno trae un JSON con conceptos recientes, los que el usuario marcó que le
 gustaron y los que rechazó, con su motivo. Es referencia de ese chat para variar
-e inspirarte. No es una cuota ni un estilo obligatorio.
+e inspirarte dentro de la dirección vigente. Los ejemplos anteriores no cambian
+la prioridad visual de las imágenes y los clips.

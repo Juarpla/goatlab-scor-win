@@ -1,6 +1,6 @@
 ---
 name: goatlab
-description: "Procesa /goatlab en Telegram: elegir un partido, leer diez guiones, recibir hasta diez audios en orden y entregar Shorts con imágenes Agnes, motion graphics y montaje creativo."
+description: "Procesa /goatlab en Telegram: elegir un partido, leer diez guiones, recibir hasta diez audios en orden y entregar Shorts con imágenes y clips Agnes protagonistas y montaje creativo."
 ---
 
 # GoatLab Shorts
@@ -18,10 +18,11 @@ Flujo: elegir partido → mostrar los diez guiones originales → recibir audios
 orden y en silencio → entrega automática de MP4. Gateway consulta el banco de
 media publicado por GitHub Actions en R2. Su inventario y la dirección editorial se configuran por separado,
 según lo documentado en [references/media.md](references/media.md). Después Render
-monta los audios recibidos, uno a la vez, con la media disponible y motion graphics
-React/Remotion dirigidos y revisados por OpenClaw. Un banco parcial o vacío
-continúa con gráficos; no esperes diez audios. La producción de imágenes, clips y
-prompts y el mantenimiento remoto pertenecen exclusivamente a GitHub Actions.
+monta los audios recibidos, uno a la vez, con React/Remotion bajo la dirección de
+OpenClaw y el contrato de [references/creative.md](references/creative.md).
+Un banco parcial aprovecha la media utilizable; solo un banco sin imágenes ni clips
+utilizables necesita un montaje de gráficos. No esperes diez audios. La producción de imágenes,
+clips y prompts y el mantenimiento remoto pertenecen exclusivamente a GitHub Actions.
 El webhook registra los audios de una serie activa con los identificadores
 originales de Telegram; no inventes `file_id` ni uses una ruta local como tal.
 El código actualiza un mensaje de progreso; no confirmes cada audio ni inventes

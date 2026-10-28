@@ -11,6 +11,9 @@ export function mediaPolicy(matchId, config = experiment) {
   return { mode: clipsFirst ? 'clips-first' : 'freedom', clips };
 }
 export function montageDirection(matchId, config = experiment) {
-  if (mediaPolicy(matchId, config).mode === 'clips-first') return `Modo de prueba: prioriza los clips animados disponibles como base visual del montaje. Combínalos con imágenes y utiliza gráficos cuando aporten información a la narración. Decide libremente el ritmo, los encuadres y la composición, sin cuotas ni obligación de utilizar todos los clips. Aprovecha recortes y repeticiones con sentido; los clips son ilustraciones generadas con IA, no evidencia del partido. Si no hay clips utilizables, continúa con imágenes y gráficos; si tampoco hay imágenes, compón con gráficos. En notes registra modo clips-first y qué clips utilizaste.`;
-  return 'Modo de libertad completa: el inventario es material disponible; elige cualquier subconjunto, repite un recurso si tiene sentido o trabaja solo con gráficos. Decide libremente el ritmo, la composición y el uso de fotos, clips y gráficos.';
+  const mode = mediaPolicy(matchId, config).mode;
+  const direction = 'Usa los clips y las imágenes disponibles como base visual protagonista del montaje. Los gráficos, títulos y datos son apoyo de la narración y mantienen visible y reconocible el material. Conserva libertad creativa en ritmo, encuadres, recortes, transiciones, efectos, composición y edición de fotos y clips, sin porcentajes ni obligación de utilizar todos los recursos. Selecciona y combina el material según la voz; puedes repetirlo con sentido. Con un banco parcial, aprovecha los recursos utilizables; si solo hay fotos o solo clips, construye el montaje con ellos. Solo si no hay imágenes ni clips utilizables, compón con gráficos y explica esa ausencia en notes. La media generada con IA ilustra, no demuestra hechos del partido. En notes identifica las fotos y los clips utilizados por su índice y explica cualquier limitación técnica encontrada.';
+  return (mode === 'clips-first'
+    ? 'Modo de prueba clips-first: prioriza los clips animados dentro de esta dirección. '
+    : 'Modo de libertad creativa con protagonismo de imágenes y clips. ') + direction;
 }

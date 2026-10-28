@@ -1,7 +1,8 @@
 # Medios y reintentos
 
 El banco pertenece al partido y reúne cuatro imágenes y cuatro clips Agnes, reutilizables
-entre audios y chats. El montaje puede continuar con recursos parciales y gráficos.
+entre audios y chats. El montaje aprovecha los recursos utilizables de un banco parcial
+según la dirección de [creative.md](creative.md).
 Las fotos externas se filtran. Los prompts publicados de imagen deben coincidir
 con ID, equipos traducidos, competición y kickoff. Los clips usan la configuración
 fija de `lib/video-animation.json`; el productor conserva los hashes originales de
@@ -17,7 +18,8 @@ la identidad del partido; solo publica en su caché local los recursos compatibl
 No consulta cuotas Agnes ni escribe o borra objetos de R2. La consulta tiene un
 límite de 90 segundos. Un 404 significa recurso ausente; 403, transporte y recursos
 inválidos se informan por separado. Si falla R2, conserva la caché compatible y
-continúa con gráficos. Banco parcial es un resultado válido, no una interrupción.
+utiliza esa media; solo recurre a un montaje de gráficos si no quedan imágenes ni
+clips utilizables. Banco parcial es un resultado válido, no una interrupción.
 
 Para «reintenta fotos», ejecutar `retry --chat=<chat>`: vuelve a consultar imágenes
 y clips publicados por Actions. Actualiza el banco de los montajes pendientes y
@@ -50,9 +52,10 @@ requiriendo final confirmado y protección de trabajos pendientes. Gateway limpi
 continúa desde R2 y elimina los temporales tras confirmar cada subida.
 Ver [deployment.md](deployment.md) para despliegue y comprobaciones.
 
-## Voz y motion graphics
+## Voz y montaje
 
-React y Remotion ejecutan los gráficos según el plan de cada voz. El sistema
+React y Remotion ejecutan la composición de imágenes, clips y apoyos gráficos
+según el plan de cada voz. El sistema
 conserva todas las palabras y ajusta la velocidad solo cuando hace falta, hasta
 un 10%, manteniendo el tono. La voz disponible es 53 segundos dentro de un MP4
 máximo de 55 segundos. Si Render informa VOICE_TOO_LONG, explica que debe grabar

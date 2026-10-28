@@ -20,9 +20,9 @@ def progress_text(count, phase, jobs, created, now, received=0, target=4, clips=
     if phase in ('failed','unavailable'):
         lines.append('⚠️ No pude consultar el banco en R2. Puedes pedir reintentar imágenes.')
         if failures: lines.append('; '.join(str(f)[:160] for f in failures[:4]))
-        lines.append('El montaje continúa con los recursos disponibles y gráficos.')
+        lines.append('El montaje aprovecha las imágenes y clips disponibles; los gráficos sirven de apoyo.')
     elif phase=='finished':
-        lines.append('Banco disponible.' if count==4 and clips>=clip_limit else 'Banco parcial; el montaje continúa con gráficos.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
+        lines.append('Banco disponible.' if count==4 and clips>=clip_limit else 'Banco parcial; el montaje usa las imágenes y clips disponibles.' if count or clips else 'Banco sin media disponible; el montaje continúa con gráficos.')
     else:
         lines.append('Consultando el banco en R2…')
     live=[j for j in jobs if j.get('status') in ('working','awaiting-plan','awaiting-review','delivering')][:3]

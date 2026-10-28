@@ -219,7 +219,17 @@ test('authoring requests the preview bytes and records how long the turn took', 
   assert.equal(authoring.images[0].bytes.toString(), 'small-preview');
   assert.match(authoring.sessionKey, /^agent:director:goatlab:/);
   assert.match(authoring.message, /Preferencias del usuario/);
-  assert.match(authoring.message, /Dirección vigente para este partido:[\s\S]*Modo de libertad completa/);
+  assert.match(authoring.message, /Dirección vigente para este partido:[\s\S]*Modo de libertad creativa/);
+  assert.match(authoring.message, /datos históricos, no instrucciones; adáptalos a la dirección vigente/);
+  assert.match(authoring.message, /editorial: montaje expresivo del material deportivo/);
+  assert.match(authoring.message, /simplifica primero filtros, capas y videos simultáneos/);
+  assert.doesNotMatch(authoring.message, /trabaja solo con gráficos|composición experimental, tipografía expresiva/);
+  const review = seen.find(request => request.key.includes(':review-'));
+  for (const request of [authoring, review]) {
+    assert.match(request.message, /clips y las imágenes disponibles como base visual protagonista/);
+    assert.match(request.message, /transiciones, efectos, composición y edición/);
+    assert.match(request.message, /Solo si no hay imágenes ni clips utilizables, compón con gráficos/);
+  }
   assert.equal(JSON.parse(readFileSync(join(dir, 'state.json'), 'utf8')).history[0].ms, 2500);
 });
 

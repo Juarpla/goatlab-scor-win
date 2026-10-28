@@ -63,7 +63,7 @@ Cuando falte una capacidad, buscar con `openclaw skills search` o
 coste y compatibilidad; un escaneo no sustituye esa revisión. Recomendar por
 Telegram con enlace y tarea que resolvería. Instalar solo cuando el usuario lo
 solicite y fijar la versión revisada. React/Remotion y FFmpeg siguen siendo el
-motor de motion graphics dirigido por OpenClaw.
+motor de montaje de imágenes, clips y apoyos gráficos dirigido por OpenClaw.
 
 DeepSeek es el modelo principal y GLM el respaldo, ambos mediante OpenCode Go.
 Usar su endpoint `https://opencode.ai/inference/go/openai/v1`; Console sin `/go/`

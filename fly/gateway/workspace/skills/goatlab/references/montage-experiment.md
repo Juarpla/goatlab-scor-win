@@ -2,14 +2,19 @@
 
 La fuente de verdad es `src/lib/montage-experiment.json`, sincronizada a `lib/` del skill.
 `clips: 4` fija el objetivo de producción en Actions y la comprobación del banco completo.
-La dirección editorial se controla por separado: `mode: freedom` devuelve la libertad
-completa para elegir fotos, clips o gráficos, sin cuotas ni prioridad obligatoria.
-`clips-first` conserva una prueba opcional de prioridad editorial; `matches` limita esa
-prioridad a IDs explícitos, o null a todos. Ambos modos mantienen el mismo inventario.
+La dirección editorial se controla por separado: `mode: freedom` conserva libertad
+creativa en la presentación, transiciones, efectos y edición de fotos y clips, que
+son la base visual del montaje. Los gráficos apoyan la narración. La dirección
+inyectada por `media-policy.js` define selección de recursos y alternativas ante
+ausencias; [creative.md](creative.md) adapta los estilos a esa dirección.
+`clips-first` conserva una prueba opcional de preferencia por los clips dentro de
+esa misma dirección; `matches` limita la prueba a IDs explícitos, o null a todos.
+Ambos modos mantienen el mismo inventario.
 
 ## Cambiar la dirección
 
-Ante «vuelve al modo de libertad completa», ejecutar desde el repositorio:
+Para conservar libertad de edición sin la preferencia experimental por clips,
+ejecutar desde el repositorio:
 
 ```sh
 node scripts/set-montage-mode.mjs freedom

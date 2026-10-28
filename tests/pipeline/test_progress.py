@@ -25,6 +25,14 @@ class ProgressTests(unittest.TestCase):
                 self.assertNotIn(obsolete, text)
             self.assertIn('Banco disponible' if clips == 4 else 'Banco parcial', text)
 
+    def test_partial_banks_keep_media_and_only_empty_banks_fall_back_to_graphics(self):
+        for photos, clips in ((4, 0), (0, 4), (1, 1)):
+            text = progress_text(photos, 'finished', [], 0, 0, clips=clips)
+            self.assertIn('usa las imágenes y clips disponibles', text)
+            self.assertNotIn('continúa con gráficos', text)
+        self.assertIn('sin media disponible; el montaje continúa con gráficos',
+                      progress_text(0, 'finished', [], 0, 0, clips=0))
+
     def test_stale_and_queued_jobs_never_claim_active_planning(self):
         job = {'status': 'working', 'variant': 3, 'currentStage': 'planning', 'updatedAt': 1000000}
         self.assertIn('Video 4: planificando', progress_text(4, 'finished', [job], 1000, 1080, clips=2))

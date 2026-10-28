@@ -10,7 +10,9 @@ OpenClaw lee el índice y los JSON de Scripts e Image Prompts de goatlab.win. Ca
 el contenido utilizado. Actions produce el banco Agnes definido por el objetivo de producción y mantiene sus cuotas y recursos remotos. Gateway consulta R2 mediante el
 lector independiente, verifica metadatos, prompts de imagen, checksum y acceso público,
 y publica su banco local listo en un máximo de 90 segundos. Un banco parcial o
-vacío permite montar los audios con gráficos. OpenClaw compone los gráficos por audio con el catálogo de hechos.
+vacío permite continuar: OpenClaw aprovecha la media utilizable; solo compone un
+montaje de gráficos cuando no quedan imágenes ni clips utilizables. Los apoyos
+gráficos por audio usan el catálogo de hechos.
 
 Gateway utiliza `MEDIA_ROLE=consumer`; el generador y sus CLI Agnes exigen
 `MEDIA_ROLE=producer` y `GITHUB_ACTIONS=true`. Reintentar media consulta R2,

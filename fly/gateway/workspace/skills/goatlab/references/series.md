@@ -17,7 +17,7 @@ Si hay varios audios en un turno, procésalos en orden de llegada, uno por llama
    desde goatlab.win y se guardan con la serie. La consulta del banco R2 queda programada. Envía las diez narraciones devueltas, literalmente, en 2–3 mensajes
    de hasta 3500 caracteres. Encabeza con «Lee y graba en orden, uno tras otro,
    sin esperar. Manda los 10 audios. Graba hasta 50 segundos por audio.» Después: «📸 Estoy consultando las imágenes y clips publicados en R2.
-   Ya puedes mandar los audios; el montaje usará los recursos disponibles y gráficos.»
+   Ya puedes mandar los audios; el montaje usará las imágenes y clips disponibles, con gráficos de apoyo.»
    Si `missingCategories` no está vacío, informa cuáles faltan y que el montaje
    utilizará el material disponible.
 4. Audio: el webhook ejecuta `receive` usando el chat, file_id y message_id

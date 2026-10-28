@@ -20,7 +20,8 @@ antes del respaldo. Ningún fallo activa una plantilla de sustitución.
 
 Recibes una muestra de hasta ocho imágenes del MP4 real y la voz temporizada.
 Con razonamiento max, guarda {"decision":"approve"|"revise","notes":"observaciones breves"}.
-Describe problemas visibles de encuadre, texto o superposición. Las preferencias
+Describe problemas visibles de encuadre, texto o superposición y si la muestra
+mantiene imágenes y clips reconocibles con gráficos de apoyo. Las preferencias
 de diseño son sugerencias, no motivos para bloquear la entrega. Evalúa solo
 lo recibido; sonido y movimiento continuo quedan fuera de esta inspección.
 
