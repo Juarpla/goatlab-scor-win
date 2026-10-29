@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readdirSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { directVideo, nativeDecision, designMemory, remember } from '../fly/gateway/creative-director.mjs';
+import { directVideo, nativeDecision, designMemory, remember, workerClient } from '../fly/gateway/creative-director.mjs';
 import { submitPlan, approveCandidate, digest, reviewTimes } from '../fly/render/creative-job.mjs';
 import { compositionProps } from '../src/lib/edit-plan.js';
 
@@ -381,4 +381,58 @@ test('design memory keeps liked and rejected concepts apart and merges a later c
   assert.equal(memory.liked[0].concept, 'subtitulos grandes');
   assert.equal(merged.items.length, 1);
   assert.equal(designMemory(root, root, '7', 'b'.repeat(32)).liked.length, 0);
+});
+
+test('Render HTTP diagnostics preserve the response body and endpoint with bounded detail', async () => {
+  const body = JSON.stringify({ error: 'invalid JSX', diagnostic: 'x'.repeat(5000) });
+  const worker = workerClient('https://render.example', 'private-token', async () => new Response(body, { status: 400 }));
+  await assert.rejects(worker('/render/plan', {}), error => {
+    assert.equal(error.status, 400);
+    assert.equal(error.endpoint, '/render/plan');
+    assert.equal(error.detail, 'invalid JSX');
+    assert.equal(error.body, body.slice(0, 4000));
+    return true;
+  });
+});
+
+test('exhausted planning preserves the last HTTP failure and a log path in the 500-character Render notice', async t => {
+  const h = harness(), dir = directory(t);
+  const render = workerClient('https://render.example', 'secret', async () => new Response(JSON.stringify({ error: 'invalid JSX: ' + 'x'.repeat(4500) }), { status: 400 }));
+  const worker = async (path, body, binary) => {
+    if (path === '/render/plan') return render(path, body);
+    if (path === '/render/fail') body = { ...body, reason: body.reason.slice(0, 500) };
+    return h.worker(path, body, binary);
+  };
+  const result = await directVideo({ requestId: 'invalid-plan-diagnostic', expiresAt: Date.now() + 3600_000 }, { ...h, worker, directory: dir });
+  assert.equal(result.status, 'error');
+  const state = JSON.parse(readFileSync(join(dir, 'state.json')));
+  const failure = JSON.parse(readFileSync(state.failure.log));
+  assert.equal(failure.httpStatus, 400);
+  assert.equal(failure.endpoint, '/render/plan');
+  assert.equal(failure.detail.length, 4000);
+  assert.equal(failure.body.length, 4000);
+  assert.equal(failure.planTries['1:0'], 2);
+  assert.equal(failure.turns.length, 2);
+  assert.match(h.job.error, /invalid JSX/);
+  assert.ok(h.job.error.includes(state.failure.log));
+});
+
+test('a failed director turn records timing and the real error without leaking its credential', async t => {
+  const h = harness(), dir = directory(t);
+  const previous = process.env.RENDER_SECRET;
+  process.env.RENDER_SECRET = 'diagnostic-private-token';
+  t.after(() => { if (previous === undefined) delete process.env.RENDER_SECRET; else process.env.RENDER_SECRET = previous; });
+  let clock = 1000;
+  Object.assign(h.job, { currentStage: 'authoring', stages: { transcription: 25 } });
+  const decide = async () => { clock += 1250; throw Error('provider unavailable: diagnostic-private-token'); };
+  await directVideo({ requestId: 'failed-turn', expiresAt: 3_600_000 }, { ...h, decide, directory: dir, now: () => clock });
+  const state = JSON.parse(readFileSync(join(dir, 'state.json')));
+  const text = readFileSync(state.failure.log, 'utf8'), failure = JSON.parse(text);
+  assert.match(failure.reason, /provider unavailable/);
+  assert.equal(failure.stage, 'authoring');
+  assert.equal(failure.stages.transcription, 25);
+  assert.equal(failure.turns[0].ms, 1250);
+  assert.match(failure.turns[0].error, /provider unavailable/);
+  assert.ok(!text.includes('diagnostic-private-token'));
+  assert.ok(!state.error.includes('diagnostic-private-token'));
 });

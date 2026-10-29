@@ -151,6 +151,23 @@ class RecoveryVisibilityTests(unittest.TestCase):
                 self.assertIsNone(execute({'kind': 'render', 'payload': json.dumps({'matchId': 'a-b'})}))
                 post.assert_not_called()
 
+    def test_status_keeps_director_diagnostics_when_the_last_turn_failed(self):
+        import hashlib
+        from unittest.mock import patch
+        from workflow import render_status
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            directory = root / 'director' / hashlib.sha256(b'failed-audio').hexdigest()
+            directory.mkdir(parents=True)
+            (directory / 'state.json').write_text(json.dumps({'generation': 1, 'error': 'plan failed', 'history': [
+                {'generation': 1, 'stage': 'plan-v5-0-0', 'ms': 120, 'error': 'provider unavailable'}]}))
+            audio = {'requestId': 'failed-audio', 'result': json.dumps({'jobId': 'job-failed'})}
+            with patch('workflow.STATE', root), patch('workflow.request_json', return_value={'status': 'error'}):
+                result = render_status(audio)
+            self.assertEqual(result['director']['error'], 'plan failed')
+            self.assertEqual(result['director']['turns'][0]['error'], 'provider unavailable')
+            self.assertEqual(result['director']['turns'][0]['ms'], 120)
+
 class TemporaryStateTests(unittest.TestCase):
     def test_expired_series_and_repeated_resets_do_not_accumulate_history(self):
         import os

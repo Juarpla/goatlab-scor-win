@@ -94,7 +94,7 @@ incluido. Siguen activos los controles técnicos de ejecución, formato y entreg
 
 Render compila y prueba tres fotogramas antes del video completo. Completa la
 autoría guardando directamente el JSON con imports completos y nombres únicos.
-El motor devuelve errores técnicos para hasta dos correcciones; las observaciones de
+El motor devuelve errores técnicos para una corrección; las observaciones de
 estilo no disparan otra captura. El archivo autorizado para entrega debe ser el
 mismo MP4 validado, comprobado por su hash.
 

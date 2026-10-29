@@ -313,8 +313,8 @@ def render_status(audio):
             path = STATE/'director'/hashlib.sha256(request.encode()).hexdigest()/'state.json'
             director = json.loads(path.read_text())
             audio['director'] = {'generation': director.get('generation'), 'error': director.get('error'),
-                'turns': [{'generation': t.get('generation'), 'stage': t['stage'], 'ms': t.get('ms'), 'model': t['result'].get('requestedModel'),
-                           'decision': t['result'].get('decision'), 'notes': t['result'].get('notes','')[:1000]}
+                'turns': [{'generation': t.get('generation'), 'stage': t['stage'], 'ms': t.get('ms'), 'model': (t.get('result') or {}).get('requestedModel'),
+                           'decision': (t.get('result') or {}).get('decision'), 'notes': (t.get('result') or {}).get('notes','')[:1000], 'error': t.get('error')}
                           for t in director.get('history', [])[-6:]]}
         except (OSError, ValueError, KeyError):
             pass

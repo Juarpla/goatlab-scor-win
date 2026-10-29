@@ -118,8 +118,18 @@ planHash,videoHash,reviewedFrames,notes y model. La aprobación habilita la entr
 del mismo MP4; no se vuelve a renderizar después de aprobar. GET
 /jobs/:id/artifacts/:generation/:revision/:name sirve JPEGs autenticados (revisión
 0 para fotos fuente). POST /render/fail registra un fallo del director. Todas las
-operaciones salvo health requieren Bearer RENDER_SECRET. Hay tres candidatos como
-máximo por generación en el contrato histórico. Ahora hay tres candidatos (dos correcciones técnicas); la revisión es orientativa y no dispara capturas. La autorización por hash protege el archivo a entregar, no actúa como veto artístico.
+operaciones salvo health requieren Bearer RENDER_SECRET. Hay dos candidatos por
+generación (el inicial y una corrección técnica) y hasta dos intentos por plan
+inválido. La revisión es orientativa y no dispara capturas. La autorización por
+hash protege el archivo a entregar, no actúa como veto artístico.
+
+Un fallo del director deja un JSON privado en
+`/data/director/<audio>/failures/failure-<generación>-<timestamp>.json`.
+Incluye el error real, estado HTTP y endpoint, respuesta de Render limitada a
+4000 caracteres, revisión, intentos, etapa y tiempos de Render, último error de
+planificación y resumen de los últimos ocho turnos. El aviso conserva la ruta
+del registro dentro de sus 500 caracteres; los secretos conocidos se ocultan.
+Estos registros siguen la retención del estado del director y no se publican en Git.
 
 Antes de activar: comprobar ledger y terminar trabajos antiguos; desplegar Render
 y después Gateway con CREATIVE_DIRECTOR_ENABLED=0. Ejecutar la prueba nativa de

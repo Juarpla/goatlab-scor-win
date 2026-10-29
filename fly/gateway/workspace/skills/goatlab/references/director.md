@@ -12,7 +12,7 @@ JSON del turno. Usa imports completos, nombres
 únicos y los datos oficiales de marca: GoatLab y goatlab.win.
 
 Un error técnico de Render vuelve con su diagnóstico. Hay un candidato inicial
-y dos correcciones técnicas; un plan inválido admite hasta tres intentos. El presupuesto
+y una corrección técnica; un plan inválido admite hasta dos intentos. El presupuesto
 por turno es 1800 s, con 15 s de margen de recogida. Un fallo cancela el turno
 antes del respaldo. Ningún fallo activa una plantilla de sustitución.
 

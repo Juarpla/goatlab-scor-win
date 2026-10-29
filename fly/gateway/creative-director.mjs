@@ -11,6 +11,18 @@ const save = (path, value) => { writeFileSync(`${path}.tmp`, JSON.stringify(valu
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const jsonFile = path => existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
 
+// Keep technical diagnostics, excluding credentials echoed by an upstream service.
+const diagnosticText = value => {
+  let text = String(value ?? '');
+  for (const [key, secret] of Object.entries(process.env))
+    if (secret && /(?:KEY|TOKEN|SECRET|PASSWORD)$/.test(key)) text = text.split(secret).join('[redacted]');
+  return text.replace(/(bearer\s+)[^\s"<>]+/gi, '$1[redacted]')
+    .replace(/([?&](?:token|key|api_key|signature|x-amz-signature|x-amz-credential)=)[^&\s"<>]+/gi, '$1[redacted]');
+};
+const httpDiagnostic = error => ({ httpStatus: error.status ?? null, endpoint: error.endpoint ?? null,
+  detail: error.detail == null ? null : diagnosticText(error.detail).slice(0, 4000),
+  body: error.body == null ? null : diagnosticText(error.body).slice(0, 4000) });
+
 /** Models sometimes write the composition with literal line breaks inside JSON strings. */
 const escapeControlsInStrings = text => {
   let out = '', inString = false, escape = false;
@@ -143,9 +155,10 @@ export function workerClient(base, secret, fetchImpl = fetch) {
     if (!response.ok) {
       let text = ''; try { text = await response.text(); } catch { /* bounded diagnostic */ }
       let error; try { error = JSON.parse(text).error; } catch { /* body is not JSON */ }
-      const failure = new Error(`Render HTTP ${response.status}${error ? ': ' + String(error).slice(0, 300) : ''}`);
+      const failure = new Error(`Render HTTP ${response.status}${error ? ': ' + diagnosticText(error).slice(0, 300) : ''}`);
       failure.status = response.status;
-      failure.detail = String(error ?? text ?? '').slice(0, 4000);
+      failure.detail = diagnosticText(error ?? text).slice(0, 4000);
+      failure.body = diagnosticText(text).slice(0, 4000);
       failure.endpoint = path;
       throw failure;
     }
@@ -290,7 +303,7 @@ export async function directVideo(body, { worker, decide, directory, wait = slee
       state.history.push({ generation, stage: key, at: now(), startedAt, ms: now() - startedAt, purpose: key.startsWith('review-') ? 'review' : 'authoring', result: turn }); persist();
       return turn;
     } catch (error) {
-      state.history.push({ generation, stage: key, at: now(), startedAt, ms: now() - startedAt, purpose: key.startsWith('review-') ? 'review' : 'authoring', error: String(error.message).slice(0, 2000) }); persist();
+      state.history.push({ generation, stage: key, at: now(), startedAt, ms: now() - startedAt, purpose: key.startsWith('review-') ? 'review' : 'authoring', error: diagnosticText(error.message).slice(0, 2000) }); persist();
       throw error;
     }
   };
@@ -317,7 +330,7 @@ export async function directVideo(body, { worker, decide, directory, wait = slee
       if (job.errorCode === 'DIRECTOR_STOPPED') return { jobId, status: 'error', error: job.error };
       generation = job.attempts;
       if (state.generation !== generation) {
-        state.generation = generation; state.reviews = {}; state.error = null; state.planningError = null; persist();
+        state.generation = generation; state.reviews = {}; state.error = null; state.planningError = null; state.planningFailure = null; persist();
       }
       if (['queued', 'working', 'delivering'].includes(job.status)) { await wait(2000); continue; }
       if (!job.prepared || job.operation === 'deliver' && job.status === 'error') throw new Error(job.error || 'falló la preparación o entrega');
@@ -346,9 +359,10 @@ export async function directVideo(body, { worker, decide, directory, wait = slee
         try {
           await worker('/render/plan', { ...identity, plan: result.plan, model: result.requestedModel });
           state.planningError = null;
+          state.planningFailure = null;
         } catch (error) {
           if (!/Render HTTP 400/.test(error.message)) throw error;
-          state.planningError = error.message; state.planTries[tryKey] = tries + 1;
+          state.planningError = diagnosticText(error.message); state.planningFailure = httpDiagnostic(error); state.planTries[tryKey] = tries + 1;
         }
         persist();
         continue;
@@ -390,8 +404,9 @@ export async function directVideo(body, { worker, decide, directory, wait = slee
     const failure = {
       at: new Date(now()).toISOString(), requestId: body.requestId, chatId: body.chatId, matchId: body.matchId,
       jobId, generation, revision: current?.revision ?? null, attempts: current?.attempts ?? null,
-      reason: String(error.message).slice(0, 4000), httpStatus: error.status ?? null, endpoint: error.endpoint ?? null,
-      detail: error.detail ?? null, renderError: current?.error ?? null, renderCode: current?.errorCode ?? null,
+      reason: diagnosticText(error.message).slice(0, 4000),
+      ...(state.planningFailure && error.status == null ? state.planningFailure : httpDiagnostic(error)),
+      renderError: current?.error ? diagnosticText(current.error) : null, renderCode: current?.errorCode ?? null,
       stage: current?.currentStage ?? null, stages: current?.stages ?? null,
       planningError: state.planningError ?? null, planTries: state.planTries ?? null,
       turns: (state.history || []).slice(-8).map(turn => ({ stage: turn.stage, generation: turn.generation, ms: turn.ms,
@@ -399,16 +414,19 @@ export async function directVideo(body, { worker, decide, directory, wait = slee
     };
     try {
       const logDir = join(directory, 'failures'); mkdirSync(logDir, { recursive: true, mode: 0o700 });
-      failure.log = join(logDir, `failure-${generation ?? 'unknown'}-${now()}.json`);
-      writeFileSync(failure.log, JSON.stringify(failure, null, 2));
+      const log = join(logDir, `failure-${generation ?? 'unknown'}-${now()}.json`);
+      writeFileSync(log, JSON.stringify({ ...failure, log }, null, 2), { mode: 0o600 });
+      failure.log = log;
     } catch { /* logging never masks the original error */ }
     state.failure = failure;
-    state.error = [String(error.message), current?.error && current.error !== error.message ? `Render: ${current.error}` : null,
-      state.planningError ? `Plan: ${String(state.planningError).slice(0, 300)}` : null,
-      failure.log ? `Detalle: ${failure.log}` : null].filter(Boolean).join(' · ').slice(0, 1500);
+    const detail = [diagnosticText(error.message), failure.renderError && failure.renderError !== error.message ? `Render: ${failure.renderError}` : null,
+      state.planningError ? `Plan: ${state.planningError}` : null].filter(Boolean).join(' · ');
+    // Render bounds its Telegram notice to 500 characters: reserve space for the log.
+    const suffix = failure.log ? ` · Detalle: ${failure.log}` : '';
+    state.error = detail.slice(0, Math.max(0, 500 - suffix.length)) + suffix;
     persist();
     console.error(JSON.stringify({ director: 'failure', jobId, generation, revision: failure.revision, error: state.error, log: failure.log }));
-    if (!current || current.attempts !== generation || ['queued', 'working', 'delivering'].includes(current.status)) throw error;
+    if (!current || current.attempts !== generation || ['queued', 'working', 'delivering'].includes(current.status)) { error.message = state.error; throw error; }
     if (current.attempts === generation && !current.cancelled && !['done', 'cancelled', 'delivering', 'delivery-unknown'].includes(current.status))
       await worker('/render/fail', { jobId, generation: current.attempts, reason: state.error });
     return { jobId, status: current.cancelled ? 'cancelled' : ['done', 'delivery-unknown'].includes(current.status) ? current.status : 'error', error: state.error };
