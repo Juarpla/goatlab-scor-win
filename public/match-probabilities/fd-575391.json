@@ -1,0 +1,591 @@
+{
+  "id": "fd-575391",
+  "home": "Borussia Dortmund",
+  "away": "Real Betis Balompié",
+  "competition": "champions",
+  "kickoff": "2026-11-04T20:00:00Z",
+  "updatedAt": "2026-10-29T12:51:21.728Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.8,
+      "away": 1.533
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.025,
+      "away": 1.342
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 3,
+      "away": 6
+    },
+    "standings": {
+      "Borussia Dortmund": {
+        "position": 13,
+        "team": "Borussia Dortmund",
+        "teamId": 92,
+        "played": 3,
+        "won": 2,
+        "drawn": 0,
+        "lost": 1,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 6,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "Real Betis Balompié": {
+        "position": 5,
+        "team": "Real Betis",
+        "teamId": 56,
+        "played": 3,
+        "won": 3,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 9,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-29T12:50:27.220Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-04T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-29T12:50:27.220Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 331
+    },
+    "venue": {
+      "city": "Dortmund",
+      "tz": "Europe/Berlin"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.432,
+      "draw": 0.247,
+      "away": 0.321
+    },
+    "doubleChance": {
+      "12": 0.753,
+      "1X": 0.679,
+      "X2": 0.568
+    },
+    "dnb": {
+      "home": 0.574,
+      "away": 0.426
+    },
+    "totals": {
+      "over15": 0.855,
+      "under15": 0.145,
+      "over25": 0.647,
+      "under25": 0.353,
+      "over35": 0.427,
+      "under35": 0.573
+    },
+    "btts": {
+      "yes": 0.664,
+      "no": 0.336
+    },
+    "cleanSheet": {
+      "home": 0.216,
+      "away": 0.165
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.108
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.089
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.075
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.068
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.058
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.37,
+    "noGoal": 0.034,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.429
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.245
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.14
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.08
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.046
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.026
+      }
+    ],
+    "firstHome": 0.581,
+    "firstAway": 0.385
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Serhou Guirassy",
+        "goals": 4,
+        "matches": 3,
+        "share": 0.5,
+        "rate": 1.01,
+        "anytime": 0.637,
+        "first": 0.3
+      },
+      {
+        "player": "Sehrou Guirassy",
+        "goals": 4,
+        "matches": 3,
+        "share": 0.5,
+        "rate": 1.01,
+        "anytime": 0.637,
+        "first": 0.3
+      }
+    ],
+    "away": [
+      {
+        "player": "Isco",
+        "goals": 2,
+        "matches": 3,
+        "share": 0.5,
+        "rate": 0.67,
+        "anytime": 0.489,
+        "first": 0.199
+      },
+      {
+        "player": "Marc Bartra",
+        "goals": 2,
+        "matches": 3,
+        "share": 0.5,
+        "rate": 0.67,
+        "anytime": 0.489,
+        "first": 0.199
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.647,
+      "draw": 0.192,
+      "away": 0.161,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.25,
+      "away": 1.15
+    },
+    "over15": 0.838,
+    "over25": 0.643,
+    "over35": 0.425,
+    "btts": 0.585,
+    "score": "2-1",
+    "cornersOver95": 0.501,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.647,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6471,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-29T12:51:16.550Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.613,
+      "draw": 0.212,
+      "away": 0.175
+    },
+    "doubleChance": {
+      "12": 0.788,
+      "1X": 0.825,
+      "X2": 0.387
+    },
+    "dnb": {
+      "home": 0.778,
+      "away": 0.222
+    },
+    "totals": {
+      "over15": 0.862,
+      "under15": 0.138,
+      "over25": 0.66,
+      "under25": 0.34,
+      "over35": 0.441,
+      "under35": 0.559
+    },
+    "btts": {
+      "yes": 0.62,
+      "no": 0.38
+    },
+    "cleanSheet": {
+      "home": 0.317,
+      "away": 0.105
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.119,
+        "share": 0.2723112128146453
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.095,
+        "share": 0.21739130434782608
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.084,
+        "share": 0.1922196796338673
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.073,
+        "share": 0.16704805491990846
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.066,
+        "share": 0.15102974828375287
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 0,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": [],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.8
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10.2
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.3,
+      "shotsOnTarget": 5.44,
+      "xg": 2.25,
+      "corners": 5.58,
+      "fouls": 11.44,
+      "yellowCards": 1.85,
+      "redCards": 0.16,
+      "offsides": 2.09,
+      "possession": 51.12
+    },
+    "away": {
+      "shots": 14.63,
+      "shotsOnTarget": 5.38,
+      "xg": 1.15,
+      "corners": 4.62,
+      "fouls": 10.65,
+      "yellowCards": 1.93,
+      "redCards": 0.12,
+      "offsides": 2.01,
+      "possession": 48.88
+    },
+    "sample": {
+      "home": 6,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 6,
+        "redCards": 5,
+        "offsides": 6
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 5,
+        "offsides": 9
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.64,
+      "shotsOnTarget": 5.58,
+      "xg": 1.74,
+      "corners": 4.74,
+      "fouls": 11.04,
+      "yellowCards": 1.74,
+      "redCards": 0.13,
+      "offsides": 2.21
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.556,
+      "draw": 0.121,
+      "away": 0.323
+    },
+    "cardsDuel": {
+      "home": 0.377,
+      "draw": 0.213,
+      "away": 0.409
+    },
+    "lastGoal": {
+      "home": 0.581,
+      "away": 0.385,
+      "noGoal": 0.034
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.588,
+        "away": 0.412
+      },
+      "5": {
+        "home": 0.614,
+        "away": 0.386
+      },
+      "7": {
+        "home": 0.636,
+        "away": 0.364
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.311,
+      "home12": 0.246,
+      "level": 0.121,
+      "away12": 0.186,
+      "away3plus": 0.136
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 11.3,
+      "condition": "unknown",
+      "sampledAt": "2026-11-04T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Signal Iduna Park",
+      "city": "Dortmund",
+      "capacity": 81365,
+      "tz": "Europe/Berlin"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Borussia Dortmund",
+      "recentSample": 3,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 3
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 3
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 3
+      },
+      "season": {
+        "position": 13,
+        "played": 3,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Serhou Guirassy",
+        "detail": "4 goles en 3 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Real Betis Balompié",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 4,
+        "played": 10,
+        "gf": 16,
+        "ga": 14,
+        "provider": null
+      },
+      "player": {
+        "name": "Abdessamad Ezzalzouli",
+        "detail": "3 goles en 7 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

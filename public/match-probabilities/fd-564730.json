@@ -4,7 +4,7 @@
   "away": "Club Atlético de Madrid",
   "competition": "laliga",
   "kickoff": "2026-10-31T13:00:00Z",
-  "updatedAt": "2026-10-29T05:57:56.192Z",
+  "updatedAt": "2026-10-29T12:51:21.728Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-28T12:42:06.612Z",
+      "updatedAt": "2026-10-29T12:50:53.403Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-28T12:42:06.612Z",
+      "updatedAt": "2026-10-29T12:50:53.403Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -205,30 +205,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.196,
-      "draw": 0.218,
-      "away": 0.586,
+      "home": 0.188,
+      "draw": 0.214,
+      "away": 0.598,
       "predicted": "A"
     },
     "xg": {
       "home": 1.42,
       "away": 1.65
     },
-    "over15": 0.8140000000000001,
-    "over25": 0.615,
-    "over35": 0.39299999999999996,
-    "btts": 0.5920000000000001,
+    "over15": 0.8170000000000001,
+    "over25": 0.612,
+    "over35": 0.391,
+    "btts": 0.59,
     "score": "1-1",
     "cornersOver95": 0.499,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.586,
+      "favoriteProb": 0.598,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.5862,
+    "confidence": 0.598,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-28T12:42:22.250Z",
+    "capturedAt": "2026-10-29T12:51:10.927Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -613,10 +613,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": "No se detecta un porcentaje que contradiga los datos; P y B difieren en magnitud (48,1 % frente a 58,6 % para el visitante), pero coinciden en la dirección.",
+    "flag": true,
+    "note": "Poisson y CatBoost discrepan en la probabilidad visitante (0.481 vs 0.598) y en la local (0.263 vs 0.188); B2 coincide con CatBoost en 0.598. No hay fila A de API-Football, la sede no aparece y B2 muestra 'no' en goles totales y ambos anotan.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-28T12:48:34.196Z"
+    "generatedAt": "2026-10-29T12:56:09.197Z"
   }
 }

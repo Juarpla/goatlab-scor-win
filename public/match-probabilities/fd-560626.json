@@ -4,7 +4,7 @@
   "away": "Manchester United FC",
   "competition": "premier",
   "kickoff": "2026-10-31T12:30:00Z",
-  "updatedAt": "2026-10-29T05:57:56.192Z",
+  "updatedAt": "2026-10-29T12:51:21.728Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,8 +13,8 @@
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 1.91,
-      "away": 1.192
+      "home": 1.905,
+      "away": 1.187
     },
     "firstGoalSource": "Blend Poisson+xG",
     "sample": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-28T12:42:18.799Z",
+      "updatedAt": "2026-10-29T12:51:06.506Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-28T12:42:18.799Z",
+      "updatedAt": "2026-10-29T12:51:06.506Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -132,13 +132,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.1,
+    "lambdaTotal": 3.09,
     "noGoal": 0.045,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.404
+        "p": 0.403
       },
       {
         "from": 15,
@@ -163,11 +163,11 @@
       {
         "from": 75,
         "to": 90,
-        "p": 0.03
+        "p": 0.031
       }
     ],
     "firstHome": 0.588,
-    "firstAway": 0.367
+    "firstAway": 0.366
   },
   "scorers": {
     "home": [
@@ -177,7 +177,7 @@
         "matches": 6,
         "share": 0.294,
         "rate": 0.56,
-        "anytime": 0.43,
+        "anytime": 0.429,
         "first": 0.181
       },
       {
@@ -186,7 +186,7 @@
         "matches": 8,
         "share": 0.235,
         "rate": 0.45,
-        "anytime": 0.362,
+        "anytime": 0.361,
         "first": 0.145
       },
       {
@@ -196,7 +196,7 @@
         "share": 0.176,
         "rate": 0.34,
         "anytime": 0.285,
-        "first": 0.108
+        "first": 0.109
       }
     ],
     "away": [
@@ -205,8 +205,8 @@
         "goals": 4,
         "matches": 8,
         "share": 0.4,
-        "rate": 0.48,
-        "anytime": 0.379,
+        "rate": 0.47,
+        "anytime": 0.378,
         "first": 0.154
       },
       {
@@ -215,7 +215,7 @@
         "matches": 8,
         "share": 0.3,
         "rate": 0.36,
-        "anytime": 0.301,
+        "anytime": 0.3,
         "first": 0.115
       }
     ]
@@ -224,95 +224,95 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.519,
-      "draw": 0.243,
-      "away": 0.23800000000000002,
+      "home": 0.515,
+      "draw": 0.244,
+      "away": 0.24100000000000002,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.84,
-      "away": 1.31
+      "home": 1.83,
+      "away": 1.3
     },
     "over15": 0.813,
-    "over25": 0.606,
-    "over35": 0.396,
-    "btts": 0.619,
+    "over25": 0.6,
+    "over35": 0.39,
+    "btts": 0.612,
     "score": "1-1",
-    "cornersOver95": 0.485,
+    "cornersOver95": 0.488,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.519,
+      "favoriteProb": 0.515,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.5189,
+    "confidence": 0.5152,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-28T12:42:22.359Z",
+    "capturedAt": "2026-10-29T12:51:10.971Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.489,
+      "home": 0.488,
       "draw": 0.249,
-      "away": 0.263
+      "away": 0.262
     },
     "doubleChance": {
       "12": 0.751,
-      "1X": 0.737,
-      "X2": 0.511
+      "1X": 0.738,
+      "X2": 0.512
     },
     "dnb": {
-      "home": 0.65,
-      "away": 0.35
+      "home": 0.651,
+      "away": 0.349
     },
     "totals": {
-      "over15": 0.832,
-      "under15": 0.168,
-      "over25": 0.61,
-      "under25": 0.39,
-      "over35": 0.386,
-      "under35": 0.614
+      "over15": 0.83,
+      "under15": 0.17,
+      "over25": 0.605,
+      "under25": 0.395,
+      "over35": 0.382,
+      "under35": 0.618
     },
     "btts": {
-      "yes": 0.625,
-      "no": 0.375
+      "yes": 0.621,
+      "no": 0.379
     },
     "cleanSheet": {
-      "home": 0.27,
-      "away": 0.159
+      "home": 0.273,
+      "away": 0.16
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
         "p": 0.119,
-        "share": 0.2806603773584906
+        "share": 0.27999999999999997
       },
       {
         "home": 2,
         "away": 1,
         "p": 0.095,
-        "share": 0.2240566037735849
+        "share": 0.2235294117647059
       },
       {
         "home": 2,
         "away": 0,
         "p": 0.073,
-        "share": 0.1721698113207547
+        "share": 0.17176470588235293
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.069,
-        "share": 0.1627358490566038
+        "p": 0.07,
+        "share": 0.1647058823529412
       },
       {
         "home": 1,
         "away": 2,
         "p": 0.068,
-        "share": 0.16037735849056606
+        "share": 0.16
       }
     ],
     "providerPick": {
@@ -400,7 +400,7 @@
       "historyRows": 331
     },
     "source": "GoatLab",
-    "expectedTotal": 4.4
+    "expectedTotal": 4.3
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -411,47 +411,47 @@
       "historyRows": 331
     },
     "source": "GoatLab",
-    "expectedTotal": 9.8
+    "expectedTotal": 9.9
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 12.83,
-      "shotsOnTarget": 4.66,
-      "xg": 1.84,
-      "corners": 4.55,
-      "fouls": 11.18,
-      "yellowCards": 2.05,
-      "redCards": 0.3,
-      "offsides": 1.69,
-      "possession": 48.17
+      "shots": 12.7,
+      "shotsOnTarget": 4.62,
+      "xg": 1.83,
+      "corners": 4.53,
+      "fouls": 11.14,
+      "yellowCards": 2.04,
+      "redCards": 0.28,
+      "offsides": 1.73,
+      "possession": 48.18
     },
     "away": {
-      "shots": 14.51,
-      "shotsOnTarget": 4.99,
-      "xg": 1.31,
-      "corners": 5.23,
-      "fouls": 11.39,
-      "yellowCards": 2.3,
-      "redCards": 0.21,
-      "offsides": 1.76,
-      "possession": 51.83
+      "shots": 14.45,
+      "shotsOnTarget": 4.96,
+      "xg": 1.3,
+      "corners": 5.32,
+      "fouls": 11.38,
+      "yellowCards": 2.28,
+      "redCards": 0.19,
+      "offsides": 1.73,
+      "possession": 51.82
     },
     "sample": {
-      "home": 8,
+      "home": 9,
       "away": 10
     },
     "coverage": {
       "home": {
-        "possession": 8,
-        "shots": 8,
-        "shotsOnTarget": 8,
-        "xg": 8,
-        "corners": 8,
-        "fouls": 8,
-        "yellowCards": 8,
-        "redCards": 2,
-        "offsides": 7
+        "possession": 9,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 9,
+        "fouls": 9,
+        "yellowCards": 9,
+        "redCards": 3,
+        "offsides": 8
       },
       "away": {
         "possession": 10,
@@ -467,13 +467,13 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.56,
-      "shotsOnTarget": 4.35,
-      "xg": 1.4,
-      "corners": 4.67,
-      "fouls": 11.45,
+      "shots": 13.52,
+      "shotsOnTarget": 4.34,
+      "xg": 1.42,
+      "corners": 4.69,
+      "fouls": 11.44,
       "yellowCards": 2.03,
-      "redCards": 0.26,
+      "redCards": 0.25,
       "offsides": 1.93
     },
     "sources": {
@@ -510,40 +510,40 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.352,
-      "draw": 0.126,
-      "away": 0.522
+      "home": 0.339,
+      "draw": 0.125,
+      "away": 0.536
     },
     "cardsDuel": {
-      "home": 0.355,
+      "home": 0.357,
       "draw": 0.197,
-      "away": 0.448
+      "away": 0.446
     },
     "lastGoal": {
       "home": 0.588,
-      "away": 0.367,
+      "away": 0.366,
       "noGoal": 0.045
     },
     "cornerRace": {
       "3": {
-        "home": 0.435,
-        "away": 0.565
+        "home": 0.425,
+        "away": 0.575
       },
       "5": {
-        "home": 0.415,
-        "away": 0.585
+        "home": 0.402,
+        "away": 0.598
       },
       "7": {
-        "home": 0.399,
-        "away": 0.601
+        "home": 0.384,
+        "away": 0.616
       }
     },
     "cornerMargin": {
-      "home3plus": 0.151,
-      "home12": 0.2,
-      "level": 0.126,
-      "away12": 0.246,
-      "away3plus": 0.276
+      "home3plus": 0.144,
+      "home12": 0.195,
+      "level": 0.125,
+      "away12": 0.247,
+      "away3plus": 0.289
     },
     "source": "GoatLab"
   },
@@ -633,10 +633,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": null,
+    "flag": true,
+    "note": "Se marca que P y B (57.4% y 51.5%) superan el 31.6% de victorias del local en H y que B2 replica el 51.5%; la forma de Manchester United es muy débil. Faltan A, L y M2.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-28T12:44:59.803Z"
+    "generatedAt": "2026-10-29T12:53:49.257Z"
   }
 }
