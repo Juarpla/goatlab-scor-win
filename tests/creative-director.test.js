@@ -39,9 +39,9 @@ test('revision transitions reject old approvals, duplicate captures and incomple
   assert.throws(()=>approveCandidate(job,current),/cancelado/);
 });
 
-test('three candidates exhaust two technical corrections; generations invalidate decisions', () => {
+test('two candidates exhaust the single technical correction; generations invalidate decisions', () => {
   const job=fresh();
-  for(let i=0;i<3;i++){submitPlan(job,input(job),()=>{});candidate(job);}
+  for(let i=0;i<2;i++){submitPlan(job,input(job),()=>{});candidate(job);}
   assert.throws(()=>submitPlan(job,input(job),()=>{}),/corrección técnica/);
   assert.throws(()=>approveCandidate(job,{...approval(job),generation:0}),/generación obsoleta/);
   assert.equal(digest({b:1,a:2}),digest({a:2,b:1}));
@@ -167,7 +167,7 @@ test('a JSX runtime failure returns its diagnostic to OpenClaw before another ca
   assert.equal(h.job.approval.videoHash,'video-2');
 });
 
-for (const failedCaptures of [2, 3]) test(`director allows two technical corrections and stops after three candidates (${failedCaptures} failures)`, async t => {
+for (const failedCaptures of [1, 2]) test(`director allows one technical correction and stops after two candidates (${failedCaptures} failures)`, async t => {
   const h = harness(), messages = [];
   const worker = async (path, body, binary) => {
     const result = await h.worker(path, body, binary);
@@ -178,18 +178,18 @@ for (const failedCaptures of [2, 3]) test(`director allows two technical correct
   };
   const decide = async request => { messages.push(request.message); return h.decide(request); };
   const result = await directVideo({ requestId: `capture-limit-${failedCaptures}`, expiresAt: Date.now() + 3600_000 }, { ...h, worker, decide, directory: directory(t) });
-  assert.equal(h.job.revision, 3);
-  assert.equal(h.events.filter(path => path === '/render/plan').length, 3);
-  assert.equal(messages.filter(message => message.includes('Corrige el error técnico: presupuesto de captura superado')).length, 2);
-  assert.equal(result.status, failedCaptures === 2 ? 'done' : 'error');
-  if (failedCaptures === 2) assert.equal(h.job.approval.videoHash, 'video-3');
+  assert.equal(h.job.revision, 2);
+  assert.equal(h.events.filter(path => path === '/render/plan').length, 2);
+  assert.equal(messages.filter(message => message.includes('Corrige el error técnico: presupuesto de captura superado')).length, 1);
+  assert.equal(result.status, failedCaptures === 1 ? 'done' : 'error');
+  if (failedCaptures === 1) assert.equal(h.job.approval.videoHash, 'video-2');
   else {
     assert.match(result.error, /Se agotó la corrección técnica/);
     assert.equal(h.events.includes('/render/approve'), false);
   }
 });
 
-for (const invalidPlans of [2, 3]) test(`director permits at most three invalid-plan attempts (${invalidPlans} invalid plans)`, async t => {
+for (const invalidPlans of [1, 2]) test(`director permits at most two invalid-plan attempts (${invalidPlans} invalid plans)`, async t => {
   const h = harness(), fallbacks = [];
   let submissions = 0;
   const worker = async (path, body, binary) => {
@@ -201,12 +201,12 @@ for (const invalidPlans of [2, 3]) test(`director permits at most three invalid-
     return h.decide(request);
   };
   const result = await directVideo({ requestId: `plan-limit-${invalidPlans}`, expiresAt: Date.now() + 3600_000 }, { ...h, worker, decide, directory: directory(t) });
-  assert.equal(submissions, 3);
-  assert.deepEqual(fallbacks, [false, true, true]);
-  assert.equal(result.status, invalidPlans === 2 ? 'done' : 'error');
-  assert.equal(h.job.revision, invalidPlans === 2 ? 1 : 0);
-  if (invalidPlans === 3) {
-    assert.match(result.error, /tres intentos/);
+  assert.equal(submissions, 2);
+  assert.deepEqual(fallbacks, [false, true]);
+  assert.equal(result.status, invalidPlans === 1 ? 'done' : 'error');
+  assert.equal(h.job.revision, invalidPlans === 1 ? 1 : 0);
+  if (invalidPlans === 2) {
+    assert.match(result.error, /dos intentos/);
     assert.equal(h.events.includes('/render/approve'), false);
   }
 });

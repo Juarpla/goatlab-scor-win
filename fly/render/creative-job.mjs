@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 
 export const WORKFLOW_PROTOCOL = 3;
-export const MAX_CANDIDATES = 3;
+export const MAX_CANDIDATES = 2;
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
 export const digest = value => createHash('sha256').update(typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(canonical(value))).digest('hex');
@@ -18,7 +18,7 @@ export function submitPlan(job, input, validate) {
   if (job.planHash === planHash && input.baseRevision === job.revision - 1) return { duplicate: true };
   if (!['awaiting-plan', 'awaiting-review', 'error'].includes(job.status) || !job.prepared) throw new Error('el trabajo no admite otro plan');
   if (input.baseRevision !== job.revision) throw new Error('revisión obsoleta');
-  if (job.revision >= MAX_CANDIDATES) throw new Error('se agotó la corrección técnica; conserva el audio para reintentar');
+  if (job.revision >= MAX_CANDIDATES) throw new Error(`se agotó la corrección técnica en ${MAX_CANDIDATES} intentos; conserva el audio para reintentar`);
   validate(input.plan);
   job.revision++;
   job.plan = input.plan;
