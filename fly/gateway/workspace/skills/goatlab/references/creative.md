@@ -102,12 +102,20 @@ mismo MP4 validado, comprobado por su hash.
 
 Render mide tres fotogramas a escala completa y proyecta la captura. El presupuesto
 es de unos 25 minutos. Si la proyección lo supera, el error vuelve como corrección
-técnica. En CPU, `filter: blur`, `backdrop-filter`, sombras grandes, muchas capas
-superpuestas y varios videos a la vez alargan cada fotograma. `backdrop` y
-`focusBlur` ya llegan desenfocados. Ante un error de coste de captura, conserva
-el protagonismo de la media y simplifica primero filtros, capas y videos simultáneos;
-puedes secuenciar los clips. Si un recurso falla, documenta el fallo en notes y
-aprovecha el resto del banco.
+técnica. Diseña la composición para que cada uno de los tres fotogramas medidos
+tarde como máximo 1200 ms (≤1200 ms/fotograma). Si alguna medición supera ese
+límite, simplifica la composición antes de volver a capturar el video completo.
+
+En CPU quedan prohibidos `filter: blur`, `backdrop-filter`, sombras grandes,
+más de un `<Video>` visible simultáneamente y más de seis capas simultáneas con
+opacidad o mezcla. El límite de un video visible también se aplica a
+`OffthreadVideo` y `Html5Video`. Para desenfoques, utiliza únicamente `backdrop`
+y `focusBlur`, que ya llegan desenfocados. Secuencia los clips y usa recortes,
+transformaciones y cortes para conservar movimiento con un coste de captura bajo.
+
+Ante un error de coste de captura, conserva el protagonismo de las imágenes y
+los clips y simplifica primero filtros, capas y videos simultáneos. Si un recurso
+falla, documenta el fallo en notes y aprovecha el resto del banco.
 
 ## Zonas del formato
 
