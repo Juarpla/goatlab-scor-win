@@ -1,51 +1,6 @@
 {
-  "updatedAt": "2026-10-29T12:58:33.948Z",
+  "updatedAt": "2026-10-29T13:37:26.631Z",
   "runs": [
-    {
-      "at": "2026-10-20T22:17:41.913Z",
-      "task": "image-prompts",
-      "matchId": "sporting-cp-vs-lask-2026-10-21",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1735,
-        "outputTokens": 4872
-      }
-    },
-    {
-      "at": "2026-10-20T22:18:16.681Z",
-      "task": "image-prompts",
-      "matchId": "inter-vs-shakhtar-donetsk-2026-10-21",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 805,
-        "outputTokens": 6523
-      }
-    },
-    {
-      "at": "2026-10-20T22:18:27.814Z",
-      "task": "video-prompts",
-      "matchId": "lille-vs-galatasaray-2026-10-21",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1249,
-        "outputTokens": 976
-      }
-    },
     {
       "at": "2026-10-20T22:18:40.265Z",
       "task": "video-prompts",
@@ -6247,6 +6202,153 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "a5b2b5ec-d107-45f2-960d-2984edb74b0c"
+    },
+    {
+      "at": "2026-10-29T13:18:32.196Z",
+      "matchId": "fd-560630",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1336,
+        "outputTokens": 14655
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "d23816cb-5bb5-471b-8d75-4fddec2d6947"
+    },
+    {
+      "at": "2026-10-29T13:35:46.550Z",
+      "matchId": "fd-560624",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1361,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 137762
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1399,
+            "outputTokens": 1856
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65553
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1361,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 147867
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1399,
+            "outputTokens": 1681
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12534
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Formato no permitido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1299,
+            "outputTokens": 5178
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 83685
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1299,
+        "outputTokens": 5178
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-29T13:37:17.284Z",
+      "matchId": "fd-564735",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1352,
+        "outputTokens": 14264
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "3b783a75-252e-4d24-828e-c8199d0afb01"
     }
   ]
 }
