@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 
 export const WORKFLOW_PROTOCOL = 3;
-export const MAX_CANDIDATES = 2;
+export const MAX_CANDIDATES = 3;
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
 export const digest = value => createHash('sha256').update(typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(canonical(value))).digest('hex');

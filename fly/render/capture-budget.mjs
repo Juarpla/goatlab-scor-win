@@ -1,4 +1,4 @@
-export const CAPTURE_BUDGET_MS = Number(process.env.CAPTURE_BUDGET_MS || 18 * 60_000);
+export const CAPTURE_BUDGET_MS = Number(process.env.CAPTURE_BUDGET_MS || 25 * 60_000);
 
 export function projectCapture({ perFrameMs, frames, workers, calibration = Number(process.env.CAPTURE_CALIBRATION || 1) }) {
   return Math.round(perFrameMs * frames / Math.max(1, workers) * calibration);

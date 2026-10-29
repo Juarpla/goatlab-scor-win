@@ -94,14 +94,14 @@ incluido. Siguen activos los controles técnicos de ejecución, formato y entreg
 
 Render compila y prueba tres fotogramas antes del video completo. Completa la
 autoría guardando directamente el JSON con imports completos y nombres únicos.
-El motor devuelve errores técnicos para una corrección; las observaciones de
+El motor devuelve errores técnicos para hasta dos correcciones; las observaciones de
 estilo no disparan otra captura. El archivo autorizado para entrega debe ser el
 mismo MP4 validado, comprobado por su hash.
 
 ## Coste de captura
 
 Render mide tres fotogramas a escala completa y proyecta la captura. El presupuesto
-es de unos 18 minutos. Si la proyección lo supera, el error vuelve como corrección
+es de unos 25 minutos. Si la proyección lo supera, el error vuelve como corrección
 técnica. En CPU, `filter: blur`, `backdrop-filter`, sombras grandes, muchas capas
 superpuestas y varios videos a la vez alargan cada fotograma. `backdrop` y
 `focusBlur` ya llegan desenfocados. Ante un error de coste de captura, conserva

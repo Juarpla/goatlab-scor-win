@@ -119,7 +119,7 @@ del mismo MP4; no se vuelve a renderizar después de aprobar. GET
 /jobs/:id/artifacts/:generation/:revision/:name sirve JPEGs autenticados (revisión
 0 para fotos fuente). POST /render/fail registra un fallo del director. Todas las
 operaciones salvo health requieren Bearer RENDER_SECRET. Hay tres candidatos como
-máximo por generación en el contrato histórico. Ahora hay dos candidatos (una corrección técnica); la revisión es orientativa y no dispara capturas. La autorización por hash protege el archivo a entregar, no actúa como veto artístico.
+máximo por generación en el contrato histórico. Ahora hay tres candidatos (dos correcciones técnicas); la revisión es orientativa y no dispara capturas. La autorización por hash protege el archivo a entregar, no actúa como veto artístico.
 
 Antes de activar: comprobar ledger y terminar trabajos antiguos; desplegar Render
 y después Gateway con CREATIVE_DIRECTOR_ENABLED=0. Ejecutar la prueba nativa de
@@ -183,7 +183,7 @@ Cada video se responde al audio original y lleva botones de
 valoración. Las valoraciones se guardan en director-memory del chat.
 
 La captura registra bundleMs, preflightMs, captureMs y captureFps en job.metrics.
-CAPTURE_BUDGET_MS (18 min) y CAPTURE_CALIBRATION proyectan el tiempo desde el
+CAPTURE_BUDGET_MS (25 min) y CAPTURE_CALIBRATION proyectan el tiempo desde el
 preflight. LAYOUT_CHECK admite off, advisory y strict; producción queda en
 advisory hasta revisar videos reales. REMOTION_GL queda vacío: el valor se elige
 con composiciones reales y comparaciones aisladas; el fixture solo valida el mecanismo.
