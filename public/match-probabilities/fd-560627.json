@@ -4,7 +4,7 @@
   "away": "Crystal Palace FC",
   "competition": "premier",
   "kickoff": "2026-10-31T17:30:00Z",
-  "updatedAt": "2026-10-29T13:16:43.032Z",
+  "updatedAt": "2026-10-29T22:50:55.815Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -596,9 +596,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Auditoría: desvío interno en Bzzoiro. B2 declara no en goles totales y no en ambos anotan, pero la fila B expone 0.595 y 0.563, marcador 1-1 (0.509) y goles esperados 1.45 y 1.37; las lecturas declaradas no cuadran entre sí. P (0.591/0.241/0.168) resulta coherente con sus 1.89 y 0.92 de base.",
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-10-28T22:45:18.079Z"
+    "note": "Hay ambigüedad de formato en B (1-1 y 0.51 sin métrica), en B2 ('no' sin umbral) y en la tabla (sin encabezados); P y B no muestran una desviación porcentual clara, pero difieren en goles esperados.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-10-29T22:55:13.734Z"
   }
 }

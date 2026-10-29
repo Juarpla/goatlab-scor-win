@@ -1,51 +1,6 @@
 {
-  "updatedAt": "2026-10-29T13:37:26.631Z",
+  "updatedAt": "2026-10-29T23:09:30.059Z",
   "runs": [
-    {
-      "at": "2026-10-20T22:18:40.265Z",
-      "task": "video-prompts",
-      "matchId": "como-vs-manchester-united-2026-10-21",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1297,
-        "outputTokens": 1573
-      }
-    },
-    {
-      "at": "2026-10-20T22:18:50.997Z",
-      "task": "video-prompts",
-      "matchId": "levante-ud-vs-athletic-club-2026-10-21",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1650,
-        "outputTokens": 2024
-      }
-    },
-    {
-      "at": "2026-10-20T22:19:01.496Z",
-      "task": "video-prompts",
-      "matchId": "sporting-cp-vs-lask-2026-10-21",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1632,
-        "outputTokens": 2099
-      }
-    },
     {
       "at": "2026-10-20T22:19:23.410Z",
       "task": "video-prompts",
@@ -6349,6 +6304,113 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "3b783a75-252e-4d24-828e-c8199d0afb01"
+    },
+    {
+      "at": "2026-10-29T22:53:00.034Z",
+      "matchId": "fd-560624",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1361,
+        "outputTokens": 12626
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "2f87fa8d-1376-4d73-bdf5-10cfd83ddd63"
+    },
+    {
+      "at": "2026-10-29T22:55:13.734Z",
+      "matchId": "fd-560627",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1314,
+        "outputTokens": 14199
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "21dcede6-16aa-4df9-9be7-dadd1fa1dc1d"
+    },
+    {
+      "at": "2026-10-29T23:09:20.893Z",
+      "matchId": "fd-564736",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1392,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 138848
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 15000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1352,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 178156
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1433,
+            "outputTokens": 1634
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14224
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1345,
+            "outputTokens": 5800
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 148920
+        }
+      ],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": {
+        "inputTokens": 1433,
+        "outputTokens": 1518
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "a146bf73-e0f9-4713-8ec7-115095855bde"
     }
   ]
 }
