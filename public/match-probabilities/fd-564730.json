@@ -4,7 +4,7 @@
   "away": "Club Atlético de Madrid",
   "competition": "laliga",
   "kickoff": "2026-10-31T13:00:00Z",
-  "updatedAt": "2026-10-30T05:59:13.507Z",
+  "updatedAt": "2026-10-30T12:43:00.834Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-29T12:50:53.403Z",
+      "updatedAt": "2026-10-30T12:42:30.855Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-29T12:50:53.403Z",
+      "updatedAt": "2026-10-30T12:42:30.855Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -205,9 +205,9 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.188,
-      "draw": 0.214,
-      "away": 0.598,
+      "home": 0.18,
+      "draw": 0.209,
+      "away": 0.611,
       "predicted": "A"
     },
     "xg": {
@@ -215,20 +215,20 @@
       "away": 1.65
     },
     "over15": 0.8170000000000001,
-    "over25": 0.612,
-    "over35": 0.391,
-    "btts": 0.59,
+    "over25": 0.613,
+    "over35": 0.39299999999999996,
+    "btts": 0.583,
     "score": "1-1",
     "cornersOver95": 0.499,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.598,
+      "favoriteProb": 0.611,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.598,
+    "confidence": 0.6108,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-29T12:51:10.927Z",
+    "capturedAt": "2026-10-30T12:42:46.643Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -614,9 +614,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Poisson y CatBoost discrepan en la probabilidad visitante (0.481 vs 0.598) y en la local (0.263 vs 0.188); B2 coincide con CatBoost en 0.598. No hay fila A de API-Football, la sede no aparece y B2 muestra 'no' en goles totales y ambos anotan.",
+    "note": "Discrepancia clara entre Poisson y CatBoost en la probabilidad visitante (0.481 frente a 0.611); B2 usa no de forma ambigua y no hay bloques A ni M2 para contrastar.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-29T12:56:09.197Z"
+    "generatedAt": "2026-10-30T12:48:56.086Z"
   }
 }

@@ -1,315 +1,6 @@
 {
-  "updatedAt": "2026-10-30T06:26:29.979Z",
+  "updatedAt": "2026-10-30T12:51:09.294Z",
   "runs": [
-    {
-      "at": "2026-10-20T22:31:44.233Z",
-      "task": "motion-prompts",
-      "matchId": "levante-ud-vs-athletic-club-2026-10-21",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2422,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 145219
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2513,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 55410
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2606,
-            "outputTokens": 3057
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 28560
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-20T22:34:07.805Z",
-      "task": "motion-prompts",
-      "matchId": "sporting-cp-vs-lask-2026-10-21",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2404,
-        "outputTokens": 10641
-      }
-    },
-    {
-      "at": "2026-10-20T22:37:06.879Z",
-      "task": "motion-prompts",
-      "matchId": "inter-vs-shakhtar-donetsk-2026-10-21",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 1420,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 105778
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 2: porcentajes no publicados",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1476,
-            "outputTokens": 5343
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 21112
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1484,
-            "outputTokens": 1594
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14533
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1413,
-            "outputTokens": 3228
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 37648
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-20T22:39:51.818Z",
-      "task": "motion-prompts",
-      "matchId": "real-madrid-vs-rb-leipzig-2026-10-21",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2253,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 132008
-        }
-      ],
-      "usage": {
-        "inputTokens": 2378,
-        "outputTokens": 6433
-      }
-    },
-    {
-      "at": "2026-10-21T05:09:57.972Z",
-      "task": "shorts",
-      "matchId": "como-vs-manchester-united-2026-10-21",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6303,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 75538
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6413,
-            "outputTokens": 8281
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 41014
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 8 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6672,
-            "outputTokens": 1201
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11312
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6303,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 56567
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6413,
-            "outputTokens": 7742
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 36233
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 7 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6672,
-            "outputTokens": 1191
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 16846
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6672,
-        "outputTokens": 1191
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-21T05:11:47.692Z",
-      "task": "motion-prompts",
-      "matchId": "levante-ud-vs-athletic-club-2026-10-21",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2422,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 62697
-        }
-      ],
-      "usage": {
-        "inputTokens": 2513,
-        "outputTokens": 9644
-      }
-    },
     {
       "at": "2026-10-21T05:12:36.099Z",
       "task": "motion-prompts",
@@ -6537,6 +6228,111 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-30T12:46:38.185Z",
+      "matchId": "fd-564737",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2040,
+        "outputTokens": 22300
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "107d60b4-2229-4073-9678-f8dc3664762b"
+    },
+    {
+      "at": "2026-10-30T12:46:38.185Z",
+      "matchId": "fd-560626",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "107d60b4-2229-4073-9678-f8dc3664762b"
+    },
+    {
+      "at": "2026-10-30T12:48:56.100Z",
+      "matchId": "fd-564730",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2040,
+        "outputTokens": 21864
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "41a04dd9-e97a-4294-a5b7-9715c13c6cf0"
+    },
+    {
+      "at": "2026-10-30T12:48:56.100Z",
+      "matchId": "fd-560625",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "41a04dd9-e97a-4294-a5b7-9715c13c6cf0"
+    },
+    {
+      "at": "2026-10-30T12:50:59.049Z",
+      "matchId": "fd-560623",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2127,
+        "outputTokens": 16720
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "2b985b43-b7ec-4562-be5b-5bef9d635341"
+    },
+    {
+      "at": "2026-10-30T12:50:59.049Z",
+      "matchId": "fd-560629",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "2b985b43-b7ec-4562-be5b-5bef9d635341"
     }
   ]
 }

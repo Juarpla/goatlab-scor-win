@@ -1,0 +1,547 @@
+{
+  "id": "bz-601208",
+  "home": "Celtic",
+  "away": "Beşiktaş JK",
+  "competition": "europa",
+  "kickoff": "2026-11-05T20:00:00+00:00",
+  "updatedAt": "2026-10-30T12:43:00.834Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.44,
+      "away": 2.76
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.64,
+      "away": 2.005
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 3,
+      "away": 3
+    },
+    "standings": {
+      "Celtic": null,
+      "Beşiktaş JK": {
+        "position": 8,
+        "team": "Beşiktaş JK",
+        "teamId": 196,
+        "played": 3,
+        "won": 2,
+        "drawn": 1,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 7,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-30T12:42:05.667Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-05T20:00:00+00:00",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-30T12:42:05.667Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 331
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.175,
+      "draw": 0.18,
+      "away": 0.645
+    },
+    "doubleChance": {
+      "12": 0.82,
+      "1X": 0.355,
+      "X2": 0.825
+    },
+    "dnb": {
+      "home": 0.213,
+      "away": 0.787
+    },
+    "totals": {
+      "over15": 0.928,
+      "under15": 0.072,
+      "over25": 0.789,
+      "under25": 0.211,
+      "over35": 0.604,
+      "under35": 0.396
+    },
+    "btts": {
+      "yes": 0.721,
+      "no": 0.279
+    },
+    "cleanSheet": {
+      "home": 0.063,
+      "away": 0.237
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.082
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.076
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.066
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.059
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.057
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.64,
+    "noGoal": 0.026,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.455
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.248
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.135
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.074
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.04
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.022
+      }
+    ],
+    "firstHome": 0.438,
+    "firstAway": 0.536
+  },
+  "scorers": {
+    "home": null,
+    "away": [
+      {
+        "player": "Amir Murillo",
+        "goals": 3,
+        "matches": 9,
+        "share": 0.333,
+        "rate": 0.67,
+        "anytime": 0.487,
+        "first": 0.183
+      },
+      {
+        "player": "Hyeon-gyu Oh",
+        "goals": 3,
+        "matches": 9,
+        "share": 0.333,
+        "rate": 0.67,
+        "anytime": 0.487,
+        "first": 0.183
+      },
+      {
+        "player": "Orkun Kökçü",
+        "goals": 3,
+        "matches": 8,
+        "share": 0.333,
+        "rate": 0.67,
+        "anytime": 0.487,
+        "first": 0.183
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.522,
+      "draw": 0.23600000000000002,
+      "away": 0.242,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.84,
+      "away": 1.25
+    },
+    "over15": 0.8009999999999999,
+    "over25": 0.584,
+    "over35": 0.359,
+    "btts": 0.5760000000000001,
+    "score": "1-1",
+    "cornersOver95": 0.564,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.522,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.5223,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-30T12:42:53.873Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.502,
+      "draw": 0.249,
+      "away": 0.249
+    },
+    "doubleChance": {
+      "12": 0.751,
+      "1X": 0.751,
+      "X2": 0.498
+    },
+    "dnb": {
+      "home": 0.668,
+      "away": 0.332
+    },
+    "totals": {
+      "over15": 0.824,
+      "under15": 0.176,
+      "over25": 0.597,
+      "under25": 0.403,
+      "over35": 0.373,
+      "under35": 0.627
+    },
+    "btts": {
+      "yes": 0.611,
+      "no": 0.389
+    },
+    "cleanSheet": {
+      "home": 0.287,
+      "away": 0.159
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12,
+        "share": 0.27842227378190254
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.096,
+        "share": 0.22273781902552206
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.077,
+        "share": 0.17865429234338748
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.073,
+        "share": 0.1693735498839907
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.065,
+        "share": 0.15081206496519722
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 0,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": [],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 331
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.7
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.09,
+      "shotsOnTarget": 5.28,
+      "xg": 1.84,
+      "corners": 5.13,
+      "fouls": 12.94,
+      "yellowCards": 2.09,
+      "redCards": 0.04,
+      "offsides": 1.69,
+      "possession": 48.99
+    },
+    "away": {
+      "shots": 15.44,
+      "shotsOnTarget": 5.05,
+      "xg": 1.25,
+      "corners": 4.61,
+      "fouls": 11.33,
+      "yellowCards": 1.87,
+      "redCards": 0.08,
+      "offsides": 1.91,
+      "possession": 51.01
+    },
+    "sample": {
+      "home": 5,
+      "away": 6
+    },
+    "coverage": {
+      "home": {
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 5,
+        "offsides": 5
+      },
+      "away": {
+        "possession": 6,
+        "shots": 6,
+        "shotsOnTarget": 6,
+        "xg": 6,
+        "corners": 6,
+        "fouls": 6,
+        "yellowCards": 6,
+        "redCards": 5,
+        "offsides": 5
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.1,
+      "shotsOnTarget": 5.06,
+      "xg": 1.55,
+      "corners": 4.78,
+      "fouls": 12.6,
+      "yellowCards": 2,
+      "redCards": 0.07,
+      "offsides": 1.59
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.501,
+      "draw": 0.128,
+      "away": 0.371
+    },
+    "cardsDuel": {
+      "home": 0.439,
+      "draw": 0.207,
+      "away": 0.354
+    },
+    "lastGoal": {
+      "home": 0.438,
+      "away": 0.536,
+      "noGoal": 0.026
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.55,
+        "away": 0.45
+      },
+      "5": {
+        "home": 0.565,
+        "away": 0.435
+      },
+      "7": {
+        "home": 0.578,
+        "away": 0.422
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.259,
+      "home12": 0.242,
+      "level": 0.128,
+      "away12": 0.207,
+      "away3plus": 0.163
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 5.5,
+      "condition": "cloudy",
+      "sampledAt": "2026-11-05T20:00:00+00:00",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Celtic",
+      "recentSample": 3,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 3
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 3
+      },
+      "season": null,
+      "player": null
+    },
+    "away": {
+      "team": "Beşiktaş JK",
+      "recentSample": 3,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 3
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 3
+      },
+      "unbeaten": {
+        "value": 3,
+        "sample": 3
+      },
+      "season": {
+        "position": 8,
+        "played": 3,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Amir Murillo",
+        "detail": "3 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

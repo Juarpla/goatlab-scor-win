@@ -4,7 +4,7 @@
   "away": "Sunderland AFC",
   "competition": "premier",
   "kickoff": "2026-10-31T15:00:00Z",
-  "updatedAt": "2026-10-30T05:59:13.507Z",
+  "updatedAt": "2026-10-30T12:43:00.834Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-29T12:51:06.506Z",
+      "updatedAt": "2026-10-30T12:42:42.928Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-29T12:51:06.506Z",
+      "updatedAt": "2026-10-30T12:42:42.928Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -194,30 +194,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.312,
-      "draw": 0.28300000000000003,
-      "away": 0.406,
+      "home": 0.31,
+      "draw": 0.282,
+      "away": 0.408,
       "predicted": "A"
     },
     "xg": {
       "home": 1.79,
       "away": 1.13
     },
-    "over15": 0.732,
+    "over15": 0.731,
     "over25": 0.49200000000000005,
-    "over35": 0.294,
-    "btts": 0.551,
+    "over35": 0.293,
+    "btts": 0.546,
     "score": "1-1",
     "cornersOver95": 0.446,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.406,
+      "favoriteProb": 0.408,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4057,
+    "confidence": 0.4079,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-29T12:51:11.865Z",
+    "capturedAt": "2026-10-30T12:42:47.419Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -604,9 +604,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Poisson y CatBoost no coinciden en el favorito: P da 0.415 a Coventry y 0.313 a Sunderland; B da 0.312 y 0.406, y B2 declara 0.406 para Sunderland. No hay fila A; B2 muestra 'no' en goles totales y ambos anotan, la sede no aparece y hay un duplicado de Nottingham Forest-Coventry.",
+    "note": "R incluye un resultado duplicado de Coventry (0-1 en Nottingham Forest); Poisson y CatBoost discrepan en el favorito (0.415 local frente a 0.408 visitante) y B2 usa no de forma ambigua.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-29T12:56:09.206Z"
+    "generatedAt": "2026-10-30T12:48:56.093Z"
   }
 }
