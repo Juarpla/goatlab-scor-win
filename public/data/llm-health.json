@@ -1,254 +1,6 @@
 {
-  "updatedAt": "2026-10-30T12:51:09.294Z",
+  "updatedAt": "2026-10-30T13:34:23.318Z",
   "runs": [
-    {
-      "at": "2026-10-21T05:12:36.099Z",
-      "task": "motion-prompts",
-      "matchId": "inter-vs-shakhtar-donetsk-2026-10-21",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1420,
-        "outputTokens": 8726
-      }
-    },
-    {
-      "at": "2026-10-21T11:50:16.037Z",
-      "task": "shorts",
-      "matchId": "como-vs-manchester-united-2026-10-21",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6310,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 78699
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6412,
-            "outputTokens": 5822
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 22703
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6676,
-            "outputTokens": 1241
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12319
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6303,
-            "outputTokens": 4708
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 108919
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6310,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 69101
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6412,
-            "outputTokens": 4645
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 18454
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 8 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6676,
-            "outputTokens": 1408
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12321
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6676,
-        "outputTokens": 1408
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-21T12:12:00.028Z",
-      "task": "shorts",
-      "matchId": "como-vs-manchester-united-2026-10-21",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6309,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 73335
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6412,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 46387
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 10 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Manchester United FC",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6676,
-            "outputTokens": 1400
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12034
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6309,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 70435
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: cifra 1907 no está en los hechos; guion 2: cifra 1907 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6412,
-            "outputTokens": 7092
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 27895
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: cifra 1907 no está en los hechos; guion 1: 6 cifras, máximo 3; guion 1: falta el antecedente asignado; guion 1: el gancho no lleva cifras; guion 2: falta Manchester United FC",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6676,
-            "outputTokens": 1309
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11806
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6676,
-        "outputTokens": 1309
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-10-21T17:23:38.488Z",
       "task": "shorts",
@@ -6333,6 +6085,203 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "2b985b43-b7ec-4562-be5b-5bef9d635341"
+    },
+    {
+      "at": "2026-10-30T13:19:26.292Z",
+      "matchId": "fd-560630",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1336,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 144096
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1391,
+            "outputTokens": 1430
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12974
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1336,
+        "outputTokens": 14704
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "96e8cfe7-ccd8-4749-8d28-49eb6e9a6b4a"
+    },
+    {
+      "at": "2026-10-30T13:21:00.867Z",
+      "matchId": "fd-560624",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1361,
+        "outputTokens": 14667
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "1084676d-6731-4a3e-b72a-6e02aa69f095"
+    },
+    {
+      "at": "2026-10-30T13:34:13.867Z",
+      "matchId": "fd-564735",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1352,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 82565
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1401,
+            "outputTokens": 1407
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10590
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Formato no permitido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1323,
+            "outputTokens": 7055
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 105348
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1352,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 96401
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1401,
+            "outputTokens": 1475
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11502
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1323,
+            "outputTokens": 6148
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 90648
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1323,
+        "outputTokens": 6148
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
