@@ -2882,85 +2882,107 @@
     "materialKey": "M|fd-576425|CR Flamengo|Estudiantes de La Plata|libertadores|2026-10-23T00:30:00Z|NS"
   },
   "fd-564737": {
-    "matchId": "fd-564737",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Villarreal y Espanyol en LaLiga",
+        "title": "Contexto de tabla y calendario",
         "bullets": [
-          "Villarreal CF y RCD Espanyol se enfrentan en LaLiga el 30 de octubre de 2026 a las 20:00, según el calendario del input.",
-          "Villarreal figura 10º con 12 puntos en 10 jornadas (15 GF, 14 GC); Espanyol es 18º con 8 puntos (12 GF, 14 GC).",
-          "El clima declarado es lluvia con valor 5; el bloque W no incluye sede."
+          "Villarreal CF y RCD Espanyol se enfrentan en LaLiga el 30 de octubre de 2026 a las 20:00 UTC, según el calendario disponible.",
+          "Villarreal figura 10.º con 12 puntos, 15 goles a favor y 14 en contra en 10 jornadas; Espanyol es 18.º con 8 puntos, 12 a favor y 14 en contra.",
+          "El registro W indica lluvia y un valor de 5 sin unidad explícita; no se aportan datos de sede."
         ],
         "stats": [
           {
-            "value": "10º",
-            "label": "posición Villarreal"
-          },
-          {
-            "value": "18º",
-            "label": "posición Espanyol"
-          },
-          {
-            "value": "12 puntos",
+            "value": "10.º",
             "label": "Villarreal"
+          },
+          {
+            "value": "18.º",
+            "label": "Espanyol"
+          },
+          {
+            "value": "8",
+            "label": "puntos Espanyol"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Lecturas de Poisson y Bzzoiro",
+        "title": "Poisson y CatBoost: lectura de modelos",
         "bullets": [
-          "El Poisson de GoatLab otorga 53.3% al local, 25.3% al empate y 21.4% al visitante, con parámetros de goles 1.8 y 1.073.",
-          "El CatBoost de Bzzoiro sube el local a 65.8%, deja el empate en 19.4% y el visitante en 14.8%; sus parámetros de goles son 2.04 y 1.03, con 1-1 como marcador más probable.",
-          "B2 declara H con 0.658 y consigna 'no' en los dos campos restantes; coincide exactamente con la probabilidad local de B.",
-          "Auditoría: el 65.8% local de B supera el 53.3% de P (12.5 puntos) y el 42.0% de victorias del local en H (21/50); B2 replica el 65.8%."
+          "Poisson GoatLab: 1.8 goles esperados del local y 1.073 del visitante; 53.3% local, 25.3% empate y 21.4% visitante.",
+          "Poisson añade 54.8% para más de 2.5 goles y 56.0% para ambos anotan.",
+          "CatBoost Bzzoiro: 66.2% local, 19.3% empate y 14.4% visitante; B2 declara local con 66.2% y 'no' en goles totales y ambos anotan.",
+          "B incluye 2.04, 1.03, 62.8%, 56.0%, 1-1 y 54.8% sin etiquetas; la brecha local Poisson-CatBoost es 12.9 puntos porcentuales."
         ],
         "stats": [
-          {
-            "value": "65.8%",
-            "label": "local Bzzoiro"
-          },
           {
             "value": "53.3%",
             "label": "local Poisson"
           },
           {
-            "value": "42.0%",
-            "label": "histórico local H"
+            "value": "66.2%",
+            "label": "local CatBoost"
+          },
+          {
+            "value": "12.9",
+            "label": "brecha local pp"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Serie histórica y cruces recientes",
+        "title": "Historial: dominio de Villarreal",
         "bullets": [
-          "El bloque H reúne 50 duelos: 21 victorias del local (42.0%), 21 empates y 8 triunfos del visitante, con 2.38 goles de media.",
-          "Los cinco HR listados favorecen a Villarreal: 4-1 y 1-0 en casa, 0-2 y 1-2 fuera, y 4-2 en casa.",
-          "Ese historial reciente es el principal contraste con la lectura de Bzzoiro, que eleva mucho al local."
+          "La serie histórica registra 50 cruces: 21 victorias de Villarreal, 21 empates y 8 triunfos del Espanyol, con 2.38 goles de promedio.",
+          "Los cinco precedentes listados en HR terminan con victoria de Villarreal: 4-1, 2-0, 1-0, 2-1 y 4-2.",
+          "En esos cinco partidos, el agregado es 13-4 favorable a Villarreal."
         ],
         "stats": [
           {
             "value": "50",
-            "label": "duelos históricos"
-          },
-          {
-            "value": "21",
-            "label": "victorias local"
+            "label": "cruces históricos"
           },
           {
             "value": "2.38",
-            "label": "goles por duelo"
+            "label": "goles por partido"
+          },
+          {
+            "value": "13-4",
+            "label": "agregado HR"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores disponibles",
+        "bullets": [
+          "Roberto Fernández, del Espanyol, acumula 6 goles en 10 apariciones y es el máximo de la lista.",
+          "Georges Mikautadze y Pape Gueye, del Villarreal, suman 3 goles cada uno en 10 apariciones.",
+          "Alberto Moleiro, también del Villarreal, registra 2 goles en 10 apariciones."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "goles Roberto Fernández"
+          },
+          {
+            "value": "3",
+            "label": "goles Mikautadze/Gueye"
+          },
+          {
+            "value": "2",
+            "label": "goles Moleiro"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Racha reciente de ambos",
+        "title": "Racha reciente disponible",
         "bullets": [
-          "Villarreal suma 3 victorias, 1 empate y 2 derrotas en sus seis R: 3-1 Levante, 0-1 Real Madrid, 3-1 Napoli, 0-0 Elche, 3-4 Liverpool y 2-1 Valencia.",
-          "Espanyol acumula 1 empate y 4 derrotas en sus 5 fechas únicas: 1-2 Rayo, 1-3 Elche, 1-1 Málaga, 0-1 Atlético y 1-2 Racing.",
-          "La fila Espanyol-Elche 1-3 aparece duplicada en R; se contabiliza una sola vez."
+          "Villarreal acumula 3 victorias, 1 empate y 2 derrotas en sus seis registros recientes: 3-1 a Levante, 0-1 ante Real Madrid, 3-1 a Napoli, 0-0 con Elche, 3-4 con Liverpool y 2-1 a Valencia.",
+          "Espanyol suma 0 victorias, 1 empate y 4 derrotas en sus cinco registros recientes: 1-2 con Rayo, 1-3 con Elche, 1-1 con Málaga, 0-1 con Atlético y 1-2 con Racing.",
+          "El duplicado Espanyol 1-3 Elche aparece dos veces en R y se contabiliza una sola vez."
         ],
         "stats": [
           {
@@ -2968,66 +2990,43 @@
             "label": "victorias Villarreal"
           },
           {
+            "value": "0",
+            "label": "victorias Espanyol"
+          },
+          {
             "value": "4",
             "label": "derrotas Espanyol"
-          },
-          {
-            "value": "5",
-            "label": "fechas únicas Espanyol"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Artilleros disponibles en el input",
-        "bullets": [
-          "En Villarreal, Georges Mikautadze y Pape Gueye registran 3 goles en 10 apariciones cada uno; Alberto Moleiro suma 2 en 10.",
-          "En Espanyol, Roberto Fernández acumula 6 goles en 10 apariciones y es el máximo anotador listado.",
-          "El input no incluye alineaciones ni bajas confirmadas para este cruce."
-        ],
-        "stats": [
-          {
-            "value": "3",
-            "label": "goles Mikautadze/Gueye"
-          },
-          {
-            "value": "6",
-            "label": "goles Roberto Fernández"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin API-Football",
-        "detail": "No hay bloque A para contrastar la distribución, el umbral de goles ni la lectura cruda del proveedor."
+        "label": "Sin A ni M2",
+        "detail": "No se incluyó la estimación API-Football (A) ni el consenso externo (M2); la lectura se limita a los bloques presentes en el input."
       },
       {
-        "label": "Sin bajas ni alineaciones",
-        "detail": "No se incluyen L, alineaciones confirmadas ni disponibilidad de jugadores; el análisis se limita a los bloques presentes."
+        "label": "Campos B sin etiqueta",
+        "detail": "El bloque B contiene 2.04, 1.03, 62.8%, 56.0%, 1-1 y 54.8% sin etiquetas explícitas; no se les asigna un mercado concreto."
       },
       {
-        "label": "Consenso externo ausente",
-        "detail": "No hay M2, por lo que no se puede comparar la lectura de GoatLab/Bzzoiro con el consenso externo en porcentaje interpretativo."
+        "label": "Duplicado en R",
+        "detail": "El resultado Espanyol 1-3 Elche aparece dos veces con variantes de nombre; se consideró un único registro para la racha."
       },
       {
-        "label": "Duplicado en forma",
-        "detail": "La fila Espanyol-Elche 1-3 del 18 de septiembre aparece dos veces en R; se contabiliza una vez."
-      },
-      {
-        "label": "Clima sin sede",
-        "detail": "El bloque W indica lluvia y valor 5, pero no incluye sede ni unidad para ese valor."
+        "label": "Clima incompleto",
+        "detail": "W solo indica lluvia y 5, sin unidad ni sede; no se usa para ajustar probabilidades ni el análisis."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Se marca la brecha entre P y B (53.3% frente a 65.8%) y que B2 replica el 65.8%; además, ambas lecturas locales superan el 42.0% de victorias del local en H. Faltan A, L y M2 para contrastar."
+      "note": "Se marca divergencia entre modelos: Poisson otorga 53.3% al local y CatBoost Bzzoiro 66.2%, 12.9 puntos porcentuales de diferencia. B2 coincide con la probabilidad local de B. No se detecta un porcentaje que contradiga de forma directa la tabla o el historial."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-29T12:53:49.248Z",
-    "inputKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.658|0.194|0.148|2.04|1.03|0.629|0.563|1-1|0.548\nB2|H|0.658|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2",
-    "materialKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.658|0.194|0.148|2.04|1.03|0.629|0.563|1-1|0.548\nB2|H|0.658|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2"
+    "generatedAt": "2026-10-30T06:08:51.815Z",
+    "inputKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.662|0.193|0.144|2.04|1.03|0.628|0.56|1-1|0.548\nB2|H|0.662|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2",
+    "materialKey": "v3|M|fd-564737|Villarreal CF|RCD Espanyol de Barcelona|laliga|2026-10-30T20:00:00Z|NS\nP|1.8|1.073|0.533|0.253|0.214|0.548|0.56\nB|0.662|0.193|0.144|2.04|1.03|0.628|0.56|1-1|0.548\nB2|H|0.662|no|no\nH|50|21|21|8|2.38\nW||rain|5|\nT|10|Villarreal CF|10|12|15|14\nT|18|RCD Espanyol de Barcelona|10|8|12|14\nS|Georges Mikautadze|Villarreal CF|3|10\nS|Pape Gueye|Villarreal CF|3|10\nS|Alberto Moleiro|Villarreal CF|2|10\nS|Roberto Fernández|RCD Espanyol de Barcelona|6|10\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-09-20|Villarreal CF|Levante UD|3|1\nR|2026-10-09|Málaga CF|RCD Espanyol de Barcelona|1|1\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-24|Real Racing Club de Santander|RCD Espanyol de Barcelona|2|1\nHR|2026-02-09|Villarreal|Espanyol|4|1\nHR|2025-11-08|Espanyol|Villarreal|0|2\nHR|2025-04-27|Villarreal|Espanyol|1|0\nHR|2024-09-26|Espanyol|Villarreal|1|2\nHR|2023-04-27|Villarreal|Espanyol|4|2"
   },
   "fd-560626": {
     "matchId": "fd-560626",
@@ -4326,145 +4325,120 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Barcelona líder recibe a un Alavés séptimo",
+        "title": "Clásico de LaLiga con Alavés en zona de descenso",
         "bullets": [
-          "FC Barcelona y Deportivo Alavés se enfrentan en LaLiga el 31 de octubre de 2026 a las 20:00; el partido figura como no iniciado.",
-          "El Barcelona llega primero con 27 puntos en 10 partidos, 40 goles a favor y 11 en contra; el Alavés es séptimo con 12 puntos, 14 a favor y 11 en contra.",
-          "El clima previsto es despejado y 11 grados; la fila W no identifica sede."
+          "FC Barcelona (1º, 27 pts) busca mantener ritmo de invencibilidad en casa (5-0-0 en 2026).",
+          "Deportivo Alavés (7º, 12 pts) lucha por evitar el descenso (4-6-0 en 2026, 11º en ataque)."
         ],
         "stats": [
           {
-            "value": "27 puntos",
-            "label": "Puntos Barcelona"
+            "value": "5-0-0",
+            "label": "Racha Barcelona en casa"
           },
           {
-            "value": "12 puntos",
-            "label": "Puntos Alavés"
-          },
-          {
-            "value": "11 grados",
-            "label": "Temperatura"
+            "value": "11º",
+            "label": "Posición Alavés en ataque"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Poisson y CatBoost: victoria local con brecha",
+        "title": "Modelos divergen: Poisson vs. CatBoost en pronósticos",
         "bullets": [
-          "Poisson GoatLab proyecta 2.34 goles esperados para el Barcelona y 1.073 para el Alavés, con 64.8% de victoria local, 20.1% de empate y 15.1% de victoria visitante.",
-          "CatBoost Bzzoiro eleva la victoria del Barcelona a 85.8%, reduce el empate a 9.6% y la victoria del Alavés a 4.6%, y señala 2-0 como marcador más probable.",
-          "B2, estimación declarada del modelo Bzzoiro, coincide en la victoria local como mayor probabilidad con 85.8%; sus dos casillas 'no' no especifican el mercado.",
-          "La diferencia entre P y B es clara en los tres resultados y se marca en la auditoría."
+          "Poisson GoatLab: Probabilidad alta para victoria barcelonista (2.34x), pero con baja confianza en goles (0.663/0.603).",
+          "CatBoost Bzzoiro: Predice 2-0 (0.522) con sesgo defensivo (0.87/0.088/0.043), pero umbral bajo para goles (0.201/0.151).",
+          "API-Football: Distribución bimodal (2-0: 0.476, 1-0: 0.338), umbral de goles alto (2+ goles: 0.771)."
         ],
         "stats": [
           {
-            "value": "64.8%",
-            "label": "P victoria local"
+            "value": "2.34x",
+            "label": "Cuota Poisson victoria BCN"
           },
           {
-            "value": "85.8%",
-            "label": "B victoria local"
+            "value": "0.522",
+            "label": "Prob. Bzzoiro 2-0"
           },
           {
-            "value": "2-0",
-            "label": "Marcador B"
+            "value": "0.771",
+            "label": "Prob. API-Football 2+ goles"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Dominio histórico del Barcelona",
+        "title": "Alavés con ventaja en enfrentamientos recientes",
         "bullets": [
-          "El historial general reúne 33 cruces: 24 victorias del Barcelona, 4 empates y 5 victorias del Alavés, con 3.21 goles por partido.",
-          "En los últimos cinco cruces, el Barcelona ganó cuatro: 3-1 y 1-0 en casa, 3-0 y 3-1 fuera; el Alavés se impuso 1-0 en mayo de 2026."
+          "Último duelo (2026-05-13): Alavés ganó 1-0 en condición neutral (HR).",
+          "Barça domina en casa (3-0 en 2024-2026, 3-0-0 en 2026).",
+          "Alavés anota en 5 de 8 partidos como local en 2026 (0.625)."
         ],
         "stats": [
           {
-            "value": "33 cruces",
-            "label": "Cruces"
-          },
-          {
-            "value": "24 victorias",
-            "label": "Victorias Barça"
-          },
-          {
-            "value": "3.21 goles",
-            "label": "Goles por partido"
+            "value": "3-0-0",
+            "label": "Barça en casa vs Alavés"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Raphinha lidera la artillería",
+        "title": "Artilleros clave: Raphinha y Yamal vs. Boyé y Díaz",
         "bullets": [
-          "Raphinha encabeza a los goleadores del Barcelona con 13 goles; Lamine Yamal suma 8 y Fermín López 4.",
-          "En el Alavés, Lucas Boyé registra 5 goles y Mariano Díaz 3."
+          "Raphinha (13 goles, 9 asistencias) y Lamine Yamal (8 goles, 10 asistencias) lideran ataque barcelonista.",
+          "Fermín López (4 goles, 10 asistencias) es el más letal de Alavés (4 goles en 10 partidos)."
         ],
         "stats": [
           {
-            "value": "13 goles",
-            "label": "Raphinha"
+            "value": "13",
+            "label": "Goles Raphinha"
           },
           {
-            "value": "5 goles",
-            "label": "Lucas Boyé"
+            "value": "4",
+            "label": "Goles López (Alavés)"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Rachas opuestas en los últimos seis",
+        "title": "Barça en racha goleadora; Alavés con irregularidad",
         "bullets": [
-          "El Barcelona suma 4V y 2D en sus últimos seis: 3-1 en Sevilla, 3-0 a Getafe, 4-1 en Galatasaray, 5-2 en Betis, 2-4 ante PSG y 1-2 con Real Madrid.",
-          "El Alavés acumula 0V, 2E y 4D en sus últimos seis: 1-2 en Racing, 0-1 con Valencia, 0-0 en Athletic, 1-2 con Atlético, 1-2 en Celta y 1-1 con Málaga."
+          "Barça: 4-2-0 en últimos 6 partidos (2026-10-10 a 2026-10-20), incluyendo 4-2 vs PSG.",
+          "Alavés: 1-2-1 en últimos 4 partidos (2026-10-10 a 2026-10-23), con empate 1-1 vs Málaga."
         ],
         "stats": [
           {
-            "value": "4V",
-            "label": "Barcelona victorias"
+            "value": "4-2-0",
+            "label": "Racha Barça últimos 6"
           },
           {
-            "value": "0V",
-            "label": "Alavés victorias"
-          },
-          {
-            "value": "2E",
-            "label": "Alavés empates"
+            "value": "1-2-1",
+            "label": "Racha Alavés últimos 4"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin API-Football",
-        "detail": "No hay fila A; no se dispone de distribución, mayor probabilidad ni lectura cruda del proveedor API-Football."
+        "label": "Datos históricos limitados",
+        "detail": "Solo 4 enfrentamientos directos en 2024-2026 (3 victorias Barça, 1 empate neutral). Ausencia de datos recientes en condición de local para Alavés (último partido como local vs Málaga el 23-10-2026)."
       },
       {
-        "label": "Sin consenso externo",
-        "detail": "No hay fila M2; no es posible contrastar el cruce con un consenso externo expresado en porcentaje."
+        "label": "Sesgo defensivo en modelos",
+        "detail": "CatBoost Bzzoiro predice bajo número de goles (0.088/0.043) y alta probabilidad de victoria barcelonista (0.87), lo que contrasta con la lectura de API-Football (0.771 de 2+ goles)."
       },
       {
-        "label": "Sin bajas",
-        "detail": "No hay fila L; no se dispone de bajas confirmadas ni de alineaciones para este partido."
-      },
-      {
-        "label": "Sede no indicada",
-        "detail": "La fila W registra clima despejado y 11 grados, pero no identifica sede, estadio ni altitud."
-      },
-      {
-        "label": "B2 incompleto",
-        "detail": "B2 declara H con 0.858 y dos casillas 'no' sin indicar el mercado; no se interpretan como probabilidades."
+        "label": "Falta de contexto táctico",
+        "detail": "No se incluyen alineaciones, lesiones clave o ajustes técnicos previos al partido, lo que limita la interpretación de la forma reciente."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Se marca la brecha P-B: P asigna 64.8% a la victoria del Barcelona, 20.1% al empate y 15.1% al Alavés; B sube a 85.8%, 9.6% y 4.6%. B2 replica el 85.8%. La diferencia es clara en los tres resultados."
+      "note": "El modelo Poisson GoatLab (2.34x victoria Barça) parece **sobreestimar** la probabilidad de victoria barcelonista frente a la lectura de CatBoost Bzzoiro (0.87/0.522), que refleja mayor cautela defensiva. La irregularidad de Alavés en local (1-2-1 últimos 4 partidos) y su historial reciente (0-1-1 v"
     },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-28T22:55:24.673Z",
-    "inputKey": "v3|M|fd-564732|FC Barcelona|Deportivo Alavés|laliga|2026-10-31T20:00:00Z|NS\nP|2.34|1.073|0.648|0.201|0.151|0.663|0.603\nB|0.858|0.096|0.046|2.45|0.91|0.762|0.501|2-0|0.521\nB2|H|0.858|no|no\nH|33|24|4|5|3.21\nW||clear|11|\nT|1|FC Barcelona|10|27|40|11\nT|7|Deportivo Alavés|10|12|14|11\nS|Raphinha|FC Barcelona|13|9\nS|Lamine Yamal|FC Barcelona|8|10\nS|Fermín López|FC Barcelona|4|10\nS|Lucas Boyé|Deportivo Alavés|5|9\nS|Mariano Díaz|Deportivo Alavés|3|10\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-19|Sevilla FC|FC Barcelona|1|3\nR|2026-09-19|Athletic Club|Deportivo Alavés|0|0\nR|2026-10-10|FC Barcelona|Getafe CF|3|0\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-13|Galatasaray SK|FC Barcelona|1|4\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|RC Celta de Vigo|Deportivo Alavés|2|1\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nHR|2026-05-13|Deportivo Alavés|FC Barcelona|1|0\nHR|2025-11-29|FC Barcelona|Deportivo Alavés|3|1\nHR|2025-02-02|FC Barcelona|Deportivo Alavés|1|0\nHR|2024-10-06|Deportivo Alavés|FC Barcelona|0|3\nHR|2024-02-03|Deportivo Alavés|FC Barcelona|1|3",
-    "materialKey": "v3|M|fd-564732|FC Barcelona|Deportivo Alavés|laliga|2026-10-31T20:00:00Z|NS\nP|2.34|1.073|0.648|0.201|0.151|0.663|0.603\nB|0.858|0.096|0.046|2.45|0.91|0.762|0.501|2-0|0.521\nB2|H|0.858|no|no\nH|33|24|4|5|3.21\nW||clear|11|\nT|1|FC Barcelona|10|27|40|11\nT|7|Deportivo Alavés|10|12|14|11\nS|Raphinha|FC Barcelona|13|9\nS|Lamine Yamal|FC Barcelona|8|10\nS|Fermín López|FC Barcelona|4|10\nS|Lucas Boyé|Deportivo Alavés|5|9\nS|Mariano Díaz|Deportivo Alavés|3|10\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-19|Sevilla FC|FC Barcelona|1|3\nR|2026-09-19|Athletic Club|Deportivo Alavés|0|0\nR|2026-10-10|FC Barcelona|Getafe CF|3|0\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-13|Galatasaray SK|FC Barcelona|1|4\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|RC Celta de Vigo|Deportivo Alavés|2|1\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nHR|2026-05-13|Deportivo Alavés|FC Barcelona|1|0\nHR|2025-11-29|FC Barcelona|Deportivo Alavés|3|1\nHR|2025-02-02|FC Barcelona|Deportivo Alavés|1|0\nHR|2024-10-06|Deportivo Alavés|FC Barcelona|0|3\nHR|2024-02-03|Deportivo Alavés|FC Barcelona|1|3"
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-10-30T06:14:41.684Z",
+    "inputKey": "v3|M|fd-564732|FC Barcelona|Deportivo Alavés|laliga|2026-10-31T20:00:00Z|NS\nP|2.34|1.073|0.648|0.201|0.151|0.663|0.603\nB|0.87|0.088|0.043|2.45|0.91|0.771|0.476|2-0|0.522\nB2|H|0.87|no|no\nH|33|24|4|5|3.21\nW||clear|11|\nT|1|FC Barcelona|10|27|40|11\nT|7|Deportivo Alavés|10|12|14|11\nS|Raphinha|FC Barcelona|13|9\nS|Lamine Yamal|FC Barcelona|8|10\nS|Fermín López|FC Barcelona|4|10\nS|Lucas Boyé|Deportivo Alavés|5|9\nS|Mariano Díaz|Deportivo Alavés|3|10\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-19|Sevilla FC|FC Barcelona|1|3\nR|2026-09-19|Athletic Club|Deportivo Alavés|0|0\nR|2026-10-10|FC Barcelona|Getafe CF|3|0\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-13|Galatasaray SK|FC Barcelona|1|4\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|RC Celta de Vigo|Deportivo Alavés|2|1\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nHR|2026-05-13|Deportivo Alavés|FC Barcelona|1|0\nHR|2025-11-29|FC Barcelona|Deportivo Alavés|3|1\nHR|2025-02-02|FC Barcelona|Deportivo Alavés|1|0\nHR|2024-10-06|Deportivo Alavés|FC Barcelona|0|3\nHR|2024-02-03|Deportivo Alavés|FC Barcelona|1|3",
+    "materialKey": "v3|M|fd-564732|FC Barcelona|Deportivo Alavés|laliga|2026-10-31T20:00:00Z|NS\nP|2.34|1.073|0.648|0.201|0.151|0.663|0.603\nB|0.87|0.088|0.043|2.45|0.91|0.771|0.476|2-0|0.522\nB2|H|0.87|no|no\nH|33|24|4|5|3.21\nW||clear|11|\nT|1|FC Barcelona|10|27|40|11\nT|7|Deportivo Alavés|10|12|14|11\nS|Raphinha|FC Barcelona|13|9\nS|Lamine Yamal|FC Barcelona|8|10\nS|Fermín López|FC Barcelona|4|10\nS|Lucas Boyé|Deportivo Alavés|5|9\nS|Mariano Díaz|Deportivo Alavés|3|10\nR|2026-09-12|Real Racing Club de Santander|Deportivo Alavés|2|1\nR|2026-09-15|Deportivo Alavés|Valencia CF|0|1\nR|2026-09-19|Sevilla FC|FC Barcelona|1|3\nR|2026-09-19|Athletic Club|Deportivo Alavés|0|0\nR|2026-10-10|FC Barcelona|Getafe CF|3|0\nR|2026-10-10|Deportivo Alavés|Club Atlético de Madrid|1|2\nR|2026-10-13|Galatasaray SK|FC Barcelona|1|4\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-18|RC Celta de Vigo|Deportivo Alavés|2|1\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-23|Deportivo Alavés|Málaga CF|1|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nHR|2026-05-13|Deportivo Alavés|FC Barcelona|1|0\nHR|2025-11-29|FC Barcelona|Deportivo Alavés|3|1\nHR|2025-02-02|FC Barcelona|Deportivo Alavés|1|0\nHR|2024-10-06|Deportivo Alavés|FC Barcelona|0|3\nHR|2024-02-03|Deportivo Alavés|FC Barcelona|1|3"
   },
   "fd-560627": {
     "summary": [
