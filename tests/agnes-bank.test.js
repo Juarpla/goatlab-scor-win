@@ -16,10 +16,10 @@ async function runBank(root,out,extraArgs=[],env={}){
     env:{...process.env,MEDIA_ROLE:'producer',GITHUB_ACTIONS:'true',GOATLAB_REPO:root,MEDIA_PACK_DIR:out,AGNES_API_KEY:'',...env},
   }), error=>error.code===2 && /faltan recursos solicitados/.test(error.stderr));
 }
-const IMAGE_KINDS=['ball-duel','goal-action','supporters','stadium'];
+const IMAGE_KINDS=['ball-duel','goal-action','ball-duel-in-the-air','stadium'];
 function imagePromptsDoc(matchId){
   return {version:1,category:'image-prompts',matchId,home:'Alpha',away:'Beta',prompts:IMAGE_KINDS.map((kind,i)=>{
-    const tail=kind==='stadium'?'Stadium, flags and team crests.':kind==='supporters'?'Both groups of supporters, fans and crowd.':'';
+    const tail=kind==='stadium'?'Stadium, flags and team crests.':kind==='ball-duel-in-the-air'?'An aerial ball duel with the ball in the air.':'';
     return {n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(4)}${tail}`};
   })};
 }

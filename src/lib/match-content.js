@@ -4,7 +4,7 @@ export const CONTENT_VERSION = 1;
 export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export const CONTENT_CATEGORIES = Object.freeze({
   scripts: { label: 'Scripts', directory: 'youtube-scripts', count: 10 },
-  'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 4, kinds: ['ball-duel', 'goal-action', 'supporters', 'stadium'] },
+  'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 4, kinds: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'], legacyKinds: ['ball-duel', 'goal-action', 'supporters', 'stadium'] },
 });
 export function contentUrl(matchId, category, json = false) {
   if (!CONTENT_CATEGORIES[category]) throw new Error('Categoría desconocida');
@@ -69,7 +69,7 @@ export function promptErrors(data, { category = data?.category, home = data?.hom
     const text = String(row?.prompt ?? '').trim();
     const label = `${category} ${i + 1}`;
     if (row?.n !== i + 1) errors.push(`${label}: número incorrecto`);
-    if (row?.kind !== spec.kinds[i]) errors.push(`${label}: escena incorrecta`);
+    if (row?.kind !== spec.kinds[i] && row?.kind !== spec.legacyKinds?.[i]) errors.push(`${label}: escena incorrecta`);
     if (typeof row?.title !== 'string' || !row.title.trim() || row.title.length > 160) errors.push(`${label}: título inválido`);
     if (text.length < 180 || text.length > 12000 || !/9\s*:\s*16/.test(text)) errors.push(`${label}: texto incompleto o formato ausente`);
     if (seen.has(text.toLowerCase())) errors.push(`${label}: prompt repetido`);
@@ -79,6 +79,7 @@ export function promptErrors(data, { category = data?.category, home = data?.hom
       if (!/photoreal|hyperreal/i.test(text) || !/referential|reference illustration/i.test(text) || !/illustration/i.test(text)) errors.push(`${label}: falta realismo y carácter referencial`);
       if (!/kit|uniform|shirt|jersey|colou?r/i.test(text)) errors.push(`${label}: falta identidad de los equipos`);
       if (row.kind === 'supporters' && !/supporters|fans|crowd/i.test(text)) errors.push(`${label}: falta hinchada`);
+      if (row.kind === 'ball-duel-in-the-air' && (!/\bball\b/i.test(text) || !/\b(?:air|aerial|header|heading|volley|overhead)\b/i.test(text))) errors.push(`${label}: falta duelo aéreo`);
       if (row.kind === 'stadium' && (!/stadium/i.test(text) || !/flag/i.test(text) || !/crest|emblem|badge|logo/i.test(text))) errors.push(`${label}: falta presentación, banderas o escudos`);
     }
     if (category === 'video-prompts' && (!/6\s*(?:-| )?second/i.test(text) || !/image|picture/i.test(text) || !/camera/i.test(text))) errors.push(`${label}: faltan duración, imagen de referencia o cámara`);

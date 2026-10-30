@@ -28,7 +28,7 @@ async function fixture(t, overrides = {}, matchId = 'a-b') {
   const repo = await mkdtemp(join(tmpdir(), 'goatlab-generation-')); t.after(() => rm(repo, { recursive: true, force: true }));
   const dir = join(repo, 'public/data/media-pack');
   const match = { id: 'af-1', webId: matchId, home: 'Alpha', away: 'Beta', competition: 'nations', status: 'NS', kickoff: new Date(now + 86_400_000).toISOString() };
-  const images = { version: 1, category: 'image-prompts', matchId: matchId, ...match, home: 'Alpha', away: 'Beta', prompts: ['ball-duel', 'goal-action', 'supporters', 'stadium'].map((kind, index) => ({
+  const images = { version: 1, category: 'image-prompts', matchId: matchId, ...match, home: 'Alpha', away: 'Beta', prompts: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'].map((kind, index) => ({
     n: index + 1, kind, title: kind, prompt: 'Referential photorealistic illustration of Alpha and Beta teams in realistic uniforms, vertical 9:16. ' + kind + ' Stadium flags and team crests. Supporters fans crowd. ' + 'Natural lighting with stable anatomy. '.repeat(6),
   })) };
   const videos = { ...images, category: 'video-prompts', prompts: ['push-in', 'tracking'].map((kind, index) => ({

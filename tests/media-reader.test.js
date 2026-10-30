@@ -14,7 +14,7 @@ async function fixture(t) {
   const now = Date.parse('2026-10-10T17:00:00Z');
   const match = { webId: 'a-b', home: 'Alpha', away: 'Beta', competition: 'league', kickoff: '2026-10-11T18:00:00Z' };
   const pack = { version: 1, matchId: 'a-b', ...match };
-  const images = { ...pack, category: 'image-prompts', prompts: ['ball-duel', 'goal-action', 'supporters', 'stadium'].map((kind, i) => ({ n: i+1, kind, title: kind,
+  const images = { ...pack, category: 'image-prompts', prompts: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'].map((kind, i) => ({ n: i+1, kind, title: kind,
     prompt: `Referential photorealistic illustration of Alpha and Beta football teams, stadium flags, team crests, supporters fans crowd, vertical 9:16. ${'Realistic uniforms, natural lighting, stable anatomy and coherent sports movement. '.repeat(4)}` + kind })) };
   const videos = { ...pack, category: 'video-prompts', prompts: ['push-in', 'tracking'].map((kind, i) => ({ n: i+1, kind, title: kind,
     prompt: `Animate the input image, 6 seconds, vertical 9:16, smooth ${kind} camera. ${'Stable anatomy and coherent sports movement, preserve both teams. '.repeat(5)}` })) };

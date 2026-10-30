@@ -15,6 +15,9 @@ MONTHS = ('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agost
 
 CATEGORIES = {'scripts': ('youtube-scripts', 10), 'image-prompts': ('image-prompts', 4)}
 KINDS = {
+    'image-prompts': ['ball-duel','goal-action','ball-duel-in-the-air','stadium'],
+}
+LEGACY_KINDS = {
     'image-prompts': ['ball-duel','goal-action','supporters','stadium'],
 }
 
@@ -34,7 +37,7 @@ def valid(data, category, match_id):
     for i, r in enumerate(rows):
         if not isinstance(r, dict) or r.get('n') != i+1:
             return False
-        if r.get('kind') != KINDS[category][i]:
+        if r.get('kind') not in (KINDS[category][i], LEGACY_KINDS.get(category, [None] * 4)[i]):
             return False
         if not (r.get('presentations') is None or r['presentations'] == ['editorial','statistical']):
             return False

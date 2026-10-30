@@ -24,9 +24,10 @@ class ContentTests(unittest.TestCase):
 
     def test_prompt_contract_is_four_photos_two_clips(self):
         from content_client import valid
-        image=self.pack('image-prompts',['ball-duel','goal-action','supporters','stadium'])
+        image=self.pack('image-prompts',['ball-duel','goal-action','ball-duel-in-the-air','stadium'])
+        legacy=self.pack('image-prompts',['ball-duel','goal-action','supporters','stadium'])
         video=self.pack('video-prompts',['push-in','tracking'])
-        for category,data in [('image-prompts',image)]:
+        for category,data in [('image-prompts',image),('image-prompts',legacy)]:
             self.assertTrue(valid(data,category,'a-b'), category)
         # El contrato antiguo (10 fotos / 5 clips) se rechaza: mismo fallo que rompió Croacia.
         old_image=self.pack('image-prompts',['ball-duel','pressing','passing','dribbling','crossing','defending','aerial-duel','goal-action','supporters','stadium'])
