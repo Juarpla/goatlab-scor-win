@@ -1,69 +1,6 @@
 {
-  "updatedAt": "2026-10-30T13:34:23.318Z",
+  "updatedAt": "2026-10-30T22:46:51.019Z",
   "runs": [
-    {
-      "at": "2026-10-21T17:23:38.488Z",
-      "task": "shorts",
-      "matchId": "brugge-kv-vs-lens-2026-10-21",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6175,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 65183
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6272,
-        "outputTokens": 11136
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "02be1e42-6e68-4486-b16a-bf1eb5e66444"
-    },
-    {
-      "at": "2026-10-21T17:24:17.261Z",
-      "task": "image-prompts",
-      "matchId": "brugge-kv-vs-lens-2026-10-21",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1384,
-        "outputTokens": 7216
-      }
-    },
-    {
-      "at": "2026-10-21T17:24:45.793Z",
-      "task": "video-prompts",
-      "matchId": "brugge-kv-vs-lens-2026-10-21",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1281,
-        "outputTokens": 2160
-      }
-    },
     {
       "at": "2026-10-21T17:26:44.177Z",
       "task": "motion-prompts",
@@ -6282,6 +6219,156 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-10-30T22:30:16.926Z",
+      "matchId": "fd-564735",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1352,
+        "outputTokens": 14038
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "723f9e8d-7347-4bbd-854c-2a0f2cc5a619"
+    },
+    {
+      "at": "2026-10-30T22:44:49.273Z",
+      "matchId": "fd-560627",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1314,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 134930
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1334,
+            "outputTokens": 1251
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7596
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1264,
+            "outputTokens": 4351
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 96886
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1314,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 128413
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1334,
+            "outputTokens": 1591
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15495
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1264,
+            "outputTokens": 4067
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 87477
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1264,
+        "outputTokens": 4067
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-10-30T22:46:40.958Z",
+      "matchId": "fd-564736",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1392,
+        "outputTokens": 12565
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b3b95ddf-cfcc-479e-a40f-4b0238dd9107"
     }
   ]
 }
