@@ -4,7 +4,7 @@
   "away": "Manchester United FC",
   "competition": "premier",
   "kickoff": "2026-10-31T12:30:00Z",
-  "updatedAt": "2026-10-31T12:12:58.170Z",
+  "updatedAt": "2026-10-31T12:45:21.316Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 1.073
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.905,
+      "away": 1.187
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 6,
       "away": 6
@@ -129,18 +132,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.05,
-    "noGoal": 0.047,
+    "lambdaTotal": 3.09,
+    "noGoal": 0.045,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.399
+        "p": 0.403
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.24
+        "p": 0.241
       },
       {
         "from": 30,
@@ -150,12 +153,12 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.087
+        "p": 0.086
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.052
+        "p": 0.051
       },
       {
         "from": 75,
@@ -163,8 +166,8 @@
         "p": 0.031
       }
     ],
-    "firstHome": 0.618,
-    "firstAway": 0.335
+    "firstHome": 0.588,
+    "firstAway": 0.366
   },
   "scorers": {
     "home": [
@@ -173,27 +176,27 @@
         "goals": 5,
         "matches": 6,
         "share": 0.294,
-        "rate": 0.58,
-        "anytime": 0.441,
-        "first": 0.191
+        "rate": 0.56,
+        "anytime": 0.429,
+        "first": 0.181
       },
       {
         "player": "Morgan Rogers",
         "goals": 4,
         "matches": 9,
         "share": 0.235,
-        "rate": 0.47,
-        "anytime": 0.372,
-        "first": 0.153
+        "rate": 0.45,
+        "anytime": 0.361,
+        "first": 0.145
       },
       {
         "player": "Pedro Neto",
         "goals": 3,
         "matches": 8,
         "share": 0.176,
-        "rate": 0.35,
-        "anytime": 0.294,
-        "first": 0.114
+        "rate": 0.34,
+        "anytime": 0.285,
+        "first": 0.109
       }
     ],
     "away": [
@@ -202,50 +205,183 @@
         "goals": 4,
         "matches": 9,
         "share": 0.4,
-        "rate": 0.43,
-        "anytime": 0.349,
-        "first": 0.141
+        "rate": 0.47,
+        "anytime": 0.378,
+        "first": 0.154
       },
       {
         "player": "Bruno Fernandes",
         "goals": 3,
         "matches": 8,
         "share": 0.3,
-        "rate": 0.32,
-        "anytime": 0.275,
-        "first": 0.106
+        "rate": 0.36,
+        "anytime": 0.3,
+        "first": 0.115
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.485,
+      "draw": 0.254,
+      "away": 0.261,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.83,
+      "away": 1.3
+    },
+    "over15": 0.807,
+    "over25": 0.586,
+    "over35": 0.382,
+    "btts": 0.61,
+    "score": "1-1",
+    "cornersOver95": 0.488,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.485,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4854,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-31T12:45:15.436Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.488,
+      "draw": 0.249,
+      "away": 0.262
+    },
+    "doubleChance": {
+      "12": 0.751,
+      "1X": 0.738,
+      "X2": 0.512
+    },
+    "dnb": {
+      "home": 0.651,
+      "away": 0.349
+    },
+    "totals": {
+      "over15": 0.83,
+      "under15": 0.17,
+      "over25": 0.605,
+      "under25": 0.395,
+      "over35": 0.382,
+      "under35": 0.618
+    },
+    "btts": {
+      "yes": 0.621,
+      "no": 0.379
+    },
+    "cleanSheet": {
+      "home": 0.273,
+      "away": 0.16
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.119,
+        "share": 0.27999999999999997
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.095,
+        "share": 0.2235294117647059
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.073,
+        "share": 0.17176470588235293
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.07,
+        "share": 0.1647058823529412
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.068,
+        "share": 0.16
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "totalMatches": 79,
+    "homeWins": 25,
+    "draws": 29,
+    "awayWins": 25,
+    "avgTotalGoals": 2.5569620253164556,
+    "recent": [
+      {
+        "eventId": 326,
+        "date": "2026-04-18T19:00:00+00:00",
+        "home": "Chelsea",
+        "away": "Manchester United",
+        "homeTeamId": 13,
+        "awayTeamId": 17,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 46,
+        "date": "2025-09-20T16:30:00+00:00",
+        "home": "Manchester United",
+        "away": "Chelsea",
+        "homeTeamId": 17,
+        "awayTeamId": 13,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 307013,
+        "date": "2025-05-16T19:15:00+00:00",
+        "home": "Chelsea",
+        "away": "Manchester United",
+        "homeTeamId": 13,
+        "awayTeamId": 17,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 306749,
+        "date": "2024-11-03T16:30:00+00:00",
+        "home": "Manchester United",
+        "away": "Chelsea",
+        "homeTeamId": 17,
+        "awayTeamId": 13,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 312432,
+        "date": "2024-04-04T19:15:00+00:00",
+        "home": "Chelsea",
+        "away": "Manchester United",
+        "homeTeamId": 13,
+        "awayTeamId": 17,
+        "homeScore": 4,
+        "awayScore": 3
+      }
+    ],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -282,7 +418,7 @@
     "home": {
       "shots": 12.7,
       "shotsOnTarget": 4.62,
-      "xg": 1.43,
+      "xg": 1.83,
       "corners": 4.53,
       "fouls": 11.14,
       "yellowCards": 2.04,
@@ -293,7 +429,7 @@
     "away": {
       "shots": 14.45,
       "shotsOnTarget": 4.96,
-      "xg": 1.57,
+      "xg": 1.3,
       "corners": 5.32,
       "fouls": 11.38,
       "yellowCards": 2.28,
@@ -384,9 +520,9 @@
       "away": 0.446
     },
     "lastGoal": {
-      "home": 0.618,
-      "away": 0.335,
-      "noGoal": 0.047
+      "home": 0.588,
+      "away": 0.366,
+      "noGoal": 0.045
     },
     "cornerRace": {
       "3": {
@@ -497,10 +633,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": "No se observa una desviación porcentual clara: el 57,4% local encaja con la diferencia de tabla y la racha, aunque faltan historial y bajas.",
+    "flag": true,
+    "note": "Se marca revisión: P y B difieren en la probabilidad local (57.4% frente a 48.5%) y en el visitante (19.1% frente a 26.1%); B2 usa 'no' sin umbral y no se puede conciliar con las casillas 58.6%/61.0% de B. Faltan A, L y M2.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-31T12:16:16.674Z"
+    "generatedAt": "2026-10-31T12:56:04.555Z"
   }
 }

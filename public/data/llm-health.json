@@ -1,51 +1,6 @@
 {
-  "updatedAt": "2026-10-31T12:20:10.621Z",
+  "updatedAt": "2026-10-31T12:59:54.185Z",
   "runs": [
-    {
-      "at": "2026-10-21T22:08:59.415Z",
-      "task": "image-prompts",
-      "matchId": "palmeiras-vs-fluminense-2026-10-21",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1343,
-        "outputTokens": 4915
-      }
-    },
-    {
-      "at": "2026-10-21T22:09:22.410Z",
-      "task": "image-prompts",
-      "matchId": "sk-sturm-graz-vs-olympique-de-marseille-2026-10-22",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1674,
-        "outputTokens": 4381
-      }
-    },
-    {
-      "at": "2026-10-21T22:10:00.769Z",
-      "task": "image-prompts",
-      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1525,
-        "outputTokens": 6776
-      }
-    },
     {
       "at": "2026-10-21T22:10:30.249Z",
       "task": "image-prompts",
@@ -6342,6 +6297,107 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "6bff869d-2e25-4aef-88c9-0d88ee27ed90"
+    },
+    {
+      "at": "2026-10-31T12:56:04.555Z",
+      "matchId": "fd-560626",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 15000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1327,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 91209
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1402,
+            "outputTokens": 1524
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9024
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1327,
+        "outputTokens": 14227
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "ca7a0d0d-cd89-46fe-8e53-f07156f53a5b"
+    },
+    {
+      "at": "2026-10-31T12:58:15.821Z",
+      "matchId": "fd-560629",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1345,
+        "outputTokens": 13589
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "dbfd64c9-896a-4cc6-8d0f-6e932e3ed73a"
+    },
+    {
+      "at": "2026-10-31T12:59:44.478Z",
+      "matchId": "fd-560630",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1336,
+        "outputTokens": 12640
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "32b48bb5-d97c-49da-a95c-ab051446ffb8"
     }
   ]
 }
