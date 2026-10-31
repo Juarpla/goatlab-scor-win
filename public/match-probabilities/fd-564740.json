@@ -1,0 +1,636 @@
+{
+  "id": "fd-564740",
+  "home": "Sevilla FC",
+  "away": "Deportivo Alavés",
+  "competition": "laliga",
+  "kickoff": "2026-11-06T20:00:00Z",
+  "updatedAt": "2026-10-31T12:12:58.170Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.53,
+      "away": 1.073
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.455,
+      "away": 1.162
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Sevilla FC": {
+        "position": 6,
+        "team": "Sevilla FC",
+        "played": 10,
+        "won": 5,
+        "drawn": 2,
+        "lost": 3,
+        "goalsFor": 16,
+        "goalsAgainst": 16,
+        "goalDifference": 0,
+        "points": 17,
+        "form": null
+      },
+      "Deportivo Alavés": {
+        "position": 7,
+        "team": "Deportivo Alavés",
+        "played": 10,
+        "won": 3,
+        "drawn": 3,
+        "lost": 4,
+        "goalsFor": 14,
+        "goalsAgainst": 11,
+        "goalDifference": 3,
+        "points": 12,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-10-31T12:12:19.731Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-06T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-10-31T12:12:19.731Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 332
+    },
+    "venue": {
+      "city": "Sevilla",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.466,
+      "draw": 0.28,
+      "away": 0.254
+    },
+    "doubleChance": {
+      "12": 0.72,
+      "1X": 0.746,
+      "X2": 0.534
+    },
+    "dnb": {
+      "home": 0.647,
+      "away": 0.353
+    },
+    "totals": {
+      "over15": 0.745,
+      "under15": 0.255,
+      "over25": 0.482,
+      "under25": 0.518,
+      "over35": 0.265,
+      "under35": 0.735
+    },
+    "btts": {
+      "yes": 0.528,
+      "no": 0.472
+    },
+    "cleanSheet": {
+      "home": 0.342,
+      "away": 0.217
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.134
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.101
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.093
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.087
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.086
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.62,
+    "noGoal": 0.073,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.353
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.229
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.096
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.062
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.04
+      }
+    ],
+    "firstHome": 0.515,
+    "firstAway": 0.412
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Isaac Romero",
+        "goals": 3,
+        "matches": 9,
+        "share": 0.188,
+        "rate": 0.27,
+        "anytime": 0.239,
+        "first": 0.104
+      },
+      {
+        "player": "Félix Correia",
+        "goals": 2,
+        "matches": 7,
+        "share": 0.125,
+        "rate": 0.18,
+        "anytime": 0.166,
+        "first": 0.069
+      },
+      {
+        "player": "Miguel Sierra",
+        "goals": 2,
+        "matches": 8,
+        "share": 0.125,
+        "rate": 0.18,
+        "anytime": 0.166,
+        "first": 0.069
+      }
+    ],
+    "away": [
+      {
+        "player": "Lucas Boyé",
+        "goals": 5,
+        "matches": 9,
+        "share": 0.357,
+        "rate": 0.41,
+        "anytime": 0.34,
+        "first": 0.158
+      },
+      {
+        "player": "Mariano Díaz",
+        "goals": 3,
+        "matches": 10,
+        "share": 0.214,
+        "rate": 0.25,
+        "anytime": 0.22,
+        "first": 0.095
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.389,
+      "draw": 0.28,
+      "away": 0.331,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.38,
+      "away": 1.25
+    },
+    "over15": 0.735,
+    "over25": 0.489,
+    "over35": 0.265,
+    "btts": 0.529,
+    "score": "1-1",
+    "cornersOver95": 0.449,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.389,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3889,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-10-31T12:12:49.010Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.387,
+      "draw": 0.286,
+      "away": 0.327
+    },
+    "doubleChance": {
+      "12": 0.714,
+      "1X": 0.673,
+      "X2": 0.613
+    },
+    "dnb": {
+      "home": 0.542,
+      "away": 0.458
+    },
+    "totals": {
+      "over15": 0.751,
+      "under15": 0.249,
+      "over25": 0.489,
+      "under25": 0.511,
+      "over35": 0.271,
+      "under35": 0.729
+    },
+    "btts": {
+      "yes": 0.546,
+      "no": 0.454
+    },
+    "cleanSheet": {
+      "home": 0.287,
+      "away": 0.252
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.109,
+        "share": 0.24494382022471906
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.087,
+        "share": 0.19550561797752805
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.086,
+        "share": 0.19325842696629209
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.085,
+        "share": 0.19101123595505617
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.078,
+        "share": 0.17528089887640447
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 28,
+    "homeWins": 12,
+    "draws": 9,
+    "awayWins": 7,
+    "avgTotalGoals": 2.2857142857142856,
+    "recent": [
+      {
+        "eventId": 930,
+        "date": "2026-02-14T17:30:00+00:00",
+        "home": "Sevilla",
+        "away": "Deportivo Alavés",
+        "homeTeamId": 52,
+        "awayTeamId": 45,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 203324,
+        "date": "2025-12-17T20:00:00+00:00",
+        "home": "Deportivo Alavés",
+        "away": "Sevilla",
+        "homeTeamId": 45,
+        "awayTeamId": 52,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 733,
+        "date": "2025-09-20T16:30:00+00:00",
+        "home": "Deportivo Alavés",
+        "away": "Sevilla",
+        "homeTeamId": 45,
+        "awayTeamId": 52,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 305671,
+        "date": "2025-04-20T16:30:00+00:00",
+        "home": "Sevilla",
+        "away": "Deportivo Alavés",
+        "homeTeamId": 52,
+        "awayTeamId": 45,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 305401,
+        "date": "2024-09-20T19:00:00+00:00",
+        "home": "Deportivo Alavés",
+        "away": "Sevilla",
+        "homeTeamId": 45,
+        "awayTeamId": 52,
+        "homeScore": 2,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 332
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.2
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 332
+    },
+    "source": "GoatLab",
+    "expectedTotal": 8.9
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.35,
+      "shotsOnTarget": 4.62,
+      "xg": 1.38,
+      "corners": 4.66,
+      "fouls": 13.07,
+      "yellowCards": 2.17,
+      "redCards": 0.32,
+      "offsides": 2.09,
+      "possession": 50.24
+    },
+    "away": {
+      "shots": 13.44,
+      "shotsOnTarget": 4.74,
+      "xg": 1.25,
+      "corners": 4.26,
+      "fouls": 12.62,
+      "yellowCards": 2.01,
+      "redCards": 0.24,
+      "offsides": 2.18,
+      "possession": 49.76
+    },
+    "sample": {
+      "home": 10,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 10,
+        "fouls": 9,
+        "yellowCards": 10,
+        "redCards": 7,
+        "offsides": 9
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 6,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.63,
+      "shotsOnTarget": 4.74,
+      "xg": 1.45,
+      "corners": 4.85,
+      "fouls": 12.36,
+      "yellowCards": 2.29,
+      "redCards": 0.33,
+      "offsides": 2.04
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.485,
+      "draw": 0.134,
+      "away": 0.38
+    },
+    "cardsDuel": {
+      "home": 0.429,
+      "draw": 0.202,
+      "away": 0.369
+    },
+    "lastGoal": {
+      "home": 0.515,
+      "away": 0.412,
+      "noGoal": 0.073
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.542,
+        "away": 0.458
+      },
+      "5": {
+        "home": 0.555,
+        "away": 0.445
+      },
+      "7": {
+        "home": 0.565,
+        "away": 0.435
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.237,
+      "home12": 0.248,
+      "level": 0.134,
+      "away12": 0.218,
+      "away3plus": 0.162
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 9.7,
+      "condition": "unknown",
+      "sampledAt": "2026-11-06T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Ramón Sánchez-Pizjuán",
+      "city": "Sevilla",
+      "capacity": 43883,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Sevilla FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 6,
+        "played": 10,
+        "gf": 16,
+        "ga": 16,
+        "provider": null
+      },
+      "player": {
+        "name": "Isaac Romero",
+        "detail": "3 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Deportivo Alavés",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 7,
+        "played": 10,
+        "gf": 14,
+        "ga": 11,
+        "provider": null
+      },
+      "player": {
+        "name": "Lucas Boyé",
+        "detail": "5 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

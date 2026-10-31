@@ -1,208 +1,6 @@
 {
-  "updatedAt": "2026-10-31T06:23:08.058Z",
+  "updatedAt": "2026-10-31T12:20:10.621Z",
   "runs": [
-    {
-      "at": "2026-10-21T21:57:12.155Z",
-      "task": "shorts",
-      "matchId": "sk-sturm-graz-vs-olympique-de-marseille-2026-10-22",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6134,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 120363
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6236,
-        "outputTokens": 11609
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "0a99ce5e-75fe-4fb2-8c5e-e1857a17008f"
-    },
-    {
-      "at": "2026-10-21T21:59:24.818Z",
-      "task": "shorts",
-      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6069,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 116089
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6193,
-        "outputTokens": 4207
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "91edcf11-b693-4762-9ff1-1577965c3619"
-    },
-    {
-      "at": "2026-10-21T22:08:05.156Z",
-      "task": "shorts",
-      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6462,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 173030
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6559,
-            "outputTokens": 5289
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 20003
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 2: 9 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 3: 9 cifras, máximo 3; guion 3: falta el llamada asignado; guion 3: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6777,
-            "outputTokens": 1435
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14692
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 3: falta OFI Crete; guion 4: 4 cifras, máximo 3; guion 4: falta Taxiarchis Fountas; guion 5: 4 cifras, máximo 3; guion 6: falta OFI Crete",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6455,
-            "outputTokens": 4721
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 74519
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6462,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 111382
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6559,
-            "outputTokens": 9790
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 36274
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 3: falta OFI Crete; guion 4: falta OFI Crete; guion 4: 10 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: falta OFI Crete",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6777,
-            "outputTokens": 1317
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11790
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: falta Taxiarchis Fountas; guion 4: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6455,
-            "outputTokens": 4600
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 78644
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6455,
-        "outputTokens": 4600
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-21T22:08:31.998Z",
-      "task": "image-prompts",
-      "matchId": "palmeiras-vs-fluminense-2026-10-21",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1754,
-        "outputTokens": 5601
-      }
-    },
     {
       "at": "2026-10-21T22:08:59.415Z",
       "task": "image-prompts",
@@ -6474,6 +6272,76 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "c7f3172a-51a9-44e8-ba55-b70b909fea4f"
+    },
+    {
+      "at": "2026-10-31T12:16:16.698Z",
+      "matchId": "fd-560626",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1881,
+        "outputTokens": 18380
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "c835e5da-221f-4ef0-8dbb-638ab60a618b"
+    },
+    {
+      "at": "2026-10-31T12:16:16.698Z",
+      "matchId": "fd-564730",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "c835e5da-221f-4ef0-8dbb-638ab60a618b"
+    },
+    {
+      "at": "2026-10-31T12:19:58.497Z",
+      "matchId": "fd-560625",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2107,
+        "outputTokens": 21616
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "6bff869d-2e25-4aef-88c9-0d88ee27ed90"
+    },
+    {
+      "at": "2026-10-31T12:19:58.497Z",
+      "matchId": "fd-560623",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "6bff869d-2e25-4aef-88c9-0d88ee27ed90"
     }
   ]
 }
