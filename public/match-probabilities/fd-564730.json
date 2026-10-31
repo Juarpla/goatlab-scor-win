@@ -4,7 +4,7 @@
   "away": "Club Atlético de Madrid",
   "competition": "laliga",
   "kickoff": "2026-10-31T13:00:00Z",
-  "updatedAt": "2026-10-30T22:28:07.300Z",
+  "updatedAt": "2026-10-31T05:55:09.450Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -205,30 +205,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.18,
-      "draw": 0.209,
-      "away": 0.611,
+      "home": 0.175,
+      "draw": 0.204,
+      "away": 0.621,
       "predicted": "A"
     },
     "xg": {
       "home": 1.42,
       "away": 1.65
     },
-    "over15": 0.8170000000000001,
-    "over25": 0.613,
-    "over35": 0.39299999999999996,
-    "btts": 0.583,
+    "over15": 0.8190000000000001,
+    "over25": 0.623,
+    "over35": 0.39799999999999996,
+    "btts": 0.58,
     "score": "1-1",
     "cornersOver95": 0.499,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.611,
+      "favoriteProb": 0.621,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6108,
+    "confidence": 0.6209,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-30T12:42:46.643Z",
+    "capturedAt": "2026-10-31T05:55:01.754Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -614,9 +614,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Discrepancia clara entre Poisson y CatBoost en la probabilidad visitante (0.481 frente a 0.611); B2 usa no de forma ambigua y no hay bloques A ni M2 para contrastar.",
+    "note": "Se marcan divergencias claras: Poisson otorga 48.1% al visitante frente al 62.1% de CatBoost y de la estimación declarada de Bzzoiro; además, B2 indica 'no' en goles totales y ambos anotan, mientras P y B sitúan esos indicadores entre 58.0% y 62.3%. El 0.499 de B queda sin etiqueta.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-30T12:48:56.086Z"
+    "generatedAt": "2026-10-31T06:12:16.728Z"
   }
 }
