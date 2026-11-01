@@ -63,7 +63,7 @@ jobs:
           if [ -n "$TOP" ]; then args+=("--top=$TOP"); fi
           if [ "$FORCE" = "true" ]; then args+=("--force"); fi
           args+=("--category=${CATEGORY:-all}")
-          node scripts/generate-match-content.mjs "${args[@]}"
+          node actions/2-scripting/generate-match-content.mjs "${args[@]}"
         env:
           CATEGORY: ${{ inputs.category }}
           MATCH: ${{ inputs.match }}

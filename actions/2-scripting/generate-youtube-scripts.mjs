@@ -1,5 +1,5 @@
-import { normalizeScriptTitles } from '../src/lib/script-titles.js';
-import { readContentSelection } from '../src/lib/content-selection.js';
+import { normalizeScriptTitles } from '../../src/lib/script-titles.js';
+import { readContentSelection } from '../../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de guiones pertenece a GitHub Actions');
 /** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
  *  redactar-guiones-shorts. Un JSON válido ya existente no se toca.
@@ -8,7 +8,7 @@ if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de gu
  *  --match o top ampliado registran el partido como extra protegido. */
 import { mkdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
 import { join } from 'node:path';
-import { CONTENT_LLM_LIMITS, createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../src/lib/llm.js';
+import { CONTENT_LLM_LIMITS, createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../../src/lib/llm.js';
 import {
   acceptYoutubeDraft,
   buildDescription,
@@ -22,13 +22,13 @@ import {
   scriptFacts,
   selectMatches,
   youtubeUserPayload,
-} from '../src/lib/youtube.js';
-import { CONTENT_PROVIDER_ORDER, scriptStructureErrors } from '../src/lib/match-content.js';
+} from '../../src/lib/youtube.js';
+import { CONTENT_PROVIDER_ORDER, scriptStructureErrors } from '../../src/lib/match-content.js';
 import { createHash, randomUUID } from 'node:crypto';
-import { esName } from '../src/lib/teams.js';
-import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../src/lib/top.js';
-import { checkDescription } from '../src/lib/compliance.js';
-import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
+import { esName } from '../../src/lib/teams.js';
+import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../../src/lib/top.js';
+import { checkDescription } from '../../src/lib/compliance.js';
+import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
 
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const dir = 'public/data/youtube-scripts';

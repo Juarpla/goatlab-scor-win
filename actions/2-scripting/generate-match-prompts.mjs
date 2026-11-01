@@ -1,13 +1,13 @@
-import { readContentSelection } from '../src/lib/content-selection.js';
+import { readContentSelection } from '../../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de prompts pertenece a GitHub Actions');
 import { readFile, mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
-import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors } from '../src/lib/match-content.js';
-import { CONTENT_LLM_LIMITS, withFailover, extractJson } from '../src/lib/llm.js';
-import { esName } from '../src/lib/teams.js';
-import { editingFacts } from '../src/lib/match-facts.js';
-import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../src/lib/top.js';
-import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
+import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors } from '../../src/lib/match-content.js';
+import { CONTENT_LLM_LIMITS, withFailover, extractJson } from '../../src/lib/llm.js';
+import { esName } from '../../src/lib/teams.js';
+import { editingFacts } from '../../src/lib/match-facts.js';
+import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../../src/lib/top.js';
+import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
 const category = args['--category'];
@@ -76,7 +76,7 @@ if (!matches.length) {
 }
 const published = JSON.parse(await readFile('public/data/evaluation-report.json', 'utf8')).published === true;
 let scorers; try { scorers = JSON.parse(await readFile('public/data/scorers.json', 'utf8')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
-const guide = await readFile(`scripts/prompts/${category}.md`, 'utf8');
+const guide = await readFile(`actions/2-scripting/prompts/${category}.md`, 'utf8');
 const instructionVersion = createHash('sha256').update(guide).digest('hex');
 let failed = 0;
 for (const match of matches) {

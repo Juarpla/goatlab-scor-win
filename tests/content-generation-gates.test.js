@@ -9,8 +9,8 @@ import { scriptStructureErrors } from '../src/lib/match-content.js';
 import { scriptFacts } from '../src/lib/youtube.js';
 
 const consumers = [
-  { script: resolve('scripts/generate-youtube-scripts.mjs'), category: 'scripts', directory: 'youtube-scripts', emptyExit: 1 },
-  { script: resolve('scripts/generate-match-prompts.mjs'), category: 'image-prompts', directory: 'image-prompts', emptyExit: 0 },
+  { script: resolve('actions/2-scripting/generate-youtube-scripts.mjs'), category: 'scripts', directory: 'youtube-scripts', emptyExit: 1 },
+  { script: resolve('actions/2-scripting/generate-match-prompts.mjs'), category: 'image-prompts', directory: 'image-prompts', emptyExit: 0 },
 ];
 const now = Date.now();
 const stamp = offset => new Date(now + offset).toISOString();
