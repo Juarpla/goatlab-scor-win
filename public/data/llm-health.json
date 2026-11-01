@@ -1,220 +1,6 @@
 {
-  "updatedAt": "2026-11-01T18:32:11.541Z",
+  "updatedAt": "2026-11-01T18:52:57.496Z",
   "runs": [
-    {
-      "at": "2026-10-22T21:53:33.752Z",
-      "task": "shorts",
-      "matchId": "deportivo-alaves-vs-malaga-2026-10-23",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6833,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 129610
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6934,
-        "outputTokens": 5731
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "799c9c36-bb90-496a-82c0-4b98a82548c8"
-    },
-    {
-      "at": "2026-10-22T21:55:19.144Z",
-      "task": "shorts",
-      "matchId": "aston-villa-vs-manchester-city-2026-10-24",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6865,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 74093
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6980,
-        "outputTokens": 7136
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "4cd3cd26-e07e-40a1-a0ff-9ad08d440872"
-    },
-    {
-      "at": "2026-10-22T21:58:10.513Z",
-      "task": "shorts",
-      "matchId": "rayo-vallecano-vs-elche-2026-10-24",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6825,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 130743
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6930,
-        "outputTokens": 6614
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "58242e7d-87a2-47a0-bede-61b43a763113"
-    },
-    {
-      "at": "2026-10-22T21:59:56.872Z",
-      "task": "shorts",
-      "matchId": "flamengo-vs-estudiantes-de-la-plata-2026-10-22",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6900,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 102482
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 8: falta el sustantivo asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7021,
-            "outputTokens": 5486
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 25686
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 8 cifras, máximo 3; guion 1: 52 palabras, mínimo 55; guion 1: el gancho no lleva cifras; guion 2: falta CR Flamengo; guion 2: falta Estudiantes de La Plata; guion 2: 40 palabras, mínimo 55; guion 2: el gancho no lleva cifras; guion 3: falta CR Flamengo",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7354,
-            "outputTokens": 1204
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10820
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 2: 51 palabras, mínimo 55; guion 3: falta el sustantivo asignado; guion 4: falta el sustantivo asignado; guion 7: falta el sustantivo asignado; guion 9: falta el sustantivo asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6893,
-            "outputTokens": 6624
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 145550
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6900,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 73356
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7021,
-        "outputTokens": 7324
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "f0ecf3ea-0eb7-4457-94e9-c1f6dad48be2"
-    },
-    {
-      "at": "2026-10-22T22:00:35.899Z",
-      "task": "image-prompts",
-      "matchId": "flamengo-vs-estudiantes-de-la-plata-2026-10-22",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1851,
-        "outputTokens": 6444
-      }
-    },
-    {
-      "at": "2026-10-22T22:01:03.313Z",
-      "task": "image-prompts",
-      "matchId": "ipswich-town-vs-nottingham-forest-2026-10-23",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1753,
-        "outputTokens": 6101
-      }
-    },
     {
       "at": "2026-10-22T22:01:39.585Z",
       "task": "image-prompts",
@@ -6396,6 +6182,111 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "1e2405a3-a431-47f8-95ef-5f334906c173"
+    },
+    {
+      "at": "2026-11-01T18:36:40.535Z",
+      "task": "shorts",
+      "matchId": "aek-athens-vs-real-madrid-2026-11-04",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 218937
+      },
+      "usage": {
+        "inputTokens": 5933,
+        "outputTokens": 32420
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "ff58a2c8-5ef9-49a6-99f1-f95cbbaa9d09"
+    },
+    {
+      "at": "2026-11-01T18:42:38.073Z",
+      "task": "shorts",
+      "matchId": "deportivo-de-a-coruna-vs-osasuna-2026-11-02",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 357531
+      },
+      "usage": {
+        "inputTokens": 5958,
+        "outputTokens": 24638
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "52f78619-0f64-4cf2-85e9-4e4801a91f16"
+    },
+    {
+      "at": "2026-11-01T18:50:19.828Z",
+      "task": "shorts",
+      "matchId": "newcastle-united-vs-everton-2026-11-02",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 461745
+      },
+      "usage": {
+        "inputTokens": 6406,
+        "outputTokens": 34743
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "42919820-1174-4c55-ab96-beca29a513d2"
+    },
+    {
+      "at": "2026-11-01T18:51:36.216Z",
+      "task": "image-prompts",
+      "matchId": "aek-athens-vs-real-madrid-2026-11-04",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1870,
+        "outputTokens": 4339
+      }
+    },
+    {
+      "at": "2026-11-01T18:52:24.451Z",
+      "task": "image-prompts",
+      "matchId": "deportivo-de-a-coruna-vs-osasuna-2026-11-02",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1470,
+        "outputTokens": 4475
+      }
+    },
+    {
+      "at": "2026-11-01T18:52:57.496Z",
+      "task": "image-prompts",
+      "matchId": "newcastle-united-vs-everton-2026-11-02",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1954,
+        "outputTokens": 2549
+      }
     }
   ]
 }
