@@ -36,5 +36,3 @@ test('advisory samples stay bounded regardless of scenes and include the closing
     assert.deepEqual(times, reviewTimes({ scenes: Array.from({ length: 100 }, () => ({ start: 0, end: 1 })) }, duration));
   }
 });
-
-
