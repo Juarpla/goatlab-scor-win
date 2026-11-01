@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { classifyLayout, layoutMessages, SAFE_BOTTOM } from '../fly/render/layout-check.mjs';
+import { classifyLayout, layoutMessages, SAFE_BOTTOM } from '../video-render/render/remotion/layout-check.mjs';
 
 const item = (frame, extra) => ({ frame, items: [{ text: 'Gol', x: 80, y: 200, w: 400, h: 80, fontSize: 64, clipped: false, visible: true, ...extra }] });
 

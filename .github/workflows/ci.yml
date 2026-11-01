@@ -8,20 +8,6 @@ on:
 permissions:
   contents: read
 jobs:
-  gateway:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - name: OpenClaw retention, startup and access
-        # Retention inspects /proc before touching SQLite. Give the tests their
-        # own PID namespace, like Fly, instead of inspecting protected runner
-        # services. Keep the tests unprivileged and the ownership guard enabled.
-        run: >-
-          docker run --rm --init --network none
-          --user "$(id -u):$(id -g)"
-          --volume "$PWD:/workspace:ro" --workdir /workspace
-          node:24-bookworm-slim
-          node --test tests/conversation-retention.test.js tests/gateway-runtime.test.js tests/ui-access.test.js tests/idle-safety.test.js
   test:
     runs-on: ubuntu-latest
     steps:
@@ -36,12 +22,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: dependencias de render (Remotion)
         run: npm ci --no-audit --no-fund
-        working-directory: fly/render
+        working-directory: video-render/render/remotion
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - run: python3 -m unittest discover -s tests/pipeline -v
-      - run: node scripts/sync-goatlab-skill.mjs --check
       - run: pnpm test
       - run: pnpm run lint:shorts
       - run: pnpm run lint:prompts

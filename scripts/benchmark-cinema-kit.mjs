@@ -2,8 +2,8 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, sep } from 'node:path';
-import { copyRenderInput, benchmarkSchedule } from '../fly/render/render-input.mjs';
-import { renderSilent } from '../fly/render/short-job.mjs';
+import { copyRenderInput, benchmarkSchedule } from '../video-render/engine/render-input.mjs';
+import { renderSilent } from '../video-render/engine/short-job.mjs';
 
 const flag = name => process.argv.find(arg => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 if (!flag('input') || !flag('output-dir')) throw new Error('requiere --input=<composición> y --output-dir=<comparaciones>');

@@ -62,7 +62,7 @@ se emitirán otras llaves.
 5. Con los secrets cargados en el entorno, crear explícitamente el registro:
 
    ```sh
-   node fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs bootstrap < .cache/agnes-seed.json
+   node scripts/agnes-state.mjs bootstrap < .cache/agnes-seed.json
    ```
 
    Usa `If-None-Match: *`. Si existe o la respuesta es incierta, detener el corte

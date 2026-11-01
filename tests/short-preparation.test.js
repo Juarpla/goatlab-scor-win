@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { composeShort, prepareShort } from '../fly/render/short-job.mjs';
+import { composeShort, prepareShort } from '../video-render/engine/short-job.mjs';
 
 test('Render requires a director plan and cannot replace it with an automatic montage', t => {
   const tmp = mkdtempSync(join(tmpdir(), 'goatlab-plan-'));

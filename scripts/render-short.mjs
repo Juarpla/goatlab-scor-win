@@ -1,8 +1,8 @@
 // Render local: media-pack + voz -> MP4 1080x1920 vía Remotion.
 // Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg --plan=plan.json [--script=guiones.json --script-n=N] [--variant=N] [--out=salida.mp4]
 // Mismo camino que el worker: tiempos por palabra (Mistral, whisper.cpp),
-// fotos reducidas, plan de OpenClaw y voz mezclada. Requiere Node 22, ffmpeg,
-// ffprobe y `npm install` en fly/render (Remotion + React).
+// fotos reducidas, plan local y voz mezclada. Requiere Node 22, ffmpeg,
+// ffprobe y `npm install` en video-render/render/remotion (Remotion + React).
 import { execFile } from 'node:child_process';
 import { mkdirSync, readFileSync, existsSync, rmSync, cpSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -10,9 +10,9 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H, FPS, MAX_SECONDS } from '../src/lib/short-format.js';
-import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../fly/render/short-job.mjs';
-import { transcribeWords } from '../fly/render/transcribe.mjs';
-import { alignReference } from '../fly/render/reference-timing.mjs';
+import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../video-render/engine/short-job.mjs';
+import { transcribeWords } from '../video-render/engine/transcribe.mjs';
+import { alignReference } from '../video-render/engine/reference-timing.mjs';
 
 const run = promisify(execFile);
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..');
@@ -66,7 +66,7 @@ if (args.script) {
   reference = script.narration;
 }
 
-const out = args.out ?? join(ROOT, 'public/shorts', `${match}-v${variant}.mp4`);
+const out = args.out ?? join(ROOT, 'video-render/videos', `${match}-v${variant}.mp4`);
 mkdirSync(dirname(out), { recursive: true });
 
 const tmp = join(tmpdir(), `goatlab-short-${match}-v${variant}`);

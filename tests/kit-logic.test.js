@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { phrases, wordAt, fitFontSize } from '../fly/render/kit/kit-logic.mjs';
+import { phrases, wordAt, fitFontSize } from '../video-render/render/remotion/kit/kit-logic.mjs';
 
 test('phrases split on pauses and word count, and wordAt stays on the edges', () => {
   const words = [
