@@ -100,7 +100,7 @@ test('Gateway and local generator calls fail before any remote operation', async
   }
 });
 test('consumer CLI entrypoints reject production before reading inputs or credentials', () => {
-  for (const script of ['scripts/generate-match-content.mjs', 'scripts/generate-youtube-scripts.mjs', 'scripts/generate-match-prompts.mjs', 'scripts/maintain-media.mjs']) {
+  for (const script of ['actions/2-scripting/generate-match-content.mjs', 'actions/2-scripting/generate-youtube-scripts.mjs', 'actions/2-scripting/generate-match-prompts.mjs', 'actions/1-update-data/maintain-media.mjs']) {
     const result = spawnSync(process.execPath, [resolve(script)], { cwd: tmpdir(), env: { ...process.env, MEDIA_ROLE: 'consumer' }, encoding: 'utf8' });
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /pertenece (?:exclusivamente )?a GitHub Actions/);

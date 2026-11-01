@@ -15,13 +15,13 @@
     "test": "node --test tests/*.test.js",
     "check:publication": "node scripts/check-site-publication.mjs",
     "lint:shorts": "node scripts/check-compliance.mjs",
-    "shorts": "node scripts/generate-youtube-scripts.mjs",
-    "content": "node scripts/generate-match-content.mjs",
+    "shorts": "node actions/2-scripting/generate-youtube-scripts.mjs",
+    "content": "node actions/2-scripting/generate-match-content.mjs",
     "lint:prompts": "node scripts/check-match-prompts.mjs",
     "media": "node actions/3-media-creation/generate-media-pack.mjs",
     "media:check": "node actions/3-media-creation/check-media-complete.mjs",
     "short": "node scripts/render-short.mjs",
-    "data:update": "node --env-file=.env scripts/update-data.mjs",
+    "data:update": "node --env-file=.env actions/1-update-data/update-data.mjs",
     "data:teams": "node --env-file=.env scripts/build-teams.mjs"
   },
   "dependencies": {

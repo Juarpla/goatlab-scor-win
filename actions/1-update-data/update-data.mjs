@@ -1,24 +1,24 @@
 import { writeFile, mkdir, readFile, readdir, rm, rename } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { observeFinishedMatches, buildPruneContext, resolvePruneMatch, pruneDue, pruneAnalysisEntries } from '../src/lib/pruning.js';
-import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, staysOnWall, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../src/lib/football.js';
+import { observeFinishedMatches, buildPruneContext, resolvePruneMatch, pruneDue, pruneAnalysisEntries } from '../../src/lib/pruning.js';
+import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, staysOnWall, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../../src/lib/football.js';
 import {
   enrichMatches, listEvents, mapPool, fetchEventStats, fetchEventDetail, fetchEventH2H, fetchEventLineup,
   fetchEventPlayerStats, fetchEventPrediction, fetchEventOdds, fetchEventBroadcasts, fetchEventSocial, fetchEventReferee, fetchTeamLast, collectTeamIds, resolveLeagues,
   fetchBzzoiroStandings, fetchLeaderboard, fetchTeamSquad, mapSquadScorers, sameTeam, isFriendlyEvent,
-} from '../src/lib/bzzoiro.js';
-import { locateMatch } from '../src/lib/venues.js';
-import { fetchKickoffWeather } from '../src/lib/weather.js';
-import { normalize, resolveCanonical, matchDay, canonicalClubKey, sameClub } from '../src/lib/teams.js';
-import { mapMarketProbs } from '../src/lib/odds.js';
-import { withFailover, extractJson, hasTransportFailure, hasTruncatedFailure, createProviderBreaker } from '../src/lib/llm.js';
-import { adoptAnalyses, findAnalysis, analysisIsFresh, buildAnalysisKey, buildMaterialKey, parseBatchAnalyses } from '../src/lib/analysis.js';
-import { mergeResolvedLeagues, providerLeagueId } from '../src/lib/leagues.js';
-import { toCompactInput } from '../src/lib/compact.js';
-import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../src/lib/predictions.js';
-import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability, marketsFromXg, withScorerFallback } from '../src/lib/probabilities.js';
-import { forecastStatsFull, forecastDominance } from '../src/lib/stats-forecast.js';
+} from '../../src/lib/bzzoiro.js';
+import { locateMatch } from '../../src/lib/venues.js';
+import { fetchKickoffWeather } from '../../src/lib/weather.js';
+import { normalize, resolveCanonical, matchDay, canonicalClubKey, sameClub } from '../../src/lib/teams.js';
+import { mapMarketProbs } from '../../src/lib/odds.js';
+import { withFailover, extractJson, hasTransportFailure, hasTruncatedFailure, createProviderBreaker } from '../../src/lib/llm.js';
+import { adoptAnalyses, findAnalysis, analysisIsFresh, buildAnalysisKey, buildMaterialKey, parseBatchAnalyses } from '../../src/lib/analysis.js';
+import { mergeResolvedLeagues, providerLeagueId } from '../../src/lib/leagues.js';
+import { toCompactInput } from '../../src/lib/compact.js';
+import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../../src/lib/predictions.js';
+import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability, marketsFromXg, withScorerFallback } from '../../src/lib/probabilities.js';
+import { forecastStatsFull, forecastDominance } from '../../src/lib/stats-forecast.js';
 
 const today = new Date().toISOString().slice(0, 10);
 /** Inicio de la ventana del muro: el día de Lima, que no cambia a las 19:00. */

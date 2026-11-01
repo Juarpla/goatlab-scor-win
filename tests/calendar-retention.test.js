@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getFixtures, staysOnWall } from '../src/lib/football.js';
-import { mergeCalendarWindow } from '../scripts/update-data.mjs';
+import { mergeCalendarWindow } from '../actions/1-update-data/update-data.mjs';
 
 const now = Date.parse('2026-10-10T12:42:05.979Z');
 const options = { date: '2026-10-10', now, logger: { warn() {} } };

@@ -5,8 +5,8 @@ import { pathToFileURL } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { randomUUID } from 'node:crypto';
-import { buildPruneContext, resolvePruneMatch, pruneDue } from '../lib/pruning.js';
-import { transact } from './agnes-state.mjs';
+import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
+import { transact } from '../../scripts/agnes-state.mjs';
 
 const run = promisify(execFile);
 const ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/;

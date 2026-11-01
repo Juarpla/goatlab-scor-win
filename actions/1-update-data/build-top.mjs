@@ -1,12 +1,12 @@
 /** Top editorial: próximos partidos de Barcelona y Madrid sin límite de días;
  *  el resto combina cercanía, atractivo del encuentro y repercusión. Lo escribe 1-update-data. Guiones, prompts y banco leen
- *  el mismo archivo. Uso: node scripts/build-top.mjs
+ *  el mismo archivo. Uso: node actions/1-update-data/build-top.mjs
  *  (respeta GOATLAB_REPO; conserva extra hasta final confirmado más gracia). */
 import { mkdir, readFile, writeFile, readdir, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { buildPruneContext, resolvePruneMatch, pruneDue } from '../src/lib/pruning.js';
-import { contentRanking } from '../src/lib/teams.js';
-import { TOP_FILENAME, TOP_VERSION, pruneExtra, providerOnlyId } from '../src/lib/top.js';
+import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
+import { contentRanking } from '../../src/lib/teams.js';
+import { TOP_FILENAME, TOP_VERSION, pruneExtra, providerOnlyId } from '../../src/lib/top.js';
 
 export async function buildTop({ repo = process.env.GOATLAB_REPO || '.', env = process.env, now = Date.now() } = {}) {
   const dataDir = `${repo}/public/data`;
