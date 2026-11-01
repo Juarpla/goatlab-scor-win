@@ -1,254 +1,6 @@
 {
-  "updatedAt": "2026-11-01T06:39:11.139Z",
+  "updatedAt": "2026-11-01T06:49:41.510Z",
   "runs": [
-    {
-      "at": "2026-10-22T05:16:13.269Z",
-      "task": "shorts",
-      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6459,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 72982
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6554,
-            "outputTokens": 5853
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 41121
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 10 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 4: 10 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 8 cifras, máximo 3; guion 5: el gancho no lleva cifras; guion 6: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6763,
-            "outputTokens": 1255
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13287
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6452,
-            "outputTokens": 4929
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 82806
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6459,
-            "outputTokens": 3648
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 98238
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: el gancho no lleva cifras; guion 3: 5 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6554,
-            "outputTokens": 5081
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 31701
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 10 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta OFI Crete; guion 2: 54 palabras, mínimo 55; guion 2: el gancho no lleva cifras; guion 3: falta OFI Crete; guion 3: falta el sustantivo asignado",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6763,
-            "outputTokens": 1228
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10351
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 500",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 40210
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6763,
-        "outputTokens": 1228
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-22T05:22:10.637Z",
-      "task": "shorts",
-      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6314,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 117126
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6433,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 68838
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 8 cifras, máximo 3; guion 1: falta el sustantivo asignado; guion 1: el gancho no lleva cifras; guion 2: falta Sunderland; guion 2: 54 palabras, mínimo 55; guion 3: falta Sunderland; guion 3: falta el pronóstico asignado; guion 4: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6599,
-            "outputTokens": 1099
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8495
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6314,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 78681
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6433,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 82843
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 1: el gancho no lleva cifras; guion 2: falta Sunderland; guion 2: 53 palabras, mínimo 55; guion 3: falta Sunderland; guion 4: 8 cifras, máximo 3; guion 4: falta el llamada asignado; guion 4: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6599,
-            "outputTokens": 1070
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15842
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6599,
-        "outputTokens": 1070
-      },
-      "truncated": true,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-22T05:22:49.164Z",
-      "task": "image-prompts",
-      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1448,
-        "outputTokens": 5653
-      }
-    },
     {
       "at": "2026-10-22T05:23:19.886Z",
       "task": "image-prompts",
@@ -6761,6 +6513,75 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "f0aba320-459d-4771-84b8-9ca6472fd95a"
+    },
+    {
+      "at": "2026-11-01T06:44:21.177Z",
+      "task": "shorts",
+      "matchId": "barcelona-vs-aston-villa-2026-11-03",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 241590
+      },
+      "usage": {
+        "inputTokens": 6038,
+        "outputTokens": 26117
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "8245af1d-ed9a-4b43-9110-e4d1d84600e4"
+    },
+    {
+      "at": "2026-11-01T06:49:01.320Z",
+      "task": "shorts",
+      "matchId": "getafe-vs-sevilla-2026-11-01",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 280136
+      },
+      "usage": {
+        "inputTokens": 6407,
+        "outputTokens": 30153
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "676ca42a-339c-4056-b533-fc1b0831889a"
+    },
+    {
+      "at": "2026-11-01T06:49:41.510Z",
+      "task": "image-prompts",
+      "matchId": "barcelona-vs-aston-villa-2026-11-03",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "image-prompts 2: falta realismo y carácter referencial",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1669,
+            "outputTokens": 2507
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 27096
+        }
+      ],
+      "usage": {
+        "inputTokens": 1607,
+        "outputTokens": 1004
+      }
     }
   ]
 }
