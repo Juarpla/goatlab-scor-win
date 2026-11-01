@@ -44,8 +44,9 @@ node --env-file=.env scripts/render-short.mjs \
   --variant=1 --keep
 ```
 
-- `--script` y `--script-n` son opcionales; con ellos los subtítulos usan el
-  texto del guion y los tiempos de Mistral.
+- `--script` es opcional; con él los subtítulos usan el texto del guion y los
+  tiempos de Mistral. `--script-n` fija el guion; sin él se elige el de mayor
+  coincidencia contra todos los guiones del archivo.
 - Sin `--out`, el MP4 va a `video-render/videos/`.
 - `--keep` guarda `composition.json` junto al MP4.
 - La skill `video-render` contiene el flujo completo, la dirección creativa y la

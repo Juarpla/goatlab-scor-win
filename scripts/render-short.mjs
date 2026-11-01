@@ -12,7 +12,7 @@ import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H, FPS, MAX_SECONDS } from '../src/lib/short-format.js';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../video-render/engine/short-job.mjs';
 import { transcribeWords } from '../video-render/engine/transcribe.mjs';
-import { alignReference } from '../video-render/engine/reference-timing.mjs';
+import { alignReference, alignScripts } from '../video-render/engine/reference-timing.mjs';
 
 const run = promisify(execFile);
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..');
@@ -57,13 +57,17 @@ if (assets.some(asset => asset.source !== 'agnes')) fail('Solo se admiten recurs
 
 // El guion es opcional: si se pasa, corrige los nombres y cifras que Mistral
 // confunde, conservando sus tiempos por palabra.
-let reference = '';
+let reference = '', scriptCandidates = null;
 if (args.script) {
-  if (!args['script-n']) fail('falta --script-n=<n> con --script');
   const document = load(args.script);
-  const script = (document.scripts ?? []).find(item => item?.n === Number(args['script-n']));
-  if (!script?.narration) fail(`guion ${args['script-n']} no encontrado en ${args.script}`);
-  reference = script.narration;
+  if (args['script-n']) {
+    const script = (document.scripts ?? []).find(item => item?.n === Number(args['script-n']));
+    if (!script?.narration) fail(`guion ${args['script-n']} no encontrado en ${args.script}`);
+    reference = script.narration;
+  } else {
+    scriptCandidates = (document.scripts ?? []).filter(item => item?.narration);
+    if (!scriptCandidates.length) fail(`no hay guiones con narración en ${args.script}`);
+  }
 }
 
 const out = args.out ?? join(ROOT, 'video-render/videos', `${match}-v${variant}.mp4`);
@@ -87,8 +91,9 @@ async function scriptTimes({ tmp, voiceFile, voiceSeconds, log }) {
   ]);
   const { provider, words, errors } = await transcribeWords({ flac, wav, voiceSeconds, log });
   if (!words.length) throw new Error('No se pudo transcribir el audio.');
-  const aligned = alignReference(words, reference, voiceSeconds);
-  log(`guion: ${Math.round(aligned.score * 100)}% de coincidencia; ${aligned.words.length} palabras`);
+  const aligned = reference ? alignReference(words, reference, voiceSeconds) : alignScripts(words, scriptCandidates, voiceSeconds);
+  if (!aligned) throw new Error('No hay guiones para alinear.');
+  log(`guion: ${args['script-n'] ? '' : `script ${aligned.n}, `}${Math.round(aligned.score * 100)}% de coincidencia; ${aligned.words.length} palabras`);
   return { provider: `${provider}+guion`, words: aligned.score >= .5 ? aligned.words : words, heard: words, errors };
 }
 
@@ -104,7 +109,7 @@ try {
     away: media.away ?? '',
     matchLabel: media.match,
     log: (m) => console.log(`render: ${m}`),
-    transcriber: reference ? scriptTimes : undefined,
+    transcriber: (reference || scriptCandidates) ? scriptTimes : undefined,
   });
   lap(`preparado (tiempos ${provider}${errors.length ? `; ${errors.join(' | ')}` : ''})`);
   const silent = join(tmp, 'silent.mp4');

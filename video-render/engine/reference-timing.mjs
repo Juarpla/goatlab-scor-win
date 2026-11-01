@@ -107,3 +107,12 @@ export function alignReference(heard, reference, voiceSeconds) {
   });
   return { words, score: matches / n };
 }
+
+/** Elige el guion que mejor se alinea con lo escuchado; null si no hay candidatos. */
+export function alignScripts(heard, scripts, voiceSeconds) {
+  const rows = (scripts ?? [])
+    .filter(script => Number.isInteger(script?.n) && typeof script.narration === 'string' && script.narration.trim())
+    .map(script => ({ n: script.n, ...alignReference(heard, script.narration, voiceSeconds) }));
+  rows.sort((a, b) => b.score - a.score || a.n - b.n);
+  return rows[0] ?? null;
+}

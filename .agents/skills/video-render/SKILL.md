@@ -62,8 +62,10 @@ Nunca edites tiempos a mano. Corrige el texto de referencia.
 
 ### Corrección razonada de la referencia
 
-Pasa `--script` y `--script-n` siempre que el audio tenga guion y lee la línea
-`guion:`.
+Pasa `--script` siempre que el audio tenga guion. Si conoces el número, añade
+`--script-n`; si no, omítelo y el CLI alinea la transcripción contra todos los
+guiones y elige el de mayor coincidencia. Lee siempre la línea `guion:`, que
+indica el número elegido y el porcentaje.
 
 - **Score ≥ 50%**: la alineación es fiable. No reescribas la narración para
   "mejorarla"; corrige solo un error factual concreto que se vería en pantalla
@@ -280,8 +282,9 @@ node --env-file=.env scripts/render-short.mjs \
 - `RENDER_WORKERS=4` usa cuatro núcleos; súbelo o bájalo según la máquina.
 - `LAYOUT_CHECK=advisory` avisa de texto fuera de la zona segura sin bloquear.
 - `RENDER_CRF=23` mantiene la mayoría de archivos por debajo de 45 MB.
-- `--script` y `--script-n` son opcionales: con ellos los subtítulos usan el texto
-  del guion y los tiempos de Mistral; sin ellos se usa la transcripción cruda.
+- `--script` es opcional: con él los subtítulos usan el texto del guion y los
+  tiempos de Mistral. `--script-n` fija el guion; sin él se elige el de mayor
+  coincidencia. Sin `--script` se usa la transcripción cruda.
 - `--keep` guarda `composition.json` junto al MP4.
 - Ejecuta con un timeout largo (30–60 min).
 - `--variant` nombra el directorio temporal `goatlab-short-<match>-v<variant>`.
