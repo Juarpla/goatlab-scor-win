@@ -86,7 +86,7 @@ Instalar las dependencias del render con
 
 ```sh
 node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo> \
-  --script=<guiones.json> --script-n=<n> --plan=<plan.json>
+  --script=<guiones.json> [--script-n=<n>] --plan=<plan.json>
 ```
 
 La transcripción usa Mistral y Whisper; con `--script` se alinea el guion para

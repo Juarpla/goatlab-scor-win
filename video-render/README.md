@@ -10,6 +10,7 @@ Fly.io: todo corre en esta máquina.
 video-render/
   engine/                 motor: preparación, transcripción, alineación, cachés
   render/remotion/        proyecto Remotion, kit, assets, bundle y render
+  ESTILO.md               preferencias y lecciones (versionado)
   videos/                 MP4 entregados (ignorado por git)
   trabajo/                planes, QA y referencias (ignorado por git)
 ```

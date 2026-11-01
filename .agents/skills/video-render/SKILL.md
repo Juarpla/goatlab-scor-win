@@ -385,6 +385,7 @@ Da identidad propia a cada render concurrente:
 
 ## Referencias
 
+- `video-render/ESTILO.md`: preferencias permanentes y lecciones de renders reales.
 - `references/creative.md`: contrato creativo, imports y kit.
 - `references/brand.md`: marca, colores, subtítulos y música.
 - `references/remotion.md`: guía de autoría Remotion, patrones y errores comunes.
