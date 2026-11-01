@@ -49,6 +49,8 @@ node --env-file=.env scripts/render-short.mjs \
   coincidencia contra todos los guiones del archivo.
 - Sin `--out`, el MP4 va a `video-render/videos/`.
 - `--keep` guarda `composition.json` junto al MP4.
+- Cada render añade una entrada a `manifest.json` en la carpeta de salida (partido,
+  audio, plan, guion elegido, score, duración, bytes y fecha).
 - La skill `video-render` contiene el flujo completo, la dirección creativa y la
   guía de autoría.
 

@@ -4,9 +4,9 @@
 // fotos reducidas, plan local y voz mezclada. Requiere Node 22, ffmpeg,
 // ffprobe y `npm install` en video-render/render/remotion (Remotion + React).
 import { execFile } from 'node:child_process';
-import { mkdirSync, readFileSync, existsSync, rmSync, cpSync, statSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, existsSync, rmSync, cpSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, dirname } from 'node:path';
+import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H, FPS, MAX_SECONDS } from '../src/lib/short-format.js';
@@ -57,7 +57,7 @@ if (assets.some(asset => asset.source !== 'agnes')) fail('Solo se admiten recurs
 
 // El guion es opcional: si se pasa, corrige los nombres y cifras que Mistral
 // confunde, conservando sus tiempos por palabra.
-let reference = '', scriptCandidates = null;
+let reference = '', scriptCandidates = null, alignment = null;
 if (args.script) {
   const document = load(args.script);
   if (args['script-n']) {
@@ -93,6 +93,7 @@ async function scriptTimes({ tmp, voiceFile, voiceSeconds, log }) {
   if (!words.length) throw new Error('No se pudo transcribir el audio.');
   const aligned = reference ? alignReference(words, reference, voiceSeconds) : alignScripts(words, scriptCandidates, voiceSeconds);
   if (!aligned) throw new Error('No hay guiones para alinear.');
+  alignment = { script: aligned.n ?? Number(args['script-n']), score: aligned.score };
   log(`guion: ${args['script-n'] ? '' : `script ${aligned.n}, `}${Math.round(aligned.score * 100)}% de coincidencia; ${aligned.words.length} palabras`);
   return { provider: `${provider}+guion`, words: aligned.score >= .5 ? aligned.words : words, heard: words, errors };
 }
@@ -118,6 +119,13 @@ try {
   const finalOut = join(tmp, 'with-audio.mp4');
   await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut, music: load(args.plan).version === 5 ? load(args.plan).music === true : true });
   cpSync(finalOut, out);
+  const manifestPath = join(dirname(out), 'manifest.json');
+  let manifest = {};
+  try { manifest = JSON.parse(readFileSync(manifestPath, 'utf8')); } catch {}
+  manifest[basename(out)] = { match, audio, plan: args.plan ?? null, script: args.script ?? null,
+    scriptN: alignment?.script ?? null, score: alignment?.score ?? null, variant,
+    duration: Number(total.toFixed(3)), bytes: statSync(out).size, at: new Date().toISOString() };
+  writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
   if (args.keep) cpSync(join(tmp, 'composition.json'), out.replace(/\.mp4$/, '.json'));
 } catch (e) {
   fail(e.message);

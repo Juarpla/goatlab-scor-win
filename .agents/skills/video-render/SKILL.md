@@ -286,6 +286,7 @@ node --env-file=.env scripts/render-short.mjs \
   tiempos de Mistral. `--script-n` fija el guion; sin él se elige el de mayor
   coincidencia. Sin `--script` se usa la transcripción cruda.
 - `--keep` guarda `composition.json` junto al MP4.
+- Cada render añade una entrada a `manifest.json` en la carpeta de salida.
 - Ejecuta con un timeout largo (30–60 min).
 - `--variant` nombra el directorio temporal `goatlab-short-<match>-v<variant>`.
   Nunca reutilices una variante mientras otro render corre.
