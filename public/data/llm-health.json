@@ -1,127 +1,6 @@
 {
-  "updatedAt": "2026-11-01T06:49:41.510Z",
+  "updatedAt": "2026-11-01T13:22:20.564Z",
   "runs": [
-    {
-      "at": "2026-10-22T05:23:19.886Z",
-      "task": "image-prompts",
-      "matchId": "juventus-vs-stade-rennais-2026-10-22",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1480,
-        "outputTokens": 6080
-      }
-    },
-    {
-      "at": "2026-10-22T05:23:49.051Z",
-      "task": "video-prompts",
-      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Se requieren 2 prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1345,
-            "outputTokens": 363
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 20040
-        }
-      ],
-      "usage": {
-        "inputTokens": 1401,
-        "outputTokens": 963
-      }
-    },
-    {
-      "at": "2026-10-22T05:23:58.291Z",
-      "task": "video-prompts",
-      "matchId": "juventus-vs-stade-rennais-2026-10-22",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1377,
-        "outputTokens": 1539
-      }
-    },
-    {
-      "at": "2026-10-22T05:26:23.719Z",
-      "task": "motion-prompts",
-      "matchId": "lech-poznan-vs-sunderland-2026-10-22",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2087,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 78948
-        }
-      ],
-      "usage": {
-        "inputTokens": 2164,
-        "outputTokens": 11098
-      }
-    },
-    {
-      "at": "2026-10-22T05:27:31.085Z",
-      "task": "motion-prompts",
-      "matchId": "juventus-vs-stade-rennais-2026-10-22",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2125,
-        "outputTokens": 11518
-      }
-    },
-    {
-      "at": "2026-10-22T11:42:11.251Z",
-      "matchId": "fd-576425",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1386,
-        "outputTokens": 7416
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "1d0f3350-21e1-45aa-b587-070d1383418e"
-    },
     {
       "at": "2026-10-22T11:58:35.357Z",
       "task": "shorts",
@@ -6582,6 +6461,111 @@
         "inputTokens": 1607,
         "outputTokens": 1004
       }
+    },
+    {
+      "at": "2026-11-01T13:16:37.366Z",
+      "matchId": "fd-564733",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1865,
+        "outputTokens": 22996
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "8d9616d1-8bfe-4516-9d68-30eab5b72f97"
+    },
+    {
+      "at": "2026-11-01T13:16:37.366Z",
+      "matchId": "fd-564734",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "8d9616d1-8bfe-4516-9d68-30eab5b72f97"
+    },
+    {
+      "at": "2026-11-01T13:18:15.830Z",
+      "matchId": "fd-560631",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2000,
+        "outputTokens": 14339
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "1d6323e0-42ad-40e8-8642-2b33d242c4e5"
+    },
+    {
+      "at": "2026-11-01T13:18:15.830Z",
+      "matchId": "fd-564728",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "1d6323e0-42ad-40e8-8642-2b33d242c4e5"
+    },
+    {
+      "at": "2026-11-01T13:22:06.447Z",
+      "matchId": "fd-564729",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 2100,
+        "outputTokens": 21779
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "70614e45-711a-4030-8465-f5a308a5d048"
+    },
+    {
+      "at": "2026-11-01T13:22:06.447Z",
+      "matchId": "fd-560622",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "70614e45-711a-4030-8465-f5a308a5d048"
     }
   ]
 }

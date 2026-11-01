@@ -4,7 +4,7 @@
   "away": "Sevilla FC",
   "competition": "laliga",
   "kickoff": "2026-11-01T13:00:00Z",
-  "updatedAt": "2026-11-01T06:21:26.614Z",
+  "updatedAt": "2026-11-01T13:12:24.042Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.457
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.245,
-      "away": 1.279
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,22 +47,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-31T12:12:19.731Z",
+      "updatedAt": "2026-11-01T13:11:45.893Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-01T13:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-01T13:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-31T12:12:19.731Z",
+      "updatedAt": "2026-11-01T13:11:45.893Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 332
+      "rows": 344
     },
     "venue": {
       "city": "Getafe",
@@ -132,18 +129,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.52,
-    "noGoal": 0.08,
+    "lambdaTotal": 2.63,
+    "noGoal": 0.072,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.343
+        "p": 0.355
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.225
+        "p": 0.229
       },
       {
         "from": 30,
@@ -153,21 +150,21 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.097
+        "p": 0.095
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.064
+        "p": 0.062
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.042
+        "p": 0.04
       }
     ],
-    "firstHome": 0.454,
-    "firstAway": 0.466
+    "firstHome": 0.413,
+    "firstAway": 0.515
   },
   "scorers": {
     "home": [
@@ -176,9 +173,9 @@
         "goals": 2,
         "matches": 10,
         "share": 0.4,
-        "rate": 0.5,
-        "anytime": 0.392,
-        "first": 0.198
+        "rate": 0.47,
+        "anytime": 0.374,
+        "first": 0.178
       }
     ],
     "away": [
@@ -187,192 +184,59 @@
         "goals": 3,
         "matches": 9,
         "share": 0.188,
-        "rate": 0.24,
-        "anytime": 0.214,
-        "first": 0.095
+        "rate": 0.27,
+        "anytime": 0.24,
+        "first": 0.104
       },
       {
         "player": "Félix Correia",
         "goals": 2,
         "matches": 7,
         "share": 0.125,
-        "rate": 0.16,
-        "anytime": 0.148,
-        "first": 0.063
+        "rate": 0.18,
+        "anytime": 0.167,
+        "first": 0.069
       },
       {
         "player": "Miguel Sierra",
         "goals": 2,
         "matches": 8,
         "share": 0.125,
-        "rate": 0.16,
-        "anytime": 0.148,
-        "first": 0.063
+        "rate": 0.18,
+        "anytime": 0.167,
+        "first": 0.069
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.298,
-      "draw": 0.319,
-      "away": 0.38299999999999995,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.32,
-      "away": 1.1
-    },
-    "over15": 0.619,
-    "over25": 0.36200000000000004,
-    "over35": 0.18100000000000002,
-    "btts": 0.44299999999999995,
-    "score": "1-1",
-    "cornersOver95": 0.435,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.383,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.383,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T06:21:22.589Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.404,
-      "draw": 0.299,
-      "away": 0.297
-    },
-    "doubleChance": {
-      "12": 0.701,
-      "1X": 0.703,
-      "X2": 0.596
-    },
-    "dnb": {
-      "home": 0.576,
-      "away": 0.424
-    },
-    "totals": {
-      "over15": 0.709,
-      "under15": 0.291,
-      "over25": 0.436,
-      "under25": 0.564,
-      "over35": 0.225,
-      "under35": 0.775
-    },
-    "btts": {
-      "yes": 0.502,
-      "no": 0.498
-    },
-    "cleanSheet": {
-      "home": 0.333,
-      "away": 0.267
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.13,
-        "share": 0.25691699604743085
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.104,
-        "share": 0.20553359683794464
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.102,
-        "share": 0.20158102766798416
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.085,
-        "share": 0.16798418972332016
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.085,
-        "share": 0.16798418972332016
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 45,
-    "homeWins": 16,
-    "draws": 7,
-    "awayWins": 22,
-    "avgTotalGoals": 2.2888888888888888,
-    "recent": [
-      {
-        "eventId": 936,
-        "date": "2026-02-22T13:00:00+00:00",
-        "home": "Getafe",
-        "away": "Sevilla",
-        "homeTeamId": 50,
-        "awayTeamId": 52,
-        "homeScore": 0,
-        "awayScore": 1
-      },
-      {
-        "eventId": 709,
-        "date": "2025-08-25T19:30:00+00:00",
-        "home": "Sevilla",
-        "away": "Getafe",
-        "homeTeamId": 52,
-        "awayTeamId": 50,
-        "homeScore": 1,
-        "awayScore": 2
-      },
-      {
-        "eventId": 305565,
-        "date": "2025-02-01T13:00:00+00:00",
-        "home": "Getafe",
-        "away": "Sevilla",
-        "homeTeamId": 50,
-        "awayTeamId": 52,
-        "homeScore": 0,
-        "awayScore": 0
-      },
-      {
-        "eventId": 305394,
-        "date": "2024-09-14T16:30:00+00:00",
-        "home": "Sevilla",
-        "away": "Getafe",
-        "homeTeamId": 52,
-        "awayTeamId": 50,
-        "homeScore": 1,
-        "awayScore": 0
-      },
-      {
-        "eventId": 311109,
-        "date": "2024-03-30T13:00:00+00:00",
-        "home": "Getafe",
-        "away": "Sevilla",
-        "homeTeamId": 50,
-        "awayTeamId": 52,
-        "homeScore": 0,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -388,7 +252,7 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 332
+      "historyRows": 344
     },
     "source": "GoatLab",
     "expectedTotal": 4.9
@@ -399,7 +263,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 332
+      "historyRows": 344
     },
     "source": "GoatLab",
     "expectedTotal": 9.3
@@ -409,23 +273,23 @@
     "home": {
       "shots": 13.37,
       "shotsOnTarget": 4.52,
-      "xg": 1.32,
+      "xg": 1.28,
       "corners": 4.7,
-      "fouls": 12.7,
-      "yellowCards": 2.55,
-      "redCards": 0.34,
-      "offsides": 1.62,
+      "fouls": 12.69,
+      "yellowCards": 2.54,
+      "redCards": 0.32,
+      "offsides": 1.63,
       "possession": 49.52
     },
     "away": {
       "shots": 14.24,
-      "shotsOnTarget": 4.95,
-      "xg": 1.1,
-      "corners": 4.61,
-      "fouls": 13.03,
-      "yellowCards": 2.39,
-      "redCards": 0.22,
-      "offsides": 1.86,
+      "shotsOnTarget": 4.94,
+      "xg": 1.33,
+      "corners": 4.6,
+      "fouls": 13.02,
+      "yellowCards": 2.38,
+      "redCards": 0.21,
+      "offsides": 1.88,
       "possession": 50.48
     },
     "sample": {
@@ -458,14 +322,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.69,
-      "shotsOnTarget": 4.8,
-      "xg": 1.46,
-      "corners": 4.88,
-      "fouls": 12.42,
-      "yellowCards": 2.3,
-      "redCards": 0.31,
-      "offsides": 1.99
+      "shots": 13.68,
+      "shotsOnTarget": 4.79,
+      "xg": 1.45,
+      "corners": 4.85,
+      "fouls": 12.38,
+      "yellowCards": 2.27,
+      "redCards": 0.28,
+      "offsides": 2.02
     },
     "sources": {
       "home": {
@@ -501,52 +365,52 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.445,
+      "home": 0.447,
       "draw": 0.133,
-      "away": 0.422
+      "away": 0.421
     },
     "cardsDuel": {
       "home": 0.436,
-      "draw": 0.184,
+      "draw": 0.185,
       "away": 0.38
     },
     "lastGoal": {
-      "home": 0.454,
-      "away": 0.466,
-      "noGoal": 0.08
+      "home": 0.413,
+      "away": 0.515,
+      "noGoal": 0.072
     },
     "cornerRace": {
       "3": {
-        "home": 0.509,
-        "away": 0.491
+        "home": 0.51,
+        "away": 0.49
       },
       "5": {
-        "home": 0.512,
-        "away": 0.488
+        "home": 0.513,
+        "away": 0.487
       },
       "7": {
-        "home": 0.514,
-        "away": 0.486
+        "home": 0.516,
+        "away": 0.484
       }
     },
     "cornerMargin": {
-      "home3plus": 0.211,
-      "home12": 0.234,
+      "home3plus": 0.212,
+      "home12": 0.235,
       "level": 0.133,
-      "away12": 0.228,
-      "away3plus": 0.194
+      "away12": 0.227,
+      "away3plus": 0.193
     },
     "source": "GoatLab"
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 21.3,
+      "temp": 19.2,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 4.9,
       "condition": null,
-      "sampledAt": "2026-11-01T13:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-01T13:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Coliseum",
@@ -628,9 +492,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Discrepancia notable entre el promedio de goles por partido de Sevilla (2.29 en 45 partidos) y su rendimiento reciente (1.5 en últimos 5). Esto podría indicar un ajuste defensivo temporal o subestimación histórica. Además, la lectura de CatBoost Bzzoiro sobre goles totales (1.32) es significativamen",
-    "provider": "MISTRAL",
-    "model": "ministral-8b-2512",
-    "generatedAt": "2026-11-01T06:27:07.321Z"
+    "note": "Se detecta un registro duplicado del Betis-Getafe 1-0 y varios parámetros Poisson y del bloque W sin etiqueta; solo se interpretan los porcentajes de local, empate y visitante, y no se describe el estado del partido en vivo.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-01T13:16:37.342Z"
   }
 }

@@ -4,7 +4,7 @@
   "away": "Real Sociedad de Fútbol",
   "competition": "laliga",
   "kickoff": "2026-11-01T20:00:00Z",
-  "updatedAt": "2026-11-01T06:21:26.614Z",
+  "updatedAt": "2026-11-01T13:12:24.042Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -23,7 +23,7 @@
     },
     "standings": {
       "Athletic Club": {
-        "position": 8,
+        "position": 7,
         "team": "Athletic Club",
         "played": 9,
         "won": 3,
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-31T12:12:19.731Z",
+      "updatedAt": "2026-11-01T13:11:45.893Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-10-31T12:12:19.731Z",
+      "updatedAt": "2026-11-01T13:11:45.893Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 332
+      "rows": 344
     },
     "venue": {
       "city": "Bilbao",
@@ -245,7 +245,7 @@
     "over15": 0.7709999999999999,
     "over25": 0.56,
     "over35": 0.33899999999999997,
-    "btts": 0.594,
+    "btts": 0.57,
     "score": "1-1",
     "cornersOver95": 0.508,
     "recommendations": {
@@ -256,7 +256,7 @@
     },
     "confidence": 0.445,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T06:21:23.363Z",
+    "capturedAt": "2026-11-01T13:12:06.418Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -406,7 +406,7 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 332
+      "historyRows": 344
     },
     "source": "GoatLab",
     "expectedTotal": 3.8
@@ -417,7 +417,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 332
+      "historyRows": 344
     },
     "source": "GoatLab",
     "expectedTotal": 10.1
@@ -428,22 +428,22 @@
       "shots": 14.85,
       "shotsOnTarget": 4.8,
       "xg": 1.66,
-      "corners": 5.25,
-      "fouls": 11.45,
-      "yellowCards": 1.97,
-      "redCards": 0.25,
-      "offsides": 1.55,
+      "corners": 5.24,
+      "fouls": 11.44,
+      "yellowCards": 1.96,
+      "redCards": 0.24,
+      "offsides": 1.56,
       "possession": 51.05
     },
     "away": {
       "shots": 12.81,
-      "shotsOnTarget": 4.44,
+      "shotsOnTarget": 4.43,
       "xg": 1.21,
-      "corners": 4.82,
-      "fouls": 11.95,
-      "yellowCards": 1.84,
-      "redCards": 0.31,
-      "offsides": 2.08,
+      "corners": 4.81,
+      "fouls": 11.94,
+      "yellowCards": 1.83,
+      "redCards": 0.29,
+      "offsides": 2.09,
       "possession": 48.95
     },
     "sample": {
@@ -477,13 +477,13 @@
     "league": {
       "possession": 50,
       "shots": 13.62,
-      "shotsOnTarget": 4.76,
-      "xg": 1.47,
-      "corners": 4.84,
-      "fouls": 12.3,
-      "yellowCards": 2.25,
-      "redCards": 0.33,
-      "offsides": 1.97
+      "shotsOnTarget": 4.75,
+      "xg": 1.46,
+      "corners": 4.82,
+      "fouls": 12.27,
+      "yellowCards": 2.22,
+      "redCards": 0.3,
+      "offsides": 2
     },
     "sources": {
       "home": {
@@ -524,8 +524,8 @@
       "away": 0.384
     },
     "cardsDuel": {
-      "home": 0.42,
-      "draw": 0.212,
+      "home": 0.419,
+      "draw": 0.213,
       "away": 0.368
     },
     "lastGoal": {
@@ -539,12 +539,12 @@
         "away": 0.46
       },
       "5": {
-        "home": 0.552,
-        "away": 0.448
+        "home": 0.553,
+        "away": 0.447
       },
       "7": {
-        "home": 0.562,
-        "away": 0.438
+        "home": 0.563,
+        "away": 0.437
       }
     },
     "cornerMargin": {
@@ -602,7 +602,7 @@
         "sample": 5
       },
       "season": {
-        "position": 8,
+        "position": 7,
         "played": 9,
         "gf": 12,
         "ga": 9,
@@ -646,9 +646,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "P y B no convergen: P da 50.0% al visitante y B 46.1% al local. El 0.515 junto a 1-1 excede el 26.0% de empate si se lee como probabilidad de marcador. B2 solo declara local 46.1%; goles y ambos anotan consignan no.",
+    "note": "Poisson otorga 50.0% al visitante y CatBoost 44.5% al local: divergencia clara en el signo. B2 replica el 44.5% local. La serie reciente, con tres victorias de Real Sociedad en cinco, no respalda ese peso local de CatBoost.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-10-26T13:01:59.657Z"
+    "generatedAt": "2026-11-01T13:22:06.423Z"
   }
 }

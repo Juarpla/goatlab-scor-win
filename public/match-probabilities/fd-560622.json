@@ -4,7 +4,7 @@
   "away": "Everton FC",
   "competition": "premier",
   "kickoff": "2026-11-02T20:00:00Z",
-  "updatedAt": "2026-11-01T06:21:26.614Z",
+  "updatedAt": "2026-11-01T13:12:24.042Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -14,7 +14,7 @@
     "lambdaSource": "Poisson",
     "lambdasBlend": {
       "home": 1.5,
-      "away": 1.252
+      "away": 1.247
     },
     "firstGoalSource": "Blend Poisson+xG",
     "sample": {
@@ -23,7 +23,7 @@
     },
     "standings": {
       "Newcastle United FC": {
-        "position": 8,
+        "position": 12,
         "team": "Newcastle United FC",
         "played": 8,
         "won": 3,
@@ -36,7 +36,7 @@
         "form": null
       },
       "Everton FC": {
-        "position": 11,
+        "position": 14,
         "team": "Everton FC",
         "played": 8,
         "won": 2,
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-10-31T12:12:32.306Z",
+      "updatedAt": "2026-11-01T13:11:58.260Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-10-31T12:12:32.306Z",
+      "updatedAt": "2026-11-01T13:11:58.260Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 332
+      "rows": 344
     },
     "venue": {
       "city": "Newcastle upon Tyne",
@@ -138,12 +138,12 @@
       {
         "from": 0,
         "to": 15,
-        "p": 0.368
+        "p": 0.367
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.233
+        "p": 0.232
       },
       {
         "from": 30,
@@ -166,8 +166,8 @@
         "p": 0.037
       }
     ],
-    "firstHome": 0.51,
-    "firstAway": 0.426
+    "firstHome": 0.511,
+    "firstAway": 0.425
   },
   "scorers": {
     "home": [
@@ -206,8 +206,8 @@
         "matches": 8,
         "share": 0.375,
         "rate": 0.47,
-        "anytime": 0.375,
-        "first": 0.171
+        "anytime": 0.374,
+        "first": 0.17
       },
       {
         "player": "Kiernan Dewsbury-Hall",
@@ -215,17 +215,8 @@
         "matches": 8,
         "share": 0.25,
         "rate": 0.31,
-        "anytime": 0.269,
-        "first": 0.114
-      },
-      {
-        "player": "Ainsley Maitland-Niles",
-        "goals": 1,
-        "matches": 6,
-        "share": 0.125,
-        "rate": 0.16,
-        "anytime": 0.145,
-        "first": 0.057
+        "anytime": 0.268,
+        "first": 0.113
       }
     ]
   },
@@ -233,95 +224,95 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.409,
-      "draw": 0.265,
-      "away": 0.326,
+      "home": 0.40399999999999997,
+      "draw": 0.267,
+      "away": 0.32899999999999996,
       "predicted": "H"
     },
     "xg": {
       "home": 1.56,
-      "away": 1.2
+      "away": 1.19
     },
     "over15": 0.7759999999999999,
-    "over25": 0.556,
-    "over35": 0.331,
-    "btts": 0.594,
+    "over25": 0.555,
+    "over35": 0.33,
+    "btts": 0.596,
     "score": "1-1",
-    "cornersOver95": 0.5579999999999999,
+    "cornersOver95": 0.564,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.409,
+      "favoriteProb": 0.404,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4092,
+    "confidence": 0.4041,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-10-31T12:12:43.637Z",
+    "capturedAt": "2026-11-01T13:12:07.375Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.445,
+      "home": 0.447,
       "draw": 0.274,
-      "away": 0.281
+      "away": 0.279
     },
     "doubleChance": {
       "12": 0.726,
-      "1X": 0.719,
-      "X2": 0.555
+      "1X": 0.721,
+      "X2": 0.553
     },
     "dnb": {
-      "home": 0.613,
-      "away": 0.387
+      "home": 0.616,
+      "away": 0.384
     },
     "totals": {
-      "over15": 0.774,
-      "under15": 0.226,
-      "over25": 0.521,
-      "under25": 0.479,
-      "over35": 0.299,
-      "under35": 0.701
+      "over15": 0.772,
+      "under15": 0.228,
+      "over25": 0.519,
+      "under25": 0.481,
+      "over35": 0.297,
+      "under35": 0.703
     },
     "btts": {
-      "yes": 0.564,
-      "no": 0.436
+      "yes": 0.561,
+      "no": 0.439
     },
     "cleanSheet": {
-      "home": 0.301,
+      "home": 0.304,
       "away": 0.21
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.115,
-        "share": 0.25784753363228696
+        "p": 0.116,
+        "share": 0.2572062084257206
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.092,
-        "share": 0.20627802690582955
+        "p": 0.093,
+        "share": 0.2062084257206208
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.087,
-        "share": 0.19506726457399098
+        "p": 0.088,
+        "share": 0.19512195121951215
       },
       {
         "home": 2,
         "away": 0,
-        "p": 0.077,
-        "share": 0.17264573991031387
+        "p": 0.078,
+        "share": 0.17294900221729487
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.075,
-        "share": 0.16816143497757843
+        "p": 0.076,
+        "share": 0.16851441241685142
       }
     ],
     "providerPick": {
@@ -406,7 +397,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 332
+      "historyRows": 344
     },
     "source": "GoatLab",
     "expectedTotal": 4.6
@@ -417,32 +408,32 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 332
+      "historyRows": 344
     },
     "source": "GoatLab",
-    "expectedTotal": 10.4
+    "expectedTotal": 10.5
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
       "shots": 14.59,
-      "shotsOnTarget": 4.45,
+      "shotsOnTarget": 4.43,
       "xg": 1.56,
-      "corners": 5.38,
-      "fouls": 11.96,
+      "corners": 5.41,
+      "fouls": 11.97,
       "yellowCards": 2.34,
-      "redCards": 0.2,
+      "redCards": 0.19,
       "offsides": 1.73,
       "possession": 51.44
     },
     "away": {
-      "shots": 14.43,
-      "shotsOnTarget": 4.7,
-      "xg": 1.2,
-      "corners": 5.01,
+      "shots": 14.44,
+      "shotsOnTarget": 4.68,
+      "xg": 1.19,
+      "corners": 5.04,
       "fouls": 10.86,
       "yellowCards": 2.24,
-      "redCards": 0.16,
+      "redCards": 0.15,
       "offsides": 1.79,
       "possession": 48.56
     },
@@ -476,13 +467,13 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.71,
-      "shotsOnTarget": 4.36,
+      "shots": 13.72,
+      "shotsOnTarget": 4.31,
       "xg": 1.41,
-      "corners": 4.75,
-      "fouls": 11.52,
+      "corners": 4.83,
+      "fouls": 11.54,
       "yellowCards": 2.07,
-      "redCards": 0.24,
+      "redCards": 0.23,
       "offsides": 1.92
     },
     "sources": {
@@ -520,7 +511,7 @@
     "method": "dominance-v1",
     "cornersDuel": {
       "home": 0.483,
-      "draw": 0.125,
+      "draw": 0.124,
       "away": 0.393
     },
     "cardsDuel": {
@@ -529,8 +520,8 @@
       "away": 0.386
     },
     "lastGoal": {
-      "home": 0.51,
-      "away": 0.426,
+      "home": 0.511,
+      "away": 0.425,
       "noGoal": 0.064
     },
     "cornerRace": {
@@ -539,8 +530,8 @@
         "away": 0.467
       },
       "5": {
-        "home": 0.544,
-        "away": 0.456
+        "home": 0.543,
+        "away": 0.457
       },
       "7": {
         "home": 0.552,
@@ -548,9 +539,9 @@
       }
     },
     "cornerMargin": {
-      "home3plus": 0.251,
-      "home12": 0.232,
-      "level": 0.125,
+      "home3plus": 0.252,
+      "home12": 0.231,
+      "level": 0.124,
       "away12": 0.209,
       "away3plus": 0.184
     },
@@ -602,7 +593,7 @@
         "sample": 5
       },
       "season": {
-        "position": 8,
+        "position": 12,
         "played": 8,
         "gf": 12,
         "ga": 14,
@@ -631,7 +622,7 @@
         "sample": 5
       },
       "season": {
-        "position": 11,
+        "position": 14,
         "played": 8,
         "gf": 8,
         "ga": 9,
@@ -644,5 +635,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Poisson y CatBoost alinean 39.2% y 40.4% local, pero Everton ganó 4 de los últimos 5 cruces; ese peso histórico no aparece en el resultado. Sin A ni M2 para contrastar.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-01T13:22:06.436Z"
+  }
 }
