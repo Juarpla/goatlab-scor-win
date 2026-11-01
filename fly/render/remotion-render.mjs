@@ -112,7 +112,7 @@ export async function renderRemotion(tmp, out, { workers = 1, onProgress = () =>
       }
       const captureAt = Date.now();
       const result = await renderMedia({ serveUrl, composition, inputProps, puppeteerInstance: browser,
-        codec: 'h264', pixelFormat: 'yuv420p', crf: 20, x264Preset: 'veryfast', disallowParallelEncoding: false,
+        codec: 'h264', pixelFormat: 'yuv420p', crf: Number(process.env.RENDER_CRF || 20), x264Preset: 'veryfast', disallowParallelEncoding: false,
         ffmpegOverride: ({ args }) => ['-threads', threads, ...args.slice(0, -1), '-threads', threads, args.at(-1)],
         outputLocation: out, concurrency, muted: true,
         onStart: start => recordRenderStart(metrics, start),

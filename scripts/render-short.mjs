@@ -1,5 +1,5 @@
 // Render local: media-pack + voz -> MP4 1080x1920 vía Remotion.
-// Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg --plan=plan.json [--variant=N] [--out=salida.mp4]
+// Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg --plan=plan.json [--script=guiones.json --script-n=N] [--variant=N] [--out=salida.mp4]
 // Mismo camino que el worker: tiempos por palabra (Mistral, whisper.cpp),
 // fotos reducidas, plan de OpenClaw y voz mezclada. Requiere Node 22, ffmpeg,
 // ffprobe y `npm install` en fly/render (Remotion + React).
@@ -11,6 +11,8 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { FRAME_W, FRAME_H, FPS, MAX_SECONDS } from '../src/lib/short-format.js';
 import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../fly/render/short-job.mjs';
+import { transcribeWords } from '../fly/render/transcribe.mjs';
+import { alignReference } from '../fly/render/reference-timing.mjs';
 
 const run = promisify(execFile);
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..');
@@ -53,6 +55,17 @@ const media = load(join(ROOT, 'public/data/media-pack', `${match}.json`));
 const assets = Array.isArray(media.assets) ? media.assets : [];
 if (assets.some(asset => asset.source !== 'agnes')) fail('Solo se admiten recursos Agnes');
 
+// El guion es opcional: si se pasa, corrige los nombres y cifras que Mistral
+// confunde, conservando sus tiempos por palabra.
+let reference = '';
+if (args.script) {
+  if (!args['script-n']) fail('falta --script-n=<n> con --script');
+  const document = load(args.script);
+  const script = (document.scripts ?? []).find(item => item?.n === Number(args['script-n']));
+  if (!script?.narration) fail(`guion ${args['script-n']} no encontrado en ${args.script}`);
+  reference = script.narration;
+}
+
 const out = args.out ?? join(ROOT, 'public/shorts', `${match}-v${variant}.mp4`);
 mkdirSync(dirname(out), { recursive: true });
 
@@ -64,6 +77,21 @@ cpSync(audio, voiceFile);
 
 const started = Date.now();
 const lap = (label) => console.log(`render: ${label} ${((Date.now() - started) / 1000).toFixed(1)}s`);
+
+async function scriptTimes({ tmp, voiceFile, voiceSeconds, log }) {
+  const flac = join(tmp, 'voice16k.flac');
+  const wav = join(tmp, 'voice16k.wav');
+  await Promise.all([
+    run('ffmpeg', ['-y', '-loglevel', 'error', '-i', voiceFile, '-ac', '1', '-ar', '16000', flac]),
+    run('ffmpeg', ['-y', '-loglevel', 'error', '-i', voiceFile, '-ac', '1', '-ar', '16000', '-c:a', 'pcm_s16le', wav]),
+  ]);
+  const { provider, words, errors } = await transcribeWords({ flac, wav, voiceSeconds, log });
+  if (!words.length) throw new Error('No se pudo transcribir el audio.');
+  const aligned = alignReference(words, reference, voiceSeconds);
+  log(`guion: ${Math.round(aligned.score * 100)}% de coincidencia; ${aligned.words.length} palabras`);
+  return { provider: `${provider}+guion`, words: aligned.score >= .5 ? aligned.words : words, heard: words, errors };
+}
+
 try {
   const voiceSeconds = await mediaDuration(voiceFile);
   const { total, provider, errors, voiceFile: adjustedVoiceFile } = await prepareShort({
@@ -76,6 +104,7 @@ try {
     away: media.away ?? '',
     matchLabel: media.match,
     log: (m) => console.log(`render: ${m}`),
+    transcriber: reference ? scriptTimes : undefined,
   });
   lap(`preparado (tiempos ${provider}${errors.length ? `; ${errors.join(' | ')}` : ''})`);
   const silent = join(tmp, 'silent.mp4');
