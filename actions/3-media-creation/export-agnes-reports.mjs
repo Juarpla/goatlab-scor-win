@@ -1,8 +1,8 @@
 import { readFile, mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { mergeQuotaReports, mergeHourlyReports } from '../src/lib/agnes-reports.js';
-import { recordOperations } from './record-r2-operations.mjs';
+import { mergeQuotaReports, mergeHourlyReports } from '../../src/lib/agnes-reports.js';
+import { recordOperations } from '../../scripts/record-r2-operations.mjs';
 
 const read = async file => { try { return JSON.parse(await readFile(file, 'utf8')); } catch { return {}; } };
 async function atomic(file, value) {
@@ -26,7 +26,7 @@ export async function exportAgnesReports({ report, repo = '.', now = Date.now() 
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try {
-    const { transact } = await import('../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs');
+    const { transact } = await import('../../scripts/agnes-state.mjs');
     const report = await transact('report', {});
     await recordOperations(report.operations);
     await exportAgnesReports({ report, repo: process.env.GOATLAB_REPO || '.' });

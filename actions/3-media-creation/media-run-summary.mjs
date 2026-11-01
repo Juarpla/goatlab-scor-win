@@ -1,6 +1,6 @@
-import { mediaPolicy } from '../src/lib/media-policy.js';
+import { mediaPolicy } from '../../src/lib/media-policy.js';
 import { readFile, mkdir, writeFile, appendFile } from 'node:fs/promises';
-import { safeMediaMessage, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../src/lib/media-diagnostics.js';
+import { safeMediaMessage, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../../src/lib/media-diagnostics.js';
 let report;
 try { report=JSON.parse(await readFile('.cache/media-run.json','utf8')); }
 catch { report={mode:process.env.AGNES_SKIP_VIDEO==='1'?'images-only':process.env.AGNES_SKIP_IMAGES==='1'?'clips-only':'all',results:[],pending:1,error:'No se completó la generación. Revisar mantenimiento, comprobación y preflight en esta ejecución.'}; }

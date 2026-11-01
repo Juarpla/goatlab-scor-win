@@ -69,7 +69,7 @@ test('--match conserves terminal media without final evidence or confirmed remot
   await writeFile(join(out, 'c-d.ready'), '{}');
   await writeFile(join(out, 'gen', 'c-d', '0.jpg'), 'foto vieja');
   await writeFile(join(out, 'gen', 'c-d', 'clip-0.mp4'), 'clip viejo');
-  const entry = resolve('fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs');
+  const entry = resolve('actions/3-media-creation/generate-media-pack.mjs');
   await assert.rejects(run(process.execPath, [entry, '--match=a-b'], {
     env: { ...process.env, MEDIA_ROLE: 'producer', GITHUB_ACTIONS: 'true', GOATLAB_REPO: root, MEDIA_PACK_DIR: out, AGNES_API_KEY: '' },
   }), /faltan recursos solicitados/);

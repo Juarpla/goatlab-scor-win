@@ -1,7 +1,7 @@
 import { pathToFileURL } from 'node:url';
-import { signR2 } from '../lib/r2-signed.js';
-import { resolveStateConfig } from '../lib/r2-state-config.js';
-import { AGNES_STATE_MAX_BYTES, validateAgnesState, reduceAgnesState } from '../lib/agnes-state.js';
+import { signR2 } from '../src/lib/r2-signed.js';
+import { resolveStateConfig } from '../src/lib/r2-state-config.js';
+import { AGNES_STATE_MAX_BYTES, validateAgnesState, reduceAgnesState } from '../src/lib/agnes-state.js';
 
 export class AgnesStateClient {
   constructor({env=process.env,fetchImpl=fetch,timeoutMs=15_000}={}) {

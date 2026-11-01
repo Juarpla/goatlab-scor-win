@@ -4,7 +4,7 @@ import { promisify } from 'node:util';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { mergeQuotaReports, mergeHourlyReports } from '../src/lib/agnes-reports.js';
+import { mergeQuotaReports, mergeHourlyReports } from '../../src/lib/agnes-reports.js';
 const execute = promisify(execFile);
 const ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/;
 const read = async path => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };

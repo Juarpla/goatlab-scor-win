@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-CONFIG = json.loads((Path(__file__).resolve().parent.parent / 'lib/montage-experiment.json').read_text())
+CONFIG = json.loads((Path(__file__).resolve().parents[2] / 'src/lib/montage-experiment.json').read_text())
 
 def clip_target(match_id):
     if CONFIG.get('mode') not in ('freedom', 'clips-first') or not (CONFIG.get('matches') is None or isinstance(CONFIG['matches'], list)):

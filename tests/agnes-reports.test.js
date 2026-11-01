@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mergeQuotaReports, mergeHourlyReports } from '../src/lib/agnes-reports.js';
-import { exportAgnesReports } from '../scripts/export-agnes-reports.mjs';
+import { exportAgnesReports } from '../actions/3-media-creation/export-agnes-reports.mjs';
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';

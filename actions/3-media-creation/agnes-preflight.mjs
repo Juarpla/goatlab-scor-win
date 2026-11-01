@@ -1,5 +1,5 @@
-import { transact } from '../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs';
-import { recordOperations } from './record-r2-operations.mjs';
+import { transact } from '../../scripts/agnes-state.mjs';
+import { recordOperations } from '../../scripts/record-r2-operations.mjs';
 try {
   const result = await transact('health', {});
   await recordOperations(result.operations);

@@ -2,7 +2,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { transact } from './agnes-state.mjs';
+import { transact } from '../../scripts/agnes-state.mjs';
 export async function reconcileVideoRecovery({ dir, env, transactImpl = transact, log = console.log }) {
   let folders=[];
   try { folders=await readdir(dir); } catch (error) { if(error.code!=='ENOENT') throw error; }

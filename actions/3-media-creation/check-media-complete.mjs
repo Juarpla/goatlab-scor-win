@@ -1,12 +1,12 @@
-import { readContentSelection } from '../src/lib/content-selection.js';
+import { readContentSelection } from '../../src/lib/content-selection.js';
 /** Read-only scheduler gate: public evidence only, with no provider or storage calls. */
 import { readFile, appendFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { contentMatches, topFreshness, defaultTopN } from '../src/lib/top.js';
-import { bankComplete, contentFingerprint } from '../src/lib/media-contract.js';
-import { contentIdentityErrors, scriptStructureErrors, validateContent } from '../src/lib/match-content.js';
+import { contentMatches, topFreshness, defaultTopN } from '../../src/lib/top.js';
+import { bankComplete, contentFingerprint } from '../../src/lib/media-contract.js';
+import { contentIdentityErrors, scriptStructureErrors, validateContent } from '../../src/lib/match-content.js';
 
 const safeId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
 const hash = value => createHash('sha256').update(value).digest('hex');

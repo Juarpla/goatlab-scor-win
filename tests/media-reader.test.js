@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { readMediaBank } from '../src/lib/media-reader.js';
-import { generateMediaBanks } from '../fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs';
+import { generateMediaBanks } from '../actions/3-media-creation/generate-media-pack.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fixture(t) {
   const dir = await mkdtemp(join(tmpdir(), 'goatlab-reader-')); t.after(() => rm(dir, { recursive: true, force: true }));

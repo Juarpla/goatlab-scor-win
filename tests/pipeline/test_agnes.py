@@ -8,7 +8,7 @@ import unittest
 import urllib.error
 from pathlib import Path
 from unittest.mock import patch
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'actions/3-media-creation'))
 from agnes import ImagePool, retry_seconds
 from fake_agnes_state import FakeAgnesState
 

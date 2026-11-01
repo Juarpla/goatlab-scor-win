@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { checkMediaComplete, mediaCheckOutput } from '../scripts/check-media-complete.mjs';
+import { checkMediaComplete, mediaCheckOutput } from '../actions/3-media-creation/check-media-complete.mjs';
 import { CONTENT_CATEGORIES, validateContent } from '../src/lib/match-content.js';
 import { contentFingerprint } from '../src/lib/media-contract.js';
 import { normalizeAgnesImage } from '../src/lib/agnes.js';
@@ -161,7 +161,7 @@ test('CLI emits the same stable fields to stdout and GITHUB_OUTPUT and exits two
   const f = await fixture(t, []);
   await f.put('top.json', { version: 1, generatedAt: new Date().toISOString(), ranking: [] });
   const output = join(f.repo, 'github-output');
-  const run = () => spawnSync(process.execPath, [resolve('scripts/check-media-complete.mjs')], { cwd: f.repo, encoding: 'utf8', env: { ...process.env, GOATLAB_REPO: f.repo, GITHUB_OUTPUT: output } });
+  const run = () => spawnSync(process.execPath, [resolve('actions/3-media-creation/check-media-complete.mjs')], { cwd: f.repo, encoding: 'utf8', env: { ...process.env, GOATLAB_REPO: f.repo, GITHUB_OUTPUT: output } });
   const good = run();
   assert.equal(good.status, 0, good.stderr);
   assert.match(good.stdout, /^complete=true\nreason=no-eligible\neligible=0\npending=0\ntop_age_h=/);

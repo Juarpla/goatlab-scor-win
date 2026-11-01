@@ -1,4 +1,4 @@
-import { readContentSelection } from '../lib/content-selection.js';
+import { readContentSelection } from '../../src/lib/content-selection.js';
 /** One ephemeral run budget; durable provider admission and verified R2 publication. */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -6,18 +6,18 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { mkdir, readFile, writeFile, rm, rename, appendFile, readdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
-import { assetErrors } from '../lib/media.js';
-import { mediaPolicy, MAX_CLIPS_PER_MATCH } from '../lib/media-policy.js';
-import animation from '../lib/video-animation.json' with { type: 'json' };
-import { normalizeAgnesImage } from '../lib/agnes.js';
-import { editingFacts } from '../lib/match-facts.js';
-import { validateContent, contentIdentityErrors, scriptStructureErrors } from '../lib/match-content.js';
-import { mediaPublisher } from '../lib/media-progress.js';
-import { contentFingerprint } from '../lib/media-contract.js';
-import { TOP_FILENAME, contentMatches, topFreshness, defaultTopN, registerExtra, providerOnlyId } from '../lib/top.js';
-import { transact } from './agnes-state.mjs';
+import { assetErrors } from '../../src/lib/media.js';
+import { mediaPolicy, MAX_CLIPS_PER_MATCH } from '../../src/lib/media-policy.js';
+import animation from '../../src/lib/video-animation.json' with { type: 'json' };
+import { normalizeAgnesImage } from '../../src/lib/agnes.js';
+import { editingFacts } from '../../src/lib/match-facts.js';
+import { validateContent, contentIdentityErrors, scriptStructureErrors } from '../../src/lib/match-content.js';
+import { mediaPublisher } from '../../src/lib/media-progress.js';
+import { contentFingerprint } from '../../src/lib/media-contract.js';
+import { TOP_FILENAME, contentMatches, topFreshness, defaultTopN, registerExtra, providerOnlyId } from '../../src/lib/top.js';
+import { transact } from '../../scripts/agnes-state.mjs';
 import { reconcileVideoRecovery } from './reconcile-video-recovery.mjs';
-import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../lib/media-diagnostics.js';
+import { safeMediaMessage, publicVideoDiagnostics, requestedMediaComplete, readyMediaLabels, mediaRunOutcome } from '../../src/lib/media-diagnostics.js';
 
 const execute = (file, args, options={}) => new Promise((resolve,reject) => {
   const { onStderr, ...settings } = options;

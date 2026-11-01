@@ -19,7 +19,7 @@ from common import agnes_authority, atomic_json, database, request_json
 from agnes import retry_seconds
 from media_policy import clip_target
 
-ANIMATION = json.loads((Path(__file__).resolve().parent.parent / 'lib/video-animation.json').read_text())
+ANIMATION = json.loads((Path(__file__).resolve().parents[2] / 'src/lib/video-animation.json').read_text())
 MODEL = ANIMATION['model']
 CLIP_SECONDS = 6
 IDENTIFIER_KEYS = {'id', 'videoid', 'taskid', 'resultid', 'generationid'}

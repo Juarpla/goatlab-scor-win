@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { generateMediaBanks, mediaRunDeadline, mediaSoftStop } from '../fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs';
+import { generateMediaBanks, mediaRunDeadline, mediaSoftStop } from '../actions/3-media-creation/generate-media-pack.mjs';
 import { buildYoutubeScripts } from '../src/lib/youtube.js';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const now = Date.parse('2026-10-08T20:00:00Z');
@@ -127,7 +127,7 @@ test('ready totals combine R2 inventory and confirmed new uploads in logs, progr
   const progress = JSON.parse(await readFile(join(f.dir, 'a-b.progress.json'), 'utf8'));
   assert.equal(report.results[0].images, progress.verifiedImages);
   assert.equal(report.results[0].clips, progress.verifiedClips);
-  const summary = spawnSync(process.execPath, [resolve('scripts/media-run-summary.mjs')], {
+  const summary = spawnSync(process.execPath, [resolve('actions/3-media-creation/media-run-summary.mjs')], {
     cwd: f.repo, encoding: 'utf8', env: { ...process.env, GITHUB_STEP_SUMMARY: join(f.repo, 'summary.md') },
   });
   assert.equal(summary.status, 0, summary.stderr);
@@ -517,7 +517,7 @@ test('current provider saturation persists in report and summary without an exec
   assert.equal(result.pending,1);assert.equal(result.completed,0);assert.equal(result.outcome.exitCode,0);
   const publication=JSON.parse(await readFile(join(f.repo,'.cache/media-publication.json'),'utf8'));
   assert.equal(publication.allow_commit,false);
-  const summary=spawnSync(process.execPath,[resolve('scripts/media-run-summary.mjs')],{cwd:f.repo,encoding:'utf8'});
+  const summary=spawnSync(process.execPath,[resolve('actions/3-media-creation/media-run-summary.mjs')],{cwd:f.repo,encoding:'utf8'});
   assert.equal(summary.status,0);assert.match(summary.stdout,/finalizado con recursos pendientes por condiciones temporales/);
   assert.match(summary.stdout,/503.*video_queue_full/);assert.match(summary.stdout,/0\/4 clips listos/);
 });

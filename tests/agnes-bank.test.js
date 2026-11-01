@@ -11,7 +11,7 @@ import { buildYoutubeScripts } from '../src/lib/youtube.js';
 const run=promisify(execFile);
 async function runBank(root,out,extraArgs=[],env={}){
   // Sin AGNES_API_KEY no hay HTTP: el script falla antes de llamar a Agnes.
-  const entry=resolve('fly/gateway/workspace/skills/goatlab/scripts/generate-media-pack.mjs');
+  const entry=resolve('actions/3-media-creation/generate-media-pack.mjs');
   await assert.rejects(run(process.execPath,[entry,...extraArgs],{
     env:{...process.env,MEDIA_ROLE:'producer',GITHUB_ACTIONS:'true',GOATLAB_REPO:root,MEDIA_PACK_DIR:out,AGNES_API_KEY:'',...env},
   }), error=>error.code===2 && /faltan recursos solicitados/.test(error.stderr));

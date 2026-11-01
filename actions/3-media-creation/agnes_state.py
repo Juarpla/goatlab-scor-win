@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-SCRIPT = Path(__file__).with_name('agnes-state.mjs')
+SCRIPT = Path(__file__).resolve().parents[2] / 'scripts' / 'agnes-state.mjs'
 
 
 class AgnesState:

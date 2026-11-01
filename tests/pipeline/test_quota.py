@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'fly/gateway/workspace/skills/goatlab/scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'actions/3-media-creation'))
 from agnes import ImagePool
 from agnes_video import VideoPool
 from common import ensure_quota

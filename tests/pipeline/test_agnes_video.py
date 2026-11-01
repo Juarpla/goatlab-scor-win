@@ -10,7 +10,7 @@ import unittest
 import urllib.error
 from pathlib import Path
 from unittest.mock import patch
-sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'actions/3-media-creation'))
 from agnes_video import VideoPool, ANIMATION
 from fake_agnes_state import FakeAgnesState
 
@@ -454,7 +454,8 @@ class VideoTests(unittest.TestCase):
         source = self.root/'source.mp4'
         subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'color=c=green:s=720x1260:r=12:d=4',
                         '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', str(source)], check=True)
-        output = self.root/'clip-0.mp4'
+        (self.root/'clips').mkdir()
+        output = self.root/'clips'/'clip-0.mp4'
         with patch('urllib.request.urlopen', return_value=io.BytesIO(source.read_bytes())):
             saved = self.pool.download('https://example.org/video.mp4', output, 2000)
         probe = json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0',
