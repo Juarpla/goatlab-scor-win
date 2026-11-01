@@ -1,97 +1,6 @@
 {
-  "updatedAt": "2026-10-31T22:48:35.359Z",
+  "updatedAt": "2026-11-01T06:39:11.139Z",
   "runs": [
-    {
-      "at": "2026-10-21T22:19:48.086Z",
-      "task": "motion-prompts",
-      "matchId": "royale-union-saint-gilloise-vs-hapoel-be-er-sheva-2026-10-22",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2152,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 62266
-        }
-      ],
-      "usage": {
-        "inputTokens": 2230,
-        "outputTokens": 7171
-      }
-    },
-    {
-      "at": "2026-10-21T22:22:03.554Z",
-      "task": "motion-prompts",
-      "matchId": "ofi-crete-vs-bayer-04-leverkusen-2026-10-22",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2150,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 74474
-        }
-      ],
-      "usage": {
-        "inputTokens": 2234,
-        "outputTokens": 9939
-      }
-    },
-    {
-      "at": "2026-10-22T05:13:12.766Z",
-      "task": "shorts",
-      "matchId": "juventus-vs-stade-rennais-2026-10-22",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 6416,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 69413
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 6546,
-        "outputTokens": 6483
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "632b9acc-4b6d-49cc-b7dc-41bcb311dce3"
-    },
     {
       "at": "2026-10-22T05:16:13.269Z",
       "task": "shorts",
@@ -6745,6 +6654,113 @@
         "inputTokens": 1795,
         "outputTokens": 2687
       }
+    },
+    {
+      "at": "2026-11-01T06:27:07.321Z",
+      "matchId": "fd-564733",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": {
+        "inputTokens": 1399,
+        "outputTokens": 1293
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "4c54ad98-297e-4a8d-8513-6365b68d8fab"
+    },
+    {
+      "at": "2026-11-01T06:28:57.089Z",
+      "matchId": "fd-564734",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1337,
+        "outputTokens": 11453
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b4c51028-879e-4692-ae81-cbd348168f28"
+    },
+    {
+      "at": "2026-11-01T06:38:59.758Z",
+      "matchId": "fd-560631",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1336,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 143085
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1294,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 162901
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1394,
+            "outputTokens": 2153
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23198
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1287,
+            "outputTokens": 6615
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 96359
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1336,
+        "outputTokens": 14647
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "f0aba320-459d-4771-84b8-9ca6472fd95a"
     }
   ]
 }
