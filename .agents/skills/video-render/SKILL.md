@@ -97,22 +97,52 @@ Save it to `video-render/work/<id>/<slug>/reference.json` and pass
 node scripts/list-media-packs.mjs
 ```
 
-It prints the table and asks for an `id`. Use the exact `id`: it is the key for
-both the media pack and the render command. Prefer matches with 4 images and 4
-clips; if the chosen one has fewer, use it and make the most of what is available.
-Never use a pack with 0 images and 0 clips.
+It reads the current `public/data/top.json`, keeps only the matches that already
+have a media pack and prints a numbered Markdown table sorted by kickoff (UTC),
+with match, date, images, clips, audio and `id`. It excludes matches whose kickoff
+already passed, so the table is always upcoming matches. Paste that table in full
+before asking anything: do not summarize it, do not reorder it from memory and do
+not start from an audio first. Then ask for an `id`.
+
+Use the exact `id`: it is the key for both the media pack and the render command.
+Prefer matches with 4 images and 4 clips; if the chosen one has fewer, use it and
+make the most of what is available. Never use a pack with 0 images and 0 clips.
+`--all` includes packs outside the current top.
 
 If the audios are numbered, the `audio` column will be empty; that is normal. They
 are identified in step 2.
 
-Closure criterion: the user chose an `id` and an audio exists for that match.
+Closure criterion: the user chose an `id`.
 
 ## Step 2 — Prepare the audio
 
-Look in `video-render/audios/<id>/` for the recording. The CLI creates that folder
-on the first run. When a batch arrives, inventory the recordings and assign each
-file to an `id` before rendering anything. `--audio` only chooses among files and
-must point inside `audios/<id>/` (or `audios/tests/` for a fixture).
+### 2.1 Create the folder and wait
+
+Run this immediately after the user picks the match:
+
+```sh
+node video-render/cli/audio.mjs prepare <id>
+```
+
+It creates `video-render/audios/<id>/` and prints the path. Tell the user:
+
+> Deja la grabación en `video-render/audios/<id>/` y avísame cuando esté.
+
+Stop there. Do not read the media pack, write the plan or render until the user
+confirms the audio is in place. When they confirm, run:
+
+```sh
+node video-render/cli/audio.mjs check <id>
+```
+
+It exits non-zero when the folder has no audio, or when it has several and no
+`--audio` was given. Only continue if it prints `audio: listo:`.
+
+### 2.2 Identify the recording
+
+When a batch arrives, inventory the recordings and assign each file to an `id`
+before rendering anything. `--audio` only chooses among files and must point
+inside `audios/<id>/` (or `audios/tests/` for a fixture).
 
 If the files are numbered (for example `Track-78.m4a`), do not trust the name:
 identify the match from the first seconds of voice. This helper prints the Mistral
@@ -146,8 +176,8 @@ Voice policy:
 - more than 58.3 s: fails with `VOICE_TOO_LONG`. Offer to trim, split or re-record.
   Never edit the original; the render works on a temporary copy.
 
-Closure criterion: one audio path, a known duration and a decision if it exceeds
-the limit.
+Closure criterion: the user confirmed the audio, one audio path is known, its
+duration is measured and there is a decision if it exceeds the limit.
 
 ## Step 3 — Read the media pack
 

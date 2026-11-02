@@ -28,6 +28,7 @@ video-render/
       kit/                   design kit
       assets/                font and brand
   cli/render.mjs             terminal entry point
+  cli/audio.mjs              audio folder gate: prepare + check
   cli/check-layout.mjs       media folder validator
   bench/render-input.mjs     benchmark-only copy helper
   soundtracks/bed.mp3        background music (independent of the renderer)
@@ -64,6 +65,8 @@ pnpm video:layout
 
 - `cli/render.mjs` is the production entry point. It parses arguments, resolves
   the media pack and folders, runs the pipeline and validates the MP4.
+- `cli/audio.mjs` creates `audios/<match-id>/` before the recording exists and
+  validates that exactly one audio is available before a render.
 - `cli/check-layout.mjs` walks the media tree and exits non-zero on any file
   that breaks the contract.
 - `bench/render-input.mjs` copies a composition into an isolated directory so
@@ -117,8 +120,17 @@ the R2/Agnes keys if media banks are generated.
 
 ## Usage
 
-Put the voice in `video-render/audios/<match-id>/`; the CLI creates the folder
-on the first run and uses the only audio it finds.
+Create the match folder before the recording exists and wait for the user:
+
+```sh
+node video-render/cli/audio.mjs prepare <match-id>
+# the user drops the recording in video-render/audios/<match-id>/
+node video-render/cli/audio.mjs check <match-id>
+```
+
+`prepare` creates `audios/<match-id>/`. `check` exits non-zero when the folder
+has no audio, or when it has several and no `--audio` was given. The render CLI
+then uses the only audio it finds.
 
 ```sh
 node --env-file=.env video-render/cli/render.mjs \
