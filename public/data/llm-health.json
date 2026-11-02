@@ -1,149 +1,6 @@
 {
-  "updatedAt": "2026-11-02T06:47:00.059Z",
+  "updatedAt": "2026-11-02T07:14:10.283Z",
   "runs": [
-    {
-      "at": "2026-10-22T22:07:53.016Z",
-      "task": "motion-prompts",
-      "matchId": "flamengo-vs-estudiantes-de-la-plata-2026-10-22",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180003
-        }
-      ],
-      "usage": {
-        "inputTokens": 2651,
-        "outputTokens": 7638
-      }
-    },
-    {
-      "at": "2026-10-22T22:12:24.288Z",
-      "task": "motion-prompts",
-      "matchId": "ipswich-town-vs-nottingham-forest-2026-10-23",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2422,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 85994
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2527,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 60875
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2600,
-            "outputTokens": 3426
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 31118
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2415,
-            "outputTokens": 5025
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 93278
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-22T22:14:08.522Z",
-      "task": "motion-prompts",
-      "matchId": "deportivo-alaves-vs-malaga-2026-10-23",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2438,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 63385
-        }
-      ],
-      "usage": {
-        "inputTokens": 2543,
-        "outputTokens": 6983
-      }
-    },
-    {
-      "at": "2026-10-22T22:18:04.853Z",
-      "task": "motion-prompts",
-      "matchId": "aston-villa-vs-manchester-city-2026-10-24",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        }
-      ],
-      "usage": {
-        "inputTokens": 2538,
-        "outputTokens": 10542
-      }
-    },
     {
       "at": "2026-10-22T22:22:52.073Z",
       "task": "motion-prompts",
@@ -6509,6 +6366,87 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "705e0d07-b160-4a0a-915b-797c077d09bd"
+    },
+    {
+      "at": "2026-11-02T07:07:49.092Z",
+      "task": "shorts",
+      "matchId": "villarreal-vs-paris-saint-germain-2026-11-03",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600004
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash",
+        "latencyMs": 556320
+      },
+      "usage": {
+        "inputTokens": 5917,
+        "outputTokens": 34826
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "4d2140e2-e26c-4339-9a6f-fabd858b29cd"
+    },
+    {
+      "at": "2026-11-02T07:13:04.758Z",
+      "task": "shorts",
+      "matchId": "manchester-united-vs-as-roma-2026-11-03",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 315659
+      },
+      "usage": {
+        "inputTokens": 6056,
+        "outputTokens": 39268
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "c2a59ee9-76de-4d8f-a72e-9be653427682"
+    },
+    {
+      "at": "2026-11-02T07:13:40.791Z",
+      "task": "image-prompts",
+      "matchId": "villarreal-vs-paris-saint-germain-2026-11-03",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1716,
+        "outputTokens": 4203
+      }
+    },
+    {
+      "at": "2026-11-02T07:14:10.283Z",
+      "task": "image-prompts",
+      "matchId": "manchester-united-vs-as-roma-2026-11-03",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1792,
+        "outputTokens": 4193
+      }
     }
   ]
 }
