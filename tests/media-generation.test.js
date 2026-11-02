@@ -438,7 +438,7 @@ test('temporary cleanup failure keeps the verified resource ready and never caus
   const retry=await f.run();assert.equal(retry.results[0].images,4);assert.equal(f.provider.length,calls);
 });
 test('the workflow stores reports but never restores or archives media between runs',async()=>{
-  const workflow=await readFile(resolve('.github/workflows/media-bank.yml'),'utf8');
+  const workflow=await readFile(resolve('.github/workflows/3-media-creation.yml'),'utf8');
   assert.ok(!/agnes-recovery|media-recovery|actions\/cache\/(?:save|restore)/.test(workflow));
   assert.match(workflow,/name: goatlab-media-bank/);
   assert.match(workflow,/rm -rf public\/data\/media-pack\/gen/);

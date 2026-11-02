@@ -160,16 +160,6 @@ publicación hasta corregir el catálogo.
 `publicationindex` permiten verificar ambos conceptos sin cambiar el banco público.
 La asignación sobrevive a fallos de PUT, HEAD o reinicios y no consume cuota.
 
-La migración manual `media-naming-migration` comparte exclusión con el workflow de
-media. Un lease privado `maintenance` también bloquea reservas, consultas y
-publicaciones de otros procesos. La migración copia y comprueba los bytes y
-metadatos, cambia el estado por CAS y publica las referencias antes de retirar
-los objetos originales. `generationMatchId` y `referenceHash` conservan la
-identidad de las solicitudes originales; `publicationReferenceHash` registra la
-referencia actual cuando cambia la URL. `previousObjectKey` permite retomar la
-limpieza tras una interrupción. No se vuelven a solicitar recursos a Agnes ni se
-reinician intentos, cuotas o diagnósticos.
-
 ## Reintentos por recurso y corrida
 
 El estado privado admite versiones 1 y 2. La versión 2 conserva un único estado

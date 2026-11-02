@@ -42,7 +42,7 @@ test('push exhaustion is explicit after fetching on each of three attempts',asyn
   await assert.rejects(pushMedia({repo}),/tres intentos/);
 });
 test('all media workflow shell blocks parse with bash and schedules preserve the queue',async()=>{
-  const source=await readFile('.github/workflows/media-bank.yml','utf8');
+  const source=await readFile('.github/workflows/3-media-creation.yml','utf8');
   assert.match(source,/cron: '15 7,9,11 \* \* \*'/); assert.match(source,/queue: max/); assert.match(source,/cancel-in-progress: false/);
   assert.doesNotMatch(source,/cache: pnpm|flyctl|fly machines/);
   const lines=source.split('\n');
@@ -50,5 +50,5 @@ test('all media workflow shell blocks parse with bash and schedules preserve the
     let shell=''; while(i+1<lines.length && (/^          /.test(lines[i+1]) || !lines[i+1].trim())) shell+=lines[++i].slice(10)+'\n';
     await execute('bash',['-n','-c',shell]);
   }
-  const full=await readFile('.github/workflows/publish.yml','utf8'); assert.match(full,/5 6 \* \* \*/); assert.match(full,/17 \*\/6 \* \* \*/);
+  const full=await readFile('.github/workflows/1-update-data.yml','utf8'); assert.match(full,/5 6 \* \* \*/); assert.match(full,/17 \*\/6 \* \* \*/);
 });

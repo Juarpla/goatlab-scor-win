@@ -197,7 +197,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       try {
         const {slot}=await state('status',{matchId,kind,ordinal});
         if(!slot || slot.state!=='completed' || slot.model!==object.model || slot.promptHash!==object.promptHash
-          || (kind==='video' && (slot.publicationReferenceHash??slot.referenceHash)!==object.referenceHash)) return false;
+          || (kind==='video' && slot.referenceHash!==object.referenceHash)) return false;
         if(kind==='video' && slot.publicationIndex && (Number(meta.attemptordinal)!==ordinal || Number(meta.publicationindex)!==slot.publicationIndex || meta.attemptid!==slot.attemptId))return false;
         if(slot.uploadClaim?.confirmed && slot.uploadClaim.sha256===object.sha256 && slot.uploadClaim.objectKey===objectKey && slot.uploadClaim.sizeBytes===sizeBytes) {
           if(cleanupFile)await cleanResource(cleanupFile);return true;
