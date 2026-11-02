@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeName, roundFecha, findStandingRow, topScorerFor } from '../src/lib/series-crumbs.js';
+import { normalizeName, roundNumber, findStandingRow, topScorerFor } from '../src/lib/series-crumbs.js';
 
 const standings = {
   europa: {
@@ -26,12 +26,12 @@ test('normalizeName quita tildes y ruido para casar fuentes', () => {
   assert.equal(normalizeName('  OFI Crete!! '), 'ofi crete');
 });
 
-test('roundFecha extrae la jornada y omite rondas sin número', () => {
-  assert.equal(roundFecha('League Stage - 1'), 1);
-  assert.equal(roundFecha('Regular Season - 6'), 6);
-  assert.equal(roundFecha(5), 5);
-  assert.equal(roundFecha('Quarter-finals'), null);
-  assert.equal(roundFecha(null), null);
+test('roundNumber extracts the matchday and skips rounds without a number', () => {
+  assert.equal(roundNumber('League Stage - 1'), 1);
+  assert.equal(roundNumber('Regular Season - 6'), 6);
+  assert.equal(roundNumber(5), 5);
+  assert.equal(roundNumber('Quarter-finals'), null);
+  assert.equal(roundNumber(null), null);
 });
 
 test('findStandingRow enlaza por teamId aunque el nombre no case', () => {
@@ -44,7 +44,7 @@ test('findStandingRow cae al nombre con tildes y parciales', () => {
   assert.deepEqual(findStandingRow(standings, 'europa', { teamId: null, names: ['Real Betis Balompié'] }), { position: 4, played: 1 });
 });
 
-test('findStandingRow devuelve null sin fila (OFI) o sin competición', () => {
+test('findStandingRow returns null without a row (OFI) or without a competition', () => {
   assert.equal(findStandingRow(standings, 'europa', { teamId: null, names: ['OFI'] }), null);
   assert.equal(findStandingRow(standings, 'copa', { teamId: 348, names: ['Levski'] }), null);
   assert.equal(findStandingRow(null, 'europa', { teamId: 348, names: [] }), null);

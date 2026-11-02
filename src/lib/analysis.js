@@ -1,8 +1,8 @@
 /**
- * Resolución de lecturas LLM (`llm-analysis.json`) por identidad, no solo por
- * id: los fixtures alternan entre ids `af-` y `fd-` cuando cambia el proveedor
- * primario, y una lectura generada bajo el id viejo queda huérfana. Aquí se
- * encuentra ese gemelo por equipos + fecha y se re-clava al id vigente.
+ * Resolution of LLM readings (`llm-analysis.json`) by identity, not only by
+ * id: fixtures alternate between `af-` and `fd-` ids when the primary provider
+ * changes, and a reading generated under the old id is left orphaned. Here that
+ * twin is found by teams + date and re-pinned to the current id.
  */
 import { sameTeam } from './bzzoiro.js';
 import { toCompactInput } from './compact.js';
@@ -10,29 +10,29 @@ import { toCompactInput } from './compact.js';
 const text = value => String(value ?? '').trim();
 
 /**
- * Clave del input que sella cada lectura (v3: suma kind y stats para la
- * pizarra). Generar y comparar usan esta misma función: si coincide, el
- * pipeline salta el partido sin gastar llamadas.
+ * Input key that seals each reading (v3: adds kind and stats for the
+ * board). Generation and comparison use this same function: if it matches, the
+ * pipeline skips the match without spending calls.
  */
 export function buildAnalysisKey(match, markets = null, ctx = {}) {
   return `v3|${toCompactInput(match, markets, ctx)}`;
 }
 
-/** La narrativa puede citar cualquier cifra del input: todos sus datos importan. */
+/** The narrative may cite any figure from the input: all its data matters. */
 export function buildMaterialKey(match, markets = null, ctx = {}) {
   return buildAnalysisKey(match, markets, ctx);
 }
 
-/** El sello antiguo M/L omitía tabla, forma y probabilidades. Nunca prueba vigencia. */
+/** The old M/L seal omitted table, form and probabilities. It never proves freshness. */
 export function analysisIsFresh(stored, match, markets = null, ctx = {}) {
   if (!stored || typeof stored !== 'object') return false;
   return typeof stored.inputKey === 'string' && stored.inputKey === buildAnalysisKey(match, markets, ctx);
 }
 
 /**
- * Parte la respuesta batch en valores por partido, sin validar el contenido
- * (eso lo hace validateAnalysis por ítem en el pipeline). Pura y testeable:
- * devuelve `{ entries: [{ matchId, value }], issues: [{ matchId, reason }] }`.
+ * Splits the batch response into per-match values, without validating content
+ * (validateAnalysis does that per item in the pipeline). Pure and testable:
+ * returns `{ entries: [{ matchId, value }], issues: [{ matchId, reason }] }`.
  */
 export function parseBatchAnalyses(parsed, expectedIds) {
   const ids = [...(expectedIds ?? [])];
@@ -60,7 +60,7 @@ export function parseBatchAnalyses(parsed, expectedIds) {
   return { entries, issues };
 }
 
-/** Identidad de un partido del calendario. */
+/** Identity of a calendar match. */
 export function matchIdentity(match) {
   return {
     home: text(match?.home),
@@ -69,7 +69,7 @@ export function matchIdentity(match) {
   };
 }
 
-/** Identidad de una entrada guardada: campos estampados o `inputKey` (v2 o JSON legacy). */
+/** Identity of a stored entry: stamped fields or `inputKey` (v2 or legacy JSON). */
 export function entryIdentity(entry) {
   if (!entry) return null;
   if (entry.home || entry.away || entry.kickoff) {
@@ -94,7 +94,7 @@ export function entryIdentity(entry) {
   return null;
 }
 
-/** Mismo cruce (±1 día por corrimientos de kickoff). Sin fecha en ambos lados, mandan los equipos. */
+/** Same pairing (±1 day for kickoff shifts). Without a date on both sides, teams decide. */
 export function sameFixture(a, b, { dayTolerance = 1 } = {}) {
   if (!a || !b || !a.home || !a.away || !b.home || !b.away) return false;
   if (!sameTeam(a.home, b.home) || !sameTeam(a.away, b.away)) return false;
@@ -104,8 +104,8 @@ export function sameFixture(a, b, { dayTolerance = 1 } = {}) {
 }
 
 /**
- * Busca la lectura de un partido: id directo primero; si no, gemelo por
- * identidad. Devuelve `{ key, entry, via }` o null.
+ * Finds a match reading: direct id first; otherwise the twin by
+ * identity. Returns `{ key, entry, via }` or null.
  */
 export function findAnalysis(analyses, match) {
   if (!analyses || !match) return null;
@@ -118,16 +118,16 @@ export function findAnalysis(analyses, match) {
   return null;
 }
 
-/** La vista y el generador comprueban exactamente el mismo input. */
+/** The view and the generator check exactly the same input. */
 export function findFreshAnalysis(analyses, match, markets = null, ctx = {}) {
   const found = findAnalysis(analyses, match);
   return found && analysisIsFresh(found.entry, match, markets, ctx) ? found : null;
 }
 
 /**
- * Re-clava gemelos al id vigente y estampa identidad en la entrada. Puro:
- * devuelve un mapa nuevo. Conserva el input original: cambiar un id no
- * convierte una lectura antigua en una lectura de los datos actuales.
+ * Re-pins twins to the current id and stamps identity on the entry. Pure:
+ * returns a new map. Keeps the original input: changing an id does not
+ * turn an old reading into a reading of current data.
  */
 export function adoptAnalyses(analyses, matches) {
   const next = { ...(analyses ?? {}) };

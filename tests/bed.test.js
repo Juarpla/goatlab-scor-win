@@ -5,7 +5,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { bedPath, muxVoice, voiceBedGraph } from '../video-render/engine/short-job.mjs';
+import { bedPath, muxVoice, voiceBedGraph } from '../video-render/pipeline/index.mjs';
 
 const run = promisify(execFile);
 
@@ -30,7 +30,7 @@ function loudness(stderr) {
   return Number(JSON.parse(stderr.slice(start, end + 1)).input_i);
 }
 
-test('la cama no sube el loudness de la voz más de 1 LU', async () => {
+test('the bed does not raise voice loudness by more than 1 LU', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'goatlab-bed-'));
   const silent = join(dir, 'silent.mp4');
   const voice = join(dir, 'voice.wav');

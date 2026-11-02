@@ -1,9 +1,9 @@
 /**
- * Fallback de la SabidurIA cuando el LLM no entregó lectura: reformula en
- * español neutro las lecturas declaradas de los proveedores (Bzzoiro
- * probabilidades + `recommendations` como reserva, `advice` de API-Football). Sin jerga de apuesta, sin
- * cuotas, siempre atribuido al proveedor. Plantillas deterministas y
- * testeables; lo irreconocible se omite, nunca se imprime en crudo.
+ * Provider-intelligence fallback when the LLM did not deliver a reading: reformulates
+ * the providers' declared readings in neutral Spanish (Bzzoiro
+ * probabilities + `recommendations` as reserve, API-Football `advice`). No betting jargon, no
+ * odds, always attributed to the provider. Deterministic and testable
+ * templates; unrecognizable input is omitted, never printed raw.
  */
 import { esName } from './teams.js';
 
@@ -13,7 +13,7 @@ const FAVORITE_SIDE = {
   draw: 'draw', d: 'draw', x: 'draw', empate: 'draw',
 };
 
-/** `favorite` del proveedor → nombre del equipo (o 'el empate'); null si no se resuelve. */
+/** Provider `favorite` → team name (or 'el empate'); null if unresolved. */
 export function favoriteName(favorite, home, away) {
   const key = String(favorite ?? '').trim().toLowerCase();
   if (!key) return null;
@@ -27,7 +27,7 @@ export function favoriteName(favorite, home, away) {
 
 const pct = value => (value == null ? null : `${Math.round(value * 100)}%`);
 
-/** Probabilidad 0–1 del proveedor → entero 0–100; null ante lo ausente. */
+/** Provider 0-1 probability → 0-100 integer; null when missing. */
 const pct100 = value =>
   (typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1
     ? Math.round(value * 100)
@@ -35,7 +35,7 @@ const pct100 = value =>
 
 const pluralGoals = n => (n === 1 ? 'gol' : 'goles');
 
-/** Línea de goles `+1.5`/`-3.5` → español neutro. Null ante lo irreconocible. */
+/** Goals line `+1.5`/`-3.5` → neutral Spanish. Null when unrecognizable. */
 export function neutralGoals(token) {
   const match = String(token ?? '').trim().match(/^([+-]?)([\d.]+)$/);
   if (!match) return null;
@@ -51,7 +51,7 @@ export function neutralGoals(token) {
 
 const cap = text => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text);
 
-/** Mitad izquierda del advice (`X or draw`, `Winner: X`) → español neutro y descriptivo. */
+/** Left half of the advice (`X or draw`, `Winner: X`) → neutral, descriptive Spanish. */
 function neutralHead(fragment) {
   const text = String(fragment ?? '').trim().replace(/^combo\s+/i, '');
   if (!text) return null;
@@ -70,8 +70,8 @@ function neutralHead(fragment) {
 }
 
 /**
- * Advice crudo de API-Football → español neutro y descriptivo.
- * Ej: `Combo Double chance : draw or Aston Villa and -3.5 goals` (crudo del proveedor, nunca visible) →
+ * Raw API-Football advice → neutral, descriptive Spanish.
+ * Ex: `Combo Double chance : draw or Aston Villa and -3.5 goals` (provider raw, never visible) →
  * `Aston Villa sin perder y menos de 4 goles`.
  */
 export function adviceToNeutral(advice) {
@@ -88,8 +88,8 @@ export function adviceToNeutral(advice) {
 }
 
 /**
- * Construye las líneas del fallback. Devuelve `{ bz, af }` o null cuando
- * ningún proveedor aporta nada usable.
+ * Builds the fallback lines. Returns `{ bz, af }` or null when
+ * no provider contributes anything usable.
  */
 export function buildProviderAdvice({ provider = null, afPrediction = null, home = '', away = '' } = {}) {
   const bz = [];
@@ -101,8 +101,8 @@ export function buildProviderAdvice({ provider = null, afPrediction = null, home
       bz.push({ label: 'Mayor probabilidad estimada', text: prob ? `${esName(fav)} (${prob}, según el modelo)` : `${esName(fav)}, según el modelo` });
     }
   }
-  // Las probabilidades mandan sobre el booleano: el `No` tajante contradecía
-  // el marcador (ej. BTTS `false` + `1-1`); el `%` matiza y mantiene coherencia.
+  // Probabilities lead over the boolean: a blunt `No` contradicted
+  // the scoreline (e.g. BTTS `false` + `1-1`); the `%` qualifies it and keeps coherence.
   const over25p = pct100(provider?.over25);
   if (over25p != null) {
     bz.push({ label: 'Goles en total', text: `${over25p}% que haya 3 o más goles, según el modelo` });

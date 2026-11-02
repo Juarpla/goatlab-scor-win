@@ -15,11 +15,11 @@ const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'L
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const dayLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'short', day: 'numeric', month: 'short' });
-// La ventana de siete días. Sin marcador, sale a los 115'. Con marcador, se queda y la tarjeta lo muestra.
+// The seven-day window. Without a scoreline, it leaves at 115'. With a scoreline, it stays and the card shows it.
 const rows = matches.filter(match => staysOnWall(match)).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
 const days = [...new Set(rows.map(match => matchDay(match.kickoff)))];
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
-// Orden del muro, distinto del array global: LaLiga y Premier primero.
+// Wall order, different from the global array: LaLiga and Premier first.
 const wallCompetitions = ['laliga', 'premier', 'champions', 'europa', 'libertadores', 'nations'].map(id => competitions.find(c => c.id === id)).filter(Boolean);
 const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FUT', competitionName: competitionById(m.competition)?.name ?? '', kickoffLabel: kickoffLabel(m.kickoff), formHome: m.form?.homeForm ?? null, formAway: m.form?.awayForm ?? null });
 ---
@@ -82,10 +82,10 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  const wide=window.matchMedia('(min-width:1150px)');
  let league='all', status='all';
  const normalize=(text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- // Paginación suave: 9 tarjetas en escritorio (fila de 3 + 3 filas de muro),
- // 6 en tablet (3 filas de 2) y 6 en mobile (6 filas de 1). Cada clic añade
- // 3 filas más (6 tarjetas escritorio/tablet, 3 mobile).
- // Sin JS el muro completo queda visible: la paginación es mejora progresiva.
+ // Smooth pagination: 9 cards on desktop (row of 3 + 3 wall rows),
+ // 6 on tablet (3 rows of 2) and 6 on mobile (6 rows of 1). Each click adds
+ // 3 more rows (6 cards desktop/tablet, 3 mobile).
+ // Without JS the full wall stays visible: pagination is progressive enhancement.
  const compact=window.matchMedia('(max-width:760px)');
  const COLS=()=>compact.matches?1:2;
  const STEP=()=>3*COLS();
@@ -94,9 +94,9 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  const moreLabel=moreBtn.querySelector('span')!;
  const wallBody=document.querySelector<HTMLElement>('.wall-body')!;
  const rails=[...wallBody.querySelectorAll<HTMLElement>('.ad-rail')];
- // Ad-blocker: los filtros cosméticos ocultan los rieles con display:none pero
- // el grid mantendría los tracks de 300px. Solo se colapsa cuando el riel está
- // oculto; la caja PUBLICIDAD vacía (aside visible) se conserva intacta.
+ // Ad blocker: cosmetic filters hide the rails with display:none but
+ // the grid would keep the 300px tracks. It only collapses when the rail is
+ // hidden; the empty ADVERTISING box (visible aside) stays intact.
  function updateAdsVisibility(){
   if(!wide.matches){wallBody.classList.remove('no-ads');return;}
   const hidden=(el:HTMLElement)=>{
@@ -117,8 +117,8 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
   const visible=cards.filter(card=>!card.hidden);
   const cut=Math.min(shown,visible.length);
   const batch=visible.slice(0,cut);
-  // Escritorio: la primera fila lleva los 3 primeros visibles y el resto fluye al masonry.
-  // En tablet/mobile la fila de 3 no existe (la card no cabe tan angosta): todo va al masonry.
+  // Desktop: the first row carries the first 3 visible and the rest flows into the masonry.
+  // On tablet/mobile the row of 3 does not exist (the card does not fit that narrow): everything goes to the masonry.
   if(wide.matches){
    lead.replaceChildren(...batch.slice(0,3));
    grid.replaceChildren(...batch.slice(3),...cards.filter(card=>card.hidden));
@@ -131,11 +131,11 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
   if(remaining>0)moreLabel.textContent=`Mostrar ${remaining} ${remaining===1?'encuentro':'encuentros'} más`;
   empty.hidden=visible.length>0;
   count.textContent=`${visible.length} ${visible.length===1?'encuentro':'encuentros'}`;
-  // Con pocos resultados el riel de 600px dominaría una vista casi vacía:
-  // los rieles se retiran y el resultado ocupa todo el ancho.
+  // With few results the 600px rail would dominate an almost empty view:
+  // the rails are removed and the result takes the full width.
   wallBody.classList.toggle('is-thin',wide.matches&&visible.length<=3);
   updateAdsVisibility();
-  // Filtros: la cascada re-entra completa. "Mostrar más": solo los recién llegados.
+  // Filters: the ladder re-enters fully. "Show more": only new arrivals.
   if(mode!=='silent'&&!reduce)batch.slice(from).forEach((card,index)=>{
    card.style.animation='none';void card.offsetWidth;
    card.style.animation=`card-in .55s cubic-bezier(.2,.8,.2,1) ${Math.min(cut-batch.slice(from).length+index,10)*45}ms both`;
@@ -156,7 +156,7 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  });
  shown=INITIAL();
  update('all');
- // Los estilos cosméticos del blocker aplican async: re-chequear tras el primer frame y con retardo.
+ // The blocker cosmetic styles apply async: re-check after the first frame and with a delay.
  requestAnimationFrame(()=>updateAdsVisibility());
  setTimeout(updateAdsVisibility,1500);
 </script>

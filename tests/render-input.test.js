@@ -4,8 +4,8 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { copyRenderInput, benchmarkSchedule } from '../video-render/engine/render-input.mjs';
-import { imageDimensions, normalizedDimensions, photoProfile } from '../video-render/engine/photo-normalization.mjs';
+import { copyRenderInput, benchmarkSchedule } from '../video-render/bench/render-input.mjs';
+import { imageDimensions, normalizedDimensions, photoProfile } from '../video-render/pipeline/04-photo-normalize.mjs';
 import { cameraAt, grainPosition } from '../video-render/render/remotion/kit/kit-logic.mjs';
 
 function directory(t) { const dir = mkdtempSync(join(tmpdir(), 'goatlab-render-input-')); t.after(() => rmSync(dir, { recursive: true, force: true })); return dir; }

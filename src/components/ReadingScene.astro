@@ -1,13 +1,13 @@
 ---
 /**
- * Escenas de la pizarra del analista: geometría declarativa de fútbol, una
- * por tipo de sección. Trazos planos sobre la superficie mate, sin cifras ni
- * resultados: los números viven en la cinta de figuras y en el texto.
- * El trazo se dibuja una vez al entrar el bloque (ver `partido.css`).
+ * Analyst-board scenes: declarative football geometry, one
+ * per section type. Flat strokes on the matte surface, without figures or
+ * results: numbers live in the figure strip and the text.
+ * The stroke draws once when the block enters (see `partido.css`).
  */
 const { kind = 'panorama' } = Astro.props;
 const scene = ['panorama', 'modelos', 'historial', 'tabla', 'goleadores', 'forma', 'claves'].includes(kind) ? kind : 'panorama';
-/* Casillas de la cinta de forma: cinco recientes y la siguiente en trazo señal. */
+/* Form strip chambers: five recent and the next in a signal stroke. */
 const chambers = [118, 162, 206, 250, 294];
 const chamberPath = x => `M${x + 5} 48h28a5 5 0 0 1 5 5v28a5 5 0 0 1-5 5h-28a5 5 0 0 1-5-5V53a5 5 0 0 1 5-5Z`;
 ---

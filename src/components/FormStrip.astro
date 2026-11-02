@@ -1,16 +1,16 @@
 ---
 import { teamShort, teamEsDisplay } from '../lib/teams.js';
 /**
- * "Cómo llegan al encuentro" como SVG dinámico: una fila por equipo con sus
- * últimos 5 partidos (marcador + rival abreviado), generada desde los datos —
- * ningún trazo estático. Mismo lenguaje que los chips de la portada (tintas
- * G/E/P, Manrope tabular) y misma accesibilidad que el gráfico anterior
- * (`role="img"` con la serie enumerada). La parrilla es fija (5 huecos, el
- * más reciente a la derecha); lo que falta se dibuja como hueco vacío.
- * Sin serie registrada, la fila cae a un blueprint en construcción (andamio
- * discontinuo, línea dibujándose en bucle, nodos parpadeantes, cian neutro)
- * con migajas reales del equipo (`homeCrumbs`/`awayCrumbs`) y expectativa
- * honesta; con movimiento reducido todo queda estático.
+ * "How they arrive" as dynamic SVG: one row per team with its
+ * last 5 matches (scoreline + abbreviated opponent), generated from the data —
+ * no static stroke. Same language as the home-page chips (G/D/L inks,
+ * tabular Manrope) and same accessibility as the previous chart
+ * (`role="img"` with the series enumerated). The grid is fixed (5 slots, the
+ * most recent on the right); what is missing is drawn as an empty slot.
+ * Without a recorded series, the row falls back to a blueprint under construction (dashed
+ * scaffold, line drawing in a loop, blinking nodes, neutral cyan)
+ * with real team crumbs (`homeCrumbs`/`awayCrumbs`) and an honest
+ * expectation; with reduced motion everything stays static.
  */
 const { home, away, homeForm = null, awayForm = null, homeCrumbs = [], awayCrumbs = [] } = Astro.props;
 const SLOTS = 5;
@@ -22,7 +22,7 @@ const TONES = {
   P: { bg: '#3b2824', fg: '#e9b4a3' },
 };
 const DOT = { home: '#c5ed74', away: '#8ca6bf' };
-// Más antiguo a la izquierda, el último a la derecha (lectura del sitio).
+// Oldest on the left, latest on the right (site reading order).
 const gamesOf = form => form.goalsFor.map((scored, index) => ({
   letter: form.form[index],
   scored,
@@ -48,8 +48,8 @@ const emptyBlocks = blocks.filter(block => !block.games);
 const ariaSeries = blocks.map(block => block.games
   ? `${teamEsDisplay(block.name)}, ${block.games.map(game => `${game.scored}-${game.conceded}`).join(', ')}`
   : `${teamEsDisplay(block.name)}: sin serie registrada, en un futuro tendremos datos`).join('; ');
-/* Fila blueprint: andamio discontinuo con la línea dibujándose en bucle y
-   dos nodos parpadeantes; geometría relativa al ancho, nada estático. */
+/* Blueprint row: dashed scaffold with the line drawing in a loop and
+   two blinking nodes; width-relative geometry, nothing static. */
 const blueprint = y => {
   const x0 = PAD + 12, x1 = width - PAD - 12, span = x1 - x0, mid = y + 20;
   const peakX = x0 + span * 0.44, peakY = mid - 9;

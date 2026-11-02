@@ -257,14 +257,14 @@ import '../styles/fuentes.css';
   }, { threshold: .18 });
   stages.forEach(stage => observer.observe(stage));
 
-  // Dial de frecuencia: progreso continuo ligado al scroll del bloque
+  // Frequency dial: continuous progress tied to the block scroll
   const freq = document.querySelector<HTMLElement>('.f-freq');
   const needle = document.querySelector<SVGGElement>('.f-dial-needle');
   const ticks = [...document.querySelectorAll<SVGElement>('.f-dial-tick')];
   const notes = [...document.querySelectorAll<HTMLElement>('.f-freq-note')];
   if (freq && needle) {
-   // La variable vive en la propia sección: `.f-freq{--freq-progress:1}`
-   // ensombrecería cualquier valor heredado de un ancestro.
+   // The variable lives on the section itself: `.f-freq{--freq-progress:1}`
+   // would shadow any value inherited from an ancestor.
    freq.style.setProperty('--freq-progress', '0');
    const apply = (p: number) => {
     freq!.style.setProperty('--freq-progress', String(p));

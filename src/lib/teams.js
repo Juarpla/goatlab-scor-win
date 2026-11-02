@@ -2,8 +2,8 @@
  * Team helpers: hero priority for the front page and short labels for charts.
  * Priority order decided in planning: Barcelona, Real Madrid, PSG, the six
  * traditional English clubs, everyone else; ties broken by earliest kickoff.
- * Parón de selecciones: cuando no hay clubes prioritarios, manda el ranking
- * de selecciones (España, Inglaterra, Francia… primero) antes que el kickoff.
+ * International break: when there are no priority clubs, the national-team
+ * ranking leads (Spain, England, France… first) before kickoff.
  */
 const PRIORITY_TEAMS = ['Barcelona', 'Real Madrid', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Manchester City', 'Manchester United', 'Chelsea', 'Tottenham'];
 const NATIONS_PRIORITY = ['Spain', 'England', 'France', 'Portugal', 'Germany', 'Netherlands', 'Italy', 'Belgium', 'Croatia', 'Denmark', 'Norway', 'Türkiye', 'Switzerland', 'Austria', 'Serbia', 'Sweden', 'Poland', 'Wales', 'Scotland', 'Greece', 'Ukraine', 'Hungary', 'Czechia'];
@@ -17,8 +17,8 @@ const SHORTS = {
 export function normalize(name) {
   return String(name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
-/** Nombre en español para lectura en voz alta (los guiones son en español).
- *  Sin entrada → se devuelve el original (no rompe equipos futuros). */
+/** Spanish name for reading aloud (scripts are in Spanish).
+ *  Without an entry → the original is returned (does not break future teams). */
 const COUNTRY_ES = {
   Albania: 'Albania', Andorra: 'Andorra', Armenia: 'Armenia', Austria: 'Austria',
   Azerbaijan: 'Azerbaiyán', Belarus: 'Bielorrusia', Belgium: 'Bélgica',
@@ -41,12 +41,12 @@ export function esName(name) {
   const key = String(name ?? '').trim();
   return COUNTRY_ES[key] ?? key;
 }
-/** Prefijos legales de proveedor que no distinguen club («FC Barcelona» = «Barcelona», «PAE AEK» = «AEK»). */
+/** Provider legal prefixes that do not distinguish a club ("FC Barcelona" = "Barcelona", "PAE AEK" = "AEK"). */
 const CLUB_PREFIXES = new Set(['fc', 'cf', 'cd', 'ca', 'cr', 'rc', 'cs', 'afc', 'rcd', 'club', 'pae']);
-/** Sufijos genéricos que sí pueden omitirse («Sevilla FC» = «Sevilla», «Levante UD» = «Levante»).
- *  «sc»/«ec» NO se omiten: distinguen (Barcelona ≠ Barcelona SC). */
+/** Generic suffixes that may be omitted ("Sevilla FC" = "Sevilla", "Levante UD" = "Levante").
+ *  "sc"/"ec" are NOT omitted: they distinguish (Barcelona ≠ Barcelona SC). */
 const IGNORABLE_SUFFIXES = new Set(['fc', 'cf', 'afc', 'ud', 'cd']);
-/** Clave canónica para dedup y comparación: sin prefijos legales ni sufijos genéricos. */
+/** Canonical key for dedup and comparison: no legal prefixes or generic suffixes. */
 export function canonicalClubKey(name) {
   const aliases = {'racing club de lens':'lens','rc lens':'lens','sporting clube de portugal':'sporting cp'};
   const normalized = normalize(name);
@@ -58,10 +58,10 @@ export function canonicalClubKey(name) {
   return tokens.slice(start, end).join(' ');
 }
 /** Providers spell clubs differently ("Newcastle" vs "Newcastle United"); compare on the normalized key.
- *  El prefijo legal se ignora («FC Barcelona» = «Barcelona») y el resto vale
- *  por prefijo de cadena («Brighton» = «Brighton Hove Albion»), salvo marca
- *  de club que distingue: extra de un solo token «sc»/«ec» no iguala
- *  («Barcelona» != «Barcelona SC»). */
+ *  The legal prefix is ignored ("FC Barcelona" = "Barcelona") and the rest matches
+ *  by string prefix ("Brighton" = "Brighton Hove Albion"), except for a club
+ *  marker that distinguishes: an extra single token "sc"/"ec" does not match
+ *  ("Barcelona" != "Barcelona SC"). */
 export function sameClub(a, b) {
   const left = canonicalClubKey(a);
   const right = canonicalClubKey(b);
@@ -74,17 +74,17 @@ export function sameClub(a, b) {
   for (const [full, base] of [[left, right], [right, left]]) {
     const extra = extraOf(full, base);
     if (extra == null) continue;
-    // Un solo «sc»/«ec» distingue clubes homónimos (Barcelona SC, Cruzeiro EC).
+    // A single "sc"/"ec" distinguishes same-name clubs (Barcelona SC, Cruzeiro EC).
     if (extra === 'sc' || extra === 'ec') return false;
     return true;
   }
   return false;
 }
 /**
- * Diccionario canónico: clave slug estable → {display, leagues, web, id
+ * Canonical dictionary: stable slug key → {display, leagues, web, id
  * (Bzzoiro, compat), bzzoiro/af/fd, aliases, frozen}.
- * Fuente: teams.json (scripts/build-teams.mjs). El pipeline resuelve por ID
- * antes que por nombre; el nombre queda como último recurso.
+ * Source: teams.json (scripts/build-teams.mjs). The pipeline resolves by ID
+ * before name; name remains the last resort.
  */
 export function resolveCanonical(catalog, name, {provider, providerId, competition} = {}) {
   const key = normalize(name);
@@ -108,18 +108,18 @@ export function providerTeamId(catalog, name, provider) {
   if (provider === 'fd') return hit.fd?.id ?? (typeof hit.fd === 'number' ? hit.fd : null);
   return hit.id ?? null;
 }
-/** Slug web estable de un equipo (`real-madrid`); null si no está en el diccionario. */
+/** Stable web slug for a team (`real-madrid`); null if not in the dictionary. */
 export function webSlug(catalog, name) {
   const hit = resolveCanonical(catalog, name);
   return hit?.web ?? hit?.key ?? null;
 }
-/** Día civil del kickoff en Lima. A las 19:00 el instante UTC ya es el día siguiente. */
+/** Calendar day of kickoff in Lima. At 19:00 the UTC instant is already the next day. */
 export function matchDay(kickoff) {
   const at = Date.parse(kickoff);
   if (!Number.isFinite(at)) return String(kickoff ?? '').slice(0, 10);
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(at));
 }
-/** ID web de un encuentro: home-vs-away-fecha de Lima (`real-madrid-vs-barcelona-2026-10-26`). */
+/** Web ID for a fixture: Lima home-vs-away-date (`real-madrid-vs-barcelona-2026-10-26`). */
 export function webMatchId(catalog, home, away, kickoff) {
   const homeSlug = webSlug(catalog, home) ?? slugify(home);
   const awaySlug = webSlug(catalog, away) ?? slugify(away);
@@ -128,7 +128,7 @@ export function webMatchId(catalog, home, away, kickoff) {
 export function slugify(name) {
   return normalize(name).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'equipo';
 }
-/** Nombre visible en español: limpia prefijos/sufijos y traduce selecciones (`Spain` → `España`). Clubes intactos. */
+/** Visible Spanish name: cleans prefixes/suffixes and translates national teams (`Spain` → `España`). Clubs untouched. */
 export function teamEsDisplay(name) {
   return esName(teamDisplay(name));
 }
@@ -139,10 +139,10 @@ export function teamShort(name) {
   return letters || '???';
 }
 /**
- * Etiqueta compacta para las camisetas: última palabra del nombre visible
- * con la inicial de la anterior («Real Madrid» → «R. Madrid»,
- * «Rayo Vallecano» → «R. Vallecano»; una sola palabra queda intacta).
- * Salta conectores («de», «la», «del»…) al buscar la inicial.
+ * Compact label for shirts: last word of the visible name
+ * with the initial of the previous one ("Real Madrid" → "R. Madrid",
+ * "Rayo Vallecano" → "R. Vallecano"; a single word stays intact).
+ * Skips connectors ("de", "la", "del"…) when looking for the initial.
  */
 const SKIP = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'al', 'en', 'a', 'the', 'of', 'da', 'do', 'das', 'dos', 'di', 'du', 'von', 'van']);
 export function teamCompact(name) {
@@ -153,7 +153,7 @@ export function teamCompact(name) {
   const prev = [...words.slice(0, -1)].reverse().find(w => !SKIP.has(normalize(w))) ?? words[words.length - 2];
   return `${prev.charAt(0).toUpperCase()}. ${last}`;
 }
-/** Nombre limpio para leer: quita los prefijos/sufijos legales que firman los proveedores («FC Barcelona» → «Barcelona»). */
+/** Clean name for reading: removes the legal prefixes/suffixes providers use ("FC Barcelona" → "Barcelona"). */
 export function teamDisplay(name) {
   return String(name ?? '')
     .replace(/^(?:FC|CF|CD|CA|SC|CR|RC|CS|AFC|RCD|Club)\s+/i, '')
@@ -164,7 +164,7 @@ export function priorityIndex(name) {
   const index = PRIORITY_TEAMS.findIndex(team => normalize(team) === key);
   return index === -1 ? PRIORITY_TEAMS.length : index;
 }
-/** Ranking de selecciones para el hero en parón internacional. No rankeadas = al fondo. */
+/** National-team ranking for the hero during an international break. Unranked = at the bottom. */
 export function nationsPriorityIndex(name) {
   let key = normalize(name);
   if (key === 'turkey') key = 'turkiye';
@@ -173,12 +173,12 @@ export function nationsPriorityIndex(name) {
   return index === -1 ? NATIONS_PRIORITY.length : index;
 }
 /**
- * Partidos no terminados, del más relevante al menos.
- * La lista de clubes manda primero (×100); si no hay ningún club
- * prioritario, manda el ranking de selecciones (×100) en vez del kickoff.
- * En ambos casos: ambos equipos rankeados (+10) y proximidad del kickoff
- * (el más temprano gana el desempate, con paso pequeño para no pisar bonus).
- * Determinista: no usa el reloj.
+ * Unfinished matches, most relevant first.
+ * The club list leads first (×100); if there is no priority
+ * club, the national-team ranking leads (×100) instead of kickoff.
+ * In both cases: both teams ranked (+10) and kickoff proximity
+ * (earliest wins the tiebreak, with a small step so it does not override bonuses).
+ * Deterministic: does not use the clock.
  */
 export function rankMatches(matches) {
   const candidates = (matches ?? []).filter(match => !FINISHED.has(match.status));
@@ -203,7 +203,7 @@ export function rankMatches(matches) {
   return [...candidates].sort((a, b) => score(b) - score(a));
 }
 
-/** Partido destacado de la portada: el primero de rankMatches. */
+/** Featured home-page match: the first from rankMatches. */
 export function heroMatch(matches) {
   return rankMatches(matches)[0] ?? null;
 }

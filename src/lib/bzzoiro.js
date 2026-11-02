@@ -1,9 +1,9 @@
 /**
- * Bzzoiro Sports Data (REST gratuito): estadísticas con xG, incidentes, historial
- * cara a cara, alineaciones, jugadores destacados y predicciones del modelo.
- * Los partidos se emparejan por nombre de equipo contra la agenda del día; si no hay
- * coincidencia confiable, el partido queda sin enriquecer (null) en lugar de inventar datos.
- * Los escudos se resuelven con su Image API (solo identificación, hotlink directo).
+ * Bzzoiro Sports Data (free REST): stats with xG, incidents, head-to-head
+ * history, lineups, standout players and model predictions.
+ * Matches are paired by team name against the day's schedule; without a
+ * reliable match, the fixture stays unenriched (null) instead of inventing data.
+ * Crests are resolved with its Image API (identification only, direct hotlink).
  */
 import { normalize } from './teams.js';
 const BASE = 'https://sports.bzzoiro.com/api/v2';
@@ -108,8 +108,8 @@ async function request(url, token, fetchImpl) {
   return res.json();
 }
 /**
- * Devuelve `{ [matchId]: { statistics, events } }` para los partidos de la fecha indicada.
- * Presupuesto acotado: máximo `maxRequests` llamadas de detalle por corrida.
+ * Returns `{ [matchId]: { statistics, events } }` for the matches on the given date.
+ * Bounded budget: at most `maxRequests` detail calls per run.
  */
 export async function enrichMatches(matches, { date, env = {}, fetchImpl = fetch, logger = console, maxRequests = 24 } = {}) {
   if (!env.BZZOIRO_API_TOKEN || !matches?.length) return {};
@@ -137,7 +137,7 @@ export async function enrichMatches(matches, { date, env = {}, fetchImpl = fetch
   return enrichments;
 }
 
-/* ---- Suite de enriquecimiento ampliado (ventana + backfill) ---- */
+/* ---- Extended enrichment suite (window + backfill) ---- */
 
 /** Runs `worker` over `items` with at most `limit` calls in flight; order preserved, failures map to null. */
 export async function mapPool(items, limit, worker) {
@@ -194,9 +194,9 @@ export async function fetchEventStats(eventId, env = {}, fetchImpl = fetch, logg
 }
 
 /**
- * Contexto del partido que el resto de endpoints no trae: clima, césped,
- * asistencia, árbitro, sede, derbi/neutral y viaje. Todo nulleable; lo ausente
- * es ausencia honesta, nunca se inventa.
+ * Match context the other endpoints do not provide: weather, pitch,
+ * attendance, referee, venue, derby/neutral and travel. All nullable; missing
+ * values are honest absence, never invented.
  */
 export function mapEventDetail(data) {
   if (!data || typeof data !== 'object') return null;
@@ -238,7 +238,7 @@ export async function fetchEventDetail(eventId, env = {}, fetchImpl = fetch) {
 
 export function mapH2H(data, recentLimit = 5) {
   if (!data || typeof data.total_matches !== 'number') return null;
-  // Cero confirmado no es ausencia: se distingue para no disfrazar un fallo.
+  // Confirmed zero is not absence: it is distinguished so a failure is not disguised.
   if (data.total_matches === 0) {
     return { totalMatches: 0, homeWins: null, draws: null, awayWins: null, homeGoals: null, awayGoals: null, avgTotalGoals: null, recent: [], source: 'Bzzoiro' };
   }
@@ -261,9 +261,9 @@ export async function fetchEventH2H(eventId, env = {}, fetchImpl = fetch) {
 }
 
 /**
- * Retransmisiones y social con presupuesto mínimo: una llamada por
- * concepto y partido. Los mapeadores son defensivos (claves alternativas)
- * porque el payload varía por mercado; lo irreconocible se descarta.
+ * Broadcasts and social with a minimal budget: one call per
+ * concept and match. Mappers are defensive (alternative keys)
+ * because the payload varies by market; unrecognizable data is discarded.
  */
 export const LATAM_COUNTRIES = ['AR', 'MX', 'CO', 'PE', 'CL', 'UY', 'EC', 'BO', 'PY', 'VE', 'BR', 'CR', 'PA', 'DO', 'GT', 'HN', 'SV', 'NI'];
 export function mapBroadcasts(data, countries = LATAM_COUNTRIES, limit = 4) {
@@ -296,9 +296,9 @@ export async function fetchEventSocial(eventId, env = {}, fetchImpl = fetch) {
 }
 
 /**
- * Árbitro del encuentro con sus promedios por partido. Resuelve el
- * `referee_id` del evento y pide su ficha; sin id o sin promedios,
- * null honesto (el bloque no se dibuja).
+ * Match referee with per-match averages. Resolves the event's
+ * `referee_id` and requests its profile; without an id or averages,
+ * honest null (the block is not drawn).
  */
 export function mapReferee(data) {
   if (!data || typeof data !== 'object') return null;
@@ -323,18 +323,18 @@ export async function fetchEventReferee(eventId, env = {}, fetchImpl = fetch) {
 }
 
 /**
- * True cuando el historial cara a cara puede mostrarse: al menos `min`
- * cruces registrados (el mismo umbral que usa la síntesis para el tilt).
+ * True when head-to-head history can be shown: at least `min`
+ * recorded meetings (the same threshold the synthesis uses for the tilt).
  */
 export function hasH2HHistory(h2h, min = 3) {
   return Boolean(h2h && Number.isInteger(h2h.totalMatches) && h2h.totalMatches >= min);
 }
 
 /**
- * Amistoso u oficial: los amistosos informan menos del ritmo competitivo
- * (rotaciones, intensidad) y pesan la mitad en los ritmos por equipo.
- * Detección tolerante sobre los campos que trae el evento; sin señal,
- * se asume oficial para no castigar por defecto.
+ * Friendly or official: friendlies say less about competitive rhythm
+ * (rotations, intensity) and weigh half in per-team rates.
+ * Tolerant detection over the fields the event provides; without a signal,
+ * official is assumed so nothing is punished by default.
  */
 export function isFriendlyEvent(row) {
   if (row?.friendly === true) return true;
@@ -347,11 +347,11 @@ export function isFriendlyEvent(row) {
 }
 
 /**
- * Últimos partidos terminados de un equipo antes de una fecha: el fallback de
- * "lo que ya jugaron" cuando la base local no cubre al club. La lista del
- * proveedor llega de más reciente a más antigua; se reordena por fecha en
- * cliente y se filtra estrictamente antes de `before`, así el propio
- * encuentro nunca entra. Misma forma de fila que `h2h.recent`.
+ * Last finished matches for a team before a date: the "what they already
+ * played" fallback when the local base does not cover the club. The provider
+ * list arrives newest to oldest; it is re-sorted by date on the client and
+ * filtered strictly before `before`, so the fixture itself never enters.
+ * Same row shape as `h2h.recent`.
  */
 export function mapTeamLast(rows, { before = null, limit = 5 } = {}) {
   const finished = (Array.isArray(rows) ? rows : [])
@@ -476,7 +476,7 @@ export function mapPrediction(data) {
     btts: markets.btts?.prob_yes != null ? pct(markets.btts.prob_yes) : null,
     score: markets.score?.most_likely ?? null,
     cornersOver95: markets.corners?.prob_over_95 != null ? pct(markets.corners.prob_over_95) : null,
-    // Picks del modelo del proveedor (favorite_prob viene 0–100 como los mercados).
+    // Provider model picks (favorite_prob arrives 0–100 like the markets).
     recommendations: rec ? {
       favorite: rec.favorite ?? null,
       favoriteProb: pct3(rec.favorite_prob),
@@ -493,12 +493,12 @@ export async function fetchEventPrediction(eventId, env = {}, fetchImpl = fetch)
   return mapPrediction(await request(`${BASE}/events/${eventId}/prediction/`, env.BZZOIRO_API_TOKEN, fetchImpl));
 }
 
-/* ---- Lectura del mercado (consenso FT, sin casas ni cuotas en la vista) ---- */
+/* ---- Market reading (FT consensus, no bookmakers or odds in the view) ---- */
 
 /**
- * Consenso de cuotas tiempo completo (11 claves FT en plan free).
- * Devuelve el payload crudo; la conversión a % vive en `src/lib/odds.js`.
- * Null honesto ante cualquier forma irreconocible o fallo HTTP.
+ * Full-time odds consensus (11 FT keys on the free plan).
+ * Returns the raw payload; conversion to % lives in `src/lib/odds.js`.
+ * Honest null on any unrecognizable shape or HTTP failure.
  */
 export function mapOdds(data) {
   if (!data || typeof data !== 'object') return null;
@@ -535,7 +535,7 @@ export async function fetchOddsComparison(eventId, env = {}, fetchImpl = fetch) 
   } catch { return null; }
 }
 
-/* ---- Resolución de ligas e ids de equipo ---- */
+/* ---- League and team id resolution ---- */
 
 /** Distinctive token sets per competition; exclusions keep second divisions and women's leagues out. */
 const LEAGUE_MATCHERS = {
@@ -605,9 +605,9 @@ function standingsRow(row) {
 }
 
 export function mapBzzoiroStandings(data, top = 20) {
-  // Las copas devuelven grupos por letra; se guardan crudos y las filas se
-  // aplanan para que los consumidores de `rows` no cambien. Algunos endpoints
-  // (Libertadores) devuelven `groups` como objeto {nombre: filas}.
+  // Cups return groups by letter; they are stored raw and the rows are
+  // flattened so `rows` consumers do not change. Some endpoints
+  // (Libertadores) return `groups` as an object {name: rows}.
   const rawGroups = data?.groups ?? data?.standings_groups ?? null;
   const groups = Array.isArray(rawGroups) ? rawGroups
     : rawGroups && typeof rawGroups === 'object'
@@ -649,8 +649,8 @@ export async function fetchBzzoiroStandings(leagueId, { env = {}, fetchImpl = fe
 }
 
 export function mapLeaderboard(data, limit = 5) {
-  // La v2 nombra la lista «leaders» (con la temporada vigente adjunta); las
-  // respuestas antiguas usaban «results» o un arreglo plano.
+  // v2 names the list "leaders" (with the current season attached); old
+  // responses used "results" or a flat array.
   const rows = Array.isArray(data?.leaders) ? data.leaders : Array.isArray(data?.results) ? data.results : Array.isArray(data) ? data : [];
   if (!rows.length) return null;
   return rows.slice(0, limit).map(row => ({
@@ -672,12 +672,12 @@ export async function fetchLeaderboard(leagueId, stat, { env = {}, fetchImpl = f
   } catch (error) { logger.warn(`Goleadores Bzzoiro (${leagueId}/${stat}): ${error.message}`); return null; }
 }
 
-/* ---- Fallback de goleadores por plantilla (Nivel 2) ---- */
+/* ---- Scorer fallback by squad (Level 2) ---- */
 
 /**
- * Plantilla de un equipo → filas de goleadores `{player, team, value, matches}`.
- * Acepta varias formas de payload (`squad`, `players` o arreglo plano) y de
- * conteo de goles; sin goles por jugador devuelve null honesto (nunca inventa).
+ * Team squad → scorer rows `{player, team, value, matches}`.
+ * Accepts several payload shapes (`squad`, `players` or flat array) and goal
+ * counting; without per-player goals it returns honest null (never invents).
  */
 export function mapSquadScorers(data, { team = null, limit = 5 } = {}) {
   const rows = Array.isArray(data) ? data : Array.isArray(data?.squad) ? data.squad : Array.isArray(data?.players) ? data.players : null;
@@ -696,7 +696,7 @@ export function mapSquadScorers(data, { team = null, limit = 5 } = {}) {
   return mapped.length ? mapped : null;
 }
 
-/** 1 request por equipo; sin id o sin clave responde null sin llamar. */
+/** 1 request per team; without an id or key it returns null without calling. */
 export async function fetchTeamSquad(teamId, { env = {}, fetchImpl = fetch } = {}) {
   if (teamId == null || !env.BZZOIRO_API_TOKEN) return null;
   try {

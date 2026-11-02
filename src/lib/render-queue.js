@@ -1,4 +1,4 @@
-/** Cola de renders: lo que se guarda mientras faltan fotos, y el texto del fallo. */
+/** Render queue: what is stored while photos are missing, and the failure text. */
 
 export function pendingRecord({ chatId, matchId, variant, audioFileId, script }) {
   const shot = script?.scripts?.[variant] ?? {};
@@ -17,7 +17,7 @@ export function pendingRecord({ chatId, matchId, variant, audioFileId, script })
   };
 }
 
-/** null si el pool no tiene al menos dos fotos. El orden lo arma el render. */
+/** null if the pool has fewer than two photos. The render sets the order. */
 export function renderRequest(record, manifest) {
   const assets = (Array.isArray(manifest?.assets) ? manifest.assets : []).filter(asset => asset?.url);
   if (assets.length < 2) return null;
@@ -34,13 +34,13 @@ export function renderRequest(record, manifest) {
   };
 }
 
-/** Listo y con fotos: publicar. Si no, dejar el audio en espera. */
+/** Ready and with photos: publish. Otherwise, leave the audio waiting. */
 export function queueDecision({ ready, request }) {
   if (ready && request) return 'post';
   return 'pending';
 }
 
-/** Últimas líneas útiles del log, para el mensaje de Telegram. No dice que falten fotos. */
+/** Last useful log lines for the Telegram message. It does not say photos are missing. */
 export function photoFailureText(log) {
   const lines = String(log ?? '').split('\n').map(line => line.trim()).filter(Boolean);
   const useful = lines.filter(line => !/faltan fotos/i.test(line) && /HTTP|agnes|error|fallo|truncad/i.test(line));
@@ -48,7 +48,7 @@ export function photoFailureText(log) {
   return tail.join('\n').slice(0, 500);
 }
 
-/** Aviso al chat cuando un audio no se puede renderizar. No reenvía el archivo. */
+/** Chat notice when an audio cannot be rendered. It does not resend the file. */
 export function audioFailureText(n, error) {
   const raw = String(error ?? '').split('\n')[0].trim();
   if (/aceleraci[oó]n|acelerándolo|Graba hasta (?:45|50)/i.test(raw)) return `El audio ${n} supera el límite del Short. Graba hasta 50 segundos y pide sustituir ese audio; conservaré los demás vídeos de la serie.`;

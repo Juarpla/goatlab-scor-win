@@ -1,8 +1,8 @@
 /**
- * Horas en la hora local del visitante (sitio estático: el servidor imprime
- * Lima como línea base y este script reescribe cada hora en el cliente).
- * Cadena acordada: visitante → zona de la ciudad del estadio → Lima.
- * El dato `data-venue-tz` llega cuando el pipeline exponga la zona del estadio.
+ * Times in the visitor's local time (static site: the server prints
+ * Lima as the baseline and this script rewrites each time on the client).
+ * Agreed chain: visitor → stadium city timezone → Lima.
+ * The `data-venue-tz` value arrives when the pipeline exposes the stadium timezone.
  */
 const LIMA = 'America/Lima';
 

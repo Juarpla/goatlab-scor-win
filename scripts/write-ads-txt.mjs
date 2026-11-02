@@ -1,6 +1,6 @@
-// Genera public/ads.txt desde la misma fuente que src/config/ads.ts:
-// la env PUBLIC_ADSENSE_PUBLISHER_ID en crudo (sin ca-), con fallback al ID
-// literal. ads.txt siempre usa el formato pub-... (nunca ca-...).
+// Generates public/ads.txt from the same source as src/config/ads.ts:
+// the raw PUBLIC_ADSENSE_PUBLISHER_ID env var (no ca-), with a fallback to the
+// literal ID. ads.txt always uses the pub-... format (never ca-...).
 import { writeFileSync } from 'node:fs';
 
 const cleaned = (process.env.PUBLIC_ADSENSE_PUBLISHER_ID ?? '').trim().replace(/^ca-/i, '');

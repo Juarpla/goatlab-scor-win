@@ -1,17 +1,17 @@
 /**
- * La lectura: normalización de las secciones LLM para la pizarra del analista.
+ * The reading: normalization of LLM sections for the analyst board.
  *
- * Acepta los tres formatos guardados en `llm-analysis.json` (párrafo legacy,
- * secciones v2 sin `kind`/`stats`, secciones v3 con ambos) y devuelve una
- * forma estable para la vista. Las cifras protagonistas solo se aceptan si
- * aparecen literalmente en los bullets de su sección: la pizarra nunca
- * escribe un número que el texto no diga.
+ * Accepts the three formats stored in `llm-analysis.json` (legacy paragraph,
+ * v2 sections without `kind`/`stats`, v3 sections with both) and returns a
+ * stable shape for the view. Protagonist figures are only accepted if
+ * they appear literally in their section's bullets: the board never
+ * writes a number the text does not state.
  */
 
-/** Tipos de sección que la pizarra sabe dibujar. */
+/** Section types the board can draw. */
 export const READING_KINDS = ['panorama', 'modelos', 'historial', 'tabla', 'goleadores', 'forma', 'claves'];
 
-/* Pistas para elegir escena en secciones v2 (solo decoración, jamás cifras).
+/* Hints for choosing a scene in v2 sections (decoration only, never figures).
    Decide el título y nada más: los bullets suelen mencionar de pasada el
    historial o los puntos, y esas palabras convertían dos secciones distintas
    en la misma escena. `goleadores` va antes que `tabla`: la tabla de
@@ -25,7 +25,7 @@ const TITLE_HINTS = [
   ['claves', /clave|contexto|nota|límite|limite|duda|ausencia|baja|sede|clima|árbitro|arbitro|descanso/i],
 ];
 
-/** Elige escena por título cuando el JSON no declara `kind`. */
+/** Chooses a scene by title when the JSON does not declare `kind`. */
 export function inferKind(title = '') {
   for (const [kind, pattern] of TITLE_HINTS) {
     if (pattern.test(title)) return kind;
@@ -33,14 +33,14 @@ export function inferKind(title = '') {
   return 'panorama';
 }
 
-/** Decimales en coma latina para toda cifra que la vista imprime. */
+/** Latin decimal comma for every figure the view prints. */
 export function formatFigure(value) {
   return String(value ?? '').replace(/(\d)\.(\d)/g, '$1,$2');
 }
 
 const normalize = value => String(value ?? '').replace(/,/g, '.');
 
-/** Sanea hasta 3 cifras: forma válida y presencia literal en los bullets. */
+/** Sanitizes up to 3 figures: valid shape and literal presence in the bullets. */
 function normalizeStats(stats, bullets) {
   if (!Array.isArray(stats)) return [];
   return stats
@@ -52,9 +52,9 @@ function normalizeStats(stats, bullets) {
 }
 
 /**
- * Normaliza una entrada de `llm-analysis.json` (o null). Devuelve
- * `{ sections }` o null si no hay nada que mostrar. La auditoría del LLM
- * (`limitations`) se queda en el JSON: la vista no la imprime nunca.
+ * Normalizes an entry from `llm-analysis.json` (or null). Returns
+ * `{ sections }` or null if there is nothing to show. The LLM audit
+ * (`limitations`) stays in the JSON: the view never prints it.
  */
 export function normalizeReading(entry) {
   if (!entry) return null;
@@ -80,9 +80,9 @@ export function normalizeReading(entry) {
 }
 
 /**
- * Parte un bullet en segmentos, marcando las cifras declaradas. Solo hay
- * coincidencia literal (con coma o punto intercambiables); ningún número
- * suelto del texto se resalta por su cuenta.
+ * Splits a bullet into segments, marking declared figures. Only literal
+ * matching (comma or dot interchangeable); no loose number in the text
+ * is highlighted on its own.
  */
 export function matchFigures(text, stats) {
   const source = String(text ?? '');

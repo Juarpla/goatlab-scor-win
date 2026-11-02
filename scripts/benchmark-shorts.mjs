@@ -2,12 +2,12 @@
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { cpus, totalmem, tmpdir } from 'node:os';
 import { join, resolve, sep } from 'node:path';
-import { copyRenderInput, benchmarkSchedule } from '../video-render/engine/render-input.mjs';
-import { photoProfile } from '../video-render/engine/photo-normalization.mjs';
+import { copyRenderInput, benchmarkSchedule } from '../video-render/bench/render-input.mjs';
+import { photoProfile } from '../video-render/pipeline/04-photo-normalize.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { renderSilent } from '../video-render/engine/short-job.mjs';
+import { renderSilent } from '../video-render/pipeline/index.mjs';
 
 const run = promisify(execFile);
 const repo = fileURLToPath(new URL('..', import.meta.url));

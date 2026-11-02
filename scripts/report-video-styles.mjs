@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-import { VISUAL_STYLES, isVisualStyle } from '../src/lib/visual-style.js';
+import { VISUAL_STYLES, isVisualStyle } from '../video-render/contract/visual-style.js';
 
 const median = values => {
   const sorted = values.filter(Number.isFinite).sort((a, b) => a - b), i = Math.floor(sorted.length / 2);

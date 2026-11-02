@@ -3,27 +3,27 @@ on:
   workflow_dispatch:
     inputs:
       match:
-        description: 'ID del partido (webId o id). Vacío = top N'
+        description: 'Match ID (webId or id). Empty = top N'
         required: false
         type: string
       top:
-        description: 'Cuántos partidos del ranking (vacío = SCRIPT_TOP_N o 5)'
+        description: 'How many matches from the ranking (empty = SCRIPT_TOP_N or 5)'
         required: false
         type: string
       category:
-        description: 'Contenido que se debe preparar'
+        description: 'Content to prepare'
         type: choice
         default: all
         options: [all, scripts, image-prompts]
       force:
-        description: 'Reescribir aunque el JSON ya exista'
+        description: 'Rewrite even if the JSON already exists'
         type: boolean
         default: false
   workflow_run:
     workflows: ["1-update-data"]
     types: [completed]
-# Corre después de que los datos ya están en main. Un fallo de narración
-# no bloquea el deploy de probabilidades.
+# Runs after the data is already on main. A narration failure
+# does not block the probabilities deploy.
 permissions:
   contents: write
   actions: read
@@ -44,19 +44,19 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # historial completo: el commit del bot hace rebase antes del push
-          ref: main # el SHA del workflow que disparó este job es el de antes del commit de datos
+          fetch-depth: 0 # full history: the bot commit rebases before push
+          ref: main # the SHA of the workflow that triggered this job predates the data commit
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Fijar selección compartida
+      - name: Set shared selection
         run: node scripts/content-selection.mjs
-      - name: Preparar categorías independientes
+      - name: Prepare independent categories
         id: scripts
-        continue-on-error: true # los JSON válidos se commitean aunque otro partido falle
+        continue-on-error: true # valid JSON is committed even if another match fails
         run: |
           args=()
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
@@ -81,11 +81,11 @@ jobs:
           LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
           SCRIPT_TOP_N: ${{ vars.SCRIPT_TOP_N }}
           SCRIPT_PROVIDER_ORDER: ${{ vars.SCRIPT_PROVIDER_ORDER || 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL' }}
-      - name: Lint de guiones
+      - name: Script lint
         run: node scripts/check-compliance.mjs --selection=.cache/content-selection.json
-      - name: Validar prompts
+      - name: Validate prompts
         run: node scripts/check-match-prompts.mjs --selection=.cache/content-selection.json
-      - name: Commit de contenido
+      - name: Commit content
         if: always() && steps.scripts.outcome != 'skipped'
         run: |
           git config user.name "github-actions[bot]"
@@ -94,7 +94,7 @@ jobs:
             if [ -e "$path" ]; then git add "$path"; fi
           done
           if git diff --cached --quiet; then
-            echo "Sin cambios de guiones que commitear"
+            echo "No script changes to commit"
           else
             git commit -m "chore: update youtube scripts"
             pushed=false
@@ -102,19 +102,19 @@ jobs:
               git fetch origin
               if ! git rebase --autostash origin/main; then
                 git rebase --abort || true
-                echo "Conflicto con main: revisar a mano"
+                echo "Conflict with main: review by hand"
                 exit 1
               fi
               if git push origin HEAD:main; then
                 pushed=true
                 break
               fi
-              echo "Push rechazado, reintento $i/3"
+              echo "Push rejected, retry $i/3"
               sleep 10
             done
             if [ "$pushed" != "true" ]; then exit 1; fi
           fi
-      - name: Publicar selección e inputs para media
+      - name: Publish selection and inputs for media
         uses: actions/upload-artifact@v4
         with:
           name: goatlab-content-selection
@@ -125,6 +125,6 @@ jobs:
             public/data/youtube-scripts/*.json
             public/data/image-prompts/*.json
           retention-days: 7
-      - name: Comprobar resultado de generación
+      - name: Check generation result
         if: always() && steps.scripts.outcome == 'failure'
         run: exit 1

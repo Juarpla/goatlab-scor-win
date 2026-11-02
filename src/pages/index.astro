@@ -30,14 +30,14 @@ const heroTime = hero ? new Date(hero.kickoff).toLocaleTimeString('es-PE', { tim
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
-// Muro: la ventana, con marcador si ya hay resultado; sin el destacado; 9 más cercanos.
+// Wall: the window, with a scoreline if there is a result; without the featured match; 9 nearest.
 const wallRows = listed.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
 const hasMore = (hero && listed.includes(hero) ? listed.length - 1 : listed.length) > wallRows.length;
 const heroFormOnly = hero ? teamForm(results.results, hero.home) : null;
 const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 
-// Cifras reales para la banda del hero; las históricas sirven de respaldo evergreen
-// para que la banda nunca quede vacía.
+// Real figures for the hero band; historical ones serve as evergreen backup
+// so the band never stays empty.
 const resultsCount = results.results.length;
 const last30 = (() => {
   const cutoff = new Date();
@@ -56,13 +56,13 @@ const evergreenSlides = [
   { figure: competitionsCount, line: `${competitionsCount === 1 ? 'competición' : 'competiciones'} cubiertas por la base histórica.` },
 ].filter(slide => slide.figure > 0 && !realSlides.some(real => real.figure === slide.figure && real.line === slide.line));
 const slides = [...realSlides, ...evergreenSlides].slice(0, 3);
-// Región de jornada: mapa de sedes, pulso de la base, tablas y termómetro.
-// Cada bloque se omite solo cuando su fuente no entregó datos.
+// Matchday region: venue map, database pulse, tables and thermometer.
+// Each block is omitted only when its source did not deliver data.
 const journeyData = buildMapData(upcoming);
 const pulse = computePulse(results.results);
 const curiosities = computeCuriosities(results.results);
 const players = computePlayerPulse(scorers);
-// Nations League es fase de grupos: su tabla plana no entra al widget (vista por grupos pendiente).
+// Nations League is a group stage: its flat table does not enter the widget (group view pending).
 const tables = Object.fromEntries(Object.entries(standings).filter(([id, table]) => id !== 'nations' && table.rows?.length));
 const hasLeft = pulse.length > 0 || players.length > 0;
 const hasRight = Object.keys(tables).length > 0 || curiosities.length > 0;
@@ -134,14 +134,14 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
    </div>}
   </div>}
  </section>}
- <!-- Fase 2: los experimentos (pulso, tabla, banda, mapa) van entre este anuncio y el cierre -->
+ <!-- Phase 2: the experiments (pulse, table, band, map) go between this ad and the close -->
  <AdSlot/>
 </main>
 <script>
  import { initLocalTimes } from '../lib/local-time.js';
  initLocalTimes();
- // El revelado de chips ocurre aunque el panel sea más alto que el viewport
- // (umbral bajo en vez del 35% que nunca llegaba a dispararse).
+ // The chip reveal happens even if the panel is taller than the viewport
+ // (low threshold instead of the 35% that never fired).
  const panels=[...document.querySelectorAll<HTMLElement>('.forma-panel')];
  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
   panels.forEach(panel=>panel.classList.add('js-anim'));

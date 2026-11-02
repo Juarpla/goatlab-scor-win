@@ -1,8 +1,8 @@
 ---
-description: Renderiza un Short de GoatLab con el skill video-render
+description: Render a GoatLab Short with the video-render skill
 agent: build
 ---
 
 Call skill({ name: "video-render" }) and follow its steps in order to handle $ARGUMENTS.
 
-Empieza por el Paso 1 (elegir partido) salvo que el pedido ya traiga partido y audio. No adivines el partido de un audio numerado: identifícalo por la voz antes de renderizar.
+Start with Step 1 (choose the match) unless the request already includes the match and audio. Do not guess the match from a numbered audio: identify it from the voice before rendering.

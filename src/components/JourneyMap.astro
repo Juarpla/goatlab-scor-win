@@ -46,8 +46,8 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
  import { initLocalTimes } from '../lib/local-time.js';
  initLocalTimes();
 
- // Parpadeo y minuto estimado: se calculan en el cliente sobre los kickoffs
- // locales a la build. Ventana en vivo acordada: kickoff → +1 h 50 min.
+ // Blink and estimated minute: computed on the client from build-local
+ // kickoffs. Agreed live window: kickoff → +1 h 50 min.
  const LIVE_WINDOW_MS = 110 * 60_000;
  const pins = [...document.querySelectorAll<HTMLButtonElement>('.pin')];
  const cards = new Map([...document.querySelectorAll<HTMLElement>('.map-card')].map(card => [card.dataset.for!, card]));

@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { voicePolicy, VOICE_SECONDS } from '../../src/lib/short-format.js';
+import { voicePolicy, VOICE_SECONDS } from '../contract/short-format.js';
 const run = promisify(execFile);
 export async function adjustVoice({ tmp, voiceFile, voiceSeconds }) {
   const policy = voicePolicy(voiceSeconds);

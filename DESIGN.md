@@ -10,12 +10,12 @@ colors:
   warm-ink: "#edf0e6"
   quiet-ink: "#a4aea3"
   rule: "#354035"
-  verde-forma: "#29351d"
-  gris-forma: "#303732"
-  rojo-forma: "#3b2824"
-  serie-empate: "#6f8173"
-  serie-mute: "#55645a"
-  amarilla: "#e9c46a"
+  form-win: "#29351d"
+  form-draw: "#303732"
+  form-loss: "#3b2824"
+  series-draw: "#6f8173"
+  series-muted: "#55645a"
+  yellow-card: "#e9c46a"
 typography:
   display:
     fontFamily: "Barlow Condensed, sans-serif"
@@ -85,7 +85,7 @@ components:
     slides: "maximum 3, real figures from the database; 12s CSS rotation; first slide static with reduced-motion"
     figure: "Barlow Condensed 700 in signal lime, tabular-nums"
   form-chip:
-    backgroundColor: "{colors.verde-forma} | {colors.gris-forma} | {colors.rojo-forma} depending on G/E/P"
+    backgroundColor: "{colors.form-win} | {colors.form-draw} | {colors.form-loss} depending on G/E/P"
     textColor: "#d2eea7 | #c7cfc6 | #e9b4a3 in the scoreline; opponent note in {colors.quiet-ink}"
     rounded: "6px"
     padding: "8px 8px 7px"

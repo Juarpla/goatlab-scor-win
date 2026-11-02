@@ -1,9 +1,9 @@
 ---
 /**
- * WaffleResult.astro — distribución del resultado en 100 escenarios.
- * "Simulación educativa: 100 escenarios": cada cuadrito es un escenario.
- * Los cuadritos florecen en cascada (.pt-fade + --d) al activarse el pane;
- * con movimiento reducido quedan fijos. Reusa los tonos de ProbabilityBar.
+ * WaffleResult.astro — result distribution in 100 scenarios.
+ * "Educational simulation: 100 scenarios": each square is a scenario.
+ * Squares bloom in a ladder (.pt-fade + --d) when the pane activates;
+ * with reduced motion they stay fixed. Reuses ProbabilityBar tones.
  */
 interface Segment { label: string; value: number; tone: 'home' | 'away' | 'draw' | 'mute' }
 interface Props { title: string; segments: Segment[]; summary: string; note?: string }

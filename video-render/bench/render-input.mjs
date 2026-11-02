@@ -1,6 +1,6 @@
 import { basename, join } from 'node:path';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { normalizePhoto, photoProfile } from './photo-normalization.mjs';
+import { normalizePhoto, photoProfile } from '../pipeline/04-photo-normalize.mjs';
 
 export function compositionFiles(props) {
   const names = [props.font, props.brand, ...(props.photos || []).flatMap(p => [p.src, p.backdrop, p.focusBlur]), ...(props.clips || []).map(c => c.src)].filter(Boolean);

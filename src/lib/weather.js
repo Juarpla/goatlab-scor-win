@@ -1,22 +1,22 @@
 /**
- * Clima por kickoff vía Open-Meteo (gratuito, sin key, 10k llamadas/día).
- * Solo la hora del saque inicial, nunca el hourly completo: el sidecar
- * `weather.json` guarda `{ temp, precipitation, wind, weathercode }` por
- * partido. Futuro → `/v1/forecast` (16 días); pasado → `/v1/archive` (ERA5).
- * Sin coordenadas o sin hora emparejada: null honesto. Atribución CC BY 4.0.
+ * Weather per kickoff via Open-Meteo (free, no key, 10k calls/day).
+ * Only the kickoff hour, never the full hourly: the `weather.json`
+ * sidecar stores `{ temp, precipitation, wind, weathercode }` per
+ * match. Future → `/v1/forecast` (16 days); past → `/v1/archive` (ERA5).
+ * Without coordinates or a matched hour: honest null. Attribution CC BY 4.0.
  */
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 const ARCHIVE_URL = 'https://archive-api.open-meteo.com/v1/archive';
 const HOURLY = 'temperature_2m,precipitation,weathercode,wind_speed_10m';
 const CHUNK = 50;
 
-/** Hora del kickoff truncada a la hora UTC que Open-Meteo indexa (`...T15:00`). */
+/** Kickoff time truncated to the UTC hour Open-Meteo indexes (`...T15:00`). */
 export function kickoffHour(kickoff) {
   const iso = String(kickoff ?? '');
   return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(iso) ? `${iso.slice(0, 13)}:00` : null;
 }
 
-/** Extrae la muestra horaria del kickoff; null si la hora no viene en la respuesta. */
+/** Extracts the kickoff hourly sample; null if the hour is not in the response. */
 export function sampleHourlyAt(hourly, kickoff) {
   const hour = kickoffHour(kickoff);
   if (!hour || !Array.isArray(hourly?.time)) return null;
@@ -52,9 +52,9 @@ function coords(points) {
 }
 
 /**
- * Clima de cada punto `{ key, lat, lng, kickoff }`. Devuelve
+ * Weather for each point `{ key, lat, lng, kickoff }`. Returns
  * `{ [key]: { temp, precipitation, weathercode, wind, sampledAt, source } }`;
- * las claves sin dato honesto no aparecen. `today` en `YYYY-MM-DD` (UTC).
+ * keys without honest data do not appear. `today` in `YYYY-MM-DD` (UTC).
  */
 export async function fetchKickoffWeather(points, { fetchImpl = fetch, today = new Date().toISOString().slice(0, 10) } = {}) {
   const valid = (points ?? []).filter(point => point?.key != null && Number.isFinite(point.lat) && Number.isFinite(point.lng) && kickoffHour(point.kickoff));

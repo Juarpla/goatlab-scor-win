@@ -31,13 +31,13 @@ test('lastResults respeta tope de 6 y trunca a 6000 caracteres', () => {
   assert.ok(out.length <= COMPACT_MAX_CHARS);
 });
 
-test('sin mercados ni predicción omite bloques P/B sin romper', () => {
+test('without markets or prediction it omits P/B blocks without breaking', () => {
   const out = toCompactInput({ ...match, modelPrediction: null, h2h: null }, null, { results: [], standings: null, scorers: null });
   assert.ok(out.startsWith('M|'));
   assert.ok(!out.includes('\nP|') && !out.includes('\nB|'));
 });
 
-test('B2 y A viajan cuando el proveedor trae picks y predicción', () => {
+test('B2 and A travel when the provider brings picks and prediction', () => {
   const withProviders = {
     ...match,
     modelPrediction: {

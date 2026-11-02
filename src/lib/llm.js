@@ -1,7 +1,7 @@
 /** Portable OpenAI-wire client. Environment is injected; secrets never enter client bundles. */
 const runtimeEnv = () => globalThis.process?.env ?? {};
 
-/** Fallo de red/HTTP/timeout/vacío/truncado: reintentar puede ayudar. */
+/** Network/HTTP/timeout/empty/truncated failure: retrying may help. */
 export class LlmTransportError extends Error {
   constructor(message, { provider = null, truncated = false, retryAfterMs = 0, usage = null } = {}) {
     super(message);
@@ -32,12 +32,12 @@ const openCodeGo = {
   extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }),
 };
 export const providers = {
-  // baseUrl admite override opcional (MISTRAL_BASE_URL) para servir modelos
-  // de la misma firma OpenAI a través de otra pasarela.
+  // baseUrl accepts an optional override (MISTRAL_BASE_URL) to serve models
+  // with the same OpenAI signature through another gateway.
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
   OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
-  // Mismo gateway y misma clave. Solo cambia el modelo.
+  // Same gateway and same key. Only the model changes.
   OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'glm-5.3-flash', ...openCodeGo },
 };
 const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
@@ -115,7 +115,7 @@ function textFromContent(content) {
     return '';
   }).join('').trim();
 }
-/** Algunos modelos gastan el techo en reasoning y dejan content vacío o en partes. */
+/** Some models spend the ceiling on reasoning and leave content empty or split. */
 function textFromMessage(message) {
   const visible = textFromContent(message?.content);
   if (visible) return visible;
@@ -180,10 +180,10 @@ export function hasTruncatedFailure(error) {
   return Array.isArray(error?.details) && error.details.some(detail => detail?.truncated === true);
 }
 /**
- * Fusible por corrida: tras N fallos de transporte seguidos un proveedor se
- * salta el resto de la corrida (el orden configurado no se toca). Cualquier
- * respuesta (ok o validación) perdona la racha. Retry-After pausa además
- * hasta la fecha indicada.
+ * Per-run breaker: after N consecutive transport failures a provider is
+ * skipped for the rest of the run (the configured order is untouched). Any
+ * response (ok or validation) forgives the streak. Retry-After also pauses
+ * until the indicated date.
  */
 export function createProviderBreaker({ maxConsecutiveFailures = 3 } = {}) {
   const state = new Map();

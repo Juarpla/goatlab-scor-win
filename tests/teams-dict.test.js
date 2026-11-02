@@ -65,8 +65,8 @@ test('matchIn no puentea ids entre Irlanda e Irlanda del Norte', () => {
   ];
   const claimed = new Set(['nations|ireland', 'nations|northern ireland']);
   assert.equal(matchIn({ league: 'nations', name: 'Northern Ireland' }, roster, claimed)?.id, 771);
-  // "Ireland" empareja tolerante con "Rep. Of Ireland" (776), nunca con
-  // "Northern Ireland" (771): ese nombre es de otra fila de la liga.
+  // "Ireland" tolerantly matches "Rep. Of Ireland" (776), never with
+  // "Northern Ireland" (771): that name belongs to another league row.
   assert.equal(matchIn({ league: 'nations', name: 'Ireland' }, roster, claimed)?.id, 776);
 });
 

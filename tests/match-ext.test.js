@@ -35,24 +35,24 @@ test('el pick del proveedor abre el podio con margen en todos los partidos', () 
   assert.ok(first.share > second.share + 0.04);
   const shareSum = derived.exactScores.reduce((total, score) => total + score.share, 0);
   assert.ok(close(shareSum, 1));
-  // Sin pick no hay boost ni providerPick: manda la matriz.
+  // Without a pick there is no boost or providerPick: the matrix decides.
   const plain = marketsFromXg({ home: 1.1, away: 2.08 });
   assert.equal(plain.providerPick, null);
   assert.deepEqual([plain.exactScores[0].home, plain.exactScores[0].away], [1, 1]);
-  // Pick fuera del top-5 entra igual al podio.
+  // A pick outside the top-5 still enters the podium.
   const outsider = marketsFromXg({ home: 0.6, away: 0.6 }, '0-3');
   assert.deepEqual([outsider.exactScores[0].home, outsider.exactScores[0].away], [0, 3]);
   assert.ok(outsider.exactScores.length === 5);
 });
 
-test('marketsFromXg null-honesto sin xG válido', () => {
+test('marketsFromXg is honest-null without valid xG', () => {
   assert.equal(marketsFromXg(null), null);
   assert.equal(marketsFromXg({ home: null, away: 2 }), null);
   assert.equal(marketsFromXg({ home: 0, away: 1.5 }), null);
   assert.equal(marketsFromXg({ home: -1, away: 1.5 }), null);
 });
 
-test('los córners heredan la procedencia: Bzzoiro cuando el insumo es del proveedor', () => {
+test('corners inherit provenance: Bzzoiro when the input comes from the provider', () => {
   const fromProvider = buildSetPiecesEstimate({ marketCorners: { over95: 0.479 }, cornersSource: 'Bzzoiro', historyRows: 130 });
   assert.equal(fromProvider.source, 'Bzzoiro');
   assert.equal(fromProvider.over95, 0.479);
@@ -62,7 +62,7 @@ test('los córners heredan la procedencia: Bzzoiro cuando el insumo es del prove
   assert.equal(empty.source, null);
 });
 
-test('los mercados derivados son coherentes entre sí', () => {
+test('derived markets are coherent with each other', () => {
   const markets = matrixMarkets(scoreMatrix(1.6, 0.9));
   assert.ok(markets.totals.over15 > markets.totals.over25);
   assert.ok(markets.totals.over25 > markets.totals.over35);
@@ -77,7 +77,7 @@ test('la doble oportunidad 12 equivale a 1 menos el empate', () => {
   assert.equal(Math.round((markets.doubleChance['12'] + markets.oneX2.draw) * 100), 100);
 });
 
-test('el empate no válida suma 100%', () => {
+test('the draw invalid does not sum to 100%', () => {
   const markets = matrixMarkets(scoreMatrix(1.8, 0.9));
   assert.equal(Math.round((markets.dnb.home + markets.dnb.away) * 100), 100);
 });
@@ -100,7 +100,7 @@ test('teamRates no mezcla Barcelona SC y deduplica AF+FD', () => {
     { date: '2026-08-31', home: 'FC Barcelona', away: 'Rayo Vallecano de Madrid', homeScore: 5, awayScore: 2 },
     { date: '2026-05-29', home: 'Cruzeiro EC', away: 'Barcelona SC', homeScore: 4, awayScore: 0 },
     { date: '2026-05-22', home: 'CD Universidad Católica', away: 'Barcelona SC', homeScore: 2, awayScore: 0 },
-    // Duplicado cross-proveedor del mismo partido con nombre largo/corto.
+    // Cross-provider duplicate of the same match with long/short name.
     { date: '2026-09-16', home: 'RC Deportivo La Coruña', away: 'Sevilla FC', homeScore: 0, awayScore: 1 },
     { date: '2026-09-16', home: 'Deportivo La Coruna', away: 'Sevilla', homeScore: 0, awayScore: 1 },
     { date: '2026-09-11', home: 'Sevilla FC', away: 'Valencia CF', homeScore: 1, awayScore: 0 },
@@ -113,7 +113,7 @@ test('teamRates no mezcla Barcelona SC y deduplica AF+FD', () => {
   assert.equal(sevilla.played, 3); // el Depor duplicado cuenta una vez
 });
 
-/* ---- Blend Poisson + xG para el primer gol ---- */
+/* ---- Poisson + xG blend for the first goal ---- */
 
 test('blendLambdas promedia a partes iguales y es null-honesto', () => {
   assert.deepEqual(blendLambdas({ home: 1.8, away: 1.38 }, { home: 1.1, away: 2.08 }), { home: 1.45, away: 1.73 });
@@ -133,16 +133,16 @@ test('computeMatchMarkets usa el blend para la carrera cuando hay xG', () => {
   assert.equal(blended.firstGoalSource, 'Blend Poisson+xG');
   assert.equal(blended.method, 'poisson-blend-v1');
   assert.ok(blended.lambdasBlend);
-  // El blend tira el primer gol hacia el visitante (dirección Bzzoiro 1-2).
+  // The blend pulls the first goal toward the away side (Bzzoiro direction 1-2).
   assert.ok(blended.firstGoal.firstAway > plain.firstGoal.firstAway);
   const total = blended.firstGoal.bands.reduce((s, b) => s + b.p, 0) + blended.firstGoal.noGoal;
   assert.equal(Math.round(total * 100), 100);
 });
 
-/* ---- Reparto top-5 de favoritos a abrir el marcador ---- */
+/* ---- Top-5 split of favorites to open the scoreline ---- */
 
 test('topScorerSplit reparte el 100% entre los 5 primeros', () => {
-  // Sevilla vs Barcelona 2026-09-19: firsts reales del JSON (blend 1.36–2.535).
+  // Sevilla vs Barcelona 2026-09-19: real firsts from the JSON (blend 1.36-2.535).
   const rows = {
     home: [
       { player: 'Miguel Sierra', goals: 2, first: 0.077, anytime: 0.26 },
@@ -176,7 +176,7 @@ test('topScorerSplit corta a 5 y es null-honesto sin filas', () => {
   assert.equal(topScorerSplit({ home: [{ player: 'X', first: 0 }], away: [] }, {}), null);
 });
 
-test('las bandas del primer gol más el partido sin goles suman 1', () => {
+test('first-goal bands plus the no-goal match sum to 1', () => {
   const race = firstGoalRace(1.3, 1.0);
   const total = race.bands.reduce((sum, band) => sum + band.p, 0) + race.noGoal;
   assert.equal(Math.round(total * 100), 100);
@@ -213,7 +213,7 @@ test('computeMatchMarkets devuelve null sin muestra suficiente y mercados con mu
   assert.ok(markets.markets.oneX2.home > 0);
 });
 
-test('teamContext deriva porterías a cero y racha de la base real', () => {
+test('teamContext derives clean sheets and streak from the real base', () => {
   const results = [
     { date: '2026-09-01', competition: 'premier', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
     { date: '2026-09-08', competition: 'premier', away: 'Local', home: 'Otro', homeScore: 0, awayScore: 1 },
@@ -236,7 +236,7 @@ test('domesticLeague resuelve la liga del equipo e ignora las copas', () => {
   assert.equal(domesticLeague({}, 'Local'), null);
 });
 
-test('teamContext filtra la muestra a la liga doméstica del equipo', () => {
+test("teamContext filters the sample to the team domestic league", () => {
   const results = [
     { date: '2026-09-01', competition: 'premier', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
     { date: '2026-09-08', competition: 'champions', home: 'Local', away: 'Otro', homeScore: 5, awayScore: 0 },
@@ -254,7 +254,7 @@ test('teamContext filtra la muestra a la liga doméstica del equipo', () => {
   assert.equal(context.player.name, 'Goleador'); // líder de la liga, no de la champions
 });
 
-test('teamContext sin liga resuelta usa la competición del partido', () => {
+test('teamContext without a resolved league uses the match competition', () => {
   const results = [
     { date: '2026-09-01', competition: 'libertadores', home: 'Local', away: 'Otro', homeScore: 2, awayScore: 0 },
   ];
@@ -263,7 +263,7 @@ test('teamContext sin liga resuelta usa la competición del partido', () => {
   assert.equal(context.cleanSheets.value, 1);
 });
 
-test('teamContext usa un solo contexto: últimos 5 en su liga', () => {
+test('teamContext uses a single context: last 5 in their league', () => {
   const results = Array.from({ length: 7 }, (_, index) => ({
     date: `2026-08-${String(index + 1).padStart(2, '0')}`,
     competition: 'premier',
@@ -315,7 +315,7 @@ test('ballAt se mantiene dentro de la cancha', () => {
   }
 });
 
-test('matchMinute sigue la convención 45+descanso', () => {
+test('matchMinute follows the 45+break convention', () => {
   const kickoff = 0;
   assert.equal(matchMinute(kickoff, -1), null);
   assert.equal(matchMinute(kickoff, 30 * 60_000), 30);
@@ -347,7 +347,7 @@ test('el zoom de sede proyecta el pin dentro del marco', () => {
   assert.ok(location.zoom.width === Math.round(size.lngSpan / size.step) * size.pitch);
 });
 
-test('locateMatch devuelve null para clubes fuera del catálogo', () => {
+test('locateMatch returns null for clubs outside the catalog', () => {
   assert.equal(locateMatch({ home: 'Club Inexistente' }), null);
 });
 

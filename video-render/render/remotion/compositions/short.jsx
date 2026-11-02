@@ -5,11 +5,11 @@ import { fade } from '@remotion/transitions/fade';
 import { slide } from '@remotion/transitions/slide';
 import { wipe } from '@remotion/transitions/wipe';
 import { iris } from '@remotion/transitions/iris';
-import { captionPages } from '../../../../src/lib/timing.js';
-import { boundedMotion } from '../../../../src/lib/edit-plan.js';
+import { captionPages } from '../../../contract/timing.js';
+import { boundedMotion } from '../../../contract/edit-plan.js';
 import { EditorialMotion } from './editorial.jsx';
-import { resolveMotion, MOTION_KINDS } from '../../../../src/lib/motion-data.js';
-import { FPS, FONT_FAMILY, CAPTION_FILL, ENDCARD_SECONDS } from '../../../../src/lib/short-format.js';
+import { resolveMotion, MOTION_KINDS } from '../../../contract/motion-data.js';
+import { FPS, FONT_FAMILY, CAPTION_FILL, ENDCARD_SECONDS } from '../../../contract/short-format.js';
 
 const white = '#edf0e6', charcoal = '#101412', lime = '#c5ed74', slate = '#8ca6bf';
 const frameAt = seconds => Math.round(seconds * FPS);

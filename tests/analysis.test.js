@@ -42,7 +42,7 @@ test('sameFixture tolera variantes de proveedor, exige mismo cruce y fecha cerca
   assert.equal(sameFixture({ home: 'Rayo Vallecano', away: 'Osasuna', date: '2026-09-19' }, a), false); // localía no se invierte
 });
 
-test('findAnalysis prioriza el id directo y luego rescata el gemelo huérfano', () => {
+test('findAnalysis prioritizes the direct id and then rescues the orphan twin', () => {
   const analyses = { 'fd-564693': legacy, otro: entry({ home: 'A', away: 'B', kickoff: '2026-09-19T12:00:00Z' }) };
   const direct = findAnalysis(analyses, osasuna);
   assert.equal(direct.via, 'identity');
@@ -85,7 +85,7 @@ test('buildAnalysisKey sella v3 y es estable: generar == comparar (el full salta
   const b = buildAnalysisKey(match, null, {});
   assert.equal(a, b);
   assert.ok(a.startsWith('v3|M|af-1|'));
-  // La clave estampada al generar es la misma que el full compara: round-trip sin regenerar.
+  // The key stamped at generation is the same one the full run compares: round-trip without regenerating.
   const stored = { inputKey: a };
   const markets = { lambdas: { home: 1.6, away: 1.1 }, markets: { oneX2: { home: 0.5, draw: 0.25, away: 0.25 } } };
   assert.notEqual(buildAnalysisKey(match, markets, {}), stored.inputKey); // cambió el input → sí regenera
@@ -107,7 +107,7 @@ test('buildMaterialKey incluye las cifras que puede citar la narrativa', () => {
   assert.ok(withAbsence.includes('\nL|'));
 });
 
-test('analysisIsFresh retira la lectura cuando se mueven los números', () => {
+test('analysisIsFresh withdraws the reading when the numbers move', () => {
   const match = { id: 'af-1', home: 'Osasuna', away: 'Rayo Vallecano', competition: 'laliga', kickoff: '2026-09-19T12:00:00Z', status: 'NS' };
   const stored = { inputKey: buildAnalysisKey(match, null, {}), materialKey: buildMaterialKey(match, null, {}) };
   const markets = { lambdas: { home: 1.2, away: 1.4 }, markets: { oneX2: { home: 0.3, draw: 0.3, away: 0.4 } } };
@@ -120,7 +120,7 @@ test('analysisIsFresh retira la lectura cuando se mueven los números', () => {
   assert.equal(analysisIsFresh({}, match, null, {}), false);
 });
 
-test('findFreshAnalysis no entrega a la vista lecturas de otra versión de tabla, resultados o proveedor', () => {
+test('findFreshAnalysis does not deliver readings from another table, results or provider version to the view', () => {
   const match = { ...osasuna, competition: 'laliga', status: 'NS' };
   const ctx = { results: [{ id: 'r1', date: '2026-09-10', home: 'Osasuna', away: 'Sevilla', homeScore: 2, awayScore: 0 }] };
   const stored = entry({ inputKey: buildAnalysisKey(match, null, ctx), materialKey: 'M|sello-antiguo' });

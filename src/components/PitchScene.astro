@@ -1,10 +1,10 @@
 ---
 /**
- * Cancha ilustrativa: SVG con el recorrido del balón entre eventos reales.
- * El servidor dibuja anclas y marcadores con una simulación determinista
- * (src/lib/pitch-path.js); el cliente anima el balón, actualiza el marcador
- * y consulta /api/live/[id].json cada 60s cuando el partido está en vivo.
- * Nunca se presenta como seguimiento real de posición: así lo dice la nota.
+ * Illustrative pitch: SVG with the ball path between real events.
+ * The server draws anchors and markers with a deterministic simulation
+ * (src/lib/pitch-path.js); the client animates the ball, updates the scoreline
+ * and queries /api/live/[id].json every 60s when the match is live.
+ * It is never presented as real position tracking: the note says so.
  */
 import { teamShort, teamEsDisplay } from '../lib/teams.js';
 import { matchPhase } from '../lib/football.js';
@@ -128,8 +128,8 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
   const status = root.dataset.status!;
   const phase = root.dataset.phase ?? '';
   const finished = phase === 'finished' || new Set(['FT', 'AET', 'PEN']).has(status);
-  // Cualquier estado dentro de la ventana que no sea programado/cancelado se trata como en juego
-  // (API-Football usa 1H/2H además de HT/ET/BT).
+  // Any state inside the window that is not scheduled/cancelled is treated as in play
+  // (API-Football uses 1H/2H in addition to HT/ET/BT).
   const notLive = new Set(['NS', 'TBD', 'PST', 'CANC', 'ABD', 'AWD', 'WO']);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LIVE_WINDOW_MS = 115 * 60_000;
@@ -313,7 +313,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
   };
 
   const poll = async () => {
-   // Los finalizados se hidratan una sola vez; los vivos, cada 60s dentro de su ventana.
+   // Finished matches hydrate once; live ones every 60s inside their window.
    if (root.dataset.live !== '1' || document.hidden) return;
    if (!finished && !inLiveWindow()) return;
    try {
@@ -332,7 +332,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
    clockNode.textContent = minute >= 95 ? 'Final del recorrido ilustrativo.' : `Minuto ${Math.floor(Math.min(90, minute))} est. · animación ilustrativa`;
   };
 
-  // Timeline contenida: altura sincronizada a la cancha, progreso y atajos.
+  // Contained timeline: height synced to the pitch, progress and shortcuts.
   updateCount();
   syncHeight();
   updateChrome();
@@ -358,7 +358,7 @@ const statusLabel = finished ? 'Finalizado' : live ? 'En juego' : match.status =
   window.addEventListener('load', () => { syncHeight(); updateChrome(); });
 
   if (reduced) {
-   // Movimiento reducido: eventos y marcador presentes, balón quieto en el centro.
+   // Reduced motion: events and scoreline present, ball still at the center.
    setBall(52.5, 34);
    updateClock(finished ? 95 : null);
    poll();

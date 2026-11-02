@@ -1,11 +1,11 @@
 import { normalizeScriptTitles } from '../../src/lib/script-titles.js';
 import { readContentSelection } from '../../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de guiones pertenece a GitHub Actions');
-/** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
- *  writing-short-scripts. Un JSON válido ya existente no se toca.
- *  Sin --match, redacta el top N (input --top, SCRIPT_TOP_N o 5) del ranking
- *  guardado en public/data/top.json (lo escribe 1-update-data). La poda pertenece a la actualización de data.
- *  --match o top ampliado registran el partido como extra protegido. */
+/** Missing Shorts scripts: the current model writes with the
+ *  writing-short-scripts skill. An existing valid JSON is not touched.
+ *  Without --match, writes the top N (--top input, SCRIPT_TOP_N or 5) from the ranking
+ *  stored in public/data/top.json (written by 1-update-data). Pruning belongs to the data update.
+ *  --match or an extended top registers the match as a protected extra. */
 import { mkdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
 import { join } from 'node:path';
 import { CONTENT_LLM_LIMITS, createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../../src/lib/llm.js';
@@ -200,13 +200,13 @@ function errorText(error) {
   return (error?.errors?.length ? error.errors.map(String).join('; ') : null) ?? error?.message ?? String(error);
 }
 
-/** Transporte o truncado: se reintenta al final del lote, no a los 30 s. */
+/** Transport or truncation: retried at the end of the batch, not after 30 s. */
 function retryLater(error) {
   const { configured } = failureDetails(error);
   return configured && (hasTransportFailure(error) || hasTruncatedFailure(error));
 }
 
-/** Una llamada por partido. `deferTransport` aparta timeout, 429 y truncado para el cierre del lote. */
+/** One call per match. `deferTransport` sets timeout, 429 and truncation aside for the batch close. */
 async function draftMatch(match, { breaker, skill, published, facts, priorFailures = [], deferTransport = false }) {
   breaker.reset();
   const matchId = match.webId ?? match.id;
@@ -278,9 +278,9 @@ async function saveDraft(match, drafted) {
 const breaker = createProviderBreaker();
 const deferred = [];
 let leftForNext = 0;
-/** Probabilidades del partido para el pick (null si no hay archivo).
- *  Vive en public/match-probabilities (trackeado, la misma llave que la
- *  página del partido), no en public/data (artefacto local). */
+/** Match probabilities for the pick (null if there is no file).
+ *  Lives in public/match-probabilities (tracked, the same key as the
+ *  match page), not in public/data (local artifact). */
 async function loadProbability(matchId) {
   const file = join('public/match-probabilities', `${matchId}.json`);
   try {

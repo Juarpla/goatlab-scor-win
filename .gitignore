@@ -28,11 +28,11 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# fuentes de los scripts de raster (se descargan solas)
+# raster script sources (downloaded automatically)
 scripts/.cache/
 
 
-# banco de medios Agnes (binarios; viajan como artifact del Action, no en git)
+# Agnes media bank (binaries; travel as an Action artifact, not in git)
 public/data/media-pack/gen/
 public/data/media-pack/agnes.sqlite*
 
@@ -44,6 +44,10 @@ __pycache__/
 # Remotion bundle (built from source)
 video-render/render/remotion/dist-remotion/
 
-# renders y material de trabajo local (binarios; nunca se versionan)
+# renders and local work material (binaries; never versioned)
 video-render/videos/
 video-render/work/
+
+# per-match voice recordings: only the folder contract is tracked
+video-render/audios/*
+!video-render/audios/README.md

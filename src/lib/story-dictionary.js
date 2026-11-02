@@ -1,10 +1,10 @@
 /**
- * Diccionario del relato: del JSON al lector.
- * Regla única: término cotidiano primero; la sigla del dato, entre paréntesis
- * solo la primera vez que aparece en un capítulo. Las claves crudas
- * (`1X2`, `BTTS`, `DNB`, `H2H`, `HT/FT`) no se imprimen jamás en la vista.
- * Semilla canónica: API-RESEARCH.md §6. `llmReview` es control interno:
- * vive en el JSON y nunca se muestra.
+ * Story dictionary: from JSON to the reader.
+ * Single rule: everyday term first; the data acronym in parentheses
+ * only the first time it appears in a chapter. Raw keys
+ * (`1X2`, `BTTS`, `DNB`, `H2H`, `HT/FT`) are never printed in the view.
+ * Canonical seed: API-RESEARCH.md §6. `llmReview` is internal control:
+ * it lives in the JSON and is never shown.
  */
 export const STORY_TERMS = {
   oneX2: { term: 'Resultado final', hint: 'Quién gana el partido o si empatan.' },
@@ -37,7 +37,7 @@ export const STORY_TERMS = {
   cornerMargin: { term: 'Por cuántos córners', hint: 'Diferencia esperada de tiros de esquina entre los dos equipos.' },
   verdict: { term: 'La síntesis', hint: 'La lectura combinada de GoatLab, con cada insumo y su peso a la vista.' },
 };
-/** Devuelve { term, hint } para una clave; si no existe, la deja legible sin inventar. */
+/** Returns { term, hint } for a key; if it does not exist, leaves it readable without inventing. */
 export function storyTerm(key) {
   return STORY_TERMS[key] ?? { term: String(key), hint: '' };
 }

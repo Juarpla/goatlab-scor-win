@@ -1,21 +1,21 @@
 /**
- * Motor de escenarios de probabilidad (build time, sin LLM).
+ * Probability scenario engine (build time, no LLM).
  *
- * Poisson independiente + corrección Dixon-Coles sobre una matriz de marcadores;
- * de la misma matriz salen todos los escenarios derivables. El "cuándo" se modela
- * como proceso de Poisson en el tiempo (relojes exponenciales a λ/90 por minuto):
- * la carrera del primer gol y sus bandas salen de exp(−Λ·t/90). Los goleadores
- * comparten el reparto real de goles del equipo (share del jugador × λ del equipo).
- * El primer gol y los goleadores usan λ blend (Poisson local + xG Bzzoiro a partes
- * iguales cuando hay ambos) para no contradecir al proveedor; el resultado
- * sigue Poisson puro y el testigo `derivado-xG-Bzzoiro` queda aparte.
- * Nada de cuotas ni vocabulario de casas de apuestas: probabilidades y valores.
- * Lo no derivable de los datos queda en null y la interfaz lo omite.
+ * Independent Poisson + Dixon-Coles correction over a scoreline matrix;
+ * every derivable scenario comes from the same matrix. "When" is modeled
+ * as a Poisson process in time (exponential clocks at λ/90 per minute):
+ * the first-goal race and its bands come from exp(−Λ·t/90). Scorers
+ * share the team's real goal split (player share × team λ).
+ * First goal and scorers use blended λ (local Poisson + Bzzoiro xG in equal
+ * parts when both exist) so they do not contradict the provider; the result
+ * stays pure Poisson and the `derivado-xG-Bzzoiro` witness is kept apart.
+ * No odds or betting-house vocabulary: probabilities and values.
+ * Anything not derivable from the data stays null and the interface omits it.
  */
 import { goalDistribution, estimateLambdas, teamRates } from './predictions.js';
 import { sameClub, normalize } from './teams.js';
 
-/** ρ de Dixon-Coles: negativo inflaría 0-0/1-1... la convención clásica usa ρ<0 con estos signos. */
+/** Dixon-Coles ρ: negative would inflate 0-0/1-1... the classic convention uses ρ<0 with these signs. */
 const DC_RHO = -0.1;
 const MAX_GOALS = 8;
 const BANDS = [[0, 15], [15, 30], [30, 45], [45, 60], [60, 75], [75, 90]];
@@ -25,7 +25,7 @@ const round = (value, digits = 3) => {
   return Math.round(value * f) / f;
 };
 
-/** Matriz de marcadores con corrección Dixon-Coles en las celdas de bajo marcador. */
+/** Scoreline matrix with Dixon-Coles correction in low-score cells. */
 export function scoreMatrix(homeLambda, awayLambda, { max = MAX_GOALS, rho = DC_RHO } = {}) {
   const home = goalDistribution(homeLambda, max);
   const away = goalDistribution(awayLambda, max);
@@ -45,7 +45,7 @@ export function scoreMatrix(homeLambda, awayLambda, { max = MAX_GOALS, rho = DC_
   return matrix;
 }
 
-/** Todos los mercados de marcador derivados de la matriz (normalizada). */
+/** All scoreline markets derived from the (normalized) matrix. */
 export function matrixMarkets(matrix, { exactScores = 5 } = {}) {
   let homeWin = 0, draw = 0, awayWin = 0, over15 = 0, over25 = 0, over35 = 0, both = 0, total = 0;
   const scores = [];
@@ -74,7 +74,7 @@ export function matrixMarkets(matrix, { exactScores = 5 } = {}) {
       over35: round(over35 / total), under35: round(1 - over35 / total),
     },
     btts: { yes: round(both / total), no: round(1 - both / total) },
-    // portería a cero: local = suma de la columna a=0 (visita no anota); visita = fila h=0.
+    // clean sheet: home = sum of column a=0 (away does not score); away = row h=0.
     cleanSheet: {
       home: round(matrix.reduce((sum, row) => sum + row[0], 0) / total),
       away: round(matrix[0].reduce((sum, cell) => sum + cell, 0) / total),
@@ -83,7 +83,7 @@ export function matrixMarkets(matrix, { exactScores = 5 } = {}) {
   };
 }
 
-/** Carrera del primer gol: relojes de Poisson a λ/90 por minuto. */
+/** First-goal race: Poisson clocks at λ/90 per minute. */
 export function firstGoalRace(homeLambda, awayLambda) {
   const lambdaTotal = homeLambda + awayLambda;
   if (lambdaTotal <= 0) return null;
@@ -101,7 +101,7 @@ export function firstGoalRace(homeLambda, awayLambda) {
   };
 }
 
-/** share de cada goleador listado sobre los goles reales del equipo en la temporada. */
+/** Each listed scorer's share of the team's real season goals. */
 export function scorerShares(scorers, team, teamGoalsFor, { top = 3 } = {}) {
   const rows = (scorers ?? []).filter(row => sameClub(row.team, team) && Number.isFinite(row.value) && row.value > 0);
   if (!rows.length) return null;
@@ -115,7 +115,7 @@ export function scorerShares(scorers, team, teamGoalsFor, { top = 3 } = {}) {
   }));
 }
 
-/** Mercados de goleador a partir del share × λ del equipo (proceso de Poisson). */
+/** Scorer markets from team share × λ (Poisson process). */
 export function scorerMarkets(shares, teamLambda, lambdaTotal) {
   if (!shares?.length || !lambdaTotal) return null;
   return shares.map(entry => {
@@ -130,11 +130,11 @@ export function scorerMarkets(shares, teamLambda, lambdaTotal) {
 }
 
 /**
- * Reparto del 100% entre los favoritos a abrir el marcador (vista, top 5).
- * Une ambos lados, ordena por `first` y renormaliza: `split = first / Σfirst₅`.
- * El JSON conserva los valores absolutos; esto es condicional ("si lo abre uno
- * de estos cinco"). Null-honesto cuando no hay filas o la suma es cero.
- * `leftover = 1 − noGoal − Σfirst₅`: lo que queda fuera de la fila (cero + resto).
+ * 100% split among the favorites to open the scoreline (view, top 5).
+ * Joins both sides, sorts by `first` and renormalizes: `split = first / Σfirst₅`.
+ * The JSON keeps absolute values; this is conditional ("if one of these
+ * five opens it"). Honest null when there are no rows or the sum is zero.
+ * `leftover = 1 − noGoal − Σfirst₅`: what stays outside the row (zero + rest).
  */
 export function topScorerSplit(scorerRows, { top = 5, noGoal = null } = {}) {
   const all = ['home', 'away'].flatMap(side =>
@@ -151,8 +151,8 @@ export function topScorerSplit(scorerRows, { top = 5, noGoal = null } = {}) {
   };
 }
 
-/** λ blend para el primer gol: media a partes iguales Poisson local + xG Bzzoiro.
- *  Null cuando falta alguno; el caller conserva el Poisson puro para los mercados. */
+/** Blended λ for the first goal: equal-parts mean of local Poisson + Bzzoiro xG.
+ *  Null when either is missing; the caller keeps pure Poisson for the markets. */
 export function blendLambdas(poisson, xg) {
   if (!poisson || !xg) return null;
   if (!Number.isFinite(poisson.home) || !Number.isFinite(poisson.away)) return null;
@@ -164,9 +164,9 @@ export function blendLambdas(poisson, xg) {
 }
 
 /**
- * Bloque de goleadores reutilizable: del leaderboard (o su fallback) a
- * mercados por equipo. Devuelve `{ scorers, hasScorers }`; null-honesto
- * cuando no hay filas ni lambdas para repartir.
+ * Reusable scorer block: from the leaderboard (or its fallback) to
+ * per-team markets. Returns `{ scorers, hasScorers }`; honest null
+ * when there are no rows or lambdas to split.
  */
 export function buildScorerMarkets({ match, scorers = null, standings = null, raceLambdas = null, lambdaTotal = null } = {}) {
   const empty = { scorers: { home: null, away: null }, hasScorers: false };
@@ -184,10 +184,10 @@ export function buildScorerMarkets({ match, scorers = null, standings = null, ra
 }
 
 /**
- * Fusiona el leaderboard de la liga con el fallback por plantilla: el
- * leaderboard manda por equipo; solo los equipos sin filas toman las del
- * fallback (plantilla Bzzoiro / topscorers AF). Nunca mezcla ambos para el
- * mismo equipo.
+ * Merges the league leaderboard with the squad fallback: the
+ * leaderboard leads per team; only teams without rows take the
+ * fallback (Bzzoiro squad / AF topscorers). It never mixes both for the
+ * same team.
  */
 export function mergeScorerFallback(base, fallback) {
   const baseRows = base?.scorers ?? [];
@@ -199,17 +199,17 @@ export function mergeScorerFallback(base, fallback) {
   return { ...base, scorers: [...baseRows, ...extra], fallbackSource: fallback.provider ?? 'Bzzoiro-squad' };
 }
 
-/** Aplica `mergeScorerFallback` por competición; sin fallback devuelve la base intacta. */
+/** Applies `mergeScorerFallback` per competition; without fallback it returns the base untouched. */
 export function withScorerFallback(scorersBase = {}, scorerFallback = {}) {
   const comps = new Set([...Object.keys(scorersBase ?? {}), ...Object.keys(scorerFallback ?? {})]);
   return Object.fromEntries([...comps].map(comp => [comp, mergeScorerFallback(scorersBase?.[comp] ?? null, scorerFallback?.[comp] ?? null)]));
 }
 /**
- * Mercados completos de un encuentro a partir de los datos ya horneados.
- * Cada grupo declara `enough` para que la interfaz omita lo débil.
- * Null-honesto: sin 3 resultados previos por lado no hay Poisson local.
- * El primer gol y los goleadores usan el blend cuando hay xG del proveedor;
- * `lambdas` conserva el Poisson puro (mercados) y `lambdasBlend` declara el usado.
+ * Full markets for a fixture from already baked data.
+ * Each group declares `enough` so the interface omits weak ones.
+ * Honest null: without 3 previous results per side there is no local Poisson.
+ * First goal and scorers use the blend when provider xG exists;
+ * `lambdas` keeps pure Poisson (markets) and `lambdasBlend` declares the one used.
  */
 export function computeMatchMarkets({ match, results = [], scorers = null, standings = null } = {}) {
   const lambdas = estimateLambdas(results, match.home, match.away);
@@ -239,14 +239,14 @@ export function computeMatchMarkets({ match, results = [], scorers = null, stand
   };
 }
 
-/* ---- Cascada siempre-emite (tolerancia cero en las 5 secciones) ---- */
+/* ---- Always-emit cascade (zero tolerance in the 5 sections) ---- */
 
 const LEAGUE_AVG_LAMBDA = { home: 1.45, away: 1.45 };
 const clipLambda = v => Math.min(4.5, Math.max(0.15, Math.round(v * 1000) / 1000));
 
 /**
- * λ con procedencia declarada: Poisson local → xG Bzzoiro → media de liga.
- * Nunca null cuando hay nombres de equipos; el caller etiqueta la fuente.
+ * λ with declared provenance: local Poisson → Bzzoiro xG → league mean.
+ * Never null when there are team names; the caller labels the source.
  */
 export function resolveLambdas({ match, results = [] } = {}) {
   const local = estimateLambdas(results, match?.home, match?.away);
@@ -258,9 +258,9 @@ export function resolveLambdas({ match, results = [] } = {}) {
   return { ...LEAGUE_AVG_LAMBDA, source: 'Media-liga' };
 }
 
-/** Mismo cálculo que computeMatchMarkets pero con λ de la cascada: nunca null por falta de muestra.
- *  Los goleadores también se intentan (leaderboard o su fallback por plantilla);
- *  sin filas, la vista cae al reparto por equipo (Nivel 4, Poisson local). */
+/** Same calculation as computeMatchMarkets but with cascade λ: never null for lack of sample.
+ *  Scorers are also attempted (leaderboard or its squad fallback);
+ *  without rows, the view falls back to the per-team split (Level 4, local Poisson). */
 export function resolveMatchMarkets({ match, results = [], scorers = null, standings = null } = {}) {
   const direct = computeMatchMarkets({ match, results, scorers, standings });
   if (direct) return direct;
@@ -290,19 +290,19 @@ export function resolveMatchMarkets({ match, results = [], scorers = null, stand
 }
 
 /**
- * Peso del marcador elegido por el proveedor: su `most_likely` ancla el
- * podio con `PROVIDER_PICK_BOOST` sobre la mejor probabilidad de la matriz.
- * Regla global (todos los partidos): garantiza que el pick abre con margen
- * sin recalibrar por partido. La `p` absoluta se conserva para auditoría;
- * `share` es el reparto a 100 entre los 5 mostrados, que es lo que ve el lector.
+ * Weight of the provider's chosen scoreline: its `most_likely` anchors the
+ * podium with `PROVIDER_PICK_BOOST` over the matrix's best probability.
+ * Global rule (all matches): ensures the pick opens with a margin
+ * without per-match recalibration. Absolute `p` is kept for audit;
+ * `share` is the 100-point split among the 5 shown, which is what the reader sees.
  */
 export const PROVIDER_PICK_BOOST = 1.25;
 
 /**
- * Mercados derivados del xG del proveedor (Bzzoiro) con la misma matriz
- * Poisson–Dixon-Coles del motor propio. Cubre lo que el proveedor no
- * publica como % (portería a cero, tabla de exactos); la procedencia
- * `derivado-xG-Bzzoiro` lo distingue del cálculo con muestra local.
+ * Markets derived from provider xG (Bzzoiro) with the same Poisson–Dixon-Coles
+ * matrix as the own engine. Covers what the provider does not
+ * publish as % (clean sheet, exact-score table); provenance
+ * `derivado-xG-Bzzoiro` distinguishes it from the local-sample calculation.
  */
 export function marketsFromXg(xg, mostLikely = null) {
   if (!Number.isFinite(xg?.home) || !Number.isFinite(xg?.away) || xg.home <= 0 || xg.away <= 0) return null;
@@ -329,9 +329,9 @@ export function marketsFromXg(xg, mostLikely = null) {
 }
 
 /**
- * Disciplina estimada: ritmos propios cuando hay muestra; si no,
- * el mercado Over 3.5 amarillas se traduce a "se esperan ~X".
- * Nunca inventa %: sin insumo devuelve el stub null-honesto.
+ * Estimated discipline: own rates when there is sample; otherwise,
+ * the Over 3.5 yellows market translates to "~X expected".
+ * Never invents %: without input it returns the honest-null stub.
  */
 export function buildDisciplineEstimate({ statsForecast = null, marketCards = null, scorers = null, historyRows = 0 } = {}) {
   const base = buildDisciplineStub({ scorers, historyRows });
@@ -342,14 +342,14 @@ export function buildDisciplineEstimate({ statsForecast = null, marketCards = nu
     return { ...base, method: 'stats-ratings-v1', expectedTotal: total, source: 'GoatLab' };
   }
   if (marketCards?.over35 != null) {
-    // Conversión interpretativa: a mayor % de pasar 3.5, mayor esperado (2.5–5.5).
+    // Interpretive conversion: higher % of going over 3.5 means a higher expected value (2.5–5.5).
     const expected = Math.round((2.5 + marketCards.over35 * 3) * 10) / 10;
     return { ...base, method: 'mercado-estimado-v1', expectedTotal: expected, over35: marketCards.over35, source: 'Mercado' };
   }
   return base;
 }
 
-/** Córners estimados con la misma regla: ritmos → mercado Over 9.5. */
+/** Estimated corners with the same rule: rates → Over 9.5 market. */
 export function buildSetPiecesEstimate({ statsForecast = null, marketCorners = null, cornersSource = null, historyRows = 0 } = {}) {
   const base = buildSetPiecesStub({ historyRows });
   const ch = statsForecast?.home?.corners;
@@ -370,16 +370,16 @@ function standingsRow(standings, competitionId, team) {
   return rows.find(row => sameClub(row.team, team)) ?? null;
 }
 
-/* ---- Contexto por equipo (tarjetas del cierre de la página) ---- */
+/* ---- Per-team context (page closing cards) ---- */
 
 const RECENT = 5;
 
-/** Competiciones coperas o internacionales: nunca son "su campeonato". */
+/** Cup or international competitions: never "their league". */
 const CUP_COMPETITIONS = new Set(['champions', 'europa', 'libertadores', 'nations']);
 
 /**
- * Liga doméstica del equipo: primera competición de tablas que lo contiene y
- * no es copa. Null cuando no se resuelve (el equipo queda fuera de cobertura).
+ * Team's domestic league: first standings competition that contains it and
+ * is not a cup. Null when unresolved (the team is out of coverage).
  */
 export function domesticLeague(standingsByLeague, team) {
   for (const [competitionId, table] of Object.entries(standingsByLeague ?? {})) {
@@ -390,12 +390,12 @@ export function domesticLeague(standingsByLeague, team) {
   return null;
 }
 
-/** Un solo contexto: últimos 5 en su liga doméstica. Sin previos, debut (0 jugados). */
+/** One context: last 5 in their domestic league. Without prior matches, debut (0 played). */
 export function teamContext(resultsBase, standingsByLeague, scorersByLeague, match, side) {
   const team = side === 'home' ? match.home : match.away;
-  // "Su campeonato": la liga doméstica cuando se resuelve; si no, la
-  // competición del partido (comportamiento anterior). Las filas sin
-  // competición declarada no cuentan: el rótulo no admite dudas.
+  // "Their league": the domestic league when it resolves; otherwise the
+  // match competition (previous behavior). Rows without a declared
+  // competition do not count: the label allows no doubt.
   const league = domesticLeague(standingsByLeague, team) ?? match.competition;
   const recent = (resultsBase ?? []).filter(row => row.homeScore != null && row.competition === league && (sameClub(row.home, team) || sameClub(row.away, team)))
     .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, RECENT);
@@ -428,11 +428,11 @@ export function teamContext(resultsBase, standingsByLeague, scorersByLeague, mat
   };
 }
 
-/* ---- Bloques extendidos (eco del proveedor + stubs null-honestos) ---- */
+/* ---- Extended blocks (provider echo + honest-null stubs) ---- */
 
 /**
- * Eco directo de `match.modelPrediction` (Bzzoiro): sin cálculo propio.
- * Siempre objeto estable; `source:null` cuando no hay captura.
+ * Direct echo of `match.modelPrediction` (Bzzoiro): no own calculation.
+ * Always a stable object; `source:null` when there is no capture.
  */
 export function buildProviderEcho(match) {
   const raw = match?.modelPrediction ?? null;
@@ -453,7 +453,7 @@ export function buildProviderEcho(match) {
   };
 }
 
-/** Eco directo de `match.h2h` (Bzzoiro); `recent` acotado a 5. */
+/** Direct echo of `match.h2h` (Bzzoiro); `recent` capped at 5. */
 export function buildH2hEcho(match) {
   const raw = match?.h2h ?? null;
   return {
@@ -467,7 +467,7 @@ export function buildH2hEcho(match) {
   };
 }
 
-/** Stub de disciplina: el modelo Poisson de tarjetas vive aquí cuando se evalúe. */
+/** Discipline stub: the cards Poisson model lives here once evaluated. */
 export function buildDisciplineStub({ scorers = null, historyRows = 0 } = {}) {
   const side = () => ({ yellowOver35: null, redAnytime: null, foulsAvg: null });
   return {
@@ -479,7 +479,7 @@ export function buildDisciplineStub({ scorers = null, historyRows = 0 } = {}) {
   };
 }
 
-/** Stub de balón parado: el modelo propio de córners/tiros/xG vive aquí. */
+/** Set-piece stub: the own corners/shots/xG model lives here. */
 export function buildSetPiecesStub({ historyRows = 0 } = {}) {
   return {
     method: 'poisson-corners-v0',
@@ -492,8 +492,8 @@ export function buildSetPiecesStub({ historyRows = 0 } = {}) {
 }
 
 /**
- * Clima + sede por partido. `weatherEntry` es el sidecar `weather.json[id]`;
- * `venue` es `locateMatch(match)` resuelto por el pipeline (evita importar venues aquí).
+ * Weather + venue per match. `weatherEntry` is the `weather.json[id]` sidecar;
+ * `venue` is `locateMatch(match)` resolved by the pipeline (avoids importing venues here).
  */
 export function buildWeatherVenue({ match, weatherEntry = null, venue = null } = {}) {
   return {
@@ -521,7 +521,7 @@ export function buildWeatherVenue({ match, weatherEntry = null, venue = null } =
   };
 }
 
-/** Disponibilidad desde `match.lineups` (Bzzoiro); ausencias confirmadas, nunca estimadas. */
+/** Availability from `match.lineups` (Bzzoiro); confirmed absences, never estimated. */
 export function buildAvailability(match) {
   const raw = match?.lineups ?? null;
   return {

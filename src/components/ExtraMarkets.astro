@@ -1,10 +1,10 @@
 ---
 /**
- * Contexto pendiente del encuentro: sede, clima y disponibilidad.
- * La lectura del proveedor (Bzzoiro) vive como marcador lateral dentro de
- * los capítulos de resultado y goles; el historial cara a cara no se muestra.
- * Mismo mundo de la sala de análisis: superficies mate, regla de 1px,
- * fichas con ícono y notas quietas. Todo bloque ausente se omite.
+ * Pending match context: venue, weather and availability.
+ * The provider reading (Bzzoiro) lives as a side note inside the
+ * result and goals chapters; head-to-head history is not shown.
+ * Same analysis-room world: matte surfaces, 1px rule,
+ * icon cards and quiet notes. Every missing block is omitted.
  */
 import Icon from './Icon.astro';
 
@@ -17,8 +17,8 @@ interface Props {
 
 const { discipline, setPieces, weatherVenue, availability } = Astro.props;
 const num = (value: number | null | undefined, digits = 1) => value == null ? '—' : Number(value).toFixed(digits);
-/* Condición en español: el proveedor la sirve en inglés (`clear`) u Open-Meteo
-   con código WMO; el viento se muestra en km/h y la temperatura en °C. */
+/* Condition in Spanish: the provider serves it in English (`clear`) or Open-Meteo
+   with a WMO code; wind is shown in km/h and temperature in °C. */
 const CONDITION_ES: Record<string, string> = {
   clear: 'despejado', sunny: 'soleado', cloudy: 'nublado', overcast: 'cubierto',
   'partly cloudy': 'parcialmente nublado', fog: 'niebla', drizzle: 'llovizna',

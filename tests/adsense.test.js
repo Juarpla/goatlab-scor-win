@@ -14,7 +14,7 @@ test('Publisher ID viene de env en crudo y ca- solo se deriva', () => {
   assert.ok(!ads.includes("'ca-pub-"));
 });
 
-test('durante la revisión no hay slots manuales activos', () => {
+test('during review there are no active manual slots', () => {
   const ads = read('src/config/ads.ts');
   assert.ok(ads.includes('Object.values(AD_SLOTS).some(Boolean)'));
   const block = ads.slice(ads.indexOf('AD_SLOTS = {'), ads.indexOf('} as const'));
@@ -22,11 +22,11 @@ test('durante la revisión no hay slots manuales activos', () => {
   assert.deepEqual(slots, []);
 });
 
-test('ads.txt contiene la línea DIRECT del publisher', () => {
+test('ads.txt contains the publisher DIRECT line', () => {
   assert.ok(read('public/ads.txt').includes('google.com, pub-1972487168739114, DIRECT, f08c47fec0942fa0'));
 });
 
-test('robots.txt expone el sitemap del dominio de revisión', () => {
+test('robots.txt exposes the review domain sitemap', () => {
   assert.ok(read('public/robots.txt').includes('Sitemap: https://goatlab.win/sitemap-index.xml'));
 });
 
@@ -36,7 +36,7 @@ test('astro.config declara site + sitemap', () => {
   assert.ok(config.includes('sitemap'));
 });
 
-test('Layout carga verificación + CMP y enlaza a cookies', () => {
+test('Layout loads verification + CMP and links to cookies', () => {
   const layout = read('src/layouts/Layout.astro');
   assert.ok(layout.includes('ADS_VERIFICATION'));
   assert.ok(layout.includes('PUBLISHER_ID'));
@@ -52,7 +52,7 @@ test('ads.txt se genera en build desde el ID en crudo', () => {
   assert.ok(!script.includes('ca-${'));
 });
 
-test('páginas legales existen y usan el contacto genérico', () => {
+test('legal pages exist and use the generic contact', () => {
   assert.ok(existsSync(new URL('src/pages/cookies.astro', root)));
   for (const page of ['privacidad', 'cookies']) {
     const src = read(`src/pages/${page}.astro`);

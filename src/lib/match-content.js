@@ -49,8 +49,8 @@ export function scriptStructureErrors(data, { matchId = null, match = null } = {
     for (const field of ['title', 'hook', 'narration']) if (!nonempty(script?.[field])) errors.push(`${label}: ${field} vacío o inválido`);
     if (!Number.isInteger(script?.words) || script.words <= 0) errors.push(`${label}: words debe ser un entero positivo`);
     if (data.editorialVersion === 2 && (!nonempty(script?.projection) || !String(script?.narration ?? '').includes(script.projection))) errors.push(`${label}: proyección editorial ausente de la narración`);
-    // El pick solo existe desde la mejora antecedente+pronóstico; los JSONs
-    // viejos sin pick siguen válidos, pero un pick presente debe tener forma.
+    // The pick only exists since the precedent+forecast improvement; old
+    // JSONs without a pick remain valid, but a present pick must have a shape.
     if (script?.pick != null) {
       for (const field of ['bridge', 'noun', 'antecedent', 'verdict', 'call']) {
         if (!nonempty(script.pick[field])) errors.push(`${label}: pick.${field} vacío o inválido`);
@@ -90,7 +90,7 @@ export function validateContent(data, category, matchId, { match = null } = {}) 
   if (category === 'scripts') return scriptStructureErrors(data, { matchId, match }).length === 0;
   if (!data || data.matchId !== matchId || !data.home || !data.away) return false;
   if (data.facts != null && (!Array.isArray(data.facts) || data.facts.length > 128 || data.facts.some(f => !f || typeof f.id !== 'string' || typeof f.label !== 'string' || !Number.isFinite(f.value) || f.value < 0 || typeof f.unit !== 'string' || typeof f.source !== 'string'))) return false;
-  // Acepta v1 y v2: los bancos generados con CONTENT_VERSION 2 siguen vigentes.
+  // Accepts v1 and v2: banks generated with CONTENT_VERSION 2 remain valid.
   if (data.version !== CONTENT_VERSION && data.version !== CONTENT_VERSION + 1) return false;
   return data.category === category && promptErrors(data, { published: data.published === true }).length === 0;
 }

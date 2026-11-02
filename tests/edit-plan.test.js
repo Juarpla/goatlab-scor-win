@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { boundedMotion, compositionProps } from '../src/lib/edit-plan.js';
+import { boundedMotion, compositionProps } from '../video-render/contract/edit-plan.js';
 
 test('movement stays inside native image resolution and crop margins', () => {
   const layer = { box: { x: 0, y: 0, w: 1, h: 1 }, from: { scale: 1.5, x: .25 }, to: { scale: 1.5, y: -.25 } };

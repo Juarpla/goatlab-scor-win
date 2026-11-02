@@ -1,7 +1,7 @@
 /**
- * Serializador compacto telegráfico para el input del LLM.
- * JSON gasta tokens en comillas/llaves/claves repetidas; aquí cada fila es
- * `BLOQUE|campo|campo` separada por `\n`, sin JSON. Ahorro estimado 30-50%.
+ * Compact telegraphic serializer for LLM input.
+ * JSON spends tokens on repeated quotes/braces/keys; here each row is
+ * `BLOCK|field|field` separated by `\n`, without JSON. Estimated saving 30-50%.
  */
 import { sameClub } from './teams.js';
 
@@ -22,7 +22,7 @@ const num = (value, digits = 3) => {
 
 const yesNo = value => (value == null ? '' : value ? 'si' : 'no');
 
-/** Últimos N resultados de un equipo, más recientes primero. */
+/** Last N results for a team, most recent first. */
 export function lastResults(results, team, n = 6) {
   return (results ?? [])
     .filter(row => row.homeScore != null && (sameClub(row.home, team) || sameClub(row.away, team)))
@@ -40,12 +40,12 @@ const topScorers = (scorers, competition, team, n = 3) =>
     .slice(0, n);
 
 /**
- * Construye el input telegráfico de un partido. Orden = prioridad de
- * truncado: lo esencial (M/P/B) primero; lo recortable (S/R/HR) al final.
- * Bloques extra (nunca recortan lo esencial): W clima+sede, L bajas,
- * M2 consenso externo en % ya normalizado, B2 estimaciones del modelo Bzzoiro, A lectura de
- * API-Football (con su lectura cruda, que el prompt reformula). El LLM narra
- * y audita, nunca calcula.
+ * Builds the telegraphic input for a match. Order = truncation
+ * priority: essentials (M/P/B) first; trimmable blocks (S/R/HR) last.
+ * Extra blocks (never trim essentials): W weather+venue, L absences,
+ * M2 external consensus already normalized to %, B2 Bzzoiro model estimates, A API-Football
+ * reading (with its raw reading, which the prompt reformulates). The LLM narrates
+ * and audits, never calculates.
  */
 export function toCompactInput(match, markets = null, { results = [], standings = null, scorers = null, weather = null, market = null } = {}) {
   const lines = [];
@@ -64,11 +64,11 @@ export function toCompactInput(match, markets = null, { results = [], standings 
       `B|${num(cb.oneX2?.home)}|${num(cb.oneX2?.draw)}|${num(cb.oneX2?.away)}|${num(cb.xg?.home, 2)}|${num(cb.xg?.away, 2)}|${num(cb.over25)}|${num(cb.btts)}|${clean(cb.score, 12)}|${num(cb.cornersOver95)}`,
     );
   }
-  // Estimaciones del modelo Bzzoiro (booleans + mayor probabilidad); acompañan, no son números GoatLab.
+  // Bzzoiro model estimates (booleans + highest probability); they accompany, they are not GoatLab numbers.
   if (cb?.recommendations) {
     lines.push(`B2|${clean(cb.recommendations.favorite, 16)}|${num(cb.recommendations.favoriteProb)}|${yesNo(cb.recommendations.over25)}|${yesNo(cb.recommendations.btts)}`);
   }
-  // Lectura de API-Football: distribución, mayor probabilidad, umbral de goles y su lectura cruda.
+  // API-Football reading: distribution, highest probability, goal threshold and its raw reading.
   const af = match.afPrediction;
   if (af) {
     lines.push(`A|${num(af.percent?.home)}|${num(af.percent?.draw)}|${num(af.percent?.away)}|${clean(af.winner, 40)}|${yesNo(af.winOrDraw)}|${clean(af.underOver, 8)}|${clean(af.goals?.home, 8)}|${clean(af.goals?.away, 8)}|${clean(af.advice, 120)}`);
@@ -77,13 +77,13 @@ export function toCompactInput(match, markets = null, { results = [], standings 
     const h = match.h2h;
     lines.push(`H|${h.totalMatches}|${h.homeWins ?? ''}|${h.draws ?? ''}|${h.awayWins ?? ''}|${num(h.avgTotalGoals, 2)}`);
   }
-  // Clima + sede (sidecar weather.json + venue del catálogo).
+  // Weather + venue (weather.json sidecar + catalog venue).
   const w = weather?.[match.id] ?? match.weatherEntry ?? null;
   const venueName = match.venue ?? null;
   if (w && (w.temp != null || w.condition != null || w.wind != null || venueName)) {
     lines.push(`W|${num(w.temp, 0)}|${clean(w.condition, 24)}|${num(w.wind, 0)}|${clean(venueName, 40)}`);
   }
-  // Bajas confirmadas (Bzzoiro lineups); nunca estimadas.
+  // Confirmed absences (Bzzoiro lineups); never estimated.
   const unavailable = match.lineups?.unavailablePlayers ?? match.availability?.unavailablePlayers ?? null;
   if (Array.isArray(unavailable) && unavailable.length) {
     const homeOut = unavailable.filter(p => p.team === 'home').length;
@@ -91,7 +91,7 @@ export function toCompactInput(match, markets = null, { results = [], standings 
     const names = unavailable.slice(0, 3).map(p => clean(p.name, 24)).join(',');
     lines.push(`L|${homeOut}|${awayOut}|${names}`);
   }
-  // Consenso externo en % interpretativo (ya sin margen ni cuotas). M2 nunca trae decimales de cuota.
+  // External consensus in interpretive % (no margin or odds). M2 never carries decimal odds.
   const m2 = market ?? match.marketConsensus ?? null;
   if (m2?.oneX2 || m2?.over25 != null || m2?.btts != null) {
     lines.push(
@@ -124,7 +124,7 @@ export function toCompactInput(match, markets = null, { results = [], standings 
     lines.push(`HR|${clean(row.date, 10)}|${clean(row.home)}|${clean(row.away)}|${row.homeScore}|${row.awayScore}`);
   }
   let out = lines.join('\n');
-  // Truncado inverso: recorta desde el final (HR/R/S) hasta caber.
+  // Reverse truncation: trims from the end (HR/R/S) until it fits.
   while (out.length > COMPACT_MAX_CHARS && lines.length > 3) {
     lines.pop();
     out = lines.join('\n');

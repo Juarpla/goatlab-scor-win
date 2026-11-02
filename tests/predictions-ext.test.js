@@ -37,7 +37,7 @@ test('teamRates averages goals for and against over the most recent matches', ()
 });
 
 test('performanceIndex aggregates the multi-metric advantage, null-honest per metric', () => {
-  // Casa A domina las métricas en tres partidos; Visita D aparece tres veces como la parte débil.
+  // Home A dominates the metrics in three matches; Away D appears three times as the weak side.
   const strong = { possession: 60, shotsOnTarget: 6, corners: 8, fouls: 8, yellowCards: 1, xg: 1.9 };
   const weak = { possession: 40, shotsOnTarget: 2, corners: 3, fouls: 12, yellowCards: 3, xg: 0.5 };
   const rows = [
@@ -99,7 +99,7 @@ test('ensemble blends declared insumos, sums to one, and degrades honestly', () 
 test('backtest evaluators compute Brier against the empirical baseline', () => {
   const metrics = evaluateOneX2([{ predicted: { home: 0.5, draw: 0.3, away: 0.2 }, outcome: 'home' }]);
   assert.equal(metrics, null); // minimum sample guard
-  // El modelo acierta la clase por fila: Brier 0.08 contra el baseline constante 0.57.
+  // The model gets the class right per row: Brier 0.08 versus the constant baseline 0.57.
   const rows = Array.from({ length: 40 }, (_, i) => i % 2 === 0
     ? { predicted: { home: 0.8, draw: 0.2, away: 0 }, outcome: 'home' }
     : { predicted: { home: 0, draw: 0.2, away: 0.8 }, outcome: 'away' });
@@ -122,7 +122,7 @@ test('oneX2Outcome and the publication gate decide without favoritism', () => {
   assert.equal(oneX2Outcome(0, 3), 'away');
   assert.equal(oneX2Outcome(null, 1), null);
 
-  // 220 partidos, el modelo sigue el resultado real por fila: supera el baseline constante.
+  // 220 matches, the model follows the real result per row: it beats the constant baseline.
   const good = evaluateOneX2(Array.from({ length: 220 }, (_, i) => i % 5 === 0
     ? { predicted: { home: 0, draw: 0.9, away: 0.1 }, outcome: 'draw' }
     : { predicted: { home: 0.9, draw: 0.1, away: 0 }, outcome: 'home' }));

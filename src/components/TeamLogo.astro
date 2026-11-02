@@ -2,8 +2,8 @@
 import { teamShort } from '../lib/teams.js';
 const { name, teamId = null, size = 30 } = Astro.props;
 const initials = teamShort(name);
-// Escudo por hotlink a la Image API de Bzzoiro (uso identificador; puede retirarse
-// por petición del club). Si el archivo no existe (204) o falla, queda el monograma.
+// Crest by hotlink to Bzzoiro's Image API (identification use; it may be withdrawn
+// at the club's request). If the file does not exist (204) or fails, the monogram remains.
 ---
 <span class="team-logo" style={`--logo-size:${size}px`}>
   {teamId != null && <img src={`https://sports.bzzoiro.com/img/team/${teamId}/?bg=transparent`} alt="" width={size} height={size} loading="lazy" decoding="async" onerror="this.remove()" />}

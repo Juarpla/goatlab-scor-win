@@ -1,12 +1,12 @@
 import { buildPruneContext, resolvePruneMatch, pruneDue } from './pruning.js';
 
-/** Top de guiones, prompts y banco como dato compartido: se calcula en
- *  1-update-data y todos leen el mismo. `priority` es informativo. `extra` protege peticiones manuales
- *  (--match o top ampliado) de la poda. */
+/** Top of scripts, prompts and bank as shared data: computed in
+ *  1-update-data and everyone reads the same. `priority` is informational. `extra` protects manual requests
+ *  (--match or extended top) from pruning. */
 export const TOP_FILENAME = 'top.json';
 export const TOP_VERSION = 1;
 
-/** Id interno de proveedor (`fd-575357`). No es código descriptivo y no entra en la cola. */
+/** Internal provider id (`fd-575357`). It is not a descriptive code and does not enter the queue. */
 export function providerOnlyId(id) {
   return /^(?:fd|af|bz)-[0-9]+$/.test(id ?? '');
 }
@@ -47,18 +47,18 @@ export function selectionCount(top, n) {
   return ask;
 }
 
-/** Conjunto efectivo: ranking.slice(0, corte) ∪ extra, sin duplicados. */
+/** Effective set: ranking.slice(0, cut) ∪ extra, without duplicates. */
 export function effectiveIds(top, n) {
   const keep = new Set([...rankingIds(top).slice(0, selectionCount(top, n)), ...(top?.extra ?? [])]);
   return [...keep];
 }
 
-/** Ids NS seleccionables según fixtures; no constituyen permiso de poda. */
+/** NS ids selectable per fixtures; they do not constitute permission to prune. */
 export function liveIds(matches) {
   return new Set((matches ?? []).filter(m => m?.status === 'NS').map(m => m.webId ?? m.id));
 }
 
-/** Fusiona ids manuales en extra; devuelve el top actualizado y lo añadido. */
+/** Merges manual ids into extra; returns the updated top and what was added. */
 export function registerExtra(top, ids) {
   const base = Array.isArray(top?.extra) ? top.extra : [];
   const have = new Set(base);

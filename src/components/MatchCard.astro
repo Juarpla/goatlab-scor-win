@@ -14,7 +14,7 @@ const sides = [
   { name: teamEsDisplay(match.home), teamId: match.teamIds?.home ?? null, form: formHome, score: match.homeScore },
   { name: teamEsDisplay(match.away), teamId: match.teamIds?.away ?? null, form: formAway, score: match.awayScore },
 ];
-// Búsqueda bilingüe y sin tildes: "spain" y "españa" encuentran el mismo card.
+// Bilingual search without accents: "spain" and "españa" find the same card.
 const searchIndex = `${normalize(match.home)} ${normalize(match.away)} ${normalize(sides[0].name)} ${normalize(sides[1].name)} ${match.venue ?? ''}`.toLowerCase();
 ---
 <a href={`/partido/${match.webId ?? match.id}/`} class="match-card" data-fixture data-league-id={match.competition} data-date={matchDay(match.kickoff)} data-stage={phase} data-teams={searchIndex}>

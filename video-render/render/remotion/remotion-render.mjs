@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { cpus, totalmem } from 'node:os';
 import { compositionCsp } from './authored-composition.mjs';
 import { bundleDir, buildVideoBundle } from './remotion-build.mjs';
-import { FPS, MAX_FRAMES } from '../../../src/lib/short-format.js';
+import { FPS, MAX_FRAMES } from '../../contract/short-format.js';
 import { projectCapture, budgetError } from './capture-budget.mjs';
 import { classifyLayout, layoutMessages } from './layout-check.mjs';
 import { recordRenderStart, recordRenderProgress } from './render-metrics.mjs';

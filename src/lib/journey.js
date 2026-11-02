@@ -1,7 +1,7 @@
 /**
- * Región de jornada de la portada: mapa de sedes, pulso de la base y
- * termómetro de curiosidades. Todo se calcula sobre los JSON locales en la
- * build; nada de esta página consulta al proveedor en runtime.
+ * Home-page matchday region: venue map, database pulse and
+ * curiosity thermometer. Everything is computed from local JSON at
+ * build time; nothing on this page queries the provider at runtime.
  */
 import { normalize, teamEsDisplay } from './teams.js';
 import { competitions } from './football.js';
@@ -10,10 +10,10 @@ import { locateMatch, MAP_CROP } from './venues.js';
 const FINISHED = new Set(['FT', 'AET', 'PEN']);
 
 /**
- * Pines por ciudad para el mapa: agrupa los próximos encuentros por sede de
- * localía y proyecta la ciudad sobre el recorte equirectangular del PNG
- * (x = (lng+180)/360, y = ((90-lat)/2 − fila superior)/filas). Los partidos sin
- * sede resuelta viajan aparte para la fila «sin ubicación».
+ * City pins for the map: groups upcoming fixtures by home venue
+ * and projects the city onto the PNG's equirectangular crop
+ * (x = (lng+180)/360, y = ((90-lat)/2 − top row)/rows). Matches without a
+ * resolved venue travel separately to the "no location" row.
  */
 export function buildMapData(matches = []) {
   const live = (matches ?? []).filter(match => !FINISHED.has(match.status) && match.kickoff);
@@ -73,10 +73,10 @@ const shortDate = date => new Date(`${date}T12:00:00Z`).toLocaleDateString('es-P
 const competitionName = id => competitions.find(competition => competition.id === id)?.name ?? id;
 
 /**
- * Los nombres: líderes reales de jugadores entre las ligas cubiertas.
- * Cada fila nombra al jugador y a su club, con la competición en el detalle.
- * Solo se publica lo que la fuente entregó; el «más eficaz» compara goles
- * por partido entre goleadores con tres partidos o más y no repite al goleador.
+ * The names: real player leaders across covered leagues.
+ * Each row names the player and club, with the competition in the detail.
+ * Only what the source delivered is published; "most efficient" compares goals
+ * per match among scorers with three or more matches and does not repeat the top scorer.
  */
 export function computePlayerPulse(scorersData = {}) {
   const entries = Object.entries(scorersData ?? {}).filter(([, table]) => (table.scorers?.length ?? 0) > 0 || (table.assists?.length ?? 0) > 0);
@@ -123,9 +123,9 @@ export function computePlayerPulse(scorersData = {}) {
 }
 
 /**
- * El pulso: racha ganadora vigente más larga, el partido con más goles, la
- * goleada más ancha y el equipo con más victorias en sus últimos 10. Cada hito
- * prefiere el más reciente cuando empatan.
+ * The pulse: longest active winning streak, the match with the most goals, the
+ * widest thrashing and the team with the most wins in its last 10. Each milestone
+ * prefers the most recent when tied.
  */
 export function computePulse(results = []) {
   const rows = playedRows(results);
@@ -176,7 +176,7 @@ export function computePulse(results = []) {
   return items.slice(0, 4);
 }
 
-/** Termómetro: tres cifras reales de la base para la banda rotativa. */
+/** Thermometer: three real figures from the database for the rotating band. */
 export function computeCuriosities(results = []) {
   const rows = playedRows(results);
   if (!rows.length) return [];

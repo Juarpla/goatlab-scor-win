@@ -4,8 +4,8 @@ import { closeSync, openSync, writeSync, readdirSync, statSync, existsSync, mkdi
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 const run = promisify(execFile);
-import { PHOTO_PROFILE, imageDimensions, normalizePhoto, photoCacheSuffix } from './photo-normalization.mjs';
-export { imageDimensions } from './photo-normalization.mjs';
+import { PHOTO_PROFILE, imageDimensions, normalizePhoto, photoCacheSuffix } from './04-photo-normalize.mjs';
+export { imageDimensions } from './04-photo-normalize.mjs';
 const inProgress = new Map();
 const leases = new Map();
 export function pinPhotos(assets) {

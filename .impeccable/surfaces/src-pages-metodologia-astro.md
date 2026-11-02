@@ -1,30 +1,30 @@
-# Surface brief — Metodología
+# Surface brief — Methodology
 
 - **Target:** `src/pages/metodologia.astro`
-- **Mode:** Read (el visitante entiende cómo se construye y evalúa el análisis) con un cierre Persuade (CTA a Encuentros).
-- **Scope:** reescritura de la página dentro del mundo establecido (DESIGN.md); extensión del patrón `.story` de `partido/[id].astro`.
+- **Mode:** Read (the visitor understands how the analysis is built and evaluated) with a Persuade close (CTA to Encuentros).
+- **Scope:** rewrite of the page inside the established world (DESIGN.md); extension of the `.story` pattern from `partido/[id].astro`.
 
-## Dirección (direction contract)
+## Direction (direction contract)
 
-**THESIS:** La metodología no se lee, se recorre: cada capa del análisis (datos → IA → editor) se explica con una ilustración SVG que se dibuja mientras el lector avanza. Se rechaza la página estática de solo texto (la versión incumbente) y también el muro de tarjetas homogéneas.
+**THESIS:** Methodology is not read, it is traversed: each layer of the analysis (data → AI → editor) is explained with an SVG illustration that draws itself as the reader advances. The static text-only page (the incumbent version) is rejected, as is the wall of homogeneous cards.
 
-**OWN-WORLD:** Paleta DESIGN.md (carbón #101412, superficie mate #181e1a, lima #c5ed74 como única señal, azul pizarra #8ca6bf como segunda serie). Barlow Condensed para capítulos y cifras grandes; Manrope para la lectura. Ilustraciones: diagramas vectoriales planos con linework de 1px y rellenos tonales — geometría SVG, no "ilustración pictórica". Mismo grid `.story` con stage sticky que la página de partido.
+**OWN-WORLD:** DESIGN.md palette (carbon #101412, matte surface #181e1a, lime #c5ed74 as the only signal, slate blue #8ca6bf as the second series). Barlow Condensed for chapters and large figures; Manrope for reading. Illustrations: flat vector diagrams with 1px linework and tonal fills, SVG geometry, not "pictorial illustration". Same `.story` grid with sticky stage as the match page.
 
-**STORY:** El visitante entiende las tres capas en orden, ve cómo se evalúa la estadística (gate de publicación, cifras reales de evaluation.json), entiende que la IA no es fuente de resultados, que los anuncios viven fuera del análisis y que no hay apuestas. Sale hacia Encuentros con el teléfono del producto a la vista.
+**STORY:** The visitor understands the three layers in order, sees how the statistic is evaluated (publication gate, real figures from evaluation.json), understands that AI is not a source of results, that ads live outside the analysis and that there is no betting. They leave toward Encuentros with the product phone in view.
 
-**FIRST VIEWPORT:** Tesis "Los datos necesitan contexto." a la izquierda (Barlow 60px) con un pequeño diagrama de las tres capas (tres nodos conectados por una línea que se dibuja) a la derecha; debajo arranca el scrollytelling: notas a la izquierda, stage sticky a la derecha con la ilustración del capítulo 1 (curva de Poisson con barras que crecen).
+**FIRST VIEWPORT:** Thesis "Los datos necesitan contexto." (Data needs context.) on the left (Barlow 60px) with a small diagram of the three layers (three nodes connected by a line that draws itself) on the right; below, the scrollytelling starts: notes on the left, sticky stage on the right with the chapter 1 illustration (Poisson curve with growing bars).
 
-**FORM:** Precisamente especificado por el usuario en grilling: patrón `.story` reutilizado, 3 capítulos + stage sticky con un SVG por capítulo, 3 unidades AdSense (tras cap. 1 horizontal, tras cap. 2 rectangular, final horizontal), teléfono SVG en stage cap. 2 y en el cierre, anchors `#datos-historicos` `#analisis-ia` `#criterio-editor` intactos, texto editable conservando todos los datos. Seed: n/a (solicitud estrecha, sin torneo de conceptos).
+**FORM:** Precisely specified by the user in grilling: reused `.story` pattern, 3 chapters + sticky stage with one SVG per chapter, 3 AdSense units (after chapter 1 horizontal, after chapter 2 rectangular, final horizontal), SVG phone in stage chapter 2 and in the close, anchors `#datos-historicos` `#analisis-ia` `#criterio-editor` intact, editable text preserving all data. Seed: n/a (tight request, no concept tournament).
 
 **FINISH:** unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
 
-## Notas de contenido
+## Content notes
 
-- Mantener todas las afirmaciones del texto incumbente: proveedores, "no publicamos cifras inventadas", frecuencia ≠ probabilidad, Poisson + CatBoost + señales, pesos declarados, gate de publicación, cifras dinámicas de `evaluation.json`, limitaciones de la IA, ads separados, sin enlaces a apuestas.
-- Añadir nota de no afiliación con Bzzoiro (PRODUCT.md la exige en metodología; hoy falta).
-- Anclas de la home intactas (`index.astro` → guía).
-- Ads: `src/config/ads.ts` con credenciales placeholder; sin credenciales, AdSlot muestra el espacio reservado existente. ads.txt placeholder en `public/`.
+- Keep all claims from the incumbent text: providers, "we do not publish invented figures", frequency ≠ probability, Poisson + CatBoost + signals, declared weights, publication gate, dynamic figures from `evaluation.json`, AI limitations, separate ads, no links to betting.
+- Add the non-affiliation note with Bzzoiro (PRODUCT.md requires it in methodology; it is missing today).
+- Home anchors intact (`index.astro` → guide).
+- Ads: `src/config/ads.ts` with placeholder credentials; without credentials, AdSlot shows the existing reserved space. ads.txt placeholder in `public/`.
 
-## Sin resolver
+## Unresolved
 
-- Credenciales reales de AdSense (el usuario las pegará en `src/config/ads.ts`).
+- Real AdSense credentials (the user will paste them into `src/config/ads.ts`).

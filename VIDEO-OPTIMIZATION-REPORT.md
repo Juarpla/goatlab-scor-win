@@ -1,201 +1,198 @@
-# Optimización del flujo de video y evaluación de revisión manual
+# Video pipeline optimization and manual review evaluation
 
-La ampliación de dirección visual, herramientas opcionales, conservación de muestras
-y comandos de comparación se describe en [VIDEO-CINEMATIC-REPORT.md](VIDEO-CINEMATIC-REPORT.md).
-Las mediciones históricas de este informe no son resultados del kit nuevo.
+The expansion of visual direction, optional tools, sample retention and comparison
+commands is described in [VIDEO-CINEMATIC-REPORT.md](VIDEO-CINEMATIC-REPORT.md).
+The historical measurements in this report are not results from the new kit.
 
-## Carriles y autoría en paralelo
+## Lanes and parallel authoring
 
-Render prepara y entrega por un carril ligero y captura de uno en uno. Gateway
-dirige un audio a la vez (`GOATLAB_MAX_DIRECTORS=1`). Cada video responde
-al audio original y trae «Me gusta» / «No me gusta». Esas marcas quedan en
-`director-memory` y vuelven a la autoría como preferencias, no como reglas.
+Render prepares and delivers through a lightweight lane and captures one at a
+time. Gateway directs one audio at a time (`GOATLAB_MAX_DIRECTORS=1`). Each video
+responds to the original audio and includes "Like" / "Dislike". Those marks stay
+in `director-memory` and return to authoring as preferences, not as rules.
 
-La máquina de Render sigue en shared-cpu-2x con 4 GB y `RENDER_WORKERS=2`.
-El detector de texto queda en aviso
-(`LAYOUT_CHECK` por defecto `advisory`). El botón «Rehacer» sigue fuera de este cambio.
+The Render machine remains shared-cpu-2x with 4 GB and `RENDER_WORKERS=2`. The
+text detector stays advisory (`LAYOUT_CHECK` defaults to `advisory`). The "Redo"
+button remains outside this change.
 
-Fecha: 21 de octubre de 2026.
+Date: October 21, 2026.
 
-## Benchmark de máquinas (fixture, 21 oct 2026)
+## Machine benchmark (fixture, Oct 21 2026)
 
-Medido en `iad` con la imagen
+Measured in `iad` with image
 `registry.fly.io/goatlab-render:deployment-01M5G38NXSQ409FDTAP95KAZQ2`
-(`7b9bd2a`). El comando fue `node scripts/benchmark-shorts.mjs --fixture`,
-con `LAYOUT_CHECK=off` y el presupuesto de captura desactivado. El fixture
-tiene 330 fotogramas (11 s): fotos sintéticas, desenfoques, un clip de 4 s,
-una ficha y el logo. No es el JSX del 21 de octubre, que ya no estaba en el
-servidor. Aquel video tardó 15 min 38 s en capturar; estas cifras sirven para
-comparar máquinas, no para predecir ese video.
+(`7b9bd2a`). The command was `node scripts/benchmark-shorts.mjs --fixture`,
+with `LAYOUT_CHECK=off` and the capture budget disabled. The fixture has 330
+frames (11 s): synthetic photos, blurs, a 4 s clip, a card and the logo. It is not
+the October 21 JSX, which was no longer on the server. That video took 15 min 38 s
+to capture; these figures serve to compare machines, not to predict that video.
 
-Las máquinas temporales se borraron al terminar. Producción no se tocó.
+Temporary machines were deleted at the end. Production was not touched.
 
-Tarifas usadas (Fly, `iad`, octubre 2026): shared-cpu-2x con 4 GB ≈ $0,0353/h
-(base de 512 MB más RAM extra); performance-2x con 4 GB = $0,0917/h;
-performance-4x con 8 GB = $0,1833/h. El coste es tarifa × `captureMs`. Un
-video de 55 s se proyecta como 5× la captura de este fixture (1650/330).
+Rates used (Fly, `iad`, October 2026): shared-cpu-2x with 4 GB ≈ $0.0353/h
+(512 MB base plus extra RAM); performance-2x with 4 GB = $0.0917/h;
+performance-4x with 8 GB = $0.1833/h. Cost is rate × `captureMs`. A 55 s video is
+projected as 5× the capture of this fixture (1650/330).
 
-| Máquina | Workers | Captura 11 s | fps | Coste captura 11 s | Proyección 55 s | Coste proyección |
+| Machine | Workers | Capture 11 s | fps | Capture cost 11 s | 55 s projection | Projected cost |
 |---|---:|---:|---:|---:|---:|---:|
-| shared-cpu-2x, 4 GB | 1 | 38,7 s | 8,5 | $0,00038 | 3 min 14 s | $0,0019 |
-| shared-cpu-2x, 4 GB | 2 | 28,1 s | 11,7 | $0,00028 | 2 min 21 s | $0,0014 |
-| performance-2x, 4 GB | 2 | 32,6 s | 10,1 | $0,00083 | 2 min 43 s | $0,0042 |
-| performance-4x, 8 GB | 4 | 17,8 s | 18,5 | $0,00091 | 1 min 29 s | $0,0045 |
+| shared-cpu-2x, 4 GB | 1 | 38.7 s | 8.5 | $0.00038 | 3 min 14 s | $0.0019 |
+| shared-cpu-2x, 4 GB | 2 | 28.1 s | 11.7 | $0.00028 | 2 min 21 s | $0.0014 |
+| performance-2x, 4 GB | 2 | 32.6 s | 10.1 | $0.00083 | 2 min 43 s | $0.0042 |
+| performance-4x, 8 GB | 4 | 17.8 s | 18.5 | $0.00091 | 1 min 29 s | $0.0045 |
 
-La fila de 2 workers en shared es la segunda pasada de la misma máquina
-(el bundle ya estaba caliente, 251 ms). `captureMs` no incluye el bundle.
-Las otras filas pagaron un arranque en frío (bundle 11–14 s). Aun así,
-performance-2x no superó a shared-cpu-2x. performance-4x capturó unas 1,6
-veces más rápido que shared con 2 workers y cuesta unas 5 veces más por
-hora. En este fixture, el tiempo ahorrado no compensa el precio.
+The 2-worker shared row is the second pass on the same machine (the bundle was
+already warm, 251 ms). `captureMs` does not include the bundle. The other rows
+paid a cold start (bundle 11-14 s). Even so, performance-2x did not beat
+shared-cpu-2x. performance-4x captured about 1.6 times faster than shared with 2
+workers and costs about 5 times more per hour. On this fixture, the time saved
+does not justify the price.
 
-Producción quedó en la segunda fila: shared-cpu-2x, 4 GB y `RENDER_WORKERS=2`.
-La máquina no cambió. `--photo-max=1080` y `REMOTION_GL` siguen sin medirse.
+Production stayed on the second row: shared-cpu-2x, 4 GB and `RENDER_WORKERS=2`.
+The machine did not change. `--photo-max=1080` and `REMOTION_GL` remain
+unmeasured.
 
-## Punto de partida
+## Starting point
 
-En la prueba del 21 de octubre, un solo audio midió:
+In the October 21 test, a single audio measured:
 
-| Etapa | Tiempo |
+| Stage | Time |
 |---|---:|
-| Transcripción con Mistral | 3 s |
-| Compilación, captura y codificación | 15 min 38 s |
-| Extracción de 52 fotogramas (52 procesos FFmpeg) | 6 min 51 s |
-| Revisión visual | 9 llamadas al modelo y un dictamen final |
-| Autoría | varios minutos por timeouts, reintentos y una corrección |
+| Transcription with Mistral | 3 s |
+| Compilation, capture and encoding | 15 min 38 s |
+| Extraction of 52 frames (52 FFmpeg processes) | 6 min 51 s |
+| Visual review | 9 model calls and a final verdict |
+| Authoring | several minutes for timeouts, retries and one correction |
 
-## Contrato vigente
+## Current contract
 
-**Duración.** El único máximo editorial es 55 s, con el logo final incluido.
-Render rechaza cualquier MP4 que lo supere. También exige voz AAC,
-H.264 a 30 fps, 1080×1920 y menos de 45 MB.
+**Duration.** The only editorial maximum is 55 s, including the final logo. Render
+rejects any MP4 that exceeds it. It also requires AAC voice, H.264 at 30 fps,
+1080×1920 and less than 45 MB.
 
-**Revisión orientativa.** Una sola pasada de FFmpeg extrae 8 JPEG de 540×960
-con una muestra fija, que incluye el cierre. Gateway hace **una** llamada visual
-con razonamiento `max` y un presupuesto de 60 s por modelo. `approve` y `revise`
-entregan ambos el mismo MP4. Si la revisión falla, la entrega se registra como
-`reviewStatus: unavailable`, sin afirmar que hubo inspección. Ya no existe el
-dictamen final ni las correcciones visuales automáticas.
+**Advisory review.** A single FFmpeg pass extracts 8 JPEGs at 540×960 with a fixed
+sample, including the endcard. Gateway makes **one** visual call with `max`
+reasoning and a 60 s budget per model. `approve` and `revise` both deliver the
+same MP4. If the review fails, delivery is recorded as `reviewStatus:
+unavailable`, without claiming that an inspection happened. The final verdict and
+automatic visual corrections no longer exist.
 
-**Autoría.** Usa razonamiento `max`, con 240 s por turno y 15 s de margen.
-Hay un candidato inicial y una única corrección técnica (`MAX_CANDIDATES = 2`).
-Un plan inválido admite dos intentos, y el segundo usa directamente GLM. El turno
-recibe GoatLab y `goatlab.win` como datos oficiales (también en los props
-`brandName`/`brandUrl`).
+**Authoring.** Uses `max` reasoning, with 240 s per turn and 15 s of margin. There
+is one initial candidate and a single technical correction (`MAX_CANDIDATES = 2`).
+An invalid plan allows two attempts, and the second one uses GLM directly. The
+turn receives GoatLab and `goatlab.win` as official data (also in the
+`brandName`/`brandUrl` props).
 
-**Reintentos.** La admisión del turno admite un solo reintento si OpenClaw aún
-no está listo. Antes de pasar al modelo de respaldo, se cancela el turno anterior
-con `chat.abort`. Si no se confirma esa cancelación, no se abre otro turno.
-Un fallo queda registrado en el archivo `.run` y no se repite dentro de la
-misma instancia de Gateway.
+**Retries.** Turn admission allows a single retry if OpenClaw is not ready yet.
+Before moving to the fallback model, the previous turn is cancelled with
+`chat.abort`. If that cancellation is not confirmed, no other turn is opened. A
+failure is recorded in the `.run` file and is not repeated within the same Gateway
+instance.
 
-**Render.** Usa Remotion 4.0.537 con codificación paralela, `x264Preset: veryfast`
-y CRF 20. Comparte un solo navegador para la selección, el preflight y la captura.
-Antes de la captura completa, el preflight mide fotogramas a escala 1 (un
-calentamiento y tres muestras) y proyecta la captura. Si la proyección supera
-`CAPTURE_BUDGET_MS` (18 min), Render devuelve `CAPTURE_BUDGET` y esa pasada
-cuenta como la corrección técnica. FFmpeg usa al menos dos hilos.
+**Render.** Uses Remotion 4.0.537 with parallel encoding, `x264Preset: veryfast`
+and CRF 20. It shares a single browser for selection, preflight and capture.
+Before full capture, preflight measures frames at scale 1 (one warm-up and three
+samples) and projects the capture. If the projection exceeds `CAPTURE_BUDGET_MS`
+(18 min), Render returns `CAPTURE_BUDGET` and that pass counts as the technical
+correction. FFmpeg uses at least two threads.
 
-**Razonamiento.** `openclaw.json` declara `reasoning: true` y
-`supportsReasoningEffort` con `low`/`high`/`max` para ambos modelos de OpenCode Go.
-Cada turno envía `thinking: max`. Conviene confirmar en el primer registro
-real que OpenCode Go recibe `reasoning_effort` con el valor esperado.
+**Reasoning.** `openclaw.json` declares `reasoning: true` and
+`supportsReasoningEffort` with `low`/`high`/`max` for both OpenCode Go models. Each
+turn sends `thinking: max`. It is worth confirming in the first real record that
+OpenCode Go receives `reasoning_effort` with the expected value.
 
-**Verificación sin pruebas largas:**
+**Verification without long tests:**
 
-- Las 584 pruebas unitarias pasan. Cubren muestreo, presupuestos de espera,
-  cancelación antes del respaldo, revisión no disponible y ausencia de
-  re-render ante sugerencias.
-- Un render sintético local de 2 s con JSX produjo H.264 1080×1920.
-- No se usaron audios reales ni llamadas a modelos.
+- All 584 unit tests pass. They cover sampling, wait budgets, cancellation before
+  fallback, unavailable review and the absence of re-render on suggestions.
+- A local 2 s synthetic render with JSX produced H.264 1080×1920.
+- No real audios or model calls were used.
 
-**Pendiente de medir con un audio real:** un video de unos 20 s. El `stages` de
-ese trabajo (`capture`, `mux`, `reviewFrames`) y `job.metrics` se comparan con
-la prueba de arriba. El benchmark de máquinas, más arriba, usa un fixture.
+**Pending measurement with a real audio:** a video of about 20 s. The `stages` of
+that job (`capture`, `mux`, `reviewFrames`) and `job.metrics` are compared with the
+test above. The machine benchmark, above, uses a fixture.
 
-## Evaluación: eliminar la revisión y/o la autoría
+## Evaluation: remove the review and/or the authoring
 
-### Opción A — Quitar la revisión y conservar la autoría (recomendada)
+### Option A — Remove the review and keep authoring (recommended)
 
-Render valida duración, formato, audio y tamaño, y entrega directamente.
-Tú revisas el video en Telegram.
+Render validates duration, format, audio and size, and delivers directly. You
+review the video in Telegram.
 
-- **Ahorro:** una llamada visual (hasta 60–75 s) y la extracción de fotogramas
-  (ahora ~segundos). El mayor coste restante es la captura.
-- **Cambio necesario (pequeño):** `directVideo` llama a `/render/approve` con
-  `reviewPolicy: 'advisory'`, `reviewStatus: 'skipped'` y sin `reviewedFrames`.
-  `approveCandidate` debe aceptar `skipped`, y Render puede omitir
-  `extractReviewFrames`. Conviene una variable `VIDEO_REVIEW=off|advisory` para
-  volver atrás sin desplegar código.
-- **Se conserva:** la autorización por hash. No es un veto artístico, sino lo
-  que impide entregar un MP4 distinto o de una versión reemplazada/cancelada.
-- **Riesgo:** nadie detecta texto cortado antes de que llegue a Telegram. Hoy la
-  revisión ya no bloquea, así que el riesgo real casi no cambia: solo se pierde
-  la nota informativa.
+- **Saving:** one visual call (up to 60-75 s) and frame extraction (now ~seconds).
+  The largest remaining cost is capture.
+- **Required change (small):** `directVideo` calls `/render/approve` with
+  `reviewPolicy: 'advisory'`, `reviewStatus: 'skipped'` and no `reviewedFrames`.
+  `approveCandidate` must accept `skipped`, and Render may skip
+  `extractReviewFrames`. A `VIDEO_REVIEW=off|advisory` variable is advisable so it
+  can be reverted without deploying code.
+- **Kept:** hash authorization. It is not an artistic veto, but what prevents
+  delivering a different MP4 or one from a replaced/cancelled version.
+- **Risk:** nobody detects clipped text before it reaches Telegram. Today the
+  review no longer blocks, so the real risk barely changes: only the
+  informational note is lost.
 
-### Opción B — Quitar también la autoría
+### Option B — Also remove authoring
 
-Sin autoría, alguien tiene que decidir el montaje. Las alternativas son:
+Without authoring, someone has to decide the edit. The alternatives are:
 
-1. **Plantillas deterministas (planes 1–4 heredados).** Render ya las sabe
-   ejecutar. Se generaría el plan por código a partir de las palabras, las fotos
-   y los facts. Sería el modo más rápido y sin coste de modelo, pero todos los
-   videos se parecerían. Además, contradice la decisión de diseño actual («no
-   existe un montaje automático de respaldo»), recogida en
-   `CREATIVE-FREEDOM-REPORT.md`.
-2. **Autoría solo bajo demanda.** Por defecto se entrega una plantilla, y un
-   botón de Telegram pide una versión original con OpenClaw (`max`).
+1. **Deterministic templates (legacy plans 1-4).** Render already knows how to run
+   them. The plan would be generated in code from the words, photos and facts. It
+   would be the fastest mode with no model cost, but every video would look alike.
+   It also contradicts the current design decision ("there is no automatic
+   fallback edit"), recorded in `CREATIVE-FREEDOM-REPORT.md`.
+2. **Authoring on demand only.** By default a template is delivered, and a
+   Telegram button requests an original version from OpenClaw (`max`).
 
-**Recomendación:** empezar con A y medir. Si la captura sigue dominando o la
-autoría falla a menudo, implementar B.2 como «modo rápido» mediante una opción
-por serie, sin eliminar la autoría.
+**Recommendation:** start with A and measure. If capture still dominates or
+authoring fails often, implement B.2 as a "fast mode" through a per-series option,
+without removing authoring.
 
-## Diseño propuesto: rehacer un video desde Telegram
+## Proposed design: redo a video from Telegram
 
-### Experiencia
+### Experience
 
-1. Render envía el MP4 con dos botones inline: **🔁 Rehacer** y
-   **✏️ Rehacer con nota**.
-2. **Rehacer** pide una composición nueva para el mismo audio.
-3. **Rehacer con nota** responde «Escribe qué cambiar» (`force_reply`). El texto
-   de tu respuesta se pasa a OpenClaw como indicación del usuario.
-4. El video nuevo llega como respuesta al mensaje original
-   (`reply_parameters.message_id`). El anterior se conserva.
-5. Alternativa por texto: `/rehacer 3 subtítulos más grandes` (número de guion
-   de la serie activa).
+1. Render sends the MP4 with two inline buttons: **🔁 Redo** and
+   **✏️ Redo with note**.
+2. **Redo** requests a new composition for the same audio.
+3. **Redo with note** replies "Write what to change" (`force_reply`). The text of
+   your reply is passed to OpenClaw as a user indication.
+4. The new video arrives as a reply to the original message
+   (`reply_parameters.message_id`). The previous one is kept.
+5. Text alternative: `/rehacer 3 subtítulos más grandes` (script number of the
+   active series).
+### Data and state
 
-### Datos y estado
+- `callback_data` has a maximum of 64 bytes. Use `redo:<12 hex of requestId>` and
+  resolve the audio in SQLite (`audios.id`).
+- **Idempotency:** store `callback_query.id` and always respond with
+  `answerCallbackQuery`. A second tap while redoing answers "already in progress".
+- **Limits:** maximum 2 redos per audio, and only while the series has not expired
+  (`expiresAt`, 24 h). Only the owner chat can request it.
+- The user note is stored as data, not as a system instruction. It is injected into
+  the authoring prompt as "User request (content)".
 
-- `callback_data` tiene un máximo de 64 bytes. Usa `redo:<12 hex del requestId>`
-  y resuelve el audio en SQLite (`audios.id`).
-- **Idempotencia:** guarda `callback_query.id` y responde siempre con
-  `answerCallbackQuery`. Un segundo toque mientras se rehace contesta
-  «ya en curso».
-- **Límites:** máximo 2 rehacer por audio y solo mientras la serie no caduque
-  (`expiresAt`, 24 h). Solo el chat propietario puede pedirlo.
-- La nota del usuario se guarda como dato, no como instrucción del sistema. Se
-  inyecta en el prompt de autoría como «Petición del usuario (contenido)».
+### Changes per component
 
-### Cambios por componente
-
-| Componente | Cambio |
+| Component | Change |
 |---|---|
-| Render `sendVideo` | Añadir `reply_markup` con los botones y aceptar `replyTo`. |
-| Render tras entregar | Hoy borra la carpeta del trabajo. Conservar `prepared.json` y la voz ajustada hasta `expiresAt` (o re-preparar con `audioFileId`, que sigue siendo válido en Telegram). |
-| Render API | `POST /render/redo {jobId, note}`: nueva generación (`attempts++`), `revision = 0`, estado `awaiting-plan`, sin volver a transcribir. |
-| Gateway webhook | Procesar `callback_query` con prefijo `redo:` fuera del agente, igual que `/start`. Encolar una tarea `redo` en el outbox de `workflow.py`. |
-| `workflow.py` | Nueva `kind: 'redo'` que llama a `/render/redo` y lanza `creative-director.mjs` con `{..., redoNote}`. |
-| `creative-director.mjs` | Incluir `redoNote` y un resumen del plan anterior en el prompt, pidiendo una composición distinta. |
-| Pruebas | Doble toque, nota con instrucciones incrustadas, rehacer tras caducidad y rehacer de un audio cancelado o reemplazado. |
+| Render `sendVideo` | Add `reply_markup` with the buttons and accept `replyTo`. |
+| Render after delivery | Today it deletes the job folder. Keep `prepared.json` and the adjusted voice until `expiresAt` (or re-prepare with `audioFileId`, which remains valid in Telegram). |
+| Render API | `POST /render/redo {jobId, note}`: new generation (`attempts++`), `revision = 0`, state `awaiting-plan`, without transcribing again. |
+| Gateway webhook | Process `callback_query` with the `redo:` prefix outside the agent, like `/start`. Enqueue a `redo` task in the `workflow.py` outbox. |
+| `workflow.py` | New `kind: 'redo'` that calls `/render/redo` and launches `creative-director.mjs` with `{..., redoNote}`. |
+| `creative-director.mjs` | Include `redoNote` and a summary of the previous plan in the prompt, asking for a different composition. |
+| Tests | Double tap, note with embedded instructions, redo after expiry and redo of a cancelled or replaced audio. |
 
-### Coste por rehacer
+### Cost per redo
 
-Una llamada de autoría `max` y una captura completa, sin transcripción ni
-descarga de medios. La revisión depende de si se adopta la opción A.
+One `max` authoring call and a full capture, without transcription or media
+download. Review depends on whether option A is adopted.
 
-### Orden sugerido
+### Suggested order
 
-1. Opción A con `VIDEO_REVIEW=off` y medición de `stages` en un audio real corto.
-2. Botón **Rehacer** sin nota (Render + webhook + outbox).
-3. **Rehacer con nota**.
-4. Evaluar el «modo rápido» con plantillas (B.2) según los tiempos medidos.
+1. Option A with `VIDEO_REVIEW=off` and measurement of `stages` on a short real
+   audio.
+2. **Redo** button without a note (Render + webhook + outbox).
+3. **Redo with note**.
+4. Evaluate the "fast mode" with templates (B.2) based on the measured times.

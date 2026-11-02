@@ -1,23 +1,23 @@
 /**
- * Datos en vivo de un partido (on-demand, sin prerender).
+ * Live match data (on-demand, no prerender).
  *
- * Proxy server-side a API-Football: la key nunca llega al navegador y el
- * consumo de la API es independiente del tráfico — cada visitante pega al
- * caché del edge (s-maxage 60s); el caché consulta al proveedor ~1 vez por
- * minuto por partido en vivo, dentro de los 10 req/min del plan gratuito.
- * Si no hay key o el proveedor falla, responde ok:false y la página degrada
- * a los datos horneados sin romper nada.
+ * Server-side proxy to API-Football: the key never reaches the browser and
+ * API consumption is independent of traffic — each visitor hits the
+ * edge cache (s-maxage 60s); the cache queries the provider ~1 time per
+ * minute per live match, within the free plan's 10 req/min.
+ * If there is no key or the provider fails, it responds ok:false and the page degrades
+ * to baked data without breaking.
  */
 export const prerender = false;
 
-// Runtime de Workers (adapter v14): la key vive en el entorno del worker,
-// nunca llega al navegador.
+// Workers runtime (adapter v14): the key lives in the worker environment,
+// never reaches the browser.
 import { env as workerEnv } from 'cloudflare:workers';
 
 const TIMEOUT = 8_000;
-/** s-maxage del estado vivo: 60s, la cadencia del proveedor. */
+/** s-maxage for live state: 60s, the provider cadence. */
 const LIVE_TTL = 60;
-/** Fallos del proveedor se cachean poco para recuperarse rápido. */
+/** Provider failures are cached briefly to recover fast. */
 const FAIL_TTL = 30;
 
 async function apiFootball(path, env) {
@@ -32,7 +32,7 @@ async function apiFootball(path, env) {
 }
 
 const EVENT_TYPES = { Goal: 'goal', Card: 'card', subst: 'sub' };
-/** Vocabulario del detalle de API-Football → nota en español; null = omitir nota. */
+/** API-Football detail vocabulary → Spanish note; null = omit the note. */
 const EVENT_DETAIL = { 'Normal Goal': null, 'Own Goal': 'Gol en propia puerta', Penalty: 'De penal', 'Missed Penalty': 'Penal fallado', 'Yellow Card': 'Tarjeta amarilla', 'Red Card': 'Tarjeta roja', 'Second Yellow card': 'Segunda amarilla' };
 
 function mapEvent(item, teams) {

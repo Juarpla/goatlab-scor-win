@@ -1,7 +1,7 @@
-// Tiempos por palabra de la voz: Mistral, luego whisper.cpp local.
-// Cada proveedor devuelve [{word, start, end}] en segundos. Si uno falla,
-// tarda demasiado o no oye nada, se pasa al siguiente. El texto final lo
-// pone el guion (src/lib/timing.js); aquí solo importan los tiempos.
+// Word timings for the voice: Mistral, then local whisper.cpp.
+// Each provider returns [{word, start, end}] in seconds. If one fails,
+// takes too long or hears nothing, it moves to the next. The final text
+// comes from the script (video-render/contract/timing.js); only timings matter here.
 import { execFile } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { promisify } from 'node:util';
@@ -13,7 +13,7 @@ function valid(words) {
   return (words ?? []).filter(w => w.word && Number.isFinite(w.start) && Number.isFinite(w.end) && w.end >= w.start);
 }
 
-/** Con granularidad `word`, Voxtral manda un segmento por palabra. */
+/** With `word` granularity, Voxtral sends one segment per word. */
 export function parseMistral(json) {
   if (json?.words?.length) {
     return valid(json.words.map(w => ({ word: String(w.word ?? w.text ?? '').trim(), start: Number(w.start), end: Number(w.end) })));
@@ -31,7 +31,7 @@ export function parseMistral(json) {
   return valid(out);
 }
 
-/** whisper.cpp con `-ml 1 -sow -ojf`: un segmento por palabra, offsets en ms. */
+/** whisper.cpp with `-ml 1 -sow -ojf`: one segment per word, offsets in ms. */
 export function parseWhisperCpp(json) {
   return valid((json?.transcription ?? []).map(s => ({
     word: String(s.text ?? '').trim(),
@@ -53,7 +53,7 @@ async function withTimeout(fetchImpl, url, init) {
   }
 }
 
-// `language` y `timestamp_granularities` no se pueden combinar en Mistral.
+// `language` and `timestamp_granularities` cannot be combined in Mistral.
 export async function mistral({ flac, env, fetchImpl }) {
   const key = env.MISTRAL_API_KEY;
   if (!key) throw new Error('sin MISTRAL_API_KEY');
@@ -88,8 +88,8 @@ export const PROVIDERS = [
 ];
 
 /**
- * Prueba cada proveedor en orden. Devuelve {provider, words, errors};
- * `provider` es null si ninguno oyó palabras.
+ * Tries each provider in order. Returns {provider, words, errors};
+ * `provider` is null if none heard words.
  */
 export async function transcribeWords({
   flac,

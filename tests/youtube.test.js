@@ -58,7 +58,7 @@ test('sin datos igual entrega 10 narraciones honestas', () => {
   }
 });
 
-test('nombres de países en español y passthrough de desconocidos', () => {
+test('country names in Spanish and passthrough of unknown ones', () => {
   assert.equal(esName('England'), 'Inglaterra');
   assert.equal(esName('Spain'), 'España');
   assert.equal(esName('Rep. Of Ireland'), 'República de Irlanda');
@@ -141,7 +141,7 @@ test('scriptFacts no lleva porcentajes y missingScripts solo pide los que faltan
   );
 });
 
-test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artículo', () => {
+test('acceptYoutubeDraft lets the story through and rejects an invented figure or article', () => {
   const facts = {
     home: 'Andorra',
     away: 'Malta',
@@ -180,7 +180,7 @@ test('acceptYoutubeDraft deja pasar el relato y rechaza cifra inventada o artíc
   assert.ok(acceptYoutubeDraft({ scripts: spilled, lede }, { facts: named, published: false }).some(e => /va en un guion de jugadores/.test(e)));
 });
 
-test('título de clic con equipos o jugadores, distinto del gancho', () => {
+test('click title with teams or players, different from the hook', () => {
   const hook = 'España llega con mejor racha que Croacia, aunque el visitante todavía tiene cómo discutirla.';
   const title = shortTitle({ home: 'España', away: 'Croacia', n: 1, hook });
   assert.ok(title.startsWith('🔥⚽ '));
@@ -207,7 +207,7 @@ test('título de clic con equipos o jugadores, distinto del gancho', () => {
   assert.equal(telegramCaption({ title: '', hook }).includes('#'), false);
 });
 
-test('hashtags de búsqueda y descripción con crédito de música', () => {
+test('search hashtags and description with music credit', () => {
   const tags = hashtagLine({
     home: 'España',
     away: 'Croacia',
@@ -306,7 +306,7 @@ test('el entero que se dice suma el total y no deja el decimal', () => {
   assert.equal(penaltyCount(20, 18, 11), 2);
 });
 
-test('buildPicks asigna una afirmación por ángulo y enteros en córners y faltas', () => {
+test('buildPicks assigns one claim per angle and integers for corners and fouls', () => {
   const facts = scriptFacts(richMatch, richScorers, richProb);
   assert.equal(facts.picks.length, 10);
   assert.ok(facts.picks.every(pick => pick && pick.bridge && pick.noun && pick.antecedent && pick.verdict && pick.call));
@@ -363,7 +363,7 @@ function assembleDraft(facts) {
   });
 }
 
-test('borrador con piezas pasa; sin pronóstico, con cifras de más o con cero, no', () => {
+test('draft with pieces passes; without a forecast, with too many figures or with zero, it does not', () => {
   const facts = scriptFacts(richMatch, richScorers, richProb);
   const scripts = assembleDraft(facts);
   const lede = 'Alpha recibe a Beta con 6 cruces ya jugados y la forma reciente en 3 partidos.';
@@ -395,7 +395,7 @@ test('borrador con piezas pasa; sin pronóstico, con cifras de más o con cero, 
   assert.ok(acceptYoutubeDraft({ scripts: clippedScore, lede }, { facts, published: false }).some(e => /pronóstico/.test(e)));
 });
 
-test('plantilla con probabilidad lleva picks válidos y pasa compliance', () => {
+test('template with probability carries valid picks and passes compliance', () => {
   const out = buildYoutubeScripts(richMatch, richProb);
   assert.equal(out.scripts.length, 10);
   for (const script of out.scripts) {

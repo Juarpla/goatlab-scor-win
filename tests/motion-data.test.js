@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveMotion, MOTION_KINDS } from '../src/lib/motion-data.js';
+import { resolveMotion, MOTION_KINDS } from '../video-render/contract/motion-data.js';
 const fact = { id: 'home.gf', label: 'España · goles', value: 3, unit: 'goles', source: 'fixtures:match', provider: 'Historial', sampleSize: 5 };
 test('motion resolves original facts, common scale and honest missing data', () => {
   for (const kind of MOTION_KINDS) {

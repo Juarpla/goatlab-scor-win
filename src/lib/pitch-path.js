@@ -1,10 +1,10 @@
 /**
- * Recorrido ilustrativo del balón para la cancha de la página de partido.
+ * Illustrative ball path for the match-page pitch.
  *
- * Las anclas son los eventos reales (minuto + tipo + equipo); la deriva entre
- * anclas es una simulación determinista sembrada con el id del partido, para
- * que el servidor y el cliente dibujen exactamente lo mismo y el movimiento
- * se sienta continuo. No es un seguimiento de posición: la página lo declara.
+ * Anchors are the real events (minute + type + team); drift between
+ * anchors is a deterministic simulation seeded with the match id, so
+ * server and client draw exactly the same thing and the movement
+ * feels continuous. It is not position tracking: the page declares it.
  */
 const MINUTE = 90;
 const PAUSE = 5;
@@ -32,7 +32,7 @@ export function mulberry32(seed) {
 const round1 = value => Math.round(value * 10) / 10;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-/** Posición de anclaje de un evento: los goles caen en el área que atacan. */
+/** Anchor position for an event: goals fall in the area the team attacks. */
 function anchorFor(event, rand) {
   const side = event.team === 'away' ? 'away' : 'home';
   if (event.type === 'goal') {
@@ -46,9 +46,9 @@ function anchorFor(event, rand) {
 }
 
 /**
- * Beats ordenados por minuto: apertura, derivas sembradas entre eventos,
- * anclas reales y cierre. Los minutos se relajan para que dos eventos
- * consecutivos no se pisen.
+ * Beats sorted by minute: kickoff, seeded drift between events,
+ * real anchors and close. Minutes are relaxed so two consecutive events
+ * do not overlap.
  */
 export function buildBeats(matchId, events = []) {
   const rand = mulberry32(hashSeed(String(matchId)));
@@ -71,7 +71,7 @@ export function buildBeats(matchId, events = []) {
   return beats;
 }
 
-/** Posición del balón (unidades de la cancha 105×68) en un minuto con decimales. */
+/** Ball position (105×68 pitch units) at a minute with decimals. */
 export function ballAt(beats, minute) {
   if (!beats?.length) return { x: 52.5, y: 34 };
   const m = clamp(minute, 0, beats[beats.length - 1].minute);
@@ -88,7 +88,7 @@ export function ballAt(beats, minute) {
   };
 }
 
-/** Minuto de juego estimado desde el kickoff (misma convención que el mapa de portada). */
+/** Estimated match minute from kickoff (same convention as the home-page map). */
 export function matchMinute(kickoffMs, nowMs) {
   const elapsed = (nowMs - kickoffMs) / 60_000;
   if (elapsed < 0) return null;

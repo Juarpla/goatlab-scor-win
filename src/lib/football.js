@@ -4,7 +4,7 @@ import { listEvents } from './bzzoiro.js';
 import { fairProbs } from './odds.js';
 import { leagues, leagueByProviderId, providerLeagueId } from './leagues.js';
 
-/** Vista de conveniencia del catálogo único (`public/data/leagues.json`). */
+/** Convenience view of the single catalog (`public/data/leagues.json`). */
 export const competitions = Object.values(leagues).map(({ id, name, providers }) => ({ id, name, api: providers.api, fd: providers.fd }));
 /** Leagues the FD free plan does not serve; Bzzoiro discovers them across the whole window. */
 const BZ_DISCOVERY = new Set(['nations', 'europa', 'libertadores']);
@@ -224,8 +224,8 @@ export async function getStandings({ competition, season, top = 20, env = {}, fe
   if (!env.FOOTBALL_DATA_KEY || !fd) return null;
   try {
     const data = await pacedRequest(`https://api.football-data.org/v4/competitions/${fd}/standings?season=${season}`, { 'X-Auth-Token': env.FOOTBALL_DATA_KEY }, fetchImpl, paceMs);
-    // La v4 de football-data.org nombra la fase de liga «REGULAR_SEASON»; las
-    // respuestas antiguas usaban «TOTAL». Aceptamos ambas, solo la tabla TOTAL.
+    // football-data.org v4 names the league phase "REGULAR_SEASON"; old
+    // responses used "TOTAL". Both are accepted, only the TOTAL table.
     const total = data.standings?.find(entry => entry.type === 'TOTAL' && (entry.stage === 'TOTAL' || entry.stage === 'REGULAR_SEASON'));
     if (!Array.isArray(total?.table)) return null;
     const FORM = { W: 'G', D: 'E', L: 'P' };
@@ -244,9 +244,9 @@ export async function getStandings({ competition, season, top = 20, env = {}, fe
 }
 
 /**
- * Goleadores de la temporada (football-data.org). La v4 devuelve el top de la
- * competición con goles, asistencias, penaltis y partidos; ausencias honestas
- * quedan en null. Europa League exceptuada (sin `fd`).
+ * Season scorers (football-data.org). v4 returns the competition's top
+ * with goals, assists, penalties and matches; missing values are honest
+ * null. Europa League is excluded (no `fd`).
  */
 export async function getScorers({ competition, season, env = {}, fetchImpl = fetch, logger = console, paceMs = 6_500 }) {
   const fd = providerLeagueId(competition.id, 'fd');
@@ -266,9 +266,9 @@ export async function getScorers({ competition, season, env = {}, fetchImpl = fe
 }
 
 /**
- * Fusión de goleadores: Football-Data.org manda en goles/asistencias/penaltis/
- * partidos; Bzzoiro conserva playerId/teamId/rank. Los sin pareja honesta
- * quedan con nulos, nunca se inventan ids.
+ * Scorer merge: Football-Data.org leads on goals/assists/penalties/
+ * matches; Bzzoiro keeps playerId/teamId/rank. Rows without an honest match
+ * keep nulls; ids are never invented.
  */
 export function fuseScorers(bzzoiroRows, fdRows) {
   if (!bzzoiroRows?.length) return bzzoiroRows ?? null;
@@ -326,7 +326,7 @@ export async function getLeagueResults({ competition, season, env = {}, fetchImp
   } catch (error) { logger.warn(`Resultados (${competition.id}): ${error.message}`); return []; }
 }
 
-/* ---- Predicciones de API-Football (contexto del narrador; nunca cuotas) ---- */
+/* ---- API-Football predictions (narrator context; never odds) ---- */
 
 const pctFromString = value => {
   const match = typeof value === 'string' ? value.match(/(\d+(?:\.\d+)?)\s*%/) : null;
@@ -336,9 +336,9 @@ const pctFromString = value => {
 };
 
 /**
- * Payload de `/predictions?fixture=` → lectura del proveedor en campos
- * estables. `advice` viaja como texto crudo para que el prompt lo reformule
- * sin lenguaje de apuesta. Null honesto si no hay nada reconocible.
+ * Payload of `/predictions?fixture=` → provider reading in stable
+ * fields. `advice` travels as raw text so the prompt can reformulate it
+ * without betting language. Honest null if there is nothing recognizable.
  */
 export function mapProviderPrediction(data) {
   const predictions = Array.isArray(data?.response) ? data.response[0]?.predictions : null;
@@ -362,7 +362,7 @@ export function mapProviderPrediction(data) {
   };
 }
 
-/** 1 request por partido; sin id o sin clave responde null sin llamar. */
+/** 1 request per match; without an id or key it returns null without calling. */
 export async function fetchProviderPrediction(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
   try {
@@ -371,7 +371,7 @@ export async function fetchProviderPrediction(fixtureId, { env = {}, fetchImpl =
   } catch { return null; }
 }
 
-/* ---- Odds pre-partido de API-Football (solo % interpretativos, nunca cuotas) ---- */
+/* ---- API-Football pre-match odds (interpretive % only, never bookmaker odds) ---- */
 
 const numOdd = value => {
   const number = typeof value === 'string' ? Number(value) : value;
@@ -384,9 +384,9 @@ const meanOdds = rows => {
 };
 
 /**
- * Payload de `/odds?fixture=` → % justos (sin margen) de 1X2, over 2.5 y BTTS.
- * Apuestas: id 1 (ganador), 5 (más/menos goles, línea 2.5), 8 (marcan los dos).
- * Promedia cuotas entre casas y quita el margen; lo irreconocible es null.
+ * Payload of `/odds?fixture=` → fair % (no margin) for 1X2, over 2.5 and BTTS.
+ * Bets: id 1 (winner), 5 (over/under goals, line 2.5), 8 (both teams score).
+ * Averages odds across bookmakers and removes the margin; unrecognizable data is null.
  */
 export function mapAfOdds(data) {
   const bookmakers = Array.isArray(data?.response?.[0]?.bookmakers) ? data.response[0].bookmakers : null;
@@ -426,7 +426,7 @@ export function mapAfOdds(data) {
   return { oneX2, over25, btts, bookmakers: bookmakers.length, capturedAt: new Date().toISOString(), source: 'API-Football' };
 }
 
-/** 1 request por partido; sin id o sin clave responde null sin llamar. */
+/** 1 request per match; without an id or key it returns null without calling. */
 export async function fetchAfOdds(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
   try {
@@ -435,7 +435,7 @@ export async function fetchAfOdds(fixtureId, { env = {}, fetchImpl = fetch, pace
   } catch { return null; }
 }
 
-/* ---- Estadísticas por equipo de API-Football (relleno de la tabla de esperados) ---- */
+/* ---- API-Football per-team statistics (expected-table fill) ---- */
 
 const AF_STAT_TYPES = {
   'Ball Possession': 'possession',
@@ -458,9 +458,9 @@ const afStatNumber = (type, value) => {
 };
 
 /**
- * Payload de `/fixtures/statistics?fixture=` → bolsas por equipo con las
- * claves de STAT_METRICS (sin xG: AF no publica goles esperados). Null
- * honesto si ningún lado trae nada reconocible.
+ * Payload of `/fixtures/statistics?fixture=` → per-team bags with the
+ * STAT_METRICS keys (no xG: AF does not publish expected goals). Honest
+ * null if neither side provides anything recognizable.
  */
 export function mapAfFixtureStatistics(data) {
   const rows = Array.isArray(data?.response) ? data.response : null;
@@ -479,7 +479,7 @@ export function mapAfFixtureStatistics(data) {
   return { home: sides[0], away: sides[1], source: 'API-Football' };
 }
 
-/** 1 request por fixture; sin id o sin clave responde null sin llamar. */
+/** 1 request per fixture; without an id or key it returns null without calling. */
 export async function fetchAfFixtureStats(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
   try {
@@ -489,8 +489,8 @@ export async function fetchAfFixtureStats(fixtureId, { env = {}, fetchImpl = fet
 }
 
 /**
- * `fixtures?date=` normalizado para emparejar recientes Bzzoiro con su
- * fixture AF (1 request por fecha; el pipeline lo cachea por día).
+ * Normalized `fixtures?date=` to pair recent Bzzoiro matches with their
+ * AF fixture (1 request per date; the pipeline caches it per day).
  */
 export async function fetchAfFixturesByDate(date, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (!date || !env.API_FOOTBALL_KEY) return [];
@@ -508,7 +508,7 @@ export async function fetchAfFixturesByDate(date, { env = {}, fetchImpl = fetch,
   } catch { return []; }
 }
 
-/** Gemelo AF de un reciente Bzzoiro por nombres tolerantes; null sin pareja honesta. */
+/** AF twin of a recent Bzzoiro match by tolerant names; null without an honest pair. */
 export function findAfFixture(list, home, away) {
   return (list ?? []).find(row => sameClub(row.home, home) && sameClub(row.away, away)) ?? null;
 }
@@ -517,8 +517,8 @@ export function findAfFixture(list, home, away) {
 
 /**
  * Payload de `/players/topscorers?league=&season=` → filas `{player, team,
- * value, matches}` compatibles con `scorerShares`. Null honesto si no hay
- * nada reconocible. Contrato a verificar con clave en mano (plan free).
+ * value, matches}` compatible with `scorerShares`. Honest null if there is
+ * nothing recognizable. Contract to verify with a key in hand (free plan).
  */
 export function mapAfTopScorers(data, { limit = 50 } = {}) {
   const rows = Array.isArray(data?.response) ? data.response : null;
@@ -537,7 +537,7 @@ export function mapAfTopScorers(data, { limit = 50 } = {}) {
   return mapped.length ? mapped : null;
 }
 
-/** 1 request por liga/temporada; sin clave responde null sin llamar. */
+/** 1 request per league/season; without a key it returns null without calling. */
 export async function fetchAfTopScorers(leagueId, season, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (leagueId == null || season == null || !env.API_FOOTBALL_KEY) return null;
   try {
@@ -550,9 +550,9 @@ export async function fetchAfTopScorers(leagueId, season, { env = {}, fetchImpl 
 
 /**
  * Payload de `/injuries?fixture=` → filas `{player, team, type, reason}`.
- * `type`: Injury|Suspension (tal cual del proveedor); `reason`: detalle
- * ("Knee Injury", "Suspended 3 matches"). Null honesto si no hay nada
- * reconocible (incluido plan free sin cobertura para la temporada).
+ * `type`: Injury|Suspension (as provided); `reason`: detail
+ * ("Knee Injury", "Suspended 3 matches"). Honest null if there is nothing
+ * recognizable (including a free plan without season coverage).
  */
 export function mapAfInjuries(data, { limit = 12 } = {}) {
   const rows = Array.isArray(data?.response) ? data.response : null;
@@ -567,7 +567,7 @@ export function mapAfInjuries(data, { limit = 12 } = {}) {
   return mapped.length ? mapped : null;
 }
 
-/** 1 request por fixture; sin id o sin clave responde null sin llamar. */
+/** 1 request per fixture; without an id or key it returns null without calling. */
 export async function fetchAfInjuries(fixtureId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (fixtureId == null || !env.API_FOOTBALL_KEY) return null;
   try {
@@ -577,10 +577,10 @@ export async function fetchAfInjuries(fixtureId, { env = {}, fetchImpl = fetch, 
 }
 
 /**
- * Payload de `/players/squads?team=` → filas `{id, name, age, number,
- * position, photo}`. Sin estadísticas de temporada (el endpoint no las
- * trae); la vista muestra una muestra honesta, nunca un ranking inventado.
- * Null honesto si no hay nada reconocible.
+ * Payload of `/players/squads?team=` → rows `{id, name, age, number,
+ * position, photo}`. No season statistics (the endpoint does not
+ * provide them); the view shows an honest sample, never an invented ranking.
+ * Honest null if there is nothing recognizable.
  */
 export function mapAfSquad(data, { limit = 30 } = {}) {
   const rows = Array.isArray(data?.response?.[0]?.players) ? data.response[0].players
@@ -598,7 +598,7 @@ export function mapAfSquad(data, { limit = 30 } = {}) {
   return mapped.length ? mapped : null;
 }
 
-/** 1 request por equipo; sin id o sin clave responde null sin llamar. */
+/** 1 request per team; without an id or key it returns null without calling. */
 export async function fetchAfSquad(teamId, { env = {}, fetchImpl = fetch, paceMs = 6_500 } = {}) {
   if (teamId == null || !env.API_FOOTBALL_KEY) return null;
   try {

@@ -1,16 +1,16 @@
-import { VISUAL_STYLES, isVisualStyle } from './visual-style.js';
+import { VISUAL_STYLES, isVisualStyle } from '../../video-render/contract/visual-style.js';
 /**
- * Guiones de Shorts (<50s). El modelo escribe una lectura propia por ángulo.
- * Las piezas calculadas orientan el análisis y conservan las plantillas antiguas.
- * Sin porcentajes mientras el gate de publicación
- * siga cerrado (ver COMPLIANCE.md).
+ * Shorts scripts (<50s). The model writes its own reading per angle.
+ * Calculated pieces guide the analysis and preserve the old templates.
+ * No percentages while the publication gate
+ * remains closed (see COMPLIANCE.md).
  */
 import { DISCLAIMER, checkScript, checkText } from './compliance.js';
 import { sameClub, esName, rankMatches } from './teams.js';
 
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 
-/** Pluralización para lectura en voz alta ("1 empate", "3 locales"). */
+/** Pluralization for reading aloud ("1 draw", "3 home teams"). */
 function pl(n, one, many) {
   return Number(n) === 1 ? one : many;
 }
@@ -47,7 +47,7 @@ const HOOKS = [
   (m) => `Últimos duelos, forma y goles: ${m.home} contra ${m.away}.`,
 ];
 
-/** Puentes fijos: espejo de SKILL.md. El cuarto rota según el antecedente. */
+/** Fixed bridges: mirror of SKILL.md. The fourth rotates with the precedent. */
 const BRIDGES = [
   'Quédate con este dato.',
   'Este es el dato que manda.',
@@ -55,9 +55,9 @@ const BRIDGES = [
 ];
 const BRIDGE_NUMBER = 'Guarda este número.';
 const BRIDGE_WORDS = 'Guarda esta lectura.';
-/** Sustantivos del pronóstico: espejo de SKILL.md. */
+/** Forecast nouns: mirror of SKILL.md. */
 const NOUNS = ['La proyección', 'El análisis final', 'El diagnóstico final', 'La lectura'];
-/** Llamadas fijas: espejo de SKILL.md §Llamadas. */
+/** Fixed calls: mirror of SKILL.md §Calls. */
 const CALLS = [
   'La lectura completa está en goatlab.win.',
   'El análisis de este cruce te espera en goatlab.win.',
@@ -71,23 +71,23 @@ const CALLS = [
   'El partido se cuenta con calma en goatlab.win.',
 ];
 const RESERVE_TEXT = 'La muestra todavía es corta y conviene decirlo: sin serie reciente ni cruces previos, no hay antecedente que sostener. El análisis espera los datos. Cuando esa serie aparezca, la lectura va a poder afirmarse. Mientras tanto, la previa se cuenta con calma.';
-/** Guiones que pueden nombrar jugadores (solo el nombre, sin promesas). */
+/** Scripts that may name players (name only, no promises). */
 const PLAYER_NS = new Set([3, 4, 7, 9]);
 const MAX_FIGURES = 3;
-/** Faltas por encima de un partido normal que abren 1 penal, y las que abren 2. */
+/** Fouls above a normal match that open 1 penalty, and those that open 2. */
 const FOULS_ABOVE_FOR_ONE = 4;
 const FOULS_ABOVE_FOR_TWO = 12;
-/** Partido normal cuando la liga no trae su media de faltas. */
+/** Normal match when the league does not provide its foul average. */
 const NORMAL_FOULS = 24;
 const TEAM_SOURCES = new Set(['Bzzoiro', 'AF']);
 const MIN_WORDS = 55;
 const rotationOf = id => [...String(id ?? '')].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % NOUNS.length;
 const comma = value => String(value).replace('.', ',');
 const finite = value => Number.isFinite(Number(value)) ? Number(value) : null;
-/** El antecedente abre frase: siempre en mayúscula inicial, sin punto final. */
+/** The precedent opens the sentence: always capitalized, no trailing period. */
 const cap = value => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
-/** Fraseo de forma sin dígito cero (la regla lo prohíbe en voz alta). */
+/** Form phrasing without the digit zero (the rule forbids it aloud). */
 function formClause(form, name) {
   if (!form || !Number.isFinite(form.n) || form.n < 1) return null;
   if (form.n === 1) {
@@ -100,7 +100,7 @@ function formClause(form, name) {
     : `${name} ganó ${form.wins} de sus últimos ${form.n}`;
 }
 
-/** Veredicto único del partido: lado + marcador coherente del cálculo. */
+/** Single match verdict: side + scoreline consistent with the calculation. */
 export function matchVerdict({ homeForm, awayForm, h2h, probability } = {}) {
   const oneX2 = probability?.markets?.oneX2 ?? null;
   let side = null;
@@ -130,7 +130,7 @@ function topScore(exactScores, side) {
   return fits.reduce((a, b) => (b.p ?? 0) > (a.p ?? 0) ? b : a);
 }
 
-/** Fragmento de marcador sin dígito cero (1-0 es «por la mínima»). */
+/** Scoreline fragment without the digit zero (1-0 is "by the minimum"). */
 function scoreFragment(score) {
   if (!score) return null;
   const h = score.home, a = score.away;
@@ -149,9 +149,9 @@ function outcomeText(verdict, home, away, withScore) {
 }
 
 /**
- * Enteros que pueden ocurrir en la cancha. El total es el redondeo de la
- * suma; cada lado arranca en su parte entera y el resto va al de mayor
- * fracción. Si empatan la fracción, al de mayor ritmo; si siguen iguales, al local.
+ * Integers that can occur on the pitch. The total is the rounding of the
+ * sum; each side starts at its integer part and the remainder goes to the
+ * largest fraction. If fractions tie, to the higher rate; if still equal, to home.
  */
 export function commitSplit(homeRate, awayRate) {
   const home = finite(homeRate);
@@ -177,9 +177,9 @@ export function commitSplit(homeRate, awayRate) {
 }
 
 /**
- * Penales que se dicen, a partir de las faltas ya enteras.
- * No hay acta de penales. Un partido normal son dos medias de liga
- * (o 24 faltas). Cuatro por encima: 1 penal. Doce por encima: 2.
+ * Penalties that are stated, from the already-integer fouls.
+ * There is no penalty record. A normal match is two league averages
+ * (or 24 fouls). Four above: 1 penalty. Twelve above: 2.
  */
 export function penaltyCount(homeFouls, awayFouls, leaguePerTeam = null) {
   const total = homeFouls + awayFouls;
@@ -248,7 +248,7 @@ function pairPhrase(split, home, away, one, many) {
   return `${bit(split.home, home)} y ${bit(split.away, away)}`;
 }
 
-/** Un antecedente por ángulo: una frase, como máximo dos cifras. */
+/** One precedent per angle: one sentence, at most two figures. */
 function angleAntecedent(n, { home: H, away: A, homeForm, awayForm, h2h, probability }) {
   const totals = probability?.markets?.totals ?? null;
   switch (n) {
@@ -388,7 +388,7 @@ function disciplineCall(probability, home, away) {
   }));
 }
 
-/** El pronóstico de cada fila: una afirmación, con enteros cuando el ángulo los tiene. */
+/** Each row's forecast: one claim, with integers when the angle has them. */
 function angleVerdict(n, ctx) {
   const { home, away, homeForm, awayForm, h2h, probability, verdict } = ctx;
   switch (n) {
@@ -455,9 +455,9 @@ function angleVerdict(n, ctx) {
 }
 
 /**
- * Las diez piezas asignadas, una afirmación por guion. Si el ángulo no tiene
- * con qué comprometerse, esa pieza queda en null y el skill usa la reserva.
- * Los enteros del pronóstico viajan en `counts` para que el lint los acepte.
+ * The ten assigned pieces, one claim per script. If the angle has nothing
+ * to commit to, that piece stays null and the skill uses the reserve.
+ * The forecast integers travel in `counts` so the lint accepts them.
  */
 export function buildPicks(match, scorers = null, probability = null) {
   const base = baseFacts(match, scorers);
@@ -491,7 +491,7 @@ export function countWords(text) {
   return String(text ?? '').split(/\s+/).filter(Boolean).length;
 }
 
-/** Narración corrida lista para leer: gancho + piezas + tejido + llamada. */
+/** Continuous narration ready to read: hook + pieces + weave + call. */
 export function buildNarration(names, pick, i) {
   const hook = HOOKS[i % HOOKS.length](names);
   if (!pick) {
@@ -503,9 +503,9 @@ export function buildNarration(names, pick, i) {
   return { hook, narration, words: countWords(narration) };
 }
 
-/** Selección de la corrida. Sin `top`: todos los NS de la ventana (fixtures.json ya es 7 días).
- *  Con `top`: los NS más relevantes, vueltos a ordenar por kickoff.
- *  `onlyMatch` ignora el ranking y el tope. */
+/** Run selection. Without `top`: every NS in the window (fixtures.json is already 7 days).
+ *  With `top`: the most relevant NS, re-sorted by kickoff.
+ *  `onlyMatch` ignores ranking and cap. */
 export function selectMatches(matches, { onlyMatch = null, limit = null, top = null } = {}) {
   let out = (matches ?? []).filter(m => m.status === 'NS');
   if (onlyMatch) out = out.filter(m => m.id === onlyMatch || m.webId === onlyMatch);
@@ -514,20 +514,20 @@ export function selectMatches(matches, { onlyMatch = null, limit = null, top = n
   return limit == null ? out : out.slice(0, Math.max(1, Number(limit)));
 }
 
-/** Archivos rancios: JSONs cuyo id ya no está vigente en fixtures. */
+/** Stale files: JSONs whose id is no longer current in fixtures. */
 export function staleScripts(files, liveIds) {
   const live = new Set(liveIds);
   return (files ?? []).filter(f => f.endsWith('.json') && !live.has(f.replace(/\.json$/, '')));
 }
 
-/** Igualdad de contenido ignorando generatedAt (escritura silenciosa). */
+/** Content equality ignoring generatedAt (silent write). */
 export function sameCore(prev, next) {
   const { generatedAt: _a, ...a } = prev ?? {};
   const { generatedAt: _b, ...b } = next ?? {};
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-/** Hasta dos goleadores por lado, copiados de la tabla de la competición. */
+/** Up to two scorers per side, copied from the competition table. */
 function sideScorers(table, competition, team, teamId, limit = 2) {
   const rows = (table?.[competition]?.scorers ?? [])
     .filter(row => row?.player && Number.isFinite(Number(row.value)) && Number(row.value) > 0)
@@ -566,11 +566,11 @@ export function playerNames(facts) {
     .filter(Boolean);
 }
 
-/** Guiones 3, 4, 7 y 9: ahí el relato puede nombrar jugadores y usar cifras buscadas. */
+/** Scripts 3, 4, 7 and 9: there the story may name players and use looked-up figures. */
 const PLAYER_SCRIPT_INDEXES = new Set([2, 3, 6, 8]);
 
-/** Hechos que el modelo puede decir. Sin porcentajes ni lectura de apuesta.
- *  `players` sale de la tabla de goleadores de la competición; null si no hay filas. */
+/** Facts the model may state. No percentages or betting reading.
+ *  `players` comes from the competition's scorer table; null if there are no rows. */
 function baseFacts(match, scorers = null) {
   const home = esName(match.home);
   const away = esName(match.away);
@@ -599,13 +599,13 @@ function baseFacts(match, scorers = null) {
 }
 
 /**
- * Hechos + referencias por ángulo + probabilidades para la lectura editorial.
+ * Facts + references per angle + probabilities for the editorial reading.
  */
 export function scriptFacts(match, scorers = null, probability = null) {
   return { ...baseFacts(match, scorers), probability: probability ?? null, picks: buildPicks(match, scorers, probability) };
 }
 
-/** Partidos de la corrida que todavía no tienen un JSON con 10 guiones. */
+/** Run matches that do not yet have a JSON with 10 scripts. */
 export function missingScripts(matches, files) {
   const have = new Set((files ?? []).filter(f => String(f).endsWith('.json')).map(f => f.replace(/\.json$/, '')));
   return (matches ?? []).filter(m => !have.has(m.webId ?? m.id));
@@ -672,7 +672,7 @@ export function competitionTag(competition) {
   return `#${String(competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
 }
 
-/** Hashtag de un equipo: sin espacios. */
+/** Team hashtag: no spaces. */
 export function teamTag(name) {
   const tag = String(name ?? '').replace(/\s+/g, '').replace(/[^\p{L}\p{N}_]/gu, '');
   return tag ? `#${tag}` : '';
@@ -684,7 +684,7 @@ const COMPETITION_TAGS = {
 
 const HASHTAG_CAP = 15;
 
-/** Hashtags de alta búsqueda. Equipos y jugadores van delante: YouTube ignora la lista si pasa de 15. */
+/** High-search hashtags. Teams and players go first: YouTube ignores the list if it exceeds 15. */
 export function hashtagLine({ home, away, competition, players } = {}) {
   const comp = COMPETITION_TAGS[competition] ?? [competitionTag(competition)];
   const playerTags = (players ?? []).slice(0, 4).map(teamTag).filter(Boolean);
@@ -706,7 +706,7 @@ export function buildDescription({ lede, matchId, competition, home, away, playe
   ].join('\n');
 }
 
-/** Descripción que se copia en /partido/id/youtube. El crédito sale de bed.txt. */
+/** Description copied to /partido/id/youtube. The credit comes from bed.txt. */
 export function youtubeCopy({ lede, matchId, home, away, competition, players, attribution, credit }) {
   const lines = [buildDescription({ lede, matchId, competition, home, away, players })];
   const photo = String(attribution ?? '').trim();
@@ -749,7 +749,7 @@ function isNameToken(word, teams) {
   return /^[\p{Lu}][\p{L}\p{M}’'.-]+$/u.test(word) && /\p{Ll}/u.test(word);
 }
 
-/** Nombres propios de la narración que no son los equipos. */
+/** Proper names in the narration that are not the teams. */
 export function playersInNarration(narration, { home, away, knownPlayers } = {}) {
   if (Array.isArray(knownPlayers)) return collapseNames(knownPlayers.filter(name => typeof name === 'string' && name.trim() && String(narration ?? '').includes(name)));
   const teams = teamWords(home, away);
@@ -777,7 +777,7 @@ function collapseNames(names) {
   return unique.filter(name => !unique.some(other => other !== name && other.toLowerCase().includes(name.toLowerCase())));
 }
 
-/** Hasta cuatro jugadores de los guiones 3, 4, 7 y 9, goles y creación primero. */
+/** Up to four players from scripts 3, 4, 7 and 9, goals and creation first. */
 export function attentionPlayers(scripts, { home, away, knownPlayers } = {}) {
   const order = [3, 9, 7, 4];
   const ranked = [];
@@ -838,8 +838,8 @@ function clipTitle(prefix, text) {
 }
 
 /**
- * Título de clic del Short. No repite el gancho: nombra a los equipos
- * o a los jugadores de ese guion, con dos iconos y tope de 100.
+ * Click title for the Short. It does not repeat the hook: it names the teams
+ * or the players of that script, with two icons and a 100-character cap.
  */
 export function shortTitle({ home, away, n, hook, players = [] } = {}) {
   const icon = TITLE_ICONS[(Math.max(1, Number(n) || 1) - 1) % TITLE_ICONS.length];
@@ -852,7 +852,7 @@ export function shortTitle({ home, away, n, hook, players = [] } = {}) {
   return clipTitle(prefix, line);
 }
 
-/** Pie de Telegram: título y gancho. Sin título, solo el gancho. */
+/** Telegram footer: title and hook. Without a title, only the hook. */
 export function telegramCaptionDetails({ title, hook, attribution, musicCredit, visualStyle } = {}) {
   const head = String(title ?? '').trim();
   const line = String(hook ?? '').trim();
@@ -872,9 +872,9 @@ export function telegramCaption(input = {}) {
 }
 
 /**
- * Valida duración, datos y publicación. El modo editorial permite cifras
- * nuevas en una frase de proyección explícita; el resto conserva el gate
- * factual. Las piezas literales se validan solo en borradores antiguos.
+ * Validates duration, data and publication. Editorial mode allows new
+ * figures in an explicit projection sentence; the rest keeps the factual
+ * gate. Literal pieces are validated only in old drafts.
  */
 export function acceptYoutubeDraft(draft, { facts, published = false, editorial = false } = {}) {
   const errors = [];
@@ -927,8 +927,8 @@ export function acceptYoutubeDraft(draft, { facts, published = false, editorial 
       for (const [field, name, ended] of [['bridge', 'puente', false], ['noun', 'sustantivo', false], ['antecedent', 'antecedente', true], ['verdict', 'pronóstico', true], ['call', 'llamada', false]]) {
         const value = String(pick[field] ?? '').trim();
         if (!value) errors.push(`${label}: falta ${name} asignado`);
-        // Antecedente y pronóstico cierran frase: el punto obliga la pieza
-        // entera y evita recortes silenciosos («por la mínima» fuera).
+        // Precedent and forecast close the sentence: the period forces the whole
+        // piece and avoids silent cuts ("by the minimum" dropped).
         else if (!(ended ? text.includes(value + '.') : text.includes(value))) errors.push(`${label}: falta el ${name} asignado`);
       }
       if (pick.player && !text.includes(pick.player)) errors.push(`${label}: falta ${pick.player}`);
@@ -951,7 +951,7 @@ export function acceptYoutubeDraft(draft, { facts, published = false, editorial 
   return errors;
 }
 
-/** Diez guiones + descripción lista para YouTube (nombres en español). */
+/** Ten scripts + description ready for YouTube (names in Spanish). */
 export function buildYoutubeScripts(match, probability = null) {
   const webId = match.webId ?? match.id;
   const names = { ...match, home: esName(match.home), away: esName(match.away) };

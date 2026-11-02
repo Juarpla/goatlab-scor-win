@@ -1,11 +1,11 @@
 /**
- * Backfill manual del histórico de estadísticas (Bzzoiro → history-stats.json).
- * Misma pareja y forma de fila que `updateHistory` en update-data.mjs, pero
- * autocontenido para corridas puntuales sin tocar el resto del pipeline.
- * Los días ya cubiertos no se repiten; los eventId existentes no se duplican.
+ * Manual backfill of statistics history (Bzzoiro → history-stats.json).
+ * Same pairing and row shape as `updateHistory` in update-data.mjs, but
+ * self-contained for one-off runs without touching the rest of the pipeline.
+ * Already covered days are not repeated; existing eventIds are not duplicated.
  *
- * Uso: HISTORY_DAYS=90 HISTORY_BUDGET=300 node --env-file=.env scripts/backfill-history.mjs
- * Cada pareja cuesta 2 llamadas (stats + detalle); el presupuesto acota llamadas.
+ * Usage: HISTORY_DAYS=90 HISTORY_BUDGET=300 node --env-file=.env scripts/backfill-history.mjs
+ * Each pair costs 2 calls (stats + detail); the budget bounds calls.
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import {

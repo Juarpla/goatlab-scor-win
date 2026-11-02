@@ -1,11 +1,11 @@
 /**
- * Evaluación histórica del veredicto GoatLab (backtest sin fuga temporal).
- * - Poisson: para cada partido del histórico, λ estimado solo con resultados
- *   anteriores; se compara contra el baseline empírico de la muestra.
- * - Ensemble: se evalúan las capturas pre-partido guardadas en predictions.json
- *   (catboost del proveedor + veredicto GoatLab calculado al momento).
- * Escribe public/data/evaluation-report.json. El gate de publicación vive en
- * predictions.js (evaluationGate): ninguna corrida publica porcentajes por sí sola.
+ * Historical evaluation of the GoatLab verdict (backtest without temporal leakage).
+ * - Poisson: for each historical match, λ estimated only from prior
+ *   results; compared against the empirical sample baseline.
+ * - Ensemble: evaluates pre-match captures stored in predictions.json
+ *   (provider catboost + GoatLab verdict computed at the time).
+ * Writes public/data/evaluation-report.json. The publication gate lives in
+ * predictions.js (evaluationGate): no run publishes percentages on its own.
  */
 import { writeFile } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
@@ -22,7 +22,7 @@ async function readJson(path) {
 
 const evaluatedAt = new Date().toISOString();
 
-/* ---- Backtest Poisson rodante contra la base de resultados ---- */
+/* ---- Rolling Poisson backtest against the results base ---- */
 
 const base = await readJson('public/data/results.json');
 const results = (base?.results ?? []).filter(row => row.homeScore != null && row.awayScore != null).sort((a, b) => (a.date < b.date ? -1 : 1));
@@ -43,7 +43,7 @@ for (let index = 0; index < results.length; index++) {
   poissonBtts.push({ predicted: prediction.bothScore, happened: row.homeScore > 0 && row.awayScore > 0 ? 1 : 0 });
 }
 
-/* ---- Muestra del ensemble: capturas pre-partido con marcador final conocido ---- */
+/* ---- Ensemble sample: pre-match captures with a known final score ---- */
 
 const captured = await readJson('public/data/predictions.json');
 const ensemble1x2 = [];
@@ -66,7 +66,7 @@ for (const entry of Object.values(captured?.captures ?? {})) {
   if (probabilities?.btts != null) ensembleBtts.push({ predicted: probabilities.btts, happened: entry.finalScore.home > 0 && entry.finalScore.away > 0 ? 1 : 0 });
 }
 
-/* ---- Muestra de proveedores: API-Football y estimaciones de Bzzoiro ---- */
+/* ---- Provider sample: API-Football and Bzzoiro estimates ---- */
 
 let afCaptures = 0;
 let recCaptures = 0;
@@ -77,7 +77,7 @@ const recFavorite = { hits: 0, total: 0 };
 const recOver25 = [];
 const recBtts = [];
 const sideOf = (entry, name) => (sameClub(name, entry.home) ? 'home' : sameClub(name, entry.away) ? 'away' : null);
-/** Línea de API-Football: negativa = máximo de goles, positiva = mínimo. Null si no es numérica. */
+/** API-Football line: negative = goal maximum, positive = minimum. Null if not numeric. */
 const lineHappened = (line, totalGoals) => {
   const value = typeof line === 'string' ? Number(line.replace('+', '')) : NaN;
   if (!Number.isFinite(value)) return null;
@@ -122,7 +122,7 @@ for (const entry of Object.values(captured?.captures ?? {})) {
 }
 const rate = bucket => ({ hits: bucket.hits, total: bucket.total, accuracy: bucket.total ? Math.round((bucket.hits / bucket.total) * 1000) / 1000 : null });
 
-/* ---- Backtest del pronóstico de estadísticas (rodante, sin fuga) ---- */
+/* ---- Stats forecast backtest (rolling, no leakage) ---- */
 
 const statRows = ((await readJson('public/data/history-stats.json'))?.rows ?? [])
   .filter(row => row?.statistics)
@@ -139,7 +139,7 @@ for (let index = 0; index < statRows.length; index++) {
       const predicted = forecast[side]?.[metric];
       const actual = row.statistics?.[side]?.[metric];
       if (predicted == null || actual == null) continue;
-      // Posesión se evalúa como reparto: el error de un lado duplica al otro.
+      // Possession is evaluated as a split: one side's error doubles on the other.
       if (metric === 'possession' && side === 'away') continue;
       const baseline = leagueAverage(prior, row.competition, metric) ?? leagueAverage(prior, null, metric);
       if (baseline == null) continue;
@@ -163,7 +163,7 @@ const statsMetrics = Object.fromEntries(Object.entries(statErrors).map(([metric,
   }];
 }));
 
-/* ---- Métricas y gate de publicación ---- */
+/* ---- Metrics and publication gate ---- */
 
 const poissonOneX2 = evaluateOneX2(poisson1x2);
 const poissonOver25 = evaluateBinary(poissonOver);

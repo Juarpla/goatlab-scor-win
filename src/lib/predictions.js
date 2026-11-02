@@ -25,15 +25,15 @@ export function publishablePrediction(prediction, evaluation) {
   return { ...prediction, validated: true, evaluation };
 }
 
-/* ---- Veredicto GoatLab (ensemble). Cada insumo declara su peso; lo ausente vale 0. ---- */
+/* ---- GoatLab verdict (ensemble). Each input declares its weight; missing ones count 0. ---- */
 
 const HOME_BOOST = 1.08, AWAY_PENALTY = 0.92;
 const clip = (value, min, max) => Math.min(max, Math.max(min, value));
 const round3 = value => Math.round(value * 1000) / 1000;
 
 /** Rolling goals profile of one team from the results base, most recent first.
- *  Dedup por fecha+rival canónico: el mismo partido capturado por AF y FD
- *  (nombres corto/largo) cuenta una sola vez. */
+ *  Dedup by canonical date+opponent: the same match captured by AF and FD
+ *  (short/long names) counts only once. */
 export function teamRates(results, team, count = 6) {
   const seen = new Set();
   const played = [];
@@ -41,8 +41,8 @@ export function teamRates(results, team, count = 6) {
     .sort((a, b) => (a.date < b.date ? 1 : -1));
   for (const row of sorted) {
     const rival = sameClub(row.home, team) ? row.away : row.home;
-    // Rival suelto por primer token: AF acorta («Brighton») y FD alarga
-    // («Brighton Hove Albion»); mismo día + mismo marcador = mismo partido.
+    // Loose opponent by first token: AF shortens ("Brighton") and FD lengthens
+    // ("Brighton Hove Albion"); same day + same scoreline = same match.
     const rivalLoose = canonicalClubKey(rival).split(' ')[0] || canonicalClubKey(rival);
     const key = `${row.date}|${rivalLoose}|${row.homeScore}-${row.awayScore}`;
     if (seen.has(key)) continue;
@@ -55,7 +55,7 @@ export function teamRates(results, team, count = 6) {
   return { played: played.length, gf: sum('homeScore') / played.length, ga: sum('awayScore') / played.length };
 }
 
-/** Poisson λ for one fixture; null-honest when either side lacks three prior results. */
+/** Poisson λ for one fixture; honest null when either side lacks three prior results. */
 export function estimateLambdas(results, home, away) {
   const homeRates = teamRates(results, home);
   const awayRates = teamRates(results, away);
@@ -126,12 +126,12 @@ function signalDistribution(tilt, base) {
   return { home, draw: base, away };
 }
 
-/* ---- Síntesis GoatLab: ensemble de insumos declarados ---- */
+/* ---- GoatLab synthesis: ensemble of declared inputs ---- */
 
 /**
- * Combina Poisson propio, CatBoost (Bzzoiro) y señales de rendimiento en una síntesis de resultado.
- * Cada insumo declara su peso en el digest; lo ausente aporta 0 y se dice. Los factores
- * cualitativos (sede, ausencias) no mueven números: solo acompañan la lectura.
+ * Combines own Poisson, CatBoost (Bzzoiro) and performance signals into a result synthesis.
+ * Each input declares its weight in the digest; missing ones contribute 0 and are stated. Qualitative
+ * factors (venue, absences) do not move numbers: they only accompany the reading.
  */
 export function ensemble({ results = [], history = [], h2h = null, catboost = null, market = null, home, away, homeForm = null, awayForm = null, unavailable = null } = {}) {
   if (!home || !away) return null;
@@ -150,8 +150,8 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
   const activeWeight = active.reduce((sum, signal) => sum + signal.weight, 0);
   const parts = [];
   const inputs = [];
-  // Con consenso externo: 0.40 CatBoost + 0.25 Poisson + 0.20 consenso + 0.15 señales.
-  // Sin consenso: reparto histórico 0.5 / 0.3-0.8 / 0.2 (tests y metodología).
+  // With external consensus: 0.40 CatBoost + 0.25 Poisson + 0.20 consensus + 0.15 signals.
+  // Without consensus: historical split 0.5 / 0.3-0.8 / 0.2 (tests and methodology).
   const wCb = mk ? 0.4 : 0.5;
   const wPoisson = mk ? 0.25 : cb ? 0.3 : 0.8;
   const wMarket = mk ? 0.2 : 0;
@@ -206,14 +206,14 @@ export function ensemble({ results = [], history = [], h2h = null, catboost = nu
   };
 }
 
-/** La síntesis se publica con porcentajes solo cuando la evaluación histórica independiente pasa. */
+/** The synthesis is published with percentages only when the independent historical evaluation passes. */
 export function publishableVerdict(verdict, evaluation) {
   if (!verdict || !evaluation || evaluation.modelVersion !== 'goatlab-ensemble-v1' || evaluation.published !== true) return { ...verdict, published: false, evaluation: evaluation ?? null };
   return { ...verdict, published: true, evaluation };
 }
 
 
-/* ---- Evaluación histórica (backtest). Funciones puras; las alimenta scripts/evaluate-predictions.mjs. ---- */
+/* ---- Historical evaluation (backtest). Pure functions; fed by scripts/evaluate-predictions.mjs. ---- */
 
 export function oneX2Outcome(homeScore, awayScore) {
   if (!Number.isFinite(homeScore) || !Number.isFinite(awayScore)) return null;
@@ -250,7 +250,7 @@ export function evaluationGate({ poissonOneX2, ensembleOneX2 = null, ensembleOve
   const passes = metrics => metrics && metrics.sampleSize >= 200 && metrics.brierScore < metrics.baselineBrierScore;
   const ensemblePasses = metrics => Boolean(metrics && metrics.sampleSize >= 100 && metrics.brierScore < metrics.baselineBrierScore);
   const poissonOk = passes(poissonOneX2);
-  // La síntesis publicada es el ensemble completo: sin muestra pre-partido no se publica nada.
+  // The published synthesis is the full ensemble: without a pre-match sample nothing is published.
   const published = poissonOk
     && ensemblePasses(ensembleOneX2)
     && (!ensembleOver25 || ensemblePasses(ensembleOver25))

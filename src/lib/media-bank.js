@@ -1,7 +1,7 @@
-/** Lector del banco de medios por partido para la ruta /partido/<id>/media.
- *  Lee los manifiestos que commitea el Action 3-media-creation y los sanea
- *  al banco de cuatro fotos y hasta cuatro clips, conservando los recursos tras rollback.
- *  Solo lectura en build (Astro estático); sin secrets ni red. */
+/** Per-match media bank reader for the /partido/<id>/media route.
+ *  Reads the manifests committed by the 3-media-creation Action and sanitizes them
+ *  into the bank of four photos and up to four clips, preserving resources after rollback.
+ *  Build-time read only (static Astro); no secrets or network. */
 import { readdirSync, readFileSync } from 'node:fs';
 import { MAX_CLIPS_PER_MATCH, mediaPolicy } from './media-policy.js';
 import { ASSETS_PER_MATCH } from './media.js';
@@ -11,7 +11,7 @@ const HTTPS = /^https:\/\//;
 
 const read = path => { try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return null; } };
 
-/** Ids con manifiesto (excluye .progress.json y .ready). */
+/** Ids with a manifest (excludes .progress.json and .ready). */
 export function mediaBankIds(dir = 'public/data/media-pack') {
   let names = [];
   try { names = readdirSync(dir); } catch { return []; }
@@ -29,7 +29,7 @@ function validClip(clip) {
   return clip?.source === 'agnes' && HTTPS.test(String(clip.url ?? '')) ? clip : null;
 }
 
-/** Manifiesto + progreso saneados, o null si no hay banco para el partido. */
+/** Sanitized manifest + progress, or null if there is no bank for the match. */
 export function readMediaBank(matchId, dir = 'public/data/media-pack') {
   if (!ID.test(String(matchId ?? ''))) return null;
   const progress = read(`${dir}/${matchId}.progress.json`);

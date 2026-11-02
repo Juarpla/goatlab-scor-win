@@ -47,7 +47,7 @@ test('la menos conservadora del Sevilla–Barça es Bzzoiro (gap 0.70 vs 0.35)',
   assert.equal(pickDecisive(normalizeOneX2(BZ), normalizeOneX2(AF)), 'bz');
 });
 
-test('pickDecisive: gana la más decisiva, empate va a Bzzoiro, nulls honestos', () => {
+test('pickDecisive: the most decisive wins, a tie goes to Bzzoiro, honest nulls', () => {
   const flat = { home: 0.4, draw: 0.2, away: 0.4 };
   const sharp = { home: 0.1, draw: 0.1, away: 0.8 };
   assert.equal(pickDecisive(sharp, flat), 'bz');

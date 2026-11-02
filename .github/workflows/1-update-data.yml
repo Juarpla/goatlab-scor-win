@@ -2,12 +2,12 @@ name: "1-update-data"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '5 6 * * *'    # actualización completa: ventana de 7 días, forma, análisis (01:05 Lima)
-    - cron: '17 */6 * * *' # refresco de marcadores del día
+    - cron: '5 6 * * *'    # full update: 7-day window, form, analysis (01:05 Lima)
+    - cron: '17 */6 * * *' # day scoreline refresh
 # The bot commits refreshed data back to the repo; that push triggers the
 # Cloudflare Workers deploy (GitHub Actions never deploys itself).
-# build-top.mjs escribe public/data/top.json (ranking completo + extras):
-# 2-scripting y 3-media-creation leen el mismo top, nunca divergen.
+# build-top.mjs writes public/data/top.json (full ranking + extras):
+# 2-scripting and 3-media-creation read the same top and never diverge.
 permissions:
   contents: write
 concurrency:
@@ -20,14 +20,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # historial completo: el commit del bot hace rebase antes del push
+          fetch-depth: 0 # full history: the bot commit rebases before push
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Actualización completa (diaria, 07:00 UTC)
+      - name: Full update (daily, 07:00 UTC)
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '5 6 * * *')
         run: node actions/1-update-data/update-data.mjs && node actions/1-update-data/build-top.mjs
         env:
@@ -50,7 +50,7 @@ jobs:
           ANALYSIS_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_RETRY_MAX_TOKENS }}
           ANALYSIS_BATCH_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_MAX_TOKENS }}
           ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
-      - name: Refresco de marcadores (cada 6 horas)
+      - name: Scoreline refresh (every 6 hours)
         if: github.event.schedule == '17 */6 * * *'
         run: node actions/1-update-data/update-data.mjs --refresh && node actions/1-update-data/build-top.mjs
         env:
@@ -73,8 +73,8 @@ jobs:
           ANALYSIS_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_RETRY_MAX_TOKENS }}
           ANALYSIS_BATCH_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_MAX_TOKENS }}
           ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
-      - name: Purgar media tras actualizar data
-        continue-on-error: true # conservar data disponible aunque el almacén remoto no responda
+      - name: Purge media after the data update
+        continue-on-error: true # keep available data even if the remote store does not respond
         run: node actions/1-update-data/maintain-media.mjs
         env:
           MEDIA_ROLE: producer
@@ -91,31 +91,31 @@ jobs:
           path: public/data/
           retention-days: 30
       - run: pnpm run build
-      - name: Commit de datos actualizados
+      - name: Commit updated data
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data public/match-probabilities public/ads.txt
           if git diff --cached --quiet; then
-            echo "Sin cambios de datos que commitear"
+            echo "No data changes to commit"
           else
             git commit -m "chore: update data"
-            # main pudo avanzar (push manual) mientras corría el workflow:
-            # rebase + reintentos en vez de fallar con "fetch first".
+            # main may have advanced (manual push) while the workflow ran:
+            # rebase + retries instead of failing with "fetch first".
             pushed=false
             for i in 1 2 3; do
               git fetch origin
               if ! git rebase --autostash origin/main; then
                 git rebase --abort || true
-                echo "Conflicto con main: revisar a mano"
+                echo "Conflict with main: review by hand"
                 exit 1
               fi
               if git push origin HEAD:main; then
                 pushed=true
                 break
               fi
-              echo "Push rechazado, reintento $i/3"
+              echo "Push rejected, retry $i/3"
               sleep 10
             done
             if [ "$pushed" != "true" ]; then exit 1; fi

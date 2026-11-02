@@ -1,11 +1,11 @@
 /**
- * Migajas del fallback del fallback ("construyendo serie"): buscadores puros
- * sobre los JSON horneados para rescatar datos reales del equipo sin serie
- * registrada. Todo lo que devuelven existe en la base; lo ausente es `null`
- * y la vista lo omite en silencio.
+ * Crumbs for the fallback of the fallback ("building series"): pure lookups
+ * over baked JSON to rescue real data for a team without a recorded
+ * series. Everything they return exists in the base; missing values are `null`
+ * and the view omits them silently.
  */
 
-/** Minúsculas sin tildes ni espacios sobrantes, para casar nombres de fuentes distintas. */
+/** Lowercase without accents or extra spaces, to match names from different sources. */
 export function normalizeName(value) {
   return String(value ?? '')
     .normalize('NFD')
@@ -17,17 +17,17 @@ export function normalizeName(value) {
 }
 
 /**
- * Fecha de la jornada desde el `round` del fixture ('League Stage - 1' → 1,
- * 5 → 5). Sin número (p. ej. 'Quarter-finals') devuelve `null`: la cabecera
- * ya nombra la competición y no filtramos inglés a la UI.
+ * Matchday number from the fixture `round` ('League Stage - 1' → 1,
+ * 5 → 5). Without a number (e.g. 'Quarter-finals') it returns `null`: the header
+ * already names the competition and we do not leak English into the UI.
  */
-export function roundFecha(round) {
+export function roundNumber(round) {
   if (typeof round === 'number' && Number.isInteger(round)) return round;
   const hit = String(round ?? '').match(/(\d+)\s*$/);
   return hit ? Number(hit[1]) : null;
 }
 
-/** ¿Casa el nombre del fixture con el de la fila (`Beşiktaş JK` ≈ `Besiktas`)? */
+/** Does the fixture name match the row name (`Beşiktaş JK` ≈ `Besiktas`)? */
 function nameHit(rowTeam, wanted) {
   const row = normalizeName(rowTeam);
   if (!row || !wanted) return false;
@@ -48,15 +48,15 @@ function matchRow(rows, teamKey, teamId, names) {
 }
 
 /**
- * Fila de tabla por `teamId` del fixture con fallback por nombre. Acepta
- * `played: 0` (arranque de fase liga): es dato real, no ausencia.
+ * Standings row by fixture `teamId` with a name fallback. Accepts
+ * `played: 0` (league phase start): it is real data, not absence.
  */
 export function findStandingRow(standingsJson, competitionId, { teamId = null, names = [] } = {}) {
   const row = matchRow(standingsJson?.[competitionId]?.rows, 'teamId', teamId, names);
   return row?.position != null ? { position: row.position, played: row.played ?? 0 } : null;
 }
 
-/** Mejor goleador del equipo en la competición (`null` si no hay muestra). */
+/** Team top scorer in the competition (`null` if there is no sample). */
 export function topScorerFor(scorersJson, competitionId, { teamId = null, names = [] } = {}) {
   const row = matchRow(scorersJson?.[competitionId]?.scorers, 'teamId', teamId, names);
   return row?.player && row?.value != null

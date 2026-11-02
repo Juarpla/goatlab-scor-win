@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { normalizeReading, matchFigures, formatFigure, inferKind, READING_KINDS } from '../src/lib/reading.js';
 
-test('normalizeReading acepta el párrafo legacy como una sección de panorama', () => {
+test('normalizeReading accepts the legacy paragraph as a panorama section', () => {
   const reading = normalizeReading({
     summary: 'Tottenham y Aston Villa se enfrentan en Premier; solo hay datos de calendario.',
     limitations: 'Sin estadísticas suficientes para analizar.',
@@ -13,7 +13,7 @@ test('normalizeReading acepta el párrafo legacy como una sección de panorama',
   assert.deepEqual(reading.sections[0].bullets, ['Tottenham y Aston Villa se enfrentan en Premier; solo hay datos de calendario.']);
 });
 
-test('la auditoría del LLM nunca llega a la vista', () => {
+test('the LLM audit never reaches the view', () => {
   const reading = normalizeReading({
     summary: [{ title: 'Contexto', bullets: ['Dos líneas de contexto.', 'Otra línea.'] }],
     limitations: [{ label: 'Muestra corta', detail: 'La tabla cubre 4 jornadas.' }],
@@ -59,7 +59,7 @@ test('inferKind reconoce las familias del relato', () => {
   for (const kind of READING_KINDS) assert.equal(typeof kind, 'string');
 });
 
-test('inferKind decide por título y no se deja arrastrar por los bullets', () => {
+test('inferKind decides by title and is not dragged by the bullets', () => {
   assert.equal(inferKind('Osasuna recibe al Rayo en LaLiga', ['El Rayo visita Pamplona con Sergio Camello como su referencia goleadora del curso.']), 'panorama');
   assert.equal(inferKind('City recibe al Sunderland en el Etihad', ['El City llega segundo con 12 puntos en 4 jornadas y saldo de 8 goles.']), 'panorama');
   assert.equal(inferKind('Brentford vs Chelsea: cita del viernes en Premier', ['El historial reciente suma 14 enfrentamientos y tres empates en los últimos cruces.']), 'panorama');
@@ -100,7 +100,7 @@ test('matchFigures tolera coma o punto en la cifra y no solapa coincidencias', (
   assert.equal(repeated.filter(part => part.figure).length, 2);
 });
 
-test('matchFigures sin stats devuelve el texto íntegro', () => {
+test('matchFigures without stats returns the full text', () => {
   assert.deepEqual(matchFigures('Texto sin cifras.', []), [{ text: 'Texto sin cifras.' }]);
   assert.deepEqual(matchFigures('', [{ value: '1', label: 'x' }]), [{ text: '' }]);
 });

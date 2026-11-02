@@ -1,7 +1,7 @@
-/** Top editorial: próximos partidos de Barcelona y Madrid sin límite de días;
- *  el resto combina cercanía, atractivo del encuentro y repercusión. Lo escribe 1-update-data. Guiones, prompts y banco leen
- *  el mismo archivo. Uso: node actions/1-update-data/build-top.mjs
- *  (respeta GOATLAB_REPO; conserva extra hasta final confirmado más gracia). */
+/** Editorial top: upcoming Barcelona and Madrid matches with no day limit;
+ *  the rest combines proximity, fixture appeal and reach. Written by 1-update-data. Scripts, prompts and bank read
+ *  the same file. Usage: node actions/1-update-data/build-top.mjs
+ *  (respects GOATLAB_REPO; keeps extra until a confirmed final plus grace). */
 import { mkdir, readFile, writeFile, readdir, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';

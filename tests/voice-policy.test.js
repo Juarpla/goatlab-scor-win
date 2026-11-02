@@ -5,8 +5,8 @@ import { promisify } from 'node:util';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { voicePolicy, VOICE_SECONDS, MAX_FRAMES } from '../src/lib/short-format.js';
-import { adjustVoice } from '../video-render/engine/voice-policy.mjs';
+import { voicePolicy, VOICE_SECONDS, MAX_FRAMES } from '../video-render/contract/short-format.js';
+import { adjustVoice } from '../video-render/pipeline/01-voice.mjs';
 const run = promisify(execFile);
 test('strict frame budget preserves a short voice and caps acceleration at ten percent', () => {
   assert.equal(voicePolicy(45).rate, 1);

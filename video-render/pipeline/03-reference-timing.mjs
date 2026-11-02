@@ -1,5 +1,5 @@
-// Alinea el texto del guion con los tiempos de Mistral. La voz manda en los
-// tiempos; el guion corrige nombres, cifras y puntuación para los subtítulos.
+// Aligns script text with Mistral timings. The voice owns the
+// timings; the script fixes names, figures and punctuation for subtitles.
 const NUMBER_WORDS = {
   cero: '0', uno: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5', seis: '6', siete: '7',
   ocho: '8', nueve: '9', diez: '10', once: '11', doce: '12', trece: '13', catorce: '14',
@@ -32,8 +32,8 @@ function canonical(word) {
 const round3 = n => Math.round(n * 1000) / 1000;
 
 /**
- * Devuelve una palabra del guion por cada token, con los tiempos de `heard`.
- * `score` es la fracción de tokens que coincidieron exactamente.
+ * Returns one script word per token, with the `heard` timings.
+ * `score` is the fraction of tokens that matched exactly.
  */
 export function alignReference(heard, reference, voiceSeconds) {
   const ref = String(reference ?? '').trim().split(/\s+/).filter(Boolean);
@@ -67,7 +67,7 @@ export function alignReference(heard, reference, voiceSeconds) {
 
   const times = new Array(n).fill(null);
   for (const [ri, hi] of pairs) times[ri] = { start: heardWords[hi].start, end: heardWords[hi].end };
-  // Un nombre que Mistral parte en varias palabras conserva todo el tramo.
+  // A name Mistral splits into several words keeps the full span.
   const ordered = [...pairs.entries()].sort((a, b) => a[0] - b[0]);
   for (let k = 1; k < ordered.length; k++) {
     const [ri, hi] = ordered[k];
@@ -78,7 +78,7 @@ export function alignReference(heard, reference, voiceSeconds) {
       times[ri].start = Math.min(times[ri].start, gap[0].start);
     }
   }
-  // Las palabras del guion sin coincidencia se reparten el hueco entre vecinas.
+  // Unmatched script words split the gap between neighbors.
   for (let r = 0; r < n; r++) {
     if (times[r]) continue;
     let p = r - 1;
@@ -108,7 +108,7 @@ export function alignReference(heard, reference, voiceSeconds) {
   return { words, score: matches / n };
 }
 
-/** Elige el guion que mejor se alinea con lo escuchado; null si no hay candidatos. */
+/** Chooses the script that best aligns with what was heard; null if there are no candidates. */
 export function alignScripts(heard, scripts, voiceSeconds) {
   const rows = (scripts ?? [])
     .filter(script => Number.isInteger(script?.n) && typeof script.narration === 'string' && script.narration.trim())

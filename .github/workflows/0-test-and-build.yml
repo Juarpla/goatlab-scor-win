@@ -3,8 +3,8 @@ on:
   push:
     branches: [main]
   pull_request:
-# Tests y build fuera de 1-update-data.yml: un test roto no debe frenar la
-# actualización de datos de la web.
+# Tests and build outside 1-update-data.yml: a broken test must not slow the
+# website data update.
 permissions:
   contents: read
 jobs:
@@ -18,9 +18,9 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: ffmpeg (tests de mezcla de cama)
+      - name: ffmpeg (bed mix tests)
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: dependencias de render (Remotion)
+      - name: render dependencies (Remotion)
         run: npm ci --no-audit --no-fund
         working-directory: video-render/render/remotion
       - uses: actions/setup-python@v6

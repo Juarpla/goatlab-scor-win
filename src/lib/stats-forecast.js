@@ -1,32 +1,32 @@
 /**
- * Pronóstico de estadísticas del partido (build time, sin LLM).
+ * Match statistics forecast (build time, no LLM).
  *
- * Espejo de `estimateLambdas` para las 9 métricas del acta: el valor esperado
- * de cada equipo sale de su promedio propio + lo que el rival concede,
- * encogido a la media de la competición con muestra corta. Sin muestra
- * suficiente la métrica queda en null y la vista la omite: nunca se inventa.
- * `forecastStatsFull` es la variante de tabla siempre llena: misma fórmula con
- * mínimo de 1 partido, relleno AF por métrica y media como sostén; la columna
- * xG se ancla al xG del modelo Bzzoiro.
- * Las comparativas (duelos 1X2, último gol, carrera a córners, margen) se
- * derivan de los mismos ritmos con Poisson independiente.
+ * Mirror of `estimateLambdas` for the 9 scorecard metrics: each team's expected
+ * value comes from its own average + what the opponent concedes,
+ * shrunk to the competition mean on a short sample. Without enough
+ * sample the metric stays null and the view omits it: never invented.
+ * `forecastStatsFull` is the always-full table variant: same formula with
+ * a minimum of 1 match, AF fill per metric and the mean as support; the xG
+ * column is anchored to the Bzzoiro model's xG.
+ * Comparisons (1X2 duels, last goal, corner race, margin) are
+ * derived from the same rates with independent Poisson.
  */
 import { sameClub } from './teams.js';
 import { goalDistribution } from './predictions.js';
 
 export const STAT_METRICS = ['possession', 'shots', 'shotsOnTarget', 'xg', 'corners', 'fouls', 'yellowCards', 'redCards', 'offsides'];
 const COUNT_METRICS = STAT_METRICS.filter(metric => metric !== 'possession');
-/** Techo honesto por métrica: fuera de rango es error de datos, no récord. */
+/** Honest ceiling per metric: out of range is a data error, not a record. */
 const MAX_VALUE = { shots: 40, shotsOnTarget: 20, xg: 8, corners: 25, fouls: 30, yellowCards: 8, redCards: 2, offsides: 10 };
-/** Amarillas esperadas que disparan el criterio disciplinario (ver abajo). */
+/** Expected yellows that trigger the disciplinary criterion (see below). */
 const MANY_YELLOWS = 3.5;
-/** Suelo de rojas cuando aplica el criterio: al menos una. */
+/** Red-card floor when the criterion applies: at least one. */
 const RED_FLOOR = 1;
 
 const round2 = value => Math.round(value * 100) / 100;
 const round3 = value => Math.round(value * 1000) / 1000;
 const mean = list => list.reduce((sum, value) => sum + value, 0) / list.length;
-/** Amistoso pesa la mitad: informa menos del ritmo competitivo. Sin señal, oficial. */
+/** Friendlies weigh half: they say less about competitive rhythm. Without a signal, official. */
 export const FRIENDLY_WEIGHT = 0.5;
 export function isFriendlyRow(row) {
   if (!row || typeof row !== 'object') return false;
@@ -51,7 +51,7 @@ const weightedMean = (values, weights) => {
   }
   return total > 0 ? sum / total : null;
 };
-/** Peso amistoso sobre el total: con mayoría amistosa se encoge más a la media. */
+/** Friendly weight over the total: with a friendly majority it shrinks more to the mean. */
 const friendlyShareOf = rows => {
   let friendly = 0, total = 0;
   for (const row of rows ?? []) {
@@ -62,7 +62,7 @@ const friendlyShareOf = rows => {
   return total > 0 ? friendly / total : 0;
 };
 
-/** Filas del histórico donde juega el equipo, más recientes primero. */
+/** Historical rows where the team plays, most recent first. */
 export function teamStatRows(history, team, count = 10) {
   return (history ?? [])
     .filter(row => row?.statistics && (sameClub(row.home, team) || sameClub(row.away, team)))
@@ -76,7 +76,7 @@ const ownValues = (rows, team, metric) => rows
 const concededValues = (rows, team, metric) => rows
   .map(row => (sameClub(row.home, team) ? row.statistics.away : row.statistics.home)?.[metric])
   .filter(value => value != null);
-/** Valores con su peso (amistoso 0.5, oficial 1): misma selección, cualquier competición. */
+/** Values with their weight (friendly 0.5, official 1): same selection, any competition. */
 const ownWeighted = (rows, team, metric) => {
   const values = [], weights = [];
   for (const row of rows ?? []) {
@@ -98,7 +98,7 @@ const concededWeighted = (rows, team, metric) => {
   return { values, weights };
 };
 
-/** Media de la competición por partido y equipo; null sin filas con dato. */
+/** Competition average per match and team; null without rows with data. */
 export function leagueAverage(history, competition, metric) {
   const pool = [];
   for (const row of history ?? []) {
@@ -112,10 +112,10 @@ export function leagueAverage(history, competition, metric) {
 }
 
 /**
- * Valor esperado de una métrica de conteo para un equipo en un partido.
- * (propio + lo que concede el rival) / 2, encogido a la media de la liga.
- * Con pesos (`ownWeights`/`oppWeights`) la media es ponderada: el amistoso
- * pesa la mitad y el mínimo sigue pidiendo partidos con dato.
+ * Expected value of a counting metric for a team in a match.
+ * (own + what the opponent concedes) / 2, shrunk to the league mean.
+ * With weights (`ownWeights`/`oppWeights`) the mean is weighted: friendlies
+ * weigh half and the minimum still requires matches with data.
  */
 export function forecastCount({ ownRows, oppRows, ownWeights = null, oppWeights = null, leagueAvg, min = 3, shrink = 4, max = Infinity }) {
   const n = Math.min(ownRows.length, oppRows.length);
@@ -130,9 +130,9 @@ export function forecastCount({ ownRows, oppRows, ownWeights = null, oppWeights 
 }
 
 /**
- * Pronóstico completo de las 9 métricas para un encuentro.
- * Devuelve `{ method, home, away, sample, coverage, league, source }`
- * con null por métrica sin muestra; null entero si ningún lado tiene filas.
+ * Full forecast of the 9 metrics for a fixture.
+ * Returns `{ method, home, away, sample, coverage, league, source }`
+ * with null per metric without sample; entirely null if neither side has rows.
  */
 export function forecastStats(history, home, away, { competition = null, count = 10, min = 3, shrink = 4 } = {}) {
   const homeRows = teamStatRows(history, home, count);
@@ -151,7 +151,7 @@ export function forecastStats(history, home, away, { competition = null, count =
     }
     return out;
   };
-  // Posesión como reparto: se normaliza a 100 entre ambos.
+  // Possession as a split: normalized to 100 between both.
   const possessionOf = team => {
     const rows = team === home ? homeRows : awayRows;
     const values = ownValues(rows, team, 'possession');
@@ -186,14 +186,14 @@ export function forecastStats(history, home, away, { competition = null, count =
   };
 }
 
-/* ---- Cascada siempre-llena (Bzzoiro → AF → media) ---- */
+/* ---- Always-full cascade (Bzzoiro → AF → mean) ---- */
 
 const clampMetric = (metric, value) => {
   if (value == null) return null;
   return Math.min(MAX_VALUE[metric] ?? Infinity, Math.max(0, value));
 };
 
-/** Promedio de bolsas AF propias (`bag` o lista de bolsas); null sin dato. */
+/** Average of own AF bags (`bag` or list of bags); null without data. */
 function afAverage(bags, metric) {
   if (bags == null) return null;
   const list = Array.isArray(bags) ? bags : [bags];
@@ -203,17 +203,17 @@ function afAverage(bags, metric) {
 }
 
 /**
- * Pronóstico de las 9 métricas con cascada por celda para tabla siempre llena:
- * 1) ritmos Bzzoiro (propio + lo que concede el rival, desde 1 partido,
- * encogido fuerte a la media; misma selección aunque no sea entre ellas,
- * amistoso pesa la mitad); 2) promedio AF del equipo mezclado con la
- * media; 3) media de la competición y luego global.
- * `providerXg` ancla la columna xG al xG del modelo Bzzoiro para no
- * contradecir su resultado esperado. Coherencia mínima: a puerta ≤ tiros;
- * con muchas amarillas (≥3.5) y sin dato de rojas de ningún proveedor,
- * al menos una roja. Cada celda declara su procedencia en `sources` (`Bzzoiro`|`AF`|`media`);
- * `shortSample` avisa muestra corta o relleno. Null entero solo en vacío
- * total (sin filas, sin AF y sin medias): nunca se inventa de la nada.
+ * Forecast of the 9 metrics with a per-cell cascade for an always-full table:
+ * 1) Bzzoiro rates (own + what the opponent concedes, from 1 match,
+ * strongly shrunk to the mean; same selection even if not among them,
+ * friendlies weigh half); 2) team AF average mixed with the
+ * mean; 3) competition mean and then global.
+ * `providerXg` anchors the xG column to the Bzzoiro model's xG so it does not
+ * contradict its expected result. Minimum coherence: shots on target ≤ shots;
+ * with many expected yellows (≥3.5) and no red-card data from any provider,
+ * at least one red. Each cell declares its provenance in `sources` (`Bzzoiro`|`AF`|`mean`);
+ * `shortSample` flags a short sample or fill. Entirely null only in total
+ * emptiness (no rows, no AF and no means): never invented from nothing.
  */
 export function forecastStatsFull(history, home, away, { extraRows = [], af = null, providerXg = null, competition = null, count = 10, shrink = 6 } = {}) {
   const seen = new Set();
@@ -233,7 +233,7 @@ export function forecastStatsFull(history, home, away, { extraRows = [], af = nu
   const takeCount = (side, team, teamRows, oppRows, metric) => {
     const own = ownWeighted(teamRows, team, metric);
     const opp = concededWeighted(oppRows, team === home ? away : home, metric);
-    // Mayoría amistosa: el ritmo propio informa menos, más ancla a la media.
+    // Friendly majority: own rhythm says less, more anchor to the mean.
     const friendlyShare = friendlyShareOf([...teamRows, ...oppRows]);
     const shrinkEff = friendlyShare > 0.5 ? shrink + 2 : shrink;
     const value = forecastCount({
@@ -299,7 +299,7 @@ export function forecastStatsFull(history, home, away, { extraRows = [], af = nu
     sources.home.possession = null;
     sources.away.possession = null;
   }
-  // Ancla xG al modelo del proveedor cuando lo trae (coherencia con su esperado).
+  // Anchor xG to the provider model when it provides it (coherence with its expected result).
   let xgSource = null;
   for (const [side, out] of [['home', homeOut], ['away', awayOut]]) {
     const anchored = providerXg?.[side];
@@ -310,13 +310,13 @@ export function forecastStatsFull(history, home, away, { extraRows = [], af = nu
     }
   }
   if (!xgSource) xgSource = sources.home.xg === sources.away.xg ? sources.home.xg : [sources.home.xg, sources.away.xg].filter(Boolean).join('+') || null;
-  // Coherencia mínima: los tiros a puerta no superan los tiros.
+  // Minimum coherence: shots on target do not exceed shots.
   for (const out of [homeOut, awayOut]) {
     if (out.shotsOnTarget != null && out.shots != null) out.shotsOnTarget = Math.min(out.shotsOnTarget, out.shots);
   }
-  // Criterio disciplinario: muchas amarillas esperadas sin dato de rojas
-  // (ni Bzzoiro ni AF) → al menos una (segunda amarilla): la media subestima
-  // esos casos. Nunca pisa una medición real de ningún proveedor.
+  // Disciplinary criterion: many expected yellows without red-card data
+  // (neither Bzzoiro nor AF) → at least one (second yellow): the mean underestimates
+  // those cases. Never overrides a real measurement from any provider.
   for (const [side, out] of [['home', homeOut], ['away', awayOut]]) {
     if (afAverage(af?.[side], 'redCards') != null) continue;
     if (sources[side].redCards === 'Bzzoiro') continue;
@@ -349,9 +349,9 @@ export function forecastStatsFull(history, home, away, { extraRows = [], af = nu
   };
 }
 
-/* ---- Comparativas frente a frente (duelos) ---- */
+/* ---- Head-to-head comparisons (duels) ---- */
 
-/** Duelo 1X2 entre dos ritmos Poisson: P(local >) / P(=) / P(visita >). */
+/** 1X2 duel between two Poisson rates: P(home >) / P(=) / P(away >). */
 export function threeWay(homeLambda, awayLambda, { max = 20 } = {}) {
   if (!Number.isFinite(homeLambda) || !Number.isFinite(awayLambda) || homeLambda < 0 || awayLambda < 0) return null;
   const home = goalDistribution(Math.min(8, homeLambda), max);
@@ -369,8 +369,8 @@ export function threeWay(homeLambda, awayLambda, { max = 20 } = {}) {
 }
 
 /**
- * Último gol por relojes en competencia: dado el reparto (n, m), el último
- * es local con prob. n/(n+m); se integra sobre la Poisson conjunta.
+ * Last goal by competing clocks: given the split (n, m), the last
+ * is home with prob. n/(n+m); integrated over the joint Poisson.
  */
 export function lastGoal(homeLambda, awayLambda, { max = 12 } = {}) {
   if (!Number.isFinite(homeLambda) || !Number.isFinite(awayLambda) || homeLambda < 0 || awayLambda < 0) return null;
@@ -392,7 +392,7 @@ export function lastGoal(homeLambda, awayLambda, { max = 12 } = {}) {
   return { home: round3(firstHome / total), away: round3(firstAway / total), noGoal: round3(noGoal / total) };
 }
 
-/** Binomial negativa: prob. de llegar primero a N con ritmos a y b. */
+/** Negative binomial: prob. of reaching N first with rates a and b. */
 export function raceTo(homeRate, awayRate, target) {
   if (!Number.isFinite(homeRate) || !Number.isFinite(awayRate) || homeRate <= 0 || awayRate <= 0) return null;
   if (!Number.isInteger(target) || target < 1) return null;
@@ -407,7 +407,7 @@ export function raceTo(homeRate, awayRate, target) {
   return { home: round3(home), away: round3(1 - home) };
 }
 
-/** Margen de córners por bandas: +3, +1/+2, iguales, −1/−2, −3 o más. */
+/** Corner margin by bands: +3, +1/+2, equal, −1/−2, −3 or more. */
 export function cornerMargin(homeLambda, awayLambda, { max = 20 } = {}) {
   if (!Number.isFinite(homeLambda) || !Number.isFinite(awayLambda) || homeLambda < 0 || awayLambda < 0) return null;
   const home = goalDistribution(Math.min(8, homeLambda), max);
@@ -431,9 +431,9 @@ export function cornerMargin(homeLambda, awayLambda, { max = 20 } = {}) {
 }
 
 /**
- * Bloque de dominancia para hornear: duelos y carreras derivados de los
- * ritmos estimados (córners, amarillas) y de los λ de gol. Cada pieza
- * nula por separado cuando su insumo falta.
+ * Dominance block to bake: duels and races derived from the
+ * estimated rates (corners, yellows) and goal λ. Each piece
+ * is null separately when its input is missing.
  */
 export function forecastDominance({ corners = null, yellows = null, goalLambdas = null } = {}) {
   const cornersDuel = corners ? threeWay(corners.home, corners.away, { max: 20 }) : null;

@@ -1,13 +1,13 @@
 /**
- * Compliance GoatLab Shorts: vocabulario y reglas bloqueantes pre-render.
- * Semilla: COMPLIANCE.md. Sin dependencias npm; corre en Node y workerd.
+ * GoatLab Shorts compliance: blocking pre-render vocabulary and rules.
+ * Seed: COMPLIANCE.md. No npm dependencies; runs on Node and workerd.
  */
 import { ASSETS_MIN, ASSETS_PER_MATCH, AI_CREDIT, assetErrors,
 } from './media.js';
 export const DISCLAIMER =
   'Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.';
 
-/** Vocabulario prohibido en guiones y descripciones (apuestas, cuotas, garantías). */
+/** Vocabulary forbidden in scripts and descriptions (betting, odds, guarantees). */
 export const FORBIDDEN_PATTERNS = [
   /cuotas?/i,
   /momios?/i,
@@ -36,7 +36,7 @@ export const FORBIDDEN_PATTERNS = [
   /footage|transmisi[oó]n en vivo/i,
 ];
 
-/** Claves crudas que jamás se imprimen (ver story-dictionary). */
+/** Raw keys that are never printed (see story-dictionary). */
 export const RAW_KEYS = ['1X2', 'BTTS', 'DNB', 'H2H', 'HT/FT'];
 
 export function checkText(text) {
@@ -49,9 +49,9 @@ export function checkText(text) {
 }
 
 /**
- * Valida un guion (texto corrido listo para leer). `published` =
- * evaluation-report.json → published. Con gate cerrado: cero porcentajes
- * (slot de probabilidades apagado).
+ * Validates a script (continuous text ready to read). `published` =
+ * evaluation-report.json → published. With the gate closed: zero percentages
+ * (probabilities slot off).
  */
 export function checkScript(script, { published = false, matchId = null } = {}) {
   const errors = [];
@@ -104,7 +104,7 @@ export function checkMediaManifest(data, { matchId = null } = {}) {
   return errors;
 }
 
-/** Solo <id>.json son manifiestos; .progress.json y .ready son notas de avance. */
+/** Only <id>.json are manifests; .progress.json and .ready are progress notes. */
 export function isMediaManifestFile(name) {
   return typeof name === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*\.json$/.test(name);
 }

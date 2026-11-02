@@ -1,8 +1,8 @@
-/** Cliente R2 mínimo (stdlib, sin dependencias) para el banco de medios.
- *  Estructura: partidos/<matchId>/<0-3.jpg|png,clip-1-2.mp4>.
- *  Env: R2_ACCOUNT_ID (o CLOUDFLARE_ACCOUNT_ID), R2_ACCESS_KEY_ID,
- *  R2_SECRET_ACCESS_KEY, R2_BUCKET (defecto goatlab), R2_PUBLIC_BASE.
- *  Nunca imprime credenciales: los comandos informativos devuelven JSON sin secretos. */
+/** Minimal R2 client (stdlib, no dependencies) for the media bank.
+ *  Structure: partidos/<matchId>/<0-3.jpg|png,clip-1-2.mp4>.
+ *  Env: R2_ACCOUNT_ID (or CLOUDFLARE_ACCOUNT_ID), R2_ACCESS_KEY_ID,
+ *  R2_SECRET_ACCESS_KEY, R2_BUCKET (default goatlab), R2_PUBLIC_BASE.
+ *  Never prints credentials: informational commands return JSON without secrets. */
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { signR2 as signRequest } from '../src/lib/r2-signed.js';
@@ -26,7 +26,7 @@ const PUBLIC_BASE = (env('R2_PUBLIC_BASE') || '').replace(/\/$/, '');
 const LEDGER = env('R2_LEDGER', 'public/data/r2-usage.json');
 const operations = { opsA: 0, opsB: 0 };
 
-// Topes internos al 80% del free tier (10 GB, 1M op-A, 10M op-B).
+// Internal caps at 80% of the free tier (10 GB, 1M op-A, 10M op-B).
 export const BUDGET = Object.freeze({ storageBytes: 8_000_000_000, opsA: 800_000, opsB: 8_000_000, warnAt: [0.7, 0.9] });
 
 const sha256 = (b) => createHash('sha256').update(b).digest('hex');

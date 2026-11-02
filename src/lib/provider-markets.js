@@ -1,17 +1,17 @@
 /**
- * Escenarios derivados de los proveedores (vista, sin modelo propio).
- * Bzzoiro trae `oneX2` y API-Football trae `percent`; ninguno trae
- * combinadas de dos resultados ni resultado-sin-empate: se derivan del
- * resultado con las identidades 1X = home+draw, X2 = draw+away,
- * sin-empate.home = home/(home+away).
- * Todo lo irreconocible → null honesto, nunca lanza.
+ * Scenarios derived from the providers (view, no own model).
+ * Bzzoiro provides `oneX2` and API-Football provides `percent`; neither provides
+ * two-outcome combinations or draw-no-bet: they are derived from the
+ * result with the identities 1X = home+draw, X2 = draw+away,
+ * draw-no-bet.home = home/(home+away).
+ * Anything unrecognizable → honest null, never throws.
  */
 
 const round3 = value => Math.round(value * 1000) / 1000;
 
 const finiteNum = value => (typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null);
 
-/** Normaliza un 1X2 crudo a suma 1. Null si falta algún lado o la suma es 0. */
+/** Normalizes a raw 1X2 to sum 1. Null if a side is missing or the sum is 0. */
 export function normalizeOneX2(raw) {
   const home = finiteNum(raw?.home);
   const draw = finiteNum(raw?.draw);
@@ -32,7 +32,7 @@ export function deriveDoubleChance(oneX2) {
   };
 }
 
-/** Resultado sin empate derivado de un resultado normalizado. */
+/** Draw-no-bet derived from a normalized result. */
 export function deriveDnb(oneX2) {
   if (!oneX2 || oneX2.home == null || oneX2.away == null) return null;
   const total = oneX2.home + oneX2.away;
@@ -41,15 +41,15 @@ export function deriveDnb(oneX2) {
   return { home, away: round3(1 - home) };
 }
 
-/** Decisividad: distancia entre local y visita. 0 cuando no hay lectura. */
+/** Decisiveness: distance between home and away. 0 when there is no reading. */
 export function decisiveness(oneX2) {
   if (!oneX2 || oneX2.home == null || oneX2.away == null) return 0;
   return Math.abs(oneX2.home - oneX2.away);
 }
 
 /**
- * Elige la lectura menos conservadora (la más decisiva).
- * Devuelve 'bz' | 'af' | null. Empate → 'bz' (Bzzoiro manda el waffle).
+ * Chooses the least conservative reading (the most decisive).
+ * Returns 'bz' | 'af' | null. Tie → 'bz' (Bzzoiro owns the waffle).
  */
 export function pickDecisive(bzOneX2, afOneX2) {
   if (bzOneX2 && !afOneX2) return 'bz';

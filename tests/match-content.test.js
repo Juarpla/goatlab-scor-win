@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentUrl } from '../src/lib/match-content.js';
 import { resolveChain } from '../src/lib/llm.js';
-import { compositionProps } from '../src/lib/edit-plan.js';
+import { compositionProps } from '../video-render/contract/edit-plan.js';
 
 const env = { OPENCODE_GO_API_KEY:'a', MISTRAL_API_KEY:'b', WORKERS_AI_API_KEY:'c', CLOUDFLARE_ACCOUNT_ID:'d', SCRIPT_PROVIDER_ORDER:CONTENT_PROVIDER_ORDER };
 test('content priority starts with DeepSeek and keeps the independent analysis default',()=>{

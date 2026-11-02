@@ -143,7 +143,7 @@ test('fetchProviderPrediction gasta una llamada y degrada a null sin clave, sin 
   assert.equal(await fetchProviderPrediction(1557408, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
 });
 
-/** Dos casas con 1X2, over 2.5 y BTTS: promedia y quita el margen. */
+/** Two bookmakers with 1X2, over 2.5 and BTTS: averages and removes the margin. */
 const AF_ODDS = bookmakers => ({ response: [{ bookmakers }] });
 const AF_BOOK = (winner, over, btts) => ({
   bets: [
@@ -164,16 +164,16 @@ test('mapAfOdds convierte cuotas a % justos y suma 1 por mercado', () => {
   assert.ok(sum([mapped.oneX2.home, mapped.oneX2.draw, mapped.oneX2.away]));
   assert.ok(mapped.over25 > 0 && mapped.over25 < 1);
   assert.ok(mapped.btts > 0 && mapped.btts < 1);
-  // El favorito en cuotas (local ~2.05) queda favorito en %.
+  // The odds favorite (home ~2.05) remains the favorite in %.
   assert.ok(mapped.oneX2.home > mapped.oneX2.away);
 });
 
-test('mapAfOdds null-honesto sin casas, sin apuestas o con cuotas inválidas', () => {
+test('mapAfOdds is honest-null without bookmakers, without bets or with invalid odds', () => {
   assert.equal(mapAfOdds({ response: [] }), null);
   assert.equal(mapAfOdds({ response: [{ bookmakers: [] }] }), null);
   assert.equal(mapAfOdds({ response: [{ bookmakers: [{ bets: [] }] }] }), null);
   assert.equal(mapAfOdds(null), null);
-  // Solo BTTS válido: rescata ese mercado.
+  // Only valid BTTS: rescues that market.
   const partial = mapAfOdds(AF_ODDS([{ bets: [{ id: 8, name: 'Both Teams Score', values: [{ value: 'Yes', odd: '1.80' }, { value: 'No', odd: '2.05' }] }] }]));
   assert.equal(partial.oneX2, null);
   assert.equal(partial.over25, null);
@@ -197,7 +197,7 @@ test('fetchAfOdds gasta una llamada y degrada a null sin clave, sin id o con err
   assert.equal(await fetchAfOdds(1570400, { env: { API_FOOTBALL_KEY: 'af' }, paceMs: 0, fetchImpl: async () => new Response('', { status: 429 }) }), null);
 });
 
-/** Estadísticas AF por equipo: tipos a claves del acta, posesión en % y '-' como null. */
+/** AF per-team statistics: types to scorecard keys, possession in % and '-' as null. */
 const AF_STATS_SIDE = (team, stats) => ({ team: { name: team }, statistics: stats });
 const stat = (type, value) => ({ type, value });
 const AF_STATS = { response: [

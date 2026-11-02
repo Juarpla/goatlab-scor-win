@@ -8,18 +8,69 @@ remote worker and no Fly.io: everything runs on this machine.
 
 ```
 video-render/
-  engine/                 engine: preparation, transcription, alignment, caches
-  render/remotion/        Remotion project, kit, assets, bundle and render
-  STYLE.md                preferences and lessons (versioned)
-  videos/                 delivered MP4s (ignored by git)
-  work/                   plans, QA and references (ignored by git)
+  contract/                  shared constants and plan/timing rules
+  pipeline/                  numbered stages in execution order
+    00-io.mjs                ffprobe duration and atomic JSON writes
+    01-voice.mjs             speed-up policy for the voice
+    02-transcribe.mjs        Mistral (Voxtral) with whisper.cpp fallback
+    03-reference-timing.mjs  script/word alignment
+    04-photo-normalize.mjs   image sizing
+    05-photo-cache.mjs       photo download and cache
+    06-clip-cache.mjs        clip download and cache
+    07-prepare.mjs           immutable prepared.json
+    08-author.mjs            plan -> renderer props
+    09-render.mjs            renderer capture
+    10-mux.mjs               voice + bed mix
+  render/                    pluggable renderers
+    index.mjs                registry and interface
+    remotion/                Remotion implementation
+      compositions/          React compositions
+      kit/                   design kit
+      assets/                font and brand
+  cli/render.mjs             command-line entry point
+  bench/render-input.mjs     benchmark fixture helper
+  assets/                    background bed (independent of the renderer)
+  audios/<match-id>/         voice recordings (ignored by git)
+  videos/<match-id>/         delivered MP4s (ignored by git)
+  videos/tests/              test renders (ignored by git)
+  work/<match-id>/           plans, manifests and QA (ignored by git)
+  tests/fixtures/audio/      three versioned audio fixtures
+  STYLE.md                   preferences and lessons
 ```
 
-- `engine/short-job.mjs` orchestrates voice, transcription, photos, clips and composition.
-- `engine/transcribe.mjs` uses Mistral (Voxtral) and falls back to whisper.cpp.
-- `engine/reference-timing.mjs` aligns the script with the heard words.
-- `render/remotion/authored-composition.mjs` validates and compiles the JSX plan.
-- `render/remotion/remotion-render.mjs` captures and encodes.
+## Renderer interface
+
+`render/index.mjs` exposes `getRenderer(name)`. `VIDEO_RENDERER` selects the
+implementation (default `remotion`). A renderer is a module exporting:
+
+| Export | Contract |
+| --- | --- |
+| `name` | matches its key in the registry |
+| `props(prepared, plan)` | validates the plan and returns `composition.json` |
+| `materialize(tmp)` | copies the renderer's own assets into the job folder |
+| `render(tmp, out, opts)` | writes the silent MP4 and returns metrics |
+
+`pipeline/` imports only `render/index.mjs`, never `render/<technology>`. To add
+a technology, create `render/<name>/index.mjs`, register it in
+`render/index.mjs`, and set `VIDEO_RENDERER=<name>`.
+
+## Updating Remotion
+
+Remotion packages are pinned together in `render/remotion/package.json`. The
+upgrade path is one command:
+
+```sh
+npm --prefix video-render/render/remotion run upgrade
+```
+
+`upgrade` installs the latest `remotion` and every `@remotion/*` package at the
+same version and refreshes `package-lock.json`. Keep them in lockstep: Remotion
+requires matching versions across its packages. React 19 is the peer version
+used here. To verify the new version still bundles:
+
+```sh
+node video-render/render/remotion/remotion-build.mjs
+```
 
 ## Requirements
 
@@ -34,24 +85,27 @@ the R2/Agnes keys if media banks are generated.
 
 ## Usage
 
+Put the voice in `video-render/audios/<match-id>/`; the CLI creates the folder
+on the first run and uses the only audio it finds.
+
 ```sh
-node --env-file=.env scripts/render-short.mjs \
+node --env-file=.env video-render/cli/render.mjs \
   --match=real-racing-club-vs-real-madrid-2026-11-01 \
-  --audio="$HOME/Desktop/goatlab-audios/Track-93.m4a" \
   --script=public/data/youtube-scripts/real-racing-club-vs-real-madrid-2026-11-01.json \
   --script-n=6 \
   --plan=video-render/work/<id>/<slug>/plan.json \
-  --out=video-render/videos/<id>-<slug>-v1.mp4 \
   --variant=1 --keep
 ```
 
+- `--audio` is optional; pass it only when the match folder has more than one file.
 - `--script` is optional; with it, subtitles use the script text and Mistral's
   timings. `--script-n` fixes the script; without it, the CLI picks the best match
   against every script in the file.
-- Without `--out`, the MP4 goes to `video-render/videos/`.
-- `--keep` saves `composition.json` next to the MP4.
-- Each render appends an entry to `manifest.json` in the output folder (match,
-  audio, plan, chosen script, score, duration, bytes and date).
+- Without `--out`, the MP4 goes to `video-render/videos/<id>/<id>-v<variant>.mp4`.
+- Recipes live outside the videos folder: `video-render/work/<id>/manifest.json`
+  plus `<stem>.plan.json`. `--keep` also saves `<stem>.composition.json` there.
+- Test renders go to `video-render/videos/tests/` via
+  `--out=video-render/videos/tests/<name>.mp4`.
 - The `video-render` skill contains the full workflow, creative direction and
   authoring guide.
 
@@ -79,4 +133,4 @@ python3 -m unittest discover -s tests/pipeline
 ```
 
 Render tests cover voice preparation, transcription, caches, layout, capture
-budget, JSX bundle and composition contract.
+budget, JSX bundle, the renderer interface and the versioned audio fixtures.

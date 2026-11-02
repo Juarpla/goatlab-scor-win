@@ -1,14 +1,14 @@
 ---
 /**
- * TrendsStrip.astro — el partido en los medios, debajo del último anuncio.
- * Bzzoiro al frente (árbitro, bajas con nombre, dónde ver en Latam y lo que
- * circula); fallback API-Football cuando Bzzoiro no cubre el hueco (bajas
- * publicadas si no hay bajas confirmadas, lectura del proveedor si no hay
- * social, muestra del plantel registrado). Hechos con fuente; lo ausente se
- * omite y sin nada que mostrar la sección no se dibuja, nunca se inventa.
- * Extra (TV/social/árbitro/AF) solo si el pipeline lo trae en
- * trends-extra.json (+ afPrediction del JSON del partido). Los iconos siguen
- * el trazo 1.7 del sistema y la lima queda para la señal de cada bloque.
+ * TrendsStrip.astro — the match in the media, below the last ad.
+ * Bzzoiro first (referee, named absences, where to watch in Latam and what
+ * is circulating); API-Football fallback when Bzzoiro does not cover the gap (published
+ * absences if there are no confirmed ones, provider reading if there is no
+ * social, registered squad sample). Facts with a source; missing data is
+ * omitted and with nothing to show the section is not drawn, never invented.
+ * Extra (TV/social/referee/AF) only if the pipeline provides it in
+ * trends-extra.json (+ afPrediction from the match JSON). Icons follow
+ * the system's 1.7 stroke and lime is reserved for each block's signal.
  */
 import Icon from './Icon.astro';
 import { adviceToNeutral } from '../lib/provider-advice.js';
@@ -44,7 +44,7 @@ const { home, away, homeShort = home, awayShort = away, unavailable = null, extr
 const dec1 = (v: number) => v.toFixed(1).replace('.', ',');
 
 const referee = extra?.referee?.name ? extra.referee : null;
-/* Escalas de referencia por métrica: cada barra se mide contra su propio techo. */
+/* Reference scales per metric: each bar is measured against its own ceiling. */
 const refBars = referee ? [
   { label: 'Amarillas', value: referee.avgYellow, max: 6 },
   { label: 'Rojas', value: referee.avgRed, max: 1 },
@@ -61,9 +61,9 @@ const showAbsences = rows.length > 0;
 const broadcasts = (extra?.broadcasts ?? []).filter(b => b.channel).slice(0, 4);
 const posts = (extra?.social ?? []).filter(p => p.text && p.url).slice(0, 3);
 
-/* Fallback API-Football: solo cuando Bzzoiro no cubre ese hueco.
-   Bajas AF si no hay bajas Bzzoiro; lectura AF si no hay social;
-   plantel AF (muestra honesta, sin ranking) siempre que llegue. */
+/* API-Football fallback: only when Bzzoiro does not cover that gap.
+   AF absences if there are no Bzzoiro absences; AF reading if there is no social;
+   AF squad (honest sample, no ranking) whenever it arrives. */
 const afInjuries = (extra?.af?.injuries ?? []).filter(p => p.player && p.team).slice(0, 6);
 const showAfInjuries = !showAbsences && afInjuries.length > 0;
 const afInjuryGroups = (() => {
@@ -84,7 +84,7 @@ const afAdvice = adviceToNeutral(afPrediction?.advice);
 const showAfPrediction = posts.length === 0 && Boolean(afAdvice || afPrediction?.winner);
 const render = Boolean(showReferee || showAbsences || broadcasts.length || posts.length || showAfInjuries || showAfSquad || showAfPrediction);
 
-/* Llave del marco: una pieza por bloque presente, cada una con su icono. */
+/* Frame key: one piece per present block, each with its icon. */
 const keys: { icon: string; label: string }[] = [];
 if (showReferee) keys.push({ icon: 'whistle', label: 'Quién pita' });
 if (showAbsences) keys.push({ icon: 'medical', label: 'Quién falta' });

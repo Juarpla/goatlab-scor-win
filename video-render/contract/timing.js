@@ -1,6 +1,6 @@
 /**
- * Tiempos de un Short: la transcripción es el texto, tomas de 2 a 4 s,
- * páginas de subtítulo y cifras en el instante en que se dicen.
+ * Short timing: the transcription is the text, 2 to 4 s shots,
+ * subtitle pages and figures at the instant they are spoken.
  */
 
 export const SHOT_MIN = 2;
@@ -20,7 +20,7 @@ function round3(n) {
   return Math.round(n * 1000) / 1000;
 }
 
-/** El texto en pantalla es lo que se oyó, con sus tiempos. */
+/** On-screen text is what was heard, with its timings. */
 export function cuesFromHeard(heard) {
   const clean = (heard ?? [])
     .filter(h => h && Number.isFinite(h.start) && Number.isFinite(h.end) && String(h.word ?? '').trim())
@@ -34,7 +34,7 @@ export function cuesFromHeard(heard) {
   });
 }
 
-/** Suma `offset` segundos a cada palabra (la voz entra tarde). */
+/** Adds `offset` seconds to each word (the voice enters late). */
 export function shiftWords(words, offset) {
   return (words ?? []).map(w => ({ ...w, start: round3(w.start + offset), end: round3(w.end + offset) }));
 }
@@ -42,9 +42,9 @@ export function shiftWords(words, offset) {
 const PUNCT_END = /[.,;:?!…]["»”)]*$/;
 
 /**
- * Tomas de SHOT_MIN a SHOT_MAX segundos sobre [0, span]. Corta al final de
- * una frase si cae dentro de la ventana; si no, en la palabra más cercana a
- * 3 s. `photo` rota sobre `photoCount`.
+ * Shots from SHOT_MIN to SHOT_MAX seconds over [0, span]. Cuts at the end of
+ * a sentence if it falls inside the window; otherwise at the word nearest to
+ * 3 s. `photo` rotates over `photoCount`.
  */
 export function planShots(words, span, photoCount) {
   const total = Number(span) > 0 ? Number(span) : 0;
@@ -77,8 +77,8 @@ export function planShots(words, span, photoCount) {
 }
 
 /**
- * Páginas de hasta PAGE_WORDS palabras. Una página se cierra en la
- * puntuación. `index` es la posición de la palabra en `words`.
+ * Pages of up to PAGE_WORDS words. A page closes at
+ * punctuation. `index` is the word position in `words`.
  */
 export function captionPages(words, maxWords = PAGE_WORDS) {
   const pages = [];
@@ -112,9 +112,9 @@ const WORD_NUM = {
 };
 
 /**
- * Hasta `limit` cifras distintas, en el instante en que se dicen.
- * Acepta dígitos y números dichos en español («cuatro»).
- * `value` es null si la cifra no admite count-up (por ejemplo `3-0`).
+ * Up to `limit` distinct figures, at the instant they are spoken.
+ * Accepts digits and numbers spoken in Spanish ("cuatro").
+ * `value` is null if the figure does not allow count-up (for example `3-0`).
  */
 export function figuresFromWords(words, limit = 3) {
   const out = [];

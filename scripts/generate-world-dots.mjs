@@ -1,18 +1,18 @@
 /**
- * Genera el mapa de puntos del mundo para la región "jornada" de la portada.
+ * Generates the world dot map for the home page's "matchday" region.
  *
- * Fuente de la geometría: land-110m.json de world-atlas v2 (Natural Earth,
- * dominio público, https://github.com/topojson/world-atlas). El script decodifica
- * el TopoJSON, muestrea el interior de tierra firme en una retícula de 2° y
- * pinta un punto por celda en un PNG plano cuyo fondo coincide con la superficie
- * mate del sitio (#181e1a). Los pines de sedes se posicionan por porcentaje con
- * la misma proyección equirectangular (x = (lon+180)/360, y = (90-lat)/180
- * recortada a LAT_TOP..LAT_BOTTOM), así que el PNG y los pines quedan alineados
- * por construcción.
+ * Geometry source: land-110m.json from world-atlas v2 (Natural Earth,
+ * public domain, https://github.com/topojson/world-atlas). The script decodes
+ * the TopoJSON, samples land interiors on a 2° grid and
+ * paints one dot per cell into a flat PNG whose background matches the site's
+ * matte surface (#181e1a). Venue pins are positioned by percentage with
+ * the same equirectangular projection (x = (lon+180)/360, y = (90-lat)/180
+ * cropped to LAT_TOP..LAT_BOTTOM), so the PNG and pins stay aligned
+ * by construction.
  *
- * Uso:  curl -sL https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json -o land-110m.json
- *       node scripts/generate-world-dots.mjs land-110m.json
- * Salida: public/img/world-dots.png (se sobrescribe).
+ * Usage:  curl -sL https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json -o land-110m.json
+ *         node scripts/generate-world-dots.mjs land-110m.json
+ * Output: public/img/world-dots.png (overwritten).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
@@ -20,7 +20,7 @@ import { deflateSync } from 'node:zlib';
 const SEA = [24, 30, 26];    // var(--surface) #181e1a
 const LAND = [58, 69, 60];   // punto de tierra, tono entre --line y --raised
 
-// Retícula: 2° por celda; recorte vertical para descartar el océano vacío.
+// Grid: 2° per cell; vertical crop to discard empty ocean.
 const STEP = 2;
 const LAT_TOP = 78;
 const LAT_BOTTOM = -58;

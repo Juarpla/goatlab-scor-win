@@ -1,58 +1,58 @@
-# Generación de contenido — 25 de octubre de 2026
+# Content generation — October 25, 2026
 
-Se probaron los diez guiones de Manchester United–Bournemouth con los hechos
-y jugadores locales (sin archivo de probabilidades para ese partido), a través del mismo gateway OpenCode Go que
-utiliza la publicación. Los borradores de prueba no se publicaron ni sustituyeron
-los guiones existentes. Son pocas observaciones de un solo partido; no representan
-un percentil de latencia ni garantizan tiempos para todas las corridas.
+The ten Manchester United-Bournemouth scripts were tested with the local facts
+and players (no probability file for that match), through the same OpenCode Go
+gateway used by publishing. Test drafts were not published and did not replace
+existing scripts. These are a few observations from a single match; they do not
+represent a latency percentile or guarantee times for every run.
 
-## Hallazgos y configuración
+## Findings and configuration
 
-- Tanto en local como en GitHub Actions, DeepSeek V4.1 Flash escribe primero y
-  GLM-5.3-Flash queda como respaldo, mediante `SCRIPT_PROVIDER_ORDER` y los valores
-  por defecto del generador y del workflow. La configuración de modelos de Fly.io
-  conserva sus valores anteriores.
-- Ambos reciben `thinking.type=enabled` y `reasoning_effort=max`.
-- El presupuesto anterior de 12.000 tokens era insuficiente para estas pruebas:
-  GLM agotó incluso 32.768 tokens en dos intentos (178 y 197 segundos).
-- Un intento GLM sin streaming se cortó a los 301 segundos pese a configurar
-  un timeout de 600 segundos. El cliente ahora consume SSE desde el inicio y
-  conserva un deadline de diez minutos para toda la respuesta, incluidos sus datos.
-- Se permiten hasta 131.072 tokens para compartir entre razonamiento y respuesta;
-  ese techo no es un objetivo de consumo. Se mantienen los límites de duración
-  de los guiones: 55–100 palabras, con techo absoluto de 110.
+- Both locally and in GitHub Actions, DeepSeek V4.1 Flash writes first and
+  GLM-5.3-Flash remains the fallback, through `SCRIPT_PROVIDER_ORDER` and the
+  generator and workflow defaults. The Fly.io model configuration keeps its
+  previous values.
+- Both receive `thinking.type=enabled` and `reasoning_effort=max`.
+- The previous 12,000-token budget was insufficient for these tests: GLM exhausted
+  even 32,768 tokens in two attempts (178 and 197 seconds).
+- A GLM attempt without streaming was cut off at 301 seconds despite configuring a
+  600-second timeout. The client now consumes SSE from the start and keeps a
+  ten-minute deadline for the whole response, including its data.
+- Up to 131,072 tokens are allowed, shared between reasoning and response; that
+  ceiling is not a consumption target. Script duration limits remain: 55-100
+  words, with an absolute ceiling of 110.
 
-## Mediciones
+## Measurements
 
-| Modelo y configuración | Tiempo total | Tokens de salida | Validación de los diez guiones |
+| Model and configuration | Total time | Output tokens | Validation of the ten scripts |
 | --- | ---: | ---: | --- |
-| DeepSeek, max, 65.536 tokens, sin streaming | 80,4 s | 17.885 | Correcta |
-| DeepSeek, max, 65.536 tokens, sin streaming | 177,8 s | 32.671 | Correcta |
-| DeepSeek, max, 131.072 tokens, streaming | 116,0 s | 13.128 | Correcta |
-| GLM, max, 131.072 tokens, streaming | 223,1 s | 19.892 | Correcta tras normalizar el gancho |
+| DeepSeek, max, 65,536 tokens, no streaming | 80.4 s | 17,885 | Passed |
+| DeepSeek, max, 65,536 tokens, no streaming | 177.8 s | 32,671 | Passed |
+| DeepSeek, max, 131,072 tokens, streaming | 116.0 s | 13,128 | Passed |
+| GLM, max, 131,072 tokens, streaming | 223.1 s | 19,892 | Passed after normalizing the hook |
 
-GLM devolvió los ganchos en su campo separado; se antepusieron a las narraciones
-con la misma normalización que ya emplea la generación de producción. Los textos
-normalizados mantienen el techo de 110 palabras y pasan la validación completa.
+GLM returned the hooks in their separate field; they were prepended to the
+narrations with the same normalization already used by production generation. The
+normalized texts keep the 110-word ceiling and pass full validation.
 
-Los tokens de salida incluyen razonamiento. La validación comprueba longitud,
-ganchos, equipos, ubicación de jugadores, frases de proyección, cifras y compliance.
-La coherencia y la naturalidad también se revisaron leyendo los borradores.
+Output tokens include reasoning. Validation checks length, hooks, teams, player
+placement, projection phrases, figures and compliance. Coherence and naturalness
+were also reviewed by reading the drafts.
 
-## Reproducción
+## Reproduction
 
 ```sh
 node --env-file=.env scripts/benchmark-content-llm.mjs \
   --match=manchester-united-vs-bournemouth-2026-10-25 --runs=2
 ```
 
-Los borradores y métricas quedan en un subdirectorio de
-`.cache/content-llm-benchmark/`. `--model=<id>` permite aislar un modelo y
-`--max-tokens=<n>` comparar un presupuesto distinto. Los archivos `.env` y las
-credenciales no se escriben en los resultados.
+Drafts and metrics are left in a subdirectory of
+`.cache/content-llm-benchmark/`. `--model=<id>` isolates one model and
+`--max-tokens=<n>` compares a different budget. `.env` files and credentials are
+not written into the results.
 
-La compatibilidad de esfuerzo máximo se contrastó con la documentación de
+Maximum-effort compatibility was checked against the documentation for
 [DeepSeek](https://api-docs.deepseek.com/guides/thinking_mode/),
-[GLM](https://docs.z.ai/api-reference/llm/chat-completion) y el
-[endpoint de OpenCode Go](https://opencode.ai/v2/docs/console/go/), además de las
-llamadas reales.
+[GLM](https://docs.z.ai/api-reference/llm/chat-completion) and the
+[OpenCode Go endpoint](https://opencode.ai/v2/docs/console/go/), in addition to
+the real calls.

@@ -21,8 +21,8 @@ test (same quality, more weight and an extra toolchain).
 - Spanish subtitles, readable and synchronized with `words`.
 - Background music is mandatory: `plan.music: true`.
 - One video per audio.
-- Input audios: `~/Desktop/goatlab-audios/`.
-- Deliveries: `video-render/videos/`.
+- Input audios: `video-render/audios/<id>/`.
+- Deliveries: `video-render/videos/<id>/`.
 - The only fixed editorial element is the GoatLab logo in the last second.
 - Permanent visual preference: vivid color, sharp and well-lit image, no dark or
   murky passages. `references/creative.md` turns this into rules.
@@ -31,11 +31,13 @@ test (same quality, more weight and an extra toolchain).
 
 | What | Where |
 | --- | --- |
-| Render CLI | `scripts/render-short.mjs` |
-| Engine | `video-render/engine/` |
+| Render CLI | `video-render/cli/render.mjs` |
+| Pipeline | `video-render/pipeline/` (stages 00–10) |
+| Renderer registry | `video-render/render/index.mjs` |
 | Remotion project, kit and assets | `video-render/render/remotion/` |
 | Plans, QA and references | `video-render/work/<id>/<slug>/` |
-| Delivered MP4s | `video-render/videos/` |
+| Delivered MP4s | `video-render/videos/<id>/` |
+| Recipes (manifest and plan) | `video-render/work/<id>/` |
 
 `<slug>` is a short kebab-case label for the audio, for example `script-3` or the
 file name. Never reuse a slug for another audio.
@@ -44,14 +46,14 @@ file name. Never reuse a slug for another audio.
 
 The YouTube script is the master text; Mistral provides the clock.
 
-1. `video-render/engine/transcribe.mjs` sends a 16 kHz mono FLAC to Mistral
+1. `video-render/pipeline/02-transcribe.mjs` sends a 16 kHz mono FLAC to Mistral
    (Voxtral) with `timestamp_granularities=word`. If Mistral fails, takes longer
    than 45 s or hears nothing, local whisper.cpp runs.
-2. `video-render/engine/reference-timing.mjs` aligns the script tokens with the
+2. `video-render/pipeline/03-reference-timing.mjs` aligns the script tokens with the
    heard tokens using Levenshtein over normalized words (no accents, canonical
    numbers). Script words inherit the heard timings; a name that Mistral splits
    keeps the full span; unmatched words are interpolated between neighbors.
-3. `scripts/render-short.mjs` logs `guion: NN% de coincidencia` and uses the
+3. `video-render/cli/render.mjs` logs `guion: NN% de coincidencia` and uses the
    aligned text only if `NN >= 50`. Below that it falls back to Mistral's raw
    words: a wrong reference is worse than an approximate transcription.
 4. `words` reaches the composition already offset by the 0.5 s intro. The plan
@@ -104,9 +106,9 @@ Closure criterion: the user chose an `id` and an audio exists for that match.
 
 ## Step 2 — Prepare the audio
 
-Look in `~/Desktop/goatlab-audios/` for a file whose name starts with the `id`.
-When a batch arrives, inventory the folder and assign each file to an `id` before
-rendering anything.
+Look in `video-render/audios/<id>/` for the recording. The CLI creates that folder
+on the first run. When a batch arrives, inventory the recordings and assign each
+file to an `id` before rendering anything.
 
 If the files are numbered (for example `Track-78.m4a`), do not trust the name:
 identify the match from the first seconds of voice. This helper prints the Mistral
@@ -118,7 +120,7 @@ TMP="video-render/work/<id>/<slug>"
 mkdir -p "$TMP"
 ffmpeg -y -loglevel error -t 20 -i "$AUDIO" -ac 1 -ar 16000 "$TMP/identify.flac"
 VOICE_FLAC="$TMP/identify.flac" node --env-file=.env --input-type=module -e "
-const { mistral } = await import('./video-render/engine/transcribe.mjs');
+const { mistral } = await import('./video-render/pipeline/02-transcribe.mjs');
 const words = await mistral({ flac: process.env.VOICE_FLAC, env: process.env, fetchImpl: fetch });
 console.log(words.map(w => w.word).join(' '));
 "
@@ -262,16 +264,19 @@ Closure criterion: the JSON parses, the code has a default export, `music` is
 ```sh
 CAPTURE_BUDGET_MS=3600000 CAPTURE_TIMEOUT_MS=3600000 RENDER_WORKERS=4 \
 LAYOUT_CHECK=advisory RENDER_CRF=23 \
-node --env-file=.env scripts/render-short.mjs \
+node --env-file=.env video-render/cli/render.mjs \
   --match=<id> \
-  --audio="$HOME/Desktop/goatlab-audios/<file>" \
   --script="public/data/youtube-scripts/<id>.json" \
   --script-n=<n> \
   --plan="video-render/work/<id>/<slug>/plan.json" \
-  --out="video-render/videos/<id>-<slug>-v1.mp4" \
   --variant=1 \
   --keep
 ```
+
+- Audio defaults to the only file in `video-render/audios/<id>/`; add
+  `--audio=` only when the folder holds more than one recording.
+- Output defaults to `video-render/videos/<id>/<id>-<audio>-v1.mp4`. Pass `--out`
+  to name the file explicitly.
 
 - `CAPTURE_BUDGET_MS=3600000` allows one hour of capture for advanced effects.
   `CAPTURE_TIMEOUT_MS` must match: the default is 20 minutes and would cancel a
@@ -294,7 +299,7 @@ node --env-file=.env scripts/render-short.mjs \
 | `guion:` below 50 | write a corrected reference and re-render |
 | `compilación` / `compilación JSX` | fix imports or JSX |
 | `presupuesto de captura` | raise `CAPTURE_BUDGET_MS` or simplify the most expensive scene |
-| `falta la música de fondo` | restore `video-render/render/remotion/assets/bed.mp3` |
+| `falta la música de fondo` | restore `video-render/assets/bed.mp3` |
 | `MP4 fuera del contrato` | check duration, format or size; re-encode if needed |
 
 If an MP4 reaches 45 MB, re-encode only that file:
@@ -356,15 +361,15 @@ acceptable or you used the corrected reference.
 
 ## Step 7 — Deliver
 
-Leave the MP4 in `video-render/videos/`. Do not delete the original audio or the
+Leave the MP4 in `video-render/videos/<id>/`. Do not delete the original audio or the
 plan. Reply with:
 
 - the file path;
 - one sentence about the concept (style, clips used, effects);
 - any limitation (missing clip, sped-up audio, alignment fallback, and so on).
 
-For several audios, name each output `<id>-<slug>-v1.mp4` and verify and deliver
-each one separately; one failure must not block the rest.
+For several audios, keep one output per audio in `video-render/videos/<id>/` and
+verify and deliver each one separately; one failure must not block the rest.
 
 ## Several videos in parallel
 
@@ -376,7 +381,7 @@ destroy each other. Give each concurrent render its own identity:
 | --- | --- |
 | Temp dir | Unique `--variant` per process. |
 | Plan and QA | `video-render/work/<id>/<slug>/…`, one slug per audio. |
-| Output | `<id>-<slug>-v1.mp4`; `--keep` writes the JSON next to it. |
+| Output | `video-render/videos/<id>/<id>-<audio>-v<n>.mp4`; `--keep` writes the composition to `video-render/work/<id>/`. |
 | Media cache | Different matches: the shared cache is safe (keys by URL hash). Same match: `PHOTO_CACHE_DIR="video-render/work/<id>/<slug>/photos"` for a private cache. |
 | CPU | 2 to 3 concurrent renders with `RENDER_WORKERS=3` each. Never launch ten. |
 

@@ -1,25 +1,25 @@
 /**
- * Google AdSense — configuración central.
+ * Google AdSense — central configuration.
  *
- * Sitio en revisión: https://goatlab.win
- * Fuente única del Publisher ID: variable de entorno
- * PUBLIC_ADSENSE_PUBLISHER_ID en crudo (pub-XXXXXXXXXXXXXXXX, sin prefijos).
- * Si viene con prefijo ca- o con basura, se normaliza; sin variable,
- * se usa el ID literal (no es secreto: viaja en el HTML y en ads.txt).
+ * Site under review: https://goatlab.win
+ * Single source for the Publisher ID: environment variable
+ * PUBLIC_ADSENSE_PUBLISHER_ID in raw form (pub-XXXXXXXXXXXXXXXX, no prefixes).
+ * If it comes with a ca- prefix or junk, it is normalized; without the variable,
+ * the literal ID is used (it is not secret: it travels in the HTML and ads.txt).
  *
- * Dónde va cada formato:
- * - PUBLISHER_ID (pub-...) → ads.txt y Funding Choices. Nada delante.
- * - AD_CLIENT (ca-pub-...) → script adsbygoogle.js y data-ad-slot. Solo ahí.
+ * Where each format goes:
+ * - PUBLISHER_ID (pub-...) → ads.txt and Funding Choices. Nothing in front.
+ * - AD_CLIENT (ca-pub-...) → adsbygoogle.js script and data-ad-slot. Only there.
  *
- * Flujo de revisión (solo Publisher ID, sin slots):
- * 1. ADS_VERIFICATION activa el script en <head>.
- * 2. Auto Ads se activa desde el panel de AdSense, sin data-ad-slot.
- * 3. scripts/write-ads-txt.mjs genera public/ads.txt desde esta misma fuente.
+ * Review flow (Publisher ID only, no slots):
+ * 1. ADS_VERIFICATION enables the script in <head>.
+ * 2. Auto Ads is enabled from the AdSense panel, without data-ad-slot.
+ * 3. scripts/write-ads-txt.mjs generates public/ads.txt from this same source.
  *
- * Tras la aprobación:
- * 1. Crea las unidades en AdSense y pega cada data-ad-slot en AD_SLOTS.
- * 2. ADS_ACTIVE se enciende solo cuando hay al menos un slot con ID.
- * 3. Cada <AdSlot/> sin slot permanece oculto.
+ * After approval:
+ * 1. Create the units in AdSense and paste each data-ad-slot into AD_SLOTS.
+ * 2. ADS_ACTIVE turns on only when there is at least one slot with an ID.
+ * 3. Every <AdSlot/> without a slot stays hidden.
  */
 const cleaned = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID ?? '').trim().replace(/^ca-/i, '');
 
@@ -28,37 +28,37 @@ export const PUBLISHER_ID = /^pub-\d+$/.test(cleaned) ? cleaned : 'pub-197248716
 export const AD_CLIENT = `ca-${PUBLISHER_ID}`;
 
 export const AD_SLOTS = {
-  /** Metodología · tras el capítulo 1 (horizontal) */
+  /** Methodology · after chapter 1 (horizontal) */
   metoCap1: '',
-  /** Metodología · tras el capítulo 2 (rectangular) */
+  /** Methodology · after chapter 2 (rectangular) */
   metoCap2: '',
-  /** Metodología · cierre (horizontal) */
+  /** Methodology · close (horizontal) */
   metoCierre: '',
-  /** Contacto · tras el capítulo 2 (rectangular) */
+  /** Contact · after chapter 2 (rectangular) */
   contactoCap2: '',
-  /** Contacto · cierre del relato (horizontal) */
+  /** Contact · story close (horizontal) */
   contactoCierre: '',
-  /** Partido · tras la cabecera del encuentro (rectangular) */
+  /** Match · after the fixture header (rectangular) */
   partidoPrevio: '',
-  /** Partido · tras el relato por capítulos (rectangular) */
+  /** Match · after the chapter story (rectangular) */
   partidoStory: '',
-  /** Partido · tras la cancha (horizontal) */
+  /** Match · after the pitch (horizontal) */
   partidoCancha: '',
-  /** Partido · cierre, antes del pie (rectangular) */
+  /** Match · close, before the footer (rectangular) */
   partidoCierre: '',
 } as const;
 
 export type AdSlotKey = keyof typeof AD_SLOTS;
 
 /**
- * Verificación para revisión: basta el Publisher ID.
- * Carga adsbygoogle.js en <head> de las páginas editoriales indexables.
+ * Verification for review: the Publisher ID is enough.
+ * Loads adsbygoogle.js in <head> of indexable editorial pages.
  */
 export const ADS_VERIFICATION = Boolean(AD_CLIENT);
 
 /**
- * Anuncios manuales: solo cuando hay al menos un slot con ID real.
- * Durante la revisión (solo Publisher ID + Auto Ads) es false a propósito:
- * los <AdSlot/> permanecen ocultos y no hacen push() vacío.
+ * Manual ads: only when there is at least one slot with a real ID.
+ * During review (Publisher ID only + Auto Ads) it is false on purpose:
+ * <AdSlot/> stays hidden and does not push() empty.
  */
 export const ADS_ACTIVE = Object.values(AD_SLOTS).some(Boolean);

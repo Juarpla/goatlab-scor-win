@@ -1,25 +1,25 @@
 /**
- * Diccionario canónico de equipos (one-off + refresco manual).
+ * Canonical team dictionary (one-off + manual refresh).
  *
- * Fuente por proveedor, temporada vigente europea 2026 (=2026/27) y
+ * Source per provider, current European season 2026 (=2026/27) and
  * Libertadores 2026:
- * - Bzzoiro: standings por liga -> team_id real vigente (10 req de 7.500/dia).
+ * - Bzzoiro: standings per league -> current real team_id (10 req of 7,500/day).
  * - Football-Data.org: /competitions/{PL|PD|CL}/teams?season=2026 (3-4 req,
- *   10/min; Europa sin `fd`, CLI puede no estar en free -> null honesto).
- * - API-Football: free bloquea season>=2025, asi que el roster sale de
- *   /teams?league&season=2024 (5 req de 100/dia, `bridged:true`) y los ids
- *   2026 observados se cosechan de /fixtures?date= (hasta 3 req, las
- *   respuestas traen teams.home/away.id reales; `bridged:false`).
+ *   10/min; Europa has no `fd`, the CLI may not be on free -> honest null).
+ * - API-Football: free blocks season>=2025, so the roster comes from
+ *   /teams?league&season=2024 (5 req of 100/day, `bridged:true`) and observed
+ *   2026 ids are harvested from /fixtures?date= (up to 3 req; responses
+ *   include real teams.home/away.id; `bridged:false`).
  *
- * La lista la manda Bzzoiro 2026 (alcance: solo vigentes). Los ids AF/FD se
- * emparejan por nombre: primero igualdad exacta, luego tolerante
- * (sameClub/sameTeam) con desambiguación — un candidato tolerante cuyo
- * nombre es el nombre exacto de OTRA fila Bzzoiro de la liga (p. ej.
- * "Northern Ireland" frente a "Ireland") no puentea ids; sin pareja
- * honesta el campo queda null, nunca se inventa. Los slugs congelados
- * (`frozen:true`) se conservan entre corridas.
+ * Bzzoiro 2026 owns the list (scope: active teams only). AF/FD ids are
+ * matched by name: exact equality first, then tolerant matching
+ * (sameClub/sameTeam) with disambiguation — a tolerant candidate whose
+ * name is the exact name of ANOTHER Bzzoiro row in the league (e.g.
+ * "Northern Ireland" versus "Ireland") does not bridge ids; without an
+ * honest match the field stays null, never invented. Frozen slugs
+ * (`frozen:true`) are kept between runs.
  *
- * Uso: node --env-file=.env scripts/build-teams.mjs
+ * Usage: node --env-file=.env scripts/build-teams.mjs
  */
 import { writeFile, readFile } from 'node:fs/promises';
 import { competitions } from '../src/lib/football.js';
@@ -54,7 +54,7 @@ export function matchIn(name, candidates, claimed = null) {
   for (const pool of pools) {
     const exact = pool.filter(c => normalize(c.name) === normalize(name.name));
     if (exact.length) return exact.length===1?exact[0]:null;
-    // El puente tolerante no roba nombres exactos de otra fila de la liga.
+    // The tolerant bridge does not steal exact names from another league row.
     const hits = pool.filter(c => (sameClub(c.name, name.name) || sameTeam(c.name, name.name))
       && !(claimed?.has(`${name.league}|${normalize(c.name)}`) && normalize(c.name) !== normalize(name.name)));
     if (hits.length === 1) return hits[0];
@@ -68,8 +68,8 @@ async function main() {
   const frozenBySlug = new Map(Object.entries(previous.teams ?? {}).filter(([, e]) => e?.frozen).map(([s, e]) => [s, e]));
   const frozenByName = new Map([...frozenBySlug].map(([s, e]) => [normalize(e.display ?? e.name ?? s), s]));
 
-  // Bzzoiro manda: standings vigentes por liga. El catálogo vive en leagues.json;
-  // durante la migración se acepta el mapa viejo de teams.json.
+  // Bzzoiro leads: current standings per league. The catalog lives in leagues.json;
+  // during migration the old teams.json map is accepted.
   const legacyLeagues = JSON.parse(await readFile('public/data/teams.json', 'utf8').catch(() => '{}')).leagues ?? null;
   const bzRows = [];
   for (const comp of competitions) {
@@ -84,11 +84,11 @@ async function main() {
     }
   }
   if (!bzRows.length) throw new Error('Sin filas Bzzoiro; revisa BZZOIRO_API_TOKEN');
-  // Nombres exactos por liga según Bzzoiro: el puente tolerante no puede
-  // reclamar el de otra fila (Irlanda frente a Irlanda del Norte).
+  // Exact names per league according to Bzzoiro: the tolerant bridge cannot
+  // claim another row's name (Ireland versus Northern Ireland).
   const claimed = new Set(bzRows.map(row => `${row.league}|${normalize(row.name)}`));
 
-  // API-Football: roster 2024 + cosecha 2026 via fixtures?date= (team ids reales).
+  // API-Football: 2024 roster + 2026 harvest via fixtures?date= (real team ids).
   const afRoster = [];
   const afHarvest = new Map();
   if (env.API_FOOTBALL_KEY) {
@@ -106,7 +106,7 @@ async function main() {
         }
       } catch (error) { console.warn(`AF roster ${comp.id}: ${error.message}`); }
     }
-    // El plan free solo sirve ayer..mañana; los dias fuera devuelven `errors`.
+    // The free plan only serves yesterday..tomorrow; days outside return `errors`.
     const today = new Date().toISOString().slice(0, 10);
     for (const offset of [-1, 0, 1]) {
       const day = new Date(`${today}T00:00:00Z`);
@@ -129,7 +129,7 @@ async function main() {
     }
   }
 
-  // Football-Data.org: plantillas 2026 (Europa exceptuada: sin `fd` en free).
+  // Football-Data.org: 2026 squads (Europa excluded: no `fd` on free).
   const fdRows = [];
   if (env.FOOTBALL_DATA_KEY) {
     for (const comp of competitions) {
@@ -148,7 +148,7 @@ async function main() {
     }
   }
 
-  // Fusión: una entrada por club vigente (clave slug congelable).
+  // Merge: one entry per active club (freezable slug key).
   const teams = {};
   const claim = (base, league) => {
     let slug = frozenByName.get(normalize(base)) ?? slugify(base);
@@ -179,8 +179,8 @@ async function main() {
       if (value && !entry.aliases.some(a => sameClub(a, value)) && !sameClub(entry.display, value)) entry.aliases.push(value);
     };
 
-    // Cosecha 2026 solo misma liga y primero igualdad exacta: el pool global
-    // trae todo el mundo (p. ej. "Barcelona SC") y el match tolerante morderia.
+    // 2026 harvest only same league and exact equality first: the global pool
+    // brings the whole world (e.g. "Barcelona SC") and tolerant matching would bite.
     const harvestPool = [...afHarvest.values()].filter(h => h.league === bz.league);
     const harvest = matchIn({ league: bz.league, name: bz.name }, harvestPool, claimed);
     const roster = harvest ?? matchIn({ league: bz.league, name: bz.name }, afRoster, claimed);

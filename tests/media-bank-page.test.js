@@ -16,7 +16,7 @@ function clip(file, url = `https://goatlab-gateway.fly.dev/media-gen/a-b/${file}
   return { id: `a-b-clip-0`, source: 'agnes', file, url, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash' };
 }
 
-test('readMediaBank conserva un banco histórico de dos clips como parcial', async t => {
+test('readMediaBank keeps a historical two-clip bank as partial', async t => {
   const dir = await mkdtemp(join(tmpdir(), 'media-bank-')); t.after(() => rm(dir, { recursive: true, force: true }));
   const assets = [asset('a-b-0'), asset('a-b-1'), asset('a-b-2'), asset('a-b-3'), asset('a-b-4'),
     { source: 'external', id: 'x', url: 'https://photos.test/x.jpg' },

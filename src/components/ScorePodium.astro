@@ -1,8 +1,8 @@
 ---
 /**
- * ScorePodium.astro — los marcadores que más repite el cálculo.
- * Tres columnas que crecen al activarse (.grow con escalonado --d):
- * el podio cuenta la historia, el resto acompaña en una línea discreta.
+ * ScorePodium.astro — the scorelines the calculation repeats most.
+ * Three columns that grow on activation (.grow with staggered --d):
+ * the podium tells the story, the rest accompanies in a discreet line.
  */
 interface Score { home: number; away: number; p: number }
 interface Props { title: string; scores: Score[]; rest?: string | null; summary: string }
@@ -12,7 +12,7 @@ const pct = (value: number) => `${Math.round(value * 100)}%`;
 const BASE = 148;
 const top = Math.max(...scores.map(score => score.p), 0.01);
 const colX = [8, 118, 228];
-/* Barras desde cero para que las diferencias se lean; suelo 8px. */
+/* Bars from zero so differences read clearly; 8px floor. */
 const height = (score: Score) => Math.max(8, (score.p / top) * 96);
 ---
 <figure class="podium">

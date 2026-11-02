@@ -7,9 +7,9 @@ import {
   figuresFromWords,
   SHOT_MIN,
   SHOT_MAX,
-} from '../src/lib/timing.js';
+} from '../video-render/contract/timing.js';
 
-test('cuesFromHeard deja el texto oído y sus tiempos', () => {
+test('cuesFromHeard keeps the heard text and its timings', () => {
   const heard = [
     { word: 'Francia', start: 0.2, end: 0.6 },
     { word: 'llega', start: 0.1, end: 0.15 },
@@ -46,7 +46,7 @@ test('planShots corta entre 2 y 4 segundos', () => {
   assert.ok(shots.length >= 3);
 });
 
-test('captionPages corta en la puntuación y a las tres palabras', () => {
+test('captionPages cuts at punctuation and at three words', () => {
   const words = [
     { word: 'España', start: 0, end: 0.4 },
     { word: 'ganó', start: 0.4, end: 0.8 },

@@ -1,8 +1,8 @@
 ---
 /**
  * Barra de probabilidad en SVG. Dos variantes:
- * - 'stack' (por defecto): una pista con segmentos que suman 100%.
- * - 'rows': una barra por segmento, para pares que se solapan (dos resultados combinados).
+ * - 'stack' (default): one track with segments that sum to 100%.
+ * - 'rows': one bar per segment, for overlapping pairs (two combined outcomes).
  */
 interface Segment { label: string; value: number | null; tone?: 'home' | 'away' | 'draw' | 'mute' }
 interface Props { title: string; segments: Segment[]; note?: string; variant?: 'stack' | 'rows' }

@@ -43,7 +43,7 @@ let matches;
 if (onlyMatch) {
   matches = contentMatches(topFile, fixtures.matches, { onlyMatch });
   if (!matches.length && requested) matches = [requested];
-  // --match manual: también vale para un partido ya jugado (FT) que haga falta rehacer.
+  // --match manual: also valid for an already played match (FT) that needs redoing.
   if (!matches.length) matches = (fixtures.matches ?? []).filter(m => m.id === onlyMatch || m.webId === onlyMatch);
   if (!matches.length) {
     try {

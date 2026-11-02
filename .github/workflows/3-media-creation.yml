@@ -5,15 +5,15 @@ on:
   workflow_dispatch:
     inputs:
       match:
-        description: 'ID del partido (webId o id). Vacío = top N'
+        description: 'Match ID (webId or id). Empty = top N'
         required: false
         type: string
       limit:
-        description: 'Tope de partidos por corrida. Vacío = selección manual del ranking y extras'
+        description: 'Match cap per run. Empty = manual ranking selection and extras'
         required: false
         type: string
       mode:
-        description: 'Qué generar'
+        description: 'What to generate'
         type: choice
         default: all
         options: [all, images-only, clips-only]
@@ -39,8 +39,8 @@ jobs:
       MATCH: ${{ inputs.match }}
       LIMIT: ${{ inputs.limit }}
       MEDIA_DRAFT: '1'
-      # La llave debe ser de tipo Token Plan: las llaves Free comparten
-      # otro pozo con 1 RPM de vídeo y se saturan con los clips.
+      # The key must be a Token Plan key: Free keys share another
+      # pool with 1 video RPM and saturate with clips.
       AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
       AGNES_RESOURCE_RETRIES: '3'
       AGNES_IMAGE_MODEL: agnes-image-2.5-flash
@@ -51,7 +51,7 @@ jobs:
       R2_STATE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       R2_STATE_BUCKET: app-states
       R2_STATE_KEY: goatlab/agnes-state.json
-      # R2 es el único almacén de la media (bucket goatlab → partidos/<id>/).
+      # R2 is the only media store (bucket goatlab → partidos/<id>/).
       MEDIA_GEN_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
       R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
       R2_BUCKET: goatlab
@@ -66,7 +66,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - name: Identificar corrida de scripting
+      - name: Identify scripting run
         if: github.event_name != 'workflow_dispatch'
         id: scripting
         uses: actions/github-script@v7
@@ -81,9 +81,9 @@ jobs:
               });
               runId = data.workflow_runs[0]?.id;
             }
-            if (!runId) throw new Error('No hay una selección automática de scripting completada');
+            if (!runId) throw new Error('No completed automatic scripting selection found');
             core.setOutput('run-id', String(runId));
-      - name: Recuperar selección e inputs de scripting
+      - name: Retrieve scripting selection and inputs
         if: github.event_name != 'workflow_dispatch'
         uses: actions/download-artifact@v4
         with:
@@ -91,22 +91,22 @@ jobs:
           run-id: ${{ steps.scripting.outputs.run-id }}
           github-token: ${{ github.token }}
           path: .
-      - name: Aplicar intención automática o manual de scripting
+      - name: Apply automatic or manual scripting intent
         if: github.event_name != 'workflow_dispatch'
         run: node scripts/content-selection.mjs --activate-media
-      - name: Comprobar banco
+      - name: Check bank
         id: check
         run: |
           args=()
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
           node actions/3-media-creation/check-media-complete.mjs "${args[@]}"
-      - name: Preflight del estado privado
+      - name: Private state preflight
         if: steps.check.outputs.complete == 'false'
         run: node actions/3-media-creation/agnes-preflight.mjs
       - uses: pnpm/action-setup@v6
         if: steps.check.outputs.complete == 'false'
-      - name: Instalar dependencias
+      - name: Install dependencies
         if: steps.check.outputs.complete == 'false'
         run: pnpm install --frozen-lockfile
       - uses: actions/setup-python@v6
@@ -116,7 +116,7 @@ jobs:
       - name: ffmpeg
         if: steps.check.outputs.complete == 'false'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: Generar banco Agnes
+      - name: Generate Agnes bank
         id: generate
         if: steps.check.outputs.complete == 'false'
         run: |
@@ -124,14 +124,14 @@ jobs:
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
           pnpm media "${args[@]}"
-      - name: Resumen de generación
+      - name: Generation summary
         if: always()
         run: node actions/3-media-creation/media-run-summary.mjs
-      - name: Reportes saneados
+      - name: Sanitized reports
         if: always()
         run: node actions/3-media-creation/export-agnes-reports.mjs
         continue-on-error: true
-      - name: Artifact solo JSON
+      - name: JSON-only artifact
         if: always()
         run: rm -rf public/data/media-pack/gen public/data/media-pack/agnes.sqlite*
       - uses: actions/upload-artifact@v4
@@ -145,7 +145,7 @@ jobs:
             public/data/r2-usage.json
             .cache/media-run.json
           retention-days: 30
-      - name: Alerta de presupuesto R2 por Telegram
+      - name: R2 budget alert via Telegram
         if: always() && steps.generate.outcome == 'success'
         run: |
           generated=$(node -e "const fs=require('fs');console.log(JSON.parse(fs.readFileSync('.cache/media-publication.json')).generated || 0)")
@@ -158,7 +158,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      - name: Commit selectivo y push
+      - name: Selective commit and push
         if: always()
         run: |
           git config user.name "github-actions[bot]"
@@ -167,7 +167,7 @@ jobs:
           if [ -n "$MATCH" ]; then args+=(--manual); fi
           node actions/3-media-creation/publish-media.mjs "${args[@]}"
           if git diff --cached --quiet; then
-            echo "Sin cambios autorizados"
+            echo "No authorized changes"
           else
             git commit -m "chore: update verified media banks and reports"
             node actions/3-media-creation/publish-media.mjs --push

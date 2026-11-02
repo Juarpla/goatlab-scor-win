@@ -1,17 +1,17 @@
-# GoatLab — portada y análisis
+# GoatLab — home page and analysis
 
-Mode: Read. Portada para encontrar encuentros; detalle para comprenderlos con gráficos y explicaciones puntuales.
+Mode: Read. Home page for finding fixtures; detail view for understanding them with charts and brief explanations.
 
 ## Direction contract
 
-THESIS: La sala de análisis convierte un encuentro en capítulos comparables. Los datos son el contenido principal, no una promesa de marketing.
+THESIS: The analysis room turns a fixture into comparable chapters. Data is the main content, not a marketing promise.
 
-OWN-WORLD: Pantalla mate verde carbón, texto marfil, series lima y azul grisáceo. Titulares deportivos condensados, cifras tabulares y separadores finos. Sin brillos ni ornamentación fotográfica.
+OWN-WORLD: Matte carbon-green screen, ivory text, lime and slate-blue series. Condensed sports headlines, tabular figures and thin rules. No glows or photographic ornamentation.
 
-STORY: El lector encuentra una competición, abre un partido y pasa de forma reciente a goles, escenarios y límites. La demostración y los datos reales se distinguen siempre.
+STORY: The reader finds a competition, opens a match and moves from recent form to goals, scenarios and limits. Demonstration and real data are always distinguished.
 
-FIRST VIEWPORT: Cabecera compacta, título editorial y selector de competiciones; encuentro destacado en una composición de dos columnas con equipos a la izquierda y gráfico grande a la derecha. La acción lleva al análisis. En el detalle, capítulos anclados a un gráfico que cambia al desplazarse; acceso manual por botones y lectura estática con movimiento reducido.
+FIRST VIEWPORT: Compact header, editorial title and competition selector; featured fixture in a two-column composition with teams on the left and a large chart on the right. The action leads to the analysis. In the detail view, chapters anchored to a chart that changes on scroll; manual access through buttons and static reading with reduced motion.
 
-FORM: Sala de análisis de video, candidata 4, seed 990ac4fe, elegida explícitamente. Los capítulos conservan ejes y escalas; los anuncios viven fuera del área fijada del gráfico.
+FORM: Video analysis room, candidate 4, seed 990ac4fe, explicitly chosen. Chapters keep axes and scales; ads live outside the fixed chart area.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

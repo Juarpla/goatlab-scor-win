@@ -4,11 +4,11 @@ import { isAdvertisingPage } from '../lib/page-policy.js';
 
 interface Props {
   compact?: boolean;
-  /** Orientación del bloque: horizontal, vertical o rectangular */
+  /** Block orientation: horizontal, vertical or rectangular */
   variant?: 'horizontal' | 'vertical' | 'rect';
-  /** Clave de AD_SLOTS (src/config/ads.ts) o ID numérico directo del bloque */
+  /** AD_SLOTS key (src/config/ads.ts) or direct numeric block ID */
   slotKey?: string;
-  /** Compatibilidad con llamadas antiguas; sin anuncio el bloque se oculta. */
+  /** Compatibility with old calls; without an ad the block hides. */
   note?: string;
 }
 

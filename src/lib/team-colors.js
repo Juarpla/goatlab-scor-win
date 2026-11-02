@@ -1,8 +1,8 @@
 /**
- * Colores curados de camiseta por club (estimación visual, no oficial).
- * Claves normalizadas; la resolución usa la misma tolerancia que sameClub.
- * Lo no curado cae en una camiseta neutra: nunca se inventa un color.
- * primary = color dominante del torso · secondary = cuello, puños y detalles.
+ * Curated shirt colors per club (visual estimate, not official).
+ * Normalized keys; resolution uses the same tolerance as sameClub.
+ * Uncurated clubs fall back to a neutral shirt: a color is never invented.
+ * primary = dominant torso color · secondary = collar, cuffs and details.
  */
 import { normalize, sameClub, teamDisplay } from './teams.js';
 
@@ -121,7 +121,7 @@ const COLORS = {
   ajax: { primary: '#d2122e', secondary: '#ffffff' },
   psv: { primary: '#ed1c24', secondary: '#f5f6f7' },
   galatasaray: { primary: '#fdb912', secondary: '#a32638' },
-  // Selecciones UEFA Nations League (estimación visual de la primera equipación)
+  // UEFA Nations League national teams (visual estimate of the home kit)
   spain: { primary: '#c60b1e', secondary: '#ffc400' },
   england: { primary: '#f5f6f7', secondary: '#00247d' },
   france: { primary: '#002395', secondary: '#ffffff' },
@@ -212,9 +212,9 @@ const COLORS = {
 export const NEUTRAL_KIT = { primary: '#3a453c', secondary: '#a4aea3' };
 
 /**
- * Camiseta de un equipo por nombre tolerante; neutral si no está curado.
- * Ignora los prefijos legales de los proveedores («FC», «CA», «CD», «Club»…)
- * vía teamDisplay, así «FC Barcelona» y «Barcelona» caen en la misma ficha.
+ * Team shirt by tolerant name; neutral if not curated.
+ * Ignores provider legal prefixes ("FC", "CA", "CD", "Club"…)
+ * through teamDisplay, so "FC Barcelona" and "Barcelona" land on the same entry.
  */
 const EXTRA_PREFIX = /^(?:CAR|CDP|SE)\s+/i;
 export function teamColors(name) {

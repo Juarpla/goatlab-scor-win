@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { cachedPhoto, imageDimensions } from '../video-render/engine/photo-cache.mjs';
+import { cachedPhoto, imageDimensions } from '../video-render/pipeline/05-photo-cache.mjs';
 
 test('real image normalization preserves native dimensions and deduplicates concurrent downloads', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'goatlab-photos-'));
@@ -27,7 +27,7 @@ test('real image normalization preserves native dimensions and deduplicates conc
 test('cache cleanup respects active photos, removes unused files and stays within budget', async t => {
   const { writeFileSync, existsSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
-  const { prunePhotoCache, pinPhotos } = await import('../video-render/engine/photo-cache.mjs');
+  const { prunePhotoCache, pinPhotos } = await import('../video-render/pipeline/05-photo-cache.mjs');
   const dir = mkdtempSync(join(tmpdir(), 'goatlab-cache-budget-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   const asset = { url: 'https://example.test/active' };
@@ -40,8 +40,8 @@ test('cache cleanup respects active photos, removes unused files and stays withi
 });
 
 test('cache profiles isolate normalization versions and dimensions while protecting URL leases', async t => {
-  const { PHOTO_PROFILE } = await import('../video-render/engine/photo-normalization.mjs');
-  const { pinPhotos, prunePhotoCache } = await import('../video-render/engine/photo-cache.mjs');
+  const { PHOTO_PROFILE } = await import('../video-render/pipeline/04-photo-normalize.mjs');
+  const { pinPhotos, prunePhotoCache } = await import('../video-render/pipeline/05-photo-cache.mjs');
   const dir = mkdtempSync(join(tmpdir(), 'goatlab-photo-profile-')); t.after(() => rmSync(dir, { recursive: true, force: true }));
   const input = join(dir, 'small.png');
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=c=green:s=128x128', '-frames:v', '1', input]);

@@ -2,8 +2,8 @@
 import TeamLogo from './TeamLogo.astro';
 import { teamEsDisplay } from '../lib/teams.js';
 const { home, away, homeForm, awayForm, teamIds = null } = Astro.props;
-// Un chip por partido: marcador desde la óptica del equipo, color por resultado
-// y el rival escrito completo (nada de siglas). El más reciente queda a la derecha.
+// One chip per match: scoreline from the team's perspective, color by result
+// and the full opponent name (no abbreviations). The most recent stays on the right.
 const sides = [
   { name: teamEsDisplay(home), form: homeForm, teamId: teamIds?.home ?? null },
   { name: teamEsDisplay(away), form: awayForm, teamId: teamIds?.away ?? null },

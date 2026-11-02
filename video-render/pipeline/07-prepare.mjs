@@ -1,39 +1,26 @@
-// Prepare a bounded, immutable Remotion composition shared by local and Fly jobs.
+// Stage 07: voice, transcription, media caches and the immutable prepared input.
 import { execFile } from 'node:child_process';
-import { copyFileSync, existsSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { DIRECTOR_ENDCARD_SECONDS, FONT_FILE, FPS, LEAD_SECONDS } from '../../src/lib/short-format.js';
-import { authoredProps } from '../render/remotion/authored-composition.mjs';
-import { adjustVoice } from './voice-policy.mjs';
-import { renderRemotion } from '../render/remotion/remotion-render.mjs';
-import { compositionProps } from '../../src/lib/edit-plan.js';
-import { warmClips, pinClips } from './clip-cache.mjs';
-import { warmPhotos, pinPhotos } from './photo-cache.mjs';
-import { cuesFromHeard, shiftWords } from '../../src/lib/timing.js';
-import { transcribeWords } from './transcribe.mjs';
+import { DIRECTOR_ENDCARD_SECONDS, FPS, LEAD_SECONDS } from '../contract/short-format.js';
+import { cuesFromHeard, shiftWords } from '../contract/timing.js';
+import { getRenderer } from '../render/index.mjs';
+import { writeJson } from './00-io.mjs';
+import { adjustVoice } from './01-voice.mjs';
+import { transcribeWords } from './02-transcribe.mjs';
+import { PHOTO_PROFILE } from './04-photo-normalize.mjs';
+import { pinPhotos, warmPhotos } from './05-photo-cache.mjs';
+import { pinClips, warmClips } from './06-clip-cache.mjs';
+import { composeShort } from './08-author.mjs';
 
 const run = promisify(execFile);
 export { LEAD_SECONDS };
-import { PHOTO_PROFILE } from './photo-normalization.mjs';
 export { PHOTO_PROFILE };
 export const PHOTO_MAX_W = PHOTO_PROFILE.maxWidth;
-export const BED_VOLUME_DB = -18;
-const BED_FADE_IN = 0.5;
-const BED_FADE_OUT = 1;
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const APP_ROOT = join(HERE, '../..');
-const RENDER_ASSETS = join(HERE, '../render/remotion/assets');
-function writeJson(path, value) {
-  writeFileSync(`${path}.tmp`, JSON.stringify(value));
-  renameSync(`${path}.tmp`, path);
-}
-
-export async function mediaDuration(file) {
-  const { stdout } = await run('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]);
-  return Number(stdout.trim());
-}
 
 async function voiceTimes({ tmp, voiceFile, voiceSeconds, log }) {
   const flac = join(tmp, 'voice16k.flac');
@@ -51,7 +38,7 @@ async function voiceTimes({ tmp, voiceFile, voiceSeconds, log }) {
 
 /**
  * Persist the render input after adjusting voice and validating the plan.
- * Devuelve la duración total y el proveedor que dio los tiempos.
+ * Returns total duration and the provider that supplied the timings.
  */
 export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], variant = 0,
   home = '', away = '', matchLabel, log = () => {},
@@ -123,68 +110,11 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     assets: available.map((asset, index) => ({ index, subject: asset.subject, motive: asset.motive,
       title: asset.title, description: asset.description, query: asset.query,
       selection: asset.selection, generated: asset.source === 'agnes', width: asset.width, height: asset.height })) };
-  copyFileSync(join(RENDER_ASSETS, FONT_FILE), join(tmp, FONT_FILE));
-  copyFileSync(join(RENDER_ASSETS, 'brand.svg'), join(tmp, 'brand.svg'));
+  getRenderer().materialize(tmp);
   const prepared = { total, frames: voice.frames, photos, previews, clips: videos, words, facts, match: matchLabel,
     source, voiceFile, voiceRate: voice.rate, originalVoiceSeconds: voice.originalSeconds, provider: timing.provider, errors: timing.errors, heard: timing.heard, stages };
   writeJson(join(tmp, 'prepared.json'), prepared);
   if (plan) composeShort(tmp, plan);
   writeJson(join(tmp, 'stages.json'), stages);
   return { ...prepared, plan };
-}
-
-/** Render executes the director's plan; it has no creative model or local fallback. */
-export function composeShort(tmp, plan) {
-  const prepared = JSON.parse(readFileSync(join(tmp, 'prepared.json'), 'utf8'));
-  const props = plan?.version === 5 ? authoredProps(prepared, plan) : compositionProps({ ...prepared, plan });
-  writeJson(join(tmp, 'composition.json'), props);
-  return props;
-}
-
-export async function renderSilent(tmp, out, { workers = process.env.RENDER_WORKERS || 1, onProgress, cancelSignal, isCancelled } = {}) {
-  return renderRemotion(tmp, out, { workers, onProgress, cancelSignal, isCancelled });
-}
-
-export function bedPath() {
-  return join(RENDER_ASSETS, 'bed.mp3');
-}
-
-/** Voz a −16 LUFS y cama a −18 dB, sin bajar la voz al mezclar. */
-export function voiceBedGraph(total) {
-  const lead = LEAD_SECONDS * 1000;
-  const dur = Number(total);
-  const fadeOut = Math.max(0, dur - BED_FADE_OUT);
-  return (
-    `[1:a]aresample=44100,aformat=channel_layouts=stereo,` +
-    `adelay=${lead}|${lead},` +
-    `loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=0:${dur}[voice];` +
-    `[2:a]aresample=44100,aformat=channel_layouts=stereo,` +
-    `atrim=0:${dur},afade=t=in:st=0:d=${BED_FADE_IN},` +
-    `afade=t=out:st=${fadeOut}:d=${BED_FADE_OUT},` +
-    `volume=${BED_VOLUME_DB}dB[bed];` +
-    `[voice][bed]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`
-  );
-}
-
-/** Voz con 0.5 s de entrada y música de fondo; el video se copia. */
-export async function muxVoice({ silent, voiceFile, total, out, bedFile = bedPath(), music = true }) {
-  if (!music) {
-    await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', silent, '-i', voiceFile, '-filter_complex',
-      `[1:a]aresample=44100,aformat=channel_layouts=stereo,adelay=${LEAD_SECONDS * 1000}|${LEAD_SECONDS * 1000},loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=0:${Number(total)}[voice]`,
-      '-map', '0:v', '-map', '[voice]', '-c:v', 'copy', '-c:a', 'aac', '-t', String(total), '-movflags', '+faststart', out], { timeout: 300_000 });
-    return;
-  }
-  if (!existsSync(bedFile)) throw new Error(`falta la música de fondo: ${bedFile}`);
-  try {
-    await run('ffmpeg', [
-      '-y', '-i', silent, '-i', voiceFile,
-      '-stream_loop', '-1', '-i', bedFile,
-      '-filter_complex', voiceBedGraph(total),
-      '-map', '0:v', '-map', '[aout]',
-      '-c:v', 'copy', '-c:a', 'aac', '-t', String(total), '-movflags', '+faststart',
-      out,
-    ], { timeout: 5 * 60 * 1000 });
-  } catch (e) {
-    throw new Error(`ffmpeg: ${(e.stderr ?? e.message).split('\n').slice(-15).join('\n')}`);
-  }
 }

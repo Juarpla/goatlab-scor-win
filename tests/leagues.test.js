@@ -6,7 +6,7 @@ import {
 } from '../src/lib/leagues.js';
 import { competitions } from '../src/lib/football.js';
 
-test('el catálogo interno resuelve ids por proveedor y vuelta atrás', () => {
+test('the internal catalog resolves ids per provider and fallback', () => {
   assert.equal(league('laliga')?.name, 'LaLiga');
   assert.equal(providerLeagueId('laliga', 'api'), 140);
   assert.equal(providerLeagueId('laliga', 'fd'), 'PD');
@@ -34,14 +34,14 @@ test('lo desconocido queda en null honesto, nunca inventado', () => {
   assert.equal(leagueByProviderId('otro', 140), null);
 });
 
-test('competitions mantiene la vista histórica (id, name, api, fd) para páginas y script', () => {
+test('competitions keeps the historical view (id, name, api, fd) for pages and script', () => {
   assert.equal(competitions.length, Object.keys(leagues).length);
   const laliga = competitions.find(c => c.id === 'laliga');
   assert.deepEqual(laliga, { id: 'laliga', name: 'LaLiga', api: 140, fd: 'PD' });
   assert.ok(competitions.every(c => c.name && c.id));
 });
 
-test('el catálogo real no tiene colisiones de códigos de proveedor', () => {
+test('the real catalog has no provider code collisions', () => {
   const source = { leagues: Object.fromEntries(Object.entries(leagues).map(([id, e]) => [id, { name: e.name, providers: { api: e.providers.api, fd: e.providers.fd, bzzoiro: e.providers.bzzoiro } }])) };
   assert.deepEqual(findLeagueCollisions(source), []);
 });

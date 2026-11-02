@@ -31,14 +31,14 @@ test('pendingRecord toma los equipos y renderRequest manda el pool, no el guion'
   assert.equal(ready.narration, undefined);
 });
 
-test('photoFailureText se queda con el error útil', () => {
+test('photoFailureText keeps the useful error', () => {
   const text = photoFailureText('media: buscando\nmedia: Agnes: HTTP 400\nruido\nfaltan fotos: 12 < 20\n');
   assert.match(text, /HTTP 400/);
   assert.doesNotMatch(text, /faltan fotos/);
   assert.doesNotMatch(text, /buscando/);
 });
 
-test('audioFailureText nombra el número y no pide reenviar el archivo', () => {
+test('audioFailureText names the number and does not ask to resend the file', () => {
   assert.match(audioFailureText(2, 'ffmpeg: Invalid data found when processing input'), /El audio 2 que enviaste está corrompido/);
   assert.match(audioFailureText(2, 'voz de 1.0s fuera de rango (5-120s)'), /El video 2 no se pudo completar/);
   assert.doesNotMatch(audioFailureText(2, 'ffmpeg: Invalid data'), /file_id|reenvi/);

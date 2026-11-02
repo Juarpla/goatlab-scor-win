@@ -28,7 +28,7 @@ test('caller validation failure and empty responses are aggregated', async () =>
 test('no credentials degrades with a clear aggregate error', async () => {
   await assert.rejects(withFailover([], { env: {}, logger }), /No hay proveedores/);
 });
-test('los fallos quedan tipados: transporte vs validación', async () => {
+test('failures stay typed: transport vs validation', async () => {
   const transport = await withFailover([], { env, logger, fetchImpl: async () => new Response('', { status: 429 }) }).catch(error => error);
   assert.equal(hasTransportFailure(transport), true);
   assert.deepEqual(transport.details.map(d => d.kind), ['transport', 'transport']);
@@ -61,7 +61,7 @@ test('finish_reason length marca truncado aunque el uso no cuadre', async () => 
   const error = await withFailover([], { env, logger, fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: '{"ok":true}' }, finish_reason: 'length' }] })), maxTokens: 3000, validate: extractJson }).catch(e => e);
   assert.equal(hasTruncatedFailure(error), true);
 });
-test('el éxito propaga usage, finishReason y callId', async () => {
+test('success propagates usage, finishReason and callId', async () => {
   const result = await withFailover([], { env, logger, fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: '{"ok":true}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 5, completion_tokens: 7 } })), validate: extractJson });
   assert.deepEqual(result.usage, { inputTokens: 5, outputTokens: 7 });
   assert.equal(result.finishReason, 'stop');
@@ -142,7 +142,7 @@ test('opencode go construye URL inference/go sin duplicar chat/completions', asy
   await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
   assert.ok(calls[0] === 'https://opencode.ai/inference/go/openai/v1/chat/completions');
 });
-test('deepseek pide razonamiento máximo sin temperatura ignorada', async () => {
+test('deepseek requests maximum reasoning without an ignored temperature', async () => {
   const calls = [];
   const deepseekEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_FALLBACK_MODEL', OPENCODE_GO_FALLBACK_MODEL: 'deepseek-v4.1-flash' };
   await withFailover([], { env: deepseekEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
@@ -159,7 +159,7 @@ test('orderVar gana sobre LLM_PROVIDER_ORDER', () => {
   }, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' });
   assert.deepEqual(chain.map(p => p.id), ['OPENCODE_GO', 'MISTRAL']);
 });
-test('orderVar vacío o ausente usa LLM_PROVIDER_ORDER', () => {
+test('empty or missing orderVar uses LLM_PROVIDER_ORDER', () => {
   const base = { MISTRAL_API_KEY: 'a', OPENCODE_GO_API_KEY: 'b', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', SCRIPT_PROVIDER_ORDER: '   ' };
   assert.deepEqual(resolveChain(base, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' }).map(p => p.id), ['OPENCODE_GO']);
   const { SCRIPT_PROVIDER_ORDER: _drop, ...without } = base;
@@ -178,7 +178,7 @@ test('el fallback de OpenCode Go reusa la clave y entra en el orden por defecto'
   assert.equal(chain[3].keyVar, 'OPENCODE_GO_API_KEY');
   assert.equal(chain[0].model, 'ministral-8b-2512');
 });
-test('DeepSeek falla y GLM responde por Go con la misma sesión y credencial', async () => {
+test('DeepSeek fails and GLM answers through Go with the same session and credential', async () => {
   const calls = [];
   const result = await withFailover([{ role: 'user', content: 'OK' }], {
     env: { OPENCODE_GO_API_KEY: 'test-go' }, logger,
@@ -200,7 +200,7 @@ test('un orden en blanco usa la cadena por defecto', () => {
   const chain = resolveChain({ MISTRAL_API_KEY: 'a', LLM_PROVIDER_ORDER: '   ' }, logger);
   assert.deepEqual(chain.map(p => p.id), ['MISTRAL']);
 });
-test('reasoning_content cubre un content vacío', async () => {
+test('reasoning_content covers empty content', async () => {
   const onlyReasoning = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'deepseek-v4.1-flash' };
   const result = await withFailover([], {
     env: onlyReasoning,

@@ -6,9 +6,9 @@ import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { bundle } from '@remotion/bundler';
-import { FPS, FRAME_W, FRAME_H, MAX_FRAMES, DIRECTOR_ENDCARD_SECONDS } from '../../../src/lib/short-format.js';
+import { FPS, FRAME_W, FRAME_H, MAX_FRAMES, DIRECTOR_ENDCARD_SECONDS } from '../../contract/short-format.js';
 
-import { isVisualStyle } from '../../../src/lib/visual-style.js';
+import { isVisualStyle } from '../../contract/visual-style.js';
 
 const require = createRequire(import.meta.url);
 const modules = dirname(dirname(require.resolve('react/package.json')));

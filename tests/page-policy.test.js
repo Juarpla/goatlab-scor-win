@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { isProductionPage, isIndexablePage, isAdvertisingPage } from '../src/lib/page-policy.js';
 
-test('herramientas y sus JSON quedan fuera de búsqueda con y sin barra final', () => {
+test('tools and their JSON stay out of search with and without a trailing slash', () => {
   for (const category of ['scripts', 'image-prompts', 'video-prompts', 'media', 'youtube']) {
     for (const suffix of ['', '/', '.json', '/?copy=1']) {
       const url = `https://goatlab.win/partido/sevilla-vs-osasuna-2026-10-26/${category}${suffix}`;
@@ -12,7 +12,7 @@ test('herramientas y sus JSON quedan fuera de búsqueda con y sin barra final', 
   }
 });
 
-test('las políticas siguen indexables y no cargan publicidad ni CMP', () => {
+test('policy pages remain indexable and load no ads or CMP', () => {
   for (const path of ['/privacidad', '/privacidad/', '/cookies', '/cookies/?lang=es']) {
     assert.equal(isIndexablePage(path), true);
     assert.equal(isAdvertisingPage(path), false);
@@ -23,7 +23,7 @@ test('las políticas siguen indexables y no cargan publicidad ni CMP', () => {
   assert.equal(isAdvertisingPage('/partido/fd-564721/'), false);
 });
 
-test('las páginas editoriales se indexan con su URL descriptiva', () => {
+test('editorial pages are indexed with their descriptive URL', () => {
   for (const path of ['/', '/encuentros/', '/fuentes/', '/metodologia/', '/partido/sevilla-vs-osasuna-2026-10-26/']) {
     assert.equal(isProductionPage(path), false);
     assert.equal(isIndexablePage(path), true);

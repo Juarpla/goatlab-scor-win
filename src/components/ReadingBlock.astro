@@ -1,9 +1,9 @@
 ---
 /**
- * La lectura: interpretación de IA en fichas con pizarra. Cada sección trae
- * su escena (kind) y sus cifras protagonistas (stats); el texto nunca se
- * reescribe, solo se resaltan las cifras que la sección declara. La auditoría
- * del LLM (limitations) queda en el JSON para revisión editorial.
+ * The reading: AI interpretation in cards with a board. Each section brings
+ * its scene (kind) and protagonist figures (stats); the text is never
+ * rewritten, only figures the section declares are highlighted. The LLM
+ * audit (limitations) stays in the JSON for editorial review.
  */
 import ReadingScene from './ReadingScene.astro';
 import { normalizeReading, matchFigures, formatFigure } from '../lib/reading.js';
@@ -11,7 +11,7 @@ import { normalizeReading, matchFigures, formatFigure } from '../lib/reading.js'
 const { entry } = Astro.props;
 const reading = normalizeReading(entry);
 const points = section => section.bullets.map(bullet => matchFigures(bullet, section.stats));
-/* La nota no promete cifras cuando ninguna sección las declara (párrafo legacy). */
+/* The note does not promise figures when no section declares them (legacy paragraph). */
 const hasFigures = Boolean(reading?.sections.some(section => section.stats.length > 0));
 ---
 

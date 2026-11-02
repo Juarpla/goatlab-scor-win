@@ -56,7 +56,7 @@ test('preserved narratives are not checked against newly available statistics', 
   assert.equal(validateContent(data, 'scripts', match.webId), true);
 });
 
-test('scripts sin pick siguen válidos; un pick presente debe tener forma', () => {
+test('scripts without a pick remain valid; a present pick must have a shape', () => {
   const pick = { bridge: 'Quédate con este dato.', noun: 'La proyección', antecedent: 'Alpha ganó 2 de 3', verdict: 'la victoria de Alpha en casa', player: null, call: 'La lectura completa está en goatlab.win.' };
   const withPick = scriptData();
   withPick.scripts = withPick.scripts.map(script => ({ ...script, pick: { ...pick } }));

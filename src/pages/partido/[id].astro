@@ -21,7 +21,7 @@ import { findFreshAnalysis } from '../../lib/analysis.js';
 import { competitions, matchPhase } from '../../lib/football.js';
 import { teamShort, teamCompact, teamEsDisplay } from '../../lib/teams.js';
 import { teamForm, bakedForm } from '../../lib/form.js';
-import { roundFecha, findStandingRow, topScorerFor } from '../../lib/series-crumbs.js';
+import { roundNumber, findStandingRow, topScorerFor } from '../../lib/series-crumbs.js';
 import { ensemble } from '../../lib/predictions.js';
 import { normalizeOneX2, deriveDoubleChance, deriveDnb, pickDecisive } from '../../lib/provider-markets.js';
 import { topScorerSplit, resolveMatchMarkets, withScorerFallback } from '../../lib/probabilities.js';
@@ -39,8 +39,8 @@ import evaluation from '../../../public/data/evaluation-report.json';
 import '../../styles/partido.css';
 
 export function getStaticPaths() {
-  // URL canónica: webId (`home-vs-away-fecha`). El id de proveedor se sigue
-  // emitiendo para no romper enlaces compartidos (mismo contenido).
+  // Canonical URL: webId (`home-vs-away-date`). The provider id is still
+  // emitted so shared links do not break (same content).
   return fixtures.matches.flatMap(match => {
     const web = { params: { id: match.webId ?? match.id }, props: { match } };
     return match.webId && match.webId !== match.id
@@ -54,7 +54,7 @@ const homeEs = teamEsDisplay(match.home);
 const awayEs = teamEsDisplay(match.away);
 const homeForm = teamForm(results.results, match.home);
 const awayForm = teamForm(results.results, match.away);
-/* Lo que ya jugaron: siempre últimos 5 por equipo (horneado del pipeline
+/* What they already played: always last 5 per team (baked by the pipeline
    primero, base local después); el H2H solo vive en el JSON/síntesis. */
 const homeRecent = bakedForm(match.lastMatches?.home, match.home) ?? teamForm(results.results, match.home);
 const awayRecent = bakedForm(match.lastMatches?.away, match.away) ?? teamForm(results.results, match.away);
@@ -68,11 +68,11 @@ const statusLabel = finished ? 'Finalizado' : phase === 'live' ? 'En juego' : 'P
 const analysisScorers = withScorerFallback(scorersData, scorerFallback);
 const analysisMarkets = resolveMatchMarkets({ match, results: results.results, scorers: analysisScorers[match.competition] ?? null, standings: standingsData });
 const ai = findFreshAnalysis(analyses, match, analysisMarkets, { results: results.results, standings: standingsData, scorers: analysisScorers, weather: weatherData, market: match.marketConsensus ?? null })?.entry;
-/* Sin lectura LLM (fallo de proveedores o presupuesto), la vista cae al
-   fallback de proveedores; `normalizeReading` decide lo mostrable. */
+/* Without an LLM reading (provider failure or budget), the view falls back
+   to the provider fallback; `normalizeReading` decides what is showable. */
 const hasReading = Boolean(normalizeReading(ai));
 const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
-/* Tabla de estimación: valores esperados con coma latina; lo nulo se pinta '—'. */
+/* Estimation table: expected values with a Latin comma; nulls are painted '—'. */
 const count1 = v => v == null ? '—' : Number(v).toFixed(1).replace('.', ',');
 const FORECAST_ROWS = [
   ['Posesión', 'possession', v => v == null ? '—' : `${Math.round(v)}%`],
@@ -97,10 +97,10 @@ const awayWins = tableAway ? tableAway.form.filter((x:string)=>x==='G').length :
 const recentMax = Math.max(tableHome?.played ?? 0, tableAway?.played ?? 0);
 const recentAvg = (totals:number, recent) => recent ? (totals/recent.played).toFixed(1) : '—';
 
-/* Cabecera: última consulta con la hora del paso de datos; el cliente la reescribe al huso del visitante. */
+/* Header: last query with the data-step time; the client rewrites it to the visitor's timezone. */
 const consultUtc = fixtures.updatedAt ? `${fixtures.updatedAt.slice(0,10)} ${fixtures.updatedAt.slice(11,16)} UTC` : '—';
 
-/* Sede y zoom del estadio: sin club en el catálogo, el mapa cae a la región
+/* Venue and stadium zoom: without a club in the catalog, the map falls back to the region
    de la competición (país con pin al centro en ligas nacionales, continente
    sin pin en las continentales) y el pie declara la sede como no ubicada. */
 const location = locateMatch(match);
@@ -115,10 +115,10 @@ const venueCaption = located
   ? `${location.stadium ?? location.city} · ${location.city}, ${location.country}`
   : `${fallbackPlace ? `${fallbackPlace} · ` : ''}sede sin ubicación en el mapa · referencia: ${fallback.label}`;
 
-/* Probabilidades horneadas por el pipeline (un JSON por partido, revisable a mano). */
+/* Probabilities baked by the pipeline (one JSON per match, reviewable by hand). */
 const probabilityFiles = import.meta.glob('../../../public/match-probabilities/*.json', { eager: true, import: 'default' }) as Record<string, any>;
 const probability: any = probabilityFiles[`../../../public/match-probabilities/${match.id}.json`] ?? null;
-/* Tendencias: hechos locales + extra del pipeline (retransmisiones/social); sin archivo, solo local. */
+/* Trends: local facts + pipeline extra (broadcasts/social); without a file, local only. */
 const trendsFiles = import.meta.glob('../../../public/data/trends-extra.json', { eager: true, import: 'default' }) as Record<string, any>;
 const trendsExtra: any = (Object.values(trendsFiles)[0] as any)?.[match.id] ?? null;
 const markets = probability?.markets ?? null;
@@ -129,12 +129,12 @@ const race = probability?.firstGoal ?? null;
 const scorerRows = probability?.scorers ?? null;
 const marketConsensus = probability?.market ?? (match as any).marketConsensus ?? null;
 const pct = (value: number | null | undefined) => value == null ? '—' : `${Math.round(value * 100)}%`;
-/* Decimales en coma latina para las lecturas nuevas (goles esperados). */
+/* Latin decimal comma for new readings (expected goals). */
 const dec = (value: number | null | undefined, digits = 1) => value == null ? '—' : Number(value).toFixed(digits).replace('.', ',');
 const bandMax = race ? Math.max(...race.bands.map((band: any) => band.p)) : 0;
 const firstSplit = race && (race.firstHome + race.firstAway) > 0 ? race.firstHome / (race.firstHome + race.firstAway) : 0.5;
 const exactAll = xgM?.exactScores ?? markets?.exactScores ?? [];
-/* El podio reparte 100 entre los 5 mostrados; la `p` absoluta queda en el JSON. */
+/* The podium splits 100 among the 5 shown; absolute `p` stays in the JSON. */
 const podiumRaw = exactAll.slice(0, 5);
 const hasShare = podiumRaw.length > 0 && podiumRaw.every((score: any) => typeof score?.share === 'number');
 const podiumSum = hasShare ? 1 : podiumRaw.reduce((total: number, score: any) => total + (score?.p ?? 0), 0);
@@ -144,25 +144,25 @@ const exactRest = podiumFive.slice(3);
 const homeKit = teamColors(match.home);
 const awayKit = teamColors(match.away);
 
-/* Capítulos siempre visibles (tolerancia cero): llegada + números + resultado +
+/* Chapters always visible (zero tolerance): arrival + numbers + result +
    goles + primer gol + síntesis. Cada bloque declara su procedencia. */
 const lambdas = probability?.inputs?.lambdas ?? null;
 const lambdaSource = probability?.inputs?.lambdaSource ?? (lambdas ? 'Poisson' : null);
-/* Si el JSON aún no trae escenarios (corrida anterior), la lectura del consenso
+/* If the JSON does not yet have scenarios (previous run), the consensus reading
    sostiene resultado/goles/ambos-anotan como mínimo honesto hasta la próxima corrida. */
 const displayOneX2 = markets?.oneX2 ?? marketConsensus?.oneX2 ?? null;
 const hasMarkets = Boolean(markets?.oneX2 || marketConsensus?.oneX2);
 const totals = markets?.totals ?? null;
-/* Ambos anotan con Bzzoiro al frente; AF en medio; Poisson propio al cierre. */
+/* Both score with Bzzoiro first; AF in the middle; own Poisson at the close. */
 const bttsBase = markets?.btts ?? (marketConsensus?.btts != null ? { yes: marketConsensus.btts, no: 1 - marketConsensus.btts } : null);
 const provenance = lambdaSource === 'Poisson' ? 'Modelo' : lambdaSource === 'Bzzoiro-xG' ? 'Modelo' : lambdaSource === 'Media-liga' ? 'Estimación' : marketConsensus ? 'Consenso externo' : 'Modelo';
 const cleanM = xgM?.cleanSheet ?? markets?.cleanSheet ?? null;
 const prov = probability?.provider ?? null;
-/* Escenarios de resultado: lectura de proveedores. El waffle usa Bzzoiro con
-   fallback a API-Football; local-o-empate y resultado-sin-empate usan la más decisiva
-   (|local − visita| mayor; empate → Bzzoiro). Ningún proveedor trae esas combinadas:
-   se derivan del resultado (local-o-empate = local+empate, visita-o-empate = empate+visita,
-   sin-empate.local = local/(local+visita)). */
+/* Result scenarios: provider reading. The waffle uses Bzzoiro with
+   API-Football fallback; home-or-draw and draw-no-bet use the most decisive
+   (largest |home − away|; tie → Bzzoiro). No provider brings those combinations:
+   they are derived from the result (home-or-draw = home+draw, away-or-draw = draw+away,
+   draw-no-bet.home = home/(home+away)). */
 const bzOneX2 = normalizeOneX2(prov?.oneX2 ?? null);
 const afOneX2 = normalizeOneX2(probability?.afPrediction?.percent ?? null);
 const waffleOneX2 = bzOneX2 ?? afOneX2 ?? null;
@@ -173,24 +173,24 @@ const dcM = dcSourceOneX2 ? deriveDoubleChance(dcSourceOneX2) : null;
 const dnbM = dcSourceOneX2 ? deriveDnb(dcSourceOneX2) : null;
 const hasScorerData = Boolean(scorerRows && (scorerRows.home?.length || scorerRows.away?.length));
 const hasFirst = Boolean(race || hasScorerData || displayOneX2);
-/* Ranking único de goleadores: reparto del 100% entre los 5 con mayor probabilidad
-   de abrir el marcador. `topScorerSplit` une ambos equipos, ordena por `first`
-   y renormaliza; el JSON conserva los valores absolutos. */
+/* Single scorer ranking: 100% split among the 5 with the highest probability
+   of opening the scoreline. `topScorerSplit` joins both teams, sorts by `first`
+   and renormalizes; the JSON keeps absolute values. */
 const scorerSplit = hasScorerData ? topScorerSplit(scorerRows, { top: 5, noGoal: race?.noGoal ?? null }) : null;
 const scorerUnified = scorerSplit?.rows ?? [];
 const scorerLeftover = scorerSplit?.leftover ?? null;
 const scorerMissingSide = hasScorerData && (!scorerRows.home?.length || !scorerRows.away?.length)
   ? (!scorerRows.home?.length ? match.home : match.away) : null;
-/* Nivel 4 (Poisson local): sin nombres por equipo, el reparto va por equipos
-   con la misma λ de la carrera; nunca se inventan goleadores. */
+/* Level 4 (local Poisson): without names per team, the split goes by teams
+   with the same race λ; scorers are never invented. */
 const teamSplit = !scorerUnified.length && race && (race.firstHome + race.firstAway) > 0
   ? [
       { side: 'home', name: homeEs, split: race.firstHome / (race.firstHome + race.firstAway) },
       { side: 'away', name: awayEs, split: race.firstAway / (race.firstHome + race.firstAway) },
     ].sort((a, b) => b.split - a.split)
   : null;
-/* Goles totales con Bzzoiro al frente, AF en medio y Poisson al
-   cierre; ningún umbral queda vacío mientras haya cálculo propio. */
+/* Total goals with Bzzoiro first, AF in the middle and Poisson at the
+   close; no threshold stays empty while there is an own calculation. */
 const round3 = (value: number) => Math.round(value * 1000) / 1000;
 const rung = (line: string, over: number | null | undefined) => ({ line, over: over ?? null, under: over != null ? round3(1 - over) : null });
 const ladder = [
@@ -200,7 +200,7 @@ const ladder = [
 ];
 const bttsYes = prov?.btts ?? afOddsM?.btts ?? bttsBase?.yes ?? null;
 const bttsM = bttsYes != null ? { yes: bttsYes, no: round3(1 - bttsYes) } : null;
-/* Fichas de goles: marcador esperado Bzzoiro más techos y mínimo de AF. */
+/* Goal cards: Bzzoiro expected scoreline plus AF ceilings and floor. */
 const expectedScore = prov?.score ? String(prov.score).replace('-', '–') : null;
 const fmtGoal = (value: number) => Number.isInteger(value) ? String(value) : String(Math.round(value * 10) / 10);
 const ceilingOf = (raw: unknown) => {
@@ -222,8 +222,8 @@ const waffle = waffleOneX2 ? [
   { label: teamShort(match.away), value: waffleOneX2.away, tone: 'away' as const },
 ] : [];
 
-/* Valores estimados: valores esperados siempre con muestra; duelos en
-   porcentaje solo cuando su insumo supera la evaluación histórica. */
+/* Estimated values: expected values always with a sample; duels in
+   percentage only when their input beats the historical evaluation. */
 const forecast = probability?.statsForecast ?? null;
 const dominance = probability?.dominance ?? null;
 const hasForecast = Boolean(forecast && (forecast.home || forecast.away));
@@ -231,7 +231,7 @@ const forecastFallback = !hasForecast && lambdas ? { home: { corners: null, shot
 const forecastTable = forecast ?? forecastFallback;
 const statEval = evaluation?.stats?.metrics ?? {};
 const statOk = (key: string) => statEval[key]?.published === true;
-/* Duelos derivados: solo con ritmos propios del equipo en esa métrica.
+/* Derived duels: only with the team's own rates in that metric.
    Con relleno de media, el Poisson degenera en moneda al aire. */
 const srcOf = (side: string, metric: string) => (forecast as any)?.sources?.[side]?.[metric] ?? null;
 const teamSourced = (metric: string) => ['Bzzoiro', 'AF'].includes(srcOf('home', metric)) && ['Bzzoiro', 'AF'].includes(srcOf('away', metric));
@@ -241,14 +241,14 @@ const cornerRace = cornersOk ? dominance?.cornerRace ?? null : null;
 const cornerMargin = cornersOk ? dominance?.cornerMargin ?? null : null;
 const cardsDuel = hasForecast && teamSourced('yellowCards') && statOk('yellowCards') ? dominance?.cardsDuel ?? null : null;
 const lastTrio = hasForecast && evaluation?.gate?.poissonOk ? dominance?.lastGoal ?? null : null;
-/* Reparto 0–1 entre ambos para el radar; nulo cuando falta un lado. */
+/* 0-1 split between both for the radar; null when one side is missing. */
 const share = (home: number | null | undefined, away: number | null | undefined) =>
   home != null && away != null && home + away > 0 ? home / (home + away) : null;
 const mkAxis = (label: string, home: number | null | undefined, away: number | null | undefined) => {
   const s = share(home, away);
   return s == null ? null : { label, home: s, away: 1 - s };
 };
-/* Radar desde Esperados · pronóstico: solo ejes con ritmos propios. */
+/* Radar from Expected · forecast: only axes with own rates. */
 const duelAxes = hasForecast ? [
   teamSourced('shotsOnTarget') ? mkAxis('A puerta', forecast.home.shotsOnTarget, forecast.away.shotsOnTarget) : null,
   teamSourced('fouls') ? mkAxis('Faltas', forecast.home.fouls, forecast.away.fouls) : null,
@@ -265,14 +265,14 @@ const marginBands = cornerMargin ? [
 ] : [];
 const hasProbRows = Boolean(cornersDuel || raceTargets.length > 0 || marginBands.length > 0 || cardsDuel || lastTrio);
 
-/* Síntesis GoatLab: combina modelo propio, CatBoost, consenso externo y señales; los pesos siempre a la vista. */
+/* GoatLab synthesis: combines own model, CatBoost, external consensus and signals; weights always in view. */
 const absentCount = side => (match.lineups?.unavailablePlayers ?? []).filter(player => player.team === side).length;
 const unavailable = match.lineups?.unavailablePlayers?.length ? { home: absentCount('home'), away: absentCount('away') } : null;
 const verdict = ensemble({ results: results.results, history: history.rows, h2h: match.h2h ?? null, catboost: match.modelPrediction ?? null, market: marketConsensus, home: match.home, away: match.away, homeForm, awayForm, unavailable });
 const published = Boolean(evaluation?.published) && Boolean(verdict);
 const direction = verdict ? (verdict.oneX2.home >= verdict.oneX2.draw && verdict.oneX2.home >= verdict.oneX2.away ? match.home : verdict.oneX2.away > verdict.oneX2.draw ? match.away : null) : null;
 
-/* Tarjetas por equipo: un solo contexto (últimos 5 en su liga); lo que falta no se dibuja.
+/* Per-team cards: one context (last 5 in their league); what is missing is not drawn.
    Viven en el capítulo 1 (la sección team-context se eliminó para no repetir). */
 const contextCards = side => {
   const data = probability?.context?.[side];
@@ -289,16 +289,16 @@ const contextCards = side => {
   return cards.slice(0, 5);
 };
 const cardsBySide = { home: contextCards('home'), away: contextCards('away') };
-/* Migajas del fallback del fallback: solo datos reales que la columna de
-   notas no muestra ya (competición·fecha, tabla rescatada por teamId,
-   goleador si no tiene tarjeta). */
-const fechaN = roundFecha(match.round);
+/* Crumbs for the fallback of the fallback: only real data the notes
+   column does not already show (competition·date, table rescued by teamId,
+   scorer if it has no card). */
+const matchday = roundNumber(match.round);
 const crumbsFor = side => {
   const name = side === 'home' ? match.home : match.away;
   const teamId = match.teamIds?.[side] ?? null;
   const labels = new Set(cardsBySide[side].map(card => card.label));
   const crumbs = [];
-  if (fechaN != null && competition) crumbs.push(`${competition} · Fecha ${fechaN}`);
+  if (matchday != null && competition) crumbs.push(`${competition} · Fecha ${matchday}`);
   const row = findStandingRow(standingsData, match.competition, { teamId, names: [name] });
   if (row && !labels.has(storyTerm('standings').term)) crumbs.push(`${row.position}.º · ${row.played} ${row.played === 1 ? 'partido' : 'partidos'}`);
   const scorer = topScorerFor(scorersData, match.competition, { teamId, names: [name] });
@@ -488,12 +488,12 @@ const crumbsFor = side => {
  }
  buttons.forEach(button=>button.addEventListener('click',()=>{manualUntil=Date.now()+1500;activate(button.dataset.stage!);document.getElementById(button.dataset.stage!)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}));
   if(!reducedMotion){let queued=false;const update=()=>{queued=false;if(Date.now()<manualUntil)return;const marker=innerWidth<761?innerHeight*.7:innerHeight*.45;let current=chapters[0];for(const chapter of chapters){if(chapter.getBoundingClientRect().top<marker)current=chapter;}if(current)activate(current.dataset.chapter!);};window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update);}},{passive:true});}
-  // Tendencias: una sola pasada de entrada al aparecer en vista; sin JS todo queda visible.
+  // Trends: a single entry pass when it appears in view; without JS everything stays visible.
   try{const trends=document.querySelector('.trends');if(trends&&!reducedMotion&&'IntersectionObserver' in window){const io=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){trends.classList.add('is-in');io.disconnect();}},{threshold:0.2});io.observe(trends);}}catch{/* visible sin animación */}
-  // Gráficos secundarios del relato: misma entrada, una sola vez por bloque.
+  // Secondary story charts: same entry, once per block.
   try{const visuals=[...document.querySelectorAll<HTMLElement>('.notes-visuals')];if(visuals.length&&!reducedMotion&&'IntersectionObserver' in window){const io=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting){entry.target.classList.add('is-in');io.unobserve(entry.target);}}},{threshold:0.15});visuals.forEach(visual=>io.observe(visual));}}catch{/* visible sin animación */}
   document.querySelectorAll<HTMLTimeElement>('time[datetime]').forEach(time=>{const date=new Date(time.dateTime);if(!Number.isNaN(date.getTime())){time.textContent=new Intl.DateTimeFormat('es',{dateStyle:'medium',timeStyle:'short'}).format(date);const sibling=time.nextSibling;if(sibling?.textContent?.includes('(Lima)'))sibling.textContent=' (tu hora local)';}});
- // La última consulta se escribe en la hora del visitante con formato fijo (todas las apariciones).
+ // The last query is written in the visitor's time with a fixed format (all occurrences).
  (()=>{
   const stamps=[...document.querySelectorAll<HTMLElement>('[data-consult]')];
   if(!stamps.length)return;

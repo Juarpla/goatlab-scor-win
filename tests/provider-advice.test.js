@@ -12,7 +12,7 @@ test('favoriteName resuelve lados, nombres y empate sin inventar', () => {
   assert.equal(favoriteName(null, 'Andorra', 'Malta'), null);
 });
 
-test('neutralGoals traduce líneas over/under sin jerga', () => {
+test('neutralGoals translates over/under lines without jargon', () => {
   assert.equal(neutralGoals('-3.5'), 'menos de 4 goles');
   assert.equal(neutralGoals('+1.5'), '2 o más goles');
   assert.equal(neutralGoals('-0.5'), 'menos de 1 gol');
@@ -20,7 +20,7 @@ test('neutralGoals traduce líneas over/under sin jerga', () => {
   assert.equal(neutralGoals(null), null);
 });
 
-test('adviceToNeutral reformula el advice AF en español neutro', () => {
+test('adviceToNeutral reformulates AF advice in neutral Spanish', () => {
   assert.equal(
     adviceToNeutral('Combo Double chance : draw or Aston Villa and -3.5 goals'),
     'Aston Villa sin perder y menos de 4 goles',
@@ -30,12 +30,12 @@ test('adviceToNeutral reformula el advice AF en español neutro', () => {
     'gana Barcelona y 2 o más goles',
   );
   assert.equal(adviceToNeutral('Double chance : draw or Chelsea'), 'Chelsea sin perder');
-  // Ejemplo del usuario: sin prefijo de mercado y con "draws" en plural.
+  // User example: no market prefix and "draws" in the plural.
   assert.equal(
     adviceToNeutral('Deportivo Santani or draws and -3.5 goals'),
     'Deportivo Santani sin perder y menos de 4 goles',
   );
-  // Lo irreconocible se omite, nunca se imprime jerga en crudo.
+  // Unrecognizable input is omitted; jargon is never printed raw.
   assert.equal(adviceToNeutral('Bet X now!'), null);
   assert.equal(adviceToNeutral(null), null);
 });
@@ -52,7 +52,7 @@ test('buildProviderAdvice combina Bzzoiro + AF y es null-honesto', () => {
   ]);
   assert.deepEqual(advice.af.map(line => line.text), ['Chelsea sin perder']);
   assert.equal(buildProviderAdvice({ provider: null, afPrediction: null }), null);
-  // Sin recommendations pero con advice, el fallback sigue emitiendo.
+  // Without recommendations but with advice, the fallback still emits.
   const onlyAf = buildProviderAdvice({ afPrediction: { advice: 'Double chance : Leeds or draw' } });
   assert.equal(onlyAf.bz.length, 0);
   assert.deepEqual(onlyAf.af.map(line => line.text), ['Leeds sin perder']);
@@ -67,7 +67,7 @@ test('buildProviderAdvice usa el booleano solo sin probabilidad', () => {
   assert.deepEqual(fallback.bz.map(line => line.text), [
     'Andorra, según el modelo', 'El modelo espera menos de 3 goles', 'No, según el modelo',
   ]);
-  // La probabilidad emite aun sin recommendations.
+  // Probability emits even without recommendations.
   const onlyProb = buildProviderAdvice({ provider: { over25: 0.6, btts: 0.4 } });
   assert.deepEqual(onlyProb.bz.map(line => line.text), [
     '60% que haya 3 o más goles, según el modelo', '40% que sí, según el modelo',

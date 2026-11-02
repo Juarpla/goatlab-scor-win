@@ -197,7 +197,7 @@ test('el criterio no pisa el dato AF de rojas', () => {
   assert.equal(forecast.sources.home.redCards, 'AF');
 });
 
-test('el criterio no pisa la medición Bzzoiro de rojas', () => {
+test("the criterion does not override the Bzzoiro red-card measurement", () => {
   const dirtyMeasured = { possession: 55, shots: 14, shotsOnTarget: 5, xg: 1.8, corners: 6, fouls: 16, yellowCards: 5, redCards: 0, offsides: 2 };
   const history = [
     row('2026-09-01', 'Portugal', 'Leeds', dirtyMeasured, dirtyMeasured),
@@ -232,7 +232,7 @@ test('el amistoso pesa la mitad: tira menos que el oficial', () => {
   assert.ok(weighted > plain);
 });
 
-test('misma selección aunque no sea entre ellas: ritmos propios por equipo', () => {
+test('same selection even if not among them: own rates per team', () => {
   const portugalAttack = { ...full, corners: 8, yellowCards: 3 };
   const walesAttack = { ...thin, corners: 3, yellowCards: 1 };
   const history = [

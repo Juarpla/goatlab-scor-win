@@ -1,15 +1,15 @@
 /**
- * Catálogo único de competiciones: `public/data/leagues.json` es la fuente.
- * Cada liga tiene id interno estable y códigos por proveedor (`api` para
- * API-Football, `fd` para Football-Data.org, `bzzoiro` para Bzzoiro). El id
- * interno es el que viaja por todo el sitio; los endpoints usan el código
- * del proveedor que corresponda vía `providerLeagueId`.
+ * Single competition catalog: `public/data/leagues.json` is the source.
+ * Each league has a stable internal id and per-provider codes (`api` for
+ * API-Football, `fd` for Football-Data.org, `bzzoiro` for Bzzoiro). The
+ * internal id travels across the site; endpoints use the matching provider
+ * code through `providerLeagueId`.
  */
 import catalog from '../../public/data/leagues.json' with { type: 'json' };
 
 const PROVIDERS = ['api', 'fd', 'bzzoiro'];
 
-/** Normaliza el crudo a `{ id, name, providers: { api, fd, bzzoiro } }` con nulls honestos. */
+/** Normalizes raw data to `{ id, name, providers: { api, fd, bzzoiro } }` with honest nulls. */
 export function normalizeLeagueCatalog(source) {
   return Object.fromEntries(Object.entries(source?.leagues ?? {}).map(([id, entry]) => [id, {
     id,
@@ -22,7 +22,7 @@ export function normalizeLeagueCatalog(source) {
   }]));
 }
 
-/** Colisiones de códigos de proveedor: `[{ provider, value, leagues: [a, b] }]`. */
+/** Provider code collisions: `[{ provider, value, leagues: [a, b] }]`. */
 export function findLeagueCollisions(source) {
   const seen = new Map();
   const collisions = [];
@@ -54,14 +54,14 @@ export function leagueName(id) {
   return leagues[id]?.name ?? null;
 }
 
-/** Código de la liga para un proveedor (`api` | `fd` | `bzzoiro`); null si no existe. */
+/** League code for a provider (`api` | `fd` | `bzzoiro`); null if it does not exist. */
 export function providerLeagueId(id, provider) {
   const entry = leagues[id];
   if (!entry || !PROVIDERS.includes(provider)) return null;
   return entry.providers[provider];
 }
 
-/** Liga interna a partir del código externo de un proveedor; null honesto. */
+/** Internal league from a provider external code; honest null. */
 export function leagueByProviderId(provider, externalId) {
   if (externalId == null || externalId === '' || !PROVIDERS.includes(provider)) return null;
   for (const entry of Object.values(leagues)) {
@@ -71,7 +71,7 @@ export function leagueByProviderId(provider, externalId) {
   return null;
 }
 
-/** Persistencia del lado servidor (scripts): resuelve ids Bzzoiro descubiertos. */
+/** Server-side persistence (scripts): resolves discovered Bzzoiro ids. */
 export function mergeResolvedLeagues(base, resolved, { at = new Date().toISOString() } = {}) {
   const next = JSON.parse(JSON.stringify(base));
   next.leagues = next.leagues ?? {};

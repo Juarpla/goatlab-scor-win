@@ -1,11 +1,11 @@
 /**
- * Catálogo curado de sedes para el mapa de la portada.
- * Cada entrada apunta al estadio de localía del club: ciudad (clave de agrupación
- * del pin), país, zona horaria IANA, coordenadas equirectangulares y capacidad
- * declarada. Lo no verificado queda en null y la interfaz lo omite; los
- * encuentros sin sede resuelta se listan debajo del mapa, nunca se inventan.
- * Coordenadas aproximadas a ±0.01°; capacidades de fuentes públicas.
- * El orden del arreglo es el orden de resolución de alias (primero exactos).
+ * Curated venue catalog for the home-page map.
+ * Each entry points to the club's home stadium: city (pin grouping key),
+ * country, IANA timezone, equirectangular coordinates and declared
+ * capacity. Unverified values stay null and the interface omits them;
+ * fixtures without a resolved venue are listed below the map, never invented.
+ * Coordinates approximate to ±0.01°; capacities from public sources.
+ * Array order is alias resolution order (exact matches first).
  */
 import { normalize } from './teams.js';
 
@@ -91,9 +91,9 @@ export const CLUBS = [
   { aliases: ['universidad central de venezuela', 'universidad central'], city: 'Caracas', country: 'Venezuela', stadium: 'Olímpico de la UCV', tz: 'America/Caracas', lat: 10.4980, lng: -66.8870, capacity: null },
   { aliases: ['deportivo la guaira', 'deportivo la guaira fc'], city: 'Caracas', country: 'Venezuela', stadium: 'Olímpico de la UCV', tz: 'America/Caracas', lat: 10.4980, lng: -66.8870, capacity: null },
   { aliases: ['coquimbo unido', 'cd coquimbo unido'], city: 'Coquimbo', country: 'Chile', stadium: 'Francisco Sánchez Rumoroso', tz: 'America/Santiago', lat: -29.9530, lng: -71.3390, capacity: null },
-  // UEFA Nations League, Liga A 2026/27 (Etapa 1): solo sedes principales
-  // estables. Las selecciones rotativas (España, Alemania, Portugal, Turquía)
-  // quedan al fallback de Europa y a la captura observada (venue-candidates).
+  // UEFA Nations League, League A 2026/27 (Stage 1): only main stable
+  // venues. Rotating national teams (Spain, Germany, Portugal, Turkey)
+  // fall back to Europe and to observed capture (venue-candidates).
   { aliases: ['france', 'francia'], city: 'Saint-Denis', country: 'Francia', stadium: 'Stade de France', tz: 'Europe/Paris', lat: 48.9244, lng: 2.3602, capacity: 81338 },
   { aliases: ['italy', 'italia'], city: 'Roma', country: 'Italia', stadium: 'Stadio Olimpico', tz: 'Europe/Rome', lat: 41.9341, lng: 12.4547, capacity: null },
   { aliases: ['belgium', 'belgica', 'bélgica'], city: 'Bruselas', country: 'Bélgica', stadium: 'King Baudouin Stadium', tz: 'Europe/Brussels', lat: 50.8956, lng: 4.3296, capacity: 50093 },
@@ -106,7 +106,7 @@ export const CLUBS = [
   { aliases: ['denmark', 'dinamarca'], city: 'Copenhague', country: 'Dinamarca', stadium: 'Parken', tz: 'Europe/Copenhagen', lat: 55.7022, lng: 12.5727, capacity: 38065 },
   { aliases: ['norway', 'noruega'], city: 'Oslo', country: 'Noruega', stadium: 'Ullevaal Stadion', tz: 'Europe/Oslo', lat: 59.9482, lng: 10.7337, capacity: 28454 },
   { aliases: ['wales', 'gales'], city: 'Cardiff', country: 'Gales', stadium: 'Cardiff City Stadium', tz: 'Europe/London', lat: 51.4728, lng: -3.2040, capacity: 33280 },
-  // Champions y Europa (clubes recurrentes; los demás caen a la fila «sin sede»)
+  // Champions and Europa (recurring clubs; the rest fall to the "no venue" row)
   { aliases: ['paris saint germain', 'paris saint-germain'], city: 'París', country: 'Francia', stadium: 'Parc des Princes', tz: 'Europe/Paris', lat: 48.8414, lng: 2.2530, capacity: 47929 },
   { aliases: ['borussia dortmund'], city: 'Dortmund', country: 'Alemania', stadium: 'Signal Iduna Park', tz: 'Europe/Berlin', lat: 51.4926, lng: 7.4461, capacity: 81365 },
   { aliases: ['bayern munich', 'fc bayern munich'], city: 'Múnich', country: 'Alemania', stadium: 'Allianz Arena', tz: 'Europe/Berlin', lat: 48.2188, lng: 11.6247, capacity: 75000 },
@@ -124,12 +124,12 @@ export const CLUBS = [
 
 export const MAP_CROP = { latTop: 78, latBottom: -58, rows: 68 };
 
-/* ---- Zoom por estadio (página de partido) ---- */
+/* ---- Per-stadium zoom (match page) ---- */
 
 /**
- * Ventana del recorte: un cuadro prudente alrededor del estadio — suficiente
- * para leer la región, no para distraer del encuentro. La retícula es más fina
- * que la del mapa de portada y el PNG se genera con scripts/generate-venue-zooms.mjs.
+ * Crop window: a prudent box around the stadium, enough
+ * to read the region, not to distract from the match. The grid is finer
+ * than the home-page map and the PNG is generated with scripts/generate-venue-zooms.mjs.
  */
 export const VENUE_ZOOM = { lngSpan: 20, latSpan: 12.5, step: 0.35, pitch: 9 };
 
@@ -138,7 +138,7 @@ const ZOOM_ROWS = Math.round(VENUE_ZOOM.latSpan / VENUE_ZOOM.step);
 const ZOOM_SPAN_LNG = ZOOM_COLS * VENUE_ZOOM.step;
 const ZOOM_SPAN_LAT = ZOOM_ROWS * VENUE_ZOOM.step;
 
-/** Slug estable por club (suffix numérico solo ante colisión). */
+/** Stable slug per club (numeric suffix only on collision). */
 const CLUB_SLUGS = new Map();
 for (const [index, club] of CLUBS.entries()) {
   const base = normalize(club.aliases[0]).replace(/ /g, '-');
@@ -151,7 +151,7 @@ export function venueZoomSrc(club) {
   return slug ? `/img/venue-zoom/${slug}.png` : null;
 }
 
-/** Layout del recorte: archivo, tamaño y pin en % dentro del marco. */
+/** Crop layout: file, size and pin in % inside the frame. */
 export function venueZoomLayout(club) {
   const src = venueZoomSrc(club);
   if (!src) return null;
@@ -176,28 +176,28 @@ function toLocation(club, match) {
   };
 }
 
-/* ---- Mapa de referencia (Europa) ---- */
+/* ---- Reference map (Europe) ---- */
 
 /**
- * Ventana del mapa de Europa que sustituye al zoom de sede cuando el club no
- * está en el catálogo: de Portugal a Turquía y del norte de África a
- * Escandinavia. Sin pin: la ubicación se desconoce, el mapa solo ubica el
- * continente. La retícula y el PNG los produce scripts/generate-venue-zooms.mjs.
+ * Europe map window that replaces the venue zoom when the club is not
+ * in the catalog: from Portugal to Turkey and from North Africa to
+ * Scandinavia. Without a pin: the location is unknown, the map only places the
+ * continent. The grid and PNG are produced by scripts/generate-venue-zooms.mjs.
  */
 export const EUROPE_MAP = { lngMin: -12, lngMax: 42, latMin: 34, latMax: 62, step: 0.5, pitch: 9 };
 
-/** Archivo y tamaño del mapa de referencia. */
+/** File and size of the reference map. */
 export function europeMapLayout() {
   return fallbackRegionLayout('europe');
 }
 
-/* ---- Regiones de reserva por competición (sin sede resuelta) ---- */
+/* ---- Fallback regions per competition (no resolved venue) ---- */
 
 /**
- * Cuando el club local no está en el catálogo la sede se desconoce y no se
- * inventa: el mapa cae a la región de la competición. Las ligas nacionales
- * apuntan a su país con pin al centro; las continentales muestran el
- * continente sin pin. La retícula y los PNG los produce
+ * When the home club is not in the catalog the venue is unknown and is not
+ * invented: the map falls back to the competition region. National leagues
+ * point to their country with a pin at the center; continental ones show the
+ * continent without a pin. The grid and PNGs are produced by
  * scripts/generate-venue-zooms.mjs.
  */
 export const REGION_MAPS = {
@@ -215,12 +215,12 @@ const COMPETITION_REGION = {
   europa: 'europe',
 };
 
-/** Región de reserva para una competición; Europa ante lo desconocido. */
+/** Fallback region for a competition; Europe when unknown. */
 export function competitionFallback(competition) {
   return COMPETITION_REGION[competition] ?? 'europe';
 }
 
-/** Archivo, tamaño, pie y pin (al centro, solo nacionales) de la región. */
+/** File, size, footer and pin (at the center, national only) for the region. */
 export function fallbackRegionLayout(key) {
   const region = REGION_MAPS[key] ?? REGION_MAPS.europe;
   const cols = Math.round((region.lngMax - region.lngMin) / region.step);
@@ -235,7 +235,7 @@ export function fallbackRegionLayout(key) {
   };
 }
 
-/** Sede de localía de un encuentro, por alias tolerante del club local. */
+/** Home venue for a fixture, by tolerant alias of the home club. */
 export function locateMatch(match) {
   const norm = normalize(match?.home);
   if (!norm) return null;

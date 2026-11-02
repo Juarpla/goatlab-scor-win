@@ -85,9 +85,12 @@ Install the render dependencies with
 `npm ci --prefix video-render/render/remotion` and run:
 
 ```sh
-node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<file> \
+node --env-file=.env video-render/cli/render.mjs --match=<webId> \
   --script=<scripts.json> [--script-n=<n>] --plan=<plan.json>
 ```
+
+Put the voice in `video-render/audios/<webId>/`; `--audio=<file>` is only needed
+when that folder has more than one recording.
 
 Transcription uses Mistral and Whisper; with `--script`, the script is aligned to
 fix names and figures without losing per-word timings. The version 5 plan is
@@ -95,8 +98,8 @@ original JSX per audio and can combine typography, SVG, overlays, cards, photos
 and clips. Versions 1 to 4 keep their compatibility path. The endcard shows the
 logo for one second and the total, including that endcard, measures at most 55 s.
 Recording recommendation: up to 50 s; technical voice budget 53 s and adjustment
-up to 1.10 preserving pitch. MP4s are saved in `video-render/videos/` and working
-files in `video-render/work/`.
+up to 1.10 preserving pitch. MP4s are saved in `video-render/videos/<webId>/` and
+recipes in `video-render/work/<webId>/`.
 See [the creative freedom and constraints report](CREATIVE-FREEDOM-REPORT.md).
 
 The five Agnes Video Flash attempts pair different prompts and images before

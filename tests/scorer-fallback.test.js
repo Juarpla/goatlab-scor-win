@@ -37,7 +37,7 @@ test('mergeScorerFallback da prioridad al leaderboard por equipo', () => {
   assert.equal(mergeScorerFallback(base, { scorers: [] }), base);
 });
 
-test('withScorerFallback fusiona por competición sin tocar la base sin fallback', () => {
+test('withScorerFallback merges per competition without touching the base when there is no fallback', () => {
   const out = withScorerFallback(
     { nations: { scorers: [] } },
     { nations: { provider: 'Bzzoiro-squad', scorers: [{ player: 'Nueve', team: 'Malta', value: 2, matches: 3 }] } },

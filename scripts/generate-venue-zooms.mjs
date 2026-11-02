@@ -1,15 +1,15 @@
 /**
- * Genera los recortes de puntos del mundo para el zoom de estadio de la
- * página de partido (/partido/[id]). Misma geometría de land-110m (Natural
- * Earth, dominio público) que la portada, muestreada más fina (0.35°) en una
- * ventana de ~20° × 12.6° centrada en el estadio de cada club del catálogo.
- * El PNG y el pin comparten proyección equirectangular, alineados por
- * construcción (src/lib/venues.js · venueZoomLayout).
+ * Generates the world dot crops for the match-page stadium zoom
+ * (/partido/[id]). Same land-110m geometry (Natural Earth, public
+ * domain) as the home page, sampled finer (0.35°) in a
+ * ~20° × 12.6° window centered on each catalog club's stadium.
+ * The PNG and the pin share an equirectangular projection, aligned by
+ * construction (src/lib/venues.js · venueZoomLayout).
  *
- * Uso: node scripts/generate-venue-zooms.mjs [land-110m.json]
- * Si falta el TopoJSON se descarga una vez desde jsdelivr y queda en .cache/.
- * Salida: public/img/venue-zoom/{slug}.png (un archivo por club del catálogo)
- * y un PNG por región de reserva (src/lib/venues.js · REGION_MAPS).
+ * Usage: node scripts/generate-venue-zooms.mjs [land-110m.json]
+ * If the TopoJSON is missing it is downloaded once from jsdelivr into .cache/.
+ * Output: public/img/venue-zoom/{slug}.png (one file per catalog club)
+ * and one PNG per fallback region (src/lib/venues.js · REGION_MAPS).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
@@ -38,7 +38,7 @@ if (!existsSync(source)) {
 }
 const topology = JSON.parse(readFileSync(source, 'utf8'));
 
-// — decodificación TopoJSON (idéntica a generate-world-dots.mjs) —
+// — TopoJSON decoding (identical to generate-world-dots.mjs) —
 function decodeTopology(topology) {
   const { scale, translate } = topology.transform;
   const arcs = topology.arcs.map(arc => {
@@ -70,7 +70,7 @@ function inside(lon, lat) {
   return hit;
 }
 
-// — PNG writer (idéntico a generate-world-dots.mjs) —
+// — PNG writer (identical to generate-world-dots.mjs) —
 function encodePng(pixels, width, height) {
   const raw = Buffer.alloc(height * (width * 3 + 1));
   for (let y = 0; y < height; y++) {
@@ -107,7 +107,7 @@ function encodePng(pixels, width, height) {
   ]);
 }
 
-/** Pinta un recorte equirectangular: esquina superior izquierda en (left, top). */
+/** Paints an equirectangular crop: top-left corner at (left, top). */
 function renderCrop({ left, top, cols, rows, step, pitch }) {
   const w = cols * pitch;
   const h = rows * pitch;
@@ -146,8 +146,8 @@ CLUBS.forEach((club, index) => {
   writeFileSync(path.join(outDir, `${slug}.png`), png);
   bytes += png.length;
 });
-/* Mapas de reserva por competición cuando la sede no está en el catálogo:
-   el mismo lenguaje de puntos sobre cada región. */
+/* Fallback maps per competition when the venue is not in the catalog:
+   the same dot language over each region. */
 let regionBytes = 0;
 for (const region of Object.values(REGION_MAPS)) {
   const cols = Math.round((region.lngMax - region.lngMin) / region.step);

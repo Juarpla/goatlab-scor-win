@@ -1,21 +1,26 @@
-// Render local: media-pack + voz -> MP4 1080x1920 vía Remotion.
-// Uso: node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=voz.ogg --plan=plan.json [--script=guiones.json --script-n=N] [--variant=N] [--out=salida.mp4]
-// Mismo camino que el worker: tiempos por palabra (Mistral, whisper.cpp),
-// fotos reducidas, plan local y voz mezclada. Requiere Node 22, ffmpeg,
-// ffprobe y `npm install` en video-render/render/remotion (Remotion + React).
+// Local render: media-pack + voice -> 1080x1920 MP4 via the configured renderer.
+// Usage: node --env-file=.env video-render/cli/render.mjs --match=<webId> [--audio=<file>] --plan=plan.json [--script=scripts.json --script-n=N] [--variant=N] [--out=output.mp4]
+// The audio defaults to the single file in video-render/audios/<match>/.
+// Requires Node 22, ffmpeg, ffprobe and `npm ci` in video-render/render/remotion.
 import { execFile } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync, existsSync, rmSync, cpSync, statSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, dirname, basename } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { FRAME_W, FRAME_H, FPS, MAX_SECONDS } from '../src/lib/short-format.js';
-import { prepareShort, renderSilent, muxVoice, mediaDuration } from '../video-render/engine/short-job.mjs';
-import { transcribeWords } from '../video-render/engine/transcribe.mjs';
-import { alignReference, alignScripts } from '../video-render/engine/reference-timing.mjs';
+import { FPS, FRAME_H, FRAME_W, MAX_SECONDS } from '../contract/short-format.js';
+import {
+  alignReference,
+  alignScripts,
+  mediaDuration,
+  muxVoice,
+  prepareShort,
+  renderSilent,
+  transcribeWords,
+} from '../pipeline/index.mjs';
 
 const run = promisify(execFile);
-const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..');
+const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '../..');
 
 const args = Object.fromEntries(
   process.argv.slice(2).map((a) => {
@@ -39,10 +44,19 @@ async function has(bin) {
 }
 
 const match = args.match ?? fail('falta --match=<webId>');
-const audio = args.audio ?? fail('falta --audio=<voz> (los tiempos de cada palabra salen de la voz)');
+const audioDir = join(ROOT, 'video-render/audios', match);
+mkdirSync(audioDir, { recursive: true });
+const audio = args.audio ?? pickAudio(audioDir);
 if (!existsSync(audio)) fail(`audio no existe: ${audio}`);
 const variant = Number(args.variant ?? 0);
 if (!args.plan || !existsSync(args.plan)) fail('falta --plan=<plan JSON aprobado por OpenClaw>');
+
+function pickAudio(dir) {
+  const files = readdirSync(dir).filter((name) => /\.(mp3|wav|m4a|ogg|flac|aac)$/i.test(name));
+  if (files.length === 1) return join(dir, files[0]);
+  if (!files.length) fail(`deja el audio en ${dir} o pasa --audio=<archivo>`);
+  fail(`hay ${files.length} audios en ${dir}; elige uno con --audio=<archivo>`);
+}
 
 if (!(await has('ffmpeg'))) fail('ffmpeg no está en PATH');
 if (!(await has('ffprobe'))) fail('ffprobe no está en PATH');
@@ -55,8 +69,8 @@ const media = load(join(ROOT, 'public/data/media-pack', `${match}.json`));
 const assets = Array.isArray(media.assets) ? media.assets : [];
 if (assets.some(asset => asset.source !== 'agnes')) fail('Solo se admiten recursos Agnes');
 
-// El guion es opcional: si se pasa, corrige los nombres y cifras que Mistral
-// confunde, conservando sus tiempos por palabra.
+// The script is optional: if passed, it fixes names and figures Mistral
+// confuses, preserving its word timings.
 let reference = '', scriptCandidates = null, alignment = null;
 if (args.script) {
   const document = load(args.script);
@@ -70,8 +84,13 @@ if (args.script) {
   }
 }
 
-const out = args.out ?? join(ROOT, 'video-render/videos', `${match}-v${variant}.mp4`);
+const out = args.out ?? join(ROOT, 'video-render/videos', match, `${match}-${basename(audio).replace(/\.[^.]+$/, '')}-v${variant}.mp4`);
 mkdirSync(dirname(out), { recursive: true });
+const recipeDir = join(ROOT, 'video-render/work', match);
+mkdirSync(recipeDir, { recursive: true });
+const stem = basename(out, '.mp4');
+const recipePlan = join(recipeDir, `${stem}.plan.json`);
+if (resolve(args.plan) !== resolve(recipePlan)) cpSync(args.plan, recipePlan);
 
 const tmp = join(tmpdir(), `goatlab-short-${match}-v${variant}`);
 rmSync(tmp, { recursive: true, force: true });
@@ -99,13 +118,14 @@ async function scriptTimes({ tmp, voiceFile, voiceSeconds, log }) {
 }
 
 try {
+  const plan = load(args.plan);
   const voiceSeconds = await mediaDuration(voiceFile);
   const { total, provider, errors, voiceFile: adjustedVoiceFile } = await prepareShort({
     tmp,
     voiceFile,
     voiceSeconds,
     assets, clips: media.clips ?? [], facts: media.facts ?? [],
-    variant, plan: load(args.plan),
+    variant, plan,
     home: media.home ?? '',
     away: media.away ?? '',
     matchLabel: media.match,
@@ -115,18 +135,19 @@ try {
   lap(`preparado (tiempos ${provider}${errors.length ? `; ${errors.join(' | ')}` : ''})`);
   const silent = join(tmp, 'silent.mp4');
   await renderSilent(tmp, silent);
-  lap('remotion');
+  lap('render');
   const finalOut = join(tmp, 'with-audio.mp4');
-  await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut, music: load(args.plan).version === 5 ? load(args.plan).music === true : true });
+  await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut, music: plan.version === 5 ? plan.music === true : true });
   cpSync(finalOut, out);
-  const manifestPath = join(dirname(out), 'manifest.json');
+  const manifestPath = join(recipeDir, 'manifest.json');
   let manifest = {};
   try { manifest = JSON.parse(readFileSync(manifestPath, 'utf8')); } catch {}
-  manifest[basename(out)] = { match, audio, plan: args.plan ?? null, script: args.script ?? null,
+  manifest[basename(out)] = { match, audio, plan: recipePlan, script: args.script ?? null,
     scriptN: alignment?.script ?? null, score: alignment?.score ?? null, variant,
+    out: relative(ROOT, out),
     duration: Number(total.toFixed(3)), bytes: statSync(out).size, at: new Date().toISOString() };
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  if (args.keep) cpSync(join(tmp, 'composition.json'), out.replace(/\.mp4$/, '.json'));
+  if (args.keep) cpSync(join(tmp, 'composition.json'), join(recipeDir, `${stem}.composition.json`));
 } catch (e) {
   fail(e.message);
 }
