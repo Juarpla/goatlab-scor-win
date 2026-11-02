@@ -21,7 +21,8 @@ test (same quality, more weight and an extra toolchain).
 - Spanish subtitles, readable and synchronized with `words`.
 - Background music is mandatory: `plan.music: true`.
 - One video per audio.
-- Input audios: `video-render/audios/<id>/`.
+- Input audios: `video-render/audios/<id>/`; fixtures live in
+  `video-render/audios/tests/` (`tests` is a reserved id).
 - Deliveries: `video-render/videos/<id>/`.
 - The only fixed editorial element is the GoatLab logo in the last second.
 - Permanent visual preference: vivid color, sharp and well-lit image, no dark or
@@ -38,6 +39,8 @@ test (same quality, more weight and an extra toolchain).
 | Plans, QA and references | `video-render/work/<id>/<slug>/` |
 | Delivered MP4s | `video-render/videos/<id>/` |
 | Recipes (manifest and plan) | `video-render/work/<id>/` |
+| Audio fixtures (versioned) | `video-render/audios/tests/` |
+| Layout check | `pnpm video:layout` |
 
 `<slug>` is a short kebab-case label for the audio, for example `script-3` or the
 file name. Never reuse a slug for another audio.
@@ -108,7 +111,8 @@ Closure criterion: the user chose an `id` and an audio exists for that match.
 
 Look in `video-render/audios/<id>/` for the recording. The CLI creates that folder
 on the first run. When a batch arrives, inventory the recordings and assign each
-file to an `id` before rendering anything.
+file to an `id` before rendering anything. `--audio` only chooses among files and
+must point inside `audios/<id>/` (or `audios/tests/` for a fixture).
 
 If the files are numbered (for example `Track-78.m4a`), do not trust the name:
 identify the match from the first seconds of voice. This helper prints the Mistral
@@ -299,7 +303,7 @@ node --env-file=.env video-render/cli/render.mjs \
 | `guion:` below 50 | write a corrected reference and re-render |
 | `compilación` / `compilación JSX` | fix imports or JSX |
 | `presupuesto de captura` | raise `CAPTURE_BUDGET_MS` or simplify the most expensive scene |
-| `falta la música de fondo` | restore `video-render/assets/bed.mp3` |
+| `falta la música de fondo` | restore `video-render/soundtracks/bed.mp3` |
 | `MP4 fuera del contrato` | check duration, format or size; re-encode if needed |
 
 If an MP4 reaches 45 MB, re-encode only that file:
@@ -360,6 +364,9 @@ frames plus the endcard, the technical probe matches and the `guion:` score was
 acceptable or you used the corrected reference.
 
 ## Step 7 — Deliver
+
+Run `pnpm video:layout`; it must print `video-render layout: ok`. The CLI already
+rejects audio or output outside the contracted folders.
 
 Leave the MP4 in `video-render/videos/<id>/`. Do not delete the original audio or the
 plan. Reply with:

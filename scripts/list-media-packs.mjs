@@ -3,11 +3,11 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { audioFiles, audioRoot } from '../video-render/contract/layout.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PACK_DIR = join(ROOT, 'public/data/media-pack');
-const AUDIO_ROOT = process.env.GOATLAB_AUDIO_DIR || join(ROOT, 'video-render/audios');
-const AUDIO_EXT = /\.(mp3|wav|m4a|ogg|flac|aac)$/i;
+const AUDIO_ROOT = process.env.GOATLAB_AUDIO_DIR || audioRoot(ROOT);
 
 const rows = [];
 for (const file of readdirSync(PACK_DIR)) {
@@ -21,9 +21,7 @@ for (const file of readdirSync(PACK_DIR)) {
   if (!assets && !clips) continue;
   const date = id.match(/(\d{4}-\d{2}-\d{2})$/)?.[1] ?? '';
   const audioDir = join(AUDIO_ROOT, id);
-  const audios = existsSync(audioDir)
-    ? readdirSync(audioDir).filter(name => AUDIO_EXT.test(name))
-    : [];
+  const audios = existsSync(audioDir) ? audioFiles(audioDir) : [];
   rows.push({ id, date, match: pack.match ?? id, images: assets, clips, audio: audios });
 }
 rows.sort((a, b) => a.date.localeCompare(b.date) || a.match.localeCompare(b.match));

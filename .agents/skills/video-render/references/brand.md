@@ -14,7 +14,7 @@ generate another logo with AI.
   the plan must not draw it. The old Fly version had a 3 s endcard with the
   domain: do not copy it.
 
-The music lives in `video-render/assets/bed.mp3`, with credits in
+The music lives in `video-render/soundtracks/bed.mp3`, with credits in
 `bed.txt`. Do not replace it when changing the edit: the engine mixes it with the
 normalized voice.
 

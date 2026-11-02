@@ -8,13 +8,13 @@ import { LEAD_SECONDS } from '../contract/short-format.js';
 
 const run = promisify(execFile);
 const HERE = fileURLToPath(new URL('.', import.meta.url));
-const AUDIO_ASSETS = join(HERE, '../assets');
+const SOUNDTRACKS = join(HERE, '../soundtracks');
 export const BED_VOLUME_DB = -18;
 const BED_FADE_IN = 0.5;
 const BED_FADE_OUT = 1;
 
 export function bedPath() {
-  return join(AUDIO_ASSETS, 'bed.mp3');
+  return join(SOUNDTRACKS, 'bed.mp3');
 }
 
 /** Voice at −16 LUFS and bed at −18 dB, without lowering the voice in the mix. */

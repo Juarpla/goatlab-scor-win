@@ -3,12 +3,22 @@
 // The audio defaults to the single file in video-render/audios/<match>/.
 // Requires Node 22, ffmpeg, ffprobe and `npm ci` in video-render/render/remotion.
 import { execFile } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { FPS, FRAME_H, FRAME_W, MAX_SECONDS } from '../contract/short-format.js';
+import {
+  assertAudioInput,
+  assertMatchId,
+  assertVideoOutput,
+  audioFiles,
+  matchAudioDir,
+  matchRecipeDir,
+  matchVideoDir,
+  videoName,
+} from '../contract/layout.js';
 import {
   alignReference,
   alignScripts,
@@ -43,16 +53,15 @@ async function has(bin) {
   }
 }
 
-const match = args.match ?? fail('falta --match=<webId>');
-const audioDir = join(ROOT, 'video-render/audios', match);
-mkdirSync(audioDir, { recursive: true });
-const audio = args.audio ?? pickAudio(audioDir);
-if (!existsSync(audio)) fail(`audio no existe: ${audio}`);
+if (!args.match) fail('falta --match=<webId>');
+let match;
+try { match = assertMatchId(args.match); } catch (e) { fail(e.message); }
 const variant = Number(args.variant ?? 0);
+if (!Number.isInteger(variant) || variant < 0) fail('--variant must be a non-negative integer');
 if (!args.plan || !existsSync(args.plan)) fail('falta --plan=<plan JSON aprobado por OpenClaw>');
 
 function pickAudio(dir) {
-  const files = readdirSync(dir).filter((name) => /\.(mp3|wav|m4a|ogg|flac|aac)$/i.test(name));
+  const files = audioFiles(dir);
   if (files.length === 1) return join(dir, files[0]);
   if (!files.length) fail(`deja el audio en ${dir} o pasa --audio=<archivo>`);
   fail(`hay ${files.length} audios en ${dir}; elige uno con --audio=<archivo>`);
@@ -69,6 +78,16 @@ const media = load(join(ROOT, 'public/data/media-pack', `${match}.json`));
 const assets = Array.isArray(media.assets) ? media.assets : [];
 if (assets.some(asset => asset.source !== 'agnes')) fail('Solo se admiten recursos Agnes');
 
+const audioDir = matchAudioDir(ROOT, match);
+mkdirSync(audioDir, { recursive: true });
+let audio;
+try {
+  audio = args.audio ? assertAudioInput(ROOT, args.audio, match) : pickAudio(audioDir);
+} catch (e) {
+  fail(e.message);
+}
+if (!existsSync(audio)) fail(`audio no existe: ${audio}`);
+
 // The script is optional: if passed, it fixes names and figures Mistral
 // confuses, preserving its word timings.
 let reference = '', scriptCandidates = null, alignment = null;
@@ -84,12 +103,19 @@ if (args.script) {
   }
 }
 
-const out = args.out ?? join(ROOT, 'video-render/videos', match, `${match}-${basename(audio).replace(/\.[^.]+$/, '')}-v${variant}.mp4`);
+let out;
+try {
+  out = args.out
+    ? assertVideoOutput(ROOT, args.out, match)
+    : join(matchVideoDir(ROOT, match), videoName(match, audio, variant));
+} catch (e) {
+  fail(e.message);
+}
 mkdirSync(dirname(out), { recursive: true });
-const recipeDir = join(ROOT, 'video-render/work', match);
-mkdirSync(recipeDir, { recursive: true });
+const recipes = matchRecipeDir(ROOT, match);
+mkdirSync(recipes, { recursive: true });
 const stem = basename(out, '.mp4');
-const recipePlan = join(recipeDir, `${stem}.plan.json`);
+const recipePlan = join(recipes, `${stem}.plan.json`);
 if (resolve(args.plan) !== resolve(recipePlan)) cpSync(args.plan, recipePlan);
 
 const tmp = join(tmpdir(), `goatlab-short-${match}-v${variant}`);
@@ -139,15 +165,15 @@ try {
   const finalOut = join(tmp, 'with-audio.mp4');
   await muxVoice({ silent, voiceFile: adjustedVoiceFile, total, out: finalOut, music: plan.version === 5 ? plan.music === true : true });
   cpSync(finalOut, out);
-  const manifestPath = join(recipeDir, 'manifest.json');
+  const manifestPath = join(recipes, 'manifest.json');
   let manifest = {};
   try { manifest = JSON.parse(readFileSync(manifestPath, 'utf8')); } catch {}
-  manifest[basename(out)] = { match, audio, plan: recipePlan, script: args.script ?? null,
+  manifest[basename(out)] = { match, audio: relative(ROOT, audio), plan: relative(ROOT, recipePlan), script: args.script ?? null,
     scriptN: alignment?.script ?? null, score: alignment?.score ?? null, variant,
     out: relative(ROOT, out),
     duration: Number(total.toFixed(3)), bytes: statSync(out).size, at: new Date().toISOString() };
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  if (args.keep) cpSync(join(tmp, 'composition.json'), join(recipeDir, `${stem}.composition.json`));
+  if (args.keep) cpSync(join(tmp, 'composition.json'), join(recipes, `${stem}.composition.json`));
 } catch (e) {
   fail(e.message);
 }

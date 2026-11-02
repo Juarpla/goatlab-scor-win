@@ -1,6 +1,8 @@
 # Audio fixtures
 
-Three real narrations kept for pipeline tests.
+Three real narrations kept for pipeline tests. They live under `audios/` because
+they are inputs, and `tests` is a reserved match id: no match recording belongs
+here.
 
 | File | Duration | Expected |
 | --- | ---: | --- |

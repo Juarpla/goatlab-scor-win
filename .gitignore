@@ -45,9 +45,16 @@ __pycache__/
 video-render/render/remotion/dist-remotion/
 
 # renders and local work material (binaries; never versioned)
-video-render/videos/
-video-render/work/
+# the folders themselves stay in git through .gitkeep
+video-render/videos/*
+!video-render/videos/tests/
+video-render/videos/tests/*
+!video-render/videos/tests/.gitkeep
+video-render/work/*
+!video-render/work/.gitkeep
 
-# per-match voice recordings: only the folder contract is tracked
+# per-match voice recordings: docs and fixtures are tracked, recordings are not
 video-render/audios/*
 !video-render/audios/README.md
+!video-render/audios/tests/
+!video-render/audios/tests/**

@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
+import { testAudioDir } from '../video-render/contract/layout.js';
 import { MAX_VOICE_RATE, VOICE_SECONDS } from '../video-render/contract/short-format.js';
 
-const dir = fileURLToPath(new URL('../video-render/tests/fixtures/audio/', import.meta.url));
+const dir = testAudioDir(fileURLToPath(new URL('..', import.meta.url)));
 const duration = (name) => Number(execFileSync('ffprobe', [
   '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', join(dir, name),
 ], { encoding: 'utf8' }).trim());

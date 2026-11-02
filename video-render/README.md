@@ -8,7 +8,7 @@ remote worker and no Fly.io: everything runs on this machine.
 
 ```
 video-render/
-  contract/                  shared constants and plan/timing rules
+  contract/                  shared constants, plan/timing rules, folder layout
   pipeline/                  numbered stages in execution order
     00-io.mjs                ffprobe duration and atomic JSON writes
     01-voice.mjs             speed-up policy for the voice
@@ -27,16 +27,48 @@ video-render/
       compositions/          React compositions
       kit/                   design kit
       assets/                font and brand
-  cli/render.mjs             command-line entry point
-  bench/render-input.mjs     benchmark fixture helper
-  assets/                    background bed (independent of the renderer)
+  cli/render.mjs             terminal entry point
+  cli/check-layout.mjs       media folder validator
+  bench/render-input.mjs     benchmark-only copy helper
+  soundtracks/bed.mp3        background music (independent of the renderer)
   audios/<match-id>/         voice recordings (ignored by git)
+  audios/tests/              three versioned audio fixtures
   videos/<match-id>/         delivered MP4s (ignored by git)
-  videos/tests/              test renders (ignored by git)
-  work/<match-id>/           plans, manifests and QA (ignored by git)
-  tests/fixtures/audio/      three versioned audio fixtures
+  videos/tests/              test renders (contents ignored; .gitkeep keeps the folder)
+  work/<match-id>/           plans, manifests and QA (contents ignored; work/.gitkeep keeps the folder)
   STYLE.md                   preferences and lessons
 ```
+
+## Folder contract
+
+`contract/layout.js` is the single source of truth for the media tree. The CLI
+builds every path through it, rejects audio outside `audios/<match-id>/` (or the
+fixtures folder) and rejects outputs outside `videos/<match-id>/` (or
+`videos/tests/`). Check the tree with:
+
+```sh
+pnpm video:layout
+```
+
+- `audios/<match-id>/` holds the voice recordings for that match. `tests` is a
+  reserved match id: `audios/tests/` holds the three versioned fixtures.
+- `videos/<match-id>/` holds only MP4s. Recipes never live there.
+- `videos/tests/` holds renders that are not delivered to the user. Git tracks
+  the folder through `.gitkeep`; its contents are ignored.
+- `work/<match-id>/` holds `manifest.json`, `<video>.plan.json`,
+  `<video>.composition.json` and local QA. Git tracks `work/` through
+  `.gitkeep`; everything inside is ignored, and only match folders (plus the
+  `.gitkeep` placeholder) are allowed at its root.
+
+## CLI and bench
+
+- `cli/render.mjs` is the production entry point. It parses arguments, resolves
+  the media pack and folders, runs the pipeline and validates the MP4.
+- `cli/check-layout.mjs` walks the media tree and exits non-zero on any file
+  that breaks the contract.
+- `bench/render-input.mjs` copies a composition into an isolated directory so
+  the benchmark scripts can time repeated renders without touching the original.
+  It is not part of the production path.
 
 ## Renderer interface
 
@@ -93,15 +125,19 @@ node --env-file=.env video-render/cli/render.mjs \
   --match=real-racing-club-vs-real-madrid-2026-11-01 \
   --script=public/data/youtube-scripts/real-racing-club-vs-real-madrid-2026-11-01.json \
   --script-n=6 \
-  --plan=video-render/work/<id>/<slug>/plan.json \
+  --plan=video-render/work/<id>/<slug>.plan.json \
   --variant=1 --keep
 ```
 
-- `--audio` is optional; pass it only when the match folder has more than one file.
+- `--audio` is optional; pass it only when the match folder has more than one
+  file. It must already live in `audios/<id>/` or `audios/tests/`.
 - `--script` is optional; with it, subtitles use the script text and Mistral's
   timings. `--script-n` fixes the script; without it, the CLI picks the best match
   against every script in the file.
-- Without `--out`, the MP4 goes to `video-render/videos/<id>/<id>-v<variant>.mp4`.
+- Without `--out`, the MP4 goes to
+  `video-render/videos/<id>/<id>-<audio>-v<variant>.mp4`.
+- `--out` must stay inside `video-render/videos/<id>/` or
+  `video-render/videos/tests/`; anything else is rejected.
 - Recipes live outside the videos folder: `video-render/work/<id>/manifest.json`
   plus `<stem>.plan.json`. `--keep` also saves `<stem>.composition.json` there.
 - Test renders go to `video-render/videos/tests/` via
