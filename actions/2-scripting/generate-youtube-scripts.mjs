@@ -2,7 +2,7 @@ import { normalizeScriptTitles } from '../../src/lib/script-titles.js';
 import { readContentSelection } from '../../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de guiones pertenece a GitHub Actions');
 /** Guiones faltantes de Shorts: el modelo de turno redacta con el skill
- *  redactar-guiones-shorts. Un JSON válido ya existente no se toca.
+ *  writing-short-scripts. Un JSON válido ya existente no se toca.
  *  Sin --match, redacta el top N (input --top, SCRIPT_TOP_N o 5) del ranking
  *  guardado en public/data/top.json (lo escribe 1-update-data). La poda pertenece a la actualización de data.
  *  --match o top ampliado registran el partido como extra protegido. */
@@ -33,7 +33,7 @@ import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pr
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 const dir = 'public/data/youtube-scripts';
 const healthPath = 'public/data/llm-health.json';
-const skillPath = '.agents/skills/redactar-guiones-shorts/SKILL.md';
+const skillPath = '.agents/skills/writing-short-scripts/SKILL.md';
 const SCRIPT_MAX_TOKENS = CONTENT_LLM_LIMITS.maxTokens;
 const SCRIPT_TIMEOUT_MS = CONTENT_LLM_LIMITS.timeoutMs;
 const LLM_HEALTH_MAX = 200;

@@ -1,38 +1,38 @@
 # video-render
 
-Render local de Shorts de GoatLab. Toma un audio, un media pack y un plan JSX, y
-entrega un MP4 1080×1920 con voz, música y subtítulos. No hay worker remoto ni
-Fly.io: todo corre en esta máquina.
+Local GoatLab Shorts renderer. It takes an audio track, a media pack and a JSX
+plan, and delivers a 1080×1920 MP4 with voice, music and subtitles. There is no
+remote worker and no Fly.io: everything runs on this machine.
 
-## Estructura
+## Structure
 
 ```
 video-render/
-  engine/                 motor: preparación, transcripción, alineación, cachés
-  render/remotion/        proyecto Remotion, kit, assets, bundle y render
-  ESTILO.md               preferencias y lecciones (versionado)
-  videos/                 MP4 entregados (ignorado por git)
-  trabajo/                planes, QA y referencias (ignorado por git)
+  engine/                 engine: preparation, transcription, alignment, caches
+  render/remotion/        Remotion project, kit, assets, bundle and render
+  STYLE.md                preferences and lessons (versioned)
+  videos/                 delivered MP4s (ignored by git)
+  work/                   plans, QA and references (ignored by git)
 ```
 
-- `engine/short-job.mjs` orquesta voz, transcripción, fotos, clips y composición.
-- `engine/transcribe.mjs` usa Mistral (Voxtral) y cae a whisper.cpp.
-- `engine/reference-timing.mjs` alinea el guion con lo escuchado.
-- `render/remotion/authored-composition.mjs` valida y compila el plan JSX.
-- `render/remotion/remotion-render.mjs` captura y codifica.
+- `engine/short-job.mjs` orchestrates voice, transcription, photos, clips and composition.
+- `engine/transcribe.mjs` uses Mistral (Voxtral) and falls back to whisper.cpp.
+- `engine/reference-timing.mjs` aligns the script with the heard words.
+- `render/remotion/authored-composition.mjs` validates and compiles the JSX plan.
+- `render/remotion/remotion-render.mjs` captures and encodes.
 
-## Requisitos
+## Requirements
 
-Node 22.12 o posterior, ffmpeg y ffprobe. Dependencias del render:
+Node 22.12 or later, ffmpeg and ffprobe. Render dependencies:
 
 ```sh
 npm ci --prefix video-render/render/remotion
 ```
 
-Las claves van en `.env` (nunca en git): `MISTRAL_API_KEY`, `OPENCODE_GO_API_KEY`
-y las de R2/Agnes si se generan bancos.
+Keys go in `.env` (never in git): `MISTRAL_API_KEY`, `OPENCODE_GO_API_KEY` and
+the R2/Agnes keys if media banks are generated.
 
-## Uso
+## Usage
 
 ```sh
 node --env-file=.env scripts/render-short.mjs \
@@ -40,43 +40,43 @@ node --env-file=.env scripts/render-short.mjs \
   --audio="$HOME/Desktop/goatlab-audios/Track-93.m4a" \
   --script=public/data/youtube-scripts/real-racing-club-vs-real-madrid-2026-11-01.json \
   --script-n=6 \
-  --plan=video-render/trabajo/<id>/<slug>/plan.json \
+  --plan=video-render/work/<id>/<slug>/plan.json \
   --out=video-render/videos/<id>-<slug>-v1.mp4 \
   --variant=1 --keep
 ```
 
-- `--script` es opcional; con él los subtítulos usan el texto del guion y los
-  tiempos de Mistral. `--script-n` fija el guion; sin él se elige el de mayor
-  coincidencia contra todos los guiones del archivo.
-- Sin `--out`, el MP4 va a `video-render/videos/`.
-- `--keep` guarda `composition.json` junto al MP4.
-- Cada render añade una entrada a `manifest.json` en la carpeta de salida (partido,
-  audio, plan, guion elegido, score, duración, bytes y fecha).
-- La skill `video-render` contiene el flujo completo, la dirección creativa y la
-  guía de autoría.
+- `--script` is optional; with it, subtitles use the script text and Mistral's
+  timings. `--script-n` fixes the script; without it, the CLI picks the best match
+  against every script in the file.
+- Without `--out`, the MP4 goes to `video-render/videos/`.
+- `--keep` saves `composition.json` next to the MP4.
+- Each render appends an entry to `manifest.json` in the output folder (match,
+  audio, plan, chosen script, score, duration, bytes and date).
+- The `video-render` skill contains the full workflow, creative direction and
+  authoring guide.
 
-## A/B de motores (2026-11-01)
+## Engine A/B test (2026-11-01)
 
-Mismo audio (45,696 s), mismo banco 4 imágenes / 4 clips, mismo brief y mismas
-1431 frames a 1080×1920/30 fps. Remotion con 3 workers; HyperFrames 0.8.226 con
-`--crf=20` y 3 workers.
+Same audio (45.696 s), same bank of 4 images / 4 clips, same brief and the same
+1431 frames at 1080×1920/30 fps. Remotion with 3 workers; HyperFrames 0.8.226
+with `--crf=20` and 3 workers.
 
-| Motor | Tiempo | Peso | Salida | Autoría |
+| Engine | Time | Size | Output | Authoring |
 | --- | --- | --- | --- | --- |
-| Remotion 4.0.537 | 33,2 s | 21 MB | 3,6 Mbps | plan JSX validado por el motor |
-| HyperFrames 0.8.226 | 37,0 s | 35 MB | 5,9 Mbps | HTML+GSAP con `check` de layout |
+| Remotion 4.0.537 | 33.2 s | 21 MB | 3.6 Mbps | JSX plan validated by the engine |
+| HyperFrames 0.8.226 | 37.0 s | 35 MB | 5.9 Mbps | HTML+GSAP with layout `check` |
 
-Calidad visual equivalente en los fotogramas comparados. Se conserva **Remotion**:
-ya estaba integrado, produce archivos más pequeños con la misma calidad y su
-contrato JSX detecta imports y APIs prohibidas antes de capturar. HyperFrames
-requería un toolchain aparte (Chrome, CLI y HTML propio) sin ventaja de tiempo.
+Visual quality was equivalent in the compared frames. **Remotion** is kept: it
+was already integrated, produces smaller files at the same quality and its JSX
+contract detects forbidden imports and APIs before capture. HyperFrames required
+a separate toolchain (Chrome, CLI and its own HTML) with no time advantage.
 
-## Pruebas
+## Tests
 
 ```sh
 node --test tests/*.test.js
 python3 -m unittest discover -s tests/pipeline
 ```
 
-Los tests de render cubren preparación de voz, transcripción, cachés, layout,
-presupuesto de captura, bundle JSX y contrato de composición.
+Render tests cover voice preparation, transcription, caches, layout, capture
+budget, JSX bundle and composition contract.

@@ -62,7 +62,7 @@ export function authoredProps(prepared, plan) {
 const facade = `import React from 'react';
 import {Img as Image,OffthreadVideo as Clip,Html5Video as HtmlVideo,useVideoConfig} from 'remotion';
 export {AbsoluteFill,Sequence,Series,Freeze,Loop,useCurrentFrame,useVideoConfig,interpolate,interpolateColors,spring,Easing,random,getInputProps} from 'remotion';
-function checked(src,props){const list=[props.font,props.brand,...props.photos.flatMap(p=>[p.src,p.backdrop,p.focusBlur]),...props.clips.map(c=>c.src)];if(!list.includes(src))throw Error('recurso ajeno al trabajo');return src;}
+function checked(src,props){const list=[props.font,props.brand,...props.photos.flatMap(p=>[p.src,p.backdrop,p.focusBlur]),...props.clips.map(c=>c.src)];if(!list.includes(src))throw Error('resource outside the job');return src;}
 export function Img(p){const {props}=useVideoConfig();return <Image {...p} src={checked(p.src,props)}/>;}
 export function OffthreadVideo(p){const {props}=useVideoConfig();return <Clip {...p} src={checked(p.src,props)} muted/>;}
 export function Html5Video(p){const {props}=useVideoConfig();return <HtmlVideo {...p} src={checked(p.src,props)} muted/>;}

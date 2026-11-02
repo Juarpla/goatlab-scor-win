@@ -34,7 +34,7 @@ del 2026-11-01 (misma calidad, más peso y un toolchain adicional).
 | CLI de render | `scripts/render-short.mjs` |
 | Motor | `video-render/engine/` |
 | Proyecto Remotion, kit y assets | `video-render/render/remotion/` |
-| Planes, QA y referencias | `video-render/trabajo/<id>/<slug>/` |
+| Planes, QA y referencias | `video-render/work/<id>/<slug>/` |
 | MP4 entregados | `video-render/videos/` |
 
 `<slug>` es una etiqueta corta en kebab-case para el audio, por ejemplo `script-3`
@@ -84,8 +84,8 @@ El archivo corregido tiene la forma que espera `--script`:
 { "scripts": [{ "n": 1, "narration": "…" }] }
 ```
 
-Guárdalo en `video-render/trabajo/<id>/<slug>/reference.json` y pasa
-`--script="video-render/trabajo/<id>/<slug>/reference.json" --script-n=1`.
+Guárdalo en `video-render/work/<id>/<slug>/reference.json` y pasa
+`--script="video-render/work/<id>/<slug>/reference.json" --script-n=1`.
 
 ## Paso 1 — Elegir el partido
 
@@ -115,7 +115,7 @@ la transcripción de Mistral; usa `-t 20` para identificar y quítalo para la
 transcripción completa de una corrección.
 
 ```sh
-TMP="video-render/trabajo/<id>/<slug>"
+TMP="video-render/work/<id>/<slug>"
 mkdir -p "$TMP"
 ffmpeg -y -loglevel error -t 20 -i "$AUDIO" -ac 1 -ar 16000 "$TMP/identify.flac"
 VOICE_FLAC="$TMP/identify.flac" node --env-file=.env --input-type=module -e "
@@ -163,7 +163,7 @@ Criterio de cierre: sabes qué muestra cada clip y cuántos vas a usar.
 
 ## Paso 4 — Escribir el plan
 
-Crea `video-render/trabajo/<id>/<slug>/plan.json`:
+Crea `video-render/work/<id>/<slug>/plan.json`:
 
 ```json
 {
@@ -270,7 +270,7 @@ node --env-file=.env scripts/render-short.mjs \
   --audio="$HOME/Desktop/goatlab-audios/<file>" \
   --script="public/data/youtube-scripts/<id>.json" \
   --script-n=<n> \
-  --plan="video-render/trabajo/<id>/<slug>/plan.json" \
+  --plan="video-render/work/<id>/<slug>/plan.json" \
   --out="video-render/videos/<id>-<slug>-v1.mp4" \
   --variant=1 \
   --keep
@@ -323,7 +323,7 @@ ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame
 Luego muestrea la línea de tiempo en una carpeta de QA:
 
 ```sh
-QA="video-render/trabajo/<id>/<slug>/qa"
+QA="video-render/work/<id>/<slug>/qa"
 mkdir -p "$QA"
 D=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$OUT")
 for pct in 5 25 50 75 95; do
@@ -378,14 +378,14 @@ Da identidad propia a cada render concurrente:
 | Recurso | Regla |
 | --- | --- |
 | Temp dir | `--variant` único por proceso. |
-| Plan y QA | `video-render/trabajo/<id>/<slug>/…`, un slug por audio. |
+| Plan y QA | `video-render/work/<id>/<slug>/…`, un slug por audio. |
 | Salida | `<id>-<slug>-v1.mp4`; `--keep` escribe el JSON al lado. |
-| Caché de medios | Partidos distintos: la caché compartida es segura (claves por hash de URL). Mismo partido: `PHOTO_CACHE_DIR="video-render/trabajo/<id>/<slug>/photos"` para una caché privada. |
+| Caché de medios | Partidos distintos: la caché compartida es segura (claves por hash de URL). Mismo partido: `PHOTO_CACHE_DIR="video-render/work/<id>/<slug>/photos"` para una caché privada. |
 | CPU | 2–3 renders concurrentes con `RENDER_WORKERS=3` cada uno. Nunca lances diez. |
 
 ## Referencias
 
-- `video-render/ESTILO.md`: preferencias permanentes y lecciones de renders reales.
+- `video-render/STYLE.md`: preferencias permanentes y lecciones de renders reales.
 - `references/creative.md`: contrato creativo, imports y kit.
 - `references/brand.md`: marca, colores, subtítulos y música.
 - `references/remotion.md`: guía de autoría Remotion, patrones y errores comunes.

@@ -145,7 +145,7 @@ cambies el motor.
 | Síntoma | Causa | Arreglo |
 | --- | --- | --- |
 | `compilación JSX` | import no permitido, sintaxis o export ausente | revisa imports y `export default` |
-| `recurso ajeno al trabajo` | usaste una URL o un archivo que no viene de props | usa `photos[].src`, `clips[].src`, `font` o `brand` |
+| `resource outside the job` | usaste una URL o un archivo que no viene de props | usa `photos[].src`, `clips[].src`, `font` o `brand` |
 | `duración fuera de límite` | `scenes` o `frames` fuera de rango | ajusta `scenes` al contenido |
 | `plan version:5 y code JSX` | falta `code` o versión | completa el JSON |
 | Captions vacíos | `words` no se pasó a `Captions` | pasa `props.words` |

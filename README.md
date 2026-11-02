@@ -96,7 +96,7 @@ fotos y clips. Las versiones 1–4 conservan su camino de compatibilidad. El cie
 muestra el logo durante un segundo y el total, incluido ese cierre, mide como
 máximo 55 s. Recomendación de grabación: hasta 50 s; presupuesto técnico de voz
 53 s y ajuste hasta 1.10 conservando el tono. Los MP4 se guardan en
-`video-render/videos/` y los archivos de trabajo en `video-render/trabajo/`.
+`video-render/videos/` y los archivos de trabajo en `video-render/work/`.
 Consulta [el reporte de libertad creativa y restricciones](CREATIVE-FREEDOM-REPORT.md).
 
 Los cinco intentos de Agnes Video Flash emparejan prompts e imágenes distintas

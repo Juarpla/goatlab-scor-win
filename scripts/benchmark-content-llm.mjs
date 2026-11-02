@@ -10,7 +10,7 @@ if (!match) throw new Error('Usa --match=<webId de fixtures>');
 const matchId = match.webId ?? match.id;
 async function optional(file) { try { return JSON.parse(await readFile(file, 'utf8')); } catch (e) { if (e.code !== 'ENOENT') throw e; return null; } }
 const facts = scriptFacts(match, await optional('public/data/scorers.json'), await optional(`public/match-probabilities/${matchId}.json`));
-const skill = (await readFile('.agents/skills/redactar-guiones-shorts/SKILL.md', 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
+const skill = (await readFile('.agents/skills/writing-short-scripts/SKILL.md', 'utf8')).replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
 const published = (await optional('public/data/evaluation-report.json'))?.published === true;
 const output = join('.cache/content-llm-benchmark', args.label ?? new Date().toISOString().replace(/[:.]/g, '-'));
 const limits = { ...CONTENT_LLM_LIMITS };

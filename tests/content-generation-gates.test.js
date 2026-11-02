@@ -100,9 +100,9 @@ async function model(t, content) {
 }
 async function scriptGuide({ cwd, data }) {
   await writeFile(join(data, 'evaluation-report.json'), JSON.stringify({ published: false }));
-  const skill = join(cwd, '.agents/skills/redactar-guiones-shorts');
+  const skill = join(cwd, '.agents/skills/writing-short-scripts');
   await mkdir(skill, { recursive: true });
-  await writeFile(join(skill, 'SKILL.md'), 'Redacta diez guiones del partido.');
+  await writeFile(join(skill, 'SKILL.md'), 'Write ten match scripts.');
 }
 function draft() {
   const phrases = ['abren el análisis', 'comparan sus ritmos', 'buscan continuidad', 'presentan sus fortalezas', 'preparan el encuentro', 'muestran sus contrastes', 'exploran el contexto', 'ponen a prueba su lectura', 'conservan sus matices', 'cierran la previa'];

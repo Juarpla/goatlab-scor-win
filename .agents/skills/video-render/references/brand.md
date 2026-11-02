@@ -1,23 +1,23 @@
-# Identidad de GoatLab
+# GoatLab identity
 
-La marca es **GoatLab** y el dominio escrito es `goatlab.win`.
+The brand is **GoatLab** and the written domain is `goatlab.win`.
 
-El logo vive en `video-render/render/remotion/assets/brand.svg`: conserva el
-símbolo del favicon de la web, gráfico verde sobre fondo oscuro. No generes otro
-logo con IA.
+The logo lives in `video-render/render/remotion/assets/brand.svg`: it keeps the
+symbol from the website favicon, a green graphic on a dark background. Do not
+generate another logo with AI.
 
-- Acento principal: `#c5ed74`.
-- Fondo de marca: `#101412`.
-- Subtítulos: `#ffe14a` con borde negro. No apliques colores de los equipos al
-  texto subtitulado.
-- El cierre local muestra solo el logo durante **1 segundo**; el motor lo añade y
-  el plan no debe dibujarlo. La versión antigua de Fly tenía un cierre de 3 s con
-  dominio: no la copies.
+- Primary accent: `#c5ed74`.
+- Brand background: `#101412`.
+- Subtitles: `#ffe14a` with a black outline. Do not apply team colors to
+  subtitled text.
+- The local endcard shows only the logo for **1 second**; the engine adds it and
+  the plan must not draw it. The old Fly version had a 3 s endcard with the
+  domain: do not copy it.
 
-La música vive en `video-render/render/remotion/assets/bed.mp3`, con sus créditos
-en `bed.txt`. No la reemplaces al modificar el montaje: el motor la mezcla con la
-voz normalizada.
+The music lives in `video-render/render/remotion/assets/bed.mp3`, with credits in
+`bed.txt`. Do not replace it when changing the edit: the engine mixes it with the
+normalized voice.
 
-Los créditos del MP4 incluyen música, fotos y el aviso de ilustraciones de IA
-cuando se usaron. No atribuyas esas ilustraciones a un jugador real ni las
-presentes como fotos del partido.
+MP4 credits include music, photos and the AI-illustration notice when those were
+used. Do not attribute those illustrations to a real player or present them as
+photos of the match.

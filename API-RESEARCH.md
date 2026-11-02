@@ -1,143 +1,143 @@
 # API-RESEARCH.md
 
-**Endpoints gratuitos para poblar los campos nulos del schema v2**
-Fecha: 2026-09-17 · Alcance: Bzzoiro (BSD v2), API-Football v3, Football-Data.org v4, Open-Meteo
-Método: documentación oficial + llamadas GET reales con las claves del proyecto (solo lectura; no se consumió cuota más allá de lo presupuestado).
-Fuera del alcance: cuotas de casas de apuestas, Polymarket, escribir código o tocar el schema.
+**Free endpoints to populate the null fields of schema v2**
+Date: 2026-09-17 · Scope: Bzzoiro (BSD v2), API-Football v3, Football-Data.org v4, Open-Meteo
+Method: official documentation + real GET calls with the project keys (read-only; no quota consumed beyond the budgeted amount).
+Out of scope: bookmaker odds, Polymarket, writing code or touching the schema.
 
-**Marcas usadas**
+**Marks used**
 
-| Marca | Significado |
+| Mark | Meaning |
 |---|---|
-| ✅ VERIFICADO (live) | Respuesta real capturada el 2026-09-17 con la clave del proyecto |
-| ✅ VERIFICADO (docs) | Documentación oficial vigente consultada hoy |
-| 🟡 PROBABLE | Documentado o indicado por terceros, no observado en vivo |
-| ⛔ NO DISPONIBLE | Comprobado que el plan gratuito no lo sirve |
+| ✅ VERIFIED (live) | Real response captured on 2026-09-17 with the project key |
+| ✅ VERIFIED (docs) | Current official documentation consulted today |
+| 🟡 LIKELY | Documented or reported by third parties, not observed live |
+| ⛔ NOT AVAILABLE | Confirmed that the free plan does not serve it |
 
 ---
 
-## 1. Tabla principal (dato → endpoint → límite → campo → riesgo)
+## 1. Main table (data → endpoint → limit → field → risk)
 
-| # | Dato | Endpoint verificado (URL + ejemplo de respuesta) | Límite plan gratuito | Campo schema v2 | Riesgo |
+| # | Data | Verified endpoint (URL + response example) | Free plan limit | Schema v2 field | Risk |
 |---|---|---|---|---|---|
-| 1.1 | **Córners por equipo y partido** | Bzzoiro `GET /api/v2/events/{id}/stats/` — `stats.home.corner_kicks: 6`, `stats.away.corner_kicks: 3` (UCL Bayern–Bodø/Glimt, event 601067) ✅ VERIFICADO (live) | 7.500 req/día (reset 00:00 UTC, burst 25/s) | `setPieces.{home,away}.cornersOver95` (+ `method: poisson-corners-v0`) | Detalle solo desde la temporada 2025/26 (ver 1.9); en Champions la cobertura de `stats` es del 52% (coverage oficial); `null` ≠ 0 |
-| 1.2 | **Tarjetas amarillas/rojas por equipo** | Bzzoiro `stats.{home,away}.yellow_cards` / `red_cards` (601067: 0 y 0 local; 1 y 1 visitante) ✅ VERIFICADO (live). Complemento timeline: `/incidents/` (`card_type: "yellow"|"red"`) ✅ VERIFICADO (live) | ídem 1.1 | `discipline.{home,away}.yellowOver35`, `redAnytime` (+ `method: poisson-cards-v0`) | `incidents` documenta `period_second` y `rescinded` (✅ VERIFICADO docs) pero **no se observaron en el payload muestreado** (🟡 PROBABLE); el conteo de tarjetas excluye anuladas por revisión |
-| 1.3 | **Faltas por equipo** | Bzzoiro `stats.{home,away}.fouls` (601067: 5 y 8) ✅ VERIFICADO (live) | ídem 1.1 | `discipline.{home,away}.foulsAvg` | Cobertura desigual fuera de las grandes ligas; `null` honesto |
-| 1.4 | **Tiros a puerta** | Bzzoiro `stats.{home,away}.shots_on_target` (601067: 12 y 3) ✅ VERIFICADO (live) | ídem 1.1 | `setPieces.shots` | Ojo: el bag y el `shotmap` pueden discrepar (docs); usar `shotmap` si hace falta un solo número |
-| 1.5 | **xG por equipo** | Bzzoiro `stats.{home,away}.xg.actual` + flag `estimated` (601067: 2.49, medido) ✅ VERIFICADO (live) — ya integrado como `provider.xg` | ídem 1.1 | `setPieces.xgTotal` | Competiciones enteras con xG **estimado** (Ligue 2, League Two, Liga Portugal 2, NWSL): no mezclar con xG medido en entrenamiento |
-| 1.6 | **Bajas y sanciones** | Bzzoiro `GET /api/v2/events/{id}/lineups/` → `unavailable_players.{home,away}[]` con `status: "injured"` y `reason` (601067: 6 bajas visitantes) ✅ VERIFICADO (live). Refuerzo: `GET /api/v2/teams/{id}/squad/` → por jugador `availability: available|injured|doubtful|suspended`, `injury_type`, `injury_expected_return` ✅ VERIFICADO (live) | ídem 1.1 | `availability.{status, unavailablePlayers, source}` (+ `sample.historyRows`) | `available` significa "no listado como baja", no "confirmado apto"; refresco varias veces al día; razón puede venir como `pending_transfer` |
-| 1.7 | **Alineaciones (XI)** | Bzzoiro `lineup_status: confirmed|predicted|unavailable` + `confidence` (601159, partido de enero 2027: `predicted`, conf. 0.577) ✅ VERIFICADO (live) | ídem 1.1 | No hay campo de XI en schema v2; el estado alimenta `availability` como contexto | Confirmado ~75 min antes; predicho desde ~14 días (docs); la ventana observada llegó a meses fuera (🟡 PROBABLE el horizonte exacto); cobertura de teamsheets: 98.6% en 2026, 69% en 2025, 8% en 2024 |
-| 1.8 | **Árbitro asignado** | Bzzoiro `GET /api/v2/events/{id}/` → `referee_id` (601067 → 2217) ✅ VERIFICADO (live) + `GET /api/v2/referees/{id}/` → `name: "Rade Obrenovič"`, `avg_yellow_per_match: 4.0`, `avg_red_per_match: 0.25`, `avg_fouls_per_match: 24.5` ✅ VERIFICADO (live) | ídem 1.1 | `weatherVenue.referee` | Ojo: el payload v2 solo trae **id**, no nombre → requiere resolución con `/referees/{id}/`; cobertura de árbitro 74% global, 100% en las competiciones del proyecto |
-| 1.9 | **Historial por equipo para los priors** | Bzzoiro `GET /api/v2/events/?team_id=&status=finished` + `/{id}/stats/` ✅ VERIFICADO (live). Muestra de profundidad: 2026-05-24 completo; 2025-10-26 completo; 2025-05-05 solo xG; 2023-04-03 solo xG | ídem 1.1 | `inputs.history.rows` + `sample.historyRows` | **El detalle de stats arranca en la temporada 2025/26**: antes solo goles/xG. Fechas exactas de corte: 🟡 PROBABLE (bracket may-2025 → oct-2025) |
-| 1.10 | **Alternativa API-Football para stats** | `GET /fixtures/statistics?fixture=1561400` → por equipo `Corner Kicks`, `Yellow Cards`, `Fouls`, `Shots on Goal` (3/5, 5/4, 19/16, 6/1) ✅ VERIFICADO (live). `GET /fixtures/events?fixture=` para timeline ✅ VERIFICADO (live) | **100 req/día** (verificado en `/status`: plan Free), 10/min | mismos que 1.1–1.4 | No sirve como motor: 1 llamada por partido y temporada actual solo por `date`/`fixture`; `season` bloqueado (`"try from 2022 to 2024"`) y `last` bloqueado |
-| 1.11 | **Football-Data.org como respaldo** | `GET /v4/competitions/CL/matches?season=2026` → 144 partidos (18 jugados) ✅ VERIFICADO (live). **Sin `statistics`, sin `bookings`, sin `lineups`** en el recurso individual (probe 551981) ✅ VERIFICADO (live) | 10 req/min, 12 competiciones, marcadores con retraso | Ninguno de stats; sí calendario/resultados/tablas/goleadores | No puebla el ítem 1; útil como respaldo de fixtures. Profundidad CL: 2023/2025/2026 OK; 2021/2022/2015 → 403 "restricted" |
-| 1.12 | **Clima de la sede** | Bzzoiro `/events/{id}/` → `weather: {code: 2, description: "cloudy", wind_speed: 4.7, temperature_c: 13}` ✅ VERIFICADO (live) → `weathercode`/`condition`/`wind`. Coordenadas: `/venues/{id}/` → `latitude: 48.2188, longitude: 11.6247` ✅ VERIFICADO (live). Open-Meteo por coordenadas para `temp`/`precipitation` (ya integrado en `src/lib/weather.js`) | Bzzoiro ídem 1.1; Open-Meteo sin clave | `weatherVenue.weather.{temp, precipitation, weathercode, wind, condition}` | Bzzoiro no trae precipitación; Open-Meteo es pronóstico/archivo externo (coste de peticiones despreciable con caché por sede/día) |
+| 1.1 | **Corners per team and match** | Bzzoiro `GET /api/v2/events/{id}/stats/`: `stats.home.corner_kicks: 6`, `stats.away.corner_kicks: 3` (UCL Bayern-Bodø/Glimt, event 601067) ✅ VERIFIED (live) | 7,500 req/day (reset 00:00 UTC, burst 25/s) | `setPieces.{home,away}.cornersOver95` (+ `method: poisson-corners-v0`) | Detail only from the 2025/26 season (see 1.9); in the Champions League `stats` coverage is 52% (official coverage); `null` ≠ 0 |
+| 1.2 | **Yellow/red cards per team** | Bzzoiro `stats.{home,away}.yellow_cards` / `red_cards` (601067: 0 and 0 home; 1 and 1 away) ✅ VERIFIED (live). Timeline complement: `/incidents/` (`card_type: "yellow"|"red"`) ✅ VERIFIED (live) | same as 1.1 | `discipline.{home,away}.yellowOver35`, `redAnytime` (+ `method: poisson-cards-v0`) | `incidents` documents `period_second` and `rescinded` (✅ VERIFIED docs) but **they were not observed in the sampled payload** (🟡 LIKELY); the card count excludes cards annulled by review |
+| 1.3 | **Fouls per team** | Bzzoiro `stats.{home,away}.fouls` (601067: 5 and 8) ✅ VERIFIED (live) | same as 1.1 | `discipline.{home,away}.foulsAvg` | Uneven coverage outside the big leagues; `null` is honest |
+| 1.4 | **Shots on target** | Bzzoiro `stats.{home,away}.shots_on_target` (601067: 12 and 3) ✅ VERIFIED (live) | same as 1.1 | `setPieces.shots` | Caution: the bag and the `shotmap` can disagree (docs); use `shotmap` if a single number is needed |
+| 1.5 | **xG per team** | Bzzoiro `stats.{home,away}.xg.actual` + flag `estimated` (601067: 2.49, measured) ✅ VERIFIED (live), already integrated as `provider.xg` | same as 1.1 | `setPieces.xgTotal` | Whole competitions with **estimated** xG (Ligue 2, League Two, Liga Portugal 2, NWSL): do not mix with measured xG in training |
+| 1.6 | **Absences and suspensions** | Bzzoiro `GET /api/v2/events/{id}/lineups/` → `unavailable_players.{home,away}[]` with `status: "injured"` and `reason` (601067: 6 away absences) ✅ VERIFIED (live). Reinforcement: `GET /api/v2/teams/{id}/squad/` → per player `availability: available|injured|doubtful|suspended`, `injury_type`, `injury_expected_return` ✅ VERIFIED (live) | same as 1.1 | `availability.{status, unavailablePlayers, source}` (+ `sample.historyRows`) | `available` means "not listed as absent", not "confirmed fit"; refresh several times a day; the reason can come as `pending_transfer` |
+| 1.7 | **Lineups (XI)** | Bzzoiro `lineup_status: confirmed|predicted|unavailable` + `confidence` (601159, January 2027 match: `predicted`, conf. 0.577) ✅ VERIFIED (live) | same as 1.1 | There is no XI field in schema v2; the status feeds `availability` as context | Confirmed ~75 min before; predicted from ~14 days (docs); the observed window reached months out (🟡 LIKELY the exact horizon); teamsheet coverage: 98.6% in 2026, 69% in 2025, 8% in 2024 |
+| 1.8 | **Assigned referee** | Bzzoiro `GET /api/v2/events/{id}/` → `referee_id` (601067 → 2217) ✅ VERIFIED (live) + `GET /api/v2/referees/{id}/` → `name: "Rade Obrenovič"`, `avg_yellow_per_match: 4.0`, `avg_red_per_match: 0.25`, `avg_fouls_per_match: 24.5` ✅ VERIFIED (live) | same as 1.1 | `weatherVenue.referee` | Caution: the v2 payload only carries the **id**, not the name → it requires resolution with `/referees/{id}/`; referee coverage 74% globally, 100% in the project competitions |
+| 1.9 | **Team history for the priors** | Bzzoiro `GET /api/v2/events/?team_id=&status=finished` + `/{id}/stats/` ✅ VERIFIED (live). Depth sample: 2026-05-24 complete; 2025-10-26 complete; 2025-05-05 xG only; 2023-04-03 xG only | same as 1.1 | `inputs.history.rows` + `sample.historyRows` | **Stats detail starts in the 2025/26 season**: before that only goals/xG. Exact cut-off dates: 🟡 LIKELY (bracket May 2025 → Oct 2025) |
+| 1.10 | **API-Football alternative for stats** | `GET /fixtures/statistics?fixture=1561400` → per team `Corner Kicks`, `Yellow Cards`, `Fouls`, `Shots on Goal` (3/5, 5/4, 19/16, 6/1) ✅ VERIFIED (live). `GET /fixtures/events?fixture=` for the timeline ✅ VERIFIED (live) | **100 req/day** (verified in `/status`: Free plan), 10/min | same as 1.1-1.4 | Not usable as an engine: 1 call per match and current season only by `date`/`fixture`; `season` blocked (`"try from 2022 to 2024"`) and `last` blocked |
+| 1.11 | **Football-Data.org as a fallback** | `GET /v4/competitions/CL/matches?season=2026` → 144 matches (18 played) ✅ VERIFIED (live). **No `statistics`, no `bookings`, no `lineups`** in the individual resource (probe 551981) ✅ VERIFIED (live) | 10 req/min, 12 competitions, delayed scores | None of the stats; yes calendar/results/standings/scorers | Does not populate item 1; useful as a fixtures fallback. CL depth: 2023/2025/2026 OK; 2021/2022/2015 → 403 "restricted" |
+| 1.12 | **Venue weather** | Bzzoiro `/events/{id}/` → `weather: {code: 2, description: "cloudy", wind_speed: 4.7, temperature_c: 13}` ✅ VERIFIED (live) → `weathercode`/`condition`/`wind`. Coordinates: `/venues/{id}/` → `latitude: 48.2188, longitude: 11.6247` ✅ VERIFIED (live). Open-Meteo by coordinates for `temp`/`precipitation` (already integrated in `src/lib/weather.js`) | Bzzoiro same as 1.1; Open-Meteo without a key | `weatherVenue.weather.{temp, precipitation, weathercode, wind, condition}` | Bzzoiro does not provide precipitation; Open-Meteo is an external forecast/archive (request cost negligible with per-venue/day cache) |
 
 ---
 
-## 2. Límites exactos del plan gratuito (lo que hay que citar)
+## 2. Exact free plan limits (what must be cited)
 
 ### Bzzoiro (BSD v2)
-- **7.500 peticiones/día** (desde 2026-08-17), reset 00:00 UTC; ráfaga 25 req/s; política de uso razonable.
-- 78 competiciones con cobertura medida; en las 5 del proyecto: Premier, LaLiga, Serie A, Bundesliga, Ligue 1 y Libertadores ~100% de `stats`; **Europa League 99%; Champions League 52%** (Basic).
-- `/stats/`: **ocho claves siempre presentes** por lado (`ball_possession`, `total_shots`, `shots_on_target`, `corner_kicks`, `fouls`, `yellow_cards`, `red_cards`, `offsides`); cuando no hay dato el valor es **`null`, nunca 0**; el resto de métricas solo aparece si el partido las reportó. Medición oficial: 87% de partidos les faltaba al menos una de las ocho.
-- `/lineups/`: `confirmed` ~75 min antes y persiste; `predicted` con `confidence` (beta) para partidos no empezados; `unavailable` devuelve 200 con `lineups: null`.
-- `/incidents/`: goles, tarjetas, cambios y decisiones VAR; documenta `period_second` (orden sub-minuto) y `rescinded: true` en tarjetas anuladas (excluidas del conteo).
-- Odds free: consenso de **11 claves de tiempo completo** únicamente (✅ VERIFICADO live en `/events/601067/odds/`); el hándicap asiático sí está en el vocabulario del feed con precio consenso (✅ VERIFICADO docs), mientras que las variantes de 1ª/2ª mitad y mercados como córners o portería a cero se sirven por `/odds/comparison/` (requiere Football Unlimited) o por el feed sin poder nombrarse en el parámetro `market` (🟡 PROBABLE su acceso free).
+- **7,500 requests/day** (since 2026-08-17), reset 00:00 UTC; burst 25 req/s; fair use policy.
+- 78 competitions with measured coverage; in the project's 5: Premier, LaLiga, Serie A, Bundesliga, Ligue 1 and Libertadores ~100% of `stats`; **Europa League 99%; Champions League 52%** (Basic).
+- `/stats/`: **eight keys always present** per side (`ball_possession`, `total_shots`, `shots_on_target`, `corner_kicks`, `fouls`, `yellow_cards`, `red_cards`, `offsides`); when there is no data the value is **`null`, never 0**; the rest of the metrics only appear if the match reported them. Official measurement: 87% of matches were missing at least one of the eight.
+- `/lineups/`: `confirmed` ~75 min before and persists; `predicted` with `confidence` (beta) for matches not started; `unavailable` returns 200 with `lineups: null`.
+- `/incidents/`: goals, cards, substitutions and VAR decisions; documents `period_second` (sub-minute order) and `rescinded: true` on annulled cards (excluded from the count).
+- Odds free: consensus of **11 full-time keys** only (✅ VERIFIED live in `/events/601067/odds/`); the Asian handicap is in the feed vocabulary with a consensus price (✅ VERIFIED docs), while the 1st/2nd half variants and markets such as corners or clean sheet are served by `/odds/comparison/` (requires Football Unlimited) or by the feed without being nameable in the `market` parameter (🟡 LIKELY free access).
 
 ### API-Football v3
-- **100 req/día**, 10/min. Todos los endpoints incluidos, **pero el plan Free solo sirve temporadas 2022–2024**:
-  - `GET /fixtures?league=39&season=2026` → `"plan": "Free plans do not have access to this season, try from 2022 to 2024."` ✅ VERIFICADO (live)
-  - `GET /fixtures?...&last=3` → `"Free plans do not have access to the Last parameter."` ✅ VERIFICADO (live)
-  - `GET /fixtures?date=2026-09-17` → 182 partidos ✅ (acceso por fecha sí funciona)
-  - `GET /fixtures?league=39&date=2026-09-16` → exige `season` → bloqueado en práctica para temporada actual.
-- Temporada 2022–2024: stats y eventos por `fixture` funcionan (867947: córners 4/4, amarillas 2/0) ✅ VERIFICADO (live).
-- `/injuries`: disponible pero solo en la ventana 2022–2024 (`team=33&season=2023` → 346 registros) ✅ VERIFICADO (live) → **inservible para bajas actuales**.
-- `GET /predictions?fixture=` **sí sirve la temporada en curso con la clave free** ✅ VERIFICADO (live 2026-09-18, fixture 1557408 Brentford–Chelsea): `winner`, `win_or_draw`, `under_over`, `goals` por equipo, `advice` y `percent` (`45%` strings). 1 request por partido; único parámetro `fixture`; actualización horaria, recomendado 1/día. La cuota diaria se comparte con el endpoint en vivo (`/api/live/[id].json`), de ahí el tope `AF_PREDICTIONS_MAX`.
+- **100 req/day**, 10/min. All endpoints included, **but the Free plan only serves seasons 2022-2024**:
+  - `GET /fixtures?league=39&season=2026` → `"plan": "Free plans do not have access to this season, try from 2022 to 2024."` ✅ VERIFIED (live)
+  - `GET /fixtures?...&last=3` → `"Free plans do not have access to the Last parameter."` ✅ VERIFIED (live)
+  - `GET /fixtures?date=2026-09-17` → 182 matches ✅ (access by date does work)
+  - `GET /fixtures?league=39&date=2026-09-16` → requires `season` → blocked in practice for the current season.
+- Seasons 2022-2024: stats and events per `fixture` work (867947: corners 4/4, yellows 2/0) ✅ VERIFIED (live).
+- `/injuries`: available but only in the 2022-2024 window (`team=33&season=2023` → 346 records) ✅ VERIFIED (live) → **useless for current absences**.
+- `GET /predictions?fixture=` **does serve the current season with the free key** ✅ VERIFIED (live 2026-09-18, fixture 1557408 Brentford-Chelsea): `winner`, `win_or_draw`, `under_over`, `goals` per team, `advice` and `percent` (`45%` strings). 1 request per match; only parameter `fixture`; hourly update, 1/day recommended. The daily quota is shared with the live endpoint (`/api/live/[id].json`), hence the `AF_PREDICTIONS_MAX` cap.
 
 ### Football-Data.org v4
-- Free €0: 12 competiciones (incluye **Champions League**, id 2001, código CL), 10/min, marcadores con retraso, calendario y tablas.
-- **`statistics` (córners/faltas/tiros/tarjetas) = add-on de pago (€15)**; alineaciones, goleadores-de-detalle, bookings y plantillas = **"Free + Deep Data" €29**; odds = add-on €15.
-- En el recurso individual free (551981) el payload trae `referees` y `odds` (con mensaje `"Activate Odds-Package..."`), pero **no** `statistics`, `bookings` ni `lineups` ✅ VERIFICADO (live).
-- Excepción verificada: `GET /v4/competitions/PL/scorers?season=2025` **sí devuelve goleadores** con la clave free ✅ VERIFICADO (live) — la llamada que ya hace `src/lib/football.js:189` funciona.
-- Profundidad de temporadas en CL: 2026 (actual) ✅, 2025 ✅ (189 terminados), 2023 ✅ (125); **2021, 2022 y 2015 → 403 "restricted"** ✅ VERIFICADO (live). Ventana free ≈ últimas 3 temporadas.
+- Free €0: 12 competitions (includes **Champions League**, id 2001, code CL), 10/min, delayed scores, calendar and standings.
+- **`statistics` (corners/fouls/shots/cards) = paid add-on (€15)**; lineups, detail-scorers, bookings and squads = **"Free + Deep Data" €29**; odds = €15 add-on.
+- In the individual free resource (551981) the payload carries `referees` and `odds` (with the message `"Activate Odds-Package..."`), but **not** `statistics`, `bookings` or `lineups` ✅ VERIFIED (live).
+- Verified exception: `GET /v4/competitions/PL/scorers?season=2025` **does return scorers** with the free key ✅ VERIFIED (live): the call already made by `src/lib/football.js:189` works.
+- Season depth in CL: 2026 (current) ✅, 2025 ✅ (189 finished), 2023 ✅ (125); **2021, 2022 and 2015 → 403 "restricted"** ✅ VERIFIED (live). Free window ≈ last 3 seasons.
 
 ---
 
-## 3. Mercados sin probabilidad pública (ítem 5) — hechos, probabilidad y derivación
+## 3. Markets without a public probability (item 5): facts, probability and derivation
 
-La redacción honesta: **los proveedores gratuitos publican los hechos de estos escenarios, no una probabilidad**. Lo que se puede publicar se deriva del modelo de goles con método declarado; lo que no, espera a un modelo de eventos evaluado.
+The honest wording: **the free providers publish the facts of these scenarios, not a probability**. What can be published is derived from the goals model with a declared method; what cannot, waits for an evaluated event model.
 
-| Escenario | Hecho deportivo (gratis) | Probabilidad publicada gratis | ¿Derivable del modelo de goles? |
+| Scenario | Sporting fact (free) | Probability published free | Derivable from the goals model? |
 |---|---|---|---|
-| Resultado al descanso y al final | Marcador al descanso en los tres proveedores; **ya guardado** en `public/data/results.json` (`halfTime`) ✅ VERIFICADO (repo); Bzzoiro lo expone como `home_score_ht`/`away_score_ht` ✅ VERIFICADO (live) | No existe el mercado combinado en free | Solo con un modelo de mitades + supuesto de dependencia declarado; **no exacto** |
-| Penalti | API-Football `fixtures/events` (el penalti llega como detalle de un gol, p. ej. `"Penalty"`) 🟡 PROBABLE (docs; en la muestra solo se observaron `Card`/`subst`); Bzzoiro `incidents` con `goal_type` ✅ VERIFICADO (live, campo presente; en la muestra solo `"regular"`) | No existe | No: requiere modelo de eventos aparte |
-| Tarjeta roja | Bzzoiro (stats + incidents) ✅ VERIFICADO (live); API-Football (`statistics` con `Red Cards` y `events` con `Red Card`) ✅ VERIFICADO (docs) | Bzzoiro: *"Cards markets in general are not currently priced"*; `red_card`/`total_red_cards` solo histórico | No: requiere modelo de disciplina (`poisson-cards-v0` aún sin evaluar) |
-| Total de goles par o impar | — | No cotizado | **Sí, exacto** desde la distribución Poisson de goles |
-| Hándicap asiático | — | Bzzoiro lo cotiza en su feed (consenso, ✅ VERIFICADO docs; el payload free por partido no lo incluye ✅ VERIFICADO live) y API-Football incluye odds en free; **excluidos por política editorial** | **Sí, exacto** desde la distribución del margen de goles |
+| Half-time and full-time result | Half-time score at the three providers; **already stored** in `public/data/results.json` (`halfTime`) ✅ VERIFIED (repo); Bzzoiro exposes it as `home_score_ht`/`away_score_ht` ✅ VERIFIED (live) | The combined market does not exist in free | Only with a halves model + a declared dependency assumption; **not exact** |
+| Penalty | API-Football `fixtures/events` (the penalty arrives as a detail of a goal, e.g. `"Penalty"`) 🟡 LIKELY (docs; in the sample only `Card`/`subst` were observed); Bzzoiro `incidents` with `goal_type` ✅ VERIFIED (live, field present; in the sample only `"regular"`) | Does not exist | No: requires a separate event model |
+| Red card | Bzzoiro (stats + incidents) ✅ VERIFIED (live); API-Football (`statistics` with `Red Cards` and `events` with `Red Card`) ✅ VERIFIED (docs) | Bzzoiro: *"Cards markets in general are not currently priced"*; `red_card`/`total_red_cards` historical only | No: requires a discipline model (`poisson-cards-v0` still not evaluated) |
+| Total goals odd or even | n/a | Not priced | **Yes, exact** from the Poisson goal distribution |
+| Asian handicap | n/a | Bzzoiro prices it in its feed (consensus, ✅ VERIFIED docs; the free per-match payload does not include it ✅ VERIFIED live) and API-Football includes odds in free; **excluded by editorial policy** | **Yes, exact** from the goal-margin distribution |
 
-Ninguno de estos escenarios tiene campo en el schema v2; publicarlos exigiría campos nuevos mínimos (spec posterior, fuera de este informe). La exclusión de cuotas es **decisión editorial** (`PRODUCT.md`), no una carencia de datos.
+None of these scenarios has a field in schema v2; publishing them would require minimal new fields (later spec, outside this report). The exclusion of odds is an **editorial decision** (`PRODUCT.md`), not a lack of data.
 
 ---
 
-## 4. Coste operativo (peticiones por fecha)
+## 4. Operating cost (requests per date)
 
-| Camino | Aritmética | Veredicto |
+| Path | Arithmetic | Verdict |
 |---|---|---|
-| Priors de tarjetas/córners vía Bzzoiro | ~32 partidos × 2 equipos × 20 partidos históricos ≈ **1.280 stats + ~64 listas/día** | Cabe en 7.500/día; cachear (las stats de un partido terminado son inmutables) y respetar uso razonable |
-| Priors vía API-Football | 1 llamada/partido y sin temporadas actuales → **imposible** | Descartado como motor; solo verificación puntual |
-| Stats de un partido concreto vía API-Football | 2 llamadas (stats + events) | Válido para contraste de un partido, no para historial |
-| Football-Data.org | 1 llamada por competición para resultados; sin stats en free | Solo respaldo de calendario/tabla/goleadores |
-| Clima vía Open-Meteo | 1 llamada por sede y día (caché) | Despreciable |
+| Card/corner priors via Bzzoiro | ~32 matches × 2 teams × 20 historical matches ≈ **1,280 stats + ~64 lists/day** | Fits in 7,500/day; cache (the stats of a finished match are immutable) and respect fair use |
+| Priors via API-Football | 1 call/match and no current seasons → **impossible** | Discarded as an engine; spot verification only |
+| Stats for a specific match via API-Football | 2 calls (stats + events) | Valid for contrasting one match, not for history |
+| Football-Data.org | 1 call per competition for results; no stats in free | Calendar/standings/scorers fallback only |
+| Weather via Open-Meteo | 1 call per venue and day (cache) | Negligible |
 
 ---
 
-## 5. Cableados pendientes en el repo (sin fuente nueva)
+## 5. Pending wiring in the repo (no new source)
 
-1. `mapEventDetail` (`src/lib/bzzoiro.js:201-237`) busca `data.referee`/`data.venue`, pero v2 sirve `referee_id`/`venue_id` → **por eso `weatherVenue.referee` siempre es null**; requiere resolver id → nombre con `/referees/{id}/` y `/venues/{id}/`.
-2. `weather.code` (0–5) y `weather.description` no se mapean a `weatherVenue.weather.weathercode`/`condition` (hoy null en 30/32 partidos).
-3. `unavailable_players` (lineups) y `availability` (squad) tienen mapper (`mapUnavailable`, `src/lib/bzzoiro.js:271-279`) pero no llegan al JSON → `availability.*` sigue null.
-4. `incidents` no se persiste: solo alimenta el enriquecimiento en vivo; es la fuente natural de tarjetas con `rescinded`.
-5. Las mitades ya están en `results.json.halfTime`: materia prima para un futuro mercado de descanso/final sin llamadas nuevas.
+1. `mapEventDetail` (`src/lib/bzzoiro.js:201-237`) looks for `data.referee`/`data.venue`, but v2 serves `referee_id`/`venue_id` → **that is why `weatherVenue.referee` is always null**; requires resolving id → name with `/referees/{id}/` and `/venues/{id}/`.
+2. `weather.code` (0-5) and `weather.description` are not mapped to `weatherVenue.weather.weathercode`/`condition` (today null in 30/32 matches).
+3. `unavailable_players` (lineups) and `availability` (squad) have a mapper (`mapUnavailable`, `src/lib/bzzoiro.js:271-279`) but do not reach the JSON → `availability.*` is still null.
+4. `incidents` is not persisted: it only feeds live enrichment; it is the natural source of cards with `rescinded`.
+5. The halves are already in `results.json.halfTime`: raw material for a future half-time/full-time market with no new calls.
 
 ---
 
-## 6. Nomenclatura canónica (semilla de diccionario)
+## 6. Canonical naming (dictionary seed)
 
-Requisito: el lector no puede ver claves crudas (`1X2`, `BTTS`, `HT/FT`) ni valores como `-1.25` sin explicación. Propuesta: **claves estables en el JSON + diccionario de etiquetas para UI** (no incrustar texto de presentación en el schema, que forzaría cambios de `schemaVersion`).
+Requirement: the reader cannot see raw keys (`1X2`, `BTTS`, `HT/FT`) or values such as `-1.25` without an explanation. Proposal: **stable keys in the JSON + a label dictionary for the UI** (do not embed presentation text in the schema, which would force `schemaVersion` changes).
 
-| Clave estable (JSON) | Término para el lector | Descripción corta |
+| Stable key (JSON) | Term for the reader | Short description |
 |---|---|---|
-| `oneX2` | Resultado final | Gana local, empate o gana visitante |
-| `doubleChance` | Doble oportunidad | Dos de los tres resultados finales |
-| `dnb` | Sin empate | Quién gana si se descarta el empate |
-| `btts` | Ambos equipos marcan | Sí/no marcan los dos |
-| `overUnder` | Total de goles | Más o menos de 1.5 / 2.5 / 3.5 |
-| `exactScore` | Marcador exacto | Resultado exacto al final |
-| `cleanSheet` | Portería a cero | Un equipo no recibe goles |
-| `firstGoal` | Primer gol | Tramo de 15 minutos del primer gol |
-| `scorers` | Goleadores | Anytime / primero / reparto |
-| `cornersOver95` | Más de 9.5 córners | Total de córners del partido |
-| `discipline` | Tarjetas y faltas | Amarillas, rojas y faltas por equipo |
-| `htFt` | Resultado al descanso y al final | Combinación descanso→final (mercado derivable) |
-| `oddEven` | Total de goles par o impar | Paridad del total (mercado derivable) |
-| `asianHandicap` | Hándicap asiático | Ventaja/desventaja aplicada al marcador |
-| `redCard` | Tarjeta roja | Sí/no hay expulsión |
-| `penalty` | Penalti | Sí/no se señala penalti |
+| `oneX2` | Final result | Home win, draw or away win |
+| `doubleChance` | Double chance | Two of the three final outcomes |
+| `dnb` | Draw no bet | Who wins if the draw is discarded |
+| `btts` | Both teams score | Yes/no both teams score |
+| `overUnder` | Total goals | Over or under 1.5 / 2.5 / 3.5 |
+| `exactScore` | Exact scoreline | Exact result at full time |
+| `cleanSheet` | Clean sheet | One team concedes no goals |
+| `firstGoal` | First goal | 15-minute band of the first goal |
+| `scorers` | Scorers | Anytime / first / split |
+| `cornersOver95` | Over 9.5 corners | Match corner total |
+| `discipline` | Cards and fouls | Yellows, reds and fouls per team |
+| `htFt` | Half-time and full-time result | Half-time→full-time combination (derivable market) |
+| `oddEven` | Total goals odd or even | Parity of the total (derivable market) |
+| `asianHandicap` | Asian handicap | Advantage/disadvantage applied to the scoreline |
+| `redCard` | Red card | Yes/no there is a sending-off |
+| `penalty` | Penalty | Yes/no a penalty is awarded |
 
 ---
 
-## 7. Excluido por política (documentado, fuera de alcance)
+## 7. Excluded by policy (documented, out of scope)
 
-- **Cuotas de casas de apuestas**: existen en free (Bzzoiro consenso 11 claves; API-Football incluye pre-match e in-play; Football-Data.org en add-on €15). Exclusión **editorial** permanente (`PRODUCT.md`), no técnica.
-- **Polymarket** (`/api/v2/events/{id}/polymarket/`): probabilidades implícitas de un mercado de predicción con dinero real; misma familia de apuestas, cobertura marginal (1X2/BTTS/OU y solo donde hay mercado activo). Excluido.
-- **Fuentes no evaluadas** (TheSportsDB, Understat, FBref): descartadas por el alcance acordado; no aportan lo que Bzzoiro ya cubre gratis.
+- **Bookmaker odds**: they exist in free (Bzzoiro consensus 11 keys; API-Football includes pre-match and in-play; Football-Data.org in a €15 add-on). Permanent **editorial** exclusion (`PRODUCT.md`), not technical.
+- **Polymarket** (`/api/v2/events/{id}/polymarket/`): implied probabilities from a prediction market with real money; same family as betting, marginal coverage (1X2/BTTS/OU and only where there is an active market). Excluded.
+- **Sources not evaluated** (TheSportsDB, Understat, FBref): discarded by the agreed scope; they do not add what Bzzoiro already covers for free.
 
 ---
 
-## 8. Fuentes consultadas (2026-09-17)
+## 8. Sources consulted (2026-09-17)
 
 - Bzzoiro: https://sports.bzzoiro.com/docs/football/events/ · /docs/football/odds-predictions/ · /docs/conventions/ · /docs/football/teams-players/ · /docs/football/managers-referees-venues/ · /football-coverage/ · https://sports.bzzoiro.com/api/schema/
-- API-Football: https://www.api-football.com/pricing (+ llamadas live a `v3.football.api-sports.io`)
+- API-Football: https://www.api-football.com/pricing (+ live calls to `v3.football.api-sports.io`)
 - Football-Data.org: https://www.football-data.org/pricing · /coverage · https://docs.football-data.org/general/v4/ (policies, competition, match, lookup_tables)
-- Proyecto: `src/lib/bzzoiro.js`, `src/lib/football.js:238-240`, `src/lib/probabilities.js:241-263`, `public/data/results.json`, `PRODUCT.md`
+- Project: `src/lib/bzzoiro.js`, `src/lib/football.js:238-240`, `src/lib/probabilities.js:241-263`, `public/data/results.json`, `PRODUCT.md`
