@@ -13,7 +13,7 @@ let entries = data?.prompts ?? [];
 if (category === 'scripts' && data) {
   const players = attentionPlayers(data.scripts, named);
   entries = data.scripts.map(script => ({ ...script, prompt: script.narration, title: shortTitle({ ...named, n: script.n, hook: script.hook, players: [3, 4, 7, 9].includes(Number(script.n)) ? playersInNarration(script.narration, named) : [] }) }));
-  const credit = existsSync('fly/render/assets/bed.txt') ? readFileSync('fly/render/assets/bed.txt', 'utf8') : '';
+  const credit = existsSync('video-render/render/remotion/assets/bed.txt') ? readFileSync('video-render/render/remotion/assets/bed.txt', 'utf8') : '';
   const pack = `public/data/media-pack/${match.matchId}.json`;
   const attribution = existsSync(pack) ? JSON.parse(readFileSync(pack, 'utf8')).attribution : '';
   description = youtubeCopy({ lede: data.description, matchId: match.matchId, ...named, competition: match.competition, players, attribution, credit });

@@ -5,7 +5,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { bedPath, muxVoice, voiceBedGraph } from '../fly/render/short-job.mjs';
+import { bedPath, muxVoice, voiceBedGraph } from '../video-render/engine/short-job.mjs';
 
 const run = promisify(execFile);
 

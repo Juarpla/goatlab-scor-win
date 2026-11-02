@@ -2,12 +2,12 @@
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { cpus, totalmem, tmpdir } from 'node:os';
 import { join, resolve, sep } from 'node:path';
-import { copyRenderInput, benchmarkSchedule } from '../fly/render/render-input.mjs';
-import { photoProfile } from '../fly/render/photo-normalization.mjs';
+import { copyRenderInput, benchmarkSchedule } from '../video-render/engine/render-input.mjs';
+import { photoProfile } from '../video-render/engine/photo-normalization.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { renderSilent } from '../fly/render/short-job.mjs';
+import { renderSilent } from '../video-render/engine/short-job.mjs';
 
 const run = promisify(execFile);
 const repo = fileURLToPath(new URL('..', import.meta.url));
@@ -29,8 +29,8 @@ async function fixtureDir(photoMax) {
     photos.push({ src, backdrop: `${i}-back.jpg`, focusBlur: `${i}-focus.jpg`, width: photoMax, height });
   }
   await run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'testsrc2=s=1080x1920:r=30:d=4', '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', join(tmp, 'clip-0.mp4')], { timeout: 30_000 });
-  copyFileSync(join(repo, 'fly/render/assets/LiberationSans-Bold.ttf'), join(tmp, 'LiberationSans-Bold.ttf'));
-  const brand = [join(repo, 'fly/gateway/workspace/skills/goatlab/assets/brand.svg'), join(repo, 'goatlab-skill/assets/brand.svg')].find(existsSync);
+  copyFileSync(join(repo, 'video-render/render/remotion/assets/LiberationSans-Bold.ttf'), join(tmp, 'LiberationSans-Bold.ttf'));
+  const brand = [join(repo, 'video-render/render/remotion/assets/brand.svg'), join(repo, 'goatlab-skill/assets/brand.svg')].find(existsSync);
   copyFileSync(brand, join(tmp, 'brand.svg'));
   const words = Array.from({ length: 25 }, (_, i) => ({ word: 'gol', start: i * .4, end: i * .4 + .3 }));
   const code = readFileSync(fileURLToPath(new URL('./bench/piece.jsx', import.meta.url)), 'utf8');

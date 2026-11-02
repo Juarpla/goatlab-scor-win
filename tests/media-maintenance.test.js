@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, access } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { maintainMedia, mediaArtifactId } from '../fly/gateway/workspace/skills/goatlab/scripts/maintain-media.mjs';
+import { maintainMedia, mediaArtifactId } from '../actions/1-update-data/maintain-media.mjs';
 import { createAgnesState, reduceAgnesState } from '../src/lib/agnes-state.js';
 
 const now = Date.parse('2026-10-08T20:00:00Z');

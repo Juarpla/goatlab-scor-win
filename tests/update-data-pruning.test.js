@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { persistFinished, persistPrunedAnalyses, updateMatchProbabilities, ensureAnalyses, catchUpAnalyses } from '../scripts/update-data.mjs';
+import { persistFinished, persistPrunedAnalyses, updateMatchProbabilities, ensureAnalyses, catchUpAnalyses } from '../actions/1-update-data/update-data.mjs';
 import { observeFinishedMatches, buildPruneContext, PRUNE_GRACE_MS } from '../src/lib/pruning.js';
 
 const now = Date.parse('2026-10-08T22:00:00Z');

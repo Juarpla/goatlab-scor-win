@@ -21,7 +21,7 @@ test('GitHub summary reports ready totals and only certifies the requested mode'
   ];
   await writeFile(join(repo, '.cache/media-run.json'), JSON.stringify({ mode: 'all', pending: 2, results }));
   const summaryPath = join(repo, 'summary.md');
-  const result = spawnSync(process.execPath, [resolve('scripts/media-run-summary.mjs')], {
+  const result = spawnSync(process.execPath, [resolve('actions/3-media-creation/media-run-summary.mjs')], {
     cwd: repo, encoding: 'utf8', env: { ...process.env, GITHUB_STEP_SUMMARY: summaryPath, AGNES_API_KEY: 'api-secret' },
   });
   assert.equal(result.status, 0, result.stderr);

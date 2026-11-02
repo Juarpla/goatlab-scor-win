@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { stageMedia, pushMedia } from '../scripts/publish-media.mjs';
+import { stageMedia, pushMedia } from '../actions/3-media-creation/publish-media.mjs';
 const execute = promisify(execFile);
 async function fixture(t) {
   const repo = await mkdtemp(join(tmpdir(), 'goatlab-stage-')); t.after(() => rm(repo,{recursive:true,force:true}));

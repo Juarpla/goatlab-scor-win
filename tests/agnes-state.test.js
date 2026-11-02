@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { createAgnesState, reduceAgnesState, validateAgnesState } from '../src/lib/agnes-state.js';
-import { AgnesStateClient } from '../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs';
+import { AgnesStateClient } from '../scripts/agnes-state.mjs';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const now=Date.parse('2026-10-09T06:00:00Z');
 const fresh=()=>createAgnesState({nowMs:now-86_400_000});

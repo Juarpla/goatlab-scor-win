@@ -37,7 +37,7 @@ test('maintenance fences generation and migration preserves immutable admission 
   assert.equal(transition(moved,'migrate-match',{owner:'migration',from:'home-vs-away-2026-10-13',to:'lens-vs-sporting-cp-2026-10-13'}).changed,false);
 });
 test('parallel clients allocate different publication positions through CAS',async()=>{
-  const {AgnesStateClient}=await import('../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs');
+  const {AgnesStateClient}=await import('../scripts/agnes-state.mjs');
   let state=completed(),version=1;
   const fetchImpl=async(_url,request)=>{
     if(request.method==='GET')return Response.json(state,{headers:{etag:'"'+version+'"',date:new Date(now).toUTCString()}});

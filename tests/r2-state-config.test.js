@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { resolveStateConfig } from '../src/lib/r2-state-config.js';
-import { AgnesStateClient } from '../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs';
+import { AgnesStateClient } from '../scripts/agnes-state.mjs';
 const shared={R2_ACCOUNT_ID:'account',R2_ACCESS_KEY_ID:'access',R2_SECRET_ACCESS_KEY:'secret',R2_BUCKET:'public-media'};
 test('same project credentials retain fixed private bucket and key',()=>{
  assert.deepEqual(resolveStateConfig(shared),{account:'account',access:'access',secret:'secret',bucket:'app-states',key:'goatlab/agnes-state.json'});

@@ -22,7 +22,7 @@ pnpm run build
 
 ## Datos y análisis
 
-`node scripts/update-data.mjs` construye una ventana de siete días fusionando dos proveedores gratuitos: Football-Data.org sirve cualquier rango en una consulta; API-Football (plan gratis limitado a ayer–mañana) es autoridad para esas fechas y aporta marcador con minuto. El modo `--refresh` actualiza solo los marcadores del día. La forma reciente se calcula contra una base local de resultados (`public/data/results.json`): relleno inicial por competición en Football-Data.org más los resultados de ayer, con deduplicación tolerante a diferencias de nombres entre proveedores. Bzzoiro (REST gratuito) aporta estadísticas con xG e incidentes de los partidos del día, con emparejamiento por nombre y presupuesto acotado. Las métricas ausentes permanecen ausentes (`null`), nunca cero inventado.
+`node actions/1-update-data/update-data.mjs` construye una ventana de siete días fusionando dos proveedores gratuitos: Football-Data.org sirve cualquier rango en una consulta; API-Football (plan gratis limitado a ayer–mañana) es autoridad para esas fechas y aporta marcador con minuto. El modo `--refresh` actualiza solo los marcadores del día. La forma reciente se calcula contra una base local de resultados (`public/data/results.json`): relleno inicial por competición en Football-Data.org más los resultados de ayer, con deduplicación tolerante a diferencias de nombres entre proveedores. Bzzoiro (REST gratuito) aporta estadísticas con xG e incidentes de los partidos del día, con emparejamiento por nombre y presupuesto acotado. Las métricas ausentes permanecen ausentes (`null`), nunca cero inventado.
 
 El diccionario de equipos (`public/data/teams.json`, 129 vigentes 2026/27 y Libertadores 2026) asigna a cada club su slug web más los ids de Bzzoiro, API-Football (roster 2024 como puente, `bridged:true`; el free bloquea la temporada vigente) y Football-Data.org; se construye con `pnpm run data:teams` y las URLs de partido usan `home-vs-away-fecha`. Los ids de fixture antiguos (`af-`/`fd-`) siguen resolviendo.
 
@@ -77,31 +77,27 @@ Los resultados y textos se guardan en `.cache/content-llm-benchmark/`.
 
 Cada partido tiene `/scripts` e `/image-prompts`
 con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
-para próximos partidos. OpenClaw toma una copia del contenido al seleccionar el
-partido y consulta el banco compartido de 4 imágenes y hasta 4 clips Agnes
-producido por GitHub Actions. Dirige el montaje según la voz y revisa el resultado. La preparación tiene un presupuesto nuevo por corrida de 50 minutos (`MEDIA_RUN_BUDGET_MS`), limitado además a kickoff + 24 horas, con entrega
-parcial cuando falten recursos. `/youtube` conserva una redirección a `/scripts`.
+para próximos partidos. El banco compartido de 4 imágenes y hasta 4 clips Agnes
+lo produce GitHub Actions. El render es local: consume el banco, la voz y el
+guion, y entrega el MP4 1080x1920 sin depender de un servidor.
 
+Instalar las dependencias del render con
+`npm ci --prefix video-render/render/remotion` y ejecutar:
 
-El montaje usa React y Remotion en Fly.io: OpenClaw escribe una composición JSX
-original por audio (plan version 5), con las skills remotion-create y
-remotion-markup. Puede combinar tipografía cinética, SVG, overlays transparentes,
-tarjetas, fotos y clips en regiones libres. No hay cuotas de uso de media ni un
-catálogo obligatorio de gráficos. Render compila el código por revisión y entrega
-solo el MP4 aprobado. Las versiones 1–4 conservan su camino de compatibilidad;
-no son un respaldo automático. El nuevo cierre muestra únicamente el logo durante
-un segundo y el total, incluido ese cierre, mide como máximo 55 s. OpenClaw decide
-subtítulos y presencia de música; Render conserva la voz y la transcripción.
-Recomendación de grabación: hasta 50 s; presupuesto técnico de voz 53 s y ajuste
-hasta 1.10 conservando el tono. Consulta [el reporte de libertad creativa y
-restricciones](CREATIVE-FREEDOM-REPORT.md).
+```sh
+node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo> \
+  --script=<guiones.json> [--script-n=<n>] --plan=<plan.json>
+```
 
-Instalar el worker con npm ci --prefix fly/render y preparar el bundle con
-node fly/render/remotion-build.mjs. El render local usa el mismo camino:
-node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo> --plan=<plan.json>.
-Render transcribe con Mistral y Whisper; OpenClaw concentra DeepSeek/GLM para
-dirección y revisión visual. El MP4 solo se entrega después de aprobar su revisión
-y su huella. La revisión visual es orientativa, con hasta ocho fotogramas y una llamada. Hay una corrección técnica; las sugerencias no disparan renders ni bloquean la entrega. Preparación y entrega no esperan detrás de la captura, y Gateway puede dirigir dos audios a la vez. Consulta [las optimizaciones y la evaluación de revisión manual](VIDEO-OPTIMIZATION-REPORT.md). No existe un montaje automático de respaldo.
+La transcripción usa Mistral y Whisper; con `--script` se alinea el guion para
+corregir nombres y cifras sin perder los tiempos por palabra. El plan version 5
+es JSX original por audio y puede combinar tipografía, SVG, overlays, tarjetas,
+fotos y clips. Las versiones 1–4 conservan su camino de compatibilidad. El cierre
+muestra el logo durante un segundo y el total, incluido ese cierre, mide como
+máximo 55 s. Recomendación de grabación: hasta 50 s; presupuesto técnico de voz
+53 s y ajuste hasta 1.10 conservando el tono. Los MP4 se guardan en
+`video-render/videos/` y los archivos de trabajo en `video-render/trabajo/`.
+Consulta [el reporte de libertad creativa y restricciones](CREATIVE-FREEDOM-REPORT.md).
 
 Los cinco intentos de Agnes Video Flash emparejan prompts e imágenes distintas
 antes de reutilizarlas. Una tarea incierta con identificador tiene hasta 60 s de
@@ -111,7 +107,7 @@ conserva la pareja respetando Retry-After dentro del presupuesto de la corrida.
 
 
 La admisión y las cuotas de Agnes se comparten mediante un JSON privado en R2;
-SQLite queda como caché. Actions consulta R2 directamente y no enciende Fly.
+SQLite queda como caché. Actions consulta R2 directamente y no enciende servidores.
 Los reintentos diarios de media se ejecutan a las 02:15, 04:15 y 06:15 Lima.
 Un banco completo evita instalar pnpm, Python y ffmpeg; el mantenimiento sigue
 corriendo. Cada banco v2 completo tiene cuatro imágenes y cuatro clips distintos,

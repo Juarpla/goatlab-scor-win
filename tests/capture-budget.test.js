@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { projectCapture, budgetError } from '../fly/render/capture-budget.mjs';
+import { projectCapture, budgetError } from '../video-render/render/remotion/capture-budget.mjs';
 
 test('capture projection scales with frames and workers and blocks only past the limit', () => {
   assert.equal(projectCapture({ perFrameMs: 100, frames: 300, workers: 1, calibration: 1 }), 30000);
@@ -14,7 +14,7 @@ test('capture projection scales with frames and workers and blocks only past the
 });
 
 test('default capture budget accepts 25 minutes and environment overrides remain supported', () => {
-  const module = new URL('../fly/render/capture-budget.mjs', import.meta.url).href;
+  const module = new URL('../video-render/render/remotion/capture-budget.mjs', import.meta.url).href;
   const check = (value, expected) => execFileSync(process.execPath, ['--input-type=module', '-e', `
     import assert from 'node:assert/strict';
     import { CAPTURE_BUDGET_MS, budgetError } from ${JSON.stringify(module)};

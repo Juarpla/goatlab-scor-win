@@ -1,5 +1,5 @@
 import test from 'node:test';
-import { buildTop } from '../scripts/build-top.mjs';
+import { buildTop } from '../actions/1-update-data/build-top.mjs';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, access, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -8,8 +8,8 @@ import { spawnSync } from 'node:child_process';
 import { CONTENT_CATEGORIES, validateContent } from '../src/lib/match-content.js';
 
 const scripts = [
-  { category: 'scripts', directory: 'youtube-scripts', script: resolve('scripts/generate-youtube-scripts.mjs') },
-  ...['image-prompts'].map(category => ({ category, directory: category, script: resolve('scripts/generate-match-prompts.mjs') })),
+  { category: 'scripts', directory: 'youtube-scripts', script: resolve('actions/2-scripting/generate-youtube-scripts.mjs') },
+  ...['image-prompts'].map(category => ({ category, directory: category, script: resolve('actions/2-scripting/generate-match-prompts.mjs') })),
 ];
 const NOW = Date.now();
 const stamp = offset => new Date(NOW + offset).toISOString();
@@ -82,8 +82,8 @@ for (const consumer of scripts) {
     await writeFile(join(directory, 'other.json'), '{}');
     if (consumer.category !== 'scripts') {
       await writeFile(join(data, 'evaluation-report.json'), JSON.stringify({ published: false }));
-      await mkdir(join(cwd, 'scripts/prompts'), { recursive: true });
-      await writeFile(join(cwd, `scripts/prompts/${consumer.category}.md`), 'Test guide');
+      await mkdir(join(cwd, 'actions/2-scripting/prompts'), { recursive: true });
+      await writeFile(join(cwd, `actions/2-scripting/prompts/${consumer.category}.md`), 'Test guide');
     }
     const result = run(['--match=provider-manual']);
     assert.equal(await exists(join(directory, 'manual.json')), true);

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createAgnesState, reduceAgnesState, validateAgnesState } from '../src/lib/agnes-state.js';
-import { AgnesStateClient } from '../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs';
+import { AgnesStateClient } from '../scripts/agnes-state.mjs';
 
 const NOW = Date.parse('2026-10-09T06:00:00Z');
 const DAY = 86400_000;

@@ -100,10 +100,10 @@ jobs:
           args=()
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
-          node scripts/check-media-complete.mjs "${args[@]}"
+          node actions/3-media-creation/check-media-complete.mjs "${args[@]}"
       - name: Preflight del estado privado
         if: steps.check.outputs.complete == 'false'
-        run: node scripts/agnes-preflight.mjs
+        run: node actions/3-media-creation/agnes-preflight.mjs
       - uses: pnpm/action-setup@v6
         if: steps.check.outputs.complete == 'false'
       - name: Instalar dependencias
@@ -126,10 +126,10 @@ jobs:
           pnpm media "${args[@]}"
       - name: Resumen de generación
         if: always()
-        run: node scripts/media-run-summary.mjs
+        run: node actions/3-media-creation/media-run-summary.mjs
       - name: Reportes saneados
         if: always()
-        run: node scripts/export-agnes-reports.mjs
+        run: node actions/3-media-creation/export-agnes-reports.mjs
         continue-on-error: true
       - name: Artifact solo JSON
         if: always()
@@ -165,10 +165,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           args=()
           if [ -n "$MATCH" ]; then args+=(--manual); fi
-          node scripts/publish-media.mjs "${args[@]}"
+          node actions/3-media-creation/publish-media.mjs "${args[@]}"
           if git diff --cached --quiet; then
             echo "Sin cambios autorizados"
           else
             git commit -m "chore: update verified media banks and reports"
-            node scripts/publish-media.mjs --push
+            node actions/3-media-creation/publish-media.mjs --push
           fi

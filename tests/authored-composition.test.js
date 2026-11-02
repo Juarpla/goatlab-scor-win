@@ -1,11 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { authoredProps, validateAuthoredPlan, compositionCsp } from '../fly/render/authored-composition.mjs';
-import { recentDesigns, authoringKnowledge } from '../fly/gateway/creative-director.mjs';
-import { reviewTimes } from '../fly/render/creative-job.mjs';
+import { authoredProps, validateAuthoredPlan, compositionCsp, reviewTimes } from '../video-render/render/remotion/authored-composition.mjs';
 
 const plan = { version: 5, code: `import React from 'react';import {AbsoluteFill,useCurrentFrame,interpolate} from 'remotion';
 export default function Piece(){const f=useCurrentFrame();return <AbsoluteFill style={{display:'grid',gridTemplateColumns:'1fr 2fr 1fr'}}><svg viewBox="0 0 100 100"><path d="M0 80L90 10" fill="none" stroke="lime"/></svg><div style={{opacity:interpolate(f,[0,20],[0,1])}}>Gol</div></AbsoluteFill>}`, scenes: [{ start: 0, end: 54 }], music: false };
@@ -41,14 +36,3 @@ test('advisory samples stay bounded regardless of scenes and include the closing
     assert.deepEqual(times, reviewTimes({ scenes: Array.from({ length: 100 }, () => ({ start: 0, end: 1 })) }, duration));
   }
 });
-
-test('creative memory stays within a chat and excludes the current request', t => {
-  const root = mkdtempSync(join(tmpdir(), 'goatlab-style-')); t.after(() => rmSync(root, { recursive: true, force: true }));
-  for (const [name, chatId, requestId, notes] of [['a', 'one', 'prior', 'Tres paneles'], ['b', 'two', 'private', 'Privado'], ['c', 'one', 'current', 'Actual']]) {
-    const dir = join(root, name.repeat(64)); mkdirSync(dir);
-    writeFileSync(join(dir, 'state.json'), JSON.stringify({ chatId, requestId, history: [{ at: 1, result: { plan, notes } }] }));
-  }
-  assert.deepEqual(recentDesigns(root, 'one', 'current').map(x => x.concept), ['Tres paneles']);
-});
-
-test('authoring turns preload both pinned skills before asking the model to write JSX',()=>{const text=authoringKnowledge();assert.match(text,/name: remotion-create/);assert.match(text,/name: remotion-markup/);assert.match(text,/useCurrentFrame/);});

@@ -3,7 +3,7 @@ import {createHash,randomUUID} from 'node:crypto';
 import {readFile,writeFile,rm} from 'node:fs/promises';
 import {join,resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {AgnesStateClient} from '../fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs';
+import {AgnesStateClient} from './agnes-state.mjs';
 import * as r2 from './r2-media.mjs';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const FROM='fd-575341', TO='lens-vs-sporting-cp-2026-10-13';

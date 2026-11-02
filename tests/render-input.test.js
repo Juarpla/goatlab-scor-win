@@ -1,13 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { copyRenderInput, benchmarkSchedule } from '../fly/render/render-input.mjs';
-import { imageDimensions, normalizedDimensions, photoProfile } from '../fly/render/photo-normalization.mjs';
-import { retainEvaluation, pruneEvaluationCorpus, EVALUATION_TTL_MS } from '../fly/render/evaluation-corpus.mjs';
-import { cameraAt, grainPosition } from '../fly/render/kit/kit-logic.mjs';
+import { copyRenderInput, benchmarkSchedule } from '../video-render/engine/render-input.mjs';
+import { imageDimensions, normalizedDimensions, photoProfile } from '../video-render/engine/photo-normalization.mjs';
+import { cameraAt, grainPosition } from '../video-render/render/remotion/kit/kit-logic.mjs';
 
 function directory(t) { const dir = mkdtempSync(join(tmpdir(), 'goatlab-render-input-')); t.after(() => rmSync(dir, { recursive: true, force: true })); return dir; }
 function writeInput(dir) {
@@ -44,27 +43,6 @@ test('benchmark separates one cold bundle per condition and alternates three war
   assert.equal(schedule.filter(row => row.phase === 'cold-bundle').length, 3);
   assert.equal(schedule.filter(row => row.phase === 'warm-bundle').length, 9);
   assert.notDeepEqual(schedule.filter(r => r.run === 1).map(r => r.photoMax), schedule.filter(r => r.run === 2).map(r => r.photoMax));
-});
-
-test('evaluation retains bounded self-contained samples for 24 hours and prefers a 20s audio', async t => {
-  const root = directory(t), source = join(root, 'source'), corpus = join(root, 'evaluation');
-  writeInput(source);
-  const base = { requestId: 'first', revision: 1, plan: { code: 'export default () => null' }, metrics: { captureMs: 3 }, originalVoiceSeconds: 40 };
-  assert.equal((await retainEvaluation(corpus, source, base, { now: 1000 })).category, 'graphics');
-  assert.equal(await retainEvaluation(corpus, source, { ...base, requestId: 'duplicate' }, { now: 1100 }), null);
-  assert.equal((await retainEvaluation(corpus, source, { ...base, requestId: 'twenty', originalVoiceSeconds: 20 }, { now: 1200 })).shortAudio, true);
-  for (const [category, code] of [['photos', 'export default ({photos,clips}) => <Img src={photos[0].src}/>'], ['clips', 'export default ({clips}) => <Video src={clips[0].src}/>']]) {
-    assert.equal((await retainEvaluation(corpus, source, { ...base, plan: { code } }, { now: 1300 })).category, category);
-  }
-  const snapshots = pruneEvaluationCorpus(corpus, { now: 1500 });
-  assert.equal(snapshots.length, 3);
-  assert.equal(snapshots.find(s => s.category === 'graphics').requestId, 'twenty');
-  assert.equal(existsSync(join(corpus, 'graphics', 'voice.ogg')), true);
-  assert.equal(JSON.parse(readFileSync(join(corpus, 'graphics', 'prepared.json'))).voiceFile, 'voice.ogg');
-  assert.equal(existsSync(join(corpus, 'graphics', 'candidate.mp4')), true);
-  assert.equal(pruneEvaluationCorpus(corpus, { now: EVALUATION_TTL_MS + 1301 }).length, 0);
-  assert.equal(existsSync(join(source, 'candidate-1.mp4')), true);
-  assert.equal(await retainEvaluation(corpus, source, base, { now: 1000, maxBytes: 1 }), null);
 });
 
 test('camera clamps to scene boundaries and grain is deterministic without per-frame random pixels', () => {

@@ -10,7 +10,7 @@ import urllib.error
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'fly/gateway/workspace/skills/goatlab/scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'actions/3-media-creation'))
 from agnes_state import AgnesState
 from agnes import ImagePool
 from agnes_video import VideoPool

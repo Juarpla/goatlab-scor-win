@@ -7,7 +7,7 @@ import {
   parseMistral,
   parseWhisperCpp,
   transcribeWords,
-} from '../fly/render/transcribe.mjs';
+} from '../video-render/engine/transcribe.mjs';
 
 function jsonResponse(body, status = 200) {
   return {

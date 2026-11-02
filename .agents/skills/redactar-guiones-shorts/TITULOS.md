@@ -1,6 +1,6 @@
 # Títulos y hashtags
 
-El guardado de `scripts/generate-youtube-scripts.mjs` descarta `title` y hashtags del modelo y estampa `shortTitle` y `hashtagLine`. Esta hoja es para quien redacta a mano. El gancho hablado sigue siendo `hook` y no se copia en el título.
+El guardado de `actions/2-scripting/generate-youtube-scripts.mjs` descarta `title` y hashtags del modelo y estampa `shortTitle` y `hashtagLine`. Esta hoja es para quien redacta a mano. El gancho hablado sigue siendo `hook` y no se copia en el título.
 
 Icono de la fila, luego `⚽`, luego el texto. Tope de 100 caracteres. En los guiones 3, 4, 7 y 9, `{jugadores}` son hasta dos nombres ya escritos en esa narración, unidos con «y». Un solo nombre conjuga en singular («puede»). Si esa narración no nombra jugadores, usa la frase de equipos.
 

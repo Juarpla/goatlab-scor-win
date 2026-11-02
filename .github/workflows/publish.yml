@@ -29,7 +29,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Actualización completa (diaria, 07:00 UTC)
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '5 6 * * *')
-        run: node scripts/update-data.mjs && node scripts/build-top.mjs
+        run: node actions/1-update-data/update-data.mjs && node actions/1-update-data/build-top.mjs
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
@@ -52,7 +52,7 @@ jobs:
           ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
       - name: Refresco de marcadores (cada 6 horas)
         if: github.event.schedule == '17 */6 * * *'
-        run: node scripts/update-data.mjs --refresh && node scripts/build-top.mjs
+        run: node actions/1-update-data/update-data.mjs --refresh && node actions/1-update-data/build-top.mjs
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
@@ -75,7 +75,7 @@ jobs:
           ANALYSIS_BATCH_RETRY_MAX_TOKENS: ${{ vars.ANALYSIS_BATCH_RETRY_MAX_TOKENS }}
       - name: Purgar media tras actualizar data
         continue-on-error: true # conservar data disponible aunque el almacén remoto no responda
-        run: node scripts/maintain-media.mjs
+        run: node actions/1-update-data/maintain-media.mjs
         env:
           MEDIA_ROLE: producer
           R2_STATE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

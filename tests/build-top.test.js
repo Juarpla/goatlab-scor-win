@@ -7,7 +7,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { rankMatches } from '../src/lib/teams.js';
 import { observeFinishedMatches, PRUNE_GRACE_MS } from '../src/lib/pruning.js';
-import { buildTop } from '../scripts/build-top.mjs';
+import { buildTop } from '../actions/1-update-data/build-top.mjs';
 const run = promisify(execFile);
 
 test('build-top writes relevance ranking while conserving extras without terminal evidence', async t => {
@@ -21,7 +21,7 @@ test('build-top writes relevance ranking while conserving extras without termina
   await mkdir(join(root, 'public/data'), { recursive: true });
   await writeFile(join(root, 'public/data/fixtures.json'), JSON.stringify({ matches }));
   await writeFile(join(root, 'public/data/top.json'), JSON.stringify({ version: 1, ranking: [], extra: ['y-y', 'gone'] }));
-  await run(process.execPath, ['scripts/build-top.mjs'], { env: { ...process.env, GOATLAB_REPO: root } });
+  await run(process.execPath, ['actions/1-update-data/build-top.mjs'], { env: { ...process.env, GOATLAB_REPO: root } });
   const top = JSON.parse(await readFile(join(root, 'public/data/top.json'), 'utf8'));
   assert.equal(top.version, 1); assert.equal(top.n, 5);
   assert.deepEqual(top.ranking.map(r => r.id), ['x-x']);

@@ -62,7 +62,7 @@ se emitirán otras llaves.
 5. Con los secrets cargados en el entorno, crear explícitamente el registro:
 
    ```sh
-   node fly/gateway/workspace/skills/goatlab/scripts/agnes-state.mjs bootstrap < .cache/agnes-seed.json
+   node scripts/agnes-state.mjs bootstrap < .cache/agnes-seed.json
    ```
 
    Usa `If-None-Match: *`. Si existe o la respuesta es incierta, detener el corte
@@ -108,7 +108,7 @@ Cada corrida dispone de 3.000.000 ms por defecto (`MEDIA_RUN_BUDGET_MS`) y cada
 partido se limita además a kickoff + 24 h. `TOP_MAX_AGE_HOURS` vale siete por
 defecto y acepta cero. `--match` omite sólo el candado de antigüedad.
 
-`node scripts/check-media-complete.mjs` comprueba la evidencia pública sin
+`node actions/3-media-creation/check-media-complete.mjs` comprueba la evidencia pública sin
 Agnes, descargas ni HEAD. Un banco v2 completo requiere cuatro fotos y los clips del modo activo
 distintos, identidad, fingerprint y almacenamiento comprobado. Los modos manuales
 pueden comprobar su subconjunto sin declarar completo un banco sin todos los recursos requeridos por el modo.
