@@ -1,6 +1,6 @@
 ---
 name: GoatLab
-description: Sistema visual oscuro para leer el fútbol mediante datos comparables.
+description: Dark visual system for reading football through comparable data.
 colors:
   deep-carbon: "#101412"
   matte-surface: "#181e1a"
@@ -73,46 +73,46 @@ components:
     padding: "10px 0"
   team-logo:
     hotlink: "https://sports.bzzoiro.com/img/team/{id}/?bg=transparent"
-    fallback: "monograma de iniciales en Barlow Condensed sobre la superficie local"
-    size: "28px en tarjetas; 30px en cabecera de partido"
+    fallback: "initials monogram in Barlow Condensed on the local surface"
+    size: "28px on cards; 30px in the match header"
   match-card:
     backgroundColor: "{colors.matte-surface}"
     rounded: "12px"
     padding: "18px 20px"
-    grid: "masonry CSS (columns) en el muro de la portada"
-    content: "chip de competición · kickoff hora local · escudos · forma G/E/P · sede o competición"
+    grid: "CSS masonry (columns) in the home page wall"
+    content: "competition chip · local kickoff time · crests · G/E/P (win/draw/loss) form · venue or competition"
   hero-band:
-    slides: "máximo 3, cifras reales de la base; rotación CSS 12s; primer slide estático con reduced-motion"
-    figure: "Barlow Condensed 700 en lima señal, tabular-nums"
+    slides: "maximum 3, real figures from the database; 12s CSS rotation; first slide static with reduced-motion"
+    figure: "Barlow Condensed 700 in signal lime, tabular-nums"
   form-chip:
-    backgroundColor: "{colors.verde-forma} | {colors.gris-forma} | {colors.rojo-forma} según G/E/P"
-    textColor: "#d2eea7 | #c7cfc6 | #e9b4a3 en el marcador; nota del rival en {colors.quiet-ink}"
+    backgroundColor: "{colors.verde-forma} | {colors.gris-forma} | {colors.rojo-forma} depending on G/E/P"
+    textColor: "#d2eea7 | #c7cfc6 | #e9b4a3 in the scoreline; opponent note in {colors.quiet-ink}"
     rounded: "6px"
     padding: "8px 8px 7px"
   form-strip:
-    layout: "SVG dinámico inline (ningún trazo estático): una fila por equipo, un hueco por partido con marcador y rival abreviado; parrilla fija de 5 con el más reciente a la derecha; hueco vacío punteado. Sin serie registrada, la fila cae a blueprint en construcción (andamio discontinuo, línea dibujándose en bucle, nodos, etiqueta «En un futuro tendremos datos») con migajas reales debajo y expectativa honesta"
-    colors: "las tintas G/E/P de form-chip; punto lima local y azul pizarra visita; el blueprint usa azul pizarra neutro"
-    a11y: 'role="img" con la serie enumerada; tooltip por partido con marcador, rival y fecha; la fila vacía se enuncia como «sin serie registrada, en un futuro tendremos datos»; movimiento reducido deja el blueprint estático'
+    layout: "dynamic inline SVG (no static stroke): one row per team, one gap per match with scoreline and abbreviated opponent; fixed 5-slot grid with the most recent on the right; empty slot dotted. With no recorded series, the row falls back to a blueprint under construction (dashed scaffold, line drawing in a loop, nodes, label «En un futuro tendremos datos» (In the future we will have data)) with real crumbs underneath and an honest expectation"
+    colors: "the G/E/P inks of form-chip; lime dot for home and slate blue for away; the blueprint uses neutral slate blue"
+    a11y: 'role="img" with the series enumerated; per-match tooltip with scoreline, opponent and date; the empty row is announced as «sin serie registrada, en un futuro tendremos datos» (no recorded series, in the future we will have data); reduced motion leaves the blueprint static'
   map-pin:
-    backgroundColor: "{colors.slate-blue} en reposo; {colors.lime-signal} activo o en vivo"
-    size: "punto de 9px en botón de 30px de toque"
+    backgroundColor: "{colors.slate-blue} at rest; {colors.lime-signal} active or live"
+    size: "9px dot on a 30px touch button"
   ticker:
-    motion: "loop lineal CSS 46s, contenido duplicado aria-hidden; fila estática con reduced-motion"
+    motion: "46s linear CSS loop, duplicated content aria-hidden; static row with reduced-motion"
   verdict-bars:
-    track: "12px con regla de 1px y relleno lima; etiqueta condensada y valor tabular"
-    weight-bar: "mini barra lima de 5px por insumo declarado"
+    track: "12px with a 1px rule and lime fill; condensed label and tabular value"
+    weight-bar: "5px lime mini bar per declared input"
   reading-card:
     backgroundColor: "{colors.matte-surface}"
     rounded: "12px"
-    padding: "24px 26px; 30px 34px la ficha ancha"
-    grid: "primera sección a ancho completo con escena de 148px; resto en dos columnas; una columna ≤1150px"
-    scene: "SVG plano por kind (panorama · modelos · historial · tabla · goleadores · forma · claves), trazo 1.7 y un balón lima; se dibuja una vez al entrar"
+    padding: "24px 26px; 30px 34px the wide card"
+    grid: "first section full width with a 148px scene; the rest in two columns; one column ≤1150px"
+    scene: "flat SVG per kind (panorama · modelos · historial · tabla · goleadores · forma · claves), 1.7 stroke and one lime ball; drawn once on entry"
   reading-figure:
     fontFamily: "Barlow Condensed, sans-serif"
     fontSize: "clamp(1.875rem, 3vw, 2.375rem)"
     fontWeight: 700
-    textColor: "{colors.warm-ink}; la primera cifra de cada ficha en {colors.lime-signal}"
-    note: "solo cifras que la sección declara y su texto contiene; decimales en coma latina; tabular-nums"
+    textColor: "{colors.warm-ink}; the first figure of each card in {colors.lime-signal}"
+    note: "only figures that the section declares and its text contains; decimals with a decimal comma; tabular-nums"
 
 ---
 
@@ -120,43 +120,43 @@ components:
 
 ## Overview
 
-**Creative North Star: “La sala de análisis”**
+**Creative North Star: “La sala de análisis” (The analysis room)**
 
-GoatLab se comporta como una estación de análisis de video: la pantalla es mate, los datos tienen escala y cada capítulo deja claro qué se sabe. La interfaz usa una base verde carbón, texto marfil y señales lima o azul pizarra para distinguir equipos y estados.
+GoatLab behaves like a video analysis station: the screen is matte, data has scale, and each chapter makes clear what is known. The interface uses a carbon green base, ivory text and lime or slate blue signals to distinguish teams and states.
 
-La densidad cambia con el relato. Un gráfico grande abre la lectura; tablas y notas breves aterrizan la cifra; una pausa publicitaria ocupa un espacio reservado fuera del área de análisis. El sistema se mantiene legible cuando se reduce a una sola columna en móvil.
+Density changes with the narrative. A large chart opens the reading; tables and short notes ground the figure; an advertising pause occupies a reserved space outside the analysis area. The system stays legible when it collapses to a single column on mobile.
 
 **Key Characteristics:**
 
-- Datos comparables con ejes y escalas estables.
-- Tipografía condensada para titulares y Manrope para lectura y controles.
-- Capas tonales planas, reglas finas y una señal lima escasa.
-- Movimiento concentrado en el cambio de capítulo y el scroll del análisis.
+- Comparable data with stable axes and scales.
+- Condensed typography for headlines and Manrope for reading and controls.
+- Flat tonal layers, thin rules and a sparse lime signal.
+- Motion concentrated in the chapter change and the analysis scroll.
 
 ## Colors
 
-La paleta se apoya en un carbón verdoso y una tinta cálida, con lima para acción o selección y azul pizarra para la segunda serie de datos.
+The palette relies on a greenish carbon and a warm ink, with lime for action or selection and slate blue for the second data series.
 
 ### Primary
 
-- **Lima señal** (#c5ed74): acción principal, selección activa y serie local del gráfico.
+- **Signal lime** (#c5ed74): primary action, active selection and the home series of the chart.
 
 ### Secondary
 
-- **Azul pizarra** (#8ca6bf): segunda serie de datos y estados comparables.
+- **Slate blue** (#8ca6bf): second data series and comparable states.
 
 ### Neutral
 
-- **Carbón profundo** (#101412): fondo de toda la aplicación y texto sobre la señal lima.
-- **Superficie mate** (#181e1a): paneles de datos, gráficos y bloques destacados.
-- **Superficie elevada** (#222a24): estados de filtro no activos y agrupaciones internas.
-- **Tinta cálida** (#edf0e6): titulares, nombres de equipos y cifras principales.
-- **Tinta quieta** (#a4aea3): notas, metadatos y explicaciones secundarias.
-- **Regla** (#354035): divisores, ejes y bordes de campos.
+- **Deep carbon** (#101412): background of the whole application and text over the signal lime.
+- **Matte surface** (#181e1a): data panels, charts and highlighted blocks.
+- **Raised surface** (#222a24): inactive filter states and internal groupings.
+- **Warm ink** (#edf0e6): headlines, team names and main figures.
+- **Quiet ink** (#a4aea3): notes, metadata and secondary explanations.
+- **Rule** (#354035): dividers, axes and field borders.
 
-**The Signal Rule.** La lima aparece en acciones, selección y una serie de datos; nunca pinta toda una sección.
+**The Signal Rule.** Lime appears in actions, selection and one data series; it never paints a whole section.
 
-**The Verdict Tint Rule.** Los resultados G/E/P usan tres tintas dedicadas (verde #29351d sobre texto #d2eea7, gris #303732 sobre #c7cfc6, rojo #3b2824 sobre #e9b4a3) en la forma de tarjetas y chips; jamás sustituyen a las señales primarias ni pintan superficies completas.
+**The Verdict Tint Rule.** G/E/P results use three dedicated inks (green #29351d on text #d2eea7, grey #303732 on #c7cfc6, red #3b2824 on #e9b4a3) in the shape of cards and chips; they never replace the primary signals nor paint full surfaces.
 
 ## Typography
 
@@ -166,151 +166,151 @@ La paleta se apoya en un carbón verdoso y una tinta cálida, con lima para acci
 
 **Label/Mono Font:** Manrope Variable with tabular numerals for measurements.
 
-**Character:** Barlow Condensed da a los nombres de partidos el pulso de una transmisión; Manrope mantiene las notas y los controles tranquilos y precisos.
+**Character:** Barlow Condensed gives match names the pulse of a broadcast; Manrope keeps notes and controls calm and precise.
 
 ### Hierarchy
 
-- **Display** (700, `clamp(3rem, 7vw, 5.125rem)`, 0.95): tesis de portada y cierre editorial.
-- **Headline** (600, `clamp(2.25rem, 4vw, 4rem)`, 1.03): títulos de encuentros y capítulos.
-- **Title** (650, 1rem, 1.3): títulos de gráficos y bloques de lectura.
-- **Body** (400, 0.9375rem, 1.6): contexto, metodología y notas; se mantiene en medidas de lectura cómodas.
-- **Label** (600, 0.6875rem, 0.08em): competición, fuente, estado y acciones auxiliares.
+- **Display** (700, `clamp(3rem, 7vw, 5.125rem)`, 0.95): home page thesis and editorial closing.
+- **Headline** (600, `clamp(2.25rem, 4vw, 4rem)`, 1.03): fixture and chapter titles.
+- **Title** (650, 1rem, 1.3): chart titles and reading blocks.
+- **Body** (400, 0.9375rem, 1.6): context, methodology and notes; kept at comfortable reading measures.
+- **Label** (600, 0.6875rem, 0.08em): competition, source, state and auxiliary actions.
 
-**The Two Voices Rule.** Barlow Condensed nombra el juego; Manrope explica qué significa. No intercambiarlos para decorar.
+**The Two Voices Rule.** Barlow Condensed names the game; Manrope explains what it means. Do not swap them for decoration.
 
 ## Layout
 
-El contenedor máximo es de 1360px con 48px de margen lateral en escritorio y 22px en móvil. La portada abre con una tesis alineada a una nota lateral, luego una barra de filtros, un encuentro destacado en dos columnas y una lista de encuentros. El análisis divide notas y escenario gráfico: la nota avanza por capítulos y el escenario queda fijo mientras hay espacio.
+The maximum container is 1360px with 48px side margin on desktop and 22px on mobile. The home page opens with a thesis aligned to a side note, then a filter bar, a featured fixture in two columns and a list of fixtures. The analysis splits notes and graphic stage: the note advances by chapters and the stage stays fixed while there is space.
 
-En menos de 1150px se reduce la densidad de la lista; en menos de 760px todo pasa a una columna, los filtros se desplazan horizontalmente y el escenario del análisis se vuelve el bloque superior. La navegación se reduce a las acciones esenciales. El ritmo usa 12, 22, 32, 48 y 70px según la escala del bloque.
+Below 1150px the density of the list is reduced; below 760px everything becomes one column, the filters scroll horizontally and the analysis stage becomes the top block. Navigation is reduced to essential actions. Rhythm uses 12, 22, 32, 48 and 70px according to the block scale.
 
 ## Elevation & Depth
 
-La profundidad se construye con capas tonales y reglas de 1px. No hay sombras decorativas: un panel de datos se reconoce por la superficie mate y su separación. La única elevación adicional es el bloque de gráfico frente al fondo.
+Depth is built with tonal layers and 1px rules. There are no decorative shadows: a data panel is recognised by its matte surface and its separation. The only additional elevation is the chart block against the background.
 
-**The Matte Surface Rule.** Las superficies permanecen opacas y quietas; el movimiento pertenece al capítulo activo, no a un efecto de cristal.
+**The Matte Surface Rule.** Surfaces stay opaque and quiet; motion belongs to the active chapter, not to a glass effect.
 
 ## Shapes
 
-Los controles de acción tienen esquinas contenidas de 5px. Los paneles de lectura y gráficos usan 12px para marcar un conjunto completo. Las reglas son finas y rectas; no se usan bordes gruesos laterales en tarjetas o avisos. Las etiquetas de estado pueden usar una pastilla pequeña, nunca una forma que compita con el dato.
+Action controls have contained 5px corners. Reading and chart panels use 12px to mark a complete set. Rules are thin and straight; no thick side borders are used on cards or notices. State labels may use a small pill, never a shape that competes with the data.
 
 ## Components
 
 ### Buttons
 
-- **Shape:** esquinas contenidas (5px).
-- **Primary:** lima señal sobre carbón, 48px de altura y `12px 18px` de espacio interno.
-- **Hover / Focus:** lima aclarada al pasar; foco visible de 2px lima con 5px de separación.
-- **Secondary:** texto quieto sobre fondo transparente; la selección usa superficie elevada o lima según su función.
+- **Shape:** contained corners (5px).
+- **Primary:** signal lime on carbon, 48px high and `12px 18px` internal spacing.
+- **Hover / Focus:** lightened lime on hover; visible 2px lime focus with 5px offset.
+- **Secondary:** quiet text on transparent background; selection uses raised surface or lime depending on its function.
 
 ### Chips
 
-- **Style:** texto pequeño, fondo transparente y reglas mínimas.
-- **Shape:** 6px para los filtros de competición; los controles de acción mantienen 5px.
-- **State:** el filtro activo usa lima y texto carbón; los demás se mantienen quietos hasta interacción.
+- **Style:** small text, transparent background and minimal rules.
+- **Shape:** 6px for competition filters; action controls keep 5px.
+- **State:** the active filter uses lime and carbon text; the rest stay quiet until interaction.
 
 ### Cards / Containers
 
-- **Corner Style:** 12px para escenarios y paneles; 5px para controles.
-- **Background:** superficie mate sobre carbón profundo.
-- **Shadow Strategy:** capas tonales; sin sombra en reposo.
-- **Border:** regla de 1px cuando se necesita separar un bloque.
-- **Internal Padding:** 25–36px en paneles; 18–22px en móvil.
+- **Corner Style:** 12px for stages and panels; 5px for controls.
+- **Background:** matte surface on deep carbon.
+- **Shadow Strategy:** tonal layers; no shadow at rest.
+- **Border:** 1px rule when a block needs separation.
+- **Internal Padding:** 25–36px in panels; 18–22px on mobile.
 
 ### Inputs / Fields
 
-- **Style:** campo sin caja brillante, texto cálido y regla de 1px debajo.
-- **Focus:** contorno lima visible y caret lima.
-- **Error / Disabled:** texto quieto y mensaje de recuperación; no ocultar un estado de datos vacío.
+- **Style:** field without a bright box, warm text and a 1px rule below.
+- **Focus:** visible lime outline and lime caret.
+- **Error / Disabled:** quiet text and a recovery message; never hide an empty data state.
 
 ### Navigation
 
-La navegación usa Manrope pequeño, texto quieto y separación amplia. Los enlaces permanecen visibles en escritorio; en móvil quedan solo inicio y exploración del análisis.
+Navigation uses small Manrope, quiet text and wide separation. Links stay visible on desktop; on mobile only the home and the analysis exploration remain.
 
 ### Chapter Stage
 
-El escenario de capítulos es el componente distintivo: controles superiores, un gráfico que cambia de forma completa y una línea de fuente en el pie. El capítulo activo siempre tiene una alternativa de teclado y el contenido permanece disponible con movimiento reducido.
+The chapter stage is the distinctive component: top controls, a chart that changes shape completely and a source line in the footer. The active chapter always has a keyboard alternative and the content stays available with reduced motion.
 
-### Componentes de la portada (extensión 2026-09)
+### Home page components (2026-09 extension)
 
-La portada añade cinco bloques dentro del mismo mundo:
+The home page adds five blocks inside the same world:
 
-- **Hero con banda rotativa:** la tesis editorial a la izquierda y una banda mate a la derecha con hasta tres cifras reales de la base (resultados, partidos de la ventana, cruces cara a cara) que rotan con CSS. Con `prefers-reduced-motion` la banda muestra la primera cifra estática.
-- **Ticker de la ventana:** franja de 1px de regla con los encuentros de la semana (chip de competición, equipos abreviados, hora local) en loop lineal; decorativo (`aria-hidden`) y estático con movimiento reducido.
-- **Forma destacada:** panel de dos columnas con el encuentro prioritario; la comparación de goles reales se revela hacia arriba (`clip-path`) cuando entra en pantalla, una sola vez.
-- **Ruta de lectura:** tres paradas numeradas (forma, números, límites) unidas por separadores; no son tarjetas.
-- **Muro de encuentros:** masonry de tarjetas con escudo por hotlink y monograma de respaldo, forma G/E/P de ambos lados y hora local. Los filtros y la búsqueda viven en `/encuentros/`.
+- **Hero with rotating band:** the editorial thesis on the left and a matte band on the right with up to three real figures from the database (results, matches in the window, head-to-head meetings) that rotate with CSS. With `prefers-reduced-motion` the band shows the first figure statically.
+- **Window ticker:** a 1px rule strip with the week's fixtures (competition chip, abbreviated teams, local time) in a linear loop; decorative (`aria-hidden`) and static with reduced motion.
+- **Featured form:** two-column panel with the priority fixture; the comparison of real goals is revealed upwards (`clip-path`) when it enters the viewport, once.
+- **Reading path:** three numbered stops (form, numbers, limits) joined by separators; they are not cards.
+- **Fixture wall:** masonry of cards with a crest by hotlink and a fallback monogram, G/E/P form on both sides and local time. Filters and search live in `/encuentros/`.
 
-### Muro de encuentros (/encuentros, extensión 2026-09)
+### Fixture wall (/encuentros, 2026-09 extension)
 
-- **Fila de 3:** en escritorio los tres primeros encuentros visibles viven en una fila de ancho completo (3 pistas `minmax(0,1fr)`) encima del muro; la anatomía de la card no cabe en pistas de ~200px, así que en tablet y mobile la fila no existe y todo va al masonry (el JS redistribuye; sin JS nada desaparece).
-- **Anuncios reservados:** en escritorio el masonry de 2 columnas va flanqueado por dos ads verticales de 300×600 (`AdSlot variant="vertical"`) que acompañan el scroll con `position:sticky` (`top:24px`): su recorrido nace y muere dentro del grid del muro, de modo que se detienen donde acaban las tarjetas, sin alcanzar el anuncio horizontal. Tablet muestra solo el horizontal final; mobile añade un horizontal debajo de los filtros. Alturas reservadas: sin layout shift, listos para el snippet real de AdSense. Con filtro de ≤3 resultados los rieles se retiran (`.wall-body.is-thin`): un riel de 600px no domina una vista casi vacía.
-- **Paginación del muro:** el muro abre con ~3 filas (9 tarjetas en escritorio contando la fila de 3; 6 en tablet/mobile) y un botón discreto «Mostrar N más» (vocabulario de `.wall-more`) carga 3 filas más por clic (6 tarjetas en escritorio/tablet, 3 en mobile). La escalera solo anima a los recién llegados; el conteo vive en el `aria-live` existente y sin JS el muro completo queda visible.
-- **Regla de expiración:** un partido sale del muro (y del JSON en los runs de datos) al cumplir 90' de juego + 15' de descanso + 10' fijos desde el kickoff; no hay filtro de finalizados ni partidos del pasado en la página.
-- **Momento autoral:** al cambiar cualquier filtro, las tarjetas visibles re-entran en escalera (rise de 14px, ease-out exponencial, 45ms por tarjeta, tope 10); punto lima con pulso de 1.8s junto a «EN VIVO» (el mismo lenguaje del pin vivo). Ambos callados con `prefers-reduced-motion`.
+- **Row of 3:** on desktop the first three visible fixtures live in a full-width row (3 tracks `minmax(0,1fr)`) above the wall; the card anatomy does not fit in ~200px tracks, so on tablet and mobile the row does not exist and everything goes to the masonry (JS redistributes; without JS nothing disappears).
+- **Reserved ads:** on desktop the 2-column masonry is flanked by two 300×600 vertical ads (`AdSlot variant="vertical"`) that follow the scroll with `position:sticky` (`top:24px`): their travel starts and ends inside the wall grid, so they stop where the cards end, without reaching the horizontal ad. Tablet shows only the final horizontal; mobile adds a horizontal below the filters. Reserved heights: no layout shift, ready for the real AdSense snippet. With a filter of ≤3 results the rails are removed (`.wall-body.is-thin`): a 600px rail does not dominate an almost empty view.
+- **Wall pagination:** the wall opens with ~3 rows (9 cards on desktop counting the row of 3; 6 on tablet/mobile) and a discreet «Mostrar N más» (Show N more) button (`.wall-more` vocabulary) loads 3 more rows per click (6 cards on desktop/tablet, 3 on mobile). The ladder only animates new arrivals; the count lives in the existing `aria-live` and without JS the full wall stays visible.
+- **Expiry rule:** a match leaves the wall (and the JSON in data runs) once it reaches 90' of play + 15' half-time + 10' fixed from kickoff; there is no filter for finished matches or past matches on the page.
+- **Authorial moment:** when any filter changes, the visible cards re-enter in a ladder (14px rise, exponential ease-out, 45ms per card, cap 10); lime dot with a 1.8s pulse next to «EN VIVO» (LIVE) (the same language as the live pin). Both silenced with `prefers-reduced-motion`.
 
-### Región de jornada (extensión Fase 2, 2026-09)
+### Matchday region (Phase 2 extension, 2026-09)
 
-Un bloque único entre los anuncios, con cuatro piezas del mismo mundo:
+A single block between the ads, with four pieces from the same world:
 
-- **Mapa de sedes:** retícula equirectangular de puntos de tierra (PNG generado de Natural Earth, dominio público, fondo idéntico a la superficie mate) con un pin por ciudad — azul pizarra en reposo, lima con parpadeo de 1.8s cuando hay partido en vivo (ventana kickoff → +1 h 50 min, minuto «est.» calculado en cliente). Cada pin abre una ficha elevada con estadio, capacidad declarada y horarios; los encuentros sin sede resuelta bajan a una fila de texto bajo el mapa, nunca desaparecen. Con `prefers-reduced-motion` el pin vivo queda lima sólida, sin animación.
-- **Pulso de la base:** ledger de hasta 4 hitos reales (racha vigente, más goles, goleada, equipo de moda) en filas con rango en lima; nunca tarjetas de cifra hero.
-- **Los nombres que marcan:** el mismo ledger en versión jugadores — goleador, asistente y el más eficaz (goles por partido, sin repetir al goleador) entre las ligas cubiertas, con club y competición en el detalle; solo leaders que la fuente entregó.
-- **Tabla viva:** top-10 por competición con pestañas de filtro; solo se muestran tablas que el proveedor entregó y, si no llegó ninguna, un estado vacío honesto con la siguiente acción.
-- **Termómetro:** la banda rotativa del hero, en versión panel, con tres cifras reales de los últimos 60 días.
+- **Venue map:** equirectangular grid of land dots (PNG generated from Natural Earth, public domain, background identical to the matte surface) with one pin per city: slate blue at rest, lime with a 1.8s blink when there is a live match (kickoff window → +1 h 50 min, "est." minute calculated on the client). Each pin opens a raised card with stadium, declared capacity and times; fixtures without a resolved venue drop to a text row below the map, they never disappear. With `prefers-reduced-motion` the live pin becomes solid lime, without animation.
+- **Database pulse:** ledger of up to 4 real milestones (current streak, most goals, thrashing, team of the moment) in rows with a lime rank; never hero figure cards.
+- **The names that count:** the same ledger in a players version: top scorer, assist leader and the most efficient (goals per match, without repeating the top scorer) across the covered leagues, with club and competition in the detail; only leaders that the source delivered.
+- **Live table:** top-10 per competition with filter tabs; only tables that the provider delivered are shown and, if none arrived, an honest empty state with the next action.
+- **Thermometer:** the hero rotating band, in panel version, with three real figures from the last 60 days.
 
-**The Micro-Label Ramp Rule.** Las etiquetas y metadatos usan una escala fina de 9–13px (10px para notas de panel, 11px para pies, 12–13px para metadatos y controles) siempre en Manrope con numeración tabular; Barlow Condensed queda reservado para nombres y cifras de 16px hacia arriba.
+**The Micro-Label Ramp Rule.** Labels and metadata use a fine 9–13px scale (10px for panel notes, 11px for footers, 12–13px for metadata and controls) always in Manrope with tabular numerals; Barlow Condensed is reserved for names and figures of 16px and above.
 
-### Veredicto (página de partido)
+### Verdict (match page)
 
-El capítulo de veredicto muestra cada insumo con su peso en una mini barra lima y explica los ausentes. Las barras de probabilidad (1X2 y mercados binarios) solo llevan porcentajes cuando la evaluación histórica publicada supera su referencia; sin ella, el panel muestra «Evaluación en curso», la dirección cualitativa de los insumos y la reserva de muestra corta. La localía y las ausencias acompañan como texto, nunca como número.
+The verdict chapter shows each input with its weight in a lime mini bar and explains absences. Probability bars (1X2 and binary markets) only carry percentages when the published historical evaluation exceeds its reference; without it, the panel shows «Evaluación en curso» (Evaluation in progress), the qualitative direction of the inputs and the short-sample caveat. Home advantage and absences accompany as text, never as a number.
 
-### Contacto y cierre promocional (extensión 2026-09)
+### Contact and promotional close (2026-09 extension)
 
-La página de contacto abandona el `prose` estático y entra en el relato del sistema:
+The contact page abandons static `prose` and enters the system narrative:
 
-- **Scrollytelling de contacto:** la grilla `.story` reutilizada con tres capítulos (reporte de errores, límites de la IA, exclusión de apuestas) y un escenario sticky que cambia de escena por capítulo sin pestañas; la activación sigue el marcador de la página de partido y las capas cruzan con el vocabulario de 240/420ms. El trazo de cada escena se dibuja al activarse (`pathLength` escalonado); los trazos discontinuos (una estimación declarada) aparecen en vez de trazarse. Con `prefers-reduced-motion` el intercambio es instantáneo y el escenario deja de ser sticky; sin JS el texto queda íntegro y el primer gráfico visible. En ≤760px el escenario desaparece y cada capítulo lleva su escena inline, con los trazos ya resueltos.
-- **Escenas del método (`ContactScene.astro`):** geometría declarativa (barras, sobre, lupa, prohibición) con lima escasa como señal única por escena y azul pizarra como segunda serie; `aria-hidden`, etiquetadas al pie como «geometría declarativa, sin datos de ejemplo». Nunca partidos ni cifras reales.
-- **Slide de cierre (`PromoSlide.astro`):** autopromoción de GoatLab, no inventario AdSense — lleva la etiqueta PUBLICIDAD fuera; sin disfraz de anuncio de terceros. Superficie mate con regla de 1px y radio 12px; titular a dos voces con la segunda línea en lima por el precedente de la banda del hero; botón primario a `/encuentros/`; nota de exclusión permanente de casas de apuestas. En móvil apila con el CTA a ancho completo.
-- **Pausas AdSense:** dos slots reservados viven dentro de la columna de relato (rect tras el capítulo 2, horizontal al cierre, claves `contactoCap2` y `contactoCierre` en `src/config/ads.ts`) con el pacing apretado de metodología (`margin-block:6px`); el escenario sticky queda sin publicidad, y el slot de cierre se separa del slide de cierre. Sin credenciales, muestran el marcador reservado y el script de Google nunca se carga.
-- **Mockup de teléfono:** SVG decorativo (`aria-hidden`) con UI esquemática del producto — chips de forma con los tres tintas de veredicto y la barra de probabilidad que se llena una vez al entrar en vista (`js-anim` + `in-view`); sin marcadores, nombres ni cifras inventadas.
+- **Contact scrollytelling:** the reused `.story` grid with three chapters (bug report, AI limits, betting exclusion) and a sticky stage that changes scene per chapter without tabs; activation follows the match page marker and layers cross with the 240/420ms vocabulary. Each scene's stroke is drawn on activation (staggered `pathLength`); dashed strokes (a declared estimate) appear instead of being drawn. With `prefers-reduced-motion` the exchange is instant and the stage stops being sticky; without JS the text stays complete and the first chart visible. At ≤760px the stage disappears and each chapter carries its scene inline, with strokes already resolved.
+- **Method scenes (`ContactScene.astro`):** declarative geometry (bars, envelope, magnifier, prohibition) with sparse lime as the single signal per scene and slate blue as the second series; `aria-hidden`, labelled in the footer as «geometría declarativa, sin datos de ejemplo» (declarative geometry, no sample data). Never real matches or figures.
+- **Closing slide (`PromoSlide.astro`):** GoatLab self-promotion, not AdSense inventory: it carries the label PUBLICIDAD (ADVERTISING) outside; no disguise as a third-party ad. Matte surface with a 1px rule and 12px radius; two-voice headline with the second line in lime following the hero band precedent; primary button to `/encuentros/`; permanent betting-house exclusion note. On mobile it stacks with the CTA full width.
+- **AdSense pauses:** two reserved slots live inside the narrative column (rect after chapter 2, horizontal at the close, keys `contactoCap2` and `contactoCierre` in `src/config/ads.ts`) with the tight methodology pacing (`margin-block:6px`); the sticky stage stays ad-free, and the closing slot is separated from the closing slide. Without credentials, they show the reserved marker and the Google script never loads.
+- **Phone mockup:** decorative SVG (`aria-hidden`) with a schematic product UI: form chips with the three verdict inks and the probability bar that fills once on entering the viewport (`js-anim` + `in-view`); no invented scorelines, names or figures.
 
-### Página de partido (extensión 2026-09, tercera pasada: el relato en 5 capítulos)
+### Match page (2026-09 extension, third pass: the narrative in 5 chapters)
 
-El story pasa de 4 capítulos fijos a **5 capítulos dinámicos**: el esqueleto (llegada + veredicto) siempre está; resultado, goles y primer gol solo aparecen con datos en el JSON, y los números pronosticados viven dentro del veredicto. El capítulo 1 muestra siempre los últimos 5 por equipo (el historial cara a cara solo vive en el JSON y el veredicto, nunca en el gráfico) y la auditoría del LLM (`llmReview`) vive solo en el JSON, nunca en la vista. Los titulares son preguntas de aficionado a dos líneas, sin siglas: «Así llegan. / Lo que ya jugaron.» · «Quién se lo lleva. / El resultado, en 100 partidos.» · «Cuántos goles. / El partido, en el marcador.» · «El primer gol. / Cuándo cae y quién lo mete.» · «El veredicto. / Con sus pesos a la vista.»
+The story goes from 4 fixed chapters to **5 dynamic chapters**: the skeleton (arrival + verdict) is always there; result, goals and first goal only appear with data in the JSON, and the predicted numbers live inside the verdict. Chapter 1 always shows the last 5 per team (the head-to-head history only lives in the JSON and the verdict, never in the chart) and the LLM audit (`llmReview`) lives only in the JSON, never in the view. The headlines are two-line fan questions, without acronyms: «Así llegan. / Lo que ya jugaron.» (This is how they arrive. / What they already played.) · «Quién se lo lleva. / El resultado, en 100 partidos.» (Who takes it. / The result, in 100 matches.) · «Cuántos goles. / El partido, en el marcador.» (How many goals. / The match, in the scoreline.) · «El primer gol. / Cuándo cae y quién lo mete.» (The first goal. / When it falls and who scores it.) · «El veredicto. / Con sus pesos a la vista.» (The verdict. / With its weights in view.)
 
-- **Diccionario del relato (`src/lib/story-dictionary.js`):** las claves crudas (`1X2`, `BTTS`, `DNB`, `H2H`) no se imprimen jamás; cada capítulo usa término cotidiano primero y sigla entre paréntesis solo la primera vez, con insinuación nativa «¿qué significa esto?» (`details.meaning`, Manrope 11px sobre regla de 1px) por capítulo.
-- **Capítulo 1 — lo que ya jugaron:** la tabla y el gráfico muestran siempre los últimos 5 partidos reales por equipo, anteriores al encuentro. Fuente prioritaria: `match.lastMatches` horneado por el pipeline (Bzzoiro, últimos 5 terminados por equipo antes del kickoff); si falta, `teamForm` sobre `results.json`; si nada, ausencia honesta. Se pinta desde 1 partido por lado; el lado sin serie registrada muestra el blueprint en construcción con sus migajas (competición·fecha, tabla rescatada por `teamId`, goleador si no tiene tarjeta en notas —`src/lib/series-crumbs.js`—; lo que falta se omite en silencio) y la expectativa «Sus últimos 5 aparecerán aquí…». El gráfico (`FormStrip.astro`, ver `form-strip`) es SVG dinámico generado desde los datos: una fila por equipo con un hueco por partido (marcador + rival abreviado, tintas G/E/P), parrilla fija de 5 con el más reciente a la derecha y huecos vacíos punteados; `role="img"` con la serie enumerada. Las señales por equipo viven en la columna de notas bajo el lead «Últimos 5 en su campeonato»: racha, arco en cero y mayor diferencia se calculan sobre los últimos 5 en la liga doméstica del equipo (primera competición de tablas que lo contiene y no es copa; si hay menos de 5 se declara la muestra real n/5; sin ningún previo se pinta «0 partidos jugados» como debut), y la tarjeta de tabla y goles de temporada usa esa misma liga cuando se resuelve.
-- **Capítulo 2 — waffle del resultado (`WaffleResult.astro`):** 100 cuadritos (10×10, radio 4px) que reparten los partidos imaginarios con los tonos 1X2; florecen en escalera al activarse (`.pt-fade` con `--d` de 6ms por celda) y la leyenda cuenta «N de 100». Es el único gráfico del escenario en este capítulo: la banda λ («Lo que espera el cálculo»: λ local/visita en coma latina + partidos analizados) con sus medidores `.pt-grow-x`, la doble oportunidad en filas y el proveedor como **lectura lateral** en texto («La otra lectura (Bzzoiro): …») bajan a la columna de notas, bajo el texto y antes de «¿qué significa esto?».
-- **Capítulo 3 — escalera y podio (`GoalsLadder.astro`, `ScorePodium.astro`):** la escalera del total apila 1.5/2.5/3.5 con arranque en escalón, barra del «sí» en lima con `.pt-grow-x` escalonado y el «no» como texto («que sea probable pasar de 1.5 no dice nada de llegar a 3.5»); es el protagonista del escenario. El podio ordena los 3 marcadores exactos en columnas lima/`#6f8173`/`#55645a` que crecen (`.pt-grow`) con cifra Barlow 21px y resto en línea discreta, y vive en la columna de notas junto con las fichas de arco en cero, «¿marcan los dos?» (`ProbabilityBar`), los mercados de contexto y el xG del proveedor como lectura lateral.
-- **Capítulo 4 — primer gol y nombres:** la carrera de seis tramos conserva su geometría y sus barras ahora crecen (`.pt-grow` escalonado por tramo); «se queda en cero» sustituye al «sin goles» y la carrera es el único gráfico del escenario. Los tramos y los goleadores usan λ blend (Poisson local + xG Bzzoiro a partes iguales cuando hay ambos; procedencia `Blend Poisson+xG` en el JSON y en la nota). Los goleadores viven en la columna de notas como reparto del 100% entre los 5 favoritos a abrir el marcador (cifra principal; goles de temporada como secundaria), con nota al pie del contexto que queda fuera de la fila (cero + resto); la barra lleva el tono de su equipo (lima local, pizarra visita). Cascada de nombres: leaderboard de la liga → plantilla Bzzoiro (`scorer-fallback.json`, tope `SCORER_FALLBACK_MAX`) → topscorers AF (tras flag `AF_TOPSCORERS=1`) → reparto por equipo con la misma Poisson (Nivel 4, sin inventar nombres); `scorerSource`/`fallbackSource` en el JSON declaran el nivel usado.
-- **Veredicto con números (`RadarDuel.astro`, quinta pasada):** el capítulo del veredicto abre con la tabla de esperados —las 9 cifras (posesión, tiros, a puerta, xG, córners, faltas, amarillas, rojas, fueras de juego) con el modelo de ritmos `stats-ratings-v1` (`src/lib/stats-forecast.js`: promedio propio + lo que concede el rival, encogido a la media de la competición, mínimo 3 partidos por lado y métrica; lo nulo se pinta `—`)— y debajo, en la columna de notas, los duelos en `ProbabilityBar` —«Quién saca más córners», «Primero a 3/5/7», «Por cuántos córners» (5 bandas), «Quién ve más tarjetas» y «Quién cierra el marcador»— más el **radar de dominancia** bajo los datos — SVG dinámico con un polígono por equipo (lima local, pizarra visita) sobre ejes de reparto con evaluación publicada, retícula de 1px, etiquetas Manrope 11px con valor en tspan, leyenda reutilizada (`.legend`) y tabla `sr-only`; florece con `.pt-fade` escalonado vía `.notes-visuals.is-in`. Después llega la tabla de insumos con sus pesos y las barras 1X2 del veredicto, que conservan el escenario. Regla de publicación: valores esperados siempre con muestra declarada; porcentajes de duelo solo cuando su insumo supera su referencia (stats: muestra ≥ 30 y MAE mejor que la media de su competición; último gol: gate Poisson). La carrera a córners hereda la evaluación de los ritmos de córner (el minutaje de córners no existe en ningún proveedor). Sin `statsForecast` el bloque de números no se dibuja pero el veredicto sigue en pie. El xG del proveedor acompaña como lectura lateral. Backfill del histórico vía `scripts/backfill-history.mjs` (el `eventDay` del pipeline lee `event_date`); evaluación rodante sin fuga en `scripts/evaluate-predictions.mjs` → `evaluation.stats`.
-- **Quinta pasada — un protagonista por capítulo:** el escenario ya no apila gráficos. Cada pestaña conserva **un solo gráfico protagonista** (forma, waffle, escalera, carrera de tramos o barras del veredicto) y todo lo demás baja a su capítulo en un bloque `.notes-visuals` (`display:flex; gap:24px;` con regla de 1px arriba), colocado tras el texto y la tabla, antes de «¿qué significa esto?» y las notas de cierre. El bloque entra una sola vez con `IntersectionObserver` (`.is-in`, umbral 0.15) que dispara el mismo vocabulario `.pt-*`; sin JS o con movimiento reducido queda visible y estático. El scroll interno de los panes largos desaparece: el escenario siempre cabe. Las notas de cierre y procedencia duplicadas se consolidan en el capítulo.
-- **Vocabulario de entrada (partido):** `.pt-grow` (scaleY desde la base), `.pt-grow-x` (scaleX desde la izquierda) y `.pt-fade`, bajo `.stage-pane.is-active` o `.notes-visuals.is-in` con `--d` escalonado y `both`; con movimiento reducido quedan en estado final. Decimales nuevos en coma latina (`~1,2`); las cifras tabulares se mantienen.
+- **Narrative dictionary (`src/lib/story-dictionary.js`):** raw keys (`1X2`, `BTTS`, `DNB`, `H2H`) are never printed; each chapter uses an everyday term first and the acronym in parentheses only the first time, with a native hint «¿qué significa esto?» (`details.meaning`, Manrope 11px over a 1px rule) per chapter.
+- **Chapter 1 — what they already played:** the table and the chart always show the last 5 real matches per team, before the fixture. Priority source: `match.lastMatches` baked by the pipeline (Bzzoiro, last 5 finished per team before kickoff); if missing, `teamForm` over `results.json`; if nothing, honest absence. It paints from 1 match per side; the side without a recorded series shows the blueprint under construction with its crumbs (competition·date, table rescued by `teamId`, top scorer if it has no card in notes, `src/lib/series-crumbs.js`; whatever is missing is omitted silently) and the expectation «Sus últimos 5 aparecerán aquí…» (Their last 5 will appear here…). The chart (`FormStrip.astro`, see `form-strip`) is dynamic SVG generated from the data: one row per team with one gap per match (scoreline + abbreviated opponent, G/E/P inks), fixed 5-slot grid with the most recent on the right and dotted empty slots; `role="img"` with the series enumerated. Team signals live in the notes column under the lead «Últimos 5 en su campeonato» (Last 5 in their league): streak, clean sheet and biggest margin are calculated over the last 5 in the team's domestic league (first competition in tables that contains it and is not a cup; if there are fewer than 5 the real sample n/5 is declared; with no prior at all it paints «0 partidos jugados» (0 matches played) as debut), and the table and season goals card uses that same league when it resolves.
+- **Chapter 2 — result waffle (`WaffleResult.astro`):** 100 small squares (10×10, 4px radius) that distribute the imaginary matches with the 1X2 tones; they bloom in a ladder on activation (`.pt-fade` with `--d` of 6ms per cell) and the legend counts «N de 100» (N of 100). It is the only chart in the stage in this chapter: the λ band («Lo que espera el cálculo»: home/away λ with a decimal comma + analysed matches) with its `.pt-grow-x` meters, the double chance in rows and the provider as a **side reading** in text («La otra lectura (Bzzoiro): …») (The other reading (Bzzoiro): …) move down to the notes column, below the text and before «¿qué significa esto?».
+- **Chapter 3 — ladder and podium (`GoalsLadder.astro`, `ScorePodium.astro`):** the total ladder stacks 1.5/2.5/3.5 with a stepped start, the "yes" bar in lime with staggered `.pt-grow-x` and the "no" as text («que sea probable pasar de 1.5 no dice nada de llegar a 3.5»: that it is likely to go over 1.5 says nothing about reaching 3.5); it is the protagonist of the stage. The podium orders the 3 exact scorelines in lime/`#6f8173`/`#55645a` columns that grow (`.pt-grow`) with a 21px Barlow figure and the rest in a discreet line, and lives in the notes column together with the clean-sheet cards, «¿marcan los dos?» (`ProbabilityBar`) (do both score?), the context markets and the provider xG as a side reading.
+- **Chapter 4 — first goal and names:** the six-leg race keeps its geometry and its bars now grow (`.pt-grow` staggered per leg); «se queda en cero» (it stays at zero) replaces «sin goles» (no goals) and the race is the only chart in the stage. The legs and scorers use λ blend (home Poisson + Bzzoiro xG in equal parts when both exist; provenance `Blend Poisson+xG` in the JSON and in the note). The scorers live in the notes column as a 100% split among the 5 favourites to open the scoreline (main figure; season goals as secondary), with a footer note on the context left out of the row (zero + rest); the bar carries its team's tone (home lime, away slate). Name cascade: league leaderboard → Bzzoiro squad (`scorer-fallback.json`, cap `SCORER_FALLBACK_MAX`) → AF topscorers (behind the `AF_TOPSCORERS=1` flag) → split by team with the same Poisson (Level 4, without inventing names); `scorerSource`/`fallbackSource` in the JSON declare the level used.
+- **Verdict with numbers (`RadarDuel.astro`, fifth pass):** the verdict chapter opens with the expected table, the 9 figures (possession, shots, shots on target, xG, corners, fouls, yellows, reds, offsides) with the rhythm model `stats-ratings-v1` (`src/lib/stats-forecast.js`: own average + what the opponent concedes, shrunk to the competition mean, minimum 3 matches per side and metric; nulls are painted `—`) and below, in the notes column, the duels in `ProbabilityBar` («Quién saca más córners», «Primero a 3/5/7», «Por cuántos córners» (5 bands), «Quién ve más tarjetas» and «Quién cierra el marcador») (who takes more corners, first to 3/5/7, by how many corners, who sees more cards, who closes the scoreline) plus the **dominance radar** under the data: dynamic SVG with one polygon per team (home lime, away slate) over distribution axes with published evaluation, 1px grid, 11px Manrope labels with the value in a tspan, reused legend (`.legend`) and an `sr-only` table; it blooms with `.pt-fade` staggered via `.notes-visuals.is-in`. Then comes the input table with its weights and the verdict 1X2 bars, which keep the stage. Publication rule: expected values always with a declared sample; duel percentages only when their input exceeds its reference (stats: sample ≥ 30 and MAE better than the competition mean; last goal: Poisson gate). The corner race inherits the evaluation of corner rhythms (corner timing does not exist in any provider). Without `statsForecast` the numbers block is not drawn but the verdict still stands. The provider xG accompanies as a side reading. History backfill via `scripts/backfill-history.mjs` (the pipeline's `eventDay` reads `event_date`); rolling evaluation without leakage in `scripts/evaluate-predictions.mjs` → `evaluation.stats`.
+- **Fifth pass — one protagonist per chapter:** the stage no longer stacks charts. Each tab keeps **a single protagonist chart** (form, waffle, ladder, leg race or verdict bars) and everything else moves down to its chapter in a `.notes-visuals` block (`display:flex; gap:24px;` with a 1px rule above), placed after the text and the table, before «¿qué significa esto?» and the closing notes. The block enters once with `IntersectionObserver` (`.is-in`, threshold 0.15) which triggers the same `.pt-*` vocabulary; without JS or with reduced motion it stays visible and static. The internal scroll of long panes disappears: the stage always fits. Duplicated closing and provenance notes are consolidated in the chapter.
+- **Entry vocabulary (match):** `.pt-grow` (scaleY from the base), `.pt-grow-x` (scaleX from the left) and `.pt-fade`, under `.stage-pane.is-active` or `.notes-visuals.is-in` with staggered `--d` and `both`; with reduced motion they stay in the final state. New decimals with a decimal comma (`~1,2`); tabular figures are kept.
 
-- **Cabecera de consulta:** «Última consulta: {fecha}» reemplaza la mención del proveedor en el título; se imprime en UTC (`YYYY-MM-DD HH:mm`) y el cliente la reescribe al huso del visitante (todas las apariciones). El proveedor vive en las notas y en el pie del escenario.
-- **Camisetas estimadas (`TeamJersey.astro`):** SVG de corte único pintado con `src/lib/team-colors.js` (colores curados a mano, cae a gris neutro si no está el club); patrones opcionales `stripes`/`sash`. El **escaneo radar** es una retícula del verde de la web (patrón SVG de 7px) en una banda enmascarada que barre la prenda recortada a su silueta, 5.8s ease cúbico con la visita desfasada 1.5s; con movimiento reducido queda una banda estática al 45%. Ficha de 88px, radio 12px, regla de 1px.
-- **Zoom de sede:** recorte equirectangular pre-generado (~20°×12.6°, 0.35°/celda, `public/img/venue-zoom/{slug}.png` vía `scripts/generate-venue-zooms.mjs`) con el **pin gota invertida** en lima anclado a lat/lng del catálogo `venues.js`; el logotipo de la web gira dentro a 16s lineales (estático con movimiento reducido). El bloque **siempre se dibuja** y las camisetas estimadas lo acompañan al costado en escritorio (apiladas y centradas en ≤760px). Sin sede resuelta, el mapa de referencia de Europa (`europa.png`, sin pin) ubica el continente y el píe declara la ausencia: «sede sin ubicación en el mapa · referencia: Europa». Píe con estadio · ciudad, país.
-- **Capítulos de probabilidad (tercera pasada):** ver «el relato en 6 capítulos» arriba; este bullet de la segunda pasada queda sustituido. El JSON fuente (`public/match-probabilities/{id}.json`) sigue siendo supervisable a mano.
-- **Cancha ilustrativa (`PitchScene.astro` + `/api/live/[id].json`):** cancha SVG con líneas al sistema, balón lima y estela; el servidor dibuja anclas (goles en el área que se ataca, tarjetas, cambios) con una simulación determinista sembrada por id (`src/lib/pitch-path.js`), y el cliente interpola con wobble sinusoidal a ritmo de minuto real, reproduce el encuentro completo en ~24s al finalizar (con botón «Repetir») y deja el balón en deriva suave antes del kickoff. Cuando el partido está en ventana, consulta el endpoint en línea cada 60s (caché de edge de 60s: el consumo de API no depende del tráfico) y actualiza marcador, minuto y eventos; sin respuesta, degrada a los datos horneados. La nota «animación ilustrativa, no un seguimiento de posición» acompaña siempre; con movimiento reducido todo queda estático. La lectura de IA vive después, a ancho completo (ver «La lectura: pizarra del analista»).
-- **Tarjetas por equipo (tercera pasada):** la sección `team-context` se elimina; sus paneles viven en el capítulo 1 (ver arriba). Las clases `.team-panel`/`.context-list` se reutilizan en la columna de notas; las reglas contenedoras `.team-context*` se retiran.
-- **La lectura: pizarra del analista (extensión 2026-09, cuarta pasada):** el bloque de IA deja el párrafo tipo libro y se vuelve fichas con escena. Cada sección del JSON (`llm-analysis.json`) trae `kind` (enum `panorama · modelos · historial · tabla · goleadores · forma · claves`, elegido por el proveedor) y hasta 3 `stats` (`{value ≤12, label ≤28}`) que **deben aparecer literalmente en sus bullets**; el validador descarta el resto. La vista (`ReadingBlock.astro` + `ReadingScene.astro` + `src/lib/reading.js`) dibuja una escena SVG plana por tipo —arranque en la cancha, duelo de arcos con el balón cruzando, dos direcciones con punto en común, rejilla de clasificación, podio de artilleros, cinta de casillas con el próximo partido en trazo señal, banderín de córner— usando el vocabulario de `ContactScene`: trazo de 1.7, guías discontinuas, un balón lima por escena, sin brillos ni gradientes. La primera ficha va a ancho completo con escena de 148px; el resto en dos columnas (una sola ≤1150px). **Cifra protagonista:** la cinta de figuras muestra cada `value` en Barlow Condensed 700 tabular con su `label` debajo; la primera cifra de cada ficha es la única lima (Signal Rule) y el texto del bullet la repite resaltada en tinta cálida con peso 650 — nunca se agranda un número que la sección no declare. La cifra se imprime con coma latina (`1.71 → 1,71`). La auditoría `limits` no se imprime jamás: vive solo en el JSON, igual que el `llmReview`. El encabezado lleva la etiqueta «Interpretación de IA» junto al título y una nota de procedencia; sin `kind`/`stats` (entradas v2) la sección se dibuja igual con escena inferida solo por título —los bullets no votan: mencionar el historial o los puntos de pasada pintaba dos secciones con la misma escena— y sin cinta de figuras, y el párrafo legacy conserva su ficha de una sección. El trazo de las escenas y las cifras se revelan una sola vez al entrar el bloque (`.is-armed`/`.is-in`, `--d` escalonado por ficha); sin JS o con movimiento reducido todo queda estático y visible. Sin lectura LLM el bloque no se dibuja y en su lugar aparece «Lo que dicen los proveedores» (`ProviderAdvice.astro` + `src/lib/provider-advice.js`): picks Bzzoiro y advice AF en español neutro, siempre atribuidos, nunca como recomendación GoatLab.'
-- **Pausas AdSense:** cuatro slots reservados (`partidoPrevio`, `partidoStory`, `partidoCancha`, `partidoCierre`) — tras la cabecera, tras el relato, tras la cancha y antes del pie; el área sticky del escenario y la cancha quedan sin publicidad; la pizarra de la lectura vive entre `partidoCancha` y `partidoCierre`.
+- **Query header:** «Última consulta: {fecha}» (Last query: {date}) replaces the provider mention in the title; it is printed in UTC (`YYYY-MM-DD HH:mm`) and the client rewrites it to the visitor's time zone (all occurrences). The provider lives in the notes and in the stage footer.
+- **Estimated shirts (`TeamJersey.astro`):** single-cut SVG painted with `src/lib/team-colors.js` (hand-curated colours, falls back to neutral grey if the club is missing); optional `stripes`/`sash` patterns. The **radar scan** is a grid of the site green (7px SVG pattern) in a masked band that sweeps the garment clipped to its silhouette, 5.8s cubic ease with the away side offset by 1.5s; with reduced motion a static band at 45% remains. 88px card, 12px radius, 1px rule.
+- **Venue zoom:** pre-generated equirectangular crop (~20°×12.6°, 0.35°/cell, `public/img/venue-zoom/{slug}.png` via `scripts/generate-venue-zooms.mjs`) with the **inverted drop pin** in lime anchored to the lat/lng of the `venues.js` catalogue; the site logo rotates inside at 16s linear (static with reduced motion). The block **is always drawn** and the estimated shirts accompany it at the side on desktop (stacked and centred at ≤760px). Without a resolved venue, the Europe reference map (`europa.png`, no pin) locates the continent and the footer declares the absence: «sede sin ubicación en el mapa · referencia: Europa» (venue without a location on the map · reference: Europe). Footer with stadium · city, country.
+- **Probability chapters (third pass):** see "the narrative in 6 chapters" above; this bullet from the second pass is superseded. The source JSON (`public/match-probabilities/{id}.json`) remains manually reviewable.
+- **Illustrative pitch (`PitchScene.astro` + `/api/live/[id].json`):** SVG pitch with system lines, lime ball and trail; the server draws anchors (goals in the attacking area, cards, substitutions) with a deterministic simulation seeded by id (`src/lib/pitch-path.js`), and the client interpolates with sinusoidal wobble at real-minute pace, replays the full fixture in ~24s on completion (with a «Repetir» (Replay) button) and leaves the ball in a soft drift before kickoff. When the match is in window, it queries the live endpoint every 60s (60s edge cache: API consumption does not depend on traffic) and updates scoreline, minute and events; without a response, it degrades to the baked data. The note «animación ilustrativa, no un seguimiento de posición» (illustrative animation, not a position tracker) always accompanies; with reduced motion everything stays static. The AI reading lives after, full width (see "The reading: analyst board").
+- **Cards per team (third pass):** the `team-context` section is removed; its panels live in chapter 1 (see above). The `.team-panel`/`.context-list` classes are reused in the notes column; the `.team-context*` container rules are removed.
+- **The reading: analyst board (2026-09 extension, fourth pass):** the AI block leaves the book-style paragraph and becomes cards with a scene. Each section of the JSON (`llm-analysis.json`) carries `kind` (enum `panorama · modelos · historial · tabla · goleadores · forma · claves`, chosen by the provider) and up to 3 `stats` (`{value ≤12, label ≤28}`) that **must appear literally in its bullets**; the validator discards the rest. The view (`ReadingBlock.astro` + `ReadingScene.astro` + `src/lib/reading.js`) draws a flat SVG scene per type (kick-off on the pitch, goal duel with the ball crossing, two directions with a common point, standings grid, scorers podium, ticker strip with the next match in a signal stroke, corner flag) using the `ContactScene` vocabulary: 1.7 stroke, dashed guides, one lime ball per scene, no glows or gradients. The first card goes full width with a 148px scene; the rest in two columns (one at ≤1150px). **Protagonist figure:** the figure strip shows each `value` in Barlow Condensed 700 tabular with its `label` below; the first figure of each card is the only lime (Signal Rule) and the bullet text repeats it highlighted in warm ink at weight 650: a number the section does not declare is never enlarged. The figure is printed with a decimal comma (`1.71 → 1,71`). The `limits` audit is never printed: it lives only in the JSON, same as the `llmReview`. The header carries the label «Interpretación de IA» (AI interpretation) next to the title and a provenance note; without `kind`/`stats` (v2 entries) the section is drawn the same way with a scene inferred only from the title (bullets do not vote: mentioning history or past points painted two sections with the same scene) and without a figure strip, and the legacy paragraph keeps its one-section card. The scene strokes and figures are revealed once when the block enters (`.is-armed`/`.is-in`, `--d` staggered per card); without JS or with reduced motion everything stays static and visible. Without an LLM reading the block is not drawn and instead «Lo que dicen los proveedores» (What the providers say) appears (`ProviderAdvice.astro` + `src/lib/provider-advice.js`): Bzzoiro picks and AF advice in neutral Spanish, always attributed, never as a GoatLab recommendation.
+- **AdSense pauses:** four reserved slots (`partidoPrevio`, `partidoStory`, `partidoCancha`, `partidoCierre`) after the header, after the narrative, after the pitch and before the footer; the sticky stage area and the pitch stay ad-free; the reading board lives between `partidoCancha` and `partidoCierre`.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** etiquetar demostraciones, fuentes, retrasos y fechas de actualización junto al dato.
-- **Do** conservar ejes, escalas y colores de serie al cambiar de capítulo.
-- **Do** mantener la publicidad en espacios reservados fuera del gráfico y del texto que se está leyendo.
-- **Do** diseñar el estado vacío con una siguiente acción clara.
-- **Do** respetar `prefers-reduced-motion` y el foco visible en teclado.
+- **Do** label demonstrations, sources, delays and update dates next to the data.
+- **Do** keep axes, scales and series colours when changing chapter.
+- **Do** keep advertising in reserved spaces outside the chart and the text being read.
+- **Do** design the empty state with a clear next action.
+- **Do** respect `prefers-reduced-motion` and visible keyboard focus.
 
 ### Don't:
 
-- **Don't** mostrar porcentajes predictivos sin evaluación histórica publicada.
-- **Don't** usar datos sintéticos como si fueran partidos reales.
-- **Don't** usar gradientes de texto, brillos o sombras de bloque como decoración.
-- **Don't** poner enlaces a casas de apuestas ni llamadas a apostar.
-- **Don't** ocultar una ausencia de datos detrás de una animación o un número inventado.
+- **Don't** show predictive percentages without a published historical evaluation.
+- **Don't** use synthetic data as if it were real matches.
+- **Don't** use text gradients, glows or block shadows as decoration.
+- **Don't** put links to betting houses or calls to bet.
+- **Don't** hide an absence of data behind an animation or an invented number.

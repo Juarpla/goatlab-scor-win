@@ -1,34 +1,34 @@
 # COMPLIANCE — GoatLab Shorts
 
-Reglas bloqueantes pre-render. El lint (`pnpm lint:shorts`) falla la corrida si alguna se viola.
+Blocking pre-render rules. Lint (`pnpm lint:shorts`) fails the run if any rule is violated.
 
-## Prohibido (cero tolerancia)
+## Prohibited (zero tolerance)
 
-1. **Footage de transmisión**: solo foto fija con licencia registrada. El movimiento es un recorrido de cámara sobre esa foto, más gráficos y la web-card propia. Nada de clips de un partido televisado.
-2. **Logos dibujados por GoatLab**: la plantilla no agrega escudos, ligas ni marcas. El único logo que pinta es el de GoatLab (`public/favicon.svg`). El escudo y el patrocinador que ya vienen en la foto del jugador se quedan.
-3. **Cuotas, casas de apuestas y CTA de apuesta**: nada de cuotas/momios, picks, stake/bankroll, tipster, bonos, casino, parlay/combinada, hándicap, "fija/segura".
-4. **Garantías de resultado**: nada de "gana seguro", "100% seguro", "garantizado".
-5. **Claves crudas al lector**: `1X2`, `BTTS`, `DNB`, `H2H`, `HT/FT` jamás se imprimen (ver `src/lib/story-dictionary.js`).
+1. **Broadcast footage**: only still photos with a registered license. Movement is a camera move over that photo, plus graphics and the site's own web card. No clips from a televised match.
+2. **Logos drawn by GoatLab**: the template adds no crests, leagues or brands. The only logo it draws is GoatLab's (`public/favicon.svg`). The crest and sponsor already present in the player photo stay.
+3. **Odds, betting houses and betting CTAs**: no odds/lines, picks, stake/bankroll, tipster, bonuses, casino, parlay/accumulator, handicap, "banker/sure thing".
+4. **Result guarantees**: no "guaranteed win", "100% safe", "guaranteed".
+5. **Raw market keys to the reader**: `1X2`, `BTTS`, `DNB`, `H2H`, `HT/FT` are never printed (see `src/lib/story-dictionary.js`).
 
-## Gate de probabilidades
+## Probability gate
 
-- `evaluation-report.json → published: false` ⇒ **cero `%` en guiones y descripciones**. Solo métricas: forma, goles, xG, cara a cara, muestras declaradas.
-- Con `published: true`, porcentajes solo de insumos que superaron su referencia (misma regla que el veredicto web).
+- `evaluation-report.json → published: false` ⇒ **zero `%` in scripts and descriptions**. Metrics only: form, goals, xG, head to head, declared samples.
+- With `published: true`, percentages only from inputs that beat their baseline (same rule as the web verdict).
 
-## Obligatorio en cada entrega
+## Required in every delivery
 
-- Beat con CTA web (`goatlab.win`) dentro del guion.
-- Descripción con: hook + análisis + `🔗 Más data: https://goatlab.win/partido/<id>` + `#goatlab` + disclaimer fijo:
+- A beat with the web CTA (`goatlab.win`) inside the script.
+- Description with: hook + analysis + `🔗 Más data: https://goatlab.win/partido/<id>` + `#goatlab` + fixed disclaimer:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
-- Guion en texto corrido ≤ 110 palabras (~50s), listo para leer en voz alta: hook + datos entrelazados + cierre + CTA hablada a `goatlab.win`. Ilustraciones Agnes con procedencia y aviso referencial registrados en `media-pack`.
-- Título de clic distinto del gancho. Lo estampa `shortTitle`: icono de la fila, `⚽` y la frase fija del skill `writing-short-scripts` (equipos, o hasta dos jugadores de los guiones 3, 4, 7 y 9). Hashtags con equipos y jugadores delante, tope de 15. El lint falla si el JSON no coincide.
+- Script in continuous text ≤ 110 words (~50s), ready to read aloud: hook + interwoven data + close + spoken CTA to `goatlab.win`. Agnes illustrations with provenance and the referential notice registered in `media-pack`.
+- Click title different from the hook. It is stamped by `shortTitle`: row icon, `⚽` and the fixed phrase from the `writing-short-scripts` skill (teams, or up to two players from scripts 3, 4, 7 and 9). Hashtags with teams and players first, limit 15. Lint fails if the JSON does not match.
 
-## Fotos
+## Photos
 
-Banco por partido: cuatro imágenes y cuatro clips referenciales Agnes. Las imágenes conservan modelo, prompt, fecha y dimensiones; los clips públicos conservan modelo, hashes de prompt/referencia y dimensiones, mientras sus identificadores de tarea quedan en el estado privado. El presupuesto efímero por corrida es de 50 minutos, limitado a kickoff + 24 h. SQLite es caché; admisión y cuotas dependen de `app-states/goatlab/agnes-state.json`, privado en R2. Los reportes públicos están saneados y no incluyen identificadores de tareas, respuestas crudas, credenciales o URLs firmadas. Las ilustraciones no documentan jugadas reales. Marca, música y fuentes propias mantienen sus licencias. Las cifras de gráficos se resuelven del catálogo verificable; datos ausentes se indican sin inventar ceros.
+Bank per match: four images and four reference Agnes clips. Images keep model, prompt, date and dimensions; public clips keep model, prompt/reference hashes and dimensions, while their task identifiers stay in private state. The ephemeral budget per run is 50 minutes, limited to kickoff + 24 h. SQLite is a cache; admission and quotas depend on `app-states/goatlab/agnes-state.json`, private in R2. Public reports are sanitized and do not include task identifiers, raw responses, credentials or signed URLs. Illustrations do not document real plays. Brand, music and own fonts keep their licenses. Graphic figures are resolved from the verifiable catalog; missing data is indicated without inventing zeros.
 
-Los bancos v2 completos requieren fingerprint e identidad coherentes, cuatro fotos y cuatro clips distintos y disponibilidad de almacenamiento comprobada. Los bancos legacy siguen siendo legibles y necesitan verificación antes de declararse completos. `_agnes-hourly.json` es telemetría, no un manifiesto. La poda requiere final FT/AET/PEN comprobado y más de una hora desde su primera detección válida; se aplica a guiones, prompts, media, análisis y probabilidades. Media requiere además cierre compartido y borrado remoto confirmado antes de borrar localmente. Los resultados y la evaluación histórica quedan fuera de esta poda.
+Complete v2 banks require coherent fingerprint and identity, four photos and four distinct clips and verified storage availability. Legacy banks remain readable and need verification before being declared complete. `_agnes-hourly.json` is telemetry, not a manifest. Pruning requires a verified final FT/AET/PEN and more than one hour since its first valid detection; it applies to scripts, prompts, media, analysis and probabilities. Media additionally requires a shared close and confirmed remote deletion before deleting locally. Results and historical evaluation are outside this pruning.
 
 ## Video
 
-`pnpm short -- --match=<webId> --audio=<archivo>`: MP4 H.264/AAC 1080×1920 a 30 fps. React/Remotion interpreta el plan validado de la voz, combinando imágenes, clips mudos y gráficos estadísticos. Conserva subtítulos amarillos con borde negro, música y cierre goatlab.win. Máximo 49.9 segundos y menos de 45 MB; voz hasta 45.9 s, aceleración máxima 1.10 conservando el tono y todas las palabras. La transcripción usa el audio ajustado. Renders en public/shorts/ (gitignorados).
+`pnpm short -- --match=<webId> --audio=<file>`: H.264/AAC MP4 1080×1920 at 30 fps. React/Remotion interprets the validated voice plan, combining images, muted clips and statistical graphics. It keeps yellow subtitles with a black outline, music and the goatlab.win endcard. Maximum 49.9 seconds and less than 45 MB; voice up to 45.9 s, maximum acceleration 1.10 preserving pitch and all words. Transcription uses the adjusted audio. Renders in public/shorts/ (gitignored).

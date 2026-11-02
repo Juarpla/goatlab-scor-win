@@ -1,24 +1,24 @@
-# Autoría Remotion
+# Remotion authoring
 
-Guía del motor que gana el A/B: Remotion 4.0.537, React 19 y el kit local de
-GoatLab. El plan es un módulo JSX de un solo archivo que el motor valida, compila
-y ejecuta en Chromium.
+Guide to the engine that wins the A/B test: Remotion 4.0.537, React 19 and the
+local GoatLab kit. The plan is a single-file JSX module that the engine validates,
+compiles and runs in Chromium.
 
-## Cómo se ejecuta el plan
+## How the plan runs
 
-1. `validateAuthoredPlan` parsea el JSX con Babel y rechaza imports, globals y
-   APIs prohibidas.
-2. `bundleAuthored` envuelve el código en una composición `GoatLabShort`:
-   - `<Sequence durationInFrames={contentFrames}>` monta tu componente.
-   - Después añade 1 s de cierre con `brand.svg`.
-   - Carga `LiberationSans-Bold.ttf` como `GoatLabLocal`.
-3. `renderMedia` captura a 1080×1920, 30 fps, H.264/AAC, con `crf` configurable
-   (`RENDER_CRF`, por defecto 20).
+1. `validateAuthoredPlan` parses the JSX with Babel and rejects imports, globals
+   and forbidden APIs.
+2. `bundleAuthored` wraps the code in a `GoatLabShort` composition:
+   - `<Sequence durationInFrames={contentFrames}>` mounts your component.
+   - It then adds a 1 s endcard with `brand.svg`.
+   - It loads `LiberationSans-Bold.ttf` as `GoatLabLocal`.
+3. `renderMedia` captures at 1080×1920, 30 fps, H.264/AAC, with a configurable
+   `crf` (`RENDER_CRF`, default 20).
 
-Tu componente **no** dibuja el cierre ni controla la duración total. Cubre
-`contentFrames` y deja que el motor cierre.
+Your component does **not** draw the endcard or control total duration. Cover
+`contentFrames` and let the engine close.
 
-## Esqueleto mínimo
+## Minimal skeleton
 
 ```jsx
 import React from 'react';
@@ -28,35 +28,35 @@ export default function Piece(props) {
   return (
     <AbsoluteFill style={{ background: '#101412' }}>
       <Sequence durationInFrames={props.contentFrames}>
-        <MiEscena words={props.words} />
+        <MyScene words={props.words} />
       </Sequence>
     </AbsoluteFill>
   );
 }
 ```
 
-`useCurrentFrame` dentro de una `Sequence` empieza en 0 en esa secuencia. Para
-timear escenas absolutas, usa `from` y `durationInFrames` en la `Sequence` padre.
+`useCurrentFrame` inside a `Sequence` starts at 0 in that sequence. To time
+absolute scenes, use `from` and `durationInFrames` on the parent `Sequence`.
 
-## Patrones
+## Patterns
 
-### Escena de foto con movimiento
+### Photo scene with motion
 
 ```jsx
-function Foto({ src, frames }) {
+function Photo({ src, frames }) {
   return (
     <AbsoluteFill>
       <KenBurns src={src} durationInFrames={frames} from={{ scale: 1.02, x: 0, y: 0 }} to={{ scale: 1.13, x: 0, y: -30 }} />
       <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(16,20,18,.05), rgba(16,20,18,.92))' }} />
       <AbsoluteFill style={{ padding: '160px 90px 340px', justifyContent: 'flex-end' }}>
-        <div style={{ fontSize: 92, fontWeight: 800, color: '#F5F1E8' }}>TÍTULO</div>
+        <div style={{ fontSize: 92, fontWeight: 800, color: '#F5F1E8' }}>TITLE</div>
       </AbsoluteFill>
     </AbsoluteFill>
   );
 }
 ```
 
-### Clip con overlay
+### Clip with overlay
 
 ```jsx
 <Sequence from={690} durationInFrames={255}>
@@ -70,7 +70,7 @@ function Foto({ src, frames }) {
 </Sequence>
 ```
 
-### Subtítulos
+### Subtitles
 
 ```jsx
 <Sequence durationInFrames={props.contentFrames}>
@@ -84,19 +84,19 @@ function Foto({ src, frames }) {
 </Sequence>
 ```
 
-Usa el relleno `#ffe14a` y un borde/sombra negra. No pongas dos capas de
-subtítulos ni sumes offsets: `words` ya viene en la línea de tiempo final.
+Use the fill `#ffe14a` and a black outline/shadow. Do not stack two subtitle layers
+or add offsets: `words` already arrives in the final timeline.
 
-### Cifra real
+### Real figure
 
 ```jsx
 <StatCard label="ÚLTIMO CRUCE" value={4} unit="goles" source="Real Madrid CF" style={{ width: 430 }} />
 ```
 
-`value` debe salir de `facts`. No inventes cifras ni uses porcentajes que el
-partido no respalde.
+`value` must come from `facts`. Do not invent figures or use percentages the match
+does not support.
 
-### Cámara y color
+### Camera and color
 
 ```jsx
 <CameraMove from={{ scale: 1, x: 0, y: 0 }} to={{ scale: 1.08, x: 0, y: -20 }} durationInFrames={300}>
@@ -105,60 +105,60 @@ partido no respalde.
 <ColorWash colors={['#1B3A2A', '#101412']} opacity={0.12} />
 ```
 
-`CameraMove` va dentro de una `Sequence` para reiniciar el movimiento por escena.
+`CameraMove` goes inside a `Sequence` to restart motion per scene.
 
-### Transiciones
+### Transitions
 
-`@remotion/transitions` no está en la lista de imports permitidos. Para
-transiciones, anima opacidad, `clipPath`, `transform` o usa cortes secos. Un
-corte sobre la voz suele leerse mejor que un fundido lento.
+`@remotion/transitions` is not in the allowed import list. For transitions,
+animate opacity, `clipPath`, `transform` or use hard cuts. A cut on the voice
+usually reads better than a slow fade.
 
-## Reglas que el validador aplica
+## Rules the validator applies
 
-- `version: 5`, `code` no vacío, máximo 200 KB.
-- Duración dentro de `MAX_FRAMES`; `scenes` dentro del contenido.
-- `music` booleano; `visualStyle` uno de los tres valores.
-- Export default.
-- Imports solo de `react`, `remotion` y `goatlab-kit`, con la lista exacta.
-- Nada de `require`, `eval`, `Function`, `process`, `global`, `globalThis`,
-  `window`, `document`, `fetch`, `XMLHttpRequest`, `WebSocket`, `Worker`,
-  `navigator`, `localStorage`, `sessionStorage`, `setInterval`, `setTimeout`.
+- `version: 5`, `code` non-empty, maximum 200 KB.
+- Duration within `MAX_FRAMES`; `scenes` within the content.
+- `music` boolean; `visualStyle` one of the three values.
+- Default export.
+- Imports only from `react`, `remotion` and `goatlab-kit`, with the exact list.
+- No `require`, `eval`, `Function`, `process`, `global`, `globalThis`, `window`,
+  `document`, `fetch`, `XMLHttpRequest`, `WebSocket`, `Worker`, `navigator`,
+  `localStorage`, `sessionStorage`, `setInterval`, `setTimeout`.
 
-Un error de validación devuelve el mensaje y no renderiza. Corrige el plan; no
-cambies el motor.
+A validation error returns the message and does not render. Fix the plan; do not
+change the engine.
 
-## Rendimiento
+## Performance
 
-- `RENDER_WORKERS` reparte frames entre procesos. 3–4 es un buen punto en un
-  portátil; cada worker abre su propio Chromium.
-- `CAPTURE_BUDGET_MS` y `CAPTURE_TIMEOUT_MS` deben ir juntos. El primero decide
-  si el render se considera viable; el segundo cancela la captura.
-- `RENDER_CRF`: 20 por defecto; 23 produce archivos más pequeños; 16–18 para
-  máxima calidad.
-- `LAYOUT_CHECK=advisory` reporta texto recortado, fuera del lienzo o en zonas
-  tapadas sin bloquear la entrega. Úsalo en el primer render.
-- Evita decenas de capas con blur simultáneo. Si el presupuesto se agota,
-  simplifica la escena más cara, no todo el video.
+- `RENDER_WORKERS` splits frames across processes. 3 to 4 is a good point on a
+  laptop; each worker opens its own Chromium.
+- `CAPTURE_BUDGET_MS` and `CAPTURE_TIMEOUT_MS` must be set together. The first
+  decides whether the render is considered viable; the second cancels capture.
+- `RENDER_CRF`: 20 by default; 23 produces smaller files; 16 to 18 for maximum
+  quality.
+- `LAYOUT_CHECK=advisory` reports clipped text, text outside the canvas or text in
+  covered areas without blocking delivery. Use it on the first render.
+- Avoid dozens of simultaneous blur layers. If the budget runs out, simplify the
+  most expensive scene, not the whole video.
 
-## Errores comunes
+## Common errors
 
-| Síntoma | Causa | Arreglo |
+| Symptom | Cause | Fix |
 | --- | --- | --- |
-| `compilación JSX` | import no permitido, sintaxis o export ausente | revisa imports y `export default` |
-| `resource outside the job` | usaste una URL o un archivo que no viene de props | usa `photos[].src`, `clips[].src`, `font` o `brand` |
-| `duración fuera de límite` | `scenes` o `frames` fuera de rango | ajusta `scenes` al contenido |
-| `plan version:5 y code JSX` | falta `code` o versión | completa el JSON |
-| Captions vacíos | `words` no se pasó a `Captions` | pasa `props.words` |
-| Video negro | clip/foto no encontrado o capa opaca encima | revisa `src`, `zIndex` y el orden de capas |
-| Texto cortado | no respeta la zona segura | usa `SafeArea` o padding 160/340/60/160 |
+| `compilación JSX` | disallowed import, syntax error or missing export | check imports and `export default` |
+| `resource outside the job` | you used a URL or file that does not come from props | use `photos[].src`, `clips[].src`, `font` or `brand` |
+| `duración fuera de límite` | `scenes` or `frames` out of range | fit `scenes` to the content |
+| `plan version:5 y code JSX` | missing `code` or version | complete the JSON |
+| Empty captions | `words` not passed to `Captions` | pass `props.words` |
+| Black video | clip/photo not found or an opaque layer on top | check `src`, `zIndex` and layer order |
+| Clipped text | safe area not respected | use `SafeArea` or padding 160/340/60/160 |
 
-## Checklist antes de renderizar
+## Checklist before rendering
 
-- [ ] El JSON parsea y tiene `version: 5`, `music: true`, `visualStyle` válido.
-- [ ] `scenes` termina dentro de `contentFrames / 30`.
-- [ ] Export default y solo imports permitidos.
-- [ ] Cada clip utilizable aparece al menos una vez.
-- [ ] 2–4 cifras de `facts`, ninguna inventada.
-- [ ] Subtítulos con `props.words`, relleno `#ffe14a` y borde negro.
-- [ ] Texto dentro de la zona segura; nada crítico bajo los 320 px inferiores.
-- [ ] Sin cierre propio: el motor añade el logo.
+- [ ] The JSON parses and has `version: 5`, `music: true`, a valid `visualStyle`.
+- [ ] `scenes` ends within `contentFrames / 30`.
+- [ ] Default export and only allowed imports.
+- [ ] Every usable clip appears at least once.
+- [ ] 2 to 4 figures from `facts`, none invented.
+- [ ] Subtitles with `props.words`, `#ffe14a` fill and black outline.
+- [ ] Text inside the safe area; nothing critical under the bottom 320 px.
+- [ ] No custom endcard: the engine adds the logo.

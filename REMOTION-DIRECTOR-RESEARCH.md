@@ -1,75 +1,152 @@
-# Dirección creativa de video en OpenClaw y Remotion
+# Creative video direction in OpenClaw and Remotion
 
-Investigación del 21 de octubre de 2026. Solo lectura de fuentes y código: no instala skills ni cambia producción.
+Research from October 21, 2026. Read-only review of sources and code: it does not
+install skills or change production.
 
-Complementa [VIDEO-SKILLS-RESEARCH.md](VIDEO-SKILLS-RESEARCH.md), investigación del 27 de septiembre sobre el catálogo de Hermes y skills de edición. Aquí se releen los archivos de origen pertinentes y se evalúan contra OpenClaw y el motor actual de GoatLab.
+It complements [VIDEO-SKILLS-RESEARCH.md](VIDEO-SKILLS-RESEARCH.md), the September
+27 research on the Hermes catalog and editing skills. This document re-reads the
+relevant source files and evaluates them against OpenClaw and the current GoatLab
+engine.
 
-## Recomendación
+## Recommendation
 
-Usar la skill oficial de Remotion como conocimiento técnico de OpenClaw y complementar las instrucciones propias de GoatLab con dirección editorial. Para que cada video pueda tener una composición nueva, también hay que ampliar lo que Render acepta: instalar instrucciones no elimina las limitaciones del motor.
+Use the official Remotion skill as OpenClaw's technical knowledge and complement
+GoatLab's own instructions with editorial direction. For every video to be able to
+have a new composition, what Render accepts must also be extended: installing
+instructions does not remove the engine's limitations.
 
-Remotion publica `remotion-best-practices`, que reúne sus skills, y módulos específicos para crear composiciones, escribir React, exportar y manejar subtítulos. La opción más pertinente es el paquete oficial, especialmente `remotion-markup` y `remotion-create`. [Catálogo oficial](https://www.remotion.dev/docs/ai/skills), [repositorio oficial](https://github.com/remotion-dev/skills).
+Remotion publishes `remotion-best-practices`, which gathers its skills, and specific
+modules for creating compositions, writing React, exporting and handling subtitles.
+The most relevant option is the official package, especially `remotion-markup` and
+`remotion-create`. [Official catalog](https://www.remotion.dev/docs/ai/skills),
+[official repository](https://github.com/remotion-dev/skills).
 
-Snapshot leído: commit `039e8a2fc78b67efc228d5645367838b85818a1c`, versión declarada `4.0.537`. El motor actual del proyecto fija Remotion `4.0.533` en `fly/render/package.json`. Una instalación posterior debe fijar una revisión compatible y verificar sus ejemplos contra esa versión; no actualizar automáticamente el motor como efecto secundario.
+Snapshot read: commit `039e8a2fc78b67efc228d5645367838b85818a1c`, declared version
+`4.0.537`. The project's current engine pins Remotion `4.0.533` in
+`fly/render/package.json`. A later installation must pin a compatible revision and
+verify its examples against that version; do not automatically update the engine as
+a side effect.
 
-## Qué aporta cada skill
+## What each skill contributes
 
-| Skill oficial | Aporte comprobado | Encaje en GoatLab |
+| Official skill | Verified contribution | Fit in GoatLab |
 | --- | --- | --- |
-| `remotion-best-practices` | Dirige al agente a las referencias pertinentes. | Entrada general; conservar referencias y archivos auxiliares completos. |
-| `remotion-markup` | Animación por fotogramas, composición, medios, transiciones, recortes, texto y efectos. | Base técnica para escribir composiciones y motion nuevos. |
-| `remotion-create` | Construcción de composición y disposición de escenas. | Puede orientar la composición original por video. |
-| `remotion-render` | Exportación de videos y fotogramas; transparencia. | Referencia de ejecución para Render, que ya tiene su propio renderizador. |
+| `remotion-best-practices` | Directs the agent to the relevant references. | General entry point; keep references and auxiliary files complete. |
+| `remotion-markup` | Frame-based animation, composition, media, transitions, crops, text and effects. | Technical basis for writing new compositions and motion. |
+| `remotion-create` | Composition construction and scene layout. | Can guide the original composition per video. |
+| `remotion-render` | Video and frame export; transparency. | Execution reference for Render, which already has its own renderer. |
 
-Fuentes inspeccionadas: [SKILL principal](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-best-practices/SKILL.md), [markup](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-markup/SKILL.md), [create](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-create/SKILL.md), [render](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-render/SKILL.md).
+Sources inspected: [main SKILL](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-best-practices/SKILL.md), [markup](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-markup/SKILL.md), [create](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-create/SKILL.md), [render](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-render/SKILL.md).
 
-La referencia de disposición recomienda establecer el foco de cada escena, espacio seguro y texto legible; no prescribe cuotas de fotos, clips o gráficos. Son pautas útiles de composición, no una garantía de calidad ni una directora editorial independiente. [Video layout](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-create/video-layout.md).
+The layout reference recommends establishing the focus of each scene, safe space
+and legible text; it does not prescribe quotas for photos, clips or graphics. These
+are useful composition guidelines, not a quality guarantee or an independent
+editorial director. [Video layout](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-create/video-layout.md).
 
-Dos candidatos de terceros del informe anterior se releyeron y no son la recomendación principal:
+Two third-party candidates from the previous report were re-read and are not the
+main recommendation:
 
-- [`short-form-video`, de iart-ai](https://github.com/iart-ai/tiktok-video-skills/blob/main/skills/short-form-video/SKILL.md): propone cambios visuales cada dos a cuatro segundos y subtítulos obligatorios. Sus consejos de gancho pueden servir de referencia, pero adoptar toda la skill reintroduciría obligaciones que el usuario quiere quitar. Sus porcentajes de retención no se verificaron y no sustentan esta recomendación.
-- [`chart-animation`, de iart-ai](https://github.com/iart-ai/data-animation-skills/blob/main/skills/chart-animation/SKILL.md): aporta contadores, interpolación de datos y gráficos por fotograma. También promueve una plantilla común aplicada a muchos datasets; útil como referencia técnica puntual, poco adecuada para dirigir videos que deben diferenciarse visualmente.
+- [`short-form-video`, by iart-ai](https://github.com/iart-ai/tiktok-video-skills/blob/main/skills/short-form-video/SKILL.md): it proposes visual changes every two to four seconds and mandatory subtitles. Its hook advice can serve as a reference, but adopting the whole skill would reintroduce obligations the user wants to remove. Its retention percentages were not verified and do not support this recommendation.
+- [`chart-animation`, by iart-ai](https://github.com/iart-ai/data-animation-skills/blob/main/skills/chart-animation/SKILL.md): it contributes counters, data interpolation and per-frame charts. It also promotes a common template applied to many datasets; useful as a specific technical reference, poorly suited to directing videos that must differ visually.
 
-El router principal está orientado a trabajo interactivo: pide abrir Studio y reserva el render para solicitudes explícitas. Para el flujo ya autorizado de Telegram, las instrucciones de integración deben explicar que Render exporta de forma automática después de la revisión; no copiar ese comportamiento interactivo sin contexto. La skill aporta conocimiento, no otro modelo ni un proveedor de inferencia.
+The main router is oriented toward interactive work: it asks to open Studio and
+reserves rendering for explicit requests. For the already authorized Telegram flow,
+the integration instructions must explain that Render exports automatically after
+review; do not copy that interactive behavior without context. The skill contributes
+knowledge, not another model or an inference provider.
 
-## Compatibilidad con OpenClaw
+## Compatibility with OpenClaw
 
-OpenClaw usa el formato AgentSkills y descubre skills en `<workspace>/skills`; el archivo requiere nombre y descripción. El formato de la skill de Remotion es compatible en principio. En esta instalación conviene incluir la carpeta completa en `fly/gateway/workspace/skills/` para que viaje con Docker, preservando referencias relativas. Esta es una propuesta de integración; no se ha instalado.
+OpenClaw uses the AgentSkills format and discovers skills in `<workspace>/skills`;
+the file requires a name and description. The Remotion skill format is compatible
+in principle. In this installation it is advisable to include the complete folder
+in `fly/gateway/workspace/skills/` so it travels with Docker, preserving relative
+references. This is an integration proposal; it has not been installed.
 
-La comprobación se hizo también contra la [documentación de OpenClaw v2026.9.6](https://github.com/openclaw/openclaw/blob/v2026.9.6/docs/tools/skills.md), versión fijada por el Dockerfile, además de la [documentación actual](https://docs.openclaw.ai/tools/skills). Una skill no concede herramientas, dependencias ni permisos ausentes.
+The check was also made against the [OpenClaw v2026.9.6
+documentation](https://github.com/openclaw/openclaw/blob/v2026.9.6/docs/tools/skills.md),
+the version pinned by the Dockerfile, in addition to the [current
+documentation](https://docs.openclaw.ai/tools/skills). A skill does not grant tools,
+dependencies or permissions that are absent.
 
-## Por qué seguirían pareciéndose los videos con solo instalarla
+## Why videos would still look alike with only the skill installed
 
-Hallazgo local: `fly/gateway/creative-director.mjs` pide a OpenClaw escribir una decisión JSON y le indica que no cambie otros archivos. `src/lib/edit-plan.js` limita las familias de gráficos conocidas. El bundle de `fly/render/remotion/short.jsx` y `editorial.jsx` contiene implementaciones prediseñadas con posiciones, fondos, tipografía y movimientos repetidos.
+Local finding: `fly/gateway/creative-director.mjs` asks OpenClaw to write a JSON
+decision and instructs it not to change other files. `src/lib/edit-plan.js` limits
+the known graphics families. The bundle of `fly/render/remotion/short.jsx` and
+`editorial.jsx` contains prebuilt implementations with repeated positions,
+backgrounds, typography and movements.
 
-`Photo` admite `layer.box`, por lo que las fotos pueden ocupar regiones. En cambio, el clip se dibuja con `inset: 0`, ancho y alto completos: varios clips no forman una pantalla dividida real. Los motions editoriales incluyen fondo completo; algunas tarjetas de gráficos son opacas. Esto limita transparencia y composición libre aunque el texto de dirección ya no exija alternancia.
+`Photo` supports `layer.box`, so photos can occupy regions. By contrast, the clip is
+drawn with `inset: 0`, full width and height: several clips do not form a real split
+screen. Editorial motions include a full background; some graphics cards are opaque.
+This limits transparency and free composition even though the direction text no
+longer requires alternation.
 
-El banco de cuatro fotos y dos clips es una decisión de producción/disponibilidad, distinta de obligar a usarlos todos. `server.mjs` sigue truncando a ese inventario; el workflow envía mínimo cero. Separar ambas decisiones evita confundir presupuesto de recursos con montaje obligatorio. El cierre actual está fijado en tres segundos y las instrucciones mantienen música, subtítulos y estilo constantes: también requieren revisión si el único requisito editorial será un logo breve al final.
+The pool of four photos and two clips is a production/availability decision,
+distinct from requiring all of them to be used. `server.mjs` still truncates to that
+inventory; the workflow sends a minimum of zero. Separating both decisions avoids
+confusing a resource budget with a mandatory edit. The current endcard is fixed at
+three seconds and the instructions keep music, subtitles and style constant: they
+also require revision if the only editorial requirement will be a brief logo at the
+end.
 
-## Transparencia y libertad propuesta
+## Transparency and proposed freedom
 
-Para superponer gráficos a una foto o clip en el mismo Remotion basta dibujar texto, SVG o elementos sin un panel de fondo que los tape. No hace falta exportar otro video con alpha. Si se desea un archivo transparente independiente, Remotion documenta ProRes 4444 y WebM VP9 con alpha. [Referencia oficial de transparencia](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-render/transparent-videos.md).
+To overlay graphics on a photo or clip in the same Remotion, it is enough to draw
+text, SVG or elements without a background panel covering them. There is no need to
+export another video with alpha. If an independent transparent file is desired,
+Remotion documents ProRes 4444 and WebM VP9 with alpha. [Official transparency
+reference](https://github.com/remotion-dev/skills/blob/039e8a2fc78b67efc228d5645367838b85818a1c/skills/remotion-render/transparent-videos.md).
 
-Propuesta, todavía sin implementar: OpenClaw diseña y escribe una composición React por video; Render la compila y ejecuta en un entorno aislado con medios y dependencias permitidos. OpenClaw revisa el resultado y modifica esa composición cuando pide correcciones. Render conserva transcripción y ejecución sin añadir otro LLM. Esto permite superposiciones transparentes, dos o tres regiones, tipografía y ritmos propios por narración. Reutilizar utilidades técnicas puede seguir siendo conveniente sin reutilizar una plantilla visual completa.
+Proposal, not yet implemented: OpenClaw designs and writes a React composition per
+video; Render compiles and runs it in an isolated environment with allowed media and
+dependencies. OpenClaw reviews the result and modifies that composition when it
+requests corrections. Render keeps transcription and execution without adding
+another LLM. This allows transparent overlays, two or three regions, typography and
+rhythms specific to each narration. Reusing technical utilities can still be
+convenient without reusing a complete visual template.
 
-La preferencia por gráficos transparentes y diversidad debe ser una guía editorial, no una nueva cuota de overlays o cantidad de paneles. Mantener como requisitos editoriales el máximo de 55 segundos y el logo breve final; conservar las verificaciones técnicas necesarias para ejecutar y entregar el archivo. Para evitar repetir montajes entre videos, OpenClaw necesitaría además recibir un resumen visual de composiciones recientes: una skill aislada no suministra esa memoria.
+The preference for transparent graphics and diversity must be an editorial
+guideline, not a new quota of overlays or panel count. Keep the 55-second maximum
+and the brief final logo as editorial requirements; keep the technical checks needed
+to run and deliver the file. To avoid repeating edits between videos, OpenClaw would
+also need to receive a visual summary of recent compositions: an isolated skill does
+not supply that memory.
 
-## Referencia audiovisual del usuario: efectos sobre video
+## User's audiovisual reference: effects on video
 
-Referencia revisada el 21 de octubre de 2026: `/Users/juarpla/Downloads/2026-10-21 02.49.43.mp4` (24.52 s, 576 × 1024, 30 fps). El adjunto señalaba inicialmente una ruta en el directorio personal; se encontró el mismo nombre en Downloads. Se inspeccionaron secuencias de fotogramas a cuatro muestras por segundo y una vista general. Los tiempos siguientes son aproximados. Esta revisión evalúa imagen y cambios visuales; no analiza la mezcla sonora ni atribuye las herramientas con que se produjo el original.
+Reference reviewed on October 21, 2026: `/Users/juarpla/Downloads/2026-10-21
+02.49.43.mp4` (24.52 s, 576 × 1024, 30 fps). The attachment initially pointed to a
+path in the home directory; the same name was found in Downloads. Frame sequences
+were inspected at four samples per second plus an overview. The following times are
+approximate. This review evaluates image and visual changes; it does not analyze the
+sound mix or attribute the tools used to produce the original.
 
-El patrón principal es una toma continua con texto, tarjetas y pequeños videos superpuestos. Las capas se introducen y retiran sin sustituir permanentemente el fondo. Es una referencia apropiada para la preferencia del usuario por gráficos sin fondo. Las tarjetas del original sí tienen sus propios paneles; se puede conservar solo el texto, líneas o contornos cuando convenga mostrar más media.
+The main pattern is a continuous shot with text, cards and small overlaid videos.
+Layers are introduced and removed without permanently replacing the background. It
+is an appropriate reference for the user's preference for graphics without a
+background. The cards in the original do have their own panels; only the text,
+lines or outlines can be kept when it is better to show more media.
 
-| Referencia observada | Tiempo aproximado | Adaptación propuesta para GoatLab |
+| Reference observed | Approximate time | Proposed adaptation for GoatLab |
 | --- | --- | --- |
-| Texto cinético, caída de palabras y tipografía grande | 00–03 s | Destacar palabras de la voz, nombres de equipos o una cifra real con entradas y escalas propias por pieza. Evitar que una segunda transcripción completa compita con subtítulos. |
-| Barra con escritura progresiva | 03–04 s | Pregunta breve, concepto o titular que se escribe sobre una foto o clip; el aspecto de buscador no es obligatorio. |
-| Tira de tarjetas flotantes, llamada Storyboard deck | 04–05 s | Hacer entrar varias fotos o recortes, reorganizarlos y dejar protagonista al recurso que corresponde a la narración. |
-| Video pequeño superpuesto, llamado File drop, y tarjeta de video posterior | 07 s y 17 s | Clip en una región con texto o gráficos en otra; cambiar entre imagen a pantalla completa y composición dividida sin una plantilla fija. |
-| Comparación de color mediante un deslizador y cambio de tratamiento | 10–13 s | Recurso opcional para comparaciones visuales o énfasis. Si compara datos o equipos, etiquetar el significado; el efecto del original muestra tratamiento de color, no estadísticas. |
-| Cuadrícula con varias piezas, llamada Playing grid | 15 s | Dos o tres regiones de foto, video y gráfico, con un foco principal y sincronización con la voz. El número de paneles queda a criterio del director. |
-| Barrido vertical con desenfoque hacia otra toma | 16 s | Transición puntual entre ideas, con dirección y duración diseñadas para ese corte. |
+| Kinetic text, falling words and large typography | 00–03 s | Highlight words from the voice, team names or a real figure with entries and scales specific to each piece. Avoid a second full transcription competing with subtitles. |
+| Bar with progressive typing | 03–04 s | A brief question, concept or headline typed over a photo or clip; the search-bar look is not mandatory. |
+| Strip of floating cards, called Storyboard deck | 04–05 s | Bring in several photos or crops, rearrange them and leave the resource matching the narration as the protagonist. |
+| Small overlaid video, called File drop, and later video card | 07 s and 17 s | Clip in one region with text or graphics in another; switch between full-screen image and split composition without a fixed template. |
+| Color comparison via a slider and treatment change | 10–13 s | Optional resource for visual comparisons or emphasis. If it compares data or teams, label the meaning; the original effect shows color treatment, not statistics. |
+| Grid with several pieces, called Playing grid | 15 s | Two or three regions of photo, video and graphic, with one main focus and synchronization with the voice. The number of panels is left to the director's judgment. |
+| Vertical wipe with blur toward another shot | 16 s | A one-off transition between ideas, with direction and duration designed for that cut. |
 
-No priorizar la simulación de una línea de tiempo de edición, los iconos de aplicaciones tachados ni las llamadas a comentar EDIT: cumplen una función promocional del video de referencia, no de la narración deportiva. El cierre de GoatLab sigue siendo un logo breve al final.
+Do not prioritize simulating an editing timeline, struck-through app icons or calls
+to comment EDIT: they serve a promotional function in the reference video, not the
+sports narration. The GoatLab endcard remains a brief logo at the end.
 
-Incorporar estas referencias al plan junto con `remotion-create` y `remotion-markup`, sin crear otro catálogo cerrado ni cuotas de uso. OpenClaw debe poder generar la composición y animación concreta de cada video, privilegiando overlays transparentes cuando funcionan, con libertad para omitir estos efectos. Para diferenciar piezas, recibir ejemplos o resúmenes de montajes recientes, no solo variar aleatoriamente efectos. Render conserva la transcripción y ejecuta el resultado sin otro modelo creativo. No se modificó ni desplegó producción durante esta revisión.
+Incorporate these references into the plan together with `remotion-create` and
+`remotion-markup`, without creating another closed catalog or usage quotas. OpenClaw
+must be able to generate the specific composition and animation for each video,
+favoring transparent overlays when they work, with freedom to omit these effects. To
+differentiate pieces, receive examples or summaries of recent edits, not just
+randomly vary effects. Render keeps the transcription and runs the result without
+another creative model. Production was not modified or deployed during this review.

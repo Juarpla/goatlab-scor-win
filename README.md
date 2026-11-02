@@ -1,14 +1,14 @@
 # GoatLab
 
-Analítica de fútbol en español para Latinoamérica. Astro, GitHub Actions y Cloudflare Pages.
+Football analytics in Spanish for Latin America. Astro, GitHub Actions and Cloudflare Pages.
 
-## Estado
+## Status
 
-Base de datos e IA implementada; interfaz propia pendiente de la elección visual abierta en Impeccable. No hay credenciales configuradas ni predicciones validadas. Los JSON iniciales representan datos no disponibles, no partidos inventados.
+Database and AI are implemented; the custom interface is pending the visual choice opened in Impeccable. No credentials are configured and no predictions are validated. The initial JSON files represent unavailable data, not invented matches.
 
-## Desarrollo
+## Development
 
-Node 22.12 o posterior.
+Node 22.12 or later.
 
 ```sh
 pnpm install
@@ -20,111 +20,112 @@ node --test tests/*.test.js
 pnpm run build
 ```
 
-## Datos y análisis
+## Data and analysis
 
-`node actions/1-update-data/update-data.mjs` construye una ventana de siete días fusionando dos proveedores gratuitos: Football-Data.org sirve cualquier rango en una consulta; API-Football (plan gratis limitado a ayer–mañana) es autoridad para esas fechas y aporta marcador con minuto. El modo `--refresh` actualiza solo los marcadores del día. La forma reciente se calcula contra una base local de resultados (`public/data/results.json`): relleno inicial por competición en Football-Data.org más los resultados de ayer, con deduplicación tolerante a diferencias de nombres entre proveedores. Bzzoiro (REST gratuito) aporta estadísticas con xG e incidentes de los partidos del día, con emparejamiento por nombre y presupuesto acotado. Las métricas ausentes permanecen ausentes (`null`), nunca cero inventado.
+`node actions/1-update-data/update-data.mjs` builds a seven-day window by merging two free providers: Football-Data.org serves any range in one request; API-Football (free plan limited to yesterday through tomorrow) is the authority for those dates and provides the score with minute. `--refresh` updates only the day's scorelines. Recent form is computed against a local results base (`public/data/results.json`): an initial per-competition fill from Football-Data.org plus yesterday's results, deduplicated tolerantly across provider name differences. Bzzoiro (free REST) provides statistics with xG and incidents for the day's matches, with name matching and a bounded budget. Missing metrics stay missing (`null`), never an invented zero.
 
-El diccionario de equipos (`public/data/teams.json`, 129 vigentes 2026/27 y Libertadores 2026) asigna a cada club su slug web más los ids de Bzzoiro, API-Football (roster 2024 como puente, `bridged:true`; el free bloquea la temporada vigente) y Football-Data.org; se construye con `pnpm run data:teams` y las URLs de partido usan `home-vs-away-fecha`. Los ids de fixture antiguos (`af-`/`fd-`) siguen resolviendo.
+The team dictionary (`public/data/teams.json`, 129 active teams for 2026/27 plus Libertadores 2026) assigns each club its web slug plus the Bzzoiro, API-Football (2024 roster as a bridge, `bridged:true`; the free plan blocks the current season) and Football-Data.org ids; it is built with `pnpm run data:teams` and match URLs use `home-vs-away-date`. Old fixture ids (`af-`/`fd-`) still resolve.
 
-El flujo de Actions corre a las 06:05 UTC (corrida completa: ventana, forma, análisis; 01:05 Lima) y cada seis horas (solo marcadores), además de ejecuciones manuales y cambios en `main`. Este intervalo **no es una transmisión en vivo**. El seguimiento minuto a minuto quedó fuera de alcance: no existe fuente gratuita en tiempo real; el WebSocket de Bzzoiro (coordenadas del balón) cuesta USD 3/mes.
+The Actions flow runs at 06:05 UTC (full run: window, form, analysis; 01:05 Lima) and every six hours (scorelines only), plus manual runs and changes to `main`. This interval **is not a live stream**. Minute-by-minute tracking was out of scope: there is no free real-time source; the Bzzoiro WebSocket (ball coordinates) costs USD 3/month.
 
-Las claves se configuran como GitHub Secrets con los nombres de `.env.example`; no deben entrar al navegador. La configuración de modelos usa variables del repositorio. OpenCode Go está diseñado para tráfico de agentes de programación según su documentación: confirmar que la cuenta permite este uso editorial antes de habilitar ese proveedor. No se suplanta otro cliente.
+Keys are configured as GitHub Secrets with the names from `.env.example`; they must not reach the browser. Model configuration uses repository variables. OpenCode Go is designed for coding-agent traffic according to its documentation: confirm that the account allows this editorial use before enabling that provider. No other client is impersonated.
 
-El análisis se prepara para todos los partidos vigentes de la ventana de siete días, cacheado por `inputKey`: un partido sin cambios no se vuelve a pagar. Los análisis y probabilidades existentes se conservan hasta más de una hora desde la primera detección válida de FT/AET/PEN con ambos marcadores. Durante esa gracia se conserva el contenido sin recalcularlo; desaparecer del calendario o salir del top no autoriza borrarlo. Se conserva entre ejecuciones mediante artefactos de Actions; no se genera por visitante. Si solo hay calendario, el prompt exige describir exclusivamente ese contexto. Una caída del LLM no bloquea los datos deportivos.
+Analysis is prepared for every active match in the seven-day window, cached by `inputKey`: a match with no changes is not paid for again. Existing analyses and probabilities are kept for more than one hour after the first valid detection of FT/AET/PEN with both scorelines. During that grace period the content is kept without recalculation; disappearing from the calendar or leaving the top does not authorize deleting it. It is preserved between runs through Actions artifacts; it is not generated per visitor. If only the calendar is available, the prompt requires describing only that context. An LLM outage does not block sports data.
 
-El motor Poisson es una base experimental aislada. No se conecta a porcentajes públicos sin evaluación histórica. El control inicial exige al menos 200 partidos de evaluación y una puntuación Brier mejor que la referencia; esto no sustituye una revisión de calibración, segmentación y calidad de datos antes de producción.
+The Poisson engine is an isolated experimental base. It is not connected to public percentages without historical evaluation. The initial gate requires at least 200 evaluation matches and a Brier score better than the baseline; this does not replace a calibration, segmentation and data-quality review before production.
 
-## Publicación en Cloudflare Pages
+## Publishing to Cloudflare Pages
 
-Crear un proyecto Pages de Direct Upload y configurar en GitHub:
+Create a Direct Upload Pages project and configure in GitHub:
 
-- Secrets `CLOUDFLARE_ACCOUNT_ID` y `CLOUDFLARE_API_TOKEN`, con permisos limitados de publicación en Pages.
-- Variable `CLOUDFLARE_PAGES_PROJECT`, con el nombre real del proyecto.
-- Secrets de las APIs deportivas y de los proveedores LLM que se vayan a utilizar.
+- Secrets `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, with limited Pages publishing permissions.
+- Variable `CLOUDFLARE_PAGES_PROJECT`, with the real project name.
+- Secrets for the sports APIs and LLM providers that will be used.
 
-El workflow ejecuta pruebas, prepara datos, construye Astro y publica `dist` mediante Wrangler. Sin nombre de proyecto, omite la publicación. No se ha ejecutado un despliegue externo.
+The workflow runs tests, prepares data, builds Astro and publishes `dist` through Wrangler. Without a project name, it skips publishing. No external deployment has been executed.
 
-AdSense está pendiente de implementación; no se cargan anuncios ni rastreadores. Se prepararán ubicaciones antes de configurar identificadores de una cuenta aprobada.
+AdSense is pending implementation; no ads or trackers are loaded. Placements will be prepared before configuring identifiers from an approved account.
 
-## Referencias
+## References
 
-- [API-Football: planes y temporadas](https://www.api-football.com/pricing)
-- [Football-Data.org: límites y retraso](https://www.football-data.org/pricing)
+- [API-Football: plans and seasons](https://www.api-football.com/pricing)
+- [Football-Data.org: limits and delay](https://www.football-data.org/pricing)
 - [Mistral: Chat Completions](https://docs.mistral.ai/api)
-- [Workers AI: API compatible](https://developers.cloudflare.com/ai-gateway/usage/rest-api/)
-- [OpenCode Go: endpoints y uso](https://opencode.ai/docs/go/)
+- [Workers AI: compatible API](https://developers.cloudflare.com/ai-gateway/usage/rest-api/)
+- [OpenCode Go: endpoints and usage](https://opencode.ai/docs/go/)
 
-Las decisiones del producto están en PRODUCT.md. El diseño se construirá directamente en código, según `.impeccable/config.json`.
+Product decisions are in PRODUCT.md. The design will be built directly in code, following `.impeccable/config.json`.
 
 
-### Contenido audiovisual
+### Audiovisual content
 
-`pnpm content` prepara los guiones y prompts del top 5 configurable. Admite
-`--category=all|scripts|image-prompts`, `--match=<webId>`,
-`--top=N` y `--force`. Las categorías se guardan de forma independiente y conservan
-el contenido válido existente. Tanto en local como en GitHub Actions, la prioridad es
-DeepSeek V4.1 Flash → GLM-5.3-Flash → Mistral → Workers AI,
-configurada por `SCRIPT_PROVIDER_ORDER`, independiente del análisis deportivo.
-DeepSeek y GLM usan razonamiento `max`, hasta 131072 tokens y 10 minutos por intento.
-Los diez guiones conservan sus temas y 55–100 palabras (techo 110); el modelo
-redacta con libertad y guarda su escenario futuro en `projection`, identificado
-como opinión en la narración. Las cifras históricas siguen saliendo de los datos.
-Motion Prompts se retiró; los gráficos reciben el catálogo de hechos directamente.
+`pnpm content` prepares scripts and prompts for the configurable top 5. It accepts
+`--category=all|scripts|image-prompts`, `--match=<webId>`, `--top=N` and `--force`.
+Categories are saved independently and preserve existing valid content. Both
+locally and in GitHub Actions, the priority is DeepSeek V4.1 Flash → GLM-5.3-Flash
+→ Mistral → Workers AI, configured by `SCRIPT_PROVIDER_ORDER`, independent of
+sports analysis. DeepSeek and GLM use `max` reasoning, up to 131072 tokens and 10
+minutes per attempt. The ten scripts keep their topics and 55 to 100 words
+(ceiling 110); the model writes freely and stores its future scenario in
+`projection`, identified as opinion in the narration. Historical figures still
+come from the data. Motion Prompts was retired; graphics receive the fact catalog
+directly.
 
-Para medir latencia y validar borradores sin publicarlos:
+To measure latency and validate drafts without publishing them:
 `node --env-file=.env scripts/benchmark-content-llm.mjs --match=<webId> --runs=2`.
-Los resultados y textos se guardan en `.cache/content-llm-benchmark/`.
+Results and texts are saved in `.cache/content-llm-benchmark/`.
 
-Cada partido tiene `/scripts` e `/image-prompts`
-con su equivalente `.json`; `/content-index.json` lista los guiones disponibles
-para próximos partidos. El banco compartido de 4 imágenes y hasta 4 clips Agnes
-lo produce GitHub Actions. El render es local: consume el banco, la voz y el
-guion, y entrega el MP4 1080x1920 sin depender de un servidor.
+Each match has `/scripts` and `/image-prompts`
+with their `.json` equivalent; `/content-index.json` lists the scripts available
+for upcoming matches. The shared bank of 4 images and up to 4 Agnes clips is
+produced by GitHub Actions. The render is local: it consumes the bank, the voice
+and the script, and delivers the 1080x1920 MP4 without depending on a server.
 
-Instalar las dependencias del render con
-`npm ci --prefix video-render/render/remotion` y ejecutar:
+Install the render dependencies with
+`npm ci --prefix video-render/render/remotion` and run:
 
 ```sh
-node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<archivo> \
-  --script=<guiones.json> [--script-n=<n>] --plan=<plan.json>
+node --env-file=.env scripts/render-short.mjs --match=<webId> --audio=<file> \
+  --script=<scripts.json> [--script-n=<n>] --plan=<plan.json>
 ```
 
-La transcripción usa Mistral y Whisper; con `--script` se alinea el guion para
-corregir nombres y cifras sin perder los tiempos por palabra. El plan version 5
-es JSX original por audio y puede combinar tipografía, SVG, overlays, tarjetas,
-fotos y clips. Las versiones 1–4 conservan su camino de compatibilidad. El cierre
-muestra el logo durante un segundo y el total, incluido ese cierre, mide como
-máximo 55 s. Recomendación de grabación: hasta 50 s; presupuesto técnico de voz
-53 s y ajuste hasta 1.10 conservando el tono. Los MP4 se guardan en
-`video-render/videos/` y los archivos de trabajo en `video-render/work/`.
-Consulta [el reporte de libertad creativa y restricciones](CREATIVE-FREEDOM-REPORT.md).
+Transcription uses Mistral and Whisper; with `--script`, the script is aligned to
+fix names and figures without losing per-word timings. The version 5 plan is
+original JSX per audio and can combine typography, SVG, overlays, cards, photos
+and clips. Versions 1 to 4 keep their compatibility path. The endcard shows the
+logo for one second and the total, including that endcard, measures at most 55 s.
+Recording recommendation: up to 50 s; technical voice budget 53 s and adjustment
+up to 1.10 preserving pitch. MP4s are saved in `video-render/videos/` and working
+files in `video-render/work/`.
+See [the creative freedom and constraints report](CREATIVE-FREEDOM-REPORT.md).
 
-Los cinco intentos de Agnes Video Flash emparejan prompts e imágenes distintas
-antes de reutilizarlas. Una tarea incierta con identificador tiene hasta 60 s de
-recuperación ante errores por corrida; sin identificador, el montaje
-parcial continúa inmediatamente. Los intentos inciertos no se repiten y un 429
-conserva la pareja respetando Retry-After dentro del presupuesto de la corrida.
+The five Agnes Video Flash attempts pair different prompts and images before
+reusing them. An uncertain task with an identifier has up to 60 s of recovery from
+errors per run; without an identifier, the partial edit continues immediately.
+Uncertain attempts are not repeated and a 429 keeps the pair while respecting
+Retry-After within the run budget.
 
 
-La admisión y las cuotas de Agnes se comparten mediante un JSON privado en R2;
-SQLite queda como caché. Actions consulta R2 directamente y no enciende servidores.
-Los reintentos diarios de media se ejecutan a las 02:15, 04:15 y 06:15 Lima.
-Un banco completo evita instalar pnpm, Python y ffmpeg; el mantenimiento sigue
-corriendo. Cada banco v2 completo tiene cuatro imágenes y cuatro clips distintos,
-identidad/fingerprint coherentes y disponibilidad comprobada en R2. Los drafts
-publican únicamente los manifiestos nuevos completos; preservan el completo
-anterior si el reintento es parcial. Progresos y reportes se publican aparte.
+Agnes admission and quotas are shared through a private JSON file in R2; SQLite
+remains a cache. Actions queries R2 directly and does not start servers. Daily
+media retries run at 02:15, 04:15 and 06:15 Lima. A complete bank avoids
+installing pnpm, Python and ffmpeg; maintenance still runs. Every complete v2 bank
+has four images and four distinct clips, coherent identity/fingerprint and
+verified availability in R2. Drafts publish only the new complete manifests; they
+preserve the previous complete one if the retry is partial. Progress and reports
+are published separately.
 
-Para configurar credenciales, realizar el corte coordinado, comprobar CAS o
-recuperar/retirar productores, seguir [AGNES-STATE.md](AGNES-STATE.md). La continuidad usa
-los archivos publicados en R2 y el JSON privado; los temporales se eliminan tras
-confirmar la subida. Una generación consumida perdida sin identificador recuperable
-conserva el bloqueo y puede dejar el banco parcial.
+To configure credentials, perform the coordinated cutover, check CAS or
+recover/retire producers, follow [AGNES-STATE.md](AGNES-STATE.md). Continuity uses
+the files published in R2 and the private JSON; temporary files are deleted after
+confirming the upload. A consumed generation lost without a recoverable
+identifier keeps the lock and may leave the bank partial.
 
-Los clips usan la frase fija «Animate this image with fast, precise, hyperrealistic movements.»
-de `src/lib/video-animation.json`, sincronizada con el consumidor portátil. No se
-generan documentos Video Prompts ni páginas de esa categoría. Agnes recibe la imagen
-como `first_frame` en modo `keyframe`, seis segundos, 720P y 9:16. Las reservas
-y las tareas aceptadas conservan sus hashes originales para recuperar y reutilizar
-clips anteriores sin repetir POST. La huella v3 incluye la política fija y las
-imágenes; un inventario anterior se vuelve a verificar antes de publicar la nueva huella.
+Clips use the fixed phrase «Animate this image with fast, precise, hyperrealistic movements.»
+from `src/lib/video-animation.json`, synchronized with the portable consumer. No
+Video Prompts documents or pages of that category are generated. Agnes receives
+the image as `first_frame` in `keyframe` mode, six seconds, 720P and 9:16.
+Reservations and accepted tasks keep their original hashes to recover and reuse
+previous clips without repeating POST. The v3 fingerprint includes the fixed
+policy and the images; a previous inventory is re-verified before publishing the
+new fingerprint.

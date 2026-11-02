@@ -1,31 +1,28 @@
-# Estado compartido de Agnes
+# Agnes shared state
 
-La autoridad de admisión está en `app-states/goatlab/agnes-state.json`, mediante
-la API S3 directa de R2. El bucket debe ser privado, Standard, con `r2.dev`
-deshabilitado y sin dominio público. GoatLab reutiliza las credenciales S3 de media para este bucket privado. El cliente solo opera sobre ese objeto.
-Actions consulta R2 directamente; esta persistencia no necesita encender Fly.
+The admission authority lives in `app-states/goatlab/agnes-state.json`, through the direct R2 S3 API. The bucket must be private, Standard, with `r2.dev` disabled and no public domain. GoatLab reuses the media S3 credentials for this private bucket. The client only operates on that object. Actions queries R2 directly; this persistence does not need Fly to be running.
 
-Cada POST requiere una reserva nueva confirmada por escritura condicional del
-JSON. Un timeout del PUT nunca concede permiso. El mismo intento o slot ya
-consumido conserva su bloqueo tras borrar SQLite, reiniciar o cambiar los
-prompts. Un 429 demostrado sin identificador devuelve la reserva una vez;
-un timeout, 5xx o resultado con identificador la conserva. La reserva usa su día
-UTC original, aunque la descarga termine al día siguiente.
+Every POST requires a new reservation confirmed by a conditional write of the
+JSON. A PUT timeout never grants permission. The same attempt or slot already
+consumed keeps its lock after deleting SQLite, restarting or changing the
+prompts. A demonstrated 429 without an identifier returns the reservation once;
+a timeout, 5xx or result with an identifier keeps it. The reservation uses its
+original UTC day, even if the download finishes the next day.
 
-El adaptador Python llama al cliente Node mediante JSON por stdin/stdout.
-SQLite es temporal y se reconstruye en cada corrida desde R2. La autoridad almacena hashes, identificadores
-de recuperación, reservas y reclamaciones; los reportes públicos son proyecciones
-saneadas. `public/data/agnes-quota.json` conserva máximos para observación y
-nunca autoriza solicitudes ni reconstruye un registro perdido.
+The Python adapter calls the Node client through JSON over stdin/stdout.
+SQLite is temporary and rebuilt on each run from R2. The authority stores hashes,
+recovery identifiers, reservations and claims; public reports are sanitized
+projections. `public/data/agnes-quota.json` keeps maxima for observation and
+never authorizes requests or reconstructs a lost record.
 
-## Configuración
+## Configuration
 
-Configurar en ambos consumidores las mismas llaves existentes `R2_ACCESS_KEY_ID`,
-`R2_SECRET_ACCESS_KEY` y `R2_ACCOUNT_ID` (o `CLOUDFLARE_ACCOUNT_ID`), con acceso
-al bucket público de media y al privado `app-states`. El bucket de estado y su
-objeto siguen fijados independientemente de `R2_BUCKET`.
+Configure the same existing keys in both consumers: `R2_ACCESS_KEY_ID`,
+`R2_SECRET_ACCESS_KEY` and `R2_ACCOUNT_ID` (or `CLOUDFLARE_ACCOUNT_ID`), with
+access to the public media bucket and the private `app-states` bucket. The state
+bucket and its object remain fixed regardless of `R2_BUCKET`.
 
-Los siguientes valores permiten una credencial separada opcional:
+The following values allow an optional separate credential:
 
 ```text
 R2_STATE_ACCOUNT_ID
@@ -35,193 +32,198 @@ R2_STATE_ACCESS_KEY_ID
 R2_STATE_SECRET_ACCESS_KEY
 ```
 
-Guardar account ID y credenciales en secrets de Actions y Fly. Por decisión del
-proyecto se comparten las llaves entre media y estado. Si se configura una pareja
-`R2_STATE_ACCESS_KEY_ID`/`R2_STATE_SECRET_ACCESS_KEY`, ambos valores son obligatorios:
-el cliente nunca mezcla una llave de esa pareja con otra de media. Los permisos
-R2 se delimitan por bucket; una carpeta no restringe el token. Para otro proyecto
-se emitirán otras llaves.
+Store the account ID and credentials in Actions and Fly secrets. By project
+decision, the keys are shared between media and state. If an
+`R2_STATE_ACCESS_KEY_ID`/`R2_STATE_SECRET_ACCESS_KEY` pair is configured, both
+values are mandatory: the client never mixes a key from that pair with a media
+key. R2 permissions are scoped by bucket; a folder does not restrict the token.
+Other keys will be issued for another project.
 
-## Corte coordinado
+## Coordinated cutover
 
-1. Suspender productores antiguos de Actions y Fly y terminar trabajo activo.
-2. Crear o verificar el bucket privado y el acceso con los secrets existentes.
-3. Obtener una copia del SQLite de Fly y conservarla fuera de Git. Inventariar
-   también artefactos y recursos existentes en R2 antes de habilitar generación.
-4. Preparar el seed sin escribir R2:
+1. Suspend old Actions and Fly producers and finish active work.
+2. Create or verify the private bucket and access with the existing secrets.
+3. Obtain a copy of the Fly SQLite and keep it outside Git. Also inventory
+   existing artifacts and resources in R2 before enabling generation.
+4. Prepare the seed without writing to R2:
 
    ```sh
-   node scripts/bootstrap-agnes-state.mjs --sqlite=/ruta/agnes.sqlite --out=.cache/agnes-seed.json
+   node scripts/bootstrap-agnes-state.mjs --sqlite=/path/agnes.sqlite --out=.cache/agnes-seed.json
    ```
 
-   Se pueden repetir `--sqlite` y `--snapshot` para incluir evidencia adicional.
-   La salida normal contiene solo cantidades. El seed privado conserva tareas
-   conocidas y bloquea el resto de slots del conjunto legacy. Los totales del día
-   de corte se conservan como estimación histórica; no bloquean solicitudes.
+   `--sqlite` and `--snapshot` can be repeated to include additional evidence.
+   Normal output contains only quantities. The private seed keeps known tasks and
+   locks the remaining slots of the legacy set. The cutover day totals are kept as
+   a historical estimate; they do not block requests.
 
-5. Con los secrets cargados en el entorno, crear explícitamente el registro:
+5. With the secrets loaded in the environment, explicitly create the record:
 
    ```sh
    node scripts/agnes-state.mjs bootstrap < .cache/agnes-seed.json
    ```
 
-   Usa `If-None-Match: *`. Si existe o la respuesta es incierta, detener el corte
-   y leer/verificar el objeto existente. El runtime nunca crea un JSON vacío.
+   Use `If-None-Match: *`. If it exists or the response is uncertain, stop the
+   cutover and read/verify the existing object. The runtime never creates an empty
+   JSON.
 
-6. Ejecutar la prueba real de concurrencia en un objeto desechable:
+6. Run the real concurrency test on a disposable object:
 
    ```sh
    node scripts/check-agnes-r2-cas.mjs --run
    ```
 
-   Debe confirmar un ganador y un HTTP 412 con el mismo ETag, y eliminar el
-   objeto de ensayo. Ejecutar además las pruebas de admisión con ambos clientes.
-7. Habilitar los productores nuevos solo después de verificar el registro y
-   la coordinación. Conservar las copias de migración de forma privada.
+   It must confirm one winner and an HTTP 412 with the same ETag, and delete the
+   test object. Also run the admission tests with both clients.
+7. Enable the new producers only after verifying the record and coordination.
+   Keep the migration copies private.
 
-La protección contra duplicados comienza en este corte. Una lista de resultados
-exitosos no demuestra que un slot sin resultado esté disponible: una solicitud
-aceptada cuyo identificador se perdió queda bloqueada y puede dejar el banco parcial.
+Duplicate protection starts at this cutover. A list of successful results does
+not prove that a slot without a result is available: an accepted request whose
+identifier was lost remains locked and may leave the bank partial.
 
-## Recuperación
+## Recovery
 
-Estado ausente, incompatible, corrupto o inaccesible cierra nuevas generaciones.
-Las tareas conocidas se recuperan mediante GET del mismo identificador, con
-permisos de consulta de 60 segundos y `Retry-After` persistido. Los productores
-renuevan actividad cada 30 segundos, con vencimiento de 120 segundos.
+Missing, incompatible, corrupt or inaccessible state closes new generations.
+Known tasks are recovered through GET with the same identifier, with 60-second
+query permissions and persisted `Retry-After`. Producers renew activity every 30
+seconds, with a 120-second expiry.
 
-Para rollback, detener nuevas generaciones y conservar el JSON privado. Los
-recursos publicados pueden seguir reutilizándose. Reparar y verificar la
-autoridad antes de reactivar; nunca borrar el registro ni sustituirlo por cuota
-vacía. Las reclamaciones de poda y subidas incompletas requieren confirmación,
-manteniendo el recurso pendiente hasta verificar su publicación en R2.
+For rollback, stop new generations and keep the private JSON. Published resources
+can continue to be reused. Repair and verify the authority before reactivating;
+never delete the record or replace it with an empty quota. Pruning claims and
+incomplete uploads require confirmation, keeping the resource pending until its
+publication in R2 is verified.
 
-Referencias: [compatibilidad S3](https://developers.cloudflare.com/r2/api/s3/api/),
-[consistencia](https://developers.cloudflare.com/r2/reference/consistency/) y
-[acceso público](https://developers.cloudflare.com/r2/buckets/public-buckets/).
+References: [S3 compatibility](https://developers.cloudflare.com/r2/api/s3/api/),
+[consistency](https://developers.cloudflare.com/r2/reference/consistency/) and
+[public access](https://developers.cloudflare.com/r2/buckets/public-buckets/).
 
-## Operación de media
+## Media operation
 
-La actualización completa corre a la 01:05 Lima; los tres reintentos de media,
-a las 02:15, 04:15 y 06:15. El refresh de marcadores conserva `17 */6` UTC.
-Cada corrida dispone de 3.000.000 ms por defecto (`MEDIA_RUN_BUDGET_MS`) y cada
-partido se limita además a kickoff + 24 h. `TOP_MAX_AGE_HOURS` vale siete por
-defecto y acepta cero. `--match` omite sólo el candado de antigüedad.
+The full update runs at 01:05 Lima; the three media retries at 02:15, 04:15 and
+06:15. The scoreline refresh keeps `17 */6` UTC. Each run has 3,000,000 ms by
+default (`MEDIA_RUN_BUDGET_MS`) and each match is additionally limited to kickoff
++ 24 h. `TOP_MAX_AGE_HOURS` is seven by default and accepts zero. `--match` only
+skips the age lock.
 
-`node actions/3-media-creation/check-media-complete.mjs` comprueba la evidencia pública sin
-Agnes, descargas ni HEAD. Un banco v2 completo requiere cuatro fotos y los clips del modo activo
-distintos, identidad, fingerprint y almacenamiento comprobado. Los modos manuales
-pueden comprobar su subconjunto sin declarar completo un banco sin todos los recursos requeridos por el modo.
-El mantenimiento sigue corriendo aunque no queden partidos elegibles.
+`node actions/3-media-creation/check-media-complete.mjs` checks public evidence
+without Agnes, downloads or HEAD. A complete v2 bank requires four photos and the
+clips of the active mode to be distinct, plus identity, fingerprint and verified
+storage. Manual modes can check their subset without declaring a bank complete
+when it lacks the resources required by the mode. Maintenance keeps running even
+when no eligible matches remain.
 
-Actions continúa desde los objetos de `partidos/<id>/` y el JSON privado. Un
-recurso está listo sólo tras verificar en R2 nombre, tamaño, checksum e identidad.
-`completed` indica que Agnes terminó; `uploadClaim.confirmed` registra la publicación,
-con `objectKey` y `sizeBytes`. Los registros anteriores se completan al verificar sus objetos.
-Tras PUT se hace HEAD antes de confirmar el estado y eliminar los temporales del recurso.
-Los manifiestos y referencias de clips incluyen únicamente recursos verificados.
+Actions continues from the objects in `partidos/<id>/` and the private JSON. A
+resource is ready only after verifying name, size, checksum and identity in R2.
+`completed` means Agnes finished; `uploadClaim.confirmed` records publication,
+with `objectKey` and `sizeBytes`. Previous records are completed when their
+objects are verified. After a PUT, a HEAD is done before confirming state and
+deleting the resource's temporary files. Manifests and clip references include
+only verified resources.
 
-Los nuevos intentos guardan `diagnostics` en el estado privado: hasta ocho eventos
-compactos por intento y un contador de consultas. Se conserva creación, última
-consulta, interrupción y publicación; mensajes de hasta 256 caracteres sin prompts,
-binarios, credenciales ni URLs firmadas. Cada petición real aparece en logs con
-método, etapa y HTTP; las consultas repetidas actualizan su último registro persistido.
-Un fallo de diagnóstico no concede permisos, devuelve cuota ni repite POST.
-El summary separa los recursos del modo activo del historial de solicitudes, incluye éxitos,
-reutilización R2 sin llamadas a Agnes e historial anterior con su corrida de origen.
-Los intentos anteriores sin diagnóstico indican «detalle original no conservado»;
-no se reconstruyen desde logs históricos.
+New attempts store `diagnostics` in private state: up to eight compact events per
+attempt and a query counter. Creation, last query, interruption and publication
+are kept; messages up to 256 characters without prompts, binaries, credentials or
+signed URLs. Every real request appears in logs with method, stage and HTTP;
+repeated queries update their last persisted record. A diagnostics failure does
+not grant permissions, return quota or repeat a POST. The summary separates the
+active-mode resources from the request history, including successes, R2 reuse
+without Agnes calls and previous history with its originating run. Previous
+attempts without diagnostics show «original detail not kept»; they are not
+reconstructed from historical logs.
 
-Las tareas vigentes con `video_id` se consultan antes de crear otras, aunque estén
-fuera del top; esta fase sólo recupera y publica, con hasta 60 segundos por partido
-dentro del presupuesto global. GitHub conserva logs y reportes JSON, sin cachés ni
-artifacts de media entre corridas. Si una generación consumida perdió el resultado
-antes de llegar a R2 y no tiene un identificador recuperable, se informa del bloqueo
-y se conserva su consumo. La limpieza local fallida no repite la generación.
+Active tasks with `video_id` are queried before creating others, even if they are
+outside the top; this phase only recovers and publishes, with up to 60 seconds per
+match inside the global budget. GitHub keeps logs and JSON reports, without media
+caches or artifacts between runs. If a consumed generation lost its result before
+reaching R2 and has no recoverable identifier, the lock is reported and its
+consumption is kept. A failed local cleanup does not repeat the generation.
 
-La evidencia terminal en `finished-at.json` gobierna la poda de contenido. Los
-marcadores, kickoff y primera detección deben ser válidos; la frontera exacta de
-una hora conserva el partido. Una corrección a NS/LIVE/PST invalida el ancla.
-Media reclama primero el cierre compartido y borra el prefijo R2 exacto, con `/`
-final; sólo un éxito remoto confirmado autoriza el borrado local y su publicación.
-Resultados y evaluación histórica quedan fuera de este mantenimiento.
+Terminal evidence in `finished-at.json` governs content pruning. Scorelines,
+kickoff and first detection must be valid; the exact one-hour boundary keeps the
+match. A correction to NS/LIVE/PST invalidates the anchor. Media first claims the
+shared close and deletes the exact R2 prefix, with a trailing `/`; only a confirmed
+remote success authorizes local deletion and publication. Results and historical
+evaluation are outside this maintenance.
 
-## Identidad y nombres de publicación
+## Identity and publication names
 
-Los IDs del proveedor (`fd-*`, `af-*`, `bz-*`) siguen identificando fixtures,
-pero no son ubicaciones admitidas para nuevas generaciones o publicaciones.
-El catálogo resuelve primero IDs de equipo del proveedor dentro de la competición;
-los alias deben tener un único propietario. Una identidad ambigua detiene la
-publicación hasta corregir el catálogo.
+Provider IDs (`fd-*`, `af-*`, `bz-*`) still identify fixtures, but they are not
+admitted locations for new generations or publications. The catalog resolves
+provider team IDs inside the competition first; aliases must have a single owner.
+An ambiguous identity stops publication until the catalog is fixed.
 
-`ordinal` conserva la identidad de la posición interna y de las solicitudes anteriores; no limita el número acumulado de POST. El campo privado opcional
-`publicationIndex` asigna mediante CAS una posición de publicación:
-`clip-1.mp4`, `clip-2.mp4` y, en la prueba, `clip-3.mp4`. Los metadatos R2 `attemptordinal`, `attemptid` y
-`publicationindex` permiten verificar ambos conceptos sin cambiar el banco público.
-La asignación sobrevive a fallos de PUT, HEAD o reinicios y no consume cuota.
+`ordinal` keeps the identity of the internal position and of previous requests;
+it does not limit the cumulative number of POSTs. The optional private field
+`publicationIndex` assigns a publication position through CAS: `clip-1.mp4`,
+`clip-2.mp4` and, in the test, `clip-3.mp4`. The R2 metadata `attemptordinal`,
+`attemptid` and `publicationindex` let both concepts be verified without changing
+the public bank. The assignment survives PUT, HEAD or restart failures and does
+not consume quota.
 
-## Reintentos por recurso y corrida
+## Per-resource and per-run retries
 
-El estado privado admite versiones 1 y 2. La versión 2 conserva un único estado
-operativo en `resources`: `pendiente`, `generando`, `publicando` o `listo`. Sólo
-la verificación de R2 permite `listo`. Los estados de proveedor permanecen
-como evidencia dentro de los intentos, junto con sus diagnósticos compactos.
+Private state supports versions 1 and 2. Version 2 keeps a single operational
+state in `resources`: `pendiente`, `generando`, `publicando` or `listo`. Only R2
+verification allows `listo`. Provider states remain as evidence inside the
+attempts, together with their compact diagnostics.
 
-Cada corrida concede hasta tres POST por cada imagen y por cada clip pendiente.
-El contador sólo existe en memoria del productor; no se almacena un contador
-acumulado en R2. El historial y los totales anteriores no se borran ni se reinician.
-Los totales diarios son informativos: no hay un límite diario preventivo local.
-Agnes decide la disponibilidad de cuota; sus respuestas se muestran con HTTP,
-código y mensaje reales, sin inferir agotamiento diario a partir de un 402.
-`renew-resource` archiva la identidad original antes de renovar una posición
-verificada como ausente, mediante CAS; una tarea vigente con ID debe recuperarse.
-Un 503 detiene ese recurso durante la corrida y permite continuar con los otros.
-Otra corrida vuelve a disponer de tres intentos. GET, PUT y HEAD no gastan POST.
+Each run grants up to three POSTs per pending image and per pending clip. The
+counter exists only in the producer's memory; no cumulative counter is stored in
+R2. History and previous totals are not deleted or reset. Daily totals are
+informational: there is no local preventive daily limit. Agnes decides quota
+availability; its responses are shown with the real HTTP, code and message,
+without inferring daily exhaustion from a 402. `renew-resource` archives the
+original identity before renewing a position verified as absent, through CAS; an
+active task with an ID must be recovered. A 503 stops that resource for the run
+and allows the others to continue. Another run again has three attempts. GET, PUT
+and HEAD do not spend a POST.
 
-`pending`, `queued` e `in_progress` conservan el ID y se consultan con pausas de
-15, 40 y 75 segundos, y después 90 segundos entre consultas; 429 respeta
-Retry-After si exige una espera mayor. Las respuestas repetidas aparecen
-en logs y se compactan en el estado. Los diagnósticos archivados se retienen
-durante la ventana actual de siete días y siguen sujetos al límite de 900 KB.
-Los temporales se eliminan tras publicación confirmada y al finalizar el job.
+`pending`, `queued` and `in_progress` keep the ID and are queried with pauses of
+15, 40 and 75 seconds, and then 90 seconds between queries; 429 respects
+Retry-After if it requires a longer wait. Repeated responses appear in logs and
+are compacted into state. Archived diagnostics are kept during the current
+seven-day window and remain subject to the 900 KB limit. Temporary files are
+deleted after confirmed publication and at job completion.
 
-El reporte de ejecución distingue `complete`, `deferred` y `error`. Un 503/429
-de la corrida actual, una tarea aceptada todavía activa o un clip bloqueado
-por ella dejan recursos pendientes y código de salida 0. Los recursos siguen
-requiriendo verificación R2 para contar como listos. Fallos de R2, identidad,
-estado privado, HTTP 402/401 y causas no identificadas mantienen código 2;
-tienen prioridad aunque existan otros recursos pospuestos. Un rechazo histórico
-no justifica el resultado de la corrida actual. La publicación selectiva sigue
-exigiendo bancos completos; no se publica un banco parcial por terminar en 0.
+The run report distinguishes `complete`, `deferred` and `error`. A 503/429 from
+the current run, an accepted task still active or a clip blocked by it leave
+resources pending with exit code 0. Resources still require R2 verification to
+count as ready. R2, identity, private state, HTTP 402/401 and unidentified causes
+keep code 2; they take priority even if other resources were deferred. A
+historical rejection does not justify the current run result. Selective
+publication still requires complete banks; a partial bank is not published for
+finishing at 0.
 
-El ritmo efectivo de la clave TokenPlan es 80 creaciones/minuto para imágenes 2K
-y una creación de vídeo cada 12,1 segundos (máximo cinco/minuto). Los antiguos
-valores 12 y 30,1 segundos se migran mediante CAS sin reiniciar tareas, cuota
-registrada ni fechas de Retry-After. Una admisión aplazada identifica el control
-local, la próxima fecha permitida y la espera; no representa una respuesta HTTP.
-Las omisiones de ritmo y las tareas vigentes se reportan como pendientes, con
-código 0; un fallo real de R2 o del estado sigue produciendo código 2.
+The effective TokenPlan key pace is 80 creations/minute for 2K images and one
+video creation every 12.1 seconds (maximum five/minute). The old values 12 and
+30.1 seconds are migrated through CAS without resetting tasks, registered quota or
+Retry-After dates. A deferred admission identifies the local control, the next
+allowed date and the wait; it does not represent an HTTP response. Pace
+omissions and active tasks are reported as pending, with code 0; a real R2 or
+state failure still produces code 2.
 
-## Animación con una instrucción fija
+## Animation with a fixed instruction
 
-Los nuevos vídeos usan `video-animation.json`: una imagen como `first_frame`,
-modo `keyframe` y la frase «Animate this image with fast, precise, hyperrealistic
-movements.». No se producen ni se consumen documentos Video Prompts. La copia de
-la configuración en el skill se verifica con `sync-goatlab-skill.mjs --check`.
-El banco ofrece cuatro imágenes y cuatro clips de seis segundos. El objetivo
-`clips` de `src/lib/montage-experiment.json` es independiente de la dirección
-editorial: freedom permite cualquier combinación de medios y gráficos. El esquema
-admite las cuatro posiciones de publicación; cambiar el modo conserva los bancos,
-las reservas y el historial privado de R2. Los bancos con dos o tres clips siguen
-siendo utilizables como parciales, y Actions genera solo los clips que faltan.
+New videos use `video-animation.json`: one image as `first_frame`, `keyframe` mode
+and the phrase «Animate this image with fast, precise, hyperrealistic
+movements.». No Video Prompts documents are produced or consumed. The copy of the
+configuration in the skill is verified with `sync-goatlab-skill.mjs --check`.
+The bank offers four images and four six-second clips. The `clips` target in
+`src/lib/montage-experiment.json` is independent of editorial direction: freedom
+allows any combination of media and graphics. The schema supports the four
+publication positions; changing the mode preserves banks, reservations and the
+private R2 history. Banks with two or three clips remain usable as partials, and
+Actions generates only the missing clips.
 
-La huella v3 depende de las imágenes, la identidad del partido y la configuración
-fija. Los bancos anteriores se revalidan desde R2 antes de publicar esa huella.
-Los clips existentes y las tareas aceptadas mantienen el promptHash y referenceHash
-de su reserva original; cambiar la instrucción no concede otra reserva ni invalida
-un clip confirmado. El lector valida el checksum, el modelo, la referencia a una
-foto retenida y los metadatos de publicación sin requerir el texto retirado.
+The v3 fingerprint depends on the images, the match identity and the fixed
+configuration. Previous banks are revalidated from R2 before publishing that
+fingerprint. Existing clips and accepted tasks keep the promptHash and
+referenceHash of their original reservation; changing the instruction does not
+grant another reservation or invalidate a confirmed clip. The reader validates
+the checksum, the model, the reference to a retained photo and the publication
+metadata without requiring the retired text.
 
-Agnes puede devolver 720×1260 incluso con `aspect_ratio=9:16`. El adaptador conserva
-las proporciones y añade márgenes para entregar el lienzo 720×1280 del banco; no
-estira la imagen. La normalización y la descarga usan el mismo presupuesto temporal.
+Agnes can return 720×1260 even with `aspect_ratio=9:16`. The adapter preserves
+the proportions and adds margins to deliver the bank's 720×1280 canvas; it does
+not stretch the image. Normalization and download use the same time budget.
