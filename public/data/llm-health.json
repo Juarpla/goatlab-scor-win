@@ -1,65 +1,6 @@
 {
-  "updatedAt": "2026-11-03T14:06:08.488Z",
+  "updatedAt": "2026-11-03T14:40:17.203Z",
   "runs": [
-    {
-      "at": "2026-10-23T05:18:00.956Z",
-      "task": "motion-prompts",
-      "matchId": "chelsea-vs-tottenham-hotspur-2026-10-24",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2333,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 156791
-        }
-      ],
-      "usage": {
-        "inputTokens": 2447,
-        "outputTokens": 11175
-      }
-    },
-    {
-      "at": "2026-10-23T21:34:55.463Z",
-      "task": "shorts",
-      "matchId": "coventry-city-vs-fulham-2026-10-24",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180003
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7049,
-        "outputTokens": 9816
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "87561223-0389-4506-917d-a8c4fee817a9"
-    },
     {
       "at": "2026-10-23T21:35:47.930Z",
       "task": "image-prompts",
@@ -6438,6 +6379,133 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "a862c2a1-0017-4edd-b19a-e14b7abdee65"
+    },
+    {
+      "at": "2026-11-03T14:39:13.111Z",
+      "task": "shorts",
+      "matchId": "fenerbahce-vs-liverpool-2026-11-04",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: cifra 3.7 no está en los hechos; guion 3: 5 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: cifra 13 no está en los hechos; guion 5: 5 cifras, máximo 3; guion 9: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6846,
+            "outputTokens": 22562
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 198663
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600002
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 8 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7184,
+            "outputTokens": 2936
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25753
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235121
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6846,
+            "outputTokens": 16211
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 93719
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 7: falta Fenerbahçe SK",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6687,
+            "outputTokens": 29283
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 497296
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 3: vocabulario prohibido: apuestas?; guion 4: 4 cifras, máximo 3; guion 5: Alexis Mac Allister va en un guion de jugadores; guion 5: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7184,
+            "outputTokens": 2622
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 31893
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235199
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7184,
+        "outputTokens": 2622
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-03T14:40:17.203Z",
+      "task": "image-prompts",
+      "matchId": "fenerbahce-vs-liverpool-2026-11-04",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1707,
+        "outputTokens": 6653
+      }
     }
   ]
 }
