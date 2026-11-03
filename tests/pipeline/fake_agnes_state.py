@@ -1,7 +1,7 @@
 """Explicit test-only remote backend. No environment switch bypasses production."""
 import hashlib
 import uuid
-from common import quota_day
+from common import quota_day, video_concurrency
 
 
 class FakeAgnesState:
@@ -39,8 +39,12 @@ class FakeAgnesState:
             return {'canPost': False, 'reason': 'slot pertenece a otra versión de prompts'}
         if row and row['state'] != 'rejected':
             return {'canPost': False, 'reason': 'resultado incierto; no se repite' if row['state'] == 'uncertain' else 'slot ya utilizado'}
-        if kind == 'video' and self.active and self.attempts[self.active]['expires'] > self.clock():
-            return {'canPost': False, 'reason': 'otra tarea pendiente o incierta'}
+        if kind == 'video':
+            active = sum(1 for key, slot in self.slots.items()
+                         if key[1] == 'video' and slot['state'] in ('pending', 'uncertain') and slot['expires'] > self.clock())
+            limit = video_concurrency()
+            if active >= limit:
+                return {'canPost': False, 'reason': f'otra tarea pendiente o incierta; límite de {limit} tareas de vídeo simultáneas'}
         if kind == 'video' and self.next_video > self.clock():
             return {'canPost': False, 'reason': 'ritmo de llamadas', 'retryAtMs': self.next_video * 1000}
         day = quota_day(self.clock())

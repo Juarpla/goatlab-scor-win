@@ -17,3 +17,16 @@ test('alignScripts ignores empty candidates and returns null without scripts', (
   assert.equal(alignScripts(heard, [], 8), null);
   assert.equal(alignScripts(heard, [{ n: 1, narration: '  ' }], 8), null);
 });
+
+test('alignScripts joins the labeled beats before aligning the voice', () => {
+  const narration = [
+    { beat: 'gancho', text: 'El Real Madrid' },
+    { beat: 'dato', text: 'gana' },
+    { beat: 'picante', text: 'cuatro' },
+    { beat: 'proyeccion', text: 'a' },
+    { beat: 'cierre', text: 'cero.' },
+  ];
+  const best = alignScripts(heard, [{ n: 7, narration }], 8);
+  assert.equal(best.n, 7);
+  assert.ok(best.score > .8);
+});

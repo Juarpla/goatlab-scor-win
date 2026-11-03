@@ -106,6 +106,14 @@ test('historical daily totals never block admission, including bootstrap day',()
   assert.equal(reduceAgnesState(state,'reserve',reserve(),{nowMs:now}).result.canPost,true);
   assert.equal(reduceAgnesState(state,'reserve',reserve({expiresAtMs:now+2*86_400_000,guard:{manual:true,kickoffMs:now+86_400_000}}),{nowMs:now+86_400_000}).result.canPost,true);
 });
+test('a slot expiry also expires the match for new admissions',()=>{
+  const expiresAtMs=now+1000;
+  const first=reduceAgnesState(fresh(),'reserve',reserve({kind:'video',model:'agnes-video-2.5-flash',expiresAtMs}),{nowMs:now});
+  assert.equal(first.result.canPost,true);
+  const second=reduceAgnesState(first.state,'reserve',reserve({kind:'video',ordinal:1,model:'agnes-video-2.5-flash'}),{nowMs:expiresAtMs});
+  assert.equal(second.result.canPost,false);
+  assert.match(second.result.reason,/caducado/);
+});
 test('429 refund is idempotent and a new attempt is counted once on the original day',()=>{
   let {state,result}=reduceAgnesState(fresh(),'reserve',reserve(),{nowMs:now});
   const event={attemptId:result.attemptId,eventId:randomUUID(),type:'hard-rejected-429',httpStatus:429,provenRejected:true,retryAfterMs:1000};
@@ -278,6 +286,34 @@ test('five video starts fit a minute and sixth waits without reopening attempts'
   const blocked=reduceAgnesState(state,'reserve',next,{nowMs:now+60_000});
   assert.equal(blocked.result.code,'rate-wait');assert.equal(blocked.result.retryAtMs,now+60_500);
   assert.equal(reduceAgnesState(blocked.state,'reserve',next,{nowMs:now+60_500}).result.canPost,true);
+});
+
+test('the default video window keeps one task in flight', () => {
+  let state=reduceAgnesState(fresh(),'reserve',reserve({kind:'video',model:'agnes-video-2.5-flash'}),{nowMs:now}).state;
+  const blocked=reduceAgnesState(state,'reserve',reserve({matchId:'gamma-delta',kind:'video',model:'agnes-video-2.5-flash'}),{nowMs:now+12_100});
+  assert.equal(blocked.result.canPost,false);
+  assert.match(blocked.result.reason,/límite de 1 tarea de vídeo simultánea/);
+});
+
+test('video concurrency admits a bounded window and promotes the remaining active attempt', () => {
+  let state=reduceAgnesState(fresh(),'reserve',reserve({kind:'video',model:'agnes-video-2.5-flash',videoConcurrency:2}),{nowMs:now}).state;
+  const first=state.activeVideoAttemptId;
+  const second=reserve({matchId:'gamma-delta',kind:'video',model:'agnes-video-2.5-flash',videoConcurrency:2});
+  let change=reduceAgnesState(state,'reserve',second,{nowMs:now+12_100});
+  assert.equal(change.result.canPost,true);state=change.state;
+  assert.equal(state.activeVideoAttemptId,second.attemptId);
+  const third=reserve({matchId:'epsilon-zeta',kind:'video',model:'agnes-video-2.5-flash',videoConcurrency:2});
+  const blocked=reduceAgnesState(state,'reserve',third,{nowMs:now+24_200});
+  assert.equal(blocked.result.canPost,false);
+  assert.match(blocked.result.reason,/límite de 2 tareas de vídeo simultáneas/);
+  state=reduceAgnesState(blocked.state,'event',{attemptId:second.attemptId,eventId:randomUUID(),type:'completed'},{nowMs:now+30_000}).state;
+  assert.equal(state.activeVideoAttemptId,first);
+  assert.equal(reduceAgnesState(state,'reserve',third,{nowMs:now+60_000}).result.canPost,true);
+});
+
+test('video concurrency stays inside the four publication positions', () => {
+  for(const videoConcurrency of [0,5,1.5,'2'])
+    assert.throws(()=>reduceAgnesState(fresh(),'reserve',reserve({kind:'video',model:'agnes-video-2.5-flash',videoConcurrency}),{nowMs:now}),/concurrencia/);
 });
 
 test('freedom admits four clips, persists fourth publication and refuses a fifth without resetting history', () => {

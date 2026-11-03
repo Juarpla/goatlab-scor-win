@@ -73,6 +73,15 @@ def quota_day(timestamp):
     return datetime.fromtimestamp(timestamp, tz=timezone.utc).strftime("%Y-%m-%d")
 
 
+def video_concurrency(env=None):
+    """In-flight video tasks this producer may hold; the authority enforces the same cap."""
+    env = os.environ if env is None else env
+    try:
+        return max(1, min(4, int(env.get('AGNES_VIDEO_CONCURRENCY', '1'))))
+    except (TypeError, ValueError):
+        return 1
+
+
 def agnes_authority(clock=None):
     """Production always uses R2. Tests inject a backend into the pools directly."""
     from agnes_state import AgnesState

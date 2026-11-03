@@ -167,6 +167,43 @@ class VideoTests(unittest.TestCase):
     def success(self,url,body=None,headers=None,timeout=None):
         if body:self.posts.append(body);return {'video_id':f'id-{len(self.posts)}'}
         return {'status':'completed','url':'https://example.org/clip.mp4'}
+    def test_concurrency_window_starts_tasks_before_polling(self):
+        events = []
+        def call(url, body=None, **kwargs):
+            if body is not None:
+                self.posts.append(body); events.append(('post', self.now))
+                return {'video_id': f'id-{len(self.posts)}'}
+            events.append(('poll', self.now))
+            return {'status': 'completed', 'url': 'https://example.org/clip.mp4'}
+        with patch.dict(os.environ, {'AGNES_RESOURCE_RETRIES': '3', 'AGNES_VIDEO_CONCURRENCY': '2'}):
+            result = self.bank(call)
+        self.assertEqual(len(result['clips']), 2)
+        self.assertEqual(len(self.posts), 2)
+        self.assertEqual([kind for kind, _ in events[:2]], ['post', 'post'])
+        posts = [at for kind, at in events if kind == 'post']
+        self.assertGreaterEqual(posts[1] - posts[0], 12.1)
+        self.assertEqual(result['runPosts'], {'1': 1, '2': 1})
+
+    def test_concurrency_window_preserves_the_three_post_limit(self):
+        def call(url, body=None, **kwargs):
+            if body is not None:
+                self.posts.append(body); return {'video_id': f'vid-{len(self.posts)}'}
+            return {'status': 'failed'}
+        with patch.dict(os.environ, {'AGNES_RESOURCE_RETRIES': '3', 'AGNES_VIDEO_CONCURRENCY': '2'}):
+            result = self.bank(call)
+        self.assertEqual(len(self.posts), 6)
+        self.assertEqual(result['runPosts'], {'1': 3, '2': 3})
+
+    def test_fake_authority_honors_the_configured_video_window(self):
+        self.state.seed('a-b', 0)
+        with patch.dict(os.environ, {'AGNES_VIDEO_CONCURRENCY': '2'}):
+            self.now += 12.1
+            self.assertTrue(self.state.reserve('c-d', 'video', 0, 'Prompt 0', 'agnes-video-2.5-flash', 3000)['canPost'])
+            self.now += 12.1
+            denied = self.state.reserve('e-f', 'video', 0, 'Prompt 0', 'agnes-video-2.5-flash', 3000)
+        self.assertFalse(denied['canPost'])
+        self.assertIn('límite de 2 tareas de vídeo simultáneas', denied['reason'])
+
     def test_concurrent_banks_do_not_duplicate_the_same_attempt(self):
         import fcntl
         lock_path = (self.root/'agnes.sqlite').with_suffix('.video.lock')

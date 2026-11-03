@@ -1,4 +1,5 @@
 import { normalizeScriptTitles } from '../../src/lib/script-titles.js';
+import { narrationText } from '../../src/lib/script-beats.js';
 import { readContentSelection } from '../../src/lib/content-selection.js';
 if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de guiones pertenece a GitHub Actions');
 /** Missing Shorts scripts: the current model writes with the
@@ -21,6 +22,7 @@ import {
   countWords,
   scriptFacts,
   selectMatches,
+  withMatchDate,
   youtubeUserPayload,
 } from '../../src/lib/youtube.js';
 import { CONTENT_PROVIDER_ORDER, scriptStructureErrors } from '../../src/lib/match-content.js';
@@ -164,7 +166,7 @@ function failureDetails(error) {
 }
 
 function validateDraft(content, match, { published, facts, matchId }) {
-  const draft = normalizeYoutubeDraft(extractJson(content));
+  const draft = withMatchDate(normalizeYoutubeDraft(extractJson(content)), facts.dateText);
   const lede = cleanLede(draft?.lede);
   const home = esName(match.home);
   const away = esName(match.away);
@@ -180,16 +182,17 @@ function validateDraft(content, match, { published, facts, matchId }) {
     players,
   });
   const errors = [
-    ...acceptYoutubeDraft({ ...draft, lede }, { facts, published, editorial: true }),
+    ...acceptYoutubeDraft({ ...draft, lede }, { facts, published, editorial: true, structured: true }),
     ...checkDescription(description, { matchId }),
   ];
   if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
   const scripts = draft.scripts.map((script, i) => {
-    const narration = String(script.narration).trim();
+    const narration = script.narration;
+    const text = narrationText(narration);
     const hook = String(script.hook).trim();
     const n = i + 1;
-    const named = [3, 4, 7, 9].includes(n) ? playersInNarration(narration, { home, away, knownPlayers }) : [];
-    const entry = { n, hook, title: shortTitle({ home, away, n, hook, players: named }), narration, words: countWords(narration) };
+    const named = [3, 4, 7, 9].includes(n) ? playersInNarration(text, { home, away, knownPlayers }) : [];
+    const entry = { n, hook, title: shortTitle({ home, away, n, hook, players: named }), narration, words: countWords(text) };
     entry.projection = String(script.projection).trim();
     return entry;
   });
@@ -259,7 +262,7 @@ async function saveDraft(match, drafted) {
     competition: match.competition,
     kickoff: match.kickoff,
     author: { provider, model },
-    editorialVersion: 2,
+    editorialVersion: 4,
     instructionVersion: createHash('sha256').update(skill).digest('hex'),
     generatedAt: new Date().toISOString(),
   };

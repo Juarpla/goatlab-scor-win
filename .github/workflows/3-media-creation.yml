@@ -17,6 +17,10 @@ on:
         type: choice
         default: all
         options: [all, images-only, clips-only]
+      video_concurrency:
+        description: 'In-flight video tasks (1-4). Empty = 2'
+        required: false
+        type: string
   workflow_run:
     workflows: ["2-scripting"]
     types: [completed]
@@ -31,7 +35,8 @@ jobs:
   media:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # 70 min soft budget plus checkout, publication and a safety margin.
+    timeout-minutes: 90
     env:
       CONTENT_AUTOMATIC: ${{ github.event_name != 'workflow_dispatch' && '1' || '0' }}
       CONTENT_SELECTION_FILE: ${{ github.event_name != 'workflow_dispatch' && '.cache/content-selection.json' || '' }}
@@ -39,6 +44,7 @@ jobs:
       MATCH: ${{ inputs.match }}
       LIMIT: ${{ inputs.limit }}
       MEDIA_DRAFT: '1'
+      MEDIA_PUBLISH_PARTIAL: '1'
       # The key must be a Token Plan key: Free keys share another
       # pool with 1 video RPM and saturate with clips.
       AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
@@ -46,6 +52,7 @@ jobs:
       AGNES_IMAGE_MODEL: agnes-image-2.5-flash
       AGNES_IMAGE_RPM: '80'
       AGNES_VIDEO_START_INTERVAL: '12.1'
+      AGNES_VIDEO_CONCURRENCY: ${{ inputs.video_concurrency || '2' }}
       AGNES_SKIP_IMAGES: ${{ inputs.mode == 'clips-only' && '1' || '' }}
       AGNES_SKIP_VIDEO: ${{ inputs.mode == 'images-only' && '1' || '' }}
       R2_STATE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

@@ -46,7 +46,7 @@ export function mediaRunOutcome(report) {
       if(message==='R2: subidas y generación pausadas; reutilización disponible'&&requestedMediaComplete({...row,mode}))continue;
       if(mode==='clips-only'&&message==='Image Prompts no disponibles'||mode==='images-only'&&message==='Video Prompts no disponibles')continue;
       const infrastructure=/R2:|Estado (?:privado|de generación|de recursos)|Historial .*no disponible|falta AGNES_API_KEY|(?:Image|Video) Prompts no disponibles|identidad.*(?:incompleta|ambigua)|Kickoff inválido|Huella de contenido inválida|otra identidad|Resultado incompatible|Imagen inválida/i.test(message);
-      const explained=/Solicitud aplazada por el control de ritmo|Agnes está pausado por ritmo de llamadas|(?:clip|intento de vídeo) \d+: pendiente; POST en esta corrida|HTTP \d{3}|"httpStatus"\s*:\s*\d{3}|Recursos incompletos|tarea pendiente|otra tarea pendiente o incierta|presupuesto de preparación agotado|presupuesto de corrida agotado|plazo de generación agotado|ventana de recuperación|^(?:clip|intento de vídeo) \d+: etapa=/i.test(message);
+      const explained=/Solicitud aplazada por el control de ritmo|Agnes está pausado por ritmo de llamadas|(?:clip|intento de vídeo) \d+: pendiente; POST en esta corrida|HTTP \d{3}|"httpStatus"\s*:\s*\d{3}|Recursos incompletos|tarea pendiente|otra tarea pendiente o incierta|presupuesto de preparación agotado|presupuesto de corrida agotado|franja del partido agotada|plazo de generación agotado|ventana de recuperación|^(?:clip|intento de vídeo) \d+: etapa=/i.test(message);
       if(infrastructure||!explained)errors.push({matchId:row.matchId,code:'execution-error',message});
     }
     for(const kind of ['image','video']) {

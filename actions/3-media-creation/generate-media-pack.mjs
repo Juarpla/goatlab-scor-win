@@ -35,13 +35,17 @@ const pngSize = bytes => Buffer.isBuffer(bytes) && bytes.length > 24 && bytes[0]
 const json = async path => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
 export const parseMediaArgs = values => Object.fromEntries(values.map(arg => { const index = arg.indexOf('='); return index < 0 ? [arg, true] : [arg.slice(0, index), arg.slice(index + 1)]; }));
 export function mediaRunDeadline(start, env = process.env) {
-  const budget = env.MEDIA_RUN_BUDGET_MS === undefined ? 3_000_000 : Number(env.MEDIA_RUN_BUDGET_MS);
+  const budget = env.MEDIA_RUN_BUDGET_MS === undefined ? 4_200_000 : Number(env.MEDIA_RUN_BUDGET_MS);
   if (!Number.isFinite(budget) || budget < 0) throw new Error('MEDIA_RUN_BUDGET_MS inválido');
   return start + budget;
 }
 export function mediaSoftStop(runDeadline, kickoff) {
   const at = Date.parse(kickoff);
   return Number.isFinite(at) ? Math.min(runDeadline, at + 86_400_000) : 0;
+}
+export function mediaMatchStop(runDeadline, now, remaining, kickoff) {
+  const slice = Math.max(0, Math.floor((runDeadline - now) / Math.max(1, remaining)));
+  return Math.min(mediaSoftStop(runDeadline, kickoff), now + slice);
 }
 
 export async function generateMediaBanks({ args = {}, env = process.env, clock = Date.now, execImpl = execute, fetchImpl = fetch, transactImpl = transact, log = console.log } = {}) {
@@ -110,7 +114,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
   }
   const snapshot = args['--content'] ? await json(args['--content']) : {};
   const mode = env.AGNES_SKIP_IMAGES === '1' ? 'clips-only' : env.AGNES_SKIP_VIDEO === '1' ? 'images-only' : 'all';
-  const summary = { runId, eligible: 0, pending: 0, generated: 0, reused: 0, completed: 0, completedIds: [], deletedIds: [] };
+  const summary = { runId, eligible: 0, pending: 0, generated: 0, reused: 0, completed: 0, completedIds: [], partialIds: [], deletedIds: [] };
   const budget = R2 ? await r2('budget') : null;
   const r2blocked = !R2 || !budget || budget.level === 'block';
   const recoveryMatches=[];
@@ -126,7 +130,16 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     }
   }
   const queue=[...recoveryMatches,...matches];
+  const completeMatches=new Set(), finishedMatches=new Set();
   for (const match of queue) {
+    const matchId=match.webId ?? match.id;
+    if (ID.test(matchId) && (await json(join(dir, matchId + '.json')))?.bankStatus==='complete') completeMatches.add(matchId);
+  }
+  for (const [index, match] of queue.entries()) {
+    const remaining=Math.max(1, queue.slice(index).filter(candidate => {
+      const candidateId=candidate.webId ?? candidate.id;
+      return !completeMatches.has(candidateId) && !finishedMatches.has(candidateId);
+    }).length);
     const recoveryOnly=match.recoveryOnly===true;
     if(recoveryOnly) log('media: '+(match.webId ?? match.id)+': recuperar tarea existente antes de generar; sin POST');
     const matchId = match.webId ?? match.id;
@@ -147,7 +160,16 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     const prev = await json(join(dir, matchId + '.json'));
     const scorers = await json(join(repo, 'public/data/scorers.json'));
     const facts = editingFacts(match, scorers);
-    const deadline = mediaSoftStop(runDeadline, match.kickoff), expiresAt = (Date.parse(match.kickoff) + 86_400_000) / 1000;
+    const matchExpiry = Date.parse(match.kickoff) + 86_400_000;
+    const matchStartedAt = clock();
+    const deadline = mediaMatchStop(runDeadline, matchStartedAt, remaining, match.kickoff), expiresAt = matchExpiry / 1000;
+    const deadlineCause = () => {
+      const now = clock(), causes = [];
+      if (runDeadline <= now) causes.push(`presupuesto de corrida agotado (límite de tiempo: ${Math.round((runDeadline - started) / 60_000)} min por corrida, MEDIA_RUN_BUDGET_MS=${runDeadline - started})`);
+      else if (deadline <= now) causes.push(`franja del partido agotada (${Math.round((deadline - matchStartedAt) / 60_000)} min asignados con ${remaining} partidos en cola)`);
+      if (Number.isFinite(matchExpiry) && matchExpiry <= now) causes.push(`plazo de generación agotado: plazo del partido vencido (kickoff + 24 h: ${new Date(matchExpiry).toISOString()})`);
+      return causes.join(' y ') || 'plazo de generación agotado';
+    };
     const imageModel = env.AGNES_IMAGE_MODEL || 'agnes-image-2.5-flash', videoModel = animation.model;
     const fingerprint = contentFingerprint(match, { ...imagePack, generationModel: imageModel });
     const failures = [];
@@ -174,7 +196,8 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
       const labels = readyMediaLabels({ ...readyCounts(), matchId });
       log(`media: ${matchId}: ${labels.images} · ${labels.clips} (${stage})${detail ? '; ' + detail : ''}`);
     };
-    const publish = mediaPublisher({ dir, match, facts, prior: prev, draft: env.MEDIA_DRAFT === '1', clock: () => new Date(clock()).toISOString() });
+    const publish = mediaPublisher({ dir, match, facts, prior: prev, draft: env.MEDIA_DRAFT === '1',
+      publishPartial: env.MEDIA_PUBLISH_PARTIAL === '1', clock: () => new Date(clock()).toISOString() });
     const extras = () => ({ clips:clips.sort((a,b)=>a.file.localeCompare(b.file)), failures, diagnostics:diagnostics.map(({runId:_runId,resourceNumber:_resourceNumber,retryAtMs:_retryAtMs,...event})=>event), runUrl, mode, contentVersion: 1, bankVersion: 2, contentFingerprint: fingerprint,
       storageVerifiedAt: new Date(clock()).toISOString(), verifiedAssets: [...verifiedAssets], verifiedClips: [...verifiedClips] });
     const cleanResource = async (file) => {
@@ -342,7 +365,7 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         if (!env.AGNES_API_KEY?.trim()) blockers.push('falta AGNES_API_KEY');
         if (r2blocked) blockers.push('R2: subidas y generación pausadas; reutilización disponible');
         if (r2ReadFailed) blockers.push('R2: inventario sin verificar; generación pausada');
-        if (deadline <= clock()) blockers.push('Generación: presupuesto de corrida agotado o plazo del partido vencido');
+        if (deadline <= clock()) blockers.push('Generación: ' + deadlineCause());
         if (!args['--match'] && (match.status !== 'NS' || Date.parse(match.kickoff) <= clock())) blockers.push('Partido fuera de la ventana de generación; solo reutilización');
         for (const reason of blockers) if (!failures.includes(reason)) failures.push(reason);
         return blockers.length === 0;
@@ -351,7 +374,11 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         if (assets.some(a => a.id === matchId + '-' + ordinal)) continue;
         if (!canGenerate()) break;
         const timeout = Number(env.AGNES_TIMEOUT_SECONDS || 300);
-        if (clock() + timeout * 1000 + 35_000 > deadline) { failures.push('Imágenes: presupuesto de corrida agotado'); for(let number=ordinal+1;number<=4;number++)deferrals.push({kind:'image',number,code:'run-deadline'}); break; }
+        if (clock() + timeout * 1000 + 35_000 > deadline) {
+          const needed = Math.ceil((timeout * 1000 + 35_000) / 1000), left = Math.max(0, Math.floor((deadline - clock()) / 1000));
+          failures.push(`Imágenes: ${deadline < runDeadline ? 'franja del partido agotada' : 'presupuesto de corrida agotado'} (no cuota de Agnes); la imagen ${ordinal + 1} necesita ${needed} s (AGNES_TIMEOUT_SECONDS=${timeout} + 35 s de margen) y quedan ${left} s`);
+          for(let number=ordinal+1;number<=4;number++)deferrals.push({kind:'image',number,code:'run-deadline'}); break;
+        }
         const promptFile = join(folder, ordinal + '.prompt.txt'); await writeFile(promptFile, row.prompt);
         try {
           const { stdout } = await execImpl(env.PYTHON_BIN || 'python3', [join(PIPELINE, 'agnes.py'), '--match=' + matchId, '--index=' + ordinal,
@@ -415,7 +442,8 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
         }
       }
       const result = await publish(assets, 'finished', extras());
-      if (complete) { summary.completed++; if(result.complete) summary.completedIds.push(matchId); } else summary.pending++;
+      if (complete) { summary.completed++; finishedMatches.add(matchId); if(result.complete) summary.completedIds.push(matchId); }
+      else { summary.pending++; if(result.publishable && env.MEDIA_PUBLISH_PARTIAL === '1') summary.partialIds.push(matchId); }
       try { for (const line of (await readFile(operationsFile, 'utf8')).split('\n').filter(Boolean)) addOperations(JSON.parse(line)); } catch {}
       await rm(operationsFile, { force: true });
       const priorResult=results.findIndex(row=>row.matchId===matchId);
@@ -463,15 +491,16 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
   summary.completed=results.filter(row=>requestedMediaComplete(row)).length;
   summary.pending=summary.eligible-summary.completed;
   summary.completedIds=[...new Set(summary.completedIds)];
+  summary.partialIds=[...new Set(summary.partialIds)];
   try { await state('run-summary', Object.fromEntries(['runId', 'eligible', 'pending', 'generated', 'reused', 'completed'].map(key => [key, summary[key]]))); } catch {}
   if (R2) await r2('record', String(operations.media.opsA), String(operations.media.opsB), String(operations.control.opsA), String(operations.control.opsB));
-  const publication = { allow_commit: summary.completedIds.length > 0 || summary.deletedIds.length > 0,
-    complete_ids: summary.completedIds, deleted_ids: summary.deletedIds, generated: summary.generated };
+  const publication = { allow_commit: summary.completedIds.length > 0 || summary.partialIds.length > 0 || summary.deletedIds.length > 0,
+    complete_ids: summary.completedIds, partial_ids: summary.partialIds, deleted_ids: summary.deletedIds, generated: summary.generated };
   await mkdir(join(repo, '.cache'), { recursive: true });
   const publicationPath = join(repo, '.cache/media-publication.json'), temporary = publicationPath + '.' + runId + '.tmp';
   await writeFile(temporary, JSON.stringify(publication));
   await rename(temporary, publicationPath);
-  if (env.GITHUB_OUTPUT) await appendFile(env.GITHUB_OUTPUT, 'allow_commit=' + publication.allow_commit + '\ncomplete_ids=' + JSON.stringify(publication.complete_ids) + '\ndeleted_ids=' + JSON.stringify(publication.deleted_ids) + '\n');
+  if (env.GITHUB_OUTPUT) await appendFile(env.GITHUB_OUTPUT, 'allow_commit=' + publication.allow_commit + '\ncomplete_ids=' + JSON.stringify(publication.complete_ids) + '\npartial_ids=' + JSON.stringify(publication.partial_ids) + '\ndeleted_ids=' + JSON.stringify(publication.deleted_ids) + '\n');
   const report={ ...summary, operations, results, mode: env.AGNES_SKIP_VIDEO === '1' ? 'images-only' : env.AGNES_SKIP_IMAGES === '1' ? 'clips-only' : 'all', runUrl };
   report.outcome=mediaRunOutcome(report);
   await writeFile(join(repo,'.cache/media-run.json'), JSON.stringify(report,null,2));

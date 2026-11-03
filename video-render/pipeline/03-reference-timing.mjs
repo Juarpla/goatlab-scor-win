@@ -1,5 +1,7 @@
 // Aligns script text with Mistral timings. The voice owns the
 // timings; the script fixes names, figures and punctuation for subtitles.
+import { narrationText } from '../contract/narration.js';
+
 const NUMBER_WORDS = {
   cero: '0', uno: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5', seis: '6', siete: '7',
   ocho: '8', nueve: '9', diez: '10', once: '11', doce: '12', trece: '13', catorce: '14',
@@ -111,8 +113,8 @@ export function alignReference(heard, reference, voiceSeconds) {
 /** Chooses the script that best aligns with what was heard; null if there are no candidates. */
 export function alignScripts(heard, scripts, voiceSeconds) {
   const rows = (scripts ?? [])
-    .filter(script => Number.isInteger(script?.n) && typeof script.narration === 'string' && script.narration.trim())
-    .map(script => ({ n: script.n, ...alignReference(heard, script.narration, voiceSeconds) }));
+    .filter(script => Number.isInteger(script?.n) && narrationText(script?.narration))
+    .map(script => ({ n: script.n, ...alignReference(heard, narrationText(script.narration), voiceSeconds) }));
   rows.sort((a, b) => b.score - a.score || a.n - b.n);
   return rows[0] ?? null;
 }

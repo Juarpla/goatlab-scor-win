@@ -70,6 +70,22 @@ class ResourceRetries(unittest.TestCase):
             self.assertEqual(self.state.status('a-b','video',3)['publicationIndex'], 4)
             self.assertEqual(len(self.state.slots), 4)
 
+    def test_production_window_starts_four_clips_before_polling(self):
+        with patch('media_policy.CONFIG', {'mode': 'freedom', 'matches': None, 'clips': 4}), \
+             patch.dict(os.environ, {'AGNES_VIDEO_CONCURRENCY': '4'}):
+            events = []
+            def call(url, body=None, **kwargs):
+                if body is not None:
+                    self.posts.append(body); events.append(('post', self.now))
+                    return {'video_id': f'id-{len(self.posts)}'}
+                events.append(('poll', self.now))
+                return {'status': 'completed', 'url': 'https://example.org/v.mp4'}
+            result = self.bank(self.pool(), call)
+        self.assertEqual(len(result['clips']), 4)
+        self.assertEqual(len(self.posts), 4)
+        self.assertEqual([kind for kind, _ in events[:4]], ['post', 'post', 'post', 'post'])
+        self.assertEqual(result['runPosts'], {'1': 1, '2': 1, '3': 1, '4': 1})
+
     def test_three_posts_per_clip_without_accumulated_budget(self):
         result = self.bank(self.pool(), self.rejected(500))
         self.assertEqual(len(self.posts), 6)

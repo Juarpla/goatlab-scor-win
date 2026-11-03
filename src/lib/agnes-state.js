@@ -78,7 +78,7 @@ export function validateAgnesState(state) {
     if(row.identity) {validateSlotInput(row.identity);if(slotKey(row.identity)!==row.slotKey)throw new Error('identidad histórica Agnes inválida');}
     if(row.diagnostics!==undefined)validateDiagnostics(row.diagnostics);
   }
-  if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('single-flight Agnes corrupto');
+  if (state.activeVideoAttemptId!==null && (!state.attempts[state.activeVideoAttemptId] || !Object.values(state.slots).some(s=>s.attemptId===state.activeVideoAttemptId && s.kind==='video' && ['pending','uncertain'].includes(s.state)))) throw new Error('intento de vídeo activo corrupto');
   for (const [matchId,row] of Object.entries(state.matches)) if (!id(matchId) || !keys(row,['closed','fenceRevision','expiresAtMs','cleanupConfirmed','redirectTo']) || typeof row.closed!=='boolean' || (row.redirectTo!==undefined&&(!id(row.redirectTo)||!row.closed||!state.matches[row.redirectTo])) || !finite(row.expiresAtMs) || (row.closed && !uuid(row.fenceRevision))) throw new Error('partido Agnes corrupto');
   for(const [runId,row] of Object.entries(state.runs)) if(!uuid(runId) || !keys(row,['matchId','untilMs']) || !finite(row.untilMs) || (row.matchId!==null && !id(row.matchId))) throw new Error('corrida Agnes corrupta');
   for(const [runId,row] of Object.entries(state.summaries)) if(!uuid(runId) || !keys(row,['runId','at','eligible','pending','generated','reused','completed']) || row.runId!==runId || !finite(row.at) || ['eligible','pending','generated','reused','completed'].some(k=>!Number.isSafeInteger(row[k]) || row[k]<0)) throw new Error('resumen Agnes corrupto');
@@ -109,7 +109,7 @@ export function compactAgnesState(state, {nowMs}) {
     if (row.state==='retired' || row.expiresAtMs>nowMs-7*86_400_000 || (row.uploadClaim && !row.uploadClaim.confirmed)) continue;
     state.slots[key]={matchId:row.matchId,kind:row.kind,ordinal:row.ordinal,attemptId:row.attemptId,state:'retired',expiresAtMs:row.expiresAtMs,...(row.generationMatchId?{generationMatchId:row.generationMatchId}:{}),...(row.publicationIndex?{publicationIndex:row.publicationIndex}:{})};
     for (const [attemptId,attempt] of Object.entries(state.attempts)) if (attempt.slotKey===key) state.attempts[attemptId]={slotKey:key,state:'retired',refunded:attempt.refunded,eventIds:[]};
-    if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
+    if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=nextActiveVideoAttemptId(state,row.attemptId);
     changed=true;
   }
   for(const [attemptId,attempt] of Object.entries(state.attempts))if(attempt.identity?.expiresAtMs<nowMs-7*86_400_000 && state.slots[attempt.slotKey]?.attemptId!==attemptId){delete state.attempts[attemptId];changed=true;}
@@ -130,6 +130,9 @@ function validPublication(row, value) {
     && Number.isSafeInteger(value.sizeBytes) && value.sizeBytes>0 && value.sizeBytes<=(row.kind==='image'?64_000_000:32_000_000);
 }
 function resultFor(row, reason) { return {canPost:false,reason,...(row ? {state:row.state,attemptId:row.attemptId,videoId:row.videoId ?? null} : {})}; }
+function nextActiveVideoAttemptId(state, excluded) {
+  return Object.values(state.slots).find(slot => slot.kind==='video' && ['pending','uncertain'].includes(slot.state) && slot.attemptId!==excluded)?.attemptId ?? null;
+}
 
 /** Pure transition. All production callers commit changed state through conditional R2 PUT. */
 export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) {
@@ -170,7 +173,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       || Object.entries(state.runs).some(([owner,run])=>run.matchId===input.matchId && run.untilMs>nowMs && input.owner!==owner)
       || (row.videoId && ['pending','uncertain'].includes(row.state))) throw new Error('recurso no renovable; recuperar tarea o verificar ausencia R2');
     state.attempts[row.attemptId].identity={...pickIdentity(row),expiresAtMs:row.expiresAtMs,...(row.publicationIndex?{publicationIndex:row.publicationIndex}:{}),...(row.videoId?{videoId:row.videoId}:{}),...(row.uploadClaim?{uploadClaim:row.uploadClaim}:{})};
-    if(state.activeVideoAttemptId===row.attemptId)state.activeVideoAttemptId=null;
+    if(state.activeVideoAttemptId===row.attemptId)state.activeVideoAttemptId=nextActiveVideoAttemptId(state,row.attemptId);
     delete state.slots[slotKey(row)];state.version=2;
     result=change({saved:true});
   } else if (operation === 'health') result = {ready:true,version:state.version};
@@ -184,7 +187,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       for (const [attemptId,attempt] of Object.entries(state.attempts)) {
         if (attempt.slotKey !== key) continue;
         delete state.attempts[attemptId];
-        if (state.activeVideoAttemptId === attemptId) state.activeVideoAttemptId = null;
+        if (state.activeVideoAttemptId === attemptId) state.activeVideoAttemptId = nextActiveVideoAttemptId(state, attemptId);
       }
     }
     state.cutover.legacyMatchIds=[];
@@ -204,7 +207,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       if (row.kind !== 'video' || row.state !== 'uncertain' || row.videoId) continue;
       if (Object.values(state.runs).some(run => run.matchId === row.matchId && run.untilMs > nowMs)) continue;
       row.state='abandoned'; state.attempts[row.attemptId].state='abandoned';
-      if (state.activeVideoAttemptId === row.attemptId) state.activeVideoAttemptId=null;
+      if (state.activeVideoAttemptId === row.attemptId) state.activeVideoAttemptId=nextActiveVideoAttemptId(state,row.attemptId);
       abandoned.push({matchId:row.matchId,ordinal:row.ordinal,reason:'sin identificador recuperable; reserva conservada'});
     }
     result=abandoned.length ? change({abandoned}) : {abandoned};
@@ -234,6 +237,8 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     if (input.publicationIndex!==undefined && (input.kind!=='video' || ![1,2,3,4].includes(input.publicationIndex))) throw new Error('posición de recurso inválida');
     if (!uuid(input.attemptId) || !finite(input.expiresAtMs)) throw new Error('intento inválido');
     const key = slotKey(input), row = state.slots[key], previousAttempt = state.attempts[input.attemptId];
+    const videoConcurrency = input.videoConcurrency ?? 1;
+    if (!Number.isInteger(videoConcurrency) || videoConcurrency < 1 || videoConcurrency > 4) throw new Error('concurrencia de vídeo inválida');
     const guard = input.guard;
     const deny = reason => resultFor(row, reason);
     if (previousAttempt) result = deny('intento ya reservado; permiso no renovable');
@@ -244,7 +249,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     else if (!row && state.cutover.legacyMatchIds.includes(input.matchId)) result = deny('legacy_unknown; solo reutilización');
     else if (nowMs >= input.expiresAtMs || (state.matches[input.matchId]?.expiresAtMs && nowMs>=state.matches[input.matchId].expiresAtMs)) result = deny('encuentro caducado');
     else if (!object(guard) || typeof guard.manual!=='boolean' || !finite(guard.kickoffMs) || input.expiresAtMs > guard.kickoffMs+86_400_000 || (!guard.manual && (!finite(guard.observedAtMs) || nowMs-guard.observedAtMs > 60_000 || guard.observedAtMs-nowMs > 5000 || guard.kickoffMs <= nowMs || !digest(guard.contextHash)))) result = deny('fixture vigente no verificado');
-    else if (input.kind === 'video' && Object.values(state.slots).some(s=>s.kind==='video' && ['pending','uncertain'].includes(s.state) && s.expiresAtMs>nowMs)) result = deny('otra tarea pendiente o incierta');
+    else if (input.kind === 'video' && Object.values(state.slots).filter(s=>s.kind==='video' && ['pending','uncertain'].includes(s.state) && s.expiresAtMs>nowMs).length >= videoConcurrency) result = deny(`otra tarea pendiente o incierta; límite de ${videoConcurrency} ${videoConcurrency===1?'tarea':'tareas'} de vídeo simultáneas`);
     else if (input.kind === 'image' && Object.values(state.slots).some(s=>s.kind==='image' && s.state==='uncertain' && s.expiresAtMs>nowMs)) result = deny('otra imagen de resultado incierto; generación simultánea cerrada');
     else if (input.kind === 'video' && Object.values(state.slots).filter(s => s.matchId===input.matchId && s.kind==='video' && ['pending','uncertain','completed'].includes(s.state)).length >= mediaPolicy(input.matchId).clips) result = deny('máximo '+mediaPolicy(input.matchId).clips+' clips por partido');
     else {
@@ -279,10 +284,10 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       } else if (input.type === 'abandoned') {
         if (row.kind !== 'video' || row.videoId || row.state !== 'uncertain') throw new Error('solo se archiva vídeo sin identificador');
         row.state='abandoned';
-        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
+        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=nextActiveVideoAttemptId(state,row.attemptId);
       } else if (input.type === 'completed' || input.type === 'failed') {
         row.state=input.type;
-        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
+        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=nextActiveVideoAttemptId(state,row.attemptId);
       } else if (input.type === 'hard-rejected-429') {
         if (input.httpStatus!==429 || row.videoId || input.provenRejected!==true || row.refunded) throw new Error('rechazo no probado');
         const quotaName=row.kind==='image'?'images':'video_seconds';
@@ -291,7 +296,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
         const retryAt=nowMs+Math.max(0,Number(input.retryAfterMs)||60_000);
         if (row.kind==='image') state.rates.imageThrottleUntil=Math.max(state.rates.imageThrottleUntil,retryAt);
         else state.rates.videoNextAt=Math.max(state.rates.videoNextAt,retryAt);
-        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=null;
+        if (state.activeVideoAttemptId===row.attemptId) state.activeVideoAttemptId=nextActiveVideoAttemptId(state,row.attemptId);
       } else if (input.type === 'poll-throttle') row.pollNextAtMs=Math.max(row.pollNextAtMs,nowMs+Math.max(0,Number(input.retryAfterMs)||60_000));
       else if (!row.videoId) row.state='uncertain';
       attempt.state=row.state; attempt.eventIds.push(input.eventId);

@@ -13,13 +13,14 @@ const reportPaths = ['public/data/agnes-quota.json', 'public/data/r2-usage.json'
 export async function stageMedia({ repo = '.', publication = {}, maintenance = {}, manual = false } = {}) {
   const git = async (...args) => (await execute('git', args, { cwd: repo })).stdout.trim();
   const complete = new Set((publication.complete_ids ?? []).filter(id => ID.test(id)));
+  const partial = new Set((publication.partial_ids ?? []).filter(id => ID.test(id)));
   const deleted = new Set([...(publication.deleted_ids ?? []), ...(maintenance.deletedIds ?? [])].filter(id => ID.test(id)));
   const allowed = new Set(reportPaths);
   if (manual) allowed.add('public/data/top.json');
   let names = []; try { names = await readdir(join(repo, 'public/data/media-pack')); } catch {}
   for (const name of names) {
     const progress = name.match(/^([A-Za-z0-9][A-Za-z0-9_-]{0,199})\.progress\.json$/);
-    if (progress || (name.endsWith('.json') && complete.has(name.slice(0, -5)))) allowed.add('public/data/media-pack/' + name);
+    if (progress || (name.endsWith('.json') && (complete.has(name.slice(0, -5)) || partial.has(name.slice(0, -5))))) allowed.add('public/data/media-pack/' + name);
   }
   for (const id of deleted) for (const suffix of ['.json', '.progress.json', '.content.json']) allowed.add('public/data/media-pack/' + id + suffix);
   const tracked = new Set((await git('ls-files')).split('\n'));

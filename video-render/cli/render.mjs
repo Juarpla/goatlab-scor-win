@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { narrationText } from '../contract/narration.js';
 import { FPS, FRAME_H, FRAME_W, MAX_SECONDS } from '../contract/short-format.js';
 import {
   assertAudioInput,
@@ -95,10 +96,10 @@ if (args.script) {
   const document = load(args.script);
   if (args['script-n']) {
     const script = (document.scripts ?? []).find(item => item?.n === Number(args['script-n']));
-    if (!script?.narration) fail(`guion ${args['script-n']} no encontrado en ${args.script}`);
-    reference = script.narration;
+    if (!narrationText(script?.narration)) fail(`guion ${args['script-n']} no encontrado en ${args.script}`);
+    reference = narrationText(script.narration);
   } else {
-    scriptCandidates = (document.scripts ?? []).filter(item => item?.narration);
+    scriptCandidates = (document.scripts ?? []).filter(item => narrationText(item?.narration));
     if (!scriptCandidates.length) fail(`no hay guiones con narración en ${args.script}`);
   }
 }

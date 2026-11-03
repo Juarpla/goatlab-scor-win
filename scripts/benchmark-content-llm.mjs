@@ -2,7 +2,8 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { CONTENT_LLM_LIMITS, withFailover, extractJson } from '../src/lib/llm.js';
-import { scriptFacts, youtubeUserPayload, acceptYoutubeDraft, countWords, normalizeYoutubeDraft } from '../src/lib/youtube.js';
+import { scriptFacts, youtubeUserPayload, acceptYoutubeDraft, countWords, normalizeYoutubeDraft, withMatchDate } from '../src/lib/youtube.js';
+import { narrationText } from '../src/lib/script-beats.js';
 const args = Object.fromEntries(process.argv.slice(2).map(arg => arg.replace(/^--/, '').split('=')));
 const fixtures = JSON.parse(await readFile('public/data/fixtures.json', 'utf8'));
 const match = fixtures.matches.find(m => (m.webId ?? m.id) === args.match) ?? (!args.match && fixtures.matches.find(m => m.status === 'NS'));
@@ -31,10 +32,10 @@ await Promise.all(models.map(async model => {
         env: { ...process.env, SCRIPT_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: model }, orderVar: 'SCRIPT_PROVIDER_ORDER', validate: extractJson,
       });
       await writeFile(join(output, `${model}-${run}.raw.json`), JSON.stringify(call.value, null, 2));
-      const draft = normalizeYoutubeDraft(call.value);
-      const errors = acceptYoutubeDraft(draft, { facts, published, editorial: true });
+      const draft = withMatchDate(normalizeYoutubeDraft(call.value), facts.dateText);
+      const errors = acceptYoutubeDraft(draft, { facts, published, editorial: true, structured: true });
       await writeFile(join(output, `${model}-${run}.draft.json`), JSON.stringify(draft, null, 2));
-      result = { ...metadata, latencyMs: call.latencyMs, finishReason: call.finishReason, usage: call.usage, valid: !errors.length, errors, words: draft.scripts?.map(s => countWords(s.narration)) };
+      result = { ...metadata, latencyMs: call.latencyMs, finishReason: call.finishReason, usage: call.usage, valid: !errors.length, errors, words: draft.scripts?.map(s => countWords(narrationText(s.narration))) };
     } catch (error) {
       result = { ...metadata, latencyMs: Date.now() - start, valid: false, failures: error.details ?? [{ reason: error.message }] };
     }

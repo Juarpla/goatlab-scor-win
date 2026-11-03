@@ -47,6 +47,34 @@ test('hourly partial draft publishes only progress; a proven bank becomes publis
  assert.deepEqual((await readdir(dir)).sort(),['a-b.json','a-b.progress.json','a-b.ready']);
 });
 
+test('a finished partial publishes its manifest when partial publication is enabled',async t=>{
+ const {dir,match}=await fixture(t), publish=mediaPublisher({dir,match,draft:true,publishPartial:true,clock:()=>verifiedAt});
+ assert.equal((await publish(verifiedPhotos.slice(0,2),'generating',verifiedExtra())).publishable,false);
+ await assert.rejects(access(join(dir,'a-b.json')));
+ const result=await publish(verifiedPhotos.slice(0,2),'finished',verifiedExtra());
+ assert.equal(result.complete,false);assert.equal(result.publishable,true);assert.equal(result.ready,false);
+ const manifest=JSON.parse(await readFile(join(dir,'a-b.json')));
+ assert.equal(manifest.bankStatus,'partial');assert.equal(manifest.assets.length,2);
+ await assert.rejects(access(join(dir,'a-b.ready')));
+});
+
+test('partial publication never creates an empty pack',async t=>{
+ const {dir,match}=await fixture(t), publish=mediaPublisher({dir,match,draft:true,publishPartial:true});
+ const result=await publish([],'finished');
+ assert.equal(result.publishable,false);
+ await assert.rejects(access(join(dir,'a-b.json')));
+});
+
+test('a partial retry never replaces a better partial with fewer resources',async t=>{
+ const {dir,match}=await fixture(t);
+ await mediaPublisher({dir,match,clock:()=>verifiedAt})(verifiedPhotos,'finished');
+ const before=await readFile(join(dir,'a-b.json'),'utf8');
+ const retry=mediaPublisher({dir,match,draft:true,publishPartial:true,clock:()=>verifiedAt});
+ const result=await retry(verifiedPhotos.slice(0,2),'finished');
+ assert.equal(result.publishable,false);
+ assert.equal(await readFile(join(dir,'a-b.json'),'utf8'),before);
+});
+
 test('partial retries preserve an existing complete manifest and ready snapshot byte-for-byte',async t=>{
  const {dir,match}=await fixture(t);
  const initial=mediaPublisher({dir,match,clock:()=>verifiedAt});

@@ -8,7 +8,7 @@ import { mediaPolicy } from './media-policy.js';
 import { bankComplete } from './media-contract.js';
 
 /** Publish valid packs before the producer finishes; every file replaces atomically. */
-export function mediaPublisher({ dir, match, facts = [], target = ASSETS_PER_MATCH, clock = () => new Date().toISOString(), draft = false, prior = null }) {
+export function mediaPublisher({ dir, match, facts = [], target = ASSETS_PER_MATCH, clock = () => new Date().toISOString(), draft = false, publishPartial = false, prior = null }) {
   const matchId = match.webId ?? match.id;
   let count = 0, ready = false;
   let priorLoaded = prior !== null;
@@ -36,7 +36,10 @@ export function mediaPublisher({ dir, match, facts = [], target = ASSETS_PER_MAT
     const complete = bankComplete(candidate, { matchId, fingerprint: candidate.contentFingerprint, now: Date.parse(generatedAt) })
       && payload.assets.every(asset => assetProof.has(asset.id)) && (payload.clips ?? []).every(clip => clipProof.has(clip.id));
     const preserve = prior?.bankStatus === 'complete' && !complete;
-    const publishable = complete || (!draft && !preserve);
+    const hasMedia = count > 0 || (payload.clips?.length ?? 0) > 0;
+    const regressed = prior?.bankStatus === 'partial'
+      && (count < (prior.assets?.length ?? 0) || (payload.clips?.length ?? 0) < (prior.clips?.length ?? 0));
+    const publishable = complete || (!draft && !preserve) || (publishPartial && phase === 'finished' && !preserve && hasMedia && !regressed);
     if (publishable) {
       await atomic('.json', { ...payload, bankStatus: complete ? 'complete' : phase === 'finished' ? 'partial' : 'preparing' });
       if (complete) prior = candidate;

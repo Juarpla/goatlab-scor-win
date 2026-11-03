@@ -97,17 +97,33 @@ Save it to `video-render/work/<id>/<slug>/reference.json` and pass
 node scripts/list-media-packs.mjs
 ```
 
-It reads the current `public/data/top.json`, keeps only the matches that already
-have a media pack and prints a numbered Markdown table sorted by kickoff (UTC),
-with match, date, images, clips, audio and `id`. It excludes matches whose kickoff
-already passed, so the table is always upcoming matches. Paste that table in full
-before asking anything: do not summarize it, do not reorder it from memory and do
-not start from an audio first. Then ask for an `id`.
+It reads the current `public/data/top.json`, keeps the matches that already have a
+media pack or a progress file and prints a numbered Markdown table sorted by
+kickoff (UTC), with match, date, photos, clips, status, script, audio and `id`.
+Status is `completo`, `parcial` or `sin media`; a partial pack is usable and its
+counts are the real media level. It excludes matches whose kickoff already
+passed, so the table is always upcoming matches. Paste that table in full before
+asking anything: do not summarize it, do not reorder it from memory and do not
+start from an audio first. Then ask for an `id`.
 
 Use the exact `id`: it is the key for both the media pack and the render command.
 Prefer matches with 4 images and 4 clips; if the chosen one has fewer, use it and
-make the most of what is available. Never use a pack with 0 images and 0 clips.
-`--all` includes packs outside the current top.
+make the most of what is available. Never use a pack with 0 images and 0 clips:
+a `sin media` row needs media generation first. `--all` includes packs outside
+the current top.
+
+When presenting the scripts for the chosen match, include its media level
+(photos/clips, status, script availability) and the action needed to complete it.
+Missing or partial media is completed through GitHub Actions, the only supported
+producer:
+
+```sh
+gh workflow run 2-scripting.yml -f match=<id>        # only when Guion is "no"
+gh workflow run 3-media-creation.yml -f match=<id>   # generates, uploads to R2, updates state
+```
+
+A finished partial bank is published with `bankStatus: partial` and is renderable;
+the scheduler still treats it as pending and keeps generating the missing clips.
 
 If the audios are numbered, the `audio` column will be empty; that is normal. They
 are identified in step 2.
@@ -187,6 +203,9 @@ Read `public/data/media-pack/<id>.json`. It contains:
 - `clips`: match clips, about 6.5 s at 720×1280.
 - `facts`: real match figures.
 - `match`, `home`, `away`.
+- `bankStatus`: `complete` or `partial`. A partial pack is usable; work with the
+  assets and clips it has and note the limitation. A partial pack with 0 assets
+  and 0 clips is not renderable.
 
 Download the clips and extract one frame from each to see what they show before
 writing the plan. Use `clips[].url` and

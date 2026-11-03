@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { contentIdentityErrors, scriptStructureErrors, validateContent } from '../src/lib/match-content.js';
+import { scriptBeats } from '../src/lib/script-beats.js';
 
 const match = { id: 'af-1', webId: 'spain-vs-netherlands-date', home: 'Spain', away: 'Netherlands', competition: 'nations', kickoff: '2026-10-09T18:00:00Z' };
 function scriptData() {
@@ -67,6 +68,67 @@ test('scripts without a pick remain valid; a present pick must have a shape', ()
     assert.ok(scriptStructureErrors(broken, { matchId: match.webId }).length, `pick.${field} vacío`);
     assert.equal(validateContent(broken, 'scripts', match.webId), false);
   }
+});
+
+function structuredScript(overrides = {}) {
+  const projection = 'Mi lectura apunta a un empate.';
+  return {
+    n: 1,
+    title: 'Título',
+    hook: 'El partido se decide en el área.',
+    narration: [
+      { beat: 'gancho', text: 'El partido se decide en el área.' },
+      { beat: 'fecha', text: 'Se juega el viernes 9 de octubre.' },
+      { beat: 'dato', text: 'Alpha ganó 2 de sus últimos 5 y Beta llega con una sola derrota en la muestra.' },
+      { beat: 'picante', text: 'Si Alpha adelanta líneas, Beta puede encontrar el espacio que necesita para lastimar de contra.' },
+      { beat: 'proyeccion', text: projection },
+      { beat: 'cierre', text: 'Todo el desglose, en goatlab.win.' },
+    ],
+    words: 60,
+    projection,
+    ...overrides,
+  };
+}
+
+test('editorial v4 requires the ordered beats, one sentence per dato and matching hook and projection', () => {
+  const data = { ...scriptData(), editorialVersion: 4, scripts: Array.from({ length: 10 }, (_, index) => ({ ...structuredScript(), n: index + 1, title: `Título ${index}` })) };
+  assert.deepEqual(scriptStructureErrors(data), []);
+  assert.equal(validateContent(data, 'scripts', match.webId), true);
+
+  for (const mutate of [
+    script => { script.narration[0].beat = 'dato'; },
+    script => { script.narration[1].text = ''; },
+    script => { script.narration[2].text = 'Corto.'; },
+    script => { script.narration[4].text = 'Otra frase.'; },
+    script => { script.hook = 'Otro gancho distinto.'; },
+    script => { script.narration = 'Un párrafo viejo.'; },
+  ]) {
+    const broken = structuredClone(data);
+    mutate(broken.scripts[0]);
+    assert.ok(scriptStructureErrors(broken).length, mutate.toString());
+  }
+  const brokenBeat = structuredClone(data);
+  brokenBeat.scripts[0].narration[2].text = 'Corto.';
+  assert.ok(scriptStructureErrors(brokenBeat).some(error => /mínimo 6/.test(error)));
+
+  const extraDato = structuredClone(data);
+  extraDato.scripts[0].narration.splice(3, 0, { beat: 'dato', text: 'Beta llega con una sola derrota en la muestra.' });
+  assert.deepEqual(scriptStructureErrors(extraDato), []);
+  const labels = scriptBeats(extraDato.scripts[0].narration).map(beat => beat.label);
+  assert.deepEqual(labels, ['Gancho', 'Fecha', 'Dato 1', 'Dato 2', 'Picante', 'Proyección', 'Cierre']);
+
+  const extraPicante = structuredClone(extraDato);
+  extraPicante.scripts[0].narration.splice(5, 0, { beat: 'picante', text: 'El espacio aparece cuando Alpha se estira.' });
+  assert.deepEqual(scriptStructureErrors(extraPicante), []);
+  assert.deepEqual(scriptBeats(extraPicante.scripts[0].narration).map(beat => beat.label), ['Gancho', 'Fecha', 'Dato 1', 'Dato 2', 'Picante 1', 'Picante 2', 'Proyección', 'Cierre']);
+
+  const paragraphDato = structuredClone(data);
+  paragraphDato.scripts[0].narration[2].text = 'Alpha ganó 2 de sus últimos 5. Beta llega con una sola derrota.';
+  assert.ok(scriptStructureErrors(paragraphDato).some(error => /una sola frase/.test(error)));
+
+  const noDate = structuredClone(data);
+  noDate.scripts[0].narration.splice(1, 1);
+  assert.ok(scriptStructureErrors(noDate).some(error => /fecha/.test(error)));
 });
 
 test('editorial files preserve their own projected sentence and legacy scripts stay reusable', () => {

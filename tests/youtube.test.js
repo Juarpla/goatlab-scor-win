@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, normalizeYoutubeDraft, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict, commitSplit, penaltyCount } from '../src/lib/youtube.js';
+import { buildYoutubeScripts, selectMatches, staleScripts, sameCore, scriptFacts, missingScripts, acceptYoutubeDraft, normalizeYoutubeDraft, withMatchDate, youtubeUserPayload, shortTitle, playersInNarration, attentionPlayers, hashtagLine, youtubeCopy, telegramCaption, TITLE_MAX, buildPicks, matchVerdict, commitSplit, penaltyCount } from '../src/lib/youtube.js';
 import { esName } from '../src/lib/teams.js';
 import { checkScript, checkDescription } from '../src/lib/compliance.js';
 
@@ -440,6 +440,52 @@ test('editorial voice can rewrite all pieces and forecast new numbers within the
   assert.ok(validate(tooLong).some(e => /techo/.test(e)));
   const percentage = structuredClone(draft); percentage.scripts[0].narration += ' Un 70%.';
   assert.ok(validate(percentage).some(e => /porcentajes/.test(e)));
+});
+
+test('structured drafts enforce ordered beats, single-sentence data and a CTA closing', () => {
+  const facts = { home: 'Alpha', away: 'Beta', homeForm: { n: 5, wins: 2 }, dateText: 'Se juega el lunes 2 de noviembre.', picks: [{ bridge: 'OLD BRIDGE', antecedent: 'OLD FACT', noun: 'OLD NOUN', verdict: 'OLD RESULT', call: 'OLD CALL' }] };
+  const phrases = ['abren el análisis', 'comparan sus ritmos', 'buscan continuidad', 'presentan sus fortalezas', 'preparan el encuentro', 'muestran sus contrastes', 'exploran el contexto', 'ponen a prueba su lectura', 'conservan sus matices', 'cierran la previa'];
+  const projection = 'Mi lectura apunta a 7 córners para Alpha.';
+  const scripts = phrases.map((phrase, i) => {
+    const hook = `Alpha y Beta ${phrase}.`;
+    return { n: i + 1, hook, projection, narration: [
+      { beat: 'gancho', text: hook },
+      { beat: 'fecha', text: facts.dateText },
+      { beat: 'dato', text: 'La forma reciente reparte 2 victorias para Alpha en la muestra y deja dudas sobre el ritmo de Beta.' },
+      { beat: 'picante', text: 'Si Alpha adelanta líneas, Beta puede encontrar el espacio que necesita para lastimar de contra y cambiar el guion.' },
+      { beat: 'proyeccion', text: projection },
+      { beat: 'cierre', text: 'Todo el desglose, en goatlab.win.' },
+    ] };
+  });
+  const draft = { scripts, lede: 'Alpha recibe a Beta con una pregunta abierta. La forma sugiere un partido cambiante.' };
+  const validate = value => acceptYoutubeDraft(value, { facts, published: false, editorial: true, structured: true });
+  assert.deepEqual(validate(draft), []);
+  const paragraph = structuredClone(draft); paragraph.scripts[0].narration = 'Un párrafo viejo.';
+  assert.ok(validate(paragraph).some(e => /lista de golpes/.test(e)));
+  const wrongBeat = structuredClone(draft); wrongBeat.scripts[0].narration[0].beat = 'dato';
+  assert.ok(validate(wrongBeat).some(e => /se esperaba gancho/.test(e)));
+  const wrongProjection = structuredClone(draft); wrongProjection.scripts[0].narration[4].text = 'Otra frase.';
+  assert.ok(validate(wrongProjection).some(e => /proyección debe coincidir/.test(e)));
+  const wrongHook = structuredClone(draft); wrongHook.scripts[0].hook = 'Otro gancho distinto.';
+  assert.ok(validate(wrongHook).some(e => /gancho debe coincidir/.test(e)));
+  const noCta = structuredClone(draft); noCta.scripts[0].narration[5].text = 'Nos vemos pronto.';
+  assert.ok(validate(noCta).some(e => /goatlab\.win/.test(e)));
+  const twoSentences = structuredClone(draft); twoSentences.scripts[0].narration[2].text = 'Alpha ganó 2 de sus últimos 5. Beta llega con una derrota.';
+  assert.ok(validate(twoSentences).some(e => /una sola frase/.test(e)));
+});
+
+test('the date beat is inserted after the hook and never invents a date', () => {
+  const draft = { scripts: [{ hook: 'Un cruce distinto.', narration: [
+    { beat: 'gancho', text: 'Un cruce distinto.' },
+    { beat: 'dato', text: 'Alpha y Beta llegan con ritmos distintos.' },
+  ] }] };
+  const dated = withMatchDate(draft, 'Se juega el lunes 2 de noviembre.');
+  assert.equal(dated.scripts[0].narration[1].beat, 'fecha');
+  assert.equal(dated.scripts[0].narration[1].text, 'Se juega el lunes 2 de noviembre.');
+  const replaced = withMatchDate(dated, 'Se juega el martes 3 de noviembre.');
+  assert.equal(replaced.scripts[0].narration.filter(beat => beat.beat === 'fecha').length, 1);
+  assert.equal(replaced.scripts[0].narration[1].text, 'Se juega el martes 3 de noviembre.');
+  assert.equal(withMatchDate(draft, null), draft);
 });
 
 test('opinion openings and connectors do not become player names in titles', () => {

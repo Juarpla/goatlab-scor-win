@@ -1,6 +1,6 @@
 # Titles and hashtags
 
-The save step in `actions/2-scripting/generate-youtube-scripts.mjs` discards the model's `title` and hashtags and stamps `shortTitle` and `hashtagLine`. This sheet is for whoever writes by hand. The spoken hook remains `hook` and is not copied into the title.
+The save step in `actions/2-scripting/generate-youtube-scripts.mjs` discards the model's `title` and hashtags and stamps `shortTitle` and `hashtagLine`. This sheet is for whoever writes by hand. The spoken hook remains `hook` and is not copied into the title. The hook is a short tension line of 4 to 12 words with no team names; the title carries the teams.
 
 Row icon, then `⚽`, then the text. Limit: 100 characters. In scripts 3, 4, 7 and 9, `{jugadores}` means up to two names already written in that narration, joined with «y». A single name is conjugated in the singular («puede»). If that narration does not name players, use the team phrase.
 

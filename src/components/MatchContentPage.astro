@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import { CONTENT_CATEGORIES, contentUrl } from '../lib/match-content.js';
 import { matchContent } from '../lib/content-store.js';
 import { attentionPlayers, playersInNarration, shortTitle, youtubeCopy } from '../lib/youtube.js';
+import { narrationText, scriptBeats } from '../lib/script-beats.js';
 const { match, category } = Astro.props;
 const data = matchContent(match, category);
 const spec = CONTENT_CATEGORIES[category];
@@ -12,14 +13,17 @@ let description = '';
 let entries = data?.prompts ?? [];
 if (category === 'scripts' && data) {
   const players = attentionPlayers(data.scripts, named);
-  entries = data.scripts.map(script => ({ ...script, prompt: script.narration, title: shortTitle({ ...named, n: script.n, hook: script.hook, players: [3, 4, 7, 9].includes(Number(script.n)) ? playersInNarration(script.narration, named) : [] }) }));
+  entries = data.scripts.map(script => {
+    const text = narrationText(script.narration);
+    return { ...script, beats: scriptBeats(script.narration), title: shortTitle({ ...named, n: script.n, hook: script.hook, players: [3, 4, 7, 9].includes(Number(script.n)) ? playersInNarration(text, named) : [] }) };
+  });
   const credit = existsSync('video-render/soundtracks/bed.txt') ? readFileSync('video-render/soundtracks/bed.txt', 'utf8') : '';
   const pack = `public/data/media-pack/${match.matchId}.json`;
   const attribution = existsSync(pack) ? JSON.parse(readFileSync(pack, 'utf8')).attribution : '';
   description = youtubeCopy({ lede: data.description, matchId: match.matchId, ...named, competition: match.competition, players, attribution, credit });
 }
 const introductions = {
-  scripts: 'Diez guiones para leer y grabar. La descripción está lista para copiar en YouTube.',
+  scripts: 'Diez guiones en seis tipos de golpes para leer y grabar. Los Dato y Picante numerados son candidatos de referencia para tu versión final. La descripción está lista para copiar en YouTube.',
   'image-prompts': 'Cuatro escenas referenciales para crear las imágenes del encuentro: disputa del balón, acción de gol, duelo aéreo y vista desde la grada.',
 };
 ---
@@ -38,7 +42,13 @@ const introductions = {
       <ol class="entries">
         {entries.map(entry => <li>
           <div class="entry-heading"><h3>{entry.title}</h3><button type="button" data-copy={`entry-${entry.n}`}>Copiar {category === 'scripts' ? 'guion' : 'prompt'} {entry.n}</button></div>
-          <p id={`entry-${entry.n}`} class="copy-text" lang={category === 'scripts' ? 'es' : 'en'}>{entry.prompt}</p>
+          {category === 'scripts'
+            ? (Array.isArray(entry.narration)
+                ? <ul id={`entry-${entry.n}`} class="script-beats" data-copy-lines lang="es">
+                    {entry.beats.map(beat => <li><span class="beat-label">{beat.label}:</span> {beat.text}</li>)}
+                  </ul>
+                : <p id={`entry-${entry.n}`} class="copy-text" lang="es">{entry.narration}</p>)
+            : <p id={`entry-${entry.n}`} class="copy-text" lang="en">{entry.prompt}</p>}
           {category === 'scripts' && <p class="note">Guion {entry.n} · {entry.words} palabras · Gancho: {entry.hook}</p>}
         </li>)}
       </ol>
@@ -51,7 +61,10 @@ const introductions = {
   document.addEventListener('click', async event => {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-copy]');
     if (!button) return;
-    const text = document.getElementById(button.dataset.copy ?? '')?.textContent;
+    const element = document.getElementById(button.dataset.copy ?? '');
+    const text = element?.hasAttribute('data-copy-lines')
+      ? [...element.querySelectorAll('li')].map(li => li.textContent?.trim() ?? '').filter(Boolean).join('\n')
+      : element?.textContent;
     if (!text) return;
     const status = document.getElementById('copy-status');
     try { await navigator.clipboard.writeText(text); if (status) status.textContent = 'Texto copiado.'; }
@@ -70,8 +83,8 @@ const introductions = {
   .intro,.copy-text{max-width:72ch;line-height:1.75}
   .intro{color:#a4aea3;margin-bottom:36px}
   .entries{padding-left:28px;margin:0}
-  .entries li{padding:28px 0;border-top:1px solid #354035}
-  .entries li::marker{font-variant-numeric:tabular-nums;color:#c5ed74;font-weight:700}
+  .entries > li{padding:28px 0;border-top:1px solid #354035}
+  .entries > li::marker{font-variant-numeric:tabular-nums;color:#c5ed74;font-weight:700}
   .entry-heading{display:flex;align-items:start;justify-content:space-between;gap:20px}
   h3{font-size:1.15rem;line-height:1.4;margin:0 0 14px;text-wrap:balance}
   button{background:#222a24;color:#edf0e6;border:1px solid #354035;border-radius:5px;min-height:44px;padding:10px 14px;font:inherit;font-size:.875rem;cursor:pointer;flex-shrink:0}
@@ -79,6 +92,11 @@ const introductions = {
   button:focus-visible,a:focus-visible{outline:2px solid #c5ed74;outline-offset:5px}
   .copy-text{white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 20px}
   .copy-text::selection{background:#c5ed74;color:#101412}
+  .script-beats{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:10px;max-width:72ch;overflow-wrap:anywhere}
+  .script-beats::selection{background:#c5ed74;color:#101412}
+  .script-beats li{padding:10px 0 10px 16px;border-left:2px solid #354035;line-height:1.7}
+  .script-beats li:first-child{border-left-color:#c5ed74}
+  .beat-label{display:inline-block;min-width:86px;color:#c5ed74;font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
   .note{color:#a4aea3;font-size:.875rem;line-height:1.6}
   .description,.pending{padding:24px 0 36px}
   #copy-status{position:sticky;bottom:18px;background:#181e1a;border-radius:5px;margin:0;max-width:72ch}

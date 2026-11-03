@@ -6,6 +6,7 @@ import { VISUAL_STYLES, isVisualStyle } from '../../video-render/contract/visual
  * remains closed (see COMPLIANCE.md).
  */
 import { DISCLAIMER, checkScript, checkText } from './compliance.js';
+import { DRAFT_BEATS, SCRIPT_BEATS, beatStructureErrors, matchDateSentence, narrationText } from './script-beats.js';
 import { sameClub, esName, rankMatches } from './teams.js';
 
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
@@ -67,7 +68,7 @@ const CALLS = [
   'Para seguir el hilo, entra a goatlab.win.',
   'Ahí está el análisis entero, en goatlab.win.',
   'La forma y el historial están en goatlab.win.',
-  'Cuando quieras la pieza completa, ábrela en goatlab.win.',
+  'La pieza completa te espera en goatlab.win.',
   'El partido se cuenta con calma en goatlab.win.',
 ];
 const RESERVE_TEXT = 'La muestra todavía es corta y conviene decirlo: sin serie reciente ni cruces previos, no hay antecedente que sostener. El análisis espera los datos. Cuando esa serie aparezca, la lectura va a poder afirmarse. Mientras tanto, la previa se cuenta con calma.';
@@ -602,7 +603,7 @@ function baseFacts(match, scorers = null) {
  * Facts + references per angle + probabilities for the editorial reading.
  */
 export function scriptFacts(match, scorers = null, probability = null) {
-  return { ...baseFacts(match, scorers), probability: probability ?? null, picks: buildPicks(match, scorers, probability) };
+  return { ...baseFacts(match, scorers), dateText: matchDateSentence(match.kickoff), probability: probability ?? null, picks: buildPicks(match, scorers, probability) };
 }
 
 /** Run matches that do not yet have a JSON with 10 scripts. */
@@ -663,9 +664,40 @@ export function normalizeYoutubeDraft(draft) {
   if (!draft || typeof draft !== 'object' || Array.isArray(draft)) return draft;
   return { ...draft, lede: cleanLede(draft.lede), scripts: Array.isArray(draft.scripts) ? draft.scripts.map(script => {
     const hook = String(script?.hook ?? '').trim();
+    if (Array.isArray(script?.narration)) {
+      const fallback = script.narration.length === SCRIPT_BEATS.length ? SCRIPT_BEATS : DRAFT_BEATS;
+      const narration = script.narration.map((beat, index) => ({
+        beat: String(beat?.beat ?? fallback[index] ?? '').trim(),
+        text: String(beat?.text ?? '').trim(),
+      }));
+      const first = narration[0]?.text ?? '';
+      const resolvedHook = first || hook;
+      if (resolvedHook && first && !first.startsWith(resolvedHook)) narration[0].text = `${resolvedHook} ${first}`.trim();
+      return { ...script, hook: resolvedHook, narration };
+    }
     const narration = String(script?.narration ?? '').trim();
     return { ...script, hook, narration: hook && narration && !narration.startsWith(hook) ? `${hook} ${narration}` : narration };
   }) : draft.scripts };
+}
+
+/** Deterministic Fecha beat: replaces a model-written date or inserts it after the hook. */
+export function withMatchDate(draft, dateText) {
+  const text = String(dateText ?? '').trim();
+  if (!text || !draft || !Array.isArray(draft.scripts)) return draft;
+  return { ...draft, scripts: draft.scripts.map(script => {
+    if (!Array.isArray(script?.narration)) return script;
+    const narration = script.narration.map(beat => ({
+      beat: String(beat?.beat ?? '').trim(),
+      text: String(beat?.text ?? '').trim(),
+    }));
+    const at = narration.findIndex(beat => beat.beat === 'fecha');
+    if (at >= 0) narration[at] = { beat: 'fecha', text };
+    else {
+      const gancho = narration.findIndex(beat => beat.beat === 'gancho');
+      narration.splice(gancho >= 0 ? gancho + 1 : 0, 0, { beat: 'fecha', text });
+    }
+    return { ...script, narration };
+  }) };
 }
 
 export function competitionTag(competition) {
@@ -784,7 +816,7 @@ export function attentionPlayers(scripts, { home, away, knownPlayers } = {}) {
   for (const n of order) {
     const script = (scripts ?? []).find(item => Number(item?.n) === n);
     if (!script) continue;
-    for (const name of playersInNarration(script.narration, { home, away, knownPlayers })) {
+    for (const name of playersInNarration(narrationText(script.narration), { home, away, knownPlayers })) {
       if (!ranked.includes(name)) ranked.push(name);
     }
   }
@@ -876,18 +908,32 @@ export function telegramCaption(input = {}) {
  * figures in an explicit projection sentence; the rest keeps the factual
  * gate. Literal pieces are validated only in old drafts.
  */
-export function acceptYoutubeDraft(draft, { facts, published = false, editorial = false } = {}) {
+export function acceptYoutubeDraft(draft, { facts, published = false, editorial = false, structured = false } = {}) {
   const errors = [];
   const scripts = draft?.scripts;
   if (!Array.isArray(scripts) || scripts.length !== 10) errors.push('hacen falta 10 guiones');
-  const allowed = allowedNumbers(facts);
+  const { dateText: _dateText, ...numericFacts } = facts ?? {};
+  const allowed = allowedNumbers(numericFacts);
   const names = [facts?.home, facts?.away].filter(Boolean);
   const players = playerNames(facts);
   const hooks = new Set();
   for (const [i, script] of (scripts ?? []).entries()) {
     const hook = String(script?.hook ?? '').trim();
-    const narration = String(script?.narration ?? '').trim();
+    const rawNarration = script?.narration;
+    const narration = narrationText(rawNarration);
     const label = `guion ${i + 1}`;
+    const beatOf = name => Array.isArray(rawNarration)
+      ? String(rawNarration.find(beat => String(beat?.beat ?? '').trim() === name)?.text ?? '').trim()
+      : '';
+    if (structured) {
+      for (const error of beatStructureErrors(rawNarration)) errors.push(`${label}: ${error}`);
+      if (Array.isArray(rawNarration)) {
+        if (beatOf('gancho') !== hook) errors.push(`${label}: el gancho debe coincidir con el golpe gancho`);
+        if (!beatOf('cierre').includes('goatlab.win')) errors.push(`${label}: el cierre debe llevar a goatlab.win`);
+        const dateText = String(facts?.dateText ?? '').trim();
+        if (dateText && beatOf('fecha') !== dateText) errors.push(`${label}: la fecha debe coincidir con la del partido`);
+      }
+    }
     if (hooks.has(hook)) errors.push(`${label}: gancho repetido`);
     if (hook) hooks.add(hook);
     if (hook && narration && !narration.startsWith(hook)) errors.push(`${label}: la narración no abre con el gancho`);
@@ -910,11 +956,21 @@ export function acceptYoutubeDraft(draft, { facts, published = false, editorial 
       if (!projection || !/^(?:Mi (?:lectura|pronóstico|proyección)|Yo (?:veo|creo|imagino|espero)|Me imagino|Veo|Creo que|Espero|Proyecto|Para mí)(?=\s|[,:])/i.test(projection)) errors.push(`${label}: falta una proyección marcada como opinión`);
       const projectionAt = narration.indexOf(projection);
       if (projection && (projectionAt < 0 || projectionAt !== narration.lastIndexOf(projection) || (projectionAt > 0 && !/[.!?]\s*$/.test(narration.slice(0, projectionAt))) || !/[.!?]$/.test(projection) || /[.!?]\s+\S/.test(projection))) errors.push(`${label}: la proyección debe ser una frase completa de la narración, una sola vez`);
+      if (structured && Array.isArray(rawNarration) && projection !== beatOf('proyeccion')) errors.push(`${label}: la proyección debe coincidir con el golpe proyección`);
       for (const n of numbersInText(projection)) if (!Number.isInteger(n) || n < 1 || n > 90) errors.push(`${label}: proyección fuera de rango`);
       if (numbersInText(hook).length) errors.push(`${label}: el gancho no lleva cifras`);
     }
-    const figures = numbersInText(text);
-    const factualText = editorial && projection ? text.replace(projection, '') : text;
+    // The date line is factual metadata added on save; it does not consume
+    // forecast figures or need to appear in the statistics facts.
+    const numericText = Array.isArray(rawNarration)
+      ? rawNarration
+        .filter(beat => String(beat?.beat ?? '').trim() !== 'fecha')
+        .map(beat => String(beat?.text ?? '').trim())
+        .filter(Boolean)
+        .join(' ')
+      : text;
+    const figures = numbersInText(numericText);
+    const factualText = editorial && projection ? numericText.replace(projection, '') : numericText;
     for (const n of numbersInText(factualText)) {
       if (n === 0) errors.push(`${label}: el cero no se escribe en dígitos`);
       else if (!numberAllowed(n, allowed)) errors.push(`${label}: cifra ${n} no está en los hechos`);

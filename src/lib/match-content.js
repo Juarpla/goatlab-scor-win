@@ -1,5 +1,6 @@
 /** Public content contract shared by Actions, Astro and the portable GoatLab skill. */
 import { esName } from './teams.js';
+import { beatStructureErrors, matchDateSentence, narrationText, scriptBeats } from './script-beats.js';
 export const CONTENT_VERSION = 1;
 export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export const CONTENT_CATEGORIES = Object.freeze({
@@ -43,12 +44,32 @@ export function scriptStructureErrors(data, { matchId = null, match = null } = {
   if (matchId != null && data.matchId !== matchId) errors.push('matchId no coincide con archivo');
   if (!nonempty(data.description)) errors.push('description vacía o inválida');
   if (!Array.isArray(data.scripts) || data.scripts.length !== 10) errors.push('se requieren diez guiones');
+  const expectedDate = matchDateSentence(data.kickoff);
   if (Array.isArray(data.scripts)) for (const [index, script] of data.scripts.entries()) {
     const label = `guion ${index + 1}`;
+    const rawNarration = script?.narration;
+    const narration = narrationText(rawNarration);
     if (script?.n !== index + 1) errors.push(`${label}: número incorrecto`);
-    for (const field of ['title', 'hook', 'narration']) if (!nonempty(script?.[field])) errors.push(`${label}: ${field} vacío o inválido`);
+    for (const field of ['title', 'hook']) if (!nonempty(script?.[field])) errors.push(`${label}: ${field} vacío o inválido`);
+    if (typeof rawNarration !== 'string' && !Array.isArray(rawNarration)) errors.push(`${label}: narration vacía o inválida`);
+    else if (!narration) errors.push(`${label}: narration vacía o inválida`);
+    if (Array.isArray(script?.narration)) {
+      for (const error of beatStructureErrors(script.narration)) errors.push(`${label}: ${error}`);
+    }
+    if (Number(data.editorialVersion) >= 3) {
+      if (!Array.isArray(script?.narration)) errors.push(`${label}: la versión editorial estructurada exige narración por golpes`);
+      else {
+        const beats = scriptBeats(script.narration);
+        const gancho = beats.find(beat => beat.beat === 'gancho')?.text ?? '';
+        const proyeccion = beats.find(beat => beat.beat === 'proyeccion')?.text ?? '';
+        const fecha = beats.find(beat => beat.beat === 'fecha')?.text ?? '';
+        if (String(script?.hook ?? '').trim() !== gancho) errors.push(`${label}: el gancho debe coincidir con el golpe gancho`);
+        if (String(script?.projection ?? '').trim() !== proyeccion) errors.push(`${label}: la proyección debe coincidir con el golpe proyección`);
+        if (expectedDate && fecha !== expectedDate) errors.push(`${label}: la fecha debe coincidir con kickoff`);
+      }
+    }
     if (!Number.isInteger(script?.words) || script.words <= 0) errors.push(`${label}: words debe ser un entero positivo`);
-    if (data.editorialVersion === 2 && (!nonempty(script?.projection) || !String(script?.narration ?? '').includes(script.projection))) errors.push(`${label}: proyección editorial ausente de la narración`);
+    if (Number(data.editorialVersion) >= 2 && (!nonempty(script?.projection) || !narration.includes(script.projection))) errors.push(`${label}: proyección editorial ausente de la narración`);
     // The pick only exists since the precedent+forecast improvement; old
     // JSONs without a pick remain valid, but a present pick must have a shape.
     if (script?.pick != null) {

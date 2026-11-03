@@ -1,4 +1,4 @@
-"""Durable single-flight image-to-video tasks. A lost POST is never repeated."""
+"""Durable image-to-video tasks with a bounded in-flight window. A lost POST is never repeated."""
 import argparse
 from agnes_diagnostics import provider_diagnostic
 import fcntl
@@ -15,7 +15,7 @@ import urllib.error
 import urllib.request
 import urllib.parse
 from pathlib import Path
-from common import agnes_authority, atomic_json, database, request_json
+from common import agnes_authority, atomic_json, database, request_json, video_concurrency
 from agnes import retry_seconds
 from media_policy import clip_target
 
@@ -214,12 +214,11 @@ class VideoPool:
             choices = matching or unassigned
             if not choices: continue
             ordinal = choices[0]; candidates.remove(ordinal); assignments.append((number, ordinal))
-        for number, ordinal in assignments:
-            self.state.resource_number = number
+        stopped = getattr(self, 'stopped_resources', set())
+        self.stopped_resources = stopped
+
+        def counted_for(number, ordinal):
             key = (match, number)
-            stopped = getattr(self, 'stopped_resources', set())
-            self.stopped_resources = stopped
-            if key in stopped: continue
             def counted_call(url, body=None, **kwargs):
                 if body is not None: counts[key] = counts.get(key, 0) + 1
                 if call is request_json and body is not None and 'observe' not in kwargs:
@@ -229,6 +228,42 @@ class VideoPool:
                          'body': payload, 'next': 'conservar identificador y consultar la tarea'})
                 return call(url, body, **kwargs) if body is not None else call(url, **kwargs)
             counted_call.provider = call is request_json
+            return counted_call
+
+        def stop_candidate(messages):
+            reason = '; '.join(messages)
+            return 'HTTP 503' in reason or any(f'HTTP {code}' in reason for code in range(400, 429)) or 'inciert' in reason
+
+        def retry_candidate(messages):
+            reason = '; '.join(messages)
+            return bool(re.search(r'HTTP \d{3}|Agnes confirmó fallo|inciert|identificador guardado|actualización remota pendiente', reason))
+
+        # Start a small window of tasks before polling the first one: the provider
+        # advances all of them while this process waits on each in turn.
+        window, concurrency = 0, video_concurrency()
+        for number, ordinal in assignments:
+            if window >= concurrency or self.clock() >= deadline or cancelled(): break
+            key = (match, number)
+            if key in stopped: continue
+            remote = slots[ordinal]
+            if remote and remote.get('videoId') and remote['state'] in ('pending', 'uncertain'):
+                window += 1
+                continue
+            self.state.resource_number = number
+            started = self._bank(match, prompts, images, out, deadline, expires, counted_for(number, ordinal), download, cancelled,
+                                 verified, False, candidate_ordinals=[ordinal], start_only=True)
+            diagnostics = started.get('diagnostics', diagnostics)
+            messages = [re.sub(r'^clip (\d+):', r'intento de vídeo \1:', message) for message in started.get('failures', [])]
+            if started.get('started'):
+                window += 1
+            elif stop_candidate(messages):
+                failures.extend(messages); stopped.add(key)
+
+        for number, ordinal in assignments:
+            self.state.resource_number = number
+            key = (match, number)
+            if key in stopped: continue
+            counted_call = counted_for(number, ordinal)
             while counts.get(key, 0) < 3 and self.clock() < deadline and not cancelled():
                 remote = self.state.status(match, 'video', ordinal)
                 accepted_path = Path(out) / f'clip-{ordinal}.accepted.json'
@@ -252,9 +287,8 @@ class VideoPool:
                 if lost and remote:
                     self.state.renew(match, 'video', ordinal, remote['attemptId'])
                     self.db.execute('DELETE FROM video_tasks WHERE match_id=? AND ordinal=?', (match, ordinal))
-                if counts.get(key, 0) == before and not lost or remote and remote.get('videoId') and remote['state'] != 'failed' and not lost: break
-                reason = '; '.join(messages)
-                if 'HTTP 503' in reason or any(f'HTTP {code}' in reason for code in range(400, 429)) or 'inciert' in reason:
+                if (counts.get(key, 0) == before and not lost and not retry_candidate(messages)) or (remote and remote.get('videoId') and remote['state'] != 'failed' and not lost): break
+                if stop_candidate(messages):
                     stopped.add(key); break
                 if counts.get(key, 0) >= 3 or self.clock()+60 >= deadline: break
                 self.sleep(60)
@@ -264,7 +298,7 @@ class VideoPool:
                 'deferrals': [{'kind':'video','number':number,'code':'run-deadline'} for number, ordinal in assignments if self.clock()>=deadline and not any(clip['index']==ordinal for clip in clips)],
                 'runPosts': {str(number): count for (bank, number), count in counts.items() if bank == match}}
 
-    def _bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False, candidate_ordinals=None):
+    def _bank(self, match, prompts, images, out, deadline, expires, call=request_json, download=None, cancelled=lambda:False, verified=None, recover_only=False, candidate_ordinals=None, start_only=False):
         if not images: return {'clips': [], 'failures': ['faltan imágenes de referencia']}
         if not os.environ.get('AGNES_API_KEY'): return {'clips': [], 'failures': ['falta AGNES_API_KEY']}
         out = Path(out); out.mkdir(parents=True, exist_ok=True)
@@ -390,7 +424,7 @@ class VideoPool:
                             except ValueError as error:
                                 self.transport(match,ordinal,'persist-accepted',error=error,attemptId=attempt_id)
                                 failures.append(f'clip {ordinal+1}: identificador guardado; actualización remota pendiente; no se repite POST')
-                                return {'clips':clips,'failures':failures + self.failure_details(match),'diagnostics':json.loads(diagnostics_path.read_text())}
+                                return {'clips':clips,'failures':failures + self.failure_details(match),'diagnostics':json.loads(diagnostics_path.read_text()),'started':True}
                         except urllib.error.HTTPError as error:
                             status,retry,video_id,proven_rejected=self.error(match,ordinal,'create',error,attemptId=attempt_id)
                             if video_id:
@@ -426,6 +460,9 @@ class VideoPool:
                         state=self.db.execute('SELECT status FROM video_tasks WHERE match_id=? AND ordinal=?',(match,ordinal)).fetchone()
                         if state and state[0] in ('failed','abandoned'): continue
                         break
+                if start_only:
+                    return {'clips':clips,'failures':failures,'diagnostics':json.loads(diagnostics_path.read_text()) if diagnostics_path.exists() else prior_diagnostics,
+                            'started':bool(video_id)}
                 last_poll = None
                 poll_stop = None
                 def observe_poll(http_status, response_headers, payload):

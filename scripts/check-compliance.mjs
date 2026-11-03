@@ -3,6 +3,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { checkScript, checkDescription, checkMediaManifest, isMediaManifestFile } from '../src/lib/compliance.js';
 import { attentionPlayers, hashtagLine, playersInNarration, shortTitle } from '../src/lib/youtube.js';
+import { narrationText } from '../src/lib/script-beats.js';
 const selectionFile = process.argv.find(arg => arg.startsWith('--selection='))?.slice(12);
 const selectionIds = selectionFile ? new Set(JSON.parse(await readFile(selectionFile, 'utf8')).ids) : null;
 
@@ -11,7 +12,7 @@ function clickErrors(data) {
   const errors = [];
   for (const script of data.scripts ?? []) {
     const players = [3, 4, 7, 9].includes(Number(script.n))
-      ? playersInNarration(script.narration, named)
+      ? playersInNarration(narrationText(script.narration), named)
       : [];
     const expected = shortTitle({ ...named, n: script.n, hook: script.hook, players });
     if (script.title !== expected) errors.push(`guion ${script.n}: el título no es la frase de clic`);

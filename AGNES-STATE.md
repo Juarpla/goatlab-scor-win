@@ -101,10 +101,14 @@ References: [S3 compatibility](https://developers.cloudflare.com/r2/api/s3/api/)
 ## Media operation
 
 The full update runs at 01:05 Lima; the three media retries at 02:15, 04:15 and
-06:15. The scoreline refresh keeps `17 */6` UTC. Each run has 3,000,000 ms by
+06:15. The scoreline refresh keeps `17 */6` UTC. Each run has 4,200,000 ms by
 default (`MEDIA_RUN_BUDGET_MS`) and each match is additionally limited to kickoff
-+ 24 h. `TOP_MAX_AGE_HOURS` is seven by default and accepts zero. `--match` only
-skips the age lock.
++ 24 h. The remaining run time is split evenly across the matches that still
+lack a complete bank, so one bank cannot consume every match's turn; unused
+slices roll forward.
+The workflow job timeout is 90 min, leaving margin for setup and publication.
+`TOP_MAX_AGE_HOURS` is seven by default and accepts zero. `--match` only skips the
+age lock.
 
 `node actions/3-media-creation/check-media-complete.mjs` checks public evidence
 without Agnes, downloads or HEAD. A complete v2 bank requires four photos and the
@@ -181,8 +185,13 @@ and HEAD do not spend a POST.
 
 `pending`, `queued` and `in_progress` keep the ID and are queried with pauses of
 15, 40 and 75 seconds, and then 90 seconds between queries; 429 respects
-Retry-After if it requires a longer wait. Repeated responses appear in logs and
-are compacted into state. Archived diagnostics are kept during the current
+Retry-After if it requires a longer wait. Video generation admits a bounded
+window of in-flight tasks (`AGNES_VIDEO_CONCURRENCY`, default 1, maximum 4)
+counted across all matches in the private state. The producer starts the window
+before polling and retrieves the tasks in publication order; an existing pending
+task counts toward the window. The window does not change the 12.1-second
+creation pace or the per-resource POST limit. Repeated responses appear in logs
+and are compacted into state. Archived diagnostics are kept during the current
 seven-day window and remain subject to the 900 KB limit. Temporary files are
 deleted after confirmed publication and at job completion.
 
@@ -192,8 +201,9 @@ resources pending with exit code 0. Resources still require R2 verification to
 count as ready. R2, identity, private state, HTTP 402/401 and unidentified causes
 keep code 2; they take priority even if other resources were deferred. A
 historical rejection does not justify the current run result. Selective
-publication still requires complete banks; a partial bank is not published for
-finishing at 0.
+publication includes complete banks and finished partial banks with at least one
+usable resource; a partial bank is never certified as complete and remains
+pending for generation.
 
 The effective TokenPlan key pace is 80 creations/minute for 2K images and one
 video creation every 12.1 seconds (maximum five/minute). The old values 12 and

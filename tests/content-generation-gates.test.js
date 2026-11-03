@@ -108,7 +108,14 @@ function draft() {
   const phrases = ['abren el análisis', 'comparan sus ritmos', 'buscan continuidad', 'presentan sus fortalezas', 'preparan el encuentro', 'muestran sus contrastes', 'exploran el contexto', 'ponen a prueba su lectura', 'conservan sus matices', 'cierran la previa'];
   return { lede: 'Alpha y Beta presentan un contraste de ritmos antes del cruce.', scripts: phrases.map(phrase => {
     const hook = `Alpha y Beta ${phrase}.`;
-    return { hook, projection: 'Mi lectura apunta a un partido parejo.', narration: `${hook} Mi lectura apunta a un partido parejo. Los antecedentes aportan contexto y ayudan a explicar las tendencias de cada equipo. La información disponible conserva sus límites y el análisis espera los datos con calma. La previa se cuenta sin prisa y con la muestra por delante. La tensión del cruce sostiene la espera. Consulta la lectura completa en goatlab.win.` };
+    const projection = 'Mi lectura apunta a un partido muy parejo.';
+    return { hook, projection, narration: [
+      { beat: 'gancho', text: hook },
+      { beat: 'dato', text: 'Los antecedentes aportan contexto y ayudan a explicar las tendencias de cada equipo en la muestra reciente.' },
+      { beat: 'picante', text: 'La información disponible conserva sus límites y el análisis espera los datos con calma, sin convertir la muestra en una certeza.' },
+      { beat: 'proyeccion', text: projection },
+      { beat: 'cierre', text: 'Consulta la lectura completa en goatlab.win.' },
+    ] };
   }) };
 }
 test('scripts: unreadable, incomplete and mismatched stored scripts are regenerated atomically', async t => {
@@ -161,7 +168,14 @@ test('scripts: probability informs the editorial prompt while saving the model p
     lede: 'Alpha recibe a Beta con la serie reciente a la vista.',
     scripts: facts.picks.map((pick, i) => {
       const hook = `Alpha y Beta abren el análisis número ${['uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'][i]}.`;
-      return { hook, projection: `Mi lectura se inclina por ${pick.verdict}.`, narration: `${hook} ${pick.bridge} ${pick.antecedent}. El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada esta noche cuando el ambiente aprieta. Mi lectura se inclina por ${pick.verdict}. ${pick.call}` };
+      const projection = `Mi lectura se inclina por ${pick.verdict}.`;
+      return { hook, projection, narration: [
+        { beat: 'gancho', text: hook },
+        { beat: 'dato', text: 'La forma reciente de Alpha y Beta deja una pista clara para este cruce.' },
+        { beat: 'picante', text: 'El ritmo del cruce sostiene la tensión hasta el final del partido y nadie se guarda nada esta noche cuando el ambiente aprieta.' },
+        { beat: 'proyeccion', text: projection },
+        { beat: 'cierre', text: pick.call },
+      ] };
     }),
   };
   const service = await model(t, content);
@@ -178,8 +192,9 @@ test('scripts: probability informs the editorial prompt while saving the model p
   const payload = JSON.parse(service.requests[0].messages[1].content.split('\n').slice(1).join('\n'));
   assert.equal(payload.facts.picks[0].verdict, 'la victoria de Alpha en casa');
   assert.equal(payload.facts.picks[4].verdict, '10 córners, 6 de Alpha y 4 de Beta');
-  assert.equal(saved.editorialVersion, 2);
+  assert.equal(saved.editorialVersion, 4);
   assert.equal(saved.scripts[0].pick, undefined);
   assert.equal(saved.scripts[0].projection, content.scripts[0].projection);
-  assert.ok(saved.scripts[8].narration.includes(saved.scripts[8].projection));
+  assert.equal(saved.scripts[0].narration[1].beat, 'fecha');
+  assert.equal(saved.scripts[8].narration.find(beat => beat.beat === 'proyeccion').text, saved.scripts[8].projection);
 });

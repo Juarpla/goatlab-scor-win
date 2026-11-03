@@ -29,6 +29,15 @@ test('only complete A, progress/report and authorized deletions are staged, excl
   assert.match(staged,/A\s+public\/data\/media-pack\/b.progress.json/);
   assert.doesNotMatch(staged,/\bb.json|gen\/|\.ready|\.running|sqlite|\.tmp/);
 });
+test('authorized partial packs are staged with their progress',async t=>{
+  const {repo,git}=await fixture(t);
+  await writeFile(join(repo,'public/data/media-pack/b.json'),'{}');
+  await writeFile(join(repo,'public/data/media-pack/b.progress.json'),'{}');
+  await stageMedia({repo,publication:{complete_ids:[],partial_ids:['b']}});
+  const staged=await git('diff','--cached','--no-renames','--name-status');
+  assert.match(staged,/A\s+public\/data\/media-pack\/b\.json/);
+  assert.match(staged,/A\s+public\/data\/media-pack\/b\.progress\.json/);
+});
 test('unrelated staged work is rejected instead of being included in the media commit',async t=>{
   const {repo,git}=await fixture(t); await writeFile(join(repo,'other.txt'),'data'); await git('add','other.txt');
   await assert.rejects(stageMedia({repo}),/ajenos/);

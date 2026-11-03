@@ -7,6 +7,7 @@ import time
 import uuid
 from datetime import datetime
 from pathlib import Path
+from common import video_concurrency
 
 SCRIPT = Path(__file__).resolve().parents[2] / 'scripts' / 'agnes-state.mjs'
 
@@ -76,8 +77,10 @@ class AgnesState:
         value = {'attemptId': str(uuid.uuid4()), 'matchId': match, 'kind': kind, 'ordinal': ordinal,
                  'promptHash': hashlib.sha256(prompt.encode()).hexdigest(), 'model': model,
                  'expiresAtMs': expires * 1000, 'guard': self.guard(match, expires)}
-        if kind == 'video' and getattr(self, 'resource_number', None):
-            value['publicationIndex'] = self.resource_number
+        if kind == 'video':
+            value['videoConcurrency'] = video_concurrency(self.env)
+            if getattr(self, 'resource_number', None):
+                value['publicationIndex'] = self.resource_number
         if reference is not None:
             value['referenceHash'] = hashlib.sha256(reference.encode()).hexdigest()
         return self.call('reserve', value)

@@ -66,9 +66,13 @@ locally and in GitHub Actions, the priority is DeepSeek V4.1 Flash → GLM-5.3-F
 → Mistral → Workers AI, configured by `SCRIPT_PROVIDER_ORDER`, independent of
 sports analysis. DeepSeek and GLM use `max` reasoning, up to 131072 tokens and 10
 minutes per attempt. The ten scripts keep their topics and 55 to 100 words
-(ceiling 110); the model writes freely and stores its future scenario in
-`projection`, identified as opinion in the narration. Historical figures still
-come from the data. Motion Prompts was retired; graphics receive the fact catalog
+(ceiling 110), written as six labeled beat types (`gancho → fecha → dato →
+picante → proyeccion → cierre`). `dato` and `picante` repeat as separate
+one-sentence candidates when there is more than one fact or reading; the site
+numbers them as reference material for the final audio and transcription. The
+fixture date is inserted verbatim. The model writes freely and stores its future
+scenario in the `proyeccion` beat and the `projection` field. Historical figures
+still come from the data. Motion Prompts was retired; graphics receive the fact catalog
 directly.
 
 To measure latency and validate drafts without publishing them:

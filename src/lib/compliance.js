@@ -4,6 +4,7 @@
  */
 import { ASSETS_MIN, ASSETS_PER_MATCH, AI_CREDIT, assetErrors,
 } from './media.js';
+import { narrationText } from './script-beats.js';
 export const DISCLAIMER =
   'Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.';
 
@@ -57,7 +58,7 @@ export function checkScript(script, { published = false, matchId = null } = {}) 
   const errors = [];
   if (!script || typeof script !== 'object') return ['guion vacío'];
   if (!script.hook || String(script.hook).trim().length < 10) errors.push('hook ausente o muy corto');
-  const narration = String(script.narration ?? '').trim();
+  const narration = narrationText(script.narration);
   if (!narration) {
     errors.push('narración ausente');
   } else {

@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { generateMediaBanks, mediaRunDeadline, mediaSoftStop } from '../actions/3-media-creation/generate-media-pack.mjs';
+import { generateMediaBanks, mediaMatchStop, mediaRunDeadline, mediaSoftStop } from '../actions/3-media-creation/generate-media-pack.mjs';
 import { buildYoutubeScripts } from '../src/lib/youtube.js';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const now = Date.parse('2026-10-08T20:00:00Z');
@@ -259,10 +259,17 @@ test('a provider producing no clips gives an incomplete-resource diagnostic', as
   assert.ok(result.results[0].failures.some(reason => /Recursos incompletos/.test(reason)));
 });
 test('run budget is ephemeral and bounded by kickoff plus 24h, with invalid kickoff refusing generation', () => {
-  assert.equal(mediaRunDeadline(now, {}), now + 3_000_000);
+  assert.equal(mediaRunDeadline(now, {}), now + 4_200_000);
   assert.equal(mediaRunDeadline(now, { MEDIA_RUN_BUDGET_MS: '0' }), now);
-  assert.equal(mediaSoftStop(now + 3_000_000, new Date(now - 86_400_000 + 1000).toISOString()), now + 1000);
-  assert.equal(mediaSoftStop(now + 3_000_000, 'invalid'), 0);
+  assert.equal(mediaSoftStop(now + 4_200_000, new Date(now - 86_400_000 + 1000).toISOString()), now + 1000);
+  assert.equal(mediaSoftStop(now + 4_200_000, 'invalid'), 0);
+});
+test('each queued match gets an equal slice of the remaining run budget', () => {
+  const kickoff = new Date(now + 86_400_000).toISOString();
+  assert.equal(mediaMatchStop(now + 4_200_000, now, 2, kickoff), now + 2_100_000);
+  assert.equal(mediaMatchStop(now + 4_200_000, now, 5, kickoff), now + 840_000);
+  assert.equal(mediaMatchStop(now + 4_200_000, now, 2, new Date(now - 86_400_000 + 1000).toISOString()), now + 1000);
+  assert.equal(mediaMatchStop(now + 1000, now + 2000, 2, kickoff), now + 1000);
 });
 test('R2 block reuses the two publication positions with their original attempt ordinals and makes zero provider calls or media PUTs', async t => {
   const f = await fixture(t, { MEDIA_RUN_BUDGET_MS: '0' }); for (let i = 0; i < 4; i++) f.addPhoto(i); f.addClip(3); f.addClip(4); f.setBlock(true);
@@ -313,6 +320,17 @@ test('draft partial does not publish its manifest and reports no complete IDs', 
   await assert.rejects(readFile(join(f.dir, 'a-b.json')), /ENOENT/);
   const publication = JSON.parse(await readFile(join(f.repo, '.cache/media-publication.json')));
   assert.deepEqual(publication.complete_ids, []); assert.equal(publication.allow_commit, false);
+});
+test('partial publication stores a finished partial manifest and authorizes its commit', async t => {
+  const f = await fixture(t, { MEDIA_DRAFT: '1', MEDIA_PUBLISH_PARTIAL: '1', MEDIA_RUN_BUDGET_MS: '0', AGNES_SKIP_VIDEO: '1' });
+  f.addPhoto(0);
+  const result = await f.run();
+  assert.equal(JSON.parse(await readFile(join(f.dir, 'a-b.json'))).bankStatus, 'partial');
+  const publication = JSON.parse(await readFile(join(f.repo, '.cache/media-publication.json')));
+  assert.deepEqual(publication.complete_ids, []);
+  assert.deepEqual(publication.partial_ids, ['a-b']);
+  assert.equal(publication.allow_commit, true);
+  assert.deepEqual(result.partialIds, ['a-b']);
 });
 test('recovered clips from older prompt hashes remain unpublished and are never uploaded as current content', async t => {
   const f = await fixture(t, { AGNES_SKIP_IMAGES: '1' }); for (let i=0;i<4;i++) f.addPhoto(i);
