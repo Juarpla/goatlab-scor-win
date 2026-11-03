@@ -3870,5 +3870,284 @@
     "generatedAt": "2026-11-03T14:05:58.154Z",
     "inputKey": "v3|M|fd-575385|LASK Linz|ŠK Slovan Bratislava|champions|2026-11-03T20:00:00Z|NS\nP|3.42|1.533|0.727|0.141|0.132|0.87|0.762\nW||rain|4|\nS|Florian Flecker|LASK Linz|3|5\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-09-09|Paris Saint-Germain FC|ŠK Slovan Bratislava|6|1\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-14|ŠK Slovan Bratislava|VfB Stuttgart|0|3\nR|2026-10-20|AS Roma|ŠK Slovan Bratislava|4|0\nR|2026-10-21|Sporting Clube de Portugal|LASK Linz|2|3",
     "materialKey": "v3|M|fd-575385|LASK Linz|ŠK Slovan Bratislava|champions|2026-11-03T20:00:00Z|NS\nP|3.42|1.533|0.727|0.141|0.132|0.87|0.762\nW||rain|4|\nS|Florian Flecker|LASK Linz|3|5\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-09-09|Paris Saint-Germain FC|ŠK Slovan Bratislava|6|1\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-14|ŠK Slovan Bratislava|VfB Stuttgart|0|3\nR|2026-10-20|AS Roma|ŠK Slovan Bratislava|4|0\nR|2026-10-21|Sporting Clube de Portugal|LASK Linz|2|3"
+  },
+  "bz-601301": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Rennes y Olympiacos, duelo europeo de noviembre",
+        "bullets": [
+          "Stade Rennais y Olympiacos FC se enfrentan el 4 de noviembre de 2026 a las 15:30 UTC en competición europea, con estado NS.",
+          "El clima se declara despejado y 14 grados; la sede no aparece consignada en el input.",
+          "Ambos equipos llegan con 3 partidos registrados en la tabla, aunque la clasificación se detalla en su sección."
+        ],
+        "stats": [
+          {
+            "value": "15:30",
+            "label": "hora UTC"
+          },
+          {
+            "value": "14",
+            "label": "temperatura C"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y Bzzoiro: lecturas divergentes",
+        "bullets": [
+          "Poisson GoatLab: 27.3% local, 27% empate y 45.7% visitante; 1.2 y 1.61 goles esperados; 53.3% y 57.1% en sus dos lecturas adicionales de goles.",
+          "CatBoost Bzzoiro: 44.5% local, 26.3% empate y 29.2% visitante; 1.2 y 1.61; 54.6%, 58.3% y 56.5% en sus valores adicionales, con marcador 1-1 como resultado más probable.",
+          "B2, estimación declarada de Bzzoiro: H con 44.5% como mayor probabilidad; los campos de goles totales y ambos equipos marcan aparecen como 'no', sin desarrollo.",
+          "Auditoría: el 27.3% local y el 45.7% visitante de Poisson contrastan con el 44.5% local y 29.2% visitante de CatBoost; la divergencia se marca sin resolver."
+        ],
+        "stats": [
+          {
+            "value": "44.5%",
+            "label": "local Bzzoiro"
+          },
+          {
+            "value": "45.7%",
+            "label": "visitante Poisson"
+          },
+          {
+            "value": "27.3%",
+            "label": "local Poisson"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Olympiacos 5º con 9 puntos; Rennes 13º con 5",
+        "bullets": [
+          "Stade Rennais figura 13º con 3 partidos y 5 puntos en la tabla consignada.",
+          "Olympiacos FC aparece 5º con 3 partidos y 9 puntos.",
+          "La diferencia es de 4 puntos a favor del visitante, con el mismo número de encuentros disputados."
+        ],
+        "stats": [
+          {
+            "value": "13",
+            "label": "puesto Rennes"
+          },
+          {
+            "value": "5",
+            "label": "puntos Rennes"
+          },
+          {
+            "value": "9",
+            "label": "puntos Olympiacos"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Olympiacos suma dos victorias; Rennes no pierde",
+        "bullets": [
+          "Stade Rennais registra una victoria por 2-1 ante OFI Crete y un empate 2-2 en cancha de Juventus.",
+          "Olympiacos FC acumula dos victorias: 0-1 en cancha de Olympique de Marseille y 1-0 frente a AC Sparta Praha.",
+          "En la muestra reciente, Olympiacos no recibió goles y Rennes marcó en ambos encuentros."
+        ],
+        "stats": [
+          {
+            "value": "2-1",
+            "label": "Rennes vs OFI"
+          },
+          {
+            "value": "1-0",
+            "label": "Olympiacos vs Sparta"
+          },
+          {
+            "value": "2-2",
+            "label": "Juventus vs Rennes"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Divergencia de modelos y datos faltantes",
+        "bullets": [
+          "La lectura principal es la discrepancia entre Poisson y CatBoost sobre el peso del local y del visitante.",
+          "El input no incluye historial H2H, bajas confirmadas, alineaciones, API-Football ni consenso externo M2.",
+          "El clima despejado y 14 grados es el único dato de contexto de sede/clima; la sede no se declara."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin historial H2H",
+        "detail": "No se aportan filas H/HR; no hay base para comparar cruces previos."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No se consignan L ni alineaciones confirmadas; no se pueden evaluar ausencias."
+      },
+      {
+        "label": "Sin API-Football",
+        "detail": "No aparece fila A; no hay lectura de distribución ni umbral de goles de ese proveedor."
+      },
+      {
+        "label": "B2 incompleto",
+        "detail": "La fila B2 usa 'no' en goles totales y ambos equipos marcan sin etiquetas; se evita inferir un mercado concreto."
+      },
+      {
+        "label": "Forma acotada",
+        "detail": "R contiene solo dos partidos recientes por equipo; la racha no debe generalizarse."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Se marca una divergencia clara: Poisson GoatLab da 27.3% al local y 45.7% al visitante, mientras CatBoost Bzzoiro y B2 sitúan al local arriba con 44.5% y 29.2% visitante. No hay datos para decidir; se mantiene la discrepancia visible."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-03T23:25:49.878Z",
+    "inputKey": "v3|M|bz-601301|Stade Rennais|Olympiacos FC|europa|2026-11-04T15:30:00+00:0|NS\nP|1.2|1.61|0.273|0.27|0.457|0.533|0.571\nB|0.445|0.263|0.292|1.2|1.61|0.546|0.583|1-1|0.565\nB2|H|0.445|no|no\nW||clear|14|\nT|13|Stade Rennais|3|5||\nT|5|Olympiacos FC|3|9||\nS|Armando González|Olympiacos FC|2|3\nR|2026-10-15|Stade Rennais|OFI Crete|2|1\nR|2026-10-15|Olympique de Marseille|Olympiacos FC|0|1\nR|2026-10-22|Juventus|Stade Rennais|2|2\nR|2026-10-22|Olympiacos FC|AC Sparta Praha|1|0",
+    "materialKey": "v3|M|bz-601301|Stade Rennais|Olympiacos FC|europa|2026-11-04T15:30:00+00:0|NS\nP|1.2|1.61|0.273|0.27|0.457|0.533|0.571\nB|0.445|0.263|0.292|1.2|1.61|0.546|0.583|1-1|0.565\nB2|H|0.445|no|no\nW||clear|14|\nT|13|Stade Rennais|3|5||\nT|5|Olympiacos FC|3|9||\nS|Armando González|Olympiacos FC|2|3\nR|2026-10-15|Stade Rennais|OFI Crete|2|1\nR|2026-10-15|Olympique de Marseille|Olympiacos FC|0|1\nR|2026-10-22|Juventus|Stade Rennais|2|2\nR|2026-10-22|Olympiacos FC|AC Sparta Praha|1|0"
+  },
+  "fd-575386": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "AEK y Real Madrid en la Champions",
+        "bullets": [
+          "El duelo programado para el 4 de noviembre de 2026 enfrenta a PAE AEK y Real Madrid CF en la Champions League; el registro figura como no iniciado.",
+          "En la tabla consignada, Real Madrid CF aparece 4º con 9 puntos y 3 partidos registrados; no se incluye la fila del AEK.",
+          "En goleadores, Barnabás Varga (PAE AEK) suma 2 y Kylian Mbappé (Real Madrid CF) 3; la fila añade 5 y 3 sin etiqueta explícita."
+        ],
+        "stats": [
+          {
+            "value": "4º",
+            "label": "posición del Real Madrid"
+          },
+          {
+            "value": "9",
+            "label": "puntos registrados"
+          },
+          {
+            "value": "3",
+            "label": "partidos en tabla"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost: Real Madrid favorito",
+        "bullets": [
+          "Poisson GoatLab reparte 12,8% para el AEK, 17,8% para el empate y 69,3% para el Real Madrid, con 1,08 y 2,607 como parámetros de goles.",
+          "CatBoost Bzzoiro sitúa sus probabilidades en 10,0% para el AEK, 14,3% para el empate y 75,7% para el Real Madrid; añade 71,7% y 57,7% sin etiquetas desarrolladas.",
+          "La estimación declarada B2 coincide en 75,7% para la etiqueta A y marca 'no' en goles totales y ambos anotan, sin desglose adicional.",
+          "Las lecturas P y B apuntan en la misma dirección; la diferencia de 6,4 puntos en la victoria visitante no constituye una desviación clara."
+        ],
+        "stats": [
+          {
+            "value": "69,3%",
+            "label": "victoria visitante Poisson"
+          },
+          {
+            "value": "75,7%",
+            "label": "victoria visitante CatBoost"
+          },
+          {
+            "value": "71,7%",
+            "label": "dato adicional de B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes: dos empates en 2002",
+        "bullets": [
+          "Los dos antecedentes HR entre Real Madrid y AEK Athens terminaron 2-2 (22-10-2002) y 3-3 (02-10-2002).",
+          "El resumen H presenta 2, 0, 2, 0 y 5 sin etiquetas; los 2 cruces documentados en HR terminaron en empate."
+        ],
+        "stats": [
+          {
+            "value": "2-2",
+            "label": "marcador en 2002"
+          },
+          {
+            "value": "3-3",
+            "label": "marcador en 2002"
+          },
+          {
+            "value": "2",
+            "label": "cruces documentados"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Real Madrid en racha; AEK con caídas",
+        "bullets": [
+          "Real Madrid enlaza seis registros: 1-0 ante Villarreal, 3-4 en Roma, 4-1 ante Sevilla, 4-1 ante Leipzig, 1-2 en Barcelona y 0-3 en Racing.",
+          "El AEK registra 1-0 ante LASK Linz, 1-3 frente a Shakhtar y 1-5 ante Manchester City, en lectura desde el AEK."
+        ],
+        "stats": [
+          {
+            "value": "1-3",
+            "label": "AEK ante Shakhtar"
+          },
+          {
+            "value": "1-5",
+            "label": "AEK ante Manchester City"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves: favoritismo, goles y contexto",
+        "bullets": [
+          "El Real Madrid llega con seis resultados favorables y una producción goleadora alta; el AEK acumula derrotas amplias ante Shakhtar y Manchester City.",
+          "La probabilidad de victoria visitante es mayoritaria en P (69,3%) y B (75,7%), mientras el empate se sitúa entre 14,3% y 17,8%.",
+          "El bloque W solo consigna 18, sin sede ni unidad explícita; no hay datos de bajas, alineaciones ni M2."
+        ],
+        "stats": [
+          {
+            "value": "69,3%",
+            "label": "victoria visitante en P"
+          },
+          {
+            "value": "75,7%",
+            "label": "victoria visitante en B"
+          },
+          {
+            "value": "18",
+            "label": "registro climático"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin bloque A",
+        "detail": "No se aporta la estimación API-Football; no puede contrastarse su distribución, su mayor probabilidad ni su umbral de goles."
+      },
+      {
+        "label": "Filas condensadas",
+        "detail": "B, B2 y H incluyen campos sin etiqueta explícita; se citan como registros del proveedor y no se corrigen."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No se aportan L, alineaciones confirmadas ni estado de disponibilidad de jugadores."
+      },
+      {
+        "label": "Sede y clima incompletos",
+        "detail": "W solo consigna 18, sin sede, unidad ni condiciones detalladas."
+      },
+      {
+        "label": "M2 ausente",
+        "detail": "No hay consenso externo en porcentaje para comparar con P y B."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "No se detecta una desviación porcentual clara: P y B coinciden en el favoritismo del Real Madrid (69,3% y 75,7%) y B2 repite 75,7%. Las diferencias son moderadas y las casillas condensadas de B/B2 se tratan como lecturas declaradas, no como correcciones."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-03T23:27:23.875Z",
+    "inputKey": "v3|M|fd-575386|PAE AEK|Real Madrid CF|champions|2026-11-04T17:45:00Z|NS\nP|1.08|2.607|0.128|0.178|0.693|0.712|0.619\nB|0.1|0.143|0.757|2.11|1.41|0.717|0.577|2-1|0.527\nB2|A|0.757|no|no\nH|2|0|2|0|5\nW|||18|\nT|4|Real Madrid CF|3|9||\nS|Barnabás Varga|PAE AEK|2|5\nS|Kylian Mbappé|Real Madrid CF|3|3\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nHR|2002-10-22|Real Madrid|AEK Athens|2|2\nHR|2002-10-02|AEK Athens|Real Madrid|3|3",
+    "materialKey": "v3|M|fd-575386|PAE AEK|Real Madrid CF|champions|2026-11-04T17:45:00Z|NS\nP|1.08|2.607|0.128|0.178|0.693|0.712|0.619\nB|0.1|0.143|0.757|2.11|1.41|0.717|0.577|2-1|0.527\nB2|A|0.757|no|no\nH|2|0|2|0|5\nW|||18|\nT|4|Real Madrid CF|3|9||\nS|Barnabás Varga|PAE AEK|2|5\nS|Kylian Mbappé|Real Madrid CF|3|3\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nHR|2002-10-22|Real Madrid|AEK Athens|2|2\nHR|2002-10-02|AEK Athens|Real Madrid|3|3"
   }
 }

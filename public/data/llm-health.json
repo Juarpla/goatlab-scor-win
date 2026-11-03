@@ -1,65 +1,6 @@
 {
-  "updatedAt": "2026-11-03T14:40:17.203Z",
+  "updatedAt": "2026-11-03T23:41:43.329Z",
   "runs": [
-    {
-      "at": "2026-10-23T21:35:47.930Z",
-      "task": "image-prompts",
-      "matchId": "coventry-city-vs-fulham-2026-10-24",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1732,
-        "outputTokens": 7121
-      }
-    },
-    {
-      "at": "2026-10-23T21:35:53.097Z",
-      "task": "video-prompts",
-      "matchId": "coventry-city-vs-fulham-2026-10-24",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1629,
-        "outputTokens": 409
-      }
-    },
-    {
-      "at": "2026-10-23T21:38:32.209Z",
-      "task": "motion-prompts",
-      "matchId": "rayo-vallecano-vs-elche-2026-10-24",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2469,
-            "outputTokens": 3240
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 99026
-        }
-      ],
-      "usage": {
-        "inputTokens": 2575,
-        "outputTokens": 10935
-      }
-    },
     {
       "at": "2026-10-23T21:40:06.087Z",
       "task": "motion-prompts",
@@ -6506,6 +6447,159 @@
         "inputTokens": 1707,
         "outputTokens": 6653
       }
+    },
+    {
+      "at": "2026-11-03T23:25:49.878Z",
+      "matchId": "bz-601301",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 985,
+        "outputTokens": 8564
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "dc2121a9-1fa9-4164-93ee-d78a6f684cee"
+    },
+    {
+      "at": "2026-11-03T23:27:23.875Z",
+      "matchId": "fd-575386",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1141,
+        "outputTokens": 10776
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "9fd90919-8647-4bc0-8f7d-3a05c234e17b"
+    },
+    {
+      "at": "2026-11-03T23:41:35.626Z",
+      "matchId": "fd-575387",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1149,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 121123
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1100,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 151689
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1148,
+            "outputTokens": 1554
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11028
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1149,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 78626
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1100,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 150140
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1148,
+            "outputTokens": 1625
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 43467
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1093,
+            "outputTokens": 4140
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 71310
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1093,
+        "outputTokens": 4140
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
