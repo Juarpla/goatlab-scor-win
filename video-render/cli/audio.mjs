@@ -7,6 +7,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertAudioInput, assertMatchId, audioFiles, matchAudioDir } from '../contract/layout.js';
+import { formatScripts } from '../contract/youtube-script.js';
 
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '../..');
 
@@ -63,6 +64,16 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (command === 'prepare') {
       const dir = prepareAudio(ROOT, match);
       console.log(`audio: carpeta lista: ${relative(ROOT, dir)}/`);
+      const scripts = formatScripts(ROOT, match);
+      console.log('');
+      if (scripts) {
+        console.log(scripts);
+        console.log('');
+        console.log('audio: graba uno de estos guiones tal cual y pásalo con --script-n=<n> al renderizar.');
+      } else {
+        console.log(`audio: no hay guiones publicados para ${match}; genéralos con: gh workflow run 2-scripting.yml -f match=${match}`);
+      }
+      console.log('');
       console.log('audio: deja ahí la grabación (mp3, wav, m4a, ogg, flac, aac) y avisa cuando esté. No se renderiza hasta que el audio exista.');
     } else {
       const result = checkAudio(ROOT, match, flags.audio || null);

@@ -140,7 +140,9 @@ Run this immediately after the user picks the match:
 node video-render/cli/audio.mjs prepare <id>
 ```
 
-It creates `video-render/audios/<id>/` and prints the path. Tell the user:
+It creates `video-render/audios/<id>/` and prints the path followed by every
+published script of the match. Paste the path and the full script block in the
+chat; do not summarize or drop scripts. Then tell the user:
 
 > Deja la grabación en `video-render/audios/<id>/` y avísame cuando esté.
 

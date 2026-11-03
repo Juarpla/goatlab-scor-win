@@ -65,8 +65,9 @@ pnpm video:layout
 
 - `cli/render.mjs` is the production entry point. It parses arguments, resolves
   the media pack and folders, runs the pipeline and validates the MP4.
-- `cli/audio.mjs` creates `audios/<match-id>/` before the recording exists and
-  validates that exactly one audio is available before a render.
+- `cli/audio.mjs` creates `audios/<match-id>/` before the recording exists,
+  prints the published YouTube scripts and validates that exactly one audio is
+  available before a render.
 - `cli/check-layout.mjs` walks the media tree and exits non-zero on any file
   that breaks the contract.
 - `bench/render-input.mjs` copies a composition into an isolated directory so
@@ -120,7 +121,8 @@ the R2/Agnes keys if media banks are generated.
 
 ## Usage
 
-Create the match folder before the recording exists and wait for the user:
+Create the match folder before the recording exists; the command prints the
+published scripts and then waits for the user:
 
 ```sh
 node video-render/cli/audio.mjs prepare <match-id>
@@ -128,9 +130,11 @@ node video-render/cli/audio.mjs prepare <match-id>
 node video-render/cli/audio.mjs check <match-id>
 ```
 
-`prepare` creates `audios/<match-id>/`. `check` exits non-zero when the folder
-has no audio, or when it has several and no `--audio` was given. The render CLI
-then uses the only audio it finds.
+`prepare` creates `audios/<match-id>/` and prints every script in
+`public/data/youtube-scripts/<match-id>.json`; paste that block in the chat so the
+recording follows one narration. `check` exits non-zero when the folder has no
+audio, or when it has several and no `--audio` was given. The render CLI then
+uses the only audio it finds.
 
 ```sh
 node --env-file=.env video-render/cli/render.mjs \
