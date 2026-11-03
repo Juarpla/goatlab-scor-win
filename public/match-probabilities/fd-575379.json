@@ -4,7 +4,7 @@
   "away": "FC Internazionale Milano",
   "competition": "champions",
   "kickoff": "2026-11-03T20:00:00Z",
-  "updatedAt": "2026-11-03T00:58:32.902Z",
+  "updatedAt": "2026-11-03T13:59:32.081Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.993
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.91,
-      "away": 1.797
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 3,
       "away": 3
@@ -26,7 +23,7 @@
       "FC Internazionale Milano": null
     },
     "scorers": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": null
@@ -37,11 +34,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 344
+      "rows": 350
     },
     "venue": null
   },
@@ -105,179 +102,76 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.71,
-    "noGoal": 0.025,
+    "lambdaTotal": 3.79,
+    "noGoal": 0.023,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.461
+        "p": 0.469
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.248
+        "p": 0.249
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.134
+        "p": 0.132
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.072
+        "p": 0.07
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.039
+        "p": 0.037
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.021
+        "p": 0.02
       }
     ],
-    "firstHome": 0.503,
-    "firstAway": 0.473
+    "firstHome": 0.464,
+    "firstAway": 0.514
   },
   "scorers": {
     "home": null,
     "away": null
   },
   "hasScorers": false,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.223,
-      "draw": 0.221,
-      "away": 0.556,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 2.02,
-      "away": 1.6
-    },
-    "over15": 0.853,
-    "over25": 0.6759999999999999,
-    "over35": 0.47100000000000003,
-    "btts": 0.6559999999999999,
-    "score": "1-1",
-    "cornersOver95": 0.451,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.556,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.5556,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T13:12:08.543Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.468,
-      "draw": 0.232,
-      "away": 0.3
-    },
-    "doubleChance": {
-      "12": 0.768,
-      "1X": 0.7,
-      "X2": 0.532
-    },
-    "dnb": {
-      "home": 0.61,
-      "away": 0.39
-    },
-    "totals": {
-      "over15": 0.885,
-      "under15": 0.115,
-      "over25": 0.701,
-      "under25": 0.299,
-      "over35": 0.489,
-      "under35": 0.511
-    },
-    "btts": {
-      "yes": 0.701,
-      "no": 0.299
-    },
-    "cleanSheet": {
-      "home": 0.202,
-      "away": 0.133
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.109,
-        "share": 0.2766497461928934
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.087,
-        "share": 0.22081218274111672
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.07,
-        "share": 0.17766497461928935
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.069,
-        "share": 0.1751269035532995
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.059,
-        "share": 0.149746192893401
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 2,
-    "homeWins": 0,
-    "draws": 0,
-    "awayWins": 2,
-    "avgTotalGoals": 2.5,
-    "recent": [
-      {
-        "eventId": 304590,
-        "date": "2025-03-11T20:00:00+00:00",
-        "home": "Inter",
-        "away": "Feyenoord",
-        "homeTeamId": 77,
-        "awayTeamId": 138,
-        "homeScore": 2,
-        "awayScore": 1
-      },
-      {
-        "eventId": 304585,
-        "date": "2025-03-05T17:45:00+00:00",
-        "home": "Feyenoord",
-        "away": "Inter",
-        "homeTeamId": 138,
-        "awayTeamId": 77,
-        "homeScore": 0,
-        "awayScore": 2
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -293,7 +187,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 3.7
@@ -304,7 +198,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 9.6
@@ -314,7 +208,7 @@
     "home": {
       "shots": 15.05,
       "shotsOnTarget": 6.08,
-      "xg": 2.02,
+      "xg": 2.05,
       "corners": 4.66,
       "fouls": 11.04,
       "yellowCards": 1.85,
@@ -325,7 +219,7 @@
     "away": {
       "shots": 16.78,
       "shotsOnTarget": 6.41,
-      "xg": 1.6,
+      "xg": 1.89,
       "corners": 4.97,
       "fouls": 10.67,
       "yellowCards": 1.83,
@@ -417,9 +311,9 @@
       "away": 0.388
     },
     "lastGoal": {
-      "home": 0.503,
-      "away": 0.473,
-      "noGoal": 0.025
+      "home": 0.464,
+      "away": 0.514,
+      "noGoal": 0.023
     },
     "cornerRace": {
       "3": {

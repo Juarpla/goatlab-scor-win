@@ -4,7 +4,7 @@
   "away": "Sporting Clube de Portugal",
   "competition": "champions",
   "kickoff": "2026-11-03T17:45:00Z",
-  "updatedAt": "2026-11-03T00:58:32.902Z",
+  "updatedAt": "2026-11-03T13:59:32.081Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.533
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.43,
-      "away": 1.622
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 3,
       "away": 3
@@ -44,7 +41,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -55,11 +52,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 344
+      "rows": 350
     },
     "venue": null
   },
@@ -123,42 +120,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.05,
-    "noGoal": 0.047,
+    "lambdaTotal": 2.97,
+    "noGoal": 0.051,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.399
+        "p": 0.391
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.24
+        "p": 0.238
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.144
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.087
+        "p": 0.088
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.052
+        "p": 0.054
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.031
+        "p": 0.033
       }
     ],
-    "firstHome": 0.446,
-    "firstAway": 0.506
+    "firstHome": 0.46,
+    "firstAway": 0.489
   },
   "scorers": {
     "home": null,
@@ -168,153 +165,50 @@
         "goals": 4,
         "matches": 3,
         "share": 0.5,
-        "rate": 0.81,
-        "anytime": 0.556,
-        "first": 0.266
+        "rate": 0.77,
+        "anytime": 0.535,
+        "first": 0.258
       },
       {
         "player": "Luis Suárez",
         "goals": 4,
         "matches": 3,
         "share": 0.5,
-        "rate": 0.81,
-        "anytime": 0.556,
-        "first": 0.266
+        "rate": 0.77,
+        "anytime": 0.535,
+        "first": 0.258
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.26,
-      "draw": 0.255,
-      "away": 0.484,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.42,
-      "away": 1.71
-    },
-    "over15": 0.785,
-    "over25": 0.5670000000000001,
-    "over35": 0.359,
-    "btts": 0.591,
-    "score": "1-1",
-    "cornersOver95": 0.43200000000000005,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.484,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4844,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T13:12:08.004Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.31,
-      "draw": 0.256,
-      "away": 0.434
-    },
-    "doubleChance": {
-      "12": 0.744,
-      "1X": 0.566,
-      "X2": 0.69
-    },
-    "dnb": {
-      "home": 0.416,
-      "away": 0.584
-    },
-    "totals": {
-      "over15": 0.83,
-      "under15": 0.17,
-      "over25": 0.605,
-      "under25": 0.395,
-      "over35": 0.382,
-      "under35": 0.618
-    },
-    "btts": {
-      "yes": 0.632,
-      "no": 0.368
-    },
-    "cleanSheet": {
-      "home": 0.181,
-      "away": 0.242
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.114,
-        "share": 0.27941176470588236
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.091,
-        "share": 0.2230392156862745
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.075,
-        "share": 0.1838235294117647
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.064,
-        "share": 0.1568627450980392
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.064,
-        "share": 0.1568627450980392
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 2,
-    "homeWins": 0,
-    "draws": 0,
-    "awayWins": 2,
-    "avgTotalGoals": 1,
-    "recent": [
-      {
-        "eventId": 475113,
-        "date": "2008-11-04T19:45:00+00:00",
-        "home": "Sporting CP",
-        "away": "Shakhtar Donetsk",
-        "homeTeamId": 22,
-        "awayTeamId": 402,
-        "homeScore": 1,
-        "awayScore": 0
-      },
-      {
-        "eventId": 475105,
-        "date": "2008-10-22T18:45:00+00:00",
-        "home": "Shakhtar Donetsk",
-        "away": "Sporting CP",
-        "homeTeamId": 402,
-        "awayTeamId": 22,
-        "homeScore": 0,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -330,7 +224,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 3.3
@@ -341,7 +235,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 9.4
@@ -351,7 +245,7 @@
     "home": {
       "shots": 14.9,
       "shotsOnTarget": 5.66,
-      "xg": 1.42,
+      "xg": 1.76,
       "corners": 4.68,
       "fouls": 11.31,
       "yellowCards": 1.67,
@@ -362,7 +256,7 @@
     "away": {
       "shots": 14.9,
       "shotsOnTarget": 5.66,
-      "xg": 1.71,
+      "xg": 1.76,
       "corners": 4.68,
       "fouls": 11.31,
       "yellowCards": 1.67,
@@ -413,7 +307,7 @@
       "home": {
         "shots": "media",
         "shotsOnTarget": "media",
-        "xg": "Bzzoiro",
+        "xg": "media",
         "corners": "media",
         "fouls": "media",
         "yellowCards": "media",
@@ -424,7 +318,7 @@
       "away": {
         "shots": "media",
         "shotsOnTarget": "media",
-        "xg": "Bzzoiro",
+        "xg": "media",
         "corners": "media",
         "fouls": "media",
         "yellowCards": "media",
@@ -437,7 +331,7 @@
       "media",
       "Bzzoiro"
     ],
-    "xgSource": "Bzzoiro",
+    "xgSource": "media",
     "shortSample": true,
     "source": "media+Bzzoiro"
   },
@@ -454,9 +348,9 @@
       "away": 0.386
     },
     "lastGoal": {
-      "home": 0.446,
-      "away": 0.506,
-      "noGoal": 0.047
+      "home": 0.46,
+      "away": 0.489,
+      "noGoal": 0.051
     },
     "cornerRace": {
       "3": {
@@ -560,10 +454,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "Se marca revisión por el 0,432 de B, incompatible con una probabilidad de 1-1 dado el 25,5% de empate, y por la etiqueta local/visitante de H frente al detalle HR. Falta A de API-Football y la fila de Shakhtar en tabla; B2 no aporta goles ni ambos anotan.",
+    "flag": false,
+    "note": "No hay desviaciones porcentuales claras: 38,7% visitante y 57,1% de goles altos resultan compatibles con un duelo cerrado y la forma de Sporting. La duplicidad de Luis Suárez afecta la presentación de goleadores, no los porcentajes.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-01T22:28:34.331Z"
+    "generatedAt": "2026-11-03T14:01:32.623Z"
   }
 }

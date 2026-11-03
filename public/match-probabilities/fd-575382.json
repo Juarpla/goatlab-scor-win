@@ -4,7 +4,7 @@
   "away": "Paris Saint-Germain FC",
   "competition": "champions",
   "kickoff": "2026-11-03T20:00:00Z",
-  "updatedAt": "2026-11-03T00:58:32.902Z",
+  "updatedAt": "2026-11-03T13:59:32.081Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 2.76
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.67,
-      "away": 2.36
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 3
@@ -62,22 +59,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-03T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-03T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 344
+      "rows": 350
     },
     "venue": {
       "city": "Vila-real",
@@ -144,13 +141,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 4.03,
-    "noGoal": 0.018,
+    "lambdaTotal": 4.38,
+    "noGoal": 0.013,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.489
+        "p": 0.518
       },
       {
         "from": 15,
@@ -160,26 +157,26 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.128
+        "p": 0.12
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.065
+        "p": 0.058
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.033
+        "p": 0.028
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.017
+        "p": 0.013
       }
     ],
-    "firstHome": 0.407,
-    "firstAway": 0.575
+    "firstHome": 0.365,
+    "firstAway": 0.622
   },
   "scorers": {
     "home": [
@@ -188,9 +185,9 @@
         "goals": 2,
         "matches": 3,
         "share": 0.9,
-        "rate": 1.5,
-        "anytime": 0.778,
-        "first": 0.373
+        "rate": 1.46,
+        "anytime": 0.767,
+        "first": 0.333
       }
     ],
     "away": [
@@ -199,141 +196,59 @@
         "goals": 3,
         "matches": 3,
         "share": 0.3,
-        "rate": 0.71,
-        "anytime": 0.507,
-        "first": 0.176
+        "rate": 0.83,
+        "anytime": 0.563,
+        "first": 0.189
       },
       {
         "player": "Ousmane Dembélé",
         "goals": 3,
         "matches": 3,
         "share": 0.3,
-        "rate": 0.71,
-        "anytime": 0.507,
-        "first": 0.176
+        "rate": 0.83,
+        "anytime": 0.563,
+        "first": 0.189
       },
       {
         "player": "Désiré Doué",
         "goals": 2,
         "matches": 3,
         "share": 0.2,
-        "rate": 0.47,
-        "anytime": 0.376,
-        "first": 0.117
+        "rate": 0.55,
+        "anytime": 0.424,
+        "first": 0.126
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.204,
-      "draw": 0.209,
-      "away": 0.5870000000000001,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.72,
-      "away": 1.96
-    },
-    "over15": 0.866,
-    "over25": 0.7,
-    "over35": 0.496,
-    "btts": 0.6629999999999999,
-    "score": "1-1",
-    "cornersOver95": 0.48200000000000004,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.587,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.5872,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T13:12:09.505Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.336,
-      "draw": 0.232,
-      "away": 0.432
-    },
-    "doubleChance": {
-      "12": 0.768,
-      "1X": 0.568,
-      "X2": 0.664
-    },
-    "dnb": {
-      "home": 0.438,
-      "away": 0.562
-    },
-    "totals": {
-      "over15": 0.89,
-      "under15": 0.11,
-      "over25": 0.711,
-      "under25": 0.289,
-      "over35": 0.502,
-      "under35": 0.498
-    },
-    "btts": {
-      "yes": 0.714,
-      "no": 0.286
-    },
-    "cleanSheet": {
-      "home": 0.141,
-      "away": 0.179
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.104,
-        "share": 0.26943005181347146
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.083,
-        "share": 0.2150259067357513
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.073,
-        "share": 0.18911917098445594
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.072,
-        "share": 0.1865284974093264
-      },
-      {
-        "home": 1,
-        "away": 3,
-        "p": 0.054,
-        "share": 0.13989637305699482
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -349,7 +264,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 3.2
@@ -360,7 +275,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 9.9
@@ -370,7 +285,7 @@
     "home": {
       "shots": 15.39,
       "shotsOnTarget": 5.9,
-      "xg": 1.72,
+      "xg": 1.71,
       "corners": 5.14,
       "fouls": 10.78,
       "yellowCards": 1.56,
@@ -381,7 +296,7 @@
     "away": {
       "shots": 15.13,
       "shotsOnTarget": 6.53,
-      "xg": 1.96,
+      "xg": 1.85,
       "corners": 4.75,
       "fouls": 10.82,
       "yellowCards": 1.68,
@@ -472,9 +387,9 @@
       "away": 0.409
     },
     "lastGoal": {
-      "home": 0.407,
-      "away": 0.575,
-      "noGoal": 0.018
+      "home": 0.365,
+      "away": 0.622,
+      "noGoal": 0.013
     },
     "cornerRace": {
       "3": {
@@ -501,13 +416,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 7,
-      "condition": "clear",
-      "sampledAt": "2026-11-03T20:00:00Z",
-      "source": "bzzoiro"
+      "temp": 13.8,
+      "precipitation": 0,
+      "weathercode": 3,
+      "wind": 5,
+      "condition": null,
+      "sampledAt": "2026-11-03T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Estadio de la Cerámica",
@@ -545,7 +460,7 @@
         "sample": 5
       },
       "season": {
-        "position": 8,
+        "position": 9,
         "played": 11,
         "gf": 15,
         "ga": 15,
@@ -588,10 +503,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "No se aprecia desvío porcentual claro entre P y B: 0.610 y 0.587 como lecturas visitantes son coherentes. La salvedad es 0.482 junto a 1-1, sin etiqueta que permita interpretarlo como probabilidad.",
+    "flag": false,
+    "note": "No se detectan desviaciones claras: 20,6+18,4+61,0 suma 100% y el Poisson acompaña el liderato y el mayor xG del PSG. Faltan B, B2, A y M2 para contraste.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-03T01:00:18.444Z"
+    "generatedAt": "2026-11-03T14:04:19.965Z"
   }
 }

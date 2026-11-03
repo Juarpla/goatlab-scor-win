@@ -4,7 +4,7 @@
   "away": "VfB Stuttgart",
   "competition": "champions",
   "kickoff": "2026-11-03T17:45:00Z",
-  "updatedAt": "2026-11-03T00:58:32.902Z",
+  "updatedAt": "2026-11-03T13:59:32.081Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 2.453
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.895,
-      "away": 1.906
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 3,
       "away": 3
@@ -44,22 +41,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-03T17:45:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-03T17:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 344
+      "rows": 350
     },
     "venue": {
       "city": "Estambul",
@@ -126,13 +123,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.8,
-    "noGoal": 0.022,
+    "lambdaTotal": 3.89,
+    "noGoal": 0.02,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.469
+        "p": 0.477
       },
       {
         "from": 15,
@@ -142,26 +139,26 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.132
+        "p": 0.13
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.07
+        "p": 0.068
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.037
+        "p": 0.036
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.02
+        "p": 0.019
       }
     ],
-    "firstHome": 0.487,
-    "firstAway": 0.49
+    "firstHome": 0.362,
+    "firstAway": 0.617
   },
   "scorers": {
     "home": [
@@ -170,9 +167,9 @@
         "goals": 2,
         "matches": 3,
         "share": 0.9,
-        "rate": 1.71,
-        "anytime": 0.818,
-        "first": 0.449
+        "rate": 1.3,
+        "anytime": 0.726,
+        "first": 0.333
       }
     ],
     "away": [
@@ -181,123 +178,41 @@
         "goals": 4,
         "matches": 3,
         "share": 0.9,
-        "rate": 1.72,
-        "anytime": 0.82,
-        "first": 0.451
+        "rate": 2.21,
+        "anytime": 0.89,
+        "first": 0.568
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.43,
-      "draw": 0.24100000000000002,
-      "away": 0.32799999999999996,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.35,
-      "away": 1.36
-    },
-    "over15": 0.8490000000000001,
-    "over25": 0.672,
-    "over35": 0.473,
-    "btts": 0.677,
-    "score": "2-1",
-    "cornersOver95": 0.5329999999999999,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.43,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4305,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T13:12:07.496Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.587,
-      "draw": 0.208,
-      "away": 0.205
-    },
-    "doubleChance": {
-      "12": 0.792,
-      "1X": 0.795,
-      "X2": 0.413
-    },
-    "dnb": {
-      "home": 0.741,
-      "away": 0.259
-    },
-    "totals": {
-      "over15": 0.892,
-      "under15": 0.108,
-      "over25": 0.716,
-      "under25": 0.284,
-      "over35": 0.508,
-      "under35": 0.492
-    },
-    "btts": {
-      "yes": 0.68,
-      "no": 0.32
-    },
-    "cleanSheet": {
-      "home": 0.257,
-      "away": 0.095
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.107,
-        "share": 0.27020202020202017
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.086,
-        "share": 0.21717171717171715
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.072,
-        "share": 0.1818181818181818
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.068,
-        "share": 0.1717171717171717
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.063,
-        "share": 0.1590909090909091
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -313,7 +228,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 3.7
@@ -324,7 +239,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 10.7
@@ -334,7 +249,7 @@
     "home": {
       "shots": 14.92,
       "shotsOnTarget": 5.26,
-      "xg": 2.35,
+      "xg": 1.68,
       "corners": 5.4,
       "fouls": 10.89,
       "yellowCards": 1.84,
@@ -345,7 +260,7 @@
     "away": {
       "shots": 15.4,
       "shotsOnTarget": 5.51,
-      "xg": 1.36,
+      "xg": 1.81,
       "corners": 5.29,
       "fouls": 11.64,
       "yellowCards": 1.85,
@@ -436,9 +351,9 @@
       "away": 0.394
     },
     "lastGoal": {
-      "home": 0.487,
-      "away": 0.49,
-      "noGoal": 0.022
+      "home": 0.362,
+      "away": 0.617,
+      "noGoal": 0.02
     },
     "cornerRace": {
       "3": {
@@ -465,13 +380,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 19.2,
+      "temp": 16.8,
+      "precipitation": 0.6,
+      "weathercode": 61,
+      "wind": 10.5,
       "condition": null,
-      "sampledAt": "2026-11-03T17:45:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-03T17:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "RAMS Park",
@@ -546,10 +461,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "Revisión activa: P inclina el cruce al visitante (0.59) y B al local (0.43); los parámetros de goles también difieren. El 0.533 ligado a 2-1 no puede ser probabilidad exacta si la victoria local es 0.43. B2 añade dos no sin etiqueta y faltan A, H/HR, M2 y L.",
+    "flag": false,
+    "note": "No se aprecian desviaciones porcentuales claras: el 59,0% visitante y el 74,6% de goles altos son coherentes con la forma y la tabla de Stuttgart. La ausencia de otras capas limita la auditoría.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-01T22:26:33.194Z"
+    "generatedAt": "2026-11-03T14:01:32.610Z"
   }
 }

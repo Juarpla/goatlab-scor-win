@@ -4,7 +4,7 @@
   "away": "Aston Villa FC",
   "competition": "champions",
   "kickoff": "2026-11-03T20:00:00Z",
-  "updatedAt": "2026-11-03T00:58:32.902Z",
+  "updatedAt": "2026-11-03T13:59:32.081Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.917
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.62,
-      "away": 1.519
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -62,22 +59,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-03T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-03T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-01T13:11:19.193Z",
+      "updatedAt": "2026-11-03T13:58:34.703Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 344
+      "rows": 350
     },
     "venue": {
       "city": "Barcelona",
@@ -144,13 +141,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 4.14,
-    "noGoal": 0.016,
+    "lambdaTotal": 4.26,
+    "noGoal": 0.014,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.498
+        "p": 0.508
       },
       {
         "from": 15,
@@ -160,26 +157,26 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.125
+        "p": 0.123
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.063
+        "p": 0.06
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.032
+        "p": 0.03
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.016
+        "p": 0.015
       }
     ],
-    "firstHome": 0.623,
-    "firstAway": 0.361
+    "firstHome": 0.542,
+    "firstAway": 0.444
   },
   "scorers": {
     "home": [
@@ -188,18 +185,18 @@
         "goals": 2,
         "matches": 3,
         "share": 0.5,
-        "rate": 1.31,
-        "anytime": 0.73,
-        "first": 0.316
+        "rate": 1.17,
+        "anytime": 0.69,
+        "first": 0.275
       },
       {
         "player": "Lamine Yamal",
         "goals": 2,
         "matches": 3,
         "share": 0.5,
-        "rate": 1.31,
-        "anytime": 0.73,
-        "first": 0.316
+        "rate": 1.17,
+        "anytime": 0.69,
+        "first": 0.275
       }
     ],
     "away": [
@@ -208,141 +205,59 @@
         "goals": 3,
         "matches": 3,
         "share": 0.375,
-        "rate": 0.57,
-        "anytime": 0.434,
-        "first": 0.138
+        "rate": 0.72,
+        "anytime": 0.513,
+        "first": 0.169
       },
       {
         "player": "Ross Barkley",
         "goals": 3,
         "matches": 3,
         "share": 0.375,
-        "rate": 0.57,
-        "anytime": 0.434,
-        "first": 0.138
+        "rate": 0.72,
+        "anytime": 0.513,
+        "first": 0.169
       },
       {
         "player": "Emiliano Buendía",
         "goals": 2,
         "matches": 3,
         "share": 0.25,
-        "rate": 0.38,
-        "anytime": 0.316,
-        "first": 0.092
+        "rate": 0.48,
+        "anytime": 0.381,
+        "first": 0.113
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.759,
-      "draw": 0.14300000000000002,
-      "away": 0.099,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.9,
-      "away": 1.12
-    },
-    "over15": 0.903,
-    "over25": 0.777,
-    "over35": 0.588,
-    "btts": 0.632,
-    "score": "2-1",
-    "cornersOver95": 0.494,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.759,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.7588,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-01T13:12:09.870Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.731,
-      "draw": 0.157,
-      "away": 0.112
-    },
-    "doubleChance": {
-      "12": 0.843,
-      "1X": 0.888,
-      "X2": 0.269
-    },
-    "dnb": {
-      "home": 0.867,
-      "away": 0.133
-    },
-    "totals": {
-      "over15": 0.915,
-      "under15": 0.085,
-      "over25": 0.764,
-      "under25": 0.236,
-      "over35": 0.569,
-      "under35": 0.431
-    },
-    "btts": {
-      "yes": 0.642,
-      "no": 0.358
-    },
-    "cleanSheet": {
-      "home": 0.326,
-      "away": 0.055
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.103,
-        "share": 0.25944584382871533
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.082,
-        "share": 0.20654911838790932
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.075,
-        "share": 0.18891687657430728
-      },
-      {
-        "home": 3,
-        "away": 0,
-        "p": 0.073,
-        "share": 0.18387909319899243
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.064,
-        "share": 0.16120906801007556
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -358,7 +273,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 4.1
@@ -369,7 +284,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 344
+      "historyRows": 350
     },
     "source": "GoatLab",
     "expectedTotal": 9.4
@@ -379,7 +294,7 @@
     "home": {
       "shots": 16.81,
       "shotsOnTarget": 6.17,
-      "xg": 2.9,
+      "xg": 2.06,
       "corners": 5.43,
       "fouls": 12.14,
       "yellowCards": 2.16,
@@ -390,7 +305,7 @@
     "away": {
       "shots": 13.12,
       "shotsOnTarget": 5.45,
-      "xg": 1.12,
+      "xg": 1.64,
       "corners": 3.97,
       "fouls": 11.42,
       "yellowCards": 1.91,
@@ -481,9 +396,9 @@
       "away": 0.35
     },
     "lastGoal": {
-      "home": 0.623,
-      "away": 0.361,
-      "noGoal": 0.016
+      "home": 0.542,
+      "away": 0.444,
+      "noGoal": 0.014
     },
     "cornerRace": {
       "3": {
@@ -510,13 +425,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 5.9,
-      "condition": "unknown",
-      "sampledAt": "2026-11-03T20:00:00Z",
-      "source": "bzzoiro"
+      "temp": 11.3,
+      "precipitation": 6,
+      "weathercode": 63,
+      "wind": 7.4,
+      "condition": null,
+      "sampledAt": "2026-11-03T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Camp Nou",
@@ -583,7 +498,7 @@
         "sample": 5
       },
       "season": {
-        "position": 9,
+        "position": 10,
         "played": 9,
         "gf": 10,
         "ga": 13,
@@ -597,10 +512,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "Divergencia fuerte entre modelos: P da 0,474 local y B 0,759; en visitante P 0,317 frente a B 0,099. B2 repite 0,759. No hay A ni M2 para contraste; no se aprecia error factual, pero la dispersión es alta.",
+    "flag": false,
+    "note": "No se detectan desviaciones claras: 47,4+20,9+31,7 suma 100% y el Poisson favorece al local pese a que Aston Villa llega 2º. Faltan B, B2, A y M2 para contraste.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-02T06:46:51.133Z"
+    "generatedAt": "2026-11-03T14:04:19.954Z"
   }
 }
