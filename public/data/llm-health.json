@@ -1,134 +1,6 @@
 {
-  "updatedAt": "2026-11-02T07:14:10.283Z",
+  "updatedAt": "2026-11-03T01:09:44.426Z",
   "runs": [
-    {
-      "at": "2026-10-22T22:22:52.073Z",
-      "task": "motion-prompts",
-      "matchId": "rayo-vallecano-vs-elche-2026-10-24",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2469,
-            "outputTokens": 2771
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 62485
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2575,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 67971
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2640,
-            "outputTokens": 3537
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 25099
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2462,
-            "outputTokens": 4613
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 131660
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-23T05:04:26.180Z",
-      "task": "shorts",
-      "matchId": "arsenal-vs-everton-2026-10-24",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7254,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 83133
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7365,
-        "outputTokens": 9255
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "1d5c398a-48e9-4750-9ca8-de50ebb77737"
-    },
-    {
-      "at": "2026-10-23T05:06:12.370Z",
-      "task": "shorts",
-      "matchId": "chelsea-vs-tottenham-hotspur-2026-10-24",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7012,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 51836
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7148,
-        "outputTokens": 10511
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "d110fd1b-cbaf-41b2-b66b-e0de2b667345"
-    },
     {
       "at": "2026-10-23T05:08:14.029Z",
       "task": "image-prompts",
@@ -6447,6 +6319,110 @@
         "inputTokens": 1792,
         "outputTokens": 4193
       }
+    },
+    {
+      "at": "2026-11-03T01:00:18.444Z",
+      "matchId": "fd-575382",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1164,
+        "outputTokens": 11395
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "2e93b95e-453b-4f6f-bd7e-34de8aae1217"
+    },
+    {
+      "at": "2026-11-03T01:01:24.655Z",
+      "matchId": "fd-575384",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 987,
+        "outputTokens": 11338
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "e5045808-c15d-4392-83ad-4c1749ef4c02"
+    },
+    {
+      "at": "2026-11-03T01:09:35.286Z",
+      "matchId": "fd-575385",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 15000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1013,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 94784
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Streaming incompleto",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 172265
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1007,
+            "outputTokens": 1204
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8259
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 979,
+            "outputTokens": 5476
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 107597
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1013,
+        "outputTokens": 13008
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "12693b77-fbb1-4746-b61b-7106a93ba505"
     }
   ]
 }
