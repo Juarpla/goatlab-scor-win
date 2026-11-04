@@ -1,165 +1,6 @@
 {
-  "updatedAt": "2026-11-04T06:59:59.816Z",
+  "updatedAt": "2026-11-04T14:23:00.128Z",
   "runs": [
-    {
-      "at": "2026-10-24T11:13:56.174Z",
-      "task": "motion-prompts",
-      "matchId": "barcelona-vs-real-madrid-2026-10-25",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: presentaciones de motion inválidas; motion-prompts 1: faltan rótulos, transiciones o fuente; motion-prompts 2: presentaciones de motion inválidas; motion-prompts 2: faltan rótulos, transiciones o fuente; motion-prompts 3: presentaciones de motion inválidas; motion-prompts 3: faltan rótulos, transiciones o fuente; motion-prompts 4: presentaciones de motion inválidas; motion-prompts 4: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2394,
-            "outputTokens": 2533
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 81184
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2508,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 63820
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Se requieren entre 2 y 10 Motion Prompts; Cada Motion Prompt requiere las dos presentaciones",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2641,
-            "outputTokens": 4372
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 43212
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 1: los marcadores no coinciden con factIds; motion-prompts 2: los marcadores no coinciden con factIds; motion-prompts 3: los marcadores no coinciden con factIds; motion-prompts 4: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2387,
-            "outputTokens": 4043
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 66871
-        }
-      ],
-      "usage": null
-    },
-    {
-      "at": "2026-10-24T11:16:19.003Z",
-      "task": "motion-prompts",
-      "matchId": "barcelona-vs-real-madrid-2026-10-25",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2394,
-        "outputTokens": 2421
-      }
-    },
-    {
-      "at": "2026-10-24T20:59:33.609Z",
-      "task": "shorts",
-      "matchId": "athletic-club-vs-getafe-2026-10-25",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 4: falta Álex Berenguer",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7110,
-            "outputTokens": 2510
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 34688
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7226,
-        "outputTokens": 6815
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "73784b2f-cfc5-4305-b85b-93cbc6693789"
-    },
-    {
-      "at": "2026-10-24T21:00:19.095Z",
-      "task": "shorts",
-      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "usage": {
-        "inputTokens": 7186,
-        "outputTokens": 3193
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "9c19bb92-ebc6-4ca7-83d1-317ffcfb1d79"
-    },
-    {
-      "at": "2026-10-24T21:00:39.172Z",
-      "task": "image-prompts",
-      "matchId": "athletic-club-vs-getafe-2026-10-25",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1703,
-        "outputTokens": 675
-      }
-    },
-    {
-      "at": "2026-10-24T21:00:54.721Z",
-      "task": "image-prompts",
-      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1809,
-        "outputTokens": 657
-      }
-    },
     {
       "at": "2026-10-24T21:00:56.988Z",
       "task": "video-prompts",
@@ -6855,6 +6696,111 @@
       "maxTokens": 131072,
       "batchSize": 1,
       "callId": "f276415b-d1a9-49d1-be7d-30b82b7a2d01"
+    },
+    {
+      "at": "2026-11-04T14:18:55.004Z",
+      "matchId": "fd-575386",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1657,
+        "outputTokens": 26462
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "04f232a7-a2f2-418b-9f59-77d6bb4aaf58"
+    },
+    {
+      "at": "2026-11-04T14:18:55.004Z",
+      "matchId": "fd-575387",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "04f232a7-a2f2-418b-9f59-77d6bb4aaf58"
+    },
+    {
+      "at": "2026-11-04T14:20:06.077Z",
+      "matchId": "fd-575390",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1408,
+        "outputTokens": 12718
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "fa756326-9d05-42f9-85e2-0f67943980a3"
+    },
+    {
+      "at": "2026-11-04T14:20:06.077Z",
+      "matchId": "fd-575392",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "fa756326-9d05-42f9-85e2-0f67943980a3"
+    },
+    {
+      "at": "2026-11-04T14:22:47.602Z",
+      "matchId": "fd-575388",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1586,
+        "outputTokens": 24380
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "4a14f40f-5fa2-4135-b7ac-18437e040628"
+    },
+    {
+      "at": "2026-11-04T14:22:47.602Z",
+      "matchId": "fd-575394",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "4a14f40f-5fa2-4135-b7ac-18437e040628"
     }
   ]
 }

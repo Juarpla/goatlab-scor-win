@@ -3287,88 +3287,87 @@
     "materialKey": "v3|M|bz-601301|Stade Rennais|Olympiacos FC|europa|2026-11-04T15:30:00+00:0|NS\nP|1.2|1.61|0.273|0.27|0.457|0.533|0.571\nB|0.422|0.269|0.309|1.2|1.61|0.544|0.58|1-1|0.565\nB2|H|0.422|no|no\nW||clear|14|\nT|13|Stade Rennais|3|5||\nT|5|Olympiacos FC|3|9||\nS|Armando González|Olympiacos FC|2|3\nR|2026-10-15|Stade Rennais|OFI Crete|2|1\nR|2026-10-15|Olympique de Marseille|Olympiacos FC|0|1\nR|2026-10-22|Juventus|Stade Rennais|2|2\nR|2026-10-22|Olympiacos FC|AC Sparta Praha|1|0"
   },
   "fd-575386": {
+    "matchId": "fd-575386",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Panorama: AEK recibe al Real Madrid",
+        "title": "AEK y Real Madrid en la fase de liga",
         "bullets": [
-          "Partido de Champions League previsto para el 4 de noviembre de 2026 a las 17:45 UTC; PAE AEK actúa como local ante Real Madrid CF y el estado figura como no iniciado.",
-          "El bloque W solo aporta 18, sin sede ni condiciones meteorológicas detalladas, de modo que el contexto de sede queda incompleto.",
-          "No se aporta bloque de consenso externo M2; las referencias disponibles son P, B/B2, H/HR, T, S, R y W."
+          "PAE AEK y Real Madrid CF se enfrentan el 4 de noviembre de 2026 en la Champions; el bloque M fija el partido como NS.",
+          "En la tabla, Real Madrid CF aparece 5º con 9 puntos en 3 partidos; no se consigna la posición de AEK.",
+          "El bloque W indica 18 sin sede detallada, por lo que el contexto de clima y estadio queda incompleto."
         ],
         "stats": [
           {
-            "value": "17:45",
-            "label": "hora UTC"
-          },
-          {
-            "value": "18",
-            "label": "dato W sin unidad"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Modelos: Real Madrid con ventaja clara",
-        "bullets": [
-          "Poisson GoatLab: 12.8% AEK, 17.8% empate y 69.3% Real Madrid; 71.2% ambos anotan y 61.9% en el indicador de goles; referencias iniciales 1.08 y 2.607.",
-          "CatBoost Bzzoiro: 9.6% AEK, 14.2% empate y 76.2% Real Madrid; B2 declara la mayor probabilidad para la opción A con 76.2% y consigna 'no' en goles totales y ambos anotan.",
-          "B añade 2.1, 1.41, 0.722, 0.569, 0.524 y un marcador 2-1 sin orientación; ese 2-1 implicaría ambos anotan y choca con B2 'ambos anotan: no'."
-        ],
-        "stats": [
-          {
-            "value": "69.3%",
-            "label": "victoria Real Madrid (P)"
-          },
-          {
-            "value": "76.2%",
-            "label": "victoria Real Madrid (B)"
-          },
-          {
-            "value": "71.2%",
-            "label": "ambos anotan (P)"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Historial: dos empates de 2002",
-        "bullets": [
-          "H resume 2 enfrentamientos previos, con 0 victorias locales, 2 empates, 0 victorias visitantes y un promedio de 5 goles por partido.",
-          "Los cruces HR de 2002 registran Real Madrid 2-2 AEK Athens y AEK Athens 3-3 Real Madrid; ambos duelos terminaron empatados.",
-          "La muestra histórica es de 2002 y no incluye antecedentes recientes ni el contexto competitivo actual."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "empates en H"
-          },
-          {
-            "value": "5",
-            "label": "promedio goles H"
-          },
-          {
-            "value": "3-3",
-            "label": "AEK-Real 2002"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Tabla y goleadores disponibles",
-        "bullets": [
-          "T sitúa a Real Madrid CF 4º con 3 partidos jugados y 9 puntos; no aparece la fila de PAE AEK ni el resto de la clasificación.",
-          "S registra a Barnabás Varga (PAE AEK) con 2 y a Kylian Mbappé (Real Madrid CF) con 3.",
-          "La tabla y la lista de goleadores llegan parciales, sin desglose completo de partidos ni posiciones de todos los equipos."
-        ],
-        "stats": [
-          {
-            "value": "4º",
+            "value": "5º",
             "label": "puesto Real Madrid"
           },
           {
             "value": "9",
             "label": "puntos Real Madrid"
+          },
+          {
+            "value": "3",
+            "label": "partidos Real Madrid"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson, CatBoost y B2",
+        "bullets": [
+          "Poisson GoatLab distribuye 12.8% local, 17.8% empate y 69.3% visitante, con 71.2% para más de 2.5 goles y 61.9% para ambos anotan.",
+          "CatBoost Bzzoiro otorga 8.5% local, 13.1% empate y 78.4% visitante; añade 73.8% para más de 2.5 goles y 58.0% para ambos anotan.",
+          "B2 declara la victoria visitante con 0.784 y no ofrece cifras para goles totales ni ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "12.8%",
+            "label": "local Poisson"
+          },
+          {
+            "value": "69.3%",
+            "label": "visitante Poisson"
+          },
+          {
+            "value": "78.4%",
+            "label": "visitante CatBoost"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Dos empates antiguos",
+        "bullets": [
+          "Los dos precedentes datan de 2002: Real Madrid 2-2 AEK Athens y AEK Athens 3-3 Real Madrid.",
+          "El resumen H contabiliza 2 partidos, 0 victorias locales, 2 empates, 0 victorias visitantes y promedio de 5 goles."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "precedentes"
+          },
+          {
+            "value": "0",
+            "label": "victorias locales"
+          },
+          {
+            "value": "5",
+            "label": "promedio de goles"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Varga y Mbappé en la lista",
+        "bullets": [
+          "Barnabás Varga (PAE AEK) figura con 2 goles en la fila S.",
+          "Kylian Mbappé (Real Madrid CF) figura con 3 goles en la misma fuente."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "goles Varga"
           },
           {
             "value": "3",
@@ -3378,208 +3377,767 @@
       },
       {
         "kind": "forma",
-        "title": "Forma: Real Madrid suma 6 victorias",
+        "title": "Racha reciente de ambos",
         "bullets": [
-          "Real Madrid CF acumula 6 triunfos en R: 1-0 a Villarreal, 4-3 en Roma, 4-1 a Sevilla, 4-1 a RB Leipzig, 2-1 en Barcelona y 3-0 en Racing.",
-          "PAE AEK muestra una victoria 1-0 ante LASK Linz y derrotas 1-3 ante Shakhtar Donetsk y 1-5 ante Manchester City FC.",
-          "El contraste es notable: Real Madrid encadena victorias y AEK concede cinco goles ante Manchester City y tres ante Shakhtar."
+          "AEK suma una victoria 1-0 ante LASK Linz y derrotas 1-3 con Shakhtar Donetsk y 1-5 con Manchester City en la muestra.",
+          "Real Madrid encadena 6 victorias en la muestra: 1-0 a Villarreal, 4-3 a Roma, 4-1 a Sevilla, 4-1 a RB Leipzig, 2-1 a Barcelona y 3-0 a Racing de Santander."
         ],
         "stats": [
           {
-            "value": "6",
-            "label": "victorias Real Madrid"
-          },
-          {
             "value": "1-5",
-            "label": "derrota AEK vs City"
+            "label": "AEK-Man City"
           },
           {
-            "value": "4-3",
-            "label": "victoria Real en Roma"
+            "value": "3-0",
+            "label": "último Real Madrid"
+          },
+          {
+            "value": "6",
+            "label": "victorias seguidas Real"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Bloque W incompleto",
-        "detail": "W solo consigna 18 y no especifica sede, hora local ni condiciones; no se usa para inferir el entorno del partido."
+        "label": "Sin API-Football",
+        "detail": "No se aporta fila A de API-Football, de modo que no hay distribución de ese proveedor para contrastar."
       },
       {
-        "label": "Tabla parcial",
-        "detail": "T solo incluye a Real Madrid CF (4º, 3 PJ, 9 puntos); no hay fila de PAE AEK ni desglose completo de la clasificación."
+        "label": "B2 sin goles ni ambos anotan",
+        "detail": "B2 no ofrece cifras de goles totales ni de ambos anotan; solo declara la mayor probabilidad visitante con 0.784."
       },
       {
-        "label": "Campos B sin etiqueta",
-        "detail": "B incluye 2.1, 1.41, 0.722, 0.569, 0.524 y un 2-1 sin orientación; se evita asignarles un significado no declarado."
+        "label": "Historial muy antiguo",
+        "detail": "Los únicos precedentes son de 2002 y ambos terminaron en empate, sin datos recientes de enfrentamientos."
       },
       {
-        "label": "M2 ausente",
-        "detail": "No se aporta consenso externo M2; las lecturas se limitan a P, B/B2, H/HR, T, S, R y W."
-      },
-      {
-        "label": "Historial antiguo",
-        "detail": "H y HR se refieren a 2002 y a una muestra de 2 partidos; no describen el contexto actual de los equipos."
+        "label": "Contexto incompleto",
+        "detail": "El bloque W solo consigna 18 y no detalla sede; no hay bloque L de bajas confirmadas."
       }
     ],
     "review": {
-      "flag": true,
-      "note": "No hay desvío en 1X2: P y B coinciden en clara ventaja visitante (69.3% y 76.2%). Se marca incompatibilidad: B2 indica 'ambos anotan: no', mientras P da 71.2% a que ambos anoten y el 2-1 de B implicaría ambos goles; ese 2-1 no tiene orientación explícita."
+      "flag": false,
+      "note": "No se detecta una desviación porcentual clara: P y B coinciden en favorecer al visitante, con 69.3% y 78.4%. La cautela principal es que B2 no aporta goles ni ambos anotan."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-04T06:41:36.122Z",
-    "inputKey": "v3|M|fd-575386|PAE AEK|Real Madrid CF|champions|2026-11-04T17:45:00Z|NS\nP|1.08|2.607|0.128|0.178|0.693|0.712|0.619\nB|0.096|0.142|0.762|2.1|1.41|0.722|0.569|2-1|0.524\nB2|A|0.762|no|no\nH|2|0|2|0|5\nW|||18|\nT|4|Real Madrid CF|3|9||\nS|Barnabás Varga|PAE AEK|2|5\nS|Kylian Mbappé|Real Madrid CF|3|3\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nHR|2002-10-22|Real Madrid|AEK Athens|2|2\nHR|2002-10-02|AEK Athens|Real Madrid|3|3",
-    "materialKey": "v3|M|fd-575386|PAE AEK|Real Madrid CF|champions|2026-11-04T17:45:00Z|NS\nP|1.08|2.607|0.128|0.178|0.693|0.712|0.619\nB|0.096|0.142|0.762|2.1|1.41|0.722|0.569|2-1|0.524\nB2|A|0.762|no|no\nH|2|0|2|0|5\nW|||18|\nT|4|Real Madrid CF|3|9||\nS|Barnabás Varga|PAE AEK|2|5\nS|Kylian Mbappé|Real Madrid CF|3|3\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nHR|2002-10-22|Real Madrid|AEK Athens|2|2\nHR|2002-10-02|AEK Athens|Real Madrid|3|3"
+    "generatedAt": "2026-11-04T14:18:54.979Z",
+    "inputKey": "v3|M|fd-575386|PAE AEK|Real Madrid CF|champions|2026-11-04T17:45:00Z|NS\nP|1.08|2.607|0.128|0.178|0.693|0.712|0.619\nB|0.085|0.131|0.784|2.1|1.42|0.738|0.58|2-1|0.524\nB2|A|0.784|no|no\nH|2|0|2|0|5\nW|||18|\nT|5|Real Madrid CF|3|9||\nS|Barnabás Varga|PAE AEK|2|5\nS|Kylian Mbappé|Real Madrid CF|3|3\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nHR|2002-10-22|Real Madrid|AEK Athens|2|2\nHR|2002-10-02|AEK Athens|Real Madrid|3|3",
+    "materialKey": "v3|M|fd-575386|PAE AEK|Real Madrid CF|champions|2026-11-04T17:45:00Z|NS\nP|1.08|2.607|0.128|0.178|0.693|0.712|0.619\nB|0.085|0.131|0.784|2.1|1.42|0.738|0.58|2-1|0.524\nB2|A|0.784|no|no\nH|2|0|2|0|5\nW|||18|\nT|5|Real Madrid CF|3|9||\nS|Barnabás Varga|PAE AEK|2|5\nS|Kylian Mbappé|Real Madrid CF|3|3\nR|2026-09-08|PAE AEK|LASK Linz|1|0\nR|2026-10-10|Real Madrid CF|Villarreal CF|1|0\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nHR|2002-10-22|Real Madrid|AEK Athens|2|2\nHR|2002-10-02|AEK Athens|Real Madrid|3|3"
   },
   "fd-575387": {
+    "matchId": "fd-575387",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Champions: Fenerbahçe SK – Liverpool FC",
+        "title": "Fenerbahçe y Liverpool en Champions",
         "bullets": [
-          "Cruce de Champions League programado para el 4 de noviembre de 2026 a las 17:45 UTC, con el Fenerbahçe SK como local ante el Liverpool FC; el partido figura sin iniciar.",
-          "El bloque de tabla registra al Liverpool FC en el puesto 3, con 3 partidos y 9 puntos.",
-          "El bloque de clima y sede llega sin condición confirmada (unknown), por lo que no hay lectura externa del entorno."
+          "Fenerbahçe SK y Liverpool FC se enfrentan el 4 de noviembre de 2026 en la Champions; el bloque M fija el partido como NS.",
+          "Liverpool FC aparece 4º con 9 puntos en 3 partidos; no se consigna la posición de Fenerbahçe en la tabla.",
+          "El bloque W consigna unknown y 9, sin sede detallada."
         ],
         "stats": [
           {
-            "value": "17:45 UTC",
-            "label": "inicio del cruce"
-          },
-          {
-            "value": "3",
-            "label": "puesto de Liverpool"
+            "value": "4º",
+            "label": "puesto Liverpool"
           },
           {
             "value": "9",
-            "label": "puntos en 3 partidos"
+            "label": "puntos Liverpool"
+          },
+          {
+            "value": "3",
+            "label": "partidos Liverpool"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Poisson GoatLab vs Bzzoiro",
+        "title": "Poisson, CatBoost y B2",
         "bullets": [
-          "Poisson GoatLab estima 1.53 goles esperados para el Fenerbahçe y 2.453 para el Liverpool, con victoria local 22.5%, empate 20.3% y victoria visitante 57.2%.",
-          "El mismo modelo proyecta 75.9% para escenarios de tres o más goles y 72.3% para que ambos equipos anoten.",
-          "Bzzoiro declara 17.4% local, 20.1% empate y 62.5% visitante, con 2.08 goles totales esperados, 1-1 como marcador más probable y respuesta 'no' en goles totales y en ambos anotan.",
-          "Ambos modelos coinciden en el favoritismo visitante (57.2% GoatLab, 62.5% Bzzoiro), pero difieren de forma notoria en el volumen ofensivo proyectado."
+          "Poisson GoatLab: 22.5% local, 20.3% empate y 57.2% visitante; 75.9% para más de 2.5 goles y 72.3% para ambos anotan.",
+          "CatBoost Bzzoiro: 16.6% local, 19.3% empate y 64.1% visitante; 68.9% para más de 2.5 goles y 61.5% para ambos anotan.",
+          "B2 declara la victoria visitante con 0.641 y no ofrece cifras para goles totales ni ambos anotan."
         ],
         "stats": [
           {
             "value": "57.2%",
-            "label": "prob. visita Poisson"
+            "label": "visitante Poisson"
           },
           {
-            "value": "62.5%",
-            "label": "prob. visita Bzzoiro"
+            "value": "64.1%",
+            "label": "visitante CatBoost"
           },
           {
             "value": "75.9%",
-            "label": "3+ goles Poisson"
+            "label": "más de 2.5 Poisson"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Forma reciente de ambos",
+        "title": "Racha reciente de ambos",
         "bullets": [
-          "Liverpool ganó 4 de sus últimos 5 registros (6-3 a LASK, 2-1 a Brentford, 4-3 a Villarreal, 2-0 a Brighton) y perdió 0-1 ante Arsenal; antes cayó 0-3 con Manchester City.",
-          "Fenerbahçe no ganó en los 3 registros disponibles: 1-1 con AS Roma, caída 0-6 en su visita a Aston Villa y 2-2 con Slavia Praha.",
-          "El 0-6 ante Aston Villa (14/10) es el resultado más abultado del bloque; el mismo día el Liverpool ganó 6-3 en LASK Linz."
+          "Fenerbahçe acumula en la muestra un empate 1-1 con Roma, una derrota 0-6 ante Aston Villa y un empate 2-2 con Slavia Praha.",
+          "Liverpool registra 4 victorias y 2 derrotas en 6 partidos: 0-3 con Manchester City, 6-3 en LASK, 2-1 en Brentford, 4-3 con Villarreal, 2-0 con Brighton y 0-1 con Arsenal."
         ],
         "stats": [
           {
-            "value": "4",
-            "label": "victorias últimos 5"
-          },
-          {
-            "value": "0",
-            "label": "victorias últimos 3 (Fener)"
-          },
-          {
             "value": "0-6",
-            "label": "caída ante Aston Villa"
+            "label": "derrota Fener"
+          },
+          {
+            "value": "4",
+            "label": "victorias Liverpool"
+          },
+          {
+            "value": "2",
+            "label": "derrotas Liverpool"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Goleadores del cruce",
+        "title": "Goles en Fenerbahçe y Liverpool",
         "bullets": [
-          "Fenerbahçe: Talisca encabeza el bloque con 4 goles en 6 presentaciones; Mason Greenwood suma 3 en 9 y Archie Brown 2 en 9.",
-          "Liverpool: Alexis Mac Allister y Bradley Barcola registran 3 goles cada uno, ambos en 3 presentaciones, el mejor ritmo del bloque listado."
+          "Talisca (Fenerbahçe) figura con 4 goles; Mason Greenwood y Archie Brown añaden 3 y 2 en la fila S.",
+          "Alexis Mac Allister y Bradley Barcola (Liverpool) figuran con 3 goles cada uno."
         ],
         "stats": [
           {
             "value": "4",
-            "label": "goles de Talisca"
+            "label": "goles Talisca"
           },
           {
             "value": "3",
-            "label": "goles Mac Allister"
+            "label": "goles Greenwood"
           },
           {
-            "value": "3",
-            "label": "goles Barcola"
+            "value": "2",
+            "label": "goles Brown"
           }
         ]
       },
       {
         "kind": "claves",
-        "title": "Claves del cruce",
+        "title": "Lecturas que apuntan a Liverpool",
         "bullets": [
-          "Ambos modelos coinciden en el favoritismo visitante: 57.2% en Poisson GoatLab y 62.5% en Bzzoiro, con empates casi idénticos (20.3% vs 20.1%).",
-          "La divergencia principal es ofensiva: Poisson suma ~3.98 goles esperados totales (1.53 + 2.453) con 75.9% a tres o más; Bzzoiro declara 2.08 y 1-1.",
-          "El contraste de forma completa el panorama: Liverpool con 4 victorias en 5 y Fenerbahçe sin ganar en 3, incluida una caída 0-6."
+          "Los modelos coinciden en dar ventaja a Liverpool: 57.2% en Poisson y 64.1% en CatBoost, con B2 en 0.641.",
+          "La forma muestra a Liverpool con 4 victorias en 6 partidos y a Fenerbahçe con dos empates y una derrota 0-6 en su muestra.",
+          "No hay historial directo ni fila A de API-Football; el contraste se apoya en P, B, B2 y la forma."
         ],
         "stats": [
           {
-            "value": "62.5%",
-            "label": "mayor prob. del bloque"
+            "value": "57.2%",
+            "label": "visitante Poisson"
           },
           {
-            "value": "~3.98",
-            "label": "total esperado Poisson"
+            "value": "64.1%",
+            "label": "visitante CatBoost"
           },
           {
-            "value": "2.08",
-            "label": "total esperado Bzzoiro"
+            "value": "0.641",
+            "label": "B2 visitante"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin historial H/HR",
-        "detail": "No llegó bloque de cruces previos entre Fenerbahçe SK y Liverpool FC; la lectura de antecedentes directos queda fuera del análisis."
+        "label": "Sin historial directo",
+        "detail": "No se incluyen filas H o HR para este cruce, por lo que no hay antecedentes directos que contrastar."
       },
       {
-        "label": "Sin bajas ni consenso",
-        "detail": "No se recibieron bloques L (bajas confirmadas) ni M2 (consenso externo en %); alineaciones y ausencias no verificadas."
+        "label": "Sin API-Football",
+        "detail": "No se aporta fila A de API-Football, de modo que no hay distribución de ese proveedor para contrastar."
       },
       {
-        "label": "Clima sin confirmar",
-        "detail": "El bloque W llega con condición 'unknown' y sin sede definida; no hay lectura fiable de clima ni estadio."
+        "label": "B2 sin goles ni ambos anotan",
+        "detail": "B2 no ofrece cifras de goles totales ni de ambos anotan; solo declara la mayor probabilidad visitante con 0.641."
+      },
+      {
+        "label": "Clima y sede incompletos",
+        "detail": "El bloque W consigna unknown y 9, sin sede; no permite contextualizar el entorno del partido."
+      },
+      {
+        "label": "Sin bloque L de bajas",
+        "detail": "No hay filas L de bajas confirmadas para Fenerbahçe ni Liverpool."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Las lecturas coinciden en favorecer a Liverpool: 57.2% en Poisson y 64.1% en CatBoost; B2 declara 0.641 y no aporta goles ni ambos anotan. No se aprecia una desviación porcentual clara."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-04T14:18:54.992Z",
+    "inputKey": "v3|M|fd-575387|Fenerbahçe SK|Liverpool FC|champions|2026-11-04T17:45:00Z|NS\nP|1.53|2.453|0.225|0.203|0.572|0.759|0.723\nB|0.166|0.193|0.641|2.08|1.31|0.689|0.615|1-1|0.552\nB2|A|0.641|no|no\nW||unknown|9|\nT|4|Liverpool FC|3|9||\nS|Talisca|Fenerbahçe SK|4|6\nS|Mason Greenwood|Fenerbahçe SK|3|9\nS|Archie Brown|Fenerbahçe SK|2|9\nS|Alexis Mac Allister|Liverpool FC|3|3\nS|Bradley Barcola|Liverpool FC|3|3\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Aston Villa FC|Fenerbahçe SK|6|0\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-20|Fenerbahçe SK|SK Slavia Praha|2|2\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1",
+    "materialKey": "v3|M|fd-575387|Fenerbahçe SK|Liverpool FC|champions|2026-11-04T17:45:00Z|NS\nP|1.53|2.453|0.225|0.203|0.572|0.759|0.723\nB|0.166|0.193|0.641|2.08|1.31|0.689|0.615|1-1|0.552\nB2|A|0.641|no|no\nW||unknown|9|\nT|4|Liverpool FC|3|9||\nS|Talisca|Fenerbahçe SK|4|6\nS|Mason Greenwood|Fenerbahçe SK|3|9\nS|Archie Brown|Fenerbahçe SK|2|9\nS|Alexis Mac Allister|Liverpool FC|3|3\nS|Bradley Barcola|Liverpool FC|3|3\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Aston Villa FC|Fenerbahçe SK|6|0\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-20|Fenerbahçe SK|SK Slavia Praha|2|2\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1"
+  },
+  "fd-575390": {
+    "matchId": "fd-575390",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "PSV y Club Brugge en Champions",
+        "bullets": [
+          "PSV recibe a Club Brugge KV el 2026-11-04 a las 20:00 en partido de Champions; el estado figura como NS.",
+          "El clima previsto es cloudy con 15, sin dato de sede en la fila W."
+        ],
+        "stats": [
+          {
+            "value": "2026-11-04",
+            "label": "fecha"
+          },
+          {
+            "value": "20:00",
+            "label": "hora"
+          },
+          {
+            "value": "15",
+            "label": "temperatura"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y CatBoost con lecturas opuestas",
+        "bullets": [
+          "Poisson GoatLab consigna 1.44 y 1.687, con 0.318 para PSV, 0.257 empate y 0.425 para Club Brugge KV, más 0.605 y 0.632.",
+          "CatBoost Bzzoiro asigna 0.465 a PSV, 0.226 al empate y 0.309 a Club Brugge KV; su marcador más probable es 2-1 y añade 0.52.",
+          "La fila B incluye además 2.39, 1.58, 0.71 y 0.694 sin etiquetas explícitas; B2 declara H con 0.465 y no/no en las otras casillas."
+        ],
+        "stats": [
+          {
+            "value": "0.465",
+            "label": "prob. local B"
+          },
+          {
+            "value": "0.425",
+            "label": "prob. visitante P"
+          },
+          {
+            "value": "2-1",
+            "label": "marcador probable B"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Rachas recientes de PSV y Club Brugge",
+        "bullets": [
+          "PSV registra 1-1 con Shakhtar Donetsk, 1-0 en contra ante RB Leipzig y 0-1 frente a FC Porto como visitante en las filas R.",
+          "Club Brugge KV registra 2-3 con Aston Villa FC, 3-4 en cancha de FC Internazionale Milano y 3-0 ante Racing Club de Lens.",
+          "En el conjunto de R, PSV suma una victoria, un empate y una derrota; Club Brugge KV, dos victorias y una derrota."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "PSV en Porto"
+          },
+          {
+            "value": "3-0",
+            "label": "último Brugge"
+          },
+          {
+            "value": "3-4",
+            "label": "Brugge en Milán"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Club Brugge en la tabla y PSV ausente",
+        "bullets": [
+          "T sitúa a Club Brugge KV en la posición 13 con 3 y 6 en las columnas disponibles.",
+          "No aparece una fila de PSV en T, por lo que la comparación de clasificación queda incompleta."
+        ],
+        "stats": [
+          {
+            "value": "13",
+            "label": "posición Brugge"
+          },
+          {
+            "value": "3",
+            "label": "dato T"
+          },
+          {
+            "value": "6",
+            "label": "dato T"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Tresoldi como única referencia goleadora",
+        "bullets": [
+          "Nicolò Tresoldi, de Club Brugge KV, aparece con 4 y 3 en la fila S de goleadores.",
+          "El input no incluye otros goleadores ni una fila de PSV en S."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "registro Tresoldi"
+          },
+          {
+            "value": "3",
+            "label": "segundo dato S"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A ni M2",
+        "detail": "No hay filas A ni M2; no hay contraste con API-Football ni con consenso externo en el input."
+      },
+      {
+        "label": "Sin historial directo",
+        "detail": "No aparecen H ni HR para PSV-Club Brugge KV, por lo que no hay antecedentes en el input."
       },
       {
         "label": "Tabla incompleta",
-        "detail": "El bloque T solo contiene al Liverpool FC (puesto 3, 3 partidos, 9 puntos); sin posición del Fenerbahçe en los datos recibidos."
+        "detail": "T solo incluye a Club Brugge KV; falta PSV y no se puede leer la clasificación completa del cruce."
       },
       {
-        "label": "Campos B sin definir",
-        "detail": "En el bloque Bzzoiro los campos 1.31, 0.668, 0.618 y 0.552 carecen de definición en el formato recibido; se reportan solo los valores interpretables."
+        "label": "Etiquetas B sin detalle",
+        "detail": "La fila B trae 2.39, 1.58, 0.71 y 0.694 sin etiquetas; no se les asigna un significado no declarado."
+      },
+      {
+        "label": "B2 críptico",
+        "detail": "B2 declara H con 0.465 y casillas no/no; el input no explica el alcance de esos campos."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Coinciden en el favorito (visita), pero divergen en goles: Poisson GoatLab proyecta ~3.98 totales con 75.9% a 3+ goles y 72.3% a ambos anotan; Bzzoiro declara 2.08, marcador 1-1 y 'no' en goles totales y ambos anotan. La brecha ofensiva supera lo esperable: marcado para revisión editorial."
+      "note": "Se marca discrepancia: Poisson GoatLab da 0.425 a Club Brugge KV y 0.318 a PSV, mientras CatBoost Bzzoiro y B2 sitúan a PSV con 0.465; el favoritismo cambia de lado y la brecha local es amplia."
     },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-11-04T06:46:55.000Z",
-    "inputKey": "v3|M|fd-575387|Fenerbahçe SK|Liverpool FC|champions|2026-11-04T17:45:00Z|NS\nP|1.53|2.453|0.225|0.203|0.572|0.759|0.723\nB|0.174|0.201|0.625|2.08|1.31|0.668|0.618|1-1|0.552\nB2|A|0.625|no|no\nW||unknown|9|\nT|3|Liverpool FC|3|9||\nS|Talisca|Fenerbahçe SK|4|6\nS|Mason Greenwood|Fenerbahçe SK|3|9\nS|Archie Brown|Fenerbahçe SK|2|9\nS|Alexis Mac Allister|Liverpool FC|3|3\nS|Bradley Barcola|Liverpool FC|3|3\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Aston Villa FC|Fenerbahçe SK|6|0\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-20|Fenerbahçe SK|SK Slavia Praha|2|2\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1",
-    "materialKey": "v3|M|fd-575387|Fenerbahçe SK|Liverpool FC|champions|2026-11-04T17:45:00Z|NS\nP|1.53|2.453|0.225|0.203|0.572|0.759|0.723\nB|0.174|0.201|0.625|2.08|1.31|0.668|0.618|1-1|0.552\nB2|A|0.625|no|no\nW||unknown|9|\nT|3|Liverpool FC|3|9||\nS|Talisca|Fenerbahçe SK|4|6\nS|Mason Greenwood|Fenerbahçe SK|3|9\nS|Archie Brown|Fenerbahçe SK|2|9\nS|Alexis Mac Allister|Liverpool FC|3|3\nS|Bradley Barcola|Liverpool FC|3|3\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-14|Aston Villa FC|Fenerbahçe SK|6|0\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-20|Fenerbahçe SK|SK Slavia Praha|2|2\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1"
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-04T14:20:06.054Z",
+    "inputKey": "v3|M|fd-575390|PSV|Club Brugge KV|champions|2026-11-04T20:00:00Z|NS\nP|1.44|1.687|0.318|0.257|0.425|0.605|0.632\nB|0.465|0.226|0.309|2.39|1.58|0.71|0.694|2-1|0.52\nB2|H|0.465|no|no\nW||cloudy|15|\nT|13|Club Brugge KV|3|6||\nS|Nicolò Tresoldi|Club Brugge KV|4|3\nR|2026-09-08|Club Brugge KV|Aston Villa FC|2|3\nR|2026-09-10|PSV|FK Shakhtar Donetsk|1|1\nR|2026-10-13|RB Leipzig|PSV|1|0\nR|2026-10-13|FC Internazionale Milano|Club Brugge KV|3|4\nR|2026-10-20|FC Porto|PSV|0|1\nR|2026-10-21|Club Brugge KV|Racing Club de Lens|3|0",
+    "materialKey": "v3|M|fd-575390|PSV|Club Brugge KV|champions|2026-11-04T20:00:00Z|NS\nP|1.44|1.687|0.318|0.257|0.425|0.605|0.632\nB|0.465|0.226|0.309|2.39|1.58|0.71|0.694|2-1|0.52\nB2|H|0.465|no|no\nW||cloudy|15|\nT|13|Club Brugge KV|3|6||\nS|Nicolò Tresoldi|Club Brugge KV|4|3\nR|2026-09-08|Club Brugge KV|Aston Villa FC|2|3\nR|2026-09-10|PSV|FK Shakhtar Donetsk|1|1\nR|2026-10-13|RB Leipzig|PSV|1|0\nR|2026-10-13|FC Internazionale Milano|Club Brugge KV|3|4\nR|2026-10-20|FC Porto|PSV|0|1\nR|2026-10-21|Club Brugge KV|Racing Club de Lens|3|0"
+  },
+  "fd-575392": {
+    "matchId": "fd-575392",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Porto y Napoli en Champions",
+        "bullets": [
+          "FC Porto recibe a SSC Napoli el 2026-11-04 a las 20:00 en partido de Champions; el estado figura como NS.",
+          "El clima previsto es rain con 2, sin dato de sede en la fila W."
+        ],
+        "stats": [
+          {
+            "value": "2026-11-04",
+            "label": "fecha"
+          },
+          {
+            "value": "20:00",
+            "label": "hora"
+          },
+          {
+            "value": "2",
+            "label": "temperatura"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y Bzzoiro dividen el favoritismo",
+        "bullets": [
+          "Poisson GoatLab consigna 1.62 y 1.687, con 0.361 para FC Porto, 0.25 empate y 0.389 para SSC Napoli, más 0.642 y 0.664.",
+          "CatBoost Bzzoiro asigna 0.484 a FC Porto, 0.257 al empate y 0.259 a SSC Napoli; su marcador más probable es 2-0 y añade 0.49.",
+          "La fila B incluye 2.28, 0.96, 0.551 y 0.576 sin etiquetas explícitas; B2 declara H con 0.484 y no/no en las otras casillas."
+        ],
+        "stats": [
+          {
+            "value": "0.484",
+            "label": "prob. local B"
+          },
+          {
+            "value": "0.389",
+            "label": "prob. visitante P"
+          },
+          {
+            "value": "2-0",
+            "label": "marcador probable B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes directos de 2014",
+        "bullets": [
+          "HR recoge SSC Napoli 2-2 FC Porto el 2014-03-20 y FC Porto 1-0 SSC Napoli el 2014-03-13.",
+          "H aporta 2, 1, 1, 0 y 2.5 para el historial, sin etiquetas explícitas en el input."
+        ],
+        "stats": [
+          {
+            "value": "2-2",
+            "label": "empate en Nápoles"
+          },
+          {
+            "value": "1-0",
+            "label": "victoria Porto"
+          },
+          {
+            "value": "2.5",
+            "label": "dato H"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Porto sin victorias y Napoli con impulso",
+        "bullets": [
+          "FC Porto registra 0-2 con Manchester City FC, 3-2 en contra en cancha de Real Betis Balompié y 0-1 frente a PSV en las filas R.",
+          "SSC Napoli registra 0-1 con Arsenal FC, 3-1 en contra en cancha de Villarreal CF y 4-3 ante FK Bodø/Glimt.",
+          "En el conjunto de R, FC Porto suma tres derrotas; SSC Napoli, dos derrotas y una victoria."
+        ],
+        "stats": [
+          {
+            "value": "0-1",
+            "label": "último Porto"
+          },
+          {
+            "value": "4-3",
+            "label": "último Napoli"
+          },
+          {
+            "value": "3-2",
+            "label": "Porto en Betis"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Favoritismo dividido y poca referencia",
+        "bullets": [
+          "La principal tensión está entre el 0.389 de Poisson para SSC Napoli y el 0.484 de B y B2 para FC Porto.",
+          "El historial directo se limita a 2014 y no ofrece continuidad temporal con este cruce.",
+          "La ausencia de A, M2, T y S reduce las comprobaciones externas disponibles."
+        ],
+        "stats": [
+          {
+            "value": "0.389",
+            "label": "prob. P Napoli"
+          },
+          {
+            "value": "0.484",
+            "label": "prob. B Porto"
+          },
+          {
+            "value": "2014",
+            "label": "año historial"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A ni M2",
+        "detail": "No hay filas A ni M2; no hay contraste con API-Football ni con consenso externo en el input."
+      },
+      {
+        "label": "Historial antiguo",
+        "detail": "Los HR son de 2014; no hay cruces recientes que conecten con el calendario de 2026."
+      },
+      {
+        "label": "Sin tabla ni goleadores",
+        "detail": "No hay filas T ni S, por lo que no se puede leer clasificación ni referencias de anotación."
+      },
+      {
+        "label": "Etiquetas H y B sin detalle",
+        "detail": "H trae 2, 1, 1, 0 y 2.5, y B trae 2.28, 0.96, 0.551 y 0.576, sin etiquetas que definan cada campo."
+      },
+      {
+        "label": "B2 críptico",
+        "detail": "B2 declara H con 0.484 y casillas no/no; el input no explica el alcance de esos campos."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Se marca discrepancia: Poisson GoatLab da 0.389 a SSC Napoli y 0.361 a FC Porto, mientras CatBoost Bzzoiro y B2 sitúan a FC Porto con 0.484; el favoritismo cambia de lado y la brecha local es amplia."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-04T14:20:06.066Z",
+    "inputKey": "v3|M|fd-575392|FC Porto|SSC Napoli|champions|2026-11-04T20:00:00Z|NS\nP|1.62|1.687|0.361|0.25|0.389|0.642|0.664\nB|0.484|0.257|0.259|2.28|0.96|0.551|0.576|2-0|0.49\nB2|H|0.484|no|no\nH|2|1|1|0|2.5\nW||rain|2|\nR|2026-09-08|FC Porto|Manchester City FC|0|2\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-20|FC Porto|PSV|0|1\nR|2026-10-20|SSC Napoli|FK Bodø/Glimt|4|3\nHR|2014-03-20|SSC Napoli|FC Porto|2|2\nHR|2014-03-13|FC Porto|SSC Napoli|1|0",
+    "materialKey": "v3|M|fd-575392|FC Porto|SSC Napoli|champions|2026-11-04T20:00:00Z|NS\nP|1.62|1.687|0.361|0.25|0.389|0.642|0.664\nB|0.484|0.257|0.259|2.28|0.96|0.551|0.576|2-0|0.49\nB2|H|0.484|no|no\nH|2|1|1|0|2.5\nW||rain|2|\nR|2026-09-08|FC Porto|Manchester City FC|0|2\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-20|FC Porto|PSV|0|1\nR|2026-10-20|SSC Napoli|FK Bodø/Glimt|4|3\nHR|2014-03-20|SSC Napoli|FC Porto|2|2\nHR|2014-03-13|FC Porto|SSC Napoli|1|0"
+  },
+  "fd-575388": {
+    "matchId": "fd-575388",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Leipzig y Manchester City en Champions",
+        "bullets": [
+          "Partido de Champions previsto para el 4 de noviembre de 2026 a las 20:00, con RB Leipzig como local y Manchester City FC como visitante; el estado figura como NS.",
+          "El bloque climático registra lluvia y un valor de 3, sin sede indicada.",
+          "El bloque T solo aporta una fila: Manchester City FC en la posición 12, con 3 y 6 como registros de tabla."
+        ],
+        "stats": [
+          {
+            "value": "12",
+            "label": "posición de City en T"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "P, B y B2: probabilidades y goles",
+        "bullets": [
+          "P (Poisson GoatLab) asigna 1.44 goles esperados a RB Leipzig y 2.3 a Manchester City FC; da 0.227 a la victoria local, 0.213 al empate y 0.56 a la visitante.",
+          "B (CatBoost Bzzoiro) otorga 0.183 a RB Leipzig, 0.198 al empate y 0.619 a Manchester City FC, con 1.71 y 1.69 goles esperados y marcador más probable 1-1.",
+          "P y B coinciden en favorecer a Manchester City FC y en elevar el umbral de goles: 0.721 y 0.717 para más de 2.5, y 0.694 y 0.663 para ambos anotan.",
+          "B2 declara la victoria visitante como mayor probabilidad con 0.619 y añade no en goles totales y no en ambos anotan, en contraste con P y B."
+        ],
+        "stats": [
+          {
+            "value": "1.44",
+            "label": "goles esperados Leipzig P"
+          },
+          {
+            "value": "0.619",
+            "label": "victoria visitante B"
+          },
+          {
+            "value": "0.721",
+            "label": "más de 2.5 goles P"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Serie histórica entre ambos",
+        "bullets": [
+          "H consigna 6 cruces con un reparto 1-1-4 y un último valor de 5, sin detallar todas las columnas.",
+          "HR lista cinco cruces: Manchester City FC ganó 3-2, 3-1 y 7-0; RB Leipzig ganó 2-1; y hubo un 1-1.",
+          "En HR, Manchester City FC acumula tres victorias, RB Leipzig una y un empate; el 7-0 es la mayor diferencia."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "cruces en H"
+          },
+          {
+            "value": "7-0",
+            "label": "mayor goleada HR"
+          },
+          {
+            "value": "1-1",
+            "label": "empate en HR"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Haaland y Foden en el registro",
+        "bullets": [
+          "El bloque S sitúa a Erling Haaland con 4 y 3, y a Phil Foden con 3 y 3, ambos en Manchester City FC.",
+          "No aparecen goleadores de RB Leipzig en el bloque S; el segundo valor de cada registro no está identificado."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "registro de Haaland"
+          },
+          {
+            "value": "3",
+            "label": "registro de Foden"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Rachas recientes de los equipos",
+        "bullets": [
+          "RB Leipzig registra una victoria 1-0 sobre PSV y derrotas 4-1 frente a Como 1907 y Real Madrid CF en los partidos recientes listados.",
+          "Manchester City FC suma victorias 3-0 ante Liverpool FC, 3-2 ante Ipswich Town FC y 5-1 ante PAE AEK.",
+          "También registra derrotas 2-4 ante Paris Saint-Germain FC, 2-1 ante Aston Villa FC y 0-1 ante Brighton & Hove Albion FC; sus dos últimos registros son derrotas."
+        ],
+        "stats": [
+          {
+            "value": "5-1",
+            "label": "victoria City ante AEK"
+          },
+          {
+            "value": "4-1",
+            "label": "derrota Leipzig ante Real"
+          },
+          {
+            "value": "0-1",
+            "label": "derrota City ante Brighton"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin bloque A",
+        "detail": "No aparece estimación de API-Football ni lectura A; la base disponible son P, B, B2, H, HR, T, S, R y W."
+      },
+      {
+        "label": "Sin alineaciones ni bajas",
+        "detail": "No se aportan L, alineaciones confirmadas ni ausencias, por lo que no hay contraste de disponibles."
+      },
+      {
+        "label": "H y HR no coinciden",
+        "detail": "H resume 6 cruces y HR lista 5; el conteo histórico no es completamente consistente."
+      },
+      {
+        "label": "B2 frente a P y B",
+        "detail": "B2 declara no en goles totales y ambos anotan, mientras P y B sitúan esos registros por encima de 0.66."
+      },
+      {
+        "label": "Tabla incompleta",
+        "detail": "T solo ofrece una fila y no detalla todas las columnas; la posición 12 de Manchester City FC es una referencia parcial."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "B2 declara no en goles totales y ambos anotan, frente a P 0.721/0.694 y B 0.717/0.663; además H resume 6 cruces y HR lista 5. La divergencia entre fuentes queda marcada."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-04T14:22:47.579Z",
+    "inputKey": "v3|M|fd-575388|RB Leipzig|Manchester City FC|champions|2026-11-04T20:00:00Z|NS\nP|1.44|2.3|0.227|0.213|0.56|0.721|0.694\nB|0.183|0.198|0.619|1.71|1.69|0.717|0.663|1-1|0.52\nB2|A|0.619|no|no\nH|6|1|1|4|5\nW||rain|3|\nT|12|Manchester City FC|3|6||\nS|Erling Haaland|Manchester City FC|4|3\nS|Phil Foden|Manchester City FC|3|3\nR|2026-09-10|Como 1907|RB Leipzig|4|1\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-13|RB Leipzig|PSV|1|0\nR|2026-10-14|Manchester City FC|Paris Saint-Germain FC|2|4\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-31|Manchester City FC|Brighton & Hove Albion FC|0|1\nHR|2023-11-28|Manchester City|RB Leipzig|3|2\nHR|2023-10-04|RB Leipzig|Manchester City|1|3\nHR|2023-03-14|Manchester City|RB Leipzig|7|0\nHR|2023-02-22|RB Leipzig|Manchester City|1|1\nHR|2021-12-07|RB Leipzig|Manchester City|2|1",
+    "materialKey": "v3|M|fd-575388|RB Leipzig|Manchester City FC|champions|2026-11-04T20:00:00Z|NS\nP|1.44|2.3|0.227|0.213|0.56|0.721|0.694\nB|0.183|0.198|0.619|1.71|1.69|0.717|0.663|1-1|0.52\nB2|A|0.619|no|no\nH|6|1|1|4|5\nW||rain|3|\nT|12|Manchester City FC|3|6||\nS|Erling Haaland|Manchester City FC|4|3\nS|Phil Foden|Manchester City FC|3|3\nR|2026-09-10|Como 1907|RB Leipzig|4|1\nR|2026-10-11|Liverpool FC|Manchester City FC|0|3\nR|2026-10-13|RB Leipzig|PSV|1|0\nR|2026-10-14|Manchester City FC|Paris Saint-Germain FC|2|4\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-31|Manchester City FC|Brighton & Hove Albion FC|0|1\nHR|2023-11-28|Manchester City|RB Leipzig|3|2\nHR|2023-10-04|RB Leipzig|Manchester City|1|3\nHR|2023-03-14|Manchester City|RB Leipzig|7|0\nHR|2023-02-22|RB Leipzig|Manchester City|1|1\nHR|2021-12-07|RB Leipzig|Manchester City|2|1"
+  },
+  "fd-575394": {
+    "matchId": "fd-575394",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Viking y Sabah en duelo europeo",
+        "bullets": [
+          "Partido de Champions previsto para el 4 de noviembre de 2026 a las 20:00, con Viking FK como local y Sabah FK como visitante; el estado figura como NS.",
+          "No se aportan bloques de tabla, clima, bajas ni historial de cruces para este encuentro."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "P, B y B2: lectura dispar",
+        "bullets": [
+          "P asigna 1.98 goles esperados a Viking FK y 1.84 a Sabah FK; da 0.414 a la victoria local, 0.228 al empate y 0.359 a la visitante.",
+          "B otorga 0.673 a Viking FK, 0.181 al empate y 0.145 a Sabah FK, con 2.45 y 1.29 goles esperados y marcador más probable 2-1.",
+          "La diferencia en la victoria local es clara: 0.414 en P frente a 0.673 en B y B2, que declara 0.673 para Viking FK.",
+          "En goles, P registra 0.734 para más de 2.5 y 0.733 para ambos anotan; B registra 0.707 y 0.621; B2 añade no en goles totales y no en ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "0.414",
+            "label": "victoria local P"
+          },
+          {
+            "value": "0.673",
+            "label": "victoria local B"
+          },
+          {
+            "value": "0.734",
+            "label": "más de 2.5 goles P"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Referencias ofensivas de ambos equipos",
+        "bullets": [
+          "El bloque S reparte sus referencias entre ambos equipos: Peter Christiansen y Zlatko Tripić, de Viking FK, aparecen con 3 y 5.",
+          "Joy Lance Mickels y Veljko Simić, de Sabah FK, figuran con 3 y 11; el segundo valor de cada registro no está identificado."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "registro de Christiansen"
+          },
+          {
+            "value": "5",
+            "label": "segundo registro Viking"
+          },
+          {
+            "value": "11",
+            "label": "segundo registro Sabah"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes de Viking y Sabah",
+        "bullets": [
+          "Viking FK registra una derrota 3-1 ante VfB Stuttgart, un empate 3-3 con FC Bayern München y una derrota 3-1 ante Aston Villa FC.",
+          "Sabah FK perdió 4-0 con Manchester United FC, ganó 2-0 a SK Slavia Praha y cayó 1-2 con Borussia Dortmund.",
+          "En los tres partidos listados, Viking FK no suma victorias; Sabah FK acumula una victoria, ninguna igualada y dos derrotas."
+        ],
+        "stats": [
+          {
+            "value": "3-3",
+            "label": "empate Viking con Bayern"
+          },
+          {
+            "value": "2-0",
+            "label": "victoria Sabah ante Slavia"
+          },
+          {
+            "value": "4-0",
+            "label": "derrota Sabah ante Man Utd"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Claves de la lectura disponible",
+        "bullets": [
+          "La mayor tensión está en la probabilidad de victoria local: P 0.414 frente a B y B2 0.673.",
+          "P y B elevan el umbral de goles y ambos anotan por encima de 0.62, mientras B2 declara no en ambos campos.",
+          "No hay historial, tabla, clima ni bajas para contrastar el contexto del cruce."
+        ],
+        "stats": [
+          {
+            "value": "0.414",
+            "label": "victoria local P"
+          },
+          {
+            "value": "0.673",
+            "label": "victoria local B y B2"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin A ni M2",
+        "detail": "No hay bloque A de API-Football ni consenso externo M2; la lectura se limita a P, B, B2, S y R."
+      },
+      {
+        "label": "Sin historial ni tabla",
+        "detail": "No se aportan H, HR, T, W ni L; no hay referencia de cruces, clasificación, clima o bajas."
+      },
+      {
+        "label": "Discrepancia P-B",
+        "detail": "P da 0.414 a Viking FK y B 0.673; la brecha en la victoria local es la desviación principal."
+      },
+      {
+        "label": "B2 sin detalle de goles",
+        "detail": "B2 declara no en goles totales y ambos anotan, frente a P y B por encima de 0.62 en ambos registros."
+      },
+      {
+        "label": "Registro S ambiguo",
+        "detail": "El segundo valor de cada goleador no está identificado; se cita sin asignarle un significado estadístico."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "P y B difieren en la victoria local: 0.414 frente a 0.673, con B2 alineado con B. B2 declara no en goles totales y ambos anotan, mientras P y B superan 0.62 en ambos registros. Se marca la divergencia."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-04T14:22:47.592Z",
+    "inputKey": "v3|M|fd-575394|Viking FK|Sabah FK|champions|2026-11-04T20:00:00Z|NS\nP|1.98|1.84|0.414|0.228|0.359|0.734|0.733\nB|0.673|0.181|0.145|2.45|1.29|0.707|0.621|2-1|0.566\nB2|H|0.673|no|no\nS|Peter Christiansen|Viking FK|3|5\nS|Zlatko Tripić|Viking FK|3|5\nS|Joy Lance Mickels|Sabah FK|3|11\nS|Veljko Simić|Sabah FK|3|11\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-10-13|Viking FK|FC Bayern München|3|3\nR|2026-10-13|Sabah FK|SK Slavia Praha|2|0\nR|2026-10-20|Sabah FK|Borussia Dortmund|1|2\nR|2026-10-21|Aston Villa FC|Viking FK|3|1",
+    "materialKey": "v3|M|fd-575394|Viking FK|Sabah FK|champions|2026-11-04T20:00:00Z|NS\nP|1.98|1.84|0.414|0.228|0.359|0.734|0.733\nB|0.673|0.181|0.145|2.45|1.29|0.707|0.621|2-1|0.566\nB2|H|0.673|no|no\nS|Peter Christiansen|Viking FK|3|5\nS|Zlatko Tripić|Viking FK|3|5\nS|Joy Lance Mickels|Sabah FK|3|11\nS|Veljko Simić|Sabah FK|3|11\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-10-13|Viking FK|FC Bayern München|3|3\nR|2026-10-13|Sabah FK|SK Slavia Praha|2|0\nR|2026-10-20|Sabah FK|Borussia Dortmund|1|2\nR|2026-10-21|Aston Villa FC|Viking FK|3|1"
   }
 }
