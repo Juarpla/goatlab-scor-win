@@ -1,65 +1,6 @@
 {
-  "updatedAt": "2026-11-04T06:47:01.968Z",
+  "updatedAt": "2026-11-04T06:59:59.816Z",
   "runs": [
-    {
-      "at": "2026-10-24T11:06:59.811Z",
-      "task": "video-prompts",
-      "matchId": "barcelona-vs-real-madrid-2026-10-25",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1616,
-        "outputTokens": 2059
-      }
-    },
-    {
-      "at": "2026-10-24T11:08:23.676Z",
-      "task": "motion-prompts",
-      "matchId": "liverpool-vs-brighton-hove-albion-2026-10-25",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 5: faltan rótulos, transiciones o fuente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2544,
-            "outputTokens": 2592
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 55559
-        }
-      ],
-      "usage": {
-        "inputTokens": 2677,
-        "outputTokens": 4199
-      }
-    },
-    {
-      "at": "2026-10-24T11:09:41.081Z",
-      "task": "motion-prompts",
-      "matchId": "manchester-united-vs-bournemouth-2026-10-25",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2428,
-        "outputTokens": 10180
-      }
-    },
     {
       "at": "2026-10-24T11:13:56.174Z",
       "task": "motion-prompts",
@@ -6854,6 +6795,66 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "45862856-3e41-4fac-9f57-46284e5e47a6"
+    },
+    {
+      "at": "2026-11-04T06:51:31.206Z",
+      "task": "shorts",
+      "matchId": "atletico-madrid-vs-barcelona-2026-11-08",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 204562
+      },
+      "usage": {
+        "inputTokens": 7091,
+        "outputTokens": 35829
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "4f7ab8b3-1fc6-4b14-b3f2-40da7de4a953"
+    },
+    {
+      "at": "2026-11-04T06:55:26.386Z",
+      "task": "shorts",
+      "matchId": "fenerbahce-vs-liverpool-2026-11-04",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 235173
+      },
+      "usage": {
+        "inputTokens": 7005,
+        "outputTokens": 27035
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "0160f350-96e5-4863-80d5-f3d6bc705033"
+    },
+    {
+      "at": "2026-11-04T06:59:59.813Z",
+      "task": "shorts",
+      "matchId": "sk-slavia-praha-vs-arsenal-2026-11-04",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 273423
+      },
+      "usage": {
+        "inputTokens": 7012,
+        "outputTokens": 31405
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "f276415b-d1a9-49d1-be7d-30b82b7a2d01"
     }
   ]
 }
