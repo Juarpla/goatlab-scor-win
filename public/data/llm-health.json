@@ -1,65 +1,6 @@
 {
-  "updatedAt": "2026-11-04T14:23:00.128Z",
+  "updatedAt": "2026-11-04T20:01:41.233Z",
   "runs": [
-    {
-      "at": "2026-10-24T21:00:56.988Z",
-      "task": "video-prompts",
-      "matchId": "athletic-club-vs-getafe-2026-10-25",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1600,
-        "outputTokens": 396
-      }
-    },
-    {
-      "at": "2026-10-24T21:01:10.989Z",
-      "task": "video-prompts",
-      "matchId": "crystal-palace-vs-newcastle-united-2026-10-25",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1706,
-        "outputTokens": 2090
-      }
-    },
-    {
-      "at": "2026-10-24T21:02:08.373Z",
-      "task": "motion-prompts",
-      "matchId": "athletic-club-vs-getafe-2026-10-25",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "motion-prompts 2: los marcadores no coinciden con factIds",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2372,
-            "outputTokens": 3203
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11478
-        }
-      ],
-      "usage": {
-        "inputTokens": 2472,
-        "outputTokens": 7899
-      }
-    },
     {
       "at": "2026-10-24T21:05:33.413Z",
       "task": "motion-prompts",
@@ -6801,6 +6742,110 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "4a14f40f-5fa2-4135-b7ac-18437e040628"
+    },
+    {
+      "at": "2026-11-04T19:49:15.930Z",
+      "matchId": "fd-575390",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1014,
+        "outputTokens": 11818
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "6785860b-28ee-4f0b-a654-96454c7be61d"
+    },
+    {
+      "at": "2026-11-04T19:51:15.871Z",
+      "matchId": "fd-575392",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1027,
+        "outputTokens": 12931
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "5690fdca-dce8-44d5-8b6c-a927faacda23"
+    },
+    {
+      "at": "2026-11-04T20:01:31.379Z",
+      "matchId": "fd-575388",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1190,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 129392
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1230,
+            "outputTokens": 1641
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25022
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1152,
+            "outputTokens": 6198
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 110534
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1190,
+        "outputTokens": 14461
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "ba8256c1-b745-4080-afd4-d924ffc131e3"
     }
   ]
 }

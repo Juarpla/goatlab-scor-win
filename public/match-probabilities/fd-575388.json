@@ -4,7 +4,7 @@
   "away": "Manchester City FC",
   "competition": "champions",
   "kickoff": "2026-11-04T20:00:00Z",
-  "updatedAt": "2026-11-04T14:14:32.956Z",
+  "updatedAt": "2026-11-04T19:46:42.061Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -188,29 +188,29 @@
   "provider": {
     "oneX2": {
       "home": 0.183,
-      "draw": 0.198,
-      "away": 0.619,
+      "draw": 0.195,
+      "away": 0.622,
       "predicted": "A"
     },
     "xg": {
       "home": 1.71,
       "away": 1.69
     },
-    "over15": 0.872,
-    "over25": 0.7170000000000001,
-    "over35": 0.495,
-    "btts": 0.6629999999999999,
+    "over15": 0.878,
+    "over25": 0.732,
+    "over35": 0.507,
+    "btts": 0.669,
     "score": "1-1",
-    "cornersOver95": 0.52,
+    "cornersOver95": 0.519,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.619,
+      "favoriteProb": 0.622,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.619,
+    "confidence": 0.6219,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-04T14:14:19.859Z",
+    "capturedAt": "2026-11-04T19:46:17.161Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -379,26 +379,26 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.64,
-      "shotsOnTarget": 5.28,
+      "shots": 13.46,
+      "shotsOnTarget": 5.18,
       "xg": 1.71,
-      "corners": 4.52,
-      "fouls": 12.23,
-      "yellowCards": 1.78,
-      "redCards": 0.14,
-      "offsides": 2.21,
-      "possession": 46.83
+      "corners": 4.4,
+      "fouls": 11.84,
+      "yellowCards": 1.71,
+      "redCards": 0.16,
+      "offsides": 2.2,
+      "possession": 46.42
     },
     "away": {
-      "shots": 14.81,
-      "shotsOnTarget": 5.8,
+      "shots": 14.98,
+      "shotsOnTarget": 5.99,
       "xg": 1.69,
-      "corners": 5.63,
-      "fouls": 11.88,
-      "yellowCards": 1.65,
-      "redCards": 0.09,
-      "offsides": 2.37,
-      "possession": 53.17
+      "corners": 5.72,
+      "fouls": 12.03,
+      "yellowCards": 1.66,
+      "redCards": 0.12,
+      "offsides": 2.24,
+      "possession": 53.58
     },
     "sample": {
       "home": 7,
@@ -424,20 +424,20 @@
         "corners": 10,
         "fouls": 10,
         "yellowCards": 10,
-        "redCards": 7,
+        "redCards": 5,
         "offsides": 9
       }
     },
     "league": {
       "possession": 50,
-      "shots": 14.56,
-      "shotsOnTarget": 5.56,
-      "xg": 1.75,
-      "corners": 4.77,
-      "fouls": 11.28,
-      "yellowCards": 1.77,
-      "redCards": 0.11,
-      "offsides": 2.26
+      "shots": 14.63,
+      "shotsOnTarget": 5.64,
+      "xg": 1.76,
+      "corners": 4.79,
+      "fouls": 11.14,
+      "yellowCards": 1.74,
+      "redCards": 0.13,
+      "offsides": 2.23
     },
     "sources": {
       "home": {
@@ -473,14 +473,14 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.305,
-      "draw": 0.12,
-      "away": 0.575
+      "home": 0.282,
+      "draw": 0.117,
+      "away": 0.601
     },
     "cardsDuel": {
-      "home": 0.414,
-      "draw": 0.225,
-      "away": 0.361
+      "home": 0.397,
+      "draw": 0.227,
+      "away": 0.376
     },
     "lastGoal": {
       "home": 0.429,
@@ -489,24 +489,24 @@
     },
     "cornerRace": {
       "3": {
-        "home": 0.398,
-        "away": 0.602
+        "home": 0.379,
+        "away": 0.621
       },
       "5": {
-        "home": 0.368,
-        "away": 0.632
-      },
-      "7": {
         "home": 0.343,
         "away": 0.657
+      },
+      "7": {
+        "home": 0.315,
+        "away": 0.685
       }
     },
     "cornerMargin": {
-      "home3plus": 0.125,
-      "home12": 0.18,
-      "level": 0.12,
-      "away12": 0.248,
-      "away3plus": 0.327
+      "home3plus": 0.112,
+      "home12": 0.17,
+      "level": 0.117,
+      "away12": 0.25,
+      "away3plus": 0.351
     },
     "source": "GoatLab"
   },
@@ -590,9 +590,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "B2 declara no en goles totales y ambos anotan, frente a P 0.721/0.694 y B 0.717/0.663; además H resume 6 cruces y HR lista 5. La divergencia entre fuentes queda marcada.",
+    "note": "Se detectan inconsistencias: B2 declara 'no' en goles totales y ambos anotan frente a B (0,732 y 0,669); H y HR no coinciden en número de cruces; T, H, S y W tienen valores sin etiqueta. Falta A de API-Football y M2/L.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-04T14:22:47.579Z"
+    "generatedAt": "2026-11-04T20:01:31.379Z"
   }
 }
