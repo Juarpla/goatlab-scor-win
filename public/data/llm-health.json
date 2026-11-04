@@ -1,228 +1,6 @@
 {
-  "updatedAt": "2026-11-03T23:41:43.329Z",
+  "updatedAt": "2026-11-04T00:57:17.825Z",
   "runs": [
-    {
-      "at": "2026-10-23T21:40:06.087Z",
-      "task": "motion-prompts",
-      "matchId": "coventry-city-vs-fulham-2026-10-24",
-      "instructionVersion": "21dad53665274de65ae6a6790c788ab0022f196593e4c0a55bc61af4418068d6",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 2401,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 63898
-        }
-      ],
-      "usage": {
-        "inputTokens": 2468,
-        "outputTokens": 4843
-      }
-    },
-    {
-      "at": "2026-10-24T10:50:41.769Z",
-      "matchId": "fd-564737",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1341,
-        "outputTokens": 8596
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "d4c89004-ae9a-4fe4-b060-758549959fc1"
-    },
-    {
-      "at": "2026-10-24T10:53:35.319Z",
-      "task": "shorts",
-      "matchId": "liverpool-vs-brighton-hove-albion-2026-10-25",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7256,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 73726
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7392,
-        "outputTokens": 10948
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "a2484b42-c5d3-4505-85d6-a62a89e86555"
-    },
-    {
-      "at": "2026-10-24T11:02:41.544Z",
-      "task": "shorts",
-      "matchId": "barcelona-vs-real-madrid-2026-10-25",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7219,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 87643
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7346,
-        "outputTokens": 5727
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "5a014ff4-06e0-454b-a357-7d1f99ed201f"
-    },
-    {
-      "at": "2026-10-24T11:04:44.167Z",
-      "task": "shorts",
-      "matchId": "manchester-united-vs-bournemouth-2026-10-25",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180003
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7280,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 56865
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 7 cifras, máximo 3; guion 1: 53 palabras, mínimo 55; guion 1: falta el antecedente asignado; guion 1: falta el llamada asignado; guion 1: el gancho no lleva cifras; guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta AFC Bournemouth; guion 2: el cero no se escribe en dígitos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7572,
-            "outputTokens": 1080
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12750
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 12000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 7119,
-            "outputTokens": 12000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 94678
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 7280,
-        "outputTokens": 6118
-      },
-      "truncated": false,
-      "maxTokens": 12000,
-      "batchSize": 1,
-      "callId": "e078e5bc-3f05-455a-b23b-c27e1f2c4219"
-    },
-    {
-      "at": "2026-10-24T11:05:11.941Z",
-      "task": "image-prompts",
-      "matchId": "liverpool-vs-brighton-hove-albion-2026-10-25",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1869,
-        "outputTokens": 4456
-      }
-    },
-    {
-      "at": "2026-10-24T11:05:30.480Z",
-      "task": "image-prompts",
-      "matchId": "manchester-united-vs-bournemouth-2026-10-25",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1753,
-        "outputTokens": 746
-      }
-    },
     {
       "at": "2026-10-24T11:06:14.580Z",
       "task": "image-prompts",
@@ -6600,6 +6378,373 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-04T00:08:48.783Z",
+      "task": "shorts",
+      "matchId": "fenerbahce-vs-liverpool-2026-11-04",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 6: falta Fenerbahçe SK; guion 6: falta Liverpool FC; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6846,
+            "outputTokens": 18187
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 149625
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "hacen falta 10 guiones; descripción: falta Fenerbahçe SK; descripción: falta Liverpool FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6686,
+            "outputTokens": 35260
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 392373
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: cifra 20 no está en los hechos; guion 3: 8 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: Talisca va en un guion de jugadores; guion 5: 5 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 8: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7184,
+            "outputTokens": 2551
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 21569
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 2: 53 palabras, mínimo 55; guion 3: 6 cifras, máximo 3; guion 3: 51 palabras, mínimo 55; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 50 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6679,
+            "outputTokens": 9473
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 205331
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6679,
+        "outputTokens": 9473
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-04T00:26:46.188Z",
+      "task": "shorts",
+      "matchId": "rb-leipzig-vs-manchester-city-2026-11-04",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 172033
+      },
+      "usage": {
+        "inputTokens": 6927,
+        "outputTokens": 31461
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "e2ceff02-25fa-4fa8-9fbb-9892bd7f43d4"
+    },
+    {
+      "at": "2026-11-04T00:40:15.343Z",
+      "task": "shorts",
+      "matchId": "atletico-madrid-vs-barcelona-2026-11-08",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7091,
+            "outputTokens": 32972
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 123125
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6945,
+            "outputTokens": 35253
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 358764
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Club Atlético de Madrid; guion 1: 6 cifras, máximo 3; guion 2: falta Club Atlético de Madrid; guion 2: 5 cifras, máximo 3; guion 3: falta Club Atlético de Madrid; guion 3: 6 cifras, máximo 3; guion 4: falta Club Atlético de Madrid; guion 4: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7585,
+            "outputTokens": 2893
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 85309
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235293
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7091,
+            "outputTokens": 18799
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 137717
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "hacen falta 10 guiones; falta la entrada de la descripción",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6945,
+            "outputTokens": 33378
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 399028
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta Club Atlético de Madrid; guion 1: 4 cifras, máximo 3; guion 2: falta Club Atlético de Madrid; guion 2: falta FC Barcelona; guion 2: 5 cifras, máximo 3; guion 3: falta Club Atlético de Madrid; guion 3: falta FC Barcelona; guion 3: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7585,
+            "outputTokens": 2601
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 53588
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: falta Club Atlético de Madrid; guion 2: falta FC Barcelona; guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: falta Club Atlético de Madrid",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6938,
+            "outputTokens": 10447
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 218818
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6938,
+        "outputTokens": 10447
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-04T00:54:47.898Z",
+      "task": "shorts",
+      "matchId": "sk-slavia-praha-vs-arsenal-2026-11-04",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 6 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7002,
+            "outputTokens": 30950
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 235094
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6890,
+            "outputTokens": 35157
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 418657
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: falta SK Slavia Praha; guion 3: falta SK Slavia Praha; guion 3: 8 cifras, máximo 3; guion 4: falta SK Slavia Praha; guion 5: falta SK Slavia Praha; guion 6: falta SK Slavia Praha; guion 6: el cero no se escribe en dígitos; guion 6: cifra 20 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7427,
+            "outputTokens": 2759
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16409
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235205
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 6 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: cifra 12 no está en los hechos; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7002,
+            "outputTokens": 33964
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 137041
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 6: falta SK Slavia Praha",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6890,
+            "outputTokens": 35204
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 451047
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: falta SK Slavia Praha; guion 2: 4 cifras, máximo 3; guion 3: 10 cifras, máximo 3; guion 4: falta SK Slavia Praha; guion 5: falta SK Slavia Praha; guion 5: 4 cifras, máximo 3; guion 6: falta SK Slavia Praha; guion 7: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7427,
+            "outputTokens": 2690
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 49211
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235255
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7427,
+        "outputTokens": 2690
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-04T00:56:01.217Z",
+      "task": "image-prompts",
+      "matchId": "atletico-madrid-vs-barcelona-2026-11-08",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1526,
+        "outputTokens": 9277
+      }
+    },
+    {
+      "at": "2026-11-04T00:56:44.320Z",
+      "task": "image-prompts",
+      "matchId": "sk-slavia-praha-vs-arsenal-2026-11-04",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1928,
+        "outputTokens": 5150
+      }
+    },
+    {
+      "at": "2026-11-04T00:57:17.825Z",
+      "task": "image-prompts",
+      "matchId": "rb-leipzig-vs-manchester-city-2026-11-04",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1825,
+        "outputTokens": 4267
+      }
     }
   ]
 }
