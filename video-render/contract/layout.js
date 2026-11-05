@@ -125,9 +125,14 @@ export function assertVideoOutput(root, file, match) {
   return resolve(file);
 }
 
+/** Metadata the OS writes into any folder it browses; it is never media. */
+const OS_METADATA = /^(?:\.DS_Store|Thumbs\.db|desktop\.ini|\._.*)$/;
+
 function entries(dir) {
   if (!existsSync(dir)) return [];
-  return readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+  return readdirSync(dir, { withFileTypes: true })
+    .filter(entry => !OS_METADATA.test(entry.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /**

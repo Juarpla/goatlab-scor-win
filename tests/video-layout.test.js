@@ -54,6 +54,16 @@ test('a tree that follows the contract has no problems', (t) => {
   assert.deepEqual(layoutProblems(root), []);
 });
 
+test('system metadata does not break the media layout', (t) => {
+  const root = tree(t);
+  touch(join(audioRoot(root), '.DS_Store'));
+  touch(join(videoRoot(root), '.DS_Store'));
+  touch(join(matchAudioDir(root, MATCH), '.DS_Store'));
+  touch(join(matchVideoDir(root, MATCH), '.DS_Store'));
+  touch(join(matchVideoDir(root, MATCH), '._track'));
+  assert.deepEqual(layoutProblems(root), []);
+});
+
 test('media outside a match folder is reported', (t) => {
   const root = tree(t);
   touch(join(audioRoot(root), 'loose.m4a'));
