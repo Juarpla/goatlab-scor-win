@@ -4,7 +4,7 @@
   "away": "Olympique Lyonnais",
   "competition": "europa",
   "kickoff": "2026-11-05T17:45:00+00:00",
-  "updatedAt": "2026-11-05T06:47:18.236Z",
+  "updatedAt": "2026-11-05T14:30:31.732Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -39,7 +39,7 @@
         "form": null
       },
       "Olympique Lyonnais": {
-        "position": 12,
+        "position": 13,
         "team": "Olympique Lyonnais",
         "teamId": 100,
         "played": 3,
@@ -59,7 +59,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-04T14:13:34.747Z",
+      "updatedAt": "2026-11-05T14:29:25.833Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -70,11 +70,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-04T14:13:34.747Z",
+      "updatedAt": "2026-11-05T14:29:25.833Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 357
+      "rows": 366
     },
     "venue": {
       "city": "San Sebastián",
@@ -228,7 +228,7 @@
     },
     "confidence": 0.5546,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-05T06:47:10.626Z",
+    "capturedAt": "2026-11-05T14:30:20.604Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -368,7 +368,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 357
+      "historyRows": 366
     },
     "source": "GoatLab",
     "expectedTotal": 3.8
@@ -379,7 +379,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 357
+      "historyRows": 366
     },
     "source": "GoatLab",
     "expectedTotal": 10
@@ -387,25 +387,25 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.09,
-      "shotsOnTarget": 5.17,
+      "shots": 14.06,
+      "shotsOnTarget": 5.16,
       "xg": 1.6,
-      "corners": 5.48,
-      "fouls": 11.96,
-      "yellowCards": 2.11,
+      "corners": 5.46,
+      "fouls": 11.97,
+      "yellowCards": 2.1,
       "redCards": 0.11,
       "offsides": 1.52,
       "possession": 51.32
     },
     "away": {
-      "shots": 13.25,
-      "shotsOnTarget": 4.58,
+      "shots": 13.21,
+      "shotsOnTarget": 4.57,
       "xg": 1.46,
-      "corners": 4.55,
+      "corners": 4.53,
       "fouls": 11.17,
-      "yellowCards": 1.68,
-      "redCards": 0.11,
-      "offsides": 1.22,
+      "yellowCards": 1.66,
+      "redCards": 0.1,
+      "offsides": 1.23,
       "possession": 48.68
     },
     "sample": {
@@ -438,14 +438,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.83,
-      "shotsOnTarget": 4.94,
-      "xg": 1.53,
-      "corners": 4.71,
-      "fouls": 12.39,
-      "yellowCards": 1.95,
+      "shots": 13.77,
+      "shotsOnTarget": 4.92,
+      "xg": 1.51,
+      "corners": 4.68,
+      "fouls": 12.4,
+      "yellowCards": 1.92,
       "redCards": 0.09,
-      "offsides": 1.45
+      "offsides": 1.46
     },
     "sources": {
       "home": {
@@ -483,12 +483,12 @@
     "cornersDuel": {
       "home": 0.553,
       "draw": 0.123,
-      "away": 0.325
+      "away": 0.324
     },
     "cardsDuel": {
-      "home": 0.48,
+      "home": 0.482,
       "draw": 0.209,
-      "away": 0.311
+      "away": 0.309
     },
     "lastGoal": {
       "home": 0.498,
@@ -497,8 +497,8 @@
     },
     "cornerRace": {
       "3": {
-        "home": 0.586,
-        "away": 0.414
+        "home": 0.587,
+        "away": 0.413
       },
       "5": {
         "home": 0.613,
@@ -510,8 +510,8 @@
       }
     },
     "cornerMargin": {
-      "home3plus": 0.306,
-      "home12": 0.247,
+      "home3plus": 0.305,
+      "home12": 0.248,
       "level": 0.123,
       "away12": 0.188,
       "away3plus": 0.136
@@ -593,7 +593,7 @@
         "sample": 2
       },
       "season": {
-        "position": 12,
+        "position": 13,
         "played": 3,
         "gf": null,
         "ga": null,
@@ -602,5 +602,11 @@
       "player": null
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Auditoría: B asigna 55,5% al local y B2 55,5%, mientras Poisson GoatLab da 40,0%; la brecha es clara. B2 marca 'no' en goles totales y ambos marcan frente a 60,9% y 60,0% de B. El 0,551 junto al 1-1 de B no se interpreta como probabilidad por ambigüedad.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-05T14:32:40.601Z"
+  }
 }

@@ -4,7 +4,7 @@
   "away": "Bournemouth",
   "competition": "europa",
   "kickoff": "2026-11-05T17:45:00+00:00",
-  "updatedAt": "2026-11-05T06:47:18.236Z",
+  "updatedAt": "2026-11-05T14:30:31.732Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -39,7 +39,7 @@
         "form": null
       },
       "Bournemouth": {
-        "position": 3,
+        "position": 4,
         "team": "Bournemouth",
         "teamId": 2,
         "played": 3,
@@ -59,7 +59,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-04T14:13:34.747Z",
+      "updatedAt": "2026-11-05T14:29:25.833Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -70,11 +70,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-04T14:13:34.747Z",
+      "updatedAt": "2026-11-05T14:29:25.833Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 357
+      "rows": 366
     },
     "venue": null
   },
@@ -205,9 +205,9 @@
     "over15": 0.8079999999999999,
     "over25": 0.597,
     "over35": 0.371,
-    "btts": 0.5579999999999999,
+    "btts": 0.556,
     "score": "1-1",
-    "cornersOver95": 0.534,
+    "cornersOver95": 0.535,
     "recommendations": {
       "favorite": "A",
       "favoriteProb": 0.631,
@@ -216,7 +216,7 @@
     },
     "confidence": 0.6315,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-05T06:47:11.549Z",
+    "capturedAt": "2026-11-05T14:30:21.587Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -315,7 +315,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 357
+      "historyRows": 366
     },
     "source": "GoatLab",
     "expectedTotal": 4.7
@@ -326,7 +326,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 357
+      "historyRows": 366
     },
     "source": "GoatLab",
     "expectedTotal": 9.3
@@ -334,23 +334,23 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.67,
-      "shotsOnTarget": 4.71,
+      "shots": 13.64,
+      "shotsOnTarget": 4.7,
       "xg": 1.61,
-      "corners": 4.55,
-      "fouls": 13.41,
-      "yellowCards": 2.43,
+      "corners": 4.53,
+      "fouls": 13.42,
+      "yellowCards": 2.42,
       "redCards": 0.15,
-      "offsides": 1.59,
+      "offsides": 1.6,
       "possession": 50.74
     },
     "away": {
-      "shots": 13.79,
-      "shotsOnTarget": 4.51,
+      "shots": 13.75,
+      "shotsOnTarget": 4.49,
       "xg": 1.28,
-      "corners": 4.75,
+      "corners": 4.73,
       "fouls": 12.28,
-      "yellowCards": 2.25,
+      "yellowCards": 2.23,
       "redCards": 0.1,
       "offsides": 1.64,
       "possession": 49.26
@@ -385,14 +385,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.9,
-      "shotsOnTarget": 4.89,
-      "xg": 1.54,
-      "corners": 4.67,
+      "shots": 13.84,
+      "shotsOnTarget": 4.86,
+      "xg": 1.53,
+      "corners": 4.64,
       "fouls": 12.76,
-      "yellowCards": 2.08,
-      "redCards": 0.11,
-      "offsides": 1.5
+      "yellowCards": 2.06,
+      "redCards": 0.1,
+      "offsides": 1.51
     },
     "sources": {
       "home": {
@@ -429,13 +429,13 @@
     "method": "dominance-v1",
     "cornersDuel": {
       "home": 0.408,
-      "draw": 0.132,
-      "away": 0.46
+      "draw": 0.133,
+      "away": 0.459
     },
     "cardsDuel": {
-      "home": 0.437,
+      "home": 0.439,
       "draw": 0.19,
-      "away": 0.373
+      "away": 0.371
     },
     "lastGoal": {
       "home": 0.526,
@@ -448,8 +448,8 @@
         "away": 0.52
       },
       "5": {
-        "home": 0.474,
-        "away": 0.526
+        "home": 0.473,
+        "away": 0.527
       },
       "7": {
         "home": 0.468,
@@ -459,9 +459,9 @@
     "cornerMargin": {
       "home3plus": 0.184,
       "home12": 0.224,
-      "level": 0.132,
+      "level": 0.133,
       "away12": 0.238,
-      "away3plus": 0.222
+      "away3plus": 0.221
     },
     "source": "GoatLab"
   },
@@ -546,5 +546,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Se marca divergencia: Poisson da 44.0% al local, mientras CatBoost Bzzoiro y B2 sitúan 63.1% al visitante; la dirección del favorito es opuesta. No hay base en el input para corregir un modelo sobre otro.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-05T14:38:44.935Z"
+  }
 }

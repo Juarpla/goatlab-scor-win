@@ -4,7 +4,7 @@
   "away": "Red Bull Salzburg",
   "competition": "europa",
   "kickoff": "2026-11-05T17:45:00+00:00",
-  "updatedAt": "2026-11-05T06:47:18.236Z",
+  "updatedAt": "2026-11-05T14:30:31.732Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -23,7 +23,7 @@
       "Red Bull Salzburg": null
     },
     "scorers": {
-      "updatedAt": "2026-11-04T14:13:34.747Z",
+      "updatedAt": "2026-11-05T14:29:25.833Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -34,11 +34,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-04T14:13:34.747Z",
+      "updatedAt": "2026-11-05T14:29:25.833Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 357
+      "rows": 366
     },
     "venue": null
   },
@@ -206,7 +206,7 @@
     "over15": 0.805,
     "over25": 0.591,
     "over35": 0.37,
-    "btts": 0.61,
+    "btts": 0.614,
     "score": "1-1",
     "cornersOver95": 0.445,
     "recommendations": {
@@ -217,7 +217,7 @@
     },
     "confidence": 0.4748,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-05T06:47:10.782Z",
+    "capturedAt": "2026-11-05T14:30:20.512Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -316,10 +316,10 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 357
+      "historyRows": 366
     },
     "source": "GoatLab",
-    "expectedTotal": 4
+    "expectedTotal": 3.9
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -327,7 +327,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 357
+      "historyRows": 366
     },
     "source": "GoatLab",
     "expectedTotal": 9
@@ -335,23 +335,23 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.08,
-      "shotsOnTarget": 5.18,
+      "shots": 14.05,
+      "shotsOnTarget": 5.16,
       "xg": 1.56,
-      "corners": 4.21,
+      "corners": 4.19,
       "fouls": 12.68,
-      "yellowCards": 2.01,
-      "redCards": 0.09,
+      "yellowCards": 1.99,
+      "redCards": 0.08,
       "offsides": 1.69,
       "possession": 50.79
     },
     "away": {
-      "shots": 13.89,
-      "shotsOnTarget": 5.21,
+      "shots": 13.86,
+      "shotsOnTarget": 5.19,
       "xg": 1.43,
-      "corners": 4.8,
-      "fouls": 12.6,
-      "yellowCards": 1.94,
+      "corners": 4.78,
+      "fouls": 12.61,
+      "yellowCards": 1.92,
       "redCards": 0.04,
       "offsides": 1.67,
       "possession": 49.21
@@ -386,14 +386,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 14.06,
-      "shotsOnTarget": 5.08,
-      "xg": 1.55,
-      "corners": 4.74,
-      "fouls": 12.46,
-      "yellowCards": 1.97,
+      "shots": 13.99,
+      "shotsOnTarget": 5.05,
+      "xg": 1.54,
+      "corners": 4.7,
+      "fouls": 12.47,
+      "yellowCards": 1.94,
       "redCards": 0.07,
-      "offsides": 1.56
+      "offsides": 1.57
     },
     "sources": {
       "home": {
@@ -430,12 +430,12 @@
     "method": "dominance-v1",
     "cornersDuel": {
       "home": 0.357,
-      "draw": 0.132,
+      "draw": 0.133,
       "away": 0.511
     },
     "cardsDuel": {
       "home": 0.409,
-      "draw": 0.208,
+      "draw": 0.209,
       "away": 0.382
     },
     "lastGoal": {
@@ -453,14 +453,14 @@
         "away": 0.58
       },
       "7": {
-        "home": 0.405,
-        "away": 0.595
+        "home": 0.404,
+        "away": 0.596
       }
     },
     "cornerMargin": {
       "home3plus": 0.148,
       "home12": 0.209,
-      "level": 0.132,
+      "level": 0.133,
       "away12": 0.253,
       "away3plus": 0.258
     },
@@ -544,9 +544,9 @@
   },
   "llmReview": {
     "flag": true,
-    "note": "Se marca revisión: CatBoost/B2 (47.5% local) se desvía de Poisson (39.6% local) y de la probabilidad visitante (27.3% vs 33.9%). El valor 0.445 junto a 1-1 no tiene definición explícita y B2 deja goles totales y ambos anotan como 'no'. No hay M2, tabla, API-Football ni bajas para contrastar.",
+    "note": "Auditoría: B da 47,5% al local y B2 47,5%, frente al 39,6% de Poisson GoatLab; B baja al visitante a 27,3% y P lo sitúa en 33,9%. B2 marca 'no' en goles totales y ambos marcan, en contraste con 59,1% y 61,4% de B.",
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-05T07:08:41.194Z"
+    "generatedAt": "2026-11-05T14:32:40.614Z"
   }
 }
