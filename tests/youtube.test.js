@@ -215,9 +215,10 @@ test('search hashtags and description with music credit', () => {
     players: ['Lamine Yamal', 'Álvaro Morata', 'Luka Modrić', 'Unai Simón'],
   });
   assert.equal(tags.split(' ').length <= 15, true);
-  assert.ok(tags.startsWith('#España #Croacia #LamineYamal #ÁlvaroMorata #LukaModrić #UnaiSimón'));
+  assert.ok(tags.startsWith('#Espana #Croacia #LamineYamal #AlvaroMorata #LukaModric #UnaiSimon'));
   assert.ok(tags.includes('#goatlab'));
   assert.ok(tags.includes('#Shorts'));
+  assert.equal(tags.includes('#fútbol'), false);
   const ranked = attentionPlayers([
     { n: 3, narration: 'Álvaro Morata y Andrej Kramarić abren España contra Croacia.' },
     { n: 9, narration: 'Lamine Yamal y Nico Williams crean para España ante Croacia.' },
@@ -234,11 +235,12 @@ test('search hashtags and description with music credit', () => {
     attribution: 'Ilustración referencial con Agnes AI',
     credit: 'Música: Kevin MacLeod (incompetech.com) — CC BY 4.0',
   });
-  assert.ok(copy.startsWith('España recibe a Croacia.'));
-  assert.equal((copy.match(/Más data:/g) ?? []).length, 1);
-  assert.ok(copy.includes('https://goatlab.win/partido/spain-vs-croatia-2026-09-29'));
-  assert.ok(copy.includes(tags));
-  assert.ok(copy.includes('Ilustración referencial con Agnes AI'));
+  assert.ok(copy.startsWith('⚽ España recibe a Croacia.'));
+  assert.equal((copy.match(/📊 Todos los datos del partido:/g) ?? []).length, 1);
+  assert.ok(copy.includes('\n\n📊 Todos los datos del partido:\nhttps://goatlab.win/partido/spain-vs-croatia-2026-09-29\n\n'));
+  assert.ok(copy.includes(`\n\n🏷️ ${tags}\n\n`));
+  assert.ok(copy.includes('\n\n⚠️ Análisis con fines educativos'));
+  assert.ok(copy.includes('\n\n©️ Ilustración referencial con Agnes AI · Música: Kevin MacLeod'));
   assert.ok(copy.endsWith('Música: Kevin MacLeod (incompetech.com) — CC BY 4.0'));
   assert.equal(checkDescription(copy, { matchId: 'spain-vs-croatia-2026-09-29' }).length, 0);
 });
@@ -417,6 +419,8 @@ test('editorial voice can rewrite all pieces and forecast new numbers within the
   const draft = { scripts, lede: 'Alpha recibe a Beta con una pregunta abierta. La forma sugiere un partido cambiante.' };
   const validate = value => acceptYoutubeDraft(value, { facts, published: false, editorial: true });
   assert.deepEqual(validate(draft), []);
+  const longLede = { ...draft, lede: `${draft.lede} ${'El detalle importa. '.repeat(20)}` };
+  assert.ok(validate(longLede).some(e => /techo de 45/.test(e)));
   const accented = structuredClone(draft);
   accented.scripts[0].projection = accented.scripts[0].projection.replace('Mi lectura apunta a', 'Para mí habrá');
   accented.scripts[0].narration = accented.scripts[0].narration.replace(scripts[0].projection, accented.scripts[0].projection);

@@ -22,7 +22,10 @@ function clickErrors(data) {
     competition: data.competition,
     players: attentionPlayers(data.scripts, named),
   });
-  const line = String(data.description ?? '').split('\n').find(row => row.trimStart().startsWith('#'));
+  const line = String(data.description ?? '')
+    .split('\n')
+    .find(row => /^\s*(?:🏷️\s*)?#/.test(row))
+    ?.replace(/^\s*🏷️\s*/, '');
   if (line !== tags) errors.push('hashtags: equipos y jugadores no van delante');
   return errors;
 }

@@ -37,7 +37,7 @@ test('gate cerrado bloquea porcentajes; abierto los permite', () => {
 });
 
 test('description requires link, hashtag and disclaimer', () => {
-  const desc = `Gran cruce.\n🔗 Más data: https://goatlab.win/partido/bz-1\n#goatlab #futbol\n${DISCLAIMER}`;
+  const desc = `⚽ Gran cruce.\n\n📊 Todos los datos del partido:\nhttps://goatlab.win/partido/bz-1\n\n🏷️ #goatlab #futbol\n\n⚠️ ${DISCLAIMER}`;
   assert.deepEqual(checkDescription(desc, { matchId: 'bz-1' }), []);
   assert.ok(checkDescription('sin nada', { matchId: 'bz-1' }).length >= 3);
 });

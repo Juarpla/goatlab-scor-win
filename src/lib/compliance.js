@@ -79,7 +79,10 @@ export function checkDescription(description, { matchId = null } = {}) {
   if (matchId && !value.includes(`https://goatlab.win/partido/${matchId}`)) {
     errors.push('falta el enlace https://goatlab.win/partido/<id>');
   }
-  if (!value.includes('🔗')) errors.push('falta el prefijo 🔗 del enlace');
+  if (!value.includes('📊')) errors.push('falta el prefijo 📊 del enlace');
+  if (!/\n\n📊 [^\n]+\nhttps:\/\/goatlab\.win\/partido\/\S+\n\n/.test(value)) {
+    errors.push('el enlace va en su bloque, separado por líneas en blanco');
+  }
   if (!/#goatlab/i.test(value)) errors.push('falta el hashtag #goatlab');
   if (!value.includes(DISCLAIMER)) errors.push('falta el disclaimer fijo');
   const scannable = value.replaceAll(DISCLAIMER, '');

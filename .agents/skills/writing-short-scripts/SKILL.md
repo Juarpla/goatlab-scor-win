@@ -115,7 +115,7 @@ Each script develops a single angle, uses a relevant precedent if one exists, an
 
 Players only in 3, 4, 7 and 9. Use only names present in `facts.players` or in the piece, once per script, as part of the scene, without treating their presence as confirmed or attributing a future goal to them. The other scripts focus on the teams. If no names are available, talk about the teams.
 
-`lede` is two sentences with both teams and a tension of the match. It may include your qualitative reading; its figures must come from the facts. No link and no hashtags. Titles, the final description and hashtags are added on save.
+`lede` is two sentences, 45 words max, with both teams and a tension of the match. Name each team once; on a second mention use a short form («el local», «el visitante», «el campeón») instead of repeating the full name. It may include your qualitative reading; its figures must come from the facts. No link and no hashtags. Titles, the final description and hashtags are added on save.
 
 Out loud, say «cara a cara». Betting vocabulary, guarantees and raw market keys are blocked by compliance: cuota, momio, apuesta, apostar, stake, bankroll, tipster, bono, casino, parlay, combinada, hándicap, fija segura, garantizado, gana seguro, 1X2, BTTS, DNB, H2H, HT/FT.
 

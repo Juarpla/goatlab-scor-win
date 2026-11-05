@@ -18,10 +18,10 @@ Blocking pre-render rules. Lint (`pnpm lint:shorts`) fails the run if any rule i
 ## Required in every delivery
 
 - A beat with the web CTA (`goatlab.win`) inside the script.
-- Description with: hook + analysis + `🔗 Más data: https://goatlab.win/partido/<id>` + `#goatlab` + fixed disclaimer:
+- Description with one icon per block: `⚽` lede + `📊` link block (`📊 Todos los datos del partido:` on one line, `https://goatlab.win/partido/<id>` on the next) + `🏷️` hashtags (including `#goatlab`) + `⚠️` fixed disclaimer, separated by blank lines:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
 - Script in continuous text ≤ 110 words (~50s), ready to read aloud: hook + interwoven data + close + spoken CTA to `goatlab.win`. Agnes illustrations with provenance and the referential notice registered in `media-pack`.
-- Click title different from the hook. It is stamped by `shortTitle`: row icon, `⚽` and the fixed phrase from the `writing-short-scripts` skill (teams, or up to two players from scripts 3, 4, 7 and 9). Hashtags with teams and players first, limit 15. Lint fails if the JSON does not match.
+- Click title different from the hook. It is stamped by `shortTitle`: row icon, `⚽` and the fixed phrase from the `writing-short-scripts` skill (teams, or up to two players from scripts 3, 4, 7 and 9). Hashtags without accents and without duplicates, teams and players first, limit 15. Lint fails if the JSON does not match.
 
 ## Photos
 

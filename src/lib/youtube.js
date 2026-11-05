@@ -82,6 +82,8 @@ const FOULS_ABOVE_FOR_TWO = 12;
 const NORMAL_FOULS = 24;
 const TEAM_SOURCES = new Set(['Bzzoiro', 'AF']);
 const MIN_WORDS = 55;
+/** Description lede: two sentences with both teams and the tension. */
+const LEDE_MAX_WORDS = 45;
 const rotationOf = id => [...String(id ?? '')].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % NOUNS.length;
 const comma = value => String(value).replace('.', ',');
 const finite = value => Number.isFinite(Number(value)) ? Number(value) : null;
@@ -654,6 +656,8 @@ export function cleanLede(lede) {
     .replace(/https?:\/\/\S+/g, '')
     .replace(/#\S+/g, '')
     .replace(/🔗/g, '')
+    .replace(/📊[^\n]*/g, '')
+    .replace(/[⚽🏷⚠©]\uFE0F?/gu, '')
     .replace(/Más data:\s*/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
@@ -704,10 +708,15 @@ export function competitionTag(competition) {
   return `#${String(competition ?? 'futbol').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
 }
 
-/** Team hashtag: no spaces. */
+/** Team or player hashtag: no spaces, no accents, each word capitalized. */
 export function teamTag(name) {
-  const tag = String(name ?? '').replace(/\s+/g, '').replace(/[^\p{L}\p{N}_]/gu, '');
-  return tag ? `#${tag}` : '';
+  const words = String(name ?? '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\p{L}\p{N}_\s]/gu, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1));
+  return words.length ? `#${words.join('')}` : '';
 }
 
 const COMPETITION_TAGS = {
@@ -722,30 +731,39 @@ export function hashtagLine({ home, away, competition, players } = {}) {
   const playerTags = (players ?? []).slice(0, 4).map(teamTag).filter(Boolean);
   const head = [teamTag(home), teamTag(away), ...playerTags, '#Shorts', '#goatlab'];
   const tail = [
-    '#futbol', '#fútbol', '#soccer', '#goles', '#previa',
+    '#futbol', '#soccer', '#goles', '#previa',
     ...comp,
     '#football', '#analisis', '#YouTubeShorts', '#deporte', '#deportes',
   ];
-  return [...new Set([...head, ...tail].filter(Boolean))].slice(0, HASHTAG_CAP).join(' ');
+  const seen = new Set();
+  const tags = [...head, ...tail].filter(Boolean).filter(tag => {
+    const key = tag.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return tags.slice(0, HASHTAG_CAP).join(' ');
 }
 
 export function buildDescription({ lede, matchId, competition, home, away, players }) {
   return [
-    cleanLede(lede),
-    `🔗 Más data: https://goatlab.win/partido/${matchId}`,
-    hashtagLine({ home, away, competition, players }),
-    DISCLAIMER,
+    `⚽ ${cleanLede(lede)}`,
+    '',
+    '📊 Todos los datos del partido:',
+    `https://goatlab.win/partido/${matchId}`,
+    '',
+    `🏷️ ${hashtagLine({ home, away, competition, players })}`,
+    '',
+    `⚠️ ${DISCLAIMER}`,
   ].join('\n');
 }
 
 /** Description copied to /partido/id/youtube. The credit comes from bed.txt. */
 export function youtubeCopy({ lede, matchId, home, away, competition, players, attribution, credit }) {
-  const lines = [buildDescription({ lede, matchId, competition, home, away, players })];
-  const photo = String(attribution ?? '').trim();
-  const music = String(credit ?? '').trim();
-  if (photo) lines.push(photo);
-  if (music) lines.push(music);
-  return lines.join('\n');
+  const blocks = [buildDescription({ lede, matchId, competition, home, away, players })];
+  const credits = [attribution, credit].map(line => String(line ?? '').trim()).filter(Boolean);
+  if (credits.length) blocks.push(`©️ ${credits.join(' · ')}`);
+  return blocks.join('\n\n');
 }
 
 const TITLE_ICONS = ['🔥', '👀', '⚡', '🧤', '✈️', '⏪', '🧱', '🤝', '✨', '⏱️'];
@@ -787,18 +805,26 @@ export function playersInNarration(narration, { home, away, knownPlayers } = {})
   const teams = teamWords(home, away);
   const found = [];
   let buf = [];
+  let opensSentence = false;
   const flush = () => {
     if (buf.length === 1 && /(?:ando|iendo|yendo)$/iu.test(buf[0])) {
       buf = [];
       return;
     }
-    if (buf.length) found.push(buf.join(' '));
+    // A lone capitalized word that opens a sentence is prose ("Quédate", "Acá"), not a name.
+    if (buf.length && !(opensSentence && buf.length === 1)) found.push(buf.join(' '));
     buf = [];
   };
+  let sentenceStart = true;
   for (const raw of String(narration ?? '').split(/\s+/)) {
     const word = raw.replace(/^[«"“(\[]+|[»"”),:;.!?]+$/g, '');
-    if (isNameToken(word, teams)) buf.push(word);
-    else flush();
+    if (isNameToken(word, teams)) {
+      if (!buf.length) opensSentence = sentenceStart;
+      buf.push(word);
+    } else {
+      flush();
+    }
+    sentenceStart = /[.!?…:]$/.test(raw);
   }
   flush();
   return collapseNames(found.filter(name => !teams.has(name.toLowerCase())));
@@ -995,6 +1021,8 @@ export function acceptYoutubeDraft(draft, { facts, published = false, editorial 
   const lede = cleanLede(draft?.lede);
   if (!lede) errors.push('falta la entrada de la descripción');
   else {
+    const words = lede.split(/\s+/).filter(Boolean).length;
+    if (words > LEDE_MAX_WORDS) errors.push(`descripción: ${words} palabras superan el techo de ${LEDE_MAX_WORDS}`);
     for (const name of names) {
       if (!lede.includes(name)) errors.push(`descripción: falta ${name}`);
     }
