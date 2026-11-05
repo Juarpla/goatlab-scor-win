@@ -1,36 +1,6 @@
 {
-  "updatedAt": "2026-11-05T14:38:57.376Z",
+  "updatedAt": "2026-11-05T15:26:52.794Z",
   "runs": [
-    {
-      "at": "2026-10-25T17:09:06.724Z",
-      "task": "video-prompts",
-      "matchId": "real-sociedad-vs-levante-ud-2026-10-25",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1840,
-        "outputTokens": 1027
-      }
-    },
-    {
-      "at": "2026-10-25T17:09:16.083Z",
-      "task": "video-prompts",
-      "matchId": "sevilla-vs-osasuna-2026-10-26",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1672,
-        "outputTokens": 1252
-      }
-    },
     {
       "at": "2026-10-25T17:09:27.203Z",
       "task": "video-prompts",
@@ -7056,6 +7026,156 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "6f0dade6-7e8b-495f-8a86-213162b209b8"
+    },
+    {
+      "at": "2026-11-05T15:15:30.026Z",
+      "task": "shorts",
+      "matchId": "valencia-vs-real-madrid-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7140,
+            "outputTokens": 22163
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 138702
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7006,
+            "outputTokens": 35157
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 551301
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta una proyección marcada como opinión; guion 1: la proyección debe ser una frase completa de la narración, una sola vez; guion 1: la proyección debe coincidir con el golpe proyección; guion 1: 4 cifras, máximo 3; guion 2: falta una proyección marcada como opinión; guion 2: la proyección debe ser una frase completa de la narración, una sola vez; guion 2: la proyección debe coincidir con el golpe proyección; guion 3: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7670,
+            "outputTokens": 2703
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 50179
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235274
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 173082
+      },
+      "usage": {
+        "inputTokens": 7140,
+        "outputTokens": 25599
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "02d565d5-8b8b-44ba-bd23-26b0658001d1"
+    },
+    {
+      "at": "2026-11-05T15:26:52.789Z",
+      "task": "shorts",
+      "matchId": "crystal-palace-vs-tsg-hoffenheim-2026-11-05",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6769,
+            "outputTokens": 18736
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 127177
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600002
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta TSG Hoffenheim; guion 2: 4 cifras, máximo 3; guion 3: falta TSG Hoffenheim; guion 3: 6 cifras, máximo 3; guion 5: falta TSG Hoffenheim; guion 5: 4 cifras, máximo 3; guion 6: falta TSG Hoffenheim",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7158,
+            "outputTokens": 2485
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 30003
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235175
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 10: cifra 20 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6769,
+            "outputTokens": 21904
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 129521
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash",
+        "latencyMs": 553239
+      },
+      "usage": {
+        "inputTokens": 6629,
+        "outputTokens": 34991
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "6c61035f-ff5b-4cbf-8439-8b5aa174de83"
     }
   ]
 }
