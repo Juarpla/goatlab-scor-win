@@ -1,89 +1,6 @@
 {
-  "updatedAt": "2026-11-05T07:15:05.117Z",
+  "updatedAt": "2026-11-05T08:28:12.149Z",
   "runs": [
-    {
-      "at": "2026-10-25T16:45:17.279Z",
-      "matchId": "fd-564736",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1388,
-        "outputTokens": 13257
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "9264b8d1-27bd-4447-bfdb-674997987426"
-    },
-    {
-      "at": "2026-10-25T16:55:43.817Z",
-      "matchId": "fd-564732",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1371,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 89452
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1414,
-            "outputTokens": 1714
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11614
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1414,
-        "outputTokens": 1385
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "129fd7fc-2cbc-4879-ac6d-ebb356e1e876"
-    },
     {
       "at": "2026-10-25T16:58:48.741Z",
       "task": "shorts",
@@ -6903,6 +6820,242 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "3724548a-04ae-43ae-8924-e97fe3a40775"
+    },
+    {
+      "at": "2026-11-05T08:11:10.329Z",
+      "task": "shorts",
+      "matchId": "valencia-vs-real-madrid-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 4: falta Real Madrid CF; guion 10: falta Real Madrid CF",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7094,
+            "outputTokens": 29376
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 404349
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 5: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6963,
+            "outputTokens": 35505
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 560222
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: golpe 4: se esperaba dato y llegó picante; guion 3: golpe 5: se esperaba picante y llegó dato; guion 3: 8 cifras, máximo 3; guion 3: guion de 115 palabras supera el techo de 50s (~110); guion 4: golpe 4: se esperaba dato y llegó picante; guion 4: golpe 5: se esperaba picante y llegó dato; guion 4: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7619,
+            "outputTokens": 2901
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26222
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235165
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7094,
+            "outputTokens": 19511
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 159766
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 5: cifra 5.2 no está en los hechos; guion 5: cifra 4.3 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6963,
+            "outputTokens": 35472
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 576894
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: falta una proyección marcada como opinión; guion 4: la proyección debe coincidir con el golpe proyección; guion 4: 4 cifras, máximo 3; guion 6: artículo delante de Valencia CF; guion 6: el cero no se escribe en dígitos; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7619,
+            "outputTokens": 2848
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 28963
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Valencia CF; guion 1: falta Real Madrid CF; guion 1: 6 cifras, máximo 3; guion 2: falta Valencia CF; guion 2: falta Real Madrid CF; guion 2: el cero no se escribe en dígitos; guion 2: 5 cifras, máximo 3; guion 3: falta Valencia CF",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6956,
+            "outputTokens": 7122
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 137868
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6956,
+        "outputTokens": 7122
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-05T08:28:12.146Z",
+      "task": "shorts",
+      "matchId": "crystal-palace-vs-tsg-hoffenheim-2026-11-05",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: cifra 4.8 no está en los hechos; guion 5: 5 cifras, máximo 3; guion 8: 6 cifras, máximo 3; guion 9: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6652,
+            "outputTokens": 31290
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 403271
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: cifra 12 no está en los hechos; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6513,
+            "outputTokens": 35544
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 509778
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta TSG Hoffenheim; guion 1: 4 cifras, máximo 3; guion 2: falta TSG Hoffenheim; guion 3: falta TSG Hoffenheim; guion 3: 4 cifras, máximo 3; guion 4: falta TSG Hoffenheim; guion 5: falta TSG Hoffenheim; guion 6: falta TSG Hoffenheim",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7035,
+            "outputTokens": 2471
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 20187
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235072
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 6 cifras, máximo 3; guion 7: proyección fuera de rango; guion 7: 8 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6652,
+            "outputTokens": 25487
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 315734
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: cifra 14.9 no está en los hechos; guion 2: cifra 12.7 no está en los hechos; guion 3: 5 cifras, máximo 3; guion 5: cifra 4.8 no está en los hechos; guion 5: 5 cifras, máximo 3; guion 5: vocabulario prohibido: apuestas?; guion 6: cifra 2.1 no está en los hechos; guion 6: cifra 2.3 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6513,
+            "outputTokens": 35687
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 509305
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: falta TSG Hoffenheim; guion 1: 4 cifras, máximo 3; guion 2: falta TSG Hoffenheim; guion 2: 6 cifras, máximo 3; guion 3: falta TSG Hoffenheim; guion 3: 6 cifras, máximo 3; guion 4: falta TSG Hoffenheim; guion 5: falta TSG Hoffenheim",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7035,
+            "outputTokens": 2600
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23158
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: falta TSG Hoffenheim; guion 3: 6 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 6: gancho repetido; guion 7: falta TSG Hoffenheim; guion 8: 5 cifras, máximo 3; guion 9: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6506,
+            "outputTokens": 8496
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 173619
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6506,
+        "outputTokens": 8496
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
