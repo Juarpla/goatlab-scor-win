@@ -1,178 +1,6 @@
 {
-  "updatedAt": "2026-11-05T20:08:28.236Z",
+  "updatedAt": "2026-11-05T21:15:02.741Z",
   "runs": [
-    {
-      "at": "2026-10-25T21:14:56.009Z",
-      "matchId": "fd-560628",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1351,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 89049
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1406,
-            "outputTokens": 1832
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15953
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1311,
-            "outputTokens": 5177
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 169847
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "usage": {
-        "inputTokens": 1318,
-        "outputTokens": 13663
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "f6fb9efb-10e4-455e-9005-7d423440d63d"
-    },
-    {
-      "at": "2026-10-25T21:18:40.113Z",
-      "task": "shorts",
-      "matchId": "barcelona-vs-deportivo-alaves-2026-10-31",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 154985
-      },
-      "usage": {
-        "inputTokens": 6482,
-        "outputTokens": 25825
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "85fed8f1-e699-426a-b8cd-67652c4d4fe1"
-    },
-    {
-      "at": "2026-10-25T21:24:14.825Z",
-      "task": "shorts",
-      "matchId": "villarreal-vs-espanyol-2026-10-30",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta RCD Espanyol de Barcelona",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6444,
-            "outputTokens": 16489
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 97228
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 237475
-      },
-      "usage": {
-        "inputTokens": 6305,
-        "outputTokens": 22593
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "ff61412b-b6cd-40d6-8168-90fcf428c428"
-    },
-    {
-      "at": "2026-10-25T21:26:45.097Z",
-      "task": "shorts",
-      "matchId": "levante-ud-vs-atletico-madrid-2026-10-31",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 150269
-      },
-      "usage": {
-        "inputTokens": 6356,
-        "outputTokens": 22511
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "fed11cc8-e4ea-4022-a656-f8b3578984b5"
-    },
-    {
-      "at": "2026-10-25T21:27:49.943Z",
-      "task": "image-prompts",
-      "matchId": "barcelona-vs-deportivo-alaves-2026-10-31",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1845,
-        "outputTokens": 10552
-      }
-    },
-    {
-      "at": "2026-10-25T21:28:18.793Z",
-      "task": "image-prompts",
-      "matchId": "villarreal-vs-espanyol-2026-10-30",
-      "instructionVersion": "1436b9237414e477968930467c76bca5c2506a95e98edee9cee30bb8cfb65dfa",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1796,
-        "outputTokens": 4267
-      }
-    },
     {
       "at": "2026-10-25T21:28:54.507Z",
       "task": "image-prompts",
@@ -7182,6 +7010,288 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "b8e966d5-a39c-4b35-b7b6-7dbcd66f4054"
+    },
+    {
+      "at": "2026-11-05T20:19:35.300Z",
+      "task": "shorts",
+      "matchId": "everton-vs-coventry-city-2026-11-06",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: artículo delante de Coventry City FC; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7159,
+            "outputTokens": 19735
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 138876
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash",
+        "latencyMs": 471108
+      },
+      "usage": {
+        "inputTokens": 7047,
+        "outputTokens": 35346
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "5883aedc-4fa2-4922-9535-c777933f0f1f"
+    },
+    {
+      "at": "2026-11-05T20:34:10.733Z",
+      "task": "shorts",
+      "matchId": "sevilla-vs-deportivo-alaves-2026-11-06",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7288,
+            "outputTokens": 34354
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 267977
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "hacen falta 10 guiones; falta la entrada de la descripción",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7149,
+            "outputTokens": 37043
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 483509
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 4: falta Deportivo Alavés; guion 5: proyección fuera de rango; guion 5: 6 cifras, máximo 3; guion 6: falta Deportivo Alavés; guion 6: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7809,
+            "outputTokens": 2873
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 32987
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 4 cifras, máximo 3; guion 2: falta Sevilla FC; guion 2: falta Deportivo Alavés; guion 2: 7 cifras, máximo 3; guion 3: falta Deportivo Alavés; guion 3: 4 cifras, máximo 3; guion 4: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7142,
+            "outputTokens": 6597
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 90953
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7142,
+        "outputTokens": 6597
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-05T21:12:54.866Z",
+      "task": "shorts",
+      "matchId": "leeds-united-vs-tottenham-hotspur-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: 6 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: el cero no se escribe en dígitos; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7213,
+            "outputTokens": 26043
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 397832
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 5: 4 cifras, máximo 3; guion 6: falta una proyección marcada como opinión; guion 6: la proyección debe coincidir con el golpe proyección; guion 6: 4 cifras, máximo 3; guion 7: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7635,
+            "outputTokens": 2960
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 28650
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235216
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7213,
+            "outputTokens": 19562
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 305868
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7083,
+            "outputTokens": 35333
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 491125
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 3: golpe 4: se esperaba dato y llegó picante; guion 3: golpe 5: se esperaba picante y llegó dato; guion 3: 5 cifras, máximo 3; guion 4: golpe 4: se esperaba dato y llegó picante; guion 4: golpe 5: se esperaba picante y llegó dato; guion 4: guion de 113 palabras supera el techo de 50s (~110); guion 5: golpe 4: se esperaba dato y llegó picante",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7635,
+            "outputTokens": 2992
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 30272
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235166
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7635,
+        "outputTokens": 2992
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-05T21:13:12.146Z",
+      "task": "image-prompts",
+      "matchId": "everton-vs-coventry-city-2026-11-06",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 2000,
+          "latencyMs": 888
+        }
+      ],
+      "usage": {
+        "inputTokens": 1832,
+        "outputTokens": 1020
+      }
+    },
+    {
+      "at": "2026-11-05T21:14:45.788Z",
+      "task": "image-prompts",
+      "matchId": "sevilla-vs-deportivo-alaves-2026-11-06",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 3000,
+          "latencyMs": 234
+        }
+      ],
+      "usage": {
+        "inputTokens": 1909,
+        "outputTokens": 7001
+      }
+    },
+    {
+      "at": "2026-11-05T21:15:02.741Z",
+      "task": "image-prompts",
+      "matchId": "leeds-united-vs-tottenham-hotspur-2026-11-07",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1992,
+        "outputTokens": 3022
+      }
     }
   ]
 }
