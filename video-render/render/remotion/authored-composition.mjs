@@ -77,7 +77,7 @@ function Short(props){const [handle]=useState(()=>delayRender('GoatLab font'));u
 <LayoutProbe enabled={props.layoutProbe===true}/>
 <style>{'@font-face{font-family:GoatLabLocal;src:url('+JSON.stringify(props.font)+')}*{box-sizing:border-box}'}</style>
 <Sequence durationInFrames={props.contentFrames}><Piece {...props}/></Sequence>
-<Sequence from={props.contentFrames} durationInFrames={${DIRECTOR_ENDCARD_SECONDS * FPS}}><AbsoluteFill style={{background:'#101412',alignItems:'center',justifyContent:'center'}}><Img src={props.brand} style={{width:240,height:240}}/></AbsoluteFill></Sequence>
+<Sequence from={props.contentFrames} durationInFrames={${DIRECTOR_ENDCARD_SECONDS * FPS}}><AbsoluteFill style={{background:'#101412',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:48}}><Img src={props.brand} style={{width:240,height:240}}/><div style={{fontSize:92,fontWeight:800,letterSpacing:3,lineHeight:1,color:'#c5ed74'}}>goatlab.win</div></AbsoluteFill></Sequence>
 </AbsoluteFill>}
 registerRoot(()=> <Composition id="GoatLabShort" component={Short} fps={${FPS}} width={${FRAME_W}} height={${FRAME_H}} durationInFrames={90} calculateMetadata={({props})=>({durationInFrames:props.frames})}/>);
 `;
