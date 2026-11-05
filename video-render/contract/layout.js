@@ -59,12 +59,44 @@ export function audioFiles(dir) {
     .sort();
 }
 
-/** `<match>-<audio>-v<variant>.mp4`, the only name the CLI writes. */
+/** `<match>-<audio>-v<variant>.mp4`, the fallback name when there is no script title. */
 export function videoName(match, audio, variant = 0) {
   assertMatchId(match);
   if (!Number.isInteger(variant) || variant < 0) throw new Error(`invalid variant: ${variant}`);
   const stem = audio.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
   return `${match}-${stem}-v${variant}.mp4`;
+}
+
+const SEPARATOR_CHARS = /[:?]+/g;
+const ILLEGAL_FILE_CHARS = /[<>"/\\|*\u0000-\u001f\u007f]+/g;
+const MAX_NAME_BYTES = 200;
+
+function clipBytes(text, max) {
+  if (Buffer.byteLength(text) <= max) return text;
+  let out = '';
+  for (const char of text) {
+    if (Buffer.byteLength(out + char) > max) break;
+    out += char;
+  }
+  const lastSpace = out.lastIndexOf(' ');
+  return (lastSpace > 0 ? out.slice(0, lastSpace) : out).trimEnd();
+}
+
+/**
+ * Upload-ready name: the script title with its icons, minus characters that
+ * filesystems reject and capped so the path stays under the 255-byte limit.
+ * Returns '' when the title leaves nothing usable, so callers can fall back.
+ */
+export function videoTitleName(title) {
+  const clean = String(title ?? '')
+    .normalize('NFC')
+    .replace(SEPARATOR_CHARS, ' - ')
+    .replace(ILLEGAL_FILE_CHARS, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^[-. ]+|[-. ]+$/g, '');
+  if (!clean) return '';
+  return `${clipBytes(clean, MAX_NAME_BYTES)}.mp4`;
 }
 
 function partsInside(base, file) {

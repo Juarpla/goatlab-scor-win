@@ -18,6 +18,7 @@ import {
   testVideoDir,
   videoName,
   videoRoot,
+  videoTitleName,
 } from '../video-render/contract/layout.js';
 
 const MATCH = 'real-racing-club-vs-real-madrid-2026-11-01';
@@ -114,4 +115,21 @@ test('the CLI only writes videos into the match or tests folder', (t) => {
 test('video names are derived from match, audio and variant', () => {
   assert.equal(videoName(MATCH, '/tmp/Track-93.m4a', 2), `${MATCH}-Track-93-v2.mp4`);
   assert.throws(() => videoName(MATCH, 'Track-93.m4a', -1), /invalid variant/);
+});
+
+test('title names keep icons and accents but drop characters filesystems reject', () => {
+  assert.equal(
+    videoTitleName('⚡⚽ Roberto Fernández y Adrián Niño: ¿quién marca en Málaga CF vs RCD Espanyol de Barcelona?'),
+    '⚡⚽ Roberto Fernández y Adrián Niño - ¿quién marca en Málaga CF vs RCD Espanyol de Barcelona.mp4',
+  );
+  assert.equal(videoTitleName('  🔥  A/B: "x"  '), '🔥 A B - x.mp4');
+  assert.equal(videoTitleName('.oculto 🔥'), 'oculto 🔥.mp4');
+  assert.equal(videoTitleName(''), '');
+  assert.equal(videoTitleName(null), '');
+});
+
+test('title names stay under the filesystem limit', () => {
+  const name = videoTitleName(`${'palabra '.repeat(40)}🔥`);
+  assert.ok(Buffer.byteLength(name) <= 204);
+  assert.ok(name.endsWith('.mp4'));
 });

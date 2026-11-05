@@ -330,8 +330,10 @@ node --env-file=.env video-render/cli/render.mjs \
 
 - Audio defaults to the only file in `video-render/audios/<id>/`; add
   `--audio=` only when the folder holds more than one recording.
-- Output defaults to `video-render/videos/<id>/<id>-<audio>-v1.mp4`. Pass `--out`
-  to name the file explicitly.
+- Output defaults to `video-render/videos/<id>/<title>.mp4`, using the resolved
+  script title with its icons. Characters filesystems reject (`:`, `?`, `/`,
+  quotes) become spaces or a dash. Without `--script`, the fallback is
+  `<id>-<audio>-v1.mp4`. Pass `--out` to name the file explicitly.
 
 - `CAPTURE_BUDGET_MS=3600000` allows one hour of capture for advanced effects.
   `CAPTURE_TIMEOUT_MS` must match: the default is 20 minutes and would cancel a
@@ -342,7 +344,7 @@ node --env-file=.env video-render/cli/render.mjs \
 - `--script` is optional: with it, subtitles use the script text and Mistral's
   timings. `--script-n` fixes the script; without it the best match is chosen.
   Without `--script`, the raw transcription is used.
-- `--keep` saves `composition.json` next to the MP4.
+- `--keep` saves `<title>.composition.json` in `video-render/work/<id>/`.
 - Each render appends an entry to `manifest.json` in the output folder.
 - Run with a long timeout (30 to 60 min).
 - `--variant` names the temporary directory `goatlab-short-<match>-v<variant>`.
@@ -439,7 +441,7 @@ destroy each other. Give each concurrent render its own identity:
 | --- | --- |
 | Temp dir | Unique `--variant` per process. |
 | Plan and QA | `video-render/work/<id>/<slug>/…`, one slug per audio. |
-| Output | `video-render/videos/<id>/<id>-<audio>-v<n>.mp4`; `--keep` writes the composition to `video-render/work/<id>/`. |
+| Output | `video-render/videos/<id>/<title>.mp4` (fallback `<id>-<audio>-v<n>.mp4`); pass `--out` when two processes would share a title; `--keep` writes the composition to `video-render/work/<id>/`. |
 | Media cache | Different matches: the shared cache is safe (keys by URL hash). Same match: `PHOTO_CACHE_DIR="video-render/work/<id>/<slug>/photos"` for a private cache. |
 | CPU | 2 to 3 concurrent renders with `RENDER_WORKERS=3` each. Never launch ten. |
 

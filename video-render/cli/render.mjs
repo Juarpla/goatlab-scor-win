@@ -19,6 +19,7 @@ import {
   matchRecipeDir,
   matchVideoDir,
   videoName,
+  videoTitleName,
 } from '../contract/layout.js';
 import {
   alignReference,
@@ -91,33 +92,28 @@ if (!existsSync(audio)) fail(`audio no existe: ${audio}`);
 
 // The script is optional: if passed, it fixes names and figures Mistral
 // confuses, preserving its word timings.
-let reference = '', scriptCandidates = null, alignment = null;
+let reference = '', scriptCandidates = null, scriptsDocument = null, scriptTitle = '', alignment = null;
 if (args.script) {
-  const document = load(args.script);
+  scriptsDocument = load(args.script);
   if (args['script-n']) {
-    const script = (document.scripts ?? []).find(item => item?.n === Number(args['script-n']));
+    const script = (scriptsDocument.scripts ?? []).find(item => item?.n === Number(args['script-n']));
     if (!narrationText(script?.narration)) fail(`guion ${args['script-n']} no encontrado en ${args.script}`);
     reference = narrationText(script.narration);
+    scriptTitle = String(script.title ?? '');
   } else {
-    scriptCandidates = (document.scripts ?? []).filter(item => narrationText(item?.narration));
+    scriptCandidates = (scriptsDocument.scripts ?? []).filter(item => narrationText(item?.narration));
     if (!scriptCandidates.length) fail(`no hay guiones con narración en ${args.script}`);
   }
 }
 
 let out;
-try {
-  out = args.out
-    ? assertVideoOutput(ROOT, args.out, match)
-    : join(matchVideoDir(ROOT, match), videoName(match, audio, variant));
-} catch (e) {
-  fail(e.message);
+if (args.out) {
+  try {
+    out = assertVideoOutput(ROOT, args.out, match);
+  } catch (e) {
+    fail(e.message);
+  }
 }
-mkdirSync(dirname(out), { recursive: true });
-const recipes = matchRecipeDir(ROOT, match);
-mkdirSync(recipes, { recursive: true });
-const stem = basename(out, '.mp4');
-const recipePlan = join(recipes, `${stem}.plan.json`);
-if (resolve(args.plan) !== resolve(recipePlan)) cpSync(args.plan, recipePlan);
 
 const tmp = join(tmpdir(), `goatlab-short-${match}-v${variant}`);
 rmSync(tmp, { recursive: true, force: true });
@@ -140,6 +136,10 @@ async function scriptTimes({ tmp, voiceFile, voiceSeconds, log }) {
   const aligned = reference ? alignReference(words, reference, voiceSeconds) : alignScripts(words, scriptCandidates, voiceSeconds);
   if (!aligned) throw new Error('No hay guiones para alinear.');
   alignment = { script: aligned.n ?? Number(args['script-n']), score: aligned.score };
+  if (!scriptTitle) {
+    const script = (scriptsDocument?.scripts ?? []).find(item => item?.n === aligned.n);
+    scriptTitle = String(script?.title ?? '');
+  }
   log(`guion: ${args['script-n'] ? '' : `script ${aligned.n}, `}${Math.round(aligned.score * 100)}% de coincidencia; ${aligned.words.length} palabras`);
   return { provider: `${provider}+guion`, words: aligned.score >= .5 ? aligned.words : words, heard: words, errors };
 }
@@ -160,6 +160,17 @@ try {
     transcriber: (reference || scriptCandidates) ? scriptTimes : undefined,
   });
   lap(`preparado (tiempos ${provider}${errors.length ? `; ${errors.join(' | ')}` : ''})`);
+  if (!out) {
+    const name = (scriptTitle && videoTitleName(scriptTitle)) || videoName(match, audio, variant);
+    out = assertVideoOutput(ROOT, join(matchVideoDir(ROOT, match), name), match);
+  }
+  mkdirSync(dirname(out), { recursive: true });
+  const recipes = matchRecipeDir(ROOT, match);
+  mkdirSync(recipes, { recursive: true });
+  const stem = basename(out, '.mp4');
+  const recipePlan = join(recipes, `${stem}.plan.json`);
+  if (resolve(args.plan) !== resolve(recipePlan)) cpSync(args.plan, recipePlan);
+
   const silent = join(tmp, 'silent.mp4');
   await renderSilent(tmp, silent);
   lap('render');

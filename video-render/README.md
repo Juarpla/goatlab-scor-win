@@ -150,8 +150,10 @@ node --env-file=.env video-render/cli/render.mjs \
 - `--script` is optional; with it, subtitles use the script text and Mistral's
   timings. `--script-n` fixes the script; without it, the CLI picks the best match
   against every script in the file.
-- Without `--out`, the MP4 goes to
-  `video-render/videos/<id>/<id>-<audio>-v<variant>.mp4`.
+- Without `--out`, the MP4 takes its name from the resolved script title, icons
+  included: `video-render/videos/<id>/<title>.mp4`. Characters that filesystems
+  reject (`:`, `?`, `/`, quotes, and so on) become spaces or a dash. Without
+  `--script`, it falls back to `<id>-<audio>-v<variant>.mp4`.
 - `--out` must stay inside `video-render/videos/<id>/` or
   `video-render/videos/tests/`; anything else is rejected.
 - Recipes live outside the videos folder: `video-render/work/<id>/manifest.json`
