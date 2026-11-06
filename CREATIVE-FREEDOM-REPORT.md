@@ -1,8 +1,13 @@
 # Creative freedom and limits of the video pipeline
 
-**Update:** review is now advisory (up to eight images) and does not veto deliveries or trigger renders. Authoring, repair and review use max; there is one technical correction. Remotion moves to 4.0.537. The [optimization report](VIDEO-OPTIMIZATION-REPORT.md) describes the current contract and the manual-review alternative.
+> Historical report of the October 2026 remote pipeline. This is not a current
+> authoring policy. For final videos, read the
+> [local workflow](.agents/skills/video-render/SKILL.md),
+> [creative direction](.agents/skills/video-render/references/creative.md) and
+> [fixed identity](.agents/skills/video-render/references/brand.md).
+> Model names, review behavior, optional music/captions and machine limits below
+> describe that historical system.
 
-**Historical record:** the following sections document the first implementation and its tests, before this optimization; their review and correction figures are no longer the current policy.
 
 Implementation of October 21, 2026. This report describes the new path for JSX compositions (plan 5); plans 1-4 are kept for manual compatibility, not as a fallback edit.
 

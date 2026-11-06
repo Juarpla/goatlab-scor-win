@@ -1,164 +1,181 @@
-# Remotion authoring
+# Remotion authoring contract
 
-Guide to the engine that wins the A/B test: Remotion 4.0.537, React 19 and the
-local GoatLab kit. The plan is a single-file JSX module that the engine validates,
-compiles and runs in Chromium.
+Technical reference for the local version 5 plan. Read this before writing JSX.
+Creative choices belong to [creative.md](creative.md); fixed identity belongs to
+[brand.md](brand.md). Examples here demonstrate APIs, not a visual template.
 
-## How the plan runs
+## Plan and execution
 
-1. `validateAuthoredPlan` parses the JSX with Babel and rejects imports, globals
-   and forbidden APIs.
-2. `bundleAuthored` wraps the code in a `GoatLabShort` composition:
-   - `<Sequence durationInFrames={contentFrames}>` mounts your component.
-   - It then adds a 1 s endcard with `brand.svg`.
-   - It loads `LiberationSans-Bold.ttf` as `GoatLabLocal`.
-3. `renderMedia` captures at 1080×1920, 30 fps, H.264/AAC, with a configurable
-   `crf` (`RENDER_CRF`, default 20).
+```json
+{
+  "version": 5,
+  "visualStyle": "editorial",
+  "music": true,
+  "scenes": [{ "start": 0, "end": 4.5 }],
+  "notes": "A brief concept and media-selection rationale for this recording.",
+  "code": "import React from 'react'; export default function Piece(props) { /* JSX */ }"
+}
+```
 
-Your component does **not** draw the endcard or control total duration. Cover
-`contentFrames` and let the engine close.
+`visualStyle` accepts `editorial`, `documentary` or `trailer`. It is a descriptive
+label, not a template selector. `notes` is author documentation; it is not consumed
+by the renderer or validated as a required field.
 
-## Minimal skeleton
+`scenes` is a non-empty list of absolute intervals used for validation/review
+metadata, not an edit decision list. Each interval must have `0 <= start < end`
+inside the content (`contentFrames / fps`, approximately `voiceSeconds / rate + 1`).
+The local `reviewTimes()` helper currently uses a fixed sample independent of
+these intervals; the manual QA in the skill samples the MP4 separately. Neither
+mechanism checks that the code follows the declared scene intervals.
+
+`validateAuthoredPlan` parses JSX with Babel, checks syntax, imports and globals,
+then `bundleAuthored` compiles it for Chromium. The engine mounts the default
+export for `contentFrames`, loads the local font and appends the closing identity.
+The component neither controls total duration nor draws the closing card.
+
+The validator accepts a boolean `music` and an optional valid `visualStyle`; the
+final-video workflow requires `music: true` and an explicit style. Technical
+fixtures may exercise a wider engine interface than a delivered video.
+
+Delivery dimensions, frame rate, voice policy and closing duration are defined
+in `video-render/contract/short-format.js`. `DIRECTOR_ENDCARD_SECONDS` governs
+version 5; `ENDCARD_SECONDS` is retained for legacy plans. Folder validation is in
+`video-render/contract/layout.js`. Read these files when changing those contracts.
+
+## Component props
+
+| Prop | Shape |
+| --- | --- |
+| `frames` | total frames, including the endcard |
+| `contentFrames` | content frames, excluding the endcard |
+| `photos` | `[{src, backdrop, focusBlur, width, height}]` |
+| `clips` | `[{src, width, height, duration}]` |
+| `words` | `[{word, start, end}]`, in seconds on the final timeline |
+| `facts` | real match figures supplied by the media pack |
+| `match` | match text |
+| `brandName`, `brandUrl` | official name and domain |
+| `font`, `brand` | local asset paths for this job |
+
+Use resource paths from props. The local media adapters reject resources outside
+the job and Chromium has a network CSP. The font family is
+`GoatLabLocal, sans-serif`.
+
+`words` already includes the intro offset. Keep a single `Captions` layer on the
+content's absolute timeline. A nested `Sequence` changes the frame origin; do not
+restart full-track captions in each shot or add another intro offset.
+
+The script is the reference text; transcription provides the clock. Fix reference
+words rather than editing timings. The CLI reports its chosen script and match
+percentage; the workflow defines correction and fallback handling.
+
+## Imports and runtime
+
+The exact allowlists live in
+`video-render/render/remotion/authored-composition.mjs`.
+
+- From `react`: React and standard hooks.
+- From `remotion`: `AbsoluteFill`, `Sequence`, `Series`, `Freeze`, `Loop`, `Img`,
+  `OffthreadVideo`, `Html5Video`, `Video`, `useCurrentFrame`, `useVideoConfig`,
+  `interpolate`, `interpolateColors`, `spring`, `Easing`, `random`, `getInputProps`.
+- From `goatlab-kit`: `Captions`, `FitText`, `SafeArea`, `KenBurns`, `StatCard`,
+  `CameraMove`, `ColorWash`, `FilmGrain`, `phrases`, `wordAt`, `fitFontSize`.
+
+`Video` aliases the local `OffthreadVideo` adapter. Clips are always muted; the
+pipeline owns the soundtrack. Animate deterministically with `useCurrentFrame`,
+`interpolate` or `spring`. CSS, inline SVG, masks, compositing and 3D transforms
+are available within this runtime; additional packages are not.
+
+No dynamic imports, re-exports, `require`, `eval`, `Function`, Node globals,
+direct DOM, network APIs, browser storage, workers or timers. No iframe/script or
+other external resource loading. `@remotion/transitions` is not available; animate
+supported properties or use cuts. A rejected plan must be fixed rather than
+relaxing the validator.
+
+## Kit APIs
+
+The kit provides tools, not mandatory components or arrangements. Its source is
+`video-render/render/remotion/kit/goatlab-kit.jsx`.
+
+- `Captions({words, style, wordStyle, activeStyle, maxWords, render})`: draws the
+  active phrase. `render(group, index)` replaces the default markup and must
+  retain the caption identity. `maxWords` defaults to 4 and can be changed.
+- `FitText({children, maxWidth, max, min, style})`: fits font size to width.
+- `SafeArea({children, style})`: leaves 160 px top, 340 bottom, 60 left, 160 right.
+- `KenBurns({src, from, to, durationInFrames, style})`: transforms a photo.
+- `StatCard({label, value, unit, source, countUp, style})`: displays a figure;
+  the default counter rounds to integers. Set `countUp={false}` for decimal
+  values or implement formatting that preserves the supplied figure.
+- `CameraMove({children, from, to, durationInFrames, startFrame, style})`:
+  transforms media or a group. `from`/`to` use `scale`, `x`, `y`.
+- `ColorWash({colors, opacity})`: overlays one or two colors.
+- `FilmGrain({opacity, seed})`: deterministic grain.
+- `phrases(words)`, `wordAt(words, seconds)`, `fitFontSize(text, options)`:
+  text/timing helpers.
+
+At 1080×1920, keep text inside the safe area and use at least 40 px for information
+that must be read on a phone, including labels and sources. `StatCard` can be
+restyled or replaced with custom JSX. The layout probe warns; it does not prove
+legibility or check whether an overlay hides a player or the ball.
+
+## Minimal API example
+
+This example only shows media paths, duration and captions. Author the actual
+composition from the creative direction and the recording.
 
 ```jsx
 import React from 'react';
-import { AbsoluteFill, Sequence, useCurrentFrame, interpolate } from 'remotion';
+import { AbsoluteFill, Img, OffthreadVideo } from 'remotion';
+import { Captions } from 'goatlab-kit';
 
 export default function Piece(props) {
-  return (
-    <AbsoluteFill style={{ background: '#101412' }}>
-      <Sequence durationInFrames={props.contentFrames}>
-        <MyScene words={props.words} />
-      </Sequence>
-    </AbsoluteFill>
-  );
-}
-```
-
-`useCurrentFrame` inside a `Sequence` starts at 0 in that sequence. To time
-absolute scenes, use `from` and `durationInFrames` on the parent `Sequence`.
-
-## Patterns
-
-### Photo scene with motion
-
-```jsx
-function Photo({ src, frames }) {
+  const mediaStyle = { width: '100%', height: '100%', objectFit: 'cover' };
   return (
     <AbsoluteFill>
-      <KenBurns src={src} durationInFrames={frames} from={{ scale: 1.02, x: 0, y: 0 }} to={{ scale: 1.13, x: 0, y: -30 }} />
-      <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(16,20,18,.05), rgba(16,20,18,.92))' }} />
-      <AbsoluteFill style={{ padding: '160px 90px 340px', justifyContent: 'flex-end' }}>
-        <div style={{ fontSize: 92, fontWeight: 800, color: '#F5F1E8' }}>TITLE</div>
-      </AbsoluteFill>
+      {props.clips.length > 0
+        ? <OffthreadVideo src={props.clips[0].src} style={mediaStyle} />
+        : <Img src={props.photos[0].src} style={mediaStyle} />}
+      <Captions words={props.words} />
     </AbsoluteFill>
   );
 }
 ```
 
-### Clip with overlay
+For a shot, use `<Sequence from={startFrame} durationInFrames={shotFrames}>`.
+`useCurrentFrame()` inside it starts at 0. Put camera helpers inside the shot's
+sequence to restart their movement there. Keep captions outside shot sequences.
+Trim a clip with `startFrom`/`endAt`; `Loop` and `Freeze` are available when needed.
+Keep a clip mounted long enough to cover its sequence or explicitly manage its
+end; the minimal example does not plan coverage for a longer voice.
 
-```jsx
-<Sequence from={690} durationInFrames={255}>
-  <AbsoluteFill style={{ background: '#000' }}>
-    <OffthreadVideo src={props.clips[0].src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-    <AbsoluteFill style={{ background: 'linear-gradient(180deg, transparent, rgba(16,20,18,.9))' }} />
-    <div style={{ position: 'absolute', left: 90, right: 90, bottom: 340 }}>
-      <div style={{ fontSize: 82, fontWeight: 800, color: '#F5F1E8' }}>AHORA JUEGA EN SU CAMPO</div>
-    </div>
-  </AbsoluteFill>
-</Sequence>
-```
+## Validation and performance
 
-### Subtitles
-
-```jsx
-<Sequence durationInFrames={props.contentFrames}>
-  <Captions
-    words={props.words}
-    maxWords={4}
-    style={{ padding: '0 70px 300px' }}
-    wordStyle={{ fontSize: 58, textShadow: '0 4px 18px rgba(0,0,0,.85)' }}
-    activeStyle={{ color: '#ffe14a' }}
-  />
-</Sequence>
-```
-
-Use the fill `#ffe14a` and a black outline/shadow. Do not stack two subtitle layers
-or add offsets: `words` already arrives in the final timeline.
-
-### Real figure
-
-```jsx
-<StatCard label="ÚLTIMO CRUCE" value={4} unit="goles" source="Real Madrid CF" style={{ width: 430 }} />
-```
-
-`value` must come from `facts`. Do not invent figures or use percentages the match
-does not support.
-
-### Camera and color
-
-```jsx
-<CameraMove from={{ scale: 1, x: 0, y: 0 }} to={{ scale: 1.08, x: 0, y: -20 }} durationInFrames={300}>
-  <Img src={props.photos[0].src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-</CameraMove>
-<ColorWash colors={['#1B3A2A', '#101412']} opacity={0.12} />
-```
-
-`CameraMove` goes inside a `Sequence` to restart motion per scene.
-
-### Transitions
-
-`@remotion/transitions` is not in the allowed import list. For transitions,
-animate opacity, `clipPath`, `transform` or use hard cuts. A cut on the voice
-usually reads better than a slow fade.
-
-## Rules the validator applies
-
-- `version: 5`, `code` non-empty, maximum 200 KB.
-- Duration within `MAX_FRAMES`; `scenes` within the content.
-- `music` boolean; `visualStyle` one of the three values.
-- Default export.
-- Imports only from `react`, `remotion` and `goatlab-kit`, with the exact list.
-- No `require`, `eval`, `Function`, `process`, `global`, `globalThis`, `window`,
-  `document`, `fetch`, `XMLHttpRequest`, `WebSocket`, `Worker`, `navigator`,
-  `localStorage`, `sessionStorage`, `setInterval`, `setTimeout`.
-
-A validation error returns the message and does not render. Fix the plan; do not
-change the engine.
-
-## Performance
-
-- `RENDER_WORKERS` splits frames across processes. 3 to 4 is a good point on a
-  laptop; each worker opens its own Chromium.
-- `CAPTURE_BUDGET_MS` and `CAPTURE_TIMEOUT_MS` must be set together. The first
-  decides whether the render is considered viable; the second cancels capture.
-- `RENDER_CRF`: 20 by default; 23 produces smaller files; 16 to 18 for maximum
-  quality.
-- `LAYOUT_CHECK=advisory` reports clipped text, text outside the canvas or text in
-  covered areas without blocking delivery. Use it on the first render.
-- Avoid dozens of simultaneous blur layers. If the budget runs out, simplify the
-  most expensive scene, not the whole video.
+- Version 5, non-empty JSX, at most 200 KB, default-exported React component.
+- Integer frame duration inside the delivery contract; valid review intervals.
+- Allowed imports and APIs; all media comes from props.
+- `RENDER_WORKERS` sets capture concurrency. Each worker opens Chromium.
+- Set `CAPTURE_BUDGET_MS` and `CAPTURE_TIMEOUT_MS` together: one controls capture
+  viability and the other cancels the operation.
+- `RENDER_CRF` defaults to 20; the workflow uses 23 for smaller deliveries.
+- `LAYOUT_CHECK=advisory` reports layout problems without blocking capture.
+- If capture exceeds its budget, measure the expensive scene and adjust its cost
+  or the local budget before retrying. Availability of an effect is not a reason
+  to use it.
 
 ## Common errors
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| `compilación JSX` | disallowed import, syntax error or missing export | check imports and `export default` |
-| `resource outside the job` | you used a URL or file that does not come from props | use `photos[].src`, `clips[].src`, `font` or `brand` |
-| `duración fuera de límite` | `scenes` or `frames` out of range | fit `scenes` to the content |
-| `plan version:5 y code JSX` | missing `code` or version | complete the JSON |
-| Empty captions | `words` not passed to `Captions` | pass `props.words` |
-| Black video | clip/photo not found or an opaque layer on top | check `src`, `zIndex` and layer order |
-| Clipped text | safe area not respected | use `SafeArea` or padding 160/340/60/160 |
+| `compilación JSX` | import, syntax or export error | check allowlists and default export |
+| `resource outside the job` | path does not come from props | use the supplied media/asset paths |
+| `duración fuera de límite` | invalid frame duration | check the format contract |
+| `tiempos de revisión fuera del contenido` | review interval out of range | fit `scenes` to the content |
+| Empty/shifted captions | missing words or local sequence clock | use full-track words on the absolute timeline |
+| Black video | missing source or opaque covering layer | check resource, layer order and coverage |
+| Clipped text | layout outside visible area | use safe-area dimensions and inspect the MP4 |
 
-## Checklist before rendering
+## Technical checks before capture
 
-- [ ] The JSON parses and has `version: 5`, `music: true`, a valid `visualStyle`.
-- [ ] `scenes` ends within `contentFrames / 30`.
-- [ ] Default export and only allowed imports.
-- [ ] Every usable clip appears at least once.
-- [ ] 2 to 4 figures from `facts`, none invented.
-- [ ] Subtitles with `props.words`, `#ffe14a` fill and black outline.
-- [ ] Text inside the safe area; nothing critical under the bottom 320 px.
-- [ ] No custom endcard: the engine adds the logo.
+Parse the JSON, validate the plan with the engine and confirm timing coverage,
+resource indices, the caption timeline and the engine-owned closing. Then apply
+[creative.md](creative.md) during visual review; compiler success cannot validate
+editorial decisions.

@@ -1,5 +1,14 @@
 # Video pipeline optimization and manual review evaluation
 
+> Historical report of the October 2026 remote pipeline. This is not a current
+> authoring policy. For final videos, read the
+> [local workflow](.agents/skills/video-render/SKILL.md),
+> [creative direction](.agents/skills/video-render/references/creative.md) and
+> [fixed identity](.agents/skills/video-render/references/brand.md).
+> Model names, review behavior, optional music/captions and machine limits below
+> describe that historical system.
+
+
 The expansion of visual direction, optional tools, sample retention and comparison
 commands is described in [VIDEO-CINEMATIC-REPORT.md](VIDEO-CINEMATIC-REPORT.md).
 The historical measurements in this report are not results from the new kit.
@@ -64,7 +73,7 @@ In the October 21 test, a single audio measured:
 | Visual review | 9 model calls and a final verdict |
 | Authoring | several minutes for timeouts, retries and one correction |
 
-## Current contract
+## Contract at the time of this report
 
 **Duration.** The only editorial maximum is 55 s, including the final logo. Render
 rejects any MP4 that exceeds it. It also requires AAC voice, H.264 at 30 fps,

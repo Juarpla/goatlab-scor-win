@@ -104,7 +104,11 @@ logo for one second and the total, including that endcard, measures at most 55 s
 Recording recommendation: up to 50 s; technical voice budget 53 s and adjustment
 up to 1.10 preserving pitch. MP4s are saved in `video-render/videos/<webId>/` and
 recipes in `video-render/work/<webId>/`.
-See [the creative freedom and constraints report](CREATIVE-FREEDOM-REPORT.md).
+For final-video authoring, read the
+[creative direction](.agents/skills/video-render/references/creative.md),
+[fixed identity](.agents/skills/video-render/references/brand.md) and
+[technical workflow](.agents/skills/video-render/SKILL.md).
+The [creative freedom report](CREATIVE-FREEDOM-REPORT.md) is historical.
 
 The five Agnes Video Flash attempts pair different prompts and images before
 reusing them. An uncertain task with an identifier has up to 60 s of recovery from

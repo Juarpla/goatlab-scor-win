@@ -14,6 +14,17 @@ script alignment, media preparation, JSX composition, render and mix run on this
 machine, with no remote worker. HyperFrames was dropped after the 2026-11-01 A/B
 test (same quality, more weight and an extra toolchain).
 
+## Sources and scope
+
+For final-video creative decisions, read [references/creative.md](references/creative.md)
+before selecting media or authoring, and use it again during review. It is the
+single creative authority. Read [references/brand.md](references/brand.md) for
+fixed identity and [references/remotion.md](references/remotion.md) before writing
+JSX for the plan schema, props, runtime and kit. This skill governs operations;
+[COMPLIANCE.md](../../../COMPLIANCE.md) governs editorial/provenance constraints.
+Asset-generation prompts govern the source material, not the final edit.
+Historical reports and benchmark plans are not current authoring instructions.
+
 ## Delivery contract
 
 - 1080×1920, 30 fps, H.264 with AAC.
@@ -24,9 +35,7 @@ test (same quality, more weight and an extra toolchain).
 - Input audios: `video-render/audios/<id>/`; fixtures live in
   `video-render/audios/tests/` (`tests` is a reserved id).
 - Deliveries: `video-render/videos/<id>/`.
-- The only fixed editorial element is the GoatLab logo in the last second.
-- Permanent visual preference: vivid color, sharp and well-lit image, no dark or
-  murky passages. `references/creative.md` turns this into rules.
+- Closing identity is injected by the engine; follow the brand reference.
 
 ## Paths
 
@@ -107,9 +116,8 @@ asking anything: do not summarize it, do not reorder it from memory and do not
 start from an audio first. Then ask for an `id`.
 
 Use the exact `id`: it is the key for both the media pack and the render command.
-Prefer matches with 4 images and 4 clips; if the chosen one has fewer, use it and
-make the most of what is available. Never use a pack with 0 images and 0 clips:
-a `sin media` row needs media generation first. `--all` includes packs outside
+A complete bank offers more choices; a partial bank is usable. Never use a pack
+with 0 images and 0 clips: a `sin media` row needs media generation first. `--all` includes packs outside
 the current top.
 
 When presenting the scripts for the chosen match, include its media level
@@ -212,107 +220,24 @@ Read `public/data/media-pack/<id>.json`. It contains:
 Download the clips and extract one frame from each to see what they show before
 writing the plan. Use `clips[].url` and
 `ffmpeg -ss 1 -i clip.mp4 -frames:v 1`. Look at the frames with the image reading
-tool. If a clip is corrupt or empty, note it and use the rest. Every **usable**
-clip must appear at least once.
+tool. Also inspect the photos. Sample clips beyond the opening frame to identify
+moving subjects and any visual defects; play them when samples are insufficient. Record
+corrupt or empty resources and work with the rest. Selection follows the creative
+reference, rather than a requirement to exhaust the bank.
 
-Closure criterion: you know what each clip shows and how many you will use.
+Closure criterion: you know the usable media, subject movement and limitations.
 
 ## Step 4 — Write the plan
 
-Create `video-render/work/<id>/<slug>/plan.json`:
+Read the creative, brand and technical references named above. Write
+`video-render/work/<id>/<slug>/plan.json` using the version 5 schema in
+[references/remotion.md](references/remotion.md). Record the concept and relevant
+media-selection decisions in `notes`, alongside the existing plan fields. Choose
+review intervals inside the content; these intervals do not define the montage.
 
-```json
-{
-  "version": 5,
-  "visualStyle": "editorial",
-  "music": true,
-  "scenes": [{ "start": 0, "end": 4.5 }],
-  "code": "import React from 'react'; ..."
-}
-```
-
-- `visualStyle`: `editorial`, `documentary` or `trailer`.
-- `music` must be `true`.
-- `scenes` are absolute seconds for sampling the visual review. They must end
-  inside the content, which runs from 0 to `voiceSeconds / rate + 1` (the 1 s
-  endcard is outside). If you do not know the rate, `voiceSeconds / 1.1 + 1` is
-  always safe. They do not impose structure.
-- `code` is a JSX module, maximum 200 KB.
-
-### Code contract
-
-- Default-export a React component.
-- It receives `frames`, `contentFrames`, `photos`, `clips`, `words`, `facts`,
-  `match`, `brandName`, `brandUrl`, `font`, `brand`.
-- `photos`: `{src, backdrop, focusBlur, width, height}`.
-- `clips`: `{src, width, height, duration}`.
-- `words`: `{word, start, end}` in seconds, already on the final timeline.
-- The engine mounts the component for `contentFrames` and adds the 1 s endcard
-  with the logo. Do not draw the endcard.
-- Allowed imports: `react`; from `remotion` only `AbsoluteFill`, `Sequence`,
-  `Series`, `Freeze`, `Loop`, `Img`, `OffthreadVideo`, `Html5Video`, `Video`,
-  `useCurrentFrame`, `useVideoConfig`, `interpolate`, `interpolateColors`,
-  `spring`, `Easing`, `random`, `getInputProps`; from `goatlab-kit` only `Captions`,
-  `FitText`, `SafeArea`, `KenBurns`, `StatCard`, `CameraMove`, `ColorWash`,
-  `FilmGrain`, `phrases`, `wordAt`, `fitFontSize`.
-- Use `Img` for photos and `Video`/`OffthreadVideo` for clips. Paths come from
-  props; never invent URLs or load external resources.
-- Animate with `useCurrentFrame` plus `interpolate`/`spring`. No `setTimeout`,
-  `setInterval`, `window`, `document`, `fetch` or dynamic imports.
-- The local font is `GoatLabLocal`; use `fontFamily: 'GoatLabLocal, sans-serif'`.
-- Respect the safe area: 160 px top, 340 px bottom, 60 px left, 160 px right.
-  Text must be readable from 40 px.
-- Subtitles: use `Captions` with `words`; fill `#ffe14a` and black outline. You may
-  change size, position and animation, but keep the brand fill and outline and make
-  them readable on a phone.
-
-### Visual direction
-
-Permanent user preferences, not suggestions:
-
-- **Vivid color.** Keep saturation high and the brand green alive. Use veils and
-  gradients as accents, not as a global tint.
-- **Brightness and light.** Lift the shadows and keep the midtones open. No
-  underexposed sequences, long black passages, crushed blacks or heavy vignettes.
-- **Sharp image.** Crop from the native resolution and avoid upscaling beyond the
-  source. Blur belongs to backgrounds, transitions and graphic layers, never to the
-  subject; use `backdrop` and `focusBlur` to separate.
-- **Readability without darkening.** Subtitles use the brand fill and black
-  outline. Do not darken the whole frame or add heavy shadows to make the text
-  readable.
-- **Dark green `#101412` belongs to the endcard.** Do not let it dominate the
-  content.
-
-Variety still matters: these rules limit quality, not concept.
-
-### Local creative freedom
-
-There is no Fly CPU budget. You may use:
-
-- two or three clips at once, picture-in-picture, split screens;
-- masks, `clip-path`, `mix-blend-mode`, gradients, light leaks;
-- `filter: blur` and `backdrop-filter` on backgrounds and graphic layers, grain,
-  chromatic aberration, scanlines;
-- SVG with `feTurbulence`, `feGaussianBlur`, `feDisplacementMap`;
-- 3D transforms, parallax, particles, kinetic typography, counters;
-- cuts on the voice, transitions and reframing.
-
-Measure the first render: if the local budget runs out, raise `CAPTURE_BUDGET_MS`
-or simplify only the most expensive scene. Do not fall back to Fly's flat style
-out of caution.
-
-### Clips and facts
-
-- Every usable clip appears at least once. If the audio is shorter than the sum of
-  clips, trim with `startFrom`/`endAt`; if it is longer, reuse with `Loop` or
-  `Freeze`.
-- Use 2 to 4 figures from `facts`; never invent statistics.
-- Agnes images support the piece; clips lead when they exist.
-- Vary the concept between audios: never repeat the same template with only the
-  text changed.
-
-Closure criterion: the JSON parses, the code has a default export, `music` is
-`true`, every usable clip appears and `scenes` fits inside the content.
+Closure criterion: the JSON parses, the JSX default export meets the technical
+contract, `music` is `true`, resource indices are valid, and the composition
+implements the creative direction for this recording.
 
 ## Step 5 — Render
 
@@ -345,7 +270,7 @@ node --env-file=.env video-render/cli/render.mjs \
   timings. `--script-n` fixes the script; without it the best match is chosen.
   Without `--script`, the raw transcription is used.
 - `--keep` saves `<title>.composition.json` in `video-render/work/<id>/`.
-- Each render appends an entry to `manifest.json` in the output folder.
+- Each render records an entry in `video-render/work/<id>/manifest.json`.
 - Run with a long timeout (30 to 60 min).
 - `--variant` names the temporary directory `goatlab-short-<match>-v<variant>`.
   Never reuse a variant while another render is running.
@@ -393,13 +318,12 @@ END=$(node -e "console.log(($D-0.5).toFixed(2))")
 ffmpeg -y -loglevel error -ss "$END" -i "$OUT" -frames:v 1 "$QA/endcard.jpg"
 ```
 
-Look at the frames and check:
-
-- subtitles readable, uncropped and inside the safe area;
-- bright, sharp and vivid image, with no dark or murky passages;
-- recognizable clips and every usable clip present;
-- the endcard shows the logo for 1 s;
-- no black frames or broken resources.
+Inspect the sample frames against [references/creative.md](references/creative.md)
+and [references/brand.md](references/brand.md). Play the rendered MP4 to check cuts,
+caption synchronization and overlays as subjects move. Use an available video
+player; if playback is unavailable, inspect denser sequences around those events
+and disclose that continuous playback was not verified. Frame sampling alone does
+not demonstrate rhythm. Check for broken resources and the engine-owned closing.
 
 Detect unintentional black segments (the endcard is dark on purpose, so it is
 excluded):
@@ -411,10 +335,11 @@ ffmpeg -hide_banner -t "$CONTENT" -i "$OUT" -vf blackdetect=d=0.5:pix_th=0.10 \
   -an -f null - 2>&1 | grep blackdetect
 ```
 
-No output means no black segment. If something is wrong, edit the plan and render
-`-v2`; never deliver a broken file. Closure criterion: you reviewed at least 5
-frames plus the endcard, the technical probe matches and the `guion:` score was
-acceptable or you used the corrected reference.
+No `blackdetect` events means this detector found no qualifying black segment.
+If something is wrong, edit the plan and render with `--variant=2`; never deliver a broken file. Closure criterion: you reviewed at least 5
+frames plus the endcard, checked temporal behavior as described above, the
+technical probe matches and the `guion:` score was acceptable or you used the
+corrected reference. Disclose any review limitation at delivery.
 
 ## Step 7 — Deliver
 
@@ -447,7 +372,7 @@ destroy each other. Give each concurrent render its own identity:
 
 ## References
 
-- `video-render/STYLE.md`: permanent preferences and lessons from real renders.
-- `references/creative.md`: creative contract, imports and kit.
-- `references/brand.md`: brand, colors, subtitles and music.
-- `references/remotion.md`: Remotion authoring guide, patterns and common errors.
+- [references/creative.md](references/creative.md): sole final-video creative direction.
+- [references/brand.md](references/brand.md): fixed identity and asset references.
+- [references/remotion.md](references/remotion.md): technical authoring contract.
+- [video-render/README.md](../../../video-render/README.md): architecture and engine measurements.

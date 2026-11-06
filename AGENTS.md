@@ -24,3 +24,12 @@ Consult these guides before working on related tasks:
 ## Language
 
 Code, comments, internal file names and documentation are written in English. User-facing site copy, public routes, generated scripts and stored data stay in Spanish.
+
+## Final videos
+
+Before authoring or reviewing a final video, follow the
+[video-render workflow](.agents/skills/video-render/SKILL.md). Final-video creative
+direction lives only in its [creative reference](.agents/skills/video-render/references/creative.md),
+with fixed identity in [brand.md](.agents/skills/video-render/references/brand.md).
+Keep JSX/runtime instructions in the technical reference and source-generation
+requirements in their prompts. Treat October video pipeline reports as history.

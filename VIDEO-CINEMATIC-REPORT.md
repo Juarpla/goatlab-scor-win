@@ -1,5 +1,14 @@
 # Visual direction and video measurement
 
+> Historical report of the October 2026 remote pipeline. This is not a current
+> authoring policy. For final videos, read the
+> [local workflow](.agents/skills/video-render/SKILL.md),
+> [creative direction](.agents/skills/video-render/references/creative.md) and
+> [fixed identity](.agents/skills/video-render/references/brand.md).
+> Model names, review behavior, optional music/captions and machine limits below
+> describe that historical system.
+
+
 Implementation of October 22, 2026. The infrastructure keeps two authoring jobs,
 one capture and two workers. Resolution, duration, audio, music and hash
 validation continue under the current contract.

@@ -4,6 +4,23 @@ Local GoatLab Shorts renderer. It takes an audio track, a media pack and a JSX
 plan, and delivers a 1080×1920 MP4 with voice, music and subtitles. There is no
 remote worker and no Fly.io: everything runs on this machine.
 
+## Authoring sources
+
+- [Workflow](../.agents/skills/video-render/SKILL.md): audio, preparation, render,
+  review and delivery.
+- [Creative direction](../.agents/skills/video-render/references/creative.md): the
+  single source for final-video aesthetic decisions.
+- [Fixed identity](../.agents/skills/video-render/references/brand.md): brand assets.
+- [Technical authoring](../.agents/skills/video-render/references/remotion.md): plan
+  schema, JSX, runtime, kit and timing.
+- [Compliance](../COMPLIANCE.md): editorial and provenance constraints.
+
+Generation prompts govern source images and animation, while the
+[writing skill](../.agents/skills/writing-short-scripts/SKILL.md) governs spoken
+scripts. They do not prescribe the final montage. October reports about remote
+workers are historical; they do not override these sources. See the
+[consolidation audit](CREATIVE-AUDIT.md) for the conflicts resolved on 2026-11-05.
+
 ## Structure
 
 ```
@@ -37,7 +54,7 @@ video-render/
   videos/<match-id>/         delivered MP4s (ignored by git)
   videos/tests/              test renders (contents ignored; .gitkeep keeps the folder)
   work/<match-id>/           plans, manifests and QA (contents ignored; work/.gitkeep keeps the folder)
-  STYLE.md                   preferences and lessons
+  STYLE.md                   compatibility link to creative direction
 ```
 
 ## Folder contract
@@ -116,8 +133,9 @@ Node 22.12 or later, ffmpeg and ffprobe. Render dependencies:
 npm ci --prefix video-render/render/remotion
 ```
 
-Keys go in `.env` (never in git): `MISTRAL_API_KEY`, `OPENCODE_GO_API_KEY` and
-the R2/Agnes keys if media banks are generated.
+Transcription uses `MISTRAL_API_KEY` from `.env` (never in git), with a local
+whisper.cpp fallback. The render has no creative-model API dependency. R2/Agnes
+credentials belong to the separate GitHub Actions media-generation flow.
 
 ## Usage
 
@@ -141,7 +159,7 @@ node --env-file=.env video-render/cli/render.mjs \
   --match=real-racing-club-vs-real-madrid-2026-11-01 \
   --script=public/data/youtube-scripts/real-racing-club-vs-real-madrid-2026-11-01.json \
   --script-n=6 \
-  --plan=video-render/work/<id>/<slug>.plan.json \
+  --plan=video-render/work/<id>/<slug>/plan.json \
   --variant=1 --keep
 ```
 
@@ -160,8 +178,7 @@ node --env-file=.env video-render/cli/render.mjs \
   plus `<stem>.plan.json`. `--keep` also saves `<stem>.composition.json` there.
 - Test renders go to `video-render/videos/tests/` via
   `--out=video-render/videos/tests/<name>.mp4`.
-- The `video-render` skill contains the full workflow, creative direction and
-  authoring guide.
+- Follow the authoring sources above before creating a final-video plan.
 
 ## Engine A/B test (2026-11-01)
 

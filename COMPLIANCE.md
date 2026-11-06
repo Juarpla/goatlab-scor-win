@@ -1,11 +1,13 @@
 # COMPLIANCE — GoatLab Shorts
 
-Blocking pre-render rules. Lint (`pnpm lint:shorts`) fails the run if any rule is violated.
+Editorial and provenance requirements. `pnpm lint:shorts` checks the stored
+scripts and media manifests; render validation and visual review cover the MP4.
+The linter does not inspect JSX, framing or the finished video.
 
 ## Prohibited (zero tolerance)
 
-1. **Broadcast footage**: only still photos with a registered license. Movement is a camera move over that photo, plus graphics and the site's own web card. No clips from a televised match.
-2. **Logos drawn by GoatLab**: the template adds no crests, leagues or brands. The only logo it draws is GoatLab's (`public/favicon.svg`). The crest and sponsor already present in the player photo stay.
+1. **Broadcast footage**: no clips from televised matches. Use licensed stills or referential Agnes images and animated clips with the provenance recorded in the media pack. Generated animation is permitted; it is not footage of a real play.
+2. **Logos drawn by GoatLab**: the authored composition adds no team crests, league logos or third-party brands. The final logo uses the asset specified in the [brand reference](.agents/skills/video-render/references/brand.md). The crest and sponsor already present in the player photo stay.
 3. **Odds, betting houses and betting CTAs**: no odds/lines, picks, stake/bankroll, tipster, bonuses, casino, parlay/accumulator, handicap, "banker/sure thing".
 4. **Result guarantees**: no "guaranteed win", "100% safe", "guaranteed".
 5. **Raw market keys to the reader**: `1X2`, `BTTS`, `DNB`, `H2H`, `HT/FT` are never printed (see `src/lib/story-dictionary.js`).
@@ -20,7 +22,7 @@ Blocking pre-render rules. Lint (`pnpm lint:shorts`) fails the run if any rule i
 - A beat with the web CTA (`goatlab.win`) inside the script.
 - Description with one icon per block: `⚽` lede + `📊` link block (`📊 Todos los datos del partido:` on one line, `https://goatlab.win/partido/<id>` on the next) + `🏷️` hashtags (including `#goatlab`) + `⚠️` fixed disclaimer, separated by blank lines:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
-- Script in continuous text ≤ 110 words (~50s), ready to read aloud: hook + interwoven data + close + spoken CTA to `goatlab.win`. Agnes illustrations with provenance and the referential notice registered in `media-pack`.
+- Script as labeled spoken beats under the [writing skill](.agents/skills/writing-short-scripts/SKILL.md), joined into continuous narration for recording, ≤110 words with a target below 50 s. Include the spoken CTA to `goatlab.win`. Agnes illustrations with provenance and the referential notice registered in `media-pack`.
 - Click title different from the hook. It is stamped by `shortTitle`: row icon, `⚽` and the fixed phrase from the `writing-short-scripts` skill (teams, or up to two players from scripts 3, 4, 7 and 9). Hashtags without accents and without duplicates, teams and players first, limit 15. Lint fails if the JSON does not match.
 
 ## Photos
@@ -31,4 +33,22 @@ Complete v2 banks require coherent fingerprint and identity, four photos and fou
 
 ## Video
 
-`pnpm short -- --match=<webId> --audio=<file>`: H.264/AAC MP4 1080×1920 at 30 fps. React/Remotion interprets the validated voice plan, combining images, muted clips and statistical graphics. It keeps yellow subtitles with a black outline, music and the goatlab.win endcard. Maximum 49.9 seconds and less than 45 MB; voice up to 45.9 s, maximum acceleration 1.10 preserving pitch and all words. Transcription uses the adjusted audio. Renders in public/shorts/ (gitignored).
+The local CLI is `node --env-file=.env video-render/cli/render.mjs`, with the
+match, script and version 5 JSX plan. Follow the
+[render workflow](.agents/skills/video-render/SKILL.md) for recording and delivery.
+
+The implemented format/voice contract is
+[short-format.js](video-render/contract/short-format.js): 1080×1920, 30 fps,
+H.264/AAC, at most 55 s including the one-second authored-plan endcard, and a
+53 s voice budget. Voice adjustment preserves pitch and words, up to 1.10×
+(input at most 58.3 s). The final file must be smaller than 45 MB.
+Transcription uses the adjusted audio.
+
+Inputs and outputs follow [layout.js](video-render/contract/layout.js): recordings
+in `video-render/audios/<id>/`, delivered MP4s in `video-render/videos/<id>/`, and
+plans/QA in `video-render/work/<id>/`. `public/shorts/` is not a delivery path.
+
+Final-video aesthetics are governed only by the
+[creative direction](.agents/skills/video-render/references/creative.md), with
+fixed identity in [brand.md](.agents/skills/video-render/references/brand.md).
+These editorial/provenance requirements still apply to all on-screen claims.
