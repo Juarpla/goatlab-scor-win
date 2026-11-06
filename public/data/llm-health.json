@@ -1,43 +1,6 @@
 {
-  "updatedAt": "2026-11-06T19:57:15.328Z",
+  "updatedAt": "2026-11-06T20:35:09.361Z",
   "runs": [
-    {
-      "at": "2026-10-27T05:22:43.272Z",
-      "matchId": "fd-560629",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1345,
-        "outputTokens": 10629
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "e2682ccb-276f-4288-a782-335589077933"
-    },
-    {
-      "at": "2026-10-27T12:04:19.310Z",
-      "matchId": "fd-564737",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2040,
-        "outputTokens": 21657
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "112e1ba0-4d02-42e9-aa11-893e853e868c"
-    },
     {
       "at": "2026-10-27T12:04:19.310Z",
       "matchId": "fd-560626",
@@ -8075,6 +8038,141 @@
       },
       "truncated": false,
       "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-06T20:02:57.578Z",
+      "task": "shorts",
+      "matchId": "arsenal-vs-hull-city-2026-11-07",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 292118
+      },
+      "usage": {
+        "inputTokens": 7403,
+        "outputTokens": 41502
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "85420343-0803-4057-94f9-1ebb53f822d0"
+    },
+    {
+      "at": "2026-11-06T20:35:09.358Z",
+      "task": "shorts",
+      "matchId": "leeds-united-vs-tottenham-hotspur-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Leeds United FC; guion 3: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7378,
+            "outputTokens": 25135
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 232200
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: proyección fuera de rango; guion 2: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7239,
+            "outputTokens": 35666
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 476878
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: falta Leeds United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7805,
+            "outputTokens": 2729
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 65615
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235307
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 7: 6 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 7 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7378,
+            "outputTokens": 30271
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 160899
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 5: golpe 3 (dato): 5 palabras, mínimo 6",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7239,
+            "outputTokens": 35475
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 500476
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: falta Tottenham Hotspur FC; guion 7: 6 cifras, máximo 3; guion 9: falta Leeds United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7805,
+            "outputTokens": 2715
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25133
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235265
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7805,
+        "outputTokens": 2715
+      },
+      "truncated": false,
+      "maxTokens": 131072,
       "batchSize": 1,
       "callId": null
     }
