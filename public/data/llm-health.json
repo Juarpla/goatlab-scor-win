@@ -1,91 +1,6 @@
 {
-  "updatedAt": "2026-11-06T07:10:45.207Z",
+  "updatedAt": "2026-11-06T08:30:20.906Z",
   "runs": [
-    {
-      "at": "2026-10-25T21:29:23.401Z",
-      "task": "video-prompts",
-      "matchId": "levante-ud-vs-atletico-madrid-2026-10-31",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1345,
-        "outputTokens": 1534
-      }
-    },
-    {
-      "at": "2026-10-26T12:51:49.385Z",
-      "matchId": "fd-564733",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2013,
-        "outputTokens": 23412
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "8c0074a9-a973-430d-8d17-8125059744af"
-    },
-    {
-      "at": "2026-10-26T12:51:49.385Z",
-      "matchId": "fd-564734",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "8c0074a9-a973-430d-8d17-8125059744af"
-    },
-    {
-      "at": "2026-10-26T12:54:11.003Z",
-      "matchId": "fd-560631",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2000,
-        "outputTokens": 18972
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "e9736882-1673-40de-8ac9-24fe5dfe0158"
-    },
-    {
-      "at": "2026-10-26T12:54:11.003Z",
-      "matchId": "fd-564728",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "e9736882-1673-40de-8ac9-24fe5dfe0158"
-    },
     {
       "at": "2026-10-26T13:01:59.657Z",
       "matchId": "fd-564729",
@@ -7512,6 +7427,334 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-06T07:44:13.402Z",
+      "task": "shorts",
+      "matchId": "nottingham-forest-vs-manchester-city-2026-11-07",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7194,
+            "outputTokens": 18237
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 353684
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "hacen falta 10 guiones; guion 1: la narración debe tener un solo golpe proyeccion; guion 1: la narración debe tener un solo golpe cierre; guion 1: golpe 6: se esperaba proyeccion y llegó nada; guion 1: golpe 7: se esperaba cierre y llegó nada; guion 1: el cierre debe llevar a goatlab.win; guion 1: falta una proyección marcada como opinión; guion 1: 44 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7067,
+            "outputTokens": 32986
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 529931
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: el cero no se escribe en dígitos; guion 1: 4 cifras, máximo 3; guion 3: 8 cifras, máximo 3; guion 5: falta una proyección marcada como opinión; guion 5: la proyección debe coincidir con el golpe proyección; guion 5: 5 cifras, máximo 3; guion 6: el gancho no lleva cifras; guion 6: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7705,
+            "outputTokens": 2896
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 24278
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: cifra 54 no está en los hechos; guion 7: porcentajes bloqueados: evaluation.published es false",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7060,
+            "outputTokens": 8813
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 160979
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7060,
+        "outputTokens": 8813
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-06T08:09:22.975Z",
+      "task": "shorts",
+      "matchId": "arsenal-vs-hull-city-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 3000,
+          "latencyMs": 2371
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600002
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 5 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 2: 7 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3; guion 5: falta Hull City AFC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7789,
+            "outputTokens": 2976
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 35326
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235187
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 3000,
+          "latencyMs": 2221
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: proyección fuera de rango; guion 5: cifra 5.3 no está en los hechos; guion 5: cifra 4.3 no está en los hechos; guion 6: proyección fuera de rango; guion 6: cifra 2017 no está en los hechos; guion 9: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7126,
+            "outputTokens": 35242
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 598523
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 6 cifras, máximo 3; guion 3: 8 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7789,
+            "outputTokens": 3004
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 67070
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 3: cifra 2.5 no está en los hechos; guion 3: 4 cifras, máximo 3; guion 5: golpe 4 (dato): 5 palabras, mínimo 6; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7119,
+            "outputTokens": 6918
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 112597
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7119,
+        "outputTokens": 6918
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-06T08:27:55.987Z",
+      "task": "shorts",
+      "matchId": "leeds-united-vs-tottenham-hotspur-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 3000,
+          "latencyMs": 2407
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7083,
+            "outputTokens": 28135
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 465835
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 3: 6 cifras, máximo 3; guion 3: porcentajes bloqueados: evaluation.published es false; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: falta Tottenham Hotspur FC; guion 7: 6 cifras, máximo 3; guion 8: 4 cifras, máximo 3; descripción: 58 palabras superan el techo de 45",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7635,
+            "outputTokens": 2818
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25625
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235290
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 7 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7213,
+            "outputTokens": 29150
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 246226
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: golpe 4: se esperaba dato y llegó picante; guion 3: golpe 5: se esperaba picante y llegó dato; guion 3: 5 cifras, máximo 3; guion 4: golpe 4: se esperaba dato y llegó picante; guion 4: golpe 5: se esperaba picante y llegó dato; guion 4: 4 cifras, máximo 3; guion 4: guion de 128 palabras supera el techo de 50s (~110)",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7635,
+            "outputTokens": 3081
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 31512
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235273
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7635,
+        "outputTokens": 3081
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-06T08:29:42.369Z",
+      "task": "image-prompts",
+      "matchId": "arsenal-vs-hull-city-2026-11-07",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 3000,
+          "latencyMs": 3776
+        }
+      ],
+      "usage": {
+        "inputTokens": 1857,
+        "outputTokens": 6514
+      }
+    },
+    {
+      "at": "2026-11-06T08:30:20.906Z",
+      "task": "image-prompts",
+      "matchId": "nottingham-forest-vs-manchester-city-2026-11-07",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1916,
+        "outputTokens": 3784
+      }
     }
   ]
 }
