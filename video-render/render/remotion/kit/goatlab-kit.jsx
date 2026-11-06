@@ -14,9 +14,9 @@ export function Captions({ words = [], style, wordStyle, activeStyle, maxWords =
   const local = group.findIndex(item => words.indexOf(item) === active);
   if (render) return render(group, local);
   return (
-    <AbsoluteFill style={{ justifyContent: 'flex-end', alignItems: 'center', padding: '0 60px 360px', ...style }}>
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', fontSize: 64, fontWeight: 800, ...wordStyle }}>
-        {group.map((item, index) => <span key={index} style={index === local ? { color: '#7CFFB2', ...activeStyle } : undefined}>{item.word}</span>)}
+    <AbsoluteFill style={{ justifyContent: 'flex-end', alignItems: 'center', padding: '0 160px 360px 60px', ...style }}>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', fontSize: 64, fontWeight: 800, color: '#ffe14a', WebkitTextStroke: '2px #000', paintOrder: 'stroke fill', ...wordStyle }}>
+        {group.map((item, index) => <span key={index} style={index === local ? { ...activeStyle } : undefined}>{item.word}</span>)}
       </div>
     </AbsoluteFill>
   );
@@ -46,9 +46,9 @@ export function StatCard({ label, value, unit, source, countUp = true, style }) 
   const shown = countUp ? Math.round(interpolate(frame, [0, fps], [0, value], { extrapolateRight: 'clamp' })) : value;
   return (
     <div style={{ padding: '28px 36px', background: 'rgba(16,20,18,.75)', borderRadius: 24, ...style }}>
-      <div style={{ fontSize: 28, letterSpacing: 1 }}>{label}</div>
+      <div style={{ fontSize: 40, letterSpacing: 1 }}>{label}</div>
       <div style={{ fontSize: 84, fontWeight: 800 }}>{shown} {unit}</div>
-      {source ? <div style={{ fontSize: 22, opacity: .75 }}>{source}</div> : null}
+      {source ? <div style={{ fontSize: 40, opacity: .85 }}>{source}</div> : null}
     </div>
   );
 }

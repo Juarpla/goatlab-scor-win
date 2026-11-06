@@ -1,6 +1,6 @@
 /**
- * Short timing: the transcription is the text, 2 to 4 s shots,
- * subtitle pages and figures at the instant they are spoken.
+ * Shared word timing helpers and legacy automatic shot/caption planning.
+ * SHOT_MIN/MAX, planShots and figure quotas do not govern authored version 5 JSX.
  */
 
 export const SHOT_MIN = 2;
