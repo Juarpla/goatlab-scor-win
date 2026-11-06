@@ -4,7 +4,7 @@
   "away": "Tottenham Hotspur FC",
   "competition": "premier",
   "kickoff": "2026-11-07T12:30:00Z",
-  "updatedAt": "2026-11-06T06:45:38.295Z",
+  "updatedAt": "2026-11-06T14:06:15.848Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-05T14:30:07.941Z",
+      "updatedAt": "2026-11-06T14:05:59.641Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-05T14:30:07.941Z",
+      "updatedAt": "2026-11-06T14:05:59.641Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 366
+      "rows": 383
     },
     "venue": {
       "city": "Leeds",
@@ -206,30 +206,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.364,
+      "home": 0.348,
       "draw": 0.282,
-      "away": 0.354,
-      "predicted": "H"
+      "away": 0.37,
+      "predicted": "A"
     },
     "xg": {
       "home": 1.68,
       "away": 1.15
     },
-    "over15": 0.737,
+    "over15": 0.733,
     "over25": 0.494,
-    "over35": 0.285,
+    "over35": 0.284,
     "btts": 0.551,
     "score": "1-1",
     "cornersOver95": 0.516,
     "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.364,
+      "favorite": "A",
+      "favoriteProb": 0.37,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.3645,
+    "confidence": 0.3701,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-05T14:30:24.273Z",
+    "capturedAt": "2026-11-06T14:06:05.877Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -379,7 +379,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 366
+      "historyRows": 383
     },
     "source": "GoatLab",
     "expectedTotal": 4
@@ -390,7 +390,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 366
+      "historyRows": 383
     },
     "source": "GoatLab",
     "expectedTotal": 9.7
@@ -614,5 +614,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": false,
+    "note": "No hay un porcentaje claramente desviado: P, B y B2 coinciden en colocar al visitante arriba. La diferencia relevante es el menor volumen de goles de P (0.99 y 1.227) frente a B (1.68 y 1.15) y al promedio histórico de 3.06.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-06T14:11:35.136Z"
+  }
 }

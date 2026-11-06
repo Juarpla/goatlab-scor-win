@@ -4,7 +4,7 @@
   "away": "Newcastle United FC",
   "competition": "premier",
   "kickoff": "2026-11-07T15:00:00Z",
-  "updatedAt": "2026-11-06T06:45:38.295Z",
+  "updatedAt": "2026-11-06T14:06:15.848Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-05T14:30:07.941Z",
+      "updatedAt": "2026-11-06T14:05:59.641Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-05T14:30:07.941Z",
+      "updatedAt": "2026-11-06T14:05:59.641Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 366
+      "rows": 383
     },
     "venue": {
       "city": "Londres",
@@ -215,9 +215,9 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.456,
+      "home": 0.45799999999999996,
       "draw": 0.257,
-      "away": 0.287,
+      "away": 0.285,
       "predicted": "H"
     },
     "xg": {
@@ -225,20 +225,20 @@
       "away": 1.28
     },
     "over15": 0.7859999999999999,
-    "over25": 0.575,
-    "over35": 0.34600000000000003,
-    "btts": 0.596,
+    "over25": 0.574,
+    "over35": 0.345,
+    "btts": 0.6,
     "score": "1-1",
     "cornersOver95": 0.568,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.456,
+      "favoriteProb": 0.458,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.456,
+    "confidence": 0.4581,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-05T14:30:24.676Z",
+    "capturedAt": "2026-11-06T14:06:06.725Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -388,7 +388,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 366
+      "historyRows": 383
     },
     "source": "GoatLab",
     "expectedTotal": 4.3
@@ -399,7 +399,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 366
+      "historyRows": 383
     },
     "source": "GoatLab",
     "expectedTotal": 10.3
@@ -626,5 +626,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Se marca revisión: B Bzzoiro asigna 28.5% al visitante frente al 18.7% de Poisson y 45.8% al local frente al 51.9%; B2 declara H con 45.8%. Son diferencias entre modelos a contrastar.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-06T14:14:56.603Z"
+  }
 }
