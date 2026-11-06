@@ -4126,18 +4126,18 @@
     "materialKey": "v3|M|bz-601299|SK Sturm Graz|NK Celje|europa|2026-11-05T20:00:00+00:0|NS\nP|2.02|1.16|0.563|0.233|0.204|0.616|0.605\nB|0.625|0.212|0.164|2.02|1.16|0.608|0.563|1-1|0.531\nB2|H|0.625|no|no\nW||rain|3|\nT|19|SK Sturm Graz|3|4||\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-15|NK Celje|Omonia Nicosia|0|3\nR|2026-10-22|SK Sturm Graz|Olympique de Marseille|1|0\nR|2026-10-22|NK Celje|Red Bull Salzburg|2|2"
   },
   "fd-560634": {
-    "matchId": "fd-560634",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Everton y Coventry en la Premier League",
+        "title": "Everton-Coventry: contexto de Premier",
         "bullets": [
-          "Everton FC y Coventry City FC se enfrentan el 6 de noviembre de 2026 a las 20:00 en la Premier League, con estado NS y clima nublado a 13.",
-          "Everton FC ocupa la 7ª plaza con 9 partidos, 13 puntos y 9-9 en goles; Coventry City FC es 16º con 9 partidos, 9 puntos y 9-16."
+          "Everton FC (7º, 13 puntos en 9 partidos) recibe a Coventry City FC (16º, 9 puntos en 9) en la Premier League, el 6 de noviembre de 2026 a las 20:00.",
+          "La tabla del input sitúa a Everton con 9 goles a favor y 9 en contra; Coventry registra 9 a favor y 16 en contra.",
+          "El clima previsto es nublado y 13 °C; el input no detalla la sede del encuentro."
         ],
         "stats": [
           {
-            "value": "7ª",
+            "value": "7º",
             "label": "Puesto Everton"
           },
           {
@@ -4152,44 +4152,39 @@
       },
       {
         "kind": "modelos",
-        "title": "Poisson y CatBoost: divergencia local",
+        "title": "Modelos: Poisson, CatBoost y B2",
         "bullets": [
-          "Poisson GoatLab reparte 40.1% para Everton, 29.4% para el empate y 30.5% para Coventry; usa 1.35 y 1.15 como referencias de goles, 45.6% para el umbral de goles y 51.9% para ambos anotan.",
-          "CatBoost Bzzoiro otorga 56.0% a Everton, 24.1% al empate y 20.0% a Coventry; añade 1.35 y 1.41 como referencias, 54.8% y 54.5% en goles y señala 1-1 con 46.8%.",
-          "B2 declara al local como mayor probabilidad con 56.0% y consigna no en goles totales y en ambos anotan.",
-          "La probabilidad local de Poisson (40.1%) queda 15.9 puntos por debajo de CatBoost/B2 (56.0%), una divergencia clara entre modelos."
+          "Poisson GoatLab otorga 40.1% a victoria de Everton, 29.4% al empate y 30.5% a Coventry; añade 45.6% para más de 2.5 goles y 51.9% para ambos equipos marcan.",
+          "CatBoost Bzzoiro declara 57.0% para Everton, 23.7% para el empate y 19.2% para Coventry; añade 53.7% para más de 2.5 goles y 53.8% para ambos equipos marcan, con 1-1 y confianza 0.469.",
+          "B2, estimación declarada de Bzzoiro, señala H con 0.57 como mayor probabilidad y 'no' en goles totales y ambos equipos marcan, sin coincidir con las cifras de B."
         ],
         "stats": [
           {
             "value": "40.1%",
-            "label": "Prob. local Poisson"
+            "label": "Victoria Everton P"
           },
           {
-            "value": "56.0%",
-            "label": "Prob. local CatBoost"
+            "value": "57.0%",
+            "label": "Victoria Everton B"
           },
           {
-            "value": "46.8%",
-            "label": "Señal 1-1"
+            "value": "53.7%",
+            "label": "Más de 2.5 B"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Antecedentes y balance histórico",
+        "title": "Historial: 18 cruces y precedentes antiguos",
         "bullets": [
-          "El registro histórico suma 18 enfrentamientos, con un balance 3-9-6 y una media de 1.89 goles por partido.",
-          "Los cinco cruces más recientes dejan dos victorias de Everton, dos de Coventry y un empate, con marcadores 1-3, 1-2, 1-0, 1-1 y 2-0.",
-          "Cuatro de esos cinco antecedentes cerraron con tres goles o menos."
+          "El resumen histórico del input registra 18 cruces, con 3 victorias de Everton, 9 empates y 6 de Coventry, y 1.89 goles por partido.",
+          "Los últimos cruces listados son de 1999-2001: Coventry 1-3 Everton, Everton 1-2 Coventry, Coventry 1-0 Everton, Everton 1-1 Coventry y Everton 2-0 Coventry.",
+          "En esos cinco duelos, Everton y Coventry suman dos victorias cada uno y un empate."
         ],
         "stats": [
           {
             "value": "18",
-            "label": "Cruces históricos"
-          },
-          {
-            "value": "3-9-6",
-            "label": "Balance histórico"
+            "label": "Cruces registrados"
           },
           {
             "value": "1.89",
@@ -4198,16 +4193,35 @@
         ]
       },
       {
-        "kind": "goleadores",
-        "title": "Referencias ofensivas",
+        "kind": "forma",
+        "title": "Forma reciente: Everton y Coventry",
         "bullets": [
-          "Thierno Barry es el máximo anotador de Everton con 4 goles en 9 partidos; Kiernan Dewsbury-Hall suma 2 en 9.",
-          "Jack Rudoni lidera a Coventry con 3 goles en 9 partidos."
+          "Everton suma 2 victorias, 1 empate y 2 derrotas en sus últimos cinco: 1-0 a Ipswich, 2-2 en Hull, 0-2 con Chelsea, 0-2 en Arsenal y 1-0 en Newcastle.",
+          "Coventry acumula 3 victorias y 2 derrotas en sus últimos cinco: 1-0 en Nottingham Forest, 4-1 a Newcastle, 1-3 en Tottenham, 0-1 con Fulham y 3-1 a Sunderland."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Victorias Everton (5)"
+          },
+          {
+            "value": "3",
+            "label": "Victorias Coventry (5)"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores: Barry, Rudoni y Dewsbury-Hall",
+        "bullets": [
+          "Thierno Barry es el máximo anotador de Everton con 4 goles en 9 partidos; Kiernan Dewsbury-Hall suma 2 goles en 9.",
+          "Jack Rudoni lidera a Coventry con 3 goles en 9 partidos.",
+          "El contraste de puestos (7º vs 16º) y de goles en contra (9 vs 16) completa el contexto del cruce."
         ],
         "stats": [
           {
             "value": "4",
-            "label": "Goles Barry"
+            "label": "Goles Thierno Barry"
           },
           {
             "value": "2",
@@ -4215,61 +4229,42 @@
           },
           {
             "value": "3",
-            "label": "Goles Rudoni"
-          }
-        ]
-      },
-      {
-        "kind": "forma",
-        "title": "Racha reciente de ambos",
-        "bullets": [
-          "Everton registra victoria 1-0 ante Ipswich, empate 2-2 en Hull City, derrota 0-2 ante Chelsea, derrota 0-2 en Arsenal y victoria 1-0 en Newcastle.",
-          "Coventry suma victoria 1-0 en Nottingham Forest, victoria 4-1 ante Newcastle, derrota 1-3 en Tottenham, derrota 0-1 ante Fulham y victoria 3-1 ante Sunderland.",
-          "En 5 registros, Everton acumula 2 victorias, 1 empate y 2 derrotas; Coventry suma 3 victorias y 2 derrotas."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Victorias Everton"
-          },
-          {
-            "value": "3",
-            "label": "Victorias Coventry"
-          },
-          {
-            "value": "5",
-            "label": "Registros por equipo"
+            "label": "Goles Jack Rudoni"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Alineaciones y bajas",
-        "detail": "No hay alineaciones confirmadas ni bloque L de bajas; la lectura se limita a los datos disponibles."
+        "label": "Sin estimación A",
+        "detail": "El input no incluye la fila A de API-Football, por lo que no hay distribución ni umbral de goles de ese proveedor para contrastar."
       },
       {
-        "label": "Sede y clima",
-        "detail": "La sede está vacía y el clima solo indica nublado y 13, sin más contexto."
+        "label": "Sin consenso externo M2",
+        "detail": "No se aporta la fila M2 de consenso externo en porcentajes interpretativos."
       },
       {
-        "label": "Duplicados",
-        "detail": "Los resultados Everton-Ipswich y Nottingham Forest-Coventry aparecen repetidos; se contaron una vez."
+        "label": "Sin bajas confirmadas L",
+        "detail": "No hay datos de bajas confirmadas ni alineaciones para este encuentro."
       },
       {
-        "label": "Consenso externo",
-        "detail": "No se incluyen M2, A ni estimaciones API-Football, por lo que no hay contraste externo."
+        "label": "Historial poco reciente",
+        "detail": "Los cruces HR listados datan de 1999-2001; su valor como referencia actual es limitado."
+      },
+      {
+        "label": "Duplicado en forma reciente",
+        "detail": "La fila R de Everton-Ipswich 1-0 aparece repetida; se contabiliza una sola vez en la racha."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Se marca revisión por la brecha de 15.9 puntos en la probabilidad local: Poisson GoatLab 40.1% frente a CatBoost Bzzoiro y B2 56.0%. El 46.8% del marcador 1-1 es una estimación declarada que exige cautela."
+      "note": "Divergencia clara entre P y B en victoria local (40.1% vs 57.0%) y visitante (30.5% vs 19.2%); B2 declara 'no' en goles totales y ambos equipos marcan frente a 53.7% y 53.8% de B. El historial es antiguo y R tiene un duplicado."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-06T14:08:08.629Z",
-    "inputKey": "v3|M|fd-560634|Everton FC|Coventry City FC|premier|2026-11-06T20:00:00Z|NS\nP|1.35|1.15|0.401|0.294|0.305|0.456|0.519\nB|0.56|0.241|0.2|1.35|1.41|0.548|0.545|1-1|0.468\nB2|H|0.56|no|no\nH|18|3|9|6|1.89\nW||cloudy|13|\nT|7|Everton FC|9|13|9|9\nT|16|Coventry City FC|9|9|9|16\nS|Thierno Barry|Everton FC|4|9\nS|Kiernan Dewsbury-Hall|Everton FC|2|9\nS|Jack Rudoni|Coventry City FC|3|9\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-24|Arsenal FC|Everton FC|2|0\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-02|Newcastle United FC|Everton FC|0|1\nHR|2001-01-20|Coventry City|Everton|1|3\nHR|2000-12-26|Everton|Coventry City|1|2\nHR|2000-03-15|Coventry City|Everton|1|0\nHR|1999-10-02|Everton|Coventry City|1|1\nHR|1999-04-11|Everton|Coventry City|2|0",
-    "materialKey": "v3|M|fd-560634|Everton FC|Coventry City FC|premier|2026-11-06T20:00:00Z|NS\nP|1.35|1.15|0.401|0.294|0.305|0.456|0.519\nB|0.56|0.241|0.2|1.35|1.41|0.548|0.545|1-1|0.468\nB2|H|0.56|no|no\nH|18|3|9|6|1.89\nW||cloudy|13|\nT|7|Everton FC|9|13|9|9\nT|16|Coventry City FC|9|9|9|16\nS|Thierno Barry|Everton FC|4|9\nS|Kiernan Dewsbury-Hall|Everton FC|2|9\nS|Jack Rudoni|Coventry City FC|3|9\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-24|Arsenal FC|Everton FC|2|0\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-02|Newcastle United FC|Everton FC|0|1\nHR|2001-01-20|Coventry City|Everton|1|3\nHR|2000-12-26|Everton|Coventry City|1|2\nHR|2000-03-15|Coventry City|Everton|1|0\nHR|1999-10-02|Everton|Coventry City|1|1\nHR|1999-04-11|Everton|Coventry City|2|0"
+    "generatedAt": "2026-11-06T19:35:35.108Z",
+    "inputKey": "v3|M|fd-560634|Everton FC|Coventry City FC|premier|2026-11-06T20:00:00Z|NS\nP|1.35|1.15|0.401|0.294|0.305|0.456|0.519\nB|0.57|0.237|0.192|1.35|1.41|0.537|0.538|1-1|0.469\nB2|H|0.57|no|no\nH|18|3|9|6|1.89\nW||cloudy|13|\nT|7|Everton FC|9|13|9|9\nT|16|Coventry City FC|9|9|9|16\nS|Thierno Barry|Everton FC|4|9\nS|Kiernan Dewsbury-Hall|Everton FC|2|9\nS|Jack Rudoni|Coventry City FC|3|9\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-24|Arsenal FC|Everton FC|2|0\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-02|Newcastle United FC|Everton FC|0|1\nHR|2001-01-20|Coventry City|Everton|1|3\nHR|2000-12-26|Everton|Coventry City|1|2\nHR|2000-03-15|Coventry City|Everton|1|0\nHR|1999-10-02|Everton|Coventry City|1|1\nHR|1999-04-11|Everton|Coventry City|2|0",
+    "materialKey": "v3|M|fd-560634|Everton FC|Coventry City FC|premier|2026-11-06T20:00:00Z|NS\nP|1.35|1.15|0.401|0.294|0.305|0.456|0.519\nB|0.57|0.237|0.192|1.35|1.41|0.537|0.538|1-1|0.469\nB2|H|0.57|no|no\nH|18|3|9|6|1.89\nW||cloudy|13|\nT|7|Everton FC|9|13|9|9\nT|16|Coventry City FC|9|9|9|16\nS|Thierno Barry|Everton FC|4|9\nS|Kiernan Dewsbury-Hall|Everton FC|2|9\nS|Jack Rudoni|Coventry City FC|3|9\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-09-19|Nottingham Forest FC|Coventry City FC|0|1\nR|2026-09-19|Nottingham Forest|Coventry|0|1\nR|2026-10-11|Hull City AFC|Everton FC|2|2\nR|2026-10-12|Coventry City FC|Newcastle United FC|4|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-19|Tottenham Hotspur FC|Coventry City FC|3|1\nR|2026-10-24|Arsenal FC|Everton FC|2|0\nR|2026-10-24|Coventry City FC|Fulham FC|0|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-02|Newcastle United FC|Everton FC|0|1\nHR|2001-01-20|Coventry City|Everton|1|3\nHR|2000-12-26|Everton|Coventry City|1|2\nHR|2000-03-15|Coventry City|Everton|1|0\nHR|1999-10-02|Everton|Coventry City|1|1\nHR|1999-04-11|Everton|Coventry City|2|0"
   },
   "fd-564740": {
     "matchId": "fd-564740",
