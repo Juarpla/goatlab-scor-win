@@ -1,57 +1,6 @@
 {
-  "updatedAt": "2026-11-06T14:15:11.105Z",
+  "updatedAt": "2026-11-06T15:28:56.095Z",
   "runs": [
-    {
-      "at": "2026-10-26T13:10:54.788Z",
-      "task": "video-prompts",
-      "matchId": "liverpool-vs-arsenal-2026-11-01",
-      "instructionVersion": "9a7a9075401a29bb0c95f7449648d8d463603eaa9e371ec96eb3ced68726df75",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1732,
-        "outputTokens": 1831
-      }
-    },
-    {
-      "at": "2026-10-26T22:46:42.971Z",
-      "matchId": "fd-564737",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1346,
-        "outputTokens": 14616
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "bec78b22-6c64-48a3-8050-d565cd31b370"
-    },
-    {
-      "at": "2026-10-26T22:48:09.110Z",
-      "matchId": "fd-560626",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1327,
-        "outputTokens": 14101
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "4fe87498-3344-4268-9337-c4a30575b109"
-    },
     {
       "at": "2026-10-26T22:56:32.752Z",
       "matchId": "fd-564730",
@@ -7704,6 +7653,256 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "97a09739-8ae1-48e9-82ab-319444cff6e1"
+    },
+    {
+      "at": "2026-11-06T14:37:04.443Z",
+      "task": "shorts",
+      "matchId": "nottingham-forest-vs-manchester-city-2026-11-07",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 292718
+      },
+      "usage": {
+        "inputTokens": 7229,
+        "outputTokens": 35704
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "1229871c-0a54-4990-bc6b-b29058855811"
+    },
+    {
+      "at": "2026-11-06T15:12:47.558Z",
+      "task": "shorts",
+      "matchId": "arsenal-vs-hull-city-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7403,
+            "outputTokens": 25654
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 120656
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: proyección fuera de rango; guion 6: artículo delante de Hull City AFC; guion 6: el cero no se escribe en dígitos; guion 9: proyección fuera de rango; guion 10: cifra 22 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7269,
+            "outputTokens": 35479
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 572337
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 9: falta Hull City AFC; guion 10: 4 cifras, máximo 3; descripción: 50 palabras superan el techo de 45",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7937,
+            "outputTokens": 2795
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 29331
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235336
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: proyección fuera de rango; guion 3: 4 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: proyección fuera de rango; guion 7: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7403,
+            "outputTokens": 24932
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 227091
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 5: cifra 5.3 no está en los hechos; guion 5: cifra 4.3 no está en los hechos; guion 9: falta Hull City AFC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7269,
+            "outputTokens": 35503
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 559048
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7937,
+            "outputTokens": 2727
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23239
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 4: el cero no se escribe en dígitos; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7262,
+            "outputTokens": 6384
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 90010
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7262,
+        "outputTokens": 6384
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-06T15:28:56.093Z",
+      "task": "shorts",
+      "matchId": "leeds-united-vs-tottenham-hotspur-2026-11-07",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: falta Leeds United FC; guion 3: cifra 2.5 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7378,
+            "outputTokens": 45818
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 382571
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600001
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: falta Tottenham Hotspur FC; guion 7: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7805,
+            "outputTokens": 2871
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25950
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235197
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: falta Leeds United FC; guion 5: falta Tottenham Hotspur FC; guion 5: 4 cifras, máximo 3; guion 6: 7 cifras, máximo 3; guion 7: falta Tottenham Hotspur FC; guion 7: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7378,
+            "outputTokens": 23333
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 134976
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600000
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 8: 4 cifras, máximo 3; descripción: vocabulario prohibido: apuestas?; vocabulario prohibido: apuestas?",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7805,
+            "outputTokens": 2499
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23621
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: el cero no se escribe en dígitos; guion 1: 5 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: falta Tottenham Hotspur FC; guion 6: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7232,
+            "outputTokens": 9610
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 209937
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7232,
+        "outputTokens": 9610
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
