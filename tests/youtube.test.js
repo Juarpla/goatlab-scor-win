@@ -238,10 +238,11 @@ test('search hashtags and description with music credit', () => {
   assert.ok(copy.startsWith('⚽ España recibe a Croacia.'));
   assert.equal((copy.match(/📊 Todos los datos del partido:/g) ?? []).length, 1);
   assert.ok(copy.includes('\n\n📊 Todos los datos del partido:\nhttps://goatlab.win/partido/spain-vs-croatia-2026-09-29\n\n'));
-  assert.ok(copy.includes(`\n\n🏷️ ${tags}\n\n`));
   assert.ok(copy.includes('\n\n⚠️ Análisis con fines educativos'));
   assert.ok(copy.includes('\n\n©️ Ilustración referencial con Agnes AI · Música: Kevin MacLeod'));
-  assert.ok(copy.endsWith('Música: Kevin MacLeod (incompetech.com) — CC BY 4.0'));
+  assert.ok(copy.endsWith(`\n\n${tags}`));
+  assert.equal(copy.includes('🏷️'), false);
+  assert.ok(copy.indexOf(tags) > copy.indexOf('©️'));
   assert.equal(checkDescription(copy, { matchId: 'spain-vs-croatia-2026-09-29' }).length, 0);
 });
 

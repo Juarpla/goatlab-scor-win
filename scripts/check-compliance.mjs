@@ -24,9 +24,10 @@ function clickErrors(data) {
   });
   const line = String(data.description ?? '')
     .split('\n')
-    .find(row => /^\s*(?:🏷️\s*)?#/.test(row))
-    ?.replace(/^\s*🏷️\s*/, '');
-  if (line !== tags) errors.push('hashtags: equipos y jugadores no van delante');
+    .filter(row => row.trim())
+    .at(-1);
+  if (String(data.description ?? '').includes('🏷️')) errors.push('hashtags: sin icono');
+  if (line !== tags) errors.push('hashtags: van al final, con equipos y jugadores delante');
   return errors;
 }
 

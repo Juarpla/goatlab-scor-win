@@ -20,7 +20,7 @@ The linter does not inspect JSX, framing or the finished video.
 ## Required in every delivery
 
 - A beat with the web CTA (`goatlab.win`) inside the script.
-- Description with one icon per block: `⚽` lede + `📊` link block (`📊 Todos los datos del partido:` on one line, `https://goatlab.win/partido/<id>` on the next) + `🏷️` hashtags (including `#goatlab`) + `⚠️` fixed disclaimer, separated by blank lines:
+- Description with icons only on the lede, link and disclaimer: `⚽` lede + `📊` link block (`📊 Todos los datos del partido:` on one line, `https://goatlab.win/partido/<id>` on the next) + `⚠️` fixed disclaimer + `©️` credits when present + hashtags (including `#goatlab`) as the last block, without icon, separated by blank lines:
   > Análisis con fines educativos e informativos. No es asesoría de apuestas y no garantiza resultados.
 - Script as labeled spoken beats under the [writing skill](.agents/skills/writing-short-scripts/SKILL.md), joined into continuous narration for recording, ≤110 words with a target below 50 s. Include the spoken CTA to `goatlab.win`. Agnes illustrations with provenance and the referential notice registered in `media-pack`.
 - Click title different from the hook. It is stamped by `shortTitle`: row icon, `⚽` and the fixed phrase from the `writing-short-scripts` skill (teams, or up to two players from scripts 3, 4, 7 and 9). Hashtags without accents and without duplicates, teams and players first, limit 15. Lint fails if the JSON does not match.

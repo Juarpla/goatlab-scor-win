@@ -745,25 +745,21 @@ export function hashtagLine({ home, away, competition, players } = {}) {
   return tags.slice(0, HASHTAG_CAP).join(' ');
 }
 
-export function buildDescription({ lede, matchId, competition, home, away, players }) {
-  return [
+export function buildDescription({ lede, matchId, competition, home, away, players, credits = [] }) {
+  const blocks = [
     `⚽ ${cleanLede(lede)}`,
-    '',
-    '📊 Todos los datos del partido:',
-    `https://goatlab.win/partido/${matchId}`,
-    '',
-    `🏷️ ${hashtagLine({ home, away, competition, players })}`,
-    '',
+    `📊 Todos los datos del partido:\nhttps://goatlab.win/partido/${matchId}`,
     `⚠️ ${DISCLAIMER}`,
-  ].join('\n');
+  ];
+  const note = credits.map(line => String(line ?? '').trim()).filter(Boolean);
+  if (note.length) blocks.push(`©️ ${note.join(' · ')}`);
+  blocks.push(hashtagLine({ home, away, competition, players }));
+  return blocks.join('\n\n');
 }
 
 /** Description copied to /partido/id/youtube. The credit comes from bed.txt. */
 export function youtubeCopy({ lede, matchId, home, away, competition, players, attribution, credit }) {
-  const blocks = [buildDescription({ lede, matchId, competition, home, away, players })];
-  const credits = [attribution, credit].map(line => String(line ?? '').trim()).filter(Boolean);
-  if (credits.length) blocks.push(`©️ ${credits.join(' · ')}`);
-  return blocks.join('\n\n');
+  return buildDescription({ lede, matchId, competition, home, away, players, credits: [attribution, credit] });
 }
 
 const TITLE_ICONS = ['🔥', '👀', '⚡', '🧤', '✈️', '⏪', '🧱', '🤝', '✨', '⏱️'];
