@@ -1,127 +1,6 @@
 {
-  "updatedAt": "2026-11-07T06:25:21.831Z",
+  "updatedAt": "2026-11-07T07:02:53.025Z",
   "runs": [
-    {
-      "at": "2026-10-27T12:10:05.281Z",
-      "matchId": "fd-560629",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2048,
-        "outputTokens": 27750
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0fb4d826-183b-4991-a5c5-6547716671f0"
-    },
-    {
-      "at": "2026-10-27T12:10:05.281Z",
-      "matchId": "fd-560630",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0fb4d826-183b-4991-a5c5-6547716671f0"
-    },
-    {
-      "at": "2026-10-27T12:34:41.255Z",
-      "matchId": "fd-560624",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1361,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 101704
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180002
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Formato no permitido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1400,
-            "outputTokens": 2649
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 36027
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1297,
-            "outputTokens": 7521
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 157134
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1361,
-        "outputTokens": 14859
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "780ed0fb-92ab-4f3b-a28a-1805a5d094ed"
-    },
-    {
-      "at": "2026-10-27T12:36:19.535Z",
-      "matchId": "fd-564735",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1352,
-        "outputTokens": 14787
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "49b04183-959b-43e0-9d0c-739c7dfac5ab"
-    },
     {
       "at": "2026-10-27T12:51:44.682Z",
       "matchId": "fd-560627",
@@ -8389,6 +8268,171 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-07T06:30:21.282Z",
+      "task": "shorts",
+      "matchId": "crystal-palace-vs-liverpool-2026-11-08",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 252612
+      },
+      "usage": {
+        "inputTokens": 7194,
+        "outputTokens": 25848
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "d4e5947e-aa0f-462b-93b3-322be4ef80f4"
+    },
+    {
+      "at": "2026-11-07T07:01:21.340Z",
+      "task": "shorts",
+      "matchId": "manchester-united-vs-aston-villa-2026-11-08",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: falta Manchester United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7257,
+            "outputTokens": 20363
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 218613
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7113,
+            "outputTokens": 35202
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 427655
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 5: falta Manchester United FC; guion 5: 4 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 9: falta Manchester United FC; guion 10: falta Manchester United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7740,
+            "outputTokens": 2781
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 21693
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235166
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 6: artículo delante de Manchester United FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7257,
+            "outputTokens": 30129
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 281299
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: falta Manchester United FC; guion 3: falta Aston Villa FC; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7113,
+            "outputTokens": 35177
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 423189
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 9: falta Manchester United FC; guion 9: 4 cifras, máximo 3; guion 10: falta Manchester United FC; guion 10: falta Aston Villa FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7740,
+            "outputTokens": 2790
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 17365
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235071
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7740,
+        "outputTokens": 2790
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-07T07:02:07.644Z",
+      "task": "image-prompts",
+      "matchId": "crystal-palace-vs-liverpool-2026-11-08",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1920,
+        "outputTokens": 2713
+      }
+    },
+    {
+      "at": "2026-11-07T07:02:53.025Z",
+      "task": "image-prompts",
+      "matchId": "manchester-united-vs-aston-villa-2026-11-08",
+      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 1993,
+        "outputTokens": 3822
+      }
     }
   ]
 }
