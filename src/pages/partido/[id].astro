@@ -6,7 +6,6 @@ import AdSlot from '../../components/AdSlot.astro';
 import TeamJersey from '../../components/TeamJersey.astro';
 import PitchScene from '../../components/PitchScene.astro';
 import ReadingBlock from '../../components/ReadingBlock.astro';
-import ProviderAdvice from '../../components/ProviderAdvice.astro';
 import ProbabilityBar from '../../components/ProbabilityBar.astro';
 import ExtraMarkets from '../../components/ExtraMarkets.astro';
 import WaffleResult from '../../components/WaffleResult.astro';
@@ -56,8 +55,11 @@ const homeForm = teamForm(results.results, match.home);
 const awayForm = teamForm(results.results, match.away);
 /* What they already played: always last 5 per team (baked by the pipeline
    primero, base local después); el H2H solo vive en el JSON/síntesis. */
-const homeRecent = bakedForm(match.lastMatches?.home, match.home) ?? teamForm(results.results, match.home);
-const awayRecent = bakedForm(match.lastMatches?.away, match.away) ?? teamForm(results.results, match.away);
+const matchDate = match.kickoff.slice(0, 10);
+const earlierResults = results.results.filter(row => row.date < matchDate);
+const beforeMatch = rows => rows?.filter(row => row.date < matchDate);
+const homeRecent = bakedForm(beforeMatch(match.lastMatches?.home), match.home) ?? teamForm(earlierResults, match.home);
+const awayRecent = bakedForm(beforeMatch(match.lastMatches?.away), match.away) ?? teamForm(earlierResults, match.away);
 const hasRecent = Boolean(homeRecent?.played || awayRecent?.played);
 const tableHome = homeRecent;
 const tableAway = awayRecent;
@@ -68,8 +70,7 @@ const statusLabel = finished ? 'Finalizado' : phase === 'live' ? 'En juego' : 'P
 const analysisScorers = withScorerFallback(scorersData, scorerFallback);
 const analysisMarkets = resolveMatchMarkets({ match, results: results.results, scorers: analysisScorers[match.competition] ?? null, standings: standingsData });
 const ai = findFreshAnalysis(analyses, match, analysisMarkets, { results: results.results, standings: standingsData, scorers: analysisScorers, weather: weatherData, market: match.marketConsensus ?? null })?.entry;
-/* Without an LLM reading (provider failure or budget), the view falls back
-   to the provider fallback; `normalizeReading` decides what is showable. */
+// Use an original comparison of observed results when no fresh reading exists.
 const hasReading = Boolean(normalizeReading(ai));
 const EVENT_LABELS = { goal: 'Gol', card: 'Tarjeta', sub: 'Cambio' };
 /* Estimation table: expected values with a Latin comma; nulls are painted '—'. */
@@ -96,6 +97,22 @@ const homeWins = tableHome ? tableHome.form.filter((x:string)=>x==='G').length :
 const awayWins = tableAway ? tableAway.form.filter((x:string)=>x==='G').length : 0;
 const recentMax = Math.max(tableHome?.played ?? 0, tableAway?.played ?? 0);
 const recentAvg = (totals:number, recent) => recent ? (totals/recent.played).toFixed(1) : '—';
+const formComparison = [
+  { name: homeEs, opponent: awayEs, form: tableHome, opposingForm: tableAway },
+  { name: awayEs, opponent: homeEs, form: tableAway, opposingForm: tableHome },
+].flatMap(({ name, opponent, form, opposingForm }) => {
+  if (!form || !opposingForm) return [];
+  const length = Math.min(form.played, opposingForm.played);
+  if (length < 3) return [];
+  const games = form.goalsFor.slice(0, length);
+  const opponentGames = opposingForm.goalsAgainst.slice(0, length);
+  return [{
+    name, opponent, length,
+    scoredIn: games.filter(goals => goals > 0).length,
+    concededIn: opponentGames.filter(goals => goals > 0).length,
+    latestOpponents: form.rivals.slice(0, length).map(teamEsDisplay).join(', '),
+  }];
+});
 
 /* Header: last query with the data-step time; the client rewrites it to the visitor's timezone. */
 const consultUtc = fixtures.updatedAt ? `${fixtures.updatedAt.slice(0,10)} ${fixtures.updatedAt.slice(11,16)} UTC` : '—';
@@ -450,7 +467,23 @@ const crumbsFor = side => {
   <PitchScene match={match} events={events}/>
   <AdSlot variant="horizontal" slotKey="partidoCancha"/>
    <ReadingBlock entry={ai}/>
-   {!hasReading && <ProviderAdvice provider={prov} afPrediction={afPred} home={match.home} away={match.away}/>}
+   {!hasReading && formComparison.length > 0 && <section class="reading" id="lectura-forma">
+    <header class="reading-head">
+     <div class="reading-heading"><h3>Cruce de forma reciente</h3><span class="outline-label">Cálculo GoatLab</span></div>
+     <p class="reading-note">Comparamos en cuántos partidos anotó cada equipo y en cuántos recibió gol su rival. Usamos la misma cantidad de resultados para ambos.</p>
+    </header>
+    <div class="reading-grid">
+     {formComparison.map(({ name, opponent, length, scoredIn, concededIn, latestOpponents }) => <article class="reading-card">
+      <div class="reading-body">
+       <ul class="reading-points">
+        <li><strong>{name}</strong> anotó en {scoredIn} de sus últimos {length}. Rivales de la muestra: {latestOpponents}.</li>
+        <li><strong>{opponent}</strong> recibió gol en {concededIn} de sus últimos {length}.</li>
+       </ul>
+      </div>
+     </article>)}
+    </div>
+    <p class="chapter-note">Son frecuencias observadas frente a rivales distintos. Para interpretar la diferencia, mira los resultados de la muestra y el contexto de la competición.</p>
+   </section>}
     <AdSlot variant="rect" slotKey="partidoCierre"/>
   <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} afPrediction={afPred} />
 </main>

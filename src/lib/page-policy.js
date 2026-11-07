@@ -12,6 +12,6 @@ export function isIndexablePage(url) {
 
 export function isAdvertisingPage(url) {
   const path = new URL(url, 'https://goatlab.win').pathname;
-  // Google requires disclosure pages to remain accessible without ad/CMP tags.
-  return isIndexablePage(url) && !/^\/(?:privacidad|cookies)\/?$/.test(path);
+  // Limit inventory to pages with evergreen publisher content.
+  return path === '/' || /^\/metodologia\/?$/.test(path);
 }

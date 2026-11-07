@@ -11,15 +11,8 @@
  * - PUBLISHER_ID (pub-...) → ads.txt and Funding Choices. Nothing in front.
  * - AD_CLIENT (ca-pub-...) → adsbygoogle.js script and data-ad-slot. Only there.
  *
- * Review flow (Publisher ID only, no slots):
- * 1. ADS_VERIFICATION enables the script in <head>.
- * 2. Auto Ads is enabled from the AdSense panel, without data-ad-slot.
- * 3. scripts/write-ads-txt.mjs generates public/ads.txt from this same source.
- *
- * After approval:
- * 1. Create the units in AdSense and paste each data-ad-slot into AD_SLOTS.
- * 2. ADS_ACTIVE turns on only when there is at least one slot with an ID.
- * 3. Every <AdSlot/> without a slot stays hidden.
+ * Verification uses the head meta tag and the generated ads.txt.
+ * Serving requires PUBLIC_ADSENSE_ENABLED=true after approval and a live CMP check.
  */
 const cleaned = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID ?? '').trim().replace(/^ca-/i, '');
 
@@ -50,15 +43,5 @@ export const AD_SLOTS = {
 
 export type AdSlotKey = keyof typeof AD_SLOTS;
 
-/**
- * Verification for review: the Publisher ID is enough.
- * Loads adsbygoogle.js in <head> of indexable editorial pages.
- */
-export const ADS_VERIFICATION = Boolean(AD_CLIENT);
-
-/**
- * Manual ads: only when there is at least one slot with a real ID.
- * During review (Publisher ID only + Auto Ads) it is false on purpose:
- * <AdSlot/> stays hidden and does not push() empty.
- */
-export const ADS_ACTIVE = Object.values(AD_SLOTS).some(Boolean);
+export const ADS_SERVING_ENABLED = import.meta.env.PUBLIC_ADSENSE_ENABLED === 'true';
+export const ADS_ACTIVE = ADS_SERVING_ENABLED && Object.values(AD_SLOTS).some(Boolean);

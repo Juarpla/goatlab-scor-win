@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { runInNewContext } from 'node:vm';
-import { isProductionPage } from '../src/lib/page-policy.js';
+import { isAdvertisingPage, isProductionPage } from '../src/lib/page-policy.js';
 
 const root = 'dist/client';
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(join(dir, entry.name)) : [join(dir, entry.name)]);
@@ -25,24 +25,32 @@ for (const file of sitemapFiles) {
   }
 }
 const home = readFileSync(join(root, 'index.html'), 'utf8');
-assert.ok(home.includes('pagead/js/adsbygoogle.js'), 'Falta verificación de AdSense en la portada');
-for (const path of ['privacidad', 'cookies']) {
-  const html = readFileSync(join(root, path, 'index.html'), 'utf8');
-  assert.ok(!html.includes('pagead/js/adsbygoogle.js'), `${path}: carga publicidad en una política`);
-  assert.ok(!html.includes('fundingchoicesmessages.google.com'), `${path}: carga CMP en una política`);
+const publisher = home.match(/name="google-adsense-account" content="ca-(pub-\d{16})"/)?.[1];
+assert.ok(publisher, 'Missing AdSense verification meta tag on the home page');
+assert.ok(readFileSync(join(root, 'ads.txt'), 'utf8').includes(`google.com, ${publisher}, DIRECT,`), 'Publisher mismatch');
+const serving = home.includes('pagead/js/adsbygoogle.js');
+for (const file of files.filter(file => file.endsWith('/index.html') || file === join(root, 'index.html'))) {
+  const path = `/${relative(root, file).replace(/index\.html$/, '')}`;
+  const html = readFileSync(file, 'utf8');
+  const shouldServe = serving && isAdvertisingPage(path);
+  assert.equal(html.includes('pagead/js/adsbygoogle.js'), shouldServe, file);
+  assert.equal(html.includes('fundingchoicesmessages.google.com'), shouldServe, file);
+  assert.equal(html.includes('id="revoke-consent"'), shouldServe, file);
 }
-assert.ok(home.includes('id="revoke-consent"'), 'Falta acceso para revisar consentimiento desde la portada');
-const signal = [...home.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(script => script.includes('function signalGooglefcPresent'));
-assert.ok(signal, 'Falta señal de presencia de la CMP');
-const frames = [];
-runInNewContext(signal, { window: { frames: {} }, document: { body: { appendChild: frame => frames.push(frame) }, createElement: () => ({ style: {} }) } });
-assert.ok(frames.some(frame => frame.name === 'googlefcPresent'), 'La señal de la CMP no ejecuta su código');
+if (serving) {
+  const signal = [...home.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(script => script.includes('function signalGooglefcPresent'));
+  assert.ok(signal, 'Missing CMP presence signal');
+  const frames = [];
+  runInNewContext(signal, { window: { frames: {} }, document: { body: { appendChild: frame => frames.push(frame) }, createElement: () => ({ style: {} }) } });
+  assert.ok(frames.some(frame => frame.name === 'googlefcPresent'), 'CMP presence signal did not run');
+}
 const headers = readFileSync(join(root, '_headers'), 'utf8');
 for (const path of ['/data/*', '/match-probabilities/*', '/content-index.json', '/partido/*.json']) {
   assert.ok(headers.includes(`${path}\n  X-Robots-Tag: noindex`), `Falta exclusión de JSON en Cloudflare: ${path}`);
 }
 for (const file of files.filter(file => /\/partido\/[^/]+\/index\.html$/.test(file))) {
   const html = readFileSync(file, 'utf8');
+  assert.ok(!html.includes('SabidurIA externa'), `${file}: provider copy used as the primary fallback`);
   assert.ok(!/href="\/partido\/[^"/]+\/(?:scripts|image-prompts|video-prompts|media)\/?"/.test(html), `${file}: enlaza herramientas desde el análisis público`);
 }
 console.log(`Publicación verificada: ${tools.length} herramientas accesibles sin indexación ni publicidad; ${urls} URL en sitemap; portada con verificación AdSense.`);

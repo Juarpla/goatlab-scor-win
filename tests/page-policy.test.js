@@ -18,7 +18,10 @@ test('policy pages remain indexable and load no ads or CMP', () => {
     assert.equal(isAdvertisingPage(path), false);
   }
   assert.equal(isAdvertisingPage('/'), true);
-  assert.equal(isAdvertisingPage('/partido/sevilla-vs-osasuna-2026-10-26/'), true);
+  assert.equal(isAdvertisingPage('/metodologia/'), true);
+  for (const path of ['/contacto/', '/encuentros/', '/fuentes/', '/partido/sevilla-vs-osasuna-2026-10-26/']) {
+    assert.equal(isAdvertisingPage(path), false, path);
+  }
   assert.equal(isAdvertisingPage('/partido/sevilla-vs-osasuna-2026-10-26/scripts/'), false);
   assert.equal(isAdvertisingPage('/partido/fd-564721/'), false);
 });

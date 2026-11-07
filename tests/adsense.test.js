@@ -36,9 +36,10 @@ test('astro.config declara site + sitemap', () => {
   assert.ok(config.includes('sitemap'));
 });
 
-test('Layout loads verification + CMP and links to cookies', () => {
+test('Layout verifies ownership independently of serving and links to cookies', () => {
   const layout = read('src/layouts/Layout.astro');
-  assert.ok(layout.includes('ADS_VERIFICATION'));
+  assert.ok(layout.includes('ADS_SERVING_ENABLED'));
+  assert.ok(layout.includes('name="google-adsense-account" content={AD_CLIENT}'));
   assert.ok(layout.includes('PUBLISHER_ID'));
   assert.ok(layout.includes('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'));
   assert.ok(layout.includes('fundingchoicesmessages.google.com/i/${PUBLISHER_ID}'));
