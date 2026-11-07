@@ -17,7 +17,7 @@ export function bedPath() {
   return join(SOUNDTRACKS, 'bed.mp3');
 }
 
-/** Voice and bed start together after the 0.5 s intro; the bed never lifts the voice. */
+/** Bed from t=0, voice after the 0.5 s intro; the bed never lifts the voice. */
 export function voiceBedGraph(total) {
   const lead = LEAD_SECONDS * 1000;
   const dur = Number(total);
@@ -27,8 +27,8 @@ export function voiceBedGraph(total) {
     `adelay=${lead}|${lead},` +
     `loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=0:${dur}[voice];` +
     `[2:a]aresample=44100,aformat=channel_layouts=stereo,` +
-    `volume=${BED_VOLUME_DB}dB,adelay=${lead}|${lead},` +
-    `atrim=0:${dur},afade=t=in:st=${LEAD_SECONDS}:d=${BED_FADE_IN},` +
+    `volume=${BED_VOLUME_DB}dB,` +
+    `atrim=0:${dur},afade=t=in:st=0:d=${BED_FADE_IN},` +
     `afade=t=out:st=${fadeOut}:d=${BED_FADE_OUT}[bed];` +
     `[voice][bed]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`
   );

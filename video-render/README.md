@@ -82,11 +82,11 @@ pnpm video:layout
 
 `01-voice.mjs` removes leading silence from the recording (silencedetect at
 −35 dB, 80 ms minimum, 50 ms of pre-roll) before transcription, word timing and
-the mix, so the first word is not delayed by dead air. `10-mux.mjs` delays both
-the normalized voice (−16 LUFS) and the bed by the 0.5 s intro: voice and music
-start at the same instant. The bed runs at `BED_VOLUME_DB` (−15 dB), with a
-0.15 s fade-in from that instant and a 1 s fade-out at the end. The bed never
-raises the voice level.
+the mix, so the first word is not delayed by dead air. `10-mux.mjs` keeps the bed
+at t=0 with no delay and delays only the normalized voice (−16 LUFS) by the
+0.5 s intro. The bed runs at `BED_VOLUME_DB` (−15 dB), with a 0.15 s fade-in
+from t=0 and a 1 s fade-out at the end. The bed never raises the voice level.
+`bed.mp3` has its own quiet fade-in, so the music is still soft during the intro.
 
 ## CLI and bench
 

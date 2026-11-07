@@ -18,10 +18,10 @@ test('el filtro baja la cama y no parte la voz', () => {
   assert.match(graph, /\[voice\]\[bed\]amix=inputs=2/);
 });
 
-test('la cama arranca con la voz y no antes', () => {
+test('la cama arranca en t=0 y solo la voz espera el intro', () => {
   const graph = voiceBedGraph(18.5);
-  assert.equal((graph.match(/adelay=500\|500/g) ?? []).length, 2);
-  assert.match(graph, /afade=t=in:st=0\.5:d=0\.15/);
+  assert.equal((graph.match(/adelay=500\|500/g) ?? []).length, 1);
+  assert.match(graph, /afade=t=in:st=0:d=0\.15/);
 });
 
 test('sin el mp3 el render no sigue', async () => {
