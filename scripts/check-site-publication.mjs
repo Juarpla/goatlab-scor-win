@@ -44,6 +44,10 @@ if (serving) {
   runInNewContext(signal, { window: { frames: {} }, document: { body: { appendChild: frame => frames.push(frame) }, createElement: () => ({ style: {} }) } });
   assert.ok(frames.some(frame => frame.name === 'googlefcPresent'), 'CMP presence signal did not run');
 }
+const ignoredAssets = readFileSync(join(root, '.assetsignore'), 'utf8').split(/\r?\n/);
+for (const path of ['/data/history-stats.json', '/data/predictions.json', '/data/team-stats.json']) {
+  assert.ok(ignoredAssets.includes(path), `Internal capture exposed by the deployment: ${path}`);
+}
 const headers = readFileSync(join(root, '_headers'), 'utf8');
 for (const path of ['/data/*', '/match-probabilities/*', '/content-index.json', '/partido/*.json']) {
   assert.ok(headers.includes(`${path}\n  X-Robots-Tag: noindex`), `Falta exclusión de JSON en Cloudflare: ${path}`);
