@@ -1,57 +1,6 @@
 {
-  "updatedAt": "2026-11-06T20:35:09.361Z",
+  "updatedAt": "2026-11-07T06:25:21.831Z",
   "runs": [
-    {
-      "at": "2026-10-27T12:04:19.310Z",
-      "matchId": "fd-560626",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "112e1ba0-4d02-42e9-aa11-893e853e868c"
-    },
-    {
-      "at": "2026-10-27T12:06:35.460Z",
-      "matchId": "fd-564730",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2130,
-        "outputTokens": 19422
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "911af0a4-42ac-429d-b13f-9c10061be25c"
-    },
-    {
-      "at": "2026-10-27T12:06:35.460Z",
-      "matchId": "fd-560623",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "911af0a4-42ac-429d-b13f-9c10061be25c"
-    },
     {
       "at": "2026-10-27T12:10:05.281Z",
       "matchId": "fd-560629",
@@ -8173,6 +8122,271 @@
       },
       "truncated": false,
       "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-07T06:11:34.867Z",
+      "matchId": "fd-560632",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 3000,
+          "latencyMs": 2366
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180002
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1378,
+            "outputTokens": 1857
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13519
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1307,
+            "outputTokens": 5598
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 114252
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1345,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 145622
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 179999
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1378,
+            "outputTokens": 1736
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12000
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1307,
+            "outputTokens": 5190
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 108825
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1307,
+        "outputTokens": 5190
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-07T06:23:34.034Z",
+      "matchId": "fd-564744",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1340,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 141107
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1378,
+            "outputTokens": 1500
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9888
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1378,
+            "outputTokens": 1541
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11157
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1296,
+            "outputTokens": 5387
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 153915
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1296,
+        "outputTokens": 5387
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-07T06:25:13.981Z",
+      "matchId": "fd-560640",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "skipped",
+          "reason": "Pausado por el fusible o la lista de exclusión"
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1398,
+            "outputTokens": 1613
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10032
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1301,
+            "outputTokens": 5781
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 82715
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1301,
+        "outputTokens": 5781
+      },
+      "truncated": false,
+      "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
     }
