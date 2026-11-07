@@ -1,67 +1,6 @@
 {
-  "updatedAt": "2026-11-07T13:02:26.349Z",
+  "updatedAt": "2026-11-07T13:41:28.662Z",
   "runs": [
-    {
-      "at": "2026-10-28T06:17:04.676Z",
-      "matchId": "fd-564733",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "skipped",
-          "reason": "Pausado por el fusible o la lista de exclusión"
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1295,
-            "outputTokens": 10350
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 160956
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1399,
-            "outputTokens": 1567
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11550
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1288,
-            "outputTokens": 7111
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 105924
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1288,
-        "outputTokens": 7111
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-10-28T12:44:59.815Z",
       "matchId": "fd-564737",
@@ -8068,6 +8007,40 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "379fb3ab-1212-4e92-a3a0-41ada4523e98"
+    },
+    {
+      "at": "2026-11-07T13:41:28.657Z",
+      "task": "shorts",
+      "matchId": "manchester-united-vs-aston-villa-2026-11-08",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 6 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7252,
+            "outputTokens": 23491
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 125692
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash",
+        "latencyMs": 510173
+      },
+      "usage": {
+        "inputTokens": 7107,
+        "outputTokens": 35606
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "722aa730-534b-4cb1-b95e-9a96d8637765"
     }
   ]
 }
