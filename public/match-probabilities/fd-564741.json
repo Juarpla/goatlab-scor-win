@@ -4,7 +4,7 @@
   "away": "Real Madrid CF",
   "competition": "laliga",
   "kickoff": "2026-11-07T20:00:00Z",
-  "updatedAt": "2026-11-07T12:49:25.030Z",
+  "updatedAt": "2026-11-07T21:51:13.569Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -205,30 +205,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.09,
-      "draw": 0.151,
-      "away": 0.759,
+      "home": 0.09300000000000001,
+      "draw": 0.154,
+      "away": 0.753,
       "predicted": "A"
     },
     "xg": {
       "home": 1.16,
       "away": 1.82
     },
-    "over15": 0.8440000000000001,
-    "over25": 0.652,
-    "over35": 0.42,
-    "btts": 0.508,
+    "over15": 0.84,
+    "over25": 0.639,
+    "over35": 0.413,
+    "btts": 0.509,
     "score": "1-1",
-    "cornersOver95": 0.521,
+    "cornersOver95": 0.522,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.759,
+      "favoriteProb": 0.753,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.7594,
+    "confidence": 0.7529,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-07T12:49:14.217Z",
+    "capturedAt": "2026-11-07T21:51:11.463Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -612,5 +612,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Auditoría: P y B discrepan en local (23,9% vs 9,3%) y visitante (53,1% vs 75,3%); B2 da 0,753 al visitante. El 'no' de B2 en ambos marcan choca con 65,6% (P) y 50,9% (B). Falta lectura A de API-Football. El 0,522 asociado a 1-1 en B no se lee como probabilidad exacta.",
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-07T21:53:42.687Z"
+  }
 }
