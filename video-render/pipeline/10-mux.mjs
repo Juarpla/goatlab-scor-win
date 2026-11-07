@@ -1,4 +1,4 @@
-// Stage 10: voice at −16 LUFS and background bed at −18 dB, then mux.
+// Stage 10: voice at −16 LUFS and background bed at −15 dB, then mux.
 import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -9,15 +9,15 @@ import { LEAD_SECONDS } from '../contract/short-format.js';
 const run = promisify(execFile);
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const SOUNDTRACKS = join(HERE, '../soundtracks');
-export const BED_VOLUME_DB = -18;
-const BED_FADE_IN = 0.5;
+export const BED_VOLUME_DB = -15;
+const BED_FADE_IN = 0.15;
 const BED_FADE_OUT = 1;
 
 export function bedPath() {
   return join(SOUNDTRACKS, 'bed.mp3');
 }
 
-/** Voice at −16 LUFS and bed at −18 dB, without lowering the voice in the mix. */
+/** Voice and bed start together after the 0.5 s intro; the bed never lifts the voice. */
 export function voiceBedGraph(total) {
   const lead = LEAD_SECONDS * 1000;
   const dur = Number(total);
@@ -27,9 +27,9 @@ export function voiceBedGraph(total) {
     `adelay=${lead}|${lead},` +
     `loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=0:${dur}[voice];` +
     `[2:a]aresample=44100,aformat=channel_layouts=stereo,` +
-    `atrim=0:${dur},afade=t=in:st=0:d=${BED_FADE_IN},` +
-    `afade=t=out:st=${fadeOut}:d=${BED_FADE_OUT},` +
-    `volume=${BED_VOLUME_DB}dB[bed];` +
+    `volume=${BED_VOLUME_DB}dB,adelay=${lead}|${lead},` +
+    `atrim=0:${dur},afade=t=in:st=${LEAD_SECONDS}:d=${BED_FADE_IN},` +
+    `afade=t=out:st=${fadeOut}:d=${BED_FADE_OUT}[bed];` +
     `[voice][bed]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`
   );
 }

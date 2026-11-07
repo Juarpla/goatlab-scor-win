@@ -5,16 +5,23 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { bedPath, muxVoice, voiceBedGraph } from '../video-render/pipeline/index.mjs';
+import { BED_VOLUME_DB, bedPath, muxVoice, voiceBedGraph } from '../video-render/pipeline/index.mjs';
 
 const run = promisify(execFile);
 
 test('el filtro baja la cama y no parte la voz', () => {
   const graph = voiceBedGraph(18.5);
-  assert.match(graph, /volume=-18dB/);
+  assert.equal(BED_VOLUME_DB, -15);
+  assert.match(graph, /volume=-15dB/);
   assert.match(graph, /normalize=0/);
   assert.match(graph, /atrim=0:18\.5/);
   assert.match(graph, /\[voice\]\[bed\]amix=inputs=2/);
+});
+
+test('la cama arranca con la voz y no antes', () => {
+  const graph = voiceBedGraph(18.5);
+  assert.equal((graph.match(/adelay=500\|500/g) ?? []).length, 2);
+  assert.match(graph, /afade=t=in:st=0\.5:d=0\.15/);
 });
 
 test('sin el mp3 el render no sigue', async () => {

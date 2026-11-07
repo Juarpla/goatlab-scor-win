@@ -6,7 +6,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { voicePolicy, VOICE_SECONDS, MAX_FRAMES } from '../video-render/contract/short-format.js';
-import { adjustVoice } from '../video-render/pipeline/01-voice.mjs';
+import { adjustVoice, leadingSilence } from '../video-render/pipeline/01-voice.mjs';
 const run = promisify(execFile);
 test('strict frame budget preserves a short voice and caps acceleration at ten percent', () => {
   assert.equal(voicePolicy(45).rate, 1);
@@ -17,6 +17,19 @@ test('strict frame budget preserves a short voice and caps acceleration at ten p
   assert.equal(voicePolicy(4.9).rate, 1);
   for (const invalid of [NaN, Infinity, 0, -1]) assert.throws(() => voicePolicy(invalid));
 });
+test('the leading silence is trimmed before transcription and mixing', async t => {
+  const tmp = await mkdtemp(join(tmpdir(), 'goatlab-trim-')); t.after(() => rm(tmp, { recursive: true, force: true }));
+  const original = join(tmp, 'lead.wav');
+  await run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=5:sample_rate=44100',
+    '-af', 'adelay=800|800', '-c:a', 'pcm_s16le', original]);
+  const result = await adjustVoice({ tmp, voiceFile: original, voiceSeconds: 5.8 });
+  assert.ok(result.trimSeconds >= 0.7 && result.trimSeconds <= 0.8, `trim ${result.trimSeconds}`);
+  assert.ok(result.seconds < 5.2, `seconds ${result.seconds}`);
+  assert.equal(result.originalSeconds, 5.8);
+  assert.equal(await leadingSilence(result.file), 0);
+  assert.equal((await adjustVoice({ tmp, voiceFile: original, voiceSeconds: 5.8 })).changed, false);
+});
+
 test('real audio adjustment fits, retains pitch and reuses its persisted policy', async t => {
   const tmp = await mkdtemp(join(tmpdir(), 'goatlab-voice-')); t.after(() => rm(tmp, { recursive: true, force: true }));
   const original = join(tmp, 'voice.wav');

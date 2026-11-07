@@ -28,7 +28,7 @@ video-render/
   contract/                  shared constants, plan/timing rules, folder layout
   pipeline/                  numbered stages in execution order
     00-io.mjs                ffprobe duration and atomic JSON writes
-    01-voice.mjs             speed-up policy for the voice
+    01-voice.mjs             leading-silence trim + speed-up policy
     02-transcribe.mjs        Mistral (Voxtral) with whisper.cpp fallback
     03-reference-timing.mjs  script/word alignment
     04-photo-normalize.mjs   image sizing
@@ -77,6 +77,16 @@ pnpm video:layout
   `<video>.composition.json` and local QA. Git tracks `work/` through
   `.gitkeep`; everything inside is ignored, and only match folders (plus the
   `.gitkeep` placeholder) are allowed at its root.
+
+## Audio mix
+
+`01-voice.mjs` removes leading silence from the recording (silencedetect at
+−35 dB, 80 ms minimum, 50 ms of pre-roll) before transcription, word timing and
+the mix, so the first word is not delayed by dead air. `10-mux.mjs` delays both
+the normalized voice (−16 LUFS) and the bed by the 0.5 s intro: voice and music
+start at the same instant. The bed runs at `BED_VOLUME_DB` (−15 dB), with a
+0.15 s fade-in from that instant and a 1 s fade-out at the end. The bed never
+raises the voice level.
 
 ## CLI and bench
 
