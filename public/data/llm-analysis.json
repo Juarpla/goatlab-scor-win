@@ -4566,400 +4566,896 @@
     "materialKey": "v3|M|fd-564741|Valencia CF|Real Madrid CF|laliga|2026-11-07T20:00:00Z|LIVE\nP|1.35|2.07|0.239|0.23|0.531|0.664|0.656\nB|0.093|0.154|0.753|1.16|1.82|0.639|0.509|1-1|0.522\nB2|A|0.753|no|no\nH|115|27|22|66|2.94\nW||unknown|27|\nT|19|Valencia CF|11|9|8|17\nT|3|Real Madrid CF|11|27|28|10\nS|Kylian Mbappé|Real Madrid CF|12|11\nS|Jude Bellingham|Real Madrid CF|4|11\nS|Yan Diomande|Real Madrid CF|3|11\nR|2026-09-20|Valencia CF|Real Sociedad de Fútbol|2|3\nR|2026-09-20|Valencia|Real Sociedad|2|3\nR|2026-10-11|Real Racing Club de Santander|Valencia CF|2|2\nR|2026-10-14|AS Roma|Real Madrid CF|3|4\nR|2026-10-17|Valencia CF|Athletic Club|0|0\nR|2026-10-18|Real Madrid CF|Sevilla FC|4|1\nR|2026-10-21|Real Madrid CF|RB Leipzig|4|1\nR|2026-10-24|Valencia CF|Villarreal CF|1|2\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-01|Real Racing Club de Santander|Real Madrid CF|0|3\nR|2026-11-04|PAE AEK|Real Madrid CF|2|3\nHR|2026-02-08|Valencia|Real Madrid|0|2\nHR|2025-11-01|Real Madrid|Valencia|4|0\nHR|2025-04-05|Real Madrid|Valencia|1|2\nHR|2025-01-03|Valencia|Real Madrid|1|2\nHR|2024-03-02|Valencia|Real Madrid|2|2"
   },
   "fd-564738": {
+    "matchId": "fd-564738",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Elche y Betis en LaLiga",
+        "title": "Elche y Betis, polos opuestos en LaLiga",
         "bullets": [
-          "Elche CF y Real Betis Balompié se enfrentan en LaLiga el 8 de noviembre de 2026 a las 13:00; el bloque M lo marca como no iniciado.",
-          "Elche llega 17.º y el Betis 4.º; el contraste de puestos ordena el contexto del cruce.",
-          "El bloque W solo aporta 22 y 17 sin etiquetas, por lo que la lectura de clima y sede queda incompleta."
+          "Elche es 17º con 10 puntos tras 11 jornadas; el Betis es 4º con 23 puntos, también con 11 partidos.",
+          "El choque llega marcado por la distancia entre el modelo Poisson, que favorece al local, y CatBoost Bzzoiro, que inclina la balanza al visitante."
         ],
         "stats": [
           {
-            "value": "17.º",
-            "label": "Puesto Elche"
+            "value": "17º",
+            "label": "posición del Elche"
           },
           {
-            "value": "4.º",
-            "label": "Puesto Betis"
+            "value": "4º",
+            "label": "posición del Betis"
           },
           {
-            "value": "13:00",
-            "label": "Hora del partido"
+            "value": "23",
+            "label": "puntos del Betis"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Poisson y CatBoost divergen",
+        "title": "Poisson y Bzzoiro discrepan de forma clara",
         "bullets": [
-          "Poisson GoatLab: 48,9% para el Elche, 27,1% empate y 24,0% para el Betis, con 1,62 y 1,073 como goles esperados.",
-          "CatBoost Bzzoiro: 27,9% para el Elche, 25,5% empate y 46,5% para el Betis; 1,48 y 1,40 de goles esperados, marcador 1-1 y 0,441 sin etiqueta explícita.",
-          "CatBoost añade 57,2% y 59,1% en métricas de goles; B2 declara 0,465 como mayor probabilidad y 'no' en goles totales y ambos equipos marcan.",
-          "La lectura P-B es contradictoria: Poisson favorece al Elche y CatBoost al Betis; se marca revisión."
+          "Poisson GoatLab da 48,9% al Elche, 27,1% al empate y 24,0% al Betis, con 1,62 y 1,073 goles esperados, 50,5% para más de 2,5 y 54,0% para ambos anotan.",
+          "CatBoost Bzzoiro da 27,7% al Elche, 25,9% al empate y 46,4% al Betis, con 1,47 y 1,41 goles esperados, 57,1% para más de 2,5 y 61,2% para ambos anotan.",
+          "El marcador modal de Bzzoiro es 1-1, con 0,441 asociado; B2 declara la victoria visitante como mayor probabilidad (0,464) y 'no' en sus dos campos binarios."
         ],
         "stats": [
           {
             "value": "48,9%",
-            "label": "Elche según Poisson"
+            "label": "victoria del Elche (P)"
           },
           {
-            "value": "46,5%",
-            "label": "Betis según CatBoost"
+            "value": "46,4%",
+            "label": "victoria del Betis (B)"
           },
           {
-            "value": "57,2%",
-            "label": "Dato de goles CatBoost"
+            "value": "1-1",
+            "label": "marcador modal de B"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Serie histórica favorable al Betis",
+        "title": "El Betis domina los antecedentes recientes",
         "bullets": [
-          "Historial: 27 partidos, 9 victorias del Elche, 5 empates y 13 victorias del Betis, con 2,67 goles por partido.",
-          "Los cinco HR recientes: Betis 2-1 Elche, Betis 2-1 Elche, Elche 1-1 Betis, Elche 2-3 Betis y Betis 3-0 Elche.",
-          "En esa muestra reciente el Betis está invicto, con cuatro triunfos y un empate."
+          "En 27 cruces, el Elche suma 9 victorias, 5 empates y 13 derrotas, con 2,67 goles por partido.",
+          "Los cinco antecedentes de HR registran cuatro triunfos del Betis y un empate; el más reciente fue Betis 2-1 Elche."
         ],
         "stats": [
           {
             "value": "27",
-            "label": "Partidos H2H"
+            "label": "cruces totales"
           },
           {
             "value": "13",
-            "label": "Victorias Betis H2H"
+            "label": "victorias del Betis"
           },
           {
             "value": "2,67",
-            "label": "Goles por partido H2H"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Clasificación y racha",
-        "bullets": [
-          "Elche: 17.º con 11 partidos, 10 puntos, 14 goles a favor y 18 en contra.",
-          "Betis: 4.º con 11 partidos, 23 puntos, 18 goles a favor y 15 en contra.",
-          "Racha del Elche: 1-3 en Espanyol, 0-0 con Celta, 0-0 en Villarreal, 3-0 en Rayo y 0-1 con Valencia.",
-          "Racha del Betis: 3-2 al Porto, 2-5 con Barcelona, 1-0 al Feyenoord, 0-0 en Celta, 2-1 al Málaga y 1-2 en Dortmund."
-        ],
-        "stats": [
-          {
-            "value": "17.º",
-            "label": "Puesto Elche"
-          },
-          {
-            "value": "4.º",
-            "label": "Puesto Betis"
-          },
-          {
-            "value": "23",
-            "label": "Puntos Betis"
+            "label": "goles por partido"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Artilleros de la muestra",
+        "title": "Fernando Niño destaca en el Elche",
         "bullets": [
-          "Fernando Niño, también listado como Fer Niño, acumula 6 goles en 11 partidos con el Elche; Germán Valera suma 2 en 11.",
-          "En el Betis, Abdessamad Ezzalzouli registra 3 goles en 8; Cucho Hernández 2 en 9; Isco 2 en 11.",
-          "El máximo anotador del Elche duplica los 3 goles del mejor del Betis en la muestra."
+          "Fernando Niño, también registrado como Fer Niño, acumula 6 goles en 11 y 12 apariciones en las dos filas disponibles.",
+          "Germán Valera suma 2 goles en 11 partidos con el Elche.",
+          "En el Betis, Ezzalzouli registra 3 goles en 8 partidos; Cucho Hernández e Isco suman 2 cada uno."
         ],
         "stats": [
           {
             "value": "6",
-            "label": "Goles Fernando Niño"
+            "label": "goles de Fernando Niño"
           },
           {
             "value": "3",
-            "label": "Goles Ezzalzouli"
+            "label": "goles de Ezzalzouli"
           },
           {
             "value": "2",
-            "label": "Goles Isco y Cucho"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Sin bloque A",
-        "detail": "No hay una fila A independiente de API-Football; solo aparece una referencia A dentro de B2, por lo que no se puede reformular una lectura completa del proveedor."
-      },
-      {
-        "label": "B2 incompleto",
-        "detail": "B2 declara 0,465 como mayor probabilidad y 'no' en goles totales y ambos equipos marcan; esos campos no permiten una lectura cerrada."
-      },
-      {
-        "label": "Campos sin etiqueta",
-        "detail": "El bloque W aporta 22 y 17 sin rótulos, y el 0,441 de CatBoost carece de etiqueta explícita; no se interpretan como temperatura, viento o probabilidad."
-      },
-      {
-        "label": "Sin M2",
-        "detail": "No se recibió el bloque M2 de consenso externo, así que no hay contraste de porcentajes de terceros."
-      },
-      {
-        "label": "Duplicados",
-        "detail": "S repite a Fernando Niño/Fer Niño y R repite Espanyol-Elche; se han unificado sin alterar los datos."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Revisión por divergencia P-B: Poisson da 48,9% al Elche y 24,0% al Betis; CatBoost invierte con 27,9% y 46,5%. B2 marca 0,465 en A y 'no' en goles y ambos marcan, frente a 57,2% y 59,1% de B."
-    },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-07T21:55:57.032Z",
-    "inputKey": "v3|M|fd-564738|Elche CF|Real Betis Balompié|laliga|2026-11-08T13:00:00Z|NS\nP|1.62|1.073|0.489|0.271|0.24|0.505|0.54\nB|0.279|0.255|0.465|1.48|1.4|0.572|0.591|1-1|0.441\nB2|A|0.465|no|no\nH|27|9|5|13|2.67\nW|22||17|\nT|17|Elche CF|11|10|14|18\nT|4|Real Betis Balompié|11|23|18|15\nS|Fernando Niño|Elche CF|6|11\nS|Fer Niño|Elche CF|6|11\nS|Germán Valera|Elche CF|2|11\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|8\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|11\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|RC Celta de Vigo|Real Betis Balompié|0|0\nR|2026-10-31|Real Betis Balompié|Málaga CF|2|1\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-04|Borussia Dortmund|Real Betis Balompié|2|1\nHR|2026-05-12|Real Betis|Elche|2|1\nHR|2026-01-14|Real Betis|Elche|2|1\nHR|2025-08-18|Elche|Real Betis|1|1\nHR|2023-02-24|Elche|Real Betis|2|3\nHR|2022-08-15|Real Betis|Elche|3|0",
-    "materialKey": "v3|M|fd-564738|Elche CF|Real Betis Balompié|laliga|2026-11-08T13:00:00Z|NS\nP|1.62|1.073|0.489|0.271|0.24|0.505|0.54\nB|0.279|0.255|0.465|1.48|1.4|0.572|0.591|1-1|0.441\nB2|A|0.465|no|no\nH|27|9|5|13|2.67\nW|22||17|\nT|17|Elche CF|11|10|14|18\nT|4|Real Betis Balompié|11|23|18|15\nS|Fernando Niño|Elche CF|6|11\nS|Fer Niño|Elche CF|6|11\nS|Germán Valera|Elche CF|2|11\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|8\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|11\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|RC Celta de Vigo|Real Betis Balompié|0|0\nR|2026-10-31|Real Betis Balompié|Málaga CF|2|1\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-04|Borussia Dortmund|Real Betis Balompié|2|1\nHR|2026-05-12|Real Betis|Elche|2|1\nHR|2026-01-14|Real Betis|Elche|2|1\nHR|2025-08-18|Elche|Real Betis|1|1\nHR|2023-02-24|Elche|Real Betis|2|3\nHR|2022-08-15|Real Betis|Elche|3|0"
-  },
-  "fd-560637": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Panorama: Ipswich recibe a Bournemouth",
-        "bullets": [
-          "Premier League, 8 de noviembre de 2026, 14:00 UTC; estado NS. Ipswich Town FC actúa como local ante AFC Bournemouth.",
-          "T: Ipswich 14º con 9 jugados, 11 puntos, 14 GF y 18 GC; Bournemouth 8º con 9 jugados, 12 puntos, 14 GF y 13 GC.",
-          "El bloque W solo aporta 18, sin sede, cielo, viento ni otras condiciones; no se usa para describir el entorno."
-        ],
-        "stats": [
-          {
-            "value": "14º",
-            "label": "puesto Ipswich"
-          },
-          {
-            "value": "8º",
-            "label": "puesto Bournemouth"
-          },
-          {
-            "value": "12",
-            "label": "puntos Bournemouth"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Modelos: probabilidad visitante y divergencias",
-        "bullets": [
-          "Poisson GoatLab: 0.171 local, 0.232 empate y 0.597 visitante; λ 0.99-1.993, más de 2.5 goles 0.573 y ambos marcan 0.553.",
-          "CatBoost Bzzoiro: 0.254 local, 0.255 empate y 0.49 visitante; goles esperados 1.55-1.53, más de 2.5 goles 0.559, ambos marcan 0.581, marcador 1-1 y confianza 0.457.",
-          "B2 declara visitante 0.49, goles totales no y ambos marcan no; coincide con B en 0.49, pero contradice 0.559 y 0.581 de B.",
-          "Auditoría: P y B difieren de forma clara en local y visitante, 0.171 frente a 0.254 y 0.597 frente a 0.49; B2 no detalla goles totales."
-        ],
-        "stats": [
-          {
-            "value": "0.597",
-            "label": "P visitante"
-          },
-          {
-            "value": "0.49",
-            "label": "B/B2 visitante"
-          },
-          {
-            "value": "0.581",
-            "label": "B ambos marcan"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Historial: equilibrio reciente y empates",
-        "bullets": [
-          "HR: Bournemouth ganó 1-2 en Ipswich (2024) e Ipswich ganó 1-2 en Bournemouth (2025).",
-          "Los otros tres HR registrados terminaron 1-1 (2015), 2-2 (2014) y 2-2 (2014).",
-          "El resumen H (6|1|4|1|3) no trae etiquetas; los cinco HR visibles dejan un triunfo por lado y tres empates."
-        ],
-        "stats": [
-          {
-            "value": "1-2",
-            "label": "resultado en ambos HR"
-          },
-          {
-            "value": "2-2",
-            "label": "empates 2014"
-          },
-          {
-            "value": "1-1",
-            "label": "empate 2015"
+            "label": "goles de Cucho e Isco"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Forma: Bournemouth encadenado, Ipswich irregular",
+        "title": "Rachas recientes de signo distinto",
         "bullets": [
-          "R de Ipswich: 0-1 con Everton (fila repetida), 2-1 a Fulham, 2-3 con Manchester City, 1-1 con Nottingham Forest y 2-2 con Hull.",
-          "R de Bournemouth: seis triunfos: 3-0 a Sturm Graz, 2-0 a Sunderland, 3-0 a Milan, Manchester United 0-3 Bournemouth, 2-0 a Leeds y Sparta Praha 1-3 Bournemouth.",
-          "Ipswich alterna: un triunfo, dos derrotas y dos empates en cinco R únicos; Bournemouth suma seis triunfos."
-        ],
-        "stats": [
-          {
-            "value": "2-2",
-            "label": "último R Ipswich"
-          },
-          {
-            "value": "2-1",
-            "label": "triunfo Ipswich"
-          }
-        ]
-      },
-      {
-        "kind": "claves",
-        "title": "Claves: goleadores, rachas y modelos",
-        "bullets": [
-          "Goleadores: Marcus Tavernier 5 en 9 y Evanilson 4 en 9 por Bournemouth; Emersonn, Julio Enciso y Leif Davis 2 en 9 por Ipswich.",
-          "La mayor probabilidad visitante aparece en P 0.597, B 0.49 y B2 0.49; el marcador más probable de B es 1-1.",
-          "HR muestra tres empates y un triunfo por lado; Bournemouth llega con seis triunfos en R e Ipswich con dos empates y una derrota en sus últimos tres R únicos.",
-          "B2 marca no en goles totales y ambos marcan, mientras B registra 0.559 y 0.581; la discrepancia queda señalada."
+          "Elche suma dos victorias, dos empates y una derrota en sus 5 registros recientes; el último fue el 0-1 ante Valencia en casa.",
+          "El Betis combina victorias, un empate y derrotas en sus 6 registros: 3-2 al Porto, 2-5 ante Barcelona, 1-0 al Feyenoord, 0-0 en Celta, 2-1 al Málaga y 1-2 en Dortmund.",
+          "Las series mezclan competiciones, por lo que la lectura de forma no aísla solo LaLiga."
         ],
         "stats": [
           {
             "value": "5",
-            "label": "goles Tavernier"
+            "label": "registros del Elche"
           },
           {
-            "value": "4",
-            "label": "goles Evanilson"
+            "value": "6",
+            "label": "registros del Betis"
           },
           {
-            "value": "2",
-            "label": "goles por jugador Ipswich"
+            "value": "2-5",
+            "label": "Betis-Barcelona"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin alineaciones ni bajas",
-        "detail": "No hay bloque L, alineaciones confirmadas ni disponibilidad; no se puede afirmar quién juega."
+        "label": "Clima y sede incompletos",
+        "detail": "La fila W solo aporta 22 y 17 sin unidades ni etiquetas; no se identifica el recinto."
       },
       {
-        "label": "B2 contradictorio",
-        "detail": "B2 declara no en goles totales y ambos marcan, pero B registra 0.559 en más de 2.5 goles y 0.581 en ambos marcan; se reporta como discrepancia."
+        "label": "B2 sin etiquetas",
+        "detail": "Los campos binarios de B2 llegan como 'no' sin indicar qué lectura representan; se citan de forma literal."
       },
       {
-        "label": "H y W incompletos",
-        "detail": "H (6|1|4|1|3) no trae etiquetas y W solo aporta 18, sin sede ni condiciones; no se usan para conclusiones."
+        "label": "Estado LIVE sin contexto",
+        "detail": "El partido figura como LIVE, pero no se aporta minuto, marcador ni incidencias."
       },
       {
-        "label": "R duplicado",
-        "detail": "La fila Everton-Ipswich 1-0 aparece dos veces en R; la forma de Ipswich se lee una sola vez."
+        "label": "Duplicados en registros",
+        "detail": "La forma repite Espanyol-Elche 1-3 y los goleadores separan Fernando Niño/Fer Niño con 6 goles."
+      },
+      {
+        "label": "Discrepancia P-B",
+        "detail": "Poisson da 48,9% al Elche y Bzzoiro 46,4% al Betis; no hay dato adicional que explique la brecha."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Se marca auditoría por B2: declara no en goles totales y ambos marcan frente a B 0.559 y 0.581, y P/B difieren en visitante 0.597 frente a 0.49. H y W son incompletos; R tiene un duplicado."
+      "note": "Se marca la fuerte discrepancia entre Poisson (48,9% Elche) y Bzzoiro (46,4% Betis), opuesta a la clasificación (17º vs 4º). También se advierte que B2 usa 'no' sin etiqueta y que la fila W está incompleta."
     },
     "provider": "OPENCODE_GO",
     "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-08T06:19:27.235Z",
-    "inputKey": "v3|M|fd-560637|Ipswich Town FC|AFC Bournemouth|premier|2026-11-08T14:00:00Z|NS\nP|0.99|1.993|0.171|0.232|0.597|0.573|0.553\nB|0.254|0.255|0.49|1.55|1.53|0.559|0.581|1-1|0.457\nB2|A|0.49|no|no\nH|6|1|4|1|3\nW|||18|\nT|14|Ipswich Town FC|9|11|14|18\nT|8|AFC Bournemouth|9|12|14|13\nS|Emersonn|Ipswich Town FC|2|9\nS|Julio Enciso|Ipswich Town FC|2|9\nS|Leif Davis|Ipswich Town FC|2|9\nS|Marcus Tavernier|AFC Bournemouth|5|9\nS|Evanilson|AFC Bournemouth|4|9\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-22|Bournemouth|AC Milan|3|0\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nR|2026-10-31|Hull City AFC|Ipswich Town FC|2|2\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-05|AC Sparta Praha|Bournemouth|1|3\nHR|2025-04-02|Bournemouth|Ipswich Town|1|2\nHR|2024-12-08|Ipswich Town|Bournemouth|1|2\nHR|2015-04-03|Ipswich Town|Bournemouth|1|1\nHR|2014-11-22|Bournemouth|Ipswich Town|2|2\nHR|2014-04-21|Ipswich Town|Bournemouth|2|2",
-    "materialKey": "v3|M|fd-560637|Ipswich Town FC|AFC Bournemouth|premier|2026-11-08T14:00:00Z|NS\nP|0.99|1.993|0.171|0.232|0.597|0.573|0.553\nB|0.254|0.255|0.49|1.55|1.53|0.559|0.581|1-1|0.457\nB2|A|0.49|no|no\nH|6|1|4|1|3\nW|||18|\nT|14|Ipswich Town FC|9|11|14|18\nT|8|AFC Bournemouth|9|12|14|13\nS|Emersonn|Ipswich Town FC|2|9\nS|Julio Enciso|Ipswich Town FC|2|9\nS|Leif Davis|Ipswich Town FC|2|9\nS|Marcus Tavernier|AFC Bournemouth|5|9\nS|Evanilson|AFC Bournemouth|4|9\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-22|Bournemouth|AC Milan|3|0\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nR|2026-10-31|Hull City AFC|Ipswich Town FC|2|2\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-05|AC Sparta Praha|Bournemouth|1|3\nHR|2025-04-02|Bournemouth|Ipswich Town|1|2\nHR|2024-12-08|Ipswich Town|Bournemouth|1|2\nHR|2015-04-03|Ipswich Town|Bournemouth|1|1\nHR|2014-11-22|Bournemouth|Ipswich Town|2|2\nHR|2014-04-21|Ipswich Town|Bournemouth|2|2"
+    "generatedAt": "2026-11-08T13:12:47.332Z",
+    "inputKey": "v3|M|fd-564738|Elche CF|Real Betis Balompié|laliga|2026-11-08T13:00:00Z|LIVE\nP|1.62|1.073|0.489|0.271|0.24|0.505|0.54\nB|0.277|0.259|0.464|1.47|1.41|0.571|0.612|1-1|0.441\nB2|A|0.464|no|no\nH|27|9|5|13|2.67\nW|22||17|\nT|17|Elche CF|11|10|14|18\nT|4|Real Betis Balompié|11|23|18|15\nS|Fernando Niño|Elche CF|6|11\nS|Fer Niño|Elche CF|6|12\nS|Germán Valera|Elche CF|2|11\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|8\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|11\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|RC Celta de Vigo|Real Betis Balompié|0|0\nR|2026-10-31|Real Betis Balompié|Málaga CF|2|1\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-04|Borussia Dortmund|Real Betis Balompié|2|1\nHR|2026-05-12|Real Betis|Elche|2|1\nHR|2026-01-14|Real Betis|Elche|2|1\nHR|2025-08-18|Elche|Real Betis|1|1\nHR|2023-02-24|Elche|Real Betis|2|3\nHR|2022-08-15|Real Betis|Elche|3|0",
+    "materialKey": "v3|M|fd-564738|Elche CF|Real Betis Balompié|laliga|2026-11-08T13:00:00Z|LIVE\nP|1.62|1.073|0.489|0.271|0.24|0.505|0.54\nB|0.277|0.259|0.464|1.47|1.41|0.571|0.612|1-1|0.441\nB2|A|0.464|no|no\nH|27|9|5|13|2.67\nW|22||17|\nT|17|Elche CF|11|10|14|18\nT|4|Real Betis Balompié|11|23|18|15\nS|Fernando Niño|Elche CF|6|11\nS|Fer Niño|Elche CF|6|12\nS|Germán Valera|Elche CF|2|11\nS|Abdessamad Ezzalzouli|Real Betis Balompié|3|8\nS|Cucho Hernández|Real Betis Balompié|2|9\nS|Isco|Real Betis Balompié|2|11\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-09-18|Espanyol|Elche|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-17|Real Betis Balompié|FC Barcelona|2|5\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|RC Celta de Vigo|Real Betis Balompié|0|0\nR|2026-10-31|Real Betis Balompié|Málaga CF|2|1\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-04|Borussia Dortmund|Real Betis Balompié|2|1\nHR|2026-05-12|Real Betis|Elche|2|1\nHR|2026-01-14|Real Betis|Elche|2|1\nHR|2025-08-18|Elche|Real Betis|1|1\nHR|2023-02-24|Elche|Real Betis|2|3\nHR|2022-08-15|Real Betis|Elche|3|0"
   },
-  "fd-560635": {
+  "fd-560637": {
+    "matchId": "fd-560637",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Clásico de Premier: Palace vs Liverpool en 2026",
+        "title": "Ipswich y Bournemouth, contextos distintos",
         "bullets": [
-          "Primer enfrentamiento de la temporada 2026-27 en Premier League, con Crystal Palace en ascenso tras 10 victorias en 11 partidos (9-7-3).",
-          "Liverpool en transición post-Mohamed Salah, con 15 victorias en 18 partidos (9-15-11), pero sin victorias en las últimas 3 citas."
+          "Ipswich es 14º con 11 puntos en 9 jornadas; el Bournemouth es 9º con 12 puntos, también con 9 partidos.",
+          "Bournemouth llega con 6 victorias consecutivas en la lista reciente; Ipswich no gana en sus últimos tres registros.",
+          "Poisson y CatBoost Bzzoiro coinciden en señalar al visitante como mayor probabilidad, aunque con intensidades distintas."
         ],
         "stats": [
           {
-            "value": "9-7-3",
-            "label": "Racha Palace (V-E-D)"
+            "value": "14º",
+            "label": "posición del Ipswich"
+          },
+          {
+            "value": "9º",
+            "label": "posición del Bournemouth"
+          },
+          {
+            "value": "12",
+            "label": "puntos del Bournemouth"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Consenso de probabilidades y modelos internos",
+        "title": "Bournemouth al frente, con matices",
         "bullets": [
-          "Poisson GoatLab: Empate (0.575) como opción más probable, seguido de victoria Palace (0.217) y Liverpool (0.237).",
-          "CatBoost Bzzoiro: Empate (0.604) con mayor probabilidad, pero con alta dispersión en goles (1.35-1.5).",
-          "API-Football: Mayor probabilidad de empate (0.604), pero con lectura de 1-1 como escenario más probable (lectura cruda: 0.52)."
+          "Poisson GoatLab da 17,1% al Ipswich, 23,2% al empate y 59,7% al Bournemouth, con 0,99 y 1,993 goles esperados, 57,3% para más de 2,5 y 55,3% para ambos anotan.",
+          "CatBoost Bzzoiro da 25,0% al Ipswich, 25,6% al empate y 49,4% al Bournemouth, con 1,55 y 1,53 goles esperados, 55,9% para más de 2,5 y 57,7% para ambos anotan.",
+          "El marcador modal de Bzzoiro es 1-1, con 0,458 asociado; B2 declara la victoria visitante como mayor probabilidad (0,494) y 'no' en sus dos campos binarios."
         ],
         "stats": [
           {
-            "value": "0.575",
-            "label": "Empate (P-GoatLab)"
+            "value": "59,7%",
+            "label": "victoria Bournemouth (P)"
           },
           {
-            "value": "1.35-1.5",
-            "label": "Goles totales (B-CatBoost)"
+            "value": "49,4%",
+            "label": "victoria Bournemouth (B)"
           },
           {
-            "value": "0.52",
-            "label": "1-1 (A-Football)"
+            "value": "1,993",
+            "label": "goles esperados visitante"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Enfrentamientos recientes y contexto histórico",
+        "title": "Serie corta y con empates",
         "bullets": [
-          "Último duelo en 2025: Liverpool ganó 3-0 en octubre, pero Palace venció 2-1 en mayo y 2-0 en septiembre. Serie equilibrada (3-3-2).",
-          "Liverpool domina en estadios rivales (3-0-1), mientras Palace tiene mejor registro en Selhurst Park (2-1-1)."
+          "El agregado H contabiliza 6 cruces: 1 victoria del Ipswich, 4 empates y 1 triunfo del Bournemouth, con 3,0 goles por partido.",
+          "La lista HR solo detalla 5 duelos, con 3 empates y un balance de una victoria por lado; el último fue Bournemouth 1-2 Ipswich.",
+          "El contraste entre 6 cruces y 5 registros, y entre 4 y 3 empates, queda marcado como inconsistencia de la fuente."
         ],
         "stats": [
           {
-            "value": "3-0-1",
-            "label": "Liverpool fuera (V-E-D)"
+            "value": "6",
+            "label": "cruces según H"
+          },
+          {
+            "value": "4",
+            "label": "empates según H"
+          },
+          {
+            "value": "3,0",
+            "label": "goles por partido"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Artilleros clave en la temporada 2026",
+        "title": "Tavernier manda en el Bournemouth",
         "bullets": [
-          "Tyrick Mitchell (Palace) con 2 goles en 9 partidos, pero con 3.25 goles por partido en la temporada (2026).",
-          "Alexander Isak (Liverpool) líder con 6 goles en 8 partidos, pero con baja participación reciente (1 gol en 3 partidos)."
+          "Marcus Tavernier lidera el registro del Bournemouth con 5 goles en 10 partidos; Evanilson suma 4 en 10.",
+          "En Ipswich, Emersonn, Julio Enciso y Leif Davis registran 2 goles cada uno, todos con 9 apariciones."
         ],
         "stats": [
           {
-            "value": "3.25",
-            "label": "Goles/partido (Mitchell)"
+            "value": "5",
+            "label": "goles de Tavernier"
+          },
+          {
+            "value": "4",
+            "label": "goles de Evanilson"
+          },
+          {
+            "value": "2",
+            "label": "goles de trío del Ipswich"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Racha y resultados recientes",
+        "title": "Bournemouth, seis triunfos al hilo",
         "bullets": [
-          "Crystal Palace: 2 victorias seguidas (vs Newcastle y Tottenham), pero con derrota en Europa (3-6 vs LASK Linz).",
-          "Liverpool: 1 victoria en 5 partidos (vs Villarreal), con 3 empates y 1 derrota (vs Arsenal y Fenerbahçe)."
+          "Bournemouth encadena 6 victorias en la lista reciente: 3-0 al Sturm Graz, 2-0 al Sunderland, 3-0 al Milan, 0-3 en Manchester United, 2-0 al Leeds y 1-3 en Sparta Praha.",
+          "Ipswich acumula una victoria, dos empates y dos derrotas en sus 5 registros: 1-0 en Everton, 2-1 al Fulham, 3-2 en Manchester City, 1-1 con Nottingham Forest y 2-2 en Hull.",
+          "Las series incluyen competiciones distintas, así que la racha no equivale solo al rendimiento liguero."
         ],
-        "stats": []
+        "stats": [
+          {
+            "value": "6",
+            "label": "victorias seguidas"
+          },
+          {
+            "value": "5",
+            "label": "registros del Ipswich"
+          },
+          {
+            "value": "1-3",
+            "label": "Sparta Praha-Bournemouth"
+          }
+        ]
       }
     ],
     "limitations": [
       {
-        "label": "Datos históricos limitados",
-        "detail": "Solo 5 enfrentamientos previos en Premier League (2024-2026), sin suficiente muestra para patrones claros de rendimiento."
+        "label": "Clima y sede incompletos",
+        "detail": "La fila W solo aporta 18 sin unidad ni etiqueta; no se detalla el recinto."
       },
       {
-        "label": "Modelos con dispersión alta",
-        "detail": "CatBoost y Poisson GoatLab muestran alta variabilidad en estimaciones de goles totales (1.35-1.5), lo que sugiere incertidumbre."
+        "label": "B2 sin etiquetas",
+        "detail": "Los campos binarios de B2 llegan como 'no' sin indicar qué lectura representan; se citan de forma literal."
       },
       {
-        "label": "Falta de contexto táctico",
-        "detail": "No se incluyen alineaciones, cambios recientes o lesiones clave que podrían alterar el resultado."
+        "label": "H y HR no coinciden",
+        "detail": "H reporta 6 cruces y 4 empates; HR solo lista 5 duelos y 3 empates."
+      },
+      {
+        "label": "Sin fila A",
+        "detail": "No se aporta estimación de API-Football para este partido."
+      },
+      {
+        "label": "Goles esperados dispares",
+        "detail": "P asigna 1,993 al Bournemouth y B 1,53; la brecha refuerza la misma dirección pero no coincide en magnitud."
       }
     ],
     "review": {
       "flag": true,
-      "note": "La lectura de API-Football (B2) contradice su propia lectura declarada (A), donde el modelo API-Football asigna 0.604 a empate pero B2 marca 'no' en ambos anotan. Esto sugiere posible error de interpretación en la entrada. Además, la racha de Palace (9-7-3) parece inconsistente con su historial reci"
+      "note": "Se marca la inconsistencia H/HR: H da 6 cruces y 4 empates; HR lista 5 y 3 empates. Además, P lleva la victoria visitante a 59,7% y los goles esperados del Bournemouth a 1,993, por encima de B (49,4% y 1,53)."
     },
-    "provider": "MISTRAL",
-    "model": "ministral-8b-2512",
-    "generatedAt": "2026-11-08T06:25:20.683Z",
-    "inputKey": "v3|M|fd-560635|Crystal Palace FC|Liverpool FC|premier|2026-11-08T14:00:00Z|NS\nP|1.44|2.377|0.217|0.207|0.575|0.734|0.7\nB|0.181|0.216|0.604|1.35|1.5|0.603|0.575|1-1|0.52\nB2|A|0.604|no|no\nH|36|8|6|22|3.25\nW|||9|\nT|18|Crystal Palace FC|9|7|9|21\nT|6|Liverpool FC|9|15|11|9\nS|Tyrick Mitchell|Crystal Palace FC|2|9\nS|Alexander Isak|Liverpool FC|6|8\nS|Víctor Muñoz|Liverpool FC|2|8\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nR|2026-10-25|Crystal Palace FC|Newcastle United FC|0|2\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-10-31|Tottenham Hotspur FC|Crystal Palace FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1\nR|2026-11-04|Fenerbahçe SK|Liverpool FC|3|2\nR|2026-11-05|Crystal Palace|TSG Hoffenheim|1|1\nHR|2026-04-25|Liverpool FC|Crystal Palace|3|1\nHR|2025-10-29|Liverpool FC|Crystal Palace|0|3\nHR|2025-09-27|Crystal Palace|Liverpool FC|2|1\nHR|2025-05-25|Liverpool FC|Crystal Palace|1|1\nHR|2024-10-05|Crystal Palace|Liverpool FC|0|1",
-    "materialKey": "v3|M|fd-560635|Crystal Palace FC|Liverpool FC|premier|2026-11-08T14:00:00Z|NS\nP|1.44|2.377|0.217|0.207|0.575|0.734|0.7\nB|0.181|0.216|0.604|1.35|1.5|0.603|0.575|1-1|0.52\nB2|A|0.604|no|no\nH|36|8|6|22|3.25\nW|||9|\nT|18|Crystal Palace FC|9|7|9|21\nT|6|Liverpool FC|9|15|11|9\nS|Tyrick Mitchell|Crystal Palace FC|2|9\nS|Alexander Isak|Liverpool FC|6|8\nS|Víctor Muñoz|Liverpool FC|2|8\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nR|2026-10-25|Crystal Palace FC|Newcastle United FC|0|2\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-10-31|Tottenham Hotspur FC|Crystal Palace FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1\nR|2026-11-04|Fenerbahçe SK|Liverpool FC|3|2\nR|2026-11-05|Crystal Palace|TSG Hoffenheim|1|1\nHR|2026-04-25|Liverpool FC|Crystal Palace|3|1\nHR|2025-10-29|Liverpool FC|Crystal Palace|0|3\nHR|2025-09-27|Crystal Palace|Liverpool FC|2|1\nHR|2025-05-25|Liverpool FC|Crystal Palace|1|1\nHR|2024-10-05|Crystal Palace|Liverpool FC|0|1"
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-08T13:12:47.345Z",
+    "inputKey": "v3|M|fd-560637|Ipswich Town FC|AFC Bournemouth|premier|2026-11-08T14:00:00Z|NS\nP|0.99|1.993|0.171|0.232|0.597|0.573|0.553\nB|0.25|0.256|0.494|1.55|1.53|0.559|0.577|1-1|0.458\nB2|A|0.494|no|no\nH|6|1|4|1|3\nW|||18|\nT|14|Ipswich Town FC|9|11|14|18\nT|9|AFC Bournemouth|9|12|14|13\nS|Emersonn|Ipswich Town FC|2|9\nS|Julio Enciso|Ipswich Town FC|2|9\nS|Leif Davis|Ipswich Town FC|2|9\nS|Marcus Tavernier|AFC Bournemouth|5|10\nS|Evanilson|AFC Bournemouth|4|10\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-22|Bournemouth|AC Milan|3|0\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nR|2026-10-31|Hull City AFC|Ipswich Town FC|2|2\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-05|AC Sparta Praha|Bournemouth|1|3\nHR|2025-04-02|Bournemouth|Ipswich Town|1|2\nHR|2024-12-08|Ipswich Town|Bournemouth|1|2\nHR|2015-04-03|Ipswich Town|Bournemouth|1|1\nHR|2014-11-22|Bournemouth|Ipswich Town|2|2\nHR|2014-04-21|Ipswich Town|Bournemouth|2|2",
+    "materialKey": "v3|M|fd-560637|Ipswich Town FC|AFC Bournemouth|premier|2026-11-08T14:00:00Z|NS\nP|0.99|1.993|0.171|0.232|0.597|0.573|0.553\nB|0.25|0.256|0.494|1.55|1.53|0.559|0.577|1-1|0.458\nB2|A|0.494|no|no\nH|6|1|4|1|3\nW|||18|\nT|14|Ipswich Town FC|9|11|14|18\nT|9|AFC Bournemouth|9|12|14|13\nS|Emersonn|Ipswich Town FC|2|9\nS|Julio Enciso|Ipswich Town FC|2|9\nS|Leif Davis|Ipswich Town FC|2|9\nS|Marcus Tavernier|AFC Bournemouth|5|10\nS|Evanilson|AFC Bournemouth|4|10\nR|2026-09-19|Everton FC|Ipswich Town FC|1|0\nR|2026-09-19|Everton|Ipswich|1|0\nR|2026-10-10|Ipswich Town FC|Fulham FC|2|1\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-17|Manchester City FC|Ipswich Town FC|3|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-22|Bournemouth|AC Milan|3|0\nR|2026-10-23|Ipswich Town FC|Nottingham Forest FC|1|1\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nR|2026-10-31|Hull City AFC|Ipswich Town FC|2|2\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-05|AC Sparta Praha|Bournemouth|1|3\nHR|2025-04-02|Bournemouth|Ipswich Town|1|2\nHR|2024-12-08|Ipswich Town|Bournemouth|1|2\nHR|2015-04-03|Ipswich Town|Bournemouth|1|1\nHR|2014-11-22|Bournemouth|Ipswich Town|2|2\nHR|2014-04-21|Ipswich Town|Bournemouth|2|2"
+  },
+  "fd-560635": {
+    "matchId": "fd-560635",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama del cruce",
+        "bullets": [
+          "Crystal Palace es 19º con 7 puntos en 9 jornadas, 9 goles a favor y 21 en contra; Liverpool es 6º con 15 puntos, 11 a favor y 9 en contra.",
+          "El partido está programado para el 8 de noviembre de 2026 a las 14:00 UTC y figura con estado NS."
+        ],
+        "stats": [
+          {
+            "value": "19º",
+            "label": "Puesto Crystal Palace"
+          },
+          {
+            "value": "6º",
+            "label": "Puesto Liverpool"
+          },
+          {
+            "value": "15",
+            "label": "Puntos Liverpool"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "Poisson GoatLab: 21.7% Crystal Palace, 20.7% empate y 57.5% Liverpool; parámetros de goles 1.44 y 2.377, 73.4% para más de 2.5 goles y 70.0% para ambos anotan.",
+          "CatBoost Bzzoiro: 17.8% local, 21.6% empate y 60.6% visitante; 60.3% para más de 2.5 goles, 59.5% para ambos anotan y 1-1 como marcador más probable.",
+          "Bzzoiro añade parámetros de goles 1.35 y 1.5; B2 declara la victoria visitante como mayor probabilidad (60.6%) y sus campos de goles totales y ambos anotan aparecen como 'no' sin etiqueta."
+        ],
+        "stats": [
+          {
+            "value": "57.5%",
+            "label": "Victoria Liverpool P"
+          },
+          {
+            "value": "60.6%",
+            "label": "Victoria Liverpool B"
+          },
+          {
+            "value": "73.4%",
+            "label": "Más de 2.5 P"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de enfrentamientos",
+        "bullets": [
+          "El balance histórico de 36 duelos registra 8 victorias de Crystal Palace, 6 empates y 22 de Liverpool, con 3.25 goles por encuentro.",
+          "Los cinco cruces más recientes muestran dos victorias de Liverpool, dos de Crystal Palace y un empate; el último fue 3-1 para Liverpool en abril de 2026."
+        ],
+        "stats": [
+          {
+            "value": "36",
+            "label": "Duelos históricos"
+          },
+          {
+            "value": "22",
+            "label": "Victorias Liverpool"
+          },
+          {
+            "value": "3.25",
+            "label": "Goles por duelo"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Crystal Palace no gana en sus últimos seis listados: derrotas 2-3 con Lyon, 0-5 con Brighton, 0-2 con Newcastle y 0-2 con Tottenham; empates 2-2 con Beşiktaş y 1-1 con Hoffenheim.",
+          "Liverpool suma cuatro victorias en sus últimos seis listados: 6-3 a LASK, 2-1 a Brentford, 4-3 a Villarreal y 2-0 a Brighton; cayó 0-1 con Arsenal y 2-3 con Fenerbahçe."
+        ],
+        "stats": [
+          {
+            "value": "0-5",
+            "label": "Derrota Palace Brighton"
+          },
+          {
+            "value": "2-2",
+            "label": "Empate Palace Beşiktaş"
+          },
+          {
+            "value": "6-3",
+            "label": "Victoria Liverpool LASK"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores",
+        "bullets": [
+          "Alexander Isak es el máximo anotador de Liverpool con 6 goles en 9 partidos; Víctor Muñoz suma 2 en 8.",
+          "Tyrick Mitchell es el referente de Crystal Palace con 2 goles en 9 partidos."
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Goles Isak"
+          },
+          {
+            "value": "2",
+            "label": "Goles Mitchell"
+          },
+          {
+            "value": "8",
+            "label": "Partidos Muñoz"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Clima y sede",
+        "detail": "La fila W solo contiene el valor 9 sin etiquetas; no se interpreta como temperatura, viento u otra condición."
+      },
+      {
+        "label": "Bajas confirmadas",
+        "detail": "No hay fila L en el input; no se dispone de bajas confirmadas para ninguno de los dos equipos."
+      },
+      {
+        "label": "Consenso externo",
+        "detail": "No se incluye bloque M2, por lo que no hay porcentajes de consenso externo que contrastar."
+      },
+      {
+        "label": "Etiquetas B2",
+        "detail": "Los campos 'no' de B2 y el valor 0.52 junto a 1-1 no están definidos en el input; no se usan como probabilidades."
+      },
+      {
+        "label": "API-Football",
+        "detail": "No hay bloque A de API-Football en el input; la referencia B2 se atribuye solo a Bzzoiro."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Sin desvíos claros entre P, B y B2: la mayor probabilidad visitante es coherente (57.5% frente a 60.6%). La ambigüedad de los campos 'no' de B2 y del 0.52 junto a 1-1 impide tratarlos como probabilidades; no se detecta una contradicción porcentual firme."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-08T13:15:16.238Z",
+    "inputKey": "v3|M|fd-560635|Crystal Palace FC|Liverpool FC|premier|2026-11-08T14:00:00Z|NS\nP|1.44|2.377|0.217|0.207|0.575|0.734|0.7\nB|0.178|0.216|0.606|1.35|1.5|0.603|0.595|1-1|0.52\nB2|A|0.606|no|no\nH|36|8|6|22|3.25\nW|||9|\nT|19|Crystal Palace FC|9|7|9|21\nT|6|Liverpool FC|9|15|11|9\nS|Tyrick Mitchell|Crystal Palace FC|2|9\nS|Alexander Isak|Liverpool FC|6|9\nS|Víctor Muñoz|Liverpool FC|2|8\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nR|2026-10-25|Crystal Palace FC|Newcastle United FC|0|2\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-10-31|Tottenham Hotspur FC|Crystal Palace FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1\nR|2026-11-04|Fenerbahçe SK|Liverpool FC|3|2\nR|2026-11-05|Crystal Palace|TSG Hoffenheim|1|1\nHR|2026-04-25|Liverpool FC|Crystal Palace|3|1\nHR|2025-10-29|Liverpool FC|Crystal Palace|0|3\nHR|2025-09-27|Crystal Palace|Liverpool FC|2|1\nHR|2025-05-25|Liverpool FC|Crystal Palace|1|1\nHR|2024-10-05|Crystal Palace|Liverpool FC|0|1",
+    "materialKey": "v3|M|fd-560635|Crystal Palace FC|Liverpool FC|premier|2026-11-08T14:00:00Z|NS\nP|1.44|2.377|0.217|0.207|0.575|0.734|0.7\nB|0.178|0.216|0.606|1.35|1.5|0.603|0.595|1-1|0.52\nB2|A|0.606|no|no\nH|36|8|6|22|3.25\nW|||9|\nT|19|Crystal Palace FC|9|7|9|21\nT|6|Liverpool FC|9|15|11|9\nS|Tyrick Mitchell|Crystal Palace FC|2|9\nS|Alexander Isak|Liverpool FC|6|9\nS|Víctor Muñoz|Liverpool FC|2|8\nR|2026-10-14|LASK Linz|Liverpool FC|3|6\nR|2026-10-15|Olympique Lyonnais|Crystal Palace|3|2\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-20|Liverpool FC|Villarreal CF|4|3\nR|2026-10-22|Beşiktaş JK|Crystal Palace|2|2\nR|2026-10-25|Crystal Palace FC|Newcastle United FC|0|2\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-10-31|Tottenham Hotspur FC|Crystal Palace FC|2|0\nR|2026-11-01|Liverpool FC|Arsenal FC|0|1\nR|2026-11-04|Fenerbahçe SK|Liverpool FC|3|2\nR|2026-11-05|Crystal Palace|TSG Hoffenheim|1|1\nHR|2026-04-25|Liverpool FC|Crystal Palace|3|1\nHR|2025-10-29|Liverpool FC|Crystal Palace|0|3\nHR|2025-09-27|Crystal Palace|Liverpool FC|2|1\nHR|2025-05-25|Liverpool FC|Crystal Palace|1|1\nHR|2024-10-05|Crystal Palace|Liverpool FC|0|1"
+  },
+  "fd-560636": {
+    "matchId": "fd-560636",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Panorama del cruce",
+        "bullets": [
+          "Sunderland es 20º con 5 puntos en 9 jornadas, 7 goles a favor y 17 en contra; Chelsea es 4º con 16 puntos, 19 a favor y 15 en contra.",
+          "El partido está programado para el 8 de noviembre de 2026 a las 14:00 UTC y figura con estado NS."
+        ],
+        "stats": [
+          {
+            "value": "20º",
+            "label": "Puesto Sunderland"
+          },
+          {
+            "value": "4º",
+            "label": "Puesto Chelsea"
+          },
+          {
+            "value": "16",
+            "label": "Puntos Chelsea"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Modelos y probabilidades",
+        "bullets": [
+          "Poisson GoatLab: 25.5% Sunderland, 27.9% empate y 46.5% Chelsea; parámetros de goles 1.08 y 1.533, 48.5% para más de 2.5 goles y 53.0% para ambos anotan.",
+          "CatBoost Bzzoiro: 25.7% local, 26.1% empate y 48.2% visitante; 52.9% para más de 2.5 goles, 55.5% para ambos anotan y 1-1 como marcador más probable.",
+          "Bzzoiro añade parámetros de goles 1.29 y 1.52; B2 declara la victoria visitante como mayor probabilidad (48.2%) y sus campos de goles totales y ambos anotan aparecen como 'no' sin etiqueta."
+        ],
+        "stats": [
+          {
+            "value": "46.5%",
+            "label": "Victoria Chelsea P"
+          },
+          {
+            "value": "48.2%",
+            "label": "Victoria Chelsea B"
+          },
+          {
+            "value": "52.9%",
+            "label": "Más de 2.5 B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial de enfrentamientos",
+        "bullets": [
+          "El balance histórico de 35 duelos registra 10 victorias de Sunderland, 2 empates y 23 de Chelsea, con 3.63 goles por encuentro.",
+          "Los cinco cruces listados muestran tres victorias de Sunderland y dos de Chelsea; los dos más recientes fueron 2-1 y 1-2 para Sunderland."
+        ],
+        "stats": [
+          {
+            "value": "35",
+            "label": "Duelos históricos"
+          },
+          {
+            "value": "23",
+            "label": "Victorias Chelsea"
+          },
+          {
+            "value": "3.63",
+            "label": "Goles por duelo"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente",
+        "bullets": [
+          "Sunderland suma en sus últimos seis: victoria 2-1 a Torreense; empates 1-1 con Lech Poznań y 0-0 con Leeds; derrotas 0-2 con Bournemouth, 1-3 con Coventry y 0-2 con Dinamo Zagreb.",
+          "Chelsea suma en sus últimos seis: victorias 5-1 a Bournemouth, 2-0 a Everton y 2-0 a Manchester United; empate 2-2 con Hull y derrotas 0-3 con Brentford y 0-2 con Tottenham."
+        ],
+        "stats": [
+          {
+            "value": "5-1",
+            "label": "Victoria Chelsea Bournemouth"
+          },
+          {
+            "value": "0-3",
+            "label": "Derrota Chelsea Brentford"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores",
+        "bullets": [
+          "João Pedro y Morgan Rogers comparten el liderato de Chelsea con 5 goles; João Pedro en 6 partidos y Rogers en 10; Cole Palmer suma 3 en 9.",
+          "Brian Brobbey es el máximo de Sunderland con 3 goles en 7 partidos; Enzo Le Fée suma 2 en 9."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "Goles João Pedro"
+          },
+          {
+            "value": "5",
+            "label": "Goles Morgan Rogers"
+          },
+          {
+            "value": "3",
+            "label": "Goles Brian Brobbey"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Clima y sede",
+        "detail": "La fila W solo contiene el valor 18 sin etiquetas; no se interpreta como temperatura, viento u otra condición."
+      },
+      {
+        "label": "Bajas confirmadas",
+        "detail": "No hay fila L en el input; no se dispone de bajas confirmadas para ninguno de los dos equipos."
+      },
+      {
+        "label": "Consenso externo",
+        "detail": "No se incluye bloque M2, por lo que no hay porcentajes de consenso externo que contrastar."
+      },
+      {
+        "label": "Etiquetas B2",
+        "detail": "Los campos 'no' de B2 y el valor 0.512 junto a 1-1 no están definidos en el input; no se usan como probabilidades."
+      },
+      {
+        "label": "API-Football",
+        "detail": "No hay bloque A de API-Football en el input; la referencia B2 se atribuye solo a Bzzoiro."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Sin desvíos claros: P y B coinciden en la mayor probabilidad visitante (46.5% y 48.2%) y B2 repite 48.2%. Los campos 'no' de B2 y el 0.512 junto a 1-1 no están definidos y no se tratan como probabilidades; no hay contradicción porcentual firme."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-08T13:15:16.249Z",
+    "inputKey": "v3|M|fd-560636|Sunderland AFC|Chelsea FC|premier|2026-11-08T14:00:00Z|NS\nP|1.08|1.533|0.255|0.279|0.465|0.485|0.53\nB|0.257|0.261|0.482|1.29|1.52|0.529|0.555|1-1|0.512\nB2|A|0.482|no|no\nH|35|10|2|23|3.63\nW|||18|\nT|20|Sunderland AFC|9|5|7|17\nT|4|Chelsea FC|9|16|19|15\nS|Brian Brobbey|Sunderland AFC|3|7\nS|Enzo Le Fée|Sunderland AFC|2|9\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|5|10\nS|Cole Palmer|Chelsea FC|3|9\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-10-31|Chelsea FC|Manchester United FC|2|0\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nHR|2026-05-24|Sunderland|Chelsea|2|1\nHR|2025-10-25|Chelsea|Sunderland|1|2\nHR|2017-05-21|Chelsea|Sunderland|5|1\nHR|2016-12-14|Sunderland|Chelsea|0|1\nHR|2016-05-07|Sunderland|Chelsea|3|2",
+    "materialKey": "v3|M|fd-560636|Sunderland AFC|Chelsea FC|premier|2026-11-08T14:00:00Z|NS\nP|1.08|1.533|0.255|0.279|0.465|0.485|0.53\nB|0.257|0.261|0.482|1.29|1.52|0.529|0.555|1-1|0.512\nB2|A|0.482|no|no\nH|35|10|2|23|3.63\nW|||18|\nT|20|Sunderland AFC|9|5|7|17\nT|4|Chelsea FC|9|16|19|15\nS|Brian Brobbey|Sunderland AFC|3|7\nS|Enzo Le Fée|Sunderland AFC|2|9\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|5|10\nS|Cole Palmer|Chelsea FC|3|9\nR|2026-09-12|Chelsea FC|Hull City AFC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-10-31|Chelsea FC|Manchester United FC|2|0\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nHR|2026-05-24|Sunderland|Chelsea|2|1\nHR|2025-10-25|Chelsea|Sunderland|1|2\nHR|2017-05-21|Chelsea|Sunderland|5|1\nHR|2016-12-14|Sunderland|Chelsea|0|1\nHR|2016-05-07|Sunderland|Chelsea|3|2"
+  },
+  "fd-560638": {
+    "matchId": "fd-560638",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Brighton y Brentford: contexto y tabla",
+        "bullets": [
+          "Brighton & Hove Albion recibe a Brentford en la Premier League el 8 de noviembre de 2026 a las 14:00Z; el estado del partido es NS y W solo consigna 12 sin unidad.",
+          "La tabla sitúa al Brighton 3.º (9 partidos, 19 puntos, 24 goles a favor y 7 en contra) y al Brentford 7.º (9 partidos, 14 puntos, 16 a favor y 9 en contra).",
+          "El bloque W no aporta condición meteorológica ni viento; el valor 12 aparece aislado y sin unidad, por lo que la lectura de sede y clima queda incompleta."
+        ],
+        "stats": [
+          {
+            "value": "3.º",
+            "label": "posición Brighton"
+          },
+          {
+            "value": "7.º",
+            "label": "posición Brentford"
+          },
+          {
+            "value": "19",
+            "label": "puntos Brighton"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y Bzzoiro: brecha local",
+        "bullets": [
+          "El Poisson de GoatLab otorga 61.1% a la victoria del Brighton, 22.4% al empate y 16.4% al triunfo del Brentford.",
+          "Bzzoiro declara 50.9% local, 24.6% empate y 24.5% visitante, con 1.72-1.18 en goles esperados y un 1-1 como marcador más probable.",
+          "La diferencia local entre P (61.1%) y B (50.9%) es de 10.2 puntos; B2 replica el 50.9% local y marca 'no' en goles totales y ambos anotan.",
+          "El bloque P añade 59.2% y 56.1%, y B agrega 59.7%, 60.2% y 50.8% sin etiquetas explícitas en el input."
+        ],
+        "stats": [
+          {
+            "value": "61.1%",
+            "label": "P local"
+          },
+          {
+            "value": "50.9%",
+            "label": "B local"
+          },
+          {
+            "value": "10.2 puntos",
+            "label": "brecha P-B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial: ventaja del Brighton",
+        "bullets": [
+          "El historial acumula 21 cruces: 10 victorias del Brighton, 6 empates y 5 del Brentford, con 2.33 goles por partido.",
+          "En el cruce más reciente, Brighton ganó 2-0 en Brentford el 21-02-2026; antes se registró 2-1 para Brighton, 4-2 para Brentford y dos 0-0.",
+          "Los cinco HR muestran dos empates, dos triunfos del Brighton y uno del Brentford."
+        ],
+        "stats": [
+          {
+            "value": "21",
+            "label": "cruces"
+          },
+          {
+            "value": "10",
+            "label": "victorias Brighton"
+          },
+          {
+            "value": "2.33",
+            "label": "goles por cruce"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente: Brighton al alza",
+        "bullets": [
+          "Brighton suma victorias recientes ante Arsenal (3-0), Sunderland (0-2), Crystal Palace (5-0) y Manchester City (0-1), con derrota 2-0 en Liverpool.",
+          "Brentford registra triunfos 3-0 sobre Chelsea y 2-0 sobre Nottingham Forest, empates 2-2 con Bournemouth, 2-2 con Aston Villa y 1-1 con Hull, y derrota 1-2 ante Liverpool.",
+          "El bloque R repite el Brighton-Arsenal del 19-09-2026; se contó una sola vez para no inflar la racha."
+        ],
+        "stats": [
+          {
+            "value": "3-0",
+            "label": "Brighton-Arsenal"
+          },
+          {
+            "value": "5-0",
+            "label": "Brighton-Palace"
+          },
+          {
+            "value": "0-1",
+            "label": "City-Brighton"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores: reparto y Schade",
+        "bullets": [
+          "Brighton reparte tres goles entre Kostoulas (3 en 9), Hinshelwood (3 en 4) y Groß (3 en 9).",
+          "Brentford tiene a Kevin Schade con 3 en 9; Igor Thiago y Keane Lewis-Potter suman 2 en 9 cada uno.",
+          "Ningún equipo concentra un artillero muy por encima del resto en este bloque; el máximo compartido es de 3 goles."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "goles Kostoulas"
+          },
+          {
+            "value": "3",
+            "label": "goles Schade"
+          },
+          {
+            "value": "2",
+            "label": "goles Thiago"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin API-Football",
+        "detail": "No hay bloque A ni distribución de API-Football; la comparación se limita a P, B y B2."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se aporta M2, así que no hay lectura de consenso externo en porcentajes."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No hay bloque L con bajas confirmadas ni alineaciones; no se pueden evaluar ausencias."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "W solo muestra 12 sin unidad, sin condición ni viento; la lectura de sede y clima es parcial."
+      },
+      {
+        "label": "Etiquetas y duplicado",
+        "detail": "B incluye 59.7%, 60.2% y 50.8% sin etiqueta explícita; R repite un Brighton-Arsenal y se contó una vez."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Auditoría: P da 61.1% local frente a 50.9% de B, una brecha de 10.2 puntos; B2 replica el 50.9%. El bloque B añade 59.7%, 60.2% y 50.8% sin etiqueta; W no detalla condición ni unidad y R contiene un duplicado."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-08T13:18:14.081Z",
+    "inputKey": "v3|M|fd-560638|Brighton & Hove Albion FC|Brentford FC|premier|2026-11-08T14:00:00Z|NS\nP|2.07|0.997|0.611|0.224|0.164|0.592|0.561\nB|0.509|0.246|0.245|1.72|1.18|0.597|0.602|1-1|0.508\nB2|H|0.509|no|no\nH|21|10|6|5|2.33\nW|||12|\nT|3|Brighton & Hove Albion FC|9|19|24|7\nT|7|Brentford FC|9|14|16|9\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|3|9\nS|Jack Hinshelwood|Brighton & Hove Albion FC|3|4\nS|Pascal Groß|Brighton & Hove Albion FC|3|9\nS|Kevin Schade|Brentford FC|3|9\nS|Igor Thiago|Brentford FC|2|9\nS|Keane Lewis-Potter|Brentford FC|2|9\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-10|Aston Villa FC|Brentford FC|2|2\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-10-25|Hull City AFC|Brentford FC|1|1\nR|2026-10-31|Manchester City FC|Brighton & Hove Albion FC|0|1\nR|2026-10-31|Brentford FC|Nottingham Forest FC|2|0\nHR|2026-02-21|Brentford|Brighton & Hove Albion|0|2\nHR|2025-11-22|Brighton & Hove Albion|Brentford|2|1\nHR|2025-04-19|Brentford|Brighton & Hove Albion|4|2\nHR|2024-12-27|Brighton & Hove Albion|Brentford|0|0\nHR|2024-04-03|Brentford|Brighton & Hove Albion|0|0",
+    "materialKey": "v3|M|fd-560638|Brighton & Hove Albion FC|Brentford FC|premier|2026-11-08T14:00:00Z|NS\nP|2.07|0.997|0.611|0.224|0.164|0.592|0.561\nB|0.509|0.246|0.245|1.72|1.18|0.597|0.602|1-1|0.508\nB2|H|0.509|no|no\nH|21|10|6|5|2.33\nW|||12|\nT|3|Brighton & Hove Albion FC|9|19|24|7\nT|7|Brentford FC|9|14|16|9\nS|Charalampos Kostoulas|Brighton & Hove Albion FC|3|9\nS|Jack Hinshelwood|Brighton & Hove Albion FC|3|4\nS|Pascal Groß|Brighton & Hove Albion FC|3|9\nS|Kevin Schade|Brentford FC|3|9\nS|Igor Thiago|Brentford FC|2|9\nS|Keane Lewis-Potter|Brentford FC|2|9\nR|2026-09-12|AFC Bournemouth|Brentford FC|2|2\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-19|Brighton & Hove Albion FC|Arsenal FC|3|0\nR|2026-09-19|Brighton|Arsenal|3|0\nR|2026-10-10|Sunderland AFC|Brighton & Hove Albion FC|0|2\nR|2026-10-10|Aston Villa FC|Brentford FC|2|2\nR|2026-10-17|Brentford FC|Liverpool FC|1|2\nR|2026-10-18|Brighton & Hove Albion FC|Crystal Palace FC|5|0\nR|2026-10-25|Liverpool FC|Brighton & Hove Albion FC|2|0\nR|2026-10-25|Hull City AFC|Brentford FC|1|1\nR|2026-10-31|Manchester City FC|Brighton & Hove Albion FC|0|1\nR|2026-10-31|Brentford FC|Nottingham Forest FC|2|0\nHR|2026-02-21|Brentford|Brighton & Hove Albion|0|2\nHR|2025-11-22|Brighton & Hove Albion|Brentford|2|1\nHR|2025-04-19|Brentford|Brighton & Hove Albion|4|2\nHR|2024-12-27|Brighton & Hove Albion|Brentford|0|0\nHR|2024-04-03|Brentford|Brighton & Hove Albion|0|0"
+  },
+  "fd-564743": {
+    "matchId": "fd-564743",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Real Sociedad y Rayo: contexto y tabla",
+        "bullets": [
+          "Real Sociedad recibe a Rayo Vallecano en LaLiga el 8 de noviembre de 2026 a las 15:15Z; el estado es NS y W indica nublado con un 6 sin unidad.",
+          "La tabla sitúa a la Real Sociedad 5.ª (11 partidos, 19 puntos, 20 goles a favor y 20 en contra) y al Rayo 14.º (10 partidos, 12 puntos, 15 a favor y 20 en contra).",
+          "El registro meteorológico no especifica unidad ni viento; solo aparece la condición nublada y el valor 6, por lo que la lectura de sede y clima es parcial."
+        ],
+        "stats": [
+          {
+            "value": "5.ª",
+            "label": "posición Real Sociedad"
+          },
+          {
+            "value": "14.º",
+            "label": "posición Rayo"
+          },
+          {
+            "value": "19",
+            "label": "puntos Real Sociedad"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Poisson y Bzzoiro: brecha local",
+        "bullets": [
+          "El Poisson de GoatLab asigna 63.0% a la victoria de la Real Sociedad, 20.4% al empate y 16.6% al triunfo del Rayo.",
+          "Bzzoiro declara 54.3% local, 23.4% empate y 22.3% visitante, con 1.72-1.24 en goles esperados y 1-1 como marcador más probable.",
+          "La brecha local entre P (63.0%) y B (54.3%) es de 8.7 puntos; B2 replica el 54.3% y marca 'no' en goles totales y ambos anotan.",
+          "P añade 67.7% y 62.6%; B agrega 59.6%, 60.1% y 55.8% sin etiquetas explícitas en el input."
+        ],
+        "stats": [
+          {
+            "value": "63.0%",
+            "label": "P local"
+          },
+          {
+            "value": "54.3%",
+            "label": "B local"
+          },
+          {
+            "value": "8.7 puntos",
+            "label": "brecha P-B"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial: equilibrio con goles",
+        "bullets": [
+          "El historial suma 52 cruces: 20 victorias de la Real Sociedad, 16 empates y 16 del Rayo, con 3.04 goles por partido.",
+          "En los cinco HR recientes, el Rayo suma dos victorias, la Real una y se registran dos empates; el último fue 3-3.",
+          "Los HR más recientes en campo de la Real muestran un 0-1, un 3-1 y un 1-2, sin una tendencia local continua."
+        ],
+        "stats": [
+          {
+            "value": "52",
+            "label": "cruces"
+          },
+          {
+            "value": "20",
+            "label": "victorias Real"
+          },
+          {
+            "value": "3.04",
+            "label": "goles por cruce"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Forma reciente: Real Sociedad y Rayo",
+        "bullets": [
+          "La Real Sociedad registra un 1-1 con Union SG, una victoria 2-5 en Málaga, un 0-6 en Lillestrøm, un 2-1 ante Levante, una derrota 2-1 en Athletic y un 1-1 con Lyon.",
+          "El Rayo muestra un 2-1 a Espanyol, un 1-1 en Osasuna, un 1-1 en Getafe, un 0-3 con Elche y un 3-0 a Celta.",
+          "El bloque R repite el Osasuna-Rayo del 19-09-2026; se contó una sola vez."
+        ],
+        "stats": [
+          {
+            "value": "2-5",
+            "label": "victoria en Málaga"
+          },
+          {
+            "value": "0-6",
+            "label": "victoria en Lillestrøm"
+          },
+          {
+            "value": "3-0",
+            "label": "Rayo-Celta"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Goleadores: Camello destaca",
+        "bullets": [
+          "Sergio Camello destaca con 7 goles en 11 partidos para el Rayo; Álvaro García suma 3 en 10 y De Frutos 2 en 8.",
+          "La Real Sociedad reparte: Luka Sučić 4 en 11, Orri Óskarsson 3 en 10 y Ander Barrenetxea 2 en 11.",
+          "El máximo del bloque es Camello, con cuatro goles más que el siguiente goleador del Rayo y tres más que Sučić."
+        ],
+        "stats": [
+          {
+            "value": "7",
+            "label": "goles Camello"
+          },
+          {
+            "value": "4",
+            "label": "goles Sučić"
+          },
+          {
+            "value": "11",
+            "label": "partidos Camello"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Sin API-Football",
+        "detail": "No hay bloque A ni distribución de API-Football; la comparación se limita a P, B y B2."
+      },
+      {
+        "label": "Sin consenso externo",
+        "detail": "No se aporta M2, así que no hay lectura de consenso externo en porcentajes."
+      },
+      {
+        "label": "Sin bajas ni alineaciones",
+        "detail": "No hay bloque L con bajas confirmadas ni alineaciones; no se pueden evaluar ausencias."
+      },
+      {
+        "label": "Clima incompleto",
+        "detail": "W solo indica nublado y 6 sin unidad ni viento; la lectura de sede y clima es parcial."
+      },
+      {
+        "label": "Etiquetas y duplicado",
+        "detail": "B incluye 59.6%, 60.1% y 55.8% sin etiqueta explícita; R repite un Osasuna-Rayo y se contó una vez."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Auditoría: P da 63.0% local frente a 54.3% de B, una brecha de 8.7 puntos; B2 replica el 54.3%. El bloque B añade 59.6%, 60.1% y 55.8% sin etiqueta; W solo indica nublado y 6 sin unidad; R contiene un duplicado."
+    },
+    "provider": "OPENCODE_GO",
+    "model": "deepseek-v4.1-flash",
+    "generatedAt": "2026-11-08T13:18:14.092Z",
+    "inputKey": "v3|M|fd-564743|Real Sociedad de Fútbol|Rayo Vallecano de Madrid|laliga|2026-11-08T15:15:00Z|NS\nP|2.34|1.15|0.63|0.204|0.166|0.677|0.626\nB|0.543|0.234|0.223|1.72|1.24|0.596|0.601|1-1|0.558\nB2|H|0.543|no|no\nH|52|20|16|16|3.04\nW||cloudy|6|\nT|5|Real Sociedad de Fútbol|11|19|20|20\nT|14|Rayo Vallecano de Madrid|10|12|15|20\nS|Luka Sučić|Real Sociedad de Fútbol|4|11\nS|Orri Óskarsson|Real Sociedad de Fútbol|3|10\nS|Ander Barrenetxea|Real Sociedad de Fútbol|2|11\nS|Sergio Camello|Rayo Vallecano de Madrid|7|11\nS|Álvaro García|Rayo Vallecano de Madrid|3|10\nS|Jorge de Frutos|Rayo Vallecano de Madrid|2|8\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-19|CA Osasuna|Rayo Vallecano de Madrid|1|1\nR|2026-09-19|Osasuna|Rayo Vallecano|1|1\nR|2026-10-15|Royale Union Saint-Gilloise|Real Sociedad|1|1\nR|2026-10-18|Málaga CF|Real Sociedad de Fútbol|2|5\nR|2026-10-19|Getafe CF|Rayo Vallecano de Madrid|1|1\nR|2026-10-22|Lillestrøm SK|Real Sociedad|0|6\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nR|2026-10-31|Rayo Vallecano de Madrid|RC Celta de Vigo|3|0\nR|2026-11-01|Athletic Club|Real Sociedad de Fútbol|2|1\nR|2026-11-05|Real Sociedad|Olympique Lyonnais|1|1\nHR|2026-04-26|Rayo Vallecano|Real Sociedad|3|3\nHR|2025-10-05|Real Sociedad|Rayo Vallecano|0|1\nHR|2025-03-16|Rayo Vallecano|Real Sociedad|2|2\nHR|2025-01-16|Real Sociedad|Rayo Vallecano|3|1\nHR|2024-08-18|Real Sociedad|Rayo Vallecano|1|2",
+    "materialKey": "v3|M|fd-564743|Real Sociedad de Fútbol|Rayo Vallecano de Madrid|laliga|2026-11-08T15:15:00Z|NS\nP|2.34|1.15|0.63|0.204|0.166|0.677|0.626\nB|0.543|0.234|0.223|1.72|1.24|0.596|0.601|1-1|0.558\nB2|H|0.543|no|no\nH|52|20|16|16|3.04\nW||cloudy|6|\nT|5|Real Sociedad de Fútbol|11|19|20|20\nT|14|Rayo Vallecano de Madrid|10|12|15|20\nS|Luka Sučić|Real Sociedad de Fútbol|4|11\nS|Orri Óskarsson|Real Sociedad de Fútbol|3|10\nS|Ander Barrenetxea|Real Sociedad de Fútbol|2|11\nS|Sergio Camello|Rayo Vallecano de Madrid|7|11\nS|Álvaro García|Rayo Vallecano de Madrid|3|10\nS|Jorge de Frutos|Rayo Vallecano de Madrid|2|8\nR|2026-09-15|Rayo Vallecano de Madrid|RCD Espanyol de Barcelona|2|1\nR|2026-09-19|CA Osasuna|Rayo Vallecano de Madrid|1|1\nR|2026-09-19|Osasuna|Rayo Vallecano|1|1\nR|2026-10-15|Royale Union Saint-Gilloise|Real Sociedad|1|1\nR|2026-10-18|Málaga CF|Real Sociedad de Fútbol|2|5\nR|2026-10-19|Getafe CF|Rayo Vallecano de Madrid|1|1\nR|2026-10-22|Lillestrøm SK|Real Sociedad|0|6\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nR|2026-10-31|Rayo Vallecano de Madrid|RC Celta de Vigo|3|0\nR|2026-11-01|Athletic Club|Real Sociedad de Fútbol|2|1\nR|2026-11-05|Real Sociedad|Olympique Lyonnais|1|1\nHR|2026-04-26|Rayo Vallecano|Real Sociedad|3|3\nHR|2025-10-05|Real Sociedad|Rayo Vallecano|0|1\nHR|2025-03-16|Rayo Vallecano|Real Sociedad|2|2\nHR|2025-01-16|Real Sociedad|Rayo Vallecano|3|1\nHR|2024-08-18|Real Sociedad|Rayo Vallecano|1|2"
   }
 }
