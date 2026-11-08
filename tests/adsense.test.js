@@ -10,7 +10,7 @@ test('Publisher ID viene de env en crudo y ca- solo se deriva', () => {
   assert.ok(ads.includes('PUBLIC_ADSENSE_PUBLISHER_ID'));
   assert.ok(ads.includes('PUBLISHER_ID'));
   assert.ok(ads.includes('AD_CLIENT = `ca-${PUBLISHER_ID}`'));
-  assert.ok(ads.includes("'pub-1972487168739114'"));
+  assert.ok(ads.includes("'pub-4320512940041280'"));
   assert.ok(!ads.includes("'ca-pub-"));
 });
 
@@ -23,7 +23,7 @@ test('during review there are no active manual slots', () => {
 });
 
 test('ads.txt contains the publisher DIRECT line', () => {
-  assert.ok(read('public/ads.txt').includes('google.com, pub-1972487168739114, DIRECT, f08c47fec0942fa0'));
+  assert.ok(read('public/ads.txt').includes('google.com, pub-4320512940041280, DIRECT, f08c47fec0942fa0'));
 });
 
 test('robots.txt exposes the review domain sitemap', () => {

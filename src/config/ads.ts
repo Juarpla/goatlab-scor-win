@@ -16,7 +16,7 @@
  */
 const cleaned = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID ?? '').trim().replace(/^ca-/i, '');
 
-export const PUBLISHER_ID = /^pub-\d+$/.test(cleaned) ? cleaned : 'pub-1972487168739114';
+export const PUBLISHER_ID = /^pub-\d+$/.test(cleaned) ? cleaned : 'pub-4320512940041280';
 
 export const AD_CLIENT = `ca-${PUBLISHER_ID}`;
 
