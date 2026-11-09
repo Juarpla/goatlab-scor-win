@@ -1,41 +1,6 @@
 {
-  "updatedAt": "2026-11-09T06:35:13.744Z",
+  "updatedAt": "2026-11-09T06:57:25.437Z",
   "runs": [
-    {
-      "at": "2026-10-30T12:50:59.049Z",
-      "matchId": "fd-560623",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2127,
-        "outputTokens": 16720
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "2b985b43-b7ec-4562-be5b-5bef9d635341"
-    },
-    {
-      "at": "2026-10-30T12:50:59.049Z",
-      "matchId": "fd-560629",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "2b985b43-b7ec-4562-be5b-5bef9d635341"
-    },
     {
       "at": "2026-10-30T13:19:26.292Z",
       "matchId": "fd-560630",
@@ -7881,6 +7846,93 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "0b8f626a-ea45-4237-abe5-7119bc09934b"
+    },
+    {
+      "at": "2026-11-09T06:38:40.994Z",
+      "task": "shorts",
+      "matchId": "italy-vs-france-2026-11-12",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 148677
+      },
+      "usage": {
+        "inputTokens": 7202,
+        "outputTokens": 24429
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "4b864856-8200-44dd-afc2-1a71dfc4b3e9"
+    },
+    {
+      "at": "2026-11-09T06:57:25.433Z",
+      "task": "shorts",
+      "matchId": "portugal-vs-denmark-2026-11-14",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 10: cifra 11 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7321,
+            "outputTokens": 21601
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 129407
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 600000
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: el gancho no lleva cifras; guion 6: 4 cifras, máximo 3; guion 7: 7 cifras, máximo 3; guion 9: falta Dinamarca",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7783,
+            "outputTokens": 2807
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 22058
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235102
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 137863
+      },
+      "usage": {
+        "inputTokens": 7321,
+        "outputTokens": 22959
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "1f929b0f-b881-44c8-bb91-4ae474b9bf1d"
     }
   ]
 }
