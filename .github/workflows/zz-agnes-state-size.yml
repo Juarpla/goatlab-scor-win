@@ -1,0 +1,22 @@
+name: "zz-agnes-state-size"
+# Temporary, read-only diagnostic: prints the shared Agnes state size against
+# AGNES_STATE_MAX_BYTES. It never generates media and never writes to R2.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: State size report
+        run: node scripts/agnes-state-size.mjs
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
