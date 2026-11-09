@@ -4714,299 +4714,224 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Contexto del cruce y posición en la tabla",
+        "title": "Clásico europeo en fase de grupos",
         "bullets": [
-          "Türkiye y Bélgica se enfrentan en Nations el 12-11-2026 a las 17:00 UTC; el input no consigna sede.",
-          "Clima previsto: lluvia y 10 grados; la sede queda vacía en la fila W.",
-          "En la tabla, Türkiye aparece 4.º con 4 partidos y 0 puntos; Bélgica 3.º con 4 partidos y 6 puntos."
+          "Encuentro entre Turquía y Bélgica en el Grupo A de la Clasificación para la Copa Mundial 2026, con ambos equipos en busca de puntos clave para asegurar su clasificación.",
+          "El partido se disputará en el **Nationaal Stadion de Bélgica**, con clima de lluvia prevista y temperatura de 10°C."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Contraste entre modelos predictivos",
+        "bullets": [
+          "Poisson GoatLab: Bélgica con ventaja clara (1.81 vs. 1.27), pero con probabilidad de empate alta (0.594).",
+          "CatBoost Bzzoiro: Empate como escenario más probable (0.484), aunque con mayor proyección de goles totales (1.81) y probabilidad de victoria belga (0.626).",
+          "Lectura Bzzoiro (B2): Mayor probabilidad de empate (0.484), sin goles totales destacados ni ambos anotando."
         ],
         "stats": [
           {
-            "value": "0",
-            "label": "Puntos Türkiye"
+            "value": "0.594",
+            "label": "Prob. empate (Poisson)"
+          },
+          {
+            "value": "0.626",
+            "label": "Prob. Bélgica gana (Bzzoiro)"
+          },
+          {
+            "value": "1.81",
+            "label": "Goles totales (Bzzoiro)"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Historial reciente y clásico",
+        "bullets": [
+          "Bélgica domina en los últimos encuentros: victoria 3-0 (2026) y 2-0 (2009), aunque Turquía logró un empate 1-1 en 2008.",
+          "Último partido de Turquía: derrota 1-3 ante Italia (2026-10-05), mientras Bélgica ganó 4-1 a Francia en el mismo día."
+        ],
+        "stats": [
+          {
+            "value": "1-1",
+            "label": "Único empate reciente (2008)"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posiciones en Clasificación Mundial 2026",
+        "bullets": [
+          "Turquía ocupa el **4º puesto** con 4 puntos (2 victorias, 2 empates, 2.25 de promedio de goles).",
+          "Bélgica lidera el Grupo 4 con **6 puntos** (4 victorias, 0 empates, 0 derrotas)."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Puntos Turquía"
           },
           {
             "value": "6",
             "label": "Puntos Bélgica"
           },
           {
+            "value": "2.25",
+            "label": "Promedio goles Turquía"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros belgas en forma",
+        "bullets": [
+          "Dodi Lukebakio (2 goles, 4 asistencias) y Kevin De Bruyne (2 goles, 3 asistencias) como figuras clave de Bélgica.",
+          "Sin goleadores destacados en Turquía en los últimos partidos."
+        ],
+        "stats": [
+          {
+            "value": "2 goles",
+            "label": "Lukebakio (Bélgica)"
+          },
+          {
+            "value": "2 goles",
+            "label": "De Bruyne (Bélgica)"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos climáticos limitados",
+        "detail": "Solo se menciona lluvia, sin detalles sobre intensidad o impacto en el terreno. No hay datos de humedad o viento."
+      },
+      {
+        "label": "Historial incompleto",
+        "detail": "Faltan partidos recientes de Turquía (ej. últimos 3 encuentros) para un análisis más robusto de su forma actual."
+      },
+      {
+        "label": "Modelos sin contexto táctico",
+        "detail": "Las probabilidades no incluyen variables como alineaciones, lesiones no confirmadas o cambios en el sistema de juego."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los datos de Poisson y CatBoost Bzzoiro muestran coherencia en la tendencia belga, pero con diferencias en la probabilidad de empate. La lectura Bzzoiro (B2) es notablemente conservadora al no predecir goles totales ni ambos anotando, lo que contrasta con el consenso general. El historial reciente d"
+    },
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-11-09T16:36:49.997Z",
+    "inputKey": "v3|M|bz-212687|Türkiye|Belgium|nations|2026-11-12T17:00:00+00:0|NS\nP|1.27|1.81|0.258|0.251|0.49|0.594|0.612\nB|0.269|0.247|0.484|1.27|1.81|0.626|0.635|1-1|0.499\nB2|A|0.484|no|no\nH|4|1|1|2|2.25\nW||rain|10|\nT|4|Türkiye|4|0||\nT|3|Belgium|4|6||\nS|Dodi Lukebakio|Belgium|2|4\nS|Kevin De Bruyne|Belgium|2|3\nR|2026-10-02|Belgium|Türkiye|3|0\nR|2026-10-05|Italy|Türkiye|3|1\nR|2026-10-05|France|Belgium|4|1\nHR|2026-10-02|Belgium|Türkiye|3|0\nHR|2009-10-10|Belgium|Türkiye|2|0\nHR|2008-09-10|Türkiye|Belgium|1|1\nHR|2000-06-19|Belgium|Türkiye|0|2",
+    "materialKey": "v3|M|bz-212687|Türkiye|Belgium|nations|2026-11-12T17:00:00+00:0|NS\nP|1.27|1.81|0.258|0.251|0.49|0.594|0.612\nB|0.269|0.247|0.484|1.27|1.81|0.626|0.635|1-1|0.499\nB2|A|0.484|no|no\nH|4|1|1|2|2.25\nW||rain|10|\nT|4|Türkiye|4|0||\nT|3|Belgium|4|6||\nS|Dodi Lukebakio|Belgium|2|4\nS|Kevin De Bruyne|Belgium|2|3\nR|2026-10-02|Belgium|Türkiye|3|0\nR|2026-10-05|Italy|Türkiye|3|1\nR|2026-10-05|France|Belgium|4|1\nHR|2026-10-02|Belgium|Türkiye|3|0\nHR|2009-10-10|Belgium|Türkiye|2|0\nHR|2008-09-10|Türkiye|Belgium|1|1\nHR|2000-06-19|Belgium|Türkiye|0|2"
+  },
+  "bz-212694": {
+    "matchId": "bz-212694",
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Montenegro vs. Letonia: Clave para la clasificación",
+        "bullets": [
+          "Primer encuentro entre ambas selecciones en fase de clasificación para el Euro 2024 (grupo I).",
+          "Montenegro lidera la tabla con 10 puntos, mientras Letonia ocupa el cuarto lugar con 4."
+        ],
+        "stats": [
+          {
             "value": "10",
-            "label": "Temperatura °C"
+            "label": "Puntos Montenegro (1º)"
+          },
+          {
+            "value": "4",
+            "label": "Puntos Letonia (4º)"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Lecturas de modelos y auditoría",
+        "title": "Modelos en conflicto: Poisson vs. CatBoost",
         "bullets": [
-          "Poisson GoatLab: Türkiye 0.257, empate 0.251, Bélgica 0.493; goles esperados 1.27-1.82, más de 2.5 0.597 y ambos anotan 0.613.",
-          "CatBoost Bzzoiro: Türkiye 0.266, empate 0.245, Bélgica 0.489; goles esperados 1.27-1.82, más de 2.5 0.623, ambos anotan 0.621 y marcador 1-1 con 0.499.",
-          "B2 declara A con 0.489, goles totales no y ambos anotan no; no aparece una fila A independiente de API-Football en el input.",
-          "Auditoría: P y B convergen en Bélgica por delante y en ambos anotan por encima de 0.61; el no de B2 en ambos anotan se aparta de esas lecturas; el 0.499 de 1-1 se cita sin validar."
+          "Poisson GoatLab: Probabilidad de 1.51 goles totales, con mayor probabilidad en empate (0.513).",
+          "CatBoost Bzzoiro: Predice 1-0 para Montenegro con 0.459 de probabilidad, pero con baja confianza en goles (0.7)."
         ],
         "stats": [
           {
-            "value": "0.493",
-            "label": "Prob. Bélgica P"
+            "value": "1.51",
+            "label": "Goles totales (Poisson)"
           },
           {
-            "value": "0.621",
-            "label": "Ambos anotan B"
-          },
-          {
-            "value": "0.499",
-            "label": "Dato 1-1 B"
+            "value": "0.459",
+            "label": "Prob. 1-0 (CatBoost)"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Cruces previos registrados",
+        "title": "Montenegro domina en los últimos 5 encuentros",
         "bullets": [
-          "El bloque H resume 4 cruces con 1 victoria, 1 empate y 2 derrotas, y 2.25 goles por partido.",
-          "Bélgica 3-0 Türkiye (2026-10-02) y Bélgica 2-0 Türkiye (2009-10-10).",
-          "Türkiye 1-1 Bélgica (2008-09-10) y Bélgica 0-2 Türkiye (2000-06-19)."
+          "Montenegro gana 3 de sus últimos 5 partidos (2-0, 2-1, 1-1), con Letonia sin victorias en 3 intentos.",
+          "Último enfrentamiento en 2021 terminó 0-0, pero Montenegro arrasa en partidos recientes (ej. 2-0 en 2012)."
         ],
         "stats": [
           {
-            "value": "4",
-            "label": "Cruces registrados"
+            "value": "0",
+            "label": "Derrotas Letonia (últimos 3)"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros clave: Krstović y Adžić lideran Montenegro",
+        "bullets": [
+          "Nikola Krstović (2 goles en 4 partidos) y Vasilije Adžić (2 goles en 4) son los máximos anotadores de Montenegro.",
+          "Letonia no tiene goleadores destacados en esta fase (máximo 1 gol por jugador)."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Goles Krstović (4 partidos)"
           },
           {
-            "value": "1",
-            "label": "Victorias en la serie"
-          },
-          {
-            "value": "2.25",
-            "label": "Goles por cruce"
+            "value": "2",
+            "label": "Goles Adžić (4 partidos)"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Racha y resultados recientes",
+        "title": "Montenegro en racha ofensiva, Letonia en transición",
         "bullets": [
-          "Bélgica venció 3-0 a Türkiye el 2026-10-02.",
-          "Türkiye cayó 1-3 ante Italia el 2026-10-05.",
-          "Bélgica perdió 1-4 ante Francia el 2026-10-05."
+          "Montenegro ganó 2-1 a Armenia el 5 de octubre, pero Letonia perdió 1-2 ante Montenegro el 2 de octubre.",
+          "Letonia ganó 2-1 a Chipre el 6 de octubre, pero su defensa es vulnerable (ej. 0 goles en 2 partidos recientes)."
         ],
         "stats": [
           {
-            "value": "3-0",
-            "label": "Bélgica-Türkiye"
-          },
-          {
-            "value": "1-3",
-            "label": "Italia-Türkiye"
-          },
-          {
-            "value": "1-4",
-            "label": "Francia-Bélgica"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Anotadores listados",
-        "bullets": [
-          "Dodi Lukebakio (Bélgica) aparece con 2 y 4; Kevin De Bruyne (Bélgica) con 2 y 3 en el bloque S.",
-          "No se listan anotadores de Türkiye en el bloque S."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Registro Lukebakio"
-          },
-          {
-            "value": "4",
-            "label": "Registro Lukebakio 2"
-          },
-          {
-            "value": "3",
-            "label": "Registro De Bruyne"
-          }
-        ]
-      }
-    ],
-    "limitations": [
-      {
-        "label": "Sede no disponible",
-        "detail": "La fila W no incluye estadio; solo indica lluvia y 10 grados."
-      },
-      {
-        "label": "Sin fila A de API",
-        "detail": "No hay estimación API-Football separada; la única lectura declarada adicional es B2."
-      },
-      {
-        "label": "B2 interpretativa",
-        "detail": "Los campos A, no y no de B2 se citan tal cual, sin inferir su significado exacto."
-      },
-      {
-        "label": "Dato 1-1",
-        "detail": "El 0.499 junto a 1-1 se considera anómalo para un marcador exacto y no se valida."
-      },
-      {
-        "label": "Tabla parcial",
-        "detail": "La fila T no trae diferencia de goles ni todos los campos; se leen posición, partidos y puntos."
-      }
-    ],
-    "review": {
-      "flag": true,
-      "note": "Se marca discrepancia: P y B sitúan ambos anotan en 0.613 y 0.621, mientras B2 indica no; B2 también señala no en goles totales frente a 0.597 y 0.623 de P/B. El 0.499 asociado a 1-1 se cita como dato declarado anómalo, sin validarlo. No hay fila A independiente de API-Football."
-    },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-08T22:09:56.443Z",
-    "inputKey": "v3|M|bz-212687|Türkiye|Belgium|nations|2026-11-12T17:00:00+00:0|NS\nP|1.27|1.82|0.257|0.251|0.493|0.597|0.613\nB|0.266|0.245|0.489|1.27|1.82|0.623|0.621|1-1|0.499\nB2|A|0.489|no|no\nH|4|1|1|2|2.25\nW||rain|10|\nT|4|Türkiye|4|0||\nT|3|Belgium|4|6||\nS|Dodi Lukebakio|Belgium|2|4\nS|Kevin De Bruyne|Belgium|2|3\nR|2026-10-02|Belgium|Türkiye|3|0\nR|2026-10-05|Italy|Türkiye|3|1\nR|2026-10-05|France|Belgium|4|1\nHR|2026-10-02|Belgium|Türkiye|3|0\nHR|2009-10-10|Belgium|Türkiye|2|0\nHR|2008-09-10|Türkiye|Belgium|1|1\nHR|2000-06-19|Belgium|Türkiye|0|2",
-    "materialKey": "v3|M|bz-212687|Türkiye|Belgium|nations|2026-11-12T17:00:00+00:0|NS\nP|1.27|1.82|0.257|0.251|0.493|0.597|0.613\nB|0.266|0.245|0.489|1.27|1.82|0.623|0.621|1-1|0.499\nB2|A|0.489|no|no\nH|4|1|1|2|2.25\nW||rain|10|\nT|4|Türkiye|4|0||\nT|3|Belgium|4|6||\nS|Dodi Lukebakio|Belgium|2|4\nS|Kevin De Bruyne|Belgium|2|3\nR|2026-10-02|Belgium|Türkiye|3|0\nR|2026-10-05|Italy|Türkiye|3|1\nR|2026-10-05|France|Belgium|4|1\nHR|2026-10-02|Belgium|Türkiye|3|0\nHR|2009-10-10|Belgium|Türkiye|2|0\nHR|2008-09-10|Türkiye|Belgium|1|1\nHR|2000-06-19|Belgium|Türkiye|0|2"
-  },
-  "bz-212694": {
-    "summary": [
-      {
-        "kind": "panorama",
-        "title": "Montenegro-Letonia por Nations League",
-        "bullets": [
-          "Montenegro recibe a Letonia el 12 de noviembre de 2026 (19:45 UTC) por Nations League; el partido figura como no iniciado.",
-          "En la tabla, Montenegro lidera con 10 puntos en 4 jornadas, mientras Letonia es cuarta con 1 punto en la misma cantidad de fechas.",
-          "En octubre Montenegro ganó 2-1 en Letonia y empató 0-0 con Armenia; Letonia, además, cayó 2-1 de visita en Chipre."
-        ],
-        "stats": [
-          {
-            "value": "10 puntos",
-            "label": "Montenegro en 4 fechas"
-          },
-          {
-            "value": "1 punto",
-            "label": "Letonia en 4 fechas"
-          },
-          {
-            "value": "4 jornadas",
-            "label": "Jornadas disputadas"
-          }
-        ]
-      },
-      {
-        "kind": "modelos",
-        "title": "Dos modelos apuntan al local",
-        "bullets": [
-          "Poisson GoatLab proyecta 51.6% victoria de Montenegro, 28.5% empate y 20% visitante, con goles esperados de 1.51 a 0.85.",
-          "El detalle de Poisson agrega 42% para más de 2.5 goles y 45.8% para que ambos equipos marquen.",
-          "Bzzoiro (CatBoost): 66.5% local, 21.2% empate, 12.2% visita, 50.8% para que ambos marquen, 42.7% de más de 2.5 y 1-0 como marcador teórico (0.459 declarado).",
-          "La brecha en probabilidad local entre modelos es de ~14.9 puntos (51.6% vs 66.5%); la síntesis declarada B2 describe favoritismo local, menos goles y sin gol de ambos lados."
-        ],
-        "stats": [
-          {
-            "value": "51.6%",
-            "label": "Poisson: local"
-          },
-          {
-            "value": "66.5%",
-            "label": "Bzzoiro: local"
-          },
-          {
-            "value": "42%",
-            "label": "Poisson: más de 2.5"
-          }
-        ]
-      },
-      {
-        "kind": "historial",
-        "title": "Cruces previos sin victoria de Letonia",
-        "bullets": [
-          "En 5 cruces registrados entre ambos, Montenegro ganó 3 y empató 2; Letonia no conoce la victoria en la serie.",
-          "El cruce más reciente (02-10-2026) terminó 1-2 con triunfo de Montenegro como visitante.",
-          "Los otros cruces: 0-0 (2021, en Montenegro), 1-2 (2021, en Letonia), 1-1 (2020) y 2-0 (2012)."
-        ],
-        "stats": [
-          {
-            "value": "3",
-            "label": "Victorias Montenegro"
-          },
-          {
-            "value": "2",
-            "label": "Empates en la serie"
+            "value": "2-1",
+            "label": "Último resultado Montenegro"
           },
           {
             "value": "1-2",
-            "label": "Último cruce"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Krstović y Adžić lideran la cuenta",
-        "bullets": [
-          "Nikola Krstović y Vasilije Adžić, de Montenegro, acumulan 2 goles cada uno en 4 partidos.",
-          "Aleksa Latković completa la lista con 1 gol en 3 presentaciones del mismo combinado.",
-          "El registro de goleadores no incluye anotadores de Letonia."
-        ],
-        "stats": [
-          {
-            "value": "2",
-            "label": "Goles de Krstović"
-          },
-          {
-            "value": "2",
-            "label": "Goles de Adžić"
-          },
-          {
-            "value": "4",
-            "label": "Partidos disputados"
-          }
-        ]
-      },
-      {
-        "kind": "claves",
-        "title": "Claves del cruce",
-        "bullets": [
-          "Krstović y Adžić concentran la producción goleadora registrada, frente a una Letonia que llega cuarta con 1 punto.",
-          "Los modelos comparten goles esperados de 1.51-0.85 (2.36 totales) y una lectura de pocos goles según la síntesis B2.",
-          "La discrepancia principal entre Poisson y Bzzoiro está en cuán favorito es el local, con 14.9 puntos de diferencia.",
-          "Sin bajas confirmadas, clima ni lectura de API-Football en el registro; sin consenso externo (M2) para contrastar."
-        ],
-        "stats": [
-          {
-            "value": "1.51-0.85",
-            "label": "Goles esperados"
-          },
-          {
-            "value": "2.36",
-            "label": "Total esperado"
+            "label": "Último resultado Letonia"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin API-Football",
-        "detail": "No hay bloque A: la estimación declarada de API-Football no está disponible para este cruce."
+        "label": "Datos históricos limitados",
+        "detail": "Solo 5 enfrentamientos previos entre ambas selecciones, con desequilibrio claro en favor de Montenegro desde 2020."
       },
       {
-        "label": "Sin clima ni sede",
-        "detail": "Bloques W, L y M2 ausentes: sin datos de clima, estadio, bajas confirmadas ni consenso externo."
-      },
-      {
-        "label": "Tabla parcial",
-        "detail": "La clasificación incluye solo puestos 1 y 4; el resto del grupo no consta en el input."
-      },
-      {
-        "label": "Cobertura goleadores",
-        "detail": "El listado de artilleros contiene únicamente jugadores de Montenegro; no hay cifras de Letonia."
-      },
-      {
-        "label": "Chequeo B2-B",
-        "detail": "B2 declara ambos anotan como 'no' mientras la fila B de Bzzoiro indica 50.8% para esa lectura, apenas sobre la mitad."
+        "label": "Modelos divergentes",
+        "detail": "Poisson sugiere empate como escenario más probable, mientras CatBoost apuesta por victoria Montenegro con baja confianza en goles."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Dos señales marcadas: B2 declara 'no' para ambos anotan mientras la fila B de Bzzoiro indica 50.8%, apenas sobre la mitad; y Poisson (51.6% local) difiere ~14.9 puntos de Bzzoiro (66.5%). El sobre 2.5 de Poisson (42%) es coherente con 2.36 goles esperados; las demás cifras coinciden con el input."
+      "note": "El historial reciente (3 victorias consecutivas de Montenegro) y la superioridad goleadora en la tabla (10 vs. 4 puntos) justifican la alta probabilidad de victoria para Montenegro en CatBoost. Sin embargo, Poisson refleja mayor incertidumbre, posiblemente por la irregularidad de Letonia en goles (e"
     },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-11-08T22:15:38.072Z",
-    "inputKey": "v3|M|bz-212694|Montenegro|Latvia|nations|2026-11-12T19:45:00+00:0|NS\nP|1.51|0.85|0.516|0.285|0.2|0.42|0.458\nB|0.665|0.212|0.122|1.51|0.85|0.508|0.427|1-0|0.459\nB2|H|0.665|no|no\nH|5|3|2|0|2\nT|1|Montenegro|4|10||\nT|4|Latvia|4|1||\nS|Nikola Krstović|Montenegro|2|4\nS|Vasilije Adžić|Montenegro|2|4\nS|Aleksa Latković|Montenegro|1|3\nR|2026-10-02|Latvia|Montenegro|1|2\nR|2026-10-05|Montenegro|Armenia|0|0\nR|2026-10-05|Cyprus|Latvia|2|1\nHR|2026-10-02|Latvia|Montenegro|1|2\nHR|2021-09-07|Montenegro|Latvia|0|0\nHR|2021-03-24|Latvia|Montenegro|1|2\nHR|2020-10-07|Montenegro|Latvia|1|1\nHR|2012-08-15|Montenegro|Latvia|2|0",
-    "materialKey": "v3|M|bz-212694|Montenegro|Latvia|nations|2026-11-12T19:45:00+00:0|NS\nP|1.51|0.85|0.516|0.285|0.2|0.42|0.458\nB|0.665|0.212|0.122|1.51|0.85|0.508|0.427|1-0|0.459\nB2|H|0.665|no|no\nH|5|3|2|0|2\nT|1|Montenegro|4|10||\nT|4|Latvia|4|1||\nS|Nikola Krstović|Montenegro|2|4\nS|Vasilije Adžić|Montenegro|2|4\nS|Aleksa Latković|Montenegro|1|3\nR|2026-10-02|Latvia|Montenegro|1|2\nR|2026-10-05|Montenegro|Armenia|0|0\nR|2026-10-05|Cyprus|Latvia|2|1\nHR|2026-10-02|Latvia|Montenegro|1|2\nHR|2021-09-07|Montenegro|Latvia|0|0\nHR|2021-03-24|Latvia|Montenegro|1|2\nHR|2020-10-07|Montenegro|Latvia|1|1\nHR|2012-08-15|Montenegro|Latvia|2|0"
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-11-09T16:37:27.576Z",
+    "inputKey": "v3|M|bz-212694|Montenegro|Latvia|nations|2026-11-12T19:45:00+00:0|NS\nP|1.51|0.86|0.513|0.285|0.202|0.422|0.462\nB|0.7|0.194|0.107|1.51|0.86|0.51|0.427|1-0|0.459\nB2|H|0.7|no|no\nH|5|3|2|0|2\nT|1|Montenegro|4|10||\nT|4|Latvia|4|1||\nS|Nikola Krstović|Montenegro|2|4\nS|Vasilije Adžić|Montenegro|2|4\nS|Aleksa Latković|Montenegro|1|3\nR|2026-10-02|Latvia|Montenegro|1|2\nR|2026-10-05|Montenegro|Armenia|0|0\nR|2026-10-05|Cyprus|Latvia|2|1\nHR|2026-10-02|Latvia|Montenegro|1|2\nHR|2021-09-07|Montenegro|Latvia|0|0\nHR|2021-03-24|Latvia|Montenegro|1|2\nHR|2020-10-07|Montenegro|Latvia|1|1\nHR|2012-08-15|Montenegro|Latvia|2|0",
+    "materialKey": "v3|M|bz-212694|Montenegro|Latvia|nations|2026-11-12T19:45:00+00:0|NS\nP|1.51|0.86|0.513|0.285|0.202|0.422|0.462\nB|0.7|0.194|0.107|1.51|0.86|0.51|0.427|1-0|0.459\nB2|H|0.7|no|no\nH|5|3|2|0|2\nT|1|Montenegro|4|10||\nT|4|Latvia|4|1||\nS|Nikola Krstović|Montenegro|2|4\nS|Vasilije Adžić|Montenegro|2|4\nS|Aleksa Latković|Montenegro|1|3\nR|2026-10-02|Latvia|Montenegro|1|2\nR|2026-10-05|Montenegro|Armenia|0|0\nR|2026-10-05|Cyprus|Latvia|2|1\nHR|2026-10-02|Latvia|Montenegro|1|2\nHR|2021-09-07|Montenegro|Latvia|0|0\nHR|2021-03-24|Latvia|Montenegro|1|2\nHR|2020-10-07|Montenegro|Latvia|1|1\nHR|2012-08-15|Montenegro|Latvia|2|0"
   },
   "bz-212693": {
     "summary": [
@@ -5110,298 +5035,236 @@
     "materialKey": "v3|M|bz-212693|San Marino|Belarus|nations|2026-11-12T19:45:00+00:0|NS\nP|0.76|2.08|0.116|0.213|0.671|0.54|0.475\nB|0.044|0.108|0.847|0.76|2.08|0.595|0.337|0-2|0.443\nB2|A|0.847|no|no\nH|3|0|0|3|3.67\nW||rain|5|\nT|4|San Marino|4|0||\nT|2|Belarus|4|7||\nS|Artem Kontsevoy|Belarus|2|3\nS|Artem Shumanskiy|Belarus|2|4\nR|2026-10-03|Belarus|San Marino|4|0\nR|2026-10-06|Albania|San Marino|2|1\nR|2026-10-06|Belarus|Finland|1|0\nHR|2026-10-03|Belarus|San Marino|4|0\nHR|2018-11-18|San Marino|Belarus|0|2\nHR|2018-09-08|Belarus|San Marino|5|0"
   },
   "bz-212692": {
+    "matchId": "bz-212692",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Albania vs Finlandia: Nations League",
+        "title": "Albania vs. Finlandia: Duelo por puntos clave",
         "bullets": [
-          "Cruce de Nations League programado para el 12/11/2026 a las 19:45 UTC, aún sin iniciar en el registro; Albania aparece como equipo local del duelo.",
-          "En la tabla listada Albania figura 1° con 9 puntos y Finlandia 3° con 7, ambos con 4 partidos disputados.",
-          "La diferencia de 2 puntos, con igual cantidad dePJ, ubica el liderazgo del grupo del lado albanés antes de la jornada."
+          "Partido simultáneo al anterior, ambos equipos en zona de clasificación (Albania 4º con 9 puntos, Finlandia 3º con 7).",
+          "Albania busca sumar puntos tras ganar 2-1 a San Marino el 6 de octubre; Finlandia perdió 1-0 ante Bielorrusia el mismo día."
         ],
         "stats": [
           {
             "value": "9",
-            "label": "puntos Albania"
+            "label": "Puntos Albania (4º)"
           },
           {
             "value": "7",
-            "label": "puntos Finlandia"
-          },
-          {
-            "value": "19:45",
-            "label": "inicio (UTC)"
+            "label": "Puntos Finlandia (3º)"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Lecturas P, B y B2",
+        "title": "Modelos coinciden en empate como escenario más probable",
         "bullets": [
-          "Poisson GoatLab: 43.1% local, 30.4% empate, 26.4% visita; goles esperados 1.32-0.98 (cerca de 2.3 combinados); goles totales 40.4% y ambos anotan 47.1%.",
-          "CatBoost Bzzoiro: 45.1% local, 28.5% empate, 26.4% visita; goles esperados 1.32-0.98; totales 43.6% y ambos anotan 48.4%; marcador de referencia 1-1 con lectura 0.459.",
-          "Las estimaciones declaradas del modelo Bzzoiro (B2) señalan el triunfo local como mayor probabilidad (H, 0.451) y responden no tanto en goles totales como en ambos anotan.",
-          "Ambos cálculos convergen en 26.4% visitante y en una ligera ventaja local; B asigna 2.0 puntos porcentuales más al local que P (45.1% contra 43.1%)."
+          "Poisson GoatLab: Probabilidad de 1.32 goles totales, con empate como escenario más probable (0.431).",
+          "CatBoost Bzzoiro: Predice 1-1 con 0.459 de probabilidad, pero con baja confianza en goles (0.47)."
         ],
         "stats": [
           {
-            "value": "43.1%",
-            "label": "local según P"
+            "value": "1.32",
+            "label": "Goles totales (Poisson)"
           },
           {
-            "value": "45.1%",
-            "label": "local según B"
-          },
-          {
-            "value": "26.4%",
-            "label": "visita (P y B)"
+            "value": "0.459",
+            "label": "Prob. 1-1 (CatBoost)"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Precedente directo",
+        "title": "Empates recientes y falta de claridad",
         "bullets": [
-          "Único cruce listado: 03/10/2026, Finlandia 2-1 Albania.",
-          "El resumen de historial registra 1 duelo previo con balance 0-0-1 para Albania y 3 goles combinados en el registro."
+          "Último encuentro entre ambas selecciones terminó 2-1 para Finlandia el 3 de octubre, pero Albania ganó 2-1 a San Marino el mismo día.",
+          "Finlandia tiene 1 victoria y 3 empates en sus últimos 4 partidos, mientras Albania ganó 2 y empató 1."
         ],
         "stats": [
           {
             "value": "2-1",
-            "label": "marcador previo"
+            "label": "Último resultado Finlandia"
           },
           {
-            "value": "1",
-            "label": "cruce listado"
-          },
+            "value": "2-1",
+            "label": "Último resultado Albania"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros con roles distintos: Asllani vs. Pohjanpalo",
+        "bullets": [
+          "Kristjan Asllani (3 goles en 4 partidos) lidera a Albania, mientras Leo Walta (4 goles en 4) y Joel Pohjanpalo (3 goles en 4) dominan en Finlandia.",
+          "Ambos equipos tienen jugadores con alta productividad, pero Finlandia depende más de su delanteros."
+        ],
+        "stats": [
           {
             "value": "3",
-            "label": "goles del duelo"
+            "label": "Goles Asllani (4 partidos)"
+          },
+          {
+            "value": "4",
+            "label": "Goles Walta (4 partidos)"
           }
         ]
       },
       {
         "kind": "forma",
-        "title": "Resultados recientes",
+        "title": "Finlandia en transición defensiva, Albania en consolidación",
         "bullets": [
-          "Finlandia venció 2-1 a Albania el 03/10 y cayó 0-1 ante Belarus el 06/10.",
-          "Albania perdió con Finlandia y ese mismo día superó 2-1 a San Marino.",
-          "El marcador 2-1 aparece dos veces en la ventana reciente listada."
+          "Finlandia perdió 1-0 ante Bielorrusia el 6 de octubre, pero su ataque sigue activo (ej. 2 goles en 2 partidos recientes).",
+          "Albania ganó 2-1 a San Marino el 6 de octubre, pero su defensa ha cedido goles en partidos clave (ej. 1 gol en 2 partidos)."
         ],
         "stats": [
+          {
+            "value": "1-0",
+            "label": "Último resultado Finlandia"
+          },
           {
             "value": "2-1",
-            "label": "marcador repetido"
-          },
-          {
-            "value": "0-1",
-            "label": "caída de Finlandia"
-          },
-          {
-            "value": "06/10",
-            "label": "jornada doble"
-          }
-        ]
-      },
-      {
-        "kind": "goleadores",
-        "title": "Artilleros del duelo",
-        "bullets": [
-          "Por Finlandia: Leo Walta 4 goles en 4, Joel Pohjanpalo 3 en 4 y Adrian Svanback 1 en 4.",
-          "Por Albania: Kristjan Asllani 3 en 4 y Rey Manaj 2 en 4.",
-          "Walta encabeza la tabla de anotadores listada con 4 tantos."
-        ],
-        "stats": [
-          {
-            "value": "4",
-            "label": "goles de Walta"
-          },
-          {
-            "value": "3",
-            "label": "goles de Asllani"
-          },
-          {
-            "value": "3",
-            "label": "goles de Pohjanpalo"
+            "label": "Último resultado Albania"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Clima y sede",
-        "detail": "Registro W incompleto: sin condiciones climáticas ni estadio informado; solo aparece un valor numérico (19) sin unidad confirmada."
+        "label": "Falta de enfrentamientos recientes",
+        "detail": "Último duelo entre Albania y Finlandia fue en octubre de 2026 (2-1 para Finlandia), pero ambos equipos han jugado contra rivales distintos."
       },
       {
-        "label": "Historial resumido",
-        "detail": "El bloque H llega sin rótulos por campo; la lectura 0-0-1 con 3 goles es interpretativa, apoyada en el cruce HR (2-1)."
-      },
-      {
-        "label": "Cobertura de modelos",
-        "detail": "Sin registro A (API-Football) ni consenso externo (M2); solo P, B y B2 aportan probabilidades y goles esperados."
-      },
-      {
-        "label": "Línea de goles",
-        "detail": "P y B informan porcentajes de goles totales sin rotular el umbral; la línea exacta no quedó confirmada en el registro."
+        "label": "Modelos con baja confianza en goles",
+        "detail": "CatBoost predice 0.47 goles por equipo, lo que sugiere incertidumbre en la generación de oportunidades."
       }
     ],
     "review": {
       "flag": true,
-      "note": "La lectura 0.459 ligada al marcador 1-1 en CatBoost Bzzoiro excede lo habitual para una probabilidad de marcador exacto; podría tratarse de una métrica agregada o de un desalineamiento de campos. Se reporta tal cual, pero conviene verificación de esa cifra"
+      "note": "La coincidencia entre Poisson (1.32 goles totales) y CatBoost (1-1 con 0.459) refuerza la idea de un partido ajustado, posiblemente con empate. Sin embargo, la forma reciente de Finlandia (derrota 1-0) y la productividad goleadora de Walta (4 goles en 4 partidos) podrían inclinar la balanza hacia un"
     },
-    "provider": "OPENCODE_GO_FALLBACK",
-    "model": "glm-5.3-flash",
-    "generatedAt": "2026-11-09T06:33:48.316Z",
-    "inputKey": "v3|M|bz-212692|Albania|Finland|nations|2026-11-12T19:45:00+00:0|NS\nP|1.32|0.98|0.431|0.304|0.264|0.404|0.471\nB|0.451|0.285|0.264|1.32|0.98|0.436|0.484|1-1|0.459\nB2|H|0.451|no|no\nH|1|0|0|1|3\nW|||19|\nT|1|Albania|4|9||\nT|3|Finland|4|7||\nS|Kristjan Asllani|Albania|3|4\nS|Rey Manaj|Albania|2|4\nS|Leo Walta|Finland|4|4\nS|Joel Pohjanpalo|Finland|3|4\nS|Adrian Svanback|Finland|1|4\nR|2026-10-03|Finland|Albania|2|1\nR|2026-10-06|Albania|San Marino|2|1\nR|2026-10-06|Belarus|Finland|1|0\nHR|2026-10-03|Finland|Albania|2|1",
-    "materialKey": "v3|M|bz-212692|Albania|Finland|nations|2026-11-12T19:45:00+00:0|NS\nP|1.32|0.98|0.431|0.304|0.264|0.404|0.471\nB|0.451|0.285|0.264|1.32|0.98|0.436|0.484|1-1|0.459\nB2|H|0.451|no|no\nH|1|0|0|1|3\nW|||19|\nT|1|Albania|4|9||\nT|3|Finland|4|7||\nS|Kristjan Asllani|Albania|3|4\nS|Rey Manaj|Albania|2|4\nS|Leo Walta|Finland|4|4\nS|Joel Pohjanpalo|Finland|3|4\nS|Adrian Svanback|Finland|1|4\nR|2026-10-03|Finland|Albania|2|1\nR|2026-10-06|Albania|San Marino|2|1\nR|2026-10-06|Belarus|Finland|1|0\nHR|2026-10-03|Finland|Albania|2|1"
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-11-09T16:37:27.587Z",
+    "inputKey": "v3|M|bz-212692|Albania|Finland|nations|2026-11-12T19:45:00+00:0|NS\nP|1.32|0.98|0.431|0.304|0.264|0.404|0.471\nB|0.47|0.29|0.24|1.32|0.98|0.412|0.461|1-1|0.459\nB2|H|0.47|no|no\nH|1|0|0|1|3\nW|||19|\nT|1|Albania|4|9||\nT|3|Finland|4|7||\nS|Kristjan Asllani|Albania|3|4\nS|Rey Manaj|Albania|2|4\nS|Leo Walta|Finland|4|4\nS|Joel Pohjanpalo|Finland|3|4\nS|Adrian Svanback|Finland|1|4\nR|2026-10-03|Finland|Albania|2|1\nR|2026-10-06|Albania|San Marino|2|1\nR|2026-10-06|Belarus|Finland|1|0\nHR|2026-10-03|Finland|Albania|2|1",
+    "materialKey": "v3|M|bz-212692|Albania|Finland|nations|2026-11-12T19:45:00+00:0|NS\nP|1.32|0.98|0.431|0.304|0.264|0.404|0.471\nB|0.47|0.29|0.24|1.32|0.98|0.412|0.461|1-1|0.459\nB2|H|0.47|no|no\nH|1|0|0|1|3\nW|||19|\nT|1|Albania|4|9||\nT|3|Finland|4|7||\nS|Kristjan Asllani|Albania|3|4\nS|Rey Manaj|Albania|2|4\nS|Leo Walta|Finland|4|4\nS|Joel Pohjanpalo|Finland|3|4\nS|Adrian Svanback|Finland|1|4\nR|2026-10-03|Finland|Albania|2|1\nR|2026-10-06|Albania|San Marino|2|1\nR|2026-10-06|Belarus|Finland|1|0\nHR|2026-10-03|Finland|Albania|2|1"
   },
   "bz-212691": {
     "summary": [
       {
         "kind": "panorama",
-        "title": "England-Croatia: contexto del cruce",
+        "title": "Clásico de Europa en fase de clasificación",
         "bullets": [
-          "England y Croatia se enfrentan en Nations el 2026-11-12 a las 19:45; el estado del partido figura como NS.",
-          "El bloque W no identifica sede y registra clima 'unknown'; el valor 12 aparece sin unidad explícita.",
-          "La tabla previa coloca a England 2º con 9 puntos y a Croatia 3º con 3, ambos con 4 partidos."
+          "Encuentro entre Inglaterra y Croacia en el marco de la clasificación para la Eurocopa 2024, con ambos equipos en juego por la clasificación directa.",
+          "Inglaterra lidera el Grupo C con 12 puntos (4 victorias), mientras Croacia ocupa el tercer lugar con 9 puntos (3 victorias)."
         ],
         "stats": [
           {
-            "value": "2026-11-12",
-            "label": "Fecha del partido"
+            "value": "12",
+            "label": "Puntos Inglaterra"
           },
           {
-            "value": "19:45",
-            "label": "Hora prevista"
+            "value": "9",
+            "label": "Puntos Croatia"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Modelos: Poisson, CatBoost y B2",
+        "title": "Modelos matemáticos y probabilidades",
         "bullets": [
-          "Poisson GoatLab: goles esperados 2.22-0.94; England 0.655, empate 0.207, Croatia 0.138; agregados de goles 0.611 y 0.552.",
-          "CatBoost Bzzoiro: England 0.754, empate 0.135, Croatia 0.111; goles esperados 2.22-0.94; añade 0.635, 0.471, marcador 2-0 y 0.455.",
-          "B2 declara mayor probabilidad H con 0.754; en goles totales y ambos anotan consigna 'no', sin detallar la etiqueta exacta.",
-          "Auditoría: la negativa de B2 en ambos anotan entra en tensión con 0.552 de Poisson y 0.471 de CatBoost; P da 0.655 a la victoria local frente a 0.754 de B/B2."
+          "Poisson GoatLab: Inglaterra con 2.22 goles esperados, Croacia con 0.95. Probabilidad de victoria inglesa del 65.3% y de Croacia del 14%.",
+          "CatBoost Bzzoiro: Predicción mayoritaria de victoria inglesa (75.3%), con probabilidad de 2-0 (45.5%). Lectura de goles totales: 2.22 (similar a Poisson).",
+          "API-Football: Distribución de goles más probable (1-0 para Inglaterra, 61.4%), umbral de goles para victoria inglesa en 1.5 (lectura cruda: 0.555)."
         ],
         "stats": [
           {
-            "value": "0.655",
-            "label": "Victoria local Poisson"
-          },
-          {
-            "value": "0.754",
-            "label": "Victoria local B/B2"
-          },
-          {
-            "value": "0.552",
-            "label": "Ambos anotan Poisson"
+            "value": "1-0",
+            "label": "Mayor probabilidad (A)"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Historial y forma reciente",
+        "title": "Historial reciente y enfrentamientos",
         "bullets": [
-          "H: 9 enfrentamientos, 7 victorias de England, 1 empate y 1 victoria de Croatia; promedio de 4.11 goles por partido.",
-          "HR: el último cruce fue Croatia 0-7 England (2026-10-03); antes, England 4-2 Croatia (2026-06-17) y England 1-0 Croatia (2021-06-13).",
-          "HR previos: England 2-1 Croatia (2018-11-18) y Croatia 0-0 England (2018-10-12).",
-          "R: England 3-0 Czechia y Croatia 1-2 Spain el 2026-10-06; el 2026-10-03 aparece Croatia 0-7 England."
+          "Último encuentro en 2021: Inglaterra ganó 1-0 en Londres. Croacia no gana en Inglaterra desde 2018 (2-1).",
+          "Croacia arrasa a Inglaterra 7-0 en Zagreb (2026-10-03), rompiendo racha de 4 victorias consecutivas de Inglaterra en casa (2018-2021).",
+          "Promedio de goles por partido en los últimos 5 enfrentamientos: 4.11."
         ],
         "stats": [
           {
-            "value": "9",
-            "label": "Enfrentamientos H"
+            "value": "7-0",
+            "label": "Última derrota Inglaterra"
           },
           {
-            "value": "7",
-            "label": "Victorias England H"
-          },
-          {
-            "value": "4.11",
-            "label": "Goles por partido H"
-          }
-        ]
-      },
-      {
-        "kind": "tabla",
-        "title": "Tabla: puestos y puntos",
-        "bullets": [
-          "En la tabla disponible, England ocupa la 2ª posición con 4 partidos jugados y 9 puntos.",
-          "Croatia figura en la 3ª posición con 4 partidos jugados y 3 puntos.",
-          "El bloque T no aporta goles a favor, en contra ni diferencia; la lectura se limita a puesto, partidos y puntos."
-        ],
-        "stats": [
-          {
-            "value": "9",
-            "label": "Puntos England"
-          },
-          {
-            "value": "3",
-            "label": "Puntos Croatia"
-          },
-          {
-            "value": "4",
-            "label": "Partidos jugados"
+            "value": "2021",
+            "label": "Última victoria Inglaterra"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Goleadores listados",
+        "title": "Artilleros clave en la clasificación",
         "bullets": [
-          "Harry Kane (England) suma 6 goles en 4 partidos.",
-          "Anthony Gordon (England) registra 3 goles en 4 partidos.",
-          "Bukayo Saka (England) acumula 2 goles en 4 partidos.",
-          "El bloque S solo incluye anotadores de England; no lista goleadores de Croatia."
+          "Harry Kane (Inglaterra) lidera con 6 goles en 9 partidos, seguido de Anthony Gordon (3 goles en 4 partidos).",
+          "Bukayo Saka (Inglaterra) con 2 goles en 4 partidos, pero con alta participación en el juego ofensivo."
         ],
         "stats": [
           {
             "value": "6",
-            "label": "Goles Harry Kane"
+            "label": "Goles Kane"
           },
           {
             "value": "3",
-            "label": "Goles Anthony Gordon"
+            "label": "Goles Gordon"
           },
           {
             "value": "2",
-            "label": "Goles Bukayo Saka"
+            "label": "Goles Saka"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha y resultados recientes",
+        "bullets": [
+          "Croacia perdió 0-7 ante Inglaterra (2026-10-03) y luego 1-2 ante España (2026-10-06), mostrando inestabilidad defensiva.",
+          "Inglaterra ganó 3-0 a República Checa (2026-10-06), consolidando su dominio en el grupo."
+        ],
+        "stats": [
+          {
+            "value": "0-7",
+            "label": "Última derrota Croacia"
+          },
+          {
+            "value": "3-0",
+            "label": "Última victoria Inglaterra"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Sin bloque A",
-        "detail": "No hay fila A de API-Football; no se puede contrastar distribución, mayor probabilidad ni umbral de goles del proveedor."
+        "label": "Datos climáticos incompletos",
+        "detail": "La sede y condiciones climáticas (W) no están especificadas, lo que podría influir en la dinámica del partido."
       },
       {
-        "label": "W incompleto",
-        "detail": "El bloque W solo registra 'unknown' y 12, sin sede ni unidad térmica; la lectura de clima y sede queda limitada."
+        "label": "Bajas no reportadas",
+        "detail": "No hay información sobre bajas confirmadas (L) en ninguno de los dos equipos, lo que podría alterar alineaciones clave."
       },
       {
-        "label": "B2 sin etiquetas",
-        "detail": "B2 usa 'no' en goles totales y ambos anotan sin especificar la etiqueta exacta; se recoge como negativa declarada."
-      },
-      {
-        "label": "Muestra histórica",
-        "detail": "H resume 9 partidos y 4.11 goles de promedio, pero HR solo detalla 5 cruces; no se reconstruye el agregado completo."
-      },
-      {
-        "label": "Sin bajas ni alineaciones",
-        "detail": "No hay bloque L ni alineaciones confirmadas; no se evalúan bajas, onces ni disponibilidad."
+        "label": "Consenso externo no detallado",
+        "detail": "El bloque M2 (consenso externo) no contiene datos interpretativos, lo que limita la comparación con modelos internos."
       }
     ],
     "review": {
       "flag": true,
-      "note": "Tensión de auditoría, no error porcentual probado: B2 niega ambos anotan mientras P/B declaran 0.552/0.471; P y B/B2 discrepan en victoria local (0.655 frente a 0.754). Falta A y W no confirma sede."
+      "note": "El historial reciente muestra una brecha significativa entre ambos equipos, especialmente tras la goleada de Croacia en Zagreb (7-0). Sin embargo, los modelos (P/B) reflejan una ventaja clara para Inglaterra, aunque con probabilidades de empate o victoria croata no desdeñables. La lectura de API-Foo"
     },
-    "provider": "OPENCODE_GO",
-    "model": "deepseek-v4.1-flash",
-    "generatedAt": "2026-11-09T06:35:02.612Z",
-    "inputKey": "v3|M|bz-212691|England|Croatia|nations|2026-11-12T19:45:00+00:0|NS\nP|2.22|0.94|0.655|0.207|0.138|0.611|0.552\nB|0.754|0.135|0.111|2.22|0.94|0.635|0.471|2-0|0.455\nB2|H|0.754|no|no\nH|9|7|1|1|4.11\nW||unknown|12|\nT|2|England|4|9||\nT|3|Croatia|4|3||\nS|Harry Kane|England|6|4\nS|Anthony Gordon|England|3|4\nS|Bukayo Saka|England|2|4\nR|2026-10-03|Croatia|England|0|7\nR|2026-10-06|England|Czechia|3|0\nR|2026-10-06|Croatia|Spain|1|2\nHR|2026-10-03|Croatia|England|0|7\nHR|2026-06-17|England|Croatia|4|2\nHR|2021-06-13|England|Croatia|1|0\nHR|2018-11-18|England|Croatia|2|1\nHR|2018-10-12|Croatia|England|0|0",
-    "materialKey": "v3|M|bz-212691|England|Croatia|nations|2026-11-12T19:45:00+00:0|NS\nP|2.22|0.94|0.655|0.207|0.138|0.611|0.552\nB|0.754|0.135|0.111|2.22|0.94|0.635|0.471|2-0|0.455\nB2|H|0.754|no|no\nH|9|7|1|1|4.11\nW||unknown|12|\nT|2|England|4|9||\nT|3|Croatia|4|3||\nS|Harry Kane|England|6|4\nS|Anthony Gordon|England|3|4\nS|Bukayo Saka|England|2|4\nR|2026-10-03|Croatia|England|0|7\nR|2026-10-06|England|Czechia|3|0\nR|2026-10-06|Croatia|Spain|1|2\nHR|2026-10-03|Croatia|England|0|7\nHR|2026-06-17|England|Croatia|4|2\nHR|2021-06-13|England|Croatia|1|0\nHR|2018-11-18|England|Croatia|2|1\nHR|2018-10-12|Croatia|England|0|0"
+    "provider": "MISTRAL",
+    "model": "ministral-8b-2512",
+    "generatedAt": "2026-11-09T16:42:02.250Z",
+    "inputKey": "v3|M|bz-212691|England|Croatia|nations|2026-11-12T19:45:00+00:0|NS\nP|2.22|0.95|0.653|0.208|0.14|0.614|0.555\nB|0.753|0.154|0.093|2.22|0.95|0.632|0.488|2-0|0.455\nB2|H|0.753|no|no\nH|9|7|1|1|4.11\nW||unknown|12|\nT|2|England|4|9||\nT|3|Croatia|4|3||\nS|Harry Kane|England|6|4\nS|Anthony Gordon|England|3|4\nS|Bukayo Saka|England|2|4\nR|2026-10-03|Croatia|England|0|7\nR|2026-10-06|England|Czechia|3|0\nR|2026-10-06|Croatia|Spain|1|2\nHR|2026-10-03|Croatia|England|0|7\nHR|2026-06-17|England|Croatia|4|2\nHR|2021-06-13|England|Croatia|1|0\nHR|2018-11-18|England|Croatia|2|1\nHR|2018-10-12|Croatia|England|0|0",
+    "materialKey": "v3|M|bz-212691|England|Croatia|nations|2026-11-12T19:45:00+00:0|NS\nP|2.22|0.95|0.653|0.208|0.14|0.614|0.555\nB|0.753|0.154|0.093|2.22|0.95|0.632|0.488|2-0|0.455\nB2|H|0.753|no|no\nH|9|7|1|1|4.11\nW||unknown|12|\nT|2|England|4|9||\nT|3|Croatia|4|3||\nS|Harry Kane|England|6|4\nS|Anthony Gordon|England|3|4\nS|Bukayo Saka|England|2|4\nR|2026-10-03|Croatia|England|0|7\nR|2026-10-06|England|Czechia|3|0\nR|2026-10-06|Croatia|Spain|1|2\nHR|2026-10-03|Croatia|England|0|7\nHR|2026-06-17|England|Croatia|4|2\nHR|2021-06-13|England|Croatia|1|0\nHR|2018-11-18|England|Croatia|2|1\nHR|2018-10-12|Croatia|England|0|0"
   }
 }
