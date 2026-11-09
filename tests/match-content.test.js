@@ -10,18 +10,31 @@ test('content priority starts with DeepSeek and keeps the independent analysis d
   assert.deepEqual(chain.map(p=>p.model),['deepseek-v4.1-flash','glm-5.3-flash','ministral-8b-2512','@cf/zai-org/glm-4.7-flash']);
   assert.equal(resolveChain(env)[0].id,'MISTRAL');
 });
-function images(){return{version:1,category:'image-prompts',matchId:'alpha-beta',home:'Alpha',away:'Beta',prompts:CONTENT_CATEGORIES['image-prompts'].kinds.map((kind,i)=>({n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(3)} ${kind==='stadium'?'Stadium, flags and team crests.':kind==='ball-duel-in-the-air'?'An aerial ball duel with the ball in the air.':''}`}))};}
-test('image contract requires exactly four ordered scenes, both teams and stadium identity',()=>{
+const KIND_HINT = {
+  'ball-duel-in-the-air': 'An aerial ball duel with the ball in the air.',
+  'stadium': 'Stadium, flags and team crests.',
+  'supporters': 'Supporters, fans and crowd of both sides.',
+  'goalkeeper-save': 'The goalkeeper denies the shot with a flying save.',
+  'free-kick': 'A direct free kick over the defensive wall.',
+  'corner-kick': 'A corner kick lands in the crowded area.',
+  'dribble': 'A winger dribbles past a rival defender.',
+  'tackle': 'A clean tackle challenge wins the ball.',
+  'celebration': 'The players celebrate the goal with raised arms.',
+  'floodlights': 'The floodlights light the night stadium.',
+};
+function images(){return{version:1,category:'image-prompts',matchId:'alpha-beta',home:'Alpha',away:'Beta',prompts:CONTENT_CATEGORIES['image-prompts'].kinds.map((kind,i)=>({n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(3)} ${KIND_HINT[kind] ?? ''}`}))};}
+test('image contract requires exactly twelve ordered scenes, both teams and stadium identity',()=>{
   const data=images();assert.ok(validateContent(data,data.category,data.matchId));
   data.prompts[3].prompt=data.prompts[3].prompt.replace('flags','banners');assert.ok(promptErrors(data).some(e=>e.includes('presentación')));
   data.prompts[0].prompt=data.prompts[0].prompt.replace('Beta','Gamma');assert.ok(promptErrors(data).some(e=>e.includes('ambos equipos')));
-  data.prompts.pop();assert.ok(promptErrors(data).some(e=>e.includes('4')));
+  data.prompts.pop();assert.ok(promptErrors(data).some(e=>e.includes('12')));
 });
-test('legacy supporters prompt remains reusable after the aerial-duel contract',()=>{
+test('supporters scene requires crowd identity words',()=>{
   const data=images();
-  data.prompts[2]={...data.prompts[2],kind:'supporters',prompt:data.prompts[2].prompt.replace(/ball-duel-in-the-air/g,'supporters').replace('An aerial ball duel with the ball in the air.','Both groups of supporters, fans and crowd.')};
-  assert.ok(validateContent(data,data.category,data.matchId));
-  assert.deepEqual(promptErrors(data),[]);
+  data.prompts[4].prompt=data.prompts[4].prompt.replace(/Supporters, fans and crowd of both sides./,'').replace(/supporters/,'');
+  data.prompts[4].prompt=data.prompts[4].prompt.replace(/football teams interacting/g,'players in play');
+  assert.ok(promptErrors(data).every(e=>!e.includes('escena incorrecta')));
+  assert.ok(promptErrors(data).some(e=>e.includes('hinchada')));
 });
 test('clip adapter preserves verified ranges and accepts legacy plan version 3', () => {
   const input={frames:270,photos:[],clips:[{src:'clip.mp4',width:720,height:1280,duration:6}],words:[{word:'Datos',start:0,end:1}],plan:{version:3,scenes:[{start:0,end:6,layers:[],clips:[{clip:0,offset:1,duration:4}]}]}};

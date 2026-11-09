@@ -9,7 +9,7 @@ export async function reconcileVideoRecovery({ dir, env, transactImpl = transact
   for(const matchId of folders.filter(id=>/^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/.test(id))) {
     let names=[]; try { names=await readdir(join(dir,matchId)); } catch { continue; }
     for(const name of names) {
-      const found=name.match(/^clip-([0-4])\.accepted\.json$/); if(!found) continue;
+      const found=name.match(/^clip-([0-6])\.accepted\.json$/); if(!found) continue;
       const accepted=JSON.parse(await readFile(join(dir,matchId,name),'utf8'));
       const {slot}=await transactImpl('status',{matchId,kind:'video',ordinal:Number(found[1])},{env});
       if(slot?.state!=='uncertain' || slot.videoId || slot.attemptId!==accepted.attemptId) continue;

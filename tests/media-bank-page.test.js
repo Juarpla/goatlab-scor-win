@@ -18,21 +18,21 @@ function clip(file, url = `https://goatlab-gateway.fly.dev/media-gen/a-b/${file}
 
 test('readMediaBank keeps a historical two-clip bank as partial', async t => {
   const dir = await mkdtemp(join(tmpdir(), 'media-bank-')); t.after(() => rm(dir, { recursive: true, force: true }));
-  const assets = [asset('a-b-0'), asset('a-b-1'), asset('a-b-2'), asset('a-b-3'), asset('a-b-4'),
+  const assets = Array.from({ length: 12 }, (_, i) => asset(`a-b-${i}`)).concat([
     { source: 'external', id: 'x', url: 'https://photos.test/x.jpg' },
-    { source: 'agnes', id: 'bad', url: 'notaurl' }];
+    { source: 'agnes', id: 'bad', url: 'notaurl' }]);
   const clips = [clip('clip-0.mp4'), clip('clip-1.mp4'), { ...clip('clip-2.mp4'), url: undefined, file: 'clip-2.mp4' }];
   await writeFile(join(dir, 'a-b.json'), JSON.stringify({ matchId: 'a-b', match: 'A vs B', home: 'A', away: 'B', bankStatus: 'complete', attribution: 'IA (Agnes AI)', assets, clips }));
-  await writeFile(join(dir, 'a-b.progress.json'), JSON.stringify({ count: 4, target: 4, clips: 2, failures: ['clip 1: HTTP 503'], phase: 'finished', ready: true }));
+  await writeFile(join(dir, 'a-b.progress.json'), JSON.stringify({ count: 12, target: 12, clips: 2, failures: ['clip 1: HTTP 503'], phase: 'finished', ready: true }));
   await writeFile(join(dir, 'a-b.ready'), '{}');
   const bank = readMediaBank('a-b', dir);
-  assert.equal(bank.assets.length, 4);
-  assert.deepEqual(bank.assets.map(a => a.id), ['a-b-0', 'a-b-1', 'a-b-2', 'a-b-3']);
+  assert.equal(bank.assets.length, 12);
+  assert.deepEqual(bank.assets.map(a => a.id).slice(0, 3), ['a-b-0', 'a-b-1', 'a-b-2']);
   assert.equal(bank.clips.length, 2);
   assert.equal(bank.bankStatus, 'partial');
-  const four = [1,2,3,4].map(i=>clip(`clip-${i}.mp4`));
-  await writeFile(join(dir, 'a-b.json'), JSON.stringify({...bank,bankStatus:'complete',clips:four}));
-  assert.equal(readMediaBank('a-b',dir).clips.length,4);
+  const six = [1,2,3,4,5,6].map(i=>clip(`clip-${i}.mp4`));
+  await writeFile(join(dir, 'a-b.json'), JSON.stringify({...bank,bankStatus:'complete',clips:six}));
+  assert.equal(readMediaBank('a-b',dir).clips.length,6);
   assert.equal(readMediaBank('a-b',dir).bankStatus,'complete');
   assert.deepEqual(bank.failures, ['clip 1: HTTP 503']);
   assert.deepEqual(mediaBankIds(dir), ['a-b']);

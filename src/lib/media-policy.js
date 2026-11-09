@@ -1,7 +1,7 @@
 import experiment from './montage-experiment.json' with { type: 'json' };
 
 // Generation and storage capacity are independent of editorial direction.
-export const MAX_CLIPS_PER_MATCH = 4;
+export const MAX_CLIPS_PER_MATCH = 6;
 export function mediaPolicy(matchId, config = experiment) {
   if (!['freedom', 'clips-first'].includes(config.mode) || !(config.matches === null || Array.isArray(config.matches)))
     throw new Error('Configuración de prueba de montaje inválida');

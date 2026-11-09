@@ -1,6 +1,6 @@
 /** Per-match media bank reader for the /partido/<id>/media route.
  *  Reads the manifests committed by the 3-media-creation Action and sanitizes them
- *  into the bank of four photos and up to four clips, preserving resources after rollback.
+ *  into the bank of twelve photos and up to six clips, preserving resources after rollback.
  *  Build-time read only (static Astro); no secrets or network. */
 import { readdirSync, readFileSync } from 'node:fs';
 import { MAX_CLIPS_PER_MATCH, mediaPolicy } from './media-policy.js';

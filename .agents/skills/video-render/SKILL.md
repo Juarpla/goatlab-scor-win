@@ -209,8 +209,8 @@ duration is measured and there is a decision if it exceeds the limit.
 
 Read `public/data/media-pack/<id>.json`. It contains:
 
-- `assets`: up to 4 Agnes images.
-- `clips`: match clips, about 6.5 s at 720×1280.
+- `assets`: up to 12 Agnes images.
+- `clips`: match clips, about 6.5 s at 720×1280 (target 6).
 - `facts`: real match figures.
 - `match`, `home`, `away`.
 - `bankStatus`: `complete` or `partial`. A partial pack is usable; work with the

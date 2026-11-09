@@ -33,3 +33,15 @@ direction lives only in its [creative reference](.agents/skills/video-render/ref
 with fixed identity in [brand.md](.agents/skills/video-render/references/brand.md).
 Keep JSX/runtime instructions in the technical reference and source-generation
 requirements in their prompts. Treat October video pipeline reports as history.
+
+Standing preferences for every video batch:
+
+- Author each video from scratch for its match: never carry over a previous
+  batch's montage pattern; every Short gets its own visual concept and motion
+  treatment within the kit and safe-area rules.
+- When a delivery fails any QA check, report the exact failing check and its
+  cause before re-rendering; "it failed" alone is not an acceptable report.
+- Media packs target 12 images and 6 clips per match. When generated images or
+  clips depict two different teams in one scene, the kits must always contrast;
+  if the home kits are too close in colour, describe the away team in its
+  alternative kit.

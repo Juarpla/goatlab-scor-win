@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import { mediaPublisher } from '../src/lib/media-progress.js';
 import { normalizeAgnesImage } from '../src/lib/agnes.js';
 import { editingFacts } from '../src/lib/match-facts.js';
-const photos=Array.from({length:4},(_,i)=>normalizeAgnesImage({matchId:'a-b',index:i,publicUrl:`https://example.test/${i}.jpg`}));
+const photos=Array.from({length:12},(_,i)=>normalizeAgnesImage({matchId:'a-b',index:i,publicUrl:`https://example.test/${i}.jpg`}));
 async function fixture(t) { const dir=await mkdtemp(join(tmpdir(),'goatlab-progress-'));t.after(()=>rm(dir,{recursive:true,force:true}));return {dir,match:{webId:'a-b',home:'Alpha FC',away:'Beta FC'}}; }
 test('the bank is persisted incrementally and becomes ready when its attempt finishes',async t=>{
  const {dir,match}=await fixture(t), publish=mediaPublisher({dir,match});
@@ -15,12 +15,12 @@ test('the bank is persisted incrementally and becomes ready when its attempt fin
  await assert.rejects(access(join(dir,'a-b.ready')));
  assert.equal(JSON.parse(await readFile(join(dir,'a-b.json'))).assets.length,2);
  assert.equal((await publish(photos,'finished')).ready,true);
- assert.equal(JSON.parse(await readFile(join(dir,'a-b.json'))).assets.length,4);
+ assert.equal(JSON.parse(await readFile(join(dir,'a-b.json'))).assets.length,12);
 });
 const verifiedAt='2026-10-08T22:00:00.000Z';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const verifiedPhotos=photos.map((photo,index)=>({...photo,sha256:hash(`photo ${index}`)}));
-function verifiedExtra(){return{bankVersion:2,contentFingerprint:hash('content inputs'),storageVerifiedAt:verifiedAt,verifiedAssets:verifiedPhotos.map(photo=>photo.id),clips:[0,1,2,3].map(index=>({id:`a-b-clip-${index}`,source:'agnes',url:`https://example.test/clip-${index}.mp4`,model:'agnes-video-2.5-flash',width:720,height:1280,duration:6,sha256:hash(`clip ${index}`),promptHash:hash(`prompt ${index}`),referenceHash:hash(verifiedPhotos[index].url)})),verifiedClips:[0,1,2,3].map(i=>'a-b-clip-'+i)};}
+function verifiedExtra(){return{bankVersion:2,contentFingerprint:hash('content inputs'),storageVerifiedAt:verifiedAt,verifiedAssets:verifiedPhotos.map(photo=>photo.id),clips:[0,1,2,3,4,5].map(index=>({id:`a-b-clip-${index}`,source:'agnes',url:`https://example.test/clip-${index}.mp4`,model:'agnes-video-2.5-flash',width:720,height:1280,duration:6,sha256:hash(`clip ${index}`),promptHash:hash(`prompt ${index}`),referenceHash:hash(verifiedPhotos[index].url)})),verifiedClips:[0,1,2,3,4,5].map(i=>'a-b-clip-'+i)};}
 
 test('completion requires current storage proofs and strips private verification inputs',async t=>{
  const {dir,match}=await fixture(t), publish=mediaPublisher({dir,match,clock:()=>verifiedAt});

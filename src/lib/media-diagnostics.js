@@ -20,13 +20,13 @@ export function publicVideoDiagnostics(rows, env={}) {
   }));
 }
 export function requestedMediaComplete({images,clips,mode,matchId}) {
-  return (mode==='clips-only'||images>=4) && (mode==='images-only'||clips>=mediaPolicy(matchId).clips);
+  return (mode==='clips-only'||images>=12) && (mode==='images-only'||clips>=mediaPolicy(matchId).clips);
 }
 
 /** Totals include existing and newly uploaded resources with confirmed R2 evidence. */
 export function readyMediaLabels({ images, clips, matchId }) {
   return {
-    images: `${images}/4 imágenes listas; faltan ${Math.max(0, 4 - images)}`,
+    images: `${images}/12 imágenes listas; faltan ${Math.max(0, 12 - images)}`,
     clips: `${clips}/${mediaPolicy(matchId).clips} clips listos; faltan ${Math.max(0, mediaPolicy(matchId).clips - clips)}`,
   };
 }
@@ -52,7 +52,7 @@ export function mediaRunOutcome(report) {
     for(const kind of ['image','video']) {
       if(kind==='image'&&mode==='clips-only'||kind==='video'&&mode==='images-only')continue;
       // A recovery-only pass does not request new resources outside the selection.
-      const numbers=Array.from({length:kind==='image'?4:mediaPolicy(row.matchId).clips},(_,i)=>i+1);
+      const numbers=Array.from({length:kind==='image'?12:mediaPolicy(row.matchId).clips},(_,i)=>i+1);
       for(const number of numbers) {
         const resource=row.resources?.find(r=>r.kind===kind&&r.number===number);
         if(resource?.verified)continue;

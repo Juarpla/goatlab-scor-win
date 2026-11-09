@@ -4,13 +4,13 @@ import { ASSETS_PER_MATCH, CLIPS_PER_MATCH, LEGACY_ASSETS_MAX, LEGACY_CLIPS_MAX,
 import { normalizeAgnesImage } from '../src/lib/agnes.js';
 const image = i => normalizeAgnesImage({ matchId: 'a-b', index: i, publicUrl: `https://media.test/${i}.jpg` });
 test('only generated Agnes assets with provenance enter the shared bank', () => {
-  assert.deepEqual(ALLOWED_SOURCES, ['agnes']); assert.equal(ASSETS_PER_MATCH, 4);
-  assert.equal(CLIPS_PER_MATCH, 4); assert.equal(LEGACY_ASSETS_MAX, 10); assert.equal(LEGACY_CLIPS_MAX, 3);
+  assert.deepEqual(ALLOWED_SOURCES, ['agnes']); assert.equal(ASSETS_PER_MATCH, 12);
+  assert.equal(CLIPS_PER_MATCH, 6); assert.equal(LEGACY_ASSETS_MAX, 10); assert.equal(LEGACY_CLIPS_MAX, 3);
   assert.deepEqual(assetErrors(image(0)), []);
   for (const invalid of [{ ...image(0), source: 'external' }, { ...image(0), generated: {} }, { ...image(0), url: 'http://media.test/0.jpg' }]) assert.ok(assetErrors(invalid).length);
 });
-test('bank deduplicates slots, caps four and preserves referential credit', () => {
-  const bank = buildManifest({ match: { id: 'a-b', home: 'A', away: 'B' }, assets: [image(0), image(0), ...Array.from({ length: 7 }, (_, i) => image(i))] });
-  assert.equal(bank.assets.length, 4); assert.equal(bank.attribution, AI_CREDIT);
+test('bank deduplicates slots, caps twelve and preserves referential credit', () => {
+  const bank = buildManifest({ match: { id: 'a-b', home: 'A', away: 'B' }, assets: [image(0), image(0), ...Array.from({ length: 14 }, (_, i) => image(i))] });
+  assert.equal(bank.assets.length, 12); assert.equal(bank.attribution, AI_CREDIT);
   assert.deepEqual(selectAssets([]), []);
 });

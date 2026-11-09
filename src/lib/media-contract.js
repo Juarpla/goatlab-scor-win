@@ -15,7 +15,7 @@ const https = value => {
   catch { return false; }
 };
 const distinct = (resources, key) => new Set(resources.map(resource => resource[key])).size === resources.length;
-const validPhotos = photos => Array.isArray(photos) && photos.length <= 4
+const validPhotos = photos => Array.isArray(photos) && photos.length <= 12
   && photos.every(photo => !assetErrors(photo).length && safeId(photo.id) && https(photo.url) && hash(photo.sha256)
     && Number.isInteger(photo.width) && photo.width > 0 && Number.isInteger(photo.height) && photo.height > 0)
   && ['id', 'url', 'sha256'].every(key => distinct(photos, key));
@@ -29,7 +29,7 @@ export function contentFingerprint(match, imagePack) {
   const identity = { matchId, home: esName(match.home), away: esName(match.away), competition: match.competition, kickoff: new Date(kickoff).toISOString() };
   const inputs = [];
   for (const [category, pack, count, fallback] of [
-    ['image-prompts', imagePack, 4, 'agnes-image-2.5-flash'],
+    ['image-prompts', imagePack, 12, 'agnes-image-2.5-flash'],
   ]) {
     // Accepts v1 and v2: banks generated with CONTENT_VERSION 2 remain valid.
     if (!pack || (pack.version !== CONTENT_VERSION && pack.version !== CONTENT_VERSION + 1) || pack.category !== category || contentIdentityErrors(pack, match).length
@@ -51,7 +51,7 @@ export function bankComplete(bank, { matchId, fingerprint, mode = 'all', now = D
   if (!Number.isFinite(verifiedAt) || verifiedAt > now) return false;
   const photos = bank.assets, clips = bank.clips;
   if (!validPhotos(photos) || !Array.isArray(clips) || clips.length > MAX_CLIPS_PER_MATCH) return false;
-  if (mode !== 'clips-only' && photos.length !== 4) return false;
+  if (mode !== 'clips-only' && photos.length !== 12) return false;
   if (mode !== 'images-only' && clips.length < mediaPolicy(matchId).clips) return false;
   const references = new Set(photos.map(photo => sha(photo.url)));
   return clips.every(clip => clip?.source === 'agnes' && safeId(clip.id) && https(clip.url) && hash(clip.sha256)

@@ -118,7 +118,7 @@ class ImagePool:
         raise ValueError('tres POST de imagen agotados en esta corrida')
 
     def _generate(self, match, slot, prompt, out, call=request_json, size="2K", ratio="9:16", expires_at=None, attempt_deadline=None):
-        if slot not in range(4):
+        if slot not in range(12):
             raise ValueError("máximo cuatro imágenes por encuentro")
         if size not in {"1K", "2K"} or ratio not in {"1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"}:
             raise ValueError("resolución o ratio no admitidos")

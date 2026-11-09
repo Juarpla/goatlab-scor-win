@@ -5,7 +5,7 @@ export const CONTENT_VERSION = 1;
 export const CONTENT_PROVIDER_ORDER = 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export const CONTENT_CATEGORIES = Object.freeze({
   scripts: { label: 'Scripts', directory: 'youtube-scripts', count: 10 },
-  'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 4, kinds: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'], legacyKinds: ['ball-duel', 'goal-action', 'supporters', 'stadium'] },
+  'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 12, kinds: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium', 'supporters', 'goalkeeper-save', 'free-kick', 'corner-kick', 'dribble', 'tackle', 'celebration', 'floodlights'], legacyKinds: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'] },
 });
 export function contentUrl(matchId, category, json = false) {
   if (!CONTENT_CATEGORIES[category]) throw new Error('Categoría desconocida');
@@ -100,6 +100,13 @@ export function promptErrors(data, { category = data?.category, home = data?.hom
       if (!/photoreal|hyperreal/i.test(text) || !/referential|reference illustration/i.test(text) || !/illustration/i.test(text)) errors.push(`${label}: falta realismo y carácter referencial`);
       if (!/kit|uniform|shirt|jersey|colou?r/i.test(text)) errors.push(`${label}: falta identidad de los equipos`);
       if (row.kind === 'supporters' && !/supporters|fans|crowd/i.test(text)) errors.push(`${label}: falta hinchada`);
+      if (row.kind === 'goalkeeper-save' && (!/goalkeeper|keeper/i.test(text) || !/save|deny|block|stop/i.test(text))) errors.push(`${label}: falta atajada del portero`);
+      if (row.kind === 'free-kick' && !/free[- ]?kick/i.test(text)) errors.push(`${label}: falta tiro libre`);
+      if (row.kind === 'corner-kick' && !/corner/i.test(text)) errors.push(`${label}: falta córner`);
+      if (row.kind === 'dribble' && !/dribbl/i.test(text)) errors.push(`${label}: falta regate`);
+      if (row.kind === 'tackle' && !/tackle|challeng/i.test(text)) errors.push(`${label}: falta entrada`);
+      if (row.kind === 'celebration' && !/celebrat/i.test(text)) errors.push(`${label}: falta celebración`);
+      if (row.kind === 'floodlights' && !/floodlight|night/i.test(text)) errors.push(`${label}: falta nocturna con reflectores`);
       if (row.kind === 'ball-duel-in-the-air' && (!/\bball\b/i.test(text) || !/\b(?:air|aerial|header|heading|volley|overhead)\b/i.test(text))) errors.push(`${label}: falta duelo aéreo`);
       if (row.kind === 'stadium' && (!/stadium/i.test(text) || !/flag/i.test(text) || !/crest|emblem|badge|logo/i.test(text))) errors.push(`${label}: falta presentación, banderas o escudos`);
     }

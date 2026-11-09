@@ -8,6 +8,7 @@ import { promisify } from 'node:util';
 import { createHash } from 'node:crypto';
 import { normalizeAgnesImage, AGNES_FREE_LIMITS, AGNES_TOKEN_LIMITS } from '../src/lib/agnes.js';
 import { buildYoutubeScripts } from '../src/lib/youtube.js';
+import { CONTENT_CATEGORIES } from '../src/lib/match-content.js';
 const run=promisify(execFile);
 async function runBank(root,out,extraArgs=[],env={}){
   // Without AGNES_API_KEY there is no HTTP: the script fails before calling Agnes.
@@ -16,11 +17,11 @@ async function runBank(root,out,extraArgs=[],env={}){
     env:{...process.env,MEDIA_ROLE:'producer',GITHUB_ACTIONS:'true',GOATLAB_REPO:root,MEDIA_PACK_DIR:out,AGNES_API_KEY:'',...env},
   }), error=>error.code===2 && /faltan recursos solicitados/.test(error.stderr));
 }
-const IMAGE_KINDS=['ball-duel','goal-action','ball-duel-in-the-air','stadium'];
+const IMAGE_PROMPT_TAIL='Stadium flags and team crests. Supporters fans crowd. Goalkeeper denies the save. Free kick over the wall. Corner kick in the area. Winger dribbles at speed. Clean tackle challenge. Celebration with raised arms. Floodlights night. Aerial ball duel with the ball in the air.';
 function imagePromptsDoc(matchId){
-  return {version:1,category:'image-prompts',matchId,home:'Alpha',away:'Beta',prompts:IMAGE_KINDS.map((kind,i)=>{
-    const tail=kind==='stadium'?'Stadium, flags and team crests.':kind==='ball-duel-in-the-air'?'An aerial ball duel with the ball in the air.':'';
-    return {n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(4)}${tail}`};
+  const kinds=CONTENT_CATEGORIES['image-prompts'].kinds;
+  return {version:1,category:'image-prompts',matchId,home:'Alpha',away:'Beta',prompts:kinds.map((kind,i)=>{
+    return {n:i+1,kind,title:kind,prompt:`Referential photorealistic illustration of Alpha and Beta football teams interacting in realistic uniforms, vertical 9:16. ${kind} ${IMAGE_PROMPT_TAIL} ${'Natural lighting, realistic anatomy and team colours, context only. '.repeat(4)}`};
   })};
 }
 function videoPromptsDoc(matchId){

@@ -12,14 +12,14 @@ function pack(category, count) {
   return { version: 1, category, matchId: 'a-b', home: esName(match.home), away: esName(match.away), competition: match.competition, kickoff: match.kickoff, prompts: Array.from({ length: count }, (_, index) => ({ n: index + 1, prompt: `Exact ${category} input ${index}`, title: 'editorial label' })) };
 }
 function bank() {
-  const assets = Array.from({ length: 4 }, (_, index) => ({ ...normalizeAgnesImage({ matchId: 'a-b', index, publicUrl: `https://media.test/${index}.jpg`, at: new Date(now).toISOString() }), sha256: hash(`photo ${index}`) }));
-  const clips = Array.from({ length: 4 }, (_, index) => ({ id: `a-b-clip-${index}`, source: 'agnes', url: `https://media.test/clip-${index}.mp4`, model: 'agnes-video-2.5-flash', width: 720, height: 1280, duration: 6, sha256: hash(`clip ${index}`), promptHash: hash(`video prompt ${index}`), referenceHash: hash(assets[index%2].url) }));
-  return { bankVersion: 2, bankStatus: 'complete', matchId: 'a-b', contentFingerprint: contentFingerprint(match, pack('image-prompts', 4), pack('video-prompts', 2)), storageVerifiedAt: new Date(now).toISOString(), assets, clips };
+  const assets = Array.from({ length: 12 }, (_, index) => ({ ...normalizeAgnesImage({ matchId: 'a-b', index, publicUrl: `https://media.test/${index}.jpg`, at: new Date(now).toISOString() }), sha256: hash(`photo ${index}`) }));
+  const clips = Array.from({ length: 6 }, (_, index) => ({ id: `a-b-clip-${index}`, source: 'agnes', url: `https://media.test/clip-${index}.mp4`, model: 'agnes-video-2.5-flash', width: 720, height: 1280, duration: 6, sha256: hash(`clip ${index}`), promptHash: hash(`video prompt ${index}`), referenceHash: hash(assets[index%2].url) }));
+  return { bankVersion: 2, bankStatus: 'complete', matchId: 'a-b', contentFingerprint: contentFingerprint(match, pack('image-prompts', 12), pack('video-prompts', 2)), storageVerifiedAt: new Date(now).toISOString(), assets, clips };
 }
 const options = value => ({ matchId: 'a-b', fingerprint: value.contentFingerprint, now });
 
 test('v1 and v2 prompt documents share fingerprints without accepting unsupported versions', () => {
-  const images = pack('image-prompts', 4), videos = pack('video-prompts', 2);
+  const images = pack('image-prompts', 12), videos = pack('video-prompts', 2);
   const expected = contentFingerprint(match, images, videos);
   for (const imageVersion of [1, 2]) for (const videoVersion of [1, 2]) {
     assert.equal(contentFingerprint(match, { ...images, version: imageVersion }, { ...videos, version: videoVersion }), expected);
@@ -31,7 +31,7 @@ test('v1 and v2 prompt documents share fingerprints without accepting unsupporte
 });
 
 test('fingerprint follows exact Agnes input and effective models, excluding editorial metadata', () => {
-  const images = pack('image-prompts', 4), videos = pack('video-prompts', 2);
+  const images = pack('image-prompts', 12), videos = pack('video-prompts', 2);
   const initial = contentFingerprint(match, images, videos);
   assert.match(initial, /^[a-f0-9]{64}$/);
   const metadata = { ...images, generatedAt: 'another date', author: { model: 'another LLM' }, motionPrompts: ['unrelated'] };
@@ -45,7 +45,7 @@ test('fingerprint follows exact Agnes input and effective models, excluding edit
 });
 
 test('invalid prompt identity or incomplete inputs cannot have a fingerprint', () => {
-  const images = pack('image-prompts', 4), videos = pack('video-prompts', 2);
+  const images = pack('image-prompts', 12), videos = pack('video-prompts', 2);
   for (const override of [{ matchId: 'other' }, { home: 'Other Home' }, { away: 'Other Away' }, { competition: 'other' }, { kickoff: '2026-10-09T19:00:00Z' }, { prompts: [] }, { generationModel: '' }]) {
     assert.equal(contentFingerprint(match, { ...images, ...override }, videos), null);
   }
@@ -63,7 +63,7 @@ test('a complete bank needs version, matching fingerprint and trustworthy storag
   assert.equal(bankComplete(value, { ...options(value), matchId: 'other' }), false);
 });
 
-test('four photographs must be valid Agnes resources with distinct identity, URL and bytes', () => {
+test('twelve photographs must be valid Agnes resources with distinct identity, URL and bytes', () => {
   const value = bank();
   for (const change of [photo => delete photo.sha256, photo => { photo.source = 'external'; }, photo => { photo.url = 'http://media.test/photo.jpg'; }, photo => { photo.width = '720'; }]) {
     const invalid = structuredClone(value); change(invalid.assets[0]);
@@ -103,10 +103,10 @@ test('mode-specific completion does not claim the missing other half', () => {
   assert.equal(bankComplete({ ...value, assets: [] }, { ...options(value), mode: 'clips-only' }), false);
 });
 
-test('freedom requires four distinct verified clips while historical banks remain partial', () => {
+test('freedom requires six distinct verified clips while historical banks remain partial', () => {
   const value = bank();
-  for (const count of [2, 3]) assert.equal(bankComplete({...value, clips:value.clips.slice(0,count)}, options(value)),false);
+  for (const count of [2, 3, 5]) assert.equal(bankComplete({...value, clips:value.clips.slice(0,count)}, options(value)),false);
   assert.equal(bankComplete(value,options(value)),true);
-  value.clips.push({...value.clips[0],id:'fifth',url:'https://media.test/clip-5.mp4',sha256:hash('fifth')});
+  value.clips.push({...value.clips[0],id:'seventh',url:'https://media.test/clip-7.mp4',sha256:hash('seventh')});
   assert.equal(bankComplete(value,options(value)),false);
 });

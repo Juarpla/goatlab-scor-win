@@ -29,8 +29,8 @@ in `notes` alongside the plan's existing fields, so a later revision preserves
 intent. These notes are for the author, not visible video copy.
 
 Select media for relevance, visual quality and continuity. There is no quota of
-clips, photos, cuts or on-screen figures. A production target of four images and
-four clips describes the bank, not an obligation to show them all. Omit redundant,
+clips, photos, cuts or on-screen figures. A production target of twelve images and
+six clips describes the bank, not an obligation to show them all. Omit redundant,
 weak or distracting assets and note consequential omissions. With a partial bank,
 build around what works; report missing material. If nothing is usable, complete
 the bank before rendering this media-led format.

@@ -43,12 +43,12 @@ export function validateAgnesState(state) {
   if (!keys(state,['version','revision','updatedAt','cutover','limits','quota','rates','matches','slots','attempts','runs','summaries','usage','activeVideoAttemptId','failureEvents','maintenance','resources']) || !keys(state.cutover,['atMs','legacyMatchIds']) || !keys(state.limits,['images','video_seconds','imageRpm','videoStartIntervalMs']) || !keys(state.rates,['imageStarts','imageThrottleUntil','videoNextAt']) || !keys(state.usage,['opsA','opsB'])) throw new Error('campos privados Agnes no admitidos');
   if(state.resources!==undefined) {
     if(!object(state.resources))throw new Error('recursos Agnes inválidos');
-    for(const [key,row] of Object.entries(state.resources))if(!keys(row,['matchId','kind','number','state','reason','objectKey','verifiedAt']) || key!==`${row.matchId}:${row.kind}:${row.number}` || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.number) || row.number<1 || row.number>(row.kind==='image'?4:MAX_CLIPS_PER_MATCH) || !['pendiente','generando','publicando','listo'].includes(row.state) || typeof row.reason!=='string' || row.reason.length>256 || (row.objectKey!==null && (typeof row.objectKey!=='string' || !row.objectKey.startsWith(`partidos/${row.matchId}/`))) || (row.verifiedAt!==null&&!isoUtc(row.verifiedAt)) || row.state==='listo'&&(!row.objectKey||!row.verifiedAt))throw new Error('estado de recurso Agnes inválido');
+    for(const [key,row] of Object.entries(state.resources))if(!keys(row,['matchId','kind','number','state','reason','objectKey','verifiedAt']) || key!==`${row.matchId}:${row.kind}:${row.number}` || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.number) || row.number<1 || row.number>(row.kind==='image'?12:MAX_CLIPS_PER_MATCH) || !['pendiente','generando','publicando','listo'].includes(row.state) || typeof row.reason!=='string' || row.reason.length>256 || (row.objectKey!==null && (typeof row.objectKey!=='string' || !row.objectKey.startsWith(`partidos/${row.matchId}/`))) || (row.verifiedAt!==null&&!isoUtc(row.verifiedAt)) || row.state==='listo'&&(!row.objectKey||!row.verifiedAt))throw new Error('estado de recurso Agnes inválido');
   }
   const positions=new Set();
   for (const row of Object.values(state.slots)) if(row.publicationIndex!==undefined) {
     const key=row.matchId+':'+row.publicationIndex;
-    if(row.kind!=='video'||![1,2,3,4].includes(row.publicationIndex)||positions.has(key))throw new Error('posición de publicación Agnes inválida');
+    if(row.kind!=='video'||![1,2,3,4,5,6].includes(row.publicationIndex)||positions.has(key))throw new Error('posición de publicación Agnes inválida');
     positions.add(key);
   }
   for (const name of ['quota','rates','matches','slots','attempts','runs','summaries','usage']) if (!object(state[name])) throw new Error('autoridad Agnes inválida');
@@ -61,7 +61,7 @@ export function validateAgnesState(state) {
   for (const [key,row] of Object.entries(state.slots)) {
     if (!object(row)) throw new Error('slot Agnes corrupto');
     if (row.state==='retired') {
-      if (!keys(row,['matchId','kind','ordinal','attemptId','state','expiresAtMs','generationMatchId','publicationIndex']) || key!==slotKey(row) || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.ordinal) || row.ordinal<0 || row.ordinal>=(row.kind==='image'?4:5) || !finite(row.expiresAtMs) || !uuid(row.attemptId) || state.attempts[row.attemptId]?.slotKey!==key || state.attempts[row.attemptId]?.state!=='retired') throw new Error('tombstone Agnes corrupto');
+      if (!keys(row,['matchId','kind','ordinal','attemptId','state','expiresAtMs','generationMatchId','publicationIndex']) || key!==slotKey(row) || !id(row.matchId) || !['image','video'].includes(row.kind) || !Number.isInteger(row.ordinal) || row.ordinal<0 || row.ordinal>=(row.kind==='image'?12:7) || !finite(row.expiresAtMs) || !uuid(row.attemptId) || state.attempts[row.attemptId]?.slotKey!==key || state.attempts[row.attemptId]?.state!=='retired') throw new Error('tombstone Agnes corrupto');
       continue;
     }
     validateSlotInput(row);
@@ -126,13 +126,13 @@ export function compactAgnesState(state, {nowMs}) {
 }
 
 function validateSlotInput(input) {
-  if (!id(input.matchId) || !['image','video'].includes(input.kind) || !Number.isInteger(input.ordinal) || input.ordinal < 0 || input.ordinal >= (input.kind === 'image' ? 4 : 5) || !digest(input.promptHash) || input.model!==`agnes-${input.kind}-2.5-flash` || (input.referenceHash !== undefined && !digest(input.referenceHash))) throw new Error('identidad de slot inválida');
+  if (!id(input.matchId) || !['image','video'].includes(input.kind) || !Number.isInteger(input.ordinal) || input.ordinal < 0 || input.ordinal >= (input.kind === 'image' ? 12 : 7) || !digest(input.promptHash) || input.model!==`agnes-${input.kind}-2.5-flash` || (input.referenceHash !== undefined && !digest(input.referenceHash))) throw new Error('identidad de slot inválida');
 }
 function pickIdentity(input) { return {matchId:input.matchId,kind:input.kind,ordinal:input.ordinal,promptHash:input.promptHash,model:input.model, ...(input.referenceHash ? {referenceHash:input.referenceHash} : {})}; }
 function sameIdentity(row,input) { return ['promptHash','model','referenceHash'].every(key => row[key] === input[key]); }
 function validPublication(row, value) {
   const canonical=value.publicationIndex!==undefined;
-  if(canonical && (row.kind!=='video'||![1,2,3,4].includes(value.publicationIndex)||value.publicationIndex!==row.publicationIndex))return false;
+  if(canonical && (row.kind!=='video'||![1,2,3,4,5,6].includes(value.publicationIndex)||value.publicationIndex!==row.publicationIndex))return false;
   const file = row.kind==='image' ? `${row.ordinal}\\.(?:png|jpg|webp)` : `clip-${canonical?value.publicationIndex:row.ordinal}\\.mp4`;
   return typeof value.objectKey==='string' && [row.matchId,row.generationMatchId].filter(Boolean).some(matchId=>new RegExp(`^partidos/${matchId}/${file}$`).test(value.objectKey))
     && Number.isSafeInteger(value.sizeBytes) && value.sizeBytes>0 && value.sizeBytes<=(row.kind==='image'?64_000_000:32_000_000);
@@ -168,7 +168,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
       row.publicationIndex=index;result=change({publicationIndex:index});
     }
   } else if (operation === 'resource-status') {
-    if(!id(input.matchId) || state.matches[input.matchId]?.closed || !Array.isArray(input.resources) || input.resources.length!==4+mediaPolicy(input.matchId).clips)throw new Error('reconciliación de recursos inválida');
+    if(!id(input.matchId) || state.matches[input.matchId]?.closed || !Array.isArray(input.resources) || input.resources.length!==12+mediaPolicy(input.matchId).clips)throw new Error('reconciliación de recursos inválida');
     state.resources??={};
     for(const row of input.resources) {
       const key=`${input.matchId}:${row.kind}:${row.number}`;
@@ -242,7 +242,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
   else if (operation === 'reserve') {
     validateSlotInput(input);
     if (/^(?:fd|af|bz)-[0-9]+$/.test(input.matchId)) throw new Error('partido sin código descriptivo; publicación y generación pausadas');
-    if (input.publicationIndex!==undefined && (input.kind!=='video' || ![1,2,3,4].includes(input.publicationIndex))) throw new Error('posición de recurso inválida');
+    if (input.publicationIndex!==undefined && (input.kind!=='video' || ![1,2,3,4,5,6].includes(input.publicationIndex))) throw new Error('posición de recurso inválida');
     if (!uuid(input.attemptId) || !finite(input.expiresAtMs)) throw new Error('intento inválido');
     const key = slotKey(input), row = state.slots[key], previousAttempt = state.attempts[input.attemptId];
     const videoConcurrency = input.videoConcurrency ?? 1;

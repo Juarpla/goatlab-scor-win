@@ -198,9 +198,9 @@ class VideoPool:
         if os.environ.get('AGNES_RESOURCE_RETRIES') != '3' or recover_only:
             return self._bank(match, prompts, images, out, deadline, expires, call, download, cancelled, verified, recover_only)
         verified = set(verified or [])
-        slots = [self.state.status(match, 'video', i) for i in range(5)]
-        protected = {i for i in range(5) if f'clip-{i}.mp4' in verified}
-        candidates = [i for i in range(5) if i not in protected]
+        slots = [self.state.status(match, 'video', i) for i in range(7)]
+        protected = {i for i in range(7) if f'clip-{i}.mp4' in verified}
+        candidates = [i for i in range(7) if i not in protected]
         candidates.sort(key=lambda i: 0 if slots[i] and slots[i].get('videoId') and slots[i]['state'] in ('pending', 'completed') else 1)
         counts = getattr(self, 'run_posts', {})
         self.run_posts = counts
@@ -323,18 +323,18 @@ class VideoPool:
             if not target: return {'clips': [], 'failures': [], 'diagnostics': prior_diagnostics}
             # Count consumed attempts from the authority even with a fresh SQLite.
             try:
-                remote_slots = [self.state.status(match, 'video', i) for i in range(5)]
+                remote_slots = [self.state.status(match, 'video', i) for i in range(7)]
             except ValueError as error:
                 return {'clips': [], 'failures': [self.safe_detail(str(error))], 'diagnostics': prior_diagnostics}
             consumed = {i for i, slot in enumerate(remote_slots) if slot and slot['state'] != 'rejected'}
-            consumed.update(int(name[5]) for name in verified if re.fullmatch(r'clip-[0-4]\.mp4', name))
-            consumed.update(row['ordinal'] for row in self.db.execute("SELECT ordinal FROM video_tasks WHERE match_id=? AND ordinal BETWEEN 0 AND 4 AND status!='limited'", (match,)) if remote_slots[row['ordinal']] is None)
+            consumed.update(int(name[5]) for name in verified if re.fullmatch(r'clip-[0-6]\.mp4', name))
+            consumed.update(row['ordinal'] for row in self.db.execute("SELECT ordinal FROM video_tasks WHERE match_id=? AND ordinal BETWEEN 0 AND 6 AND status!='limited'", (match,)) if remote_slots[row['ordinal']] is None)
             # Clear stale cache occupancy before considering any available ordinal.
             for i, slot in enumerate(remote_slots):
                 if slot and slot['state'] in ('failed', 'abandoned'):
                     self.db.execute('UPDATE video_tasks SET status=? WHERE match_id=? AND ordinal=?', (slot['state'], match, i))
             stop_reason = None
-            for ordinal in (candidate_ordinals if candidate_ordinals is not None else range(5)):
+            for ordinal in (candidate_ordinals if candidate_ordinals is not None else range(7)):
                 if f'clip-{ordinal}.mp4' in verified: continue
                 prompt = prompts[ordinal % len(prompts)]
                 if self.clock() >= deadline or cancelled(): break

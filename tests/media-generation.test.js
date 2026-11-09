@@ -8,17 +8,18 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { generateMediaBanks, mediaMatchStop, mediaRunDeadline, mediaSoftStop } from '../actions/3-media-creation/generate-media-pack.mjs';
 import { buildYoutubeScripts } from '../src/lib/youtube.js';
+import { CONTENT_CATEGORIES } from '../src/lib/match-content.js';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const now = Date.parse('2026-10-08T20:00:00Z');
 test('fresh runner reports every R2 resource and remote HTTP history without provider requests',async t=>{
   const f=await fixture(t);
-  for(let ordinal=0;ordinal<4;ordinal++)f.addPhoto(ordinal);
-  for(let i=0;i<4;i++)f.addClip(i);
+  for(let ordinal=0;ordinal<12;ordinal++)f.addPhoto(ordinal);
+  for(let i=0;i<6;i++)f.addClip(i);
   const attempts=Array.from({length:5},(_,ordinal)=>({kind:'video',ordinal,state:ordinal<2?'completed':'abandoned',attemptId:'attempt-'+ordinal,
     diagnostics:ordinal<2?null:{queryCount:0,events:[{id:'event-'+ordinal,at:now-60000,runId:'prior-run',runUrl:'',stage:'create',method:'POST',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full',providerStatus:'',progress:null,requestId:'req'}]}}));
   const result=await f.run({transactImpl:async(op,input)=>op==='attempts'?{attempts}:f.transactImpl(op,input)});
   assert.equal(f.provider.length,0);
-  assert.equal(result.results[0].resources.length,8);
+  assert.equal(result.results[0].resources.length,18);
   assert.ok(result.results[0].resources.every(row=>row.verified&&row.status==='reutilizado'&&row.reason.includes('sin petición a Agnes')));
   assert.equal(result.results[0].attempts[4].diagnostics.events[0].httpStatus,503);
   assert.ok(f.logs.some(line=>line.includes('historial anterior')&&line.includes('video_queue_full')));
@@ -28,8 +29,8 @@ async function fixture(t, overrides = {}, matchId = 'a-b') {
   const repo = await mkdtemp(join(tmpdir(), 'goatlab-generation-')); t.after(() => rm(repo, { recursive: true, force: true }));
   const dir = join(repo, 'public/data/media-pack');
   const match = { id: 'af-1', webId: matchId, home: 'Alpha', away: 'Beta', competition: 'nations', status: 'NS', kickoff: new Date(now + 86_400_000).toISOString() };
-  const images = { version: 1, category: 'image-prompts', matchId: matchId, ...match, home: 'Alpha', away: 'Beta', prompts: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'].map((kind, index) => ({
-    n: index + 1, kind, title: kind, prompt: 'Referential photorealistic illustration of Alpha and Beta teams in realistic uniforms, vertical 9:16. ' + kind + ' Stadium flags and team crests. Supporters fans crowd. ' + 'Natural lighting with stable anatomy. '.repeat(6),
+  const images = { version: 1, category: 'image-prompts', matchId: matchId, ...match, home: 'Alpha', away: 'Beta', prompts: CONTENT_CATEGORIES['image-prompts'].kinds.map((kind, index) => ({
+    n: index + 1, kind, title: kind, prompt: 'Referential photorealistic illustration of Alpha and Beta teams in realistic uniforms, vertical 9:16. ' + kind + ' Stadium flags and team crests. Supporters fans crowd. Goalkeeper denies the save. Free kick over the wall. Corner kick in the area. Winger dribbles at speed. Clean tackle challenge. Celebration with raised arms. Floodlights night stadium. Aerial ball duel with the ball in the air. ' + 'Natural lighting with stable anatomy. '.repeat(6),
   })) };
   const videos = { ...images, category: 'video-prompts', prompts: ['push-in', 'tracking'].map((kind, index) => ({
     n: index + 1, kind, title: kind, prompt: 'Animate the input image with a smooth camera ' + kind + ', 6 seconds, vertical 9:16. ' + 'Keep realistic movement and coherent sports anatomy. '.repeat(6),
@@ -79,14 +80,14 @@ async function fixture(t, overrides = {}, matchId = 'a-b') {
     for (let ordinal = 0; ordinal < mediaPolicy(matchId).clips; ordinal++) {
       position(ordinal);
       const file = 'clip-' + ordinal + '.mp4'; await writeFile(join(out, file), 'clip-' + ordinal);
-      clips.push({ index: ordinal, file, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash', prompt: videos.prompts[ordinal % 2].prompt, reference: env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + ordinal + '.jpg', videoId: 'private-task', attemptId: 'private-attempt' });
+      clips.push({ index: ordinal, file, width: 720, height: 1280, duration: 6, model: 'agnes-video-2.5-flash', prompt: videos.prompts[ordinal % 2].prompt, reference: env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + ordinal % 4 + '.jpg', videoId: 'private-task', attemptId: 'private-attempt' });
     }
     return { stdout: JSON.stringify({ clips, failures: [] }) };
   };
   const transactImpl = async (operation, input) => {
     if(operation==='publication-slot')return {publicationIndex:position(input.ordinal)};
     if(operation==='status'&&input.kind==='video'&&!positions.has(input.ordinal))return {slot:null};
-    if (operation === 'status') return { slot: { attemptId:'attempt-'+input.ordinal,publicationIndex:positions.get(input.ordinal),uploadClaim: input.kind==='video'&&positions.has(input.ordinal)&&objects.has(`partidos/${matchId}/clip-`+positions.get(input.ordinal)+'.mp4')?{publicationIndex:positions.get(input.ordinal)}:null,state: 'completed', model: 'agnes-' + input.kind + '-2.5-flash', promptHash: hash((input.kind === 'image' ? images : videos).prompts[input.ordinal % (input.kind === 'image' ? 4 : 2)].prompt), referenceHash: hash(env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + input.ordinal % 4 + '.jpg') } };
+    if (operation === 'status') return { slot: { attemptId:'attempt-'+input.ordinal,publicationIndex:positions.get(input.ordinal),uploadClaim: input.kind==='video'&&positions.has(input.ordinal)&&objects.has(`partidos/${matchId}/clip-`+positions.get(input.ordinal)+'.mp4')?{publicationIndex:positions.get(input.ordinal)}:null,state: 'completed', model: 'agnes-' + input.kind + '-2.5-flash', promptHash: hash((input.kind === 'image' ? images : videos).prompts[input.ordinal % (input.kind === 'image' ? 12 : 2)].prompt), referenceHash: hash(env.R2_PUBLIC_BASE + `/partidos/${matchId}/` + input.ordinal % 4 + '.jpg') } };
     return { canPut: true, saved: true };
   };
   const downloads = [], logs = [];
@@ -106,9 +107,9 @@ for (const [imageVersion, videoVersion] of [[1, 1], [2, 2], [1, 2], [2, 1]]) {
     }
     const result = await f.run();
     assert.equal(result.completed, 1);
-    assert.equal(result.results[0].images, 4);
-    assert.equal(result.results[0].clips, 4);
-    assert.equal(f.provider.length, 5);
+    assert.equal(result.results[0].images, 12);
+    assert.equal(result.results[0].clips, 6);
+    assert.equal(f.provider.length, 13);
   });
 }
 test('ready totals combine R2 inventory and confirmed new uploads in logs, progress and JSON', async t => {
@@ -117,11 +118,11 @@ test('ready totals combine R2 inventory and confirmed new uploads in logs, progr
   f.addClip(0);
   const result = await f.run();
   assert.equal(result.reused, 4);
-  assert.equal(result.generated, 4);
+  assert.equal(result.generated, 14);
   assert.equal(result.completed, 1);
-  assert.ok(f.logs.some(line => line.includes('3/4 imágenes listas; faltan 1 · 1/4 clips listos; faltan 3')));
-  assert.ok(f.logs.some(line => line.includes('4/4 imágenes listas; faltan 0 · 1/4 clips listos; faltan 3')));
-  assert.ok(f.logs.some(line=>/4\/4 imágenes listas; faltan 0 · 4\/4 clips listos; faltan 0/.test(line)));
+  assert.ok(f.logs.some(line => line.includes('3/12 imágenes listas; faltan 9 · 1/6 clips listos; faltan 5')));
+  assert.ok(f.logs.some(line => line.includes('12/12 imágenes listas; faltan 0 · 1/6 clips listos; faltan 5')));
+  assert.ok(f.logs.some(line=>/12\/12 imágenes listas; faltan 0 · 6\/6 clips listos; faltan 0/.test(line)));
   assert.equal(result.outcome.status,'complete');
   const report = JSON.parse(await readFile(join(f.repo, '.cache/media-run.json'), 'utf8'));
   const progress = JSON.parse(await readFile(join(f.dir, 'a-b.progress.json'), 'utf8'));
@@ -131,8 +132,8 @@ test('ready totals combine R2 inventory and confirmed new uploads in logs, progr
     cwd: f.repo, encoding: 'utf8', env: { ...process.env, GITHUB_STEP_SUMMARY: join(f.repo, 'summary.md') },
   });
   assert.equal(summary.status, 0, summary.stderr);
-  assert.match(summary.stdout, /4\/4 imágenes listas; faltan 0/);
-  assert.match(summary.stdout, /4\/4 clips listos; faltan 0/);
+  assert.match(summary.stdout, /12\/12 imágenes listas; faltan 0/);
+  assert.match(summary.stdout, /6\/6 clips listos; faltan 0/);
   assert.match(summary.stdout, /Verificado/);
 });
 test('local results with failed uploads never appear ready in logs', async t => {
@@ -141,12 +142,12 @@ test('local results with failed uploads never appear ready in logs', async t => 
   const result = await f.run();
   assert.equal(result.results[0].images, 1);
   assert.equal(result.pending, 1);
-  assert.match(f.logs.at(-1), /1\/4 imágenes listas; faltan 3/);
-  assert.ok(!f.logs.some(line => line.includes('4/4 imágenes listas')));
+  assert.match(f.logs.at(-1), /1\/12 imágenes listas; faltan 11/);
+  assert.ok(!f.logs.some(line => line.includes('12/12 imágenes listas')));
 });
 test('duplicate extensions and recovered provider clips do not increase ready totals', async t => {
   const f = await fixture(t);
-  for (let ordinal = 0; ordinal < 4; ordinal++) f.addPhoto(ordinal);
+  for (let ordinal = 0; ordinal < 12; ordinal++) f.addPhoto(ordinal);
   f.objects.set('partidos/a-b/0.png', f.objects.get('partidos/a-b/0.jpg'));
   f.addClip(0);
   const result = await f.run({ execImpl: async (...args) => {
@@ -156,9 +157,9 @@ test('duplicate extensions and recovered provider clips do not increase ready to
     data.clips.push(data.clips[1]);
     return { stdout: JSON.stringify(data) };
   } });
-  assert.equal(result.results[0].images, 4);
-  assert.equal(result.results[0].clips, 4);
-  assert.equal(result.generated, 3);
+  assert.equal(result.results[0].images, 12);
+  assert.equal(result.results[0].clips, 6);
+  assert.equal(result.generated, 5);
 });
 test('expired run budget gives a reason for missing media', async t => {
   const f = await fixture(t, { MEDIA_RUN_BUDGET_MS: '0' });
@@ -223,7 +224,7 @@ test('incompatible R2 metadata and rejected generated clips never increase ready
     return { stdout: JSON.stringify(data) };
   } });
   assert.equal(result.results[0].clips, 0);
-  assert.match(f.logs.at(-1), /0\/4 clips listos; faltan 4/);
+  assert.match(f.logs.at(-1), /0\/6 clips listos; faltan 6/);
   assert.ok(result.results[0].failures.some(reason => /identidad/.test(reason)));
   assert.equal(f.provider.length,0);
 });
@@ -276,7 +277,7 @@ test('R2 block reuses the two publication positions with their original attempt 
   const result = await f.run();
   assert.equal(f.provider.length, 0); assert.equal(f.calls.filter(c => c.cmd === 'put').length, 0);
   assert.equal(result.completed, 0); assert.equal(result.reused, 6);
-  assert.ok(f.logs.some(line=>/4\/4 imágenes listas; faltan 0 · 2\/4 clips listos; faltan 2/.test(line)));
+  assert.ok(f.logs.some(line=>/4\/12 imágenes listas; faltan 8 · 2\/6 clips listos; faltan 4/.test(line)));
   assert.equal(result.outcome.status,'error');
   assert.equal(f.logs.filter(line => line.startsWith('media: a-b:')).length, 2);
   const manifest = JSON.parse(await readFile(join(f.dir, 'a-b.json'), 'utf8'));
@@ -346,8 +347,8 @@ test('missing image dimension evidence cannot certify a complete bank', async t 
   const f=await fixture(t,{MEDIA_RUN_BUDGET_MS:'0'}); for(let i=0;i<4;i++) {f.addPhoto(i);delete f.objects.get('partidos/a-b/'+i+'.jpg').meta.width;} for(let i=0;i<4;i++)f.addClip(i);
   const result=await f.run(); assert.equal(result.completed,0); assert.equal(f.provider.length,0);
 });
-test('images-only verification still leaves a bank partial until its four clips exist', async t => {
-  const f=await fixture(t,{AGNES_SKIP_VIDEO:'1',MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<4;i++) f.addPhoto(i);
+test('images-only verification still leaves a bank partial until its six clips exist', async t => {
+  const f=await fixture(t,{AGNES_SKIP_VIDEO:'1',MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<12;i++) f.addPhoto(i);
   const result=await f.run();assert.equal(result.completed,1);assert.equal(result.pending,0);assert.deepEqual(result.completedIds,[]);
   assert.equal(JSON.parse(await readFile(join(f.dir,'a-b.json'))).bankStatus,'partial');
 });
@@ -360,9 +361,9 @@ test('publication verifies HEAD and stores the R2 identity before removing local
   }});
   assert.equal(result.completed, 1);
   const confirms = events.filter(e=>e.op==='uploadconfirm');
-  assert.equal(confirms.length, 8);
+  assert.equal(confirms.length, 18);
   for(const {input} of confirms) {
-    assert.match(input.objectKey, /^partidos\/a-b\/(?:[0-3]\.jpg|clip-[0-4]\.mp4)$/);
+    assert.match(input.objectKey, /^partidos\/a-b\/(?:[0-9]|1[01])\.jpg|clip-[0-6]\.mp4$/);
     assert.ok(input.sizeBytes > 0);
     const names = await readdir(join(f.dir,'gen','a-b'));
     assert.ok(!names.includes(input.objectKey.split('/').at(-1)));
@@ -397,15 +398,15 @@ for(const defect of ['missing','wrong-key','wrong-size','wrong-hash','wrong-mode
 test('an empty runner continues from two R2 images without regenerating them',async t=>{
   const f=await fixture(t);f.addPhoto(0);f.addPhoto(1);
   const result=await f.run();assert.equal(result.completed,1);
-  assert.equal(f.provider.filter(p=>p.endsWith('agnes.py')).length,2);
+  assert.equal(f.provider.filter(p=>p.endsWith('agnes.py')).length,10);
   assert.equal(f.provider.filter(p=>p.endsWith('agnes_video.py')).length,1);
   assert.equal((await readdir(join(f.dir,'gen','a-b'))).some(n=>/\.(?:jpg|png|mp4|response\.json|accepted\.json)$/.test(n)),false);
 });
 test('existing R2 objects reconcile missing upload confirmations without another PUT',async t=>{
-  const f=await fixture(t,{MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<4;i++)f.addPhoto(i);for(let i=0;i<4;i++)f.addClip(i);
+  const f=await fixture(t,{MEDIA_RUN_BUDGET_MS:'0'});for(let i=0;i<12;i++)f.addPhoto(i);for(let i=0;i<6;i++)f.addClip(i);
   const confirmed=[];
   const result=await f.run({transactImpl:async(op,input)=>{if(op==='uploadconfirm')confirmed.push(input);return f.transactImpl(op,input);}});
-  assert.equal(result.completed,1);assert.equal(confirmed.length,8);
+  assert.equal(result.completed,1);assert.equal(confirmed.length,18);
   assert.equal(f.calls.some(c=>c.cmd==='put'),false);assert.equal(f.provider.length,0);
 });
 test('clips never use images whose publication failed',async t=>{
@@ -427,7 +428,7 @@ test('a pending match outside selection is recovered before generation with no n
     }
     return f.execImpl(binary,argv,options);
   }});
-  assert.equal(result.results[0].matchId,'a-b');assert.equal(result.results[0].clips,4);
+  assert.equal(result.results[0].matchId,'a-b');assert.equal(result.results[0].clips,6);
   assert.equal(f.provider.length,1);assert.ok(f.provider[0].endsWith('agnes_video.py'));
 });
 
@@ -450,10 +451,10 @@ test('temporary cleanup failure keeps the verified resource ready and never caus
     }
     return response;
   }});
-  assert.equal(run.results[0].images,4);assert.equal(run.completed,1);
+  assert.equal(run.results[0].images,12);assert.equal(run.completed,1);
   assert.ok(f.logs.some(line=>line.includes('limpieza temporal pendiente')));
   const calls=f.provider.length;f.env.MEDIA_RUN_BUDGET_MS='0';
-  const retry=await f.run();assert.equal(retry.results[0].images,4);assert.equal(f.provider.length,calls);
+  const retry=await f.run();assert.equal(retry.results[0].images,12);assert.equal(f.provider.length,calls);
 });
 test('the workflow stores reports but never restores or archives media between runs',async()=>{
   const workflow=await readFile(resolve('.github/workflows/3-media-creation.yml'),'utf8');
@@ -498,8 +499,8 @@ test('a fifth attempt publishes clip-1 and a recovered clip is not named after i
 });
 test('provider-only match identifiers are omitted without failing the rest of the run',async t=>{
   const f=await fixture(t);
-  for(let ordinal=0;ordinal<4;ordinal++)f.addPhoto(ordinal);
-  for(let i=0;i<4;i++)f.addClip(i);
+  for(let ordinal=0;ordinal<12;ordinal++)f.addPhoto(ordinal);
+  for(let i=0;i<6;i++)f.addClip(i);
   const fixturesPath=join(f.repo,'public/data/fixtures.json');
   const fixtures=JSON.parse(await readFile(fixturesPath));
   fixtures.matches.push({...fixtures.matches[0],id:'fd-9',webId:null});
@@ -519,12 +520,12 @@ test('provider-only match identifiers are omitted without failing the rest of th
 
 
 test('current provider saturation persists in report and summary without an execution failure',async t=>{
-  const f=await fixture(t);for(let i=0;i<4;i++)f.addPhoto(i);
+  const f=await fixture(t);for(let i=0;i<12;i++)f.addPhoto(i);
   let runId,called=false;
   const result=await f.run({
     transactImpl:async(op,input)=>{
       if(op==='heartbeat')runId=input.runId;
-      if(op==='attempts')return {attempts:called?[1,2,3,4].map(publicationIndex=>({kind:'video',ordinal:publicationIndex-1,publicationIndex,state:'abandoned',diagnostics:{events:[{runId,method:'POST',stage:'create',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full'}]}})):[]};
+      if(op==='attempts')return {attempts:called?[1,2,3,4,5,6].map(publicationIndex=>({kind:'video',ordinal:publicationIndex-1,publicationIndex,state:'abandoned',diagnostics:{events:[{runId,method:'POST',stage:'create',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full'}]}})):[]};
       return f.transactImpl(op,input);
     },
     execImpl:async(binary,args,options)=>{
@@ -537,7 +538,7 @@ test('current provider saturation persists in report and summary without an exec
   assert.equal(publication.allow_commit,false);
   const summary=spawnSync(process.execPath,[resolve('actions/3-media-creation/media-run-summary.mjs')],{cwd:f.repo,encoding:'utf8'});
   assert.equal(summary.status,0);assert.match(summary.stdout,/finalizado con recursos pendientes por condiciones temporales/);
-  assert.match(summary.stdout,/503.*video_queue_full/);assert.match(summary.stdout,/0\/4 clips listos/);
+  assert.match(summary.stdout,/503.*video_queue_full/);assert.match(summary.stdout,/0\/6 clips listos/);
 });
 
 test('manual media generation never runs terminal maintenance or deletes another bank', async t => {
@@ -551,12 +552,12 @@ test('manual media generation never runs terminal maintenance or deletes another
 
 test('generation needs no video prompt document and preserves proven historical clips', async t => {
   const f = await fixture(t);
-  for (let ordinal=0; ordinal<4; ordinal++) f.addPhoto(ordinal);
-  for(let i=0;i<4;i++) f.addClip(i);
+  for (let ordinal=0; ordinal<12; ordinal++) f.addPhoto(ordinal);
+  for(let i=0;i<6;i++) f.addClip(i);
   await rm(join(f.repo, 'public/data/video-prompts'), { recursive: true });
   const result = await f.run();
   assert.equal(result.completed, 1);
-  assert.equal(result.reused, 8);
+  assert.equal(result.reused, 18);
   assert.equal(f.provider.length, 0);
 });
 
@@ -570,24 +571,24 @@ test('new video input passes images and no generated prompts to the production a
   }});
   assert.equal(result.completed, 1);
   assert.equal(input.prompts, undefined);
-  assert.equal(input.images.length, 4);
+  assert.equal(input.images.length, 12);
 });
 
-test('freedom adds only the missing fourth clip and preserves all verified R2 objects', async t => {
+test('freedom adds only the missing sixth clip and preserves all verified R2 objects', async t => {
   const matchId = 'levante-ud-vs-atletico-madrid-2026-10-31';
   const f = await fixture(t, { AGNES_SKIP_IMAGES: '1' }, matchId);
   for (let i=0; i<4; i++) f.addPhoto(i);
-  for(let i=0;i<3;i++) f.addClip(i);
+  for(let i=0;i<5;i++) f.addClip(i);
   const original = new Map([...f.objects].map(([key, object]) => [key, object.meta.sha256]));
   const result = await f.run();
   assert.equal(result.completed, 1);
   assert.equal(result.generated, 1);
-  assert.equal(result.results[0].clips, 4);
+  assert.equal(result.results[0].clips, 6);
   assert.equal(f.provider.length, 1);
   assert.ok(f.provider[0].endsWith('agnes_video.py'));
-  assert.equal(result.results[0].resources.length, 8);
+  assert.equal(result.results[0].resources.length, 18);
   for (const [key, checksum] of original) assert.equal(f.objects.get(key).meta.sha256, checksum);
-  assert.deepEqual(f.calls.filter(c => c.cmd === 'put').map(c => c.values[1]), ['partidos/'+matchId+'/clip-4.mp4']);
+  assert.deepEqual(f.calls.filter(c => c.cmd === 'put').map(c => c.values[1]), ['partidos/'+matchId+'/clip-6.mp4']);
   assert.equal((await f.run()).generated, 0);
   assert.equal(f.provider.length, 1);
 });

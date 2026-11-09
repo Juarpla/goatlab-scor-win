@@ -23,7 +23,7 @@ for(const row of report.results??[]) {
 for(const row of report.results??[]) {
   summary+=`\n### ${safe(row.matchId)}\n\n#### Recursos\n\n| Recurso | Disponibilidad | Objeto R2 | Verificación / motivo |\n| --- | --- | --- | --- |\n`;
   const resources=row.resources??[
-    ...Array.from({length:4},(_,index)=>({kind:'image',number:index+1,status:'sin detalle individual',reason:'detalle original no conservado'})),
+    ...Array.from({length:12},(_,index)=>({kind:'image',number:index+1,status:'sin detalle individual',reason:'detalle original no conservado'})),
     ...Array.from({length:mediaPolicy(row.matchId).clips},(_,index)=>({kind:'video',number:index+1,status:'sin detalle individual',reason:'detalle original no conservado'})),
   ];
   for(const resource of resources) summary+=`| ${resource.kind==='image'?'Imagen':'Clip'} ${resource.number} | ${safe(resource.status)} | ${safe(resource.objectKey??'—')} | ${safe(resource.reason)} |\n`;

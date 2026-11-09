@@ -33,7 +33,7 @@ function inputEvidence(bank, images, imageModel, videoModel, mode, matchId) {
   for (const clip of bank.clips) {
     const prefix = `${matchId}-clip-`;
     const suffix = clip.id.startsWith(prefix) ? clip.id.slice(prefix.length) : '';
-    if (!/^[0-4]$/.test(suffix)) return false;
+    if (!/^[0-6]$/.test(suffix)) return false;
     const ordinal = Number(suffix), file = `clip-${ordinal}.mp4`;
     if ((clip.file !== undefined && clip.file !== file) || new URL(clip.url).pathname.split('/').at(-1) !== file
       || !/^[a-f0-9]{64}$/.test(clip.promptHash) || clip.model !== videoModel) return false;
