@@ -1,40 +1,6 @@
 {
-  "updatedAt": "2026-11-09T22:29:18.075Z",
+  "updatedAt": "2026-11-09T23:50:57.224Z",
   "runs": [
-    {
-      "at": "2026-10-31T22:44:29.735Z",
-      "task": "shorts",
-      "matchId": "elche-vs-valencia-2026-11-01",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 9: proyección fuera de rango",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6288,
-            "outputTokens": 27444
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 200958
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 403274
-      },
-      "usage": {
-        "inputTokens": 6129,
-        "outputTokens": 34598
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "9654670c-1169-4b08-84cf-270c1d16fb32"
-    },
     {
       "at": "2026-10-31T22:47:40.892Z",
       "task": "image-prompts",
@@ -7686,6 +7652,62 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-09T23:50:57.224Z",
+      "task": "image-prompts",
+      "matchId": "czechia-vs-spain-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 148
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 121
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "image-prompts 1: texto incompleto o formato ausente; image-prompts 1: falta realismo y carácter referencial; image-prompts 2: texto incompleto o formato ausente; image-prompts 2: falta realismo y carácter referencial; image-prompts 3: texto incompleto o formato ausente; image-prompts 3: falta realismo y carácter referencial; image-prompts 4: texto incompleto o formato ausente; image-prompts 4: falta realismo y carácter referencial",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2747,
+            "outputTokens": 2172
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 17889
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "image-prompts 1: texto incompleto o formato ausente; image-prompts 1: falta realismo y carácter referencial; image-prompts 2: texto incompleto o formato ausente; image-prompts 2: falta realismo y carácter referencial; image-prompts 3: texto incompleto o formato ausente; image-prompts 3: falta realismo y carácter referencial; image-prompts 4: texto incompleto o formato ausente; image-prompts 4: falta realismo y carácter referencial",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2549,
+            "outputTokens": 4316
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 89034
+        }
+      ],
+      "usage": null
     }
   ]
 }
