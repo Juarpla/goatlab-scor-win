@@ -2,7 +2,7 @@ import { randomUUID, createHash } from 'node:crypto';
 import { mediaPolicy, MAX_CLIPS_PER_MATCH } from './media-policy.js';
 import { safeMediaMessage } from './media-diagnostics.js';
 
-export const AGNES_STATE_MAX_BYTES = 900_000;
+export const AGNES_STATE_MAX_BYTES = 2_000_000;
 const dayAt = now => new Date(now).toISOString().slice(0, 10);
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const finite = value => typeof value === 'number' && Number.isFinite(value) && value >= 0;
@@ -114,6 +114,14 @@ export function compactAgnesState(state, {nowMs}) {
   }
   for(const [attemptId,attempt] of Object.entries(state.attempts))if(attempt.identity?.expiresAtMs<nowMs-7*86_400_000 && state.slots[attempt.slotKey]?.attemptId!==attemptId){delete state.attempts[attemptId];changed=true;}
   for(const [key,resource] of Object.entries(state.resources??{}))if(state.matches[resource.matchId]?.closed && state.matches[resource.matchId].expiresAtMs<nowMs-7*86_400_000){delete state.resources[key];changed=true;}
+  for(const attempt of Object.values(state.attempts)) {
+    if(!attempt.diagnostics?.events.length) continue;
+    const events=attempt.diagnostics.events.filter(event=>event.at>=nowMs-48*3_600_000);
+    if(events.length===attempt.diagnostics.events.length) continue;
+    if(events.length) attempt.diagnostics.events=events;
+    else delete attempt.diagnostics;
+    changed=true;
+  }
   return changed;
 }
 

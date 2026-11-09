@@ -191,8 +191,10 @@ counted across all matches in the private state. The producer starts the window
 before polling and retrieves the tasks in publication order; an existing pending
 task counts toward the window. The window does not change the 12.1-second
 creation pace or the per-resource POST limit. Repeated responses appear in logs
-and are compacted into state. Archived diagnostics are kept during the current
-seven-day window and remain subject to the 900 KB limit. Temporary files are
+and are compacted into state. Diagnostic events older than 48 hours are shed
+during compaction, the same window as failureEvents and summaries; attempt and
+slot identities still follow the seven-day window. All of it remains subject to
+the 2 MB limit. Temporary files are
 deleted after confirmed publication and at job completion.
 
 The run report distinguishes `complete`, `deferred` and `error`. A 503/429 from

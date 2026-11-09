@@ -160,6 +160,16 @@ test('compaction retains consumed slot and attempt tombstones without reopening 
   assert.equal(reduceAgnesState(state,'reserve',reserve({expiresAtMs:now+20*86_400_000,guard:{manual:true,kickoffMs:now+19*86_400_000}}),{nowMs:now+9*86_400_000}).result.canPost,false);
   assert.equal(reduceAgnesState(state,'reserve',input,{nowMs:now+9*86_400_000}).result.canPost,false);
 });
+test('compaction sheds diagnostic events older than 48 hours and keeps recent evidence',()=>{
+  const input=reserve();let {state}=reduceAgnesState(fresh(),'reserve',input,{nowMs:now});
+  const base={runUrl:'',stage:'create',method:'POST',httpStatus:503,providerCode:'video_queue_full',message:'video queue is full',providerStatus:'',progress:null,requestId:'req'};
+  state=reduceAgnesState(state,'diagnostic',{attemptId:input.attemptId,record:{...base,id:'stale-event',at:now-3*86_400_000,runId:'stale-run'}},{nowMs:now}).state;
+  state=reduceAgnesState(state,'diagnostic',{attemptId:input.attemptId,record:{...base,id:'fresh-event',at:now-3_600_000,runId:'fresh-run'}},{nowMs:now}).state;
+  assert.equal(state.attempts[input.attemptId].diagnostics.events.length,2);
+  state=reduceAgnesState(state,'compact',{},{nowMs:now}).state;
+  assert.deepEqual(state.attempts[input.attemptId].diagnostics.events.map(event=>event.id),['fresh-event']);
+  validateAgnesState(state);
+});
 test('uncertain image holds the shared flight until a known terminal response',()=>{
   let {state,result}=reduceAgnesState(fresh(),'reserve',reserve(),{nowMs:now});
   assert.equal(reduceAgnesState(state,'reserve',reserve({matchId:'other-match'}),{nowMs:now}).result.canPost,false);

@@ -1,8 +1,14 @@
 name: "zz-agnes-state-size"
-# Temporary, read-only diagnostic: prints the shared Agnes state size against
-# AGNES_STATE_MAX_BYTES. It never generates media and never writes to R2.
+# Temporary diagnostic: prints the shared Agnes state size against
+# AGNES_STATE_MAX_BYTES. It never generates media. The optional compact step
+# writes only through the conditional CAS transaction of scripts/agnes-state.mjs.
 on:
   workflow_dispatch:
+    inputs:
+      compact:
+        description: 'Also run compaction (sheds >48h diagnostic events, CAS write)'
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -15,6 +21,20 @@ jobs:
         with:
           node-version: '22'
       - name: State size report
+        run: node scripts/agnes-state-size.mjs
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      - name: Compact state
+        if: inputs.compact
+        run: node scripts/agnes-state.mjs compact </dev/null
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      - name: State size report after compaction
+        if: inputs.compact
         run: node scripts/agnes-state-size.mjs
         env:
           R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
