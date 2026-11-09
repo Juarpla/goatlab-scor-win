@@ -1,162 +1,6 @@
 {
-  "updatedAt": "2026-11-09T16:44:22.479Z",
+  "updatedAt": "2026-11-09T22:29:18.075Z",
   "runs": [
-    {
-      "at": "2026-10-31T22:08:50.039Z",
-      "matchId": "fd-564733",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1397,
-        "outputTokens": 1288
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "84b05629-da8f-4756-a896-f69a123946ff"
-    },
-    {
-      "at": "2026-10-31T22:21:24.200Z",
-      "task": "shorts",
-      "matchId": "barcelona-vs-aston-villa-2026-11-03",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: falta Aston Villa FC",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6038,
-            "outputTokens": 19939
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 160980
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 2: cifra 20 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 5852,
-            "outputTokens": 34665
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 430647
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: la proyección debe ser una frase completa de la narración, una sola vez; guion 1: cifra 20 no está en los hechos; guion 1: guion de 113 palabras supera el techo de 50s (~110); guion 1: falta la CTA a goatlab.win en la narración; guion 2: falta la CTA a goatlab.win en la narración; guion 3: falta la CTA a goatlab.win en la narración; guion 4: falta FC Barcelona; guion 4: la proyección debe ser una frase completa de la narración, una sola vez",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6252,
-            "outputTokens": 1675
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13040
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: la proyección debe ser una frase completa de la narración, una sola vez; guion 1: 48 palabras, mínimo 55; guion 1: falta la CTA a goatlab.win en la narración; guion 2: 47 palabras, mínimo 55; guion 2: falta la CTA a goatlab.win en la narración; guion 3: la proyección debe ser una frase completa de la narración, una sola vez; guion 3: 49 palabras, mínimo 55; guion 3: falta la CTA a goatlab.win en la narración",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 5845,
-            "outputTokens": 4861
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 90793
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 5845,
-        "outputTokens": 4861
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-10-31T22:34:25.501Z",
-      "task": "shorts",
-      "matchId": "getafe-vs-sevilla-2026-11-01",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: artículo delante de Getafe CF",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6401,
-            "outputTokens": 29823
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 224161
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "hacen falta 10 guiones; falta la entrada de la descripción",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6234,
-            "outputTokens": 34771
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 439577
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: la proyección debe ser una frase completa de la narración, una sola vez; guion 1: guion de 119 palabras supera el techo de 50s (~110); guion 1: falta la CTA a goatlab.win en la narración; guion 2: la proyección debe ser una frase completa de la narración, una sola vez; guion 2: falta la CTA a goatlab.win en la narración; guion 3: la proyección debe ser una frase completa de la narración, una sola vez; guion 3: guion de 111 palabras supera el techo de 50s (~110); guion 3: falta la CTA a goatlab.win en la narración",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6754,
-            "outputTokens": 1899
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13036
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: la proyección debe ser una frase completa de la narración, una sola vez; guion 2: la proyección debe ser una frase completa de la narración, una sola vez; guion 3: la proyección debe ser una frase completa de la narración, una sola vez; guion 4: la proyección debe ser una frase completa de la narración, una sola vez; guion 5: la proyección debe ser una frase completa de la narración, una sola vez; guion 5: cifra 4.6 no está en los hechos; guion 5: 5 cifras, máximo 3; guion 6: falta Getafe CF",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6227,
-            "outputTokens": 5318
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 104524
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6227,
-        "outputTokens": 5318
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-10-31T22:44:29.735Z",
       "task": "shorts",
@@ -7656,6 +7500,192 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "d91a36f7-bf91-4fd8-959e-38170d9d2630"
+    },
+    {
+      "at": "2026-11-09T22:24:28.554Z",
+      "matchId": "bz-212688",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 269
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 152
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1028,
+            "outputTokens": 1333
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 20330
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 979,
+            "outputTokens": 6858
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 137623
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 979,
+        "outputTokens": 6858
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-09T22:26:01.587Z",
+      "matchId": "bz-212690",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 165
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 147
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1084,
+            "outputTokens": 2037
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 25081
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1030,
+            "outputTokens": 4385
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 60504
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1030,
+        "outputTokens": 4385
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-09T22:29:12.094Z",
+      "matchId": "bz-212689",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 150
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 197
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1081,
+            "outputTokens": 1352
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 18654
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1021,
+            "outputTokens": 6274
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 165409
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1021,
+        "outputTokens": 6274
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
