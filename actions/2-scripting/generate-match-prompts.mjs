@@ -9,6 +9,19 @@ import { editingFacts } from '../../src/lib/match-facts.js';
 import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../../src/lib/top.js';
 import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
 
+/** Image prompts must carry fixed boilerplate the pack contract greps for; small
+ *  models drop the phrases on early entries, so complete them mechanically. */
+export function mendImagePromptBoilerplate(prompt, { home, away } = {}) {
+  let text = String(prompt ?? '');
+  if (!/\b9\s*:\s*16\b/.test(text)) text += ' Vertical 9:16.';
+  if (!/photoreal|hyperreal/i.test(text)) text = 'Referential photorealistic illustration. ' + text;
+  else if (!/referential|reference illustration/i.test(text)) text = 'Referential illustration. ' + text;
+  if (!/illustration/i.test(text)) text = 'Illustrative art direction. ' + text;
+  const missingSides = [home, away].filter(side => side && !text.includes(side));
+  if (missingSides.length) text += ` Both representative squads of ${missingSides.join(' and ')} take part in this illustration.`;
+  return text;
+}
+
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const i = a.indexOf('='); return i < 0 ? [a, true] : [a.slice(0, i), a.slice(i + 1)]; }));
 const category = args['--category'];
 const spec = CONTENT_CATEGORIES[category];
@@ -95,6 +108,7 @@ for (const match of matches) {
       orderVar: 'SCRIPT_PROVIDER_ORDER', ...CONTENT_LLM_LIMITS,
       validate: text => {
         const draft = extractJson(text);
+        if (category === 'image-prompts') for (const row of draft.prompts ?? []) row.prompt = mendImagePromptBoilerplate(row.prompt, { home, away });
         const errors = promptErrors(draft, { category, home, away, facts, published });
         if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
         return draft;
