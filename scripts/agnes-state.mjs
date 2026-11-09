@@ -13,7 +13,7 @@ export class AgnesStateClient {
     const c=this.config;
     if (!c.account || !c.access || !c.secret || c.bucket!=='app-states' || c.key!=='goatlab/agnes-state.json') throw new Error('configuración privada R2 de Agnes incompleta o inválida');
     const bytes=body===undefined?Buffer.alloc(0):Buffer.from(JSON.stringify(body));
-    if (bytes.length>AGNES_STATE_MAX_BYTES) throw new Error('autoridad Agnes supera presupuesto');
+    if (bytes.length>AGNES_STATE_MAX_BYTES) throw new Error('el estado compartido en R2 supera el límite de tamaño');
     const headers={...(method==='PUT'?{'content-type':'application/json','cache-control':'no-store'}:{'accept-encoding':'identity'}),...condition};
     const signed=signR2({...c,method,body:bytes,headers});
     if (method==='GET') this.operations.opsB++; else if (method==='PUT') this.operations.opsA++;
@@ -24,11 +24,11 @@ export class AgnesStateClient {
     if (!response.ok) throw new Error(`autoridad Agnes GET HTTP ${response.status}`);
     const etag=response.headers.get('etag'),serverNowMs=Date.parse(response.headers.get('date'));
     if (!etag || !Number.isFinite(serverNowMs)) throw new Error('autoridad Agnes sin ETag o reloj fiable');
-    if (Number(response.headers.get('content-length')||0)>AGNES_STATE_MAX_BYTES) throw new Error('autoridad Agnes supera presupuesto');
+    if (Number(response.headers.get('content-length')||0)>AGNES_STATE_MAX_BYTES) throw new Error('el estado compartido en R2 supera el límite de tamaño');
     const reader=response.body?.getReader();
     let bytes=0,chunks=[];
     if (reader) {
-      for (;;) {const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;if(bytes>AGNES_STATE_MAX_BYTES){await reader.cancel();throw new Error('autoridad Agnes supera presupuesto');}chunks.push(value);}
+      for (;;) {const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;if(bytes>AGNES_STATE_MAX_BYTES){await reader.cancel();throw new Error('el estado compartido en R2 supera el límite de tamaño');}chunks.push(value);}
     } else chunks=[Buffer.from(await response.text())];
     let state;try{state=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw new Error('autoridad Agnes JSON corrupto');}
     return {state:validateAgnesState(state),etag,serverNowMs};

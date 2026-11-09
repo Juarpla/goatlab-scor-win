@@ -83,7 +83,7 @@ export function validateAgnesState(state) {
   for(const [runId,row] of Object.entries(state.runs)) if(!uuid(runId) || !keys(row,['matchId','untilMs']) || !finite(row.untilMs) || (row.matchId!==null && !id(row.matchId))) throw new Error('corrida Agnes corrupta');
   for(const [runId,row] of Object.entries(state.summaries)) if(!uuid(runId) || !keys(row,['runId','at','eligible','pending','generated','reused','completed']) || row.runId!==runId || !finite(row.at) || ['eligible','pending','generated','reused','completed'].some(k=>!Number.isSafeInteger(row[k]) || row[k]<0)) throw new Error('resumen Agnes corrupto');
   for(const event of state.failureEvents) if(!keys(event,['eventId','at','hourUTC','stage','httpStatus','matchId']) || !digest(event.eventId) || !finite(event.at) || !Number.isInteger(event.hourUTC) || event.hourUTC<0 || event.hourUTC>23 || !['create','retrieve'].includes(event.stage) || !id(event.matchId) || (event.httpStatus!==null && (!Number.isInteger(event.httpStatus) || event.httpStatus<100 || event.httpStatus>599))) throw new Error('evento Agnes corrupto');
-  if (Buffer.byteLength(JSON.stringify(state)) > AGNES_STATE_MAX_BYTES) throw new Error('autoridad Agnes supera presupuesto');
+  if (Buffer.byteLength(JSON.stringify(state)) > AGNES_STATE_MAX_BYTES) throw new Error('el estado compartido en R2 supera el límite de tamaño');
   return state;
 }
 
