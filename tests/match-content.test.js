@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentUrl } from '../src/lib/match-content.js';
+import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentUrl, mendImagePromptBoilerplate } from '../src/lib/match-content.js';
 import { resolveChain } from '../src/lib/llm.js';
 import { compositionProps } from '../video-render/contract/edit-plan.js';
 
@@ -35,6 +35,14 @@ test('supporters scene requires crowd identity words',()=>{
   data.prompts[4].prompt=data.prompts[4].prompt.replace(/football teams interacting/g,'players in play');
   assert.ok(promptErrors(data).every(e=>!e.includes('escena incorrecta')));
   assert.ok(promptErrors(data).some(e=>e.includes('hinchada')));
+});
+
+test('mechanical appendix restores pack-critical words on degenerate drafts',()=>{
+  const kinds=CONTENT_CATEGORIES['image-prompts'].kinds;
+  const rows=kinds.map((kind,i)=>({n:i+1,kind,title:kind,prompt:mendImagePromptBoilerplate(`Row ${i} scene description of the match.`,{home:'España',away:'Chequia',kind})}));
+  assert.deepEqual(promptErrors({prompts:rows},{category:'image-prompts',home:'España',away:'Chequia'}),[]);
+  const restored=mendImagePromptBoilerplate('A wide shot with no ratio marker.',{home:'Alpha',away:'Beta',kind:'stadium'});
+  assert.ok(restored.includes('vertical 9:16')&&restored.includes('Alpha')&&restored.includes('flags')&&restored.includes('crest'));
 });
 test('clip adapter preserves verified ranges and accepts legacy plan version 3', () => {
   const input={frames:270,photos:[],clips:[{src:'clip.mp4',width:720,height:1280,duration:6}],words:[{word:'Datos',start:0,end:1}],plan:{version:3,scenes:[{start:0,end:6,layers:[],clips:[{clip:0,offset:1,duration:4}]}]}};

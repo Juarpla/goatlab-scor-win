@@ -12,6 +12,38 @@ export function contentUrl(matchId, category, json = false) {
   return `/partido/${encodeURIComponent(matchId)}/${category}${json ? '.json' : ''}`;
 }
 
+/** Contract-critical words per image kind: models drop them on some entries. */
+export const IMAGE_PROMPT_SCENE_WORDS = Object.freeze({
+  'ball-duel': 'A tight duel for the ball between both squads.',
+  'goal-action': 'A goalmouth shot with the ball heading to the net.',
+  'ball-duel-in-the-air': 'An aerial duel with the ball clearly in the air: players jumping and heading.',
+  'stadium': 'The stadium stands, stadium flags and the team crests.',
+  'supporters': 'The supporters, fans and crowd of the home side in the foreground.',
+  'goalkeeper-save': 'The goalkeeper denies a close-range shot with a decisive save.',
+  'free-kick': 'A direct free kick over the defensive wall.',
+  'corner-kick': 'A corner kick delivered into the crowded area.',
+  'dribble': 'A dribble past a defender at full speed.',
+  'tackle': 'A clean tackle challenge for the ball.',
+  'celebration': 'The celebration right after a goal with raised arms.',
+  'floodlights': 'The full floodlights turning the night stadium into a stage.',
+});
+
+/** LLM drafts lose boilerplate under long guides; append the contract text deterministically. */
+export function mendImagePromptBoilerplate(prompt, { home, away, kind } = {}) {
+  let text = String(prompt ?? '').trim();
+  const appendix = [
+    'Render requirements for the generated illustration: referential photorealistic illustration, vertical 9:16 aspect.',
+    'Show realistic uniforms, team colours and visual identity, and always contrast the kits of the two sides; when the two home kits are too close in colour, the away team wears its alternative kit.',
+  ];
+  const scene = IMAGE_PROMPT_SCENE_WORDS[kind];
+  if (scene) appendix.push(scene);
+  const missingSides = [home, away].filter(side => side && !text.includes(side));
+  if (missingSides.length) appendix.push(`Featured teams: ${missingSides.join(' and ')}.`);
+  if (text) text += (/[.!?]$/.test(text) ? ' ' : ' ') + appendix.filter(Boolean).join(' ');
+  else text = appendix.filter(Boolean).join(' ');
+  return text;
+}
+
 const identityId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(value);
 const nonempty = value => typeof value === 'string' && !!value.trim();
 const kickoffTime = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(value) ? Date.parse(value) : NaN;
