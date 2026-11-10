@@ -1,146 +1,6 @@
 {
-  "updatedAt": "2026-11-10T07:22:26.601Z",
+  "updatedAt": "2026-11-10T07:24:53.138Z",
   "runs": [
-    {
-      "at": "2026-11-01T06:38:59.758Z",
-      "matchId": "fd-560631",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1336,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 143085
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1294,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 162901
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1394,
-            "outputTokens": 2153
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 23198
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1287,
-            "outputTokens": 6615
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 96359
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1336,
-        "outputTokens": 14647
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "f0aba320-459d-4771-84b8-9ca6472fd95a"
-    },
-    {
-      "at": "2026-11-01T06:44:21.177Z",
-      "task": "shorts",
-      "matchId": "barcelona-vs-aston-villa-2026-11-03",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 241590
-      },
-      "usage": {
-        "inputTokens": 6038,
-        "outputTokens": 26117
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "8245af1d-ed9a-4b43-9110-e4d1d84600e4"
-    },
-    {
-      "at": "2026-11-01T06:49:01.320Z",
-      "task": "shorts",
-      "matchId": "getafe-vs-sevilla-2026-11-01",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 280136
-      },
-      "usage": {
-        "inputTokens": 6407,
-        "outputTokens": 30153
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "676ca42a-339c-4056-b533-fc1b0831889a"
-    },
-    {
-      "at": "2026-11-01T06:49:41.510Z",
-      "task": "image-prompts",
-      "matchId": "barcelona-vs-aston-villa-2026-11-03",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "image-prompts 2: falta realismo y carácter referencial",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1669,
-            "outputTokens": 2507
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 27096
-        }
-      ],
-      "usage": {
-        "inputTokens": 1607,
-        "outputTokens": 1004
-      }
-    },
     {
       "at": "2026-11-01T13:16:37.366Z",
       "matchId": "fd-564733",
@@ -7814,6 +7674,150 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-10T07:23:42.525Z",
+      "task": "image-prompts",
+      "matchId": "england-vs-croatia-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 214
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 126
+        }
+      ],
+      "usage": {
+        "inputTokens": 2704,
+        "outputTokens": 2127
+      }
+    },
+    {
+      "at": "2026-11-10T07:24:12.441Z",
+      "task": "image-prompts",
+      "matchId": "italy-vs-france-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 147
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 124
+        }
+      ],
+      "usage": {
+        "inputTokens": 2727,
+        "outputTokens": 2421
+      }
+    },
+    {
+      "at": "2026-11-10T07:24:32.369Z",
+      "task": "image-prompts",
+      "matchId": "portugal-vs-denmark-2026-11-14",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 143
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 124
+        }
+      ],
+      "usage": {
+        "inputTokens": 2804,
+        "outputTokens": 2018
+      }
+    },
+    {
+      "at": "2026-11-10T07:24:53.138Z",
+      "task": "image-prompts",
+      "matchId": "serbia-vs-germany-2026-11-13",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 145
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 130
+        }
+      ],
+      "usage": {
+        "inputTokens": 2596,
+        "outputTokens": 2141
+      }
     }
   ]
 }
