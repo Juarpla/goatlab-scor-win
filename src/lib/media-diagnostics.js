@@ -42,8 +42,10 @@ export function mediaRunOutcome(report) {
     const mode=row.mode??report.mode;
     // Known omissions are explained below using resource evidence. Unexpected failures stay fatal.
     for(const message of row.failures??[]) {
+      // Verified-complete rows cannot hide an unresolved resource: leftover provider pacing and
+      // recovery notes from the same run are provenance, not failures.
+      if(requestedMediaComplete({...row,mode}))continue;
       if(message==='Motion Prompts no disponibles; montaje local disponible')continue;
-      if(message==='R2: subidas y generación pausadas; reutilización disponible'&&requestedMediaComplete({...row,mode}))continue;
       if(mode==='clips-only'&&message==='Image Prompts no disponibles'||mode==='images-only'&&message==='Video Prompts no disponibles')continue;
       const infrastructure=/R2:|Estado (?:privado|de generación|de recursos)|Historial .*no disponible|falta AGNES_API_KEY|(?:Image|Video) Prompts no disponibles|identidad.*(?:incompleta|ambigua)|Kickoff inválido|Huella de contenido inválida|otra identidad|Resultado incompatible|Imagen inválida/i.test(message);
       const explained=/Solicitud aplazada por el control de ritmo|Agnes está pausado por ritmo de llamadas|(?:clip|intento de vídeo) \d+: pendiente; POST en esta corrida|HTTP \d{3}|"httpStatus"\s*:\s*\d{3}|Recursos incompletos|tarea pendiente|otra tarea pendiente o incierta|presupuesto de preparación agotado|presupuesto de corrida agotado|franja del partido agotada|plazo de generación agotado|ventana de recuperación|^(?:clip|intento de vídeo) \d+: etapa=/i.test(message);

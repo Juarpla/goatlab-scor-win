@@ -78,3 +78,18 @@ test('omission texts alone cannot excuse an unknown missing resource',()=>{
   report.results[0].failures=['Clip 1: pendiente; POST en esta corrida 0/3; reintentar en otra corrida'];
   assert.equal(mediaRunOutcome(report).exitCode,2);
 });
+
+test('a verified-complete bank turns residual provider diagnostics informational',()=>{
+  const report=fixture();report.pending=0;
+  const row=report.results[0];
+  for(const resource of row.resources)resource.verified=true;
+  row.images=12;row.clips=6;
+  row.failures=['posición de clip ocupada; recuperar recurso existente',
+    'intento de vídeo 4: etapa=admission modelo=agnes-video-2.5-flash HTTP=sin respuesta requestId=no disponible intento=detalle original no conservado registrado=1794320017.4235942; posición de clip ocupada; recuperar recurso existente; siguiente: sin nueva solicitud; reutilizar evidencia o esperar ritmo/cuota',
+    'intento de vídeo 5: etapa=retrieve-response modelo=agnes-video-2.5-flash HTTP=200 requestId=x intento=31f61218; {"httpStatus": 200, "status": "pending", "progress": 0}'];
+  const outcome=mediaRunOutcome(report);
+  assert.equal(outcome.exitCode,0);assert.equal(outcome.status,'complete');
+  assert.deepEqual(outcome.errors,[]);assert.deepEqual(outcome.deferred,[]);
+  const partial=structuredClone(report);partial.pending=1;partial.results[0].resources.at(-1).verified=false;partial.results[0].attempts=[];
+  assert.equal(mediaRunOutcome(partial).exitCode,2);
+});
