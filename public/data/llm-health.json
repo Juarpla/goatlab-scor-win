@@ -1,68 +1,6 @@
 {
-  "updatedAt": "2026-11-09T23:50:57.224Z",
+  "updatedAt": "2026-11-10T00:01:38.728Z",
   "runs": [
-    {
-      "at": "2026-10-31T22:47:40.892Z",
-      "task": "image-prompts",
-      "matchId": "barcelona-vs-aston-villa-2026-11-03",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": null,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "image-prompts 2: falta identidad de los equipos; image-prompts 3: falta identidad de los equipos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1669,
-            "outputTokens": 3956
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 38772
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "image-prompts 2: falta identidad de los equipos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1607,
-            "outputTokens": 6763
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 76381
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "image-prompts 1: texto incompleto o formato ausente; image-prompts 1: falta realismo y carácter referencial; image-prompts 2: texto incompleto o formato ausente; image-prompts 2: falta realismo y carácter referencial; image-prompts 3: texto incompleto o formato ausente; image-prompts 3: falta realismo y carácter referencial; image-prompts 3: falta identidad de los equipos; image-prompts 4: texto incompleto o formato ausente",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1743,
-            "outputTokens": 829
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8856
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "image-prompts 1: texto incompleto o formato ausente; image-prompts 1: falta realismo y carácter referencial; image-prompts 2: texto incompleto o formato ausente; image-prompts 2: falta realismo y carácter referencial; image-prompts 3: texto incompleto o formato ausente; image-prompts 3: falta realismo y carácter referencial; image-prompts 4: texto incompleto o formato ausente; image-prompts 4: falta realismo y carácter referencial",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1600,
-            "outputTokens": 3023
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 67071
-        }
-      ],
-      "usage": null
-    },
     {
       "at": "2026-10-31T22:48:11.721Z",
       "task": "image-prompts",
@@ -7705,6 +7643,62 @@
           },
           "retryAfterMs": 0,
           "latencyMs": 89034
+        }
+      ],
+      "usage": null
+    },
+    {
+      "at": "2026-11-10T00:01:38.728Z",
+      "task": "image-prompts",
+      "matchId": "czechia-vs-spain-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": null,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 205
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 152
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "image-prompts 4: falta presentación, banderas o escudos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2747,
+            "outputTokens": 2377
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 19395
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "image-prompts 3: falta identidad de los equipos; image-prompts 4: falta identidad de los equipos; image-prompts 4: falta presentación, banderas o escudos; image-prompts 6: falta atajada del portero; image-prompts 8: falta identidad de los equipos; image-prompts 10: falta identidad de los equipos; image-prompts 11: falta identidad de los equipos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2549,
+            "outputTokens": 7539
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 151155
         }
       ],
       "usage": null
