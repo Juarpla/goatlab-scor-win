@@ -1,57 +1,6 @@
 {
-  "updatedAt": "2026-11-10T00:04:22.101Z",
+  "updatedAt": "2026-11-10T07:22:26.601Z",
   "runs": [
-    {
-      "at": "2026-10-31T22:48:35.359Z",
-      "task": "image-prompts",
-      "matchId": "elche-vs-valencia-2026-11-01",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1795,
-        "outputTokens": 2687
-      }
-    },
-    {
-      "at": "2026-11-01T06:27:07.321Z",
-      "matchId": "fd-564733",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1399,
-        "outputTokens": 1293
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "4c54ad98-297e-4a8d-8513-6365b68d8fab"
-    },
-    {
-      "at": "2026-11-01T06:28:57.089Z",
-      "matchId": "fd-564734",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1337,
-        "outputTokens": 11453
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b4c51028-879e-4692-ae81-cbd348168f28"
-    },
     {
       "at": "2026-11-01T06:38:59.758Z",
       "matchId": "fd-560631",
@@ -7723,6 +7672,148 @@
         "inputTokens": 2747,
         "outputTokens": 1994
       }
+    },
+    {
+      "at": "2026-11-10T07:20:31.168Z",
+      "matchId": "bz-212688",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 121
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 110
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1028,
+            "outputTokens": 1762
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14497
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 979,
+            "outputTokens": 4220
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 123716
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 979,
+        "outputTokens": 4220
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-10T07:20:48.960Z",
+      "matchId": "bz-212690",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "usage": {
+        "inputTokens": 1084,
+        "outputTokens": 1247
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "540f2479-c1b2-403e-8c24-d0b8fce33d10"
+    },
+    {
+      "at": "2026-11-10T07:22:20.991Z",
+      "matchId": "bz-212689",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 110
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 106
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1081,
+            "outputTokens": 1105
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10222
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1021,
+            "outputTokens": 4726
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 76087
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1021,
+        "outputTokens": 4726
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
