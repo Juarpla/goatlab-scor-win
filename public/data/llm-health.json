@@ -1,21 +1,6 @@
 {
-  "updatedAt": "2026-11-10T00:01:38.728Z",
+  "updatedAt": "2026-11-10T00:04:22.101Z",
   "runs": [
-    {
-      "at": "2026-10-31T22:48:11.721Z",
-      "task": "image-prompts",
-      "matchId": "getafe-vs-sevilla-2026-11-01",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1886,
-        "outputTokens": 4095
-      }
-    },
     {
       "at": "2026-10-31T22:48:35.359Z",
       "task": "image-prompts",
@@ -7702,6 +7687,42 @@
         }
       ],
       "usage": null
+    },
+    {
+      "at": "2026-11-10T00:04:22.101Z",
+      "task": "image-prompts",
+      "matchId": "czechia-vs-spain-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 251
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 157
+        }
+      ],
+      "usage": {
+        "inputTokens": 2747,
+        "outputTokens": 1994
+      }
     }
   ]
 }
