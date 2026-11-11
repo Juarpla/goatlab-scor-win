@@ -1,10 +1,14 @@
 ---
 import MatchContentPage from '../../../components/MatchContentPage.astro';
-import { contentMatches } from '../../../lib/content-store.js';
+import { contentMatches, publishedAnalysisIds } from '../../../lib/content-store.js';
 import { CONTENT_CATEGORIES } from '../../../lib/match-content.js';
 export function getStaticPaths() {
-  return contentMatches().flatMap(match => Object.keys(CONTENT_CATEGORIES).map(category => ({ params: { id: match.matchId, category }, props: { match, category } })));
+  const analysisIds = publishedAnalysisIds();
+  return contentMatches().flatMap(match => Object.keys(CONTENT_CATEGORIES).map(category => ({
+    params: { id: match.matchId, category },
+    props: { match, category, hasAnalysis: analysisIds.has(match.matchId) },
+  })));
 }
-const { match, category } = Astro.props;
+const { match, category, hasAnalysis } = Astro.props;
 ---
-<MatchContentPage match={match} category={category}/>
+<MatchContentPage match={match} category={category} hasAnalysis={hasAnalysis}/>

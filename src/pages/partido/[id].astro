@@ -26,6 +26,7 @@ import { normalizeOneX2, deriveDoubleChance, deriveDnb, pickDecisive } from '../
 import { topScorerSplit, resolveMatchMarkets, withScorerFallback } from '../../lib/probabilities.js';
 import { locateMatch, competitionFallback, fallbackRegionLayout } from '../../lib/venues.js';
 import { teamColors } from '../../lib/team-colors.js';
+import { matchPageIds } from '../../lib/page-policy.js';
 import fixtures from '../../../public/data/fixtures.json';
 import analyses from '../../../public/data/llm-analysis.json';
 import results from '../../../public/data/results.json';
@@ -40,17 +41,13 @@ import '../../styles/partido.css';
 export function getStaticPaths() {
   // Canonical URL: webId (`home-vs-away-date`). The provider id is still
   // emitted so shared links do not break (same content).
-  return fixtures.matches.flatMap(match => {
-    const web = { params: { id: match.webId ?? match.id }, props: { match } };
-    return match.webId && match.webId !== match.id
-      ? [web, { params: { id: match.id }, props: { match } }]
-      : [web];
-  });
+  return fixtures.matches.flatMap(match => matchPageIds(match).map(id => ({ params: { id }, props: { match } })));
 }
 const {match} = Astro.props;
 const competition = competitions.find(c=>c.id===match.competition)?.name;
 const homeEs = teamEsDisplay(match.home);
 const awayEs = teamEsDisplay(match.away);
+const description = `Análisis de ${homeEs} vs. ${awayEs}${competition ? ` en ${competition}` : ''}. Consulta la forma reciente de ambos equipos y las estadísticas disponibles del encuentro.`;
 const homeForm = teamForm(results.results, match.home);
 const awayForm = teamForm(results.results, match.away);
 /* What they already played: always last 5 per team (baked by the pipeline
@@ -324,7 +321,7 @@ const crumbsFor = side => {
   return crumbs;
 };
 ---
-<Layout title={`${homeEs} vs. ${awayEs} — GoatLab`} canonical={`/partido/${match.webId ?? match.id}/`}>
+<Layout title={`${homeEs} vs. ${awayEs} — GoatLab`} description={description} canonical={`/partido/${match.webId ?? match.id}/`}>
 <main id="main" class="wrap">
  <a class="back-link" href="/#encuentros"><Icon size={16}/> Volver a encuentros</a>
  <div class="match-title"><div><h1>{homeEs}<span>vs.</span>{awayEs}</h1><p>{competition} · Última consulta: <time data-consult data-utc={fixtures.updatedAt}>{consultUtc}</time>{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>

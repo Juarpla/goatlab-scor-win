@@ -15,3 +15,7 @@ export function isAdvertisingPage(url) {
   // Limit inventory to pages with evergreen publisher content.
   return path === '/' || /^\/metodologia\/?$/.test(path);
 }
+
+export function matchPageIds(match) {
+  return match.webId && match.webId !== match.id ? [match.webId, match.id] : [match.id];
+}

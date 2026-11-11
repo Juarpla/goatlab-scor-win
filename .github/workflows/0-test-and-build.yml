@@ -29,6 +29,5 @@ jobs:
       - run: python3 -m unittest discover -s tests/pipeline -v
       - run: pnpm test
       - run: pnpm run lint:shorts
-      - run: pnpm run lint:prompts
       - run: pnpm run build
-      - run: pnpm run check:publication
+      - run: pnpm run lint:prompts

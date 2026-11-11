@@ -1,10 +1,17 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { CONTENT_CATEGORIES, contentUrl, validateContent } from './match-content.js';
 import { esName } from './teams.js';
+import { matchPageIds } from './page-policy.js';
 
 const read = path => { try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return null; } };
+const fixtureMatches = () => read('public/data/fixtures.json')?.matches ?? [];
+
+export function publishedAnalysisIds() {
+  return new Set(fixtureMatches().flatMap(matchPageIds));
+}
+
 export function contentMatches() {
-  const matches = new Map((read('public/data/fixtures.json')?.matches ?? []).map(m => [m.webId ?? m.id, { ...m, matchId: m.webId ?? m.id, home: esName(m.home), away: esName(m.away) }]));
+  const matches = new Map(fixtureMatches().map(m => [m.webId ?? m.id, { ...m, matchId: m.webId ?? m.id, home: esName(m.home), away: esName(m.away) }]));
   const dir = 'public/data/youtube-scripts';
   if (existsSync(dir)) for (const file of readdirSync(dir).filter(f => f.endsWith('.json'))) {
     const data = read(`${dir}/${file}`);

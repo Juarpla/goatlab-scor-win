@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 
 const root = new URL('../', import.meta.url);
 const read = (rel) => readFileSync(new URL(rel, root), 'utf8');
@@ -53,11 +53,11 @@ test('ads.txt se genera en build desde el ID en crudo', () => {
   assert.ok(!script.includes('ca-${'));
 });
 
-test('legal pages exist and use the generic contact', () => {
-  assert.ok(existsSync(new URL('src/pages/cookies.astro', root)));
+test('privacy and contact pages use the official email address', () => {
+  for (const page of ['contacto', 'privacidad', 'cookies']) {
+    assert.ok(read(`src/pages/${page}.astro`).includes('mailto:goatlab.win@gmail.com'));
+  }
   for (const page of ['privacidad', 'cookies']) {
-    const src = read(`src/pages/${page}.astro`);
-    assert.ok(src.includes('contacto@scor.win'));
-    assert.ok(src.includes('AdSense'));
+    assert.ok(read(`src/pages/${page}.astro`).includes('AdSense'));
   }
 });

@@ -3,11 +3,15 @@ import { readFileSync, existsSync } from 'node:fs';
 import Layout from '../layouts/Layout.astro';
 import { CONTENT_CATEGORIES, contentUrl } from '../lib/match-content.js';
 import { matchContent } from '../lib/content-store.js';
+import { readMediaBank } from '../lib/media-bank.js';
 import { attentionPlayers, playersInNarration, shortTitle, youtubeCopy } from '../lib/youtube.js';
 import { narrationText, scriptBeats } from '../lib/script-beats.js';
-const { match, category } = Astro.props;
+const { match, category, hasAnalysis } = Astro.props;
 const data = matchContent(match, category);
 const spec = CONTENT_CATEGORIES[category];
+const availableCategories = Object.entries(CONTENT_CATEGORIES).filter(([key]) => key === category || matchContent(match, key));
+const bank = readMediaBank(match.matchId);
+const hasMedia = bank && (bank.assets.length > 0 || bank.clips.length > 0);
 const named = { home: match.home, away: match.away, knownPlayers: data?.playerNames };
 let description = '';
 let entries = data?.prompts ?? [];
@@ -29,11 +33,13 @@ const introductions = {
 ---
 <Layout title={`${match.home} contra ${match.away}: ${spec.label} | GoatLab`} description={introductions[category]} canonical={`https://goatlab.win${contentUrl(match.matchId, category)}`}>
   <main id="main" class="content-wrap">
-    <a class="back" href={`/partido/${match.matchId}/`}>Volver al análisis del partido</a>
+    {hasAnalysis
+      ? <a class="back" href={`/partido/${encodeURIComponent(match.matchId)}/`}>Volver al análisis del partido</a>
+      : <a class="back" href="/encuentros/">Ver encuentros</a>}
     <h1>{match.home}<br/><span>contra {match.away}</span></h1>
     <nav aria-label="Contenido del encuentro">
-      {Object.entries(CONTENT_CATEGORIES).map(([key, value]) => <a href={contentUrl(match.matchId, key)} aria-current={key === category ? 'page' : undefined}>{value.label}</a>)}
-      <a href={`/partido/${encodeURIComponent(match.matchId)}/media`}>Media</a>
+      {availableCategories.map(([key, value]) => <a href={contentUrl(match.matchId, key)} aria-current={key === category ? 'page' : undefined}>{value.label}</a>)}
+      {hasMedia && <a href={`/partido/${encodeURIComponent(match.matchId)}/media/`}>Media</a>}
     </nav>
     <h2>{spec.label}</h2>
     <p class="intro">{introductions[category]}</p>
@@ -53,7 +59,7 @@ const introductions = {
         </li>)}
       </ol>
       <p class="note">{category === 'scripts' ? 'Guiones' : 'Prompts'} preparados el {new Date(data.generatedAt).toLocaleDateString('es-PE', {timeZone:'America/Lima'})}.</p>
-    </> : <section class="pending"><h3>Contenido en preparación</h3><p>Esta lista todavía no está disponible. Puedes consultar el análisis y las otras categorías del encuentro.</p></section>}
+    </> : <section class="pending"><h3>Contenido en preparación</h3><p>Esta lista todavía no está disponible.</p></section>}
     <p id="copy-status" role="status" aria-live="polite"></p>
   </main>
 </Layout>
