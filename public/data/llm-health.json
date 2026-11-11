@@ -1,55 +1,6 @@
 {
-  "updatedAt": "2026-11-11T14:22:33.066Z",
+  "updatedAt": "2026-11-11T16:37:16.992Z",
   "runs": [
-    {
-      "at": "2026-11-02T06:46:51.133Z",
-      "matchId": "fd-575380",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1218,
-        "outputTokens": 10974
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "705e0d07-b160-4a0a-915b-797c077d09bd"
-    },
-    {
-      "at": "2026-11-02T07:07:49.092Z",
-      "task": "shorts",
-      "matchId": "villarreal-vs-paris-saint-germain-2026-11-03",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 600004
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 556320
-      },
-      "usage": {
-        "inputTokens": 5917,
-        "outputTokens": 34826
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "4d2140e2-e26c-4339-9a6f-fabd858b29cd"
-    },
     {
       "at": "2026-11-02T07:13:04.758Z",
       "task": "shorts",
@@ -8441,6 +8392,141 @@
       "usage": {
         "inputTokens": 7065,
         "outputTokens": 5870
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-11T16:04:04.425Z",
+      "task": "shorts",
+      "matchId": "turkiye-vs-belgium-2026-11-12",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 308511
+      },
+      "usage": {
+        "inputTokens": 7229,
+        "outputTokens": 32128
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "8c8c642b-3822-411e-8c51-4f18375df546"
+    },
+    {
+      "at": "2026-11-11T16:37:16.989Z",
+      "task": "shorts",
+      "matchId": "armenia-vs-cyprus-2026-11-12",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Armenia; guion 3: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7043,
+            "outputTokens": 21296
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 211096
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 5: cifra 5.6 no está en los hechos; guion 5: cifra 4.5 no está en los hechos; guion 5: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: cifra 10.7 no está en los hechos; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6921,
+            "outputTokens": 35031
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 542368
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Armenia; guion 3: 6 cifras, máximo 3; guion 5: cifra 30.3 no está en los hechos; guion 5: 4 cifras, máximo 3; guion 5: porcentajes bloqueados: evaluation.published es false; guion 6: falta Armenia; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7475,
+            "outputTokens": 2585
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 33680
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235232
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Armenia; guion 3: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7043,
+            "outputTokens": 24284
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 142554
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; descripción: cifra 12 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6921,
+            "outputTokens": 35341
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 532413
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: el gancho no lleva cifras; guion 7: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7475,
+            "outputTokens": 2447
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 59660
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235552
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7475,
+        "outputTokens": 2447
       },
       "truncated": false,
       "maxTokens": 131072,
