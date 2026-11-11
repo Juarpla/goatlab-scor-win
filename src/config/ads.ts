@@ -27,8 +27,6 @@ export const AD_SLOTS = {
   metoCap2: '',
   /** Methodology · close (horizontal) */
   metoCierre: '',
-  /** Contact · after chapter 2 (rectangular) */
-  contactoCap2: '',
   /** Contact · story close (horizontal) */
   contactoCierre: '',
   /** Match · after the fixture header (rectangular) */

@@ -8,13 +8,15 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
 ---
 <div class="map-block">
   <div class="map-frame">
-   <img src="/img/world-dots.png" alt="" width={2160} height={816} loading="lazy" decoding="async"/>
-   <div class="map-pins">
-    {pins.map(pin => (
-     <button class="pin" data-pin={pin.id} style={`--x:${pin.x}%;--y:${pin.y}%`} aria-pressed="false" aria-label={`Ver los encuentros en ${pin.city}, ${pin.country}`}>
-      <i aria-hidden="true"></i>
-     </button>
-    ))}
+   <div class="map-world">
+    <img src="/img/world-dots.png" alt="" width={2160} height={816} loading="lazy" decoding="async" draggable="false"/>
+    <div class="map-pins">
+     {pins.map(pin => (
+      <button type="button" class="pin" data-pin={pin.id} style={`--x:${pin.x}%;--y:${pin.y}%`} aria-pressed="false" aria-label={`Ver los encuentros en ${pin.city}, ${pin.country}`}>
+       <i aria-hidden="true"></i>
+      </button>
+     ))}
+    </div>
    </div>
    {pins.map(pin => (
     <div class="map-card" data-for={pin.id} hidden tabindex="-1">
@@ -40,56 +42,68 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
   </div>
    <footer class="map-foot">
     <p class="map-legend"><i class="dot dot-pin" aria-hidden="true"></i> sede con encuentros <i class="dot dot-live" aria-hidden="true"></i> en vivo, el punto parpadea <span aria-hidden="true">·</span> horas del visitante</p>
+    <div class="map-controls" role="group" aria-label="Zoom del mapa" hidden>
+     <button type="button" data-map-out aria-label="Alejar mapa">−</button>
+     <button type="button" data-map-in aria-label="Acercar mapa">+</button>
+     <button type="button" data-map-fit>Ver todas las sedes</button>
+    </div>
    </footer>
 </div>
 <script>
  import { initLocalTimes } from '../lib/local-time.js';
+ import { initMapViewport } from '../lib/map-viewport';
  initLocalTimes();
 
- // Blink and estimated minute: computed on the client from build-local
- // kickoffs. Agreed live window: kickoff → +1 h 50 min.
- const LIVE_WINDOW_MS = 110 * 60_000;
- const pins = [...document.querySelectorAll<HTMLButtonElement>('.pin')];
- const cards = new Map([...document.querySelectorAll<HTMLElement>('.map-card')].map(card => [card.dataset.for!, card]));
- const minuteLabel = (kickoff: number) => {
-  const elapsed = (Date.now() - kickoff) / 60_000;
-  if (elapsed < 0) return null;
-  if (elapsed <= 45) return `min. ${Math.floor(elapsed) + 1} est.`;
-  if (elapsed <= 60) return 'descanso est.';
-  if (elapsed <= 105) return `min. ${Math.floor(elapsed) - 15} est.`;
-  return 'final est.';
- };
- const evaluateLive = () => {
-  for (const [id, card] of cards) {
-   const kickoffs = [...card.querySelectorAll('[data-kickoff]')].map(node => Date.parse((node as HTMLElement).dataset.kickoff!));
-   const live = kickoffs.some(kickoff => Date.now() - kickoff >= 0 && Date.now() - kickoff < LIVE_WINDOW_MS);
-   pins.find(pin => pin.dataset.pin === id)?.classList.toggle('live', live);
-   card.querySelectorAll<HTMLElement>('.map-min').forEach((badge, index) => {
-    const label = live ? minuteLabel(kickoffs[index]) : null;
-    badge.textContent = label ?? '';
-    badge.hidden = label == null;
-   });
-  }
- };
- evaluateLive();
- setInterval(evaluateLive, 30_000);
+ for (const map of document.querySelectorAll<HTMLElement>('.map-block')) {
+  // Blink and estimated minute: computed on the client from build-local
+  // kickoffs. Agreed live window: kickoff → +1 h 50 min.
+  const LIVE_WINDOW_MS = 110 * 60_000;
+  const pins = [...map.querySelectorAll<HTMLButtonElement>('.pin')];
+  const cards = new Map([...map.querySelectorAll<HTMLElement>('.map-card')].map(card => [card.dataset.for!, card]));
+  const minuteLabel = (kickoff: number) => {
+   const elapsed = (Date.now() - kickoff) / 60_000;
+   if (elapsed < 0) return null;
+   if (elapsed <= 45) return `min. ${Math.floor(elapsed) + 1} est.`;
+   if (elapsed <= 60) return 'descanso est.';
+   if (elapsed <= 105) return `min. ${Math.floor(elapsed) - 15} est.`;
+   return 'final est.';
+  };
+  const evaluateLive = () => {
+   for (const [id, card] of cards) {
+    const kickoffs = [...card.querySelectorAll<HTMLElement>('[data-kickoff]')].map(node => Date.parse(node.dataset.kickoff!));
+    const live = kickoffs.some(kickoff => Date.now() - kickoff >= 0 && Date.now() - kickoff < LIVE_WINDOW_MS);
+    pins.find(pin => pin.dataset.pin === id)?.classList.toggle('live', live);
+    card.querySelectorAll<HTMLElement>('.map-min').forEach((badge, index) => {
+     const label = live ? minuteLabel(kickoffs[index]) : null;
+     badge.textContent = label ?? '';
+     badge.hidden = label == null;
+    });
+   }
+  };
+  evaluateLive();
+  setInterval(evaluateLive, 30_000);
 
- const open = (pin: HTMLButtonElement) => {
-  for (const [id, card] of cards) {
-   const on = id === pin.dataset.pin;
-   card.hidden = !on;
-   const other = document.querySelector<HTMLButtonElement>(`[data-pin="${id}"]`);
-   other?.setAttribute('aria-pressed', String(on));
-   other?.classList.toggle('active', on);
-  }
-  const card = cards.get(pin.dataset.pin!);
-  card?.focus();
- };
- pins.forEach(pin => pin.addEventListener('click', () => open(pin)));
- const closeAll = () => {
-  document.querySelectorAll('.map-card').forEach(card => (card.hidden = true));
-  pins.forEach(pin => { pin.classList.remove('active'); pin.setAttribute('aria-pressed', 'false'); });
- };
- document.querySelectorAll<HTMLElement>('.map-close').forEach(button => button.addEventListener('click', closeAll));
- document.addEventListener('keydown', event => { if (event.key === 'Escape') closeAll(); });
+  let activePin: HTMLButtonElement | null = null;
+  const open = (pin: HTMLButtonElement) => {
+   for (const other of pins) {
+    const on = other === pin;
+    cards.get(other.dataset.pin!)!.hidden = !on;
+    other.setAttribute('aria-pressed', String(on));
+    other.classList.toggle('active', on);
+   }
+   activePin = pin;
+   cards.get(pin.dataset.pin!)?.focus({ preventScroll: true });
+  };
+  const close = () => {
+   if (!activePin) return;
+   cards.get(activePin.dataset.pin!)!.hidden = true;
+   activePin.classList.remove('active');
+   activePin.setAttribute('aria-pressed', 'false');
+   activePin.focus({ preventScroll: true });
+   activePin = null;
+  };
+  map.querySelectorAll('.map-close').forEach(button => button.addEventListener('click', close));
+  map.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  initMapViewport(map, pins, open);
+ }
 </script>

@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Icon from '../components/Icon.astro';
 import ContactScene from '../components/ContactScene.astro';
 import PromoSlide from '../components/PromoSlide.astro';
 import AdSlot from '../components/AdSlot.astro';
@@ -21,14 +20,6 @@ import '../styles/contacto.css';
         <p>¿Una cifra mal atribuida, un dato que la fuente no entregó, un resumen que se adelanta? Escríbenos: las correcciones se revisan antes de la siguiente actualización programada.</p>
         <a class="ct-mail" href="mailto:goatlab.win@gmail.com">goatlab.win@gmail.com</a>
       </section>
-      <section class="story-chapter" id="analisis" data-chapter="analisis">
-        <div class="ct-inline" aria-hidden="true"><ContactScene name="analisis"/></div>
-        <h2>La IA declara<br/>sus límites.</h2>
-        <p>Los resúmenes preparados con IA indican siempre sus limitaciones junto al texto. Si un análisis afirma un dato que la fuente no entregó, ese es exactamente el reporte que nos interesa recibir.</p>
-        <a class="text-link" href="/metodologia/#analisis-ia">Cómo se controla la IA <Icon size={18}/></a>
-        <span class="chapter-note">Cada texto se prepara a partir de datos verificados; sus límites viajan pegados al párrafo.</span>
-      </section>
-      <AdSlot variant="rect" slotKey="contactoCap2"/>
       <section class="story-chapter" id="fuera" data-chapter="fuera">
         <div class="ct-inline" aria-hidden="true"><ContactScene name="fuera"/></div>
         <h2>Lo que queda<br/>fuera.</h2>
@@ -39,9 +30,7 @@ import '../styles/contacto.css';
     </div>
     <div class="story-stage ct-stage">
       <div class="stage-pane is-active" data-pane="reportar" aria-hidden="false"><ContactScene name="reportar"/></div>
-      <div class="stage-pane" data-pane="analisis" aria-hidden="true" hidden><ContactScene name="analisis"/></div>
       <div class="stage-pane" data-pane="fuera" aria-hidden="true" hidden><ContactScene name="fuera"/></div>
-      <div class="stage-source">Escenas del método · geometría declarativa, sin datos de ejemplo</div>
     </div>
   </div>
   <PromoSlide/>
