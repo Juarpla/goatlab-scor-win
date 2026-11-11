@@ -4,7 +4,7 @@
   "away": "Belgium",
   "competition": "nations",
   "kickoff": "2026-11-12T17:00:00+00:00",
-  "updatedAt": "2026-11-11T13:58:44.145Z",
+  "updatedAt": "2026-11-11T19:36:22.375Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -597,10 +597,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": "Los datos de Poisson y CatBoost Bzzoiro muestran coherencia en la tendencia belga, pero con diferencias en la probabilidad de empate. La lectura Bzzoiro (B2) es notablemente conservadora al no predecir goles totales ni ambos anotando, lo que contrasta con el consenso general. El historial reciente d",
-    "provider": "MISTRAL",
-    "model": "ministral-8b-2512",
-    "generatedAt": "2026-11-09T16:36:49.997Z"
+    "flag": true,
+    "note": "B2 declara 'no' al umbral de goles y a ambos anotan, pero el propio B reporta 62.9% y 63% y P da 59.9% y 61.4%, todas sobre 50%. La lectura declarada se desvía de las estimaciones del proveedor y de P; punto pendiente de verificación antes de publicar.",
+    "provider": "OPENCODE_GO_FALLBACK",
+    "model": "glm-5.3-flash",
+    "generatedAt": "2026-11-11T19:40:56.482Z"
   }
 }
