@@ -32,6 +32,9 @@ const openCodeGo = {
   extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }),
 };
 export const providers = {
+  // Agnes serves text on the same hub as images and video. Its chat endpoint
+  // rejects max_tokens above 65536, so the request budget is clamped per provider.
+  AGNES: { name: 'Agnes', keyVar: 'AGNES_API_KEY', defaultModel: 'agnes-3.0-flash', requires: [], maxOutputTokens: 65_536, baseUrl: env => env.AGNES_BASE_URL?.trim() || 'https://apihub.agnes-ai.com/v1' },
   // baseUrl accepts an optional override (MISTRAL_BASE_URL) to serve models
   // with the same OpenAI signature through another gateway.
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
@@ -125,12 +128,15 @@ function textFromMessage(message) {
   return '';
 }
 export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
+  // The declared ceiling is a job budget: providers with a lower hard limit get
+  // the smaller value so the call is not rejected as a permanent 400.
+  const budget = maxTokens === undefined ? undefined : Math.min(maxTokens, provider.maxOutputTokens ?? maxTokens);
   let res;
   try {
     res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
       method: 'POST', signal: AbortSignal.timeout(timeoutMs),
       headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
-      body: JSON.stringify({ model: provider.model, ...requestExtras(provider.model), messages, ...(maxTokens === undefined ? {} : { max_tokens: maxTokens }) }),
+      body: JSON.stringify({ model: provider.model, ...requestExtras(provider.model), messages, ...(budget === undefined ? {} : { max_tokens: budget }) }),
     });
   } catch (error) {
     throw new LlmTransportError(error?.message ?? 'Error de red', { provider: provider.id });
@@ -147,8 +153,8 @@ export async function callProvider(provider, messages, { env = runtimeEnv(), fet
   const usage = normalizeUsage(body?.usage);
   const finishReason = body?.choices?.[0]?.finish_reason ?? null;
   if (!content) throw new LlmTransportError('Respuesta vacía o inválida', { provider: provider.id, usage });
-  if (finishReason === 'length' || (maxTokens !== undefined && usage.outputTokens != null && usage.outputTokens >= maxTokens)) {
-    throw new LlmTransportError(`Respuesta truncada (techo ${maxTokens} tokens)`, { provider: provider.id, truncated: true, usage });
+  if (finishReason === 'length' || (budget !== undefined && usage.outputTokens != null && usage.outputTokens >= budget)) {
+    throw new LlmTransportError(`Respuesta truncada (techo ${budget} tokens)`, { provider: provider.id, truncated: true, usage });
   }
   return { content: content.trim(), usage, finishReason };
 }

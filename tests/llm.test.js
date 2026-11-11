@@ -150,6 +150,16 @@ test('deepseek requests maximum reasoning without an ignored temperature', async
   assert.ok(!('temperature' in calls[0]));
   assert.equal(calls[0].reasoning_effort, 'max');
 });
+test('agnes usa el hub de texto y recorta el techo al límite del proveedor', async () => {
+  const calls = [];
+  const aEnv = { AGNES_API_KEY: 'x', LLM_PROVIDER_ORDER: 'AGNES_MODEL' };
+  const result = await withFailover([], { env: aEnv, logger, maxTokens: 131_072, fetchImpl: async (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return response('{"ok":true}'); }, validate: extractJson });
+  assert.equal(result.provider, 'AGNES');
+  assert.equal(result.model, 'agnes-3.0-flash');
+  assert.equal(calls[0].url, 'https://apihub.agnes-ai.com/v1/chat/completions');
+  assert.equal(calls[0].body.max_tokens, 65_536);
+  assert.equal(calls[0].body.temperature, 0);
+});
 test('orderVar gana sobre LLM_PROVIDER_ORDER', () => {
   const chain = resolveChain({
     MISTRAL_API_KEY: 'a',
