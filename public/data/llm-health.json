@@ -1,24 +1,6 @@
 {
-  "updatedAt": "2026-11-11T19:41:32.760Z",
+  "updatedAt": "2026-11-11T20:08:27.540Z",
   "runs": [
-    {
-      "at": "2026-11-03T01:00:18.444Z",
-      "matchId": "fd-575382",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1164,
-        "outputTokens": 11395
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "2e93b95e-453b-4f6f-bd7e-34de8aae1217"
-    },
     {
       "at": "2026-11-03T01:01:24.655Z",
       "matchId": "fd-575384",
@@ -8536,6 +8518,102 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "4254bb4f-2251-466b-a508-f4e379e94aaf"
+    },
+    {
+      "at": "2026-11-11T20:08:27.535Z",
+      "task": "shorts",
+      "matchId": "armenia-vs-cyprus-2026-11-12",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: falta Armenia; guion 2: falta Chipre; guion 2: 53 palabras, mínimo 55; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 5: 52 palabras, mínimo 55; guion 6: falta Armenia",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7349,
+            "outputTokens": 1745
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14933
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7043,
+            "outputTokens": 24437
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 235289
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "descripción: cifra 12 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6922,
+            "outputTokens": 34996
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 449718
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 2: falta Chipre; guion 2: el gancho no lleva cifras; guion 2: el cero no se escribe en dígitos; guion 2: 4 cifras, máximo 3; guion 2: 54 palabras, mínimo 55; guion 3: el gancho no lleva cifras; guion 3: 4 cifras, máximo 3; guion 4: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7475,
+            "outputTokens": 2539
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13371
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235288
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: el cero no se escribe en dígitos; guion 2: 8 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 8: falta Chipre",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7349,
+            "outputTokens": 2820
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 27125
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 591282
+      },
+      "usage": {
+        "inputTokens": 7043,
+        "outputTokens": 31524
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "84e0ef49-e013-4ceb-bf36-61bf6a765271"
     }
   ]
 }
