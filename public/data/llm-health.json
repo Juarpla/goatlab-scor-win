@@ -1,131 +1,6 @@
 {
-  "updatedAt": "2026-11-11T06:35:01.315Z",
+  "updatedAt": "2026-11-11T06:42:29.423Z",
   "runs": [
-    {
-      "at": "2026-11-01T18:32:00.662Z",
-      "matchId": "fd-564729",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Streaming incompleto",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 140917
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1437,
-            "outputTokens": 1876
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14830
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1369,
-            "outputTokens": 6085
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 118546
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1396,
-        "outputTokens": 14916
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "1e2405a3-a431-47f8-95ef-5f334906c173"
-    },
-    {
-      "at": "2026-11-01T18:36:40.535Z",
-      "task": "shorts",
-      "matchId": "aek-athens-vs-real-madrid-2026-11-04",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 218937
-      },
-      "usage": {
-        "inputTokens": 5933,
-        "outputTokens": 32420
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "ff58a2c8-5ef9-49a6-99f1-f95cbbaa9d09"
-    },
-    {
-      "at": "2026-11-01T18:42:38.073Z",
-      "task": "shorts",
-      "matchId": "deportivo-de-a-coruna-vs-osasuna-2026-11-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 357531
-      },
-      "usage": {
-        "inputTokens": 5958,
-        "outputTokens": 24638
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "52f78619-0f64-4cf2-85e9-4e4801a91f16"
-    },
-    {
-      "at": "2026-11-01T18:50:19.828Z",
-      "task": "shorts",
-      "matchId": "newcastle-united-vs-everton-2026-11-02",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 461745
-      },
-      "usage": {
-        "inputTokens": 6406,
-        "outputTokens": 34743
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "42919820-1174-4c55-ab96-beca29a513d2"
-    },
     {
       "at": "2026-11-01T18:51:36.216Z",
       "task": "image-prompts",
@@ -8265,6 +8140,204 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-11T06:38:34.018Z",
+      "task": "shorts",
+      "matchId": "turkiye-vs-belgium-2026-11-12",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 151
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 85
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: el cero no se escribe en dígitos; guion 2: 6 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7610,
+            "outputTokens": 2860
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 27231
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 2: el cero no se escribe en dígitos; guion 2: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: 4 cifras, máximo 3; guion 10: cifra 11.6 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7084,
+            "outputTokens": 7636
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 145365
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7084,
+        "outputTokens": 7636
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-11T06:41:53.973Z",
+      "task": "shorts",
+      "matchId": "armenia-vs-cyprus-2026-11-12",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 111
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 91
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 5: falta Chipre; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7473,
+            "outputTokens": 2733
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 23832
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Armenia; guion 2: el cero no se escribe en dígitos; guion 2: el cero no se escribe en dígitos; guion 2: 5 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: falta Armenia; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6901,
+            "outputTokens": 6677
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 175919
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6901,
+        "outputTokens": 6677
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-11T06:42:13.684Z",
+      "task": "image-prompts",
+      "matchId": "turkiye-vs-belgium-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 115
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 67
+        }
+      ],
+      "usage": {
+        "inputTokens": 2732,
+        "outputTokens": 2311
+      }
+    },
+    {
+      "at": "2026-11-11T06:42:29.423Z",
+      "task": "image-prompts",
+      "matchId": "armenia-vs-cyprus-2026-11-12",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "ministral-8b-2512"
+      },
+      "failures": [
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 109
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 401",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 76
+        }
+      ],
+      "usage": {
+        "inputTokens": 2672,
+        "outputTokens": 1891
+      }
     }
   ]
 }
