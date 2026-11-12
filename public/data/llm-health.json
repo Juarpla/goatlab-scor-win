@@ -1,41 +1,6 @@
 {
-  "updatedAt": "2026-11-12T07:13:03.997Z",
+  "updatedAt": "2026-11-12T07:18:43.765Z",
   "runs": [
-    {
-      "at": "2026-11-03T14:01:32.635Z",
-      "matchId": "fd-575377",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "ddf152f7-288b-4f66-956e-39ac097a552d"
-    },
-    {
-      "at": "2026-11-03T14:04:19.976Z",
-      "matchId": "fd-575380",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1647,
-        "outputTokens": 18687
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4678f360-5134-4852-a908-9aa0daa45ad9"
-    },
     {
       "at": "2026-11-03T14:04:19.976Z",
       "matchId": "fd-575382",
@@ -8563,6 +8528,55 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "337479f6-f5d0-4c41-bd28-e12d398e2709"
+    },
+    {
+      "at": "2026-11-12T07:18:19.585Z",
+      "task": "shorts",
+      "matchId": "netherlands-vs-greece-2026-11-13",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 6: falta Países Bajos; guion 6: 53 palabras, mínimo 55; guion 7: falta Grecia; guion 7: 4 cifras, máximo 3; guion 8: falta Grecia; guion 8: 54 palabras, mínimo 55; guion 10: cifra 23 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7290,
+            "outputTokens": 2830
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 31615
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 240507
+      },
+      "usage": {
+        "inputTokens": 6974,
+        "outputTokens": 39174
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "6fd2a167-a050-4166-974b-dde18a1d1cbb"
+    },
+    {
+      "at": "2026-11-12T07:18:43.765Z",
+      "task": "image-prompts",
+      "matchId": "netherlands-vs-greece-2026-11-13",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2632,
+        "outputTokens": 2311
+      }
     }
   ]
 }
