@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+import { competitions } from '../lib/football.js';
+import { teamEsDisplay } from '../lib/teams.js';
+import { matchDateLabel } from '../lib/match-seo.js';
+
+const { matches } = Astro.props;
+---
+<ul class="archive-list">
+  {matches.map(match => <li>
+    <a href={`/partido/${match.webId}/`}>
+      <svg class="archive-mini" aria-hidden="true" focusable="false" viewBox="0 0 32 24" width="32" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1" y="2" width="30" height="20" rx="3"/><path d="M16 2v20M1 8h5v8H1m30-8h-5v8h5"/><circle cx="16" cy="12" r="4"/>
+      </svg>
+      <span class="archive-match">
+        <strong>{teamEsDisplay(match.home)} vs. {teamEsDisplay(match.away)}</strong>
+        <small>{competitions.find(league => league.id === match.competition)?.name} · <time datetime={match.kickoff}>{matchDateLabel(match.kickoff)}</time></small>
+      </span>
+      <span class="archive-score" aria-label={`Marcador final ${match.homeScore} a ${match.awayScore}`}>{match.homeScore}–{match.awayScore}</span>
+      <Icon size={17}/>
+    </a>
+  </li>)}
+</ul>
+
+<style>
+  .archive-list{padding:0;margin:0;list-style:none;border-block:1px solid var(--line)}
+  .archive-list li+li{border-top:1px solid var(--line)}
+  .archive-list a{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:clamp(9px,2vw,24px);align-items:center;padding:clamp(12px,2vw,21px) 4px}
+  .archive-match{display:grid;gap:3px;min-width:0}
+  .archive-match strong{font-family:var(--display);font-size:clamp(19px,2.5vw,28px);font-weight:700;line-height:1.15;overflow-wrap:anywhere}
+  .archive-match small{font-size:clamp(10px,1.4vw,12px);color:var(--muted)}
+  .archive-mini{width:clamp(20px,4vw,32px);height:auto;color:var(--away)}
+  .archive-score{color:var(--accent);font:700 clamp(22px,3vw,35px)/1 var(--display);white-space:nowrap}
+  @media(prefers-reduced-motion:no-preference){.archive-list a>svg:last-child{transition:transform .2s ease}.archive-list a:is(:hover,:focus-visible)>svg:last-child{transform:translateX(3px)}}
+</style>

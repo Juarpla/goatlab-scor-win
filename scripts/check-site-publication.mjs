@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { runInNewContext } from 'node:vm';
-import { isAdvertisingPage, isProductionPage } from '../src/lib/page-policy.js';
+import { isAdvertisingPage, isIndexablePage, isProductionPage, robotsDirective } from '../src/lib/page-policy.js';
 
 const root = 'dist/client';
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(join(dir, entry.name)) : [join(dir, entry.name)]);
@@ -23,6 +23,9 @@ for (const file of files.filter(file => file.endsWith('.html'))) {
   htmlPages.set(path, {
     ids: new Set(tags.map(tag => attribute(tag, 'id')).filter(Boolean)),
     hrefs: new Set(tags.filter(tag => /^<a(?:\s|>)/i.test(tag)).map(tag => attribute(tag, 'href')).filter(href => href !== null)),
+    canonicals: tags.filter(tag => /^<link\b/i.test(tag) && attribute(tag, 'rel') === 'canonical').map(tag => attribute(tag, 'href')),
+    descriptions: tags.filter(tag => /^<meta\b/i.test(tag) && attribute(tag, 'name') === 'description').map(tag => attribute(tag, 'content')),
+    robots: tags.filter(tag => /^<meta\b/i.test(tag) && attribute(tag, 'name') === 'robots').map(tag => attribute(tag, 'content')),
   });
 }
 
@@ -55,17 +58,63 @@ const tools = files.filter(file => file.endsWith('/index.html') && isProductionP
 assert.ok(tools.length > 0, 'No se encontraron herramientas en la compilación');
 for (const file of tools) {
   const html = readFileSync(file, 'utf8');
-  assert.ok(/name="robots" content="noindex, follow"/.test(html), `${file}: falta noindex`);
+  const path = `/${relative(root, file)}`;
+  assert.deepEqual(htmlPages.get(path).robots, [robotsDirective(path.replace(/index\.html$/, ''))], `${file}: incorrect robots directive`);
   assert.ok(!html.includes('pagead/js/adsbygoogle.js'), `${file}: carga AdSense`);
   assert.ok(!html.includes('fundingchoicesmessages.google.com'), `${file}: carga CMP publicitaria`);
+  assert.ok(!/class="adsbygoogle\b|data-ad-slot=/.test(html), `${file}: renders an ad slot`);
 }
+assert.ok(!files.some(file => /\/partido\/[^/]+\/motion-prompts(?:\/index\.html|\.json)$/.test(file)), 'Retired motion tools should still be absent');
+const robots = readFileSync(join(root, 'robots.txt'), 'utf8');
+assert.ok(!/^\s*Disallow:\s*\/(?:partido(?:\/|\s*$)|\s*$)/im.test(robots), 'robots.txt must let crawlers read match responses');
 const sitemapFiles = files.filter(file => /sitemap-\d+\.xml$/.test(file));
 assert.ok(sitemapFiles.length > 0, 'Falta sitemap');
 const sitemapUrls = new Set();
 for (const file of sitemapFiles) {
   for (const [, url] of readFileSync(file, 'utf8').matchAll(/<loc>(.*?)<\/loc>/g)) {
-    assert.ok(!isProductionPage(url), `Herramienta incluida en sitemap: ${url}`);
+    assert.ok(isIndexablePage(url), `Non-indexable page in sitemap: ${url}`);
     sitemapUrls.add(url);
+  }
+}
+const descriptions = new Set(htmlPages.get('/index.html').descriptions);
+for (const [file, page] of htmlPages) {
+  if (!file.endsWith('/index.html')) continue;
+  assert.equal(page.canonicals.length, 1, file);
+  const canonical = new URL(page.canonicals[0]);
+  assert.equal(canonical.origin, site.origin, file);
+  assert.ok(canonical.pathname.endsWith('/') && !canonical.search && !canonical.hash, file);
+  assert.ok(htmlPages.has(targetPath(canonical.pathname)), `${file}: canonical target is missing`);
+  if (!/^\/partido\/[^/]+\/index\.html$/.test(file)) continue;
+  assert.equal(page.descriptions.length, 1, file);
+  assert.ok(page.descriptions[0], file);
+  if (isIndexablePage(file.replace(/index\.html$/, ''))) {
+    assert.ok(!descriptions.has(page.descriptions[0]), `${file}: duplicate match description`);
+    descriptions.add(page.descriptions[0]);
+    assert.ok(sitemapUrls.has(canonical.href), `${file}: canonical missing from sitemap`);
+  } else {
+    assert.deepEqual(page.descriptions, htmlPages.get(targetPath(canonical.pathname)).descriptions, `${file}: alias description mismatch`);
+  }
+}
+const encounters = htmlPages.get('/encuentros/index.html');
+assert.ok(htmlPages.get('/index.html').hrefs.has('/encuentros/#analisis-recientes'));
+const archive = JSON.parse(readFileSync(join(root, 'data/match-archive.json'), 'utf8'));
+if (Object.keys(archive).length) {
+  const visited = new Set();
+  const queue = ['/encuentros/archivo/'];
+  assert.ok(encounters.hrefs.has(queue[0]));
+  for (const path of queue) {
+    assert.ok(sitemapUrls.has(new URL(path, site).href), `${path}: archive listing missing from sitemap`);
+    const page = htmlPages.get(targetPath(path));
+    assert.ok(page, path);
+    visited.add(path);
+    for (const href of page.hrefs) {
+      if (href.startsWith('/partido/')) visited.add(href);
+      if (href.startsWith('/encuentros/archivo/') && !queue.includes(href)) queue.push(href);
+    }
+  }
+  for (const id of Object.keys(archive)) {
+    const path = `/partido/${id}/`;
+    assert.ok(visited.has(path) && sitemapUrls.has(new URL(path, site).href), `${path}: archived fixture is orphaned`);
   }
 }
 const home = readFileSync(join(root, 'index.html'), 'utf8');

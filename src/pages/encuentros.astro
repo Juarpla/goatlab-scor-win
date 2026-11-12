@@ -3,12 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import MatchCard from '../components/MatchCard.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ArchiveMatchList from '../components/ArchiveMatchList.astro';
 import { competitions, staysOnWall } from '../lib/football.js';
 import { matchDay } from '../lib/teams.js';
 import { matchForm } from '../lib/form.js';
+import { archiveEntries } from '../lib/match-archive.js';
 import fixtures from '../../public/data/fixtures.json';
 import results from '../../public/data/results.json';
+import archive from '../../public/data/match-archive.json';
 import '../styles/home.css';
+import '../styles/match-archive.css';
 
 const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
 const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
@@ -22,12 +26,14 @@ const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString
 // Wall order, different from the global array: LaLiga and Premier first.
 const wallCompetitions = ['laliga', 'premier', 'champions', 'europa', 'libertadores', 'nations'].map(id => competitions.find(c => c.id === id)).filter(Boolean);
 const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FUT', competitionName: competitionById(m.competition)?.name ?? '', kickoffLabel: kickoffLabel(m.kickoff), formHome: m.form?.homeForm ?? null, formAway: m.form?.awayForm ?? null });
+const recent = archiveEntries(archive).slice(0, 6);
 ---
-<Layout title="Encuentros — GoatLab" description="La ventana completa de siete días: filtra por liga, día o estado y busca por equipo o estadio.">
+<Layout title="Encuentros — GoatLab" description="Explora los próximos siete días de fútbol y consulta resultados y análisis recientes de partidos finalizados.">
 <main id="main" class="wrap">
  <section class="intro">
   <div><h1>Todos los<br/><span>encuentros.</span></h1></div>
   <p>La ventana completa de siete días de nuestras competiciones, ordenada por kickoff{updated ? ` · actualizado ${updated} (Lima)` : ''}. Los horarios se muestran en tu hora local. Cuando el partido ya tiene marcador, la tarjeta lo muestra. Si pasa el tiempo de juego y no hay resultado, sale del muro.</p>
+  <a class="archive-back" href="#analisis-recientes">Resultados y análisis recientes <Icon size={14}/></a>
  </section>
  <section class="wall wall--ads" aria-labelledby="wall-title" style="padding-top:0;border-top:0;margin-top:0">
   <div class="section-heading"><h2 id="wall-title" class="sr-only">El muro de encuentros</h2><span>Cada tarjeta abre el análisis del partido</span></div>
@@ -64,6 +70,13 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
    <AdSlot variant="vertical" class="ad-rail"/>
   </div>
   <AdSlot variant="horizontal"/>
+ </section>
+ <section id="analisis-recientes" class="archive-section" aria-labelledby="recent-title">
+  <h2 id="recent-title">Resultados y <strong>análisis recientes.</strong></h2>
+  {recent.length > 0 ? <>
+   <ArchiveMatchList matches={recent}/>
+   <div class="archive-pager"><a class="archive-back" href="/encuentros/archivo/">Ver todo el archivo <Icon size={16}/></a></div>
+  </> : <p>Los partidos con marcador final y análisis previo aparecerán aquí.</p>}
  </section>
 </main>
 <script>

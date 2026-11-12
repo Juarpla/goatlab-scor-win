@@ -1,7 +1,13 @@
 /** Production tools keep their public URLs, outside search and advertising. */
 export function isProductionPage(url) {
   const path = new URL(url, 'https://goatlab.win').pathname;
-  return /^\/partido\/[^/]+\/(?:scripts|image-prompts|video-prompts|media|youtube)(?:\/|\.json|$)/.test(path);
+  return /^\/partido\/[^/]+\/(?:scripts|image-prompts|motion-prompts|video-prompts|media|youtube)(?:\/|\.json|$)/.test(path);
+}
+
+export function robotsDirective(url) {
+  const path = new URL(url, 'https://goatlab.win').pathname;
+  if (/^\/partido\/[^/]+\/(?:scripts|motion-prompts)\/?$/.test(path)) return 'noindex, nofollow';
+  return isIndexablePage(path) ? null : 'noindex, follow';
 }
 
 export function isIndexablePage(url) {

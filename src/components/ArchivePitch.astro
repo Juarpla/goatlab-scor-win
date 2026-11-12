@@ -1,0 +1,39 @@
+<svg class="archive-pitch" data-archive-pitch aria-hidden="true" focusable="false" viewBox="0 0 480 240" width="480" height="240">
+  <g class="pitch-lines" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="16" y="16" width="448" height="208" rx="10"/>
+    <path d="M240 16v208M16 65h73v110H16m448-110h-73v110h73M16 96h32v48H16m448-48h-32v48h32"/>
+    <circle cx="240" cy="120" r="37"/>
+    <path d="M89 94a34 34 0 0 1 0 52m302-52a34 34 0 0 0 0 52"/>
+  </g>
+  <path class="pitch-route" pathLength="1" d="M80 164C142 170 154 77 211 85s77 67 124 50l60-45" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <g class="pitch-points" stroke-width="4">
+    <circle cx="80" cy="164" r="8"/><circle cx="211" cy="85" r="8"/>
+    <circle cx="335" cy="135" r="8"/><circle cx="395" cy="90" r="9"/>
+  </g>
+</svg>
+
+<style>
+  .archive-pitch{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;color:var(--accent)}
+  .pitch-lines{color:var(--line)}
+  .pitch-points{fill:var(--surface);stroke:var(--away)}
+  .pitch-points circle:last-child{fill:var(--accent);stroke:var(--accent)}
+  @media(prefers-reduced-motion:no-preference){
+    .is-entered .pitch-route{animation:draw-route .9s cubic-bezier(.2,.75,.35,1) both}
+    .is-entered .pitch-points{animation:show-points .38s .25s ease-out both}
+    @keyframes draw-route{from{stroke-dasharray:1;stroke-dashoffset:1}to{stroke-dasharray:1;stroke-dashoffset:0}}
+    @keyframes show-points{from{opacity:.2}to{opacity:1}}
+  }
+</style>
+
+<script>
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      for (const { target, isIntersecting } of entries) {
+        if (!isIntersecting) continue;
+        target.classList.add('is-entered');
+        observer.unobserve(target);
+      }
+    }, { threshold: .25 });
+    document.querySelectorAll('[data-archive-pitch]').forEach(pitch => observer.observe(pitch));
+  }
+</script>

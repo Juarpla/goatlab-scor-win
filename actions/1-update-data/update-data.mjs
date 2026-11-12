@@ -1,5 +1,5 @@
 import { writeFile, mkdir, readFile, readdir, rm, rename } from 'node:fs/promises';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { observeFinishedMatches, buildPruneContext, resolvePruneMatch, pruneDue, pruneAnalysisEntries } from '../../src/lib/pruning.js';
 import { getFixtures, getLeagueResults, getScorers, getStandings, fuseScorers, toResult, mergeFixtures, competitions, FINISHED_STATUSES, staysOnWall, fetchProviderPrediction, fetchAfOdds, fetchAfTopScorers, fetchAfFixtureStats, fetchAfFixturesByDate, findAfFixture, fetchAfInjuries, fetchAfSquad } from '../../src/lib/football.js';
@@ -19,6 +19,7 @@ import { toCompactInput } from '../../src/lib/compact.js';
 import { ensemble as buildEnsemble, estimateLambdas, teamRates, drawBase } from '../../src/lib/predictions.js';
 import { computeMatchMarkets, resolveMatchMarkets, resolveLambdas, teamContext, buildProviderEcho, buildH2hEcho, buildDisciplineStub, buildSetPiecesStub, buildDisciplineEstimate, buildSetPiecesEstimate, buildWeatherVenue, buildAvailability, marketsFromXg, withScorerFallback } from '../../src/lib/probabilities.js';
 import { forecastStatsFull, forecastDominance } from '../../src/lib/stats-forecast.js';
+import { updateMatchArchive } from '../../src/lib/match-archive.js';
 
 const today = new Date().toISOString().slice(0, 10);
 /** Start of the wall window: the Lima day, which does not change at 19:00. */
@@ -304,6 +305,18 @@ export async function ensureAnalyses(matches, analyses, prepare, { budget = ANAL
 }
 
 export async function persistPrunedAnalyses(analyses, context, { now = Date.now(), path = 'public/data/llm-analysis.json' } = {}) {
+  const directory = dirname(path);
+  const archivePath = join(directory, 'match-archive.json');
+  const previous = await readFile(archivePath, 'utf8').then(JSON.parse, error => {
+    if (error.code === 'ENOENT') return {};
+    throw error;
+  });
+  const [results, teams, fixtures] = await Promise.all(['results', 'teams', 'fixtures'].map(name => readJson(join(directory, `${name}.json`))));
+  const archive = updateMatchArchive(previous, analyses, context, { results: results?.results, teams: teams?.teams, activeMatches: fixtures?.matches, now });
+  if (JSON.stringify(archive) !== JSON.stringify(previous)) {
+    await writeJson(`${archivePath}.tmp`, archive);
+    await rename(`${archivePath}.tmp`, archivePath);
+  }
   const retained = pruneAnalysisEntries(analyses, context, now);
   await writeJson(path, retained);
   return retained;

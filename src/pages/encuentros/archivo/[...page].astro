@@ -1,0 +1,33 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ArchiveMatchList from '../../../components/ArchiveMatchList.astro';
+import ArchivePitch from '../../../components/ArchivePitch.astro';
+import Icon from '../../../components/Icon.astro';
+import { archiveEntries } from '../../../lib/match-archive.js';
+import archive from '../../../../public/data/match-archive.json';
+import '../../../styles/match-archive.css';
+
+export function getStaticPaths({ paginate }) {
+  return paginate(archiveEntries(archive), { pageSize: 24 });
+}
+const { page } = Astro.props;
+const number = page.currentPage > 1 ? ` · Página ${page.currentPage}` : '';
+---
+<Layout title={`Archivo de partidos${number} — GoatLab`} description={`Resultados y análisis previos de los partidos finalizados en GoatLab${number}.`}>
+  <main class="wrap" id="main">
+    <header class="archive-header">
+      <div class="archive-copy">
+        <a class="archive-back" href="/encuentros/#analisis-recientes">Volver a Encuentros <Icon size={14}/></a>
+        <h1>Archivo de <strong>partidos.</strong></h1>
+        <p>Marcadores finales y análisis publicados antes de cada encuentro.</p>
+      </div>
+      <ArchivePitch/>
+    </header>
+    {page.data.length > 0 ? <ArchiveMatchList matches={page.data}/> : <p>Los partidos con marcador final y análisis previo aparecerán aquí.</p>}
+    {page.lastPage > 1 && <nav class="archive-pager" aria-label="Páginas del archivo">
+      {page.url.prev && <a class="archive-back" href={`${page.url.prev.replace(/\/$/, '')}/`}>Página anterior</a>}
+      <span>Página {page.currentPage} de {page.lastPage}</span>
+      {page.url.next && <a class="archive-back" href={`${page.url.next.replace(/\/$/, '')}/`}>Página siguiente <Icon size={14}/></a>}
+    </nav>}
+  </main>
+</Layout>

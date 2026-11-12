@@ -1,0 +1,29 @@
+---
+import AdSlot from './AdSlot.astro';
+import ArchivePitch from './ArchivePitch.astro';
+import Icon from './Icon.astro';
+import ReadingBlock from './ReadingBlock.astro';
+import TeamLogo from './TeamLogo.astro';
+import { matchDateLabel } from '../lib/match-seo.js';
+import '../styles/match-archive.css';
+
+const { match, home, away, competition } = Astro.props;
+---
+<main id="main" class="wrap">
+  <header class="archive-header">
+    <div class="archive-copy">
+      <a class="archive-back" href="/encuentros/#analisis-recientes">Resultados y análisis recientes <Icon size={14}/></a>
+      <h1><strong>{home}</strong> vs. <strong>{away}</strong></h1>
+      <p>{competition} · <time datetime={match.kickoff}>{matchDateLabel(match.kickoff)}</time></p>
+      <div class="archive-final">
+        <TeamLogo name={match.home} size={34}/>
+        <span><small>Marcador final</small><strong>{match.homeScore}–{match.awayScore}</strong></span>
+        <TeamLogo name={match.away} size={34}/>
+      </div>
+    </div>
+    <ArchivePitch/>
+  </header>
+  <AdSlot variant="horizontal" slotKey="partidoPrevio"/>
+  <ReadingBlock entry={match.reading} archived/>
+  <AdSlot variant="horizontal" slotKey="partidoCierre"/>
+</main>

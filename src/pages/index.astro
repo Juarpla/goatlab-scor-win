@@ -10,6 +10,7 @@ import MatchPulse from '../components/MatchPulse.astro';
 import PlayerPulse from '../components/PlayerPulse.astro';
 import StandingsBoard from '../components/StandingsBoard.astro';
 import JornadaBand from '../components/JornadaBand.astro';
+import ArchivePitch from '../components/ArchivePitch.astro';
 import { competitions, matchPhase, staysOnWall } from '../lib/football.js';
 import { heroMatch, teamShort, teamEsDisplay } from '../lib/teams.js';
 import { matchForm, teamForm } from '../lib/form.js';
@@ -19,6 +20,7 @@ import results from '../../public/data/results.json';
 import standings from '../../public/data/standings.json';
 import scorers from '../../public/data/scorers.json';
 import '../styles/home.css';
+import '../styles/match-archive.css';
 
 const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
 const listed = matches.filter(match => staysOnWall(match));
@@ -119,7 +121,15 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
   </div>
   {hasMore && <nav class="wall-nav" aria-label="Más encuentros"><a class="wall-more" href="/encuentros/">Ver más encuentros <Icon size={16}/></a></nav>}
  </section>
- <AdSlot/>
+ <AdSlot variant="horizontal" slotKey="homeArchive"/>
+ <section class="archive-promo" aria-labelledby="archive-title">
+  <div class="archive-copy">
+   <h2 id="archive-title">Resultados y <strong>análisis recientes.</strong></h2>
+   <p>Consulta el marcador final y vuelve a la lectura que preparamos antes del partido.</p>
+   <a class="archive-back" href="/encuentros/#analisis-recientes">Explorar partidos finalizados <Icon size={16}/></a>
+  </div>
+  <ArchivePitch/>
+ </section>
  {hasJourney && <section class="journey" aria-labelledby="journey-title">
   <div class="section-heading"><h2 id="journey-title">Donde ocurre la jornada.</h2><span>Mapa de sedes · pulso de la base · tablas</span></div>
   {journeyData.pins.length > 0 && <JourneyMap pins={journeyData.pins}/>}

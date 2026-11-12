@@ -6,6 +6,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import TeamJersey from '../../components/TeamJersey.astro';
 import PitchScene from '../../components/PitchScene.astro';
 import ReadingBlock from '../../components/ReadingBlock.astro';
+import ArchivedMatch from '../../components/ArchivedMatch.astro';
 import ProbabilityBar from '../../components/ProbabilityBar.astro';
 import ExtraMarkets from '../../components/ExtraMarkets.astro';
 import WaffleResult from '../../components/WaffleResult.astro';
@@ -17,7 +18,7 @@ import TrendsStrip from '../../components/TrendsStrip.astro';
 import { storyTerm } from '../../lib/story-dictionary.js';
 import { normalizeReading } from '../../lib/reading.js';
 import { findFreshAnalysis } from '../../lib/analysis.js';
-import { competitions, matchPhase } from '../../lib/football.js';
+import { competitions, FINISHED_STATUSES, hasNumericScore, matchPhase } from '../../lib/football.js';
 import { teamShort, teamCompact, teamEsDisplay } from '../../lib/teams.js';
 import { teamForm, bakedForm } from '../../lib/form.js';
 import { roundNumber, findStandingRow, topScorerFor } from '../../lib/series-crumbs.js';
@@ -27,7 +28,10 @@ import { topScorerSplit, resolveMatchMarkets, withScorerFallback } from '../../l
 import { locateMatch, competitionFallback, fallbackRegionLayout } from '../../lib/venues.js';
 import { teamColors } from '../../lib/team-colors.js';
 import { matchPageIds } from '../../lib/page-policy.js';
+import { archiveEntries } from '../../lib/match-archive.js';
+import { describeMatch, formSnapshot } from '../../lib/match-seo.js';
 import fixtures from '../../../public/data/fixtures.json';
+import archive from '../../../public/data/match-archive.json';
 import analyses from '../../../public/data/llm-analysis.json';
 import results from '../../../public/data/results.json';
 import standingsData from '../../../public/data/standings.json';
@@ -41,13 +45,22 @@ import '../../styles/partido.css';
 export function getStaticPaths() {
   // Canonical URL: webId (`home-vs-away-date`). The provider id is still
   // emitted so shared links do not break (same content).
-  return fixtures.matches.flatMap(match => matchPageIds(match).map(id => ({ params: { id }, props: { match } })));
+  const paths = new Map();
+  for (const match of archiveEntries(archive)) {
+    for (const id of matchPageIds(match)) paths.set(id, { params: { id }, props: { match, archived: true } });
+  }
+  for (const match of fixtures.matches) {
+    // Live fixtures win. Confirmed finals use the captured archive when available.
+    const saved = archive[match.webId ?? ''];
+    const archived = Boolean(saved && FINISHED_STATUSES.has(match.status) && hasNumericScore(match));
+    for (const id of matchPageIds(match)) paths.set(id, { params: { id }, props: { match: archived ? saved : match, archived } });
+  }
+  return [...paths.values()];
 }
-const {match} = Astro.props;
+const { match, archived } = Astro.props;
 const competition = competitions.find(c=>c.id===match.competition)?.name;
 const homeEs = teamEsDisplay(match.home);
 const awayEs = teamEsDisplay(match.away);
-const description = `Análisis de ${homeEs} vs. ${awayEs}${competition ? ` en ${competition}` : ''}. Consulta la forma reciente de ambos equipos y las estadísticas disponibles del encuentro.`;
 const homeForm = teamForm(results.results, match.home);
 const awayForm = teamForm(results.results, match.away);
 /* What they already played: always last 5 per team (baked by the pipeline
@@ -243,6 +256,12 @@ const dominance = probability?.dominance ?? null;
 const hasForecast = Boolean(forecast && (forecast.home || forecast.away));
 const forecastFallback = !hasForecast && lambdas ? { home: { corners: null, shots: null, shotsOnTarget: null, xg: lambdas.home, yellowCards: null }, away: { corners: null, shots: null, shotsOnTarget: null, xg: lambdas.away, yellowCards: null } } : null;
 const forecastTable = forecast ?? forecastFallback;
+const description = describeMatch({
+  home: homeEs, away: awayEs, competition, kickoff: match.kickoff,
+  form: archived ? match.form : formSnapshot(homeRecent, awayRecent),
+  xg: archived ? undefined : { home: forecastTable?.home?.xg, away: forecastTable?.away?.xg },
+  finalScore: FINISHED_STATUSES.has(match.status) && hasNumericScore(match) ? { home: match.homeScore, away: match.awayScore } : undefined,
+});
 const statEval = evaluation?.stats?.metrics ?? {};
 const statOk = (key: string) => statEval[key]?.published === true;
 /* Derived duels: only with the team's own rates in that metric.
@@ -322,6 +341,7 @@ const crumbsFor = side => {
 };
 ---
 <Layout title={`${homeEs} vs. ${awayEs} — GoatLab`} description={description} canonical={`/partido/${match.webId ?? match.id}/`}>
+{archived ? <ArchivedMatch match={match} home={homeEs} away={awayEs} competition={competition}/> : <>
 <main id="main" class="wrap">
  <a class="back-link" href="/#encuentros"><Icon size={16}/> Volver a encuentros</a>
  <div class="match-title"><div><h1>{homeEs}<span>vs.</span>{awayEs}</h1><p>{competition} · Última consulta: <time data-consult data-utc={fixtures.updatedAt}>{consultUtc}</time>{statusLabel === 'En juego' && match.minute != null ? ` · Minuto ${match.minute}` : ''}</p></div><span class="outline-label">{statusLabel}</span></div>
@@ -484,7 +504,9 @@ const crumbsFor = side => {
     <AdSlot variant="rect" slotKey="partidoCierre"/>
   <TrendsStrip home={match.home} away={match.away} homeShort={teamShort(match.home)} awayShort={teamShort(match.away)} unavailable={probability?.availability?.unavailablePlayers ?? match.lineups?.unavailablePlayers ?? null} extra={trendsExtra} afPrediction={afPred} />
 </main>
+</>}
 <script>
+ if (document.querySelector('.match-title')) {
  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-stage]')];
  const panes=[...document.querySelectorAll<HTMLElement>('[data-pane]')];
  const chapters=[...document.querySelectorAll<HTMLElement>('[data-chapter]')];
@@ -539,5 +561,6 @@ const crumbsFor = side => {
    stamp.textContent=`${read('year')}-${read('month')}-${read('day')} ${read('hour')}:${read('minute')}`;
   }
  })();
+ }
 </script>
 </Layout>
