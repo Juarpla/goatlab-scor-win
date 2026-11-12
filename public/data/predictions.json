@@ -573404,7 +573404,11 @@
           }
         }
       ],
-      "finalScore": null
+      "finalScore": {
+        "home": 1,
+        "away": 1,
+        "recordedAt": "2026-11-12T19:54:09.964Z"
+      }
     },
     "bz-212687": {
       "kickoff": "2026-11-12T17:00:00+00:00",
@@ -575172,7 +575176,11 @@
           }
         }
       ],
-      "finalScore": null
+      "finalScore": {
+        "home": 1,
+        "away": 2,
+        "recordedAt": "2026-11-12T19:54:09.964Z"
+      }
     },
     "bz-212694": {
       "kickoff": "2026-11-12T19:45:00+00:00",
@@ -576893,6 +576901,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.7379"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.6)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T19:54:06.184Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.73,
+              "draw": 0.177,
+              "away": 0.09300000000000001,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.51,
+              "away": 0.86
+            },
+            "over15": 0.7490000000000001,
+            "over25": 0.522,
+            "over35": 0.27899999999999997,
+            "btts": 0.40700000000000003,
+            "score": "1-0",
+            "cornersOver95": 0.45899999999999996,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.73,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7302,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.691,
+              "draw": 0.191,
+              "away": 0.118
+            },
+            "over25": 0.522,
+            "btts": 0.407,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7302"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -578706,6 +578802,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T19:54:06.145Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.048,
+              "draw": 0.11699999999999999,
+              "away": 0.835,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 0.76,
+              "away": 2.08
+            },
+            "over15": 0.79,
+            "over25": 0.5670000000000001,
+            "over35": 0.35100000000000003,
+            "btts": 0.316,
+            "score": "0-2",
+            "cornersOver95": 0.44299999999999995,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.835,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.835,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.061,
+              "draw": 0.148,
+              "away": 0.791
+            },
+            "over25": 0.567,
+            "btts": 0.316,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.835"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-1)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -580429,6 +580613,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4714"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T19:54:06.247Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.44299999999999995,
+              "draw": 0.312,
+              "away": 0.245,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.32,
+              "away": 0.98
+            },
+            "over15": 0.625,
+            "over25": 0.34299999999999997,
+            "over35": 0.177,
+            "btts": 0.419,
+            "score": "1-1",
+            "cornersOver95": 0.45899999999999996,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.443,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4426,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.443,
+              "draw": 0.312,
+              "away": 0.245
+            },
+            "over25": 0.343,
+            "btts": 0.419,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4426"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -582242,6 +582514,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T19:54:06.275Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.7440000000000001,
+              "draw": 0.156,
+              "away": 0.10099999999999999,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 2.23,
+              "away": 0.94
+            },
+            "over15": 0.835,
+            "over25": 0.6409999999999999,
+            "over35": 0.418,
+            "btts": 0.512,
+            "score": "2-0",
+            "cornersOver95": 0.456,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.744,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7436,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.706,
+              "draw": 0.176,
+              "away": 0.118
+            },
+            "over25": 0.641,
+            "btts": 0.512,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7436"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.667)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -583965,6 +584325,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.7885"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.75)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T19:54:06.900Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.085,
+              "draw": 0.142,
+              "away": 0.773,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 0.8,
+              "away": 2.01
+            },
+            "over15": 0.82,
+            "over25": 0.618,
+            "over35": 0.38,
+            "btts": 0.47200000000000003,
+            "score": "0-2",
+            "cornersOver95": 0.39799999999999996,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.773,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.773,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.101,
+              "draw": 0.166,
+              "away": 0.733
+            },
+            "over25": 0.618,
+            "btts": 0.472,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.773"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -585778,6 +586226,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T19:54:07.031Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.262,
+              "draw": 0.26,
+              "away": 0.479,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.44,
+              "away": 1.45
+            },
+            "over15": 0.7909999999999999,
+            "over25": 0.5720000000000001,
+            "over35": 0.354,
+            "btts": 0.596,
+            "score": "1-1",
+            "cornersOver95": 0.475,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.479,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4785,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.281,
+              "draw": 0.25,
+              "away": 0.469
+            },
+            "over25": 0.572,
+            "btts": 0.596,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4785"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.154)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -587149,6 +587685,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.3586"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:33.286Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.35600000000000004,
+              "draw": 0.311,
+              "away": 0.33299999999999996,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.27,
+              "away": 1.39
+            },
+            "over15": 0.6459999999999999,
+            "over25": 0.38299999999999995,
+            "over35": 0.21100000000000002,
+            "btts": 0.462,
+            "score": "1-1",
+            "cornersOver95": 0.526,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.356,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3557,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.365,
+              "draw": 0.287,
+              "away": 0.348
+            },
+            "over25": 0.383,
+            "btts": 0.462,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3557"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -588786,6 +589410,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:33.070Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.075,
+              "draw": 0.18899999999999997,
+              "away": 0.737,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 0.68,
+              "away": 1.52
+            },
+            "over15": 0.677,
+            "over25": 0.44,
+            "over35": 0.22,
+            "btts": 0.326,
+            "score": "0-1",
+            "cornersOver95": 0.375,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.737,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7367,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.113,
+              "draw": 0.199,
+              "away": 0.688
+            },
+            "over25": 0.44,
+            "btts": 0.326,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7367"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.5)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -590129,6 +590841,94 @@
               "away": 1.15
             },
             "over15": 0.578,
+            "over25": 0.336,
+            "over35": 0.158,
+            "btts": 0.359,
+            "score": "0-1",
+            "cornersOver95": 0.418,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.503,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5035,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.419,
+              "draw": 0.279,
+              "away": 0.302
+            },
+            "over25": 0.336,
+            "btts": 0.359,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5035"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.5)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:33.083Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.503,
+              "draw": 0.3,
+              "away": 0.196,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 0.77,
+              "away": 1.15
+            },
+            "over15": 0.579,
             "over25": 0.336,
             "over35": 0.158,
             "btts": 0.359,
@@ -591794,6 +592594,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:33.194Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.43799999999999994,
+              "draw": 0.298,
+              "away": 0.264,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.04,
+              "away": 1.1
+            },
+            "over15": 0.64,
+            "over25": 0.384,
+            "over35": 0.18899999999999997,
+            "btts": 0.457,
+            "score": "1-1",
+            "cornersOver95": 0.451,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.438,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4378,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.339,
+              "draw": 0.277,
+              "away": 0.383
+            },
+            "over25": 0.384,
+            "btts": 0.457,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4378"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-1)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -593165,6 +594053,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.5043"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.333)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:33.968Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.222,
+              "draw": 0.27,
+              "away": 0.508,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.06,
+              "away": 1.53
+            },
+            "over15": 0.6970000000000001,
+            "over25": 0.451,
+            "over35": 0.24600000000000002,
+            "btts": 0.48700000000000004,
+            "score": "1-1",
+            "cornersOver95": 0.42200000000000004,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.508,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5077,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.305,
+              "draw": 0.257,
+              "away": 0.438
+            },
+            "over25": 0.451,
+            "btts": 0.487,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5077"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -594802,6 +595778,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:34.016Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.695,
+              "draw": 0.196,
+              "away": 0.109,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.35,
+              "away": 1.07
+            },
+            "over15": 0.7509999999999999,
+            "over25": 0.515,
+            "over35": 0.28600000000000003,
+            "btts": 0.44299999999999995,
+            "score": "1-1",
+            "cornersOver95": 0.534,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.695,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6949,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.695,
+              "draw": 0.196,
+              "away": 0.109
+            },
+            "over25": 0.515,
+            "btts": 0.443,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6949"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -596173,6 +597237,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.7314"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:34.092Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.107,
+              "draw": 0.158,
+              "away": 0.735,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 0.82,
+              "away": 2.1
+            },
+            "over15": 0.8490000000000001,
+            "over25": 0.664,
+            "over35": 0.43,
+            "btts": 0.536,
+            "score": "0-2",
+            "cornersOver95": 0.48,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.735,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7346,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.187,
+              "draw": 0.177,
+              "away": 0.636
+            },
+            "over25": 0.664,
+            "btts": 0.536,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7346"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -597810,6 +598962,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:34.157Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.625,
+              "draw": 0.213,
+              "away": 0.161,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.6,
+              "away": 1.11
+            },
+            "over15": 0.8,
+            "over25": 0.584,
+            "over35": 0.35,
+            "btts": 0.55,
+            "score": "1-1",
+            "cornersOver95": 0.49,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.625,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6255,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.558,
+              "draw": 0.217,
+              "away": 0.226
+            },
+            "over25": 0.584,
+            "btts": 0.55,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6255"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -599181,6 +600421,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.5657"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.8)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:34.847Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.17800000000000002,
+              "draw": 0.262,
+              "away": 0.56,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 0.94,
+              "away": 1.48
+            },
+            "over15": 0.687,
+            "over25": 0.43799999999999994,
+            "over35": 0.231,
+            "btts": 0.45399999999999996,
+            "score": "1-1",
+            "cornersOver95": 0.42100000000000004,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.56,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5603,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.164,
+              "draw": 0.252,
+              "away": 0.584
+            },
+            "over25": 0.438,
+            "btts": 0.454,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5603"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -600818,6 +602146,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:34.868Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.7929999999999999,
+              "draw": 0.145,
+              "away": 0.062,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.8,
+              "away": 0.81
+            },
+            "over15": 0.772,
+            "over25": 0.555,
+            "over35": 0.322,
+            "btts": 0.361,
+            "score": "1-0",
+            "cornersOver95": 0.47200000000000003,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.793,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7928,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.719,
+              "draw": 0.168,
+              "away": 0.113
+            },
+            "over25": 0.555,
+            "btts": 0.361,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7928"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.4)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -601925,6 +603341,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.494"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:35.198Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.511,
+              "draw": 0.263,
+              "away": 0.226,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.66,
+              "away": 0.96
+            },
+            "over15": 0.74,
+            "over25": 0.502,
+            "over35": 0.285,
+            "btts": 0.524,
+            "score": "1-1",
+            "cornersOver95": 0.371,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.511,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5108,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.511,
+              "draw": 0.263,
+              "away": 0.226
+            },
+            "over25": 0.502,
+            "btts": 0.524,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5108"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -603298,6 +604802,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:34.960Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.311,
+              "draw": 0.305,
+              "away": 0.384,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.15,
+              "away": 1.16
+            },
+            "over15": 0.64,
+            "over25": 0.38299999999999995,
+            "over35": 0.19399999999999998,
+            "btts": 0.461,
+            "score": "1-1",
+            "cornersOver95": 0.45,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.384,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3842,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.311,
+              "draw": 0.305,
+              "away": 0.384
+            },
+            "over25": 0.383,
+            "btts": 0.461,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3842"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -604405,6 +605997,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.759"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:35.689Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.772,
+              "draw": 0.14300000000000002,
+              "away": 0.085,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.82,
+              "away": 1.04
+            },
+            "over15": 0.847,
+            "over25": 0.659,
+            "over35": 0.414,
+            "btts": 0.496,
+            "score": "1-1",
+            "cornersOver95": 0.46799999999999997,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.772,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7723,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.772,
+              "draw": 0.143,
+              "away": 0.085
+            },
+            "over25": 0.659,
+            "btts": 0.496,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7723"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -605778,6 +607458,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:35.805Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.621,
+              "draw": 0.21600000000000003,
+              "away": 0.163,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.38,
+              "away": 1.22
+            },
+            "over15": 0.797,
+            "over25": 0.586,
+            "over35": 0.34600000000000003,
+            "btts": 0.552,
+            "score": "1-1",
+            "cornersOver95": 0.373,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.621,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6207,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.621,
+              "draw": 0.216,
+              "away": 0.163
+            },
+            "over25": 0.586,
+            "btts": 0.552,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6207"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -606885,6 +608653,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4846"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.6)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:35.867Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.243,
+              "draw": 0.252,
+              "away": 0.505,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.23,
+              "away": 1.61
+            },
+            "over15": 0.77,
+            "over25": 0.544,
+            "over35": 0.32799999999999996,
+            "btts": 0.562,
+            "score": "1-1",
+            "cornersOver95": 0.418,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.505,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5046,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.225,
+              "draw": 0.244,
+              "away": 0.531
+            },
+            "over25": 0.544,
+            "btts": 0.562,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5046"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -608258,6 +610114,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:36.113Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.594,
+              "draw": 0.235,
+              "away": 0.171,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.34,
+              "away": 1.11
+            },
+            "over15": 0.752,
+            "over25": 0.521,
+            "over35": 0.284,
+            "btts": 0.502,
+            "score": "1-1",
+            "cornersOver95": 0.37,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.594,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5942,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.535,
+              "draw": 0.232,
+              "away": 0.233
+            },
+            "over25": 0.521,
+            "btts": 0.502,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5942"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -609365,6 +611309,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.3994"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.333)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:36.585Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.397,
+              "draw": 0.307,
+              "away": 0.297,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.31,
+              "away": 0.93
+            },
+            "over15": 0.636,
+            "over25": 0.375,
+            "over35": 0.18899999999999997,
+            "btts": 0.451,
+            "score": "1-1",
+            "cornersOver95": 0.391,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.397,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3966,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.429,
+              "draw": 0.284,
+              "away": 0.287
+            },
+            "over25": 0.375,
+            "btts": 0.451,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3966"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -610738,6 +612770,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:36.665Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.626,
+              "draw": 0.21,
+              "away": 0.16399999999999998,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.53,
+              "away": 1.2
+            },
+            "over15": 0.818,
+            "over25": 0.604,
+            "over35": 0.37,
+            "btts": 0.564,
+            "score": "1-1",
+            "cornersOver95": 0.47100000000000003,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.626,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6262,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.558,
+              "draw": 0.214,
+              "away": 0.228
+            },
+            "over25": 0.604,
+            "btts": 0.564,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6262"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -611581,6 +613701,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.3843"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.4)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:36.702Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.384,
+              "draw": 0.318,
+              "away": 0.298,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.17,
+              "away": 1.01
+            },
+            "over15": 0.649,
+            "over25": 0.38299999999999995,
+            "over35": 0.177,
+            "btts": 0.45899999999999996,
+            "score": "1-1",
+            "cornersOver95": 0.474,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.384,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3839,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.343,
+              "draw": 0.292,
+              "away": 0.366
+            },
+            "over25": 0.383,
+            "btts": 0.459,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3839"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -612690,6 +614898,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.017Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.395,
+              "draw": 0.273,
+              "away": 0.332,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.43,
+              "away": 1.3
+            },
+            "over15": 0.75,
+            "over25": 0.51,
+            "over35": 0.285,
+            "btts": 0.5429999999999999,
+            "score": "1-1",
+            "cornersOver95": 0.452,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.395,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.395,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.342,
+              "draw": 0.259,
+              "away": 0.399
+            },
+            "over25": 0.51,
+            "btts": 0.543,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.395"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.5)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -613533,6 +615829,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.7831"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:36.980Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.782,
+              "draw": 0.153,
+              "away": 0.065,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 2.3,
+              "away": 0.63
+            },
+            "over15": 0.78,
+            "over25": 0.5539999999999999,
+            "over35": 0.32799999999999996,
+            "btts": 0.444,
+            "score": "2-0",
+            "cornersOver95": 0.48700000000000004,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.782,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7821,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.782,
+              "draw": 0.153,
+              "away": 0.065
+            },
+            "over25": 0.554,
+            "btts": 0.444,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7821"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -614642,6 +617026,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.033Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.242,
+              "draw": 0.285,
+              "away": 0.473,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.11,
+              "away": 1.22
+            },
+            "over15": 0.6709999999999999,
+            "over25": 0.42100000000000004,
+            "over35": 0.223,
+            "btts": 0.466,
+            "score": "1-1",
+            "cornersOver95": 0.447,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.473,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4728,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.213,
+              "draw": 0.268,
+              "away": 0.519
+            },
+            "over25": 0.421,
+            "btts": 0.466,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4728"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.75)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -615485,6 +617957,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.462"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.25)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.100Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.599,
+              "draw": 0.214,
+              "away": 0.18600000000000003,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.54,
+              "away": 1.15
+            },
+            "over15": 0.8079999999999999,
+            "over25": 0.624,
+            "over35": 0.38,
+            "btts": 0.593,
+            "score": "1-1",
+            "cornersOver95": 0.40399999999999997,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.599,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5993,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.566,
+              "draw": 0.217,
+              "away": 0.217
+            },
+            "over25": 0.624,
+            "btts": 0.593,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5993"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -616594,6 +619154,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.348Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.6829999999999999,
+              "draw": 0.193,
+              "away": 0.124,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.65,
+              "away": 1.27
+            },
+            "over15": 0.78,
+            "over25": 0.574,
+            "over35": 0.342,
+            "btts": 0.499,
+            "score": "1-1",
+            "cornersOver95": 0.424,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.683,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6827,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.65,
+              "draw": 0.202,
+              "away": 0.148
+            },
+            "over25": 0.574,
+            "btts": 0.499,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6827"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.5)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -617437,6 +620085,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.5559"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.429Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.797,
+              "draw": 0.128,
+              "away": 0.07400000000000001,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.88,
+              "away": 1.15
+            },
+            "over15": 0.7929999999999999,
+            "over25": 0.711,
+            "over35": 0.441,
+            "btts": 0.517,
+            "score": "1-1",
+            "cornersOver95": 0.466,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.797,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7974,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.798,
+              "draw": 0.128,
+              "away": 0.074
+            },
+            "over25": 0.711,
+            "btts": 0.517,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7974"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -618546,6 +621282,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.487Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.434,
+              "draw": 0.265,
+              "away": 0.301,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.79,
+              "away": 1.24
+            },
+            "over15": 0.794,
+            "over25": 0.545,
+            "over35": 0.348,
+            "btts": 0.585,
+            "score": "1-1",
+            "cornersOver95": 0.5,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.434,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4336,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.379,
+              "draw": 0.254,
+              "away": 0.368
+            },
+            "over25": 0.545,
+            "btts": 0.585,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4336"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.4)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -619037,6 +621861,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4782"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.333)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.514Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.24600000000000002,
+              "draw": 0.27699999999999997,
+              "away": 0.478,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.05,
+              "away": 1.48
+            },
+            "over15": 0.718,
+            "over25": 0.467,
+            "over35": 0.24600000000000002,
+            "btts": 0.506,
+            "score": "1-1",
+            "cornersOver95": 0.512,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.478,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4776,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.322,
+              "draw": 0.262,
+              "away": 0.416
+            },
+            "over25": 0.467,
+            "btts": 0.506,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4776"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -619794,6 +622706,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.780Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.598,
+              "draw": 0.24100000000000002,
+              "away": 0.162,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.76,
+              "away": 0.89
+            },
+            "over15": 0.738,
+            "over25": 0.493,
+            "over35": 0.26899999999999996,
+            "btts": 0.494,
+            "score": "1-0",
+            "cornersOver95": 0.524,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.598,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5975,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.573,
+              "draw": 0.236,
+              "away": 0.191
+            },
+            "over25": 0.493,
+            "btts": 0.494,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5975"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.333)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -620285,6 +623285,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.7195"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (1)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.803Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.718,
+              "draw": 0.20800000000000002,
+              "away": 0.07400000000000001,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.83,
+              "away": 0.52
+            },
+            "over15": 0.682,
+            "over25": 0.423,
+            "over35": 0.20800000000000002,
+            "btts": 0.381,
+            "score": "1-0",
+            "cornersOver95": 0.42200000000000004,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.718,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.7177,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.708,
+              "draw": 0.213,
+              "away": 0.079
+            },
+            "over25": 0.423,
+            "btts": 0.381,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.7177"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -621042,6 +624130,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.915Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.505,
+              "draw": 0.28300000000000003,
+              "away": 0.213,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.47,
+              "away": 0.92
+            },
+            "over15": 0.69,
+            "over25": 0.43200000000000005,
+            "over35": 0.21600000000000003,
+            "btts": 0.475,
+            "score": "1-0",
+            "cornersOver95": 0.406,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.505,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5046,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.504,
+              "draw": 0.283,
+              "away": 0.213
+            },
+            "over25": 0.432,
+            "btts": 0.475,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5046"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -621533,6 +624709,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4916"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:37.935Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.49200000000000005,
+              "draw": 0.287,
+              "away": 0.221,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.44,
+              "away": 0.93
+            },
+            "over15": 0.687,
+            "over25": 0.428,
+            "over35": 0.212,
+            "btts": 0.475,
+            "score": "1-1",
+            "cornersOver95": 0.486,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.492,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4918,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.492,
+              "draw": 0.287,
+              "away": 0.221
+            },
+            "over25": 0.428,
+            "btts": 0.475,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4918"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -622290,6 +625554,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.172Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.32799999999999996,
+              "draw": 0.307,
+              "away": 0.365,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.13,
+              "away": 1.18
+            },
+            "over15": 0.675,
+            "over25": 0.413,
+            "over35": 0.2,
+            "btts": 0.48,
+            "score": "1-1",
+            "cornersOver95": 0.406,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.365,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3647,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.318,
+              "draw": 0.284,
+              "away": 0.398
+            },
+            "over25": 0.413,
+            "btts": 0.48,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3647"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.25)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -622781,6 +626133,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.6183"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.333)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.194Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.619,
+              "draw": 0.233,
+              "away": 0.14800000000000002,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.81,
+              "away": 0.85
+            },
+            "over15": 0.74,
+            "over25": 0.496,
+            "over35": 0.272,
+            "btts": 0.488,
+            "score": "1-0",
+            "cornersOver95": 0.455,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.619,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.6191,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.588,
+              "draw": 0.231,
+              "away": 0.181
+            },
+            "over25": 0.496,
+            "btts": 0.488,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.6191"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -623538,6 +626978,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.408Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.47700000000000004,
+              "draw": 0.255,
+              "away": 0.268,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.65,
+              "away": 1.23
+            },
+            "over15": 0.774,
+            "over25": 0.5429999999999999,
+            "over35": 0.317,
+            "btts": 0.556,
+            "score": "1-1",
+            "cornersOver95": 0.505,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.477,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4772,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.47,
+              "draw": 0.247,
+              "away": 0.284
+            },
+            "over25": 0.543,
+            "btts": 0.556,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4772"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.167)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -624029,6 +627557,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.5784"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal equilibrada (0)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.361Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.58,
+              "draw": 0.23600000000000002,
+              "away": 0.184,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.82,
+              "away": 1
+            },
+            "over15": 0.765,
+            "over25": 0.531,
+            "over35": 0.305,
+            "btts": 0.526,
+            "score": "1-1",
+            "cornersOver95": 0.455,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.58,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5798,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.525,
+              "draw": 0.233,
+              "away": 0.242
+            },
+            "over25": 0.531,
+            "btts": 0.526,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5798"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -624786,6 +628402,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.581Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.21100000000000002,
+              "draw": 0.303,
+              "away": 0.48700000000000004,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 0.85,
+              "away": 1.34
+            },
+            "over15": 0.65,
+            "over25": 0.38299999999999995,
+            "over35": 0.177,
+            "btts": 0.445,
+            "score": "0-1",
+            "cornersOver95": 0.42200000000000004,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.487,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4866,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.234,
+              "draw": 0.281,
+              "away": 0.485
+            },
+            "over25": 0.383,
+            "btts": 0.445,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4866"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.25)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -625013,6 +628717,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.4041"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.2)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.587Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.405,
+              "draw": 0.262,
+              "away": 0.33299999999999996,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.51,
+              "away": 1.36
+            },
+            "over15": 0.772,
+            "over25": 0.541,
+            "over35": 0.314,
+            "btts": 0.562,
+            "score": "1-1",
+            "cornersOver95": 0.40399999999999997,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.405,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4048,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.378,
+              "draw": 0.252,
+              "away": 0.37
+            },
+            "over25": 0.541,
+            "btts": 0.562,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4048"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -625506,6 +629298,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.780Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.5429999999999999,
+              "draw": 0.258,
+              "away": 0.2,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.65,
+              "away": 0.97
+            },
+            "over15": 0.733,
+            "over25": 0.486,
+            "over35": 0.263,
+            "btts": 0.505,
+            "score": "1-1",
+            "cornersOver95": 0.408,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.543,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5426,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.558,
+              "draw": 0.249,
+              "away": 0.194
+            },
+            "over25": 0.486,
+            "btts": 0.505,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5426"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.6)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -625733,6 +629613,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.5166"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del visitante (-0.333)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.795Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.225,
+              "draw": 0.26,
+              "away": 0.515,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.06,
+              "away": 1.62
+            },
+            "over15": 0.743,
+            "over25": 0.5,
+            "over35": 0.276,
+            "btts": 0.522,
+            "score": "1-1",
+            "cornersOver95": 0.364,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.515,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.515,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.236,
+              "draw": 0.25,
+              "away": 0.514
+            },
+            "over25": 0.5,
+            "btts": 0.522,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.515"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -626226,6 +630194,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:38.993Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.402,
+              "draw": 0.301,
+              "away": 0.297,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.28,
+              "away": 1.08
+            },
+            "over15": 0.685,
+            "over25": 0.425,
+            "over35": 0.21,
+            "btts": 0.486,
+            "score": "1-1",
+            "cornersOver95": 0.374,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.402,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.402,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.402,
+              "draw": 0.301,
+              "away": 0.297
+            },
+            "over25": 0.425,
+            "btts": 0.486,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.402"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -626453,6 +630509,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.3944"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.5)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:39.021Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.395,
+              "draw": 0.297,
+              "away": 0.307,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.29,
+              "away": 1.12
+            },
+            "over15": 0.6940000000000001,
+            "over25": 0.436,
+            "over35": 0.21899999999999997,
+            "btts": 0.494,
+            "score": "1-1",
+            "cornersOver95": 0.415,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.395,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3953,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.444,
+              "draw": 0.277,
+              "away": 0.279
+            },
+            "over25": 0.436,
+            "btts": 0.494,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3953"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -626946,6 +631090,94 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:39.148Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.337,
+              "draw": 0.324,
+              "away": 0.33899999999999997,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.08,
+              "away": 1.07
+            },
+            "over15": 0.6409999999999999,
+            "over25": 0.373,
+            "over35": 0.17,
+            "btts": 0.45399999999999996,
+            "score": "1-1",
+            "cornersOver95": 0.434,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.339,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.3389,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.416,
+              "draw": 0.296,
+              "away": 0.288
+            },
+            "over25": 0.373,
+            "btts": 0.454,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.3389"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.667)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
@@ -627173,6 +631405,94 @@
                 "label": "CatBoost (Bzzoiro)",
                 "weight": 0.5,
                 "detail": "confianza del proveedor 0.5163"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:39.160Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.21899999999999997,
+              "draw": 0.265,
+              "away": 0.516,
+              "predicted": "A"
+            },
+            "xg": {
+              "home": 1.02,
+              "away": 1.58
+            },
+            "over15": 0.73,
+            "over25": 0.483,
+            "over35": 0.26,
+            "btts": 0.51,
+            "score": "1-1",
+            "cornersOver95": 0.45399999999999996,
+            "recommendations": {
+              "favorite": "A",
+              "favoriteProb": 0.516,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.5162,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.219,
+              "draw": 0.265,
+              "away": 0.516
+            },
+            "over25": 0.483,
+            "btts": 0.51,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.5162"
               },
               {
                 "label": "Poisson (GoatLab)",
@@ -627666,10 +631986,98 @@
             },
             "drawBase": 0.22554890219560877
           }
+        },
+        {
+          "capturedAt": "2026-11-12T14:59:39.396Z",
+          "catboost": {
+            "oneX2": {
+              "home": 0.418,
+              "draw": 0.257,
+              "away": 0.326,
+              "predicted": "H"
+            },
+            "xg": {
+              "home": 1.57,
+              "away": 1.38
+            },
+            "over15": 0.7829999999999999,
+            "over25": 0.557,
+            "over35": 0.331,
+            "btts": 0.5720000000000001,
+            "score": "1-1",
+            "cornersOver95": 0.46,
+            "recommendations": {
+              "favorite": "H",
+              "favoriteProb": 0.418,
+              "over25": false,
+              "btts": false
+            },
+            "confidence": 0.4177,
+            "model": "dc-blend-v1"
+          },
+          "apiFootball": null,
+          "goatlab": {
+            "oneX2": {
+              "home": 0.436,
+              "draw": 0.248,
+              "away": 0.316
+            },
+            "over25": 0.557,
+            "btts": 0.572,
+            "inputs": [
+              {
+                "label": "CatBoost (Bzzoiro)",
+                "weight": 0.5,
+                "detail": "confianza del proveedor 0.4177"
+              },
+              {
+                "label": "Poisson (GoatLab)",
+                "weight": 0,
+                "detail": "sin muestra suficiente de ambos equipos"
+              },
+              {
+                "label": "Consenso externo",
+                "weight": 0,
+                "detail": "sin consenso externo para este encuentro"
+              },
+              {
+                "label": "Historial cara a cara",
+                "weight": 0.2,
+                "detail": "señal a favor del local (0.25)"
+              },
+              {
+                "label": "Racha y forma",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Índice de rendimiento",
+                "weight": 0,
+                "detail": "sin datos suficientes"
+              },
+              {
+                "label": "Localía y sede",
+                "weight": 0,
+                "detail": "factor cualitativo: no mueve el número"
+              },
+              {
+                "label": "Ausencias confirmadas",
+                "weight": 0,
+                "detail": "sin bajas confirmadas al momento de la captura"
+              }
+            ],
+            "method": "goatlab-ensemble-v1",
+            "lambdas": null,
+            "sample": {
+              "home": 0,
+              "away": 0
+            },
+            "drawBase": 0.22554890219560877
+          }
         }
       ],
       "finalScore": null
     }
   },
-  "updatedAt": "2026-11-12T14:59:58.563Z"
+  "updatedAt": "2026-11-12T19:54:09.965Z"
 }
