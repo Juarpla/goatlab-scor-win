@@ -1,302 +1,6 @@
 {
-  "updatedAt": "2026-11-12T19:55:03.073Z",
+  "updatedAt": "2026-11-12T20:47:32.554Z",
   "runs": [
-    {
-      "at": "2026-11-04T00:54:47.898Z",
-      "task": "shorts",
-      "matchId": "sk-slavia-praha-vs-arsenal-2026-11-04",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 6 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7002,
-            "outputTokens": 30950
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 235094
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6890,
-            "outputTokens": 35157
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 418657
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 2: falta SK Slavia Praha; guion 3: falta SK Slavia Praha; guion 3: 8 cifras, máximo 3; guion 4: falta SK Slavia Praha; guion 5: falta SK Slavia Praha; guion 6: falta SK Slavia Praha; guion 6: el cero no se escribe en dígitos; guion 6: cifra 20 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7427,
-            "outputTokens": 2759
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 16409
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235205
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 6 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: cifra 12 no está en los hechos; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7002,
-            "outputTokens": 33964
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 137041
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 6: falta SK Slavia Praha",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6890,
-            "outputTokens": 35204
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 451047
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 2: falta SK Slavia Praha; guion 2: 4 cifras, máximo 3; guion 3: 10 cifras, máximo 3; guion 4: falta SK Slavia Praha; guion 5: falta SK Slavia Praha; guion 5: 4 cifras, máximo 3; guion 6: falta SK Slavia Praha; guion 7: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7427,
-            "outputTokens": 2690
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 49211
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235255
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7427,
-        "outputTokens": 2690
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-04T00:56:01.217Z",
-      "task": "image-prompts",
-      "matchId": "atletico-madrid-vs-barcelona-2026-11-08",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1526,
-        "outputTokens": 9277
-      }
-    },
-    {
-      "at": "2026-11-04T00:56:44.320Z",
-      "task": "image-prompts",
-      "matchId": "sk-slavia-praha-vs-arsenal-2026-11-04",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1928,
-        "outputTokens": 5150
-      }
-    },
-    {
-      "at": "2026-11-04T00:57:17.825Z",
-      "task": "image-prompts",
-      "matchId": "rb-leipzig-vs-manchester-city-2026-11-04",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1825,
-        "outputTokens": 4267
-      }
-    },
-    {
-      "at": "2026-11-04T06:31:46.973Z",
-      "matchId": "bz-601301",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 985,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 129731
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 980,
-            "outputTokens": 888
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 42024
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 955,
-            "outputTokens": 4712
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 83067
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 985,
-        "outputTokens": 8874
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "9757506e-c7a6-47a1-bf24-81d85c78e9f9"
-    },
-    {
-      "at": "2026-11-04T06:41:36.122Z",
-      "matchId": "fd-575386",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 1141,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 78919
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1169,
-            "outputTokens": 1349
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13266
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 1102,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 144203
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1141,
-        "outputTokens": 14583
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "5b3e510c-40f8-4156-b33e-9ecaeae4475d"
-    },
     {
       "at": "2026-11-04T06:46:55.000Z",
       "matchId": "fd-575387",
@@ -8234,6 +7938,325 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "0228cc90-ca76-4a55-b6ed-03d50449d8fc"
+    },
+    {
+      "at": "2026-11-12T20:08:10.946Z",
+      "task": "shorts",
+      "matchId": "slovenia-vs-switzerland-2026-11-13",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 3: 54 palabras, mínimo 55; guion 4: falta Eslovenia; guion 5: 4 cifras, máximo 3; guion 5: 53 palabras, mínimo 55; guion 6: 49 palabras, mínimo 55; guion 8: gancho repetido; guion 8: falta Suiza",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7604,
+            "outputTokens": 1723
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16940
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 4 cifras, máximo 3; guion 2: proyección fuera de rango; guion 2: 4 cifras, máximo 3; guion 3: proyección fuera de rango; guion 3: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7237,
+            "outputTokens": 20554
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 193742
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: proyección fuera de rango; guion 5: cifra 4.2 no está en los hechos; guion 5: cifra 4.5 no está en los hechos; guion 9: proyección fuera de rango; guion 10: cifra 12.2 no está en los hechos; guion 10: cifra 11.1 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7131,
+            "outputTokens": 35047
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 396585
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 2: falta Eslovenia; guion 3: falta Eslovenia; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 5: 52 palabras, mínimo 55; guion 6: 4 cifras, máximo 3; guion 6: 53 palabras, mínimo 55; guion 7: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7726,
+            "outputTokens": 2538
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13281
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: proyección fuera de rango; guion 2: el cero no se escribe en dígitos; guion 2: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3; guion 6: falta Eslovenia; guion 6: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7124,
+            "outputTokens": 7115
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 122651
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7124,
+        "outputTokens": 7115
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-12T20:38:00.297Z",
+      "task": "shorts",
+      "matchId": "moldova-vs-kazakhstan-2026-11-13",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 50 palabras, mínimo 55; guion 2: falta Moldavia; guion 2: falta Kazajistán; guion 2: 52 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 3: 53 palabras, mínimo 55; guion 4: 49 palabras, mínimo 55; guion 5: 46 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7459,
+            "outputTokens": 2674
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26441
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7108,
+            "outputTokens": 29849
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 345381
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 9: falta Moldavia",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6980,
+            "outputTokens": 35686
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 419885
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 2: falta Moldavia; guion 2: falta Kazajistán; guion 2: 52 palabras, mínimo 55; guion 4: 54 palabras, mínimo 55; guion 5: golpe 3 (dato): 5 palabras, mínimo 6; guion 5: 4 cifras, máximo 3; guion 5: 50 palabras, mínimo 55; guion 6: Nuraly Alip va en un guion de jugadores",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7595,
+            "outputTokens": 2539
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14413
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: el cero no se escribe en dígitos; guion 1: 5 cifras, máximo 3; guion 2: falta Kazajistán; guion 2: 6 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: falta Moldavia; guion 4: falta Kazajistán; guion 4: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6973,
+            "outputTokens": 8223
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 136187
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 6973,
+        "outputTokens": 8223
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-12T20:44:38.886Z",
+      "task": "shorts",
+      "matchId": "scotland-vs-north-macedonia-2026-11-13",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Macedonia del Norte; guion 1: el cero no se escribe en dígitos; guion 1: 4 cifras, máximo 3; guion 1: 54 palabras, mínimo 55; guion 4: falta Macedonia del Norte; guion 4: 52 palabras, mínimo 55; guion 5: 5 cifras, máximo 3; guion 6: falta Macedonia del Norte",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7282,
+            "outputTokens": 2746
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 22613
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: proyección fuera de rango; guion 3: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 6 cifras, máximo 3; guion 8: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6931,
+            "outputTokens": 23097
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 218890
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: falta Macedonia del Norte",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6814,
+            "outputTokens": 33509
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 357885
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 2: falta Macedonia del Norte; guion 2: 47 palabras, mínimo 55; guion 3: 5 cifras, máximo 3; guion 4: falta Macedonia del Norte; guion 4: 49 palabras, mínimo 55; guion 5: 6 cifras, máximo 3; guion 6: gancho repetido; guion 6: falta Macedonia del Norte",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7380,
+            "outputTokens": 2413
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12285
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235366
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 8: 52 palabras, mínimo 55; guion 9: falta Macedonia del Norte",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7282,
+            "outputTokens": 2797
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 22869
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 375720
+      },
+      "usage": {
+        "inputTokens": 6931,
+        "outputTokens": 29780
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "a2f1dbb6-7e36-4272-bc5e-0d4a280d2d6b"
+    },
+    {
+      "at": "2026-11-12T20:46:50.742Z",
+      "task": "image-prompts",
+      "matchId": "slovenia-vs-switzerland-2026-11-13",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "image-prompts 2: escena incorrecta",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 2768,
+            "outputTokens": 2424
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 22248
+        }
+      ],
+      "usage": {
+        "inputTokens": 2695,
+        "outputTokens": 11046
+      }
+    },
+    {
+      "at": "2026-11-12T20:47:11.084Z",
+      "task": "image-prompts",
+      "matchId": "scotland-vs-north-macedonia-2026-11-13",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2664,
+        "outputTokens": 2498
+      }
+    },
+    {
+      "at": "2026-11-12T20:47:32.554Z",
+      "task": "image-prompts",
+      "matchId": "moldova-vs-kazakhstan-2026-11-13",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2670,
+        "outputTokens": 2616
+      }
     }
   ]
 }
