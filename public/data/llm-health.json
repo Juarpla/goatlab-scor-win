@@ -1,61 +1,6 @@
 {
-  "updatedAt": "2026-11-13T07:01:26.172Z",
+  "updatedAt": "2026-11-13T07:16:25.074Z",
   "runs": [
-    {
-      "at": "2026-11-04T06:59:59.813Z",
-      "task": "shorts",
-      "matchId": "sk-slavia-praha-vs-arsenal-2026-11-04",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 273423
-      },
-      "usage": {
-        "inputTokens": 7012,
-        "outputTokens": 31405
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "f276415b-d1a9-49d1-be7d-30b82b7a2d01"
-    },
-    {
-      "at": "2026-11-04T14:18:55.004Z",
-      "matchId": "fd-575386",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1657,
-        "outputTokens": 26462
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "04f232a7-a2f2-418b-9f59-77d6bb4aaf58"
-    },
-    {
-      "at": "2026-11-04T14:18:55.004Z",
-      "matchId": "fd-575387",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "04f232a7-a2f2-418b-9f59-77d6bb4aaf58"
-    },
     {
       "at": "2026-11-04T14:20:06.077Z",
       "matchId": "fd-575390",
@@ -8349,6 +8294,102 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "3b885b19-740a-4621-a288-9ce6f9f68568"
+    },
+    {
+      "at": "2026-11-13T07:08:56.934Z",
+      "task": "shorts",
+      "matchId": "norway-vs-wales-2026-11-14",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Noruega; guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 6: falta Noruega; guion 6: 53 palabras, mínimo 55; guion 7: 52 palabras, mínimo 55; guion 8: falta Gales",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7245,
+            "outputTokens": 2856
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10857
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6952,
+            "outputTokens": 22067
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 206955
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash",
+        "latencyMs": 176122
+      },
+      "usage": {
+        "inputTokens": 6830,
+        "outputTokens": 29824
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "2dfa7c3b-e2e4-48f3-a56e-ab2b1c80cffb"
+    },
+    {
+      "at": "2026-11-13T07:16:17.965Z",
+      "task": "shorts",
+      "matchId": "slovenia-vs-switzerland-2026-11-13",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 52 palabras, mínimo 55; guion 2: falta Eslovenia; guion 2: 54 palabras, mínimo 55; guion 3: falta Suiza; guion 4: 54 palabras, mínimo 55; guion 5: 6 cifras, máximo 3; guion 5: 54 palabras, mínimo 55; guion 6: 49 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7562,
+            "outputTokens": 2725
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7653
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 433372
+      },
+      "usage": {
+        "inputTokens": 7227,
+        "outputTokens": 46066
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "e48d477a-e8e5-474e-9a6b-3aca91c0e5ac"
+    },
+    {
+      "at": "2026-11-13T07:16:25.074Z",
+      "task": "image-prompts",
+      "matchId": "norway-vs-wales-2026-11-14",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2682,
+        "outputTokens": 1677
+      }
     }
   ]
 }
