@@ -1,65 +1,6 @@
 {
-  "updatedAt": "2026-11-13T14:30:02.341Z",
+  "updatedAt": "2026-11-13T19:45:37.944Z",
   "runs": [
-    {
-      "at": "2026-11-04T21:11:49.366Z",
-      "task": "image-prompts",
-      "matchId": "valencia-vs-real-madrid-2026-11-07",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1844,
-        "outputTokens": 3544
-      }
-    },
-    {
-      "at": "2026-11-04T21:13:10.306Z",
-      "task": "image-prompts",
-      "matchId": "ac-milan-vs-ferencvaros-tc-2026-11-05",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "image-prompts 4: faltan ambos equipos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1687,
-            "outputTokens": 2220
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14259
-        }
-      ],
-      "usage": {
-        "inputTokens": 1630,
-        "outputTokens": 5668
-      }
-    },
-    {
-      "at": "2026-11-04T21:13:36.540Z",
-      "task": "image-prompts",
-      "matchId": "ac-sparta-praha-vs-bournemouth-2026-11-05",
-      "instructionVersion": "6e483100a481231616ac80d12f8c0aa4c1b792aa42424c28d81b92544bc580c9",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 1588,
-        "outputTokens": 3784
-      }
-    },
     {
       "at": "2026-11-04T21:14:00.522Z",
       "task": "image-prompts",
@@ -8122,6 +8063,60 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "a83266ab-2dbe-4c3e-b910-2f1f207825bf"
+    },
+    {
+      "at": "2026-11-13T19:43:49.412Z",
+      "matchId": "bz-212702",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1039,
+        "outputTokens": 11125
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "8e0eef61-13ea-4597-816f-e5e7ae19c2dd"
+    },
+    {
+      "at": "2026-11-13T19:43:58.262Z",
+      "matchId": "bz-212701",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1040,
+        "outputTokens": 645
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "9e3d7336-14a2-4dea-a26d-eb8ff4a329e6"
+    },
+    {
+      "at": "2026-11-13T19:45:31.064Z",
+      "matchId": "bz-212700",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash"
+      },
+      "usage": {
+        "inputTokens": 1019,
+        "outputTokens": 8047
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "7871bb87-bb66-4a5c-9f7c-c229c12a9ac5"
     }
   ]
 }
