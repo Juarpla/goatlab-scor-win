@@ -24,10 +24,12 @@ El Mundial de Clubes de 2025 repartió **US$1.000 millones** entre 32 participan
 | Clasificación a octavos | US$7,5 M |
 | Clasificación a cuartos | US$13,125 M |
 | Clasificación a semifinales | US$21 M |
-| Clasificación a la final | US$30 M |
-| Título | US$40 M adicionales |
+| Subcampeón | US$30 M |
+| Campeón | US$40 M |
 
 Un club de la CONMEBOL partía de **US$15,21 millones** por participar. Si lograba dos victorias y un empate antes de quedar eliminado en octavos, el cálculo sumaba 15,21 + 5 + 7,5 = **US$27,71 millones**. Si alcanzaba cuartos, el ejemplo subía a US$40,835 millones. El cálculo usa las reglas del torneo y permite apreciar cuánto pesa el resultado deportivo frente al derecho de entrada.
+
+La última partida es de US$40 millones para el campeón o US$30 millones para el subcampeón. En el escenario de mayor premio posible, un club de la UEFA sumaba US$38,19 millones por participar, US$6 millones por ganar tres partidos de grupo y US$81,625 millones por las eliminatorias y el título, cerca de los US$125 millones anunciados por FIFA.
 
 ## El premio y el dinero para otros clubes
 

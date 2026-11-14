@@ -233,8 +233,8 @@ const forecastFallback = !hasForecast && lambdas ? { home: { corners: null, shot
 const forecastTable = forecast ?? forecastFallback;
 const description = describeMatch({
   home: homeEs, away: awayEs, competition, kickoff: match.kickoff,
-  form: archived ? match.form : formSnapshot(homeRecent, awayRecent),
-  xg: archived ? undefined : { home: forecastTable?.home?.xg, away: forecastTable?.away?.xg },
+  form: formSnapshot(homeRecent, awayRecent),
+  xg: { home: forecastTable?.home?.xg, away: forecastTable?.away?.xg },
   finalScore: FINISHED_STATUSES.has(match.status) && hasNumericScore(match) ? { home: match.homeScore, away: match.awayScore } : undefined,
 });
 const statEval = evaluation?.stats?.metrics ?? {};

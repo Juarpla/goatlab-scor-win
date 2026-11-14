@@ -31,8 +31,9 @@ for (const page of [encounters, archive, missing]) noAds(page.body);
 const sitemapPaths = new Set([...sitemap.body.matchAll(/<loc>https:\/\/goatlab\.win([^<]+)<\/loc>/g)].map(match => match[1]));
 const calendarPaths = new Set([...encounters.body.matchAll(/href="(\/partido\/[^"]+\/)" class="match-card"/g)].map(match => match[1]));
 for (const path of sitemapPaths) assert.ok(calendarPaths.has(path), path);
-const path = [...calendarPaths][0] ?? process.env.GOATLAB_CHECK_ACTIVE;
-if (path) {
+const paths = [...calendarPaths];
+if (!paths.length && process.env.GOATLAB_CHECK_ACTIVE) paths.push(process.env.GOATLAB_CHECK_ACTIVE);
+for (const path of paths) {
   const detail = await html(path);
   assert.equal(detail.response.status, 200, path);
   assert.equal(detail.response.headers.has('x-robots-tag'), !sitemapPaths.has(path), path);
