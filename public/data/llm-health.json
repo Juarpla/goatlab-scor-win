@@ -1,41 +1,6 @@
 {
-  "updatedAt": "2026-11-14T18:04:07.900Z",
+  "updatedAt": "2026-11-14T18:43:17.155Z",
   "runs": [
-    {
-      "at": "2026-11-06T14:11:35.156Z",
-      "matchId": "fd-560632",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2052,
-        "outputTokens": 23822
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "b3bb94fb-e330-4434-88a5-209d4ba60ea9"
-    },
-    {
-      "at": "2026-11-06T14:11:35.156Z",
-      "matchId": "fd-564744",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "b3bb94fb-e330-4434-88a5-209d4ba60ea9"
-    },
     {
       "at": "2026-11-06T14:14:56.612Z",
       "matchId": "fd-560640",
@@ -7685,6 +7650,158 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "defaef4d-37e1-47a9-a4f0-1be2e42cbce7"
+    },
+    {
+      "at": "2026-11-14T18:08:03.391Z",
+      "task": "shorts",
+      "matchId": "france-vs-turkiye-2026-11-15",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: falta Turquía; guion 2: proyección fuera de rango; guion 2: 5 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 6: falta Turquía; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7166,
+            "outputTokens": 3424
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11021
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 179529
+      },
+      "usage": {
+        "inputTokens": 6887,
+        "outputTokens": 18311
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "a96c2a77-b577-456c-bd83-4fbf2f33e2e7"
+    },
+    {
+      "at": "2026-11-14T18:43:17.153Z",
+      "task": "shorts",
+      "matchId": "belgium-vs-italy-2026-11-15",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Bélgica; guion 5: 54 palabras, mínimo 55; guion 6: el cero no se escribe en dígitos; guion 6: 48 palabras, mínimo 55; guion 7: falta Italia; guion 7: 53 palabras, mínimo 55; guion 8: falta Bélgica; guion 8: 51 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7657,
+            "outputTokens": 2705
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7727
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7336,
+            "outputTokens": 28071
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 308139
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7197,
+            "outputTokens": 35501
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 505355
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 2: 7 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 3: 7 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 4: 6 cifras, máximo 3; guion 5: golpe 3 (dato): 5 palabras, mínimo 6",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7801,
+            "outputTokens": 3030
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16395
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235167
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Bélgica; guion 5: 6 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: falta Italia; guion 8: falta Bélgica; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7657,
+            "outputTokens": 2436
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6884
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7336,
+            "outputTokens": 25740
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 288652
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7197,
+            "outputTokens": 35227
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 494494
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7801,
+        "outputTokens": 2994
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
