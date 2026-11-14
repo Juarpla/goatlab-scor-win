@@ -1,41 +1,48 @@
 ---
+import { env } from 'cloudflare:workers';
+import { matchCalendar, unavailableCalendar } from '../lib/match-calendar-store.js';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import MatchCard from '../components/MatchCard.astro';
-import AdSlot from '../components/AdSlot.astro';
-import ArchiveMatchList from '../components/ArchiveMatchList.astro';
-import { competitions, staysOnWall } from '../lib/football.js';
+import { competitions } from '../lib/football.js';
 import { matchDay } from '../lib/teams.js';
 import { matchForm } from '../lib/form.js';
-import { archiveEntries } from '../lib/match-archive.js';
-import fixtures from '../../public/data/fixtures.json';
 import results from '../../public/data/results.json';
-import archive from '../../public/data/match-archive.json';
 import '../styles/home.css';
-import '../styles/match-archive.css';
 
-const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
+export const prerender = false;
+let matches = [];
+let lastUpdate = null;
+let calendarUnavailable = false;
+Astro.response.headers.set('Cache-Control', 'no-store');
+try {
+  const calendar = await matchCalendar(env);
+  matches = (await calendar.list()).map(({ match }) => match);
+  lastUpdate = calendar.updatedAt;
+} catch (error) {
+  console.error('Match calendar unavailable', error);
+  calendarUnavailable = true;
+  Astro.response.status = 503;
+  for (const [name, value] of Object.entries(unavailableCalendar())) Astro.response.headers.set(name, value);
+}
 const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
 const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const dayLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'short', day: 'numeric', month: 'short' });
-// The seven-day window. Without a scoreline, it leaves at 115'. With a scoreline, it stays and the card shows it.
-const rows = matches.filter(match => staysOnWall(match)).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
+const rows = matches.map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
 const days = [...new Set(rows.map(match => matchDay(match.kickoff)))];
-const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
+const updated = lastUpdate ? new Date(lastUpdate).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 // Wall order, different from the global array: LaLiga and Premier first.
 const wallCompetitions = ['laliga', 'premier', 'champions', 'europa', 'libertadores', 'nations'].map(id => competitions.find(c => c.id === id)).filter(Boolean);
 const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FUT', competitionName: competitionById(m.competition)?.name ?? '', kickoffLabel: kickoffLabel(m.kickoff), formHome: m.form?.homeForm ?? null, formAway: m.form?.awayForm ?? null });
-const recent = archiveEntries(archive).slice(0, 6);
 ---
-<Layout title="Encuentros — GoatLab" description="Explora los próximos siete días de fútbol y consulta resultados y análisis recientes de partidos finalizados.">
+<Layout title="Encuentros — GoatLab" description="Explora los próximos siete días de fútbol y los encuentros de la jornada en juego.">
 <main id="main" class="wrap">
  <section class="intro">
   <div><h1>Todos los<br/><span>encuentros.</span></h1></div>
-  <p>La ventana completa de siete días de nuestras competiciones, ordenada por kickoff{updated ? ` · actualizado ${updated} (Lima)` : ''}. Los horarios se muestran en tu hora local. Cuando el partido ya tiene marcador, la tarjeta lo muestra. Si pasa el tiempo de juego y no hay resultado, sale del muro.</p>
-  <a class="archive-back" href="#analisis-recientes">Resultados y análisis recientes <Icon size={14}/></a>
+  <p>Los partidos de nuestras competiciones en los próximos siete días, ordenados por hora de inicio{updated ? ` · actualizado ${updated} (Lima)` : ''}. Los horarios se muestran en tu hora local. Los encuentros dejan el calendario al confirmarse el resultado o al pasar tres horas desde el inicio sin confirmación.</p>
  </section>
- <section class="wall wall--ads" aria-labelledby="wall-title" style="padding-top:0;border-top:0;margin-top:0">
+ <section class="wall" aria-labelledby="wall-title" style="padding-top:0;border-top:0;margin-top:0">
   <div class="section-heading"><h2 id="wall-title" class="sr-only">El muro de encuentros</h2><span>Cada tarjeta abre el análisis del partido</span></div>
   <div class="filter-row">
    <div class="competition-filters" role="group" aria-label="Filtrar por competición">
@@ -55,28 +62,17 @@ const recent = archiveEntries(archive).slice(0, 6);
    </div>
    <label class="search"><Icon name="search" size={18}/><input type="search" id="team-search" placeholder="Buscar equipo o estadio" aria-label="Buscar equipo o estadio"/></label>
   </div>
-  <AdSlot variant="horizontal" class="ad-under-filters"/>
   <div class="wall-lead" id="wall-lead"></div>
   <div class="wall-body">
-   <AdSlot variant="vertical" class="ad-rail"/>
   <div class="wall-center">
    <div class="wall-grid" id="wall-grid">
     {rows.map(m => <MatchCard {...cardProps(m)}/>)}
    </div>
-   <p id="filter-empty" class="empty-message" hidden>No hay encuentros con ese filtro. Prueba otra liga, otro día u otro estado, o busca por otro nombre.</p>
+   <p id="filter-empty" class="empty-message" hidden={rows.length > 0}>{calendarUnavailable ? "El calendario no está disponible en este momento. Vuelve a intentarlo en unos minutos." : "No hay encuentros con ese filtro. Prueba otra liga, otro día u otro estado, o busca por otro nombre."}</p>
    <p id="filter-count" class="sr-only" aria-live="polite"></p>
    <button id="wall-more" class="wall-more" type="button" hidden><span>Mostrar más</span><Icon size={16}/></button>
   </div>
-   <AdSlot variant="vertical" class="ad-rail"/>
   </div>
-  <AdSlot variant="horizontal"/>
- </section>
- <section id="analisis-recientes" class="archive-section" aria-labelledby="recent-title">
-  <h2 id="recent-title">Resultados y <strong>análisis recientes.</strong></h2>
-  {recent.length > 0 ? <>
-   <ArchiveMatchList matches={recent}/>
-   <div class="archive-pager"><a class="archive-back" href="/encuentros/archivo/">Ver todo el archivo <Icon size={16}/></a></div>
-  </> : <p>Los partidos con marcador final y análisis previo aparecerán aquí.</p>}
  </section>
 </main>
 <script>
@@ -105,21 +101,6 @@ const recent = archiveEntries(archive).slice(0, 6);
  const INITIAL=()=>wide.matches?STEP()+3:6;
  const moreBtn=document.querySelector<HTMLButtonElement>('#wall-more')!;
  const moreLabel=moreBtn.querySelector('span')!;
- const wallBody=document.querySelector<HTMLElement>('.wall-body')!;
- const rails=[...wallBody.querySelectorAll<HTMLElement>('.ad-rail')];
- // Ad blocker: cosmetic filters hide the rails with display:none but
- // the grid would keep the 300px tracks. It only collapses when the rail is
- // hidden; the empty ADVERTISING box (visible aside) stays intact.
- function updateAdsVisibility(){
-  if(!wide.matches){wallBody.classList.remove('no-ads');return;}
-  const hidden=(el:HTMLElement)=>{
-   const cs=getComputedStyle(el);
-   if(cs.display==='none'||cs.visibility==='hidden')return true;
-   const rect=el.getBoundingClientRect();
-   return rect.width===0&&rect.height===0;
-  };
-  wallBody.classList.toggle('no-ads',rails.length>0&&rails.every(hidden));
- }
  let shown=0;
  function update(mode:'all'|'new'|'silent', from=0){
   const query=normalize(search.value), day=daySelect.value;
@@ -144,10 +125,6 @@ const recent = archiveEntries(archive).slice(0, 6);
   if(remaining>0)moreLabel.textContent=`Mostrar ${remaining} ${remaining===1?'encuentro':'encuentros'} más`;
   empty.hidden=visible.length>0;
   count.textContent=`${visible.length} ${visible.length===1?'encuentro':'encuentros'}`;
-  // With few results the 600px rail would dominate an almost empty view:
-  // the rails are removed and the result takes the full width.
-  wallBody.classList.toggle('is-thin',wide.matches&&visible.length<=3);
-  updateAdsVisibility();
   // Filters: the ladder re-enters fully. "Show more": only new arrivals.
   if(mode!=='silent'&&!reduce)batch.slice(from).forEach((card,index)=>{
    card.style.animation='none';void card.offsetWidth;
@@ -169,8 +146,5 @@ const recent = archiveEntries(archive).slice(0, 6);
  });
  shown=INITIAL();
  update('all');
- // The blocker cosmetic styles apply async: re-check after the first frame and with a delay.
- requestAnimationFrame(()=>updateAdsVisibility());
- setTimeout(updateAdsVisibility,1500);
 </script>
 </Layout>

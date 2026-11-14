@@ -33,7 +33,7 @@ export function buildMapData(matches = []) {
     }
     const pin = pins.get(id);
     pin.matches.push({
-      id: match.id, home: match.home, away: match.away, kickoff: match.kickoff,
+      id: match.id, status: match.status, minute: match.minute, homeScore: match.homeScore, awayScore: match.awayScore, home: match.home, away: match.away, kickoff: match.kickoff,
       stadium: location.stadium, capacity: location.capacity,
     });
   }

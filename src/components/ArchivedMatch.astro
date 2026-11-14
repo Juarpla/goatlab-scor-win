@@ -1,5 +1,4 @@
 ---
-import AdSlot from './AdSlot.astro';
 import ArchivePitch from './ArchivePitch.astro';
 import Icon from './Icon.astro';
 import ReadingBlock from './ReadingBlock.astro';
@@ -12,7 +11,7 @@ const { match, home, away, competition } = Astro.props;
 <main id="main" class="wrap">
   <header class="archive-header">
     <div class="archive-copy">
-      <a class="archive-back" href="/encuentros/#analisis-recientes">Resultados y análisis recientes <Icon size={14}/></a>
+      <a class="archive-back" href="/encuentros/">Volver al calendario <Icon size={14}/></a>
       <h1><strong>{home}</strong> vs. <strong>{away}</strong></h1>
       <p>{competition} · <time datetime={match.kickoff}>{matchDateLabel(match.kickoff)}</time></p>
       <div class="archive-final">
@@ -23,7 +22,5 @@ const { match, home, away, competition } = Astro.props;
     </div>
     <ArchivePitch/>
   </header>
-  <AdSlot variant="horizontal" slotKey="partidoPrevio"/>
-  <ReadingBlock entry={match.reading} archived/>
-  <AdSlot variant="horizontal" slotKey="partidoCierre"/>
+  {match.reading && <ReadingBlock entry={match.reading} archived/>}
 </main>

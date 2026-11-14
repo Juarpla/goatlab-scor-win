@@ -1,0 +1,25 @@
+---
+import land from './editorial-land.json';
+// Natural Earth 1:110m land outlines, public domain.
+const earnings = Astro.props.kind === 'earnings';
+const landmarks = earnings
+  ? [{ name: 'Miami', x: 111, y: 64, dx: -10, dy: 24 }, { name: 'París', x: 203, y: 37, dx: -11, dy: -23 }, { name: 'Riad', x: 252, y: 65, dx: 17, dy: -8 }]
+  : [{ name: 'Barcelona', x: 173, y: 147, dx: -16, dy: 24 }, { name: 'París', x: 175, y: 66, dx: 18, dy: 0 }];
+const route = `M${landmarks[0].x} ${landmarks[0].y - 3} Q${landmarks[0].x - 35} ${(landmarks[0].y + landmarks[1].y) / 2} ${landmarks[1].x} ${landmarks[1].y - 3}`;
+---
+<figure class="editorial-figure">
+  <svg viewBox={earnings ? '0 0 400 188' : '0 0 400 205'} role="img" aria-label={earnings ? 'Mapa de Riad, París y Miami, clubes de los líderes de ingresos mencionados' : 'Ruta de Neymar en 2017 de Barcelona, España, a París, Francia'} focusable="false">
+    <rect width="400" height="205" rx="10" class="editorial-sea"/>
+    <path class="editorial-land" d={earnings ? land.world : land.europe}/>
+    {!earnings && <>
+      <path d={route} class="editorial-route-base"/>
+      <path d={route} class="editorial-route" pathLength="1"/>
+    </>}
+    {landmarks.map((point, index) => <g transform={`translate(${point.x} ${point.y})`}>
+      <path class:list={['editorial-drop', { 'editorial-drop-highlight': earnings ? index === 2 : index === 1 }]} d="M0 0C-2-3-8-9-8-14a8 8 0 1 1 16 0C8-9 2-3 0 0Z"/>
+      <circle cy="-14" r="2" class="editorial-dot"/>
+      <text x={point.dx} y={point.dy} text-anchor={point.dx < 0 ? 'end' : 'start'}>{point.name}</text>
+    </g>)}
+  </svg>
+  <figcaption><slot/></figcaption>
+</figure>

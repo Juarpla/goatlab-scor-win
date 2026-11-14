@@ -53,9 +53,10 @@ let ensembleCaptures = 0;
 for (const entry of Object.values(captured?.captures ?? {})) {
   if (!entry?.finalScore || !entry?.captures?.length) continue;
   const preKick = entry.captures
-    .filter(capture => capture.capturedAt && entry.kickoff && capture.capturedAt <= entry.kickoff)
+    .filter(capture => Date.parse(capture.computedAt) < Date.parse(entry.kickoff))
     .sort((a, b) => (a.capturedAt < b.capturedAt ? -1 : 1));
-  const capture = preKick[preKick.length - 1] ?? entry.captures[entry.captures.length - 1];
+  const capture = preKick[preKick.length - 1];
+  if (!capture) continue;
   ensembleCaptures += 1;
   const probabilities = capture.goatlab ?? capture.catboost;
   if (probabilities?.oneX2?.home != null && probabilities.oneX2.draw != null && probabilities.oneX2.away != null) {
@@ -86,13 +87,13 @@ const lineHappened = (line, totalGoals) => {
 for (const entry of Object.values(captured?.captures ?? {})) {
   if (!entry?.finalScore || !entry?.captures?.length) continue;
   const preKick = entry.captures
-    .filter(capture => capture.capturedAt && entry.kickoff && capture.capturedAt <= entry.kickoff)
+    .filter(capture => Date.parse(capture.computedAt) < Date.parse(entry.kickoff))
     .sort((a, b) => (a.capturedAt < b.capturedAt ? -1 : 1));
   const capture = preKick[preKick.length - 1];
   if (!capture) continue;
   const outcome = oneX2Outcome(entry.finalScore.home, entry.finalScore.away);
   const totalGoals = entry.finalScore.home + entry.finalScore.away;
-  const af = capture.apiFootball;
+  const af = Date.parse(capture.apiFootball?.capturedAt) < Date.parse(entry.kickoff) ? capture.apiFootball : null;
   if (af) {
     afCaptures += 1;
     if (outcome && af.percent?.home != null && af.percent.draw != null && af.percent.away != null) {

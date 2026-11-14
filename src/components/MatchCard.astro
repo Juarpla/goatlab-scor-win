@@ -2,14 +2,14 @@
 import Icon from './Icon.astro';
 import TeamLogo from './TeamLogo.astro';
 import { teamEsDisplay, normalize, matchDay } from '../lib/teams.js';
-import { hasNumericScore, matchPhase } from '../lib/football.js';
+import { calendarPhase } from '../lib/match-calendar.js';
+import { hasNumericScore } from '../lib/football.js';
 
 const { match, competitionCode, competitionName, kickoffLabel, formHome = null, formAway = null } = Astro.props;
-const phase = matchPhase(match);
+const phase = calendarPhase(match, Date.now());
 const isLive = phase === 'live';
-const isFinished = phase === 'finished';
-const showScore = phase !== 'upcoming' && hasNumericScore(match);
-const statusLabel = isLive ? `EN VIVO${match.minute ? ` · ${match.minute}'` : ''}` : isFinished ? 'FINAL' : null;
+const showScore = isLive && hasNumericScore(match);
+const statusLabel = isLive ? `EN VIVO${match.minute ? ` · ${match.minute}'` : ''}` : phase === 'pending' ? 'POR CONFIRMAR' : null;
 const sides = [
   { name: teamEsDisplay(match.home), teamId: match.teamIds?.home ?? null, form: formHome, score: match.homeScore },
   { name: teamEsDisplay(match.away), teamId: match.teamIds?.away ?? null, form: formAway, score: match.awayScore },

@@ -13,7 +13,7 @@ export function robotsDirective(url) {
 export function isIndexablePage(url) {
   const path = new URL(url, 'https://goatlab.win').pathname;
   // Provider aliases remain usable; only the descriptive canonical goes in search.
-  return !isProductionPage(url) && !/^\/partido\/(?:af|fd|bz)-\d+\/?$/.test(path);
+  return !isProductionPage(url) && !/^\/partido\/(?:af|fd|bz)-\d+\/?$/.test(path) && !/^\/encuentros\/archivo(?:\/|$)/.test(path) && !/^\/404(?:\.html|\/)?$/.test(path);
 }
 
 export function isAdvertisingPage(url) {

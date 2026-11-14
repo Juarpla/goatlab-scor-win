@@ -10,6 +10,8 @@ const files = walk(root);
 const site = new URL('https://goatlab.win');
 const assetPaths = new Set(files.map(file => `/${relative(root, file)}`));
 const htmlPages = new Map();
+const dynamicPage = path => path === '/' || path === '/encuentros/' || /^\/partido\/[a-z0-9][a-z0-9_-]+\/?$/i.test(path);
+const editorialRoot = '/el-juego-en-datos/';
 const attribute = (tag, name) => {
   const value = tag.match(new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'));
   return value && (value[1] ?? value[2] ?? value[3]);
@@ -47,7 +49,7 @@ for (const [file, { hrefs }] of htmlPages) {
     if (!['http:', 'https:'].includes(target.protocol) || target.hostname !== site.hostname) continue;
     const path = targetPath(decodeURIComponent(target.pathname));
     const fragment = decodeURIComponent(target.hash.slice(1).split(':~:')[0]);
-    if (!assetPaths.has(path) || (fragment && htmlPages.has(path) && !htmlPages.get(path).ids.has(fragment))) {
+    if ((!assetPaths.has(path) && !dynamicPage(target.pathname)) || (fragment && htmlPages.has(path) && !htmlPages.get(path).ids.has(fragment))) {
       brokenLinks.push(`${page} → ${href}`);
     }
   }
@@ -76,7 +78,7 @@ for (const file of sitemapFiles) {
     sitemapUrls.add(url);
   }
 }
-const descriptions = new Set(htmlPages.get('/index.html').descriptions);
+const descriptions = new Set();
 for (const [file, page] of htmlPages) {
   if (!file.endsWith('/index.html')) continue;
   assert.equal(page.canonicals.length, 1, file);
@@ -84,49 +86,39 @@ for (const [file, page] of htmlPages) {
   assert.equal(canonical.origin, site.origin, file);
   assert.ok(canonical.pathname.endsWith('/') && !canonical.search && !canonical.hash, file);
   assert.ok(htmlPages.has(targetPath(canonical.pathname)), `${file}: canonical target is missing`);
-  if (!/^\/partido\/[^/]+\/index\.html$/.test(file)) continue;
+  if (!canonical.pathname.startsWith(editorialRoot)) continue;
   assert.equal(page.descriptions.length, 1, file);
-  assert.ok(page.descriptions[0], file);
-  if (isIndexablePage(file.replace(/index\.html$/, ''))) {
-    assert.ok(!descriptions.has(page.descriptions[0]), `${file}: duplicate match description`);
-    descriptions.add(page.descriptions[0]);
-    assert.ok(sitemapUrls.has(canonical.href), `${file}: canonical missing from sitemap`);
-  } else {
-    assert.deepEqual(page.descriptions, htmlPages.get(targetPath(canonical.pathname)).descriptions, `${file}: alias description mismatch`);
-  }
+  assert.ok(page.descriptions[0] && !descriptions.has(page.descriptions[0]), file);
+  descriptions.add(page.descriptions[0]);
+  assert.ok(sitemapUrls.has(canonical.href), `${file}: missing from sitemap`);
+  assert.ok(!page.robots.some(value => value.includes('noindex')), file);
 }
-const encounters = htmlPages.get('/encuentros/index.html');
-assert.ok(htmlPages.get('/index.html').hrefs.has('/encuentros/#analisis-recientes'));
-const archive = JSON.parse(readFileSync(join(root, 'data/match-archive.json'), 'utf8'));
-if (Object.keys(archive).length) {
-  const visited = new Set();
-  const queue = ['/encuentros/archivo/'];
-  assert.ok(encounters.hrefs.has(queue[0]));
-  for (const path of queue) {
-    assert.ok(sitemapUrls.has(new URL(path, site).href), `${path}: archive listing missing from sitemap`);
-    const page = htmlPages.get(targetPath(path));
-    assert.ok(page, path);
-    visited.add(path);
-    for (const href of page.hrefs) {
-      if (href.startsWith('/partido/')) visited.add(href);
-      if (href.startsWith('/encuentros/archivo/') && !queue.includes(href)) queue.push(href);
-    }
-  }
-  for (const id of Object.keys(archive)) {
-    const path = `/partido/${id}/`;
-    assert.ok(visited.has(path) && sitemapUrls.has(new URL(path, site).href), `${path}: archived fixture is orphaned`);
-  }
+assert.ok(![...sitemapUrls].some(url => /\/(?:partido|fuentes|encuentros\/archivo)\//.test(new URL(url).pathname)));
+assert.ok(readFileSync(join(root, 'sitemap-index.xml'), 'utf8').includes('https://goatlab.win/sitemap-matches.xml'));
+assert.deepEqual(readFileSync(join(root, '_redirects'), 'utf8').trim().split(/\r?\n/), [
+  '/fuentes /metodologia/ 301', '/fuentes/ /metodologia/ 301',
+]);
+const editorial = htmlPages.get('/el-juego-en-datos/index.html');
+const articles = [...htmlPages.keys()].filter(file => /^\/el-juego-en-datos\/[^/]+\/index\.html$/.test(file));
+assert.ok(articles.length >= 10, 'Missing launch editorials');
+for (const file of articles) {
+  assert.ok(editorial.hrefs.has(file.replace(/index\.html$/, '')), `${file}: editorial is orphaned`);
+  assert.ok(htmlPages.get(file).ids.has('editorial-sources-title'), file);
 }
-const home = readFileSync(join(root, 'index.html'), 'utf8');
-const footer = home.match(/<footer\b[^>]*class="site-footer[^"\n]*"[^>]*>[\s\S]*?<\/footer>/i)?.[0] ?? '';
-for (const path of ['/nosotros/', '/terminos/', '/privacidad/', '/cookies/', '/contacto/']) {
+for (const slug of ['futbolistas-mejor-pagados', 'traspasos-mas-caros']) {
+  const html = readFileSync(join(root, editorialRoot, slug, 'index.html'), 'utf8');
+  assert.match(html, /<figure class="editorial-figure">/, slug);
+  assert.match(html, /<table>/, slug);
+}
+const methodology = readFileSync(join(root, 'metodologia/index.html'), 'utf8');
+const footer = methodology.match(/<footer\b[^>]*class="site-footer[^"\n]*"[^>]*>[\s\S]*?<\/footer>/i)?.[0] ?? '';
+for (const path of ['/nosotros/', '/terminos/', '/privacidad/', '/cookies/', '/contacto/', editorialRoot, '/metodologia/']) {
   assert.ok(footer.includes(`href="${path}"`), `Missing footer link: ${path}`);
   assert.ok(sitemapUrls.has(new URL(path, site).href), `Missing from sitemap: ${path}`);
 }
-const publisher = home.match(/name="google-adsense-account" content="ca-(pub-\d{16})"/)?.[1];
-assert.ok(publisher, 'Missing AdSense verification meta tag on the home page');
-assert.ok(readFileSync(join(root, 'ads.txt'), 'utf8').includes(`google.com, ${publisher}, DIRECT,`), 'Publisher mismatch');
-const serving = home.includes('pagead/js/adsbygoogle.js');
+const ads = readFileSync(join(root, 'ads.txt'), 'utf8');
+assert.match(ads, /^google\.com, pub-\d{16}, DIRECT, f08c47fec0942fa0$/m, 'Invalid ads.txt declaration');
+const serving = methodology.includes('pagead/js/adsbygoogle.js');
 for (const file of files.filter(file => file.endsWith('/index.html') || file === join(root, 'index.html'))) {
   const path = `/${relative(root, file).replace(/index\.html$/, '')}`;
   const html = readFileSync(file, 'utf8');
@@ -136,7 +128,7 @@ for (const file of files.filter(file => file.endsWith('/index.html') || file ===
   assert.equal(html.includes('id="revoke-consent"'), shouldServe, file);
 }
 if (serving) {
-  const signal = [...home.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(script => script.includes('function signalGooglefcPresent'));
+  const signal = [...methodology.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(script => script.includes('function signalGooglefcPresent'));
   assert.ok(signal, 'Missing CMP presence signal');
   const frames = [];
   runInNewContext(signal, { window: { frames: {} }, document: { body: { appendChild: frame => frames.push(frame) }, createElement: () => ({ style: {} }) } });
@@ -155,4 +147,4 @@ for (const file of files.filter(file => /\/partido\/[^/]+\/index\.html$/.test(fi
   assert.ok(!html.includes('SabidurIA externa'), `${file}: provider copy used as the primary fallback`);
   assert.ok(!/href="\/partido\/[^"/]+\/(?:scripts|image-prompts|video-prompts|media)\/?"/.test(html), `${file}: enlaza herramientas desde el análisis público`);
 }
-console.log(`Publicación verificada: ${htmlPages.size} páginas sin enlaces internos rotos; ${tools.length} herramientas sin indexación ni publicidad; ${sitemapUrls.size} URL en sitemap; portada con verificación AdSense.`);
+console.log(`Publicación verificada: ${htmlPages.size} páginas sin enlaces internos rotos; ${tools.length} herramientas sin indexación ni publicidad; ${sitemapUrls.size} URL en sitemap estático; ${articles.length} artículos con fuentes.`);

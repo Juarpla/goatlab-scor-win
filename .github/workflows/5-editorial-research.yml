@@ -1,0 +1,40 @@
+name: "5-editorial-research"
+on:
+  schedule:
+    - cron: '37 13 * * 1'
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: Editorial slug (leave blank to use the weekly rotation)
+        type: string
+permissions:
+  contents: read
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - run: node actions/5-editorial/research.mjs "$TOPIC"
+        env:
+          TOPIC: ${{ inputs.topic }}
+          BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+          AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
+          OPENCODE_GO_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          LLM_PROVIDER_ORDER: ${{ vars.ANALYSIS_PROVIDER_ORDER }}
+          MISTRAL_BASE_URL: ${{ vars.MISTRAL_BASE_URL }}
+          MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          WORKERS_AI_MODEL: ${{ vars.WORKERS_AI_MODEL }}
+          OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
+          OPENCODE_GO_FALLBACK_MODEL: ${{ vars.OPENCODE_GO_FALLBACK_MODEL }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: goatlab-editorial-brief
+          path: editorial-brief/
+          retention-days: 45

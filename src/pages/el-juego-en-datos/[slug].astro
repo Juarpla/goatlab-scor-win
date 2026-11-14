@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import EditorialFigure from '../../components/EditorialFigure.astro';
+import '../../styles/editorial.css';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('editorial');
+  return articles.map(article => ({
+    params: { slug: article.id },
+    props: { article, related: articles.filter(other => other.id !== article.id && other.data.category === article.data.category).sort((a, b) => a.data.order - b.data.order).slice(0, 3) },
+  }));
+}
+const { article, related } = Astro.props;
+const { Content } = await render(article);
+const { title, description, category, date, figure, sources } = article.data;
+const content = article.rendered?.html ?? '';
+const mapNote = figure && content.match(/<blockquote>\s*([\s\S]*?)<\/blockquote>/);
+const stamp = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZone: 'UTC' }).format(date);
+---
+<Layout title={`${title} — GoatLab`} description={description}>
+  <main class="wrap editorial-article" id="main">
+    <nav class="editorial-trail" aria-label="Ruta editorial"><a href="/el-juego-en-datos/">El Juego en Datos</a><span>{category}</span></nav>
+    <article>
+      <header class="editorial-intro">
+        <h1>{title}</h1>
+        <p>{description}</p>
+        <div class="editorial-byline">Redacción GoatLab <span aria-hidden="true">·</span> <time datetime={date.toISOString().slice(0,10)}>{stamp}</time></div>
+      </header>
+      <div class="editorial-prose">
+        {mapNote && mapNote.index != null ? <>
+          <Fragment set:html={content.slice(0, mapNote.index)}/>
+          <EditorialFigure kind={figure}><Fragment set:html={mapNote[1]}/></EditorialFigure>
+          <Fragment set:html={content.slice(mapNote.index + mapNote[0].length)}/>
+        </> : <Content/>}
+        <section class="editorial-sources" aria-labelledby="editorial-sources-title">
+          <h2 id="editorial-sources-title">Fuentes y datos</h2>
+          <ul>{sources.map(({ name, url }) => <li><a href={url}>{name}</a></li>)}</ul>
+        </section>
+      </div>
+    </article>
+    {related.length > 0 && <aside class="editorial-related" aria-labelledby="related-title">
+      <h2 id="related-title">También en El Juego en Datos</h2>
+      <ul>{related.map(({ id, data }) => <li><a href={`/el-juego-en-datos/${id}/`}>{data.title}</a></li>)}</ul>
+    </aside>}
+  </main>
+</Layout>

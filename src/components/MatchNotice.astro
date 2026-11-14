@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+const { title, message } = Astro.props;
+---
+<Layout title={`${title} — GoatLab`} description={message} robots="noindex, follow">
+  <main id="main" class="wrap">
+    <section class="intro">
+      <div><h1>{title}</h1></div>
+      <p>{message}</p>
+      <a class="back-link" href="/encuentros/">Ver el calendario de encuentros</a>
+    </section>
+  </main>
+</Layout>

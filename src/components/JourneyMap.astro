@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { calendarPhase } from '../lib/match-calendar.js';
 import { teamEsDisplay } from '../lib/teams.js';
 
 const { pins = [] } = Astro.props;
@@ -12,8 +13,8 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
     <img src="/img/world-dots.png" alt="" width={2160} height={816} loading="lazy" decoding="async" draggable="false"/>
     <div class="map-pins">
      {pins.map(pin => (
-      <button type="button" class="pin" data-pin={pin.id} style={`--x:${pin.x}%;--y:${pin.y}%`} aria-pressed="false" aria-label={`Ver los encuentros en ${pin.city}, ${pin.country}`}>
-       <i aria-hidden="true"></i>
+      <button type="button" class:list={['pin', { live: pin.matches.some(match => calendarPhase(match, Date.now()) === 'live') }]} data-pin={pin.id} style={`--x:${pin.x}%;--y:${pin.y}%`} aria-pressed="false" aria-label={`Ver los encuentros en ${pin.city}, ${pin.country}`}>
+       <svg class="map-drop" viewBox="0 0 18 24" aria-hidden="true"><path d="M9 23C6 19 1 14 1 9a8 8 0 1 1 16 0c0 5-5 10-8 14Z"/><circle cx="9" cy="9" r="2.5"/></svg>
       </button>
      ))}
     </div>
@@ -30,9 +31,9 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
         <span class="map-teams">{teamEsDisplay(m.home)} <em>vs.</em> {teamEsDisplay(m.away)}</span>
         <span class="map-meta">
          <time datetime={m.kickoff} data-kickoff={m.kickoff} data-format="datetime">{kickoffLabel(m.kickoff)}</time>
+         {calendarPhase(m, Date.now()) === 'live' && <strong> · En juego{m.minute ? ` · ${m.minute}′` : ''}</strong>}
          {m.stadium && <span> · {m.stadium}</span>}
          {m.capacity != null && <span> · {capacity(m.capacity)} plazas</span>}
-         <b class="map-min" hidden data-kickoff={m.kickoff}></b>
         </span>
        </li>
       ))}
@@ -41,7 +42,7 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
    ))}
   </div>
    <footer class="map-foot">
-    <p class="map-legend"><i class="dot dot-pin" aria-hidden="true"></i> sede con encuentros <i class="dot dot-live" aria-hidden="true"></i> en vivo, el punto parpadea <span aria-hidden="true">·</span> horas del visitante</p>
+    <p class="map-legend"><i class="dot dot-pin" aria-hidden="true"></i> sede con encuentros <i class="dot dot-live" aria-hidden="true"></i> en juego <span aria-hidden="true">·</span> horas del visitante</p>
     <div class="map-controls" role="group" aria-label="Zoom del mapa" hidden>
      <button type="button" data-map-out aria-label="Alejar mapa">−</button>
      <button type="button" data-map-in aria-label="Acercar mapa">+</button>
@@ -55,34 +56,8 @@ const capacity = value => value == null ? null : value.toLocaleString('es-PE');
  initLocalTimes();
 
  for (const map of document.querySelectorAll<HTMLElement>('.map-block')) {
-  // Blink and estimated minute: computed on the client from build-local
-  // kickoffs. Agreed live window: kickoff → +1 h 50 min.
-  const LIVE_WINDOW_MS = 110 * 60_000;
   const pins = [...map.querySelectorAll<HTMLButtonElement>('.pin')];
   const cards = new Map([...map.querySelectorAll<HTMLElement>('.map-card')].map(card => [card.dataset.for!, card]));
-  const minuteLabel = (kickoff: number) => {
-   const elapsed = (Date.now() - kickoff) / 60_000;
-   if (elapsed < 0) return null;
-   if (elapsed <= 45) return `min. ${Math.floor(elapsed) + 1} est.`;
-   if (elapsed <= 60) return 'descanso est.';
-   if (elapsed <= 105) return `min. ${Math.floor(elapsed) - 15} est.`;
-   return 'final est.';
-  };
-  const evaluateLive = () => {
-   for (const [id, card] of cards) {
-    const kickoffs = [...card.querySelectorAll<HTMLElement>('[data-kickoff]')].map(node => Date.parse(node.dataset.kickoff!));
-    const live = kickoffs.some(kickoff => Date.now() - kickoff >= 0 && Date.now() - kickoff < LIVE_WINDOW_MS);
-    pins.find(pin => pin.dataset.pin === id)?.classList.toggle('live', live);
-    card.querySelectorAll<HTMLElement>('.map-min').forEach((badge, index) => {
-     const label = live ? minuteLabel(kickoffs[index]) : null;
-     badge.textContent = label ?? '';
-     badge.hidden = label == null;
-    });
-   }
-  };
-  evaluateLive();
-  setInterval(evaluateLive, 30_000);
-
   let activePin: HTMLButtonElement | null = null;
   const open = (pin: HTMLButtonElement) => {
    for (const other of pins) {

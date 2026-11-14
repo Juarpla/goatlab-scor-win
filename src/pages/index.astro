@@ -1,5 +1,8 @@
 ---
+import { env } from 'cloudflare:workers';
+import { matchCalendar } from '../lib/match-calendar-store.js';
 import Layout from '../layouts/Layout.astro';
+import EditorialShelf from '../components/EditorialShelf.astro';
 import Icon from '../components/Icon.astro';
 import AdSlot from '../components/AdSlot.astro';
 import FormChips from '../components/FormChips.astro';
@@ -10,21 +13,29 @@ import MatchPulse from '../components/MatchPulse.astro';
 import PlayerPulse from '../components/PlayerPulse.astro';
 import StandingsBoard from '../components/StandingsBoard.astro';
 import JornadaBand from '../components/JornadaBand.astro';
-import ArchivePitch from '../components/ArchivePitch.astro';
-import { competitions, matchPhase, staysOnWall } from '../lib/football.js';
+import { competitions } from '../lib/football.js';
 import { heroMatch, teamShort, teamEsDisplay } from '../lib/teams.js';
 import { matchForm, teamForm } from '../lib/form.js';
 import { buildMapData, computePulse, computeCuriosities, computePlayerPulse } from '../lib/journey.js';
-import fixtures from '../../public/data/fixtures.json';
 import results from '../../public/data/results.json';
 import standings from '../../public/data/standings.json';
 import scorers from '../../public/data/scorers.json';
 import '../styles/home.css';
-import '../styles/match-archive.css';
 
-const matches = [...fixtures.matches].sort((a, b) => (a.kickoff < b.kickoff ? -1 : 1));
-const listed = matches.filter(match => staysOnWall(match));
-const upcoming = matches.filter(match => matchPhase(match) !== 'finished');
+export const prerender = false;
+let matches = [];
+let lastUpdate = null;
+let calendarUnavailable = false;
+Astro.response.headers.set('Cache-Control', 'no-store');
+try {
+  const calendar = await matchCalendar(env);
+  matches = (await calendar.list()).map(({ match }) => match);
+  lastUpdate = calendar.updatedAt;
+} catch (error) {
+  console.error('Match calendar unavailable', error);
+  calendarUnavailable = true;
+}
+const upcoming = matches;
 const hero = heroMatch(upcoming);
 const heroForm = hero ? matchForm(results.results, hero.home, hero.away) : null;
 const heroDate = hero ? new Date(hero.kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', weekday: 'long', day: 'numeric', month: 'long' }) : null;
@@ -33,10 +44,10 @@ const competitionById = id => competitions.find(c => c.id === id) ?? null;
 const CODES = { champions: 'UCL', europa: 'UEL', libertadores: 'LIB', laliga: 'LAL', premier: 'EPL', nations: 'UNL' };
 const kickoffLabel = kickoff => new Date(kickoff).toLocaleDateString('es-PE', { timeZone: 'America/Lima', day: 'numeric', month: 'short' }) + ' · ' + new Date(kickoff).toLocaleTimeString('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 // Wall: the window, with a scoreline if there is a result; without the featured match; 9 nearest.
-const wallRows = listed.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
-const hasMore = (hero && listed.includes(hero) ? listed.length - 1 : listed.length) > wallRows.length;
+const wallRows = upcoming.filter(match => match !== hero).slice(0, 9).map(match => ({ ...match, form: matchForm(results.results, match.home, match.away) }));
+const hasMore = (hero && upcoming.includes(hero) ? upcoming.length - 1 : upcoming.length) > wallRows.length;
 const heroFormOnly = hero ? teamForm(results.results, hero.home) : null;
-const updated = fixtures.updatedAt ? new Date(fixtures.updatedAt).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
+const updated = lastUpdate ? new Date(lastUpdate).toLocaleString('es-PE', { timeZone: 'America/Lima' }) : null;
 
 // Real figures for the hero band; historical ones serve as evergreen backup
 // so the band never stays empty.
@@ -50,7 +61,7 @@ const competitionsCount = new Set(results.results.map(row => row.competition)).s
 const h2hCount = upcoming.filter(match => match.h2h?.totalMatches).length;
 const realSlides = [
   { figure: resultsCount, line: `${resultsCount === 1 ? 'resultado' : 'resultados'} reales en la base de forma.` },
-  { figure: upcoming.length, line: `${upcoming.length === 1 ? 'partido' : 'partidos'} de nuestras competiciones en los próximos siete días.` },
+  { figure: upcoming.length, line: `${upcoming.length === 1 ? 'partido' : 'partidos'} en juego o programados para los próximos siete días.` },
   { figure: h2hCount, line: `encuentros con historial cara a cara verificado.` },
 ].filter(slide => slide.figure > 0);
 const evergreenSlides = [
@@ -85,10 +96,12 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
    {slides.map(slide => <div class="band-slide"><span class="band-figure">{slide.figure}</span><span class="band-line">{slide.line}</span></div>)}
   </div>}
  </section>
+ <EditorialShelf preview/>
+ {calendarUnavailable && <p class="empty-message">El calendario no está disponible en este momento. Puedes seguir leyendo El Juego en Datos.</p>}
  {tickerItems.length > 0 && <div class="ticker" aria-hidden="true"><div class="ticker-track">{[0, 1].map(copy => <span class:list={['ticker-set', { 'ticker-copy': copy === 1 }]}>{tickerItems.map(item => <span class="ticker-item"><TeamLogo name={item.home} teamId={item.homeId} size={18}/><strong>{item.text}</strong><small title={item.full} data-kickoff={item.kickoff} data-format="time" data-label="off">{item.time}</small><TeamLogo name={item.away} teamId={item.awayId} size={18}/></span>)}</span>)}</div></div>}
  {hero ? <>
  <section id="forma" class="forma" aria-labelledby="forma-title">
-  <div class="section-heading"><h2 id="forma-title">La forma, con resultados reales.</h2><span>Actualizado {updated} (Lima)</span></div>
+  <div class="section-heading"><h2 id="forma-title">La forma, con resultados reales.</h2><span>{updated ? `Actualizado ${updated} (Lima)` : 'Datos históricos de GoatLab'}</span></div>
   <div class="forma-panel">
    <div class="forma-copy">
     <div class="forma-meta"><span class="chip-league">{competitionById(hero.competition)?.name}</span><span data-kickoff={hero.kickoff} data-format="date">{heroDate}</span><span data-kickoff={hero.kickoff} data-format="time">{heroTime} (Lima)</span></div>
@@ -122,14 +135,6 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
   {hasMore && <nav class="wall-nav" aria-label="Más encuentros"><a class="wall-more" href="/encuentros/">Ver más encuentros <Icon size={16}/></a></nav>}
  </section>
  <AdSlot variant="horizontal" slotKey="homeArchive"/>
- <section class="archive-promo" aria-labelledby="archive-title">
-  <div class="archive-copy">
-   <h2 id="archive-title">Resultados y <strong>análisis recientes.</strong></h2>
-   <p>Consulta el marcador final y vuelve a la lectura que preparamos antes del partido.</p>
-   <a class="archive-back" href="/encuentros/#analisis-recientes">Explorar partidos finalizados <Icon size={16}/></a>
-  </div>
-  <ArchivePitch/>
- </section>
  {hasJourney && <section class="journey" aria-labelledby="journey-title">
   <div class="section-heading"><h2 id="journey-title">Donde ocurre la jornada.</h2><span>Mapa de sedes · pulso de la base · tablas</span></div>
   {journeyData.pins.length > 0 && <JourneyMap pins={journeyData.pins}/>}

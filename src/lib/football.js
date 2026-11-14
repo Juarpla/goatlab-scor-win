@@ -181,8 +181,10 @@ export async function getFixtures({ date, days = 1, env = {}, fetchImpl = fetch,
   let discovered = [];
   if (env.BZZOIRO_API_TOKEN && dates.length) {
     try {
-      const events = await listEvents({ dateFrom: dates[0], dateTo: dates[dates.length - 1], env, fetchImpl, logger });
-      const BZ_STATUS = { notstarted: 'NS', inprogress: 'LIVE', finished: 'FT' };
+      const events = await listEvents({ dateFrom: dates[0], dateTo: dates[dates.length - 1], env, fetchImpl, logger: {
+        warn(message) { errors.push(message); },
+      } });
+      const BZ_STATUS = { notstarted: 'NS', inprogress: 'LIVE', finished: 'FT', canceled: 'CANC', cancelled: 'CANC', postponed: 'PST', interrupted: 'INT', suspended: 'SUSP', abandoned: 'ABD' };
       discovered = events.flatMap(event => {
         const league = leagueByProviderId('bzzoiro', event?.league_id);
         if (!league || !BZ_DISCOVERY.has(league.id) || !event?.home_team || !event?.away_team || !event?.event_date) return [];

@@ -1356,8 +1356,11 @@ async function updateWeather(matches) {
 async function capturePredictions(matches, results = []) {
   const previous = await readJson('public/data/predictions.json') ?? { captures: {} };
   const captures = { ...previous.captures };
-  for (const match of matches.filter(match => !isFinished(match))) {
-    const entry = captures[match.id] ?? { kickoff: match.kickoff, home: match.home, away: match.away, captures: [], finalScore: null };
+  for (const match of matches.filter(match => match.status === 'NS' && Date.parse(match.kickoff) > Date.now())) {
+    const captureTime = new Date().toISOString();
+    const previous = captures[match.id];
+    const entry = previous && Date.parse(previous.kickoff) === Date.parse(match.kickoff)
+      ? previous : { kickoff: match.kickoff, home: match.home, away: match.away, captures: [], finalScore: null };
     // GoatLab verdict computed with the data available before the match.
     const goatlab = buildEnsemble({
       results, history: [], h2h: match.h2h ?? null, catboost: match.modelPrediction ?? null,
@@ -1366,7 +1369,8 @@ async function capturePredictions(matches, results = []) {
     const cb = match.modelPrediction;
     const af = match.afPrediction ?? null;
     entry.captures.push({
-      capturedAt: cb?.capturedAt ?? af?.capturedAt ?? new Date().toISOString(),
+      capturedAt: captureTime,
+      computedAt: captureTime,
       catboost: cb ? {
         oneX2: cb.oneX2 ?? null, xg: cb.xg ?? null,
         over15: cb.over15 ?? null, over25: cb.over25 ?? null, over35: cb.over35 ?? null,
@@ -1431,7 +1435,7 @@ async function full() {
   // AF pre-match odds: fair % for the ladder/BTTS when Bzzoiro is not enough.
   await captureAfOdds(windowMatches);
   // The wall only keeps live matches; the full window still feeds predictions and analysis.
-  await writeJson('public/data/fixtures.json', { matches: windowMatches.filter(alive), provider: result.provider, delayed: result.delayed, updatedAt: result.updatedAt });
+  await writeJson('public/data/fixtures.json', { matches: windowMatches.filter(alive), provider: result.provider, delayed: result.delayed, sourceErrors: result.errors ?? [], updatedAt: result.updatedAt });
   const pruneNow = Date.now();
   const finished = await persistFinished(windowMatches, { previousMatches: previousCalendar?.matches ?? [], now: pruneNow });
   const pruneContext = buildPruneContext(windowMatches, finished);
@@ -1560,7 +1564,7 @@ async function refreshScores() {
   // The final scoreline is recorded before pruning: the evaluation dataset needs finished matches.
   await capturePredictions(merged, resultsBase?.results ?? []);
   const matches = merged.filter(alive);
-  await writeJson('public/data/fixtures.json', { matches, provider: result.provider, delayed: result.delayed, updatedAt: result.updatedAt });
+  await writeJson('public/data/fixtures.json', { matches, provider: result.provider, delayed: result.delayed, sourceErrors: result.errors ?? [], updatedAt: result.updatedAt });
   const pruneNow = Date.now();
   const finished = await persistFinished(merged, { previousMatches: previous.matches, now: pruneNow });
   const pruneContext = buildPruneContext(merged, finished);

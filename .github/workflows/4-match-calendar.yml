@@ -1,0 +1,60 @@
+name: "4-match-calendar"
+on:
+  workflow_run:
+    workflows: ["1-update-data"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        options: [sync, reconcile, simulate, prune-preview]
+        default: sync
+  schedule:
+    - cron: '11,41 * * * *'
+    - cron: '51 8 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: goatlab-d1-calendar
+  cancel-in-progress: false
+  queue: max
+jobs:
+  calendar:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Sync calendar, reconcile match status or prune expired rows
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GOATLAB_D1_API_TOKEN: ${{ secrets.GOATLAB_D1_API_TOKEN }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
+          BZZOIRO_API_TOKEN: ${{ secrets.BZZOIRO_API_TOKEN }}
+          OPERATION: ${{ inputs.operation }}
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          case "$EVENT_NAME:$OPERATION:$SCHEDULE" in
+            workflow_run:*) node scripts/match-calendar.mjs sync ;;
+            workflow_dispatch:sync:*) node scripts/match-calendar.mjs sync ;;
+            workflow_dispatch:reconcile:*) node scripts/match-calendar.mjs reconcile ;;
+            workflow_dispatch:simulate:*) node scripts/match-calendar.mjs simulate ;;
+            workflow_dispatch:prune-preview:*) node scripts/match-calendar.mjs prune --dry-run ;;
+            "schedule::51 8 * * *") node scripts/match-calendar.mjs prune ;;
+            schedule:*) node scripts/match-calendar.mjs reconcile ;;
+          esac
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: calendar-prune-backup
+          path: calendar-prune-backup.json
+          if-no-files-found: ignore
+          retention-days: 30
