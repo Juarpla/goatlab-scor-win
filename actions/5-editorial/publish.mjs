@@ -19,8 +19,11 @@ const remaining = catalog.filter(topic => !known.has(topic.slug));
 const rotation = Math.floor((Date.now() - Date.UTC(2026, 10, 14)) / (3 * 86_400_000));
 const requested = process.argv.find(arg => arg.startsWith('--topic='))?.split('=')[1];
 if (requested && (!preview || !remaining.some(topic => topic.slug === requested))) throw new Error('Topic overrides are for unpublished previews');
-const candidate = !refresh && active.length < EDITORIAL_LIMIT && remaining.length
-  ? remaining.find(topic => topic.slug === requested) ?? remaining[((rotation % remaining.length) + remaining.length) % remaining.length] : null;
+const create = !refresh && active.length < EDITORIAL_LIMIT;
+const pool = remaining.length ? remaining : catalog;
+const candidate = create ? pool.find(topic => topic.slug === requested) ?? pool[((rotation % pool.length) + pool.length) % pool.length] : null;
+const discover = create && !remaining.length;
+const usedTitles = state.results.map(row => JSON.parse(row.payload).title);
 const row = candidate ? null : active[0];
 if (!candidate && !row) throw new Error('No active editorial or available topic');
 const old = row ? JSON.parse(row.payload) : null;
@@ -28,10 +31,12 @@ const topic = candidate ?? {
   slug: row.slug,
   title: old.title,
   question: old.nextQuestion ?? `¿Qué análisis nuevo, comprobable con las fuentes, aporta valor al artículo «${old.title}»?`,
-  sources: catalog.find(item => item.slug === row.slug)?.sources ?? old.sources,
+  sources: catalog.find(item => item.slug === (old.researchTopic ?? row.slug))?.sources ?? old.sources,
 };
 console.log(`${preview ? 'Preview' : 'Scheduled'} ${candidate ? 'creation' : 'refresh'}: ${topic.slug}; ${active.length} active`);
 
+const slugify = title => title.normalize('NFD').replace(/\p{Mark}/gu, '').toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 110).replace(/-$/, '');
 const clean = text => String(text).replace(/\s+/g, ' ').trim();
 const decode = text => text.replace(/&#(x[\da-f]+|\d+);/gi, (entity, code) => {
   const point = /^x/i.test(code) ? parseInt(code.slice(1), 16) : Number(code);
@@ -105,6 +110,9 @@ function validate(raw) {
   if (!textField(value.description, 45, 300)) return invalid('description');
   const words = [...value.lead, ...value.sections.flatMap(section => section.paragraphs)].join(' ').split(/\s+/).length;
   if (words < 500 || words > 1600) return invalid(`article length (${words} words)`);
+  if (discover && (!textField(value.title, 18, 105) || !isEditorialSlug(slugify(value.title))
+    || known.has(slugify(value.title)) || usedTitles.some(title => slugify(title) === slugify(value.title)))) return invalid('new title');
+
   return value;
 }
 
@@ -130,7 +138,8 @@ try {
   ({ value: draft } = await withFailover([
     { role: 'system', content: template },
     { role: 'user', content: JSON.stringify({
-      mode: candidate ? 'create' : 'refresh', title: topic.title, question: topic.question, visual: topic.visual,
+      mode: discover ? 'discover' : candidate ? 'create' : 'refresh', title: topic.title, question: topic.question, visual: topic.visual,
+      ...(discover ? { usedTitles } : {}),
       current: old ? strip([old.leadHtml, old.bodyHtml, old.extraHtml, old.updateHtml].filter(Boolean).join(' ')).slice(0, 14000) : null,
       documents: documents.map(({ name, note, passages }, index) => ({ source: index + 1, name, note, passages: passages.map((text, i) => [i + 1, text]) })),
     }) },
@@ -154,7 +163,7 @@ const sourceRows = [...new Set(draft.evidence.map(item => item.source))].map(i =
   return { name, url };
 });
 const payload = candidate ? {
-  title: topic.title, description: draft.description.length > 180 ? draft.description.slice(0, 177).replace(/\s+\S*$/, '') + '…' : draft.description, category: 'Dinero y fútbol',
+  title: discover ? draft.title : topic.title, description: draft.description.length > 180 ? draft.description.slice(0, 177).replace(/\s+\S*$/, '') + '…' : draft.description, category: 'Dinero y fútbol',
   leadHtml: draft.lead.map(paragraph).join(''), bodyHtml: sectionsHtml(draft.sections),
   visual: topic.visual, sources: sourceRows,
 } : {
@@ -163,8 +172,10 @@ const payload = candidate ? {
   sources: [...new Map([...old.sources, ...sourceRows].map(source => [source.url, source])).values()],
 };
 payload.nextQuestion = draft.nextQuestion;
+if (candidate) payload.researchTopic = topic.slug;
 payload.evidenceHash = digest;
 
+const publishedSlug = discover ? slugify(draft.title) : topic.slug;
 if (!preview) {
   if (candidate) {
     const { changes } = (await queryD1({
@@ -172,7 +183,7 @@ if (!preview) {
         SELECT ?, (SELECT COALESCE(max(position), 0) + 1 FROM editorials), ?, ?, ?, ?
         WHERE (SELECT count(*) FROM editorials WHERE retired_at IS NULL) < ?
         ON CONFLICT(slug) DO NOTHING`,
-      params: [topic.slug, now, now, now, JSON.stringify(payload), EDITORIAL_LIMIT],
+      params: [publishedSlug, now, now, now, JSON.stringify(payload), EDITORIAL_LIMIT],
     }))[0].meta;
     if (!changes) throw new Error('The editorial catalog changed while the article was prepared');
   } else {
@@ -183,5 +194,5 @@ if (!preview) {
     if (!changes) throw new Error('The editorial changed while the update was prepared');
   }
 }
-await report({ status: preview ? 'preview' : 'published', draft, verifiedEvidence: draft.evidence.map(({ source, passage, claim }) => ({ source, claim, excerpt: documents[source - 1].passages[passage - 1].slice(0, 300) })), nextQuestion: draft.nextQuestion });
-console.log(`${preview ? 'Validated preview' : 'Published'}: ${topic.slug}`);
+await report({ status: preview ? 'preview' : 'published', publishedSlug, draft, verifiedEvidence: draft.evidence.map(({ source, passage, claim }) => ({ source, claim, excerpt: documents[source - 1].passages[passage - 1].slice(0, 300) })), nextQuestion: draft.nextQuestion });
+console.log(`${preview ? 'Validated preview' : 'Published'}: ${publishedSlug}`);
