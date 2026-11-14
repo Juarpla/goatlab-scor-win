@@ -4,7 +4,7 @@
   "away": "San Marino",
   "competition": "nations",
   "kickoff": "2026-11-15T17:00:00+00:00",
-  "updatedAt": "2026-11-14T06:22:57.577Z",
+  "updatedAt": "2026-11-14T13:22:00.334Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,7 +13,7 @@
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 2.03,
+      "home": 2.045,
       "away": 0.699
     },
     "firstGoalSource": "Blend Poisson+xG",
@@ -54,19 +54,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-13T14:25:53.367Z",
+      "updatedAt": "2026-11-14T13:21:41.881Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
-    "weather": null,
+    "weather": {
+      "sampledAt": "2026-11-15T17:00:00+00:00",
+      "source": "bzzoiro"
+    },
     "discipline": {
-      "updatedAt": "2026-11-13T14:25:53.367Z",
+      "updatedAt": "2026-11-14T13:21:41.881Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 410
+      "rows": 420
     },
     "venue": null
   },
@@ -130,13 +133,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.73,
-    "noGoal": 0.065,
+    "lambdaTotal": 2.74,
+    "noGoal": 0.064,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.365
+        "p": 0.367
       },
       {
         "from": 15,
@@ -161,11 +164,11 @@
       {
         "from": 75,
         "to": 90,
-        "p": 0.038
+        "p": 0.037
       }
     ],
-    "firstHome": 0.695,
-    "firstAway": 0.239
+    "firstHome": 0.697,
+    "firstAway": 0.238
   },
   "scorers": {
     "home": [
@@ -173,28 +176,19 @@
         "player": "Leo Walta",
         "goals": 4,
         "matches": 5,
-        "share": 0.5,
-        "rate": 1.01,
-        "anytime": 0.638,
-        "first": 0.372
+        "share": 0.571,
+        "rate": 1.17,
+        "anytime": 0.689,
+        "first": 0.426
       },
       {
         "player": "Joel Pohjanpalo",
         "goals": 3,
         "matches": 5,
-        "share": 0.375,
-        "rate": 0.76,
-        "anytime": 0.533,
-        "first": 0.279
-      },
-      {
-        "player": "Adrian Svanback",
-        "goals": 1,
-        "matches": 4,
-        "share": 0.125,
-        "rate": 0.25,
-        "anytime": 0.224,
-        "first": 0.093
+        "share": 0.429,
+        "rate": 0.88,
+        "anytime": 0.584,
+        "first": 0.32
       }
     ],
     "away": null
@@ -203,95 +197,95 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.777,
-      "draw": 0.158,
-      "away": 0.066,
+      "home": 0.941,
+      "draw": 0.042,
+      "away": 0.016,
       "predicted": "H"
     },
     "xg": {
-      "home": 2.26,
+      "home": 2.29,
       "away": 0.63
     },
-    "over15": 0.773,
-    "over25": 0.544,
-    "over35": 0.318,
-    "btts": 0.441,
+    "over15": 0.778,
+    "over25": 0.551,
+    "over35": 0.325,
+    "btts": 0.44299999999999995,
     "score": "2-0",
-    "cornersOver95": 0.474,
+    "cornersOver95": 0.47200000000000003,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.777,
+      "favoriteProb": 0.941,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.7767,
+    "confidence": 0.9413,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-13T14:26:02.241Z",
+    "capturedAt": "2026-11-14T13:21:49.446Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.736,
-      "draw": 0.184,
-      "away": 0.08
+      "home": 0.742,
+      "draw": 0.18,
+      "away": 0.078
     },
     "doubleChance": {
-      "12": 0.816,
-      "1X": 0.92,
-      "X2": 0.264
+      "12": 0.82,
+      "1X": 0.922,
+      "X2": 0.258
     },
     "dnb": {
-      "home": 0.902,
-      "away": 0.098
+      "home": 0.905,
+      "away": 0.095
     },
     "totals": {
-      "over15": 0.792,
-      "under15": 0.208,
-      "over25": 0.551,
-      "under25": 0.449,
-      "over35": 0.328,
-      "under35": 0.672
+      "over15": 0.796,
+      "under15": 0.204,
+      "over25": 0.558,
+      "under25": 0.442,
+      "over35": 0.334,
+      "under35": 0.666
     },
     "btts": {
-      "yes": 0.427,
-      "no": 0.573
+      "yes": 0.428,
+      "no": 0.572
     },
     "cleanSheet": {
       "home": 0.533,
-      "away": 0.104
+      "away": 0.101
     },
     "exactScores": [
       {
         "home": 2,
         "away": 0,
-        "p": 0.148,
-        "share": 0.26958105646630237
+        "p": 0.145,
+        "share": 0.2665441176470588
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.118,
-        "share": 0.214936247723133
+        "p": 0.116,
+        "share": 0.2132352941176471
       },
       {
         "home": 3,
         "away": 0,
-        "p": 0.107,
-        "share": 0.19489981785063754
+        "p": 0.108,
+        "share": 0.1985294117647059
       },
       {
         "home": 2,
         "away": 1,
         "p": 0.089,
-        "share": 0.1621129326047359
+        "share": 0.1636029411764706
       },
       {
         "home": 1,
         "away": 1,
-        "p": 0.087,
-        "share": 0.15846994535519127
+        "p": 0.086,
+        "share": 0.15808823529411767
       }
     ],
     "providerPick": {
@@ -336,10 +330,10 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 410
+      "historyRows": 420
     },
     "source": "GoatLab",
-    "expectedTotal": 4.2
+    "expectedTotal": 4.1
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -347,7 +341,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 410
+      "historyRows": 420
     },
     "source": "GoatLab",
     "expectedTotal": 8.8
@@ -355,25 +349,25 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.91,
+      "shots": 14.8,
       "shotsOnTarget": 4.97,
-      "xg": 2.26,
-      "corners": 5.08,
-      "fouls": 12.75,
-      "yellowCards": 1.87,
-      "redCards": 0.28,
-      "offsides": 1.48,
+      "xg": 2.29,
+      "corners": 5.07,
+      "fouls": 12.78,
+      "yellowCards": 1.83,
+      "redCards": 0.25,
+      "offsides": 1.49,
       "possession": 57.06
     },
     "away": {
-      "shots": 10.91,
+      "shots": 10.8,
       "shotsOnTarget": 3.52,
       "xg": 0.63,
-      "corners": 3.72,
-      "fouls": 12.75,
-      "yellowCards": 2.32,
-      "redCards": 0.33,
-      "offsides": 1.7,
+      "corners": 3.71,
+      "fouls": 12.78,
+      "yellowCards": 2.29,
+      "redCards": 0.3,
+      "offsides": 1.72,
       "possession": 42.94
     },
     "sample": {
@@ -406,14 +400,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.51,
-      "shotsOnTarget": 4.37,
-      "xg": 1.35,
-      "corners": 4.65,
-      "fouls": 11.55,
-      "yellowCards": 2.09,
-      "redCards": 0.35,
-      "offsides": 1.54
+      "shots": 13.31,
+      "shotsOnTarget": 4.36,
+      "xg": 1.36,
+      "corners": 4.63,
+      "fouls": 11.59,
+      "yellowCards": 2.03,
+      "redCards": 0.29,
+      "offsides": 1.56
     },
     "sources": {
       "home": {
@@ -454,14 +448,14 @@
       "away": 0.263
     },
     "cardsDuel": {
-      "home": 0.317,
-      "draw": 0.198,
-      "away": 0.486
+      "home": 0.313,
+      "draw": 0.199,
+      "away": 0.487
     },
     "lastGoal": {
-      "home": 0.695,
-      "away": 0.239,
-      "noGoal": 0.065
+      "home": 0.697,
+      "away": 0.238,
+      "noGoal": 0.064
     },
     "cornerRace": {
       "3": {
@@ -469,12 +463,12 @@
         "away": 0.357
       },
       "5": {
-        "home": 0.684,
-        "away": 0.316
+        "home": 0.685,
+        "away": 0.315
       },
       "7": {
-        "home": 0.716,
-        "away": 0.284
+        "home": 0.717,
+        "away": 0.283
       }
     },
     "cornerMargin": {
@@ -491,10 +485,10 @@
       "temp": null,
       "precipitation": null,
       "weathercode": null,
-      "wind": null,
-      "condition": null,
-      "sampledAt": null,
-      "source": null
+      "wind": 37.8,
+      "condition": "rain",
+      "sampledAt": "2026-11-15T17:00:00+00:00",
+      "source": "bzzoiro"
     },
     "venue": {
       "stadium": null,

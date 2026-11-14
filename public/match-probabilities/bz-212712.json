@@ -4,33 +4,36 @@
   "away": "Scotland",
   "competition": "nations",
   "kickoff": "2026-11-16T19:45:00+00:00",
-  "updatedAt": "2026-11-14T06:22:57.577Z",
+  "updatedAt": "2026-11-14T13:22:00.334Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
-      "home": 1.83,
-      "away": 1.02
+      "home": 1.44,
+      "away": 0.92
     },
-    "lambdaSource": "Bzzoiro-xG",
-    "lambdasBlend": null,
-    "firstGoalSource": "Bzzoiro-xG",
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.59,
+      "away": 0.98
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
-      "home": 0,
-      "away": 0
+      "home": 3,
+      "away": 3
     },
     "standings": {
       "Switzerland": {
         "position": 1,
         "team": "Switzerland",
         "teamId": 462,
-        "played": 4,
+        "played": 5,
         "won": 4,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
         "goalsFor": null,
         "goalsAgainst": null,
         "goalDifference": null,
-        "points": 12,
+        "points": 13,
         "zone": {
           "key": "promo",
           "label": "Promotion",
@@ -42,20 +45,20 @@
         "position": 3,
         "team": "Scotland",
         "teamId": 466,
-        "played": 4,
-        "won": 1,
+        "played": 5,
+        "won": 2,
         "drawn": 1,
         "lost": 2,
         "goalsFor": null,
         "goalsAgainst": null,
         "goalDifference": null,
-        "points": 4,
+        "points": 7,
         "zone": null,
         "form": null
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-13T14:25:53.367Z",
+      "updatedAt": "2026-11-14T13:21:41.881Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -66,227 +69,237 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-13T14:25:53.367Z",
+      "updatedAt": "2026-11-14T13:21:41.881Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 410
+      "rows": 420
     },
     "venue": null
   },
   "markets": {
     "oneX2": {
-      "home": 0.553,
-      "draw": 0.25,
-      "away": 0.198
+      "home": 0.479,
+      "draw": 0.293,
+      "away": 0.228
     },
     "doubleChance": {
-      "12": 0.75,
-      "1X": 0.802,
-      "X2": 0.447
+      "12": 0.707,
+      "1X": 0.772,
+      "X2": 0.521
     },
     "dnb": {
-      "home": 0.737,
-      "away": 0.263
+      "home": 0.677,
+      "away": 0.323
     },
     "totals": {
-      "over15": 0.788,
-      "under15": 0.212,
-      "over25": 0.542,
-      "under25": 0.458,
-      "over35": 0.319,
-      "under35": 0.681
+      "over15": 0.695,
+      "under15": 0.305,
+      "over25": 0.42,
+      "under25": 0.58,
+      "over35": 0.213,
+      "under35": 0.787
     },
     "btts": {
-      "yes": 0.548,
-      "no": 0.452
+      "yes": 0.471,
+      "no": 0.529
     },
     "cleanSheet": {
-      "home": 0.361,
-      "away": 0.16
+      "home": 0.399,
+      "away": 0.237
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.119
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.099
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.097
+        "p": 0.138
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.095
+        "p": 0.123
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.069
+        "p": 0.107
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.098
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.09
       }
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.85,
-    "noGoal": 0.058,
+    "lambdaTotal": 2.57,
+    "noGoal": 0.077,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.378
+        "p": 0.348
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.235
+        "p": 0.227
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.148
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.091
+        "p": 0.096
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.057
+        "p": 0.063
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.035
+        "p": 0.041
       }
     ],
-    "firstHome": 0.605,
-    "firstAway": 0.337
+    "firstHome": 0.571,
+    "firstAway": 0.352
   },
   "scorers": {
     "home": [
       {
         "player": "Zeki Amdouni",
         "goals": 3,
-        "matches": 4,
+        "matches": 5,
         "share": 0.6,
-        "rate": 1.1,
-        "anytime": 0.666,
-        "first": 0.385
+        "rate": 0.95,
+        "anytime": 0.615,
+        "first": 0.371
       },
       {
         "player": "Dan Ndoye",
         "goals": 2,
-        "matches": 4,
+        "matches": 5,
         "share": 0.4,
-        "rate": 0.73,
-        "anytime": 0.519,
-        "first": 0.257
+        "rate": 0.64,
+        "anytime": 0.471,
+        "first": 0.247
       }
     ],
-    "away": null
+    "away": [
+      {
+        "player": "John McGinn",
+        "goals": 3,
+        "matches": 5,
+        "share": 0.9,
+        "rate": 0.88,
+        "anytime": 0.586,
+        "first": 0.343
+      }
+    ]
   },
   "hasScorers": true,
-  "method": "poisson-fallback-v1",
+  "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.638,
-      "draw": 0.215,
-      "away": 0.147,
+      "home": 0.633,
+      "draw": 0.221,
+      "away": 0.146,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.83,
-      "away": 1.02
+      "home": 1.74,
+      "away": 1.04
     },
-    "over15": 0.75,
-    "over25": 0.513,
-    "over35": 0.289,
-    "btts": 0.48,
+    "over15": 0.742,
+    "over25": 0.504,
+    "over35": 0.284,
+    "btts": 0.47600000000000003,
     "score": "1-1",
-    "cornersOver95": 0.466,
+    "cornersOver95": 0.514,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.638,
+      "favoriteProb": 0.633,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6382,
+    "confidence": 0.6326,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-13T14:26:04.129Z",
+    "capturedAt": "2026-11-14T13:21:53.808Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.553,
-      "draw": 0.25,
-      "away": 0.198
+      "home": 0.527,
+      "draw": 0.259,
+      "away": 0.214
     },
     "doubleChance": {
-      "12": 0.75,
-      "1X": 0.802,
-      "X2": 0.447
+      "12": 0.741,
+      "1X": 0.786,
+      "X2": 0.473
     },
     "dnb": {
-      "home": 0.737,
-      "away": 0.263
+      "home": 0.711,
+      "away": 0.289
     },
     "totals": {
-      "over15": 0.788,
-      "under15": 0.212,
-      "over25": 0.542,
-      "under25": 0.458,
-      "over35": 0.319,
-      "under35": 0.681
+      "over15": 0.777,
+      "under15": 0.223,
+      "over25": 0.526,
+      "under25": 0.474,
+      "over35": 0.304,
+      "under35": 0.696
     },
     "btts": {
-      "yes": 0.548,
-      "no": 0.452
+      "yes": 0.544,
+      "no": 0.456
     },
     "cleanSheet": {
-      "home": 0.361,
-      "away": 0.16
+      "home": 0.353,
+      "away": 0.176
     },
     "exactScores": [
       {
         "home": 1,
         "away": 1,
-        "p": 0.124,
-        "share": 0.256198347107438
+        "p": 0.123,
+        "share": 0.2536082474226804
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.099,
-        "share": 0.20454545454545453
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.097,
-        "share": 0.20041322314049587
+        "p": 0.098,
+        "share": 0.2020618556701031
       },
       {
         "home": 1,
         "away": 0,
-        "p": 0.095,
-        "share": 0.19628099173553717
+        "p": 0.097,
+        "share": 0.19999999999999998
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.094,
+        "share": 0.1938144329896907
       },
       {
         "home": 0,
         "away": 0,
-        "p": 0.069,
-        "share": 0.14256198347107438
+        "p": 0.073,
+        "share": 0.15051546391752574
       }
     ],
     "providerPick": {
@@ -351,10 +364,10 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 410
+      "historyRows": 420
     },
     "source": "GoatLab",
-    "expectedTotal": 4
+    "expectedTotal": 3.7
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -362,34 +375,34 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 410
+      "historyRows": 420
     },
     "source": "GoatLab",
-    "expectedTotal": 9
+    "expectedTotal": 9.3
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.6,
-      "shotsOnTarget": 5.15,
-      "xg": 1.83,
-      "corners": 4.68,
-      "fouls": 12.38,
-      "yellowCards": 1.92,
-      "redCards": 0.23,
-      "offsides": 1.42,
-      "possession": 53.05
+      "shots": 13.88,
+      "shotsOnTarget": 4.7,
+      "xg": 1.74,
+      "corners": 5.01,
+      "fouls": 11.78,
+      "yellowCards": 1.7,
+      "redCards": 0.16,
+      "offsides": 1.38,
+      "possession": 53.89
     },
     "away": {
-      "shots": 12.42,
-      "shotsOnTarget": 4.06,
-      "xg": 1.02,
-      "corners": 4.32,
-      "fouls": 12.38,
-      "yellowCards": 2.05,
-      "redCards": 0.32,
-      "offsides": 1.51,
-      "possession": 46.95
+      "shots": 11.79,
+      "shotsOnTarget": 3.84,
+      "xg": 1.04,
+      "corners": 4.33,
+      "fouls": 12.37,
+      "yellowCards": 1.97,
+      "redCards": 0.3,
+      "offsides": 1.43,
+      "possession": 46.11
     },
     "sample": {
       "home": 5,
@@ -421,14 +434,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.68,
-      "shotsOnTarget": 4.44,
-      "xg": 1.36,
-      "corners": 4.66,
-      "fouls": 11.61,
-      "yellowCards": 2.1,
-      "redCards": 0.34,
-      "offsides": 1.52
+      "shots": 13.37,
+      "shotsOnTarget": 4.37,
+      "xg": 1.35,
+      "corners": 4.61,
+      "fouls": 11.6,
+      "yellowCards": 2.04,
+      "redCards": 0.29,
+      "offsides": 1.54
     },
     "sources": {
       "home": {
@@ -464,40 +477,40 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.48,
-      "draw": 0.134,
-      "away": 0.386
+      "home": 0.522,
+      "draw": 0.129,
+      "away": 0.348
     },
     "cardsDuel": {
-      "home": 0.371,
-      "draw": 0.207,
-      "away": 0.421
+      "home": 0.338,
+      "draw": 0.215,
+      "away": 0.446
     },
     "lastGoal": {
-      "home": 0.605,
-      "away": 0.337,
-      "noGoal": 0.058
+      "home": 0.571,
+      "away": 0.352,
+      "noGoal": 0.077
     },
     "cornerRace": {
       "3": {
-        "home": 0.537,
-        "away": 0.463
+        "home": 0.568,
+        "away": 0.432
       },
       "5": {
-        "home": 0.549,
-        "away": 0.451
+        "home": 0.589,
+        "away": 0.411
       },
       "7": {
-        "home": 0.558,
-        "away": 0.442
+        "home": 0.606,
+        "away": 0.394
       }
     },
     "cornerMargin": {
-      "home3plus": 0.234,
-      "home12": 0.246,
-      "level": 0.134,
-      "away12": 0.219,
-      "away3plus": 0.167
+      "home3plus": 0.272,
+      "home12": 0.251,
+      "level": 0.129,
+      "away12": 0.203,
+      "away3plus": 0.146
     },
     "source": "GoatLab"
   },
@@ -532,57 +545,61 @@
   "context": {
     "home": {
       "team": "Switzerland",
-      "recentSample": 2,
+      "recentSample": 3,
       "debut": false,
       "cleanSheets": {
-        "value": 1,
-        "sample": 2
+        "value": 2,
+        "sample": 3
       },
       "biggestWin": {
         "value": 3,
-        "sample": 2
+        "sample": 3
       },
       "unbeaten": {
-        "value": 2,
-        "sample": 2
+        "value": 3,
+        "sample": 3
       },
       "season": {
         "position": 1,
-        "played": 4,
+        "played": 5,
         "gf": null,
         "ga": null,
         "provider": null
       },
       "player": {
         "name": "Zeki Amdouni",
-        "detail": "3 goles en 4 partidos",
+        "detail": "3 goles en 5 partidos",
         "source": "líder del equipo en la temporada"
       }
     },
     "away": {
       "team": "Scotland",
-      "recentSample": 2,
+      "recentSample": 3,
       "debut": false,
       "cleanSheets": {
         "value": 1,
-        "sample": 2
+        "sample": 3
       },
       "biggestWin": {
         "value": 2,
-        "sample": 2
+        "sample": 3
       },
       "unbeaten": {
-        "value": 0,
-        "sample": 2
+        "value": 1,
+        "sample": 3
       },
       "season": {
         "position": 3,
-        "played": 4,
+        "played": 5,
         "gf": null,
         "ga": null,
         "provider": null
       },
-      "player": null
+      "player": {
+        "name": "John McGinn",
+        "detail": "3 goles en 5 partidos",
+        "source": "líder del equipo en la temporada"
+      }
     }
   },
   "llmReview": null
