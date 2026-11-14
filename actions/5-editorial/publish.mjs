@@ -17,8 +17,10 @@ const known = new Set(state.results.map(row => row.slug));
 const remaining = catalog.filter(topic => !known.has(topic.slug));
 // The calendar makes retries deterministic within a day and rotates past unavailable sources.
 const rotation = Math.floor((Date.now() - Date.UTC(2026, 10, 14)) / (3 * 86_400_000));
+const requested = process.argv.find(arg => arg.startsWith('--topic='))?.split('=')[1];
+if (requested && (!preview || !remaining.some(topic => topic.slug === requested))) throw new Error('Topic overrides are for unpublished previews');
 const candidate = !refresh && active.length < EDITORIAL_LIMIT && remaining.length
-  ? remaining[((rotation % remaining.length) + remaining.length) % remaining.length] : null;
+  ? remaining.find(topic => topic.slug === requested) ?? remaining[((rotation % remaining.length) + remaining.length) % remaining.length] : null;
 const row = candidate ? null : active[0];
 if (!candidate && !row) throw new Error('No active editorial or available topic');
 const old = row ? JSON.parse(row.payload) : null;
@@ -90,9 +92,8 @@ function validate(raw) {
   if (!Array.isArray(value?.sections)) return invalid('sections missing');
   if (!candidate && value.sections.length === 0) return value;
   if (value.sections.length < (candidate ? 4 : 1) || value.sections.length > (candidate ? 5 : 2)) return invalid('section count');
-  if (!value.sections.every(({ heading, paragraphs }) => textField(heading, 8, 100) && Array.isArray(paragraphs)
-    && paragraphs.length >= 2 && paragraphs.length <= 4 && paragraphs.every(text => textField(text, 85, 1100))
-    && paragraphs.some(text => /\*\*[^*]+\*\*/.test(text)))) return invalid('paragraphs, heading or emphasis');
+  if (!value.sections.every(({ heading, paragraphs }) => textField(heading, 4, 130) && Array.isArray(paragraphs)
+    && paragraphs.length >= 2 && paragraphs.length <= 4 && paragraphs.every(text => textField(text, 65, 1600)))) return invalid('paragraphs or heading');
   if (!textField(value.nextQuestion, 18, 300)) return invalid('missing next question');
   if (!Array.isArray(value.evidence) || value.evidence.length < (candidate ? 4 : 2)) return invalid('evidence count');
   const verified = value.evidence.filter(({ source, passage: quote, claim }) =>
@@ -100,21 +101,18 @@ function validate(raw) {
   if (verified.length !== value.evidence.length || new Set(verified.map(item => item.source)).size < 2) return invalid('source quotes missing or unmatched');
   if (!candidate) return value;
   if (!Array.isArray(value.lead) || value.lead.length < 1 || value.lead.length > 3
-    || !value.lead.every(text => textField(text, 100, 900)) || !textField(value.description, 50, 185)) return invalid('lead or description');
+    || !value.lead.every(text => textField(text, 80, 1300))) return invalid('lead');
+  if (!textField(value.description, 45, 300)) return invalid('description');
   const words = [...value.lead, ...value.sections.flatMap(section => section.paragraphs)].join(' ').split(/\s+/).length;
-  if (words < 600 || words > 1200) return invalid('article length');
-  const visual = value.visual;
-  if (!textField(visual?.title, 8, 42) || !textField(visual.caption, 20, 260) || typeof visual.unit !== 'string' || /[<>]/.test(visual.unit)
-    || visual.unit.length > 8 || !Array.isArray(visual.labels) || !visual.labels.every(label => textField(label, 2, 19))
-    || !Array.isArray(visual.values)) return invalid('visual labels or caption');
-  const diagram = visual.labels.length === 3 && visual.values.length === 0;
-  const chart = visual.labels.length >= 2 && visual.labels.length <= 4 && visual.values.length === visual.labels.length
-    && visual.values.every(number => Number.isFinite(number) && number >= 0 && number <= 999999);
-  return diagram || chart ? value : invalid('chart values');
+  if (words < 500 || words > 1600) return invalid(`article length (${words} words)`);
+  return value;
 }
 
 const escape = string => string.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
-const paragraph = text => `<p>${escape(text).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')}</p>`;
+const paragraph = text => {
+  const emphasized = /\*\*[^*]+\*\*/.test(text) ? text : text.replace(/\b\d[\d.,]*\s?(?:%|millones|euros|dólares)/i, '**$&**');
+  return `<p>${escape(emphasized).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')}</p>`;
+};
 const sectionsHtml = sections => sections.map(section => `<h2>${escape(section.heading)}</h2>${section.paragraphs.map(paragraph).join('')}`).join('');
 const touch = async () => {
   if (!preview && row) await queryD1({ sql: 'UPDATE editorials SET checked_at = ? WHERE slug = ? AND retired_at IS NULL', params: [now, row.slug] });
@@ -132,11 +130,11 @@ try {
   ({ value: draft } = await withFailover([
     { role: 'system', content: template },
     { role: 'user', content: JSON.stringify({
-      mode: candidate ? 'create' : 'refresh', title: topic.title, question: topic.question,
+      mode: candidate ? 'create' : 'refresh', title: topic.title, question: topic.question, visual: topic.visual,
       current: old ? strip([old.leadHtml, old.bodyHtml, old.extraHtml, old.updateHtml].filter(Boolean).join(' ')).slice(0, 14000) : null,
       documents: documents.map(({ name, note, passages }, index) => ({ source: index + 1, name, note, passages: passages.map((text, i) => [i + 1, text]) })),
     }) },
-  ], { maxTokens: 16000, timeoutMs: 100_000, validate }));
+  ], { maxTokens: 16000, timeoutMs: 100_000, validate, orderVar: 'EDITORIAL_PROVIDER_ORDER' }));
 } catch (error) {
   await touch();
   await report({ status: 'validation-failed' });
@@ -156,9 +154,9 @@ const sourceRows = [...new Set(draft.evidence.map(item => item.source))].map(i =
   return { name, url };
 });
 const payload = candidate ? {
-  title: topic.title, description: draft.description, category: 'Dinero y fútbol',
+  title: topic.title, description: draft.description.length > 180 ? draft.description.slice(0, 177).replace(/\s+\S*$/, '') + '…' : draft.description, category: 'Dinero y fútbol',
   leadHtml: draft.lead.map(paragraph).join(''), bodyHtml: sectionsHtml(draft.sections),
-  visual: draft.visual, sources: sourceRows,
+  visual: topic.visual, sources: sourceRows,
 } : {
   ...old, updateHtml: [...(old.revisions ?? []).slice(-2), sectionsHtml(draft.sections)].join(''), revised_at: now,
   revisions: [...(old.revisions ?? []).slice(-2), sectionsHtml(draft.sections)],
