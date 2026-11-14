@@ -1,260 +1,6 @@
 {
-  "updatedAt": "2026-11-14T06:23:34.174Z",
+  "updatedAt": "2026-11-14T07:29:21.387Z",
   "runs": [
-    {
-      "at": "2026-11-05T14:34:31.039Z",
-      "matchId": "bz-601250",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "7b690812-242c-4859-b9ac-68a4b8a402d3"
-    },
-    {
-      "at": "2026-11-05T14:36:12.402Z",
-      "matchId": "bz-601247",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1505,
-        "outputTokens": 13788
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "122e8d23-819d-4698-a1e7-7910de7ed059"
-    },
-    {
-      "at": "2026-11-05T14:36:12.402Z",
-      "matchId": "bz-601212",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "122e8d23-819d-4698-a1e7-7910de7ed059"
-    },
-    {
-      "at": "2026-11-05T14:38:44.959Z",
-      "matchId": "bz-601179",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1493,
-        "outputTokens": 17646
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6f0dade6-7e8b-495f-8a86-213162b209b8"
-    },
-    {
-      "at": "2026-11-05T14:38:44.959Z",
-      "matchId": "bz-601174",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6f0dade6-7e8b-495f-8a86-213162b209b8"
-    },
-    {
-      "at": "2026-11-05T15:15:30.026Z",
-      "task": "shorts",
-      "matchId": "valencia-vs-real-madrid-2026-11-07",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7140,
-            "outputTokens": 22163
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 138702
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7006,
-            "outputTokens": 35157
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 551301
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: falta una proyección marcada como opinión; guion 1: la proyección debe ser una frase completa de la narración, una sola vez; guion 1: la proyección debe coincidir con el golpe proyección; guion 1: 4 cifras, máximo 3; guion 2: falta una proyección marcada como opinión; guion 2: la proyección debe ser una frase completa de la narración, una sola vez; guion 2: la proyección debe coincidir con el golpe proyección; guion 3: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7670,
-            "outputTokens": 2703
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 50179
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235274
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 173082
-      },
-      "usage": {
-        "inputTokens": 7140,
-        "outputTokens": 25599
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "02d565d5-8b8b-44ba-bd23-26b0658001d1"
-    },
-    {
-      "at": "2026-11-05T15:26:52.789Z",
-      "task": "shorts",
-      "matchId": "crystal-palace-vs-tsg-hoffenheim-2026-11-05",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6769,
-            "outputTokens": 18736
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 127177
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 600002
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta TSG Hoffenheim; guion 2: 4 cifras, máximo 3; guion 3: falta TSG Hoffenheim; guion 3: 6 cifras, máximo 3; guion 5: falta TSG Hoffenheim; guion 5: 4 cifras, máximo 3; guion 6: falta TSG Hoffenheim",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7158,
-            "outputTokens": 2485
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 30003
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235175
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 10: cifra 20 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6769,
-            "outputTokens": 21904
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 129521
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 553239
-      },
-      "usage": {
-        "inputTokens": 6629,
-        "outputTokens": 34991
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "6c61035f-ff5b-4cbf-8439-8b5aa174de83"
-    },
-    {
-      "at": "2026-11-05T20:02:50.338Z",
-      "matchId": "bz-601316",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "usage": {
-        "inputTokens": 983,
-        "outputTokens": 6483
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "053c5547-4777-4240-9f26-9ca0ecdf2edd"
-    },
     {
       "at": "2026-11-05T20:07:01.197Z",
       "matchId": "bz-601306",
@@ -8047,6 +7793,396 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "05dcd405-36a1-4be6-89cc-e3f8210c3ba0"
+    },
+    {
+      "at": "2026-11-14T07:09:09.560Z",
+      "task": "shorts",
+      "matchId": "belgium-vs-italy-2026-11-15",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: el cero no se escribe en dígitos; guion 1: 13 cifras, máximo 3; guion 2: proyección fuera de rango; guion 2: 7 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7662,
+            "outputTokens": 3583
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11141
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 5 cifras, máximo 3; guion 8: 6 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: cifra 2.4 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7338,
+            "outputTokens": 30723
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 283812
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 5: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7211,
+            "outputTokens": 35200
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 421523
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 1: 9 cifras, máximo 3; guion 2: el cero no se escribe en dígitos; guion 2: 9 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: el cero no se escribe en dígitos; guion 5: 9 cifras, máximo 3; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7806,
+            "outputTokens": 3139
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16258
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: el cero no se escribe en dígitos; guion 3: 5 cifras, máximo 3; guion 4: 53 palabras, mínimo 55; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 6: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7204,
+            "outputTokens": 7379
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 199287
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7204,
+        "outputTokens": 7379
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-14T07:13:13.356Z",
+      "task": "shorts",
+      "matchId": "croatia-vs-czechia-2026-11-15",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: 6 cifras, máximo 3; guion 4: falta Croacia; guion 4: falta Chequia; guion 6: 4 cifras, máximo 3; guion 8: falta Croacia; guion 8: falta Chequia; guion 8: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7411,
+            "outputTokens": 3266
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10405
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 233389
+      },
+      "usage": {
+        "inputTokens": 7095,
+        "outputTokens": 25104
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "ee61c015-a9f9-405e-8ab5-e5b6c15e80fc"
+    },
+    {
+      "at": "2026-11-14T07:17:45.961Z",
+      "task": "shorts",
+      "matchId": "spain-vs-england-2026-11-15",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 6 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: falta España; guion 3: el gancho no lleva cifras; guion 3: 6 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7710,
+            "outputTokens": 2827
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10500
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 8: falta España; guion 8: falta Inglaterra",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7348,
+            "outputTokens": 19985
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 199132
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 2: artículo delante de Inglaterra; guion 8: falta España; guion 8: falta Inglaterra",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7225,
+            "outputTokens": 34832
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 485175
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: el gancho no lleva cifras; guion 2: 9 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 3: 6 cifras, máximo 3; guion 4: falta España; guion 4: el gancho no lleva cifras; guion 4: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7861,
+            "outputTokens": 2593
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13038
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235146
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: falta España; guion 3: falta Inglaterra; guion 5: 5 cifras, máximo 3; guion 7: cifra 41 no está en los hechos; guion 7: porcentajes bloqueados: evaluation.published es false; guion 8: falta España",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7710,
+            "outputTokens": 1871
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7133
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 265468
+      },
+      "usage": {
+        "inputTokens": 7348,
+        "outputTokens": 27725
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "8d9a34b5-ccf1-41eb-a8c9-2c2240ab19fe"
+    },
+    {
+      "at": "2026-11-14T07:28:45.639Z",
+      "task": "shorts",
+      "matchId": "france-vs-turkiye-2026-11-15",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 9: falta Turquía",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7135,
+            "outputTokens": 2869
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9317
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6887,
+            "outputTokens": 14412
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 141828
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 10: cifra 11 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6731,
+            "outputTokens": 34397
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 408284
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 2: falta Turquía; guion 3: 5 cifras, máximo 3; guion 4: falta Turquía; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 5: 53 palabras, mínimo 55; guion 6: falta Turquía; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7245,
+            "outputTokens": 2472
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11850
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235174
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 53 palabras, mínimo 55; guion 2: 50 palabras, mínimo 55; guion 5: 54 palabras, mínimo 55; guion 6: el cero no se escribe en dígitos; guion 6: 51 palabras, mínimo 55; guion 7: 52 palabras, mínimo 55; guion 8: falta Turquía; guion 8: 50 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7135,
+            "outputTokens": 1612
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5861
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6887,
+            "outputTokens": 24405
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 235463
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6731,
+            "outputTokens": 25858
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 170692
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7245,
+        "outputTokens": 2371
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-14T07:28:52.097Z",
+      "task": "image-prompts",
+      "matchId": "spain-vs-england-2026-11-15",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2762,
+        "outputTokens": 1736
+      }
+    },
+    {
+      "at": "2026-11-14T07:29:07.282Z",
+      "task": "image-prompts",
+      "matchId": "france-vs-turkiye-2026-11-15",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2648,
+        "outputTokens": 1854
+      }
+    },
+    {
+      "at": "2026-11-14T07:29:14.389Z",
+      "task": "image-prompts",
+      "matchId": "belgium-vs-italy-2026-11-15",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2811,
+        "outputTokens": 1434
+      }
+    },
+    {
+      "at": "2026-11-14T07:29:21.387Z",
+      "task": "image-prompts",
+      "matchId": "croatia-vs-czechia-2026-11-15",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2643,
+        "outputTokens": 1810
+      }
     }
   ]
 }
