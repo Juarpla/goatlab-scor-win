@@ -1,13 +1,11 @@
 /**
  * Home-page matchday region: venue map, database pulse and
- * curiosity thermometer. Everything is computed from local JSON at
- * build time; nothing on this page queries the provider at runtime.
+ * curiosity thermometer. Venue pins use the current calendar; aggregate
+ * statistics use the periodic snapshots.
  */
 import { normalize, teamEsDisplay } from './teams.js';
-import { competitions } from './football.js';
+import { competitions, FINISHED_STATUSES, hasNumericScore } from './football.js';
 import { locateMatch, MAP_CROP } from './venues.js';
-
-const FINISHED = new Set(['FT', 'AET', 'PEN']);
 
 /**
  * City pins for the map: groups upcoming fixtures by home venue
@@ -16,7 +14,7 @@ const FINISHED = new Set(['FT', 'AET', 'PEN']);
  * resolved venue travel separately to the "no location" row.
  */
 export function buildMapData(matches = []) {
-  const live = (matches ?? []).filter(match => !FINISHED.has(match.status) && match.kickoff);
+  const live = (matches ?? []).filter(match => match.kickoff && (!FINISHED_STATUSES.has(match.status) || !hasNumericScore(match)));
   const pins = new Map();
   const unlocated = [];
   for (const match of live) {

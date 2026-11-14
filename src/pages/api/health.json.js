@@ -1,7 +1,4 @@
-// On-demand endpoint (prerender = false). It keeps the Worker script-backed —
-// unlocking runtime vars/secrets, bindings, logs and observability in the
-// Cloudflare dashboard — while every page stays prerendered at build time.
-// Also serves as an uptime/freshness probe for the deployed site.
+// Worker uptime probe. Calendar checks also exercise the D1-backed pages.
 export const prerender = false;
 
 export function GET() {

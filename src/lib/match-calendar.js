@@ -26,7 +26,7 @@ export function calendarPhase(match, now) {
 export function fixtureIsVisible(match, now) {
   const kickoff = Date.parse(match.kickoff);
   return Number.isFinite(kickoff) && kickoff > now - MATCH_WINDOW && kickoff <= now + SCHEDULE_WINDOW
-    && !FINISHED_STATUSES.has(match.status) && !CANCELLED.has(match.status) && !PAUSED.has(match.status);
+    && calendarPhase(match, now) !== 'final' && !CANCELLED.has(match.status) && !PAUSED.has(match.status);
 }
 
 export function pageReading(match, { analyses, results, standings, scorers, weather }) {

@@ -135,7 +135,7 @@ if (serving) {
   assert.ok(frames.some(frame => frame.name === 'googlefcPresent'), 'CMP presence signal did not run');
 }
 const ignoredAssets = readFileSync(join(root, '.assetsignore'), 'utf8').split(/\r?\n/);
-for (const path of ['/data/history-stats.json', '/data/predictions.json', '/data/team-stats.json']) {
+for (const path of ['/data/history-stats.json', '/data/predictions.json', '/data/team-stats.json', '/data/fixtures.json', '/data/finished-at.json', '/data/match-archive.json', '/data/llm-analysis.json']) {
   assert.ok(ignoredAssets.includes(path), `Internal capture exposed by the deployment: ${path}`);
 }
 const headers = readFileSync(join(root, '_headers'), 'utf8');
