@@ -1,61 +1,6 @@
 {
-  "updatedAt": "2026-11-14T18:43:17.155Z",
+  "updatedAt": "2026-11-14T22:32:31.652Z",
   "runs": [
-    {
-      "at": "2026-11-06T14:14:56.612Z",
-      "matchId": "fd-560640",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 2033,
-        "outputTokens": 22535
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "97a09739-8ae1-48e9-82ab-319444cff6e1"
-    },
-    {
-      "at": "2026-11-06T14:14:56.612Z",
-      "matchId": "fd-560633",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "97a09739-8ae1-48e9-82ab-319444cff6e1"
-    },
-    {
-      "at": "2026-11-06T14:37:04.443Z",
-      "task": "shorts",
-      "matchId": "nottingham-forest-vs-manchester-city-2026-11-07",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 292718
-      },
-      "usage": {
-        "inputTokens": 7229,
-        "outputTokens": 35704
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "1229871c-0a54-4990-bc6b-b29058855811"
-    },
     {
       "at": "2026-11-06T15:12:47.558Z",
       "task": "shorts",
@@ -7802,6 +7747,126 @@
       "maxTokens": 131072,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-14T22:32:04.835Z",
+      "matchId": "bz-212714",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1185,
+            "outputTokens": 781
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3597
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "Respuesta vacía o inválida",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1113,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 149847
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "Respuesta truncada (techo 15000 tokens)",
+          "truncated": true,
+          "usage": {
+            "inputTokens": 1088,
+            "outputTokens": 15000
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 173888
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1151,
+            "outputTokens": 1019
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5651
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1081,
+            "outputTokens": 4110
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 96455
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1185,
+        "outputTokens": 958
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b8a10a47-b9ba-4b90-a918-e8e763de4961"
+    },
+    {
+      "at": "2026-11-14T22:32:14.533Z",
+      "matchId": "bz-212713",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1191,
+        "outputTokens": 1031
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b25355e6-5012-4be8-81fb-10081f862477"
+    },
+    {
+      "at": "2026-11-14T22:32:26.057Z",
+      "matchId": "bz-212716",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1097,
+        "outputTokens": 736
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "fed74126-4ba0-4147-9fd4-c3ca5faef2a5"
     }
   ]
 }
