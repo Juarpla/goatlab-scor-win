@@ -31,7 +31,7 @@ import { describeMatch, formSnapshot } from '../lib/match-seo.js';
 import results from '../../public/data/results.json';
 import standingsData from '../../public/data/standings.json';
 import scorersData from '../../public/data/scorers.json';
-import history from '../../public/data/history-stats.json';
+import history from 'virtual:performance-history';
 import evaluation from '../../public/data/evaluation-report.json';
 import '../styles/partido.css';
 
@@ -276,7 +276,7 @@ const hasProbRows = Boolean(cornersDuel || raceTargets.length > 0 || marginBands
 /* GoatLab synthesis: combines own model, CatBoost, external consensus and signals; weights always in view. */
 const absentCount = side => (match.lineups?.unavailablePlayers ?? []).filter(player => player.team === side).length;
 const unavailable = match.lineups?.unavailablePlayers?.length ? { home: absentCount('home'), away: absentCount('away') } : null;
-const verdict = ensemble({ results: results.results, history: history.rows, h2h: match.h2h ?? null, catboost: match.modelPrediction ?? null, market: marketConsensus, home: match.home, away: match.away, homeForm, awayForm, unavailable });
+const verdict = ensemble({ results: results.results, history, h2h: match.h2h ?? null, catboost: match.modelPrediction ?? null, market: marketConsensus, home: match.home, away: match.away, homeForm, awayForm, unavailable });
 const published = Boolean(evaluation?.published) && Boolean(verdict);
 const direction = verdict ? (verdict.oneX2.home >= verdict.oneX2.draw && verdict.oneX2.home >= verdict.oneX2.away ? match.home : verdict.oneX2.away > verdict.oneX2.draw ? match.away : null) : null;
 

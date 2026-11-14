@@ -17,7 +17,7 @@ function buildFallbackIndex() {
     const previous = bySlug.get(slug);
     const saved = archive[slug];
     const sameKickoff = !previous || Date.parse(previous.match.kickoff) === Date.parse(match.kickoff);
-    const reading = saved && sameKickoff ? saved.reading : editorialReading(match);
+    const reading = saved && sameKickoff ? saved.reading : null;
     bySlug.set(slug, { match, aliases: sameKickoff ? previous?.aliases ?? [] : [], terminalAt: sameKickoff ? previous?.terminalAt : null, reading });
   }
 
@@ -36,7 +36,8 @@ function fallbackMatch(id, now) {
   const slug = bySlug.has(id) ? id : fallbackAliases.get(id);
   const record = bySlug.get(slug);
   if (!record) return null;
-  const { match, reading } = record;
+  const { match } = record;
+  const reading = record.reading ?? (match.status === 'NS' && Date.parse(match.kickoff) > now ? editorialReading(match) : null);
   const terminalAt = record.terminalAt ?? Math.max(Date.parse(match.kickoff), Date.parse(fixtures.updatedAt) || 0);
   return { slug, match, reading, retire_at: matchRetirement(match, { now, terminalAt, reading }), indexable: Boolean(reading) };
 }
@@ -79,8 +80,10 @@ export async function matchCalendar(env) {
 function fallback(now) {
   return {
     updatedAt: fixtures.updatedAt,
-    async list() {
-      return fixtures.matches.filter(match => fixtureIsVisible(match, now)).map(match => fallbackMatch(match.webId ?? match.id, now));
+    async list({ forSitemap = false } = {}) {
+      return fixtures.matches.filter(match => fixtureIsVisible(match, now)).map(match => forSitemap
+        ? fallbackMatch(match.webId ?? match.id, now)
+        : { match, slug: match.webId ?? match.id });
     },
     async get(id) {
       return isSafeMatchId(id) ? fallbackMatch(id, now) : null;

@@ -68,19 +68,21 @@ export function estimateLambdas(results, home, away) {
 const FAVORED = { shotsOnTarget: 1, xg: 1, possession: 1, corners: 1, fouls: -1, yellowCards: -1 };
 /** Multi-metric rolling index from the Bzzoiro history base → advantage in [-1, 1] (positive favors home). */
 export function performanceIndex(history, home, away, count = 6) {
-  const metricRows = (team, metric) => (history ?? [])
+  const recent = team => (history ?? [])
     .filter(row => row?.statistics && (sameClub(row.home, team) || sameClub(row.away, team)))
     .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, count)
-    .map(row => {
-      const own = sameClub(row.home, team) ? row.statistics.home : row.statistics.away;
-      const value = own?.[metric];
-      return value == null ? null : FAVORED[metric] === -1 ? -value : value;
-    }).filter(value => value != null);
+    .map(row => sameClub(row.home, team) ? row.statistics.home : row.statistics.away);
+  const homeRows = recent(home);
+  const awayRows = recent(away);
+  const metricRows = (rows, metric) => rows
+    .map(row => row?.[metric])
+    .filter(value => value != null)
+    .map(value => value * FAVORED[metric]);
   const metrics = Object.keys(FAVORED);
   const means = {};
   for (const metric of metrics) {
-    const homeMean = metricRows(home, metric);
-    const awayMean = metricRows(away, metric);
+    const homeMean = metricRows(homeRows, metric);
+    const awayMean = metricRows(awayRows, metric);
     if (homeMean.length < 3 || awayMean.length < 3) { means[metric] = null; continue; }
     const avg = list => list.reduce((a, b) => a + b, 0) / list.length;
     const h = avg(homeMean), a = avg(awayMean);
