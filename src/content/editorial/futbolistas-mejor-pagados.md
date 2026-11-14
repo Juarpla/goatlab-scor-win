@@ -58,3 +58,13 @@ Ronaldo y Messi concentran **US$445 millones**, el 47,2% de los US$942 millones 
 La brecha entre Ronaldo y Messi es de US$155 millones. Para acortarla, tendría que cambiar mucho el ingreso futbolístico del líder, subir de manera extraordinaria el de otro jugador o darse ambas cosas. La cifra de Lamine Yamal muestra otra dinámica. Sus US$20 millones comerciales ya representan el 36% de su total. En futuras ediciones podrá verse si el crecimiento llega por el contrato del club, por patrocinios o por ambos.
 
 Forbes publica estimaciones brutas antes de impuestos y comisiones. El periodo deportivo de 2026 es la temporada 2026/27 salvo Messi, cuya proyección usa el año natural 2026. La serie permite seguir el liderazgo entre ediciones. Los US$300 millones son el máximo de este tramo comparado y el máximo de la edición de 2026.
+
+## El mismo puesto, dos modelos de ingresos
+
+**Al Nassr sostiene el grueso del ingreso de Ronaldo**. Del total proyectado, el 83,3% corresponde a la columna deportiva. En Messi, la actividad comercial representa cerca del 51,7%. El reparto cambia lo que hay que vigilar al renovar el ranking: un cambio de contrato de club pesa especialmente en el caso de Ronaldo, mientras que en Messi también importa qué ocurre con acuerdos comerciales que pueden durar más que una temporada.
+
+Mbappé ofrece otra comparación. Forbes proyectó US$110 millones de ingresos deportivos en París en 2022 y US$70 millones en Madrid en 2026. Al mismo tiempo, su estimación comercial pasó de US$18 millones a US$30 millones. La suma bajó US$28 millones entre esas dos ediciones. El crecimiento comercial compensó parte de la caída deportiva, pero el componente de mayor tamaño siguió dictando el sentido del total.
+
+**El top cambia cuando cambia la pregunta**. Si se ordena por ingresos fuera de la cancha, Messi encabeza la tabla con US$75 millones, Ronaldo queda segundo con US$50 millones y Mbappé tercero con US$30 millones. Si se ordena por actividad futbolística, Sadio Mané sube por delante de Vinícius y Lamine Yamal. Esa diferencia ayuda a interpretar quién depende más del club y quién tiene una estructura de ingresos más equilibrada.
+
+Para comparar con una próxima edición, conviene conservar las dos columnas y la ciudad del club de cada año. Si cambia la moneda de un contrato o el calendario de pagos, el efecto puede aparecer en la estimación de una edición. El domicilio del equipo indica dónde jugaba el futbolista al publicarse el ranking, mientras que los acuerdos comerciales pueden tener alcance mundial.

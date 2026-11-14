@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AdSlot from './AdSlot.astro';
+import EditorialCards from './EditorialCards.astro';
+import EditorialCalendarLink from './EditorialCalendarLink.astro';
+import { EDITORIAL_PAGE_SIZE, pagePath } from '../lib/editorial.js';
+import '../styles/editorial.css';
+
+const { page, pages, visible } = Astro.props;
+const title = page === 1 ? 'Datos jugados' : `Datos jugados · Página ${page}`;
+---
+<Layout title={`${title} — GoatLab`} description={`Rankings, historias y guías sobre el dinero y las estadísticas del fútbol mundial.${page > 1 ? ` Página ${page}.` : ''}`} allowAds={visible.length > 0}>
+  <main class="wrap editorial-index" id="main">
+    <header class="editorial-intro">
+      <h1>Datos <em>jugados.</em></h1>
+      <p>Rankings, historias y guías para entender cuánto dinero mueve el fútbol y qué nos cuentan los números sobre la cancha.</p>
+    </header>
+    <section class="editorial-shelf" aria-label="Artículos de Datos jugados">
+      <EditorialCards articles={visible.slice(0, 4)}/>
+      {visible.length > 0 && <AdSlot variant="horizontal" slotKey="editorialList" preview/>}
+      {visible.length > 4 && <EditorialCards articles={visible.slice(4)}/>}
+      {pages > 1 && <nav class="editorial-pagination" aria-label="Páginas de artículos">
+        {Array.from({ length: pages }, (_, index) => index + 1).map(number =>
+          <a href={pagePath(number)} aria-label={`Página ${number}`} aria-current={number === page ? 'page' : undefined}>{number}</a>
+        )}
+      </nav>}
+    </section>
+    <EditorialCalendarLink/>
+  </main>
+</Layout>

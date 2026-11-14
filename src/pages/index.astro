@@ -96,8 +96,8 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
    {slides.map(slide => <div class="band-slide"><span class="band-figure">{slide.figure}</span><span class="band-line">{slide.line}</span></div>)}
   </div>}
  </section>
- <EditorialShelf preview/>
- {calendarUnavailable && <p class="empty-message">El calendario no está disponible en este momento. Puedes seguir leyendo El Juego en Datos.</p>}
+ <EditorialShelf/>
+ {calendarUnavailable && <p class="empty-message">El calendario no está disponible en este momento. Puedes seguir leyendo Datos jugados.</p>}
  {tickerItems.length > 0 && <div class="ticker" aria-hidden="true"><div class="ticker-track">{[0, 1].map(copy => <span class:list={['ticker-set', { 'ticker-copy': copy === 1 }]}>{tickerItems.map(item => <span class="ticker-item"><TeamLogo name={item.home} teamId={item.homeId} size={18}/><strong>{item.text}</strong><small title={item.full} data-kickoff={item.kickoff} data-format="time" data-label="off">{item.time}</small><TeamLogo name={item.away} teamId={item.awayId} size={18}/></span>)}</span>)}</div></div>}
  {hero ? <>
  <section id="forma" class="forma" aria-labelledby="forma-title">

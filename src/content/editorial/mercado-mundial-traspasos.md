@@ -32,3 +32,15 @@ Brasil registró 1.187 llegadas y 1.000 salidas en el mismo universo profesional
 Del 1 de junio al 2 de septiembre de 2026, los clubes masculinos profesionales gastaron más de **US$9.890 millones** en más de 12.500 traspasos internacionales. Inglaterra volvió a liderar el gasto y Francia encabezó los ingresos de esa ventana con US$1.700 millones. El fútbol femenino profesional movió US$28,6 millones en 1.406 operaciones, más del doble del gasto de la misma ventana anterior.
 
 La comparación válida es entre ventanas equivalentes. El dato de 2026 cubre un periodo de inscripción. El de 2025 cubre todo el año y revela cuánto espacio ocupan otras ventanas en el calendario del mercado.
+
+## Una llegada sin precio sigue siendo una llegada
+
+En el registro de FIFA, el **conteo de movimientos** incluye operaciones con y sin pago. Eso explica por qué un país puede aparecer muy arriba por incorporaciones o salidas y más abajo si se ordena por dinero. Una cesión o el registro de un futbolista libre puede aumentar la actividad sin que exista un precio de transferencia comparable al de una compra definitiva.
+
+El saldo también depende de la base. Para Argentina, dividir los cobros de US$217 millones por el gasto de US$133 millones da cerca de **1,63 dólares recibidos por cada dólar gastado**. Para Ecuador, el mismo cociente supera 16, pero parte de un gasto informado de solo US$2,52 millones. Un cociente muy alto puede reflejar una base pequeña. Para comparar mercados conviene mostrar la razón junto con ambos importes absolutos.
+
+## Qué cambia con una sola venta
+
+En un ejemplo de escala, un club vende por US$20 millones a otra federación. Si la asociación había recibido antes US$40 millones, una sola operación aumentaría en un 50% su cobro agregado. En una asociación que ya había recibido US$1.000 millones, la misma venta supondría un 2%. El ejemplo explica por qué los países con menor volumen pueden presentar cambios porcentuales muy pronunciados de una ventana a otra.
+
+La comparación por **asociación de origen y destino** ayuda a distinguir geografías del mercado. Si un jugador de una selección sudamericana sale de un club europeo hacia un tercero en Europa, el movimiento sigue el registro de los clubes. Para estudiar países formadores hay que combinar otra fuente, por ejemplo el historial de formación, y mantener separados ambos ámbitos.

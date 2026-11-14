@@ -33,3 +33,15 @@ La ventaja observada fue de unos **0,03 goles** de error medio. La diferencia es
 Reúne varios meses de jornadas y fija un objetivo, como la diferencia de goles del próximo partido. Para cada fecha, calcula ambas ventanas usando solo partidos anteriores y el mismo criterio de competición. Conserva una muestra común para que los dos métodos se enfrenten a exactamente los mismos cruces. Entrena o ajusta con fechas anteriores y comprueba el error en fechas posteriores.
 
 También se puede evaluar una media ponderada donde los últimos partidos pesan más y los antiguos siguen aportando contexto. Publica la muestra por liga y, si procede, por localía. El ejemplo inicial explica la sensibilidad de ambas ventanas. Una comparación fuera de muestra en otras temporadas ayudaría a comprobar si la ventaja se repite.
+
+## El efecto de quién estaba enfrente
+
+Dos equipos pueden lograr **siete puntos en cinco partidos** con rivales completamente distintos. Si uno acumuló esos puntos contra equipos del fondo y el otro afrontó dos partidos de visitante ante líderes, la cifra bruta describe dos muestras con distinta dificultad. Para comparar la forma en serio, hay que mostrar rivales, fecha, competición y localía. Un ajuste por fuerza del contrincante necesita una referencia disponible antes del partido.
+
+En el ejemplo de GoatLab, el margen medio usa la diferencia de goles, así que una goleada aislada pesa más que un triunfo ajustado. Una variante robusta podría limitar el efecto de una diferencia extrema o combinar el margen con goles esperados si están disponibles de forma comparable. Es una propuesta para otra prueba. Para medir su efecto habría que enfrentar ambas fórmulas sobre los mismos 126 partidos o una muestra posterior equivalente.
+
+## Qué preguntar al ver una racha
+
+Pregunta si el periodo coincide con un cambio de entrenador, lesiones o un calendario muy cargado. Una ventana corta puede recoger un cambio reciente y también puede incluir dos cruces poco representativos. Una larga suaviza ese ruido y tarda más en reflejar cambios persistentes. En ambos casos **la regla se fija antes de conocer el resultado siguiente** para evitar seleccionar la ventana que hace ver mejor al equipo.
+
+La diferencia de 0,03 goles del corte inicial da una referencia del tamaño del efecto. Para decidir si compensa cambiar de ventana, conviene publicar el error por competición y comprobar si la mejora persiste durante varias jornadas.

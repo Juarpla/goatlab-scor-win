@@ -21,6 +21,9 @@ export const PUBLISHER_ID = /^pub-\d+$/.test(cleaned) ? cleaned : 'pub-432051294
 export const AD_CLIENT = `ca-${PUBLISHER_ID}`;
 
 export const AD_SLOTS = {
+  editorialList: import.meta.env.PUBLIC_ADSENSE_EDITORIAL_LIST_SLOT ?? '',
+  editorialArticle: import.meta.env.PUBLIC_ADSENSE_EDITORIAL_ARTICLE_SLOT ?? '',
+  editorialClose: import.meta.env.PUBLIC_ADSENSE_EDITORIAL_CLOSE_SLOT ?? '',
   /** Home · before the recent results section (horizontal) */
   homeArchive: '',
   /** Methodology · after chapter 1 (horizontal) */

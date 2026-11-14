@@ -31,3 +31,15 @@ En una operación hipotética elegible de €10 millones, la bolsa completa ser�
 En el fichaje de Enzo Fernández, Benfica comunicó €121 millones y señaló que Chelsea podía retener un 3,78% para distribuirlo a los clubes formadores. El 3,78% describe la retención comunicada en esa operación. Para leer otra transferencia hay que comprobar la base, los años registrados y la forma en que el acuerdo distribuye el dinero.
 
 El pasaporte electrónico registra los clubes en los que se formó el jugador. La Cámara de Compensación de la FIFA utiliza ese historial para determinar los beneficiarios. A julio de 2026, la FIFA reportó casi US$1.000 millones asignados y más de US$639 millones distribuidos en **solidaridad y compensación por formación combinadas**. Asignar una cantidad establece a quién corresponde; distribuirla supone que el pago ya ocurrió.
+
+## Qué ocurre cuando cambia el historial
+
+Imagina que ese mismo club registró al jugador durante seis meses, en lugar de todo el año, a los 16. Su parte de ese tramo sería la mitad de €50.000, es decir, **€25.000**. Con dos años completos a los 14 y 15, y ese medio año a los 16, la suma quedaría en €75.000. La prueba clave son las fechas de registro que utiliza el pasaporte electrónico.
+
+Si la transferencia incluye **pagos condicionados**, interesa comprobar si la condición llegó a cumplirse antes de atribuir todo el máximo posible al club formador. Un incentivo hipotético de €2 millones que entre en la base elegible añadiría €100.000 a la bolsa completa bajo el 5%. Si el incentivo no se activa, esa suma no entra en el ejemplo. La mecánica ilustra por qué el precio anunciado como «hasta» cierta cantidad merece su propia columna.
+
+## Cómo seguir el pago desde el club formador
+
+Las primeras pistas son la fecha del traspaso, la edad del jugador, las fechas de registro y la cifra del acuerdo que efectivamente entra en la base de cálculo. Después se puede revisar la **distribución** en los comunicados de FIFA o en cuentas o anuncios del club. La asignación puede aparecer antes que el abono, así que el verbo que usa la fuente importa.
+
+La compensación por formación sigue otro supuesto del reglamento. El informe de la Cámara de Compensación puede sumar ambos mecanismos al hablar del dinero dirigido a clubes formadores. Para reconstruir el importe de una operación concreta, hay que revisar a qué figura corresponde la cifra publicada.

@@ -24,3 +24,15 @@ Guarda el pronóstico, la hora efectiva de cálculo y el inicio del encuentro. E
 En el primer corte que aplicó este requisito, GoatLab encontró 337 registros de encuentros en su archivo de capturas y ninguno contaba con una marca de cálculo verificable bajo la nueva regla. La evaluación de la serie empezará con las capturas que registren la hora efectiva de cálculo y cuenten con marcador final.
 
 Para que la mejora sea interpretable, compara en la misma muestra con una referencia, por ejemplo las frecuencias históricas de local, empate y visitante que estaban disponibles en cada corte. Mide además calibración por intervalos. Si la categoría que recibe alrededor de 60% ocurre mucho menos que seis veces de cada diez en una muestra amplia, hay indicios de exceso de confianza. Para una competición con pocos casos, conviene mostrar el tamaño de la muestra antes de sacar una conclusión.
+
+## Cómo montar una tabla de calibración
+
+Para probar un intervalo de probabilidades, imagina que un modelo pronosticó victoria local entre **55% y 65%** en cien partidos. La media de esos pronósticos fue 60% y se observaron 54 victorias locales. En ese grupo, el resultado observado queda seis puntos por debajo de la media. Con decenas de grupos pequeños, una brecha aislada puede aparecer por azar. Publicar el número de casos en la misma tabla ayuda a valorar el tamaño del efecto.
+
+El empate merece su propia columna. Un modelo puede acertar bastante al equipo favorito y asignar demasiado poco peso al empate en muchos partidos. Comparar las tres clases por separado revela errores que el porcentaje de acierto general mezcla. También ayuda medir la **cobertura**: cuántos partidos quedaron sin pronóstico al faltar alineación, datos de forma u otro insumo.
+
+## Qué cambia al evaluar por orden de fecha
+
+Para replicar la prueba, fija primero el periodo de entrenamiento y reserva fechas posteriores. Une las capturas a cada partido por su identidad y horario. Selecciona la última captura válida **anterior al saque**, incluyendo el momento en que el modelo terminó de calcularla. Un sello del proveedor puede ser anterior al momento en que los demás insumos llegaron, por lo que conviene registrar ambos.
+
+El Brier general resume el resultado, pero una mejora pequeña puede depender de dos fechas extraordinarias o de una liga dominante. Una tabla por competición, otra por mes y una referencia con el mismo conjunto de partidos permiten estudiar la consistencia. El análisis gana valor cuando explica también los partidos en los que el pronóstico se equivocó con mayor seguridad.

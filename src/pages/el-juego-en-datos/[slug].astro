@@ -1,47 +1,70 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import EditorialFigure from '../../components/EditorialFigure.astro';
+import EditorialDiagram from '../../components/EditorialDiagram.astro';
+import EditorialCards from '../../components/EditorialCards.astro';
+import EditorialSources from '../../components/EditorialSources.astro';
+import MatchNotice from '../../components/MatchNotice.astro';
+import { getEditorial, listEditorials } from '../../lib/editorial-store.js';
+import { EDITORIAL_ROOT, relatedEditorials } from '../../lib/editorial.js';
 import '../../styles/editorial.css';
 
-export async function getStaticPaths() {
-  const articles = await getCollection('editorial');
-  return articles.map(article => ({
-    params: { slug: article.id },
-    props: { article, related: articles.filter(other => other.id !== article.id && other.data.category === article.data.category).sort((a, b) => a.data.order - b.data.order).slice(0, 3) },
-  }));
+export const prerender = false;
+let article = null;
+let related = [];
+let failed = false;
+try {
+  article = await getEditorial(env.GOATLAB_DB, Astro.params.slug);
+  if (article && !article.retired_at) related = relatedEditorials(await listEditorials(env.GOATLAB_DB), article);
+} catch (error) {
+  console.error('Editorial unavailable', error);
+  failed = true;
 }
-const { article, related } = Astro.props;
-const { Content } = await render(article);
-const { title, description, category, date, figure, sources } = article.data;
-const content = article.rendered?.html ?? '';
-const mapNote = figure && content.match(/<blockquote>\s*([\s\S]*?)<\/blockquote>/);
-const stamp = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZone: 'UTC' }).format(date);
+const unavailable = failed || !article || article.retired_at;
+if (unavailable) {
+  Astro.response.status = failed ? 503 : article?.retired_at ? 410 : 404;
+  if (failed) Astro.response.headers.set('Retry-After', '300');
+}
+Astro.response.headers.set('Cache-Control', 'no-store');
+const sections = article?.bodyHtml ? [...article.bodyHtml.matchAll(/<h2\b/g)] : [];
+const split = sections[Math.floor(sections.length / 2)]?.index ?? article?.bodyHtml?.length ?? 0;
+const dateFormat = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZone: 'UTC' });
 ---
-<Layout title={`${title} — GoatLab`} description={description}>
+{unavailable ? <MatchNotice title={failed ? 'El artículo no está disponible' : article?.retired_at ? 'Este artículo se retiró' : 'Artículo no encontrado'} message="Puedes volver al listado de Datos jugados desde el menú."/> :
+<Layout title={`${article.title} — GoatLab`} description={article.description}>
   <main class="wrap editorial-article" id="main">
-    <nav class="editorial-trail" aria-label="Ruta editorial"><a href="/el-juego-en-datos/">El Juego en Datos</a><span>{category}</span></nav>
+    <nav class="editorial-trail" aria-label="Ruta editorial"><a href={EDITORIAL_ROOT}>Datos jugados</a><span>{article.category}</span></nav>
     <article>
       <header class="editorial-intro">
-        <h1>{title}</h1>
-        <p>{description}</p>
-        <div class="editorial-byline">Redacción GoatLab <span aria-hidden="true">·</span> <time datetime={date.toISOString().slice(0,10)}>{stamp}</time></div>
+        <h1>{article.title}</h1>
+        <p>{article.description}</p>
+        <div class="editorial-byline">Redacción GoatLab <span aria-hidden="true">·</span>
+          <time datetime={article.published_at}>{dateFormat.format(new Date(article.published_at))}</time>
+          {article.revised_at && <span>Actualizado el <time datetime={article.revised_at}>{dateFormat.format(new Date(article.revised_at))}</time></span>}
+        </div>
       </header>
       <div class="editorial-prose">
-        {mapNote && mapNote.index != null ? <>
-          <Fragment set:html={content.slice(0, mapNote.index)}/>
-          <EditorialFigure kind={figure}><Fragment set:html={mapNote[1]}/></EditorialFigure>
-          <Fragment set:html={content.slice(mapNote.index + mapNote[0].length)}/>
-        </> : <Content/>}
-        <section class="editorial-sources" aria-labelledby="editorial-sources-title">
-          <h2 id="editorial-sources-title">Fuentes y datos</h2>
-          <ul>{sources.map(({ name, url }) => <li><a href={url}>{name}</a></li>)}</ul>
-        </section>
+        {article.figure ? <>
+          <Fragment set:html={article.leadHtml}/>
+          <EditorialFigure kind={article.figure}>{article.mapCaption}</EditorialFigure>
+        </> : <>
+          <EditorialDiagram visual={article.visual}/>
+          <Fragment set:html={article.leadHtml}/>
+        </>}
+        <Fragment set:html={article.bodyHtml.slice(0, split)}/>
+        <AdSlot variant="horizontal" slotKey="editorialArticle" preview/>
+        <Fragment set:html={article.bodyHtml.slice(split)}/>
+        {article.updateHtml && <Fragment set:html={article.updateHtml}/>}
+        {article.visual && article.figure && <div class="editorial-extra"><EditorialDiagram visual={article.visual}/><Fragment set:html={article.extraHtml}/></div>}
+        <EditorialSources sources={article.sources}/>
       </div>
     </article>
     {related.length > 0 && <aside class="editorial-related" aria-labelledby="related-title">
-      <h2 id="related-title">También en El Juego en Datos</h2>
-      <ul>{related.map(({ id, data }) => <li><a href={`/el-juego-en-datos/${id}/`}>{data.title}</a></li>)}</ul>
+      <h2 id="related-title">También en Datos jugados</h2>
+      <EditorialCards articles={related} related/>
     </aside>}
+    <AdSlot variant="horizontal" slotKey="editorialClose" preview/>
   </main>
-</Layout>
+</Layout>}

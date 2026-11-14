@@ -67,3 +67,13 @@ Selección ordenada por importe inicial o fijo publicado, en millones de euros n
 El detalle de Mbappé muestra cómo cambian los rankings. La FIFA reportó €145 millones iniciales y un techo de €180 millones. Una resolución laboral de París, publicada por el PSG, recoge €180 millones como valor del traspaso en sus antecedentes. Aquí usamos el importe inicial para comparar con otros contratos que también divulgaron variables.
 
 Alexander Isak es otro caso. Newcastle confirmó en 2025 que su venta a Liverpool batió el récord británico y dejó sin publicar el precio. Una cifra sin desglose de las partes queda fuera de esta selección. En un [traspaso con solidaridad](/el-juego-en-datos/solidaridad-traspasos/), también importa distinguir el precio del dinero que acaba recibiendo el club vendedor.
+
+## Cómo se lee el precio de un fichaje
+
+**Un importe inicial responde a una pregunta distinta del coste final**. El caso de Dembélé es útil para comprobarlo. Si se suma todo el paquete anunciado, el techo era de €145 millones, el mismo importe inicial que FIFA cita para Mbappé. En la tabla aparecen en posiciones distintas porque el acuerdo de Dembélé divulgó €105 millones de base. Usar el techo de uno y la base del otro cambia la comparación antes de que cambie ningún contrato.
+
+**El precio y los cobros también pueden separarse**. Benfica comunicó una cifra de €126 millones para João Félix, desglosada en cobro inmediato y financiación. Tras el coste de financiar el cobro, señaló €120 millones para el club. El importe que aparece en un comunicado de mercado ayuda a comparar acuerdos. Para analizar el flujo de caja del vendedor se necesita el calendario de cobros y sus costes.
+
+Al mirar la cronología, los cinco récords citados enlazan operaciones en Italia, Inglaterra, España y Francia. El salto más visible se produce en 2017, cuando el depósito de la cláusula rompió la referencia de €105 millones fijada un año antes. El dato de Guinness identifica el récord; el comunicado del Barcelona permite seguir el mecanismo jurídico del pago. Son dos piezas de evidencia con funciones diferentes.
+
+Para una futura actualización, **la primera comprobación será la base del contrato**. Después se revisarán moneda original, cláusula, variables y términos de financiación. Una nueva cifra bien documentada puede mover el ranking de inmediato. Mientras una parte del contrato siga sin divulgarse, el caso se puede describir con su límite de información.

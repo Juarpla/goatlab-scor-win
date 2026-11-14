@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import { safeEditorialLink } from '../lib/editorial.js';
+const { sources } = Astro.props;
+---
+<div class="editorial-sources">
+  <button class="editorial-source-button" data-open-sources type="button" aria-haspopup="dialog" aria-controls="editorial-sources">
+    <Icon name="chart" size={17}/> Ver fuentes y datos
+  </button>
+  <dialog class="editorial-dialog" id="editorial-sources" aria-labelledby="editorial-sources-title">
+    <header>
+      <h2 id="editorial-sources-title">Fuentes y datos</h2>
+      <form method="dialog"><button type="submit" aria-label="Cerrar fuentes" autofocus><Icon name="close" size={20}/></button></form>
+    </header>
+    <ul role="list">
+      {sources.filter(({ url }) => safeEditorialLink(url)).map(({ name, url }) => <li><a href={url}>
+        <svg viewBox="0 0 38 38" width="38" height="38" aria-hidden="true"><rect x="8" y="5" width="22" height="28" rx="3"/><path d="M13 13h12" pathLength="1"/><path d="M13 19h12" pathLength="1"/><path d="M13 25h8" pathLength="1"/></svg>
+        <span>{name}<small>{new URL(url).hostname.replace(/^www\./, '')}</small></span>
+        <Icon size={18}/>
+      </a></li>)}
+    </ul>
+  </dialog>
+</div>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-open-sources]');
+  const dialog = document.querySelector<HTMLDialogElement>('#editorial-sources');
+  if (button && dialog) {
+    button.addEventListener('click', () => dialog.showModal());
+    dialog.addEventListener('close', () => button.focus());
+  }
+</script>

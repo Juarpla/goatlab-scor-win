@@ -34,3 +34,15 @@ La última partida es de US$40 millones para el campeón o US$30 millones para e
 ## El premio y el dinero para otros clubes
 
 El total distribuido a quienes jugaron el torneo se puede verificar en las cuentas anuales de la FIFA. La FIFA también anunció un programa de solidaridad para clubes no participantes con un tope de US$250 millones. Su informe de cierre recoge el avance de la implementación. Para evaluar el alcance de esa ayuda, la cifra a seguir es cuánto se termina distribuyendo, junto con los criterios de acceso.
+
+## La participación cambia el punto de partida
+
+El componente fijo por participar dejó **bases diferentes según la confederación**. Para Europa, FIFA publicó un rango de US$12,81 a US$38,19 millones. El tramo sudamericano fue de US$15,21 millones por club; para Asia, África y Concacaf la cifra anunciada fue de US$9,55 millones y para Oceanía, de US$3,58 millones. En la fase de grupos, una victoria y un empate añadían US$3 millones a cualquiera de esas bases.
+
+Supongamos dos equipos con exactamente dos victorias, un empate y eliminación en octavos. Un representante con base de US$9,55 millones habría llegado a **US$22,05 millones**. El representante sudamericano del ejemplo habría recibido US$27,71 millones. La diferencia de US$5,66 millones se explica por la participación, porque ambos siguieron el mismo camino deportivo en el cálculo.
+
+## Premio bruto e impacto económico
+
+Para estudiar el efecto en las finanzas de un club hay que separar el **premio bruto** de primas al plantel, costes de viaje, impuestos y el tratamiento contable. Si una prima depende de llegar a cuartos, el ingreso incremental y la obligación con los jugadores pueden reconocerse juntos. Ese detalle necesita cuentas del club o un acuerdo publicado.
+
+También importa la temporada. Un torneo de verano puede quedar cerca del cierre del ejercicio y algunos pagos pueden registrarse en periodos diferentes. Por eso resulta útil comparar las reglas del torneo con la nota de ingresos extraordinarios en las cuentas del club, si esas cuentas desglosan la cifra.

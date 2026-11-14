@@ -1,0 +1,18 @@
+---
+import Icon from './Icon.astro';
+---
+<section class="editorial-calendar" aria-labelledby="editorial-calendar-title">
+  <div>
+    <h2 id="editorial-calendar-title">¿Qué se juega hoy?</h2>
+    <p>Revisa los partidos en curso y los próximos cruces, con sus horarios y previas.</p>
+    <a class="primary-button" href="/encuentros/">Ver encuentros <Icon size={18}/></a>
+  </div>
+  <svg viewBox="0 0 420 235" role="img" aria-label="Una jugada avanza desde el centro del campo hacia el área">
+    <rect x="10" y="14" width="400" height="207" rx="14"/>
+    <path d="M210 14v207M10 67h65v101H10m400-101h-65v101h65M10 95h28v45H10m400-45h-28v45h28"/>
+    <circle cx="210" cy="118" r="35"/><circle cx="210" cy="118" r="3"/>
+    <path class="editorial-route-base" d="M113 166Q166 75 239 113T351 81"/>
+    <path class="editorial-route" pathLength="1" d="M113 166Q166 75 239 113T351 81"/>
+    <circle class="editorial-drop-highlight" cx="113" cy="166" r="6"/><circle class="editorial-drop-highlight" cx="351" cy="81" r="6"/>
+  </svg>
+</section>

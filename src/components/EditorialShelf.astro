@@ -1,28 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
+import { env } from 'cloudflare:workers';
+import { listEditorials } from '../lib/editorial-store.js';
+import EditorialCards from './EditorialCards.astro';
 import Icon from './Icon.astro';
+import { EDITORIAL_ROOT } from '../lib/editorial.js';
 import '../styles/editorial.css';
 
-const { preview = false } = Astro.props;
-const articles = (await getCollection('editorial')).sort((a, b) => a.data.order - b.data.order);
-const visible = preview ? articles.slice(0, 2) : articles;
+let articles = [];
+try {
+  articles = (await listEditorials(env.GOATLAB_DB)).slice(0, 2);
+} catch (error) {
+  console.error('Editorial preview unavailable', error);
+}
 ---
-<section class="editorial-shelf" aria-labelledby="editorial-shelf-title">
-  {preview && <div class="editorial-shelf-heading">
-    <h2 id="editorial-shelf-title">El Juego en Datos.</h2>
-    <a href="/el-juego-en-datos/">Todos los artículos <Icon size={16}/></a>
-  </div>}
-  {!preview && <h2 class="sr-only" id="editorial-shelf-title">Todos los artículos</h2>}
-  <ul class="editorial-grid" role="list">
-    {visible.map(({ id, data }) => <li>
-      <article class:list={['editorial-card', { 'editorial-card-featured': data.figure }]}>
-        <a href={`/el-juego-en-datos/${id}/`}>
-          <span class="editorial-category">{data.category}</span>
-          <h3>{data.title}</h3>
-          <p>{data.description}</p>
-          <span class="editorial-arrow" aria-hidden="true"><Icon size={19}/></span>
-        </a>
-      </article>
-    </li>)}
-  </ul>
-</section>
+{articles.length > 0 && <section class="editorial-shelf" aria-labelledby="editorial-shelf-title">
+  <div class="editorial-shelf-heading">
+    <h2 id="editorial-shelf-title">Datos jugados.</h2>
+    <a href={EDITORIAL_ROOT}>Todos los artículos <Icon size={16}/></a>
+  </div>
+  <EditorialCards articles={articles}/>
+</section>}

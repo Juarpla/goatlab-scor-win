@@ -1,0 +1,32 @@
+---
+const { visual } = Astro.props;
+const labels = visual?.labels ?? [];
+const values = visual?.values ?? [];
+const chart = labels.length >= 2 && labels.length === values.length;
+const max = chart ? Math.max(1, ...values) : 1;
+const y = index => 58 + index * 45;
+---
+{visual && <figure class="editorial-figure editorial-diagram">
+  <svg viewBox={`0 0 380 ${chart ? 80 + labels.length * 45 : 175}`} role="img" aria-label={visual.caption}>
+    <rect width="380" height="100%" rx="12" class="editorial-sea"/>
+    <text x="22" y="29" class="diagram-title">{visual.title}</text>
+    {chart ? <>
+      <path d={`M155 45v${labels.length * 45}`} class="diagram-guide"/>
+      {labels.map((label, i) => <g>
+        <text x="22" y={y(i) + 5}>{label}</text>
+        <rect x="155" y={y(i) - 8} width={126 * values[i] / max} height="17" rx="3" class:list={['diagram-bar', { 'diagram-bar-alt': i % 2 }]} style={`--delay:${i * 100}ms`}/>
+        <text x="294" y={y(i) + 5}>{new Intl.NumberFormat('es-PE', { maximumFractionDigits: 3 }).format(values[i])} {visual.unit}</text>
+        <path d={`M22 ${y(i) + 22}h330`} class="diagram-guide"/>
+      </g>)}
+    </> : <>
+      <path d="M54 95h272" class="editorial-route-base"/>
+      <path d="M54 95h272" class="editorial-route" pathLength="1"/>
+      {labels.slice(0, 3).map((label, i) => <g>
+        <circle cx={54 + i * 136} cy="95" r="10" class="editorial-drop-highlight"/>
+        <circle cx={54 + i * 136} cy="95" r="4" class="editorial-dot"/>
+        <text x={54 + i * 136} y="127" text-anchor="middle">{label}</text>
+      </g>)}
+    </>}
+  </svg>
+  <figcaption>{visual.caption}</figcaption>
+</figure>}

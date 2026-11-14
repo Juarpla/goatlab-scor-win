@@ -1,13 +1,11 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import EditorialShelf from '../../components/EditorialShelf.astro';
+import { env } from 'cloudflare:workers';
+import EditorialList from '../../components/EditorialList.astro';
+import MatchNotice from '../../components/MatchNotice.astro';
+import { editorialPage } from '../../lib/editorial-store.js';
+
+export const prerender = false;
+const page = await editorialPage(env.GOATLAB_DB, 1, Astro.response);
 ---
-<Layout title="El Juego en Datos — GoatLab" description="Rankings, historias y guías de GoatLab sobre el dinero, las estadísticas y el juego en el fútbol mundial.">
-  <main class="wrap editorial-index" id="main">
-    <header class="editorial-intro">
-      <h1>El Juego <em>en Datos.</em></h1>
-      <p>Rankings, historias y guías para entender cuánto dinero mueve el fútbol y qué nos cuentan los números sobre lo que pasa en la cancha.</p>
-    </header>
-    <EditorialShelf/>
-  </main>
-</Layout>
+{page ? <EditorialList {...page}/> :
+  <MatchNotice title="Datos jugados no está disponible" message="Vuelve a intentarlo en unos minutos."/>}

@@ -49,3 +49,56 @@
   .editorial-prose td,.editorial-prose th{padding:7px 5px;overflow-wrap:anywhere}
 }
 @media(prefers-reduced-motion:reduce){.editorial-route{animation:none}}
+
+.editorial-article .editorial-intro{text-align:center;padding:clamp(38px,6vw,76px) 0 clamp(30px,5vw,52px)}
+.editorial-article .editorial-intro h1{max-width:20ch;margin-inline:auto;font-size:clamp(2.85rem,6.2vw,6rem);line-height:.98}
+.editorial-article .editorial-intro p,.editorial-article .editorial-byline{margin-inline:auto}
+.editorial-byline{justify-content:center;flex-wrap:wrap}
+.editorial-article .editorial-prose{max-width:76ch;margin:clamp(28px,5vw,52px) auto 32px;font-size:clamp(.95rem,1.3vw,1.08rem);line-height:1.8}
+.editorial-prose h2{margin:clamp(27px,4vw,43px) 0 13px}
+.editorial-prose p{margin-bottom:1.18em}
+.editorial-prose strong{color:var(--text)}
+.editorial-prose table{clear:both;margin:21px 0 29px}
+.editorial-figure{margin-block:4px 15px}
+.editorial-extra{display:flow-root}
+.editorial-sources{padding-top:20px}
+.editorial-source-button,.editorial-dialog button{display:inline-flex;gap:8px;align-items:center;padding:9px 13px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:7px}
+.editorial-source-button:hover,.editorial-dialog button:hover{color:var(--text);border-color:var(--accent)}
+.editorial-dialog{color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:14px;width:min(560px,calc(100% - 34px));max-height:78dvh;padding:clamp(18px,4vw,32px)}
+.editorial-dialog::backdrop{background:rgb(8 12 9 / .78)}
+.editorial-dialog header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.editorial-dialog header h2,.editorial-dialog header form{margin:0}
+.editorial-dialog ul{list-style:none;padding:0;margin:20px 0 0}
+.editorial-dialog a{display:grid;grid-template-columns:38px minmax(0,1fr) 20px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.editorial-dialog small{display:block;color:var(--muted)}
+.editorial-dialog a svg:first-child{fill:none;stroke:var(--accent);stroke-width:1.5}
+.editorial-dialog a svg:first-child path{stroke-dasharray:1;animation:editorial-route .65s ease-out both}
+.editorial-grid-related{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:17px}
+.editorial-grid-related h3{font-size:clamp(1.45rem,2.5vw,2.15rem)}
+.editorial-related a{text-decoration:none;color:inherit}
+.editorial-prose .ad-slot{clear:both;margin-block:36px}.editorial-ad-preview{min-height:132px;background:var(--surface);border-color:var(--line);border-radius:10px}
+.editorial-ad-preview span{margin:0;color:var(--muted)}
+.editorial-pagination{display:flex;gap:10px;justify-content:center;margin-top:30px}
+.editorial-pagination a{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:7px}
+.editorial-pagination a[aria-current]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.editorial-calendar{display:grid;grid-template-columns:1fr minmax(210px,400px);align-items:center;gap:clamp(14px,6vw,76px);padding:clamp(22px,5vw,54px);margin:32px 0 46px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.editorial-calendar h2{font-size:clamp(2.4rem,4.8vw,4rem);margin-bottom:12px}
+.editorial-calendar svg:where([viewBox="0 0 420 235"]){width:100%;fill:none;stroke:var(--line);stroke-width:1.7}
+.editorial-calendar svg .editorial-drop-highlight{stroke:var(--accent)}
+.diagram-bar{fill:var(--accent);transform-origin:155px center;animation:editorial-bar .75s ease-out var(--delay) both}
+.diagram-bar-alt{fill:var(--away)}
+.diagram-guide{stroke:var(--line);fill:none}
+.editorial-figure .diagram-title{fill:var(--accent)}
+@keyframes editorial-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(max-width:800px){.editorial-grid-related{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){
+  .editorial-article .editorial-intro h1{font-size:clamp(2.7rem,11vw,4.3rem)}
+  .editorial-article .editorial-prose{margin-top:26px}
+  .editorial-figure{margin-inline:auto}
+  .editorial-calendar,.editorial-grid-related{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.diagram-bar,.editorial-dialog a svg:first-child path{animation:none}}
+
+@supports(animation-timeline:view()){
+  .editorial-figure .editorial-route,.editorial-calendar .editorial-route,.diagram-bar{animation-timeline:view();animation-range:entry 0% cover 32%}
+}

@@ -1,0 +1,15 @@
+---
+import { env } from 'cloudflare:workers';
+import EditorialList from '../../../components/EditorialList.astro';
+import MatchNotice from '../../../components/MatchNotice.astro';
+import { editorialPage } from '../../../lib/editorial-store.js';
+import { pagePath } from '../../../lib/editorial.js';
+
+export const prerender = false;
+const raw = Astro.params.page ?? '';
+if (raw === '1') return Astro.redirect(pagePath(1), 301);
+const pageNumber = /^[1-9]\d*$/.test(raw) ? Number(raw) : NaN;
+const page = await editorialPage(env.GOATLAB_DB, pageNumber, Astro.response);
+---
+{page ? <EditorialList {...page}/> :
+  <MatchNotice title={Astro.response.status === 503 ? 'Datos jugados no está disponible' : 'Página editorial no encontrada'} message="Puedes volver al listado de Datos jugados desde el menú."/>}

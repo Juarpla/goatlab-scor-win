@@ -4,6 +4,7 @@ import { isAdvertisingPage } from '../lib/page-policy.js';
 
 interface Props {
   compact?: boolean;
+  preview?: boolean;
   /** Block orientation: horizontal, vertical or rectangular */
   variant?: 'horizontal' | 'vertical' | 'rect';
   /** AD_SLOTS key (src/config/ads.ts) or direct numeric block ID */
@@ -12,7 +13,7 @@ interface Props {
   note?: string;
 }
 
-const { compact = false, variant, slotKey, class: className } = Astro.props;
+const { compact = false, preview = false, variant, slotKey, class: className } = Astro.props;
 const slotId = slotKey && /^\d+$/.test(slotKey) ? slotKey : AD_SLOTS[slotKey as keyof typeof AD_SLOTS] ?? '';
 const live = ADS_ACTIVE && /^\d+$/.test(slotId) && isAdvertisingPage(Astro.url.href);
 const variantClass = variant === 'horizontal' ? 'ad-horizontal' : variant === 'vertical' ? 'ad-vertical' : variant === 'rect' ? 'ad-rect' : undefined;
@@ -23,3 +24,7 @@ const adFormat = variant === 'vertical' ? 'vertical' : variant === 'rect' ? 'rec
  <ins class="adsbygoogle" style="display:block" data-ad-client={AD_CLIENT} data-ad-slot={slotId} data-ad-format={adFormat} data-full-width-responsive="true"></ins>
 </aside>}
 {live && <script is:inline>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>}
+
+{preview && !live && <aside class:list={['ad-slot', 'editorial-ad-preview', variantClass, className]} aria-label="Espacio reservado para publicidad">
+ <span>ESPACIO PUBLICITARIO</span>
+</aside>}

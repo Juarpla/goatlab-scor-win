@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { runInNewContext } from 'node:vm';
+import { EDITORIAL_ROOT as editorialRoot } from '../src/lib/editorial.js';
 import { isAdvertisingPage, isIndexablePage, isProductionPage, robotsDirective } from '../src/lib/page-policy.js';
 
 const root = 'dist/client';
@@ -10,8 +11,7 @@ const files = walk(root);
 const site = new URL('https://goatlab.win');
 const assetPaths = new Set(files.map(file => `/${relative(root, file)}`));
 const htmlPages = new Map();
-const dynamicPage = path => path === '/' || path === '/encuentros/' || /^\/partido\/[a-z0-9][a-z0-9_-]+\/?$/i.test(path);
-const editorialRoot = '/el-juego-en-datos/';
+const dynamicPage = path => path === '/' || path === '/encuentros/' || path.startsWith(editorialRoot) || /^\/partido\/[a-z0-9][a-z0-9_-]+\/?$/i.test(path);
 const attribute = (tag, name) => {
   const value = tag.match(new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'));
   return value && (value[1] ?? value[2] ?? value[3]);
@@ -78,7 +78,6 @@ for (const file of sitemapFiles) {
     sitemapUrls.add(url);
   }
 }
-const descriptions = new Set();
 for (const [file, page] of htmlPages) {
   if (!file.endsWith('/index.html')) continue;
   assert.equal(page.canonicals.length, 1, file);
@@ -86,35 +85,24 @@ for (const [file, page] of htmlPages) {
   assert.equal(canonical.origin, site.origin, file);
   assert.ok(canonical.pathname.endsWith('/') && !canonical.search && !canonical.hash, file);
   assert.ok(htmlPages.has(targetPath(canonical.pathname)), `${file}: canonical target is missing`);
-  if (!canonical.pathname.startsWith(editorialRoot)) continue;
-  assert.equal(page.descriptions.length, 1, file);
-  assert.ok(page.descriptions[0] && !descriptions.has(page.descriptions[0]), file);
-  descriptions.add(page.descriptions[0]);
-  assert.ok(sitemapUrls.has(canonical.href), `${file}: missing from sitemap`);
-  assert.ok(!page.robots.some(value => value.includes('noindex')), file);
 }
 assert.ok(![...sitemapUrls].some(url => /\/(?:partido|fuentes|encuentros\/archivo)\//.test(new URL(url).pathname)));
-assert.ok(readFileSync(join(root, 'sitemap-index.xml'), 'utf8').includes('https://goatlab.win/sitemap-matches.xml'));
+const sitemapIndex = readFileSync(join(root, 'sitemap-index.xml'), 'utf8');
+for (const file of ['sitemap-matches.xml', 'sitemap-editorial.xml']) assert.ok(sitemapIndex.includes(`https://goatlab.win/${file}`));
 assert.deepEqual(readFileSync(join(root, '_redirects'), 'utf8').trim().split(/\r?\n/), [
   '/fuentes /metodologia/ 301', '/fuentes/ /metodologia/ 301',
 ]);
-const editorial = htmlPages.get('/el-juego-en-datos/index.html');
-const articles = [...htmlPages.keys()].filter(file => /^\/el-juego-en-datos\/[^/]+\/index\.html$/.test(file));
-assert.ok(articles.length >= 10, 'Missing launch editorials');
-for (const file of articles) {
-  assert.ok(editorial.hrefs.has(file.replace(/index\.html$/, '')), `${file}: editorial is orphaned`);
-  assert.ok(htmlPages.get(file).ids.has('editorial-sources-title'), file);
-}
-for (const slug of ['futbolistas-mejor-pagados', 'traspasos-mas-caros']) {
-  const html = readFileSync(join(root, editorialRoot, slug, 'index.html'), 'utf8');
-  assert.match(html, /<figure class="editorial-figure">/, slug);
-  assert.match(html, /<table>/, slug);
+const articles = JSON.parse(readFileSync(join(root, 'editorial-seed.json'), 'utf8'));
+assert.equal(articles.length, 10);
+for (const article of articles) {
+  assert.ok(article.sources.length > 1 && article.visual?.caption, article.slug);
+  assert.match(article.leadHtml + article.bodyHtml + article.extraHtml, /<strong>/, article.slug);
 }
 const methodology = readFileSync(join(root, 'metodologia/index.html'), 'utf8');
 const footer = methodology.match(/<footer\b[^>]*class="site-footer[^"\n]*"[^>]*>[\s\S]*?<\/footer>/i)?.[0] ?? '';
 for (const path of ['/nosotros/', '/terminos/', '/privacidad/', '/cookies/', '/contacto/', editorialRoot, '/metodologia/']) {
   assert.ok(footer.includes(`href="${path}"`), `Missing footer link: ${path}`);
-  assert.ok(sitemapUrls.has(new URL(path, site).href), `Missing from sitemap: ${path}`);
+  if (path !== editorialRoot) assert.ok(sitemapUrls.has(new URL(path, site).href), `Missing from sitemap: ${path}`);
 }
 const ads = readFileSync(join(root, 'ads.txt'), 'utf8');
 assert.match(ads, /^google\.com, pub-\d{16}, DIRECT, f08c47fec0942fa0$/m, 'Invalid ads.txt declaration');
@@ -135,7 +123,7 @@ if (serving) {
   assert.ok(frames.some(frame => frame.name === 'googlefcPresent'), 'CMP presence signal did not run');
 }
 const ignoredAssets = readFileSync(join(root, '.assetsignore'), 'utf8').split(/\r?\n/);
-for (const path of ['/data/history-stats.json', '/data/predictions.json', '/data/team-stats.json', '/data/fixtures.json', '/data/finished-at.json', '/data/match-archive.json', '/data/llm-analysis.json']) {
+for (const path of ['/data/history-stats.json', '/data/predictions.json', '/data/team-stats.json', '/data/fixtures.json', '/data/finished-at.json', '/data/match-archive.json', '/data/llm-analysis.json', '/editorial-seed.json']) {
   assert.ok(ignoredAssets.includes(path), `Internal capture exposed by the deployment: ${path}`);
 }
 const headers = readFileSync(join(root, '_headers'), 'utf8');
@@ -147,4 +135,4 @@ for (const file of files.filter(file => /\/partido\/[^/]+\/index\.html$/.test(fi
   assert.ok(!html.includes('SabidurIA externa'), `${file}: provider copy used as the primary fallback`);
   assert.ok(!/href="\/partido\/[^"/]+\/(?:scripts|image-prompts|video-prompts|media)\/?"/.test(html), `${file}: enlaza herramientas desde el análisis público`);
 }
-console.log(`Publicación verificada: ${htmlPages.size} páginas sin enlaces internos rotos; ${tools.length} herramientas sin indexación ni publicidad; ${sitemapUrls.size} URL en sitemap estático; ${articles.length} artículos con fuentes.`);
+console.log(`Publicación verificada: ${htmlPages.size} páginas sin enlaces internos rotos; ${tools.length} herramientas sin indexación ni publicidad; ${sitemapUrls.size} URL en sitemap estático; ${articles.length} artículos iniciales con fuentes.`);

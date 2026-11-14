@@ -29,7 +29,7 @@ export default defineConfig({
   site: 'https://goatlab.win',
   vite: { plugins: [performanceHistory] },
   adapter: cloudflare({ prerenderEnvironment: 'node' }),
-  integrations: [sitemap({ filter: isIndexablePage, customSitemaps: ['https://goatlab.win/sitemap-matches.xml'] })],
+  integrations: [sitemap({ filter: isIndexablePage, customSitemaps: ['https://goatlab.win/sitemap-matches.xml', 'https://goatlab.win/sitemap-editorial.xml'] })],
   // The site does not use sessions,
   // so the adapter must not provision a KV namespace on deploy.
   session: false,

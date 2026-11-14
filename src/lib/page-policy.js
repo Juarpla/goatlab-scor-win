@@ -19,7 +19,7 @@ export function isIndexablePage(url) {
 export function isAdvertisingPage(url) {
   const path = new URL(url, 'https://goatlab.win').pathname;
   // Limit inventory to pages with evergreen publisher content.
-  return path === '/' || /^\/metodologia\/?$/.test(path);
+  return path === '/' || /^\/metodologia\/?$/.test(path) || /^\/el-juego-en-datos(?:\/[a-z0-9-]+|\/pagina\/[1-9][0-9]*)?\/?$/.test(path);
 }
 
 export function matchPageIds(match) {

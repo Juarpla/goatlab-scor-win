@@ -6,14 +6,18 @@ import '../styles/global.css';
 import '../styles/detail-motion.css';
 import Icon from '../components/Icon.astro';
 import ConsentControl from '../components/ConsentControl.astro';
-import { AD_CLIENT, ADS_SERVING_ENABLED, PUBLISHER_ID } from '../config/ads';
+import { AD_CLIENT, ADS_SERVING_ENABLED, ADS_ACTIVE, AD_SLOTS, PUBLISHER_ID } from '../config/ads';
 import { robotsDirective, isAdvertisingPage } from '../lib/page-policy.js';
-const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.', canonical = null, robots: pageRobots = undefined } = Astro.props;
+const { title = 'GoatLab — El fútbol, bajo la lupa.', description = 'Entiende el partido con análisis visuales, estadísticas y contexto. Fútbol para mirar más allá del marcador.', canonical = null, robots: pageRobots = undefined, allowAds = true } = Astro.props;
 const canonicalOrigin = 'https://goatlab.win';
 const canonicalPath = new URL(canonical ?? Astro.url.pathname, canonicalOrigin).pathname;
 const canonicalUrl = `${canonicalOrigin}${canonicalPath.replace(/\/+$/, '')}/`;
 const robots = pageRobots === undefined ? robotsDirective(Astro.url.href) : pageRobots;
-const advertising = ADS_SERVING_ENABLED && isAdvertisingPage(Astro.url.href);
+const editorial = Astro.url.pathname.startsWith('/el-juego-en-datos');
+const editorialSlots = /^\/el-juego-en-datos\/(?!pagina\/)[^/]+/.test(Astro.url.pathname)
+  ? [AD_SLOTS.editorialArticle, AD_SLOTS.editorialClose] : [AD_SLOTS.editorialList];
+const advertising = allowAds && ADS_SERVING_ENABLED && isAdvertisingPage(Astro.url.href)
+  && (!editorial || (ADS_ACTIVE && editorialSlots.some(slot => /^\d+$/.test(slot))));
 ---
 <!doctype html>
 <html lang="es">
@@ -28,7 +32,7 @@ const advertising = ADS_SERVING_ENABLED && isAdvertisingPage(Astro.url.href);
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
-<header class="site-header"><div class="header-inner"><a href="/" class="brand" aria-label="GoatLab, inicio"><span class="brand-symbol"><Icon name="chart" size={25}/></span>GOAT<span>LAB</span><span class="brand-dot"></span></a><nav aria-label="Navegación principal"><a href="/encuentros/">Encuentros</a><a href="/el-juego-en-datos/">El Juego en Datos</a><a href="/metodologia/">Metodología y fuentes</a><a href="/contacto/">Contacto</a></nav><span class="header-note">FÚTBOL. CON PERSPECTIVA.</span></div></header>
+<header class="site-header"><div class="header-inner"><a href="/" class="brand" aria-label="GoatLab, inicio"><span class="brand-symbol"><Icon name="chart" size={25}/></span>GOAT<span>LAB</span><span class="brand-dot"></span></a><nav aria-label="Navegación principal"><a href="/encuentros/">Encuentros</a><a href="/el-juego-en-datos/">Datos jugados</a><a href="/metodologia/">Metodología</a><a href="/contacto/">Contacto</a></nav><span class="header-note">FÚTBOL. CON PERSPECTIVA.</span></div></header>
 <slot/>
-<footer class="site-footer wrap"><a class="brand" href="/">GOAT<span>LAB</span></a><p>Más contexto. Otra forma de ver el fútbol.</p><div><a href="/encuentros/">Encuentros</a><a href="/el-juego-en-datos/">El Juego en Datos</a><a href="/metodologia/">Metodología y fuentes</a><a href="/nosotros/">Nosotros</a><a href="/privacidad/">Privacidad</a><a href="/cookies/">Cookies</a><a href="/terminos/">Términos y condiciones</a><a href="/contacto/">Contacto</a></div><small>GoatLab · Analítica deportiva con fines informativos. Sin cuotas ni enlaces a casas de apuestas.</small>{advertising && <ConsentControl/>}</footer>
+<footer class="site-footer wrap"><a class="brand" href="/">GOAT<span>LAB</span></a><p>Más contexto. Otra forma de ver el fútbol.</p><div><a href="/encuentros/">Encuentros</a><a href="/el-juego-en-datos/">Datos jugados</a><a href="/metodologia/">Metodología</a><a href="/nosotros/">Nosotros</a><a href="/privacidad/">Privacidad</a><a href="/cookies/">Cookies</a><a href="/terminos/">Términos y condiciones</a><a href="/contacto/">Contacto</a></div><small>GoatLab · Analítica deportiva con fines informativos. Sin cuotas ni enlaces a casas de apuestas.</small>{advertising && <ConsentControl/>}</footer>
 </body></html>

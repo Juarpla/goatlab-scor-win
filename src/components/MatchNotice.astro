@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 const { title, message } = Astro.props;
 ---
-<Layout title={`${title} — GoatLab`} description={message} robots="noindex, follow">
+<Layout title={`${title} — GoatLab`} description={message} robots="noindex, follow" allowAds={false}>
   <main id="main" class="wrap">
     <section class="intro">
       <div><h1>{title}</h1></div>
