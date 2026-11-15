@@ -4,7 +4,7 @@
   "away": "Bulgaria",
   "competition": "nations",
   "kickoff": "2026-11-16T17:00:00+00:00",
-  "updatedAt": "2026-11-15T18:51:34.063Z",
+  "updatedAt": "2026-11-15T22:48:23.995Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,8 +13,8 @@
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 1.71,
-      "away": 0.579
+      "home": 1.73,
+      "away": 0.584
     },
     "firstGoalSource": "Blend Poisson+xG",
     "sample": {
@@ -58,10 +58,10 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-15T13:49:08.876Z",
+      "updatedAt": "2026-11-15T22:48:08.690Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
-      "scorerSource": "leaderboard"
+      "scorerSource": null
     },
     "resultsWindowDays": 180,
     "weather": {
@@ -69,7 +69,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-15T13:49:08.876Z",
+      "updatedAt": "2026-11-15T22:48:08.690Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -137,18 +137,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.29,
-    "noGoal": 0.101,
+    "lambdaTotal": 2.31,
+    "noGoal": 0.099,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.317
+        "p": 0.32
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.217
+        "p": 0.218
       },
       {
         "from": 30,
@@ -163,7 +163,7 @@
       {
         "from": 60,
         "to": 75,
-        "p": 0.069
+        "p": 0.068
       },
       {
         "from": 75,
@@ -171,116 +171,106 @@
         "p": 0.047
       }
     ],
-    "firstHome": 0.671,
+    "firstHome": 0.674,
     "firstAway": 0.227
   },
   "scorers": {
-    "home": [
-      {
-        "player": "Maksim Paskotsi",
-        "goals": 2,
-        "matches": 5,
-        "share": 0.9,
-        "rate": 1.54,
-        "anytime": 0.785,
-        "first": 0.672
-      }
-    ],
+    "home": null,
     "away": null
   },
-  "hasScorers": true,
+  "hasScorers": false,
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.452,
-      "draw": 0.301,
-      "away": 0.247,
+      "home": 0.447,
+      "draw": 0.297,
+      "away": 0.256,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.62,
-      "away": 0.85
+      "home": 1.66,
+      "away": 0.86
     },
-    "over15": 0.624,
-    "over25": 0.364,
-    "over35": 0.19399999999999998,
-    "btts": 0.424,
+    "over15": 0.634,
+    "over25": 0.379,
+    "over35": 0.2,
+    "btts": 0.442,
     "score": "1-0",
-    "cornersOver95": 0.46299999999999997,
+    "cornersOver95": 0.47,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.452,
+      "favoriteProb": 0.447,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.452,
+    "confidence": 0.4474,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-15T13:49:16.251Z",
+    "capturedAt": "2026-11-15T22:48:14.637Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.544,
-      "draw": 0.271,
-      "away": 0.185
+      "home": 0.552,
+      "draw": 0.266,
+      "away": 0.182
     },
     "doubleChance": {
-      "12": 0.729,
-      "1X": 0.815,
-      "X2": 0.456
+      "12": 0.734,
+      "1X": 0.818,
+      "X2": 0.448
     },
     "dnb": {
-      "home": 0.747,
-      "away": 0.253
+      "home": 0.752,
+      "away": 0.248
     },
     "totals": {
-      "over15": 0.718,
-      "under15": 0.282,
-      "over25": 0.448,
-      "under25": 0.552,
-      "over35": 0.236,
-      "under35": 0.764
+      "over15": 0.728,
+      "under15": 0.272,
+      "over25": 0.461,
+      "under25": 0.539,
+      "over35": 0.247,
+      "under35": 0.753
     },
     "btts": {
-      "yes": 0.471,
-      "no": 0.529
+      "yes": 0.479,
+      "no": 0.521
     },
     "cleanSheet": {
-      "home": 0.427,
-      "away": 0.198
+      "home": 0.423,
+      "away": 0.19
     },
     "exactScores": [
       {
         "home": 1,
         "away": 0,
-        "p": 0.16,
-        "share": 0.27164685908319186
+        "p": 0.158,
+        "share": 0.2714776632302406
       },
       {
         "home": 1,
         "away": 1,
-        "p": 0.128,
-        "share": 0.2173174872665535
+        "p": 0.126,
+        "share": 0.21649484536082475
       },
       {
         "home": 2,
         "away": 0,
         "p": 0.111,
-        "share": 0.18845500848896435
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.096,
-        "share": 0.16298811544991512
+        "share": 0.1907216494845361
       },
       {
         "home": 2,
         "away": 1,
-        "p": 0.094,
-        "share": 0.15959252971137522
+        "p": 0.095,
+        "share": 0.16323024054982818
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.092,
+        "share": 0.15807560137457047
       }
     ],
     "providerPick": {
@@ -356,7 +346,7 @@
     "home": {
       "shots": 12.54,
       "shotsOnTarget": 4.85,
-      "xg": 1.62,
+      "xg": 1.66,
       "corners": 4.7,
       "fouls": 13.42,
       "yellowCards": 1.88,
@@ -367,7 +357,7 @@
     "away": {
       "shots": 12.9,
       "shotsOnTarget": 4.03,
-      "xg": 0.85,
+      "xg": 0.86,
       "corners": 4.65,
       "fouls": 11.65,
       "yellowCards": 2.38,
@@ -458,9 +448,9 @@
       "away": 0.495
     },
     "lastGoal": {
-      "home": 0.671,
+      "home": 0.674,
       "away": 0.227,
-      "noGoal": 0.101
+      "noGoal": 0.099
     },
     "cornerRace": {
       "3": {
@@ -537,11 +527,7 @@
         "ga": null,
         "provider": null
       },
-      "player": {
-        "name": "Maksim Paskotsi",
-        "detail": "2 goles en 5 partidos",
-        "source": "líder del equipo en la temporada"
-      }
+      "player": null
     },
     "away": {
       "team": "Bulgaria",
@@ -569,5 +555,11 @@
       "player": null
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Se detecta una inconsistencia en la lógica de la clasificación: Bulgaria figura en tercer lugar con 4 puntos, mientras Estonia está en quinto con 9 puntos. Esta divergencia numérica sugiere una error en los datos de entrada proporcionados en la sección T.",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-15T22:49:15.405Z"
+  }
 }
