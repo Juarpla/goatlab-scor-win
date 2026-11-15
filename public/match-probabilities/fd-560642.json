@@ -1,0 +1,639 @@
+{
+  "id": "fd-560642",
+  "home": "Chelsea FC",
+  "away": "Leeds United FC",
+  "competition": "premier",
+  "kickoff": "2026-11-21T15:00:00Z",
+  "updatedAt": "2026-11-15T13:49:26.397Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.26,
+      "away": 0.767
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.45,
+      "away": 1.029
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Chelsea FC": {
+        "position": 5,
+        "team": "Chelsea FC",
+        "played": 10,
+        "won": 5,
+        "drawn": 1,
+        "lost": 4,
+        "goalsFor": 19,
+        "goalsAgainst": 16,
+        "goalDifference": 3,
+        "points": 16,
+        "form": null
+      },
+      "Leeds United FC": {
+        "position": 9,
+        "team": "Leeds United FC",
+        "played": 10,
+        "won": 3,
+        "drawn": 5,
+        "lost": 2,
+        "goalsFor": 10,
+        "goalsAgainst": 8,
+        "goalDifference": 2,
+        "points": 14,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-15T13:49:08.067Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-21T15:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-15T13:49:08.067Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 428
+    },
+    "venue": {
+      "city": "Londres",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.468,
+      "draw": 0.319,
+      "away": 0.214
+    },
+    "doubleChance": {
+      "12": 0.681,
+      "1X": 0.786,
+      "X2": 0.532
+    },
+    "dnb": {
+      "home": 0.686,
+      "away": 0.314
+    },
+    "totals": {
+      "over15": 0.614,
+      "under15": 0.386,
+      "over25": 0.331,
+      "under25": 0.669,
+      "over35": 0.148,
+      "under35": 0.852
+    },
+    "btts": {
+      "yes": 0.396,
+      "no": 0.604
+    },
+    "cleanSheet": {
+      "home": 0.464,
+      "away": 0.284
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.153
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.144
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.14
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.105
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.088
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.48,
+    "noGoal": 0.084,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.338
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.224
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.098
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.065
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.043
+      }
+    ],
+    "firstHome": 0.536,
+    "firstAway": 0.38
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "João Pedro",
+        "goals": 5,
+        "matches": 6,
+        "share": 0.263,
+        "rate": 0.38,
+        "anytime": 0.317,
+        "first": 0.154
+      },
+      {
+        "player": "Morgan Rogers",
+        "goals": 5,
+        "matches": 10,
+        "share": 0.263,
+        "rate": 0.38,
+        "anytime": 0.317,
+        "first": 0.154
+      },
+      {
+        "player": "Cole Palmer",
+        "goals": 3,
+        "matches": 10,
+        "share": 0.158,
+        "rate": 0.23,
+        "anytime": 0.205,
+        "first": 0.092
+      }
+    ],
+    "away": [
+      {
+        "player": "Dominic Calvert-Lewin",
+        "goals": 3,
+        "matches": 9,
+        "share": 0.3,
+        "rate": 0.31,
+        "anytime": 0.266,
+        "first": 0.124
+      },
+      {
+        "player": "Jayden Bogle",
+        "goals": 2,
+        "matches": 9,
+        "share": 0.2,
+        "rate": 0.21,
+        "anytime": 0.186,
+        "first": 0.083
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.45799999999999996,
+      "draw": 0.254,
+      "away": 0.28800000000000003,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.64,
+      "away": 1.29
+    },
+    "over15": 0.78,
+    "over25": 0.552,
+    "over35": 0.326,
+    "btts": 0.565,
+    "score": "1-1",
+    "cornersOver95": 0.489,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.458,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4579,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-15T13:49:19.408Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.445,
+      "draw": 0.265,
+      "away": 0.29
+    },
+    "doubleChance": {
+      "12": 0.735,
+      "1X": 0.71,
+      "X2": 0.555
+    },
+    "dnb": {
+      "home": 0.605,
+      "away": 0.395
+    },
+    "totals": {
+      "over15": 0.801,
+      "under15": 0.199,
+      "over25": 0.561,
+      "under25": 0.439,
+      "over35": 0.337,
+      "under35": 0.663
+    },
+    "btts": {
+      "yes": 0.595,
+      "no": 0.405
+    },
+    "cleanSheet": {
+      "home": 0.275,
+      "away": 0.194
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.116,
+        "share": 0.2697674418604651
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.093,
+        "share": 0.21627906976744182
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.076,
+        "share": 0.1767441860465116
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.073,
+        "share": 0.16976744186046508
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.072,
+        "share": 0.16744186046511625
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 36,
+    "homeWins": 16,
+    "draws": 10,
+    "awayWins": 10,
+    "avgTotalGoals": 2.638888888888889,
+    "recent": [
+      {
+        "eventId": 601545,
+        "date": "2026-09-09T19:15:00+00:00",
+        "home": "Chelsea",
+        "away": "Leeds United",
+        "homeTeamId": 13,
+        "awayTeamId": 19,
+        "homeScore": 6,
+        "awayScore": 3
+      },
+      {
+        "eventId": 204482,
+        "date": "2026-04-26T14:00:00+00:00",
+        "home": "Chelsea",
+        "away": "Leeds United",
+        "homeTeamId": 13,
+        "awayTeamId": 19,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 256,
+        "date": "2026-02-10T19:30:00+00:00",
+        "home": "Chelsea",
+        "away": "Leeds United",
+        "homeTeamId": 13,
+        "awayTeamId": 19,
+        "homeScore": 2,
+        "awayScore": 2
+      },
+      {
+        "eventId": 138,
+        "date": "2025-12-03T20:15:00+00:00",
+        "home": "Leeds United",
+        "away": "Chelsea",
+        "homeTeamId": 19,
+        "awayTeamId": 13,
+        "homeScore": 3,
+        "awayScore": 1
+      },
+      {
+        "eventId": 242783,
+        "date": "2024-02-28T19:30:00+00:00",
+        "home": "Chelsea",
+        "away": "Leeds United",
+        "homeTeamId": 13,
+        "awayTeamId": 19,
+        "homeScore": 3,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 428
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.6
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 428
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.5
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.05,
+      "shotsOnTarget": 4.64,
+      "xg": 1.64,
+      "corners": 4.72,
+      "fouls": 11.11,
+      "yellowCards": 2.14,
+      "redCards": 0.15,
+      "offsides": 1.92,
+      "possession": 50.58
+    },
+    "away": {
+      "shots": 12.72,
+      "shotsOnTarget": 4.29,
+      "xg": 1.29,
+      "corners": 4.76,
+      "fouls": 12.35,
+      "yellowCards": 2.43,
+      "redCards": 0.15,
+      "offsides": 1.89,
+      "possession": 49.42
+    },
+    "sample": {
+      "home": 10,
+      "away": 9
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 5,
+        "offsides": 9
+      },
+      "away": {
+        "possession": 9,
+        "shots": 9,
+        "shotsOnTarget": 9,
+        "xg": 9,
+        "corners": 9,
+        "fouls": 9,
+        "yellowCards": 9,
+        "redCards": 5,
+        "offsides": 9
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.63,
+      "shotsOnTarget": 4.31,
+      "xg": 1.44,
+      "corners": 4.76,
+      "fouls": 11.49,
+      "yellowCards": 2.11,
+      "redCards": 0.19,
+      "offsides": 1.88
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.429,
+      "draw": 0.131,
+      "away": 0.439
+    },
+    "cardsDuel": {
+      "home": 0.352,
+      "draw": 0.191,
+      "away": 0.457
+    },
+    "lastGoal": {
+      "home": 0.536,
+      "away": 0.38,
+      "noGoal": 0.084
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.496,
+        "away": 0.504
+      },
+      "5": {
+        "home": 0.495,
+        "away": 0.505
+      },
+      "7": {
+        "home": 0.494,
+        "away": 0.506
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.201,
+      "home12": 0.228,
+      "level": 0.131,
+      "away12": 0.231,
+      "away3plus": 0.209
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 7.2,
+      "condition": "rain",
+      "sampledAt": "2026-11-21T15:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Stamford Bridge",
+      "city": "Londres",
+      "capacity": 40341,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Chelsea FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 4,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 5,
+        "played": 10,
+        "gf": 19,
+        "ga": 16,
+        "provider": null
+      },
+      "player": {
+        "name": "João Pedro",
+        "detail": "5 goles en 6 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Leeds United FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 9,
+        "played": 10,
+        "gf": 10,
+        "ga": 8,
+        "provider": null
+      },
+      "player": {
+        "name": "Dominic Calvert-Lewin",
+        "detail": "3 goles en 9 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

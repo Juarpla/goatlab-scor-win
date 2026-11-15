@@ -1,0 +1,616 @@
+{
+  "id": "fd-564754",
+  "home": "Real Madrid CF",
+  "away": "RC Celta de Vigo",
+  "competition": "laliga",
+  "kickoff": "2026-11-21T20:00:00Z",
+  "updatedAt": "2026-11-15T13:49:26.397Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 2.07,
+      "away": 0.92
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.13,
+      "away": 0.935
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Real Madrid CF": {
+        "position": 2,
+        "team": "Real Madrid CF",
+        "played": 12,
+        "won": 10,
+        "drawn": 0,
+        "lost": 2,
+        "goalsFor": 31,
+        "goalsAgainst": 10,
+        "goalDifference": 21,
+        "points": 30,
+        "form": null
+      },
+      "RC Celta de Vigo": {
+        "position": 11,
+        "team": "RC Celta de Vigo",
+        "played": 12,
+        "won": 2,
+        "drawn": 7,
+        "lost": 3,
+        "goalsFor": 10,
+        "goalsAgainst": 10,
+        "goalDifference": 0,
+        "points": 13,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-15T13:48:55.603Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-21T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-15T13:48:55.603Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 428
+    },
+    "venue": {
+      "city": "Madrid",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.63,
+      "draw": 0.222,
+      "away": 0.149
+    },
+    "doubleChance": {
+      "12": 0.778,
+      "1X": 0.851,
+      "X2": 0.37
+    },
+    "dnb": {
+      "home": 0.809,
+      "away": 0.191
+    },
+    "totals": {
+      "over15": 0.809,
+      "under15": 0.191,
+      "over25": 0.574,
+      "under25": 0.426,
+      "over35": 0.35,
+      "under35": 0.65
+    },
+    "btts": {
+      "yes": 0.535,
+      "no": 0.465
+    },
+    "cleanSheet": {
+      "home": 0.399,
+      "away": 0.126
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.108
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.105
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.099
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.095
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.074
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.07,
+    "noGoal": 0.047,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.4
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.24
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.144
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.086
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.052
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.031
+      }
+    ],
+    "firstHome": 0.663,
+    "firstAway": 0.291
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Kylian Mbappé",
+        "goals": 13,
+        "matches": 12,
+        "share": 0.419,
+        "rate": 0.89,
+        "anytime": 0.59,
+        "first": 0.291
+      },
+      {
+        "player": "Jude Bellingham",
+        "goals": 4,
+        "matches": 12,
+        "share": 0.129,
+        "rate": 0.27,
+        "anytime": 0.24,
+        "first": 0.09
+      },
+      {
+        "player": "Arda Güler",
+        "goals": 3,
+        "matches": 12,
+        "share": 0.097,
+        "rate": 0.21,
+        "anytime": 0.187,
+        "first": 0.067
+      }
+    ],
+    "away": null
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.682,
+      "draw": 0.19,
+      "away": 0.128,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.19,
+      "away": 0.95
+    },
+    "over15": 0.8079999999999999,
+    "over25": 0.595,
+    "over35": 0.371,
+    "btts": 0.536,
+    "score": "2-0",
+    "cornersOver95": 0.47,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.682,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6823,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-15T13:49:20.267Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.647,
+      "draw": 0.211,
+      "away": 0.143
+    },
+    "doubleChance": {
+      "12": 0.789,
+      "1X": 0.857,
+      "X2": 0.353
+    },
+    "dnb": {
+      "home": 0.819,
+      "away": 0.181
+    },
+    "totals": {
+      "over15": 0.83,
+      "under15": 0.17,
+      "over25": 0.607,
+      "under25": 0.393,
+      "over35": 0.384,
+      "under35": 0.616
+    },
+    "btts": {
+      "yes": 0.554,
+      "no": 0.446
+    },
+    "cleanSheet": {
+      "home": 0.387,
+      "away": 0.112
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.124,
+        "share": 0.256198347107438
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.099,
+        "share": 0.20454545454545453
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.099,
+        "share": 0.20454545454545453
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.086,
+        "share": 0.1776859504132231
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.076,
+        "share": 0.15702479338842973
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 0
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 87,
+    "homeWins": 55,
+    "draws": 14,
+    "awayWins": 18,
+    "avgTotalGoals": 3.2873563218390807,
+    "recent": [
+      {
+        "eventId": 953,
+        "date": "2026-03-06T20:00:00+00:00",
+        "home": "Celta Vigo",
+        "away": "Real Madrid",
+        "homeTeamId": 49,
+        "awayTeamId": 57,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 839,
+        "date": "2025-12-07T20:00:00+00:00",
+        "home": "Real Madrid",
+        "away": "Celta Vigo",
+        "homeTeamId": 57,
+        "awayTeamId": 49,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 305689,
+        "date": "2025-05-04T12:00:00+00:00",
+        "home": "Real Madrid",
+        "away": "Celta Vigo",
+        "homeTeamId": 57,
+        "awayTeamId": 49,
+        "homeScore": 3,
+        "awayScore": 2
+      },
+      {
+        "eventId": 231631,
+        "date": "2025-01-16T20:30:00+00:00",
+        "home": "Real Madrid",
+        "away": "Celta Vigo",
+        "homeTeamId": 57,
+        "awayTeamId": 49,
+        "homeScore": 5,
+        "awayScore": 2
+      },
+      {
+        "eventId": 305445,
+        "date": "2024-10-19T19:00:00+00:00",
+        "home": "Celta Vigo",
+        "away": "Real Madrid",
+        "homeTeamId": 49,
+        "awayTeamId": 57,
+        "homeScore": 1,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 428
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.4
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 428
+    },
+    "source": "GoatLab",
+    "expectedTotal": 8.7
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.36,
+      "shotsOnTarget": 5.32,
+      "xg": 2.19,
+      "corners": 4.97,
+      "fouls": 12.26,
+      "yellowCards": 2.21,
+      "redCards": 0.28,
+      "offsides": 2.13,
+      "possession": 50.93
+    },
+    "away": {
+      "shots": 11.73,
+      "shotsOnTarget": 4.25,
+      "xg": 0.95,
+      "corners": 3.71,
+      "fouls": 13.26,
+      "yellowCards": 2.18,
+      "redCards": 0.28,
+      "offsides": 1.91,
+      "possession": 49.07
+    },
+    "sample": {
+      "home": 10,
+      "away": 8
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 8,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 8,
+        "shots": 8,
+        "shotsOnTarget": 8,
+        "xg": 8,
+        "corners": 8,
+        "fouls": 8,
+        "yellowCards": 8,
+        "redCards": 3,
+        "offsides": 8
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.64,
+      "shotsOnTarget": 4.73,
+      "xg": 1.47,
+      "corners": 4.79,
+      "fouls": 12.34,
+      "yellowCards": 2.24,
+      "redCards": 0.27,
+      "offsides": 2.09
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.601,
+      "draw": 0.126,
+      "away": 0.273
+    },
+    "cardsDuel": {
+      "home": 0.407,
+      "draw": 0.197,
+      "away": 0.396
+    },
+    "lastGoal": {
+      "home": 0.663,
+      "away": 0.291,
+      "noGoal": 0.047
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.634,
+        "away": 0.366
+      },
+      "5": {
+        "home": 0.674,
+        "away": 0.326
+      },
+      "7": {
+        "home": 0.704,
+        "away": 0.296
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.331,
+      "home12": 0.269,
+      "level": 0.126,
+      "away12": 0.176,
+      "away3plus": 0.097
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 19.5,
+      "condition": null,
+      "sampledAt": "2026-11-21T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Santiago Bernabéu",
+      "city": "Madrid",
+      "capacity": 83186,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Real Madrid CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 2,
+        "played": 12,
+        "gf": 31,
+        "ga": 10,
+        "provider": null
+      },
+      "player": {
+        "name": "Kylian Mbappé",
+        "detail": "13 goles en 12 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "RC Celta de Vigo",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 11,
+        "played": 12,
+        "gf": 10,
+        "ga": 10,
+        "provider": null
+      },
+      "player": null
+    }
+  },
+  "llmReview": null
+}

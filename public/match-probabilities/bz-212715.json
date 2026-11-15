@@ -4,7 +4,7 @@
   "away": "Albania",
   "competition": "nations",
   "kickoff": "2026-11-15T17:00:00+00:00",
-  "updatedAt": "2026-11-15T06:32:23.804Z",
+  "updatedAt": "2026-11-15T13:49:26.397Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -62,7 +62,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-14T13:21:41.881Z",
+      "updatedAt": "2026-11-15T13:49:08.876Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -73,11 +73,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-14T13:21:41.881Z",
+      "updatedAt": "2026-11-15T13:49:08.876Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 420
+      "rows": 428
     },
     "venue": null
   },
@@ -245,7 +245,7 @@
     "over15": 0.654,
     "over25": 0.405,
     "over35": 0.209,
-    "btts": 0.452,
+    "btts": 0.45,
     "score": "1-1",
     "cornersOver95": 0.452,
     "recommendations": {
@@ -256,7 +256,7 @@
     },
     "confidence": 0.4902,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-15T06:32:20.511Z",
+    "capturedAt": "2026-11-15T13:49:13.743Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -396,7 +396,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 420
+      "historyRows": 428
     },
     "source": "GoatLab",
     "expectedTotal": 4.5
@@ -407,33 +407,33 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 420
+      "historyRows": 428
     },
     "source": "GoatLab",
-    "expectedTotal": 9.1
+    "expectedTotal": 9.2
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 11.91,
-      "shotsOnTarget": 3.68,
+      "shots": 11.92,
+      "shotsOnTarget": 3.72,
       "xg": 1.17,
-      "corners": 3.99,
-      "fouls": 14.12,
-      "yellowCards": 2.35,
-      "redCards": 0.24,
-      "offsides": 1.53,
+      "corners": 4.05,
+      "fouls": 14.13,
+      "yellowCards": 2.34,
+      "redCards": 0.22,
+      "offsides": 1.54,
       "possession": 47.33
     },
     "away": {
-      "shots": 14.09,
-      "shotsOnTarget": 4.22,
+      "shots": 14.1,
+      "shotsOnTarget": 4.26,
       "xg": 1.2,
-      "corners": 5.08,
-      "fouls": 12.21,
-      "yellowCards": 2.17,
-      "redCards": 0.2,
-      "offsides": 1.58,
+      "corners": 5.14,
+      "fouls": 12.22,
+      "yellowCards": 2.15,
+      "redCards": 0.18,
+      "offsides": 1.59,
       "possession": 52.67
     },
     "sample": {
@@ -466,13 +466,13 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.34,
-      "shotsOnTarget": 4.32,
-      "xg": 1.35,
-      "corners": 4.65,
-      "fouls": 11.64,
-      "yellowCards": 2.06,
-      "redCards": 0.28,
+      "shots": 13.35,
+      "shotsOnTarget": 4.4,
+      "xg": 1.36,
+      "corners": 4.76,
+      "fouls": 11.66,
+      "yellowCards": 2.03,
+      "redCards": 0.24,
       "offsides": 1.56
     },
     "sources": {
@@ -509,14 +509,14 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.297,
+      "home": 0.298,
       "draw": 0.126,
       "away": 0.576
     },
     "cardsDuel": {
-      "home": 0.436,
-      "draw": 0.193,
-      "away": 0.371
+      "home": 0.438,
+      "draw": 0.194,
+      "away": 0.368
     },
     "lastGoal": {
       "home": 0.551,
@@ -525,24 +525,24 @@
     },
     "cornerRace": {
       "3": {
-        "home": 0.388,
-        "away": 0.612
+        "home": 0.39,
+        "away": 0.61
       },
       "5": {
-        "home": 0.355,
-        "away": 0.645
+        "home": 0.357,
+        "away": 0.643
       },
       "7": {
-        "home": 0.329,
-        "away": 0.671
+        "home": 0.331,
+        "away": 0.669
       }
     },
     "cornerMargin": {
-      "home3plus": 0.113,
+      "home3plus": 0.115,
       "home12": 0.184,
       "level": 0.126,
-      "away12": 0.262,
-      "away3plus": 0.315
+      "away12": 0.26,
+      "away3plus": 0.316
     },
     "source": "GoatLab"
   },
@@ -634,5 +634,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Se marca una desviación clara entre el modelo Poisson, que otorga un 76,7% a la victoria local (1.8), y el modelo Bzzoiro que predice victoria visitante (A|0.49). Esta contradicción requiere verificación cruzada de los inputs numéricos.",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-15T13:50:06.698Z"
+  }
 }
