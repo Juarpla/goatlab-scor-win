@@ -1,157 +1,6 @@
 {
-  "updatedAt": "2026-11-15T14:00:25.181Z",
+  "updatedAt": "2026-11-15T14:19:08.948Z",
   "runs": [
-    {
-      "at": "2026-11-07T22:10:36.273Z",
-      "matchId": "fd-560637",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1415,
-            "outputTokens": 2046
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 27097
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1311,
-            "outputTokens": 4259
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 68886
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1370,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 95587
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180000
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1415,
-            "outputTokens": 1356
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13425
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1311,
-            "outputTokens": 6386
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 86626
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1311,
-        "outputTokens": 6386
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-07T22:14:32.360Z",
-      "task": "shorts",
-      "matchId": "sunderland-vs-chelsea-2026-11-08",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 186809
-      },
-      "usage": {
-        "inputTokens": 7291,
-        "outputTokens": 23180
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "c80f745a-3fa6-4b48-a415-5d6cef44350e"
-    },
-    {
-      "at": "2026-11-07T22:18:50.045Z",
-      "task": "shorts",
-      "matchId": "elche-vs-real-betis-2026-11-08",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 257679
-      },
-      "usage": {
-        "inputTokens": 7521,
-        "outputTokens": 27785
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "61ead866-68ee-4678-b50b-c55e8826d0dc"
-    },
     {
       "at": "2026-11-07T22:19:41.428Z",
       "task": "image-prompts",
@@ -7229,6 +7078,102 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "12fe0574-0532-425c-ae58-e009ec3f977d"
+    },
+    {
+      "at": "2026-11-15T14:14:08.478Z",
+      "task": "shorts",
+      "matchId": "real-madrid-vs-celta-vigo-2026-11-21",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta RC Celta de Vigo; guion 2: falta RC Celta de Vigo; guion 4: falta RC Celta de Vigo; guion 6: 4 cifras, máximo 3; guion 7: falta RC Celta de Vigo; guion 7: 4 cifras, máximo 3; guion 8: falta Real Madrid CF; guion 8: falta RC Celta de Vigo",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7548,
+            "outputTokens": 2894
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8617
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7199,
+            "outputTokens": 28379
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 315585
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash",
+        "latencyMs": 445575
+      },
+      "usage": {
+        "inputTokens": 7057,
+        "outputTokens": 30561
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "49fd7a23-be6e-42bc-8165-6908681d89de"
+    },
+    {
+      "at": "2026-11-15T14:19:00.615Z",
+      "task": "shorts",
+      "matchId": "belgium-vs-italy-2026-11-15",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: cifra 2.2 no está en los hechos; guion 3: cifra 1.6 no está en los hechos; guion 3: 7 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 5: vocabulario prohibido: cuotas?; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7686,
+            "outputTokens": 3624
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13454
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 278677
+      },
+      "usage": {
+        "inputTokens": 7370,
+        "outputTokens": 28476
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "d83d503b-af46-4063-a800-9c6328853727"
+    },
+    {
+      "at": "2026-11-15T14:19:08.948Z",
+      "task": "image-prompts",
+      "matchId": "real-madrid-vs-celta-vigo-2026-11-21",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2361,
+        "outputTokens": 1868
+      }
     }
   ]
 }
