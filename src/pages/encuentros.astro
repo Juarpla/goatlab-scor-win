@@ -14,11 +14,13 @@ export const prerender = false;
 let matches = [];
 let lastUpdate = null;
 let calendarUnavailable = false;
+let usingSnapshot = false;
 Astro.response.headers.set('Cache-Control', 'no-store');
 try {
   const calendar = await matchCalendar(env);
   matches = (await calendar.list()).map(({ match }) => match);
   lastUpdate = calendar.updatedAt;
+  usingSnapshot = calendar.isDegraded ?? false;
 } catch (error) {
   console.error('Match calendar unavailable', error);
   calendarUnavailable = true;
@@ -41,6 +43,7 @@ const cardProps = m => ({ match: m, competitionCode: CODES[m.competition] ?? 'FU
  <section class="intro">
   <div><h1>Todos los<br/><span>encuentros.</span></h1></div>
   <p>Los partidos de nuestras competiciones en los próximos siete días, ordenados por hora de inicio{updated ? ` · actualizado ${updated} (Lima)` : ''}. Los horarios se muestran en tu hora local. Los encuentros dejan el calendario al confirmarse el resultado o al pasar tres horas desde el inicio sin confirmación.</p>
+  {usingSnapshot && <p>Mostramos el último calendario disponible. Los cambios recientes pueden tardar en aparecer.</p>}
  </section>
  <section class="wall" aria-labelledby="wall-title" style="padding-top:0;border-top:0;margin-top:0">
   <div class="section-heading"><h2 id="wall-title" class="sr-only">El muro de encuentros</h2><span>Cada tarjeta abre el análisis del partido</span></div>

@@ -1,7 +1,8 @@
-import { DAY, MATCH_WINDOW, SCHEDULE_WINDOW, fixtureIsIndexable, fixtureIsVisible, isSafeMatchId, matchRetirement } from './match-calendar.js';
+import { DAY, MATCH_WINDOW, SCHEDULE_WINDOW, calendarPhase, fixtureIsIndexable, fixtureIsVisible, isSafeMatchId, matchRetirement } from './match-calendar.js';
 import { archive, editorialReading, fixtures, ledger } from './match-feed.js';
 
 let fallbackIndex;
+const isStillScheduled = (match, now) => match.status === 'NS' && Date.parse(match.kickoff) > now;
 
 function buildFallbackIndex() {
   const bySlug = new Map();
@@ -88,15 +89,23 @@ export async function matchCalendar(env, now = Date.now()) {
       }
     }
     const age = now - Date.parse(snapshot.updatedAt);
-    if (!(age >= 0 && age <= DAY)) throw failure;
-    const result = await snapshot[method](input);
+    if (!(age >= 0)) throw failure;
+    const stale = age > DAY;
+    if (method === 'list') {
+      const records = await snapshot.list({ ...input, upcomingOnly: stale });
+      if (stale && !records.length) throw failure;
+      return records;
+    }
+    const record = await snapshot.get(input);
     // A snapshot miss cannot distinguish an unknown fixture from a newer D1 row.
-    if (result === null) throw failure;
-    return result;
+    // An older snapshot can still establish a final score or a scheduled kickoff.
+    if (!record || (stale && !isStillScheduled(record.match, now) && calendarPhase(record.match, now) !== 'final')) throw failure;
+    return record;
   }
 
   return {
     get updatedAt() { return primary?.updatedAt ?? snapshot.updatedAt; },
+    get isDegraded() { return !primary; },
     list: options => read('list', options),
     get: id => isSafeMatchId(id) ? read('get', id) : Promise.resolve(null),
   };
@@ -105,8 +114,8 @@ export async function matchCalendar(env, now = Date.now()) {
 function fallback(now) {
   return {
     updatedAt: fixtures.updatedAt,
-    async list({ forSitemap = false } = {}) {
-      return fixtures.matches.filter(match => fixtureIsVisible(match, now)).map(match => forSitemap
+    async list({ forSitemap = false, upcomingOnly = false } = {}) {
+      return fixtures.matches.filter(match => fixtureIsVisible(match, now) && (!upcomingOnly || isStillScheduled(match, now))).map(match => forSitemap
         ? fallbackMatch(match.webId ?? match.id, now)
         : { match, slug: match.webId ?? match.id });
     },

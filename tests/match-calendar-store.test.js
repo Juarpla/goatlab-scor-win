@@ -46,8 +46,18 @@ for (const failSync of [true, false]) {
   });
 }
 
-test('quota errors still report unavailability after the bundled schedule becomes stale', async () => {
-  const calendar = await matchCalendar({ GOATLAB_DB: database(true) }, now + 25 * 3_600_000);
-  await assert.rejects(calendar.list(), quotaError);
-  await assert.rejects(calendar.get(slug), quotaError);
+test('an older snapshot retains upcoming fixtures and expires when its schedule runs out', async () => {
+  const later = now + 25 * 3_600_000;
+  const remaining = visible.filter(match => match.status === 'NS' && Date.parse(match.kickoff) > later);
+  assert.ok(remaining.length, 'fixture snapshot must include upcoming matches beyond one day');
+  const env = { GOATLAB_DB: database(true) };
+  const calendar = await matchCalendar(env, later);
+  assert.deepEqual((await calendar.list()).map(record => record.match), remaining);
+  assert.equal(calendar.isDegraded, true);
+  const [future] = remaining;
+  assert.equal((await calendar.get(future.webId ?? future.id)).match.id, future.id);
+
+  const exhausted = await matchCalendar(env, now + 8 * 86_400_000);
+  await assert.rejects(exhausted.list(), quotaError);
+  await assert.rejects(exhausted.get(future.webId ?? future.id), quotaError);
 });
