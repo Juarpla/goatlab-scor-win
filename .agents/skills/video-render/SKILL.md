@@ -56,49 +56,32 @@ file name. Never reuse a slug for another audio.
 
 ## How timing works
 
-The YouTube script is the master text; Mistral provides the clock.
+The voice is the only source for subtitles.
 
 1. `video-render/pipeline/02-transcribe.mjs` sends a 16 kHz mono FLAC to Mistral
    (Voxtral) with `timestamp_granularities=word`. If Mistral fails, takes longer
    than 45 s or hears nothing, local whisper.cpp runs.
-2. `video-render/pipeline/03-reference-timing.mjs` aligns the script tokens with the
-   heard tokens using Levenshtein over normalized words (no accents, canonical
-   numbers). Script words inherit the heard timings; a name that Mistral splits
-   keeps the full span; unmatched words are interpolated between neighbors.
-3. `video-render/cli/render.mjs` logs `guion: NN% de coincidencia` and uses the
-   aligned text only if `NN >= 50`. Below that it falls back to Mistral's raw
-   words: a wrong reference is worse than an approximate transcription.
+2. `video-render/contract/timing.js` turns the heard words into cues
+   (`cuesFromHeard`): it orders them, repairs zero-width spans and corrects the
+   fixed brand domain. This text is exactly what the subtitles show.
+3. `video-render/pipeline/03-reference-timing.mjs` only compares the transcription
+   with the published scripts to identify the take: script number, title and
+   output file name. The CLI logs `voz: script N, NN% de coincidencia`.
 4. `words` reaches the composition already offset by the 0.5 s intro. The plan
    code must not add another offset.
 
-Never edit timings by hand. Fix the reference text.
+Never replace spoken words with script sentences. If the transcription is wrong,
+fix the transcription source or add a narrow, documented artifact repair. Do not
+edit timings by hand.
 
-### Reasoned reference correction
+### Identifying the take
 
-Pass `--script` whenever the audio has a script. If you know the number, add
-`--script-n`; if not, omit it and the CLI aligns the transcription against every
-script and picks the best match. Always read the `guion:` line, which reports the
-chosen number and percentage.
-
-- **Score ≥ 50%**: the alignment is reliable. Do not rewrite the narration to
-  "improve" it; fix only a concrete factual error that would be visible on screen
-  (a player who did not play, a false scoreline) and render again.
-- **Score < 50%**: the recording does not follow the master script (improvised
-  take, wrong number, edited narration) and the render uses the raw text. Read the
-  full transcription, compare it with the script and write a corrected reference
-  that says what the audio actually says, with fixed names and figures. Render
-  again.
-- **Ambiguous case** (score just below 50%, or one wrong name inside a good
-  alignment): fix only the affected words and re-render.
-
-The corrected file has the shape `--script` expects:
-
-```json
-{ "scripts": [{ "n": 1, "narration": "…" }] }
-```
-
-Save it to `video-render/work/<id>/<slug>/reference.json` and pass
-`--script="video-render/work/<id>/<slug>/reference.json" --script-n=1`.
+Pass `--script` whenever the audio has a published script; add `--script-n` when
+you already know the number. If you omit it, the CLI aligns the transcription
+against every script and picks the best match. The percentage measures how close
+the take is to the published script, not what the subtitles say: an improvised
+take can score low and still render correctly. Use the script title for the
+output name and check the opening seconds during QA.
 
 ## Step 1 — Choose the match
 

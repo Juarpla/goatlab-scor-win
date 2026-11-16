@@ -1,5 +1,5 @@
-// Aligns script text with Mistral timings. The voice owns the
-// timings; the script fixes names, figures and punctuation for subtitles.
+// Aligns script text with Mistral timings to identify which published script a
+// take follows. Subtitles never use this text: they come from the transcription.
 import { narrationText } from '../contract/narration.js';
 
 const NUMBER_WORDS = {

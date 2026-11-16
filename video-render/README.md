@@ -30,7 +30,7 @@ video-render/
     00-io.mjs                ffprobe duration and atomic JSON writes
     01-voice.mjs             leading-silence trim + speed-up policy
     02-transcribe.mjs        Mistral (Voxtral) with whisper.cpp fallback
-    03-reference-timing.mjs  script/word alignment
+    03-reference-timing.mjs  take identification against published scripts
     04-photo-normalize.mjs   image sizing
     05-photo-cache.mjs       photo download and cache
     06-clip-cache.mjs        clip download and cache
@@ -175,9 +175,10 @@ node --env-file=.env video-render/cli/render.mjs \
 
 - `--audio` is optional; pass it only when the match folder has more than one
   file. It must already live in `audios/<id>/` or `audios/tests/`.
-- `--script` is optional; with it, subtitles use the script text and Mistral's
-  timings. `--script-n` fixes the script; without it, the CLI picks the best match
-  against every script in the file.
+- `--script` is optional; with it, the CLI identifies which published script the
+  take follows and uses its title for the output name. Subtitles always come from
+  the voice transcription. `--script-n` fixes the script; without it, the CLI
+  picks the best match against every script in the file.
 - Without `--out`, the MP4 takes its name from the resolved script title, icons
   included: `video-render/videos/<id>/<title>.mp4`. Characters that filesystems
   reject (`:`, `?`, `/`, quotes, and so on) become spaces or a dash. Without

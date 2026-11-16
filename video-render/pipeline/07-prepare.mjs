@@ -68,7 +68,10 @@ export async function prepareShort({ tmp, voiceFile, voiceSeconds, assets = [], 
     if (!timing.words?.length) throw new Error('se requiere transcripción para renderizar');
     writeJson(transcriptFile, timing);
   }
-  if (!timing.words?.length || timing.words.some(w => !Number.isFinite(w.start) || !Number.isFinite(w.end) || w.end <= w.start || w.start < 0 || w.end > voiceSeconds + .3))
+  if (!timing.words?.length) throw new Error('transcripción vacía o fuera de la duración de la voz');
+  // Mistral occasionally returns a zero-width span for a short word; keep it usable.
+  for (const word of timing.words) if (Number.isFinite(word.start) && word.end <= word.start) word.end = word.start + 0.02;
+  if (timing.words.some(w => !Number.isFinite(w.start) || !Number.isFinite(w.end) || w.end <= w.start || w.start < 0 || w.end > voiceSeconds + .3))
     throw new Error('transcripción vacía o fuera de la duración de la voz');
   const photos = [], previews = [], available = [];
   const unpin = pinPhotos(assets);

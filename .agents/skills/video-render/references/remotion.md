@@ -64,9 +64,9 @@ the job and Chromium has a network CSP. The font family is
 content's absolute timeline. A nested `Sequence` changes the frame origin; do not
 restart full-track captions in each shot or add another intro offset.
 
-The script is the reference text; transcription provides the clock. Fix reference
-words rather than editing timings. The CLI reports its chosen script and match
-percentage; the workflow defines correction and fallback handling.
+Subtitles are the voice transcription. The script only identifies the take and
+the output title; never replace spoken words with script text, and never edit
+timings by hand.
 
 ## Imports and runtime
 

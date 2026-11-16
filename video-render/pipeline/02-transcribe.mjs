@@ -1,7 +1,7 @@
 // Word timings for the voice: Mistral, then local whisper.cpp.
 // Each provider returns [{word, start, end}] in seconds. If one fails,
-// takes too long or hears nothing, it moves to the next. The final text
-// comes from the script (video-render/contract/timing.js); only timings matter here.
+// takes too long or hears nothing, it moves to the next. The heard text is also
+// the subtitle text; the script only identifies which take this is.
 import { execFile } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { promisify } from 'node:util';

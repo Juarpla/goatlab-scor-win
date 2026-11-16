@@ -20,11 +20,29 @@ function round3(n) {
   return Math.round(n * 1000) / 1000;
 }
 
+const BRAND_DOMAIN = 'goatlab.win';
+// Mistral mishears the closing domain in predictable ways; the voice always says the brand.
+const BRAND_TOKENS = new Set([
+  'goatlabwin', 'godlatwin', 'gotlatwin', 'gotlabwi', 'goatlabwi', 'godlabwin', 'gotlabwin', 'hotladwin',
+]);
+// Voxtral invents an English "thank you" over leading silence.
+const LEAD_ARTIFACT = /^thank you[.!]?$/i;
+
+function repairBrand(word) {
+  const bare = word.replace(/[.,;:!?]+$/, '');
+  if (!/^[a-z0-9-]+\.[a-z]{2,4}$/i.test(bare)) return word;
+  return BRAND_TOKENS.has(normalizeWord(bare)) ? `${BRAND_DOMAIN}${word.slice(bare.length)}` : word;
+}
+
 /** On-screen text is what was heard, with its timings. */
 export function cuesFromHeard(heard) {
-  const clean = (heard ?? [])
+  const sorted = (heard ?? [])
     .filter(h => h && Number.isFinite(h.start) && Number.isFinite(h.end) && String(h.word ?? '').trim())
-    .sort((a, b) => a.start - b.start);
+    .sort((a, b) => a.start - b.start)
+    .map(h => ({ ...h, word: repairBrand(String(h.word).trim()) }));
+  const clean = sorted.length >= 2 && LEAD_ARTIFACT.test(`${sorted[0].word} ${sorted[1].word}`)
+    ? sorted.slice(2)
+    : sorted;
   let floor = 0;
   return clean.map(h => {
     const start = Math.max(floor, h.start);

@@ -23,6 +23,20 @@ test('cuesFromHeard keeps the heard text and its timings', () => {
   assert.deepEqual(cuesFromHeard([]), []);
 });
 
+test('cuesFromHeard drops a leading hallucination and repairs the brand domain', () => {
+  const heard = [
+    { word: 'Thank', start: 0, end: 0.2 },
+    { word: 'you.', start: 0.2, end: 0.4 },
+    { word: 'Todo', start: 1.3, end: 1.5 },
+    { word: 'en', start: 1.5, end: 1.7 },
+    { word: 'godlat.win', start: 1.7, end: 2.2 },
+  ];
+  const cues = cuesFromHeard(heard);
+  assert.deepEqual(cues.map(c => c.word), ['Todo', 'en', 'goatlab.win']);
+  assert.equal(cues[0].start, 1.3);
+  assert.deepEqual(cuesFromHeard([{ word: 'madrid.com', start: 0, end: 1 }]).map(c => c.word), ['madrid.com']);
+});
+
 test('planShots corta entre 2 y 4 segundos', () => {
   const words = [
     { word: 'uno', start: 0, end: 1 },

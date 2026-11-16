@@ -1,6 +1,7 @@
 // Local render: media-pack + voice -> 1080x1920 MP4 via the configured renderer.
 // Usage: node --env-file=.env video-render/cli/render.mjs --match=<webId> [--audio=<file>] --plan=plan.json [--script=scripts.json --script-n=N] [--variant=N] [--out=output.mp4]
 // The audio defaults to the single file in video-render/audios/<match>/.
+// Subtitles are always the transcription of the voice; the script only identifies the take.
 // Requires Node 22, ffmpeg, ffprobe and `npm ci` in video-render/render/remotion.
 import { execFile } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -10,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { narrationText } from '../contract/narration.js';
 import { FPS, FRAME_H, FRAME_W, MAX_SECONDS } from '../contract/short-format.js';
+import { cuesFromHeard } from '../contract/timing.js';
 import {
   assertAudioInput,
   assertMatchId,
@@ -90,8 +92,8 @@ try {
 }
 if (!existsSync(audio)) fail(`audio no existe: ${audio}`);
 
-// The script is optional: if passed, it fixes names and figures Mistral
-// confuses, preserving its word timings.
+// The script is optional: if passed, it only identifies which published script
+// the take follows (title and log). Subtitles always come from the transcription.
 let reference = '', scriptCandidates = null, scriptsDocument = null, scriptTitle = '', alignment = null;
 if (args.script) {
   scriptsDocument = load(args.script);
@@ -140,8 +142,8 @@ async function scriptTimes({ tmp, voiceFile, voiceSeconds, log }) {
     const script = (scriptsDocument?.scripts ?? []).find(item => item?.n === aligned.n);
     scriptTitle = String(script?.title ?? '');
   }
-  log(`guion: ${args['script-n'] ? '' : `script ${aligned.n}, `}${Math.round(aligned.score * 100)}% de coincidencia; ${aligned.words.length} palabras`);
-  return { provider: `${provider}+guion`, words: aligned.score >= .5 ? aligned.words : words, heard: words, errors };
+  log(`voz: ${args['script-n'] ? '' : `script ${aligned.n}, `}${Math.round(aligned.score * 100)}% de coincidencia; subtítulos desde ${words.length} palabras transcritas`);
+  return { provider, words: cuesFromHeard(words), heard: words, errors, alignment };
 }
 
 try {
