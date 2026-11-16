@@ -22,16 +22,13 @@ function round3(n) {
 
 const BRAND_DOMAIN = 'goatlab.win';
 // Mistral mishears the closing domain in predictable ways; the voice always says the brand.
-const BRAND_TOKENS = new Set([
-  'goatlabwin', 'godlatwin', 'gotlatwin', 'gotlabwi', 'goatlabwi', 'godlabwin', 'gotlabwin', 'hotladwin',
-]);
+const BRAND_SHAPE = /^(?:go|ho)[dta][a-z]{0,5}\.(?:win|wing|wi|we|com|ru|net)$/i;
 // Voxtral invents an English "thank you" over leading silence.
 const LEAD_ARTIFACT = /^thank you[.!]?$/i;
 
 function repairBrand(word) {
   const bare = word.replace(/[.,;:!?]+$/, '');
-  if (!/^[a-z0-9-]+\.[a-z]{2,4}$/i.test(bare)) return word;
-  return BRAND_TOKENS.has(normalizeWord(bare)) ? `${BRAND_DOMAIN}${word.slice(bare.length)}` : word;
+  return BRAND_SHAPE.test(bare) ? `${BRAND_DOMAIN}${word.slice(bare.length)}` : word;
 }
 
 /** On-screen text is what was heard, with its timings. */

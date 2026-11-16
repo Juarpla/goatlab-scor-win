@@ -249,9 +249,9 @@ node --env-file=.env video-render/cli/render.mjs \
 - `RENDER_WORKERS=4` uses four cores; raise or lower it for the machine.
 - `LAYOUT_CHECK=advisory` warns about text outside the safe area without blocking.
 - `RENDER_CRF=23` keeps most files under 45 MB.
-- `--script` is optional: with it, subtitles use the script text and Mistral's
-  timings. `--script-n` fixes the script; without it the best match is chosen.
-  Without `--script`, the raw transcription is used.
+- `--script` is optional: with it, the CLI identifies the take and takes the
+  output name from its title. Subtitles always come from the voice transcription.
+  `--script-n` fixes the script; without it the best match is chosen.
 - `--keep` saves `<title>.composition.json` in `video-render/work/<id>/`.
 - Each render records an entry in `video-render/work/<id>/manifest.json`.
 - Run with a long timeout (30 to 60 min).
@@ -261,7 +261,7 @@ node --env-file=.env video-render/cli/render.mjs \
 | Failure | Fix |
 | --- | --- |
 | `VOICE_TOO_LONG` | audio longer than 58.3 s: trim, split or re-record |
-| `guion:` below 50 | write a corrected reference and re-render |
+| `voz:` below 50 | the take diverges from the published script; subtitles still come from the audio, so only check that the title and figures on screen are true |
 | `compilación` / `compilación JSX` | fix imports or JSX |
 | `presupuesto de captura` | raise `CAPTURE_BUDGET_MS` or simplify the most expensive scene |
 | `falta la música de fondo` | restore `video-render/soundtracks/bed.mp3` |
@@ -321,8 +321,8 @@ ffmpeg -hide_banner -t "$CONTENT" -i "$OUT" -vf blackdetect=d=0.5:pix_th=0.10 \
 No `blackdetect` events means this detector found no qualifying black segment.
 If something is wrong, edit the plan and render with `--variant=2`; never deliver a broken file. Closure criterion: you reviewed at least 5
 frames plus the endcard, checked temporal behavior as described above, the
-technical probe matches and the `guion:` score was acceptable or you used the
-corrected reference. Disclose any review limitation at delivery.
+technical probe matches and the subtitles match the spoken audio. Disclose any
+review limitation at delivery.
 
 ## Step 7 — Deliver
 
