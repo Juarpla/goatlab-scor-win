@@ -1,57 +1,6 @@
 {
-  "updatedAt": "2026-11-16T22:07:36.226Z",
+  "updatedAt": "2026-11-16T22:24:52.325Z",
   "runs": [
-    {
-      "at": "2026-11-09T16:36:57.662Z",
-      "matchId": "bz-212687",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "57bb4282-f1f3-42bc-b504-359ba9f21f0c"
-    },
-    {
-      "at": "2026-11-09T16:37:27.597Z",
-      "matchId": "bz-212694",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1544,
-        "outputTokens": 2197
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "3613328a-e139-41e3-9e9f-8018228affb3"
-    },
-    {
-      "at": "2026-11-09T16:37:27.597Z",
-      "matchId": "bz-212692",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "3613328a-e139-41e3-9e9f-8018228affb3"
-    },
     {
       "at": "2026-11-09T16:42:02.250Z",
       "matchId": "bz-212691",
@@ -6903,6 +6852,137 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "64901309-6d7f-4517-b7c8-835bbee3e16a"
+    },
+    {
+      "at": "2026-11-16T22:11:57.697Z",
+      "task": "shorts",
+      "matchId": "barcelona-vs-villarreal-2026-11-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: cifra 67 no está en los hechos; guion 7: 5 cifras, máximo 3; guion 7: porcentajes bloqueados: evaluation.published es false; guion 8: falta FC Barcelona",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7737,
+            "outputTokens": 3427
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10015
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 204517
+      },
+      "usage": {
+        "inputTokens": 7333,
+        "outputTokens": 21755
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "c3122f9f-5e6a-40be-8f14-1b90d39fd5f8"
+    },
+    {
+      "at": "2026-11-16T22:24:45.534Z",
+      "task": "shorts",
+      "matchId": "poland-vs-sweden-2026-11-17",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 7 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: cifra 2026 no está en los hechos; guion 7: cifra 40 no está en los hechos; guion 7: 5 cifras, máximo 3; guion 7: porcentajes bloqueados: evaluation.published es false",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7629,
+            "outputTokens": 2947
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9179
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "validation",
+          "reason": "guion 6: cifra 2022 no está en los hechos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7304,
+            "outputTokens": 22996
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 196736
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "validation",
+          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: cifra 11.7 no está en los hechos; guion 10: cifra 11.6 no está en los hechos; guion 10: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7159,
+            "outputTokens": 35184
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 347318
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 1: 54 palabras, mínimo 55; guion 2: 4 cifras, máximo 3; guion 2: 51 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 3: 53 palabras, mínimo 55; guion 4: falta Suecia; guion 4: 53 palabras, mínimo 55; guion 5: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7769,
+            "outputTokens": 2406
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14849
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: cifra 11.7 no está en los hechos; guion 10: cifra 11.6 no está en los hechos; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7152,
+            "outputTokens": 9018
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 199750
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7152,
+        "outputTokens": 9018
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-16T22:24:52.325Z",
+      "task": "image-prompts",
+      "matchId": "poland-vs-sweden-2026-11-17",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2686,
+        "outputTokens": 2109
+      }
     }
   ]
 }
