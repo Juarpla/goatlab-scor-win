@@ -4,7 +4,7 @@
   "away": "Luxembourg",
   "competition": "nations",
   "kickoff": "2026-11-16T17:00:00+00:00",
-  "updatedAt": "2026-11-16T06:29:43.091Z",
+  "updatedAt": "2026-11-16T15:30:12.786Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -58,7 +58,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-15T22:48:08.690Z",
+      "updatedAt": "2026-11-16T15:29:52.315Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -69,11 +69,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-15T22:48:08.690Z",
+      "updatedAt": "2026-11-16T15:29:52.315Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 428
+      "rows": 436
     },
     "venue": null
   },
@@ -212,10 +212,10 @@
     },
     "over15": 0.773,
     "over25": 0.5489999999999999,
-    "over35": 0.316,
-    "btts": 0.424,
+    "over35": 0.317,
+    "btts": 0.42200000000000004,
     "score": "1-0",
-    "cornersOver95": 0.39399999999999996,
+    "cornersOver95": 0.39299999999999996,
     "recommendations": {
       "favorite": "H",
       "favoriteProb": 0.748,
@@ -224,7 +224,7 @@
     },
     "confidence": 0.748,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-16T06:29:38.404Z",
+    "capturedAt": "2026-11-16T15:29:57.664Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -344,7 +344,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 428
+      "historyRows": 436
     },
     "source": "GoatLab",
     "expectedTotal": 4.4
@@ -355,7 +355,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 428
+      "historyRows": 436
     },
     "source": "GoatLab",
     "expectedTotal": 8.6
@@ -363,25 +363,25 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.2,
-      "shotsOnTarget": 4.99,
+      "shots": 13.3,
+      "shotsOnTarget": 5.05,
       "xg": 1.69,
-      "corners": 4.67,
+      "corners": 4.69,
       "fouls": 11.84,
       "yellowCards": 2.11,
-      "redCards": 0.13,
-      "offsides": 1.87,
+      "redCards": 0.11,
+      "offsides": 1.86,
       "possession": 49.17
     },
     "away": {
-      "shots": 11.75,
-      "shotsOnTarget": 3.99,
+      "shots": 11.85,
+      "shotsOnTarget": 4.05,
       "xg": 0.86,
-      "corners": 3.9,
-      "fouls": 12.15,
+      "corners": 3.92,
+      "fouls": 12.16,
       "yellowCards": 2.25,
-      "redCards": 0.13,
-      "offsides": 1.64,
+      "redCards": 0.11,
+      "offsides": 1.63,
       "possession": 50.83
     },
     "sample": {
@@ -414,14 +414,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.37,
-      "shotsOnTarget": 4.48,
-      "xg": 1.36,
-      "corners": 4.73,
+      "shots": 13.56,
+      "shotsOnTarget": 4.58,
+      "xg": 1.4,
+      "corners": 4.77,
       "fouls": 11.62,
       "yellowCards": 2.04,
-      "redCards": 0.23,
-      "offsides": 1.59
+      "redCards": 0.21,
+      "offsides": 1.57
     },
     "sources": {
       "home": {
@@ -473,24 +473,24 @@
     },
     "cornerRace": {
       "3": {
-        "home": 0.584,
-        "away": 0.416
+        "home": 0.583,
+        "away": 0.417
       },
       "5": {
         "home": 0.609,
         "away": 0.391
       },
       "7": {
-        "home": 0.63,
-        "away": 0.37
+        "home": 0.629,
+        "away": 0.371
       }
     },
     "cornerMargin": {
-      "home3plus": 0.272,
-      "home12": 0.263,
+      "home3plus": 0.273,
+      "home12": 0.262,
       "level": 0.134,
       "away12": 0.202,
-      "away3plus": 0.128
+      "away3plus": 0.129
     },
     "source": "GoatLab"
   },
@@ -576,10 +576,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": "La probabilidad de victoria de Islandia es alta en ambos modelos (P y B), coherente con el rendimiento reciente (goles a favor) y el histórico favorable. No se detectan desviaciones claras.",
+    "flag": true,
+    "note": "Existe una desviación marcada entre el modelo Poisson (15% para Islandia) y CatBoost Bzzoiro (74.8% para Islandia) en la probabilidad de victoria. La forma reciente de Islandia (5 victorias, 8 goles a favor) respalda fuertemente a Bzzoiro, mientras que la lectura de Poisson parece subestimar la vent",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-15T22:48:51.005Z"
+    "generatedAt": "2026-11-16T15:30:54.754Z"
   }
 }

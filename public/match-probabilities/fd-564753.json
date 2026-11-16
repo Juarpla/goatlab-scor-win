@@ -1,0 +1,607 @@
+{
+  "id": "fd-564753",
+  "home": "Getafe CF",
+  "away": "Club Atlético de Madrid",
+  "competition": "laliga",
+  "kickoff": "2026-11-22T20:00:00Z",
+  "updatedAt": "2026-11-16T15:30:12.786Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 0.9,
+      "away": 1.303
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 0.99,
+      "away": 1.366
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Getafe CF": {
+        "position": 15,
+        "team": "Getafe CF",
+        "played": 12,
+        "won": 3,
+        "drawn": 3,
+        "lost": 6,
+        "goalsFor": 8,
+        "goalsAgainst": 18,
+        "goalDifference": -10,
+        "points": 12,
+        "form": null
+      },
+      "Club Atlético de Madrid": {
+        "position": 3,
+        "team": "Club Atlético de Madrid",
+        "played": 12,
+        "won": 9,
+        "drawn": 1,
+        "lost": 2,
+        "goalsFor": 23,
+        "goalsAgainst": 10,
+        "goalDifference": 13,
+        "points": 28,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-16T15:29:38.885Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-22T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-16T15:29:38.885Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 436
+    },
+    "venue": {
+      "city": "Getafe",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.245,
+      "draw": 0.309,
+      "away": 0.446
+    },
+    "doubleChance": {
+      "12": 0.691,
+      "1X": 0.554,
+      "X2": 0.755
+    },
+    "dnb": {
+      "home": 0.354,
+      "away": 0.646
+    },
+    "totals": {
+      "over15": 0.659,
+      "under15": 0.341,
+      "over25": 0.378,
+      "under25": 0.622,
+      "over35": 0.181,
+      "under35": 0.819
+    },
+    "btts": {
+      "yes": 0.445,
+      "no": 0.555
+    },
+    "cleanSheet": {
+      "home": 0.272,
+      "away": 0.407
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.143
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.131
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.123
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.094
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.086
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.36,
+    "noGoal": 0.095,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.325
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.219
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.1
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.068
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.046
+      }
+    ],
+    "firstHome": 0.38,
+    "firstAway": 0.525
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Martín Satriano",
+        "goals": 3,
+        "matches": 12,
+        "share": 0.375,
+        "rate": 0.37,
+        "anytime": 0.31,
+        "first": 0.157
+      },
+      {
+        "player": "Enes Ünal",
+        "goals": 2,
+        "matches": 11,
+        "share": 0.25,
+        "rate": 0.25,
+        "anytime": 0.219,
+        "first": 0.105
+      }
+    ],
+    "away": null
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.262,
+      "draw": 0.282,
+      "away": 0.455,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.08,
+      "away": 1.43
+    },
+    "over15": 0.713,
+    "over25": 0.461,
+    "over35": 0.24,
+    "btts": 0.505,
+    "score": "1-1",
+    "cornersOver95": 0.488,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.455,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4554,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-16T15:30:04.808Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.272,
+      "draw": 0.29,
+      "away": 0.438
+    },
+    "doubleChance": {
+      "12": 0.71,
+      "1X": 0.562,
+      "X2": 0.728
+    },
+    "dnb": {
+      "home": 0.383,
+      "away": 0.617
+    },
+    "totals": {
+      "over15": 0.727,
+      "under15": 0.273,
+      "over25": 0.459,
+      "under25": 0.541,
+      "over35": 0.245,
+      "under35": 0.755
+    },
+    "btts": {
+      "yes": 0.515,
+      "no": 0.485
+    },
+    "cleanSheet": {
+      "home": 0.239,
+      "away": 0.34
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.13,
+        "share": 0.2594810379241518
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.104,
+        "share": 0.2075848303393214
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.094,
+        "share": 0.18762475049900204
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.09,
+        "share": 0.17964071856287428
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.083,
+        "share": 0.16566866267465075
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 46,
+    "homeWins": 5,
+    "draws": 10,
+    "awayWins": 31,
+    "avgTotalGoals": 2.4130434782608696,
+    "recent": [
+      {
+        "eventId": 220508,
+        "date": "2026-07-29T18:30:00+00:00",
+        "home": "Atlético Madrid",
+        "away": "Getafe",
+        "homeTeamId": 54,
+        "awayTeamId": 50,
+        "homeScore": 4,
+        "awayScore": 1
+      },
+      {
+        "eventId": 961,
+        "date": "2026-03-14T15:15:00+00:00",
+        "home": "Atlético Madrid",
+        "away": "Getafe",
+        "homeTeamId": 54,
+        "awayTeamId": 50,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 818,
+        "date": "2025-11-23T17:30:00+00:00",
+        "home": "Getafe",
+        "away": "Atlético Madrid",
+        "homeTeamId": 50,
+        "awayTeamId": 54,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 305617,
+        "date": "2025-03-09T13:00:00+00:00",
+        "home": "Getafe",
+        "away": "Atlético Madrid",
+        "homeTeamId": 50,
+        "awayTeamId": 54,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 231632,
+        "date": "2025-02-04T20:30:00+00:00",
+        "home": "Atlético Madrid",
+        "away": "Getafe",
+        "homeTeamId": 54,
+        "awayTeamId": 50,
+        "homeScore": 5,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 436
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.6
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 436
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.7
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 12.16,
+      "shotsOnTarget": 4.14,
+      "xg": 1.08,
+      "corners": 4.28,
+      "fouls": 12.89,
+      "yellowCards": 2.37,
+      "redCards": 0.36,
+      "offsides": 1.61,
+      "possession": 42.82
+    },
+    "away": {
+      "shots": 14.96,
+      "shotsOnTarget": 5.03,
+      "xg": 1.43,
+      "corners": 5.42,
+      "fouls": 11.85,
+      "yellowCards": 2.27,
+      "redCards": 0.25,
+      "offsides": 1.97,
+      "possession": 57.18
+    },
+    "sample": {
+      "home": 10,
+      "away": 8
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 8,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 8,
+        "shots": 8,
+        "shotsOnTarget": 8,
+        "xg": 8,
+        "corners": 8,
+        "fouls": 8,
+        "yellowCards": 8,
+        "redCards": 3,
+        "offsides": 8
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.68,
+      "shotsOnTarget": 4.7,
+      "xg": 1.45,
+      "corners": 4.81,
+      "fouls": 12.19,
+      "yellowCards": 2.27,
+      "redCards": 0.25,
+      "offsides": 2.06
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.298,
+      "draw": 0.122,
+      "away": 0.58
+    },
+    "cardsDuel": {
+      "home": 0.423,
+      "draw": 0.191,
+      "away": 0.387
+    },
+    "lastGoal": {
+      "home": 0.38,
+      "away": 0.525,
+      "noGoal": 0.095
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.391,
+        "away": 0.609
+      },
+      "5": {
+        "home": 0.358,
+        "away": 0.642
+      },
+      "7": {
+        "home": 0.332,
+        "away": 0.668
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.118,
+      "home12": 0.18,
+      "level": 0.122,
+      "away12": 0.254,
+      "away3plus": 0.327
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 2.8,
+      "condition": "rain",
+      "sampledAt": "2026-11-22T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Coliseum",
+      "city": "Getafe",
+      "capacity": 17393,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Getafe CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 15,
+        "played": 12,
+        "gf": 8,
+        "ga": 18,
+        "provider": null
+      },
+      "player": {
+        "name": "Martín Satriano",
+        "detail": "3 goles en 12 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Club Atlético de Madrid",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 3,
+        "played": 12,
+        "gf": 23,
+        "ga": 10,
+        "provider": null
+      },
+      "player": null
+    }
+  },
+  "llmReview": null
+}
