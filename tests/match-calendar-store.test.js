@@ -16,10 +16,11 @@ function database(failSync) {
       return {
         prepare(sql) {
           if (sql.includes('match_calendar_sync')) {
-            return { async first() {
+            const first = async () => {
               if (failSync) throw quotaError;
               return { feed_at: now + 1000, activated_at: now };
-            } };
+            };
+            return { first, async all() { return { results: [await first()] }; } };
           }
           const fail = async () => { throw quotaError; };
           return { bind: () => ({ all: fail, first: fail }) };
@@ -60,4 +61,70 @@ test('an older snapshot retains upcoming fixtures and expires when its schedule 
   const exhausted = await matchCalendar(env, now + 8 * 86_400_000);
   await assert.rejects(exhausted.list(), quotaError);
   await assert.rejects(exhausted.get(future.webId ?? future.id), quotaError);
+});
+
+test('wall and sitemap requests share a calendar read and apply time boundaries after a cache hit', async () => {
+  const storage = new Map();
+  const cache = {
+    async match(key) { return storage.get(key)?.clone(); },
+    async put(key, response) { storage.set(key, response.clone()); },
+  };
+  const edgeMatch = { ...match, kickoff: new Date(now - 3 * 3_600_000 + 1000).toISOString(), status: 'NS' };
+  let queries = 0;
+  const response = results => ({ results, meta: { rows_read: results.length } });
+  const env = { GOATLAB_DB: { withSession: () => ({ prepare(sql) {
+    if (sql.includes('match_calendar_sync')) return {
+      async all() { queries++; return response([{ feed_at: now, activated_at: now }]); },
+      async first() { queries++; return { feed_at: now, activated_at: now }; },
+    };
+    return { bind: () => ({ async all() {
+      queries++;
+      return response([{ slug, payload: JSON.stringify(edgeMatch), reading: null, indexable: 1 }]);
+    } }) };
+  } }) } };
+  const wall = await matchCalendar(env, now, cache);
+  assert.equal((await wall.list()).length, 1);
+  assert.equal(wall.listTiming, 'calendar-cache;desc="miss", calendar-d1-rows;desc="2"');
+  assert.equal([...storage.values()][0].headers.get('Cache-Control'), 'public, max-age=45');
+  const sitemap = await matchCalendar(env, now + 2000, cache);
+  assert.deepEqual(await sitemap.list({ forSitemap: true }), []);
+  assert.equal(sitemap.listTiming, 'calendar-cache;desc="hit", calendar-d1-rows;desc="0"');
+  assert.equal(queries, 2);
+  assert.equal(sitemap.updatedAt, fixtures.updatedAt);
+});
+
+test('a D1 error serves the snapshot without caching an outage', async () => {
+  let writes = 0;
+  const cache = { async match() { throw new Error('cache unavailable'); }, async put() { writes++; } };
+  const calendar = await matchCalendar({ GOATLAB_DB: database(true) }, now, cache);
+  assert.deepEqual((await calendar.list()).map(record => record.match), visible);
+  assert.equal(calendar.listTiming, 'calendar-cache;desc="fallback"');
+  assert.equal(writes, 0);
+});
+
+test('the shadow check can be cached without caching the bundled snapshot or changing detail reads', async () => {
+  let entry;
+  let sqlCalls = 0;
+  const cache = {
+    async match() { return entry?.clone(); },
+    async put(key, response) { entry = response.clone(); },
+  };
+  const env = { GOATLAB_DB: { withSession: () => ({ prepare(sql) {
+    assert.match(sql, /match_calendar_sync/);
+    return {
+      async all() { sqlCalls++; return { results: [{ activated_at: null }], meta: { rows_read: 1 } }; },
+      async first() { sqlCalls++; return { activated_at: null }; },
+    };
+  } }) } };
+  const initial = await matchCalendar(env, now, cache);
+  assert.deepEqual((await initial.list()).map(record => record.match), visible);
+  assert.deepEqual(await entry.clone().json(), { rows: null });
+
+  const followUp = await matchCalendar(env, now, cache);
+  assert.deepEqual((await followUp.list()).map(record => record.match), visible);
+  assert.equal(followUp.isDegraded, false);
+  assert.equal(followUp.listTiming, 'calendar-cache;desc="hit", calendar-d1-rows;desc="0"');
+  assert.equal(sqlCalls, 1);
+  assert.equal((await followUp.get(match.id)).slug, slug);
+  assert.equal(sqlCalls, 2);
 });

@@ -30,6 +30,7 @@ Astro.response.headers.set('Cache-Control', 'no-store');
 try {
   const calendar = await matchCalendar(env);
   matches = (await calendar.list()).map(({ match }) => match);
+  if (calendar.listTiming) Astro.response.headers.append('Server-Timing', calendar.listTiming);
   lastUpdate = calendar.updatedAt;
 } catch (error) {
   console.error('Match calendar unavailable', error);
