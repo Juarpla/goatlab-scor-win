@@ -1,4 +1,4 @@
-import { MATCH_WINDOW, SCHEDULE_WINDOW, fixtureIsIndexable, fixtureIsVisible, isSafeMatchId, matchRetirement } from './match-calendar.js';
+import { DAY, MATCH_WINDOW, SCHEDULE_WINDOW, fixtureIsIndexable, fixtureIsVisible, isSafeMatchId, matchRetirement } from './match-calendar.js';
 import { archive, editorialReading, fixtures, ledger } from './match-feed.js';
 
 let fallbackIndex;
@@ -50,14 +50,16 @@ const LIST = `SELECT slug, payload, reading, retire_at, indexable FROM match_cal
  WHERE payload IS NOT NULL AND kickoff > ? AND kickoff <= ?
  ORDER BY kickoff, slug`;
 
-export async function matchCalendar(env) {
-  const now = Date.now();
-  if (!env.GOATLAB_DB || env.GOATLAB_D1_MODE === 'json') return fallback(now);
+export async function matchCalendar(env, now = Date.now()) {
+  const snapshot = fallback(now);
+  if (!env.GOATLAB_DB || env.GOATLAB_D1_MODE === 'json') return snapshot;
+  let primary;
+  let failure;
   try {
     const db = env.GOATLAB_DB.withSession('first-primary');
     const sync = await db.prepare('SELECT feed_at, activated_at FROM match_calendar_sync WHERE id = 1').first();
-    if (!sync?.activated_at) return fallback(now);
-    return {
+    if (!sync?.activated_at) return snapshot;
+    primary = {
       updatedAt: new Date(sync.feed_at).toISOString(),
       async list() {
         const { results } = await db.prepare(LIST).bind(now - MATCH_WINDOW, now + SCHEDULE_WINDOW).all();
@@ -72,9 +74,32 @@ export async function matchCalendar(env) {
     };
   } catch (error) {
     // Local Wrangler gets its own empty D1 until the migration is applied.
-    if (import.meta.env.DEV && /no such table/i.test(String(error.cause ?? error.message))) return fallback(now);
-    throw error;
+    if (import.meta.env?.DEV && /no such table/i.test(String(error.cause ?? error.message))) return snapshot;
+    failure = error;
   }
+
+  async function read(method, input) {
+    if (primary) {
+      try {
+        return await primary[method](input);
+      } catch (error) {
+        primary = null;
+        failure = error;
+      }
+    }
+    const age = now - Date.parse(snapshot.updatedAt);
+    if (!(age >= 0 && age <= DAY)) throw failure;
+    const result = await snapshot[method](input);
+    // A snapshot miss cannot distinguish an unknown fixture from a newer D1 row.
+    if (result === null) throw failure;
+    return result;
+  }
+
+  return {
+    get updatedAt() { return primary?.updatedAt ?? snapshot.updatedAt; },
+    list: options => read('list', options),
+    get: id => isSafeMatchId(id) ? read('get', id) : Promise.resolve(null),
+  };
 }
 
 function fallback(now) {

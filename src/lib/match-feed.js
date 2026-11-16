@@ -1,12 +1,12 @@
-import fixtures from '../../public/data/fixtures.json';
-import results from '../../public/data/results.json';
-import ledger from '../../public/data/finished-at.json';
-import archive from '../../public/data/match-archive.json';
-import analyses from '../../public/data/llm-analysis.json';
-import standings from '../../public/data/standings.json';
-import scorers from '../../public/data/scorers.json';
-import scorerFallback from '../../public/data/scorer-fallback.json';
-import weather from '../../public/data/weather.json';
+import fixtures from '../../public/data/fixtures.json' with { type: 'json' };
+import results from '../../public/data/results.json' with { type: 'json' };
+import ledger from '../../public/data/finished-at.json' with { type: 'json' };
+import archive from '../../public/data/match-archive.json' with { type: 'json' };
+import analyses from '../../public/data/llm-analysis.json' with { type: 'json' };
+import standings from '../../public/data/standings.json' with { type: 'json' };
+import scorers from '../../public/data/scorers.json' with { type: 'json' };
+import scorerFallback from '../../public/data/scorer-fallback.json' with { type: 'json' };
+import weather from '../../public/data/weather.json' with { type: 'json' };
 import { withScorerFallback } from './probabilities.js';
 import { editorialMatch, pageReading } from './match-calendar.js';
 
