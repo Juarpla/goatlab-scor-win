@@ -1,102 +1,6 @@
 {
-  "updatedAt": "2026-11-16T16:13:54.385Z",
+  "updatedAt": "2026-11-16T22:07:36.226Z",
   "runs": [
-    {
-      "at": "2026-11-09T16:36:25.372Z",
-      "matchId": "bz-212688",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 156
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 152
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1028,
-            "outputTokens": 1805
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 17098
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 979,
-            "outputTokens": 3664
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 53376
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 979,
-        "outputTokens": 3664
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-09T16:36:49.997Z",
-      "matchId": "bz-212687",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1068,
-        "outputTokens": 1277
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "f6de9862-e237-4a28-9830-f00ef4ad4195"
-    },
-    {
-      "at": "2026-11-09T16:36:57.662Z",
-      "matchId": "bz-212688",
-      "attempts": 1,
-      "failures": [],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1521,
-        "outputTokens": 3892
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "57bb4282-f1f3-42bc-b504-359ba9f21f0c"
-    },
     {
       "at": "2026-11-09T16:36:57.662Z",
       "matchId": "bz-212687",
@@ -6945,6 +6849,60 @@
         "inputTokens": 2822,
         "outputTokens": 2027
       }
+    },
+    {
+      "at": "2026-11-16T22:07:10.650Z",
+      "matchId": "bz-212736",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "OPENCODE_GO_FALLBACK",
+        "model": "glm-5.3-flash"
+      },
+      "usage": {
+        "inputTokens": 1099,
+        "outputTokens": 13197
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "3144195b-274c-457a-a6e9-f87d23806692"
+    },
+    {
+      "at": "2026-11-16T22:07:21.352Z",
+      "matchId": "bz-212735",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1254,
+        "outputTokens": 1037
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "d33e4cc6-3e9e-4b55-9d44-2d137b95cd5e"
+    },
+    {
+      "at": "2026-11-16T22:07:29.379Z",
+      "matchId": "bz-212734",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1110,
+        "outputTokens": 837
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "64901309-6d7f-4517-b7c8-835bbee3e16a"
     }
   ]
 }
