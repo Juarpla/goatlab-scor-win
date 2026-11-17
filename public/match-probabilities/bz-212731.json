@@ -4,7 +4,7 @@
   "away": "Northern Ireland",
   "competition": "nations",
   "kickoff": "2026-11-17T19:45:00+00:00",
-  "updatedAt": "2026-11-17T07:55:07.515Z",
+  "updatedAt": "2026-11-17T15:50:49.738Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -62,7 +62,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-16T15:29:52.315Z",
+      "updatedAt": "2026-11-17T15:50:32.926Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -70,11 +70,11 @@
     "resultsWindowDays": 180,
     "weather": null,
     "discipline": {
-      "updatedAt": "2026-11-16T15:29:52.315Z",
+      "updatedAt": "2026-11-17T15:50:32.926Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 436
+      "rows": 446
     },
     "venue": null
   },
@@ -193,8 +193,8 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.479,
-      "draw": 0.292,
+      "home": 0.47600000000000003,
+      "draw": 0.294,
       "away": 0.23,
       "predicted": "H"
     },
@@ -203,20 +203,20 @@
       "away": 1.05
     },
     "over15": 0.636,
-    "over25": 0.38,
+    "over25": 0.382,
     "over35": 0.187,
     "btts": 0.43799999999999994,
     "score": "1-1",
     "cornersOver95": 0.46299999999999997,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.479,
+      "favoriteProb": 0.476,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4785,
+    "confidence": 0.4761,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-17T07:54:53.294Z",
+    "capturedAt": "2026-11-17T15:50:42.161Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -346,10 +346,10 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 436
+      "historyRows": 446
     },
     "source": "GoatLab",
-    "expectedTotal": 4.4
+    "expectedTotal": 4.3
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -357,33 +357,33 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 436
+      "historyRows": 446
     },
     "source": "GoatLab",
-    "expectedTotal": 9.2
+    "expectedTotal": 9.1
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 13.18,
-      "shotsOnTarget": 4.06,
+      "shots": 13.16,
+      "shotsOnTarget": 4.04,
       "xg": 1.15,
-      "corners": 4.78,
-      "fouls": 12.51,
-      "yellowCards": 2.18,
-      "redCards": 0.12,
-      "offsides": 1.23,
+      "corners": 4.74,
+      "fouls": 12.53,
+      "yellowCards": 2.16,
+      "redCards": 0.1,
+      "offsides": 1.24,
       "possession": 53.86
     },
     "away": {
-      "shots": 12.59,
-      "shotsOnTarget": 3.97,
+      "shots": 12.57,
+      "shotsOnTarget": 3.95,
       "xg": 1.05,
-      "corners": 4.37,
-      "fouls": 11.92,
-      "yellowCards": 2.18,
-      "redCards": 0.16,
-      "offsides": 2.16,
+      "corners": 4.33,
+      "fouls": 11.94,
+      "yellowCards": 2.16,
+      "redCards": 0.15,
+      "offsides": 2.17,
       "possession": 46.14
     },
     "sample": {
@@ -416,14 +416,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.57,
-      "shotsOnTarget": 4.52,
-      "xg": 1.4,
-      "corners": 4.76,
-      "fouls": 11.68,
-      "yellowCards": 2.08,
-      "redCards": 0.22,
-      "offsides": 1.55
+      "shots": 13.54,
+      "shotsOnTarget": 4.49,
+      "xg": 1.39,
+      "corners": 4.69,
+      "fouls": 11.73,
+      "yellowCards": 2.04,
+      "redCards": 0.19,
+      "offsides": 1.56
     },
     "sources": {
       "home": {
@@ -465,7 +465,7 @@
     },
     "cardsDuel": {
       "home": 0.401,
-      "draw": 0.198,
+      "draw": 0.199,
       "away": 0.401
     },
     "lastGoal": {
@@ -483,16 +483,16 @@
         "away": 0.445
       },
       "7": {
-        "home": 0.565,
-        "away": 0.435
+        "home": 0.566,
+        "away": 0.434
       }
     },
     "cornerMargin": {
-      "home3plus": 0.241,
-      "home12": 0.246,
+      "home3plus": 0.24,
+      "home12": 0.247,
       "level": 0.133,
       "away12": 0.216,
-      "away3plus": 0.165
+      "away3plus": 0.163
     },
     "source": "GoatLab"
   },
@@ -580,5 +580,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "Contradicción en el modelo Bzzoiro: el marcador más probable declarado es 1-1, pero la lectura de 'ambos anotan' es 'no' (lo cual es lógicamente incorrecto para un 1-1). Además, Poisson da 0.9 a Hungría y 0.767 a Irlanda del Norte, pero Bzzoiro da 1.15 y 1.05 respectivamente, mostrando dispersión en",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-17T15:51:55.578Z"
+  }
 }
