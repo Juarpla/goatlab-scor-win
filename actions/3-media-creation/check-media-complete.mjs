@@ -48,8 +48,9 @@ export async function checkMediaComplete({ repo = process.cwd(), args = {}, env 
   const { top, fixtures } = await readContentSelection({ repo, env });
   const freshness = topFreshness(top, { now, env, manual: !!args['--match'] });
   const result = { complete: false, reason: '', eligible: 0, pending: 0, top_age_h: freshness.ageHours, top_stale: freshness.stale, exitCode: 0 };
-  if (!freshness.valid) return { ...result, reason: `top-${freshness.reason}`, exitCode: 2 };
+  if (!freshness.valid && !freshness.stale) return { ...result, reason: `top-${freshness.reason}`, exitCode: 2 };
   if (!fixtures || !Array.isArray(fixtures.matches)) return { ...result, reason: 'fixtures-invalid', exitCode: 2 };
+  if (!freshness.valid) return { ...result, reason: 'top-stale' };
   let matches;
   const requested = args['--match'];
   if (requested) {

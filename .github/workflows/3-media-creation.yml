@@ -108,41 +108,47 @@ jobs:
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
           node actions/3-media-creation/check-media-complete.mjs "${args[@]}"
+      - name: Report deferred run
+        if: steps.check.outputs.reason == 'top-stale'
+        run: |
+          message='Generación pospuesta porque el ranking superó su límite de antigüedad. Ejecuta 1-update-data para actualizarlo o indica un partido en match.'
+          echo "::notice::$message"
+          echo "$message" >> "$GITHUB_STEP_SUMMARY"
       - name: Private state preflight
-        if: steps.check.outputs.complete == 'false'
+        if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
         run: node actions/3-media-creation/agnes-preflight.mjs
       - uses: pnpm/action-setup@v6
-        if: steps.check.outputs.complete == 'false'
+        if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
       - name: Install dependencies
-        if: steps.check.outputs.complete == 'false'
+        if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
         run: pnpm install --frozen-lockfile
       - uses: actions/setup-python@v6
-        if: steps.check.outputs.complete == 'false'
+        if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
         with:
           python-version: '3.12'
       - name: ffmpeg
-        if: steps.check.outputs.complete == 'false'
+        if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Generate Agnes bank
         id: generate
-        if: steps.check.outputs.complete == 'false'
+        if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
         run: |
           args=()
           if [ -n "$MATCH" ]; then args+=("--match=$MATCH"); fi
           if [ -n "$LIMIT" ]; then args+=("--limit=$LIMIT"); fi
           pnpm media "${args[@]}"
       - name: Generation summary
-        if: always()
+        if: always() && steps.check.outputs.reason != 'top-stale'
         run: node actions/3-media-creation/media-run-summary.mjs
       - name: Sanitized reports
-        if: always()
+        if: always() && steps.check.outputs.reason != 'top-stale'
         run: node actions/3-media-creation/export-agnes-reports.mjs
         continue-on-error: true
       - name: JSON-only artifact
-        if: always()
+        if: always() && steps.check.outputs.reason != 'top-stale'
         run: rm -rf public/data/media-pack/gen public/data/media-pack/agnes.sqlite*
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.check.outputs.reason != 'top-stale'
         with:
           name: goatlab-media-bank
           include-hidden-files: true
@@ -166,7 +172,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Selective commit and push
-        if: always()
+        if: always() && steps.check.outputs.reason != 'top-stale'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -123,10 +123,17 @@ test('top gating rejects invalid and future input, with manual bypass limited to
     }
   }
   await f.put('top.json', { version: 1, generatedAt: stamp(-8 * 3600_000), ranking: [{ id: 'alpha-beta' }] });
-  assert.equal((await f.check()).reason, 'top-stale');
+  const stale = await f.check();
+  assert.equal(stale.reason, 'top-stale');
+  assert.equal(stale.complete, false);
+  assert.equal(stale.exitCode, 0);
   const manual = await f.check({ '--match': 'provider-alpha-beta' });
   assert.equal(manual.complete, true);
   assert.equal(manual.top_stale, true);
+  await f.put('fixtures.json', { matches: null });
+  const invalidFixtures = await f.check();
+  assert.equal(invalidFixtures.reason, 'fixtures-invalid');
+  assert.equal(invalidFixtures.exitCode, 2);
 });
 test('manual fallback uses a valid script identity without manufacturing NS status', async t => {
   const f = await fixture(t); await f.complete();
@@ -157,7 +164,7 @@ test('adopted clip ordinals one through six follow cycling prompts and retained 
   await f.put('media-pack/alpha-beta.json', invalid);
   assert.equal((await f.check()).complete, false);
 });
-test('CLI emits the same stable fields to stdout and GITHUB_OUTPUT and exits two for invalid top', async t => {
+test('CLI emits matching outputs, defers stale rankings, and exits two for invalid top', async t => {
   const f = await fixture(t, []);
   await f.put('top.json', { version: 1, generatedAt: new Date().toISOString(), ranking: [] });
   const output = join(f.repo, 'github-output');
@@ -166,6 +173,11 @@ test('CLI emits the same stable fields to stdout and GITHUB_OUTPUT and exits two
   assert.equal(good.status, 0, good.stderr);
   assert.match(good.stdout, /^complete=true\nreason=no-eligible\neligible=0\npending=0\ntop_age_h=/);
   assert.equal(await readFile(output, 'utf8'), good.stdout);
+  await f.put('top.json', { version: 1, generatedAt: new Date(Date.now() - 8 * 3600_000).toISOString(), ranking: [] });
+  const stale = run();
+  assert.equal(stale.status, 0, stale.stderr);
+  assert.match(stale.stdout, /^complete=false\nreason=top-stale\neligible=0\npending=0\n/);
+  assert.ok((await readFile(output, 'utf8')).endsWith(stale.stdout));
   await f.put('top.json', { version: 9 });
   const bad = run();
   assert.equal(bad.status, 2);
