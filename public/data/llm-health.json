@@ -1,168 +1,6 @@
 {
-  "updatedAt": "2026-11-17T16:47:43.984Z",
+  "updatedAt": "2026-11-17T20:56:43.459Z",
   "runs": [
-    {
-      "at": "2026-11-11T06:38:34.018Z",
-      "task": "shorts",
-      "matchId": "turkiye-vs-belgium-2026-11-12",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 151
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 85
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 2: el cero no se escribe en dígitos; guion 2: 6 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7610,
-            "outputTokens": 2860
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 27231
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 2: el cero no se escribe en dígitos; guion 2: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: 4 cifras, máximo 3; guion 10: cifra 11.6 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7084,
-            "outputTokens": 7636
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 145365
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7084,
-        "outputTokens": 7636
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-11T06:41:53.973Z",
-      "task": "shorts",
-      "matchId": "armenia-vs-cyprus-2026-11-12",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 111
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 91
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "guion 5: falta Chipre; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7473,
-            "outputTokens": 2733
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 23832
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta Armenia; guion 2: el cero no se escribe en dígitos; guion 2: el cero no se escribe en dígitos; guion 2: 5 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: falta Armenia; guion 6: el cero no se escribe en dígitos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6901,
-            "outputTokens": 6677
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 175919
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6901,
-        "outputTokens": 6677
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-11T06:42:13.684Z",
-      "task": "image-prompts",
-      "matchId": "turkiye-vs-belgium-2026-11-12",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 115
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 67
-        }
-      ],
-      "usage": {
-        "inputTokens": 2732,
-        "outputTokens": 2311
-      }
-    },
     {
       "at": "2026-11-11T06:42:29.423Z",
       "task": "image-prompts",
@@ -6022,6 +5860,60 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "c21614cc-8b23-407f-9f1e-8f6a31f03237"
+    },
+    {
+      "at": "2026-11-17T20:55:57.090Z",
+      "matchId": "bz-212736",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1193,
+        "outputTokens": 898
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "32c55d61-a39f-49da-a679-e5eddbf83d90"
+    },
+    {
+      "at": "2026-11-17T20:56:08.484Z",
+      "matchId": "bz-212735",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1254,
+        "outputTokens": 1297
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "5ddf50b5-753e-4d9d-b470-0ba78dcae53d"
+    },
+    {
+      "at": "2026-11-17T20:56:37.646Z",
+      "matchId": "bz-212734",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1111,
+        "outputTokens": 1063
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "0c9d40d7-cfc9-41e6-958c-765a37991f32"
     }
   ]
 }
