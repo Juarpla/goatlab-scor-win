@@ -1,149 +1,6 @@
 {
-  "updatedAt": "2026-11-16T22:24:52.325Z",
+  "updatedAt": "2026-11-17T08:05:56.662Z",
   "runs": [
-    {
-      "at": "2026-11-09T16:42:02.250Z",
-      "matchId": "bz-212691",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 177
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 143
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1083,
-            "outputTokens": 1597
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12936
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1083,
-        "outputTokens": 1279
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "301ea758-03d7-4b53-a5b2-d62fa0f2cad7"
-    },
-    {
-      "at": "2026-11-09T16:44:03.945Z",
-      "matchId": "bz-212690",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 146
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 401",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 156
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "ministral-8b-2512",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1084,
-            "outputTokens": 1364
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13223
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1030,
-            "outputTokens": 6347
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 103049
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1030,
-        "outputTokens": 6347
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-09T16:44:10.876Z",
-      "matchId": "bz-212691",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "MISTRAL",
-        "model": "ministral-8b-2512"
-      },
-      "usage": {
-        "inputTokens": 1592,
-        "outputTokens": 2479
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "d91a36f7-bf91-4fd8-959e-38170d9d2630"
-    },
     {
       "at": "2026-11-09T16:44:10.877Z",
       "matchId": "bz-212690",
@@ -6983,6 +6840,117 @@
         "inputTokens": 2686,
         "outputTokens": 2109
       }
+    },
+    {
+      "at": "2026-11-17T07:55:32.465Z",
+      "matchId": "bz-212736",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1193,
+        "outputTokens": 1118
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "061eabbb-e595-4b4a-b3bb-4d2cee5f65e7"
+    },
+    {
+      "at": "2026-11-17T08:05:37.089Z",
+      "matchId": "bz-212735",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1254,
+            "outputTokens": 1100
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6810
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1190,
+            "outputTokens": 1075
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7413
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1254,
+        "outputTokens": 975
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "c8f60795-3eac-444e-8030-2bf080ac0b83"
+    },
+    {
+      "at": "2026-11-17T08:05:48.976Z",
+      "matchId": "bz-212734",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1109,
+        "outputTokens": 928
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "09d733ad-eb30-4918-a578-3c4fcf62f767"
     }
   ]
 }
