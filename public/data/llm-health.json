@@ -1,19 +1,6 @@
 {
-  "updatedAt": "2026-11-17T08:05:56.662Z",
+  "updatedAt": "2026-11-17T08:13:44.819Z",
   "runs": [
-    {
-      "at": "2026-11-09T16:44:10.877Z",
-      "matchId": "bz-212690",
-      "attempts": 1,
-      "failures": [],
-      "ok": null,
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "d91a36f7-bf91-4fd8-959e-38170d9d2630"
-    },
     {
       "at": "2026-11-09T22:24:28.554Z",
       "matchId": "bz-212688",
@@ -6951,6 +6938,40 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "09d733ad-eb30-4918-a578-3c4fcf62f767"
+    },
+    {
+      "at": "2026-11-17T08:13:44.814Z",
+      "task": "shorts",
+      "matchId": "poland-vs-sweden-2026-11-17",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 53 palabras, mínimo 55; guion 4: falta Suecia; guion 5: 4 cifras, máximo 3; guion 5: 52 palabras, mínimo 55; guion 6: 49 palabras, mínimo 55; guion 7: falta Suecia; guion 7: 50 palabras, mínimo 55; guion 8: falta Suecia",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7500,
+            "outputTokens": 2269
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8711
+        }
+      ],
+      "ok": {
+        "provider": "OPENCODE_GO",
+        "model": "deepseek-v4.1-flash",
+        "latencyMs": 396881
+      },
+      "usage": {
+        "inputTokens": 7185,
+        "outputTokens": 40523
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "83bf465f-a061-402e-b73d-0b760aa2d12e"
     }
   ]
 }
