@@ -73,7 +73,7 @@ function dateWindow(date, days) {
 }
 /** Result row for the local results base (input of the form charts). */
 export function toResult(match) {
-  return { id: match.id, date: match.kickoff.slice(0, 10), competition: match.competition, home: match.home, away: match.away, homeScore: match.homeScore, awayScore: match.awayScore };
+  return { id: match.id, date: match.kickoff.slice(0, 10), kickoff: match.kickoff, competition: match.competition, home: match.home, away: match.away, homeScore: match.homeScore, awayScore: match.awayScore };
 }
 const byKickoff = (a, b) => (a.kickoff < b.kickoff ? -1 : a.kickoff > b.kickoff ? 1 : 0);
 /**
@@ -318,7 +318,7 @@ export async function getLeagueResults({ competition, season, env = {}, fetchImp
       const league = leagueByProviderId('fd', item.competition.code);
       if (!league || league.id !== competition.id || item.status !== 'FINISHED' || item.score.fullTime.home == null) return [];
       return [{
-        id: `fd-${item.id}`, date: item.utcDate.slice(0, 10), competition: league.id,
+        id: `fd-${item.id}`, date: item.utcDate.slice(0, 10), kickoff: item.utcDate, competition: league.id,
         home: item.homeTeam.name, away: item.awayTeam.name,
         homeScore: item.score.fullTime.home, awayScore: item.score.fullTime.away,
         halfTime: item.score.halfTime?.home != null ? { home: item.score.halfTime.home, away: item.score.halfTime.away } : null,

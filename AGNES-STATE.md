@@ -145,8 +145,12 @@ consumption is kept. A failed local cleanup does not repeat the generation.
 
 Terminal evidence in `finished-at.json` governs content pruning. Scorelines,
 kickoff and first detection must be valid; the exact one-hour boundary keeps the
-match. A correction to NS/LIVE/PST invalidates the anchor. Media first claims the
-shared close and deletes the exact R2 prefix, with a trailing `/`; only a confirmed
+match. A correction to NS/LIVE/PST invalidates the anchor. Media maintenance also
+lists R2 match prefixes. Outside the current fixture window, a uniquely matched
+historical final can authorize cleanup after the result's UTC day and the grace
+period. Legacy results without kickoff require a saved kickoff to map the UTC
+result date to the Lima match ID. Media first claims the shared close and deletes
+the exact R2 prefix, with a trailing `/`; only a confirmed
 remote success authorizes local deletion and publication. Results and historical
 evaluation are outside this maintenance.
 

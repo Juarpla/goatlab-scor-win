@@ -149,6 +149,7 @@ if (cmd && process.argv[1] && import.meta.url === pathToFileURL(process.argv[1])
   else if (cmd === 'exists') { out(JSON.stringify({ key: rest[0], found: await exists(rest[0]) })); }
   else if (cmd === 'del') { for (const k of rest) out(JSON.stringify(await del(k))); }
   else if (cmd === 'del-prefix') { out(JSON.stringify({ ok: true, prefix: rest[0], deleted: (await delPrefix(rest[0])).length })); }
+  else if (cmd === 'list-partidos') { out(JSON.stringify({ objects: await listAll('partidos/') })); }
   else if (cmd === 'public') { out(publicUrl(rest[0])); }
   else if (cmd === 'budget') { out(JSON.stringify(await budget())); }
   else if (cmd === 'record') {
@@ -162,5 +163,5 @@ if (cmd && process.argv[1] && import.meta.url === pathToFileURL(process.argv[1])
       const type = /\.mp4$/i.test(f) ? 'video/mp4' : /\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg';
       out(JSON.stringify(await put(`${prefix}/${f}`, bytes, type)));
     }
-  } else { console.error('uso: put|exists|del|del-prefix|public|budget|record|sync-dir'); process.exit(2); }
+  } else { console.error('uso: put|exists|del|del-prefix|list-partidos|public|budget|record|sync-dir'); process.exit(2); }
 }

@@ -65,7 +65,7 @@ test('league results come from football-data, finished matches only', async () =
     { id: 11, utcDate: '2026-09-11T14:00:00Z', status: 'SCHEDULED', competition: { code: 'PL' }, homeTeam: { name: 'C' }, awayTeam: { name: 'D' }, score: { fullTime: { home: null, away: null } } },
     { id: 12, utcDate: '2026-09-12T14:00:00Z', status: 'FINISHED', competition: { code: 'CL' }, homeTeam: { name: 'E' }, awayTeam: { name: 'F' }, score: { fullTime: { home: 1, away: 1 } } },
   ] })), paceMs: 0 });
-  assert.deepEqual(rows, [{ id: 'fd-10', date: '2026-09-10', competition: 'premier', home: 'Arsenal', away: 'Newcastle United', homeScore: 2, awayScore: 1, halfTime: null, matchday: null }]);
+  assert.deepEqual(rows, [{ id: 'fd-10', date: '2026-09-10', kickoff: '2026-09-10T14:00:00Z', competition: 'premier', home: 'Arsenal', away: 'Newcastle United', homeScore: 2, awayScore: 1, halfTime: null, matchday: null }]);
 });
 test('a match expires 115 minutes after kickoff, even without a final status', () => {
   const match = { kickoff: '2026-09-14T19:00:00Z' };

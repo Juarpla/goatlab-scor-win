@@ -61,3 +61,32 @@ test('reserved reports and path traversal are never artifact identities', () => 
   assert.equal(mediaArtifactId('_agnes-hourly.json'), null); assert.equal(mediaArtifactId('../a-b.json'), null);
   assert.equal(mediaArtifactId('a-b.progress.json'), 'a-b'); assert.equal(mediaArtifactId('a-b.content.json'), 'a-b');
 });
+
+test('R2-only banks use terminal evidence and historical scores reconcile old Lima dates', async t => {
+  const options = await fixture(t);
+  const old = { id: 'fd-2', webId: 'alpha-vs-beta-2026-09-29', home: 'Alpha', away: 'Beta', competition: 'League', kickoff: '2026-09-30T00:30:00Z', status: 'NS' };
+  const future = { ...old, id: 'fd-3', webId: 'alpha-vs-beta-2026-10-08', kickoff: '2026-10-08T23:00:00Z' };
+  const data = join(options.repo, 'public/data');
+  await writeFile(join(data, 'fixtures.json'), JSON.stringify({ matches: [future] }));
+  await writeFile(join(data, 'finished-at.json'), JSON.stringify({
+    ...ledger, snapshots: { ...ledger.snapshots, [old.webId]: { ...old, ids: [old.id] } },
+  }));
+  await writeFile(join(data, 'teams.json'), JSON.stringify({ teams: {
+    alpha: { name: 'Alpha', web: 'alpha', leagues: ['League'] },
+    beta: { name: 'Beta', web: 'beta', leagues: ['League'] },
+  } }));
+  await writeFile(join(data, 'results.json'), JSON.stringify({ results: [
+    { ...old, date: '2026-09-30', homeScore: 2, awayScore: 1, kickoff: undefined },
+    { ...future, date: '2026-10-08', homeScore: 2, awayScore: 1 },
+  ] }));
+  await rm(join(options.dir, 'gen/a-b'), { recursive: true });
+  for (const suffix of ['.json', '.progress.json', '.ready']) await rm(join(options.dir, 'a-b' + suffix));
+
+  const prefixes = ['a-b', old.webId, 'unknown', future.webId];
+  const result = await maintainMedia({
+    ...options, now, transactImpl: claim, listRemote: async () => prefixes.map(id => ({ key: `partidos/${id}/0.jpg`, bytes: 100 })),
+    r2Impl: async prefix => ({ ok: true, prefix }),
+  });
+  assert.deepEqual(result.deletedIds, ['a-b', old.webId]);
+  assert.equal(result.reclaimedBytes, 200);
+});
