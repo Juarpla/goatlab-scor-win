@@ -4,7 +4,7 @@
   "away": "Ipswich Town FC",
   "competition": "premier",
   "kickoff": "2026-11-21T15:00:00Z",
-  "updatedAt": "2026-11-18T07:28:38.362Z",
+  "updatedAt": "2026-11-18T15:30:06.718Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-17T16:44:36.301Z",
+      "updatedAt": "2026-11-18T15:29:48.257Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-17T16:44:36.301Z",
+      "updatedAt": "2026-11-18T15:29:48.257Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 446
+      "rows": 454
     },
     "venue": {
       "city": "Londres",
@@ -215,9 +215,9 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.613,
-      "draw": 0.21600000000000003,
-      "away": 0.172,
+      "home": 0.614,
+      "draw": 0.215,
+      "away": 0.171,
       "predicted": "H"
     },
     "xg": {
@@ -232,13 +232,13 @@
     "cornersOver95": 0.505,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.613,
+      "favoriteProb": 0.614,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.6126,
+    "confidence": 0.6141,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-17T16:44:43.344Z",
+    "capturedAt": "2026-11-18T15:29:54.461Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -388,7 +388,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 446
+      "historyRows": 454
     },
     "source": "GoatLab",
     "expectedTotal": 4.1
@@ -399,7 +399,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 446
+      "historyRows": 454
     },
     "source": "GoatLab",
     "expectedTotal": 9.6
@@ -627,10 +627,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "Los valores de Poisson GoatLab (P) son inconsistentes: la probabilidad de victoria local (1.8) excede el valor máximo teórico de 1.0. Además, el valor de empate (1.073) también es superior a 1.0. Esto indica un error en la entrada de datos del modelo P o una codificación distinta que no se ajusta a ",
+    "flag": false,
+    "note": "Los porcentajes y datos proporcionados son consistentes con el input. No se detecta desviación clara de los datos. La lectura de B2 como 'H' con 0.614 coincide con la probabilidad de CatBoost Bzzoiro. No hay contradicciones internas significativas en los bloques M, P, B, B2, H, T, S, R, W y HR.",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-17T16:47:32.725Z"
+    "generatedAt": "2026-11-18T15:35:07.858Z"
   }
 }

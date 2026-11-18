@@ -1,0 +1,609 @@
+{
+  "id": "fd-575398",
+  "home": "Manchester City FC",
+  "away": "SSC Napoli",
+  "competition": "champions",
+  "kickoff": "2026-11-24T20:00:00Z",
+  "updatedAt": "2026-11-18T15:30:06.718Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 2.655,
+      "away": 1.533
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.508,
+      "away": 1.346
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 4
+    },
+    "standings": {
+      "Manchester City FC": {
+        "position": 7,
+        "team": "Manchester City",
+        "teamId": 12,
+        "played": 4,
+        "won": 3,
+        "drawn": 0,
+        "lost": 1,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 9,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "SSC Napoli": null
+    },
+    "scorers": {
+      "updatedAt": "2026-11-18T15:29:08.693Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-24T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-18T15:29:08.693Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 454
+    },
+    "venue": {
+      "city": "Mánchester",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.609,
+      "draw": 0.189,
+      "away": 0.202
+    },
+    "doubleChance": {
+      "12": 0.811,
+      "1X": 0.798,
+      "X2": 0.391
+    },
+    "dnb": {
+      "home": 0.751,
+      "away": 0.249
+    },
+    "totals": {
+      "over15": 0.927,
+      "under15": 0.073,
+      "over25": 0.788,
+      "under25": 0.212,
+      "over35": 0.602,
+      "under35": 0.398
+    },
+    "btts": {
+      "yes": 0.735,
+      "no": 0.265
+    },
+    "cleanSheet": {
+      "home": 0.216,
+      "away": 0.07
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.082
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.073
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.068
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.063
+      },
+      {
+        "home": 3,
+        "away": 2,
+        "p": 0.056
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.85,
+    "noGoal": 0.021,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.474
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.249
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.131
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.069
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.036
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.019
+      }
+    ],
+    "firstHome": 0.637,
+    "firstAway": 0.342
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Erling Haaland",
+        "goals": 5,
+        "matches": 4,
+        "share": 0.625,
+        "rate": 1.57,
+        "anytime": 0.791,
+        "first": 0.407
+      },
+      {
+        "player": "Phil Foden",
+        "goals": 3,
+        "matches": 4,
+        "share": 0.375,
+        "rate": 0.94,
+        "anytime": 0.61,
+        "first": 0.244
+      }
+    ],
+    "away": [
+      {
+        "player": "Scott McTominay",
+        "goals": 3,
+        "matches": 3,
+        "share": 0.9,
+        "rate": 1.21,
+        "anytime": 0.702,
+        "first": 0.315
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.669,
+      "draw": 0.18100000000000002,
+      "away": 0.151,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.36,
+      "away": 1.16
+    },
+    "over15": 0.852,
+    "over25": 0.6659999999999999,
+    "over35": 0.451,
+    "btts": 0.594,
+    "score": "2-1",
+    "cornersOver95": 0.52,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.669,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6686,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-18T15:29:57.937Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.632,
+      "draw": 0.203,
+      "away": 0.165
+    },
+    "doubleChance": {
+      "12": 0.797,
+      "1X": 0.835,
+      "X2": 0.368
+    },
+    "dnb": {
+      "home": 0.793,
+      "away": 0.207
+    },
+    "totals": {
+      "over15": 0.874,
+      "under15": 0.126,
+      "over25": 0.683,
+      "under25": 0.317,
+      "over35": 0.467,
+      "under35": 0.533
+    },
+    "btts": {
+      "yes": 0.63,
+      "no": 0.37
+    },
+    "cleanSheet": {
+      "home": 0.313,
+      "away": 0.094
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.111,
+        "share": 0.26303317535545023
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.089,
+        "share": 0.21090047393364925
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.082,
+        "share": 0.19431279620853079
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.075,
+        "share": 0.1777251184834123
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.065,
+        "share": 0.15402843601895733
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 5,
+    "homeWins": 3,
+    "draws": 1,
+    "awayWins": 1,
+    "avgTotalGoals": 3.2,
+    "recent": [
+      {
+        "eventId": 2085,
+        "date": "2025-09-18T19:00:00+00:00",
+        "home": "Manchester City",
+        "away": "SSC Napoli",
+        "homeTeamId": 12,
+        "awayTeamId": 62,
+        "homeScore": 2,
+        "awayScore": 0
+      },
+      {
+        "eventId": 342870,
+        "date": "2017-11-01T19:45:00+00:00",
+        "home": "SSC Napoli",
+        "away": "Manchester City",
+        "homeTeamId": 62,
+        "awayTeamId": 12,
+        "homeScore": 2,
+        "awayScore": 4
+      },
+      {
+        "eventId": 342846,
+        "date": "2017-10-17T18:45:00+00:00",
+        "home": "Manchester City",
+        "away": "SSC Napoli",
+        "homeTeamId": 12,
+        "awayTeamId": 62,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 435634,
+        "date": "2011-11-22T19:45:00+00:00",
+        "home": "SSC Napoli",
+        "away": "Manchester City",
+        "homeTeamId": 62,
+        "awayTeamId": 12,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 435576,
+        "date": "2011-09-14T18:45:00+00:00",
+        "home": "Manchester City",
+        "away": "SSC Napoli",
+        "homeTeamId": 12,
+        "awayTeamId": 62,
+        "homeScore": 1,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.9
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.8
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 16.31,
+      "shotsOnTarget": 5.64,
+      "xg": 2.36,
+      "corners": 5.68,
+      "fouls": 10.21,
+      "yellowCards": 1.67,
+      "redCards": 0.06,
+      "offsides": 2.05,
+      "possession": 54.37
+    },
+    "away": {
+      "shots": 13.32,
+      "shotsOnTarget": 5.45,
+      "xg": 1.16,
+      "corners": 4.09,
+      "fouls": 12.13,
+      "yellowCards": 2.22,
+      "redCards": 0.18,
+      "offsides": 2.09,
+      "possession": 45.63
+    },
+    "sample": {
+      "home": 10,
+      "away": 8
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 7,
+        "offsides": 9
+      },
+      "away": {
+        "possession": 8,
+        "shots": 8,
+        "shotsOnTarget": 8,
+        "xg": 8,
+        "corners": 8,
+        "fouls": 8,
+        "yellowCards": 8,
+        "redCards": 6,
+        "offsides": 8
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.85,
+      "shotsOnTarget": 5.61,
+      "xg": 1.72,
+      "corners": 4.86,
+      "fouls": 11.08,
+      "yellowCards": 1.86,
+      "redCards": 0.13,
+      "offsides": 2.22
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.636,
+      "draw": 0.114,
+      "away": 0.25
+    },
+    "cardsDuel": {
+      "home": 0.292,
+      "draw": 0.203,
+      "away": 0.505
+    },
+    "lastGoal": {
+      "home": 0.637,
+      "away": 0.342,
+      "noGoal": 0.021
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.65,
+        "away": 0.35
+      },
+      "5": {
+        "home": 0.693,
+        "away": 0.307
+      },
+      "7": {
+        "home": 0.726,
+        "away": 0.274
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.38,
+      "home12": 0.255,
+      "level": 0.114,
+      "away12": 0.158,
+      "away3plus": 0.092
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 22.7,
+      "condition": null,
+      "sampledAt": "2026-11-24T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Etihad Stadium",
+      "city": "Mánchester",
+      "capacity": 53400,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Manchester City FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 3,
+        "played": 10,
+        "gf": 21,
+        "ga": 13,
+        "provider": null
+      },
+      "player": {
+        "name": "Erling Haaland",
+        "detail": "9 goles en 10 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "SSC Napoli",
+      "recentSample": 4,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": null,
+      "player": {
+        "name": "Scott McTominay",
+        "detail": "3 goles en 3 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

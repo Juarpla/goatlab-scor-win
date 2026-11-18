@@ -1,0 +1,544 @@
+{
+  "id": "fd-575397",
+  "home": "Real Madrid CF",
+  "away": "PSV",
+  "competition": "champions",
+  "kickoff": "2026-11-24T20:00:00Z",
+  "updatedAt": "2026-11-18T15:30:06.718Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 2.25,
+      "away": 0.728
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.315,
+      "away": 1.179
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 4
+    },
+    "standings": {
+      "Real Madrid CF": {
+        "position": 2,
+        "team": "Real Madrid",
+        "teamId": 57,
+        "played": 4,
+        "won": 4,
+        "drawn": 0,
+        "lost": 0,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 12,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "PSV": null
+    },
+    "scorers": {
+      "updatedAt": "2026-11-18T15:29:08.693Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-24T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-18T15:29:08.693Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 454
+    },
+    "venue": {
+      "city": "Madrid",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.711,
+      "draw": 0.192,
+      "away": 0.097
+    },
+    "doubleChance": {
+      "12": 0.808,
+      "1X": 0.903,
+      "X2": 0.289
+    },
+    "dnb": {
+      "home": 0.88,
+      "away": 0.12
+    },
+    "totals": {
+      "over15": 0.806,
+      "under15": 0.194,
+      "over25": 0.572,
+      "under25": 0.428,
+      "over35": 0.347,
+      "under35": 0.653
+    },
+    "btts": {
+      "yes": 0.471,
+      "no": 0.529
+    },
+    "cleanSheet": {
+      "home": 0.483,
+      "away": 0.105
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.129
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.106
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.097
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.094
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.092
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.49,
+    "noGoal": 0.03,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.441
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.247
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.138
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.077
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.043
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.024
+      }
+    ],
+    "firstHome": 0.642,
+    "firstAway": 0.327
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Kylian Mbappé",
+        "goals": 4,
+        "matches": 4,
+        "share": 0.667,
+        "rate": 1.54,
+        "anytime": 0.786,
+        "first": 0.442
+      },
+      {
+        "player": "Federico Valverde",
+        "goals": 2,
+        "matches": 4,
+        "share": 0.333,
+        "rate": 0.77,
+        "anytime": 0.537,
+        "first": 0.221
+      }
+    ],
+    "away": null
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.562,
+      "draw": 0.191,
+      "away": 0.247,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.38,
+      "away": 1.63
+    },
+    "over15": 0.893,
+    "over25": 0.74,
+    "over35": 0.544,
+    "btts": 0.6779999999999999,
+    "score": "2-1",
+    "cornersOver95": 0.519,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.562,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.5621,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-18T15:29:58.781Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.537,
+      "draw": 0.209,
+      "away": 0.254
+    },
+    "doubleChance": {
+      "12": 0.791,
+      "1X": 0.746,
+      "X2": 0.463
+    },
+    "dnb": {
+      "home": 0.679,
+      "away": 0.321
+    },
+    "totals": {
+      "over15": 0.916,
+      "under15": 0.084,
+      "over25": 0.763,
+      "under25": 0.237,
+      "over35": 0.568,
+      "under35": 0.432
+    },
+    "btts": {
+      "yes": 0.737,
+      "no": 0.263
+    },
+    "cleanSheet": {
+      "home": 0.196,
+      "away": 0.093
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.096,
+        "share": 0.26373626373626374
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.077,
+        "share": 0.21153846153846154
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.068,
+        "share": 0.18681318681318684
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.066,
+        "share": 0.18131868131868134
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.057,
+        "share": 0.1565934065934066
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 0,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": [],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.1
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.2
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.23,
+      "shotsOnTarget": 5.6,
+      "xg": 2.38,
+      "corners": 4.59,
+      "fouls": 10.33,
+      "yellowCards": 2.09,
+      "redCards": 0.13,
+      "offsides": 2.2,
+      "possession": 48.55
+    },
+    "away": {
+      "shots": 14.76,
+      "shotsOnTarget": 5.5,
+      "xg": 1.63,
+      "corners": 4.64,
+      "fouls": 12.33,
+      "yellowCards": 2,
+      "redCards": 0.13,
+      "offsides": 1.97,
+      "possession": 51.45
+    },
+    "sample": {
+      "home": 10,
+      "away": 7
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 8,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 7,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 7,
+        "fouls": 7,
+        "yellowCards": 7,
+        "redCards": 5,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.83,
+      "shotsOnTarget": 5.69,
+      "xg": 1.77,
+      "corners": 4.76,
+      "fouls": 11.07,
+      "yellowCards": 1.85,
+      "redCards": 0.13,
+      "offsides": 2.27
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.427,
+      "draw": 0.133,
+      "away": 0.44
+    },
+    "cardsDuel": {
+      "home": 0.415,
+      "draw": 0.204,
+      "away": 0.381
+    },
+    "lastGoal": {
+      "home": 0.642,
+      "away": 0.327,
+      "noGoal": 0.03
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.495,
+        "away": 0.505
+      },
+      "5": {
+        "home": 0.493,
+        "away": 0.507
+      },
+      "7": {
+        "home": 0.492,
+        "away": 0.508
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.197,
+      "home12": 0.23,
+      "level": 0.133,
+      "away12": 0.234,
+      "away3plus": 0.206
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 24.6,
+      "condition": null,
+      "sampledAt": "2026-11-24T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Santiago Bernabéu",
+      "city": "Madrid",
+      "capacity": 83186,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Real Madrid CF",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 2,
+        "played": 12,
+        "gf": 31,
+        "ga": 10,
+        "provider": null
+      },
+      "player": {
+        "name": "Kylian Mbappé",
+        "detail": "13 goles en 12 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "PSV",
+      "recentSample": 4,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": null,
+      "player": null
+    }
+  },
+  "llmReview": null
+}

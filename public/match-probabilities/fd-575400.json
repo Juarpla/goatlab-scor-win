@@ -1,0 +1,515 @@
+{
+  "id": "fd-575400",
+  "home": "Feyenoord Rotterdam",
+  "away": "FC Porto",
+  "competition": "champions",
+  "kickoff": "2026-11-24T20:00:00Z",
+  "updatedAt": "2026-11-18T15:30:06.718Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.485,
+      "away": 1.955
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.533,
+      "away": 1.773
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 4,
+      "away": 4
+    },
+    "standings": {
+      "Feyenoord Rotterdam": null,
+      "FC Porto": null
+    },
+    "scorers": {
+      "updatedAt": "2026-11-18T15:29:08.693Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": null
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-24T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-18T15:29:08.693Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 454
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.285,
+      "draw": 0.238,
+      "away": 0.478
+    },
+    "doubleChance": {
+      "12": 0.762,
+      "1X": 0.522,
+      "X2": 0.715
+    },
+    "dnb": {
+      "home": 0.374,
+      "away": 0.626
+    },
+    "totals": {
+      "over15": 0.867,
+      "under15": 0.133,
+      "over25": 0.668,
+      "under25": 0.332,
+      "over35": 0.45,
+      "under35": 0.55
+    },
+    "btts": {
+      "yes": 0.673,
+      "no": 0.327
+    },
+    "cleanSheet": {
+      "home": 0.142,
+      "away": 0.227
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.102
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.091
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.069
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.068
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.061
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.31,
+    "noGoal": 0.037,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.424
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.244
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.141
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.081
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.047
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.027
+      }
+    ],
+    "firstHome": 0.447,
+    "firstAway": 0.517
+  },
+  "scorers": {
+    "home": null,
+    "away": null
+  },
+  "hasScorers": false,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.37200000000000005,
+      "draw": 0.245,
+      "away": 0.38299999999999995,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.58,
+      "away": 1.59
+    },
+    "over15": 0.813,
+    "over25": 0.603,
+    "over35": 0.379,
+    "btts": 0.603,
+    "score": "1-1",
+    "cornersOver95": 0.428,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.383,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3832,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-18T15:29:58.429Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.37,
+      "draw": 0.257,
+      "away": 0.374
+    },
+    "doubleChance": {
+      "12": 0.743,
+      "1X": 0.626,
+      "X2": 0.63
+    },
+    "dnb": {
+      "home": 0.497,
+      "away": 0.503
+    },
+    "totals": {
+      "over15": 0.835,
+      "under15": 0.165,
+      "over25": 0.614,
+      "under25": 0.386,
+      "over35": 0.391,
+      "under35": 0.609
+    },
+    "btts": {
+      "yes": 0.643,
+      "no": 0.357
+    },
+    "cleanSheet": {
+      "home": 0.204,
+      "away": 0.206
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.105,
+        "share": 0.266497461928934
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.084,
+        "share": 0.2131979695431472
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.083,
+        "share": 0.21065989847715735
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.066,
+        "share": 0.16751269035532995
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.056,
+        "share": 0.14213197969543148
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 2,
+    "homeWins": 1,
+    "draws": 0,
+    "awayWins": 1,
+    "avgTotalGoals": 3.5,
+    "recent": [
+      {
+        "eventId": 289358,
+        "date": "2019-12-12T20:00:00+00:00",
+        "home": "FC Porto",
+        "away": "Feyenoord",
+        "homeTeamId": 35,
+        "awayTeamId": 138,
+        "homeScore": 3,
+        "awayScore": 2
+      },
+      {
+        "eventId": 289252,
+        "date": "2019-10-03T16:55:00+00:00",
+        "home": "Feyenoord",
+        "away": "FC Porto",
+        "homeTeamId": 138,
+        "awayTeamId": 35,
+        "homeScore": 2,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.5
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 8.5
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.47,
+      "shotsOnTarget": 4.93,
+      "xg": 1.58,
+      "corners": 4.06,
+      "fouls": 11.13,
+      "yellowCards": 1.77,
+      "redCards": 0.15,
+      "offsides": 2.23,
+      "possession": 49.61
+    },
+    "away": {
+      "shots": 15.18,
+      "shotsOnTarget": 5.82,
+      "xg": 1.59,
+      "corners": 4.46,
+      "fouls": 11.41,
+      "yellowCards": 1.72,
+      "redCards": 0.07,
+      "offsides": 2.42,
+      "possession": 50.39
+    },
+    "sample": {
+      "home": 7,
+      "away": 8
+    },
+    "coverage": {
+      "home": {
+        "possession": 7,
+        "shots": 7,
+        "shotsOnTarget": 7,
+        "xg": 7,
+        "corners": 7,
+        "fouls": 7,
+        "yellowCards": 7,
+        "redCards": 5,
+        "offsides": 7
+      },
+      "away": {
+        "possession": 8,
+        "shots": 8,
+        "shotsOnTarget": 8,
+        "xg": 8,
+        "corners": 8,
+        "fouls": 8,
+        "yellowCards": 8,
+        "redCards": 6,
+        "offsides": 7
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.82,
+      "shotsOnTarget": 5.63,
+      "xg": 1.73,
+      "corners": 4.74,
+      "fouls": 11.04,
+      "yellowCards": 1.77,
+      "redCards": 0.13,
+      "offsides": 2.24
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.377,
+      "draw": 0.138,
+      "away": 0.485
+    },
+    "cardsDuel": {
+      "home": 0.399,
+      "draw": 0.223,
+      "away": 0.378
+    },
+    "lastGoal": {
+      "home": 0.447,
+      "away": 0.517,
+      "noGoal": 0.037
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.456,
+        "away": 0.544
+      },
+      "5": {
+        "home": 0.442,
+        "away": 0.558
+      },
+      "7": {
+        "home": 0.431,
+        "away": 0.569
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.157,
+      "home12": 0.221,
+      "level": 0.138,
+      "away12": 0.253,
+      "away3plus": 0.232
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 21,
+      "condition": "rain",
+      "sampledAt": "2026-11-24T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Feyenoord Rotterdam",
+      "recentSample": 4,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": null,
+      "player": null
+    },
+    "away": {
+      "team": "FC Porto",
+      "recentSample": 4,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 4
+      },
+      "season": null,
+      "player": null
+    }
+  },
+  "llmReview": null
+}
