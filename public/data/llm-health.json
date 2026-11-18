@@ -1,59 +1,6 @@
 {
-  "updatedAt": "2026-11-18T16:04:10.308Z",
+  "updatedAt": "2026-11-18T20:35:15.676Z",
   "runs": [
-    {
-      "at": "2026-11-12T15:07:09.714Z",
-      "matchId": "bz-212692",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1474,
-        "outputTokens": 11152
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6fde341c-bd74-48b6-acc1-d59cad4fdfac"
-    },
-    {
-      "at": "2026-11-12T15:07:09.714Z",
-      "matchId": "bz-212691",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6fde341c-bd74-48b6-acc1-d59cad4fdfac"
-    },
-    {
-      "at": "2026-11-12T19:54:21.386Z",
-      "matchId": "bz-212694",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1128,
-        "outputTokens": 759
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b5bedf63-2a49-4519-ba1a-0ceea7dbbfb7"
-    },
     {
       "at": "2026-11-12T19:54:37.485Z",
       "matchId": "bz-212693",
@@ -6185,6 +6132,147 @@
       },
       "truncated": false,
       "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-18T20:31:43.395Z",
+      "matchId": "fd-564751",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1419,
+        "outputTokens": 998
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "4e484dae-242b-4710-8d4f-536172d50a2d"
+    },
+    {
+      "at": "2026-11-18T20:31:56.531Z",
+      "matchId": "fd-564756",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1479,
+        "outputTokens": 1088
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "ea49758b-e3b3-41ef-94d9-202b5fe89b8d"
+    },
+    {
+      "at": "2026-11-18T20:35:07.651Z",
+      "matchId": "fd-560651",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1455,
+            "outputTokens": 1119
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4046
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 268
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 195
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1421,
+            "outputTokens": 1744
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8139
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 500",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 127965
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1455,
+            "outputTokens": 967
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4645
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 158
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1421,
+        "outputTokens": 1744
+      },
+      "truncated": false,
+      "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
     }
