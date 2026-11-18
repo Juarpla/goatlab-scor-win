@@ -1,59 +1,6 @@
 {
-  "updatedAt": "2026-11-18T15:36:33.016Z",
+  "updatedAt": "2026-11-18T16:04:10.308Z",
   "runs": [
-    {
-      "at": "2026-11-12T15:05:27.655Z",
-      "matchId": "bz-212693",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1029,
-        "outputTokens": 10836
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "5a736ef5-f7a6-436a-83b0-931ea79fedde"
-    },
-    {
-      "at": "2026-11-12T15:05:33.616Z",
-      "matchId": "bz-212694",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1587,
-        "outputTokens": 2059
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4437c4df-0d22-4e7d-96b8-c84cff517181"
-    },
-    {
-      "at": "2026-11-12T15:05:33.616Z",
-      "matchId": "bz-212693",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4437c4df-0d22-4e7d-96b8-c84cff517181"
-    },
     {
       "at": "2026-11-12T15:07:09.714Z",
       "matchId": "bz-212692",
@@ -5922,6 +5869,324 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "ead34297-e4c9-4bc3-9a62-47dc9d310189"
+    },
+    {
+      "at": "2026-11-18T15:55:33.775Z",
+      "task": "shorts",
+      "matchId": "liverpool-vs-manchester-united-2026-11-22",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Manchester United FC; guion 2: el cero no se escribe en dígitos; guion 2: 5 cifras, máximo 3; guion 4: falta Manchester United FC; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: falta Liverpool FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7530,
+            "outputTokens": 2460
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8527
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 206
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 167
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Liverpool FC; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 49 palabras, mínimo 55; guion 7: gancho repetido; guion 7: 53 palabras, mínimo 55; guion 8: gancho repetido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7679,
+            "outputTokens": 2497
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12223
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235257
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Liverpool FC; guion 4: falta Manchester United FC; guion 5: 4 cifras, máximo 3; guion 6: falta Liverpool FC; guion 6: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: falta Manchester United FC; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7530,
+            "outputTokens": 2464
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6680
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 305
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 160
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7679,
+        "outputTokens": 2455
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-18T15:59:54.902Z",
+      "task": "shorts",
+      "matchId": "athletic-club-vs-espanyol-2026-11-20",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: artículo delante de Athletic Club; guion 2: 4 cifras, máximo 3; guion 3: falta RCD Espanyol de Barcelona; guion 3: 5 cifras, máximo 3; guion 4: artículo delante de RCD Espanyol de Barcelona; guion 4: proyección fuera de rango; guion 4: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7791,
+            "outputTokens": 3365
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10459
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 195
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 148
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 2: falta Athletic Club; guion 2: el gancho no lleva cifras; guion 3: el gancho no lleva cifras; guion 3: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: el gancho no lleva cifras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7925,
+            "outputTokens": 2701
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16445
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235220
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta RCD Espanyol de Barcelona; guion 1: 53 palabras, mínimo 55; guion 2: falta Athletic Club; guion 2: falta RCD Espanyol de Barcelona; guion 2: 54 palabras, mínimo 55; guion 3: falta Athletic Club; guion 3: falta RCD Espanyol de Barcelona; guion 4: falta Athletic Club",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7791,
+            "outputTokens": 2291
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9271
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 220
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 157
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7925,
+        "outputTokens": 2711
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-18T16:04:10.306Z",
+      "task": "shorts",
+      "matchId": "manchester-city-vs-fulham-2026-11-21",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: falta Fulham FC; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7669,
+            "outputTokens": 3032
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12581
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 186
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 160
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: falta Fulham FC; guion 2: 5 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 7: 6 cifras, máximo 3; guion 8: golpe 1 (gancho): 3 palabras, rango 4–14",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7795,
+            "outputTokens": 2554
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15407
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235197
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 4: falta Manchester City FC; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: falta Fulham FC; guion 9: falta Fulham FC; guion 9: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7669,
+            "outputTokens": 2911
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8401
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 170
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 150
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 7795,
+        "outputTokens": 2566
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
