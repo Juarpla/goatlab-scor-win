@@ -138,7 +138,14 @@ jobs:
           python-version: '3.12'
       - name: ffmpeg
         if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+        timeout-minutes: 5
+        run: |
+          if command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1; then
+            echo "FFmpeg and FFprobe are already installed"
+          else
+            sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
+            sudo apt-get install -y ffmpeg
+          fi
       - name: Generate Agnes bank
         id: generate
         if: steps.check.outputs.complete == 'false' && steps.check.outputs.reason != 'top-stale'
