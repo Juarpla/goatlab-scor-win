@@ -1,5 +1,8 @@
 # Video pipeline optimization and manual review evaluation
 
+> Historical report. Provider examples below describe a retired setup. Current text inference uses Agnes → Mistral → Cloudflare Workers AI, as defined in `src/lib/llm.js`.
+
+
 > Historical report of the October 2026 remote pipeline. This is not a current
 > authoring policy. For final videos, read the
 > [local workflow](.agents/skills/video-render/SKILL.md),

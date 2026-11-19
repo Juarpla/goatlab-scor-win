@@ -25,12 +25,6 @@ export class LlmPermanentError extends Error {
   }
 }
 
-const openCodeGo = {
-  keyVar: 'OPENCODE_GO_API_KEY',
-  requires: [],
-  baseUrl: () => 'https://opencode.ai/inference/go/openai/v1',
-  extraHeaders: (_env, sessionId) => ({ 'user-agent': 'GoatLab/1.0', 'x-opencode-session': sessionId }),
-};
 export const providers = {
   // Agnes serves text on the same hub as images and video. Its chat endpoint
   // rejects max_tokens above 65536, so the request budget is clamped per provider.
@@ -39,11 +33,8 @@ export const providers = {
   // with the same OpenAI signature through another gateway.
   MISTRAL: { name: 'Mistral', keyVar: 'MISTRAL_API_KEY', defaultModel: 'ministral-8b-2512', requires: [], baseUrl: env => env.MISTRAL_BASE_URL?.trim() || 'https://api.mistral.ai/v1' },
   WORKERS_AI: { name: 'Workers AI', keyVar: 'WORKERS_AI_API_KEY', defaultModel: '@cf/zai-org/glm-4.7-flash', requires: ['CLOUDFLARE_ACCOUNT_ID'], baseUrl: env => env.WORKERS_AI_BASE_URL?.trim() || `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1` },
-  OPENCODE_GO: { name: 'OpenCode Go', defaultModel: 'deepseek-v4.1-flash', ...openCodeGo },
-  // Same gateway and same key. Only the model changes.
-  OPENCODE_GO_FALLBACK: { name: 'OpenCode Go fallback', defaultModel: 'glm-5.3-flash', ...openCodeGo },
 };
-const DEFAULT_PROVIDER_ORDER = 'MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL';
+export const DEFAULT_PROVIDER_ORDER = 'AGNES_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
 export function resolveChain(env = runtimeEnv(), logger = console, { orderVar } = {}) {
   const preferred = orderVar ? env[orderVar]?.trim() : '';
   const order = preferred || env.LLM_PROVIDER_ORDER?.trim() || DEFAULT_PROVIDER_ORDER;
@@ -127,7 +118,7 @@ function textFromMessage(message) {
   }
   return '';
 }
-export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens, sessionId = crypto.randomUUID() } = {}) {
+export async function callProvider(provider, messages, { env = runtimeEnv(), fetchImpl = fetch, timeoutMs = 180_000, maxTokens } = {}) {
   // The declared ceiling is a job budget: providers with a lower hard limit get
   // the smaller value so the call is not rejected as a permanent 400.
   const budget = maxTokens === undefined ? undefined : Math.min(maxTokens, provider.maxOutputTokens ?? maxTokens);
@@ -135,7 +126,7 @@ export async function callProvider(provider, messages, { env = runtimeEnv(), fet
   try {
     res = await fetchImpl(`${provider.baseUrl(env).replace(/\/$/, '')}/chat/completions`, {
       method: 'POST', signal: AbortSignal.timeout(timeoutMs),
-      headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}`, ...provider.extraHeaders?.(env, sessionId) },
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${env[provider.keyVar]}` },
       body: JSON.stringify({ model: provider.model, ...requestExtras(provider.model), messages, ...(budget === undefined ? {} : { max_tokens: budget }) }),
     });
   } catch (error) {
@@ -231,7 +222,7 @@ export async function withFailover(messages, options = {}) {
       let call;
       const started = Date.now();
       try {
-        call = await callProvider(provider, currentMessages, { ...options, env, sessionId });
+        call = await callProvider(provider, currentMessages, { ...options, env });
       } catch (error) {
         const transport = error instanceof LlmTransportError;
         const permanent = error instanceof LlmPermanentError;

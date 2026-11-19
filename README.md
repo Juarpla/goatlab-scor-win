@@ -28,7 +28,7 @@ The team dictionary (`public/data/teams.json`, 129 active teams for 2026/27 plus
 
 The Actions flow runs at 06:05 UTC (full run: window, form, analysis; 01:05 Lima) and every six hours (scorelines only), plus manual runs and changes to `main`. This interval **is not a live stream**. Minute-by-minute tracking was out of scope: there is no free real-time source; the Bzzoiro WebSocket (ball coordinates) costs USD 3/month.
 
-Keys are configured as GitHub Secrets with the names from `.env.example`; they must not reach the browser. Model configuration uses repository variables. OpenCode Go is designed for coding-agent traffic according to its documentation: confirm that the account allows this editorial use before enabling that provider. No other client is impersonated.
+Keys are configured as GitHub Secrets with the names from `.env.example`; they must not reach the browser. Model configuration uses repository variables. All text tasks use Agnes → Mistral → Cloudflare Workers AI, in that order. Image and video generation use Agnes; voice transcription uses Mistral Voxtral with local Whisper fallback.
 
 Analysis is prepared for every active match in the seven-day window, cached by `inputKey`: a match with no changes is not paid for again. Existing analyses and probabilities are kept for more than one hour after the first valid detection of FT/AET/PEN with both scorelines. During that grace period the content is kept without recalculation; disappearing from the calendar or leaving the top does not authorize deleting it. It is preserved between runs through Actions artifacts; it is not generated per visitor. If only the calendar is available, the prompt requires describing only that context. An LLM outage does not block sports data.
 
@@ -52,7 +52,6 @@ AdSense is pending implementation; no ads or trackers are loaded. Placements wil
 - [Football-Data.org: limits and delay](https://www.football-data.org/pricing)
 - [Mistral: Chat Completions](https://docs.mistral.ai/api)
 - [Workers AI: compatible API](https://developers.cloudflare.com/ai-gateway/usage/rest-api/)
-- [OpenCode Go: endpoints and usage](https://opencode.ai/docs/go/)
 
 Product decisions are in PRODUCT.md. The design will be built directly in code, following `.impeccable/config.json`.
 
@@ -62,10 +61,10 @@ Product decisions are in PRODUCT.md. The design will be built directly in code, 
 `pnpm content` prepares scripts and prompts for the configurable top 5. It accepts
 `--category=all|scripts|image-prompts`, `--match=<webId>`, `--top=N` and `--force`.
 Categories are saved independently and preserve existing valid content. Both
-locally and in GitHub Actions, the priority is DeepSeek V4.1 Flash → GLM-5.3-Flash
-→ Mistral → Workers AI, configured by `SCRIPT_PROVIDER_ORDER`, independent of
-sports analysis. DeepSeek and GLM use `max` reasoning, up to 131072 tokens and 10
-minutes per attempt. The ten scripts keep their topics and 55 to 100 words
+locally and in GitHub Actions, the priority is Agnes → Mistral → Workers AI,
+shared with analysis and editorials. Task variables use the same provider order.
+Content calls allow up to 131072 tokens and 10 minutes per attempt; the client
+clamps the output ceiling to the provider limit. The ten scripts keep their topics and 55 to 100 words
 (ceiling 110), written as six labeled beat types (`gancho → fecha → dato →
 picante → proyeccion → cierre`). `dato` and `picante` repeat as separate
 one-sentence candidates when there is more than one fact or reading; the site

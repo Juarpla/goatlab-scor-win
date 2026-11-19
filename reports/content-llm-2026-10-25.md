@@ -1,5 +1,8 @@
 # Content generation — October 25, 2026
 
+> Historical report. Provider examples below describe a retired setup. Current text inference uses Agnes → Mistral → Cloudflare Workers AI, as defined in `src/lib/llm.js`.
+
+
 The ten Manchester United-Bournemouth scripts were tested with the local facts
 and players (no probability file for that match), through the same OpenCode Go
 gateway used by publishing. Test drafts were not published and did not replace

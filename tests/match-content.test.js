@@ -4,11 +4,11 @@ import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateConte
 import { resolveChain } from '../src/lib/llm.js';
 import { compositionProps } from '../video-render/contract/edit-plan.js';
 
-const env = { AGNES_API_KEY:'e', OPENCODE_GO_API_KEY:'a', MISTRAL_API_KEY:'b', WORKERS_AI_API_KEY:'c', CLOUDFLARE_ACCOUNT_ID:'d', SCRIPT_PROVIDER_ORDER:CONTENT_PROVIDER_ORDER };
-test('content priority starts with Agnes and keeps the independent analysis default',()=>{
+const env = { AGNES_API_KEY:'e', MISTRAL_API_KEY:'b', WORKERS_AI_API_KEY:'c', CLOUDFLARE_ACCOUNT_ID:'d', SCRIPT_PROVIDER_ORDER:CONTENT_PROVIDER_ORDER };
+test('content and analysis share the three-provider priority',()=>{
   const chain=resolveChain(env,console,{orderVar:'SCRIPT_PROVIDER_ORDER'});
-  assert.deepEqual(chain.map(p=>p.model),['agnes-3.0-flash','deepseek-v4.1-flash','glm-5.3-flash','ministral-8b-2512','@cf/zai-org/glm-4.7-flash']);
-  assert.equal(resolveChain(env)[0].id,'MISTRAL');
+  assert.deepEqual(chain.map(p=>p.model),['agnes-3.0-flash','ministral-8b-2512','@cf/zai-org/glm-4.7-flash']);
+  assert.equal(resolveChain(env)[0].id,'AGNES');
 });
 const KIND_HINT = {
   'ball-duel-in-the-air': 'An aerial ball duel with the ball in the air.',

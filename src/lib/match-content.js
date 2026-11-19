@@ -1,8 +1,9 @@
 /** Public content contract shared by Actions, Astro and the portable GoatLab skill. */
 import { esName } from './teams.js';
+import { DEFAULT_PROVIDER_ORDER } from './llm.js';
 import { beatStructureErrors, matchDateSentence, narrationText, scriptBeats } from './script-beats.js';
 export const CONTENT_VERSION = 1;
-export const CONTENT_PROVIDER_ORDER = 'AGNES_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL';
+export const CONTENT_PROVIDER_ORDER = DEFAULT_PROVIDER_ORDER;
 export const CONTENT_CATEGORIES = Object.freeze({
   scripts: { label: 'Scripts', directory: 'youtube-scripts', count: 10 },
   'image-prompts': { label: 'Image Prompts', directory: 'image-prompts', count: 12, kinds: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium', 'supporters', 'goalkeeper-save', 'free-kick', 'corner-kick', 'dribble', 'tackle', 'celebration', 'floodlights'], legacyKinds: ['ball-duel', 'goal-action', 'ball-duel-in-the-air', 'stadium'] },

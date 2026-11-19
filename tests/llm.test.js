@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveChain, withFailover, extractJson, hasTransportFailure, hasPermanentFailure, hasTruncatedFailure, createProviderBreaker, parseRetryAfter } from '../src/lib/llm.js';
+import { resolveChain, withFailover, extractJson, hasTransportFailure, hasPermanentFailure, hasTruncatedFailure, createProviderBreaker, parseRetryAfter, providers } from '../src/lib/llm.js';
 const logger = { warn() {} };
-const env = { MISTRAL_API_KEY: 'test-a', OPENCODE_GO_API_KEY: 'test-b', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL,OPENCODE_GO_MODEL' };
+const env = { AGNES_API_KEY: 'test-a', MISTRAL_API_KEY: 'test-b', LLM_PROVIDER_ORDER: 'AGNES_MODEL,MISTRAL_MODEL' };
 const response = content => new Response(JSON.stringify({ choices: [{ message: { content } }] }));
 test('opt-in validation repair sends the rejected draft and exact errors to the same provider', async () => {
   const requests = [];
@@ -15,7 +15,7 @@ test('opt-in validation repair sends the rejected draft and exact errors to the 
     },
     validate: content => { const value = extractJson(content); if (!value.ok) throw new Error('Missing required ok field'); return value; },
   });
-  assert.equal(result.provider, 'MISTRAL');
+  assert.equal(result.provider, 'AGNES');
   assert.equal(requests.length, 2);
   assert.equal(requests[1].messages.at(-2).content, '{"missing":true}');
   assert.match(requests[1].messages.at(-1).content, /Missing required ok field/);
@@ -29,18 +29,18 @@ test('validation repair is bounded before failover and transport errors are not 
     repairMessages: ({ messages }) => { repairs += 1; return messages; },
     fetchImpl: async (_url, init) => {
       const model = JSON.parse(init.body).model; models.push(model);
-      return response(model === 'ministral-8b-2512' ? 'invalid' : '{"ok":true}');
+      return response(model === 'agnes-3.0-flash' ? 'invalid' : '{"ok":true}');
     }, validate: extractJson,
   });
   assert.equal(repairs, 1);
-  assert.deepEqual(models, ['ministral-8b-2512', 'ministral-8b-2512', 'deepseek-v4.1-flash']);
-  assert.equal(result.provider, 'OPENCODE_GO');
+  assert.deepEqual(models, ['agnes-3.0-flash', 'agnes-3.0-flash', 'ministral-8b-2512']);
+  assert.equal(result.provider, 'MISTRAL');
 });
 test('permanent provider errors stay excluded across matches until the run ends', async () => {
   const breaker = createProviderBreaker();
   let blockedCalls = 0;
   const fetchImpl = async (_url, init) => {
-    if (JSON.parse(init.body).model === 'ministral-8b-2512') { blockedCalls += 1; return new Response('', { status: 403 }); }
+    if (JSON.parse(init.body).model === 'agnes-3.0-flash') { blockedCalls += 1; return new Response('', { status: 403 }); }
     return response('{"ok":true}');
   };
   await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
@@ -48,21 +48,19 @@ test('permanent provider errors stay excluded across matches until the run ends'
   assert.equal(blockedCalls, 1);
 });
 test('runtime resolution skips missing credentials and requirements and deduplicates', () => {
-  assert.deepEqual(resolveChain({ ...env, WORKERS_AI_API_KEY: 'x', LLM_PROVIDER_ORDER: 'UNKNOWN_MODEL,MISTRAL_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL' }, logger).map(p => p.id), ['MISTRAL', 'OPENCODE_GO']);
+  assert.deepEqual(resolveChain({ ...env, WORKERS_AI_API_KEY: 'x', LLM_PROVIDER_ORDER: 'UNKNOWN_MODEL,AGNES_MODEL,AGNES_MODEL,WORKERS_AI_MODEL,MISTRAL_MODEL' }, logger).map(p => p.id), ['AGNES', 'MISTRAL']);
 });
 test('HTTP error falls through exactly once and keeps temperature zero', async () => {
   const calls = [];
   const result = await withFailover([], { env, logger, fetchImpl: async (url, init) => { calls.push({ url, init }); return calls.length === 1 ? new Response('', { status: 429 }) : response('{"ok":true}'); }, validate: extractJson });
-  assert.equal(calls.length, 2); assert.equal(result.value.ok, true);
-  const mistralBody = JSON.parse(calls[0].init.body);
-  const opencodeBody = JSON.parse(calls[1].init.body);
-  assert.equal(mistralBody.temperature, 0);
-  assert.ok(!('reasoning_effort' in mistralBody));
-  assert.equal(opencodeBody.model, 'deepseek-v4.1-flash');
-  assert.ok(!('temperature' in opencodeBody));
-  assert.equal(opencodeBody.reasoning_effort, 'max');
-  assert.deepEqual(opencodeBody.thinking, { type: 'enabled' });
-  assert.ok(calls[1].init.headers['x-opencode-session']);
+  assert.equal(calls.length, 2);
+  assert.equal(result.provider, 'MISTRAL');
+  assert.equal(result.value.ok, true);
+  for (const call of calls) {
+    const body = JSON.parse(call.init.body);
+    assert.equal(body.temperature, 0);
+    assert.ok(!('reasoning_effort' in body));
+  }
 });
 test('caller validation failure and empty responses are aggregated', async () => {
   let calls = 0;
@@ -81,11 +79,11 @@ test('failures stay typed: transport vs validation', async () => {
   assert.ok(validation.details.every(d => d.provider && d.reason));
 });
 test('el proveedor que revive corta la cadena y reporta su modelo', async () => {
-  const result = await withFailover([], { env, logger, fetchImpl: async (url, init) => JSON.parse(init.body).model === 'ministral-8b-2512'
+  const result = await withFailover([], { env, logger, fetchImpl: async (url, init) => JSON.parse(init.body).model === 'agnes-3.0-flash'
     ? new Response('', { status: 500 })
     : response('{"ok":true}'), validate: extractJson });
-  assert.equal(result.provider, 'OPENCODE_GO');
-  assert.equal(result.model, 'deepseek-v4.1-flash');
+  assert.equal(result.provider, 'MISTRAL');
+  assert.equal(result.model, 'ministral-8b-2512');
 });
 test('thinking, nested data, arrays and braces in strings parse correctly', () => {
   assert.deepEqual(extractJson('<think>{ignore}</think>```json\n{"items":[{"label":"a } b"}]}\n```'), { items: [{ label: 'a } b' }] });
@@ -126,25 +124,25 @@ test('el fusible excluye tras 3 transportes seguidos y perdona al que responde',
 });
 test('withFailover salta excluidos y registra skipped sin quemar intentos', async () => {
   let calls = 0;
-  const result = await withFailover([], { env, logger, excludeProviders: ['MISTRAL'], fetchImpl: async () => { calls += 1; return response('{"ok":true}'); }, validate: extractJson });
+  const result = await withFailover([], { env, logger, excludeProviders: ['AGNES'], fetchImpl: async () => { calls += 1; return response('{"ok":true}'); }, validate: extractJson });
   assert.equal(calls, 1);
-  assert.equal(result.provider, 'OPENCODE_GO');
+  assert.equal(result.provider, 'MISTRAL');
 });
 test('fusible integrado: tras la racha el proveedor deja de intentarse', async () => {
   const breaker = createProviderBreaker({ maxConsecutiveFailures: 1 });
-  let mistralCalls = 0;
+  let primaryCalls = 0;
   const fetchImpl = async (url, init) => {
-    if (JSON.parse(init.body).model === 'ministral-8b-2512') { mistralCalls += 1; return new Response('', { status: 429 }); }
+    if (JSON.parse(init.body).model === 'agnes-3.0-flash') { primaryCalls += 1; return new Response('', { status: 429 }); }
     return response('{"ok":true}');
   };
   await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
-  assert.equal(mistralCalls, 1);
+  assert.equal(primaryCalls, 1);
   const again = await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
-  assert.equal(mistralCalls, 1);
-  assert.equal(again.provider, 'OPENCODE_GO');
+  assert.equal(primaryCalls, 1);
+  assert.equal(again.provider, 'MISTRAL');
 });
 test('Retry-After del 429 queda en details para el fusible', async () => {
-  const error = await withFailover([], { env: { OPENCODE_GO_API_KEY: 'x' }, logger, fetchImpl: async () => new Response('', { status: 429, headers: { 'retry-after': '5' } }) }).catch(e => e);
+  const error = await withFailover([], { env: { MISTRAL_API_KEY: 'x' }, logger, fetchImpl: async () => new Response('', { status: 429, headers: { 'retry-after': '5' } }) }).catch(e => e);
   assert.ok(error.details.every(d => d.retryAfterMs === 5000));
 });
 test('parseRetryAfter acepta segundos y fechas, ignora basura', () => {
@@ -161,7 +159,7 @@ test('el 400 es permanente y no reintentable como transporte', async () => {
 });
 test('mimo omite temperature para evitar 400 en thinking mode', async () => {
   const calls = [];
-  const mimoEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'mimo-v2.6-flash' };
+  const mimoEnv = { MISTRAL_API_KEY: 'x', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL', MISTRAL_MODEL: 'mimo-v2.6-flash' };
   const result = await withFailover([], { env: mimoEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
   assert.equal(calls.length, 1);
   assert.equal(calls[0].model, 'mimo-v2.6-flash');
@@ -179,15 +177,12 @@ test('workers AI construye URL con account id y usa glm-4.7-flash', async () => 
   assert.ok(calls[0].url === 'https://api.cloudflare.com/client/v4/accounts/abc123/ai/v1/chat/completions');
   assert.equal(calls[0].body.temperature, 0);
 });
-test('opencode go construye URL inference/go sin duplicar chat/completions', async () => {
-  const calls = [];
-  const oEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'mimo-v2.6-flash' };
-  await withFailover([], { env: oEnv, logger, fetchImpl: async (url) => { calls.push(url); return response('{"ok":true}'); }, validate: extractJson });
-  assert.ok(calls[0] === 'https://opencode.ai/inference/go/openai/v1/chat/completions');
+test('the registry contains only the three supported providers', () => {
+  assert.deepEqual(Object.keys(providers), ['AGNES', 'MISTRAL', 'WORKERS_AI']);
 });
 test('deepseek requests maximum reasoning without an ignored temperature', async () => {
   const calls = [];
-  const deepseekEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_FALLBACK_MODEL', OPENCODE_GO_FALLBACK_MODEL: 'deepseek-v4.1-flash' };
+  const deepseekEnv = { MISTRAL_API_KEY: 'x', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL', MISTRAL_MODEL: 'deepseek-v4.1-flash' };
   await withFailover([], { env: deepseekEnv, logger, fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return response('{"ok":true}'); }, validate: extractJson });
   assert.equal(calls[0].model, 'deepseek-v4.1-flash');
   assert.ok(!('temperature' in calls[0]));
@@ -204,57 +199,45 @@ test('agnes usa el hub de texto y recorta el techo al límite del proveedor', as
   assert.equal(calls[0].body.temperature, 0);
 });
 test('orderVar gana sobre LLM_PROVIDER_ORDER', () => {
-  const chain = resolveChain({
-    MISTRAL_API_KEY: 'a',
-    OPENCODE_GO_API_KEY: 'b',
-    LLM_PROVIDER_ORDER: 'MISTRAL_MODEL',
-    SCRIPT_PROVIDER_ORDER: 'OPENCODE_GO_MODEL,MISTRAL_MODEL',
-  }, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' });
-  assert.deepEqual(chain.map(p => p.id), ['OPENCODE_GO', 'MISTRAL']);
+  const chain = resolveChain({ ...env, LLM_PROVIDER_ORDER: 'AGNES_MODEL', SCRIPT_PROVIDER_ORDER: 'MISTRAL_MODEL,AGNES_MODEL' }, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' });
+  assert.deepEqual(chain.map(p => p.id), ['MISTRAL', 'AGNES']);
 });
 test('empty or missing orderVar uses LLM_PROVIDER_ORDER', () => {
-  const base = { MISTRAL_API_KEY: 'a', OPENCODE_GO_API_KEY: 'b', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', SCRIPT_PROVIDER_ORDER: '   ' };
-  assert.deepEqual(resolveChain(base, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' }).map(p => p.id), ['OPENCODE_GO']);
+  const base = { MISTRAL_API_KEY: 'a', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL', SCRIPT_PROVIDER_ORDER: '   ' };
+  assert.deepEqual(resolveChain(base, logger, { orderVar: 'SCRIPT_PROVIDER_ORDER' }).map(p => p.id), ['MISTRAL']);
   const { SCRIPT_PROVIDER_ORDER: _drop, ...without } = base;
-  assert.deepEqual(resolveChain(without, logger, { orderVar: 'ANALYSIS_PROVIDER_ORDER' }).map(p => p.id), ['OPENCODE_GO']);
+  assert.deepEqual(resolveChain(without, logger, { orderVar: 'ANALYSIS_PROVIDER_ORDER' }).map(p => p.id), ['MISTRAL']);
 });
-test('el fallback de OpenCode Go reusa la clave y entra en el orden por defecto', () => {
-  const chain = resolveChain({
-    MISTRAL_API_KEY: 'a',
-    WORKERS_AI_API_KEY: 'b',
-    CLOUDFLARE_ACCOUNT_ID: 'abc',
-    OPENCODE_GO_API_KEY: 'c',
-  }, logger);
-  assert.deepEqual(chain.map(p => p.id), ['MISTRAL', 'WORKERS_AI', 'OPENCODE_GO', 'OPENCODE_GO_FALLBACK']);
-  assert.equal(chain[2].model, 'deepseek-v4.1-flash');
-  assert.equal(chain[3].model, 'glm-5.3-flash');
-  assert.equal(chain[3].keyVar, 'OPENCODE_GO_API_KEY');
-  assert.equal(chain[0].model, 'ministral-8b-2512');
+test('all text tasks share the Agnes, Mistral, Workers AI default order', () => {
+  const configured = { AGNES_API_KEY: 'a', MISTRAL_API_KEY: 'b', WORKERS_AI_API_KEY: 'c', CLOUDFLARE_ACCOUNT_ID: 'account' };
+  for (const orderVar of [undefined, 'ANALYSIS_PROVIDER_ORDER', 'SCRIPT_PROVIDER_ORDER', 'EDITORIAL_PROVIDER_ORDER']) {
+    assert.deepEqual(resolveChain(configured, logger, { orderVar }).map(p => p.id), ['AGNES', 'MISTRAL', 'WORKERS_AI']);
+  }
 });
-test('DeepSeek fails and GLM answers through Go with the same session and credential', async () => {
+test('the full chain calls each backend once with its own credentials', async () => {
   const calls = [];
-  const result = await withFailover([{ role: 'user', content: 'OK' }], {
-    env: { OPENCODE_GO_API_KEY: 'test-go' }, logger,
+  const result = await withFailover([], {
+    env: { AGNES_API_KEY: 'a', MISTRAL_API_KEY: 'b', WORKERS_AI_API_KEY: 'c', CLOUDFLARE_ACCOUNT_ID: 'account' }, logger,
     fetchImpl: async (url, init) => {
-      calls.push({ url, headers: init.headers, body: JSON.parse(init.body) });
-      return calls.length === 1 ? new Response('', { status: 503 }) : response('OK');
+      calls.push({ url, headers: init.headers });
+      return calls.length < 3 ? new Response('', { status: 503 }) : response('OK');
     },
   });
-  assert.equal(result.provider, 'OPENCODE_GO_FALLBACK');
-  assert.equal(result.model, 'glm-5.3-flash');
-  assert.deepEqual(calls.map(call => call.body.model), ['deepseek-v4.1-flash', 'glm-5.3-flash']);
-  assert.ok(calls.every(call => call.url === 'https://opencode.ai/inference/go/openai/v1/chat/completions'));
-  assert.ok(calls.every(call => call.headers.authorization === 'Bearer test-go'));
-  assert.ok(calls.every(call => call.headers['user-agent'] === 'GoatLab/1.0'));
-  assert.ok(calls[0].headers['x-opencode-session']);
-  assert.equal(calls[0].headers['x-opencode-session'], calls[1].headers['x-opencode-session']);
+  assert.equal(result.provider, 'WORKERS_AI');
+  assert.deepEqual(calls.map(c => c.url), [
+    'https://apihub.agnes-ai.com/v1/chat/completions',
+    'https://api.mistral.ai/v1/chat/completions',
+    'https://api.cloudflare.com/client/v4/accounts/account/ai/v1/chat/completions',
+  ]);
+  assert.deepEqual(calls.map(c => c.headers.authorization), ['Bearer a', 'Bearer b', 'Bearer c']);
+  assert.ok(calls.every(c => Object.keys(c.headers).length === 2));
 });
 test('un orden en blanco usa la cadena por defecto', () => {
   const chain = resolveChain({ MISTRAL_API_KEY: 'a', LLM_PROVIDER_ORDER: '   ' }, logger);
   assert.deepEqual(chain.map(p => p.id), ['MISTRAL']);
 });
 test('reasoning_content covers empty content', async () => {
-  const onlyReasoning = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL', OPENCODE_GO_MODEL: 'deepseek-v4.1-flash' };
+  const onlyReasoning = { MISTRAL_API_KEY: 'x', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL', MISTRAL_MODEL: 'deepseek-v4.1-flash' };
   const result = await withFailover([], {
     env: onlyReasoning,
     logger,
@@ -264,7 +247,7 @@ test('reasoning_content covers empty content', async () => {
   assert.equal(result.value.ok, true);
 });
 test('content en partes se concatena', async () => {
-  const partsEnv = { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL' };
+  const partsEnv = { MISTRAL_API_KEY: 'x', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL' };
   const result = await withFailover([], {
     env: partsEnv,
     logger,
@@ -275,7 +258,7 @@ test('content en partes se concatena', async () => {
 });
 test('razonamiento sin respuesta y finish length es truncado', async () => {
   const error = await withFailover([], {
-    env: { OPENCODE_GO_API_KEY: 'x', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL' },
+    env: { MISTRAL_API_KEY: 'x', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL' },
     logger,
     maxTokens: 40,
     fetchImpl: async () => new Response(JSON.stringify({ choices: [{ message: { content: null, reasoning_content: 'pensando' }, finish_reason: 'length' }], usage: { completion_tokens: 40 } })),
@@ -287,7 +270,7 @@ test('razonamiento sin respuesta y finish length es truncado', async () => {
 test('GLM fallback receives maximum reasoning and success records latency', async () => {
   const calls = [];
   const result = await withFailover([], {
-    env: { OPENCODE_GO_API_KEY: 'test', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL' },
+    env: { ...env, MISTRAL_MODEL: 'glm-5.3-flash' },
     logger, fetchImpl: async (_url, init) => {
       calls.push(JSON.parse(init.body));
       return calls.length === 1 ? new Response('', { status: 503 }) : response('{"ok":true}');
@@ -313,7 +296,7 @@ function sse(events, { split = false } = {}) {
     controller.close();
   } }), { headers: { 'content-type': 'text/event-stream; charset=utf-8' } });
 }
-const streamingEnv = { OPENCODE_GO_API_KEY: 'test', LLM_PROVIDER_ORDER: 'OPENCODE_GO_MODEL' };
+const streamingEnv = { MISTRAL_API_KEY: 'test', MISTRAL_MODEL: 'deepseek-v4.1-flash', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL' };
 test('streaming preserves spaces and split UTF-8, ignores reasoning and retains final usage', async () => {
   const result = await withFailover([], { env: streamingEnv, logger, maxTokens: 131072, validate: extractJson, fetchImpl: async (_url, init) => {
     const body = JSON.parse(init.body);
