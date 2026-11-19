@@ -198,6 +198,18 @@ test('scripts: projection metadata is derived from the spoken beat without chang
   assert.equal(saved.scripts[0].projection, candidate.scripts[0].narration.find(b => b.beat === 'proyeccion').text);
   assert.equal(service.calls(), 1);
 });
+test('scripts: repair can return only the rejected numbered script', async t => {
+  const invalid = draft();
+  invalid.scripts[0] = JSON.parse(JSON.stringify(invalid.scripts[0]).replaceAll('Alpha', 'Gamma'));
+  const service = await model(t, calls => calls === 1 ? invalid : { scripts: [{ ...draft().scripts[0], n: 1 }] });
+  const f = await fixture(t, consumers[0]);
+  await scriptGuide(f);
+  const result = await f.run([], service.env);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(service.calls(), 2);
+  const saved = JSON.parse(await readFile(join(f.directory, 'upcoming.json'), 'utf8'));
+  assert.equal(saved.scripts.length, 10);
+});
 test('scripts: probability informs the editorial prompt while saving the model projection', async t => {
   const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };
   const prob = {

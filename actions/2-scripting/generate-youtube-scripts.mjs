@@ -227,11 +227,20 @@ async function draftMatch(match, { breaker, skill, published, facts, priorFailur
       breaker,
       orderVar: 'SCRIPT_PROVIDER_ORDER',
       validationRetries: 2,
-      repairMessages: ({ messages, content, error }) => [
-        ...messages,
-        { role: 'assistant', content: error.draft ? JSON.stringify(error.draft) : content },
-        { role: 'user', content: `Corrige este borrador y devuelve el JSON completo de los 10 guiones. Conserva los guiones válidos y los hechos originales. No inventes datos ni rebajes las reglas. Cada guion debe nombrar literalmente a ${facts.home} y ${facts.away}, sumar entre 55 y 100 palabras y tener como máximo 3 cifras sin contar la fecha. Apunta a 70–85 palabras para evitar quedarte corto. Un marcador consume 2 cifras: si lo usas, conserva como máximo 1 cifra histórica. Las fechas las inserta el sistema. Añade análisis condicional cuando falten palabras, sin añadir hechos nuevos. Corrige todos estos errores:\n${(error.validationErrors ?? [error.message]).join('\n')}` },
-      ],
+      repairMessages: ({ messages, content, error, attempt }) => {
+        const rejected = [...new Set((error.validationErrors ?? []).flatMap(message => {
+          const match = /^guion (\d+):/.exec(message); return match ? [Number(match[1])] : [];
+        }))];
+        const format = error.draft?.scripts?.length === 10
+          ? `Devuelve solo un objeto JSON con scripts: una lista de reemplazos con n, hook, narration y projection ÚNICAMENTE para los guiones ${rejected.join(', ') || 'ninguno'}. No repitas los guiones válidos. Incluye lede solo si tiene errores. Cada n es el número original del guion, no su posición en esta lista.`
+          : 'Devuelve el JSON completo con lede y exactamente 10 scripts numerados del 1 al 10.';
+        console.log(`shorts: ${matchId}: corrección ${attempt}, guiones rechazados: ${rejected.join(', ') || 'estructura general'}`);
+        return [
+          ...messages,
+          { role: 'assistant', content: error.draft ? JSON.stringify(error.draft) : content },
+          { role: 'user', content: `${format} Conserva los hechos originales. No inventes datos ni rebajes las reglas. Cada guion debe nombrar literalmente a ${facts.home} y ${facts.away}, sumar entre 55 y 100 palabras y tener como máximo 3 cifras sin contar la fecha. Apunta a 70–85 palabras. Un marcador consume 2 cifras: si lo usas, conserva como máximo 1 cifra histórica. Las fechas las inserta el sistema. Añade análisis condicional cuando falten palabras, sin añadir hechos nuevos. Errores:\n${(error.validationErrors ?? [error.message]).join('\n')}\n${(error.repairHints ?? []).join('\n')}` },
+        ];
+      },
       validate: (content, context) => validateDraft(validateCandidate(content, context), match, { published, facts, matchId }),
     });
     noteLlmHealth({
