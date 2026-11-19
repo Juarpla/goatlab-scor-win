@@ -73,8 +73,16 @@ for (const id of ids) {
 rows.sort((a, b) => (a.kickoff ?? a.date).localeCompare(b.kickoff ?? b.date)
   || (a.top ?? 999) - (b.top ?? 999) || a.match.localeCompare(b.match));
 
+// Keep renderable rows separate, but make missing automatic banks visible.
+const queuedIds = new Set((top?.selectionIds ?? ranking.slice(0, 5).map(row => row.id)).slice(0, 5));
+const pending = ranking.filter(row => queuedIds.has(row.id) && !rows.some(pack => pack.id === row.id)
+  && Date.parse(row.kickoff) > now).map(row => ({
+    id: row.id, match: `${row.home} vs ${row.away}`,
+    script: !!readJson(join(SCRIPT_DIR, `${row.id}.json`)),
+  }));
+
 if (asJson) {
-  console.log(JSON.stringify({ generatedAt: top?.generatedAt ?? null, rows }, null, 2));
+  console.log(JSON.stringify({ generatedAt: top?.generatedAt ?? null, rows, pending }, null, 2));
 } else {
   const source = all ? 'public/data/media-pack (packs y progresos)' : `public/data/top.json (${top?.generatedAt ?? 'sin top.json'}) + media-pack`;
   console.log(`${all ? 'Todos los packs y progresos en disco' : 'Partidos del ranking actual con pack o progreso'} · fuente: ${source}`);
@@ -97,5 +105,9 @@ if (asJson) {
   } else {
     console.log('No hay partidos futuros del ranking con pack o progreso.');
     console.log('Actualiza los datos (workflow 1-update-data) o usa --all para ver packs antiguos.');
+  }
+  if (!all && pending.length) {
+    console.log(`\nAdemás hay ${pending.length} partido(s) de la selección automática pendientes de banco multimedia:`);
+    for (const row of pending) console.log(`- ${row.match} · ${row.script ? 'guion disponible; falta media' : 'falta guion y media'} · ${row.id}`);
   }
 }
