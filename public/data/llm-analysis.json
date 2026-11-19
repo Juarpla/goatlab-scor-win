@@ -7196,54 +7196,70 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Contexto del encuentro Chelsea-Leeds",
+        "title": "Chelsea recibe a Leeds en la Premier League",
         "bullets": [
-          "El partido se disputa el 21 de noviembre de 2026 en la Premier League.",
-          "El pronóstico del clima indica lluvia con sensación de 7 grados.",
-          "No se reportan bajas confirmadas para ambos equipos."
+          "El partido se disputa el 21 de noviembre de 2026 a las 15:00 UTC.",
+          "La sede de Chelsea presenta condiciones de lluvia con una intensidad de 7."
         ],
         "stats": []
       },
       {
         "kind": "modelos",
-        "title": "Lecturas de modelos GoatLab y Bzzoiro",
+        "title": "Estimaciones de probabilidad y goles",
         "bullets": [
-          "Poisson GoatLab asigna 0.767 de probabilidad a la victoria local y 0.214 al empate.",
-          "CatBoost Bzzoiro estima 0.505 de probabilidad para el resultado local.",
-          "El modelo Bzzoiro declara el 1-1 como resultado más probable con 0.489."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "historial",
-        "title": "Cruces previos y rendimiento",
-        "bullets": [
-          "Chelsea ha ganado 16 de 36 cruces totales frente a Leeds.",
-          "En el último cruce directo (sept 2026), Chelsea venció por 6-3.",
-          "Leeds ha marcado en 2 de sus últimos 5 partidos como visitante."
+          "El modelo Poisson GoatLab asigna una probabilidad de victoria de 0.767 y 0.468 para el empate.",
+          "Bzzoiro proyecta una mayor probabilidad de resultado local (H) y un total de goles esperado de 1.64.",
+          "API-Football indica una probabilidad de que ambos anoten del 0.396 y un umbral de goles de 0.331."
         ],
         "stats": [
           {
-            "value": "6-3",
-            "label": "Último cruce Chelsea-Leeds"
+            "value": "0.767",
+            "label": "Prob. victoria P"
+          },
+          {
+            "value": "1.64",
+            "label": "Goles totales B"
+          },
+          {
+            "value": "0.396",
+            "label": "Ambos anotan A"
           }
         ]
       },
       {
         "kind": "tabla",
-        "title": "Posición en la clasificación",
+        "title": "Posición en la clasificación de la Premier",
         "bullets": [
-          "Chelsea ocupa el 5to lugar con 10 puntos, 16 goles a favor y 16 en contra.",
-          "Leeds se ubica en la 9ta posición con 10 puntos, 14 a favor y 8 en contra."
+          "Chelsea ocupa la posición 5 con 10 puntos, 19 goles a favor y 16 en contra.",
+          "Leeds United está en el puesto 9 con 10 puntos, 10 goles a favor y 8 en contra."
         ],
         "stats": [
           {
             "value": "5",
-            "label": "Posición Chelsea"
+            "label": "Puesto Chelsea"
           },
           {
             "value": "9",
-            "label": "Posición Leeds"
+            "label": "Puesto Leeds"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros destacados de ambos equipos",
+        "bullets": [
+          "João Pedro y Morgan Rogers lideran en Chelsea con 5 goles cada uno, en 6 y 10 partidos respectivamente.",
+          "Dominic Calvert-Lewin es el máximo anotador de Leeds con 3 goles en 9 partidos.",
+          "Cole Palmer de Chelsea y Jayden Bogle de Leeds suman 3 y 2 goles respectivamente."
+        ],
+        "stats": [
+          {
+            "value": "5",
+            "label": "Goles J. Pedro"
+          },
+          {
+            "value": "5",
+            "label": "Goles M. Rogers"
           }
         ]
       },
@@ -7251,21 +7267,20 @@
         "kind": "forma",
         "title": "Racha y resultados recientes",
         "bullets": [
-          "Chelsea ha perdido 2 de sus últimos 3 partidos como local o visitante.",
-          "Leeds mantiene 2 empates y 1 victoria en sus últimos 5 encuentros.",
-          "La forma reciente muestra a Chelsea con mayor volumen de goles anotados."
+          "Chelsea ganó su último partido contra Manchester United 2-0 y empató contra Tottenham 0-2.",
+          "Leeds ganó contra Tottenham 1-0 y perdió contra Bournemouth 2-0 en sus últimos encuentros."
         ],
         "stats": []
       }
     ],
     "limitations": [
       {
-        "label": "Bajas no especificadas",
-        "detail": "No se proporcionó información de bajas confirmadas en el bloque L, por lo que el análisis asume alineaciones completas."
+        "label": "Historial limitado",
+        "detail": "Se registran 5 cruces previos entre Chelsea y Leeds desde 2024, con predominio de victorias locales o empates."
       },
       {
-        "label": "Clima limitado",
-        "detail": "Solo se indica lluvia y temperatura de 7 grados, sin detalles de viento o impacto en el juego."
+        "label": "Clima variable",
+        "detail": "La lluvia en la sede de Chelsea podría influir en el ritmo del juego y la efectividad de los atacantes."
       }
     ],
     "review": {
@@ -7274,76 +7289,79 @@
     },
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-18T15:35:39.678Z",
-    "inputKey": "v3|M|fd-560642|Chelsea FC|Leeds United FC|premier|2026-11-21T15:00:00Z|NS\nP|1.26|0.767|0.468|0.319|0.214|0.331|0.396\nB|0.505|0.253|0.241|1.64|1.29|0.546|0.561|1-1|0.489\nB2|H|0.505|no|no\nH|36|16|10|10|2.64\nW||rain|7|\nT|5|Chelsea FC|10|16|19|16\nT|9|Leeds United FC|10|14|10|8\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|5|10\nS|Cole Palmer|Chelsea FC|3|10\nS|Dominic Calvert-Lewin|Leeds United FC|3|9\nS|Jayden Bogle|Leeds United FC|2|9\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Arsenal FC|Leeds United FC|2|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Chelsea FC|Manchester United FC|2|0\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-07|Leeds United FC|Tottenham Hotspur FC|1|0\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-09-09|Chelsea|Leeds United|6|3\nHR|2026-04-26|Chelsea|Leeds United|1|0\nHR|2026-02-10|Chelsea|Leeds United|2|2\nHR|2025-12-03|Leeds United|Chelsea|3|1\nHR|2024-02-28|Chelsea|Leeds United|3|2",
-    "materialKey": "v3|M|fd-560642|Chelsea FC|Leeds United FC|premier|2026-11-21T15:00:00Z|NS\nP|1.26|0.767|0.468|0.319|0.214|0.331|0.396\nB|0.505|0.253|0.241|1.64|1.29|0.546|0.561|1-1|0.489\nB2|H|0.505|no|no\nH|36|16|10|10|2.64\nW||rain|7|\nT|5|Chelsea FC|10|16|19|16\nT|9|Leeds United FC|10|14|10|8\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|5|10\nS|Cole Palmer|Chelsea FC|3|10\nS|Dominic Calvert-Lewin|Leeds United FC|3|9\nS|Jayden Bogle|Leeds United FC|2|9\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Arsenal FC|Leeds United FC|2|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Chelsea FC|Manchester United FC|2|0\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-07|Leeds United FC|Tottenham Hotspur FC|1|0\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-09-09|Chelsea|Leeds United|6|3\nHR|2026-04-26|Chelsea|Leeds United|1|0\nHR|2026-02-10|Chelsea|Leeds United|2|2\nHR|2025-12-03|Leeds United|Chelsea|3|1\nHR|2024-02-28|Chelsea|Leeds United|3|2"
+    "generatedAt": "2026-11-19T20:40:49.709Z",
+    "inputKey": "v3|M|fd-560642|Chelsea FC|Leeds United FC|premier|2026-11-21T15:00:00Z|NS\nP|1.26|0.767|0.468|0.319|0.214|0.331|0.396\nB|0.507|0.253|0.24|1.64|1.29|0.542|0.561|1-1|0.489\nB2|H|0.507|no|no\nH|36|16|10|10|2.64\nW||rain|7|\nT|5|Chelsea FC|10|16|19|16\nT|9|Leeds United FC|10|14|10|8\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|5|10\nS|Cole Palmer|Chelsea FC|3|10\nS|Dominic Calvert-Lewin|Leeds United FC|3|9\nS|Jayden Bogle|Leeds United FC|2|9\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Arsenal FC|Leeds United FC|2|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Chelsea FC|Manchester United FC|2|0\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-07|Leeds United FC|Tottenham Hotspur FC|1|0\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-09-09|Chelsea|Leeds United|6|3\nHR|2026-04-26|Chelsea|Leeds United|1|0\nHR|2026-02-10|Chelsea|Leeds United|2|2\nHR|2025-12-03|Leeds United|Chelsea|3|1\nHR|2024-02-28|Chelsea|Leeds United|3|2",
+    "materialKey": "v3|M|fd-560642|Chelsea FC|Leeds United FC|premier|2026-11-21T15:00:00Z|NS\nP|1.26|0.767|0.468|0.319|0.214|0.331|0.396\nB|0.507|0.253|0.24|1.64|1.29|0.542|0.561|1-1|0.489\nB2|H|0.507|no|no\nH|36|16|10|10|2.64\nW||rain|7|\nT|5|Chelsea FC|10|16|19|16\nT|9|Leeds United FC|10|14|10|8\nS|João Pedro|Chelsea FC|5|6\nS|Morgan Rogers|Chelsea FC|5|10\nS|Cole Palmer|Chelsea FC|3|10\nS|Dominic Calvert-Lewin|Leeds United FC|3|9\nS|Jayden Bogle|Leeds United FC|2|9\nR|2026-09-18|Brentford FC|Chelsea FC|3|0\nR|2026-09-20|Leeds United FC|Crystal Palace FC|0|0\nR|2026-10-10|Chelsea FC|AFC Bournemouth|5|1\nR|2026-10-10|Arsenal FC|Leeds United FC|2|1\nR|2026-10-17|Everton FC|Chelsea FC|0|2\nR|2026-10-18|Leeds United FC|Manchester United FC|1|1\nR|2026-10-24|Chelsea FC|Tottenham Hotspur FC|0|2\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Chelsea FC|Manchester United FC|2|0\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-07|Leeds United FC|Tottenham Hotspur FC|1|0\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-09-09|Chelsea|Leeds United|6|3\nHR|2026-04-26|Chelsea|Leeds United|1|0\nHR|2026-02-10|Chelsea|Leeds United|2|2\nHR|2025-12-03|Leeds United|Chelsea|3|1\nHR|2024-02-28|Chelsea|Leeds United|3|2"
   },
   "fd-560644": {
     "summary": [
       {
         "kind": "panorama",
-        "title": "Cruce Premier League: Aston Villa recibe al Sunderland",
+        "title": "Cruce Premier League: Villa vs Sunderland",
         "bullets": [
-          "El partido se disputa el 21 de noviembre de 2026 en sede del Aston Villa, con condiciones de lluvia y nivel de riesgo 2.",
-          "Aston Villa llega en la posición 10 de la tabla con 17 puntos, mientras Sunderland ocupa el 19 con la misma cantidad de puntos.",
-          "Sunderland no ha conseguido ganar en sus últimos tres enfrentamientos directos contra Villa, que ha sumado victorias en 3 de los últimos 5 cruces."
+          "Partido de la jornada en la Premier League entre Aston Villa y Sunderland.",
+          "El encuentro se disputará el 21 de noviembre de 2026 a las 15:00 UTC.",
+          "Situación meteorológica con lluvia y nivel 2 en la sede."
         ],
-        "stats": [
-          {
-            "value": "10",
-            "label": "Posición Villa"
-          },
-          {
-            "value": "19",
-            "label": "Posición Sund."
-          }
-        ]
+        "stats": []
       },
       {
         "kind": "modelos",
-        "title": "Proyecciones de probabilidades y goles",
+        "title": "Estimaciones probabilísticas de los proveedores",
         "bullets": [
-          "GoatLab estima un 52.8% de probabilidad de victoria local, 20.8% empate y 26.2% visitante, con un 53% de probabilidad de que ambos anoten.",
-          "El modelo Bzzoiro (CatBoost) proyecta un 52.5% de probabilidad local, 25.3% empate y 22.2% visitante, indicando que no hay goles en ambos equipos en su lectura principal.",
-          "La proyección de goles totales de Bzzoiro es de 2.62, con 1.14 para el local y 1.14 para el visitante, destacando el 1-1 como resultado más probable con un 47.1%."
+          "GoatLab Poisson proyecta una victoria local de 53% y empate de 26%.",
+          "El modelo Bzzoiro CatBoost estima un 52.3% de probabilidad para el Aston Villa.",
+          "Bzzoiro declarada predice un empate a 1-1 como resultado más probable con 47.1% de chance.",
+          "La lectura de API-Football indica una distribución con mayor probabilidad local (52.8%)."
         ],
         "stats": [
           {
-            "value": "52.8%",
-            "label": "Prob. local P"
+            "value": "1-1",
+            "label": "Resultado Bzzoiro"
           }
         ]
       },
       {
         "kind": "historial",
-        "title": "Historial de enfrentamientos directos",
+        "title": "Balance en cruces directos previos",
         "bullets": [
-          "En 35 cruces previos, Aston Villa ha ganado 14, Sunderland 7 y hay 14 empates, para un promedio de 2.14 goles por partido.",
-          "El último enfrentamiento en abril de 2026 terminó 4-3 a favor de Villa, mientras que en septiembre de 2025 fue empate 1-1.",
-          "Aston Villa acumula victorias en los dos partidos más recientes del historial disponible antes de 2025 (2018 y 2017)."
+          "En 35 enfrentamientos totales, el Aston Villa suma 14 victorias frente a 14 de Sunderland.",
+          "Han ocurrido 7 empates en la historia reciente del cruce.",
+          "La media de goles anotados por partido es de 2.14."
         ],
         "stats": [
           {
-            "value": "14",
-            "label": "Victorias Villa"
-          },
-          {
-            "value": "7",
-            "label": "Victorias Sund."
-          },
-          {
             "value": "2.14",
-            "label": "Goles prom."
+            "label": "Media goles/partido"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posición en la clasificación actual",
+        "bullets": [
+          "Aston Villa se ubica en la posición 10 con 10 puntos, 3 victorias y 4 empates.",
+          "Sunderland ocupa la posición 19 con 8 puntos, 2 victorias y 8 empates.",
+          "El Aston Villa ha recibido 17 goles, mientras que el Sunderland también ha recibido 17."
+        ],
+        "stats": [
+          {
+            "value": "10",
+            "label": "Puesto Villa"
+          },
+          {
+            "value": "19",
+            "label": "Puesto Sunderland"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Artilleros y máximos anotadores",
+        "title": "Arqueros destacados de ambos equipos",
         "bullets": [
-          "Nicolas Jackson lidera el ataque del Aston Villa con 6 goles en 9 partidos.",
-          "En Sunderland, Brian Brobbey y Enzo Le Fée comparten el liderato con 3 goles cada uno, jugando 8 y 10 partidos respectivamente.",
-          "Alysson (Villa) y Johan Manzambi (Villa) suman 2 goles cada uno, mientras que no se registran anotaciones para otros delanteros en la lista proporcionada."
+          "Nicolas Jackson es el máximo goleador del Aston Villa con 6 goles en 9 apariciones.",
+          "Brian Brobbey lidera al Sunderland con 3 goles en 8 partidos disputados.",
+          "Enzo Le Fée completa la línea de goleadores del Sunderland con 3 goles en 10 salidas."
         ],
         "stats": [
           {
@@ -7353,56 +7371,29 @@
           {
             "value": "3",
             "label": "Goles Brobbey"
-          },
-          {
-            "value": "3",
-            "label": "Goles Le Fée"
-          }
-        ]
-      },
-      {
-        "kind": "forma",
-        "title": "Racha y resultados recientes",
-        "bullets": [
-          "Aston Villa llega con mezcla de resultados: victoria ante Newcastle (1-0), derrota ante Barcelona (0-3) y empate ante Fulham (1-1) en sus últimos partidos.",
-          "Sunderland ha sumado un empate ante Leeds (0-0) y una victoria ante Chelsea (1-0), pero cayó derrotado ante Coventry (1-3) y Dinamo Zagreb (0-2).",
-          "Los modelos no presentan desviaciones claras en sus porcentajes de probabilidad respecto a los datos de forma reciente y tabla."
-        ],
-        "stats": [
-          {
-            "value": "1-0",
-            "label": "Último Vill. (Prem.)"
-          },
-          {
-            "value": "1-0",
-            "label": "Último Sund. (Prem.)"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Faltan bajas confirmadas",
-        "detail": "No se proporcionaron datos de lesionados o suspendidos (L), por lo que la disponibilidad de plantel no está auditada."
+        "label": "Clima incierto",
+        "detail": "La lluvia nivel 2 puede afectar la velocidad del juego y la precisión de los disparos, generando variabilidad en el rendimiento de ambos equipos."
       },
       {
-        "label": "Sin datos de API-Football",
-        "detail": "No se incluye información de la distribución A, por lo que la lectura se limita a los modelos P, B y Bzzoiro."
-      },
-      {
-        "label": "Clima con incertidumbre",
-        "detail": "Se indica lluvia y nivel 2, pero sin detalles de intensidad o viento que afecten la lectura táctica."
+        "label": "Datos de bajas",
+        "detail": "No se proporcionan información de bajas confirmadas en el input, lo que limita la evaluación del impacto en las alineaciones titulares."
       }
     ],
     "review": {
       "flag": false,
-      "note": "Los porcentajes de los modelos son coherentes con el historial y la forma reciente. No se detectan desviaciones claras que requieran alerta."
+      "note": null
     },
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-18T15:35:50.569Z",
-    "inputKey": "v3|M|fd-560644|Aston Villa FC|Sunderland AFC|premier|2026-11-21T15:00:00Z|NS\nP|1.71|0.997|0.53|0.262|0.208|0.508|0.528\nB|0.525|0.253|0.222|1.62|1.14|0.533|0.55|1-1|0.471\nB2|H|0.525|no|no\nH|35|14|14|7|2.14\nW||rain|2|\nT|10|Aston Villa FC|10|13|14|17\nT|19|Sunderland AFC|10|8|8|17\nS|Nicolas Jackson|Aston Villa FC|6|9\nS|Alysson|Aston Villa FC|2|9\nS|Johan Manzambi|Aston Villa FC|2|7\nS|Brian Brobbey|Sunderland AFC|3|8\nS|Enzo Le Fée|Sunderland AFC|3|10\nR|2026-10-17|Newcastle United FC|Aston Villa FC|0|1\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-21|Aston Villa FC|Viking FK|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Aston Villa FC|Fulham FC|1|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nR|2026-11-08|Manchester United FC|Aston Villa FC|4|4\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-04-19|Aston Villa|Sunderland|4|3\nHR|2025-09-21|Sunderland|Aston Villa|1|1\nHR|2018-03-06|Sunderland|Aston Villa|0|3\nHR|2017-11-21|Aston Villa|Sunderland|2|1\nHR|2016-01-02|Sunderland|Aston Villa|3|1",
-    "materialKey": "v3|M|fd-560644|Aston Villa FC|Sunderland AFC|premier|2026-11-21T15:00:00Z|NS\nP|1.71|0.997|0.53|0.262|0.208|0.508|0.528\nB|0.525|0.253|0.222|1.62|1.14|0.533|0.55|1-1|0.471\nB2|H|0.525|no|no\nH|35|14|14|7|2.14\nW||rain|2|\nT|10|Aston Villa FC|10|13|14|17\nT|19|Sunderland AFC|10|8|8|17\nS|Nicolas Jackson|Aston Villa FC|6|9\nS|Alysson|Aston Villa FC|2|9\nS|Johan Manzambi|Aston Villa FC|2|7\nS|Brian Brobbey|Sunderland AFC|3|8\nS|Enzo Le Fée|Sunderland AFC|3|10\nR|2026-10-17|Newcastle United FC|Aston Villa FC|0|1\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-21|Aston Villa FC|Viking FK|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Aston Villa FC|Fulham FC|1|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nR|2026-11-08|Manchester United FC|Aston Villa FC|4|4\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-04-19|Aston Villa|Sunderland|4|3\nHR|2025-09-21|Sunderland|Aston Villa|1|1\nHR|2018-03-06|Sunderland|Aston Villa|0|3\nHR|2017-11-21|Aston Villa|Sunderland|2|1\nHR|2016-01-02|Sunderland|Aston Villa|3|1"
+    "generatedAt": "2026-11-19T20:41:01.318Z",
+    "inputKey": "v3|M|fd-560644|Aston Villa FC|Sunderland AFC|premier|2026-11-21T15:00:00Z|NS\nP|1.71|0.997|0.53|0.262|0.208|0.508|0.528\nB|0.523|0.252|0.225|1.62|1.14|0.532|0.553|1-1|0.471\nB2|H|0.523|no|no\nH|35|14|14|7|2.14\nW||rain|2|\nT|10|Aston Villa FC|10|13|14|17\nT|19|Sunderland AFC|10|8|8|17\nS|Nicolas Jackson|Aston Villa FC|6|9\nS|Alysson|Aston Villa FC|2|9\nS|Johan Manzambi|Aston Villa FC|2|7\nS|Brian Brobbey|Sunderland AFC|3|8\nS|Enzo Le Fée|Sunderland AFC|3|10\nR|2026-10-17|Newcastle United FC|Aston Villa FC|0|1\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-21|Aston Villa FC|Viking FK|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Aston Villa FC|Fulham FC|1|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nR|2026-11-08|Manchester United FC|Aston Villa FC|4|4\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-04-19|Aston Villa|Sunderland|4|3\nHR|2025-09-21|Sunderland|Aston Villa|1|1\nHR|2018-03-06|Sunderland|Aston Villa|0|3\nHR|2017-11-21|Aston Villa|Sunderland|2|1\nHR|2016-01-02|Sunderland|Aston Villa|3|1",
+    "materialKey": "v3|M|fd-560644|Aston Villa FC|Sunderland AFC|premier|2026-11-21T15:00:00Z|NS\nP|1.71|0.997|0.53|0.262|0.208|0.508|0.528\nB|0.523|0.252|0.225|1.62|1.14|0.532|0.553|1-1|0.471\nB2|H|0.523|no|no\nH|35|14|14|7|2.14\nW||rain|2|\nT|10|Aston Villa FC|10|13|14|17\nT|19|Sunderland AFC|10|8|8|17\nS|Nicolas Jackson|Aston Villa FC|6|9\nS|Alysson|Aston Villa FC|2|9\nS|Johan Manzambi|Aston Villa FC|2|7\nS|Brian Brobbey|Sunderland AFC|3|8\nS|Enzo Le Fée|Sunderland AFC|3|10\nR|2026-10-17|Newcastle United FC|Aston Villa FC|0|1\nR|2026-10-18|AFC Bournemouth|Sunderland AFC|2|0\nR|2026-10-21|Aston Villa FC|Viking FK|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Aston Villa FC|Fulham FC|1|1\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nR|2026-11-08|Manchester United FC|Aston Villa FC|4|4\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nHR|2026-04-19|Aston Villa|Sunderland|4|3\nHR|2025-09-21|Sunderland|Aston Villa|1|1\nHR|2018-03-06|Sunderland|Aston Villa|0|3\nHR|2017-11-21|Aston Villa|Sunderland|2|1\nHR|2016-01-02|Sunderland|Aston Villa|3|1"
   },
   "fd-560650": {
     "matchId": "fd-560650",
