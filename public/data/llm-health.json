@@ -1,213 +1,6 @@
 {
-  "updatedAt": "2026-11-18T21:01:28.157Z",
+  "updatedAt": "2026-11-19T07:29:52.278Z",
   "runs": [
-    {
-      "at": "2026-11-12T20:38:00.297Z",
-      "task": "shorts",
-      "matchId": "moldova-vs-kazakhstan-2026-11-13",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 50 palabras, mínimo 55; guion 2: falta Moldavia; guion 2: falta Kazajistán; guion 2: 52 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 3: 53 palabras, mínimo 55; guion 4: 49 palabras, mínimo 55; guion 5: 46 palabras, mínimo 55",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7459,
-            "outputTokens": 2674
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 26441
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7108,
-            "outputTokens": 29849
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 345381
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 9: falta Moldavia",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6980,
-            "outputTokens": 35686
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 419885
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Moldavia; guion 2: falta Kazajistán; guion 2: 52 palabras, mínimo 55; guion 4: 54 palabras, mínimo 55; guion 5: golpe 3 (dato): 5 palabras, mínimo 6; guion 5: 4 cifras, máximo 3; guion 5: 50 palabras, mínimo 55; guion 6: Nuraly Alip va en un guion de jugadores",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7595,
-            "outputTokens": 2539
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14413
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: el cero no se escribe en dígitos; guion 1: 5 cifras, máximo 3; guion 2: falta Kazajistán; guion 2: 6 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: falta Moldavia; guion 4: falta Kazajistán; guion 4: el cero no se escribe en dígitos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6973,
-            "outputTokens": 8223
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 136187
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6973,
-        "outputTokens": 8223
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-12T20:44:38.886Z",
-      "task": "shorts",
-      "matchId": "scotland-vs-north-macedonia-2026-11-13",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: falta Macedonia del Norte; guion 1: el cero no se escribe en dígitos; guion 1: 4 cifras, máximo 3; guion 1: 54 palabras, mínimo 55; guion 4: falta Macedonia del Norte; guion 4: 52 palabras, mínimo 55; guion 5: 5 cifras, máximo 3; guion 6: falta Macedonia del Norte",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7282,
-            "outputTokens": 2746
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 22613
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: proyección fuera de rango; guion 3: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 6 cifras, máximo 3; guion 8: proyección fuera de rango",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6931,
-            "outputTokens": 23097
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 218890
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 2: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: falta Macedonia del Norte",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6814,
-            "outputTokens": 33509
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 357885
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Macedonia del Norte; guion 2: 47 palabras, mínimo 55; guion 3: 5 cifras, máximo 3; guion 4: falta Macedonia del Norte; guion 4: 49 palabras, mínimo 55; guion 5: 6 cifras, máximo 3; guion 6: gancho repetido; guion 6: falta Macedonia del Norte",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7380,
-            "outputTokens": 2413
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12285
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235366
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 8: 52 palabras, mínimo 55; guion 9: falta Macedonia del Norte",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7282,
-            "outputTokens": 2797
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 22869
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 375720
-      },
-      "usage": {
-        "inputTokens": 6931,
-        "outputTokens": 29780
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "a2f1dbb6-7e36-4272-bc5e-0d4a280d2d6b"
-    },
-    {
-      "at": "2026-11-12T20:46:50.742Z",
-      "task": "image-prompts",
-      "matchId": "slovenia-vs-switzerland-2026-11-13",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "image-prompts 2: escena incorrecta",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 2768,
-            "outputTokens": 2424
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 22248
-        }
-      ],
-      "usage": {
-        "inputTokens": 2695,
-        "outputTokens": 11046
-      }
-    },
     {
       "at": "2026-11-12T20:47:11.084Z",
       "task": "image-prompts",
@@ -6473,6 +6266,174 @@
       },
       "truncated": false,
       "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-19T07:25:32.152Z",
+      "matchId": "fd-560651",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1455,
+        "outputTokens": 788
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "23c80ec2-156f-4cf2-b49d-94a724a2fd66"
+    },
+    {
+      "at": "2026-11-19T07:27:39.296Z",
+      "matchId": "fd-564754",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1424,
+            "outputTokens": 777
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4243
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 170
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 78
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1390,
+            "outputTokens": 1436
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7357
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Formato no permitido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1295,
+            "outputTokens": 5803
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 107595
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1295,
+        "outputTokens": 5803
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-19T07:29:44.191Z",
+      "matchId": "fd-564749",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1461,
+            "outputTokens": 856
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3941
+        },
+        {
+          "provider": "OPENCODE_GO",
+          "model": "deepseek-v4.1-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 74
+        },
+        {
+          "provider": "OPENCODE_GO_FALLBACK",
+          "model": "glm-5.3-flash",
+          "kind": "permanent",
+          "reason": "HTTP 403",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 64
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1421,
+            "outputTokens": 1154
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5734
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1317,
+            "outputTokens": 5907
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 110016
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1317,
+        "outputTokens": 5907
+      },
+      "truncated": false,
+      "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
     }
