@@ -9,12 +9,10 @@ if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de gu
  *  --match or an extended top registers the match as a protected extra. */
 import { mkdir, readFile, rm, writeFile, rename, appendFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { CONTENT_LLM_LIMITS, createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../../src/lib/llm.js';
+import { CONTENT_LLM_LIMITS, createProviderBreaker, hasTransportFailure, hasTruncatedFailure, withFailover } from '../../src/lib/llm.js';
 import {
-  acceptYoutubeDraft,
   buildDescription,
   cleanLede,
-  normalizeYoutubeDraft,
   attentionPlayers,
   playersInNarration,
   playerNames,
@@ -22,10 +20,10 @@ import {
   countWords,
   scriptFacts,
   selectMatches,
-  withMatchDate,
   youtubeUserPayload,
 } from '../../src/lib/youtube.js';
 import { CONTENT_PROVIDER_ORDER, scriptStructureErrors } from '../../src/lib/match-content.js';
+import { createYoutubeDraftValidator } from '../../src/lib/youtube-draft.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { esName } from '../../src/lib/teams.js';
 import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../../src/lib/top.js';
@@ -167,8 +165,7 @@ function failureDetails(error) {
   };
 }
 
-function validateDraft(content, match, { published, facts, matchId }) {
-  const draft = withMatchDate(normalizeYoutubeDraft(extractJson(content)), facts.dateText);
+function validateDraft(draft, match, { published, facts, matchId }) {
   const lede = cleanLede(draft?.lede);
   const home = esName(match.home);
   const away = esName(match.away);
@@ -184,7 +181,6 @@ function validateDraft(content, match, { published, facts, matchId }) {
     players,
   });
   const errors = [
-    ...acceptYoutubeDraft({ ...draft, lede }, { facts, published, editorial: true, structured: true }),
     ...checkDescription(description, { matchId }),
   ];
   if (errors.length) {
@@ -219,6 +215,7 @@ function retryLater(error) {
 async function draftMatch(match, { breaker, skill, published, facts, priorFailures = [], deferTransport = false }) {
   const matchId = match.webId ?? match.id;
   const attempts = priorFailures.length ? 2 : 1;
+  const validateCandidate = createYoutubeDraftValidator({ facts, published });
   const messages = [
     { role: 'system', content: skill },
     { role: 'user', content: `Redacta los 10 guiones de este partido. En CADA guion escribe literalmente ${facts.home} y ${facts.away}, sin artículos delante. Apunta a 70–85 palabras por guion; el mínimo es 55 y el máximo 100. Usa como máximo 3 cifras por guion sin contar la fecha: un marcador consume 2 cifras. El gancho lleva 4–12 palabras, sin cifras ni nombres de equipos. Sigue los ángulos y separa hechos de proyecciones según la guía. Antes de responder cuenta las palabras y las cifras de cada guion. Responde solo el JSON.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
@@ -232,10 +229,10 @@ async function draftMatch(match, { breaker, skill, published, facts, priorFailur
       validationRetries: 2,
       repairMessages: ({ messages, content, error }) => [
         ...messages,
-        { role: 'assistant', content },
+        { role: 'assistant', content: error.draft ? JSON.stringify(error.draft) : content },
         { role: 'user', content: `Corrige este borrador y devuelve el JSON completo de los 10 guiones. Conserva los guiones válidos y los hechos originales. No inventes datos ni rebajes las reglas. Cada guion debe nombrar literalmente a ${facts.home} y ${facts.away}, sumar entre 55 y 100 palabras y tener como máximo 3 cifras sin contar la fecha. Apunta a 70–85 palabras para evitar quedarte corto. Un marcador consume 2 cifras: si lo usas, conserva como máximo 1 cifra histórica. Las fechas las inserta el sistema. Añade análisis condicional cuando falten palabras, sin añadir hechos nuevos. Corrige todos estos errores:\n${(error.validationErrors ?? [error.message]).join('\n')}` },
       ],
-      validate: content => validateDraft(content, match, { published, facts, matchId }),
+      validate: (content, context) => validateDraft(validateCandidate(content, context), match, { published, facts, matchId }),
     });
     noteLlmHealth({
       at: new Date().toISOString(), task: 'shorts', matchId, attempts, failures: [...priorFailures, ...(drafted.failures ?? [])].slice(0, 8),

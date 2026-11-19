@@ -7,6 +7,7 @@ import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { scriptStructureErrors } from '../src/lib/match-content.js';
 import { scriptFacts } from '../src/lib/youtube.js';
+import { createYoutubeDraftValidator } from '../src/lib/youtube-draft.js';
 
 const consumers = [
   { script: resolve('actions/2-scripting/generate-youtube-scripts.mjs'), category: 'scripts', directory: 'youtube-scripts', emptyExit: 1 },
@@ -149,7 +150,10 @@ test('scripts: rejected regeneration preserves the prior file without temporary 
 test('scripts: invalid team names are repaired with feedback before publishing the complete batch', async t => {
   const invalid = draft();
   invalid.scripts[0] = JSON.parse(JSON.stringify(invalid.scripts[0]).replaceAll('Alpha', 'Gamma'));
-  const service = await model(t, calls => calls === 1 ? invalid : draft());
+  const repaired = draft();
+  // The model fixes script 1 but damages the previously valid script 2.
+  repaired.scripts[1] = JSON.parse(JSON.stringify(repaired.scripts[1]).replaceAll('Alpha', 'Gamma'));
+  const service = await model(t, calls => calls === 1 ? invalid : repaired);
   const f = await fixture(t, consumers[0]);
   await scriptGuide(f);
   const result = await f.run([], service.env);
@@ -172,6 +176,15 @@ test('scripts: exhausted transport retries fail visibly and record the deferred 
   assert.equal(report.complete, false);
   assert.match(await readFile(summary, 'utf8'), /incompletos/);
   assert.deepEqual(await readdir(f.directory), []);
+});
+test('scripts: preserved repairs never mix provider attribution', () => {
+  const validate = createYoutubeDraftValidator({ facts: scriptFacts(match), published: false });
+  const first = draft();
+  first.scripts[0] = JSON.parse(JSON.stringify(first.scripts[0]).replaceAll('Alpha', 'Gamma'));
+  assert.throws(() => validate(JSON.stringify(first), { provider: 'MISTRAL' }), /falta Alpha/);
+  const other = draft();
+  other.scripts[1] = JSON.parse(JSON.stringify(other.scripts[1]).replaceAll('Alpha', 'Gamma'));
+  assert.throws(() => validate(JSON.stringify(other), { provider: 'AGNES' }), /guion 2: falta Alpha/);
 });
 test('scripts: probability informs the editorial prompt while saving the model projection', async t => {
   const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };

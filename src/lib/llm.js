@@ -243,7 +243,7 @@ export async function withFailover(messages, options = {}) {
       }
       let value;
       try {
-        value = options.validate ? await options.validate(call.content) : call.content;
+        value = options.validate ? await options.validate(call.content, { provider: provider.id, model: provider.model, attempt }) : call.content;
       } catch (error) {
         breaker?.note(provider.id, { kind: 'validation' });
         failures.push(new Error(`${provider.name}/${provider.model}: ${error?.message ?? 'Validación rechazada'}`));
