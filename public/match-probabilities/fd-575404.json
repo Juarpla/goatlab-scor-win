@@ -1,0 +1,564 @@
+{
+  "id": "fd-575404",
+  "home": "Sabah FK",
+  "away": "FC Barcelona",
+  "competition": "champions",
+  "kickoff": "2026-11-25T17:45:00Z",
+  "updatedAt": "2026-11-19T15:36:41.688Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.44,
+      "away": 2.607
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.545,
+      "away": 2.489
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 4,
+      "away": 6
+    },
+    "standings": {
+      "Sabah FK": null,
+      "FC Barcelona": {
+        "position": 5,
+        "team": "FC Barcelona",
+        "teamId": 44,
+        "played": 4,
+        "won": 3,
+        "drawn": 0,
+        "lost": 1,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 9,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-19T15:35:43.858Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-25T17:45:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-19T15:35:43.858Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 454
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.191,
+      "draw": 0.191,
+      "away": 0.619
+    },
+    "doubleChance": {
+      "12": 0.809,
+      "1X": 0.381,
+      "X2": 0.809
+    },
+    "dnb": {
+      "home": 0.235,
+      "away": 0.765
+    },
+    "totals": {
+      "over15": 0.918,
+      "under15": 0.082,
+      "over25": 0.768,
+      "under25": 0.232,
+      "over35": 0.575,
+      "under35": 0.425
+    },
+    "btts": {
+      "yes": 0.713,
+      "no": 0.287
+    },
+    "cleanSheet": {
+      "home": 0.074,
+      "away": 0.237
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.086
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.074
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.072
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.062
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "p": 0.059
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 4.03,
+    "noGoal": 0.018,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.489
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.25
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.128
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.065
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.033
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.017
+      }
+    ],
+    "firstHome": 0.376,
+    "firstAway": 0.606
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Joy Lance Mickels",
+        "goals": 3,
+        "matches": 12,
+        "share": 0.5,
+        "rate": 0.77,
+        "anytime": 0.538,
+        "first": 0.192
+      },
+      {
+        "player": "Veljko Simić",
+        "goals": 3,
+        "matches": 12,
+        "share": 0.5,
+        "rate": 0.77,
+        "anytime": 0.538,
+        "first": 0.192
+      }
+    ],
+    "away": [
+      {
+        "player": "Raphinha",
+        "goals": 4,
+        "matches": 3,
+        "share": 0.571,
+        "rate": 1.42,
+        "anytime": 0.759,
+        "first": 0.353
+      },
+      {
+        "player": "Lamine Yamal",
+        "goals": 3,
+        "matches": 4,
+        "share": 0.429,
+        "rate": 1.07,
+        "anytime": 0.656,
+        "first": 0.265
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.24600000000000002,
+      "draw": 0.19,
+      "away": 0.563,
+      "predicted": "A"
+    },
+    "xg": {
+      "home": 1.65,
+      "away": 2.37
+    },
+    "over15": 0.895,
+    "over25": 0.742,
+    "over35": 0.5479999999999999,
+    "btts": 0.6809999999999999,
+    "score": "1-2",
+    "cornersOver95": 0.516,
+    "recommendations": {
+      "favorite": "A",
+      "favoriteProb": 0.563,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.5633,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-19T15:36:34.481Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.259,
+      "draw": 0.209,
+      "away": 0.531
+    },
+    "doubleChance": {
+      "12": 0.791,
+      "1X": 0.469,
+      "X2": 0.741
+    },
+    "dnb": {
+      "home": 0.328,
+      "away": 0.672
+    },
+    "totals": {
+      "over15": 0.917,
+      "under15": 0.083,
+      "over25": 0.765,
+      "under25": 0.235,
+      "over35": 0.57,
+      "under35": 0.43
+    },
+    "btts": {
+      "yes": 0.739,
+      "no": 0.261
+    },
+    "cleanSheet": {
+      "home": 0.094,
+      "away": 0.192
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.096,
+        "share": 0.26229508196721313
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.077,
+        "share": 0.2103825136612022
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.069,
+        "share": 0.18852459016393444
+      },
+      {
+        "home": 1,
+        "away": 3,
+        "p": 0.066,
+        "share": 0.18032786885245902
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.058,
+        "share": 0.15846994535519127
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 2
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 0,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": [],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.9
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.98,
+      "shotsOnTarget": 5.25,
+      "xg": 1.65,
+      "corners": 4.45,
+      "fouls": 11.71,
+      "yellowCards": 2.13,
+      "redCards": 0.16,
+      "offsides": 2.95,
+      "possession": 44.24
+    },
+    "away": {
+      "shots": 17.09,
+      "shotsOnTarget": 6.63,
+      "xg": 2.37,
+      "corners": 5.54,
+      "fouls": 11.35,
+      "yellowCards": 1.81,
+      "redCards": 0.17,
+      "offsides": 2.55,
+      "possession": 55.76
+    },
+    "sample": {
+      "home": 5,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 5,
+        "offsides": 4
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 6,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.96,
+      "shotsOnTarget": 5.7,
+      "xg": 1.78,
+      "corners": 4.78,
+      "fouls": 11.22,
+      "yellowCards": 1.86,
+      "redCards": 0.15,
+      "offsides": 2.34
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.306,
+      "draw": 0.121,
+      "away": 0.573
+    },
+    "cardsDuel": {
+      "home": 0.459,
+      "draw": 0.206,
+      "away": 0.335
+    },
+    "lastGoal": {
+      "home": 0.376,
+      "away": 0.606,
+      "noGoal": 0.018
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.399,
+        "away": 0.601
+      },
+      "5": {
+        "home": 0.368,
+        "away": 0.632
+      },
+      "7": {
+        "home": 0.344,
+        "away": 0.656
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.125,
+      "home12": 0.181,
+      "level": 0.121,
+      "away12": 0.25,
+      "away3plus": 0.323
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 18,
+      "condition": "clear",
+      "sampledAt": "2026-11-25T17:45:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Sabah FK",
+      "recentSample": 4,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 4
+      },
+      "season": null,
+      "player": {
+        "name": "Joy Lance Mickels",
+        "detail": "3 goles en 12 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "FC Barcelona",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 5,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 2,
+        "sample": 5
+      },
+      "season": {
+        "position": 1,
+        "played": 12,
+        "gf": 48,
+        "ga": 13,
+        "provider": null
+      },
+      "player": {
+        "name": "Raphinha",
+        "detail": "15 goles en 11 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

@@ -1,0 +1,606 @@
+{
+  "id": "fd-575411",
+  "home": "Sporting Clube de Portugal",
+  "away": "Manchester United FC",
+  "competition": "champions",
+  "kickoff": "2026-11-25T20:00:00Z",
+  "updatedAt": "2026-11-19T15:36:41.688Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 2.52,
+      "away": 1.15
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.625,
+      "away": 1.105
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 4,
+      "away": 6
+    },
+    "standings": {
+      "Sporting Clube de Portugal": {
+        "position": 10,
+        "team": "Sporting CP",
+        "teamId": 22,
+        "played": 4,
+        "won": 3,
+        "drawn": 0,
+        "lost": 1,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 9,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      },
+      "Manchester United FC": {
+        "position": 17,
+        "team": "Manchester United",
+        "teamId": 17,
+        "played": 4,
+        "won": 2,
+        "drawn": 0,
+        "lost": 2,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 6,
+        "zone": {
+          "key": "playoff",
+          "label": "Qualification Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-19T15:35:43.858Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-25T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-19T15:35:43.858Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 454
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.664,
+      "draw": 0.189,
+      "away": 0.148
+    },
+    "doubleChance": {
+      "12": 0.811,
+      "1X": 0.852,
+      "X2": 0.336
+    },
+    "dnb": {
+      "home": 0.818,
+      "away": 0.182
+    },
+    "totals": {
+      "over15": 0.888,
+      "under15": 0.112,
+      "over25": 0.709,
+      "under25": 0.291,
+      "over35": 0.499,
+      "under35": 0.501
+    },
+    "btts": {
+      "yes": 0.636,
+      "no": 0.364
+    },
+    "cleanSheet": {
+      "home": 0.317,
+      "away": 0.081
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.093
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.081
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.081
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.078
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.068
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.73,
+    "noGoal": 0.024,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.463
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.249
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.134
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.072
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.039
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.021
+      }
+    ],
+    "firstHome": 0.687,
+    "firstAway": 0.289
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Luis Javier Suárez",
+        "goals": 4,
+        "matches": 4,
+        "share": 0.5,
+        "rate": 1.31,
+        "anytime": 0.731,
+        "first": 0.352
+      },
+      {
+        "player": "Luis Suárez",
+        "goals": 4,
+        "matches": 4,
+        "share": 0.5,
+        "rate": 1.31,
+        "anytime": 0.731,
+        "first": 0.352
+      }
+    ],
+    "away": [
+      {
+        "player": "Matheus Cunha",
+        "goals": 3,
+        "matches": 4,
+        "share": 0.6,
+        "rate": 0.66,
+        "anytime": 0.485,
+        "first": 0.178
+      },
+      {
+        "player": "Bruno Fernandes",
+        "goals": 2,
+        "matches": 4,
+        "share": 0.4,
+        "rate": 0.44,
+        "anytime": 0.357,
+        "first": 0.118
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.759,
+      "draw": 0.141,
+      "away": 0.1,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.73,
+      "away": 1.06
+    },
+    "over15": 0.8759999999999999,
+    "over25": 0.7090000000000001,
+    "over35": 0.504,
+    "btts": 0.585,
+    "score": "2-1",
+    "cornersOver95": 0.44799999999999995,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.759,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.7593,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-19T15:36:35.098Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.718,
+      "draw": 0.167,
+      "away": 0.115
+    },
+    "doubleChance": {
+      "12": 0.833,
+      "1X": 0.885,
+      "X2": 0.282
+    },
+    "dnb": {
+      "home": 0.861,
+      "away": 0.139
+    },
+    "totals": {
+      "over15": 0.898,
+      "under15": 0.102,
+      "over25": 0.729,
+      "under25": 0.271,
+      "over35": 0.523,
+      "under35": 0.477
+    },
+    "btts": {
+      "yes": 0.617,
+      "no": 0.383
+    },
+    "cleanSheet": {
+      "home": 0.346,
+      "away": 0.065
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.105,
+        "share": 0.25059665871121717
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.084,
+        "share": 0.20047732696897375
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.081,
+        "share": 0.19331742243436753
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.077,
+        "share": 0.1837708830548926
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.072,
+        "share": 0.17183770883054889
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 2,
+    "homeWins": 0,
+    "draws": 0,
+    "awayWins": 2,
+    "avgTotalGoals": 2,
+    "recent": [
+      {
+        "eventId": 485001,
+        "date": "2007-11-27T19:45:00+00:00",
+        "home": "Manchester United",
+        "away": "Sporting CP",
+        "homeTeamId": 17,
+        "awayTeamId": 22,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 484944,
+        "date": "2007-09-19T18:45:00+00:00",
+        "home": "Sporting CP",
+        "away": "Manchester United",
+        "homeTeamId": 22,
+        "awayTeamId": 17,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 52,
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 3.6
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 454
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.4
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.94,
+      "shotsOnTarget": 5.61,
+      "xg": 2.73,
+      "corners": 4.55,
+      "fouls": 12.09,
+      "yellowCards": 1.66,
+      "redCards": 0.12,
+      "offsides": 1.85,
+      "possession": 52.03
+    },
+    "away": {
+      "shots": 14.4,
+      "shotsOnTarget": 4.97,
+      "xg": 1.06,
+      "corners": 4.8,
+      "fouls": 11.41,
+      "yellowCards": 1.96,
+      "redCards": 0.15,
+      "offsides": 1.98,
+      "possession": 47.97
+    },
+    "sample": {
+      "home": 5,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 5,
+        "shots": 5,
+        "shotsOnTarget": 5,
+        "xg": 5,
+        "corners": 5,
+        "fouls": 5,
+        "yellowCards": 5,
+        "redCards": 5,
+        "offsides": 5
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 9,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 14.98,
+      "shotsOnTarget": 5.66,
+      "xg": 1.77,
+      "corners": 4.79,
+      "fouls": 11.26,
+      "yellowCards": 1.79,
+      "redCards": 0.13,
+      "offsides": 2.18
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.402,
+      "draw": 0.132,
+      "away": 0.466
+    },
+    "cardsDuel": {
+      "home": 0.331,
+      "draw": 0.216,
+      "away": 0.452
+    },
+    "lastGoal": {
+      "home": 0.687,
+      "away": 0.289,
+      "noGoal": 0.024
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.475,
+        "away": 0.525
+      },
+      "5": {
+        "home": 0.467,
+        "away": 0.533
+      },
+      "7": {
+        "home": 0.461,
+        "away": 0.539
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.181,
+      "home12": 0.221,
+      "level": 0.132,
+      "away12": 0.239,
+      "away3plus": 0.227
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 15.1,
+      "condition": "clear",
+      "sampledAt": "2026-11-25T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Sporting Clube de Portugal",
+      "recentSample": 4,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 4
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 4
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 4
+      },
+      "season": {
+        "position": 10,
+        "played": 4,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Luis Javier Suárez",
+        "detail": "4 goles en 4 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Manchester United FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 18,
+        "played": 10,
+        "gf": 14,
+        "ga": 19,
+        "provider": null
+      },
+      "player": {
+        "name": "Bruno Fernandes",
+        "detail": "4 goles en 10 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}
