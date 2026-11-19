@@ -88,11 +88,11 @@ test('legacy, partial, changed prompts and inconsistent input evidence keep a ba
   await f.put('image-prompts/alpha-beta.json', changed);
   assert.equal((await f.check()).pending, 1);
 });
-test('corrupt scripts or prompt identity stay pending even with a matching bank header', async t => {
+test('spoken scripts do not invalidate proven media, while wrong prompt identity still blocks it', async t => {
   const f = await fixture(t);
   const { images } = await f.complete();
   await f.put('youtube-scripts/alpha-beta.json', '{broken');
-  assert.equal((await f.check()).pending, 1);
+  assert.equal((await f.check()).pending, 0);
   await f.put('youtube-scripts/alpha-beta.json', script(match()));
   await f.put('image-prompts/alpha-beta.json', { ...images, home: 'Gamma' });
   assert.equal((await f.check()).pending, 1);

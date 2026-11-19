@@ -186,6 +186,18 @@ test('scripts: preserved repairs never mix provider attribution', () => {
   other.scripts[1] = JSON.parse(JSON.stringify(other.scripts[1]).replaceAll('Alpha', 'Gamma'));
   assert.throws(() => validate(JSON.stringify(other), { provider: 'AGNES' }), /guion 2: falta Alpha/);
 });
+test('scripts: projection metadata is derived from the spoken beat without changing its words', async t => {
+  const candidate = draft();
+  for (const script of candidate.scripts) delete script.projection;
+  const service = await model(t, candidate);
+  const f = await fixture(t, consumers[0]);
+  await scriptGuide(f);
+  const result = await f.run([], service.env);
+  assert.equal(result.status, 0, result.stderr);
+  const saved = JSON.parse(await readFile(join(f.directory, 'upcoming.json'), 'utf8'));
+  assert.equal(saved.scripts[0].projection, candidate.scripts[0].narration.find(b => b.beat === 'proyeccion').text);
+  assert.equal(service.calls(), 1);
+});
 test('scripts: probability informs the editorial prompt while saving the model projection', async t => {
   const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };
   const prob = {

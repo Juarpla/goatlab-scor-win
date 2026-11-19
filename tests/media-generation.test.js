@@ -97,6 +97,15 @@ async function fixture(t, overrides = {}, matchId = 'a-b') {
   });
   return { repo, dir, env, calls, provider, downloads, logs, objects, run, execImpl, transactImpl, addPhoto, addClip, setBlock: value => { block = value; }, setFailPut: value => { failPut = value; } };
 }
+test('automatic media generation uses verified prompts and fixture identity while scripts are pending', async t => {
+  const f = await fixture(t);
+  await rm(join(f.repo, 'public/data/youtube-scripts/a-b.json'));
+  const result = await f.run();
+  assert.equal(result.completed, 1);
+  assert.equal(result.results[0].images, 12);
+  assert.equal(result.results[0].clips, 6);
+  assert.ok(f.logs.some(line => line.includes('guiones pendientes')));
+});
 for (const [imageVersion, videoVersion] of [[1, 1], [2, 2], [1, 2], [2, 1]]) {
   test(`generation accepts image v${imageVersion} and video v${videoVersion}`, async t => {
     const f = await fixture(t);

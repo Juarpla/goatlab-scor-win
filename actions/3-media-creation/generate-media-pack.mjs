@@ -154,7 +154,8 @@ export async function generateMediaBanks({ args = {}, env = process.env, clock =
     const validPack = (pack, category) => validateContent(pack, category, matchId) && !contentIdentityErrors(pack, match).length;
     const imagePrompts = validPack(imagePack, 'image-prompts') ? imagePack.prompts : [];
     const script = await json(join(repo, 'public/data/youtube-scripts', matchId + '.json'));
-    if (!recoveryOnly && !args['--match'] && (scriptStructureErrors(script, { matchId, match }).length || !imagePrompts.length)) { log('media: ' + matchId + ': sin guión o prompts válidos; omitido'); continue; }
+    if (!recoveryOnly && !args['--match'] && !imagePrompts.length) { log('media: ' + matchId + ': sin prompts válidos; omitido'); continue; }
+    if (scriptStructureErrors(script, { matchId, match }).length) log('media: ' + matchId + ': guiones pendientes; el banco usa prompts e identidad verificados del partido');
     summary.eligible++;
     const folder = join(dir, 'gen', matchId); await mkdir(folder, { recursive: true });
     const prev = await json(join(dir, matchId + '.json'));

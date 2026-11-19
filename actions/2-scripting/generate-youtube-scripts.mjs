@@ -218,7 +218,7 @@ async function draftMatch(match, { breaker, skill, published, facts, priorFailur
   const validateCandidate = createYoutubeDraftValidator({ facts, published });
   const messages = [
     { role: 'system', content: skill },
-    { role: 'user', content: `Redacta los 10 guiones de este partido. En CADA guion escribe literalmente ${facts.home} y ${facts.away}, sin artículos delante. Apunta a 70–85 palabras por guion; el mínimo es 55 y el máximo 100. Usa como máximo 3 cifras por guion sin contar la fecha: un marcador consume 2 cifras. El gancho lleva 4–12 palabras, sin cifras ni nombres de equipos. Sigue los ángulos y separa hechos de proyecciones según la guía. Antes de responder cuenta las palabras y las cifras de cada guion. Responde solo el JSON.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
+    { role: 'user', content: `Redacta los 10 guiones de este partido. En CADA guion escribe literalmente ${facts.home} y ${facts.away}, sin artículos delante. Apunta a 70–85 palabras por guion; el mínimo es 55 y el máximo 100. Usa como máximo 1 cifra histórica y reserva hasta 2 para la proyección; la fecha no cuenta. Un marcador consume 2 cifras. El gancho lleva 4–12 palabras, sin cifras ni nombres de equipos. Sigue los ángulos y separa hechos de proyecciones según la guía. Antes de responder cuenta las palabras y las cifras de cada guion. Devuelve UN objeto JSON con lede y scripts; scripts contiene exactamente 10 objetos con n de 1 a 10.\n${JSON.stringify(youtubeUserPayload({ published, facts }))}` },
   ];
   try {
     const drafted = await withFailover(messages, {

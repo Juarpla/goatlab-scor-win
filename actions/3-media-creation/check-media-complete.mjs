@@ -74,8 +74,7 @@ export async function checkMediaComplete({ repo = process.cwd(), args = {}, env 
     result.eligible += 1;
     const matchId = match?.webId ?? match?.id;
     if (!safeId(matchId)) { result.pending += 1; continue; }
-    const [script, images, bank] = await Promise.all([
-      json(join(data, 'youtube-scripts', `${matchId}.json`)),
+    const [images, bank] = await Promise.all([
       json(join(data, 'image-prompts', `${matchId}.json`)),
       json(join(bankDirectory, `${matchId}.json`)),
     ]);
@@ -83,7 +82,7 @@ export async function checkMediaComplete({ repo = process.cwd(), args = {}, env 
     const fingerprint = contentFingerprint(match, { ...images, generationModel: imageModel });
     // An explicitly limited mode certifies its subset, while the stored full-bank status stays partial.
     const candidate = mode !== 'all' && bank?.bankStatus === 'partial' ? { ...bank, bankStatus: 'complete' } : bank;
-    if (scriptStructureErrors(script, { matchId, match }).length || !validPack(images, 'image-prompts')
+    if (!validPack(images, 'image-prompts')
       || !bankComplete(candidate, { matchId, fingerprint, mode, now }) || !inputEvidence(candidate, images, imageModel, videoModel, mode, matchId)) result.pending += 1;
   }
   result.complete = result.pending === 0;

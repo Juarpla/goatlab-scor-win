@@ -677,7 +677,8 @@ export function normalizeYoutubeDraft(draft) {
       const first = narration[0]?.text ?? '';
       const resolvedHook = first || hook;
       if (resolvedHook && first && !first.startsWith(resolvedHook)) narration[0].text = `${resolvedHook} ${first}`.trim();
-      return { ...script, hook: resolvedHook, narration };
+      const projection = narration.find(beat => beat.beat === 'proyeccion')?.text ?? String(script?.projection ?? '').trim();
+      return { ...script, hook: resolvedHook, projection, narration };
     }
     const narration = String(script?.narration ?? '').trim();
     return { ...script, hook, narration: hook && narration && !narration.startsWith(hook) ? `${hook} ${narration}` : narration };
