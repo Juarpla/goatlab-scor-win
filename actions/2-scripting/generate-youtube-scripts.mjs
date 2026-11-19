@@ -7,7 +7,7 @@ if (process.env.MEDIA_ROLE === 'consumer') throw new Error('La producción de gu
  *  Without --match, writes the top N (--top input, SCRIPT_TOP_N or 5) from the ranking
  *  stored in public/data/top.json (written by 1-update-data). Pruning belongs to the data update.
  *  --match or an extended top registers the match as a protected extra. */
-import { mkdir, readFile, rm, writeFile, rename } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile, rename, appendFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { CONTENT_LLM_LIMITS, createProviderBreaker, extractJson, hasTransportFailure, hasTruncatedFailure, withFailover } from '../../src/lib/llm.js';
 import {
@@ -33,6 +33,8 @@ import { checkDescription } from '../../src/lib/compliance.js';
 import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
 
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
+// Keep prose generation independent of the coding model used by other jobs.
+process.env.MISTRAL_MODEL = process.env.MISTRAL_SCRIPT_MODEL?.trim() || 'mistral-small-2603';
 const dir = 'public/data/youtube-scripts';
 const healthPath = 'public/data/llm-health.json';
 const skillPath = '.agents/skills/writing-short-scripts/SKILL.md';
@@ -185,7 +187,11 @@ function validateDraft(content, match, { published, facts, matchId }) {
     ...acceptYoutubeDraft({ ...draft, lede }, { facts, published, editorial: true, structured: true }),
     ...checkDescription(description, { matchId }),
   ];
-  if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
+  if (errors.length) {
+    const error = new Error(errors.slice(0, 8).join('; '));
+    error.validationErrors = errors;
+    throw error;
+  }
   const scripts = draft.scripts.map((script, i) => {
     const narration = script.narration;
     const text = narrationText(narration);
@@ -211,7 +217,6 @@ function retryLater(error) {
 
 /** One call per match. `deferTransport` sets timeout, 429 and truncation aside for the batch close. */
 async function draftMatch(match, { breaker, skill, published, facts, priorFailures = [], deferTransport = false }) {
-  breaker.reset();
   const matchId = match.webId ?? match.id;
   const attempts = priorFailures.length ? 2 : 1;
   const messages = [
@@ -224,6 +229,12 @@ async function draftMatch(match, { breaker, skill, published, facts, priorFailur
       timeoutMs: SCRIPT_TIMEOUT_MS,
       breaker,
       orderVar: 'SCRIPT_PROVIDER_ORDER',
+      validationRetries: 2,
+      repairMessages: ({ messages, content, error }) => [
+        ...messages,
+        { role: 'assistant', content },
+        { role: 'user', content: `Corrige este borrador y devuelve el JSON completo de los 10 guiones. Conserva los guiones válidos y los hechos originales. No inventes datos ni rebajes las reglas. Cada guion debe nombrar literalmente a ${facts.home} y ${facts.away}, sumar entre 55 y 100 palabras y tener como máximo 3 cifras sin contar la fecha. Apunta a 70–85 palabras para evitar quedarte corto. Un marcador consume 2 cifras: si lo usas, conserva como máximo 1 cifra histórica. Las fechas las inserta el sistema. Añade análisis condicional cuando falten palabras, sin añadir hechos nuevos. Corrige todos estos errores:\n${(error.validationErrors ?? [error.message]).join('\n')}` },
+      ],
       validate: content => validateDraft(content, match, { published, facts, matchId }),
     });
     noteLlmHealth({
@@ -280,6 +291,7 @@ async function saveDraft(match, drafted) {
 
 const breaker = createProviderBreaker();
 const deferred = [];
+const unresolved = [];
 let leftForNext = 0;
 /** Match probabilities for the pick (null if there is no file).
  *  Lives in public/match-probabilities (tracked, the same key as the
@@ -310,6 +322,7 @@ try {
         continue;
       }
       failures += 1;
+      unresolved.push({ matchId, reason: errorText(error) });
       console.error(`shorts: ${file}: ${error.message}`);
     }
   }
@@ -322,6 +335,7 @@ try {
       await saveDraft(item.match, drafted);
     } catch (error) {
       leftForNext += 1;
+      unresolved.push({ matchId, reason: errorText(error) });
       console.error(`shorts: ${matchId} queda para la siguiente corrida. ${errorText(error)}`);
     }
   }
@@ -330,4 +344,9 @@ try {
 }
 const leftNote = leftForNext ? `, ${leftForNext} para la siguiente` : '';
 console.log(`shorts: ${written} redactados, ${skipped} ya existían, ${failures} fallos${leftNote}`);
-process.exit(failures ? 1 : 0);
+await mkdir('.cache', { recursive: true });
+const summary = { selected: matches.length, written, existing: skipped, failed: failures, deferred: leftForNext, unresolved, complete: failures + leftForNext === 0 };
+await writeFile('.cache/shorts-run.json', JSON.stringify(summary, null, 2));
+if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY,
+  `\n### Guiones: ${summary.complete ? 'completos' : 'incompletos'}\n\n${written} redactados · ${skipped} existentes · ${failures} fallidos · ${leftForNext} pendientes tras los reintentos.\n${unresolved.map(item => `\n- Pendiente: \`${item.matchId}\``).join('')}\n${summary.complete ? '' : '\nLos guiones válidos se conservan; esta corrida falla para que los pendientes no pasen inadvertidos.\n'}`);
+process.exit(summary.complete ? 0 : 1);

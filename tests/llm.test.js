@@ -4,6 +4,49 @@ import { resolveChain, withFailover, extractJson, hasTransportFailure, hasPerman
 const logger = { warn() {} };
 const env = { MISTRAL_API_KEY: 'test-a', OPENCODE_GO_API_KEY: 'test-b', LLM_PROVIDER_ORDER: 'MISTRAL_MODEL,OPENCODE_GO_MODEL' };
 const response = content => new Response(JSON.stringify({ choices: [{ message: { content } }] }));
+test('opt-in validation repair sends the rejected draft and exact errors to the same provider', async () => {
+  const requests = [];
+  const result = await withFailover([{ role: 'user', content: 'Write a valid object.' }], {
+    env, logger, validationRetries: 1,
+    repairMessages: ({ content, error, messages }) => [...messages, { role: 'assistant', content }, { role: 'user', content: error.message }],
+    fetchImpl: async (_url, init) => {
+      requests.push(JSON.parse(init.body));
+      return response(requests.length === 1 ? '{"missing":true}' : '{"ok":true}');
+    },
+    validate: content => { const value = extractJson(content); if (!value.ok) throw new Error('Missing required ok field'); return value; },
+  });
+  assert.equal(result.provider, 'MISTRAL');
+  assert.equal(requests.length, 2);
+  assert.equal(requests[1].messages.at(-2).content, '{"missing":true}');
+  assert.match(requests[1].messages.at(-1).content, /Missing required ok field/);
+  assert.equal(result.failures[0].kind, 'validation');
+});
+test('validation repair is bounded before failover and transport errors are not repaired', async () => {
+  const models = [];
+  let repairs = 0;
+  const result = await withFailover([], {
+    env, logger, validationRetries: 1,
+    repairMessages: ({ messages }) => { repairs += 1; return messages; },
+    fetchImpl: async (_url, init) => {
+      const model = JSON.parse(init.body).model; models.push(model);
+      return response(model === 'ministral-8b-2512' ? 'invalid' : '{"ok":true}');
+    }, validate: extractJson,
+  });
+  assert.equal(repairs, 1);
+  assert.deepEqual(models, ['ministral-8b-2512', 'ministral-8b-2512', 'deepseek-v4.1-flash']);
+  assert.equal(result.provider, 'OPENCODE_GO');
+});
+test('permanent provider errors stay excluded across matches until the run ends', async () => {
+  const breaker = createProviderBreaker();
+  let blockedCalls = 0;
+  const fetchImpl = async (_url, init) => {
+    if (JSON.parse(init.body).model === 'ministral-8b-2512') { blockedCalls += 1; return new Response('', { status: 403 }); }
+    return response('{"ok":true}');
+  };
+  await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
+  await withFailover([], { env, logger, breaker, fetchImpl, validate: extractJson });
+  assert.equal(blockedCalls, 1);
+});
 test('runtime resolution skips missing credentials and requirements and deduplicates', () => {
   assert.deepEqual(resolveChain({ ...env, WORKERS_AI_API_KEY: 'x', LLM_PROVIDER_ORDER: 'UNKNOWN_MODEL,MISTRAL_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL' }, logger).map(p => p.id), ['MISTRAL', 'OPENCODE_GO']);
 });

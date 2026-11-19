@@ -76,12 +76,13 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           MISTRAL_BASE_URL: ${{ vars.MISTRAL_BASE_URL }}
           MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          MISTRAL_SCRIPT_MODEL: ${{ vars.MISTRAL_SCRIPT_MODEL || 'mistral-small-2603' }}
           WORKERS_AI_MODEL: ${{ vars.WORKERS_AI_MODEL }}
           OPENCODE_GO_MODEL: ${{ vars.OPENCODE_GO_MODEL }}
           OPENCODE_GO_FALLBACK_MODEL: ${{ vars.OPENCODE_GO_FALLBACK_MODEL }}
           LLM_PROVIDER_ORDER: ${{ vars.LLM_PROVIDER_ORDER }}
           SCRIPT_TOP_N: ${{ vars.SCRIPT_TOP_N }}
-          SCRIPT_PROVIDER_ORDER: ${{ vars.SCRIPT_PROVIDER_ORDER || 'OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL' }}
+          SCRIPT_PROVIDER_ORDER: ${{ vars.SCRIPT_PROVIDER_ORDER || 'AGNES_MODEL,MISTRAL_MODEL,WORKERS_AI_MODEL,OPENCODE_GO_MODEL,OPENCODE_GO_FALLBACK_MODEL' }}
       - name: Script lint
         run: node scripts/check-compliance.mjs --selection=.cache/content-selection.json
       - name: Validate prompts
@@ -116,6 +117,7 @@ jobs:
             if [ "$pushed" != "true" ]; then exit 1; fi
           fi
       - name: Publish selection and inputs for media
+        if: always() && steps.scripts.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: goatlab-content-selection
@@ -125,6 +127,7 @@ jobs:
             .cache/content-selection.json
             public/data/youtube-scripts/*.json
             public/data/image-prompts/*.json
+            .cache/shorts-run.json
           retention-days: 7
       - name: Check generation result
         if: always() && steps.scripts.outcome == 'failure'

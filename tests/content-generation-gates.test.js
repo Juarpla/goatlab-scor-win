@@ -81,7 +81,7 @@ test('scripts: manual ID bypasses only age and valid persisted scripts skip gene
   assert.match(manual.stdout, /1 ya redactados, 0 faltantes/);
 });
 
-async function model(t, content) {
+async function model(t, content, status = 200) {
   let calls = 0;
   const requests = [];
   const server = createServer((request, response) => {
@@ -90,8 +90,8 @@ async function model(t, content) {
     request.on('data', chunk => { body += chunk; });
     request.on('end', () => {
       requests.push(JSON.parse(body));
-      response.writeHead(200, { 'content-type': 'application/json' });
-      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(content) } }] }));
+      response.writeHead(status, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(typeof content === 'function' ? content(calls) : content) } }] }));
     });
   });
   await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
@@ -142,9 +142,36 @@ test('scripts: rejected regeneration preserves the prior file without temporary 
   await writeFile(file, old);
   const result = await f.run([], service.env);
   assert.equal(result.status, 1, result.stderr);
-  assert.equal(service.calls(), 1);
+  assert.equal(service.calls(), 3);
   assert.equal(await readFile(file, 'utf8'), old);
   assert.deepEqual(await readdir(f.directory), ['upcoming.json']);
+});
+test('scripts: invalid team names are repaired with feedback before publishing the complete batch', async t => {
+  const invalid = draft();
+  invalid.scripts[0] = JSON.parse(JSON.stringify(invalid.scripts[0]).replaceAll('Alpha', 'Gamma'));
+  const service = await model(t, calls => calls === 1 ? invalid : draft());
+  const f = await fixture(t, consumers[0]);
+  await scriptGuide(f);
+  const result = await f.run([], service.env);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(service.calls(), 2);
+  assert.match(service.requests[1].messages.at(-1).content, /guion 1: falta Alpha/);
+  const saved = JSON.parse(await readFile(join(f.directory, 'upcoming.json'), 'utf8'));
+  assert.deepEqual(scriptStructureErrors(saved, { matchId: match.webId, match }), []);
+});
+test('scripts: exhausted transport retries fail visibly and record the deferred match', async t => {
+  const service = await model(t, {}, 408);
+  const f = await fixture(t, consumers[0]);
+  await scriptGuide(f);
+  const summary = join(f.cwd, 'summary.md');
+  const result = await f.run([], { ...service.env, GITHUB_STEP_SUMMARY: summary });
+  assert.equal(result.status, 1, result.stderr);
+  assert.equal(service.calls(), 2);
+  const report = JSON.parse(await readFile(join(f.cwd, '.cache/shorts-run.json'), 'utf8'));
+  assert.equal(report.deferred, 1);
+  assert.equal(report.complete, false);
+  assert.match(await readFile(summary, 'utf8'), /incompletos/);
+  assert.deepEqual(await readdir(f.directory), []);
 });
 test('scripts: probability informs the editorial prompt while saving the model projection', async t => {
   const probMatch = { ...match, lastMatches: { home: [{ date: '2026-09-01', home: 'Alpha', away: 'X', homeScore: 2, awayScore: 0 }], away: [] } };

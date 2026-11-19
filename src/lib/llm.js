@@ -196,11 +196,12 @@ export function createProviderBreaker({ maxConsecutiveFailures = 3 } = {}) {
   return {
     excluded(now = Date.now()) {
       return [...state.entries()]
-        .filter(([, s]) => s.consecutive >= maxConsecutiveFailures || s.skipUntil > now)
+        .filter(([, s]) => s.permanent || s.consecutive >= maxConsecutiveFailures || s.skipUntil > now)
         .map(([id]) => id);
     },
     note(id, { kind = 'unknown', retryAfterMs = 0, now = Date.now() } = {}) {
-      const s = state.get(id) ?? { consecutive: 0, skipUntil: 0 };
+      const s = state.get(id) ?? { consecutive: 0, skipUntil: 0, permanent: false };
+      if (kind === 'permanent') s.permanent = true;
       s.consecutive = kind === 'transport' ? s.consecutive + 1 : 0;
       if (retryAfterMs > 0) s.skipUntil = Math.max(s.skipUntil, now + retryAfterMs);
       state.set(id, s);
@@ -221,36 +222,47 @@ export async function withFailover(messages, options = {}) {
       details.push({ provider: provider.id, model: provider.model, kind: 'skipped', reason: 'Pausado por el fusible o la lista de exclusión' });
       continue;
     }
-    let call;
-    const started = Date.now();
-    try {
-      call = await callProvider(provider, messages, { ...options, env, sessionId });
-    } catch (error) {
-      const transport = error instanceof LlmTransportError;
-      const permanent = error instanceof LlmPermanentError;
-      const kind = transport ? 'transport' : permanent ? 'permanent' : 'unknown';
-      breaker?.note(provider.id, { kind, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0 });
-      failures.push(new Error(`${provider.name}/${provider.model}: ${error.message}`));
-      details.push({ provider: provider.id, model: provider.model, kind, reason: String(error?.message ?? error), truncated: transport ? Boolean(error.truncated) : false, usage: error.usage ?? null, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0, latencyMs: Date.now() - started });
-      continue;
+    // Repairs are opt-in and bounded. A new provider starts from the original
+    // request; transport/auth failures never enter the editorial repair loop.
+    const repairs = typeof options.repairMessages === 'function'
+      ? Math.max(0, Math.min(2, Math.floor(Number(options.validationRetries) || 0))) : 0;
+    let currentMessages = messages;
+    for (let attempt = 0; attempt <= repairs; attempt += 1) {
+      let call;
+      const started = Date.now();
+      try {
+        call = await callProvider(provider, currentMessages, { ...options, env, sessionId });
+      } catch (error) {
+        const transport = error instanceof LlmTransportError;
+        const permanent = error instanceof LlmPermanentError;
+        const kind = transport ? 'transport' : permanent ? 'permanent' : 'unknown';
+        breaker?.note(provider.id, { kind, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0 });
+        failures.push(new Error(`${provider.name}/${provider.model}: ${error.message}`));
+        details.push({ provider: provider.id, model: provider.model, kind, reason: String(error?.message ?? error), truncated: transport ? Boolean(error.truncated) : false, usage: error.usage ?? null, retryAfterMs: transport ? error.retryAfterMs ?? 0 : 0, latencyMs: Date.now() - started });
+        break;
+      }
+      let value;
+      try {
+        value = options.validate ? await options.validate(call.content) : call.content;
+      } catch (error) {
+        breaker?.note(provider.id, { kind: 'validation' });
+        failures.push(new Error(`${provider.name}/${provider.model}: ${error?.message ?? 'Validación rechazada'}`));
+        details.push({ provider: provider.id, model: provider.model, kind: 'validation', reason: String(error?.message ?? error), truncated: false, usage: call.usage, retryAfterMs: 0, latencyMs: Date.now() - started });
+        if (attempt < repairs) {
+          currentMessages = await options.repairMessages({ messages, content: call.content, error, attempt: attempt + 1 });
+          continue;
+        }
+        break;
+      }
+      if (value === false || value === undefined || value === null) {
+        breaker?.note(provider.id, { kind: 'validation' });
+        failures.push(new Error(`${provider.name}/${provider.model}: Validación rechazada`));
+        details.push({ provider: provider.id, model: provider.model, kind: 'validation', reason: 'Validación rechazada', truncated: false, usage: call.usage, retryAfterMs: 0, latencyMs: Date.now() - started });
+        break;
+      }
+      breaker?.note(provider.id, { kind: 'ok' });
+      return { value, provider: provider.id, model: provider.model, usage: call.usage, finishReason: call.finishReason, latencyMs: Date.now() - started, callId: sessionId, failures: details };
     }
-    let value;
-    try {
-      value = options.validate ? await options.validate(call.content) : call.content;
-    } catch (error) {
-      breaker?.note(provider.id, { kind: 'validation' });
-      failures.push(new Error(`${provider.name}/${provider.model}: ${error?.message ?? 'Validación rechazada'}`));
-      details.push({ provider: provider.id, model: provider.model, kind: 'validation', reason: String(error?.message ?? error), truncated: false, usage: call.usage, retryAfterMs: 0, latencyMs: Date.now() - started });
-      continue;
-    }
-    if (value === false || value === undefined || value === null) {
-      breaker?.note(provider.id, { kind: 'validation' });
-      failures.push(new Error(`${provider.name}/${provider.model}: Validación rechazada`));
-      details.push({ provider: provider.id, model: provider.model, kind: 'validation', reason: 'Validación rechazada', truncated: false, usage: call.usage, retryAfterMs: 0, latencyMs: Date.now() - started });
-      continue;
-    }
-    breaker?.note(provider.id, { kind: 'ok' });
-    return { value, provider: provider.id, model: provider.model, usage: call.usage, finishReason: call.finishReason, latencyMs: Date.now() - started, callId: sessionId, failures: details };
   }
   const aggregate = new AggregateError(failures, failures.length ? failures.map(e => e.message).join('; ') : details.length ? `No hay proveedores LLM disponibles (fusible): ${details.map(d => `${d.provider} (${d.kind})`).join(', ')}` : 'No hay proveedores LLM configurados');
   aggregate.details = details;
