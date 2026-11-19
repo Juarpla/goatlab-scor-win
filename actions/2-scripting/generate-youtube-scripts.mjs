@@ -34,7 +34,7 @@ import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pr
 
 process.env.SCRIPT_PROVIDER_ORDER ||= CONTENT_PROVIDER_ORDER;
 // Keep prose generation independent of the coding model used by other jobs.
-process.env.MISTRAL_MODEL = process.env.MISTRAL_SCRIPT_MODEL?.trim() || 'mistral-small-2603';
+process.env.MISTRAL_MODEL = process.env.MISTRAL_SCRIPT_MODEL?.trim() || 'ministral-8b-2512';
 const dir = 'public/data/youtube-scripts';
 const healthPath = 'public/data/llm-health.json';
 const skillPath = '.agents/skills/writing-short-scripts/SKILL.md';
