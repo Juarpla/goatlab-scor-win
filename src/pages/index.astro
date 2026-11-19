@@ -97,7 +97,6 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
    {slides.map(slide => <div class="band-slide"><span class="band-figure">{slide.figure}</span><span class="band-line">{slide.line}</span></div>)}
   </div>}
  </section>
- <EditorialShelf/>
  {calendarUnavailable && <p class="empty-message">El calendario no está disponible en este momento. Puedes seguir leyendo Datos jugados.</p>}
  {tickerItems.length > 0 && <div class="ticker" aria-hidden="true"><div class="ticker-track">{[0, 1].map(copy => <span class:list={['ticker-set', { 'ticker-copy': copy === 1 }]}>{tickerItems.map(item => <span class="ticker-item"><TeamLogo name={item.home} teamId={item.homeId} size={18}/><strong>{item.text}</strong><small title={item.full} data-kickoff={item.kickoff} data-format="time" data-label="off">{item.time}</small><TeamLogo name={item.away} teamId={item.awayId} size={18}/></span>)}</span>)}</div></div>}
  {hero ? <>
@@ -127,6 +126,7 @@ const tickerItems = upcoming.slice(0, 12).map(match => ({
   </div>
  </section>
  </> : <section id="forma" class="real-data"><div><h2>Sin encuentros a la vista</h2><p>No hay partidos de nuestras competiciones en los próximos siete días, o la fuente de datos no respondió en la última actualización{updated ? ` (${updated} hora de Lima)` : ''}.</p></div><div><p>Vuelve más tarde: el calendario se actualiza cada día a las 2:00 a. m. (hora de Perú) y los marcadores cada seis horas.</p></div></section>}
+ <EditorialShelf/>
  <AdSlot/>
  <section id="encuentros" class="wall" aria-labelledby="wall-title">
   <div class="section-heading"><h2 id="wall-title">El muro de encuentros</h2><span>Los 9 más próximos</span></div>
