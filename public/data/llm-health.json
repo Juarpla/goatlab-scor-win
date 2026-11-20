@@ -1,160 +1,6 @@
 {
-  "updatedAt": "2026-11-20T07:19:35.192Z",
+  "updatedAt": "2026-11-20T07:31:51.159Z",
   "runs": [
-    {
-      "at": "2026-11-13T21:00:36.746Z",
-      "task": "shorts",
-      "matchId": "sweden-vs-bosnia-herzegovina-2026-11-14",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: falta Suecia; guion 6: falta Suecia; guion 7: falta Bosnia y Herzegovina; guion 7: 4 cifras, máximo 3; guion 9: falta Bosnia y Herzegovina",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7233,
-            "outputTokens": 2886
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8224
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta Suecia; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: cifra 4.2 no está en los hechos; guion 5: 4 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6925,
-            "outputTokens": 28227
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 231666
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 3: cifra 1.4 no está en los hechos; guion 5: cifra 4.2 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6836,
-            "outputTokens": 35745
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 504044
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Bosnia y Herzegovina; guion 2: 53 palabras, mínimo 55; guion 4: falta Suecia; guion 5: 6 cifras, máximo 3; guion 6: falta Suecia; guion 6: 52 palabras, mínimo 55; guion 7: gancho repetido; guion 7: falta Bosnia y Herzegovina",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7321,
-            "outputTokens": 2475
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 20055
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235274
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta Bosnia y Herzegovina; guion 2: 5 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: falta Bosnia y Herzegovina; guion 6: 4 cifras, máximo 3; guion 7: falta Bosnia y Herzegovina",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7233,
-            "outputTokens": 3143
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8639
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6925,
-            "outputTokens": 27286
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 254285
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 461573
-      },
-      "usage": {
-        "inputTokens": 6836,
-        "outputTokens": 35070
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "d3d6ffe1-289c-48f7-a739-e105d2ad3080"
-    },
-    {
-      "at": "2026-11-13T21:00:44.873Z",
-      "task": "image-prompts",
-      "matchId": "austria-vs-ireland-2026-11-14",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2670,
-        "outputTokens": 1891
-      }
-    },
-    {
-      "at": "2026-11-13T21:00:50.056Z",
-      "task": "image-prompts",
-      "matchId": "sweden-vs-bosnia-herzegovina-2026-11-14",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2793,
-        "outputTokens": 1576
-      }
-    },
-    {
-      "at": "2026-11-13T21:01:00.457Z",
-      "task": "image-prompts",
-      "matchId": "romania-vs-poland-2026-11-14",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2631,
-        "outputTokens": 2549
-      }
-    },
     {
       "at": "2026-11-14T06:23:05.858Z",
       "matchId": "bz-212703",
@@ -7439,6 +7285,188 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "40e12ead-0096-4a94-a624-5b890fe02d53"
+    },
+    {
+      "at": "2026-11-20T07:26:48.013Z",
+      "task": "shorts",
+      "matchId": "chelsea-vs-leeds-united-2026-11-21",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: artículo delante de Chelsea FC; guion 5: artículo delante de Chelsea FC; guion 9: falta Leeds United FC; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7846,
+            "outputTokens": 2779
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9015
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 3036
+      },
+      "usage": {
+        "inputTokens": 9901,
+        "outputTokens": 1105
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "5a7d85ce-a07b-45db-8cd3-a92caa7dc3e5"
+    },
+    {
+      "at": "2026-11-20T07:31:33.204Z",
+      "task": "shorts",
+      "matchId": "newcastle-united-vs-arsenal-2026-11-21",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Newcastle United FC; guion 1: 50 palabras, mínimo 55; guion 2: falta Newcastle United FC; guion 2: 53 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 4: falta Newcastle United FC; guion 5: falta Newcastle United FC; guion 5: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7910,
+            "outputTokens": 2693
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7763
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 52 palabras, mínimo 55; guion 2: 54 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 5: falta Arsenal FC; guion 5: 52 palabras, mínimo 55; guion 6: el cero no se escribe en dígitos; guion 6: 54 palabras, mínimo 55; guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10226,
+            "outputTokens": 1292
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3991
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10060,
+            "outputTokens": 1916
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5664
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 8 cifras, máximo 3; guion 2: 6 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 6 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: 6 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 8059,
+            "outputTokens": 2734
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 39781
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 4 cifras, máximo 3; guion 2: cifra 20 no está en los hechos; guion 2: 5 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 11182,
+            "outputTokens": 2101
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26819
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 5 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 11085,
+            "outputTokens": 2098
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 29966
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235842
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 5 cifras, máximo 3; guion 2: falta Arsenal FC; guion 5: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 54 palabras, mínimo 55; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7910,
+            "outputTokens": 2322
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7456
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 10941,
+        "outputTokens": 1817
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-20T07:31:40.901Z",
+      "task": "image-prompts",
+      "matchId": "newcastle-united-vs-arsenal-2026-11-21",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2844,
+        "outputTokens": 2027
+      }
+    },
+    {
+      "at": "2026-11-20T07:31:51.159Z",
+      "task": "image-prompts",
+      "matchId": "chelsea-vs-leeds-united-2026-11-21",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2838,
+        "outputTokens": 2416
+      }
     }
   ]
 }
