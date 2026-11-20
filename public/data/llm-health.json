@@ -1,59 +1,6 @@
 {
-  "updatedAt": "2026-11-20T15:33:45.942Z",
+  "updatedAt": "2026-11-20T20:23:38.663Z",
   "runs": [
-    {
-      "at": "2026-11-14T13:24:47.038Z",
-      "matchId": "bz-212703",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1277,
-        "outputTokens": 15021
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "ebc5ebe5-12a3-4030-bd2f-3179cdc30ce8"
-    },
-    {
-      "at": "2026-11-14T13:24:47.038Z",
-      "matchId": "bz-212705",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "ebc5ebe5-12a3-4030-bd2f-3179cdc30ce8"
-    },
-    {
-      "at": "2026-11-14T13:25:12.313Z",
-      "matchId": "bz-212704",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1032,
-        "outputTokens": 1007
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "204dd565-5313-4ecd-b7e8-57115b318518"
-    },
     {
       "at": "2026-11-14T13:27:22.828Z",
       "matchId": "bz-212710",
@@ -7379,6 +7326,134 @@
       "maxTokens": 131072,
       "batchSize": 1,
       "callId": "92d01a7e-17df-46dd-b38e-c4ec11bed42c"
+    },
+    {
+      "at": "2026-11-20T20:20:04.823Z",
+      "matchId": "fd-564748",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1461,
+        "outputTokens": 1057
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "8d92cf22-83ff-49d7-9571-fd71626e97ef"
+    },
+    {
+      "at": "2026-11-20T20:21:57.144Z",
+      "matchId": "fd-560650",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1390,
+            "outputTokens": 1299
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4682
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1339,
+            "outputTokens": 1090
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4994
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1259,
+            "outputTokens": 5404
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 95470
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1259,
+        "outputTokens": 5404
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-20T20:23:31.142Z",
+      "matchId": "fd-564751",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1420,
+            "outputTokens": 1631
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6611
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1384,
+            "outputTokens": 1410
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6588
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1293,
+            "outputTokens": 4930
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 72772
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1293,
+        "outputTokens": 4930
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
     }
   ]
 }
