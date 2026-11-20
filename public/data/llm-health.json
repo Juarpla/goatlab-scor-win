@@ -1,189 +1,6 @@
 {
-  "updatedAt": "2026-11-19T22:19:48.759Z",
+  "updatedAt": "2026-11-20T07:19:35.192Z",
   "runs": [
-    {
-      "at": "2026-11-13T19:45:31.064Z",
-      "matchId": "bz-212700",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1019,
-        "outputTokens": 8047
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "7871bb87-bb66-4a5c-9f7c-c229c12a9ac5"
-    },
-    {
-      "at": "2026-11-13T20:33:59.417Z",
-      "task": "shorts",
-      "matchId": "romania-vs-poland-2026-11-14",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 53 palabras, mínimo 55; guion 3: 5 cifras, máximo 3; guion 4: 53 palabras, mínimo 55; guion 5: 4 cifras, máximo 3; guion 5: 53 palabras, mínimo 55; guion 6: el cero no se escribe en dígitos; guion 7: cifra 54 no está en los hechos; guion 7: porcentajes bloqueados: evaluation.published es false",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7353,
-            "outputTokens": 2782
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 17286
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7030,
-            "outputTokens": 21382
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 213082
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 503045
-      },
-      "usage": {
-        "inputTokens": 6912,
-        "outputTokens": 35153
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "2ed90cb3-66ca-4e10-9fdb-7f6eb8bcb01b"
-    },
-    {
-      "at": "2026-11-13T20:48:32.248Z",
-      "task": "shorts",
-      "matchId": "austria-vs-ireland-2026-11-14",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Austria; guion 2: falta Irlanda; guion 3: falta Austria; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 7: falta Irlanda; guion 7: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7392,
-            "outputTokens": 2604
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8072
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7061,
-            "outputTokens": 32822
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 301688
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6960,
-            "outputTokens": 35774
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 548312
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 1: 53 palabras, mínimo 55; guion 2: falta Austria; guion 2: falta Irlanda; guion 2: 52 palabras, mínimo 55; guion 3: 5 cifras, máximo 3; guion 4: falta Austria; guion 5: golpe 3 (dato): 5 palabras, mínimo 6; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7522,
-            "outputTokens": 2439
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13152
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235255
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 7: falta Irlanda; guion 7: 4 cifras, máximo 3; guion 8: falta Irlanda; guion 8: 5 cifras, máximo 3; guion 8: porcentajes bloqueados: evaluation.published es false",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7392,
-            "outputTokens": 3004
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12255
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta Irlanda; guion 3: 4 cifras, máximo 3; guion 5: cifra 4.4 no está en los hechos; guion 5: cifra 3.9 no está en los hechos; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7061,
-            "outputTokens": 21756
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 191032
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 3: 4 cifras, máximo 3; guion 5: cifra 4.4 no está en los hechos; guion 9: 5 cifras, máximo 3; guion 10: cifra 13.3 no está en los hechos; guion 10: cifra 11.5 no está en los hechos; guion 10: 4 cifras, máximo 3; descripción: cifra 14 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6960,
-            "outputTokens": 35534
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 468341
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6953,
-        "outputTokens": 7422
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-11-13T21:00:36.746Z",
       "task": "shorts",
@@ -7531,6 +7348,97 @@
       "maxTokens": 131072,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-20T07:15:19.680Z",
+      "matchId": "fd-564748",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1461,
+        "outputTokens": 1166
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "1cc4ecd9-f163-454a-b640-e0f9e3729eeb"
+    },
+    {
+      "at": "2026-11-20T07:15:32.442Z",
+      "matchId": "fd-560648",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1465,
+        "outputTokens": 1144
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "9e3f2ba0-e487-4198-9ff8-9974fdb0c494"
+    },
+    {
+      "at": "2026-11-20T07:19:27.052Z",
+      "matchId": "fd-560650",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "No se encontró JSON válido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1392,
+            "outputTokens": 414
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3158
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1341,
+            "outputTokens": 1252
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5651
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1392,
+        "outputTokens": 1408
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "40e12ead-0096-4a94-a624-5b890fe02d53"
     }
   ]
 }
