@@ -1,21 +1,6 @@
 {
-  "updatedAt": "2026-11-20T15:27:58.036Z",
+  "updatedAt": "2026-11-20T15:33:45.942Z",
   "runs": [
-    {
-      "at": "2026-11-14T07:29:21.387Z",
-      "task": "image-prompts",
-      "matchId": "croatia-vs-czechia-2026-11-15",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2643,
-        "outputTokens": 1810
-      }
-    },
     {
       "at": "2026-11-14T13:24:47.038Z",
       "matchId": "bz-212703",
@@ -7275,6 +7260,125 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "e16a2f27-2e73-4c29-b9e4-fa264b57f196"
+    },
+    {
+      "at": "2026-11-20T15:33:45.937Z",
+      "task": "shorts",
+      "matchId": "newcastle-united-vs-arsenal-2026-11-21",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 5 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: falta Newcastle United FC; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7897,
+            "outputTokens": 2399
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8505
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: 4 cifras, máximo 3; guion 8: falta Arsenal FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10690,
+            "outputTokens": 2496
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6463
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 4 cifras, máximo 3; guion 1: 54 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10504,
+            "outputTokens": 1257
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3954
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: falta Newcastle United FC; guion 2: 5 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: falta Arsenal FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 8046,
+            "outputTokens": 2373
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 16462
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 6 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: proyección fuera de rango; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10713,
+            "outputTokens": 1601
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10757
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "transport",
+          "reason": "HTTP 429",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 230
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235281
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 5: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7897,
+            "outputTokens": 2883
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7984
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1973
+      },
+      "usage": {
+        "inputTokens": 10016,
+        "outputTokens": 575
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "92d01a7e-17df-46dd-b38e-c4ec11bed42c"
     }
   ]
 }
