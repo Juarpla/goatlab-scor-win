@@ -1,108 +1,6 @@
 {
-  "updatedAt": "2026-11-21T19:18:48.785Z",
+  "updatedAt": "2026-11-21T19:20:33.633Z",
   "runs": [
-    {
-      "at": "2026-11-14T22:32:04.835Z",
-      "matchId": "bz-212714",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1185,
-            "outputTokens": 781
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 3597
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "transport",
-          "reason": "Respuesta vacía o inválida",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1113,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 149847
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "Respuesta truncada (techo 15000 tokens)",
-          "truncated": true,
-          "usage": {
-            "inputTokens": 1088,
-            "outputTokens": 15000
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 173888
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1151,
-            "outputTokens": 1019
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 5651
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1081,
-            "outputTokens": 4110
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 96455
-        }
-      ],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1185,
-        "outputTokens": 958
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b8a10a47-b9ba-4b90-a918-e8e763de4961"
-    },
-    {
-      "at": "2026-11-14T22:32:14.533Z",
-      "matchId": "bz-212713",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1191,
-        "outputTokens": 1031
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b25355e6-5012-4be8-81fb-10081f862477"
-    },
     {
       "at": "2026-11-14T22:32:26.057Z",
       "matchId": "bz-212716",
@@ -7526,6 +7424,55 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "9c118b09-466a-4cc2-a5f1-ff4f49ceb628"
+    },
+    {
+      "at": "2026-11-21T19:20:24.062Z",
+      "task": "shorts",
+      "matchId": "hull-city-vs-brighton-hove-albion-2026-11-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "No se encontró JSON válido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7824,
+            "outputTokens": 8155
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 41408
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 6817
+      },
+      "usage": {
+        "inputTokens": 16142,
+        "outputTokens": 2855
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "186ff65b-053d-409c-baf1-971145db6ef6"
+    },
+    {
+      "at": "2026-11-21T19:20:33.633Z",
+      "task": "image-prompts",
+      "matchId": "hull-city-vs-brighton-hove-albion-2026-11-22",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2911,
+        "outputTokens": 2304
+      }
     }
   ]
 }
