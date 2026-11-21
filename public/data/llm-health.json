@@ -1,59 +1,6 @@
 {
-  "updatedAt": "2026-11-20T20:23:38.663Z",
+  "updatedAt": "2026-11-21T07:17:19.514Z",
   "runs": [
-    {
-      "at": "2026-11-14T13:27:22.828Z",
-      "matchId": "bz-212710",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1005,
-        "outputTokens": 12412
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "eb0a4bec-0e8d-4801-84cb-5baa81a02f8b"
-    },
-    {
-      "at": "2026-11-14T13:27:28.960Z",
-      "matchId": "bz-212704",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1473,
-        "outputTokens": 2221
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4e8ee3d5-67b8-4dd9-8ad8-8f31b8c6f8e6"
-    },
-    {
-      "at": "2026-11-14T13:27:28.960Z",
-      "matchId": "bz-212710",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4e8ee3d5-67b8-4dd9-8ad8-8f31b8c6f8e6"
-    },
     {
       "at": "2026-11-14T13:27:50.495Z",
       "matchId": "bz-212708",
@@ -7454,6 +7401,170 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-21T07:10:10.813Z",
+      "matchId": "fd-560643",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1429,
+            "outputTokens": 1292
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4494
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1392,
+            "outputTokens": 1021
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5033
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1290,
+            "outputTokens": 4303
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 151137
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1290,
+        "outputTokens": 4303
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-21T07:17:01.694Z",
+      "matchId": "fd-564755",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1468,
+            "outputTokens": 1261
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5532
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1401,
+            "outputTokens": 1262
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5887
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1468,
+            "outputTokens": 659
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5857
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1401,
+            "outputTokens": 1597
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7313
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1358,
+            "outputTokens": 4465
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 163211
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1358,
+        "outputTokens": 4465
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-21T07:17:10.957Z",
+      "matchId": "fd-560648",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1465,
+        "outputTokens": 998
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "f7c642c9-fb2c-4a03-8b1b-44a2e32d336e"
     }
   ]
 }
