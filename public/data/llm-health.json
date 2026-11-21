@@ -1,43 +1,6 @@
 {
-  "updatedAt": "2026-11-21T07:17:19.514Z",
+  "updatedAt": "2026-11-21T07:24:14.211Z",
   "runs": [
-    {
-      "at": "2026-11-14T13:27:50.495Z",
-      "matchId": "bz-212708",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1102,
-        "outputTokens": 1181
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b69790cb-f44c-4cfd-afbb-3d3993b7698e"
-    },
-    {
-      "at": "2026-11-14T13:27:57.588Z",
-      "matchId": "bz-212709",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1595,
-        "outputTokens": 1024
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "c2b41c09-955e-4ee8-b46c-b74977fd6282"
-    },
     {
       "at": "2026-11-14T13:27:57.588Z",
       "matchId": "bz-212708",
@@ -7565,6 +7528,143 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "f7c642c9-fb2c-4a03-8b1b-44a2e32d336e"
+    },
+    {
+      "at": "2026-11-21T07:24:07.182Z",
+      "task": "shorts",
+      "matchId": "getafe-vs-atletico-madrid-2026-11-22",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: el cero no se escribe en dígitos; guion 1: 6 cifras, máximo 3; guion 2: falta Getafe CF; guion 3: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7659,
+            "outputTokens": 3047
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9532
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 1: 4 cifras, máximo 3; guion 6: proyección fuera de rango; guion 6: 4 cifras, máximo 3; guion 8: proyección fuera de rango; guion 8: proyección fuera de rango; guion 8: 4 cifras, máximo 3; guion 9: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10519,
+            "outputTokens": 2337
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6010
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango; guion 6: proyección fuera de rango; guion 6: 4 cifras, máximo 3; guion 8: proyección fuera de rango; guion 8: proyección fuera de rango; guion 9: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10120,
+            "outputTokens": 978
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 2749
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Club Atlético de Madrid; guion 2: 5 cifras, máximo 3; guion 3: falta Club Atlético de Madrid; guion 4: falta Club Atlético de Madrid; guion 5: falta Club Atlético de Madrid; guion 5: 4 cifras, máximo 3; guion 6: falta Club Atlético de Madrid",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7792,
+            "outputTokens": 2636
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 34863
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: el gancho no lleva cifras; guion 3: cifra 52 no está en los hechos; guion 3: 5 cifras, máximo 3; guion 3: porcentajes bloqueados: evaluation.published es false; guion 7: 5 cifras, máximo 3; guion 8: proyección fuera de rango; guion 8: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10824,
+            "outputTokens": 2437
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 31531
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 7: proyección fuera de rango; guion 7: 5 cifras, máximo 3; guion 8: proyección fuera de rango; guion 8: proyección fuera de rango; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10455,
+            "outputTokens": 1125
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10080
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235239
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Getafe CF; guion 3: falta Club Atlético de Madrid; guion 4: falta Club Atlético de Madrid; guion 5: 54 palabras, mínimo 55; guion 7: 54 palabras, mínimo 55; guion 8: falta Club Atlético de Madrid; guion 9: proyección fuera de rango; guion 10: falta Club Atlético de Madrid",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7659,
+            "outputTokens": 2747
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10892
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 986
+      },
+      "usage": {
+        "inputTokens": 9625,
+        "outputTokens": 190
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "02a721d4-5f1a-4135-a2dc-81f524c7b5cc"
+    },
+    {
+      "at": "2026-11-21T07:24:14.211Z",
+      "task": "image-prompts",
+      "matchId": "getafe-vs-atletico-madrid-2026-11-22",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2401,
+        "outputTokens": 1631
+      }
     }
   ]
 }
