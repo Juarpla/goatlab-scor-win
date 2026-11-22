@@ -1,0 +1,639 @@
+{
+  "id": "fd-564760",
+  "home": "Real Betis Balompié",
+  "away": "Rayo Vallecano de Madrid",
+  "competition": "laliga",
+  "kickoff": "2026-11-28T13:00:00Z",
+  "updatedAt": "2026-11-22T14:27:27.125Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.26,
+      "away": 0.69
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.48,
+      "away": 0.905
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Real Betis Balompié": {
+        "position": 4,
+        "team": "Real Betis Balompié",
+        "played": 13,
+        "won": 8,
+        "drawn": 3,
+        "lost": 2,
+        "goalsFor": 21,
+        "goalsAgainst": 16,
+        "goalDifference": 5,
+        "points": 27,
+        "form": null
+      },
+      "Rayo Vallecano de Madrid": {
+        "position": 14,
+        "team": "Rayo Vallecano de Madrid",
+        "played": 12,
+        "won": 3,
+        "drawn": 3,
+        "lost": 6,
+        "goalsFor": 15,
+        "goalsAgainst": 22,
+        "goalDifference": -7,
+        "points": 12,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-22T14:26:53.895Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-28T13:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-22T14:26:53.895Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 456
+    },
+    "venue": {
+      "city": "Sevilla",
+      "tz": "Europe/Madrid"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.488,
+      "draw": 0.32,
+      "away": 0.191
+    },
+    "doubleChance": {
+      "12": 0.68,
+      "1X": 0.809,
+      "X2": 0.512
+    },
+    "dnb": {
+      "home": 0.718,
+      "away": 0.282
+    },
+    "totals": {
+      "over15": 0.593,
+      "under15": 0.407,
+      "over25": 0.31,
+      "under25": 0.69,
+      "over35": 0.134,
+      "under35": 0.866
+    },
+    "btts": {
+      "yes": 0.369,
+      "no": 0.631
+    },
+    "cleanSheet": {
+      "home": 0.502,
+      "away": 0.284
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.167
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.155
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.136
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.113
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "p": 0.086
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.38,
+    "noGoal": 0.092,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.328
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.22
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.1
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.067
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.045
+      }
+    ],
+    "firstHome": 0.563,
+    "firstAway": 0.345
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Abdessamad Ezzalzouli",
+        "goals": 3,
+        "matches": 10,
+        "share": 0.143,
+        "rate": 0.21,
+        "anytime": 0.191,
+        "first": 0.089
+      },
+      {
+        "player": "Marc Bartra",
+        "goals": 3,
+        "matches": 13,
+        "share": 0.143,
+        "rate": 0.21,
+        "anytime": 0.191,
+        "first": 0.089
+      },
+      {
+        "player": "Rodrigo Riquelme",
+        "goals": 3,
+        "matches": 13,
+        "share": 0.143,
+        "rate": 0.21,
+        "anytime": 0.191,
+        "first": 0.089
+      }
+    ],
+    "away": [
+      {
+        "player": "Sergio Camello",
+        "goals": 7,
+        "matches": 13,
+        "share": 0.467,
+        "rate": 0.42,
+        "anytime": 0.345,
+        "first": 0.178
+      },
+      {
+        "player": "Álvaro García",
+        "goals": 3,
+        "matches": 11,
+        "share": 0.2,
+        "rate": 0.18,
+        "anytime": 0.166,
+        "first": 0.076
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.633,
+      "draw": 0.21600000000000003,
+      "away": 0.15,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.7,
+      "away": 1.12
+    },
+    "over15": 0.807,
+    "over25": 0.616,
+    "over35": 0.371,
+    "btts": 0.555,
+    "score": "1-1",
+    "cornersOver95": 0.55,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.633,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6335,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-22T14:27:18.721Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.498,
+      "draw": 0.263,
+      "away": 0.239
+    },
+    "doubleChance": {
+      "12": 0.737,
+      "1X": 0.761,
+      "X2": 0.502
+    },
+    "dnb": {
+      "home": 0.675,
+      "away": 0.325
+    },
+    "totals": {
+      "over15": 0.784,
+      "under15": 0.216,
+      "over25": 0.535,
+      "under25": 0.465,
+      "over35": 0.312,
+      "under35": 0.688
+    },
+    "btts": {
+      "yes": 0.562,
+      "no": 0.438
+    },
+    "cleanSheet": {
+      "home": 0.326,
+      "away": 0.183
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12,
+        "share": 0.25917926565874727
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.096,
+        "share": 0.20734341252699784
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.09,
+        "share": 0.19438444924406045
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.086,
+        "share": 0.18574514038876888
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.071,
+        "share": 0.15334773218142547
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 41,
+    "homeWins": 16,
+    "draws": 15,
+    "awayWins": 10,
+    "avgTotalGoals": 2.6341463414634148,
+    "recent": [
+      {
+        "eventId": 938,
+        "date": "2026-02-21T15:15:00+00:00",
+        "home": "Real Betis",
+        "away": "Rayo Vallecano",
+        "homeTeamId": 56,
+        "awayTeamId": 40,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 850,
+        "date": "2025-12-15T20:00:00+00:00",
+        "home": "Rayo Vallecano",
+        "away": "Real Betis",
+        "homeTeamId": 40,
+        "awayTeamId": 56,
+        "homeScore": 0,
+        "awayScore": 0
+      },
+      {
+        "eventId": 305711,
+        "date": "2025-05-15T17:00:00+00:00",
+        "home": "Rayo Vallecano",
+        "away": "Real Betis",
+        "homeTeamId": 40,
+        "awayTeamId": 56,
+        "homeScore": 2,
+        "awayScore": 2
+      },
+      {
+        "eventId": 305533,
+        "date": "2024-12-22T20:00:00+00:00",
+        "home": "Real Betis",
+        "away": "Rayo Vallecano",
+        "homeTeamId": 56,
+        "awayTeamId": 40,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 311106,
+        "date": "2024-03-17T17:30:00+00:00",
+        "home": "Rayo Vallecano",
+        "away": "Real Betis",
+        "homeTeamId": 40,
+        "awayTeamId": 56,
+        "homeScore": 2,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 51,
+      "historyRows": 456
+    },
+    "source": "GoatLab",
+    "expectedTotal": 5.1
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 456
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10.5
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.86,
+      "shotsOnTarget": 5.24,
+      "xg": 1.7,
+      "corners": 5.36,
+      "fouls": 12.58,
+      "yellowCards": 2.34,
+      "redCards": 0.29,
+      "offsides": 1.86,
+      "possession": 48.61
+    },
+    "away": {
+      "shots": 15.43,
+      "shotsOnTarget": 4.96,
+      "xg": 1.12,
+      "corners": 5.14,
+      "fouls": 13.11,
+      "yellowCards": 2.75,
+      "redCards": 0.22,
+      "offsides": 2.03,
+      "possession": 51.39
+    },
+    "sample": {
+      "home": 10,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 8,
+        "offsides": 9
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 8,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.8,
+      "shotsOnTarget": 4.72,
+      "xg": 1.47,
+      "corners": 4.87,
+      "fouls": 12.47,
+      "yellowCards": 2.33,
+      "redCards": 0.27,
+      "offsides": 2.1
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.465,
+      "draw": 0.124,
+      "away": 0.411
+    },
+    "cardsDuel": {
+      "home": 0.34,
+      "draw": 0.179,
+      "away": 0.481
+    },
+    "lastGoal": {
+      "home": 0.563,
+      "away": 0.345,
+      "noGoal": 0.092
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.52,
+        "away": 0.48
+      },
+      "5": {
+        "home": 0.526,
+        "away": 0.474
+      },
+      "7": {
+        "home": 0.531,
+        "away": 0.469
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.238,
+      "home12": 0.227,
+      "level": 0.124,
+      "away12": 0.214,
+      "away3plus": 0.198
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 26.7,
+      "condition": null,
+      "sampledAt": "2026-11-28T13:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Benito Villamarín",
+      "city": "Sevilla",
+      "capacity": 60721,
+      "tz": "Europe/Madrid"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Real Betis Balompié",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 4,
+        "sample": 5
+      },
+      "season": {
+        "position": 4,
+        "played": 13,
+        "gf": 21,
+        "ga": 16,
+        "provider": null
+      },
+      "player": {
+        "name": "Abdessamad Ezzalzouli",
+        "detail": "3 goles en 10 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Rayo Vallecano de Madrid",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 14,
+        "played": 12,
+        "gf": 15,
+        "ga": 22,
+        "provider": null
+      },
+      "player": {
+        "name": "Sergio Camello",
+        "detail": "7 goles en 13 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

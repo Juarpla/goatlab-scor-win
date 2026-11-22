@@ -4,7 +4,7 @@
   "away": "Everton FC",
   "competition": "premier",
   "kickoff": "2026-11-23T20:00:00Z",
-  "updatedAt": "2026-11-22T06:48:14.090Z",
+  "updatedAt": "2026-11-22T14:27:27.125Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -23,7 +23,7 @@
     },
     "standings": {
       "Brentford FC": {
-        "position": 8,
+        "position": 10,
         "team": "Brentford FC",
         "played": 10,
         "won": 3,
@@ -36,7 +36,7 @@
         "form": null
       },
       "Everton FC": {
-        "position": 6,
+        "position": 7,
         "team": "Everton FC",
         "played": 10,
         "won": 4,
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-21T14:30:56.972Z",
+      "updatedAt": "2026-11-22T14:27:07.277Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,7 +61,7 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-21T14:30:56.972Z",
+      "updatedAt": "2026-11-22T14:27:07.277Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
@@ -188,15 +188,6 @@
         "rate": 0.19,
         "anytime": 0.171,
         "first": 0.072
-      },
-      {
-        "player": "Keane Lewis-Potter",
-        "goals": 2,
-        "matches": 10,
-        "share": 0.125,
-        "rate": 0.19,
-        "anytime": 0.171,
-        "first": 0.072
       }
     ],
     "away": [
@@ -224,30 +215,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.44299999999999995,
-      "draw": 0.267,
-      "away": 0.29,
+      "home": 0.41600000000000004,
+      "draw": 0.27,
+      "away": 0.314,
       "predicted": "H"
     },
     "xg": {
       "home": 1.57,
       "away": 1.16
     },
-    "over15": 0.76,
-    "over25": 0.531,
-    "over35": 0.315,
-    "btts": 0.5720000000000001,
+    "over15": 0.757,
+    "over25": 0.524,
+    "over35": 0.312,
+    "btts": 0.573,
     "score": "1-1",
-    "cornersOver95": 0.49200000000000005,
+    "cornersOver95": 0.493,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.443,
+      "favoriteProb": 0.416,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4431,
+    "confidence": 0.4162,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-21T14:31:10.735Z",
+    "capturedAt": "2026-11-22T14:27:12.684Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -593,7 +584,7 @@
         "sample": 5
       },
       "season": {
-        "position": 8,
+        "position": 10,
         "played": 10,
         "gf": 16,
         "ga": 11,
@@ -622,7 +613,7 @@
         "sample": 5
       },
       "season": {
-        "position": 6,
+        "position": 7,
         "played": 10,
         "gf": 12,
         "ga": 10,
@@ -635,5 +626,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": false,
+    "note": "La información se procesa fielmente. La lectura de Bzzoiro se atribuye al proveedor sin recomendaciones propias. La forma reciente de Everton (2 victorias) y Brentford (1 derrota) se extrae correctamente de la sección R.",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-22T14:28:52.908Z"
+  }
 }

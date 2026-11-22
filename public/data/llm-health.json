@@ -1,262 +1,6 @@
 {
-  "updatedAt": "2026-11-22T06:56:51.384Z",
+  "updatedAt": "2026-11-22T14:29:25.162Z",
   "runs": [
-    {
-      "at": "2026-11-15T06:32:44.091Z",
-      "matchId": "bz-212713",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1190,
-        "outputTokens": 1006
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "11e0b13a-a564-4199-a274-3025b34e8f6a"
-    },
-    {
-      "at": "2026-11-15T06:32:53.426Z",
-      "matchId": "bz-212716",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1094,
-        "outputTokens": 999
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "bf351818-632e-4ac0-a121-ad5ce206e7f0"
-    },
-    {
-      "at": "2026-11-15T06:39:53.255Z",
-      "task": "shorts",
-      "matchId": "germany-vs-netherlands-2026-11-16",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 52 palabras, mínimo 55; guion 2: falta Países Bajos; guion 2: 54 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 3: 54 palabras, mínimo 55; guion 4: falta Países Bajos; guion 5: falta Alemania; guion 5: 52 palabras, mínimo 55",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7625,
-            "outputTokens": 2660
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7837
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 342501
-      },
-      "usage": {
-        "inputTokens": 7283,
-        "outputTokens": 35272
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "77365f6d-25ac-431a-9cf8-2a3f927a8ef4"
-    },
-    {
-      "at": "2026-11-15T06:48:52.388Z",
-      "task": "shorts",
-      "matchId": "belgium-vs-italy-2026-11-15",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: falta Italia; guion 8: falta Bélgica; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7629,
-            "outputTokens": 2523
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8166
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7326,
-            "outputTokens": 24456
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 222611
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 5: cifra 4.8 no está en los hechos; guion 5: cifra 4.5 no está en los hechos; guion 5: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: 5 cifras, máximo 3; guion 10: cifra 11.5 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7185,
-            "outputTokens": 22582
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 159140
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 1: 6 cifras, máximo 3; guion 2: 6 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: gancho repetido; guion 7: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7773,
-            "outputTokens": 3015
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15164
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 2: el cero no se escribe en dígitos; guion 2: 5 cifras, máximo 3; guion 3: falta Bélgica; guion 3: cifra 2.5 no está en los hechos; guion 3: vocabulario prohibido: apuestas?; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: cifra 50.6 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7178,
-            "outputTokens": 8160
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 134044
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7178,
-        "outputTokens": 8160
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-15T06:49:00.827Z",
-      "task": "image-prompts",
-      "matchId": "germany-vs-netherlands-2026-11-16",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2756,
-        "outputTokens": 2148
-      }
-    },
-    {
-      "at": "2026-11-15T13:49:46.814Z",
-      "matchId": "bz-212714",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1750,
-        "outputTokens": 2467
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6f9041e8-774f-472d-a0c5-5fba946205ea"
-    },
-    {
-      "at": "2026-11-15T13:49:46.814Z",
-      "matchId": "bz-212713",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "6f9041e8-774f-472d-a0c5-5fba946205ea"
-    },
-    {
-      "at": "2026-11-15T13:50:06.708Z",
-      "matchId": "bz-212716",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1701,
-        "outputTokens": 2049
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "089ace24-0932-4819-8b89-2ea28a9d746c"
-    },
-    {
-      "at": "2026-11-15T13:50:06.708Z",
-      "matchId": "bz-212715",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "089ace24-0932-4819-8b89-2ea28a9d746c"
-    },
-    {
-      "at": "2026-11-15T13:50:25.585Z",
-      "matchId": "bz-212720",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1779,
-        "outputTokens": 1844
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4f1e54f6-ee58-47eb-a12b-ff0c9c622d8b"
-    },
     {
       "at": "2026-11-15T13:50:25.585Z",
       "matchId": "bz-212719",
@@ -7486,6 +7230,181 @@
         "inputTokens": 2468,
         "outputTokens": 2530
       }
+    },
+    {
+      "at": "2026-11-22T14:27:52.936Z",
+      "matchId": "fd-564749",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 2346,
+        "outputTokens": 2369
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "e42b851f-885c-402b-85a0-16889bf5a7b5"
+    },
+    {
+      "at": "2026-11-22T14:27:52.936Z",
+      "matchId": "fd-560646",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "e42b851f-885c-402b-85a0-16889bf5a7b5"
+    },
+    {
+      "at": "2026-11-22T14:28:10.602Z",
+      "matchId": "fd-564750",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 2211,
+        "outputTokens": 1823
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "17f38e81-678d-4205-a6d5-4cbe551ff6ae"
+    },
+    {
+      "at": "2026-11-22T14:28:10.602Z",
+      "matchId": "fd-560645",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "17f38e81-678d-4205-a6d5-4cbe551ff6ae"
+    },
+    {
+      "at": "2026-11-22T14:28:31.420Z",
+      "matchId": "fd-564752",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 2204,
+        "outputTokens": 2331
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "b4eafcf1-11b2-438e-8ca8-7eb4766688a6"
+    },
+    {
+      "at": "2026-11-22T14:28:31.420Z",
+      "matchId": "fd-564753",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "b4eafcf1-11b2-438e-8ca8-7eb4766688a6"
+    },
+    {
+      "at": "2026-11-22T14:28:52.914Z",
+      "matchId": "fd-564757",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 2290,
+        "outputTokens": 2041
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "fd92cfd6-cea2-48a1-86b3-5b080d72201f"
+    },
+    {
+      "at": "2026-11-22T14:28:52.914Z",
+      "matchId": "fd-560649",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "fd92cfd6-cea2-48a1-86b3-5b080d72201f"
+    },
+    {
+      "at": "2026-11-22T14:29:12.880Z",
+      "matchId": "fd-575396",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1766,
+        "outputTokens": 2018
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "68c905f3-7136-48cf-bdf4-b955d8ee18e5"
+    },
+    {
+      "at": "2026-11-22T14:29:12.880Z",
+      "matchId": "fd-575395",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "68c905f3-7136-48cf-bdf4-b955d8ee18e5"
     }
   ]
 }

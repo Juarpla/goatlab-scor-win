@@ -1,0 +1,553 @@
+{
+  "id": "fd-576807",
+  "home": "SE Palmeiras",
+  "away": "Estudiantes de La Plata",
+  "competition": "libertadores",
+  "kickoff": "2026-11-28T20:00:00Z",
+  "updatedAt": "2026-11-22T14:27:27.125Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.8,
+      "away": 1.61
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.735,
+      "away": 1.15
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "SE Palmeiras": null,
+      "Estudiantes de La Plata": {
+        "position": 2,
+        "team": "Estudiantes de La Plata",
+        "teamId": 787,
+        "played": 6,
+        "won": 2,
+        "drawn": 3,
+        "lost": 1,
+        "goalsFor": null,
+        "goalsAgainst": null,
+        "goalDifference": null,
+        "points": 9,
+        "zone": {
+          "key": "playoff",
+          "label": "Playoffs",
+          "type": "playoff"
+        },
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-22T14:26:40.731Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-11-28T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-22T14:26:40.731Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 456
+    },
+    "venue": {
+      "city": "São Paulo",
+      "tz": "America/Sao_Paulo"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.417,
+      "draw": 0.244,
+      "away": 0.339
+    },
+    "doubleChance": {
+      "12": 0.756,
+      "1X": 0.661,
+      "X2": 0.583
+    },
+    "dnb": {
+      "home": 0.552,
+      "away": 0.448
+    },
+    "totals": {
+      "over15": 0.864,
+      "under15": 0.136,
+      "over25": 0.662,
+      "under25": 0.338,
+      "over35": 0.444,
+      "under35": 0.556
+    },
+    "btts": {
+      "yes": 0.677,
+      "no": 0.323
+    },
+    "cleanSheet": {
+      "home": 0.2,
+      "away": 0.165
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.105
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.086
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.077
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.069
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.054
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.89,
+    "noGoal": 0.056,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.382
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.236
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.146
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.09
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.056
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.034
+      }
+    ],
+    "firstHome": 0.568,
+    "firstAway": 0.376
+  },
+  "scorers": {
+    "home": null,
+    "away": [
+      {
+        "player": "Guido Carrillo",
+        "goals": 3,
+        "matches": 12,
+        "share": 0.375,
+        "rate": 0.43,
+        "anytime": 0.35,
+        "first": 0.149
+      },
+      {
+        "player": "Tiago Palacios",
+        "goals": 3,
+        "matches": 9,
+        "share": 0.375,
+        "rate": 0.43,
+        "anytime": 0.35,
+        "first": 0.149
+      },
+      {
+        "player": "Alexis Castro",
+        "goals": 2,
+        "matches": 12,
+        "share": 0.25,
+        "rate": 0.29,
+        "anytime": 0.25,
+        "first": 0.099
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.626,
+      "draw": 0.248,
+      "away": 0.125,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.67,
+      "away": 0.69
+    },
+    "over15": 0.684,
+    "over25": 0.425,
+    "over35": 0.21,
+    "btts": 0.431,
+    "score": "1-0",
+    "cornersOver95": 0.47700000000000004,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.626,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6265,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-22T14:27:19.466Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.599,
+      "draw": 0.261,
+      "away": 0.14
+    },
+    "doubleChance": {
+      "12": 0.739,
+      "1X": 0.86,
+      "X2": 0.401
+    },
+    "dnb": {
+      "home": 0.81,
+      "away": 0.19
+    },
+    "totals": {
+      "over15": 0.694,
+      "under15": 0.306,
+      "over25": 0.42,
+      "under25": 0.58,
+      "over35": 0.213,
+      "under35": 0.787
+    },
+    "btts": {
+      "yes": 0.415,
+      "no": 0.585
+    },
+    "cleanSheet": {
+      "home": 0.502,
+      "away": 0.188
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.165,
+        "share": 0.26916802610114193
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.132,
+        "share": 0.21533442088091356
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.12,
+        "share": 0.1957585644371941
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.105,
+        "share": 0.17128874388254486
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.091,
+        "share": 0.14845024469820556
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 0
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 0,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": [],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 456
+    },
+    "source": "GoatLab",
+    "expectedTotal": 5
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 456
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.9
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.1,
+      "shotsOnTarget": 3.94,
+      "xg": 1.67,
+      "corners": 5.14,
+      "fouls": 13.21,
+      "yellowCards": 2.24,
+      "redCards": 0.29,
+      "offsides": 1.87,
+      "possession": 50.02
+    },
+    "away": {
+      "shots": 11.52,
+      "shotsOnTarget": 3.47,
+      "xg": 0.69,
+      "corners": 4.74,
+      "fouls": 13.99,
+      "yellowCards": 2.75,
+      "redCards": 0.24,
+      "offsides": 1.47,
+      "possession": 49.98
+    },
+    "sample": {
+      "home": 3,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 3,
+        "shots": 3,
+        "shotsOnTarget": 3,
+        "xg": 3,
+        "corners": 3,
+        "fouls": 3,
+        "yellowCards": 3,
+        "redCards": 1,
+        "offsides": 3
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 5,
+        "offsides": 8
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 12.08,
+      "shotsOnTarget": 3.66,
+      "xg": 0.98,
+      "corners": 4.92,
+      "fouls": 13.1,
+      "yellowCards": 2.48,
+      "redCards": 0.25,
+      "offsides": 1.5
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.486,
+      "draw": 0.128,
+      "away": 0.386
+    },
+    "cardsDuel": {
+      "home": 0.322,
+      "draw": 0.18,
+      "away": 0.498
+    },
+    "lastGoal": {
+      "home": 0.568,
+      "away": 0.376,
+      "noGoal": 0.056
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.538,
+        "away": 0.462
+      },
+      "5": {
+        "home": 0.55,
+        "away": 0.45
+      },
+      "7": {
+        "home": 0.559,
+        "away": 0.441
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.248,
+      "home12": 0.238,
+      "level": 0.128,
+      "away12": 0.211,
+      "away3plus": 0.175
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 28.1,
+      "condition": "rain",
+      "sampledAt": "2026-11-28T20:00:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Allianz Parque",
+      "city": "São Paulo",
+      "capacity": 43713,
+      "tz": "America/Sao_Paulo"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "SE Palmeiras",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": null,
+      "player": null
+    },
+    "away": {
+      "team": "Estudiantes de La Plata",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 3,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 3,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 2,
+        "played": 6,
+        "gf": null,
+        "ga": null,
+        "provider": null
+      },
+      "player": {
+        "name": "Guido Carrillo",
+        "detail": "3 goles en 12 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}
