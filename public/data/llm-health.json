@@ -1,122 +1,6 @@
 {
-  "updatedAt": "2026-11-22T19:42:44.572Z",
+  "updatedAt": "2026-11-22T19:44:11.879Z",
   "runs": [
-    {
-      "at": "2026-11-15T14:00:11.266Z",
-      "matchId": "bz-212722",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1700,
-        "outputTokens": 3193
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "12fe0574-0532-425c-ae58-e009ec3f977d"
-    },
-    {
-      "at": "2026-11-15T14:00:11.267Z",
-      "matchId": "bz-212721",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "12fe0574-0532-425c-ae58-e009ec3f977d"
-    },
-    {
-      "at": "2026-11-15T14:14:08.478Z",
-      "task": "shorts",
-      "matchId": "real-madrid-vs-celta-vigo-2026-11-21",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: falta RC Celta de Vigo; guion 2: falta RC Celta de Vigo; guion 4: falta RC Celta de Vigo; guion 6: 4 cifras, máximo 3; guion 7: falta RC Celta de Vigo; guion 7: 4 cifras, máximo 3; guion 8: falta Real Madrid CF; guion 8: falta RC Celta de Vigo",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7548,
-            "outputTokens": 2894
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8617
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7199,
-            "outputTokens": 28379
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 315585
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 445575
-      },
-      "usage": {
-        "inputTokens": 7057,
-        "outputTokens": 30561
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "49fd7a23-be6e-42bc-8165-6908681d89de"
-    },
-    {
-      "at": "2026-11-15T14:19:00.615Z",
-      "task": "shorts",
-      "matchId": "belgium-vs-italy-2026-11-15",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 2: 4 cifras, máximo 3; guion 3: cifra 2.2 no está en los hechos; guion 3: cifra 1.6 no está en los hechos; guion 3: 7 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 5: vocabulario prohibido: cuotas?; guion 6: el cero no se escribe en dígitos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7686,
-            "outputTokens": 3624
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13454
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 278677
-      },
-      "usage": {
-        "inputTokens": 7370,
-        "outputTokens": 28476
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "d83d503b-af46-4063-a800-9c6328853727"
-    },
     {
       "at": "2026-11-15T14:19:08.948Z",
       "task": "image-prompts",
@@ -7497,6 +7381,117 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "48f8c352-40a6-4198-a1cb-a20a79284b0d"
+    },
+    {
+      "at": "2026-11-22T19:43:42.551Z",
+      "task": "shorts",
+      "matchId": "brentford-vs-everton-2026-11-23",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Brentford FC; guion 4: falta Everton FC; guion 5: 54 palabras, mínimo 55; guion 6: falta Brentford FC; guion 6: falta Everton FC; guion 7: falta Everton FC; guion 8: falta Everton FC; guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7865,
+            "outputTokens": 2355
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7316
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 4427
+      },
+      "usage": {
+        "inputTokens": 9916,
+        "outputTokens": 1695
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "8e577451-2a7f-49ad-99e6-aeb7ccd06549"
+    },
+    {
+      "at": "2026-11-22T19:43:56.724Z",
+      "task": "shorts",
+      "matchId": "levante-ud-vs-elche-2026-11-23",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: falta Levante UD; guion 3: falta Elche CF; guion 5: falta Levante UD; guion 5: falta Elche CF; guion 6: falta Elche CF; guion 7: falta Elche CF; guion 7: 4 cifras, máximo 3; guion 9: falta Levante UD",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7956,
+            "outputTokens": 2831
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8039
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: artículo delante de Levante UD; guion 3: artículo delante de Elche CF; guion 9: artículo delante de Levante UD",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10138,
+            "outputTokens": 1745
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4554
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1575
+      },
+      "usage": {
+        "inputTokens": 10033,
+        "outputTokens": 408
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "e1223329-f044-4ec2-94eb-620249fb0bee"
+    },
+    {
+      "at": "2026-11-22T19:44:02.233Z",
+      "task": "image-prompts",
+      "matchId": "brentford-vs-everton-2026-11-23",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2807,
+        "outputTokens": 1574
+      }
+    },
+    {
+      "at": "2026-11-22T19:44:11.879Z",
+      "task": "image-prompts",
+      "matchId": "levante-ud-vs-elche-2026-11-23",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2839,
+        "outputTokens": 2093
+      }
     }
   ]
 }
