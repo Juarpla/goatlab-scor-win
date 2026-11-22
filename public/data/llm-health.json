@@ -1,39 +1,6 @@
 {
-  "updatedAt": "2026-11-22T06:50:32.050Z",
+  "updatedAt": "2026-11-22T06:56:51.384Z",
   "runs": [
-    {
-      "at": "2026-11-14T22:52:48.957Z",
-      "task": "image-prompts",
-      "matchId": "cyprus-vs-montenegro-2026-11-15",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2690,
-        "outputTokens": 2794
-      }
-    },
-    {
-      "at": "2026-11-15T06:32:32.672Z",
-      "matchId": "bz-212714",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1186,
-        "outputTokens": 1015
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "ad486b2a-9e16-45c6-91dd-ed0ed873a990"
-    },
     {
       "at": "2026-11-15T06:32:44.091Z",
       "matchId": "bz-212713",
@@ -7382,6 +7349,143 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "0c54ec86-232a-4117-b610-5a0f0f462c1b"
+    },
+    {
+      "at": "2026-11-22T06:56:39.145Z",
+      "task": "shorts",
+      "matchId": "real-madrid-vs-psv-eindhoven-2026-11-24",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Real Madrid CF; guion 2: falta PSV; guion 2: 53 palabras, mínimo 55; guion 3: falta Real Madrid CF; guion 5: falta Real Madrid CF; guion 5: 53 palabras, mínimo 55; guion 6: falta Real Madrid CF; guion 6: falta PSV",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7183,
+            "outputTokens": 2703
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8671
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Real Madrid CF; guion 2: falta PSV; guion 2: 53 palabras, mínimo 55; guion 3: falta Real Madrid CF; guion 6: falta Real Madrid CF; guion 6: falta PSV; guion 6: 50 palabras, mínimo 55; guion 8: falta Real Madrid CF",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9333,
+            "outputTokens": 1350
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3443
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 6: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9276,
+            "outputTokens": 1620
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4405
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: falta Real Madrid CF; guion 3: 4 cifras, máximo 3; guion 6: falta Real Madrid CF; guion 6: falta PSV; guion 6: 53 palabras, mínimo 55; guion 8: 52 palabras, mínimo 55; guion 9: falta PSV; guion 9: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7309,
+            "outputTokens": 2242
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 18089
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 2: porcentajes bloqueados: evaluation.published es false; guion 3: 5 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: proyección fuera de rango; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9527,
+            "outputTokens": 1202
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13150
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: cifra 20 no está en los hechos; guion 3: 6 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: proyección fuera de rango; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9809,
+            "outputTokens": 1003
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 12091
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235135
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: falta PSV; guion 9: falta PSV",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7183,
+            "outputTokens": 2893
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9222
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1906
+      },
+      "usage": {
+        "inputTokens": 9270,
+        "outputTokens": 578
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "ef234b88-6779-4d8e-b114-cf7ac534a0d2"
+    },
+    {
+      "at": "2026-11-22T06:56:51.384Z",
+      "task": "image-prompts",
+      "matchId": "real-madrid-vs-psv-eindhoven-2026-11-24",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2468,
+        "outputTokens": 2530
+      }
     }
   ]
 }
