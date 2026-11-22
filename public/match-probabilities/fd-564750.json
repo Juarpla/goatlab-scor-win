@@ -4,7 +4,7 @@
   "away": "Real Sociedad de Fútbol",
   "competition": "laliga",
   "kickoff": "2026-11-22T15:15:00Z",
-  "updatedAt": "2026-11-21T19:15:52.867Z",
+  "updatedAt": "2026-11-22T06:48:14.090Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -209,30 +209,30 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.298,
-      "draw": 0.235,
-      "away": 0.467,
+      "home": 0.299,
+      "draw": 0.23199999999999998,
+      "away": 0.469,
       "predicted": "A"
     },
     "xg": {
       "home": 1.89,
       "away": 1.52
     },
-    "over15": 0.86,
-    "over25": 0.6970000000000001,
-    "over35": 0.479,
-    "btts": 0.7,
+    "over15": 0.862,
+    "over25": 0.705,
+    "over35": 0.48100000000000004,
+    "btts": 0.695,
     "score": "1-1",
-    "cornersOver95": 0.5660000000000001,
+    "cornersOver95": 0.5670000000000001,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.467,
+      "favoriteProb": 0.469,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.4669,
+    "confidence": 0.4685,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-21T14:31:09.372Z",
+    "capturedAt": "2026-11-22T06:48:09.825Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -620,5 +620,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "El porcentaje de la probabilidad de empate (0.469) en el bloque B2 de estimaciones del proveedor es significativamente más alto que el valor de empate del modelo P (0.205), lo que indica una divergencia clara entre la lectura del proveedor y los datos base de Poisson GoatLab.",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-22T06:50:24.187Z"
+  }
 }
