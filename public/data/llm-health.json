@@ -1,77 +1,6 @@
 {
-  "updatedAt": "2026-11-22T14:29:25.162Z",
+  "updatedAt": "2026-11-22T14:31:21.958Z",
   "runs": [
-    {
-      "at": "2026-11-15T13:50:25.585Z",
-      "matchId": "bz-212719",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "4f1e54f6-ee58-47eb-a12b-ff0c9c622d8b"
-    },
-    {
-      "at": "2026-11-15T13:52:45.151Z",
-      "matchId": "bz-212718",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash"
-      },
-      "usage": {
-        "inputTokens": 1049,
-        "outputTokens": 10971
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "38d2f89f-5ebf-4ca6-9471-d301d13355db"
-    },
-    {
-      "at": "2026-11-15T13:52:55.480Z",
-      "matchId": "bz-212717",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1219,
-        "outputTokens": 808
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "3f438c1e-26e0-43ac-9022-842a468d2ef8"
-    },
-    {
-      "at": "2026-11-15T13:53:03.462Z",
-      "matchId": "bz-212718",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1702,
-        "outputTokens": 1890
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "c06ed39e-1571-4f3d-ad4f-af10b27e2b9f"
-    },
     {
       "at": "2026-11-15T13:53:03.462Z",
       "matchId": "bz-212717",
@@ -7405,6 +7334,130 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "68c905f3-7136-48cf-bdf4-b955d8ee18e5"
+    },
+    {
+      "at": "2026-11-22T14:30:51.216Z",
+      "task": "shorts",
+      "matchId": "sabah-fk-vs-barcelona-2026-11-25",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 1: 54 palabras, mínimo 55; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: falta FC Barcelona; guion 5: 5 cifras, máximo 3; guion 8: falta Sabah FK; guion 8: falta FC Barcelona",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7300,
+            "outputTokens": 2837
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8463
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 54 palabras, mínimo 55; guion 2: 52 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9845,
+            "outputTokens": 1408
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4757
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1680
+      },
+      "usage": {
+        "inputTokens": 9291,
+        "outputTokens": 391
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "73a706eb-110f-453f-bfdf-8b18c0bb8f81"
+    },
+    {
+      "at": "2026-11-22T14:31:03.763Z",
+      "task": "shorts",
+      "matchId": "real-racing-club-vs-real-sociedad-2026-11-22",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta Real Racing Club de Santander; guion 2: falta Real Racing Club de Santander; guion 4: falta Real Racing Club de Santander; guion 4: vocabulario prohibido: apuestas?; guion 6: falta Real Racing Club de Santander; guion 6: falta Real Sociedad de Fútbol; guion 8: falta Real Racing Club de Santander; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7841,
+            "outputTokens": 2898
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8209
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: falta Real Racing Club de Santander",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10091,
+            "outputTokens": 1086
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3120
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1213
+      },
+      "usage": {
+        "inputTokens": 9923,
+        "outputTokens": 305
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "b120b65e-adf7-404e-bcf5-97168be48cc6"
+    },
+    {
+      "at": "2026-11-22T14:31:12.253Z",
+      "task": "image-prompts",
+      "matchId": "sabah-fk-vs-barcelona-2026-11-25",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2540,
+        "outputTokens": 2221
+      }
+    },
+    {
+      "at": "2026-11-22T14:31:21.958Z",
+      "task": "image-prompts",
+      "matchId": "real-racing-club-vs-real-sociedad-2026-11-22",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2873,
+        "outputTokens": 2237
+      }
     }
   ]
 }
