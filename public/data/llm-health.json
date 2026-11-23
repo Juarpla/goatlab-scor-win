@@ -1,24 +1,6 @@
 {
-  "updatedAt": "2026-11-23T17:55:47.123Z",
+  "updatedAt": "2026-11-23T18:02:51.313Z",
   "runs": [
-    {
-      "at": "2026-11-16T06:30:13.440Z",
-      "matchId": "bz-212725",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1054,
-        "outputTokens": 1299
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "64b5d9c6-8010-4edb-96a4-a087fa579cb2"
-    },
     {
       "at": "2026-11-16T06:40:35.338Z",
       "task": "shorts",
@@ -7678,6 +7660,128 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "721bb267-0243-45ea-a593-0d7a5a7d8a6b"
+    },
+    {
+      "at": "2026-11-23T18:02:51.309Z",
+      "task": "shorts",
+      "matchId": "arsenal-vs-borussia-dortmund-2026-11-24",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Borussia Dortmund; guion 4: falta Borussia Dortmund; guion 6: falta Borussia Dortmund; guion 6: el cero no se escribe en dígitos; guion 6: 53 palabras, mínimo 55; guion 7: 4 cifras, máximo 3; guion 8: falta Borussia Dortmund",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7750,
+            "outputTokens": 2331
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7457
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: proyección fuera de rango; guion 6: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9902,
+            "outputTokens": 1718
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4779
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: proyección fuera de rango; guion 6: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9755,
+            "outputTokens": 437
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 1538
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Borussia Dortmund; guion 2: 5 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: falta Borussia Dortmund; guion 6: proyección fuera de rango; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7875,
+            "outputTokens": 2352
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 20223
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: falta Borussia Dortmund; guion 2: 5 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 4: falta Borussia Dortmund; guion 6: falta Borussia Dortmund; guion 6: 54 palabras, mínimo 55; guion 8: falta Borussia Dortmund",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10613,
+            "outputTokens": 1625
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 13932
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 3: 53 palabras, mínimo 55; guion 8: falta Borussia Dortmund; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10588,
+            "outputTokens": 1834
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 11653
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235178
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: falta Borussia Dortmund; guion 8: proyección fuera de rango; guion 8: proyección fuera de rango; guion 8: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7750,
+            "outputTokens": 3061
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8930
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 2126
+      },
+      "usage": {
+        "inputTokens": 10097,
+        "outputTokens": 663
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "1d416d9c-0ccb-40a5-b17d-6039895c7e0a"
     }
   ]
 }
