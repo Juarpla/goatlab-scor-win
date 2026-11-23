@@ -4,7 +4,7 @@
   "away": "Everton FC",
   "competition": "premier",
   "kickoff": "2026-11-23T20:00:00Z",
-  "updatedAt": "2026-11-23T07:38:35.640Z",
+  "updatedAt": "2026-11-23T17:53:31.917Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.073
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.51,
-      "away": 1.112
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,22 +47,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-22T14:27:07.277Z",
+      "updatedAt": "2026-11-23T17:53:06.791Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-23T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-23T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-22T14:27:07.277Z",
+      "updatedAt": "2026-11-23T17:53:06.791Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 456
+      "rows": 462
     },
     "venue": {
       "city": "Londres",
@@ -132,18 +129,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.62,
-    "noGoal": 0.073,
+    "lambdaTotal": 2.51,
+    "noGoal": 0.081,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.354
+        "p": 0.342
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.229
+        "p": 0.225
       },
       {
         "from": 30,
@@ -153,21 +150,21 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.095
+        "p": 0.097
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.062
+        "p": 0.064
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.04
+        "p": 0.042
       }
     ],
-    "firstHome": 0.534,
-    "firstAway": 0.393
+    "firstHome": 0.527,
+    "firstAway": 0.392
   },
   "scorers": {
     "home": [
@@ -176,8 +173,8 @@
         "goals": 3,
         "matches": 10,
         "share": 0.188,
-        "rate": 0.28,
-        "anytime": 0.247,
+        "rate": 0.27,
+        "anytime": 0.237,
         "first": 0.108
       },
       {
@@ -185,8 +182,8 @@
         "goals": 2,
         "matches": 10,
         "share": 0.125,
-        "rate": 0.19,
-        "anytime": 0.172,
+        "rate": 0.18,
+        "anytime": 0.165,
         "first": 0.072
       }
     ],
@@ -196,183 +193,50 @@
         "goals": 6,
         "matches": 10,
         "share": 0.5,
-        "rate": 0.56,
-        "anytime": 0.427,
-        "first": 0.212
+        "rate": 0.54,
+        "anytime": 0.415,
+        "first": 0.214
       },
       {
         "player": "Kiernan Dewsbury-Hall",
         "goals": 3,
         "matches": 10,
         "share": 0.25,
-        "rate": 0.28,
-        "anytime": 0.243,
-        "first": 0.106
+        "rate": 0.27,
+        "anytime": 0.235,
+        "first": 0.107
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.414,
-      "draw": 0.271,
-      "away": 0.315,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.58,
-      "away": 1.15
-    },
-    "over15": 0.7559999999999999,
-    "over25": 0.524,
-    "over35": 0.312,
-    "btts": 0.57,
-    "score": "1-1",
-    "cornersOver95": 0.496,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.414,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4136,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-23T07:38:33.592Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.461,
-      "draw": 0.273,
-      "away": 0.265
-    },
-    "doubleChance": {
-      "12": 0.727,
-      "1X": 0.735,
-      "X2": 0.539
-    },
-    "dnb": {
-      "home": 0.635,
-      "away": 0.365
-    },
-    "totals": {
-      "over15": 0.769,
-      "under15": 0.231,
-      "over25": 0.514,
-      "under25": 0.486,
-      "over35": 0.293,
-      "under35": 0.707
-    },
-    "btts": {
-      "yes": 0.554,
-      "no": 0.446
-    },
-    "cleanSheet": {
-      "home": 0.317,
-      "away": 0.206
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.118,
-        "share": 0.25596529284164854
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.094,
-        "share": 0.2039045553145336
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.091,
-        "share": 0.19739696312364424
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.081,
-        "share": 0.175704989154013
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.077,
-        "share": 0.16702819956616052
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 12,
-    "homeWins": 3,
-    "draws": 5,
-    "awayWins": 4,
-    "avgTotalGoals": 2.75,
-    "recent": [
-      {
-        "eventId": 315,
-        "date": "2026-04-11T14:00:00+00:00",
-        "home": "Brentford",
-        "away": "Everton",
-        "homeTeamId": 16,
-        "awayTeamId": 20,
-        "homeScore": 2,
-        "awayScore": 2
-      },
-      {
-        "eventId": 196,
-        "date": "2026-01-04T15:00:00+00:00",
-        "home": "Everton",
-        "away": "Brentford",
-        "homeTeamId": 20,
-        "awayTeamId": 16,
-        "homeScore": 2,
-        "awayScore": 4
-      },
-      {
-        "eventId": 306916,
-        "date": "2025-02-26T19:30:00+00:00",
-        "home": "Brentford",
-        "away": "Everton",
-        "homeTeamId": 16,
-        "awayTeamId": 20,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 306765,
-        "date": "2024-11-23T15:00:00+00:00",
-        "home": "Everton",
-        "away": "Brentford",
-        "homeTeamId": 20,
-        "awayTeamId": 16,
-        "homeScore": 0,
-        "awayScore": 0
-      },
-      {
-        "eventId": 312468,
-        "date": "2024-04-27T16:30:00+00:00",
-        "home": "Everton",
-        "away": "Brentford",
-        "homeTeamId": 20,
-        "awayTeamId": 16,
-        "homeScore": 1,
-        "awayScore": 0
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -388,7 +252,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 4.4
@@ -399,7 +263,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 9.8
@@ -407,24 +271,24 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.5,
-      "shotsOnTarget": 4.32,
-      "xg": 1.58,
-      "corners": 5.04,
+      "shots": 14.52,
+      "shotsOnTarget": 4.34,
+      "xg": 1.56,
+      "corners": 5.05,
       "fouls": 12.05,
-      "yellowCards": 2.3,
+      "yellowCards": 2.29,
       "redCards": 0.32,
       "offsides": 1.45,
       "possession": 49.54
     },
     "away": {
-      "shots": 13.97,
-      "shotsOnTarget": 4.54,
-      "xg": 1.15,
-      "corners": 4.76,
+      "shots": 13.98,
+      "shotsOnTarget": 4.55,
+      "xg": 1.49,
+      "corners": 4.77,
       "fouls": 10.55,
       "yellowCards": 2.11,
-      "redCards": 0.1,
+      "redCards": 0.11,
       "offsides": 1.76,
       "possession": 50.46
     },
@@ -458,14 +322,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.66,
-      "shotsOnTarget": 4.35,
-      "xg": 1.44,
-      "corners": 4.77,
+      "shots": 13.71,
+      "shotsOnTarget": 4.39,
+      "xg": 1.46,
+      "corners": 4.81,
       "fouls": 11.55,
-      "yellowCards": 2.13,
-      "redCards": 0.19,
-      "offsides": 1.86
+      "yellowCards": 2.12,
+      "redCards": 0.2,
+      "offsides": 1.87
     },
     "sources": {
       "home": {
@@ -503,17 +367,17 @@
     "cornersDuel": {
       "home": 0.471,
       "draw": 0.129,
-      "away": 0.4
+      "away": 0.401
     },
     "cardsDuel": {
-      "home": 0.437,
+      "home": 0.435,
       "draw": 0.196,
-      "away": 0.367
+      "away": 0.369
     },
     "lastGoal": {
-      "home": 0.534,
-      "away": 0.393,
-      "noGoal": 0.073
+      "home": 0.527,
+      "away": 0.392,
+      "noGoal": 0.081
     },
     "cornerRace": {
       "3": {
@@ -530,23 +394,23 @@
       }
     },
     "cornerMargin": {
-      "home3plus": 0.235,
+      "home3plus": 0.236,
       "home12": 0.235,
       "level": 0.129,
-      "away12": 0.217,
+      "away12": 0.216,
       "away3plus": 0.184
     },
     "source": "GoatLab"
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 11.6,
-      "condition": "rain",
-      "sampledAt": "2026-11-23T20:00:00Z",
-      "source": "bzzoiro"
+      "temp": 4.3,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 11.2,
+      "condition": null,
+      "sampledAt": "2026-11-23T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Gtech Community Stadium",
@@ -628,9 +492,9 @@
   },
   "llmReview": {
     "flag": false,
-    "note": "La información se procesa fielmente. La lectura de Bzzoiro se atribuye al proveedor sin recomendaciones propias. La forma reciente de Everton (2 victorias) y Brentford (1 derrota) se extrae correctamente de la sección R.",
+    "note": null,
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-22T14:28:52.908Z"
+    "generatedAt": "2026-11-23T17:54:08.272Z"
   }
 }

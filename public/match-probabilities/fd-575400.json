@@ -4,7 +4,7 @@
   "away": "FC Porto",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-23T07:38:35.640Z",
+  "updatedAt": "2026-11-23T17:53:31.917Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -26,7 +26,7 @@
       "FC Porto": null
     },
     "scorers": {
-      "updatedAt": "2026-11-22T14:26:27.543Z",
+      "updatedAt": "2026-11-23T17:52:26.193Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": null
@@ -37,11 +37,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-22T14:26:27.543Z",
+      "updatedAt": "2026-11-23T17:52:26.193Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 456
+      "rows": 462
     },
     "venue": null
   },
@@ -150,9 +150,9 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.35100000000000003,
-      "draw": 0.259,
-      "away": 0.39,
+      "home": 0.348,
+      "draw": 0.258,
+      "away": 0.39399999999999996,
       "predicted": "A"
     },
     "xg": {
@@ -160,20 +160,20 @@
       "away": 1.61
     },
     "over15": 0.802,
-    "over25": 0.5920000000000001,
-    "over35": 0.381,
-    "btts": 0.622,
+    "over25": 0.591,
+    "over35": 0.382,
+    "btts": 0.623,
     "score": "1-1",
-    "cornersOver95": 0.43200000000000005,
+    "cornersOver95": 0.431,
     "recommendations": {
       "favorite": "A",
-      "favoriteProb": 0.39,
+      "favoriteProb": 0.394,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.3903,
+    "confidence": 0.3944,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-22T14:27:14.575Z",
+    "capturedAt": "2026-11-23T17:53:14.585Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -293,7 +293,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 3.6
@@ -304,7 +304,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 8.6
@@ -512,10 +512,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": null,
+    "flag": true,
+    "note": "El valor de probabilidad local en el modelo Poisson GoatLab (P) aparece como 1.485, lo cual supera el 100% y es matemáticamente inviable para una probabilidad simple. Esto sugiere un error de formato en el input (posiblemente decimales invertidos o escalado incorrecto) donde debería ser 0.485 o simi",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-23T07:45:38.777Z"
+    "generatedAt": "2026-11-23T17:55:04.139Z"
   }
 }

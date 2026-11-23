@@ -4,7 +4,7 @@
   "away": "PAE AEK",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-23T07:38:35.640Z",
+  "updatedAt": "2026-11-23T17:53:31.917Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -44,7 +44,7 @@
       "PAE AEK": null
     },
     "scorers": {
-      "updatedAt": "2026-11-22T14:26:27.543Z",
+      "updatedAt": "2026-11-23T17:52:26.193Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -55,11 +55,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-22T14:26:27.543Z",
+      "updatedAt": "2026-11-23T17:52:26.193Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 456
+      "rows": 462
     },
     "venue": null
   },
@@ -206,9 +206,9 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.721,
+      "home": 0.7190000000000001,
       "draw": 0.16699999999999998,
-      "away": 0.11199999999999999,
+      "away": 0.114,
       "predicted": "H"
     },
     "xg": {
@@ -216,20 +216,20 @@
       "away": 1.42
     },
     "over15": 0.856,
-    "over25": 0.687,
+    "over25": 0.688,
     "over35": 0.47,
-    "btts": 0.5760000000000001,
+    "btts": 0.583,
     "score": "1-1",
     "cornersOver95": 0.486,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.721,
+      "favoriteProb": 0.719,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.7206,
+    "confidence": 0.7185,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-22T14:27:14.354Z",
+    "capturedAt": "2026-11-23T17:53:13.703Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -328,7 +328,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 3
@@ -339,7 +339,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 9.4
@@ -560,5 +560,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "El valor de 0.897 para el empate en GoLab es extremadamente alto y contrasta con la probabilidad de 0.095 para la victoria local, lo que sugiere un sesgo fuerte del modelo hacia el resultado igualado pese a la diferencia de puntos en la tabla (4 vs 9).",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-23T17:55:33.393Z"
+  }
 }

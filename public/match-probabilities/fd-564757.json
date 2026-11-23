@@ -4,7 +4,7 @@
   "away": "Elche CF",
   "competition": "laliga",
   "kickoff": "2026-11-23T20:00:00Z",
-  "updatedAt": "2026-11-23T07:38:35.640Z",
+  "updatedAt": "2026-11-23T17:53:31.917Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.15
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.385,
-      "away": 1.225
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,22 +47,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-22T14:26:53.895Z",
+      "updatedAt": "2026-11-23T17:52:53.189Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-23T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-23T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-22T14:26:53.895Z",
+      "updatedAt": "2026-11-23T17:52:53.189Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 456
+      "rows": 462
     },
     "venue": {
       "city": "Valencia",
@@ -132,18 +129,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.61,
-    "noGoal": 0.074,
+    "lambdaTotal": 2.23,
+    "noGoal": 0.108,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.353
+        "p": 0.31
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.228
+        "p": 0.214
       },
       {
         "from": 30,
@@ -153,21 +150,21 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.096
+        "p": 0.102
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.062
+        "p": 0.07
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.04
+        "p": 0.048
       }
     ],
-    "firstHome": 0.492,
-    "firstAway": 0.435
+    "firstHome": 0.432,
+    "firstAway": 0.46
   },
   "scorers": {
     "home": [
@@ -176,27 +173,27 @@
         "goals": 5,
         "matches": 11,
         "share": 0.313,
-        "rate": 0.43,
-        "anytime": 0.352,
-        "first": 0.166
+        "rate": 0.34,
+        "anytime": 0.287,
+        "first": 0.152
       },
       {
         "player": "Iván Romero",
         "goals": 3,
         "matches": 12,
         "share": 0.188,
-        "rate": 0.26,
-        "anytime": 0.229,
-        "first": 0.1
+        "rate": 0.2,
+        "anytime": 0.184,
+        "first": 0.091
       },
       {
         "player": "Adrián de la Fuente",
         "goals": 2,
         "matches": 10,
         "share": 0.125,
-        "rate": 0.17,
-        "anytime": 0.159,
-        "first": 0.066
+        "rate": 0.14,
+        "anytime": 0.126,
+        "first": 0.061
       }
     ],
     "away": [
@@ -205,192 +202,50 @@
         "goals": 6,
         "matches": 12,
         "share": 0.429,
-        "rate": 0.53,
-        "anytime": 0.409,
-        "first": 0.201
+        "rate": 0.49,
+        "anytime": 0.389,
+        "first": 0.221
       },
       {
         "player": "Fer Niño",
         "goals": 6,
         "matches": 12,
         "share": 0.429,
-        "rate": 0.53,
-        "anytime": 0.409,
-        "first": 0.201
-      },
-      {
-        "player": "Germán Valera",
-        "goals": 2,
-        "matches": 12,
-        "share": 0.143,
-        "rate": 0.18,
-        "anytime": 0.161,
-        "first": 0.067
+        "rate": 0.49,
+        "anytime": 0.389,
+        "first": 0.221
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.436,
-      "draw": 0.263,
-      "away": 0.302,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.69,
-      "away": 1.3
-    },
-    "over15": 0.777,
-    "over25": 0.5660000000000001,
-    "over35": 0.35,
-    "btts": 0.599,
-    "score": "1-1",
-    "cornersOver95": 0.457,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.436,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4356,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-23T07:38:33.576Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.455,
-      "draw": 0.261,
-      "away": 0.284
-    },
-    "doubleChance": {
-      "12": 0.739,
-      "1X": 0.716,
-      "X2": 0.545
-    },
-    "dnb": {
-      "home": 0.615,
-      "away": 0.385
-    },
-    "totals": {
-      "over15": 0.81,
-      "under15": 0.19,
-      "over25": 0.575,
-      "under25": 0.425,
-      "over35": 0.35,
-      "under35": 0.65
-    },
-    "btts": {
-      "yes": 0.604,
-      "no": 0.396
-    },
-    "cleanSheet": {
-      "home": 0.273,
-      "away": 0.185
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.116,
-        "share": 0.2716627634660421
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.093,
-        "share": 0.21779859484777514
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.074,
-        "share": 0.1733021077283372
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.072,
-        "share": 0.16861826697892268
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.072,
-        "share": 0.16861826697892268
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 20,
-    "homeWins": 10,
-    "draws": 7,
-    "awayWins": 3,
-    "avgTotalGoals": 2.15,
-    "recent": [
-      {
-        "eventId": 895,
-        "date": "2026-01-23T20:00:00+00:00",
-        "home": "Levante UD",
-        "away": "Elche",
-        "homeTeamId": 46,
-        "awayTeamId": 55,
-        "homeScore": 3,
-        "awayScore": 2
-      },
-      {
-        "eventId": 710,
-        "date": "2025-08-29T17:30:00+00:00",
-        "home": "Elche",
-        "away": "Levante UD",
-        "homeTeamId": 55,
-        "awayTeamId": 46,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 202921,
-        "date": "2025-05-10T16:30:00+00:00",
-        "home": "Elche",
-        "away": "Levante UD",
-        "homeTeamId": 55,
-        "awayTeamId": 46,
-        "homeScore": 1,
-        "awayScore": 3
-      },
-      {
-        "eventId": 202654,
-        "date": "2024-11-16T17:30:00+00:00",
-        "home": "Levante UD",
-        "away": "Elche",
-        "homeTeamId": 46,
-        "awayTeamId": 55,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 248800,
-        "date": "2024-03-24T17:30:00+00:00",
-        "home": "Levante UD",
-        "away": "Elche",
-        "homeTeamId": 46,
-        "awayTeamId": 55,
-        "homeScore": 3,
-        "awayScore": 2
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -406,7 +261,7 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
     "expectedTotal": 4.4
@@ -417,32 +272,32 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 456
+      "historyRows": 462
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 9.7
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.03,
-      "shotsOnTarget": 4.56,
-      "xg": 1.69,
-      "corners": 4.66,
+      "shots": 14.06,
+      "shotsOnTarget": 4.57,
+      "xg": 1.54,
+      "corners": 4.67,
       "fouls": 11.71,
       "yellowCards": 1.95,
-      "redCards": 0.16,
+      "redCards": 0.17,
       "offsides": 2.39,
       "possession": 46.8
     },
     "away": {
-      "shots": 14.47,
+      "shots": 14.5,
       "shotsOnTarget": 4.63,
-      "xg": 1.3,
-      "corners": 4.98,
+      "xg": 1.73,
+      "corners": 4.99,
       "fouls": 12.12,
       "yellowCards": 2.42,
-      "redCards": 0.24,
+      "redCards": 0.25,
       "offsides": 2.31,
       "possession": 53.2
     },
@@ -476,14 +331,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.67,
-      "shotsOnTarget": 4.67,
-      "xg": 1.46,
-      "corners": 4.85,
+      "shots": 13.74,
+      "shotsOnTarget": 4.68,
+      "xg": 1.49,
+      "corners": 4.88,
       "fouls": 12.32,
-      "yellowCards": 2.28,
-      "redCards": 0.25,
-      "offsides": 2.1
+      "yellowCards": 2.29,
+      "redCards": 0.27,
+      "offsides": 2.08
     },
     "sources": {
       "home": {
@@ -520,7 +375,7 @@
     "method": "dominance-v1",
     "cornersDuel": {
       "home": 0.395,
-      "draw": 0.13,
+      "draw": 0.129,
       "away": 0.476
     },
     "cardsDuel": {
@@ -529,9 +384,9 @@
       "away": 0.49
     },
     "lastGoal": {
-      "home": 0.492,
-      "away": 0.435,
-      "noGoal": 0.074
+      "home": 0.432,
+      "away": 0.46,
+      "noGoal": 0.108
     },
     "cornerRace": {
       "3": {
@@ -543,14 +398,14 @@
         "away": 0.541
       },
       "7": {
-        "home": 0.451,
-        "away": 0.549
+        "home": 0.452,
+        "away": 0.548
       }
     },
     "cornerMargin": {
       "home3plus": 0.179,
       "home12": 0.216,
-      "level": 0.13,
+      "level": 0.129,
       "away12": 0.238,
       "away3plus": 0.238
     },
@@ -558,13 +413,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 18.1,
-      "condition": "unknown",
-      "sampledAt": "2026-11-23T20:00:00Z",
-      "source": "bzzoiro"
+      "temp": 14,
+      "precipitation": 0,
+      "weathercode": 0,
+      "wind": 5,
+      "condition": null,
+      "sampledAt": "2026-11-23T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Ciutat de València",
@@ -645,10 +500,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "La línea P presenta una desviación clara: la probabilidad de victoria local (0.385) y el empate (0.265 implícito por la resta) no suman 1 junto con la victoria visitante si se asume una distribución estándar de tres resultados. Además, los valores 1.08 y 1.15 en el inicio de la línea P parecen ser c",
+    "flag": false,
+    "note": null,
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-23T07:38:56.751Z"
+    "generatedAt": "2026-11-23T17:54:08.260Z"
   }
 }
