@@ -7858,44 +7858,80 @@
     "materialKey": "v3|M|fd-564753|Getafe CF|Club Atlético de Madrid|laliga|2026-11-22T20:00:00Z|NS\nP|0.9|1.303|0.245|0.309|0.446|0.378|0.445\nB|0.148|0.238|0.615|1.08|1.43|0.461|0.44|1-1|0.489\nB2|A|0.615|no|no\nH|46|5|10|31|2.41\nW||rain|3|\nT|15|Getafe CF|12|12|8|18\nT|3|Club Atlético de Madrid|12|28|23|10\nS|Martín Satriano|Getafe CF|3|12\nS|Enes Ünal|Getafe CF|2|11\nR|2026-09-20|Getafe CF|Málaga CF|1|0\nR|2026-10-10|FC Barcelona|Getafe CF|3|0\nR|2026-10-17|RCD Espanyol de Barcelona|Club Atlético de Madrid|0|1\nR|2026-10-19|Getafe CF|Rayo Vallecano de Madrid|1|1\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-24|Club Atlético de Madrid|RC Deportivo La Coruña|1|0\nR|2026-10-25|Athletic Club|Getafe CF|4|0\nR|2026-10-31|Levante UD|Club Atlético de Madrid|0|2\nR|2026-11-01|Getafe CF|Sevilla FC|3|1\nR|2026-11-03|Club Atlético de Madrid|FC Bayern München|0|2\nR|2026-11-08|Villarreal CF|Getafe CF|2|0\nR|2026-11-08|Club Atlético de Madrid|FC Barcelona|1|2\nHR|2026-07-29|Atlético Madrid|Getafe|4|1\nHR|2026-03-14|Atlético Madrid|Getafe|1|0\nHR|2025-11-23|Getafe|Atlético Madrid|0|1\nHR|2025-03-09|Getafe|Atlético Madrid|2|1\nHR|2025-02-04|Atlético Madrid|Getafe|5|0"
   },
   "fd-564757": {
-    "matchId": "fd-564757",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Cruce LaLiga entre colistas y rivales directos",
+        "title": "Cruce de la última jornada de LaLiga",
         "bullets": [
-          "Levante UD y Elche CF se enfrentan el 23 de noviembre de 2026 en LaLiga.",
-          "Ambos equipos disputan el partido sin conocer aún la alineación oficial (estado NS).",
-          "El encuentro sirve para medir la distancia entre dos equipos ubicados en la parte baja de la tabla."
+          "El partido se disputa el 23 de noviembre de 2026 a las 20:00 UTC.",
+          "Levante UD (18º) recibe a Elche CF (19º) en el estadio de Levante.",
+          "Ambos equipos pelean en la parte baja de la clasificación, separados por dos puntos.",
+          "El clima no está especificado en los datos proporcionados."
         ],
         "stats": []
       },
       {
         "kind": "modelos",
-        "title": "Lectura de probabilidades de los proveedores",
+        "title": "Probabilidades según Poisson y CatBoost",
         "bullets": [
-          "El modelo Poisson GoatLab estima una probabilidad de 0.385 para el empate y 0.465 para que ambos anoten.",
-          "La estimación de Bzzoiro señala una probabilidad de 0.456 para el marcador exacto 1-1.",
-          "La lectura de Bzzoiro indica que el resultado más probable es un triunfo local (H) con 0.432 de probabilidad, y que no se espera un marcador alto."
+          "Poisson GoatLab estima una probabilidad de victoria local del 38,5% y empate del 26,5%.",
+          "CatBoost Bzzoiro asigna un 43,6% de probabilidad a la victoria de Levante.",
+          "El modelo Bzzoiro predice un resultado más probable de 1-1 con un 45,7% de probabilidad.",
+          "La lectura declarada de Bzzoiro indica que no es probable que ambos anoten ni que el total supere el umbral declarado."
         ],
         "stats": [
           {
-            "value": "0.456",
-            "label": "Prob. 1-1 (Bzzoiro)"
+            "value": "43.6%",
+            "label": "Victoria Levante (B)"
           },
           {
-            "value": "0.465",
-            "label": "Ambos anotan (Poisson)"
+            "value": "45.7%",
+            "label": "Resultado 1-1 (B)"
           }
         ]
       },
       {
-        "kind": "goleadores",
-        "title": "Aportación ofensiva de los líderes anotadores",
+        "kind": "historial",
+        "title": "Balance de cruces previos",
         "bullets": [
-          "En Levante UD, Roger Brugué lidera con 5 goles en 11 partidos jugados.",
-          "En Elche CF, Fernando Niño y Fer Niño comparten el liderato con 6 goles en 12 encuentros.",
-          "Germán Valera de Elche suma 2 goles, mientras que en Levante Adrián de la Fuente tiene 2."
+          "En los últimos 20 enfrentamientos, Elche CF ganó 7 partidos.",
+          "Levante UD tiene 10 victorias y 3 empates en el historial reciente.",
+          "La media de goles totales en los últimos 20 cruces es de 2.15.",
+          "El último choque, el 23 de enero de 2026, finalizó con victoria 3-2 para Levante."
+        ],
+        "stats": [
+          {
+            "value": "10",
+            "label": "Victorias Levante"
+          },
+          {
+            "value": "7",
+            "label": "Victorias Elche"
+          },
+          {
+            "value": "2.15",
+            "label": "Media goles H"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Situación en LaLiga",
+        "bullets": [
+          "Levante UD ocupa la posición 18 con 16 goles a favor y 21 en contra.",
+          "Elche CF se encuentra en la posición 19 con 14 goles a favor y 20 en contra.",
+          "Ambos equipos han disputado 12 jornadas, con 11 y 10 empates respectivamente."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "goleadores",
+        "title": "Arqueros destacados",
+        "bullets": [
+          "Fernando Niño y Fer Niño lideran el ataque del Elche CF con 6 goles y 12 asistencias.",
+          "Roger Brugué es el máximo goleador del Levante UD con 5 goles y 11 asistencias.",
+          "Iván Romero suma 3 goles y 12 asistencias para el Levante UD.",
+          "Germán Valera completa la lista de goleadores destacados del Elche con 2 goles."
         ],
         "stats": [
           {
@@ -7907,46 +7943,31 @@
             "label": "Goles Brugué"
           }
         ]
-      },
-      {
-        "kind": "forma",
-        "title": "Racha reciente de resultados",
-        "bullets": [
-          "Levante UD viene de empatar 0-0 ante Celta de Vigo y de perder 0-2 frente a Atlético de Madrid.",
-          "Elche CF ha perdido sus últimos dos partidos: 0-1 ante Valencia y 0-2 ante Real Betis Balompié.",
-          "El equipo visitante suma 3 derrotas consecutivas, mientras que el local alterna empates y derrotas."
-        ],
-        "stats": [
-          {
-            "value": "0-0",
-            "label": "Últ. Levante"
-          }
-        ]
       }
     ],
     "limitations": [
       {
-        "label": "Clima desconocido",
-        "detail": "La línea W indica 'unknown' para las condiciones climáticas, lo que impide evaluar el impacto del terreno de juego."
+        "label": "Datos de clima ausentes",
+        "detail": "El campo de clima en la línea W está vacío ('unknown'), por lo que no se puede evaluar el impacto meteorológico."
       },
       {
         "label": "Bajas no especificadas",
-        "detail": "No se proporciona información sobre lesionados o sancionados confirmados en las líneas L."
+        "detail": "No se proporcionan líneas L con bajas confirmadas para ninguno de los dos equipos."
       },
       {
-        "label": "Datos históricos limitados",
-        "detail": "El historial de cruces H incluye resultados de temporadas anteriores, pero no detalles de goles por jugador en esos partidos."
+        "label": "Consenso externo no incluido",
+        "detail": "No hay líneas M2 en el input, por lo que no se puede analizar el consenso del mercado externo."
       }
     ],
     "review": {
-      "flag": false,
-      "note": "Los datos proporcionados son consistentes. La lectura del modelo Bzzoiro se ha reformulado correctamente sin jerga de apuestas. Las estadísticas de forma y goleadores son coherentes con los resultados recientes listados."
+      "flag": true,
+      "note": "La línea P presenta una desviación clara: la probabilidad de victoria local (0.385) y el empate (0.265 implícito por la resta) no suman 1 junto con la victoria visitante si se asume una distribución estándar de tres resultados. Además, los valores 1.08 y 1.15 en el inicio de la línea P parecen ser c"
     },
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-22T14:28:52.900Z",
-    "inputKey": "v3|M|fd-564757|Levante UD|Elche CF|laliga|2026-11-23T20:00:00Z|NS\nP|1.08|1.15|0.325|0.315|0.36|0.385|0.465\nB|0.432|0.263|0.305|1.68|1.29|0.563|0.594|1-1|0.456\nB2|H|0.432|no|no\nH|20|10|7|3|2.15\nW||unknown|18|\nT|18|Levante UD|12|11|16|21\nT|19|Elche CF|12|10|14|20\nS|Roger Brugué|Levante UD|5|11\nS|Iván Romero|Levante UD|3|12\nS|Adrián de la Fuente|Levante UD|2|10\nS|Fernando Niño|Elche CF|6|12\nS|Fer Niño|Elche CF|6|12\nS|Germán Valera|Elche CF|2|12\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nR|2026-10-31|Levante UD|Club Atlético de Madrid|0|2\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-08|RC Celta de Vigo|Levante UD|0|0\nR|2026-11-08|Elche CF|Real Betis Balompié|0|2\nHR|2026-01-23|Levante UD|Elche|3|2\nHR|2025-08-29|Elche|Levante UD|2|0\nHR|2025-05-10|Elche|Levante UD|1|3\nHR|2024-11-16|Levante UD|Elche|1|1\nHR|2024-03-24|Levante UD|Elche|3|2",
-    "materialKey": "v3|M|fd-564757|Levante UD|Elche CF|laliga|2026-11-23T20:00:00Z|NS\nP|1.08|1.15|0.325|0.315|0.36|0.385|0.465\nB|0.432|0.263|0.305|1.68|1.29|0.563|0.594|1-1|0.456\nB2|H|0.432|no|no\nH|20|10|7|3|2.15\nW||unknown|18|\nT|18|Levante UD|12|11|16|21\nT|19|Elche CF|12|10|14|20\nS|Roger Brugué|Levante UD|5|11\nS|Iván Romero|Levante UD|3|12\nS|Adrián de la Fuente|Levante UD|2|10\nS|Fernando Niño|Elche CF|6|12\nS|Fer Niño|Elche CF|6|12\nS|Germán Valera|Elche CF|2|12\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nR|2026-10-31|Levante UD|Club Atlético de Madrid|0|2\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-08|RC Celta de Vigo|Levante UD|0|0\nR|2026-11-08|Elche CF|Real Betis Balompié|0|2\nHR|2026-01-23|Levante UD|Elche|3|2\nHR|2025-08-29|Elche|Levante UD|2|0\nHR|2025-05-10|Elche|Levante UD|1|3\nHR|2024-11-16|Levante UD|Elche|1|1\nHR|2024-03-24|Levante UD|Elche|3|2"
+    "generatedAt": "2026-11-23T07:38:56.751Z",
+    "inputKey": "v3|M|fd-564757|Levante UD|Elche CF|laliga|2026-11-23T20:00:00Z|NS\nP|1.08|1.15|0.325|0.315|0.36|0.385|0.465\nB|0.436|0.263|0.302|1.69|1.3|0.566|0.599|1-1|0.457\nB2|H|0.436|no|no\nH|20|10|7|3|2.15\nW||unknown|18|\nT|18|Levante UD|12|11|16|21\nT|19|Elche CF|12|10|14|20\nS|Roger Brugué|Levante UD|5|11\nS|Iván Romero|Levante UD|3|12\nS|Adrián de la Fuente|Levante UD|2|10\nS|Fernando Niño|Elche CF|6|12\nS|Fer Niño|Elche CF|6|12\nS|Germán Valera|Elche CF|2|12\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nR|2026-10-31|Levante UD|Club Atlético de Madrid|0|2\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-08|RC Celta de Vigo|Levante UD|0|0\nR|2026-11-08|Elche CF|Real Betis Balompié|0|2\nHR|2026-01-23|Levante UD|Elche|3|2\nHR|2025-08-29|Elche|Levante UD|2|0\nHR|2025-05-10|Elche|Levante UD|1|3\nHR|2024-11-16|Levante UD|Elche|1|1\nHR|2024-03-24|Levante UD|Elche|3|2",
+    "materialKey": "v3|M|fd-564757|Levante UD|Elche CF|laliga|2026-11-23T20:00:00Z|NS\nP|1.08|1.15|0.325|0.315|0.36|0.385|0.465\nB|0.436|0.263|0.302|1.69|1.3|0.566|0.599|1-1|0.457\nB2|H|0.436|no|no\nH|20|10|7|3|2.15\nW||unknown|18|\nT|18|Levante UD|12|11|16|21\nT|19|Elche CF|12|10|14|20\nS|Roger Brugué|Levante UD|5|11\nS|Iván Romero|Levante UD|3|12\nS|Adrián de la Fuente|Levante UD|2|10\nS|Fernando Niño|Elche CF|6|12\nS|Fer Niño|Elche CF|6|12\nS|Germán Valera|Elche CF|2|12\nR|2026-09-18|RCD Espanyol de Barcelona|Elche CF|1|3\nR|2026-10-11|Elche CF|RC Celta de Vigo|0|0\nR|2026-10-12|Levante UD|Sevilla FC|3|3\nR|2026-10-16|RC Deportivo La Coruña|Levante UD|1|1\nR|2026-10-17|Villarreal CF|Elche CF|0|0\nR|2026-10-21|Levante UD|Athletic Club|3|1\nR|2026-10-24|Rayo Vallecano de Madrid|Elche CF|0|3\nR|2026-10-25|Real Sociedad de Fútbol|Levante UD|2|1\nR|2026-10-31|Levante UD|Club Atlético de Madrid|0|2\nR|2026-11-01|Elche CF|Valencia CF|0|1\nR|2026-11-08|RC Celta de Vigo|Levante UD|0|0\nR|2026-11-08|Elche CF|Real Betis Balompié|0|2\nHR|2026-01-23|Levante UD|Elche|3|2\nHR|2025-08-29|Elche|Levante UD|2|0\nHR|2025-05-10|Elche|Levante UD|1|3\nHR|2024-11-16|Levante UD|Elche|1|1\nHR|2024-03-24|Levante UD|Elche|3|2"
   },
   "fd-560649": {
     "matchId": "fd-560649",
@@ -8402,5 +8423,75 @@
     "generatedAt": "2026-11-22T19:42:37.086Z",
     "inputKey": "v3|M|fd-575398|Manchester City FC|SSC Napoli|champions|2026-11-24T20:00:00Z|NS\nP|2.475|1.457|0.591|0.201|0.209|0.751|0.71\nB|0.753|0.149|0.098|2.32|1.16|0.7|0.56|2-1|0.532\nB2|H|0.753|no|no\nH|5|3|1|1|3.2\nW|||23|\nT|7|Manchester City FC|4|9||\nS|Erling Haaland|Manchester City FC|5|4\nS|Phil Foden|Manchester City FC|3|4\nS|Scott McTominay|SSC Napoli|3|3\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-20|SSC Napoli|FK Bodø/Glimt|4|3\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-31|Manchester City FC|Brighton & Hove Albion FC|0|1\nR|2026-11-04|RB Leipzig|Manchester City FC|2|3\nR|2026-11-04|FC Porto|SSC Napoli|4|1\nR|2026-11-07|Nottingham Forest FC|Manchester City FC|3|1\nR|2026-11-21|Manchester City FC|Fulham FC|1|1\nHR|2025-09-18|Manchester City|SSC Napoli|2|0\nHR|2017-11-01|SSC Napoli|Manchester City|2|4\nHR|2017-10-17|Manchester City|SSC Napoli|2|1\nHR|2011-11-22|SSC Napoli|Manchester City|2|1\nHR|2011-09-14|Manchester City|SSC Napoli|1|1",
     "materialKey": "v3|M|fd-575398|Manchester City FC|SSC Napoli|champions|2026-11-24T20:00:00Z|NS\nP|2.475|1.457|0.591|0.201|0.209|0.751|0.71\nB|0.753|0.149|0.098|2.32|1.16|0.7|0.56|2-1|0.532\nB2|H|0.753|no|no\nH|5|3|1|1|3.2\nW|||23|\nT|7|Manchester City FC|4|9||\nS|Erling Haaland|Manchester City FC|5|4\nS|Phil Foden|Manchester City FC|3|4\nS|Scott McTominay|SSC Napoli|3|3\nR|2026-09-09|SSC Napoli|Arsenal FC|0|1\nR|2026-10-13|Villarreal CF|SSC Napoli|3|1\nR|2026-10-20|Manchester City FC|PAE AEK|5|1\nR|2026-10-20|SSC Napoli|FK Bodø/Glimt|4|3\nR|2026-10-24|Aston Villa FC|Manchester City FC|2|1\nR|2026-10-31|Manchester City FC|Brighton & Hove Albion FC|0|1\nR|2026-11-04|RB Leipzig|Manchester City FC|2|3\nR|2026-11-04|FC Porto|SSC Napoli|4|1\nR|2026-11-07|Nottingham Forest FC|Manchester City FC|3|1\nR|2026-11-21|Manchester City FC|Fulham FC|1|1\nHR|2025-09-18|Manchester City|SSC Napoli|2|0\nHR|2017-11-01|SSC Napoli|Manchester City|2|4\nHR|2017-10-17|Manchester City|SSC Napoli|2|1\nHR|2011-11-22|SSC Napoli|Manchester City|2|1\nHR|2011-09-14|Manchester City|SSC Napoli|1|1"
+  },
+  "fd-575400": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Enfrentamiento continental de altura",
+        "bullets": [
+          "Partido de Champions League que se disputa el 24 de noviembre de 2026 a las 20:00 UTC.",
+          "El contexto meteorológico indica lluvia y una temperatura de 21 grados en la sede."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Probabilidades de distintos modelos",
+        "bullets": [
+          "Poisson GoatLab ofrece probabilidades de 0.668 para el local y 0.285 para el visitante, con empate en 0.047.",
+          "CatBoost Bzzoiro estima un 0.39 de victoria para el local y 0.39 para el visitante, con empate en 0.22.",
+          "API-Football señala un 0.39 para el local, 0.39 para el visitante y empate en 0.22; no prevé goles totales ni ambos anotarán."
+        ],
+        "stats": [
+          {
+            "value": "0.668",
+            "label": "P local"
+          },
+          {
+            "value": "0.39",
+            "label": "B local"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Cruces previos entre ambos",
+        "bullets": [
+          "En los dos últimos enfrentamientos directos, el Feyenoord ganó 2-0 y el Porto venció 3-2.",
+          "El historial acumulado arroja 2 victorias del Feyenoord, 1 del Porto y 0 empates, con un promedio de 3.5 goles por partido."
+        ],
+        "stats": [
+          {
+            "value": "3.5",
+            "label": "Goles/Partido"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes de ambos equipos",
+        "bullets": [
+          "El Feyenoord sumó victorias ante Como 1907 y Real Betis, pero cayó 0-3 ante el Inter y 5-1 ante el Barcelona.",
+          "El FC Porto empató 0-2 ante el Manchester City, venció 4-1 al Napoli y empató 0-1 ante el PSV."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos limitados",
+        "detail": "Falta información de la clasificación actual, goleadores y bajas confirmadas en el input provisto."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-23T07:45:38.777Z",
+    "inputKey": "v3|M|fd-575400|Feyenoord Rotterdam|FC Porto|champions|2026-11-24T20:00:00Z|NS\nP|1.485|1.955|0.285|0.238|0.478|0.668|0.673\nB|0.351|0.259|0.39|1.57|1.61|0.592|0.622|1-1|0.432\nB2|A|0.39|no|no\nH|2|1|0|1|3.5\nW||rain|21|\nR|2026-09-08|FC Porto|Manchester City FC|0|2\nR|2026-09-09|FC Barcelona|Feyenoord Rotterdam|5|1\nR|2026-10-14|Feyenoord Rotterdam|Como 1907|3|2\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-20|FC Porto|PSV|0|1\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-11-03|Feyenoord Rotterdam|FC Internazionale Milano|0|3\nR|2026-11-04|FC Porto|SSC Napoli|4|1\nHR|2019-12-12|FC Porto|Feyenoord|3|2\nHR|2019-10-03|Feyenoord|FC Porto|2|0",
+    "materialKey": "v3|M|fd-575400|Feyenoord Rotterdam|FC Porto|champions|2026-11-24T20:00:00Z|NS\nP|1.485|1.955|0.285|0.238|0.478|0.668|0.673\nB|0.351|0.259|0.39|1.57|1.61|0.592|0.622|1-1|0.432\nB2|A|0.39|no|no\nH|2|1|0|1|3.5\nW||rain|21|\nR|2026-09-08|FC Porto|Manchester City FC|0|2\nR|2026-09-09|FC Barcelona|Feyenoord Rotterdam|5|1\nR|2026-10-14|Feyenoord Rotterdam|Como 1907|3|2\nR|2026-10-14|Real Betis Balompié|FC Porto|3|2\nR|2026-10-20|FC Porto|PSV|0|1\nR|2026-10-21|Real Betis Balompié|Feyenoord Rotterdam|1|0\nR|2026-11-03|Feyenoord Rotterdam|FC Internazionale Milano|0|3\nR|2026-11-04|FC Porto|SSC Napoli|4|1\nHR|2019-12-12|FC Porto|Feyenoord|3|2\nHR|2019-10-03|Feyenoord|FC Porto|2|0"
   }
 }
