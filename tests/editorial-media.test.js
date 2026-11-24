@@ -5,7 +5,7 @@ import { listEditorials, getEditorial } from '../src/lib/editorial-store.js';
 const cover = { source: 'agnes', url: 'https://example.com/cover.webp', alt: 'Ilustración conceptual de fútbol', width: 1280, height: 720 };
 test('only valid, explicitly attributed images reach the shared template', () => {
   assert.equal(editorialImage(cover), cover);
-  for (const input of [null, {}, { ...cover, url: 'javascript:alert(1)' }, { ...cover, source: 'unknown' }, { ...cover, width: 0 }, { ...cover, alt: '' }]) assert.equal(editorialImage(input), null);
+  for (const input of [null, {}, { ...cover, reviewStatus: 'rejected' }, { ...cover, url: 'javascript:alert(1)' }, { ...cover, source: 'unknown' }, { ...cover, width: 0 }, { ...cover, alt: '' }]) assert.equal(editorialImage(input), null);
 });
 test('D1 listing and article expose the same persisted cover without loading full prose in cards', async () => {
   const db = { prepare(sql) { return {

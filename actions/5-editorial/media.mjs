@@ -11,20 +11,24 @@ const run = promisify(execFile);
 const root = '.cache/editorial-media';
 const failures = [];
 const report = [];
+const requestedSlug = process.argv.find(arg => arg.startsWith('--slug='))?.slice(7);
+const requestedRole = process.argv.find(arg => arg.startsWith('--role='))?.slice(7);
+if (requestedSlug && !isEditorialSlug(requestedSlug) || requestedRole && !['cover', 'detail'].includes(requestedRole)) throw new Error('Invalid media selection');
 await mkdir(root, { recursive: true });
 const [catalog] = await queryD1({ sql: 'SELECT slug FROM editorials WHERE retired_at IS NULL ORDER BY position, slug LIMIT 20' });
 for (const { slug } of catalog.results) {
+  if (requestedSlug && slug !== requestedSlug) continue;
   if (!isEditorialSlug(slug)) throw new Error('Invalid editorial slug');
   for (const [index, role] of ['cover', 'detail'].entries()) {
+    if (requestedRole && role !== requestedRole) continue;
     try {
       const [result] = await queryD1({ sql: 'SELECT title, payload FROM (SELECT json_extract(payload, \'$.title\') AS title, payload FROM editorials WHERE slug = ? AND retired_at IS NULL)', params: [slug] });
       const row = result.results[0];
       if (!row) break;
       const article = JSON.parse(row.payload);
       if (editorialImage(article.media?.[role])) { report.push({ slug, role, status: 'existente' }); continue; }
-      const excerpt = [article.leadHtml, article.bodyHtml].join(' ').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').slice(0, 1700);
-      const prompt = `Create an original 16:9 editorial illustration for GoatLab, a Spanish football data magazine. Topic: ${row.title}. Context for visual symbolism only: ${excerpt}. ${role === 'cover' ? 'Wide cinematic cover with a strong focal point, football and the economics or statistics described by the article.' : 'A complementary close-up still life explaining the article visually through football objects, stadium architecture, financial or analytical symbols; a distinctly different composition from the cover.'} Premium illustrated editorial art, detailed tactile materials, dark forest green and charcoal palette, lime accents, warm ivory highlights, subtle grain, thoughtful negative space. No lettering, numbers, watermarks, club crests or brand logos. No invented charts or factual labels. Do not depict a real transaction, documentary photograph or identifiable real person. An evocative illustration, not evidence of an actual event.`;
-      const version = createHash('sha256').update(`editorial-v1:${slug}:${role}`).digest('hex').slice(0, 12);
+      const prompt = `A wordless conceptual still-life illustration. Empty of people: absolutely no humans, faces, athletes, uniforms or jerseys. Absolutely no text, letters, digits, labels, logos, charts, watermarks or written symbols anywhere. ${role === 'cover' ? 'Wide cinematic composition: a beautiful unbranded football, sculptural stacks of blank metallic discs, empty stadium architecture and luminous abstract connecting paths.' : 'Macro still-life: tactile unbranded football leather, blank contract papers without any writing, small abstract stadium sculptures and flowing lime threads. An intimate, detailed composition.'} Visual metaphor for football economics, not a representation of real events or quantitative data. Premium magazine illustration, forest green and charcoal, lime highlights, warm ivory, subtle film grain, high contrast, generous negative space, horizontal 16:9 framing. Editorial subject for thematic inspiration only; do not depict or write the title: ${row.title}. Repeat: no people and no writing. The image will accompany verified data displayed separately as HTML.`;
+      const version = createHash('sha256').update(`editorial-v2:${slug}:${role}`).digest('hex').slice(0, 12);
       const id = `editorial-${slug}-${version}`;
       const key = `editoriales/${slug}/${role}-${version}.webp`;
       const metadataKey = `editoriales/${slug}/${role}-${version}.json`;
@@ -56,7 +60,7 @@ for (const { slug } of catalog.results) {
         await put(key, bytes, 'image/webp', {}, { 'cache-control': 'public, max-age=31536000, immutable' });
         await put(metadataKey, Buffer.from(JSON.stringify(image)), 'application/json');
       }
-      const [saved] = await queryD1({ sql: `UPDATE editorials SET payload = json_set(payload, '$.media.${role}', json(?)), updated_at = ? WHERE slug = ? AND retired_at IS NULL AND json_extract(payload, '$.media.${role}.url') IS NULL`, params: [JSON.stringify(image), new Date().toISOString(), slug] });
+      const [saved] = await queryD1({ sql: `UPDATE editorials SET payload = json_set(payload, '$.media.${role}', json(?)), updated_at = ? WHERE slug = ? AND retired_at IS NULL AND (json_extract(payload, '$.media.${role}.url') IS NULL OR json_extract(payload, '$.media.${role}.reviewStatus') = 'rejected')`, params: [JSON.stringify(image), new Date().toISOString(), slug] });
       if (!saved.meta.changes) throw new Error('Editorial changed before media publication');
       report.push({ slug, role, status: 'publicada', url: image.url });
     } catch (error) {
