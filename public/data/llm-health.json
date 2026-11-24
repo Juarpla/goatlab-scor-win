@@ -1,250 +1,6 @@
 {
-  "updatedAt": "2026-11-23T18:02:51.313Z",
+  "updatedAt": "2026-11-24T00:00:52.060Z",
   "runs": [
-    {
-      "at": "2026-11-16T06:40:35.338Z",
-      "task": "shorts",
-      "matchId": "wales-vs-portugal-2026-11-17",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 53 palabras, mínimo 55; guion 2: falta Gales; guion 3: 4 cifras, máximo 3; guion 4: falta Gales; guion 6: el cero no se escribe en dígitos; guion 6: 54 palabras, mínimo 55; guion 7: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7273,
-            "outputTokens": 2343
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7311
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6994,
-            "outputTokens": 22878
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 220045
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 3: falta una proyección marcada como opinión; guion 6: cifra 2016 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6857,
-            "outputTokens": 31594
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 187776
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 3: 6 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 4: 7 cifras, máximo 3; guion 5: golpe 3 (dato): 5 palabras, mínimo 6; guion 5: 4 cifras, máximo 3; guion 6: el gancho no lleva cifras; guion 7: el gancho no lleva cifras; guion 7: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7387,
-            "outputTokens": 2962
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15789
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: proyección fuera de rango; guion 1: 5 cifras, máximo 3; guion 2: proyección fuera de rango; guion 3: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: 5 cifras, máximo 3; guion 10: cifra 11.5 no está en los hechos; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6850,
-            "outputTokens": 8482
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 118296
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 6850,
-        "outputTokens": 8482
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-16T07:04:58.416Z",
-      "task": "shorts",
-      "matchId": "switzerland-vs-scotland-2026-11-16",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 2: falta Suiza; guion 2: falta Escocia; guion 3: falta Suiza; guion 3: falta Escocia; guion 3: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: falta Escocia",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7425,
-            "outputTokens": 3058
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12642
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta Escocia; guion 2: proyección fuera de rango; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: proyección fuera de rango; guion 7: 4 cifras, máximo 3; guion 9: proyección fuera de rango",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7103,
-            "outputTokens": 30817
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 233238
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash",
-        "latencyMs": 199832
-      },
-      "usage": {
-        "inputTokens": 6971,
-        "outputTokens": 32067
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "557a3e7d-65e8-46c1-892f-2b8f85ee3c78"
-    },
-    {
-      "at": "2026-11-16T07:22:52.459Z",
-      "task": "shorts",
-      "matchId": "denmark-vs-norway-2026-11-17",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 8: falta Dinamarca; guion 8: falta Noruega; guion 9: falta Noruega",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7444,
-            "outputTokens": 2506
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 9598
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7144,
-            "outputTokens": 19527
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 173824
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 600001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Noruega; guion 2: 51 palabras, mínimo 55; guion 3: el gancho no lleva cifras; guion 3: 4 cifras, máximo 3; guion 4: falta Noruega; guion 4: el gancho no lleva cifras; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7546,
-            "outputTokens": 2425
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 15242
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 7 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: falta Dinamarca; guion 3: falta Noruega; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: cifra 51 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7018,
-            "outputTokens": 8691
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 218695
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "No se encontró JSON válido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7444,
-            "outputTokens": 57
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 1137
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 2: 5 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 5 cifras, máximo 3; guion 9: falta Noruega",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7144,
-            "outputTokens": 31688
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 247488
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 600000
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7018,
-        "outputTokens": 6018
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-11-16T07:23:04.867Z",
       "task": "image-prompts",
@@ -7782,6 +7538,134 @@
       "maxTokens": 131072,
       "batchSize": 1,
       "callId": "1d416d9c-0ccb-40a5-b17d-6039895c7e0a"
+    },
+    {
+      "at": "2026-11-23T23:56:35.780Z",
+      "matchId": "fd-575399",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1353,
+            "outputTokens": 1393
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6133
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1306,
+            "outputTokens": 1173
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6165
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1231,
+            "outputTokens": 5394
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 135199
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1231,
+        "outputTokens": 5394
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-24T00:00:27.769Z",
+      "matchId": "fd-575404",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1191,
+            "outputTokens": 1228
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4287
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1154,
+            "outputTokens": 1121
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5349
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1191,
+        "outputTokens": 657
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "885f0edf-1965-4b3b-909c-e53e886426be"
+    },
+    {
+      "at": "2026-11-24T00:00:42.298Z",
+      "matchId": "fd-575405",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "codestral-2508"
+      },
+      "usage": {
+        "inputTokens": 1180,
+        "outputTokens": 799
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "1898bc1b-69e2-4bec-be89-02992f9be8a4"
     }
   ]
 }
