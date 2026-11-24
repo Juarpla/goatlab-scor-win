@@ -1,36 +1,6 @@
 {
-  "updatedAt": "2026-11-24T00:00:52.060Z",
+  "updatedAt": "2026-11-24T00:07:45.685Z",
   "runs": [
-    {
-      "at": "2026-11-16T07:23:04.867Z",
-      "task": "image-prompts",
-      "matchId": "wales-vs-portugal-2026-11-17",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2655,
-        "outputTokens": 2333
-      }
-    },
-    {
-      "at": "2026-11-16T07:23:24.618Z",
-      "task": "image-prompts",
-      "matchId": "denmark-vs-norway-2026-11-17",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2715,
-        "outputTokens": 1705
-      }
-    },
     {
       "at": "2026-11-16T07:23:33.536Z",
       "task": "image-prompts",
@@ -7666,6 +7636,143 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "1898bc1b-69e2-4bec-be89-02992f9be8a4"
+    },
+    {
+      "at": "2026-11-24T00:07:36.700Z",
+      "task": "shorts",
+      "matchId": "bod-glimt-vs-lask-2026-11-24",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 54 palabras, mínimo 55; guion 3: falta FK Bodø/Glimt; guion 4: falta FK Bodø/Glimt; guion 7: falta FK Bodø/Glimt; guion 8: falta LASK Linz; guion 8: 51 palabras, mínimo 55; guion 9: falta FK Bodø/Glimt; guion 10: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6707,
+            "outputTokens": 2360
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7270
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 8793,
+            "outputTokens": 1284
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3370
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 8: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 8713,
+            "outputTokens": 338
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 1884
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6779,
+            "outputTokens": 2494
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 39550
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9578,
+            "outputTokens": 1474
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 22437
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: cifra 80 no está en los hechos; guion 2: porcentajes bloqueados: evaluation.published es false; guion 3: 4 cifras, máximo 3; guion 7: 5 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9558,
+            "outputTokens": 1510
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 26405
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235330
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: falta FK Bodø/Glimt; guion 1: 53 palabras, mínimo 55; guion 2: 4 cifras, máximo 3; guion 4: falta FK Bodø/Glimt; guion 5: 4 cifras, máximo 3; guion 7: falta FK Bodø/Glimt; guion 8: falta FK Bodø/Glimt; guion 8: falta LASK Linz",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6707,
+            "outputTokens": 2526
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7349
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1336
+      },
+      "usage": {
+        "inputTokens": 8916,
+        "outputTokens": 313
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "adbc1182-9eb1-436d-88df-ace4ede6a9c2"
+    },
+    {
+      "at": "2026-11-24T00:07:45.685Z",
+      "task": "image-prompts",
+      "matchId": "bod-glimt-vs-lask-2026-11-24",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2028,
+        "outputTokens": 2421
+      }
     }
   ]
 }
