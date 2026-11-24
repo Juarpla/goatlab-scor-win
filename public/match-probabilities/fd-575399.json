@@ -4,7 +4,7 @@
   "away": "Borussia Dortmund",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.188
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.728,
-      "away": 1.119
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 4
@@ -62,22 +59,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-24T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-24T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": {
       "city": "Londres",
@@ -144,42 +141,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.85,
-    "noGoal": 0.058,
+    "lambdaTotal": 2.76,
+    "noGoal": 0.063,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.378
+        "p": 0.369
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.235
+        "p": 0.233
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.146
+        "p": 0.147
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.091
+        "p": 0.093
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.057
+        "p": 0.058
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.035
+        "p": 0.037
       }
     ],
-    "firstHome": 0.572,
-    "firstAway": 0.37
+    "firstHome": 0.534,
+    "firstAway": 0.403
   },
   "scorers": {
     "home": [
@@ -188,9 +185,9 @@
         "goals": 2,
         "matches": 4,
         "share": 0.9,
-        "rate": 1.56,
-        "anytime": 0.789,
-        "first": 0.546
+        "rate": 1.42,
+        "anytime": 0.758,
+        "first": 0.514
       }
     ],
     "away": [
@@ -199,183 +196,50 @@
         "goals": 4,
         "matches": 4,
         "share": 0.5,
-        "rate": 0.56,
-        "anytime": 0.429,
-        "first": 0.196
+        "rate": 0.59,
+        "anytime": 0.448,
+        "first": 0.215
       },
       {
         "player": "Sehrou Guirassy",
         "goals": 4,
         "matches": 4,
         "share": 0.5,
-        "rate": 0.56,
-        "anytime": 0.429,
-        "first": 0.196
+        "rate": 0.59,
+        "anytime": 0.448,
+        "first": 0.215
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.669,
-      "draw": 0.19699999999999998,
-      "away": 0.134,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.88,
-      "away": 1.05
-    },
-    "over15": 0.7879999999999999,
-    "over25": 0.585,
-    "over35": 0.36200000000000004,
-    "btts": 0.521,
-    "score": "1-1",
-    "cornersOver95": 0.45299999999999996,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.669,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.6693,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:22.148Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.557,
-      "draw": 0.245,
-      "away": 0.198
-    },
-    "doubleChance": {
-      "12": 0.755,
-      "1X": 0.802,
-      "X2": 0.443
-    },
-    "dnb": {
-      "home": 0.738,
-      "away": 0.262
-    },
-    "totals": {
-      "over15": 0.801,
-      "under15": 0.199,
-      "over25": 0.561,
-      "under25": 0.439,
-      "over35": 0.337,
-      "under35": 0.663
-    },
-    "btts": {
-      "yes": 0.561,
-      "no": 0.439
-    },
-    "cleanSheet": {
-      "home": 0.35,
-      "away": 0.153
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.124,
-        "share": 0.2632696390658174
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.099,
-        "share": 0.21019108280254778
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.094,
-        "share": 0.19957537154989383
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.09,
-        "share": 0.19108280254777069
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "p": 0.064,
-        "share": 0.13588110403397027
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 8,
-    "homeWins": 4,
-    "draws": 1,
-    "awayWins": 3,
-    "avgTotalGoals": 2.25,
-    "recent": [
-      {
-        "eventId": 391997,
-        "date": "2014-11-26T19:45:00+00:00",
-        "home": "Arsenal",
-        "away": "Borussia Dortmund",
-        "homeTeamId": 18,
-        "awayTeamId": 92,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 391925,
-        "date": "2014-09-16T18:45:00+00:00",
-        "home": "Borussia Dortmund",
-        "away": "Arsenal",
-        "homeTeamId": 92,
-        "awayTeamId": 18,
-        "homeScore": 2,
-        "awayScore": 0
-      },
-      {
-        "eventId": 407411,
-        "date": "2013-11-06T19:45:00+00:00",
-        "home": "Borussia Dortmund",
-        "away": "Arsenal",
-        "homeTeamId": 92,
-        "awayTeamId": 18,
-        "homeScore": 0,
-        "awayScore": 1
-      },
-      {
-        "eventId": 407386,
-        "date": "2013-10-22T18:45:00+00:00",
-        "home": "Arsenal",
-        "away": "Borussia Dortmund",
-        "homeTeamId": 18,
-        "awayTeamId": 92,
-        "homeScore": 1,
-        "awayScore": 2
-      },
-      {
-        "eventId": 435644,
-        "date": "2011-11-23T19:45:00+00:00",
-        "home": "Arsenal",
-        "away": "Borussia Dortmund",
-        "homeTeamId": 18,
-        "awayTeamId": 92,
-        "homeScore": 2,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -391,7 +255,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 3.9
@@ -402,7 +266,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 10
@@ -412,7 +276,7 @@
     "home": {
       "shots": 14.62,
       "shotsOnTarget": 5.22,
-      "xg": 1.88,
+      "xg": 1.63,
       "corners": 5.03,
       "fouls": 10.29,
       "yellowCards": 1.89,
@@ -423,7 +287,7 @@
     "away": {
       "shots": 13.78,
       "shotsOnTarget": 4.86,
-      "xg": 1.05,
+      "xg": 1.58,
       "corners": 4.94,
       "fouls": 12.37,
       "yellowCards": 2.01,
@@ -514,9 +378,9 @@
       "away": 0.419
     },
     "lastGoal": {
-      "home": 0.572,
-      "away": 0.37,
-      "noGoal": 0.058
+      "home": 0.534,
+      "away": 0.403,
+      "noGoal": 0.063
     },
     "cornerRace": {
       "3": {
@@ -543,13 +407,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 22.1,
-      "condition": "rain",
-      "sampledAt": "2026-11-24T20:00:00Z",
-      "source": "bzzoiro"
+      "temp": 4.9,
+      "precipitation": 0,
+      "weathercode": 3,
+      "wind": 10.4,
+      "condition": null,
+      "sampledAt": "2026-11-24T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Emirates Stadium",
@@ -629,5 +493,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": false,
+    "note": null,
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-24T17:30:59.646Z"
+  }
 }

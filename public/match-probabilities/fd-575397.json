@@ -4,7 +4,7 @@
   "away": "PSV",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 0.728
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.22,
-      "away": 1.189
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 4
@@ -44,22 +41,22 @@
       "PSV": null
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-24T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-24T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": {
       "city": "Madrid",
@@ -126,42 +123,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.41,
-    "noGoal": 0.033,
+    "lambdaTotal": 2.8,
+    "noGoal": 0.061,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.433
+        "p": 0.373
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.246
+        "p": 0.234
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.139
+        "p": 0.147
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.079
+        "p": 0.092
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.045
+        "p": 0.058
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.025
+        "p": 0.036
       }
     ],
-    "firstHome": 0.63,
-    "firstAway": 0.337
+    "firstHome": 0.695,
+    "firstAway": 0.244
   },
   "scorers": {
     "home": [
@@ -170,133 +167,51 @@
         "goals": 4,
         "matches": 4,
         "share": 0.667,
-        "rate": 1.48,
-        "anytime": 0.773,
-        "first": 0.434
+        "rate": 1.38,
+        "anytime": 0.749,
+        "first": 0.493
       },
       {
         "player": "Federico Valverde",
         "goals": 2,
         "matches": 4,
         "share": 0.333,
-        "rate": 0.74,
-        "anytime": 0.523,
-        "first": 0.217
+        "rate": 0.69,
+        "anytime": 0.498,
+        "first": 0.246
       }
     ],
     "away": null
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.82,
-      "draw": 0.107,
-      "away": 0.073,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.37,
-      "away": 1.65
-    },
-    "over15": 0.9109999999999999,
-    "over25": 0.812,
-    "over35": 0.628,
-    "btts": 0.621,
-    "score": "2-1",
-    "cornersOver95": 0.516,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.82,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.82,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:22.777Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.531,
-      "draw": 0.209,
-      "away": 0.259
-    },
-    "doubleChance": {
-      "12": 0.791,
-      "1X": 0.741,
-      "X2": 0.469
-    },
-    "dnb": {
-      "home": 0.672,
-      "away": 0.328
-    },
-    "totals": {
-      "over15": 0.917,
-      "under15": 0.083,
-      "over25": 0.765,
-      "under25": 0.235,
-      "over35": 0.57,
-      "under35": 0.43
-    },
-    "btts": {
-      "yes": 0.739,
-      "no": 0.261
-    },
-    "cleanSheet": {
-      "home": 0.192,
-      "away": 0.094
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.096,
-        "share": 0.26229508196721313
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.077,
-        "share": 0.2103825136612022
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.069,
-        "share": 0.18852459016393444
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.066,
-        "share": 0.18032786885245902
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.058,
-        "share": 0.15846994535519127
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -312,7 +227,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 4.1
@@ -323,7 +238,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 9.3
@@ -333,7 +248,7 @@
     "home": {
       "shots": 14.38,
       "shotsOnTarget": 5.82,
-      "xg": 2.37,
+      "xg": 1.82,
       "corners": 4.72,
       "fouls": 10.04,
       "yellowCards": 2.05,
@@ -344,7 +259,7 @@
     "away": {
       "shots": 14.63,
       "shotsOnTarget": 5.45,
-      "xg": 1.65,
+      "xg": 1.67,
       "corners": 4.55,
       "fouls": 12.17,
       "yellowCards": 2,
@@ -435,9 +350,9 @@
       "away": 0.388
     },
     "lastGoal": {
-      "home": 0.63,
-      "away": 0.337,
-      "noGoal": 0.033
+      "home": 0.695,
+      "away": 0.244,
+      "noGoal": 0.061
     },
     "cornerRace": {
       "3": {
@@ -464,13 +379,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 24.6,
+      "temp": 7.6,
+      "precipitation": 0,
+      "weathercode": 2,
+      "wind": 9.3,
       "condition": null,
-      "sampledAt": "2026-11-24T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-24T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Santiago Bernabéu",

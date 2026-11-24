@@ -4,7 +4,7 @@
   "away": "PAE AEK",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.265
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.935,
-      "away": 1.342
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
@@ -44,7 +41,7 @@
       "PAE AEK": null
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -55,11 +52,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": null
   },
@@ -123,42 +120,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 4.28,
-    "noGoal": 0.014,
+    "lambdaTotal": 5.32,
+    "noGoal": 0.005,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.51
+        "p": 0.588
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.25
+        "p": 0.242
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.123
+        "p": 0.1
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.06
+        "p": 0.041
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.029
+        "p": 0.017
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.014
+        "p": 0.007
       }
     ],
-    "firstHome": 0.677,
-    "firstAway": 0.309
+    "firstHome": 0.758,
+    "firstAway": 0.237
   },
   "scorers": {
     "home": [
@@ -167,27 +164,27 @@
         "goals": 6,
         "matches": 4,
         "share": 0.545,
-        "rate": 1.6,
-        "anytime": 0.798,
-        "first": 0.374
+        "rate": 2.21,
+        "anytime": 0.89,
+        "first": 0.415
       },
       {
         "player": "Nico Paz",
         "goals": 3,
         "matches": 4,
         "share": 0.273,
-        "rate": 0.8,
-        "anytime": 0.551,
-        "first": 0.187
+        "rate": 1.11,
+        "anytime": 0.669,
+        "first": 0.208
       },
       {
         "player": "Assane Diao",
         "goals": 2,
         "matches": 2,
         "share": 0.182,
-        "rate": 0.53,
-        "anytime": 0.414,
-        "first": 0.125
+        "rate": 0.74,
+        "anytime": 0.522,
+        "first": 0.139
       }
     ],
     "away": [
@@ -196,123 +193,41 @@
         "goals": 2,
         "matches": 6,
         "share": 0.9,
-        "rate": 1.21,
-        "anytime": 0.701,
-        "first": 0.282
+        "rate": 1.14,
+        "anytime": 0.68,
+        "first": 0.214
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.762,
-      "draw": 0.146,
-      "away": 0.092,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.82,
-      "away": 1.42
-    },
-    "over15": 0.862,
-    "over25": 0.705,
-    "over35": 0.478,
-    "btts": 0.5589999999999999,
-    "score": "1-1",
-    "cornersOver95": 0.486,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.762,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.7621,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:22.120Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.46,
-      "draw": 0.248,
-      "away": 0.291
-    },
-    "doubleChance": {
-      "12": 0.752,
-      "1X": 0.709,
-      "X2": 0.54
-    },
-    "dnb": {
-      "home": 0.612,
-      "away": 0.388
-    },
-    "totals": {
-      "over15": 0.844,
-      "under15": 0.156,
-      "over25": 0.628,
-      "under25": 0.372,
-      "over35": 0.406,
-      "under35": 0.594
-    },
-    "btts": {
-      "yes": 0.646,
-      "no": 0.354
-    },
-    "cleanSheet": {
-      "home": 0.242,
-      "away": 0.162
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.115,
-        "share": 0.28117359413202936
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.092,
-        "share": 0.22493887530562345
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.072,
-        "share": 0.17603911980440096
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.065,
-        "share": 0.1589242053789731
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.065,
-        "share": 0.1589242053789731
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -328,7 +243,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 3
@@ -339,7 +254,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 9.4
@@ -349,7 +264,7 @@
     "home": {
       "shots": 14.12,
       "shotsOnTarget": 5.27,
-      "xg": 1.82,
+      "xg": 1.69,
       "corners": 4.71,
       "fouls": 10.66,
       "yellowCards": 1.27,
@@ -451,9 +366,9 @@
       "away": 0.485
     },
     "lastGoal": {
-      "home": 0.677,
-      "away": 0.309,
-      "noGoal": 0.014
+      "home": 0.758,
+      "away": 0.237,
+      "noGoal": 0.005
     },
     "cornerRace": {
       "3": {
@@ -561,10 +476,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "El valor de 0.897 para el empate en GoLab es extremadamente alto y contrasta con la probabilidad de 0.095 para la victoria local, lo que sugiere un sesgo fuerte del modelo hacia el resultado igualado pese a la diferencia de puntos en la tabla (4 vs 9).",
+    "flag": false,
+    "note": "La lectura del modelo Poisson GoatLab es coherente con los goles esperados y la probabilidad de ambos anoten. Los resultados recientes de Como 1907 (9-1) justifican la alta expectativa ofensiva reflejada en el modelo.",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-23T17:55:33.393Z"
+    "generatedAt": "2026-11-24T17:28:13.491Z"
   }
 }

@@ -4,7 +4,7 @@
   "away": "LASK Linz",
   "competition": "champions",
   "kickoff": "2026-11-24T17:45:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 2.185
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.108,
-      "away": 1.797
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
@@ -44,7 +41,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -55,11 +52,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": null
   },
@@ -123,13 +120,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.91,
-    "noGoal": 0.02,
+    "lambdaTotal": 3.94,
+    "noGoal": 0.019,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.478
+        "p": 0.481
       },
       {
         "from": 15,
@@ -139,12 +136,12 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.13
+        "p": 0.129
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.068
+        "p": 0.067
       },
       {
         "from": 60,
@@ -157,8 +154,8 @@
         "p": 0.018
       }
     ],
-    "firstHome": 0.529,
-    "firstAway": 0.451
+    "firstHome": 0.437,
+    "firstAway": 0.544
   },
   "scorers": {
     "home": null,
@@ -168,141 +165,59 @@
         "goals": 3,
         "matches": 6,
         "share": 0.333,
-        "rate": 0.6,
-        "anytime": 0.45,
-        "first": 0.153
+        "rate": 0.73,
+        "anytime": 0.517,
+        "first": 0.185
       },
       {
         "player": "Robert Ljubičić",
         "goals": 3,
         "matches": 6,
         "share": 0.333,
-        "rate": 0.6,
-        "anytime": 0.45,
-        "first": 0.153
+        "rate": 0.73,
+        "anytime": 0.517,
+        "first": 0.185
       },
       {
         "player": "Samuel Adeniran",
         "goals": 3,
         "matches": 5,
         "share": 0.333,
-        "rate": 0.6,
-        "anytime": 0.45,
-        "first": 0.153
+        "rate": 0.73,
+        "anytime": 0.517,
+        "first": 0.185
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.634,
-      "draw": 0.18899999999999997,
-      "away": 0.177,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.46,
-      "away": 1.41
-    },
-    "over15": 0.882,
-    "over25": 0.737,
-    "over35": 0.545,
-    "btts": 0.6729999999999999,
-    "score": "2-1",
-    "cornersOver95": 0.47200000000000003,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.634,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.6337,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:22.113Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.598,
-      "draw": 0.201,
-      "away": 0.201
-    },
-    "doubleChance": {
-      "12": 0.799,
-      "1X": 0.799,
-      "X2": 0.402
-    },
-    "dnb": {
-      "home": 0.748,
-      "away": 0.252
-    },
-    "totals": {
-      "over15": 0.906,
-      "under15": 0.094,
-      "over25": 0.742,
-      "under25": 0.258,
-      "over35": 0.54,
-      "under35": 0.46
-    },
-    "btts": {
-      "yes": 0.698,
-      "no": 0.302
-    },
-    "cleanSheet": {
-      "home": 0.244,
-      "away": 0.086
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.1,
-        "share": 0.2638522427440633
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.08,
-        "share": 0.21108179419525067
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.073,
-        "share": 0.19261213720316622
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.063,
-        "share": 0.1662269129287599
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.063,
-        "share": 0.1662269129287599
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -318,7 +233,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 3.3
@@ -329,7 +244,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 9.4
@@ -339,7 +254,7 @@
     "home": {
       "shots": 13.52,
       "shotsOnTarget": 5.09,
-      "xg": 2.46,
+      "xg": 1.62,
       "corners": 4.54,
       "fouls": 10.45,
       "yellowCards": 1.55,
@@ -350,7 +265,7 @@
     "away": {
       "shots": 15.85,
       "shotsOnTarget": 6.09,
-      "xg": 1.41,
+      "xg": 1.78,
       "corners": 4.84,
       "fouls": 10.2,
       "yellowCards": 1.72,
@@ -441,9 +356,9 @@
       "away": 0.421
     },
     "lastGoal": {
-      "home": 0.529,
-      "away": 0.451,
-      "noGoal": 0.02
+      "home": 0.437,
+      "away": 0.544,
+      "noGoal": 0.019
     },
     "cornerRace": {
       "3": {
@@ -547,10 +462,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "Los porcentajes del modelo P (Poisson GoatLab) presentan valores extremadamente bajos (1.755%, 2.185%, 0.307%) que no suman 100 y parecen desvinculados de la lógica habitual de probabilidades de partido, sugiriendo posible error de escala o dato bruto no normalizado, en fuerte contraste con el model",
+    "flag": false,
+    "note": "Los datos son coherentes. La diferencia en goles esperados (2.185 vs 1.755) se alinea con la mayor eficacia anotadora del LASK en sus últimos 3 partidos (10 goles en 5 juegos vs 2 goles en 4 para Glimt).",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-24T09:58:38.584Z"
+    "generatedAt": "2026-11-24T17:27:07.101Z"
   }
 }

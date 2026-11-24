@@ -1,491 +1,6 @@
 {
-  "updatedAt": "2026-11-24T10:16:41.720Z",
+  "updatedAt": "2026-11-24T17:31:29.150Z",
   "runs": [
-    {
-      "at": "2026-11-16T15:31:36.031Z",
-      "matchId": "bz-212727",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1105,
-        "outputTokens": 1216
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "db8a9b75-109c-4e14-8bf5-06ddb72c9a8a"
-    },
-    {
-      "at": "2026-11-16T15:31:42.139Z",
-      "matchId": "bz-212727",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1686,
-        "outputTokens": 2067
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "e913f82e-3b22-4ad1-a6ab-bc6e584256cb"
-    },
-    {
-      "at": "2026-11-16T15:31:42.139Z",
-      "matchId": "bz-212726",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "e913f82e-3b22-4ad1-a6ab-bc6e584256cb"
-    },
-    {
-      "at": "2026-11-16T15:31:59.991Z",
-      "matchId": "bz-212712",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1698,
-        "outputTokens": 1717
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "369cbba9-c411-40d9-b60f-02b964e9adf2"
-    },
-    {
-      "at": "2026-11-16T15:31:59.991Z",
-      "matchId": "bz-212711",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "369cbba9-c411-40d9-b60f-02b964e9adf2"
-    },
-    {
-      "at": "2026-11-16T15:47:20.603Z",
-      "task": "shorts",
-      "matchId": "barcelona-vs-villarreal-2026-11-22",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 48 palabras, mínimo 55; guion 2: falta Villarreal CF; guion 2: 48 palabras, mínimo 55; guion 3: artículo delante de Villarreal CF; guion 3: 50 palabras, mínimo 55; guion 4: falta FC Barcelona; guion 4: 50 palabras, mínimo 55; guion 5: falta FC Barcelona",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7737,
-            "outputTokens": 2174
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 6876
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7333,
-            "outputTokens": 20001
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 194767
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7185,
-            "outputTokens": 29593
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 553840
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 7: falta Villarreal CF; guion 7: 50 palabras, mínimo 55; guion 8: el gancho no lleva cifras; guion 9: falta Villarreal CF; guion 9: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7876,
-            "outputTokens": 2591
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14654
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: proyección fuera de rango; guion 1: 6 cifras, máximo 3; guion 2: falta Villarreal CF; guion 2: 6 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: falta Villarreal CF; guion 6: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7178,
-            "outputTokens": 7721
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 87385
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7178,
-        "outputTokens": 7721
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-16T16:08:29.148Z",
-      "task": "shorts",
-      "matchId": "denmark-vs-norway-2026-11-17",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 3: falta Dinamarca; guion 3: falta Noruega; guion 4: falta Noruega; guion 8: falta Dinamarca; guion 8: falta Noruega; guion 9: falta Noruega; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7467,
-            "outputTokens": 2958
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 9454
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 221631
-      },
-      "usage": {
-        "inputTokens": 7151,
-        "outputTokens": 24724
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "2824d4fd-37d1-4156-b95b-eb2dec08112a"
-    },
-    {
-      "at": "2026-11-16T16:13:46.910Z",
-      "task": "shorts",
-      "matchId": "wales-vs-portugal-2026-11-17",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 3: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: falta Gales; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7267,
-            "outputTokens": 2441
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10091
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6993,
-            "outputTokens": 32935
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 319405
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 600001
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Gales; guion 2: el gancho no lleva cifras; guion 3: el gancho no lleva cifras; guion 3: 4 cifras, máximo 3; guion 4: el gancho no lleva cifras; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: el gancho no lleva cifras",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7381,
-            "outputTokens": 2506
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 13335
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 2: el cero no se escribe en dígitos; guion 3: 5 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 9: gancho repetido; guion 9: 5 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 6846,
-            "outputTokens": 8049
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 94623
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 1: vocabulario prohibido: apuestas?; guion 2: proyección fuera de rango; guion 2: el gancho no lleva cifras; guion 2: el cero no se escribe en dígitos; guion 2: 6 cifras, máximo 3; guion 3: 6 cifras, máximo 3; guion 4: proyección fuera de rango",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7267,
-            "outputTokens": 2990
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8664
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 309096
-      },
-      "usage": {
-        "inputTokens": 6993,
-        "outputTokens": 32995
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "5fe5d1cf-4afb-45fa-ba87-0b3c40904abd"
-    },
-    {
-      "at": "2026-11-16T16:13:54.385Z",
-      "task": "image-prompts",
-      "matchId": "barcelona-vs-villarreal-2026-11-22",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2822,
-        "outputTokens": 2027
-      }
-    },
-    {
-      "at": "2026-11-16T22:07:10.650Z",
-      "matchId": "bz-212736",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "OPENCODE_GO_FALLBACK",
-        "model": "glm-5.3-flash"
-      },
-      "usage": {
-        "inputTokens": 1099,
-        "outputTokens": 13197
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "3144195b-274c-457a-a6e9-f87d23806692"
-    },
-    {
-      "at": "2026-11-16T22:07:21.352Z",
-      "matchId": "bz-212735",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1254,
-        "outputTokens": 1037
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "d33e4cc6-3e9e-4b55-9d44-2d137b95cd5e"
-    },
-    {
-      "at": "2026-11-16T22:07:29.379Z",
-      "matchId": "bz-212734",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1110,
-        "outputTokens": 837
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "64901309-6d7f-4517-b7c8-835bbee3e16a"
-    },
-    {
-      "at": "2026-11-16T22:11:57.697Z",
-      "task": "shorts",
-      "matchId": "barcelona-vs-villarreal-2026-11-22",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: cifra 67 no está en los hechos; guion 7: 5 cifras, máximo 3; guion 7: porcentajes bloqueados: evaluation.published es false; guion 8: falta FC Barcelona",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7737,
-            "outputTokens": 3427
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 10015
-        }
-      ],
-      "ok": {
-        "provider": "OPENCODE_GO",
-        "model": "deepseek-v4.1-flash",
-        "latencyMs": 204517
-      },
-      "usage": {
-        "inputTokens": 7333,
-        "outputTokens": 21755
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": "c3122f9f-5e6a-40be-8f14-1b90d39fd5f8"
-    },
-    {
-      "at": "2026-11-16T22:24:45.534Z",
-      "task": "shorts",
-      "matchId": "poland-vs-sweden-2026-11-17",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 4: proyección fuera de rango; guion 4: 7 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: cifra 2026 no está en los hechos; guion 7: cifra 40 no está en los hechos; guion 7: 5 cifras, máximo 3; guion 7: porcentajes bloqueados: evaluation.published es false",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7629,
-            "outputTokens": 2947
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 9179
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "validation",
-          "reason": "guion 6: cifra 2022 no está en los hechos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7304,
-            "outputTokens": 22996
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 196736
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "validation",
-          "reason": "guion 3: 5 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 9: 5 cifras, máximo 3; guion 10: cifra 11.7 no está en los hechos; guion 10: cifra 11.6 no está en los hechos; guion 10: 5 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7159,
-            "outputTokens": 35184
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 347318
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 1: 54 palabras, mínimo 55; guion 2: 4 cifras, máximo 3; guion 2: 51 palabras, mínimo 55; guion 3: 4 cifras, máximo 3; guion 3: 53 palabras, mínimo 55; guion 4: falta Suecia; guion 4: 53 palabras, mínimo 55; guion 5: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7769,
-            "outputTokens": 2406
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 14849
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 2: 5 cifras, máximo 3; guion 3: 7 cifras, máximo 3; guion 4: 4 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: cifra 11.7 no está en los hechos; guion 10: cifra 11.6 no está en los hechos; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7152,
-            "outputTokens": 9018
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 199750
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7152,
-        "outputTokens": 9018
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-11-16T22:24:52.325Z",
       "task": "image-prompts",
@@ -8004,6 +7519,287 @@
         "inputTokens": 2042,
         "outputTokens": 1794
       }
+    },
+    {
+      "at": "2026-11-24T17:27:07.116Z",
+      "matchId": "fd-575396",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1633,
+        "outputTokens": 1888
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "2708b33b-8be8-4b36-8813-d1118e67510c"
+    },
+    {
+      "at": "2026-11-24T17:27:07.116Z",
+      "matchId": "fd-575395",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "2708b33b-8be8-4b36-8813-d1118e67510c"
+    },
+    {
+      "at": "2026-11-24T17:27:25.008Z",
+      "matchId": "fd-575402",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1516,
+        "outputTokens": 1591
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "b98dadd1-9318-483a-9653-c8843797ad25"
+    },
+    {
+      "at": "2026-11-24T17:27:25.008Z",
+      "matchId": "fd-575398",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "b98dadd1-9318-483a-9653-c8843797ad25"
+    },
+    {
+      "at": "2026-11-24T17:27:47.886Z",
+      "matchId": "fd-575400",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1015,
+        "outputTokens": 658
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "66dd1f3b-5c93-4ae8-86a7-b476e27d8ad3"
+    },
+    {
+      "at": "2026-11-24T17:27:55.848Z",
+      "matchId": "fd-575400",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1520,
+        "outputTokens": 1815
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "3bb66677-01b4-4e99-94c6-a1e59a7b47c3"
+    },
+    {
+      "at": "2026-11-24T17:27:55.848Z",
+      "matchId": "fd-575401",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "3bb66677-01b4-4e99-94c6-a1e59a7b47c3"
+    },
+    {
+      "at": "2026-11-24T17:30:15.991Z",
+      "matchId": "fd-575397",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1091,
+            "outputTokens": 1115
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4497
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1057,
+            "outputTokens": 682
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5505
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1007,
+            "outputTokens": 4146
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 112484
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1007,
+        "outputTokens": 4146
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-24T17:30:23.343Z",
+      "matchId": "fd-575397",
+      "attempts": 1,
+      "failures": [],
+      "ok": null,
+      "usage": {
+        "inputTokens": 1590,
+        "outputTokens": 1326
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "49c6bd71-b8e6-4bd6-bf2d-65e8c91b3b63"
+    },
+    {
+      "at": "2026-11-24T17:30:23.343Z",
+      "matchId": "fd-575403",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "49c6bd71-b8e6-4bd6-bf2d-65e8c91b3b63"
+    },
+    {
+      "at": "2026-11-24T17:30:59.646Z",
+      "matchId": "fd-575399",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1146,
+        "outputTokens": 733
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "a06313f0-52a3-452d-87b7-6d13363da266"
+    },
+    {
+      "at": "2026-11-24T17:31:10.740Z",
+      "matchId": "fd-575404",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1190,
+        "outputTokens": 978
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b96ac399-397f-46ec-a953-6396710a2d26"
+    },
+    {
+      "at": "2026-11-24T17:31:17.947Z",
+      "matchId": "fd-575399",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "codestral-2508"
+      },
+      "usage": {
+        "inputTokens": 1680,
+        "outputTokens": 1627
+      },
+      "charged": true,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "941f3728-4ba1-490d-8b86-7c7042c0ae47"
+    },
+    {
+      "at": "2026-11-24T17:31:17.947Z",
+      "matchId": "fd-575404",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "MISTRAL",
+        "model": "codestral-2508"
+      },
+      "usage": null,
+      "charged": false,
+      "truncated": false,
+      "maxTokens": 40000,
+      "batchSize": 2,
+      "callId": "941f3728-4ba1-490d-8b86-7c7042c0ae47"
     }
   ]
 }

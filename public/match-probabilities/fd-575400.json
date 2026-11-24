@@ -4,7 +4,7 @@
   "away": "FC Porto",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.955
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.528,
-      "away": 1.783
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
@@ -26,7 +23,7 @@
       "FC Porto": null
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": null
@@ -37,11 +34,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": null
   },
@@ -105,179 +102,76 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.31,
-    "noGoal": 0.036,
+    "lambdaTotal": 3.44,
+    "noGoal": 0.032,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.424
+        "p": 0.436
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.244
+        "p": 0.246
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.141
+        "p": 0.139
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.081
+        "p": 0.078
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.047
+        "p": 0.044
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.027
+        "p": 0.025
       }
     ],
-    "firstHome": 0.445,
-    "firstAway": 0.519
+    "firstHome": 0.418,
+    "firstAway": 0.55
   },
   "scorers": {
     "home": null,
     "away": null
   },
   "hasScorers": false,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.326,
-      "draw": 0.26,
-      "away": 0.414,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.57,
-      "away": 1.61
-    },
-    "over15": 0.802,
-    "over25": 0.5920000000000001,
-    "over35": 0.382,
-    "btts": 0.62,
-    "score": "1-1",
-    "cornersOver95": 0.431,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.414,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.4142,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:22.849Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.363,
-      "draw": 0.256,
-      "away": 0.381
-    },
-    "doubleChance": {
-      "12": 0.744,
-      "1X": 0.619,
-      "X2": 0.637
-    },
-    "dnb": {
-      "home": 0.488,
-      "away": 0.512
-    },
-    "totals": {
-      "over15": 0.837,
-      "under15": 0.163,
-      "over25": 0.616,
-      "under25": 0.384,
-      "over35": 0.393,
-      "under35": 0.607
-    },
-    "btts": {
-      "yes": 0.644,
-      "no": 0.356
-    },
-    "cleanSheet": {
-      "home": 0.2,
-      "away": 0.208
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.106,
-        "share": 0.2676767676767677
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.085,
-        "share": 0.21464646464646464
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.083,
-        "share": 0.20959595959595959
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.066,
-        "share": 0.16666666666666666
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.056,
-        "share": 0.1414141414141414
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 2,
-    "homeWins": 1,
-    "draws": 0,
-    "awayWins": 1,
-    "avgTotalGoals": 3.5,
-    "recent": [
-      {
-        "eventId": 289358,
-        "date": "2019-12-12T20:00:00+00:00",
-        "home": "FC Porto",
-        "away": "Feyenoord",
-        "homeTeamId": 35,
-        "awayTeamId": 138,
-        "homeScore": 3,
-        "awayScore": 2
-      },
-      {
-        "eventId": 289252,
-        "date": "2019-10-03T16:55:00+00:00",
-        "home": "Feyenoord",
-        "away": "FC Porto",
-        "homeTeamId": 138,
-        "awayTeamId": 35,
-        "homeScore": 2,
-        "awayScore": 0
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -293,7 +187,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 3.6
@@ -304,7 +198,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 8.6
@@ -314,7 +208,7 @@
     "home": {
       "shots": 13.79,
       "shotsOnTarget": 4.99,
-      "xg": 1.57,
+      "xg": 1.45,
       "corners": 4.22,
       "fouls": 10.62,
       "yellowCards": 1.77,
@@ -325,7 +219,7 @@
     "away": {
       "shots": 15.01,
       "shotsOnTarget": 5.81,
-      "xg": 1.61,
+      "xg": 1.67,
       "corners": 4.36,
       "fouls": 11.41,
       "yellowCards": 1.84,
@@ -416,9 +310,9 @@
       "away": 0.405
     },
     "lastGoal": {
-      "home": 0.445,
-      "away": 0.519,
-      "noGoal": 0.036
+      "home": 0.418,
+      "away": 0.55,
+      "noGoal": 0.032
     },
     "cornerRace": {
       "3": {
@@ -512,10 +406,10 @@
     }
   },
   "llmReview": {
-    "flag": true,
-    "note": "El valor de probabilidad local en el modelo Poisson GoatLab (P) aparece como 1.485, lo cual supera el 100% y es matemáticamente inviable para una probabilidad simple. Esto sugiere un error de formato en el input (posiblemente decimales invertidos o escalado incorrecto) donde debería ser 0.485 o simi",
+    "flag": false,
+    "note": "Los datos proporcionados son consistentes con la información telegráfico de entrada. No se detectan desviaciones claras en los porcentajes presentados por el modelo GoatLab.",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-23T17:55:04.139Z"
+    "generatedAt": "2026-11-24T17:27:47.886Z"
   }
 }

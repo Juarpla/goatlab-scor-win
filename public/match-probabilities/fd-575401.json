@@ -4,7 +4,7 @@
   "away": "Real Betis Balompié",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 2.492
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.388,
-      "away": 1.921
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 6
@@ -44,7 +41,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": null
@@ -55,11 +52,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": null
   },
@@ -123,158 +120,76 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.31,
-    "noGoal": 0.037,
+    "lambdaTotal": 2.99,
+    "noGoal": 0.05,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.424
+        "p": 0.392
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.244
+        "p": 0.238
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.141
+        "p": 0.145
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.081
+        "p": 0.088
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.047
+        "p": 0.054
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.027
+        "p": 0.033
       }
     ],
-    "firstHome": 0.404,
-    "firstAway": 0.559
+    "firstHome": 0.157,
+    "firstAway": 0.792
   },
   "scorers": {
     "home": null,
     "away": null
   },
   "hasScorers": false,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.094,
-      "draw": 0.14800000000000002,
-      "away": 0.758,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 2.28,
-      "away": 1.35
-    },
-    "over15": 0.863,
-    "over25": 0.6970000000000001,
-    "over35": 0.491,
-    "btts": 0.551,
-    "score": "2-1",
-    "cornersOver95": 0.488,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.758,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.758,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:22.792Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.575,
-      "draw": 0.214,
-      "away": 0.211
-    },
-    "doubleChance": {
-      "12": 0.786,
-      "1X": 0.789,
-      "X2": 0.425
-    },
-    "dnb": {
-      "home": 0.731,
-      "away": 0.269
-    },
-    "totals": {
-      "over15": 0.885,
-      "under15": 0.115,
-      "over25": 0.702,
-      "under25": 0.298,
-      "over35": 0.491,
-      "under35": 0.509
-    },
-    "btts": {
-      "yes": 0.673,
-      "no": 0.327
-    },
-    "cleanSheet": {
-      "home": 0.259,
-      "away": 0.102
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.112,
-        "share": 0.2765432098765432
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.09,
-        "share": 0.2222222222222222
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.071,
-        "share": 0.17530864197530863
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.069,
-        "share": 0.17037037037037037
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.063,
-        "share": 0.15555555555555556
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -290,7 +205,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 3.8
@@ -301,7 +216,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 10.1
@@ -311,7 +226,7 @@
     "home": {
       "shots": 14.55,
       "shotsOnTarget": 5.07,
-      "xg": 2.28,
+      "xg": 1.66,
       "corners": 4.65,
       "fouls": 11.77,
       "yellowCards": 2.01,
@@ -322,7 +237,7 @@
     "away": {
       "shots": 16.55,
       "shotsOnTarget": 6.06,
-      "xg": 1.35,
+      "xg": 1.92,
       "corners": 5.44,
       "fouls": 11.45,
       "yellowCards": 1.82,
@@ -413,9 +328,9 @@
       "away": 0.357
     },
     "lastGoal": {
-      "home": 0.404,
-      "away": 0.559,
-      "noGoal": 0.037
+      "home": 0.157,
+      "away": 0.792,
+      "noGoal": 0.05
     },
     "cornerRace": {
       "3": {
@@ -516,10 +431,10 @@
     }
   },
   "llmReview": {
-    "flag": false,
-    "note": null,
+    "flag": true,
+    "note": "La tabla de clasificación (T) indica que Real Betis está en 11ª posición con 9 puntos, lo cual parece contradictorio si el equipo ha ganado 3 de sus últimos 5 partidos en Champions. El porcentaje de victoria de Betis (0.804) es muy alto, lo que se alinea con el historial reciente de Slovan (18 goles",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-23T17:55:09.081Z"
+    "generatedAt": "2026-11-24T17:27:45.208Z"
   }
 }

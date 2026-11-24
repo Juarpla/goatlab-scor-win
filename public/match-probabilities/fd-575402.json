@@ -4,7 +4,7 @@
   "away": "Racing Club de Lens",
   "competition": "champions",
   "kickoff": "2026-11-24T20:00:00Z",
-  "updatedAt": "2026-11-24T09:54:26.854Z",
+  "updatedAt": "2026-11-24T17:26:41.599Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.725
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.558,
-      "away": 1.613
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
@@ -26,7 +23,7 @@
       "Racing Club de Lens": null
     },
     "scorers": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": null
@@ -37,11 +34,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-23T17:52:26.193Z",
+      "updatedAt": "2026-11-24T17:25:34.421Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 462
+      "rows": 464
     },
     "venue": null
   },
@@ -105,158 +102,76 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 4.17,
-    "noGoal": 0.015,
+    "lambdaTotal": 4.56,
+    "noGoal": 0.01,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.501
+        "p": 0.532
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.25
+        "p": 0.249
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.125
+        "p": 0.116
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.062
+        "p": 0.054
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.031
+        "p": 0.025
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.015
+        "p": 0.012
       }
     ],
-    "firstHome": 0.604,
-    "firstAway": 0.381
+    "firstHome": 0.615,
+    "firstAway": 0.374
   },
   "scorers": {
     "home": null,
     "away": null
   },
   "hasScorers": false,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.684,
-      "draw": 0.172,
-      "away": 0.14400000000000002,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.28,
-      "away": 1.5
-    },
-    "over15": 0.877,
-    "over25": 0.72,
-    "over35": 0.525,
-    "btts": 0.633,
-    "score": "2-1",
-    "cornersOver95": 0.545,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.684,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.6843,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-24T09:54:23.482Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.544,
-      "draw": 0.215,
-      "away": 0.241
-    },
-    "doubleChance": {
-      "12": 0.785,
-      "1X": 0.759,
-      "X2": 0.456
-    },
-    "dnb": {
-      "home": 0.693,
-      "away": 0.307
-    },
-    "totals": {
-      "over15": 0.899,
-      "under15": 0.101,
-      "over25": 0.728,
-      "under25": 0.272,
-      "over35": 0.522,
-      "under35": 0.478
-    },
-    "btts": {
-      "yes": 0.705,
-      "no": 0.295
-    },
-    "cleanSheet": {
-      "home": 0.223,
-      "away": 0.102
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.107,
-        "share": 0.27648578811369506
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.086,
-        "share": 0.2222222222222222
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.068,
-        "share": 0.1757105943152455
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.067,
-        "share": 0.1731266149870801
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.059,
-        "share": 0.15245478036175708
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -272,7 +187,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 3.3
@@ -283,7 +198,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 462
+      "historyRows": 464
     },
     "source": "GoatLab",
     "expectedTotal": 9.6
@@ -293,7 +208,7 @@
     "home": {
       "shots": 15,
       "shotsOnTarget": 6.12,
-      "xg": 2.28,
+      "xg": 1.96,
       "corners": 4.91,
       "fouls": 11.61,
       "yellowCards": 1.61,
@@ -304,7 +219,7 @@
     "away": {
       "shots": 13.63,
       "shotsOnTarget": 5.61,
-      "xg": 1.5,
+      "xg": 1.68,
       "corners": 4.72,
       "fouls": 11.62,
       "yellowCards": 1.73,
@@ -395,9 +310,9 @@
       "away": 0.411
     },
     "lastGoal": {
-      "home": 0.604,
-      "away": 0.381,
-      "noGoal": 0.015
+      "home": 0.615,
+      "away": 0.374,
+      "noGoal": 0.01
     },
     "cornerRace": {
       "3": {
@@ -492,9 +407,9 @@
   },
   "llmReview": {
     "flag": false,
-    "note": null,
+    "note": "Los porcentajes proporcionados en el modelo Poisson son coherentes con la media de goles estimada de 0.833, que sugiere un partido de baja ofensiva.",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-24T10:06:30.456Z"
+    "generatedAt": "2026-11-24T17:27:24.993Z"
   }
 }
