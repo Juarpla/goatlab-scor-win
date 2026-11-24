@@ -248,6 +248,12 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     const videoConcurrency = input.videoConcurrency ?? 1;
     if (!Number.isInteger(videoConcurrency) || videoConcurrency < 1 || videoConcurrency > 4) throw new Error('concurrencia de vídeo inválida');
     const guard = input.guard;
+    // Evergreen articles share quota/admission, without pretending to be fixtures.
+    const editorialGuard = object(guard) && guard.editorial === true && input.kind === 'image'
+      && typeof guard.slug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(guard.slug)
+      && input.matchId.startsWith(`editorial-${guard.slug}-`) && digest(guard.contextHash)
+      && finite(guard.observedAtMs) && nowMs - guard.observedAtMs <= 60_000
+      && guard.observedAtMs - nowMs <= 5000 && input.expiresAtMs <= nowMs + 7 * 86_400_000;
     const deny = reason => resultFor(row, reason);
     if (previousAttempt) result = deny('intento ya reservado; permiso no renovable');
     else if (state.matches[input.matchId]?.closed) result = deny('partido cerrado por poda');
@@ -256,7 +262,7 @@ export function reduceAgnesState(original, operation, input = {}, {nowMs} = {}) 
     else if (row && row.state !== 'rejected') result = deny(row.state === 'uncertain' ? 'resultado incierto; no se repite' : 'slot ya utilizado');
     else if (!row && state.cutover.legacyMatchIds.includes(input.matchId)) result = deny('legacy_unknown; solo reutilización');
     else if (nowMs >= input.expiresAtMs || (state.matches[input.matchId]?.expiresAtMs && nowMs>=state.matches[input.matchId].expiresAtMs)) result = deny('encuentro caducado');
-    else if (!object(guard) || typeof guard.manual!=='boolean' || !finite(guard.kickoffMs) || input.expiresAtMs > guard.kickoffMs+86_400_000 || (!guard.manual && (!finite(guard.observedAtMs) || nowMs-guard.observedAtMs > 60_000 || guard.observedAtMs-nowMs > 5000 || guard.kickoffMs <= nowMs || !digest(guard.contextHash)))) result = deny('fixture vigente no verificado');
+    else if (!editorialGuard && (!object(guard) || guard.editorial === true || typeof guard.manual!=='boolean' || !finite(guard.kickoffMs) || input.expiresAtMs > guard.kickoffMs+86_400_000 || (!guard.manual && (!finite(guard.observedAtMs) || nowMs-guard.observedAtMs > 60_000 || guard.observedAtMs-nowMs > 5000 || guard.kickoffMs <= nowMs || !digest(guard.contextHash))))) result = deny('fixture vigente no verificado');
     else if (input.kind === 'video' && Object.values(state.slots).filter(s=>s.kind==='video' && ['pending','uncertain'].includes(s.state) && s.expiresAtMs>nowMs).length >= videoConcurrency) result = deny(`otra tarea pendiente o incierta; límite de ${videoConcurrency} ${videoConcurrency===1?'tarea':'tareas'} de vídeo simultáneas`);
     else if (input.kind === 'image' && Object.values(state.slots).some(s=>s.kind==='image' && s.state==='uncertain' && s.expiresAtMs>nowMs)) result = deny('otra imagen de resultado incierto; generación simultánea cerrada');
     else if (input.kind === 'video' && Object.values(state.slots).filter(s => s.matchId===input.matchId && s.kind==='video' && ['pending','uncertain','completed'].includes(s.state)).length >= mediaPolicy(input.matchId).clips) result = deny('máximo '+mediaPolicy(input.matchId).clips+' clips por partido');

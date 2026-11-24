@@ -8,6 +8,20 @@ const now=Date.parse('2026-10-09T06:00:00Z');
 const fresh=()=>createAgnesState({nowMs:now-86_400_000});
 const reserve=(extra={})=>({attemptId:randomUUID(),matchId:'alpha-beta',kind:'image',ordinal:0,promptHash:hash('prompt'),model:'agnes-image-2.5-flash',expiresAtMs:now+86_400_000,guard:{manual:true,kickoffMs:now},...extra});
 const env={R2_STATE_ACCOUNT_ID:'account',R2_STATE_ACCESS_KEY_ID:'test-key',R2_STATE_SECRET_ACCESS_KEY:'test-secret'};
+test('evergreen illustrations share quota without bypassing fixture or video guards', () => {
+  const input = reserve({ matchId: 'editorial-traspasos-abc123',
+    guard: { editorial: true, slug: 'traspasos', contextHash: hash('article'), observedAtMs: now } });
+  const admitted = reduceAgnesState(fresh(), 'reserve', input, { nowMs: now });
+  assert.equal(admitted.result.canPost, true);
+  assert.equal(admitted.state.quota['2026-10-09'].images, 1);
+  for (const invalid of [
+    { ...input, kind: 'video', model: 'agnes-video-2.5-flash' },
+    { ...input, matchId: 'arsenal-vs-dortmund' },
+    { ...input, expiresAtMs: now + 8 * 86400000 },
+    { ...input, guard: { ...input.guard, observedAtMs: now - 61000 } },
+    { ...input, guard: { ...input.guard, slug: 'otro-articulo' } },
+  ]) assert.equal(reduceAgnesState(fresh(), 'reserve', invalid, { nowMs: now }).result.canPost, false);
+});
 test('attempt diagnostics survive restart, stay bounded and never alter admission or quota',async()=>{
   const remote=backend();let client=new AgnesStateClient({env,fetchImpl:remote.fetch.bind(remote)});
   const input=reserve({kind:'video',model:'agnes-video-2.5-flash'});

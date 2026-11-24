@@ -1,0 +1,9 @@
+---
+import { editorialImage } from '../lib/editorial-media.js';
+const { image, cover = false } = Astro.props;
+const media = editorialImage(image);
+---
+{media && <figure class:list={['editorial-image', { 'editorial-image-cover': cover }]}>
+  <img src={media.url} alt={media.alt} width={media.width} height={media.height} loading="lazy" decoding="async"/>
+  <figcaption>Ilustración editorial generada con Agnes AI. {media.caption}</figcaption>
+</figure>}

@@ -6,7 +6,7 @@ on:
     inputs:
       operation:
         type: choice
-        options: [preview, publish, refresh-preview, refresh]
+        options: [preview, publish, refresh-preview, refresh, images]
         default: preview
 permissions:
   contents: read
@@ -15,6 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   editorial:
+    if: inputs.operation != 'images'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -47,4 +48,49 @@ jobs:
         with:
           name: goatlab-editorial-brief
           path: editorial-brief/
+          retention-days: 45
+  images:
+    needs: editorial
+    if: always() && (github.event_name == 'schedule' || inputs.operation == 'publish' || inputs.operation == 'refresh' || inputs.operation == 'images')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      GOATLAB_D1_API_TOKEN: ${{ secrets.GOATLAB_D1_API_TOKEN }}
+      AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
+      AGNES_IMAGE_MODEL: agnes-image-2.5-flash
+      AGNES_IMAGE_RPM: '12'
+      R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: goatlab
+      R2_PUBLIC_BASE: https://pub-7a18e0f62bb14c3a987f20633a81b283.r2.dev
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/editorial-media
+          key: editorial-media-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: editorial-media-
+      - name: Install image tools
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Complete missing editorial illustrations with Agnes
+        run: node actions/5-editorial/media.mjs
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .cache/editorial-media
+          key: editorial-media-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: goatlab-editorial-media-report
+          path: .cache/editorial-media/report.json
+          include-hidden-files: true
           retention-days: 45

@@ -12,3 +12,6 @@ Write a Spanish article about the question supplied for the selected football fi
 New article fields (also include title in discover mode): description (50–175 characters), lead (array of paragraphs), sections (array of objects with heading and paragraphs), evidence (array of objects with source, passage and claim), nextQuestion. Source numbers start at 1.
 
 Update fields: sections, evidence, nextQuestion. Leave sections empty if there is no substantive change. A refresh must have at least two paragraphs and be supported by two documents.
+# Editorial illustrations
+
+The publication workflow adds an original Agnes cover and a complementary inline illustration after the text passes validation. Do not insert external image URLs or fabricate documentary images. Preserve the data-driven SVGs, tables, source links and substantive prose; illustrations complement these elements. Existing media remains attached during text refreshes. Images are explicitly identified as AI-generated illustrations in the public template.

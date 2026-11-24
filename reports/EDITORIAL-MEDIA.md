@@ -1,0 +1,11 @@
+# Editorial illustrations and team crests
+
+`5-editorial-research` completes missing covers and inline illustrations after scheduled publication/refresh runs (Monday and Thursday at 08:37 Lima), including when text research produces no material update. The manual `images` operation backfills the active catalog without changing article text. Preview operations never generate or publish images.
+
+Each active article receives two original Agnes illustrations, rendered alongside existing SVG diagrams, source links and advertising previews. Home, listing and related cards reuse the persisted cover. Public captions identify generated illustrations; prompts exclude invented charts, documentary events, lettering and logos.
+
+The media job uses the existing Agnes image pool, private R2 CAS admission, shared quota, throttling and ambiguous-request protection. Editorial admission has a separate namespace and fresh active-article evidence; it cannot admit video tasks or bypass fixture guards. Generation is serialized. The job stores versioned WebP files and recovery manifests under `editoriales/<slug>/` in R2, and metadata in `payload.media.cover` / `payload.media.detail` in D1. Cache restores preserve response evidence for interrupted runs; completed R2 manifests recover a failed D1 write without another generation. A lost response without compatible evidence remains blocked for inspection, rather than risking a duplicate request.
+
+Missing media is completed idempotently. Existing media is retained during research refreshes. A failed image does not erase published text or previous images; the run fails visibly and includes a JSON artifact. This workflow does not delete illustrations or rotate them merely to change modification dates. New art directions require an explicit version change and review.
+
+TeamLogo resolves Bzzoiro crest IDs through the canonical team catalog when a fixture only includes nested FD/AF identifiers. Exact primary club names precede aliases, so a short alias cannot confuse Lille with Lillestrøm or Barcelona with Barcelona SC. Unknown teams retain the monogram fallback, and upstream image failures remain possible. No generated club logos are substituted.

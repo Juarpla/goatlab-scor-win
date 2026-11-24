@@ -1,12 +1,14 @@
 ---
 import Icon from './Icon.astro';
 import { editorialPath } from '../lib/editorial.js';
+import { editorialImage } from '../lib/editorial-media.js';
 const { articles, related = false } = Astro.props;
 ---
 <ul class:list={['editorial-grid', { 'editorial-grid-related': related }]} role="list">
   {articles.map(article => <li>
     <article class="editorial-card">
       <a href={editorialPath(article.slug)}>
+        {editorialImage(article.cover) && <img class="editorial-card-image" src={article.cover.url} alt={article.cover.alt} width={article.cover.width} height={article.cover.height} loading="lazy" decoding="async"/>}
         <span class="editorial-category">{article.category}</span>
         <h3>{article.title}</h3>
         <p>{article.description}</p>

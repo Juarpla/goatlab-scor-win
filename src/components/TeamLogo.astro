@@ -1,12 +1,15 @@
 ---
 import { teamShort } from '../lib/teams.js';
+import { teamCrestId } from '../lib/team-crest.js';
+import catalog from '../../public/data/teams.json';
 const { name, teamId = null, size = 30 } = Astro.props;
 const initials = teamShort(name);
+const crestId = teamCrestId(catalog, name, teamId);
 // Crest by hotlink to Bzzoiro's Image API (identification use; it may be withdrawn
 // at the club's request). If the file does not exist (204) or fails, the monogram remains.
 ---
 <span class="team-logo" style={`--logo-size:${size}px`}>
-  {teamId != null && <img src={`https://sports.bzzoiro.com/img/team/${teamId}/?bg=transparent`} alt="" width={size} height={size} loading="lazy" decoding="async" onerror="this.remove()" />}
+  {crestId != null && <img src={`https://sports.bzzoiro.com/img/team/${crestId}/?bg=transparent`} alt="" width={size} height={size} loading="lazy" decoding="async" onerror="this.remove()" />}
   <span class="team-logo-fallback" aria-hidden="true">{initials}</span>
 </span>
 <style>

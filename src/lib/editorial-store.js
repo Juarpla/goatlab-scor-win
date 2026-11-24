@@ -1,11 +1,12 @@
 import { EDITORIAL_PAGE_SIZE, isEditorialSlug } from './editorial.js';
 
 const columns = `slug, position, json_extract(payload, '$.title') AS title,
-  json_extract(payload, '$.description') AS description, json_extract(payload, '$.category') AS category`;
+  json_extract(payload, '$.description') AS description, json_extract(payload, '$.category') AS category,
+  json_extract(payload, '$.media.cover') AS cover`;
 
 export async function listEditorials(db) {
   const { results } = await db.prepare(`SELECT ${columns}, updated_at FROM editorials WHERE retired_at IS NULL ORDER BY position, slug`).all();
-  return results.filter(row => isEditorialSlug(row.slug));
+  return results.filter(row => isEditorialSlug(row.slug)).map(row => ({ ...row, cover: typeof row.cover === 'string' ? JSON.parse(row.cover) : row.cover }));
 }
 
 export async function getEditorial(db, slug) {

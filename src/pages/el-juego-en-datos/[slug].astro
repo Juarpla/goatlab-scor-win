@@ -3,6 +3,7 @@ import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import EditorialFigure from '../../components/EditorialFigure.astro';
+import EditorialImage from '../../components/EditorialImage.astro';
 import EditorialDiagram from '../../components/EditorialDiagram.astro';
 import EditorialCards from '../../components/EditorialCards.astro';
 import EditorialSources from '../../components/EditorialSources.astro';
@@ -44,6 +45,7 @@ const dateFormat = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZon
           {article.revised_at && <span>Actualizado el <time datetime={article.revised_at}>{dateFormat.format(new Date(article.revised_at))}</time></span>}
         </div>
       </header>
+      <EditorialImage image={article.media?.cover} cover/>
       <div class="editorial-prose">
         {article.figure ? <>
           <Fragment set:html={article.leadHtml}/>
@@ -54,6 +56,7 @@ const dateFormat = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZon
         </>}
         <Fragment set:html={article.bodyHtml.slice(0, split)}/>
         <AdSlot variant="horizontal" slotKey="editorialArticle" preview/>
+        <EditorialImage image={article.media?.detail}/>
         <Fragment set:html={article.bodyHtml.slice(split)}/>
         {article.updateHtml && <Fragment set:html={article.updateHtml}/>}
         {article.visual && article.figure && <div class="editorial-extra"><EditorialDiagram visual={article.visual}/><Fragment set:html={article.extraHtml}/></div>}
