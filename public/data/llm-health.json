@@ -1,76 +1,6 @@
 {
-  "updatedAt": "2026-11-24T10:06:38.756Z",
+  "updatedAt": "2026-11-24T10:16:41.720Z",
   "runs": [
-    {
-      "at": "2026-11-16T15:30:54.761Z",
-      "matchId": "bz-212725",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1568,
-        "outputTokens": 1883
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "74b0ede8-b0bf-496b-a94d-8de5ae028bc4"
-    },
-    {
-      "at": "2026-11-16T15:30:54.761Z",
-      "matchId": "bz-212724",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "74b0ede8-b0bf-496b-a94d-8de5ae028bc4"
-    },
-    {
-      "at": "2026-11-16T15:31:12.657Z",
-      "matchId": "bz-212723",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1551,
-        "outputTokens": 1561
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0e97f9e8-0256-4aea-8365-91df3245bcce"
-    },
-    {
-      "at": "2026-11-16T15:31:12.657Z",
-      "matchId": "bz-212728",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0e97f9e8-0256-4aea-8365-91df3245bcce"
-    },
     {
       "at": "2026-11-16T15:31:36.031Z",
       "matchId": "bz-212727",
@@ -7888,6 +7818,192 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "1606af37-b29b-49b2-a3fa-b49fd71daf67"
+    },
+    {
+      "at": "2026-11-24T10:07:47.064Z",
+      "task": "shorts",
+      "matchId": "paris-saint-germain-vs-as-roma-2026-11-25",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 51 palabras, mínimo 55; guion 2: falta AS Roma; guion 2: 47 palabras, mínimo 55; guion 3: falta Paris Saint-Germain FC; guion 3: falta AS Roma; guion 3: 54 palabras, mínimo 55; guion 4: artículo delante de Paris Saint-Germain FC; guion 4: falta AS Roma",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7416,
+            "outputTokens": 2628
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7148
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 7442
+      },
+      "usage": {
+        "inputTokens": 9488,
+        "outputTokens": 2813
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "287eb3c1-5b99-4885-85ad-e81895577ee5"
+    },
+    {
+      "at": "2026-11-24T10:16:27.590Z",
+      "task": "shorts",
+      "matchId": "atletico-madrid-vs-viking-fk-2026-11-25",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 4: falta Club Atlético de Madrid; guion 8: falta Club Atlético de Madrid; guion 10: 4 cifras, máximo 3; descripción: 46 palabras superan el techo de 45",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7125,
+            "outputTokens": 1781
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6401
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9303,
+            "outputTokens": 930
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 2469
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 10: falta Viking FK",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9245,
+            "outputTokens": 557
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 2282
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: Zlatko Tripić va en un guion de jugadores; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 6: falta Club Atlético de Madrid; guion 6: falta Viking FK; guion 8: falta Club Atlético de Madrid; guion 8: 52 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7237,
+            "outputTokens": 2375
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 28836
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 5 cifras, máximo 3; guion 9: 7 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9905,
+            "outputTokens": 1745
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 15753
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 3: 5 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 9: 6 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9929,
+            "outputTokens": 1200
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 14325
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "validation",
+          "reason": "guion 3: 6 cifras, máximo 3; guion 5: cifra 5.4 no está en los hechos; guion 5: cifra 4.9 no está en los hechos; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: gancho repetido; guion 8: gancho repetido; guion 9: gancho repetido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 6727,
+            "outputTokens": 8091
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 206285
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235847
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1484
+      },
+      "usage": {
+        "inputTokens": 9063,
+        "outputTokens": 353
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "ddf5af32-516c-4dab-bc59-e5dbbf829181"
+    },
+    {
+      "at": "2026-11-24T10:16:35.149Z",
+      "task": "image-prompts",
+      "matchId": "paris-saint-germain-vs-as-roma-2026-11-25",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2590,
+        "outputTokens": 1911
+      }
+    },
+    {
+      "at": "2026-11-24T10:16:41.720Z",
+      "task": "image-prompts",
+      "matchId": "atletico-madrid-vs-viking-fk-2026-11-25",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2042,
+        "outputTokens": 1794
+      }
     }
   ]
 }
