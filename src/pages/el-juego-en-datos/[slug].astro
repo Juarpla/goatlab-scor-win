@@ -8,7 +8,7 @@ import EditorialCards from '../../components/EditorialCards.astro';
 import EditorialSources from '../../components/EditorialSources.astro';
 import MatchNotice from '../../components/MatchNotice.astro';
 import { getEditorial, listEditorials } from '../../lib/editorial-store.js';
-import { EDITORIAL_ROOT, relatedEditorials } from '../../lib/editorial.js';
+import { relatedEditorials } from '../../lib/editorial.js';
 import '../../styles/editorial.css';
 
 export const prerender = false;
@@ -35,7 +35,6 @@ const dateFormat = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZon
 {unavailable ? <MatchNotice title={failed ? 'El artículo no está disponible' : article?.retired_at ? 'Este artículo se retiró' : 'Artículo no encontrado'} message="Puedes volver al listado de Datos jugados desde el menú."/> :
 <Layout title={`${article.title} — GoatLab`} description={article.description}>
   <main class="wrap editorial-article" id="main">
-    <nav class="editorial-trail" aria-label="Ruta editorial"><a href={EDITORIAL_ROOT}>Datos jugados</a><span>{article.category}</span></nav>
     <article>
       <header class="editorial-intro">
         <h1>{article.title}</h1>
