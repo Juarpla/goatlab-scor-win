@@ -1,0 +1,85 @@
+name: "aa-seo-improvement"
+on:
+  schedule:
+    - cron: '23 9 * * *' # 04:23 Lima, independent of the data pipeline
+  workflow_run:
+    workflows: ["1-update-data", "5-editorial-research"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "Audit only, or synchronize already validated content before auditing"
+        type: choice
+        options: [maintain, audit]
+        default: maintain
+permissions:
+  contents: read
+concurrency:
+  group: goatlab-seo-maintenance
+  cancel-in-progress: false
+jobs:
+  maintain:
+    if: (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && inputs.operation != 'audit'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    # Calendar writes share the lock used by 4-match-calendar; no concurrent D1 writers.
+    concurrency:
+      group: goatlab-d1-calendar
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Publish already validated match readings to the calendar
+        run: node scripts/match-calendar.mjs sync
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GOATLAB_D1_API_TOKEN: ${{ secrets.GOATLAB_D1_API_TOKEN }}
+  audit:
+    needs: maintain
+    if: always() && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/seo-baseline
+          key: seo-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: seo-baseline-
+      - run: pnpm install --frozen-lockfile
+      - name: Test SEO checks and validate the compiled site
+        run: node --test tests/seo-audit.test.js && pnpm run build
+      - name: Audit production HTML, crawlability, sitemaps and advertising exclusions
+        if: always()
+        run: node scripts/seo-maintenance.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: goatlab-seo-report
+          path: .cache/seo/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 60
+      - uses: actions/cache/save@v4
+        if: always() && hashFiles('.cache/seo-baseline/report.json') != ''
+        with:
+          path: .cache/seo-baseline
+          key: seo-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Propagate failed calendar maintenance
+        if: always() && needs.maintain.result == 'failure'
+        run: |
+          echo '::error::Calendar synchronization failed; inspect the maintain job. SEO findings remain in the audit artifact.'
+          exit 1

@@ -48,6 +48,12 @@ AdSense is pending implementation; no ads or trackers are loaded. Placements wil
 
 ## References
 
+Recurring production SEO checks run in `aa-seo-improvement`, daily at 04:23 Lima
+and after data/editorial updates. It synchronizes already validated calendar
+readings and audits HTML, links, sitemaps, crawler access and ad exclusions.
+Run the read-only audit locally with `pnpm check:seo`. See
+[SEO maintenance](reports/SEO-MAINTENANCE.md) for scope, artifacts and limitations.
+
 - [API-Football: plans and seasons](https://www.api-football.com/pricing)
 - [Football-Data.org: limits and delay](https://www.football-data.org/pricing)
 - [Mistral: Chat Completions](https://docs.mistral.ai/api)
