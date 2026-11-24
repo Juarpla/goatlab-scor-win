@@ -1,56 +1,6 @@
 {
-  "updatedAt": "2026-11-24T00:07:45.685Z",
+  "updatedAt": "2026-11-24T10:06:38.756Z",
   "runs": [
-    {
-      "at": "2026-11-16T07:23:33.536Z",
-      "task": "image-prompts",
-      "matchId": "switzerland-vs-scotland-2026-11-16",
-      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "failures": [],
-      "usage": {
-        "inputTokens": 2735,
-        "outputTokens": 2128
-      }
-    },
-    {
-      "at": "2026-11-16T15:30:34.458Z",
-      "matchId": "bz-212722",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1700,
-        "outputTokens": 1848
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "bfdf2895-cc4a-4392-a175-4439a361764c"
-    },
-    {
-      "at": "2026-11-16T15:30:34.458Z",
-      "matchId": "bz-212721",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "bfdf2895-cc4a-4392-a175-4439a361764c"
-    },
     {
       "at": "2026-11-16T15:30:54.761Z",
       "matchId": "bz-212725",
@@ -7773,6 +7723,171 @@
         "inputTokens": 2028,
         "outputTokens": 2421
       }
+    },
+    {
+      "at": "2026-11-24T09:58:38.584Z",
+      "matchId": "fd-575396",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "No se encontró JSON válido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1157,
+            "outputTokens": 770
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3895
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1110,
+            "outputTokens": 1058
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7415
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1157,
+        "outputTokens": 1252
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "6c732e59-f4a6-44fc-b494-e6e84ce329b5"
+    },
+    {
+      "at": "2026-11-24T10:02:33.475Z",
+      "matchId": "fd-575395",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1224,
+            "outputTokens": 1276
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4517
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1181,
+            "outputTokens": 1213
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6391
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180001
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1224,
+        "outputTokens": 1063
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "5aab4967-1af9-49d6-8eca-c1a1c964ccc5"
+    },
+    {
+      "at": "2026-11-24T10:06:30.456Z",
+      "matchId": "fd-575402",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1075,
+            "outputTokens": 803
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8219
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "codestral-2508",
+          "kind": "validation",
+          "reason": "Análisis inválido",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 1044,
+            "outputTokens": 726
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4259
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "The operation was aborted due to timeout",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 180000
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1075,
+        "outputTokens": 593
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "1606af37-b29b-49b2-a3fa-b49fd71daf67"
     }
   ]
 }
