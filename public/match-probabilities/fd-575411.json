@@ -4,7 +4,7 @@
   "away": "Manchester United FC",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T17:03:03.977Z",
+  "updatedAt": "2026-11-25T21:42:31.177Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 1.073
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.805,
+      "away": 1.042
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 4,
       "away": 6
@@ -138,13 +141,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.86,
+    "lambdaTotal": 3.85,
     "noGoal": 0.021,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.475
+        "p": 0.473
       },
       {
         "from": 15,
@@ -172,8 +175,8 @@
         "p": 0.019
       }
     ],
-    "firstHome": 0.707,
-    "firstAway": 0.272
+    "firstHome": 0.714,
+    "firstAway": 0.265
   },
   "scorers": {
     "home": [
@@ -183,8 +186,8 @@
         "matches": 4,
         "share": 0.5,
         "rate": 1.4,
-        "anytime": 0.752,
-        "first": 0.361
+        "anytime": 0.754,
+        "first": 0.364
       },
       {
         "player": "Luis Suárez",
@@ -192,8 +195,8 @@
         "matches": 4,
         "share": 0.5,
         "rate": 1.4,
-        "anytime": 0.752,
-        "first": 0.361
+        "anytime": 0.754,
+        "first": 0.364
       }
     ],
     "away": [
@@ -202,50 +205,153 @@
         "goals": 3,
         "matches": 4,
         "share": 0.6,
-        "rate": 0.64,
-        "anytime": 0.475,
-        "first": 0.167
+        "rate": 0.63,
+        "anytime": 0.465,
+        "first": 0.162
       },
       {
         "player": "Bruno Fernandes",
         "goals": 2,
         "matches": 4,
         "share": 0.4,
-        "rate": 0.43,
-        "anytime": 0.349,
-        "first": 0.111
+        "rate": 0.42,
+        "anytime": 0.341,
+        "first": 0.108
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.382,
+      "draw": 0.256,
+      "away": 0.363,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.82,
+      "away": 1.01
+    },
+    "over15": 0.818,
+    "over25": 0.625,
+    "over35": 0.43799999999999994,
+    "btts": 0.6409999999999999,
+    "score": "2-1",
+    "cornersOver95": 0.46799999999999997,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.382,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3816,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-25T21:42:27.940Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.741,
+      "draw": 0.157,
+      "away": 0.102
+    },
+    "doubleChance": {
+      "12": 0.843,
+      "1X": 0.898,
+      "X2": 0.259
+    },
+    "dnb": {
+      "home": 0.88,
+      "away": 0.12
+    },
+    "totals": {
+      "over15": 0.901,
+      "under15": 0.099,
+      "over25": 0.735,
+      "under25": 0.265,
+      "over35": 0.531,
+      "under35": 0.469
+    },
+    "btts": {
+      "yes": 0.604,
+      "no": 0.396
+    },
+    "cleanSheet": {
+      "home": 0.364,
+      "away": 0.06
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.107,
+        "share": 0.2523584905660377
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.086,
+        "share": 0.20283018867924524
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.082,
+        "share": 0.19339622641509432
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "p": 0.081,
+        "share": 0.1910377358490566
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.068,
+        "share": 0.16037735849056603
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
-    "homeWins": null,
-    "draws": null,
-    "awayWins": null,
-    "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "totalMatches": 2,
+    "homeWins": 0,
+    "draws": 0,
+    "awayWins": 2,
+    "avgTotalGoals": 2,
+    "recent": [
+      {
+        "eventId": 485001,
+        "date": "2007-11-27T19:45:00+00:00",
+        "home": "Manchester United",
+        "away": "Sporting CP",
+        "homeTeamId": 17,
+        "awayTeamId": 22,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 484944,
+        "date": "2007-09-19T18:45:00+00:00",
+        "home": "Sporting CP",
+        "away": "Manchester United",
+        "homeTeamId": 22,
+        "awayTeamId": 17,
+        "homeScore": 0,
+        "awayScore": 1
+      }
+    ],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -282,7 +388,7 @@
     "home": {
       "shots": 14.83,
       "shotsOnTarget": 5.78,
-      "xg": 1.92,
+      "xg": 2.82,
       "corners": 4.47,
       "fouls": 12.07,
       "yellowCards": 1.57,
@@ -293,7 +399,7 @@
     "away": {
       "shots": 14.37,
       "shotsOnTarget": 4.97,
-      "xg": 1.52,
+      "xg": 1.01,
       "corners": 4.89,
       "fouls": 11.24,
       "yellowCards": 1.91,
@@ -384,8 +490,8 @@
       "away": 0.459
     },
     "lastGoal": {
-      "home": 0.707,
-      "away": 0.272,
+      "home": 0.714,
+      "away": 0.265,
       "noGoal": 0.021
     },
     "cornerRace": {

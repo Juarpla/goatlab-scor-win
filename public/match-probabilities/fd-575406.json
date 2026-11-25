@@ -4,7 +4,7 @@
   "away": "VfB Stuttgart",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T17:03:03.977Z",
+  "updatedAt": "2026-11-25T21:42:31.177Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 1.495
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.035,
+      "away": 1.398
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 4,
       "away": 4
@@ -120,42 +123,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.12,
-    "noGoal": 0.044,
+    "lambdaTotal": 3.43,
+    "noGoal": 0.032,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.405
+        "p": 0.436
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.241
+        "p": 0.246
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.143
+        "p": 0.139
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.085
+        "p": 0.078
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.051
+        "p": 0.044
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.03
+        "p": 0.025
       }
     ],
-    "firstHome": 0.497,
-    "firstAway": 0.459
+    "firstHome": 0.574,
+    "firstAway": 0.394
   },
   "scorers": {
     "home": null,
@@ -165,41 +168,123 @@
         "goals": 4,
         "matches": 4,
         "share": 0.9,
-        "rate": 1.35,
-        "anytime": 0.74,
-        "first": 0.431
+        "rate": 1.26,
+        "anytime": 0.716,
+        "first": 0.367
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.675,
+      "draw": 0.172,
+      "away": 0.152,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.45,
+      "away": 1.3
+    },
+    "over15": 0.895,
+    "over25": 0.76,
+    "over35": 0.561,
+    "btts": 0.655,
+    "score": "2-1",
+    "cornersOver95": 0.517,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.675,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6755,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-25T21:42:26.593Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.619,
+      "draw": 0.199,
+      "away": 0.182
+    },
+    "doubleChance": {
+      "12": 0.801,
+      "1X": 0.818,
+      "X2": 0.381
+    },
+    "dnb": {
+      "home": 0.773,
+      "away": 0.227
+    },
+    "totals": {
+      "over15": 0.896,
+      "under15": 0.104,
+      "over25": 0.723,
+      "under25": 0.277,
+      "over35": 0.516,
+      "under35": 0.484
+    },
+    "btts": {
+      "yes": 0.672,
+      "no": 0.328
+    },
+    "cleanSheet": {
+      "home": 0.273,
+      "away": 0.086
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.103,
+        "share": 0.26342710997442453
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.082,
+        "share": 0.20971867007672634
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.075,
+        "share": 0.1918158567774936
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.071,
+        "share": 0.1815856777493606
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.06,
+        "share": 0.15345268542199486
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
+    "totalMatches": 0,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "recent": [],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -236,7 +321,7 @@
     "home": {
       "shots": 16.22,
       "shotsOnTarget": 5.71,
-      "xg": 1.72,
+      "xg": 2.45,
       "corners": 5.09,
       "fouls": 10.26,
       "yellowCards": 1.98,
@@ -247,7 +332,7 @@
     "away": {
       "shots": 15.1,
       "shotsOnTarget": 5.61,
-      "xg": 1.99,
+      "xg": 1.3,
       "corners": 4.68,
       "fouls": 11.3,
       "yellowCards": 1.89,
@@ -338,9 +423,9 @@
       "away": 0.377
     },
     "lastGoal": {
-      "home": 0.497,
-      "away": 0.459,
-      "noGoal": 0.044
+      "home": 0.574,
+      "away": 0.394,
+      "noGoal": 0.032
     },
     "cornerRace": {
       "3": {
@@ -445,9 +530,9 @@
   },
   "llmReview": {
     "flag": false,
-    "note": null,
+    "note": "Los datos de modelos son coherentes entre Poisson y CatBoost respecto a la tendencia del local. La lectura de API-Football es limitada por ausencia de datos numéricos detallados en el input. La clasificación de Stuttgart (15) parece inusual para un equipo de Champions, posiblemente refiriéndose a ot",
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-25T08:38:32.691Z"
+    "generatedAt": "2026-11-25T21:43:04.265Z"
   }
 }

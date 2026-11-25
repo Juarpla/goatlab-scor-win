@@ -4,7 +4,7 @@
   "away": "AS Roma",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T17:03:03.977Z",
+  "updatedAt": "2026-11-25T21:42:31.177Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 1.725
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 3.08,
+      "away": 1.523
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 4,
       "away": 4
@@ -123,42 +126,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 5.51,
-    "noGoal": 0.004,
+    "lambdaTotal": 4.6,
+    "noGoal": 0.01,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.6
+        "p": 0.536
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.24
+        "p": 0.249
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.096
+        "p": 0.115
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.038
+        "p": 0.054
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.015
+        "p": 0.025
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.006
+        "p": 0.012
       }
     ],
-    "firstHome": 0.684,
-    "firstAway": 0.312
+    "firstHome": 0.662,
+    "firstAway": 0.328
   },
   "scorers": {
     "home": [
@@ -167,27 +170,27 @@
         "goals": 4,
         "matches": 4,
         "share": 0.308,
-        "rate": 1.16,
-        "anytime": 0.688,
-        "first": 0.211
+        "rate": 0.95,
+        "anytime": 0.613,
+        "first": 0.206
       },
       {
         "player": "Désiré Doué",
         "goals": 3,
         "matches": 4,
         "share": 0.231,
-        "rate": 0.87,
-        "anytime": 0.582,
-        "first": 0.158
+        "rate": 0.71,
+        "anytime": 0.509,
+        "first": 0.155
       },
       {
         "player": "Ferran Torres",
         "goals": 3,
         "matches": 4,
         "share": 0.231,
-        "rate": 0.87,
-        "anytime": 0.582,
-        "first": 0.158
+        "rate": 0.71,
+        "anytime": 0.509,
+        "first": 0.155
       }
     ],
     "away": [
@@ -196,41 +199,123 @@
         "goals": 4,
         "matches": 4,
         "share": 0.9,
-        "rate": 1.55,
-        "anytime": 0.788,
-        "first": 0.282
+        "rate": 1.37,
+        "anytime": 0.746,
+        "first": 0.298
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.66,
+      "draw": 0.185,
+      "away": 0.156,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 2.38,
+      "away": 1.32
+    },
+    "over15": 0.872,
+    "over25": 0.7190000000000001,
+    "over35": 0.514,
+    "btts": 0.643,
+    "score": "2-1",
+    "cornersOver95": 0.445,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.66,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.6595,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-25T21:42:26.605Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.601,
+      "draw": 0.205,
+      "away": 0.194
+    },
+    "doubleChance": {
+      "12": 0.795,
+      "1X": 0.806,
+      "X2": 0.399
+    },
+    "dnb": {
+      "home": 0.756,
+      "away": 0.244
+    },
+    "totals": {
+      "over15": 0.891,
+      "under15": 0.109,
+      "over25": 0.714,
+      "under25": 0.286,
+      "over35": 0.505,
+      "under35": 0.495
+    },
+    "btts": {
+      "yes": 0.673,
+      "no": 0.327
+    },
+    "cleanSheet": {
+      "home": 0.267,
+      "away": 0.093
+    },
+    "exactScores": [
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.106,
+        "share": 0.2683544303797468
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.085,
+        "share": 0.21518987341772153
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.073,
+        "share": 0.18481012658227847
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.07,
+        "share": 0.17721518987341772
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.061,
+        "share": 0.15443037974683543
+      }
+    ],
+    "providerPick": {
+      "home": 2,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
+    "totalMatches": 0,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "recent": [],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -267,7 +352,7 @@
     "home": {
       "shots": 15.43,
       "shotsOnTarget": 6.78,
-      "xg": 1.93,
+      "xg": 2.38,
       "corners": 4.59,
       "fouls": 10.01,
       "yellowCards": 1.47,
@@ -278,7 +363,7 @@
     "away": {
       "shots": 14.82,
       "shotsOnTarget": 5.78,
-      "xg": 1.79,
+      "xg": 1.32,
       "corners": 4.84,
       "fouls": 11.19,
       "yellowCards": 1.47,
@@ -369,9 +454,9 @@
       "away": 0.377
     },
     "lastGoal": {
-      "home": 0.684,
-      "away": 0.312,
-      "noGoal": 0.004
+      "home": 0.662,
+      "away": 0.328,
+      "noGoal": 0.01
     },
     "cornerRace": {
       "3": {

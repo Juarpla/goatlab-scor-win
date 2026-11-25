@@ -8065,142 +8065,297 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Lille OSC vs FC Bayern München: Contexto del partido",
+        "title": "Encuentro de la Champions League entre Lille y Bayern",
         "bullets": [
-          "El partido entre Lille OSC y FC Bayern München se celebrará el 25 de noviembre de 2026 a las 20:00 UTC en el marco de la Champions League.",
-          "Lille OSC se enfrenta a FC Bayern München, uno de los equipos más dominantes de Europa en los últimos años.",
-          "El partido es parte de la fase de grupos de la Champions League, donde ambos equipos buscan puntos cruciales para avanzar a la siguiente fase."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "modelos",
-        "title": "Análisis de modelos de probabilidad",
-        "bullets": [
-          "El modelo Poisson de GoatLab predice una probabilidad del 1.215% para un empate 0-0, 2.53% para un empate 1-1, y 0.158% para un empate 2-2.",
-          "El modelo CatBoost Bzzoiro predice una probabilidad del 19% para que ambos equipos marquen goles, con un total de 0.652 goles para Lille OSC y 0.722 goles para FC Bayern München.",
-          "El modelo Bzzoiro estima una probabilidad del 65.4% para que ambos equipos marquen goles en el partido."
+          "El partido se disputa el 25 de noviembre de 2026 en la Champions League.",
+          "FC Bayern München llega con 14 puntos en la tabla.",
+          "Lille OSC registra resultados mixtos en las últimas jornadas."
         ],
         "stats": [
           {
-            "value": "1.215%",
-            "label": "Empate 0-0"
-          },
-          {
-            "value": "2.53%",
-            "label": "Empate 1-1"
-          },
-          {
-            "value": "0.158%",
-            "label": "Empate 2-2"
+            "value": "14",
+            "label": "Pts. Bayern"
           }
         ]
       },
       {
-        "kind": "historial",
-        "title": "Historial reciente de enfrentamientos",
+        "kind": "modelos",
+        "title": "Lectura de probabilidades según Poisson",
         "bullets": [
-          "El último enfrentamiento entre Lille OSC y FC Bayern München fue en la Champions League, donde FC Bayern München ganó 5-0.",
-          "Lille OSC ha perdido sus dos últimos partidos de la Champions League, incluyendo una derrota 2-4 ante Galatasaray SK.",
-          "FC Bayern München ha ganado sus dos últimos partidos de la Champions League, incluyendo un empate 2-2 ante Arsenal FC."
+          "La probabilidad de victoria local es 0.158.",
+          "La probabilidad de empate se sitúa en 0.652.",
+          "La probabilidad de victoria visitante es 0.19."
         ],
-        "stats": []
+        "stats": [
+          {
+            "value": "0.158",
+            "label": "Local"
+          },
+          {
+            "value": "0.652",
+            "label": "Empate"
+          },
+          {
+            "value": "0.19",
+            "label": "Visitante"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posición de FC Bayern München",
+        "bullets": [
+          "FC Bayern München ocupa la posición 4.",
+          "Suma 8 partidos disputados."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Posición"
+          },
+          {
+            "value": "8",
+            "label": "Partidos"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Máximos anotadores del Bayern",
+        "bullets": [
+          "Harry Kane lleva 4 goles en 4 partidos.",
+          "Alphonso Davies tiene 2 goles en 4 partidos."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Goles Kane"
+          },
+          {
+            "value": "2",
+            "label": "Goles Davies"
+          }
+        ]
       },
       {
         "kind": "forma",
-        "title": "Forma reciente de los equipos",
+        "title": "Racha reciente de ambos equipos",
         "bullets": [
-          "Lille OSC ha perdido sus dos últimos partidos de la Champions League, incluyendo una derrota 2-4 ante Galatasaray SK.",
-          "FC Bayern München ha ganado sus dos últimos partidos de la Champions League, incluyendo un empate 2-2 ante Arsenal FC.",
-          "Lille OSC ha perdido sus dos últimos partidos de liga, incluyendo una derrota 3-0 ante Arsenal FC.",
-          "FC Bayern München ha ganado sus dos últimos partidos de liga, incluyendo una victoria 2-0 ante Club Atlético de Madrid."
+          "Lille OSC: 0-0 ante Bodø/Glimt, 4-2 ante Galatasaray.",
+          "FC Bayern München: 2-0 ante Atlético, 3-3 ante Viking FK."
         ],
-        "stats": []
+        "stats": [
+          {
+            "value": "4-2",
+            "label": "Lille vs Gala"
+          },
+          {
+            "value": "2-0",
+            "label": "Atlético vs B. Múnich"
+          }
+        ]
       }
     ],
     "limitations": [
       {
-        "label": "Datos incompletos",
-        "detail": "La información sobre la tabla de clasificación, goleadores y clima/sede no está disponible en el input proporcionado."
+        "label": "Datos limitados del modelo",
+        "detail": "Solo se presenta el modelo Poisson GoatLab; faltan datos de CatBoost Bzzoiro y estimaciones de API-Football para una auditoría completa de desviaciones."
+      },
+      {
+        "label": "Falta de historial directo",
+        "detail": "No se proporcionan datos de enfrentamientos previos entre Lille y Bayern."
       }
     ],
     "review": {
       "flag": false,
-      "note": null
+      "note": "Los datos presentados son consistentes con el input telegráfico. No se detectan desviaciones claras de porcentajes al no existir datos adicionales para comparación."
     },
-    "provider": "MISTRAL",
-    "model": "codestral-2508",
-    "generatedAt": "2026-11-24T22:27:20.399Z",
-    "inputKey": "v3|M|fd-575410|Lille OSC|FC Bayern München|champions|2026-11-25T20:00:00Z|NS\nP|1.215|2.53|0.158|0.19|0.652|0.722|0.654\nT|13|FC Bayern München|4|8||\nS|Harry Kane|FC Bayern München|4|4\nS|Alphonso Davies|FC Bayern München|2|4\nR|2026-09-08|Lille OSC|Real Betis Balompié|2|3\nR|2026-09-10|FC Bayern München|FK Bodø/Glimt|5|0\nR|2026-10-13|Arsenal FC|Lille OSC|3|0\nR|2026-10-13|Viking FK|FC Bayern München|3|3\nR|2026-10-21|Lille OSC|Galatasaray SK|2|4\nR|2026-10-21|FC Bayern München|Arsenal FC|2|2\nR|2026-11-03|FK Bodø/Glimt|Lille OSC|0|0\nR|2026-11-03|Club Atlético de Madrid|FC Bayern München|0|2",
-    "materialKey": "v3|M|fd-575410|Lille OSC|FC Bayern München|champions|2026-11-25T20:00:00Z|NS\nP|1.215|2.53|0.158|0.19|0.652|0.722|0.654\nT|13|FC Bayern München|4|8||\nS|Harry Kane|FC Bayern München|4|4\nS|Alphonso Davies|FC Bayern München|2|4\nR|2026-09-08|Lille OSC|Real Betis Balompié|2|3\nR|2026-09-10|FC Bayern München|FK Bodø/Glimt|5|0\nR|2026-10-13|Arsenal FC|Lille OSC|3|0\nR|2026-10-13|Viking FK|FC Bayern München|3|3\nR|2026-10-21|Lille OSC|Galatasaray SK|2|4\nR|2026-10-21|FC Bayern München|Arsenal FC|2|2\nR|2026-11-03|FK Bodø/Glimt|Lille OSC|0|0\nR|2026-11-03|Club Atlético de Madrid|FC Bayern München|0|2"
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-25T21:42:52.738Z",
+    "inputKey": "v3|M|fd-575410|Lille OSC|FC Bayern München|champions|2026-11-25T20:00:00Z|LIVE\nP|1.215|2.53|0.158|0.19|0.652|0.722|0.654\nT|14|FC Bayern München|4|8||\nS|Harry Kane|FC Bayern München|4|4\nS|Alphonso Davies|FC Bayern München|2|4\nR|2026-09-08|Lille OSC|Real Betis Balompié|2|3\nR|2026-09-10|FC Bayern München|FK Bodø/Glimt|5|0\nR|2026-10-13|Arsenal FC|Lille OSC|3|0\nR|2026-10-13|Viking FK|FC Bayern München|3|3\nR|2026-10-21|Lille OSC|Galatasaray SK|2|4\nR|2026-10-21|FC Bayern München|Arsenal FC|2|2\nR|2026-11-03|FK Bodø/Glimt|Lille OSC|0|0\nR|2026-11-03|Club Atlético de Madrid|FC Bayern München|0|2",
+    "materialKey": "v3|M|fd-575410|Lille OSC|FC Bayern München|champions|2026-11-25T20:00:00Z|LIVE\nP|1.215|2.53|0.158|0.19|0.652|0.722|0.654\nT|14|FC Bayern München|4|8||\nS|Harry Kane|FC Bayern München|4|4\nS|Alphonso Davies|FC Bayern München|2|4\nR|2026-09-08|Lille OSC|Real Betis Balompié|2|3\nR|2026-09-10|FC Bayern München|FK Bodø/Glimt|5|0\nR|2026-10-13|Arsenal FC|Lille OSC|3|0\nR|2026-10-13|Viking FK|FC Bayern München|3|3\nR|2026-10-21|Lille OSC|Galatasaray SK|2|4\nR|2026-10-21|FC Bayern München|Arsenal FC|2|2\nR|2026-11-03|FK Bodø/Glimt|Lille OSC|0|0\nR|2026-11-03|Club Atlético de Madrid|FC Bayern München|0|2"
   },
   "fd-575406": {
     "summary": [
       {
         "kind": "panorama",
-        "title": "Cruce europeo ante el Stuttgart",
+        "title": "Cruce en Champions: Inter vs Stuttgart",
         "bullets": [
-          "El FC Internazionale Milano recibe al VfB Stuttgart en la Champions League el 25 de noviembre de 2026.",
-          "El encuentro corresponde a la jornada 14 del calendario de la competición.",
-          "No se registran factores climáticos específicos para la fecha."
+          "FC Internazionale Milano se mide ante VfB Stuttgart el 25 de noviembre de 2026 en la Champions League.",
+          "El encuentro se presenta con estado LIVE, sugiriendo que la información es en tiempo real o inminente.",
+          "No se reportan bajas confirmadas ni condiciones climáticas específicas para la sede."
         ],
         "stats": []
       },
       {
         "kind": "modelos",
-        "title": "Lecturas de probabilidades",
+        "title": "Lectura de modelos estadísticos",
         "bullets": [
-          "Poisson GoatLab estima 63.3% de probabilidad de goles, con 39.8% a favor del Inter y 25.9% del Stuttgart.",
-          "El modelo Bzzoiro proyecta una victoria del Inter (67.5%) y un marcador probable de 2-1, con 51.7% de probabilidad de 2 goles totales.",
-          "La lectura declarada del proveedor Bzzoiro sugiere que no anotarán ambos equipos."
+          "GoatLab Poisson estima 1.62 goles para Inter y 1.495 para Stuttgart, con 39.8% probabilidad de victoria local.",
+          "CatBoost Bzzoiro otorga 67.5% de probabilidad a la victoria de Inter, previendo un marcador de 2-1 con 51.7% de confianza.",
+          "API-Football no proporciona datos numéricos, pero indica 5 goles totales estimados y coincide en la tendencia favorable al local."
         ],
-        "stats": [
-          {
-            "value": "63.3%",
-            "label": "Proba Goles (P)"
-          },
-          {
-            "value": "67.5%",
-            "label": "Proba Inter (B)"
-          },
-          {
-            "value": "2-1",
-            "label": "Marcador B"
-          }
-        ]
+        "stats": []
       },
       {
         "kind": "forma",
-        "title": "Tendencias recientes",
+        "title": "Racha reciente de los contendientes",
         "bullets": [
-          "El Inter ganó su último cruce ante el Feyenoord por 3-0, tras empatar 1-1 con el Shakhtar.",
-          "El Stuttgart empató ante el Atlético de Madrid 1-1, pero cayó 2-0 ante el Galatasaray en su último partido.",
-          "Antes, el Inter perdió 3-4 ante Club Brugge y el Stuttgart ganó 3-0 a Slovan Bratislava."
+          "Inter ganó su último partido ante Feyenoord (3-0) tras perder con Club Brugge (3-4) y empatar con Shakhtar (1-0 ganado).",
+          "Stuttgart venció a Slovan Bratislava (3-0) y empató con Atlético de Madrid (1-1), pero cayó ante Galatasaray (0-2).",
+          "Ambos equipos muestran rendimiento irregular, con victorias contundentes y derrotas claras en sus últimos tres encuentros."
         ],
         "stats": [
           {
             "value": "3-0",
-            "label": "Inter-Feyenoord"
+            "label": "Último partido de Inter"
           },
           {
-            "value": "1-1",
-            "label": "Stuttgart-Atlético"
+            "value": "0-2",
+            "label": "Último partido de Stuttgart"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros destacados",
+        "bullets": [
+          "Ermedin Demirović es el máximo goleador de Stuttgart con 4 goles y 4 asistencias.",
+          "No se proporcionan datos de goleadores específicos para FC Internazionale Milano en la entrada."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Goles de Demirović"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Clasificación actual",
+        "bullets": [
+          "VfB Stuttgart ocupa la posición 15 con 4 puntos y 7 partidos jugados según el bloque T.",
+          "No se especifica la posición ni puntuación de FC Internazionale Milano en los datos proporcionados."
+        ],
+        "stats": [
+          {
+            "value": "15",
+            "label": "Posición de Stuttgart"
           },
           {
-            "value": "2-0",
-            "label": "Galatasaray-Stuttgart"
+            "value": "4",
+            "label": "Puntos de Stuttgart"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Historial de cruce",
-        "detail": "No se proporcionó información de enfrentamientos directos previos entre el Inter y el Stuttgart en el input (bloque H vacío)."
+        "label": "Datos incompletos de Inter",
+        "detail": "Falta información de tabla, goleadores y forma específica de Inter para una comparación completa."
       },
       {
-        "label": "Bajas y alineaciones",
-        "detail": "No se incluyen datos de bajas confirmadas (bloque L) ni alineaciones probables en el input telegráfico."
+        "label": "Ausencia de consenso externo",
+        "detail": "No se proporcionó el bloque M2 para validar el consenso del mercado o expertos."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": "Los datos de modelos son coherentes entre Poisson y CatBoost respecto a la tendencia del local. La lectura de API-Football es limitada por ausencia de datos numéricos detallados en el input. La clasificación de Stuttgart (15) parece inusual para un equipo de Champions, posiblemente refiriéndose a ot"
+    },
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-25T21:43:04.265Z",
+    "inputKey": "v3|M|fd-575406|FC Internazionale Milano|VfB Stuttgart|champions|2026-11-25T20:00:00Z|LIVE\nP|1.62|1.495|0.398|0.259|0.344|0.602|0.633\nB|0.675|0.172|0.152|2.45|1.3|0.76|0.655|2-1|0.517\nB2|H|0.675|no|no\nW|||5|\nT|15|VfB Stuttgart|4|7||\nS|Ermedin Demirović|VfB Stuttgart|4|4\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-10-13|FC Internazionale Milano|Club Brugge KV|3|4\nR|2026-10-14|ŠK Slovan Bratislava|VfB Stuttgart|0|3\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|FC Internazionale Milano|FK Shakhtar Donetsk|1|0\nR|2026-11-03|Feyenoord Rotterdam|FC Internazionale Milano|0|3\nR|2026-11-03|Galatasaray SK|VfB Stuttgart|2|0",
+    "materialKey": "v3|M|fd-575406|FC Internazionale Milano|VfB Stuttgart|champions|2026-11-25T20:00:00Z|LIVE\nP|1.62|1.495|0.398|0.259|0.344|0.602|0.633\nB|0.675|0.172|0.152|2.45|1.3|0.76|0.655|2-1|0.517\nB2|H|0.675|no|no\nW|||5|\nT|15|VfB Stuttgart|4|7||\nS|Ermedin Demirović|VfB Stuttgart|4|4\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-10-13|FC Internazionale Milano|Club Brugge KV|3|4\nR|2026-10-14|ŠK Slovan Bratislava|VfB Stuttgart|0|3\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|FC Internazionale Milano|FK Shakhtar Donetsk|1|0\nR|2026-11-03|Feyenoord Rotterdam|FC Internazionale Milano|0|3\nR|2026-11-03|Galatasaray SK|VfB Stuttgart|2|0"
+  },
+  "fd-575412": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Cruce europeo en vivo",
+        "bullets": [
+          "Encuentro de UEFA Champions League 2025/2026 entre FK Shakhtar Donetsk y Fenerbahçe SK.",
+          "El partido se disputará el 25 de noviembre de 2026 a las 20:00 UTC.",
+          "El análisis corresponde a un estado de juego en vivo (LIVE)."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Estimaciones de modelos",
+        "bullets": [
+          "Poisson GoatLab proyecta una probabilidad del 56.6% para el local y un 39.6% para el empate.",
+          "Bzzoiro estima 1.54 goles para Shakhtar y 1.58 para Fenerbahçe, con empate técnico 1-1.",
+          "La lectura API-Football señala una probabilidad del 39.6% y descarta goleada o ambos anotan."
+        ],
+        "stats": [
+          {
+            "value": "56.6%",
+            "label": "Prob. local Poisson"
+          },
+          {
+            "value": "1-1",
+            "label": "Resultado esperado Bzzoiro"
+          },
+          {
+            "value": "39.6%",
+            "label": "Prob. empate API"
+          }
+        ]
+      },
+      {
+        "kind": "historial",
+        "title": "Antecedentes directos",
+        "bullets": [
+          "El historial muestra 2 victorias para Shakhtar, 1 para Fenerbahçe y 1 empate.",
+          "El gol average histórico favorece a Shakhtar con 1.5 goles de media por partido."
+        ],
+        "stats": [
+          {
+            "value": "2",
+            "label": "Victorias Shakhtar"
+          },
+          {
+            "value": "1.5",
+            "label": "Goles medios"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros destacados",
+        "bullets": [
+          "Mason Greenwood y Talisca lideran en Fenerbahçe con 4 goles cada uno.",
+          "Archibald Brown suma 3 goles para el equipo turco en la temporada."
+        ],
+        "stats": [
+          {
+            "value": "4",
+            "label": "Goles Greenwood"
+          },
+          {
+            "value": "4",
+            "label": "Goles Talisca"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes",
+        "bullets": [
+          "Shakhtar ganó 1 de sus últimos 4 enfrentamientos directos listados.",
+          "Fenerbahçe venció a Liverpool 3-2 en la última fecha antes del cruce.",
+          "Ambos equipos registraron empates en octubre contra Roma y Slavia Praga."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos en vivo",
+        "detail": "La información refleja un partido en curso; los porcentajes y probabilidades pueden variar según el tiempo de juego."
       }
     ],
     "review": {
@@ -8209,8 +8364,8 @@
     },
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-25T08:38:32.691Z",
-    "inputKey": "v3|M|fd-575406|FC Internazionale Milano|VfB Stuttgart|champions|2026-11-25T20:00:00Z|NS\nP|1.62|1.495|0.398|0.259|0.344|0.602|0.633\nB|0.675|0.172|0.152|2.45|1.3|0.76|0.671|2-1|0.517\nB2|H|0.675|no|no\nW|||5|\nT|14|VfB Stuttgart|4|7||\nS|Ermedin Demirović|VfB Stuttgart|4|4\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-10-13|FC Internazionale Milano|Club Brugge KV|3|4\nR|2026-10-14|ŠK Slovan Bratislava|VfB Stuttgart|0|3\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|FC Internazionale Milano|FK Shakhtar Donetsk|1|0\nR|2026-11-03|Feyenoord Rotterdam|FC Internazionale Milano|0|3\nR|2026-11-03|Galatasaray SK|VfB Stuttgart|2|0",
-    "materialKey": "v3|M|fd-575406|FC Internazionale Milano|VfB Stuttgart|champions|2026-11-25T20:00:00Z|NS\nP|1.62|1.495|0.398|0.259|0.344|0.602|0.633\nB|0.675|0.172|0.152|2.45|1.3|0.76|0.671|2-1|0.517\nB2|H|0.675|no|no\nW|||5|\nT|14|VfB Stuttgart|4|7||\nS|Ermedin Demirović|VfB Stuttgart|4|4\nR|2026-09-08|Real Madrid CF|FC Internazionale Milano|2|1\nR|2026-09-09|VfB Stuttgart|Viking FK|3|1\nR|2026-10-13|FC Internazionale Milano|Club Brugge KV|3|4\nR|2026-10-14|ŠK Slovan Bratislava|VfB Stuttgart|0|3\nR|2026-10-20|VfB Stuttgart|Club Atlético de Madrid|1|1\nR|2026-10-21|FC Internazionale Milano|FK Shakhtar Donetsk|1|0\nR|2026-11-03|Feyenoord Rotterdam|FC Internazionale Milano|0|3\nR|2026-11-03|Galatasaray SK|VfB Stuttgart|2|0"
+    "generatedAt": "2026-11-25T21:43:13.394Z",
+    "inputKey": "v3|M|fd-575412|FK Shakhtar Donetsk|Fenerbahçe SK|champions|2026-11-25T20:00:00Z|LIVE\nP|2.025|1.15|0.566|0.232|0.202|0.615|0.603\nB|0.332|0.271|0.396|1.54|1.58|0.546|0.587|1-1|0.504\nB2|A|0.396|no|no\nH|2|1|1|0|1.5\nW|||29|\nS|Mason Greenwood|Fenerbahçe SK|4|10\nS|Talisca|Fenerbahçe SK|4|6\nS|Archie Brown|Fenerbahçe SK|3|10\nR|2026-09-10|PSV|FK Shakhtar Donetsk|1|1\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|Aston Villa FC|Fenerbahçe SK|6|0\nR|2026-10-20|Fenerbahçe SK|SK Slavia Praha|2|2\nR|2026-10-21|FC Internazionale Milano|FK Shakhtar Donetsk|1|0\nR|2026-11-03|FK Shakhtar Donetsk|Sporting Clube de Portugal|0|1\nR|2026-11-04|Fenerbahçe SK|Liverpool FC|3|2\nHR|2015-08-05|Shakhtar Donetsk|Fenerbahçe|3|0\nHR|2015-07-28|Fenerbahçe|Shakhtar Donetsk|0|0",
+    "materialKey": "v3|M|fd-575412|FK Shakhtar Donetsk|Fenerbahçe SK|champions|2026-11-25T20:00:00Z|LIVE\nP|2.025|1.15|0.566|0.232|0.202|0.615|0.603\nB|0.332|0.271|0.396|1.54|1.58|0.546|0.587|1-1|0.504\nB2|A|0.396|no|no\nH|2|1|1|0|1.5\nW|||29|\nS|Mason Greenwood|Fenerbahçe SK|4|10\nS|Talisca|Fenerbahçe SK|4|6\nS|Archie Brown|Fenerbahçe SK|3|10\nR|2026-09-10|PSV|FK Shakhtar Donetsk|1|1\nR|2026-09-10|Fenerbahçe SK|AS Roma|1|1\nR|2026-10-14|FK Shakhtar Donetsk|PAE AEK|3|1\nR|2026-10-14|Aston Villa FC|Fenerbahçe SK|6|0\nR|2026-10-20|Fenerbahçe SK|SK Slavia Praha|2|2\nR|2026-10-21|FC Internazionale Milano|FK Shakhtar Donetsk|1|0\nR|2026-11-03|FK Shakhtar Donetsk|Sporting Clube de Portugal|0|1\nR|2026-11-04|Fenerbahçe SK|Liverpool FC|3|2\nHR|2015-08-05|Shakhtar Donetsk|Fenerbahçe|3|0\nHR|2015-07-28|Fenerbahçe|Shakhtar Donetsk|0|0"
   }
 }

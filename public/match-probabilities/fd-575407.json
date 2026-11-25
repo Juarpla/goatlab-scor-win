@@ -4,7 +4,7 @@
   "away": "Viking FK",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T17:03:03.977Z",
+  "updatedAt": "2026-11-25T21:42:31.177Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,8 +12,11 @@
       "away": 1.418
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": null,
-    "firstGoalSource": "Poisson",
+    "lambdasBlend": {
+      "home": 2.03,
+      "away": 1.524
+    },
+    "firstGoalSource": "Blend Poisson+xG",
     "sample": {
       "home": 6,
       "away": 4
@@ -105,13 +108,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.49,
-    "noGoal": 0.031,
+    "lambdaTotal": 3.55,
+    "noGoal": 0.029,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.441
+        "p": 0.447
       },
       {
         "from": 15,
@@ -121,26 +124,26 @@
       {
         "from": 30,
         "to": 45,
-        "p": 0.138
+        "p": 0.137
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.077
+        "p": 0.076
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.043
+        "p": 0.042
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.024
+        "p": 0.023
       }
     ],
-    "firstHome": 0.575,
-    "firstAway": 0.394
+    "firstHome": 0.555,
+    "firstAway": 0.417
   },
   "scorers": {
     "home": null,
@@ -150,50 +153,132 @@
         "goals": 4,
         "matches": 6,
         "share": 0.571,
-        "rate": 0.81,
-        "anytime": 0.555,
-        "first": 0.232
+        "rate": 0.87,
+        "anytime": 0.581,
+        "first": 0.245
       },
       {
         "player": "Peter Christiansen",
         "goals": 3,
         "matches": 6,
         "share": 0.429,
-        "rate": 0.61,
-        "anytime": 0.456,
-        "first": 0.174
+        "rate": 0.65,
+        "anytime": 0.48,
+        "first": 0.184
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-dixoncoles-v1",
+  "method": "poisson-blend-v1",
   "provider": {
-    "oneX2": null,
-    "xg": null,
-    "over15": null,
-    "over25": null,
-    "over35": null,
-    "btts": null,
-    "score": null,
-    "cornersOver95": null,
-    "recommendations": null,
-    "confidence": null,
-    "model": null,
-    "capturedAt": null,
-    "source": null
+    "oneX2": {
+      "home": 0.8590000000000001,
+      "draw": 0.094,
+      "away": 0.047,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.99,
+      "away": 1.63
+    },
+    "over15": 0.883,
+    "over25": 0.7490000000000001,
+    "over35": 0.5379999999999999,
+    "btts": 0.493,
+    "score": "1-1",
+    "cornersOver95": 0.555,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.859,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.8591,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-25T21:42:27.815Z",
+    "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.456,
+      "draw": 0.233,
+      "away": 0.311
+    },
+    "doubleChance": {
+      "12": 0.767,
+      "1X": 0.689,
+      "X2": 0.544
+    },
+    "dnb": {
+      "home": 0.594,
+      "away": 0.406
+    },
+    "totals": {
+      "over15": 0.885,
+      "under15": 0.115,
+      "over25": 0.701,
+      "under25": 0.299,
+      "over35": 0.489,
+      "under35": 0.511
+    },
+    "btts": {
+      "yes": 0.703,
+      "no": 0.297
+    },
+    "cleanSheet": {
+      "home": 0.196,
+      "away": 0.137
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.107,
+        "share": 0.27365728900255754
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.086,
+        "share": 0.21994884910485932
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.071,
+        "share": 0.1815856777493606
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.07,
+        "share": 0.17902813299232737
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.057,
+        "share": 0.14578005115089515
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
   "market": null,
   "h2h": {
-    "totalMatches": null,
+    "totalMatches": 0,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": null,
-    "source": null
+    "recent": [],
+    "source": "Bzzoiro"
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -230,7 +315,7 @@
     "home": {
       "shots": 15.37,
       "shotsOnTarget": 5.17,
-      "xg": 1.59,
+      "xg": 1.99,
       "corners": 5.37,
       "fouls": 11.14,
       "yellowCards": 1.77,
@@ -241,7 +326,7 @@
     "away": {
       "shots": 13.82,
       "shotsOnTarget": 4.99,
-      "xg": 1.57,
+      "xg": 1.63,
       "corners": 4.91,
       "fouls": 11.53,
       "yellowCards": 1.79,
@@ -332,9 +417,9 @@
       "away": 0.394
     },
     "lastGoal": {
-      "home": 0.575,
-      "away": 0.394,
-      "noGoal": 0.031
+      "home": 0.555,
+      "away": 0.417,
+      "noGoal": 0.029
     },
     "cornerRace": {
       "3": {
