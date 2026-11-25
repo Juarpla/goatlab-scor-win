@@ -4,7 +4,7 @@
   "away": "Manchester United FC",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T08:34:04.634Z",
+  "updatedAt": "2026-11-25T17:03:03.977Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,18 +12,15 @@
       "away": 1.073
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 2.805,
-      "away": 1.042
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 6
     },
     "standings": {
       "Sporting Clube de Portugal": {
-        "position": 10,
+        "position": 12,
         "team": "Sporting CP",
         "teamId": 22,
         "played": 4,
@@ -42,7 +39,7 @@
         "form": null
       },
       "Manchester United FC": {
-        "position": 17,
+        "position": 19,
         "team": "Manchester United",
         "teamId": 17,
         "played": 4,
@@ -62,7 +59,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-24T17:25:34.421Z",
+      "updatedAt": "2026-11-25T17:02:05.312Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -73,11 +70,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-24T17:25:34.421Z",
+      "updatedAt": "2026-11-25T17:02:05.312Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 464
+      "rows": 472
     },
     "venue": null
   },
@@ -141,13 +138,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.85,
+    "lambdaTotal": 3.86,
     "noGoal": 0.021,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.473
+        "p": 0.475
       },
       {
         "from": 15,
@@ -175,8 +172,8 @@
         "p": 0.019
       }
     ],
-    "firstHome": 0.714,
-    "firstAway": 0.265
+    "firstHome": 0.707,
+    "firstAway": 0.272
   },
   "scorers": {
     "home": [
@@ -186,8 +183,8 @@
         "matches": 4,
         "share": 0.5,
         "rate": 1.4,
-        "anytime": 0.754,
-        "first": 0.364
+        "anytime": 0.752,
+        "first": 0.361
       },
       {
         "player": "Luis Suárez",
@@ -195,8 +192,8 @@
         "matches": 4,
         "share": 0.5,
         "rate": 1.4,
-        "anytime": 0.754,
-        "first": 0.364
+        "anytime": 0.752,
+        "first": 0.361
       }
     ],
     "away": [
@@ -205,153 +202,50 @@
         "goals": 3,
         "matches": 4,
         "share": 0.6,
-        "rate": 0.63,
-        "anytime": 0.465,
-        "first": 0.162
+        "rate": 0.64,
+        "anytime": 0.475,
+        "first": 0.167
       },
       {
         "player": "Bruno Fernandes",
         "goals": 2,
         "matches": 4,
         "share": 0.4,
-        "rate": 0.42,
-        "anytime": 0.341,
-        "first": 0.108
+        "rate": 0.43,
+        "anytime": 0.349,
+        "first": 0.111
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.382,
-      "draw": 0.256,
-      "away": 0.363,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.82,
-      "away": 1.01
-    },
-    "over15": 0.818,
-    "over25": 0.625,
-    "over35": 0.43799999999999994,
-    "btts": 0.6409999999999999,
-    "score": "2-1",
-    "cornersOver95": 0.46799999999999997,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.382,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.3816,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-25T08:33:59.467Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.741,
-      "draw": 0.157,
-      "away": 0.102
-    },
-    "doubleChance": {
-      "12": 0.843,
-      "1X": 0.898,
-      "X2": 0.259
-    },
-    "dnb": {
-      "home": 0.88,
-      "away": 0.12
-    },
-    "totals": {
-      "over15": 0.901,
-      "under15": 0.099,
-      "over25": 0.735,
-      "under25": 0.265,
-      "over35": 0.531,
-      "under35": 0.469
-    },
-    "btts": {
-      "yes": 0.604,
-      "no": 0.396
-    },
-    "cleanSheet": {
-      "home": 0.364,
-      "away": 0.06
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.107,
-        "share": 0.2523584905660377
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.086,
-        "share": 0.20283018867924524
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.082,
-        "share": 0.19339622641509432
-      },
-      {
-        "home": 3,
-        "away": 0,
-        "p": 0.081,
-        "share": 0.1910377358490566
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.068,
-        "share": 0.16037735849056603
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 2,
-    "homeWins": 0,
-    "draws": 0,
-    "awayWins": 2,
-    "avgTotalGoals": 2,
-    "recent": [
-      {
-        "eventId": 485001,
-        "date": "2007-11-27T19:45:00+00:00",
-        "home": "Manchester United",
-        "away": "Sporting CP",
-        "homeTeamId": 17,
-        "awayTeamId": 22,
-        "homeScore": 2,
-        "awayScore": 1
-      },
-      {
-        "eventId": 484944,
-        "date": "2007-09-19T18:45:00+00:00",
-        "home": "Sporting CP",
-        "away": "Manchester United",
-        "homeTeamId": 22,
-        "awayTeamId": 17,
-        "homeScore": 0,
-        "awayScore": 1
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -367,7 +261,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 464
+      "historyRows": 472
     },
     "source": "GoatLab",
     "expectedTotal": 3.5
@@ -378,33 +272,33 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 464
+      "historyRows": 472
     },
     "source": "GoatLab",
-    "expectedTotal": 9.5
+    "expectedTotal": 9.4
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.92,
-      "shotsOnTarget": 5.91,
-      "xg": 2.82,
-      "corners": 4.53,
-      "fouls": 12.1,
-      "yellowCards": 1.58,
-      "redCards": 0.1,
-      "offsides": 1.88,
+      "shots": 14.83,
+      "shotsOnTarget": 5.78,
+      "xg": 1.92,
+      "corners": 4.47,
+      "fouls": 12.07,
+      "yellowCards": 1.57,
+      "redCards": 0.09,
+      "offsides": 1.85,
       "possession": 51.82
     },
     "away": {
-      "shots": 14.46,
-      "shotsOnTarget": 5.1,
-      "xg": 1.01,
-      "corners": 4.95,
-      "fouls": 11.27,
-      "yellowCards": 1.92,
-      "redCards": 0.18,
-      "offsides": 1.95,
+      "shots": 14.37,
+      "shotsOnTarget": 4.97,
+      "xg": 1.52,
+      "corners": 4.89,
+      "fouls": 11.24,
+      "yellowCards": 1.91,
+      "redCards": 0.16,
+      "offsides": 1.92,
       "possession": 48.18
     },
     "sample": {
@@ -437,14 +331,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 14.99,
-      "shotsOnTarget": 5.71,
-      "xg": 1.79,
-      "corners": 4.86,
-      "fouls": 11.25,
-      "yellowCards": 1.77,
-      "redCards": 0.14,
-      "offsides": 2.18
+      "shots": 14.84,
+      "shotsOnTarget": 5.49,
+      "xg": 1.74,
+      "corners": 4.74,
+      "fouls": 11.2,
+      "yellowCards": 1.76,
+      "redCards": 0.12,
+      "offsides": 2.13
     },
     "sources": {
       "home": {
@@ -481,39 +375,39 @@
     "method": "dominance-v1",
     "cornersDuel": {
       "home": 0.381,
-      "draw": 0.13,
+      "draw": 0.131,
       "away": 0.488
     },
     "cardsDuel": {
-      "home": 0.321,
+      "home": 0.32,
       "draw": 0.22,
-      "away": 0.46
+      "away": 0.459
     },
     "lastGoal": {
-      "home": 0.714,
-      "away": 0.265,
+      "home": 0.707,
+      "away": 0.272,
       "noGoal": 0.021
     },
     "cornerRace": {
       "3": {
-        "home": 0.459,
-        "away": 0.541
+        "home": 0.458,
+        "away": 0.542
       },
       "5": {
-        "home": 0.446,
-        "away": 0.554
+        "home": 0.445,
+        "away": 0.555
       },
       "7": {
-        "home": 0.435,
-        "away": 0.565
+        "home": 0.434,
+        "away": 0.566
       }
     },
     "cornerMargin": {
-      "home3plus": 0.168,
-      "home12": 0.213,
-      "level": 0.13,
-      "away12": 0.243,
-      "away3plus": 0.246
+      "home3plus": 0.167,
+      "home12": 0.214,
+      "level": 0.131,
+      "away12": 0.244,
+      "away3plus": 0.244
     },
     "source": "GoatLab"
   },
@@ -563,7 +457,7 @@
         "sample": 4
       },
       "season": {
-        "position": 10,
+        "position": 12,
         "played": 4,
         "gf": null,
         "ga": null,

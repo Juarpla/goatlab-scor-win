@@ -7861,81 +7861,110 @@
     "summary": [
       {
         "kind": "panorama",
-        "title": "Sabah FK vs FC Barcelona: Contexto del cruce",
+        "title": "Contexto del cruce en Champions League",
         "bullets": [
-          "El Sabah FK enfrenta al FC Barcelona en la fase de grupos de la Champions League.",
-          "El partido se celebrará el 25 de noviembre de 2026 a las 17:45 UTC.",
-          "El Sabah FK tiene un historial reciente con victorias y derrotas, incluyendo una victoria sobre el Manchester United FC y una derrota ante el Borussia Dortmund.",
-          "El FC Barcelona ha tenido una racha de resultados positivos, incluyendo victorias sobre el Paris Saint-Germain FC y el Real Madrid CF."
+          "El partido enfrenta a Sabah FK contra FC Barcelona en la fase de grupos de la Champions League 2026.",
+          "La cita está fijada para el 25 de noviembre de 2026 a las 17:45 UTC, disputada bajo condición climática despejada con 18 grados.",
+          "No se registran bajas confirmadas ni información adicional de clima más allá de los datos base proporcionados."
         ],
         "stats": [
           {
-            "value": "17:45",
-            "label": "Hora del partido"
+            "value": "18",
+            "label": "Temperatura (°C)"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Probabilidades y predicciones de los modelos",
+        "title": "Lectura de probabilidad del modelo GoatLab",
         "bullets": [
-          "El modelo Poisson de GoatLab predice un empate con una probabilidad del 59%.",
-          "El modelo CatBoost de Bzzoiro predice una victoria para el FC Barcelona con una probabilidad del 88.2%.",
-          "El modelo CatBoost de Bzzoiro predice un total de goles de 1.65 y un total de goles de 2.35.",
-          "La API-Football predice una victoria para el FC Barcelona con una probabilidad del 88.2%."
+          "El modelo P de GoatLab asigna una probabilidad del 70.5% a la victoria local de Sabah FK.",
+          "La probabilidad de empate se sitúa en un 20.8% según la estimación del modelo.",
+          "La posibilidad de un resultado visitante para el FC Barcelona se calcula en un 9.0% (derivado de 1 - 0.705 - 0.208)."
         ],
-        "stats": []
+        "stats": [
+          {
+            "value": "0.705",
+            "label": "Prob. victoria local"
+          },
+          {
+            "value": "0.208",
+            "label": "Prob. empate"
+          }
+        ]
       },
       {
-        "kind": "historial",
-        "title": "Historial reciente de Sabah FK y FC Barcelona",
+        "kind": "tabla",
+        "title": "Posición actual en la clasificación",
         "bullets": [
-          "Sabah FK ha ganado 2 de sus últimos 4 partidos, incluyendo una victoria sobre el Manchester United FC y una derrota ante el Borussia Dortmund.",
-          "FC Barcelona ha ganado 6 de sus últimos 7 partidos, incluyendo victorias sobre el Paris Saint-Germain FC, el Real Madrid CF y el Deportivo Alavés."
+          "FC Barcelona ocupa actualmente la cuarta posición en la tabla de la competición.",
+          "El bloque de datos de tabla solo contiene información explícita para FC Barcelona, sin datos numéricos para Sabah FK.",
+          "No se proporcionan puntos, goles a favor o en contra en el fragmento de tabla suministrado."
         ],
         "stats": []
       },
       {
         "kind": "goleadores",
-        "title": "Máximos goleadores de Sabah FK y FC Barcelona",
+        "title": "Arqueros destacados de ambos equipos",
         "bullets": [
-          "Joy Lance Mickels es el máximo goleador del Sabah FK con 3 goles en 12 partidos.",
-          "Veljko Simić también ha marcado 3 goles para el Sabah FK en 12 partidos.",
-          "Raphinha es el máximo goleador del FC Barcelona con 4 goles en 3 partidos.",
-          "Lamine Yamal también ha marcado 3 goles para el FC Barcelona en 4 partidos."
+          "Joy Lance Mickels y Veljko Simić lideran al Sabah FK con 3 goles cada uno en 12 apariciones.",
+          "Raphinha es el máximo goleador de FC Barcelona en el torneo con 4 goles en solo 4 encuentros.",
+          "Lamine Yamal aporta 3 goles para el conjunto barcelonista en 4 partidos disputados."
         ],
-        "stats": []
+        "stats": [
+          {
+            "value": "4",
+            "label": "Goles de Raphinha"
+          },
+          {
+            "value": "3",
+            "label": "Goles de Mickels"
+          }
+        ]
       },
       {
-        "kind": "claves",
-        "title": "Aspectos clave a considerar",
+        "kind": "forma",
+        "title": "Racha reciente de resultados",
         "bullets": [
-          "El Sabah FK tiene un historial reciente con resultados mixtos, incluyendo una victoria importante sobre el Manchester United FC.",
-          "El FC Barcelona ha mostrado una gran forma reciente, con una racha de 6 victorias en 7 partidos.",
-          "Los modelos de predicción sugieren una victoria para el FC Barcelona, pero con un total de goles predicho que podría ser bajo."
+          "Sabah FK ha perdido sus dos últimos partidos como visitante, cayendo ante Dortmund (1-2) y Viking FK (1-4).",
+          "FC Barcelona ha mostrado una racha mixta: victoria ante Aston Villa (3-0) y Atlético de Madrid (2-1), pero derrota ante Real Madrid (1-2).",
+          "El último partido de Barcelona finalizó con victoria ante Villarreal (3-2) el 22 de noviembre de 2026."
         ],
-        "stats": []
+        "stats": [
+          {
+            "value": "1-4",
+            "label": "Sabah vs Viking"
+          },
+          {
+            "value": "3-0",
+            "label": "Barça vs Villa"
+          }
+        ]
       }
     ],
     "limitations": [
       {
-        "label": "Datos limitados",
-        "detail": "La información disponible es limitada y puede no ser representativa del rendimiento real de los equipos."
+        "label": "Ausencia de datos B y A",
+        "detail": "El input no contiene bloques para CatBoost Bzzoiro (B/B2) ni para estimaciones de API-Football (A), por lo que solo se analizan los datos declarados del modelo P de GoatLab."
       },
       {
-        "label": "Modelos de predicción",
-        "detail": "Los modelos de predicción pueden no ser precisos y deben tomarse con cautela."
+        "label": "Datos incompletos de tabla",
+        "detail": "La sección T solo especifica la posición de FC Barcelona (4º). No se dispone de la clasificación, puntos ni estadísticas de goles de Sabah FK para un análisis comparativo completo."
+      },
+      {
+        "label": "Historial de cruces vacío",
+        "detail": "No se proporcionan líneas H o HR, por lo que no existe registro histórico de enfrentamientos previos entre Sabah FK y FC Barcelona en esta competición."
       }
     ],
     "review": {
       "flag": false,
-      "note": null
+      "note": "Los datos procesados son coherentes con el input telegráfico. La probabilidad de victoria local se interpreta directamente de los campos P. No se detectan desviaciones claras ni contradicciones internas en la información suministrada."
     },
-    "provider": "MISTRAL",
-    "model": "codestral-2508",
-    "generatedAt": "2026-11-25T08:34:27.013Z",
-    "inputKey": "v3|M|fd-575404|Sabah FK|FC Barcelona|champions|2026-11-25T17:45:00Z|NS\nP|1.44|2.453|0.208|0.202|0.59|0.746|0.705\nB|0.044|0.074|0.882|1.65|2.35|0.858|0.585|1-2|0.507\nB2|A|0.882|no|no\nW||clear|18|\nT|5|FC Barcelona|4|9||\nS|Joy Lance Mickels|Sabah FK|3|12\nS|Veljko Simić|Sabah FK|3|12\nS|Raphinha|FC Barcelona|4|3\nS|Lamine Yamal|FC Barcelona|3|4\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-10-13|Sabah FK|SK Slavia Praha|2|0\nR|2026-10-20|Sabah FK|Borussia Dortmund|1|2\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-10-31|FC Barcelona|Deportivo Alavés|6|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-04|Viking FK|Sabah FK|4|1\nR|2026-11-08|Club Atlético de Madrid|FC Barcelona|1|2\nR|2026-11-22|FC Barcelona|Villarreal CF|3|2",
-    "materialKey": "v3|M|fd-575404|Sabah FK|FC Barcelona|champions|2026-11-25T17:45:00Z|NS\nP|1.44|2.453|0.208|0.202|0.59|0.746|0.705\nB|0.044|0.074|0.882|1.65|2.35|0.858|0.585|1-2|0.507\nB2|A|0.882|no|no\nW||clear|18|\nT|5|FC Barcelona|4|9||\nS|Joy Lance Mickels|Sabah FK|3|12\nS|Veljko Simić|Sabah FK|3|12\nS|Raphinha|FC Barcelona|4|3\nS|Lamine Yamal|FC Barcelona|3|4\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-10-13|Sabah FK|SK Slavia Praha|2|0\nR|2026-10-20|Sabah FK|Borussia Dortmund|1|2\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-10-31|FC Barcelona|Deportivo Alavés|6|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-04|Viking FK|Sabah FK|4|1\nR|2026-11-08|Club Atlético de Madrid|FC Barcelona|1|2\nR|2026-11-22|FC Barcelona|Villarreal CF|3|2"
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-25T17:06:29.130Z",
+    "inputKey": "v3|M|fd-575404|Sabah FK|FC Barcelona|champions|2026-11-25T17:45:00Z|NS\nP|1.44|2.453|0.208|0.202|0.59|0.746|0.705\nW||clear|18|\nT|8|FC Barcelona|4|9||\nS|Joy Lance Mickels|Sabah FK|3|12\nS|Veljko Simić|Sabah FK|3|12\nS|Raphinha|FC Barcelona|4|4\nS|Lamine Yamal|FC Barcelona|3|4\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-10-13|Sabah FK|SK Slavia Praha|2|0\nR|2026-10-20|Sabah FK|Borussia Dortmund|1|2\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-10-31|FC Barcelona|Deportivo Alavés|6|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-04|Viking FK|Sabah FK|4|1\nR|2026-11-08|Club Atlético de Madrid|FC Barcelona|1|2\nR|2026-11-22|FC Barcelona|Villarreal CF|3|2",
+    "materialKey": "v3|M|fd-575404|Sabah FK|FC Barcelona|champions|2026-11-25T17:45:00Z|NS\nP|1.44|2.453|0.208|0.202|0.59|0.746|0.705\nW||clear|18|\nT|8|FC Barcelona|4|9||\nS|Joy Lance Mickels|Sabah FK|3|12\nS|Veljko Simić|Sabah FK|3|12\nS|Raphinha|FC Barcelona|4|4\nS|Lamine Yamal|FC Barcelona|3|4\nR|2026-09-10|Manchester United FC|Sabah FK|4|0\nR|2026-10-13|Sabah FK|SK Slavia Praha|2|0\nR|2026-10-20|Sabah FK|Borussia Dortmund|1|2\nR|2026-10-20|Paris Saint-Germain FC|FC Barcelona|4|2\nR|2026-10-25|FC Barcelona|Real Madrid CF|1|2\nR|2026-10-31|FC Barcelona|Deportivo Alavés|6|1\nR|2026-11-03|FC Barcelona|Aston Villa FC|3|0\nR|2026-11-04|Viking FK|Sabah FK|4|1\nR|2026-11-08|Club Atlético de Madrid|FC Barcelona|1|2\nR|2026-11-22|FC Barcelona|Villarreal CF|3|2"
   },
   "fd-575405": {
     "summary": [

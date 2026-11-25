@@ -4,7 +4,7 @@
   "away": "AS Roma",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T08:34:04.634Z",
+  "updatedAt": "2026-11-25T17:03:03.977Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,18 +12,15 @@
       "away": 1.725
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 3.08,
-      "away": 1.523
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
     },
     "standings": {
       "Paris Saint-Germain FC": {
-        "position": 1,
+        "position": 2,
         "team": "Paris Saint-Germain",
         "teamId": 114,
         "played": 4,
@@ -41,43 +38,25 @@
         },
         "form": null
       },
-      "AS Roma": {
-        "position": 20,
-        "team": "AS Roma",
-        "teamId": 65,
-        "played": 4,
-        "won": 1,
-        "drawn": 1,
-        "lost": 2,
-        "goalsFor": null,
-        "goalsAgainst": null,
-        "goalDifference": null,
-        "points": 4,
-        "zone": {
-          "key": "playoff",
-          "label": "Qualification Playoffs",
-          "type": "playoff"
-        },
-        "form": null
-      }
+      "AS Roma": null
     },
     "scorers": {
-      "updatedAt": "2026-11-24T17:25:34.421Z",
+      "updatedAt": "2026-11-25T17:02:05.312Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-25T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-25T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-24T17:25:34.421Z",
+      "updatedAt": "2026-11-25T17:02:05.312Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 464
+      "rows": 472
     },
     "venue": {
       "city": "París",
@@ -144,42 +123,42 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 4.6,
-    "noGoal": 0.01,
+    "lambdaTotal": 5.51,
+    "noGoal": 0.004,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.536
+        "p": 0.6
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.249
+        "p": 0.24
       },
       {
         "from": 30,
         "to": 45,
-        "p": 0.115
+        "p": 0.096
       },
       {
         "from": 45,
         "to": 60,
-        "p": 0.054
+        "p": 0.038
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.025
+        "p": 0.015
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.012
+        "p": 0.006
       }
     ],
-    "firstHome": 0.662,
-    "firstAway": 0.328
+    "firstHome": 0.684,
+    "firstAway": 0.312
   },
   "scorers": {
     "home": [
@@ -188,27 +167,27 @@
         "goals": 4,
         "matches": 4,
         "share": 0.308,
-        "rate": 0.95,
-        "anytime": 0.613,
-        "first": 0.206
+        "rate": 1.16,
+        "anytime": 0.688,
+        "first": 0.211
       },
       {
         "player": "Désiré Doué",
         "goals": 3,
         "matches": 4,
         "share": 0.231,
-        "rate": 0.71,
-        "anytime": 0.509,
-        "first": 0.155
+        "rate": 0.87,
+        "anytime": 0.582,
+        "first": 0.158
       },
       {
         "player": "Ferran Torres",
         "goals": 3,
         "matches": 4,
         "share": 0.231,
-        "rate": 0.71,
-        "anytime": 0.509,
-        "first": 0.155
+        "rate": 0.87,
+        "anytime": 0.582,
+        "first": 0.158
       }
     ],
     "away": [
@@ -217,123 +196,41 @@
         "goals": 4,
         "matches": 4,
         "share": 0.9,
-        "rate": 1.37,
-        "anytime": 0.746,
-        "first": 0.298
+        "rate": 1.55,
+        "anytime": 0.788,
+        "first": 0.282
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.66,
-      "draw": 0.185,
-      "away": 0.156,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 2.38,
-      "away": 1.32
-    },
-    "over15": 0.872,
-    "over25": 0.7190000000000001,
-    "over35": 0.514,
-    "btts": 0.647,
-    "score": "2-1",
-    "cornersOver95": 0.445,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.66,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.6595,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-25T08:33:59.601Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.601,
-      "draw": 0.205,
-      "away": 0.194
-    },
-    "doubleChance": {
-      "12": 0.795,
-      "1X": 0.806,
-      "X2": 0.399
-    },
-    "dnb": {
-      "home": 0.756,
-      "away": 0.244
-    },
-    "totals": {
-      "over15": 0.891,
-      "under15": 0.109,
-      "over25": 0.714,
-      "under25": 0.286,
-      "over35": 0.505,
-      "under35": 0.495
-    },
-    "btts": {
-      "yes": 0.673,
-      "no": 0.327
-    },
-    "cleanSheet": {
-      "home": 0.267,
-      "away": 0.093
-    },
-    "exactScores": [
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.106,
-        "share": 0.2683544303797468
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.085,
-        "share": 0.21518987341772153
-      },
-      {
-        "home": 3,
-        "away": 1,
-        "p": 0.073,
-        "share": 0.18481012658227847
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "p": 0.07,
-        "share": 0.17721518987341772
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.061,
-        "share": 0.15443037974683543
-      }
-    ],
-    "providerPick": {
-      "home": 2,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 0,
+    "totalMatches": null,
     "homeWins": null,
     "draws": null,
     "awayWins": null,
     "avgTotalGoals": null,
-    "recent": [],
-    "source": "Bzzoiro"
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -349,7 +246,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 464
+      "historyRows": 472
     },
     "source": "GoatLab",
     "expectedTotal": 2.9
@@ -360,33 +257,33 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 464
+      "historyRows": 472
     },
     "source": "GoatLab",
-    "expectedTotal": 9.5
+    "expectedTotal": 9.4
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 15.49,
-      "shotsOnTarget": 6.88,
-      "xg": 2.38,
-      "corners": 4.63,
-      "fouls": 10.02,
+      "shots": 15.43,
+      "shotsOnTarget": 6.78,
+      "xg": 1.93,
+      "corners": 4.59,
+      "fouls": 10.01,
       "yellowCards": 1.47,
-      "redCards": 0.1,
-      "offsides": 1.94,
+      "redCards": 0.09,
+      "offsides": 1.92,
       "possession": 50.91
     },
     "away": {
-      "shots": 14.88,
-      "shotsOnTarget": 5.88,
-      "xg": 1.32,
-      "corners": 4.88,
+      "shots": 14.82,
+      "shotsOnTarget": 5.78,
+      "xg": 1.79,
+      "corners": 4.84,
       "fouls": 11.19,
       "yellowCards": 1.47,
-      "redCards": 0.06,
-      "offsides": 2.16,
+      "redCards": 0.05,
+      "offsides": 2.13,
       "possession": 49.09
     },
     "sample": {
@@ -419,14 +316,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 14.89,
-      "shotsOnTarget": 5.8,
-      "xg": 1.78,
-      "corners": 4.81,
-      "fouls": 10.87,
+      "shots": 14.76,
+      "shotsOnTarget": 5.57,
+      "xg": 1.74,
+      "corners": 4.71,
+      "fouls": 10.86,
       "yellowCards": 1.68,
-      "redCards": 0.12,
-      "offsides": 2.28
+      "redCards": 0.1,
+      "offsides": 2.22
     },
     "sources": {
       "home": {
@@ -462,7 +359,7 @@
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.403,
+      "home": 0.402,
       "draw": 0.131,
       "away": 0.466
     },
@@ -472,9 +369,9 @@
       "away": 0.377
     },
     "lastGoal": {
-      "home": 0.662,
-      "away": 0.328,
-      "noGoal": 0.01
+      "home": 0.684,
+      "away": 0.312,
+      "noGoal": 0.004
     },
     "cornerRace": {
       "3": {
@@ -482,32 +379,32 @@
         "away": 0.525
       },
       "5": {
-        "home": 0.468,
-        "away": 0.532
+        "home": 0.467,
+        "away": 0.533
       },
       "7": {
-        "home": 0.462,
-        "away": 0.538
+        "home": 0.461,
+        "away": 0.539
       }
     },
     "cornerMargin": {
-      "home3plus": 0.183,
+      "home3plus": 0.182,
       "home12": 0.22,
       "level": 0.131,
-      "away12": 0.237,
-      "away3plus": 0.229
+      "away12": 0.238,
+      "away3plus": 0.228
     },
     "source": "GoatLab"
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 17.5,
+      "temp": 5.4,
+      "precipitation": 0.4,
+      "weathercode": 61,
+      "wind": 8.3,
       "condition": null,
-      "sampledAt": "2026-11-25T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-25T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "Parc des Princes",
@@ -545,7 +442,7 @@
         "sample": 4
       },
       "season": {
-        "position": 1,
+        "position": 2,
         "played": 4,
         "gf": null,
         "ga": null,
@@ -573,13 +470,7 @@
         "value": 0,
         "sample": 4
       },
-      "season": {
-        "position": 20,
-        "played": 4,
-        "gf": null,
-        "ga": null,
-        "provider": null
-      },
+      "season": null,
       "player": {
         "name": "Donyell Malen",
         "detail": "4 goles en 4 partidos",

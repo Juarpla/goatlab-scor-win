@@ -4,7 +4,7 @@
   "away": "Fenerbahçe SK",
   "competition": "champions",
   "kickoff": "2026-11-25T20:00:00Z",
-  "updatedAt": "2026-11-25T08:34:04.634Z",
+  "updatedAt": "2026-11-25T17:03:03.977Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,39 +12,18 @@
       "away": 1.15
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.783,
-      "away": 1.365
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 4,
       "away": 4
     },
     "standings": {
       "FK Shakhtar Donetsk": null,
-      "Fenerbahçe SK": {
-        "position": 19,
-        "team": "Fenerbahçe",
-        "teamId": 134,
-        "played": 4,
-        "won": 1,
-        "drawn": 2,
-        "lost": 1,
-        "goalsFor": null,
-        "goalsAgainst": null,
-        "goalDifference": null,
-        "points": 5,
-        "zone": {
-          "key": "playoff",
-          "label": "Qualification Playoffs",
-          "type": "playoff"
-        },
-        "form": null
-      }
+      "Fenerbahçe SK": null
     },
     "scorers": {
-      "updatedAt": "2026-11-24T17:25:34.421Z",
+      "updatedAt": "2026-11-25T17:02:05.312Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -55,11 +34,11 @@
       "source": "bzzoiro"
     },
     "discipline": {
-      "updatedAt": "2026-11-24T17:25:34.421Z",
+      "updatedAt": "2026-11-25T17:02:05.312Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 464
+      "rows": 472
     },
     "venue": null
   },
@@ -123,13 +102,13 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.15,
-    "noGoal": 0.043,
+    "lambdaTotal": 3.18,
+    "noGoal": 0.042,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.408
+        "p": 0.411
       },
       {
         "from": 15,
@@ -144,21 +123,21 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.085
+        "p": 0.084
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.05
+        "p": 0.049
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.03
+        "p": 0.029
       }
     ],
-    "firstHome": 0.542,
-    "firstAway": 0.415
+    "firstHome": 0.611,
+    "firstAway": 0.347
   },
   "scorers": {
     "home": null,
@@ -168,162 +147,59 @@
         "goals": 4,
         "matches": 10,
         "share": 0.364,
-        "rate": 0.5,
-        "anytime": 0.392,
-        "first": 0.158
+        "rate": 0.42,
+        "anytime": 0.342,
+        "first": 0.132
       },
       {
         "player": "Talisca",
         "goals": 4,
         "matches": 6,
         "share": 0.364,
-        "rate": 0.5,
-        "anytime": 0.392,
-        "first": 0.158
+        "rate": 0.42,
+        "anytime": 0.342,
+        "first": 0.132
       },
       {
         "player": "Archie Brown",
         "goals": 3,
         "matches": 10,
         "share": 0.273,
-        "rate": 0.37,
-        "anytime": 0.311,
-        "first": 0.118
+        "rate": 0.31,
+        "anytime": 0.269,
+        "first": 0.099
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.332,
-      "draw": 0.271,
-      "away": 0.396,
-      "predicted": "A"
-    },
-    "xg": {
-      "home": 1.54,
-      "away": 1.58
-    },
-    "over15": 0.772,
-    "over25": 0.546,
-    "over35": 0.345,
-    "btts": 0.588,
-    "score": "1-1",
-    "cornersOver95": 0.504,
-    "recommendations": {
-      "favorite": "A",
-      "favoriteProb": 0.396,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.3965,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-25T08:33:59.492Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.362,
-      "draw": 0.259,
-      "away": 0.379
-    },
-    "doubleChance": {
-      "12": 0.741,
-      "1X": 0.621,
-      "X2": 0.638
-    },
-    "dnb": {
-      "home": 0.488,
-      "away": 0.512
-    },
-    "totals": {
-      "over15": 0.829,
-      "under15": 0.171,
-      "over25": 0.603,
-      "under25": 0.397,
-      "over35": 0.38,
-      "under35": 0.62
-    },
-    "btts": {
-      "yes": 0.635,
-      "no": 0.365
-    },
-    "cleanSheet": {
-      "home": 0.206,
-      "away": 0.214
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.106,
-        "share": 0.2663316582914573
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.085,
-        "share": 0.2135678391959799
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.083,
-        "share": 0.20854271356783918
-      },
-      {
-        "home": 2,
-        "away": 2,
-        "p": 0.065,
-        "share": 0.16331658291457285
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.059,
-        "share": 0.14824120603015073
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 2,
-    "homeWins": 1,
-    "draws": 1,
-    "awayWins": 0,
-    "avgTotalGoals": 1.5,
-    "recent": [
-      {
-        "eventId": 373446,
-        "date": "2015-08-05T18:45:00+00:00",
-        "home": "Shakhtar Donetsk",
-        "away": "Fenerbahçe",
-        "homeTeamId": 402,
-        "awayTeamId": 134,
-        "homeScore": 3,
-        "awayScore": 0
-      },
-      {
-        "eventId": 373477,
-        "date": "2015-07-28T18:00:00+00:00",
-        "home": "Fenerbahçe",
-        "away": "Shakhtar Donetsk",
-        "homeTeamId": 134,
-        "awayTeamId": 402,
-        "homeScore": 0,
-        "awayScore": 0
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -339,7 +215,7 @@
     },
     "sample": {
       "scorers": 52,
-      "historyRows": 464
+      "historyRows": 472
     },
     "source": "GoatLab",
     "expectedTotal": 3.7
@@ -350,33 +226,33 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 464
+      "historyRows": 472
     },
     "source": "GoatLab",
-    "expectedTotal": 9.6
+    "expectedTotal": 9.4
   },
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 14.84,
-      "shotsOnTarget": 5.65,
-      "xg": 1.54,
-      "corners": 4.8,
-      "fouls": 11.32,
-      "yellowCards": 1.86,
-      "redCards": 0.14,
-      "offsides": 2.23,
+      "shots": 14.7,
+      "shotsOnTarget": 5.43,
+      "xg": 1.69,
+      "corners": 4.69,
+      "fouls": 11.26,
+      "yellowCards": 1.84,
+      "redCards": 0.12,
+      "offsides": 2.18,
       "possession": 49.57
     },
     "away": {
-      "shots": 14.84,
-      "shotsOnTarget": 5.65,
-      "xg": 1.58,
-      "corners": 4.8,
-      "fouls": 11.32,
-      "yellowCards": 1.86,
-      "redCards": 0.14,
-      "offsides": 2.23,
+      "shots": 14.7,
+      "shotsOnTarget": 5.43,
+      "xg": 1.69,
+      "corners": 4.69,
+      "fouls": 11.26,
+      "yellowCards": 1.84,
+      "redCards": 0.12,
+      "offsides": 2.18,
       "possession": 50.43
     },
     "sample": {
@@ -409,20 +285,20 @@
     },
     "league": {
       "possession": 50,
-      "shots": 14.84,
-      "shotsOnTarget": 5.65,
-      "xg": 1.74,
-      "corners": 4.8,
-      "fouls": 11.32,
-      "yellowCards": 1.86,
-      "redCards": 0.14,
-      "offsides": 2.23
+      "shots": 14.7,
+      "shotsOnTarget": 5.43,
+      "xg": 1.69,
+      "corners": 4.69,
+      "fouls": 11.26,
+      "yellowCards": 1.84,
+      "redCards": 0.12,
+      "offsides": 2.18
     },
     "sources": {
       "home": {
         "shots": "media",
         "shotsOnTarget": "media",
-        "xg": "Bzzoiro",
+        "xg": "media",
         "corners": "media",
         "fouls": "media",
         "yellowCards": "media",
@@ -433,7 +309,7 @@
       "away": {
         "shots": "media",
         "shotsOnTarget": "media",
-        "xg": "Bzzoiro",
+        "xg": "media",
         "corners": "media",
         "fouls": "media",
         "yellowCards": "media",
@@ -446,26 +322,26 @@
       "media",
       "Bzzoiro"
     ],
-    "xgSource": "Bzzoiro",
+    "xgSource": "media",
     "shortSample": true,
     "source": "media+Bzzoiro"
   },
   "dominance": {
     "method": "dominance-v1",
     "cornersDuel": {
-      "home": 0.435,
-      "draw": 0.131,
-      "away": 0.435
+      "home": 0.434,
+      "draw": 0.132,
+      "away": 0.434
     },
     "cardsDuel": {
       "home": 0.392,
-      "draw": 0.215,
+      "draw": 0.217,
       "away": 0.392
     },
     "lastGoal": {
-      "home": 0.542,
-      "away": 0.415,
-      "noGoal": 0.043
+      "home": 0.611,
+      "away": 0.347,
+      "noGoal": 0.042
     },
     "cornerRace": {
       "3": {
@@ -482,11 +358,11 @@
       }
     },
     "cornerMargin": {
-      "home3plus": 0.206,
-      "home12": 0.228,
-      "level": 0.131,
-      "away12": 0.228,
-      "away3plus": 0.206
+      "home3plus": 0.204,
+      "home12": 0.23,
+      "level": 0.132,
+      "away12": 0.23,
+      "away3plus": 0.204
     },
     "source": "GoatLab"
   },
@@ -554,13 +430,7 @@
         "value": 2,
         "sample": 4
       },
-      "season": {
-        "position": 19,
-        "played": 4,
-        "gf": null,
-        "ga": null,
-        "provider": null
-      },
+      "season": null,
       "player": {
         "name": "Mason Greenwood",
         "detail": "4 goles en 10 partidos",
