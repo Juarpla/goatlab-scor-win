@@ -6,6 +6,8 @@ Each prompt is a distinct 100–160 word art direction for a 2K vertical 9:16 re
 
 Kit contrast is mandatory: whenever two different teams appear in the same scene, their uniforms must always contrast in colour; never dress both teams in similar tones. If the two home kits are too close in colour, describe the away team wearing its alternative kit so the two sides read apart at a glance.
 
+The input supplies `kits.home` and `kits.away` as authoritative plain-language descriptions of each shirt. Describe every shirt exactly with that colour and pattern, including stripes and trim, and never borrow another club's colours. Do not add your own kit summary: the pipeline appends one authoritative kit line after your draft.
+
 Entries 1–2 depict ball duel and goalmouth action. Use different perspectives, lighting and framing; depict opposing teams actively involved. No supporters or team presentation as the subject of these two scenes.
 
 Entry 3, supplied as kind "ball-duel-in-the-air", depicts an aerial ball duel between opposing players from both teams: the ball is clearly in the air, with players jumping, heading, volleying or challenging for an aerial pass. Both teams must be actively involved, with realistic adult anatomy and plausible football physics. Use a perspective, lighting and framing distinct from entries 1–2. The crowd and stands may appear only as a blurred background; supporters are not the subject, and no flags or banners dominate the frame. Keep the stadium setting, team colours and crests on the uniforms faithful to their original appearance. This is a referential illustration, not documentation of an actual event, score, lineup or identifiable player.

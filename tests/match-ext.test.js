@@ -4,7 +4,7 @@ import { scoreMatrix, matrixMarkets, firstGoalRace, scorerShares, scorerMarkets,
 import { sameClub, canonicalClubKey } from '../src/lib/teams.js';
 import { teamRates, estimateLambdas } from '../src/lib/predictions.js';
 import { buildBeats, ballAt, matchMinute, hashSeed } from '../src/lib/pitch-path.js';
-import { teamColors, NEUTRAL_KIT } from '../src/lib/team-colors.js';
+import { teamColors, NEUTRAL_KIT, colorName, kitDescription } from '../src/lib/team-colors.js';
 import { locateMatch, venueZoomLayout, VENUE_ZOOM, europeMapLayout, EUROPE_MAP } from '../src/lib/venues.js';
 
 const close = (a, b, epsilon = 0.002) => Math.abs(a - b) <= epsilon;
@@ -334,6 +334,14 @@ test('hashSeed es estable', () => {
 test('teamColors resuelve por nombre tolerante y cae a neutro', () => {
   assert.equal(teamColors('Liverpool FC').primary, '#c8102e');
   assert.deepEqual(teamColors('Club Desconocido de Nowhere'), NEUTRAL_KIT);
+});
+
+test('kitDescription nombra el color y las rayas del kit curado', () => {
+  assert.equal(colorName('#0761af'), 'blue');
+  assert.equal(kitDescription('Deportivo Alavés'), 'blue and white vertically striped shirt');
+  assert.equal(kitDescription('Alavés'), 'blue and white vertically striped shirt');
+  assert.equal(kitDescription('Real Madrid CF'), 'white shirt with blue trim');
+  assert.match(kitDescription('Club Desconocido de Nowhere'), /shirt with .* trim/);
 });
 
 test('el zoom de sede proyecta el pin dentro del marco', () => {

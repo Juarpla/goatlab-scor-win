@@ -1,5 +1,6 @@
 /** Public content contract shared by Actions, Astro and the portable GoatLab skill. */
 import { esName } from './teams.js';
+import { kitDescription } from './team-colors.js';
 import { DEFAULT_PROVIDER_ORDER } from './llm.js';
 import { beatStructureErrors, matchDateSentence, narrationText, scriptBeats } from './script-beats.js';
 export const CONTENT_VERSION = 1;
@@ -30,14 +31,17 @@ export const IMAGE_PROMPT_SCENE_WORDS = Object.freeze({
 });
 
 /** LLM drafts lose boilerplate under long guides; append the contract text deterministically. */
-export function mendImagePromptBoilerplate(prompt, { home, away, kind } = {}) {
-  let text = String(prompt ?? '').trim();
+export function mendImagePromptBoilerplate(prompt, { home, away, kind, kits } = {}) {
+  let text = String(prompt ?? '').trim().replace(/\s*Authoritative kits:[^.]+\./gi, '').trim();
+  const homeKit = kits?.home || (home ? kitDescription(home) : '');
+  const awayKit = kits?.away || (away ? kitDescription(away) : '');
   const appendix = [
     'Render requirements for the generated illustration: referential photorealistic illustration, vertical 9:16 aspect.',
     'Show realistic uniforms, team colours and visual identity, and always contrast the kits of the two sides; when the two home kits are too close in colour, the away team wears its alternative kit.',
   ];
   const scene = IMAGE_PROMPT_SCENE_WORDS[kind];
   if (scene) appendix.push(scene);
+  if (home && away && homeKit && awayKit) appendix.push(`Authoritative kits: ${home} wearing a ${homeKit}; ${away} wearing a ${awayKit}.`);
   const missingSides = [home, away].filter(side => side && !text.includes(side));
   if (missingSides.length) appendix.push(`Featured teams: ${missingSides.join(' and ')}.`);
   if (text) text += (/[.!?]$/.test(text) ? ' ' : ' ') + appendix.filter(Boolean).join(' ');

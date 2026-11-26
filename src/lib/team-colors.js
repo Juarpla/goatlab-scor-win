@@ -29,22 +29,22 @@ const COLORS = {
   burnley: { primary: '#6c1d45', secondary: '#99d6ea' },
   sunderland: { primary: '#eb172b', secondary: '#ffffff' },
   // LaLiga
-  barcelona: { primary: '#a50044', secondary: '#004d98' },
-  'real madrid': { primary: '#f5f6f7', secondary: '#00529f', pattern: 'sash' },
+  barcelona: { primary: '#a50044', secondary: '#004d98', pattern: 'stripes' },
+  'real madrid': { primary: '#f5f6f7', secondary: '#00529f' },
   'atletico de madrid': { primary: '#cb3524', secondary: '#ffffff', pattern: 'stripes' },
-  'athletic club': { primary: '#ee2523', secondary: '#ffffff' },
+  'athletic club': { primary: '#ee2523', secondary: '#ffffff', pattern: 'stripes' },
   sevilla: { primary: '#d8112b', secondary: '#ffffff' },
   'real betis': { primary: '#00954c', secondary: '#ffffff', pattern: 'stripes' },
   villarreal: { primary: '#ffe667', secondary: '#005187' },
   celta: { primary: '#8ac3ee', secondary: '#ffffff' },
   valencia: { primary: '#f5f6f7', secondary: '#f5a100' },
   osasuna: { primary: '#d91a21', secondary: '#0a346f' },
-  alaves: { primary: '#0761af', secondary: '#ffffff' },
-  girona: { primary: '#cd2534', secondary: '#ffffff' },
+  alaves: { primary: '#0761af', secondary: '#ffffff', pattern: 'stripes' },
+  girona: { primary: '#cd2534', secondary: '#ffffff', pattern: 'stripes' },
   getafe: { primary: '#005999', secondary: '#ffffff' },
   mallorca: { primary: '#e20613', secondary: '#2b2b2b' },
   'rayo vallecano': { primary: '#f5f6f7', secondary: '#e53027', pattern: 'sash' },
-  espanyol: { primary: '#0072bc', secondary: '#ffffff' },
+  espanyol: { primary: '#0072bc', secondary: '#ffffff', pattern: 'stripes' },
   elche: { primary: '#f5f6f7', secondary: '#00953b', pattern: 'stripes' },
   levante: { primary: '#004b97', secondary: '#c8102e', pattern: 'stripes' },
   malaga: { primary: '#0066b2', secondary: '#ffffff' },
@@ -141,7 +141,7 @@ const COLORS = {
   'az alkmaar': { primary: '#e30613', secondary: '#ffffff' },
   anderlecht: { primary: '#4a2d82', secondary: '#ffffff' },
   'rsc anderlecht': { primary: '#4a2d82', secondary: '#ffffff' },
-  barca: { primary: '#a50044', secondary: '#004d98' },
+  barca: { primary: '#a50044', secondary: '#004d98', pattern: 'stripes' },
   'bayer 04 leverkusen': { primary: '#e32219', secondary: '#231f20' },
   'bayern munchen': { primary: '#dc052d', secondary: '#0066b2' },
   besiktas: { primary: '#231f20', secondary: '#ffffff' },
@@ -210,6 +210,44 @@ const COLORS = {
 };
 
 export const NEUTRAL_KIT = { primary: '#3a453c', secondary: '#a4aea3' };
+
+/** Coarse English colour name for image prompts; hex stays the source of truth. */
+export function colorName(hex) {
+  const match = /^#([0-9a-f]{6})$/i.exec(String(hex ?? ''));
+  if (!match) return 'team-coloured';
+  const value = parseInt(match[1], 16);
+  const r = (value >> 16) / 255, g = ((value >> 8) & 255) / 255, b = (value & 255) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, d = max - min;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+  let h = 0;
+  if (d) {
+    if (max === r) h = 60 * (((g - b) / d) % 6);
+    else if (max === g) h = 60 * ((b - r) / d + 2);
+    else h = 60 * ((r - g) / d + 4);
+  }
+  h = (h + 360) % 360;
+  if (l >= .88 && s <= .2) return 'white';
+  if (l <= .16) return 'black';
+  if (s <= .14) return l < .4 ? 'dark grey' : l > .72 ? 'light grey' : 'grey';
+  if (h < 15 || h >= 345) return l < .3 ? 'maroon' : 'red';
+  if (h < 40) return l < .32 ? 'brown' : 'orange';
+  if (h < 65) return l < .35 ? 'olive' : l > .8 ? 'light yellow' : 'yellow';
+  if (h < 160) return l < .3 ? 'dark green' : 'green';
+  if (h < 200) return l < .4 ? 'teal' : 'light blue';
+  if (h < 250) return l < .28 ? 'navy' : 'blue';
+  if (h < 290) return 'purple';
+  if (h < 345) return l < .35 ? 'dark red' : 'pink';
+  return 'pink';
+}
+
+/** Plain-language shirt for prompts: primary, secondary and pattern. */
+export function kitDescription(name) {
+  const { primary, secondary, pattern } = teamColors(name);
+  const first = colorName(primary), second = colorName(secondary);
+  if (pattern === 'stripes') return `${first} and ${second} vertically striped shirt`;
+  if (pattern === 'sash') return `${first} shirt with a ${second} diagonal sash`;
+  return first === second ? `${first} shirt` : `${first} shirt with ${second} trim`;
+}
 
 /**
  * Team shirt by tolerant name; neutral if not curated.

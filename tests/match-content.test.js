@@ -44,6 +44,12 @@ test('mechanical appendix restores pack-critical words on degenerate drafts',()=
   const restored=mendImagePromptBoilerplate('A wide shot with no ratio marker.',{home:'Alpha',away:'Beta',kind:'stadium'});
   assert.ok(restored.includes('vertical 9:16')&&restored.includes('Alpha')&&restored.includes('flags')&&restored.includes('crest'));
 });
+test('mechanical appendix states the authoritative kits',()=>{
+  const text=mendImagePromptBoilerplate('A scene.',{home:'Real Madrid CF',away:'Deportivo Alavés',kind:'ball-duel'});
+  assert.ok(text.includes('Authoritative kits: Real Madrid CF wearing a white shirt with blue trim; Deportivo Alavés wearing a blue and white vertically striped shirt.'));
+  const twice=mendImagePromptBoilerplate(text,{home:'Real Madrid CF',away:'Deportivo Alavés',kind:'ball-duel'});
+  assert.equal(twice.match(/Authoritative kits:/g).length,1);
+});
 test('clip adapter preserves verified ranges and accepts legacy plan version 3', () => {
   const input={frames:270,photos:[],clips:[{src:'clip.mp4',width:720,height:1280,duration:6}],words:[{word:'Datos',start:0,end:1}],plan:{version:3,scenes:[{start:0,end:6,layers:[],clips:[{clip:0,offset:1,duration:4}]}]}};
   assert.equal(compositionProps(input).plan.scenes[0].clips[0].offset,1);

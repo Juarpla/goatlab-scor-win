@@ -5,6 +5,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { CONTENT_CATEGORIES, CONTENT_PROVIDER_ORDER, promptErrors, validateContent, contentIdentityErrors, mendImagePromptBoilerplate } from '../../src/lib/match-content.js';
 import { CONTENT_LLM_LIMITS, withFailover, extractJson } from '../../src/lib/llm.js';
 import { esName } from '../../src/lib/teams.js';
+import { kitDescription } from '../../src/lib/team-colors.js';
 import { editingFacts } from '../../src/lib/match-facts.js';
 import { TOP_FILENAME, contentMatches, defaultTopN, registerExtra, topFreshness } from '../../src/lib/top.js';
 import { buildPruneContext, resolvePruneMatch, pruneDue } from '../../src/lib/pruning.js';
@@ -87,7 +88,8 @@ for (const match of matches) {
   } catch (e) { if (e.code !== 'ENOENT' && !(e instanceof SyntaxError)) throw e; }
   const home = esName(match.home), away = esName(match.away);
   const facts = editingFacts(match, scorers);
-  const identity = { matchId, home, away, competition: match.competition, kickoff: match.kickoff, venue: match.venue ?? null, facts, published, kinds: spec.kinds };
+  const kits = { home: kitDescription(match.home), away: kitDescription(match.away) };
+  const identity = { matchId, home, away, competition: match.competition, kickoff: match.kickoff, venue: match.venue ?? null, facts, published, kinds: spec.kinds, kits };
   let result, error;
   console.log(`${category}: preparando ${matchId}`);
   try {
@@ -95,7 +97,7 @@ for (const match of matches) {
       orderVar: 'SCRIPT_PROVIDER_ORDER', ...CONTENT_LLM_LIMITS,
       validate: text => {
         const draft = extractJson(text);
-        if (category === 'image-prompts') for (const row of draft.prompts ?? []) row.prompt = mendImagePromptBoilerplate(row.prompt, { home, away, kind: row?.kind });
+        if (category === 'image-prompts') for (const row of draft.prompts ?? []) row.prompt = mendImagePromptBoilerplate(row.prompt, { home, away, kind: row?.kind, kits });
         const errors = promptErrors(draft, { category, home, away, facts, published });
         if (errors.length) throw new Error(errors.slice(0, 8).join('; '));
         return draft;

@@ -1,100 +1,6 @@
 {
-  "updatedAt": "2026-11-26T08:19:54.927Z",
+  "updatedAt": "2026-11-26T14:26:00.737Z",
   "runs": [
-    {
-      "at": "2026-11-17T20:56:37.646Z",
-      "matchId": "bz-212734",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1111,
-        "outputTokens": 1063
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "0c9d40d7-cfc9-41e6-958c-765a37991f32"
-    },
-    {
-      "at": "2026-11-17T21:09:35.047Z",
-      "task": "shorts",
-      "matchId": "manchester-city-vs-fulham-2026-11-21",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 5: 6 cifras, máximo 3; guion 6: el cero no se escribe en dígitos; guion 7: 4 cifras, máximo 3; guion 9: falta Fulham FC; guion 9: 4 cifras, máximo 3; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7683,
-            "outputTokens": 2955
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8399
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 197
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 174
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Fulham FC; guion 5: 6 cifras, máximo 3; guion 7: 6 cifras, máximo 3; guion 8: 50 palabras, mínimo 55; guion 9: falta Fulham FC; guion 10: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7809,
-            "outputTokens": 2520
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 12745
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "guion 1: 5 cifras, máximo 3; guion 2: el cero no se escribe en dígitos; guion 2: 4 cifras, máximo 3; guion 3: falta una proyección marcada como opinión; guion 3: 4 cifras, máximo 3; guion 5: falta una proyección marcada como opinión; guion 5: 4 cifras, máximo 3; guion 6: el cero no se escribe en dígitos",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7149,
-            "outputTokens": 7204
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 185166
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7149,
-        "outputTokens": 7204
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-11-17T21:13:54.232Z",
       "task": "shorts",
@@ -8223,6 +8129,36 @@
       "usage": {
         "inputTokens": 2811,
         "outputTokens": 2086
+      }
+    },
+    {
+      "at": "2026-11-26T14:24:59.328Z",
+      "task": "image-prompts",
+      "matchId": "real-madrid-vs-deportivo-alaves-2026-11-28",
+      "instructionVersion": "64a6de6217d2ad41f3c5c166ff7cdf5368876f3863ccd1844230acaf571acc5d",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2990,
+        "outputTokens": 2230
+      }
+    },
+    {
+      "at": "2026-11-26T14:26:00.737Z",
+      "task": "image-prompts",
+      "matchId": "real-madrid-vs-deportivo-alaves-2026-11-28",
+      "instructionVersion": "12ad6002325eda4f8bc9df218cfac46afb8d94724c8d16596a588a4e395327f9",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2991,
+        "outputTokens": 1655
       }
     }
   ]
