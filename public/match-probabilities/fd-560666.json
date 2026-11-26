@@ -1,0 +1,630 @@
+{
+  "id": "fd-560666",
+  "home": "Aston Villa FC",
+  "away": "Everton FC",
+  "competition": "premier",
+  "kickoff": "2026-12-02T20:15:00Z",
+  "updatedAt": "2026-11-26T16:44:22.471Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.62,
+      "away": 1.227
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.59,
+      "away": 1.164
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Aston Villa FC": {
+        "position": 12,
+        "team": "Aston Villa FC",
+        "played": 11,
+        "won": 3,
+        "drawn": 5,
+        "lost": 3,
+        "goalsFor": 14,
+        "goalsAgainst": 17,
+        "goalDifference": -3,
+        "points": 14,
+        "form": null
+      },
+      "Everton FC": {
+        "position": 9,
+        "team": "Everton FC",
+        "played": 11,
+        "won": 4,
+        "drawn": 4,
+        "lost": 3,
+        "goalsFor": 12,
+        "goalsAgainst": 14,
+        "goalDifference": -2,
+        "points": 16,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-12-02T20:15:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 479
+    },
+    "venue": {
+      "city": "Birmingham",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.454,
+      "draw": 0.268,
+      "away": 0.278
+    },
+    "doubleChance": {
+      "12": 0.732,
+      "1X": 0.722,
+      "X2": 0.546
+    },
+    "dnb": {
+      "home": 0.62,
+      "away": 0.38
+    },
+    "totals": {
+      "over15": 0.788,
+      "under15": 0.212,
+      "over25": 0.542,
+      "under25": 0.458,
+      "over35": 0.318,
+      "under35": 0.682
+    },
+    "btts": {
+      "yes": 0.578,
+      "no": 0.422
+    },
+    "cleanSheet": {
+      "home": 0.293,
+      "away": 0.198
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.127
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.093
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.082
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.076
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.071
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.75,
+    "noGoal": 0.064,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.368
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.233
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.147
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.093
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.059
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.037
+      }
+    ],
+    "firstHome": 0.541,
+    "firstAway": 0.396
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Nicolas Jackson",
+        "goals": 6,
+        "matches": 10,
+        "share": 0.429,
+        "rate": 0.68,
+        "anytime": 0.494,
+        "first": 0.248
+      },
+      {
+        "player": "Alysson",
+        "goals": 2,
+        "matches": 10,
+        "share": 0.143,
+        "rate": 0.23,
+        "anytime": 0.203,
+        "first": 0.083
+      }
+    ],
+    "away": [
+      {
+        "player": "Thierno Barry",
+        "goals": 6,
+        "matches": 11,
+        "share": 0.5,
+        "rate": 0.58,
+        "anytime": 0.441,
+        "first": 0.212
+      },
+      {
+        "player": "Kiernan Dewsbury-Hall",
+        "goals": 3,
+        "matches": 11,
+        "share": 0.25,
+        "rate": 0.29,
+        "anytime": 0.252,
+        "first": 0.106
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.483,
+      "draw": 0.267,
+      "away": 0.25,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.56,
+      "away": 1.1
+    },
+    "over15": 0.74,
+    "over25": 0.496,
+    "over35": 0.272,
+    "btts": 0.524,
+    "score": "1-1",
+    "cornersOver95": 0.49200000000000005,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.483,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4829,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-26T16:44:17.690Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.468,
+      "draw": 0.276,
+      "away": 0.256
+    },
+    "doubleChance": {
+      "12": 0.724,
+      "1X": 0.744,
+      "X2": 0.532
+    },
+    "dnb": {
+      "home": 0.646,
+      "away": 0.354
+    },
+    "totals": {
+      "over15": 0.756,
+      "under15": 0.244,
+      "over25": 0.497,
+      "under25": 0.503,
+      "over35": 0.277,
+      "under35": 0.723
+    },
+    "btts": {
+      "yes": 0.539,
+      "no": 0.461
+    },
+    "cleanSheet": {
+      "home": 0.333,
+      "away": 0.21
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.121,
+        "share": 0.25260960334029225
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.097,
+        "share": 0.20250521920668058
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.094,
+        "share": 0.1962421711899791
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.085,
+        "share": 0.17745302713987474
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.082,
+        "share": 0.17118997912317327
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 64,
+    "homeWins": 27,
+    "draws": 21,
+    "awayWins": 16,
+    "avgTotalGoals": 2.59375,
+    "recent": [
+      {
+        "eventId": 220,
+        "date": "2026-01-18T16:30:00+00:00",
+        "home": "Aston Villa",
+        "away": "Everton",
+        "homeTeamId": 3,
+        "awayTeamId": 20,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 34,
+        "date": "2025-09-13T14:00:00+00:00",
+        "home": "Everton",
+        "away": "Aston Villa",
+        "homeTeamId": 20,
+        "awayTeamId": 3,
+        "homeScore": 0,
+        "awayScore": 0
+      },
+      {
+        "eventId": 306856,
+        "date": "2025-01-15T19:30:00+00:00",
+        "home": "Everton",
+        "away": "Aston Villa",
+        "homeTeamId": 20,
+        "awayTeamId": 3,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "eventId": 306687,
+        "date": "2024-09-14T16:30:00+00:00",
+        "home": "Aston Villa",
+        "away": "Everton",
+        "homeTeamId": 3,
+        "awayTeamId": 20,
+        "homeScore": 3,
+        "awayScore": 2
+      },
+      {
+        "eventId": 312326,
+        "date": "2024-01-14T14:00:00+00:00",
+        "home": "Everton",
+        "away": "Aston Villa",
+        "homeTeamId": 20,
+        "awayTeamId": 3,
+        "homeScore": 0,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 479
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.3
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 479
+    },
+    "source": "GoatLab",
+    "expectedTotal": 10.1
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 14.89,
+      "shotsOnTarget": 4.66,
+      "xg": 1.56,
+      "corners": 5.31,
+      "fouls": 11.53,
+      "yellowCards": 2.04,
+      "redCards": 0.19,
+      "offsides": 1.32,
+      "possession": 51
+    },
+    "away": {
+      "shots": 13.49,
+      "shotsOnTarget": 4.41,
+      "xg": 1.1,
+      "corners": 4.74,
+      "fouls": 11.96,
+      "yellowCards": 2.29,
+      "redCards": 0.14,
+      "offsides": 2.07,
+      "possession": 49
+    },
+    "sample": {
+      "home": 10,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 7,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 6,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.63,
+      "shotsOnTarget": 4.35,
+      "xg": 1.43,
+      "corners": 4.82,
+      "fouls": 11.57,
+      "yellowCards": 2.11,
+      "redCards": 0.2,
+      "offsides": 1.87
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.508,
+      "draw": 0.126,
+      "away": 0.367
+    },
+    "cardsDuel": {
+      "home": 0.355,
+      "draw": 0.197,
+      "away": 0.448
+    },
+    "lastGoal": {
+      "home": 0.541,
+      "away": 0.396,
+      "noGoal": 0.064
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.553,
+        "away": 0.447
+      },
+      "5": {
+        "home": 0.569,
+        "away": 0.431
+      },
+      "7": {
+        "home": 0.583,
+        "away": 0.417
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.268,
+      "home12": 0.24,
+      "level": 0.126,
+      "away12": 0.203,
+      "away3plus": 0.163
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 21.4,
+      "condition": null,
+      "sampledAt": "2026-12-02T20:15:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "Villa Park",
+      "city": "Birmingham",
+      "capacity": 42640,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Aston Villa FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 2,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 1,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 5,
+        "sample": 5
+      },
+      "season": {
+        "position": 12,
+        "played": 11,
+        "gf": 14,
+        "ga": 17,
+        "provider": null
+      },
+      "player": {
+        "name": "Nicolas Jackson",
+        "detail": "6 goles en 10 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Everton FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 9,
+        "played": 11,
+        "gf": 12,
+        "ga": 14,
+        "provider": null
+      },
+      "player": {
+        "name": "Thierno Barry",
+        "detail": "6 goles en 11 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

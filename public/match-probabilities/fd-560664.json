@@ -1,0 +1,627 @@
+{
+  "id": "fd-560664",
+  "home": "Hull City AFC",
+  "away": "Nottingham Forest FC",
+  "competition": "premier",
+  "kickoff": "2026-12-02T19:30:00Z",
+  "updatedAt": "2026-11-26T16:44:22.471Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 1.53,
+      "away": 0.92
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.47,
+      "away": 1.105
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Hull City AFC": {
+        "position": 11,
+        "team": "Hull City AFC",
+        "played": 11,
+        "won": 3,
+        "drawn": 5,
+        "lost": 3,
+        "goalsFor": 13,
+        "goalsAgainst": 11,
+        "goalDifference": 2,
+        "points": 14,
+        "form": null
+      },
+      "Nottingham Forest FC": {
+        "position": 17,
+        "team": "Nottingham Forest FC",
+        "played": 11,
+        "won": 2,
+        "drawn": 3,
+        "lost": 6,
+        "goalsFor": 9,
+        "goalsAgainst": 15,
+        "goalDifference": -6,
+        "points": 9,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-12-02T19:30:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 479
+    },
+    "venue": null
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.503,
+      "draw": 0.282,
+      "away": 0.215
+    },
+    "doubleChance": {
+      "12": 0.718,
+      "1X": 0.785,
+      "X2": 0.497
+    },
+    "dnb": {
+      "home": 0.701,
+      "away": 0.299
+    },
+    "totals": {
+      "over15": 0.714,
+      "under15": 0.286,
+      "over25": 0.443,
+      "under25": 0.557,
+      "over35": 0.232,
+      "under35": 0.768
+    },
+    "btts": {
+      "yes": 0.483,
+      "no": 0.517
+    },
+    "cleanSheet": {
+      "home": 0.399,
+      "away": 0.217
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.134
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.12
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.101
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.098
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.093
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 2.58,
+    "noGoal": 0.076,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.349
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.227
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.148
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.096
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.063
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.041
+      }
+    ],
+    "firstHome": 0.527,
+    "firstAway": 0.396
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Oliver McBurnie",
+        "goals": 4,
+        "matches": 11,
+        "share": 0.308,
+        "rate": 0.45,
+        "anytime": 0.364,
+        "first": 0.175
+      },
+      {
+        "player": "Mohamed Belloumi",
+        "goals": 3,
+        "matches": 10,
+        "share": 0.231,
+        "rate": 0.34,
+        "anytime": 0.288,
+        "first": 0.132
+      }
+    ],
+    "away": [
+      {
+        "player": "Liam Delap",
+        "goals": 3,
+        "matches": 10,
+        "share": 0.333,
+        "rate": 0.37,
+        "anytime": 0.308,
+        "first": 0.143
+      },
+      {
+        "player": "Dan Ndoye",
+        "goals": 2,
+        "matches": 11,
+        "share": 0.222,
+        "rate": 0.25,
+        "anytime": 0.218,
+        "first": 0.095
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.391,
+      "draw": 0.27399999999999997,
+      "away": 0.33399999999999996,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.41,
+      "away": 1.29
+    },
+    "over15": 0.747,
+    "over25": 0.505,
+    "over35": 0.28,
+    "btts": 0.54,
+    "score": "1-1",
+    "cornersOver95": 0.502,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.391,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.3914,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-26T16:44:17.336Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.387,
+      "draw": 0.282,
+      "away": 0.331
+    },
+    "doubleChance": {
+      "12": 0.718,
+      "1X": 0.669,
+      "X2": 0.613
+    },
+    "dnb": {
+      "home": 0.538,
+      "away": 0.462
+    },
+    "totals": {
+      "over15": 0.764,
+      "under15": 0.236,
+      "over25": 0.506,
+      "under25": 0.494,
+      "over35": 0.286,
+      "under35": 0.714
+    },
+    "btts": {
+      "yes": 0.56,
+      "no": 0.44
+    },
+    "cleanSheet": {
+      "home": 0.275,
+      "away": 0.244
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.107,
+        "share": 0.24654377880184328
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.086,
+        "share": 0.19815668202764972
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "p": 0.083,
+        "share": 0.19124423963133638
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "p": 0.079,
+        "share": 0.18202764976958524
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.079,
+        "share": 0.18202764976958524
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 17,
+    "homeWins": 8,
+    "draws": 3,
+    "awayWins": 6,
+    "avgTotalGoals": 2.2941176470588234,
+    "recent": [
+      {
+        "eventId": 319031,
+        "date": "2022-05-07T11:30:00+00:00",
+        "home": "Hull City",
+        "away": "Nottingham Forest",
+        "homeTeamId": 204,
+        "awayTeamId": 15,
+        "homeScore": 1,
+        "awayScore": 1
+      },
+      {
+        "eventId": 318725,
+        "date": "2021-12-18T15:00:00+00:00",
+        "home": "Nottingham Forest",
+        "away": "Hull City",
+        "homeTeamId": 15,
+        "awayTeamId": 204,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 327217,
+        "date": "2019-12-26T15:00:00+00:00",
+        "home": "Hull City",
+        "away": "Nottingham Forest",
+        "homeTeamId": 204,
+        "awayTeamId": 15,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 327090,
+        "date": "2019-10-23T18:45:00+00:00",
+        "home": "Nottingham Forest",
+        "away": "Hull City",
+        "homeTeamId": 15,
+        "awayTeamId": 204,
+        "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "eventId": 331220,
+        "date": "2019-03-09T15:00:00+00:00",
+        "home": "Nottingham Forest",
+        "away": "Hull City",
+        "homeTeamId": 15,
+        "awayTeamId": 204,
+        "homeScore": 3,
+        "awayScore": 0
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 479
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.1
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 479
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.6
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 11.83,
+      "shotsOnTarget": 3.82,
+      "xg": 1.41,
+      "corners": 4.4,
+      "fouls": 10.96,
+      "yellowCards": 2.09,
+      "redCards": 0.12,
+      "offsides": 1.73,
+      "possession": 45.59
+    },
+    "away": {
+      "shots": 14.98,
+      "shotsOnTarget": 4.48,
+      "xg": 1.29,
+      "corners": 5.15,
+      "fouls": 11.21,
+      "yellowCards": 1.97,
+      "redCards": 0.21,
+      "offsides": 1.95,
+      "possession": 54.41
+    },
+    "sample": {
+      "home": 10,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 5,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 5,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.71,
+      "shotsOnTarget": 4.35,
+      "xg": 1.45,
+      "corners": 4.81,
+      "fouls": 11.47,
+      "yellowCards": 2.08,
+      "redCards": 0.22,
+      "offsides": 1.87
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.342,
+      "draw": 0.127,
+      "away": 0.531
+    },
+    "cardsDuel": {
+      "home": 0.42,
+      "draw": 0.205,
+      "away": 0.375
+    },
+    "lastGoal": {
+      "home": 0.527,
+      "away": 0.396,
+      "noGoal": 0.076
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.427,
+        "away": 0.573
+      },
+      "5": {
+        "home": 0.404,
+        "away": 0.596
+      },
+      "7": {
+        "home": 0.386,
+        "away": 0.614
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.143,
+      "home12": 0.198,
+      "level": 0.127,
+      "away12": 0.25,
+      "away3plus": 0.281
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 24.1,
+      "condition": null,
+      "sampledAt": "2026-12-02T19:30:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": null,
+      "city": null,
+      "capacity": null,
+      "tz": null
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Hull City AFC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 1,
+        "sample": 5
+      },
+      "season": {
+        "position": 11,
+        "played": 11,
+        "gf": 13,
+        "ga": 11,
+        "provider": null
+      },
+      "player": {
+        "name": "Oliver McBurnie",
+        "detail": "4 goles en 11 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Nottingham Forest FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 17,
+        "played": 11,
+        "gf": 9,
+        "ga": 15,
+        "provider": null
+      },
+      "player": {
+        "name": "Liam Delap",
+        "detail": "3 goles en 10 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}

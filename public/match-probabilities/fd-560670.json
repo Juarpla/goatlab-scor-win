@@ -1,0 +1,636 @@
+{
+  "id": "fd-560670",
+  "home": "Newcastle United FC",
+  "away": "Manchester United FC",
+  "competition": "premier",
+  "kickoff": "2026-12-02T20:15:00Z",
+  "updatedAt": "2026-11-26T16:44:22.471Z",
+  "schemaVersion": 5,
+  "inputs": {
+    "lambdas": {
+      "home": 2.07,
+      "away": 1.38
+    },
+    "lambdaSource": "Poisson",
+    "lambdasBlend": {
+      "home": 1.925,
+      "away": 1.4
+    },
+    "firstGoalSource": "Blend Poisson+xG",
+    "sample": {
+      "home": 6,
+      "away": 6
+    },
+    "standings": {
+      "Newcastle United FC": {
+        "position": 13,
+        "team": "Newcastle United FC",
+        "played": 11,
+        "won": 3,
+        "drawn": 4,
+        "lost": 4,
+        "goalsFor": 15,
+        "goalsAgainst": 18,
+        "goalDifference": -3,
+        "points": 13,
+        "form": null
+      },
+      "Manchester United FC": {
+        "position": 19,
+        "team": "Manchester United FC",
+        "played": 11,
+        "won": 1,
+        "drawn": 5,
+        "lost": 5,
+        "goalsFor": 14,
+        "goalsAgainst": 23,
+        "goalDifference": -9,
+        "points": 8,
+        "form": null
+      }
+    },
+    "scorers": {
+      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "provider": "Bzzoiro + Football-Data.org",
+      "fallbackSource": null,
+      "scorerSource": "leaderboard"
+    },
+    "resultsWindowDays": 180,
+    "weather": {
+      "sampledAt": "2026-12-02T20:15:00Z",
+      "source": "bzzoiro"
+    },
+    "discipline": {
+      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "provider": "Bzzoiro + Football-Data.org"
+    },
+    "history": {
+      "rows": 479
+    },
+    "venue": {
+      "city": "Newcastle upon Tyne",
+      "tz": "Europe/London"
+    }
+  },
+  "markets": {
+    "oneX2": {
+      "home": 0.525,
+      "draw": 0.23,
+      "away": 0.245
+    },
+    "doubleChance": {
+      "12": 0.77,
+      "1X": 0.755,
+      "X2": 0.475
+    },
+    "dnb": {
+      "home": 0.682,
+      "away": 0.318
+    },
+    "totals": {
+      "over15": 0.868,
+      "under15": 0.132,
+      "over25": 0.67,
+      "under25": 0.33,
+      "over35": 0.452,
+      "under35": 0.548
+    },
+    "btts": {
+      "yes": 0.663,
+      "no": 0.337
+    },
+    "cleanSheet": {
+      "home": 0.252,
+      "away": 0.126
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.1
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.094
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.068
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.065
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "p": 0.065
+      }
+    ]
+  },
+  "firstGoal": {
+    "lambdaTotal": 3.33,
+    "noGoal": 0.036,
+    "bands": [
+      {
+        "from": 0,
+        "to": 15,
+        "p": 0.425
+      },
+      {
+        "from": 15,
+        "to": 30,
+        "p": 0.244
+      },
+      {
+        "from": 30,
+        "to": 45,
+        "p": 0.14
+      },
+      {
+        "from": 45,
+        "to": 60,
+        "p": 0.081
+      },
+      {
+        "from": 60,
+        "to": 75,
+        "p": 0.046
+      },
+      {
+        "from": 75,
+        "to": 90,
+        "p": 0.027
+      }
+    ],
+    "firstHome": 0.558,
+    "firstAway": 0.406
+  },
+  "scorers": {
+    "home": [
+      {
+        "player": "Harvey Barnes",
+        "goals": 3,
+        "matches": 11,
+        "share": 0.2,
+        "rate": 0.39,
+        "anytime": 0.32,
+        "first": 0.116
+      },
+      {
+        "player": "Anthony Elanga",
+        "goals": 2,
+        "matches": 7,
+        "share": 0.133,
+        "rate": 0.26,
+        "anytime": 0.226,
+        "first": 0.077
+      },
+      {
+        "player": "Joe Willock",
+        "goals": 2,
+        "matches": 11,
+        "share": 0.133,
+        "rate": 0.26,
+        "anytime": 0.226,
+        "first": 0.077
+      }
+    ],
+    "away": [
+      {
+        "player": "Bruno Fernandes",
+        "goals": 4,
+        "matches": 11,
+        "share": 0.286,
+        "rate": 0.4,
+        "anytime": 0.33,
+        "first": 0.12
+      },
+      {
+        "player": "Bryan Mbeumo",
+        "goals": 4,
+        "matches": 11,
+        "share": 0.286,
+        "rate": 0.4,
+        "anytime": 0.33,
+        "first": 0.12
+      }
+    ]
+  },
+  "hasScorers": true,
+  "method": "poisson-blend-v1",
+  "provider": {
+    "oneX2": {
+      "home": 0.465,
+      "draw": 0.239,
+      "away": 0.29600000000000004,
+      "predicted": "H"
+    },
+    "xg": {
+      "home": 1.78,
+      "away": 1.42
+    },
+    "over15": 0.816,
+    "over25": 0.606,
+    "over35": 0.38299999999999995,
+    "btts": 0.6,
+    "score": "1-1",
+    "cornersOver95": 0.506,
+    "recommendations": {
+      "favorite": "H",
+      "favoriteProb": 0.465,
+      "over25": false,
+      "btts": false
+    },
+    "confidence": 0.4649,
+    "model": "dc-blend-v1",
+    "capturedAt": "2026-11-26T16:44:17.758Z",
+    "source": "Bzzoiro"
+  },
+  "afPrediction": null,
+  "afOdds": null,
+  "xgMarkets": {
+    "oneX2": {
+      "home": 0.451,
+      "draw": 0.251,
+      "away": 0.298
+    },
+    "doubleChance": {
+      "12": 0.749,
+      "1X": 0.702,
+      "X2": 0.549
+    },
+    "dnb": {
+      "home": 0.602,
+      "away": 0.398
+    },
+    "totals": {
+      "over15": 0.839,
+      "under15": 0.161,
+      "over25": 0.62,
+      "under25": 0.38,
+      "over35": 0.397,
+      "under35": 0.603
+    },
+    "btts": {
+      "yes": 0.641,
+      "no": 0.359
+    },
+    "cleanSheet": {
+      "home": 0.242,
+      "away": 0.169
+    },
+    "exactScores": [
+      {
+        "home": 1,
+        "away": 1,
+        "p": 0.115,
+        "share": 0.28048780487804875
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "p": 0.092,
+        "share": 0.224390243902439
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "p": 0.073,
+        "share": 0.17804878048780484
+      },
+      {
+        "home": 2,
+        "away": 2,
+        "p": 0.065,
+        "share": 0.15853658536585366
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "p": 0.065,
+        "share": 0.15853658536585366
+      }
+    ],
+    "providerPick": {
+      "home": 1,
+      "away": 1
+    },
+    "method": "poisson-xg-bzzoiro-v1",
+    "source": "derivado-xG-Bzzoiro"
+  },
+  "market": null,
+  "h2h": {
+    "totalMatches": 65,
+    "homeWins": 13,
+    "draws": 16,
+    "awayWins": 36,
+    "avgTotalGoals": 3,
+    "recent": [
+      {
+        "eventId": 291,
+        "date": "2026-03-04T20:15:00+00:00",
+        "home": "Newcastle United",
+        "away": "Manchester United",
+        "homeTeamId": 4,
+        "awayTeamId": 17,
+        "homeScore": 2,
+        "awayScore": 1
+      },
+      {
+        "eventId": 171,
+        "date": "2025-12-26T20:00:00+00:00",
+        "home": "Manchester United",
+        "away": "Newcastle United",
+        "homeTeamId": 17,
+        "awayTeamId": 4,
+        "homeScore": 1,
+        "awayScore": 0
+      },
+      {
+        "eventId": 306970,
+        "date": "2025-04-13T15:30:00+00:00",
+        "home": "Newcastle United",
+        "away": "Manchester United",
+        "homeTeamId": 4,
+        "awayTeamId": 17,
+        "homeScore": 4,
+        "awayScore": 1
+      },
+      {
+        "eventId": 306840,
+        "date": "2024-12-30T20:00:00+00:00",
+        "home": "Manchester United",
+        "away": "Newcastle United",
+        "homeTeamId": 17,
+        "awayTeamId": 4,
+        "homeScore": 0,
+        "awayScore": 2
+      },
+      {
+        "eventId": 312462,
+        "date": "2024-05-15T19:00:00+00:00",
+        "home": "Manchester United",
+        "away": "Newcastle United",
+        "homeTeamId": 17,
+        "awayTeamId": 4,
+        "homeScore": 3,
+        "awayScore": 2
+      }
+    ],
+    "source": "Bzzoiro"
+  },
+  "discipline": {
+    "method": "stats-ratings-v1",
+    "home": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "away": {
+      "yellowOver35": null,
+      "redAnytime": null,
+      "foulsAvg": null
+    },
+    "sample": {
+      "scorers": 50,
+      "historyRows": 479
+    },
+    "source": "GoatLab",
+    "expectedTotal": 4.5
+  },
+  "setPieces": {
+    "method": "stats-ratings-v1",
+    "cornersOver95": null,
+    "shots": null,
+    "xgTotal": null,
+    "sample": {
+      "historyRows": 479
+    },
+    "source": "GoatLab",
+    "expectedTotal": 9.5
+  },
+  "statsForecast": {
+    "method": "stats-ratings-v2",
+    "home": {
+      "shots": 13.67,
+      "shotsOnTarget": 4.76,
+      "xg": 1.78,
+      "corners": 4.73,
+      "fouls": 12.31,
+      "yellowCards": 2.14,
+      "redCards": 0.19,
+      "offsides": 1.89,
+      "possession": 50.67
+    },
+    "away": {
+      "shots": 13.86,
+      "shotsOnTarget": 4.54,
+      "xg": 1.42,
+      "corners": 4.79,
+      "fouls": 11.4,
+      "yellowCards": 2.39,
+      "redCards": 0.23,
+      "offsides": 1.96,
+      "possession": 49.33
+    },
+    "sample": {
+      "home": 10,
+      "away": 10
+    },
+    "coverage": {
+      "home": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 5,
+        "offsides": 10
+      },
+      "away": {
+        "possession": 10,
+        "shots": 10,
+        "shotsOnTarget": 10,
+        "xg": 10,
+        "corners": 10,
+        "fouls": 10,
+        "yellowCards": 10,
+        "redCards": 10,
+        "offsides": 10
+      }
+    },
+    "league": {
+      "possession": 50,
+      "shots": 13.63,
+      "shotsOnTarget": 4.37,
+      "xg": 1.46,
+      "corners": 4.77,
+      "fouls": 11.57,
+      "yellowCards": 2.13,
+      "redCards": 0.22,
+      "offsides": 1.89
+    },
+    "sources": {
+      "home": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      },
+      "away": {
+        "shots": "Bzzoiro",
+        "shotsOnTarget": "Bzzoiro",
+        "xg": "Bzzoiro",
+        "corners": "Bzzoiro",
+        "fouls": "Bzzoiro",
+        "yellowCards": "Bzzoiro",
+        "redCards": "Bzzoiro",
+        "offsides": "Bzzoiro",
+        "possession": "Bzzoiro"
+      }
+    },
+    "origins": [
+      "Bzzoiro"
+    ],
+    "xgSource": "Bzzoiro",
+    "shortSample": false,
+    "source": "Bzzoiro"
+  },
+  "dominance": {
+    "method": "dominance-v1",
+    "cornersDuel": {
+      "home": 0.427,
+      "draw": 0.131,
+      "away": 0.442
+    },
+    "cardsDuel": {
+      "home": 0.358,
+      "draw": 0.192,
+      "away": 0.449
+    },
+    "lastGoal": {
+      "home": 0.558,
+      "away": 0.406,
+      "noGoal": 0.036
+    },
+    "cornerRace": {
+      "3": {
+        "home": 0.494,
+        "away": 0.506
+      },
+      "5": {
+        "home": 0.492,
+        "away": 0.508
+      },
+      "7": {
+        "home": 0.491,
+        "away": 0.509
+      }
+    },
+    "cornerMargin": {
+      "home3plus": 0.2,
+      "home12": 0.227,
+      "level": 0.131,
+      "away12": 0.231,
+      "away3plus": 0.211
+    },
+    "source": "GoatLab"
+  },
+  "weatherVenue": {
+    "weather": {
+      "temp": null,
+      "precipitation": null,
+      "weathercode": null,
+      "wind": 20.3,
+      "condition": null,
+      "sampledAt": "2026-12-02T20:15:00Z",
+      "source": "bzzoiro"
+    },
+    "venue": {
+      "stadium": "St. James' Park",
+      "city": "Newcastle upon Tyne",
+      "capacity": 52305,
+      "tz": "Europe/London"
+    },
+    "referee": null,
+    "pitch": null,
+    "attendance": null,
+    "derby": null,
+    "neutral": null,
+    "travelKm": null
+  },
+  "availability": {
+    "status": null,
+    "unavailablePlayers": null,
+    "source": null
+  },
+  "context": {
+    "home": {
+      "team": "Newcastle United FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 1,
+        "sample": 5
+      },
+      "biggestWin": {
+        "value": 2,
+        "sample": 5
+      },
+      "unbeaten": {
+        "value": 2,
+        "sample": 5
+      },
+      "season": {
+        "position": 13,
+        "played": 11,
+        "gf": 15,
+        "ga": 18,
+        "provider": null
+      },
+      "player": {
+        "name": "Harvey Barnes",
+        "detail": "3 goles en 11 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    },
+    "away": {
+      "team": "Manchester United FC",
+      "recentSample": 5,
+      "debut": false,
+      "cleanSheets": {
+        "value": 0,
+        "sample": 5
+      },
+      "biggestWin": null,
+      "unbeaten": {
+        "value": 0,
+        "sample": 5
+      },
+      "season": {
+        "position": 19,
+        "played": 11,
+        "gf": 14,
+        "ga": 23,
+        "provider": null
+      },
+      "player": {
+        "name": "Bruno Fernandes",
+        "detail": "4 goles en 11 partidos",
+        "source": "líder del equipo en la temporada"
+      }
+    }
+  },
+  "llmReview": null
+}
