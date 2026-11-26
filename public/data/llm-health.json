@@ -1,77 +1,6 @@
 {
-  "updatedAt": "2026-11-26T21:37:17.864Z",
+  "updatedAt": "2026-11-26T21:51:15.487Z",
   "runs": [
-    {
-      "at": "2026-11-18T15:30:44.757Z",
-      "matchId": "fd-564748",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1461,
-        "outputTokens": 761
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "48000509-7d7a-484f-8871-eb8652e2f1c3"
-    },
-    {
-      "at": "2026-11-18T15:30:53.761Z",
-      "matchId": "fd-560643",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1430,
-        "outputTokens": 1075
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "1721d4b8-8a87-4221-8dbb-5fda1fc06f10"
-    },
-    {
-      "at": "2026-11-18T15:30:59.264Z",
-      "matchId": "fd-564748",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 2277,
-        "outputTokens": 1759
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "710daef0-2af4-4233-ad30-3c853f02199c"
-    },
-    {
-      "at": "2026-11-18T15:30:59.264Z",
-      "matchId": "fd-560643",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "710daef0-2af4-4233-ad30-3c853f02199c"
-    },
     {
       "at": "2026-11-18T15:35:07.858Z",
       "matchId": "fd-560648",
@@ -7928,6 +7857,244 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "4dbd9a01-aa23-44b7-a42a-c79bdcb31170"
+    },
+    {
+      "at": "2026-11-26T21:50:49.622Z",
+      "task": "shorts",
+      "matchId": "levante-ud-vs-real-racing-club-2026-11-27",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 2: artículo delante de Real Racing Club de Santander; guion 3: falta Real Racing Club de Santander; guion 3: falta una proyección marcada como opinión; guion 4: falta Real Racing Club de Santander; guion 4: 4 cifras, máximo 3; guion 5: falta Real Racing Club de Santander; guion 6: falta Real Racing Club de Santander",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7827,
+            "outputTokens": 1835
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6816
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 4 cifras, máximo 3; guion 3: falta una proyección marcada como opinión; guion 4: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10292,
+            "outputTokens": 2533
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6748
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10212,
+            "outputTokens": 1407
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4009
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "transport",
+          "reason": "HTTP 402",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 298
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235209
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "hacen falta 10 guiones; falta la entrada de la descripción",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7827,
+            "outputTokens": 1734
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5937
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 4 cifras, máximo 3; guion 4: falta Real Racing Club de Santander; guion 4: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: falta Real Racing Club de Santander; guion 8: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9684,
+            "outputTokens": 2370
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6406
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: 54 palabras, mínimo 55; guion 6: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10309,
+            "outputTokens": 1881
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5670
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 10309,
+        "outputTokens": 1881
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-26T21:50:59.911Z",
+      "task": "shorts",
+      "matchId": "palmeiras-vs-estudiantes-de-la-plata-2026-11-28",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: golpe 3 (dato): una sola frase por golpe; guion 2: golpe 3 (dato): una sola frase por golpe; guion 2: 4 cifras, máximo 3; guion 3: golpe 3 (dato): una sola frase por golpe; guion 3: 5 cifras, máximo 3; guion 4: golpe 3 (dato): una sola frase por golpe; guion 4: 4 cifras, máximo 3; guion 5: golpe 3 (dato): una sola frase por golpe",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7256,
+            "outputTokens": 2859
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 8320
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: golpe 3 (dato): una sola frase por golpe; guion 2: golpe 3 (dato): una sola frase por golpe; guion 3: golpe 3 (dato): una sola frase por golpe; guion 3: 4 cifras, máximo 3; guion 4: golpe 3 (dato): una sola frase por golpe; guion 4: 4 cifras, máximo 3; guion 5: golpe 3 (dato): una sola frase por golpe; guion 5: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10102,
+            "outputTokens": 1875
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 5731
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: golpe 3 (dato): una sola frase por golpe; guion 3: 4 cifras, máximo 3; guion 5: falta Estudiantes de La Plata; guion 8: falta SE Palmeiras; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10078,
+            "outputTokens": 2702
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6428
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "transport",
+          "reason": "HTTP 402",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 293
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235160
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Estudiantes de La Plata; guion 5: falta SE Palmeiras; guion 5: falta Estudiantes de La Plata; guion 8: falta SE Palmeiras",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7256,
+            "outputTokens": 2846
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7748
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 2540
+      },
+      "usage": {
+        "inputTokens": 9329,
+        "outputTokens": 926
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "76e82cad-2759-46f6-8470-e4636f688b71"
+    },
+    {
+      "at": "2026-11-26T21:51:07.854Z",
+      "task": "image-prompts",
+      "matchId": "levante-ud-vs-real-racing-club-2026-11-27",
+      "instructionVersion": "12ad6002325eda4f8bc9df218cfac46afb8d94724c8d16596a588a4e395327f9",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2952,
+        "outputTokens": 1976
+      }
+    },
+    {
+      "at": "2026-11-26T21:51:15.487Z",
+      "task": "image-prompts",
+      "matchId": "palmeiras-vs-estudiantes-de-la-plata-2026-11-28",
+      "instructionVersion": "12ad6002325eda4f8bc9df218cfac46afb8d94724c8d16596a588a4e395327f9",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2254,
+        "outputTokens": 1833
+      }
     }
   ]
 }
