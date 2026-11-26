@@ -8785,81 +8785,283 @@
     "materialKey": "v3|M|bz-601203|Celta Vigo|Bournemouth|europa|2026-11-26T17:45:00+00:0|NS\nP|1.08|1.687|0.232|0.264|0.504|0.523|0.55\nB|0.272|0.272|0.456|1.41|1.47|0.506|0.549|1-1|0.412\nB2|A|0.456|no|no\nW|||21|\nT|2|Bournemouth|4|12||\nS|Rayan|Bournemouth|3|4\nS|Evanilson|Bournemouth|2|4\nR|2026-09-13|Celta Vigo|Malaga|1|1\nR|2026-09-16|Omonia Nicosia|Celta Vigo|1|0\nR|2026-09-19|Celta Vigo|Racing Santander|5|0\nR|2026-10-15|Celta Vigo|Juventus|1|2\nR|2026-10-22|Celtic|Celta Vigo|1|2\nR|2026-10-22|Bournemouth|AC Milan|3|0\nR|2026-10-25|Manchester United FC|AFC Bournemouth|0|3\nR|2026-10-31|AFC Bournemouth|Leeds United FC|2|0\nR|2026-11-05|Celta Vigo|Royale Union Saint-Gilloise|1|2\nR|2026-11-05|AC Sparta Praha|Bournemouth|1|3\nR|2026-11-08|Ipswich Town FC|AFC Bournemouth|1|2\nR|2026-11-21|AFC Bournemouth|Nottingham Forest FC|2|0"
   },
   "bz-601314": {
-    "matchId": "bz-601314",
     "summary": [
       {
         "kind": "panorama",
-        "title": "Desafío de Torreense ante Celtic",
+        "title": "Cruce europeo entre escuadras de distinta magnitud",
         "bullets": [
-          "Torreense, club portugués, recibe a Celtic en un encuentro de la fase de grupos de noviembre de 2026.",
-          "La temperatura prevista en la sede es de 33 grados, un factor climático notable.",
-          "Torreense ocupa la posición 19 en la tabla, mientras que Celtic entra con mayor bagaje europeo reciente."
+          "Partido de la fase de grupos de Europa League entre Torreense y Celtic, programado para el 26 de noviembre de 2026.",
+          "El cruce enfrenta a un equipo portugués de la posición 19 en su liga contra un escuadro escocés de élite continental.",
+          "Ambos conjuntos disputarán el encuentro en la sede del equipo local, bajo las normas de la UEFA."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "modelos",
+        "title": "Lecturas probabilísticas y estimaciones de proveedores",
+        "bullets": [
+          "El modelo Poisson de GoatLab (P) asigna un 52.8% de probabilidad a la victoria local, un 20.6% al empate y un 26.6% a la visita.",
+          "La estimación de Bzzoiro (B) indica una mayor probabilidad de empate (57.4%) y un 55.1% a que ambos equipos anoten.",
+          "API-Football (A) y Bzzoiro (B2) coinciden en una lectura cruda de 57.4% para el empate y niegan la probabilidad de que ambos anoten en el análisis B2."
         ],
         "stats": [
           {
-            "value": "33",
-            "label": "Temp. exterior"
+            "value": "57.4%",
+            "label": "Prob. Empate (B/B2)"
+          },
+          {
+            "value": "52.8%",
+            "label": "Prob. Local (P)"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Racha reciente y rendimiento competitivo",
+        "bullets": [
+          "Torreense llega con un 3-2 ante Ararat-Armenia tras perder contra Ferencváros (4-1) y vencer a Lillestrøm (2-1).",
+          "Celtic superó a Beşiktaş (3-2) y Celta Vigo (2-1), aunque cayó ante Benfica (4-1) y Ferencváros (3-1) en duelos previos.",
+          "Los últimos encuentros muestran volatilidad defensiva para ambos, con múltiples goles a favor y en contra en sus últimos cinco compromisos."
+        ],
+        "stats": []
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artilleros destacados de la plantilla",
+        "bullets": [
+          "Camilo Durán, jugador del Celtic, es el máximo anotador destacado con 3 goles en 4 partidos registrados en el dataset.",
+          "No se proporcionan datos específicos de goleadores para el equipo local Torreense en la entrada."
+        ],
+        "stats": [
+          {
+            "value": "3 goles",
+            "label": "Anotaciones de Durán"
+          }
+        ]
+      },
+      {
+        "kind": "claves",
+        "title": "Factores determinantes del encuentro",
+        "bullets": [
+          "La diferencia de cotas iniciales sugiere una ventaja técnica del Celtic, reflejada en los modelos de predicción.",
+          "La capacidad de ambos equipos para marcar goles en los últimos partidos será clave, dado el 55.1% de probabilidad de ambos anoten.",
+          "El historial inmediato muestra que Celtic suele encajar varios goles, lo que puede influir en el esquema táctico del visitante."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Ausencia de datos de bajas y clima",
+        "detail": "No se proporcionan información sobre lesionados confirmados (L) ni condiciones climáticas y sede detalladas (W), limitando el análisis de factores externos."
+      },
+      {
+        "label": "Falta de consenso externo M2",
+        "detail": "No hay datos de consenso externo en porcentaje (M2) para comparar contra las probabilidades internas de los modelos."
+      },
+      {
+        "label": "Historial H vacío",
+        "detail": "No se incluye historial de enfrentamientos directos previos (H/HR) entre Torreense y Celtic, solo forma reciente general."
+      }
+    ],
+    "review": {
+      "flag": true,
+      "note": "Inconsistencia detectada en B2: indica 'no' a 'ambos anotan' mientras que B estima 0.551 (55.1%) de probabilidad positiva. Además, P asigna mayor probabilidad a local (0.528) mientras B/B2 asignan mayor probabilidad a empate (0.574), mostrando divergencia estratégica entre los modelos de GoatLab y B"
+    },
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-26T21:34:36.565Z",
+    "inputKey": "v3|M|bz-601314|Torreense|Celtic|europa|2026-11-26T20:00:00+00:0|NS\nP|2.43|1.725|0.528|0.206|0.266|0.784|0.756\nB|0.206|0.219|0.574|1.37|1.7|0.655|0.63|1-1|0.551\nB2|A|0.574|no|no\nW|||33|\nT|19|Torreense|4|6||\nS|Camilo Durán|Celtic|3|4\nR|2026-09-17|Lillestrom|Torreense|1|2\nR|2026-09-17|Celtic|Ferencvarosi TC|1|3\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-15|Benfica|Celtic|4|1\nR|2026-10-22|Ferencváros TC|Torreense|4|1\nR|2026-10-22|Celtic|Celta Vigo|1|2\nR|2026-11-05|Torreense|FC Ararat-Armenia|3|2\nR|2026-11-05|Celtic|Beşiktaş JK|3|2",
+    "materialKey": "v3|M|bz-601314|Torreense|Celtic|europa|2026-11-26T20:00:00+00:0|NS\nP|2.43|1.725|0.528|0.206|0.266|0.784|0.756\nB|0.206|0.219|0.574|1.37|1.7|0.655|0.63|1-1|0.551\nB2|A|0.574|no|no\nW|||33|\nT|19|Torreense|4|6||\nS|Camilo Durán|Celtic|3|4\nR|2026-09-17|Lillestrom|Torreense|1|2\nR|2026-09-17|Celtic|Ferencvarosi TC|1|3\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-15|Benfica|Celtic|4|1\nR|2026-10-22|Ferencváros TC|Torreense|4|1\nR|2026-10-22|Celtic|Celta Vigo|1|2\nR|2026-11-05|Torreense|FC Ararat-Armenia|3|2\nR|2026-11-05|Celtic|Beşiktaş JK|3|2"
+  },
+  "bz-601311": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Encuentro europeo de ida",
+        "bullets": [
+          "El TSG Hoffenheim recibe al SK Sturm Graz en una jornada europea el 26 de noviembre de 2026.",
+          "El encuentro se jugará a las 20:00 UTC y se espera lluvia con temperatura de 15 grados.",
+          "No hay información de bajas confirmadas para ninguno de los equipos."
+        ],
+        "stats": [
+          {
+            "value": "15",
+            "label": "Temperatura"
           }
         ]
       },
       {
         "kind": "modelos",
-        "title": "Estimaciones numéricas",
+        "title": "Proyecciones de modelos",
         "bullets": [
-          "El modelo Poisson GoatLab proyecta 2.43 goles para Torreense y 0.528 para Celtic, favoreciendo claramente al local.",
-          "CatBoost Bzzoiro estima un empate a 1 como resultado más probable, con una probabilidad del 55,1%.",
-          "La lectura de B2 sugiere que es improbable que ambos equipos marquen, a pesar de la proyección de empate."
-        ],
-        "stats": []
-      },
-      {
-        "kind": "forma",
-        "title": "Rachas de resultados",
-        "bullets": [
-          "Celtic llega con resultados mixtos: ganó a Beşiktaş 3-2, pero cayó 4-1 ante Benfica y 2-1 ante Celta Vigo.",
-          "Torreense muestra inconsistencia, con victorias ante Lillestrøm y FC Ararat-Armenia, pero derrotas ante Ferencváros 4-1.",
-          "El último partido de Celtic fue la derrota 2-1 ante Celta Vigo el 22 de octubre de 2026."
+          "El modelo Poisson de GoatLab estima un 21.8% de probabilidad de victoria local y un 17% para el visitante.",
+          "El modelo Bzzoiro predice un 11.6% de probabilidad de victoria para el Sturm Graz y un 1.57 goles esperados para el equipo austríaco.",
+          "La lectura de Bzzoiro sugiere un empate como resultado más probable (1-1) con una probabilidad del 56.9%."
         ],
         "stats": [
           {
-            "value": "4-1",
-            "label": "Torreense vs Fer."
+            "value": "1.57",
+            "label": "Goles esperados Sturm"
           }
         ]
       },
       {
         "kind": "goleadores",
-        "title": "Datos ofensivos",
+        "title": "Datos de artillería",
         "bullets": [
-          "Camilo Durán es el único goleador listado para Celtic con 3 goles en 4 partidos.",
-          "No se especifican goleadores destacados para Torreense en los datos proporcionados, sugiriendo un reparto más difuso o falta de registro."
+          "Oumar Diakité del SK Sturm Graz es el goleador destacado en los datos proporcionados.",
+          "Diakité acumula 3 goles y 4 asistencias según el registro disponible."
         ],
         "stats": [
           {
             "value": "3",
-            "label": "Goles Durán"
+            "label": "Goles de Diakité"
+          },
+          {
+            "value": "4",
+            "label": "Asistencias de Diakité"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Rendimiento reciente",
+        "bullets": [
+          "El TSG Hoffenheim empató 1-1 con Crystal Palace y ganó 3-0 ante Olympique Lyonnais en sus últimos partidos.",
+          "El SK Sturm Graz perdió 3-0 ante Bournemouth y 3-2 contra NK Celje, aunque ganó 1-0 a Olympique de Marseille.",
+          "Ambos equipos mostraron resultados mixtos contra rivales de similar o superior categoría en Europa."
+        ],
+        "stats": [
+          {
+            "value": "3-0",
+            "label": "Hoffenheim vs Lyon"
+          },
+          {
+            "value": "1-0",
+            "label": "Sturm vs Marsella"
           }
         ]
       }
     ],
     "limitations": [
       {
-        "label": "Falta de tabla rival",
-        "detail": "La posición 19 de Torreense está presente, pero no se especifica claramente la posición de Celtic en la tabla en el bloque T."
+        "label": "Falta de historial H",
+        "detail": "No se proporcionó datos de historial de enfrentamientos directos (H/HR) ni de tabla de clasificación (T), lo que limita el análisis de precedentes y posición competitiva."
       },
       {
-        "label": "Goleadores incompletos",
-        "detail": "No hay registro de anotadores locales para Torreense, limitando el análisis ofensivo del equipo anfitrión."
+        "label": "Clima limitado",
+        "detail": "Se indica lluvia y 15 grados, pero no se detalla la duración o intensidad de la precipitación, lo que afecta la precisión del impacto en el juego."
       }
     ],
     "review": {
       "flag": true,
-      "note": "El modelo Poisson proyecta 2.43 goles para Torreense, mientras que CatBoost Bzzoiro estima un 1-1 con 56.9% de probabilidad para el empate y 1.37 goles esperados para el local. Existe una desviación notable entre la proyección de goles del modelo Poisson y el marcador más probable del CatBoost."
+      "note": "El modelo Poisson indica una probabilidad de empate del 62.7% y victoria local del 21.8%, mientras que Bzzoiro estima empate del 56.9% y victoria visitante del 11.6%. La divergencia en la probabilidad de victoria del equipo local (21.8% vs 71.8% en B para local? No, B es 0.718 para local en probabil"
     },
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-26T16:49:14.790Z",
-    "inputKey": "v3|M|bz-601314|Torreense|Celtic|europa|2026-11-26T20:00:00+00:0|NS\nP|2.43|1.725|0.528|0.206|0.266|0.784|0.756\nB|0.203|0.227|0.569|1.37|1.7|0.609|0.589|1-1|0.551\nB2|A|0.569|no|no\nW|||33|\nT|19|Torreense|4|6||\nS|Camilo Durán|Celtic|3|4\nR|2026-09-17|Lillestrom|Torreense|1|2\nR|2026-09-17|Celtic|Ferencvarosi TC|1|3\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-15|Benfica|Celtic|4|1\nR|2026-10-22|Ferencváros TC|Torreense|4|1\nR|2026-10-22|Celtic|Celta Vigo|1|2\nR|2026-11-05|Torreense|FC Ararat-Armenia|3|2\nR|2026-11-05|Celtic|Beşiktaş JK|3|2",
-    "materialKey": "v3|M|bz-601314|Torreense|Celtic|europa|2026-11-26T20:00:00+00:0|NS\nP|2.43|1.725|0.528|0.206|0.266|0.784|0.756\nB|0.203|0.227|0.569|1.37|1.7|0.609|0.589|1-1|0.551\nB2|A|0.569|no|no\nW|||33|\nT|19|Torreense|4|6||\nS|Camilo Durán|Celtic|3|4\nR|2026-09-17|Lillestrom|Torreense|1|2\nR|2026-09-17|Celtic|Ferencvarosi TC|1|3\nR|2026-10-15|Torreense|Sunderland|1|2\nR|2026-10-15|Benfica|Celtic|4|1\nR|2026-10-22|Ferencváros TC|Torreense|4|1\nR|2026-10-22|Celtic|Celta Vigo|1|2\nR|2026-11-05|Torreense|FC Ararat-Armenia|3|2\nR|2026-11-05|Celtic|Beşiktaş JK|3|2"
+    "generatedAt": "2026-11-26T21:36:59.157Z",
+    "inputKey": "v3|M|bz-601311|TSG Hoffenheim|SK Sturm Graz|europa|2026-11-26T20:00:00+00:0|NS\nP|2.16|1.073|0.612|0.218|0.17|0.627|0.591\nB|0.718|0.166|0.116|1.57|1.39|0.696|0.584|1-1|0.569\nB2|H|0.718|no|no\nW||rain|15|\nS|Oumar Diakité|SK Sturm Graz|3|4\nR|2026-10-15|TSG Hoffenheim|Beşiktaş JK|2|3\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-22|TSG Hoffenheim|Olympique Lyonnais|3|0\nR|2026-10-22|SK Sturm Graz|Olympique de Marseille|1|0\nR|2026-11-05|Crystal Palace|TSG Hoffenheim|1|1\nR|2026-11-05|SK Sturm Graz|NK Celje|2|3",
+    "materialKey": "v3|M|bz-601311|TSG Hoffenheim|SK Sturm Graz|europa|2026-11-26T20:00:00+00:0|NS\nP|2.16|1.073|0.612|0.218|0.17|0.627|0.591\nB|0.718|0.166|0.116|1.57|1.39|0.696|0.584|1-1|0.569\nB2|H|0.718|no|no\nW||rain|15|\nS|Oumar Diakité|SK Sturm Graz|3|4\nR|2026-10-15|TSG Hoffenheim|Beşiktaş JK|2|3\nR|2026-10-15|Bournemouth|SK Sturm Graz|3|0\nR|2026-10-22|TSG Hoffenheim|Olympique Lyonnais|3|0\nR|2026-10-22|SK Sturm Graz|Olympique de Marseille|1|0\nR|2026-11-05|Crystal Palace|TSG Hoffenheim|1|1\nR|2026-11-05|SK Sturm Graz|NK Celje|2|3"
+  },
+  "bz-601307": {
+    "summary": [
+      {
+        "kind": "panorama",
+        "title": "Cruce europeo entre Sunderland y Jagiellonia Białystok",
+        "bullets": [
+          "Partido de la competición europea programado para el 26 de noviembre de 2026 a las 20:00 UTC.",
+          "Ambos equipos presentan antecedentes recientes en competiciones internacionales y domésticas.",
+          "Las condiciones meteorológicas se describen como nubladas con temperatura de 19 grados."
+        ],
+        "stats": [
+          {
+            "value": "19",
+            "label": "Temp. Clima"
+          }
+        ]
+      },
+      {
+        "kind": "modelos",
+        "title": "Proyecciones de Poisson y CatBoost Bzzoiro",
+        "bullets": [
+          "El modelo Poisson de GoatLab estima una probabilidad del 60% para el gol total o resultado combinado.",
+          "CatBoost Bzzoiro predice un empate a 1-1 como escenario más probable con probabilidad del 46.4%.",
+          "La lectura declarada del proveedor Bzzoiro indica que Jagiellonia no anota y que no hay ambos equipos anotando."
+        ],
+        "stats": [
+          {
+            "value": "1-1",
+            "label": "Marcador"
+          }
+        ]
+      },
+      {
+        "kind": "tabla",
+        "title": "Posición actual de Sunderland en la clasificación",
+        "bullets": [
+          "Sunderland ocupa el puesto 11 en la tabla de clasificación de referencia.",
+          "El equipo ha acumulado 4 puntos con 7 partidos disputados hasta la fecha indicada.",
+          "No se proporciona información de la tabla específica para Jagiellonia Białystok."
+        ],
+        "stats": [
+          {
+            "value": "11",
+            "label": "Puesto"
+          },
+          {
+            "value": "4",
+            "label": "Puntos"
+          }
+        ]
+      },
+      {
+        "kind": "goleadores",
+        "title": "Artillería de Jagiellonia Białystok",
+        "bullets": [
+          "Kajetan Szmyt es el máximo goleador identificado de Jagiellonia Białystok.",
+          "Ha marcado 3 goles en 8 apariciones o jugadas registradas para el equipo."
+        ],
+        "stats": [
+          {
+            "value": "3",
+            "label": "Goles"
+          },
+          {
+            "value": "8",
+            "label": "Partidos"
+          }
+        ]
+      },
+      {
+        "kind": "forma",
+        "title": "Resultados recientes de ambos equipos",
+        "bullets": [
+          "Sunderland empató 0-0 con Leeds United y 0-0 con Aston Villa en sus últimos partidos domésticos.",
+          "Sunderland perdió 0-2 contra Dinamo Zagreb en competición europea.",
+          "Jagiellonia Białystok perdió 0-3 ante RSC Anderlecht y 1-0 contra Levski Sofia en sus últimos encuentros internacionales."
+        ],
+        "stats": []
+      }
+    ],
+    "limitations": [
+      {
+        "label": "Datos incompletos de Jagiellonia",
+        "detail": "Falta información de tabla de clasificación y de otros goleadores para Jagiellonia Białystok en el input proporcionado."
+      },
+      {
+        "label": "Falta de bajas confirmadas",
+        "detail": "No se incluyen datos de bajas confirmadas (bloque L) ni de historial detallado de cruces previos (bloque H/HR)."
+      }
+    ],
+    "review": {
+      "flag": false,
+      "note": null
+    },
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-26T21:37:09.784Z",
+    "inputKey": "v3|M|bz-601307|Sunderland|Jagiellonia Białystok|europa|2026-11-26T20:00:00+00:0|NS\nP|1.215|0.92|0.416|0.319|0.266|0.36|0.436\nB|0.741|0.164|0.095|1.45|1.36|0.585|0.46|1-1|0.464\nB2|H|0.741|no|no\nW||cloudy|19|\nT|11|Sunderland|4|7||\nS|Kajetan Szmyt|Jagiellonia Białystok|3|8\nR|2026-09-16|Olympiakos Piraeus|Jagiellonia|2|1\nR|2026-10-15|Jagiellonia Białystok|FC Ararat-Armenia|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-22|Jagiellonia Białystok|RSC Anderlecht|0|3\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nR|2026-11-05|Levski Sofia|Jagiellonia Białystok|1|0\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nR|2026-11-21|Aston Villa FC|Sunderland AFC|0|0",
+    "materialKey": "v3|M|bz-601307|Sunderland|Jagiellonia Białystok|europa|2026-11-26T20:00:00+00:0|NS\nP|1.215|0.92|0.416|0.319|0.266|0.36|0.436\nB|0.741|0.164|0.095|1.45|1.36|0.585|0.46|1-1|0.464\nB2|H|0.741|no|no\nW||cloudy|19|\nT|11|Sunderland|4|7||\nS|Kajetan Szmyt|Jagiellonia Białystok|3|8\nR|2026-09-16|Olympiakos Piraeus|Jagiellonia|2|1\nR|2026-10-15|Jagiellonia Białystok|FC Ararat-Armenia|3|1\nR|2026-10-22|Lech Poznań|Sunderland|1|1\nR|2026-10-22|Jagiellonia Białystok|RSC Anderlecht|0|3\nR|2026-10-25|Sunderland AFC|Leeds United FC|0|0\nR|2026-10-31|Coventry City FC|Sunderland AFC|3|1\nR|2026-11-05|Sunderland|GNK Dinamo Zagreb|0|2\nR|2026-11-05|Levski Sofia|Jagiellonia Białystok|1|0\nR|2026-11-08|Sunderland AFC|Chelsea FC|1|0\nR|2026-11-21|Aston Villa FC|Sunderland AFC|0|0"
   }
 }

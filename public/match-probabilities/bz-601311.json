@@ -4,7 +4,7 @@
   "away": "SK Sturm Graz",
   "competition": "europa",
   "kickoff": "2026-11-26T20:00:00+00:00",
-  "updatedAt": "2026-11-26T16:44:22.471Z",
+  "updatedAt": "2026-11-26T21:31:32.320Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -13,7 +13,7 @@
     },
     "lambdaSource": "Poisson",
     "lambdasBlend": {
-      "home": 1.86,
+      "home": 1.865,
       "away": 1.232
     },
     "firstGoalSource": "Blend Poisson+xG",
@@ -105,7 +105,7 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 3.09,
+    "lambdaTotal": 3.1,
     "noGoal": 0.045,
     "bands": [
       {
@@ -139,7 +139,7 @@
         "p": 0.031
       }
     ],
-    "firstHome": 0.574,
+    "firstHome": 0.575,
     "firstAway": 0.38
   },
   "scorers": {
@@ -152,7 +152,7 @@
         "share": 0.9,
         "rate": 1.11,
         "anytime": 0.67,
-        "first": 0.359
+        "first": 0.358
       }
     ]
   },
@@ -160,64 +160,64 @@
   "method": "poisson-blend-v1",
   "provider": {
     "oneX2": {
-      "home": 0.711,
-      "draw": 0.17,
-      "away": 0.11900000000000001,
+      "home": 0.718,
+      "draw": 0.166,
+      "away": 0.11599999999999999,
       "predicted": "H"
     },
     "xg": {
-      "home": 1.56,
+      "home": 1.57,
       "away": 1.39
     },
-    "over15": 0.855,
-    "over25": 0.675,
-    "over35": 0.44,
-    "btts": 0.575,
+    "over15": 0.862,
+    "over25": 0.696,
+    "over35": 0.449,
+    "btts": 0.584,
     "score": "1-1",
     "cornersOver95": 0.569,
     "recommendations": {
       "favorite": "H",
-      "favoriteProb": 0.711,
+      "favoriteProb": 0.718,
       "over25": false,
       "btts": false
     },
-    "confidence": 0.7108,
+    "confidence": 0.718,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-26T08:17:33.044Z",
+    "capturedAt": "2026-11-26T21:31:28.143Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
   "afOdds": null,
   "xgMarkets": {
     "oneX2": {
-      "home": 0.404,
-      "draw": 0.267,
-      "away": 0.329
+      "home": 0.407,
+      "draw": 0.266,
+      "away": 0.327
     },
     "doubleChance": {
-      "12": 0.733,
-      "1X": 0.671,
-      "X2": 0.596
+      "12": 0.734,
+      "1X": 0.673,
+      "X2": 0.593
     },
     "dnb": {
-      "home": 0.551,
-      "away": 0.449
+      "home": 0.554,
+      "away": 0.446
     },
     "totals": {
-      "over15": 0.805,
-      "under15": 0.195,
-      "over25": 0.565,
-      "under25": 0.435,
-      "over35": 0.342,
-      "under35": 0.658
+      "over15": 0.806,
+      "under15": 0.194,
+      "over25": 0.568,
+      "under25": 0.432,
+      "over35": 0.344,
+      "under35": 0.656
     },
     "btts": {
-      "yes": 0.604,
-      "no": 0.396
+      "yes": 0.606,
+      "no": 0.394
     },
     "cleanSheet": {
       "home": 0.249,
-      "away": 0.21
+      "away": 0.208
     },
     "exactScores": [
       {
@@ -245,7 +245,7 @@
         "share": 0.1694915254237288
       },
       {
-        "home": 0,
+        "home": 2,
         "away": 0,
         "p": 0.064,
         "share": 0.15496368038740918
@@ -303,7 +303,7 @@
     "home": {
       "shots": 14.21,
       "shotsOnTarget": 4.78,
-      "xg": 1.56,
+      "xg": 1.57,
       "corners": 5,
       "fouls": 13.19,
       "yellowCards": 2.31,
@@ -405,7 +405,7 @@
       "away": 0.389
     },
     "lastGoal": {
-      "home": 0.574,
+      "home": 0.575,
       "away": 0.38,
       "noGoal": 0.045
     },
@@ -504,5 +504,11 @@
       }
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "El modelo Poisson indica una probabilidad de empate del 62.7% y victoria local del 21.8%, mientras que Bzzoiro estima empate del 56.9% y victoria visitante del 11.6%. La divergencia en la probabilidad de victoria del equipo local (21.8% vs 71.8% en B para local? No, B es 0.718 para local en probabil",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-26T21:36:59.157Z"
+  }
 }
