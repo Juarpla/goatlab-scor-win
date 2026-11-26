@@ -1,42 +1,6 @@
 {
-  "updatedAt": "2026-11-26T08:18:22.624Z",
+  "updatedAt": "2026-11-26T08:19:54.927Z",
   "runs": [
-    {
-      "at": "2026-11-17T20:55:57.090Z",
-      "matchId": "bz-212736",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1193,
-        "outputTokens": 898
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "32c55d61-a39f-49da-a679-e5eddbf83d90"
-    },
-    {
-      "at": "2026-11-17T20:56:08.484Z",
-      "matchId": "bz-212735",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1254,
-        "outputTokens": 1297
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "5ddf50b5-753e-4d9d-b470-0ba78dcae53d"
-    },
     {
       "at": "2026-11-17T20:56:37.646Z",
       "matchId": "bz-212734",
@@ -8211,6 +8175,55 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "c2e06e0a-813e-4155-bee3-ff09353b9c35"
+    },
+    {
+      "at": "2026-11-26T08:19:45.727Z",
+      "task": "shorts",
+      "matchId": "nottingham-forest-vs-chelsea-2026-11-27",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: falta Nottingham Forest FC; guion 7: falta Nottingham Forest FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7815,
+            "outputTokens": 2885
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10558
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 2014
+      },
+      "usage": {
+        "inputTokens": 9896,
+        "outputTokens": 626
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "13d062df-7f41-4741-a63e-13a430a8b78b"
+    },
+    {
+      "at": "2026-11-26T08:19:54.927Z",
+      "task": "image-prompts",
+      "matchId": "nottingham-forest-vs-chelsea-2026-11-27",
+      "instructionVersion": "0bfb7a545fb6062bb7f8304d7765e17a08fb5785f413243c10ddc7c3ac23607c",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2811,
+        "outputTokens": 2086
+      }
     }
   ]
 }
