@@ -414,7 +414,10 @@ class VideoPool:
                             def create_call(*args, **kwargs):
                                 return call(*args, **kwargs, observe=lambda status, headers, payload: self.diagnostic(match, ordinal, {'at': self.clock(), 'model': MODEL, 'stage': 'create-response', 'httpStatus': status, 'requestId': str(headers.get('X-Request-ID') or '')[:200], 'videoId': None, 'attemptId': attempt_id, 'next': 'interpretar respuesta; si hay identificador, guardarlo antes de actualizar el estado', 'body': payload}))
                         try:
-                            result=create_call('https://apihub.agnes-ai.com/v1/videos', {'model':MODEL,'prompt':ANIMATION['prompt'],'mode':ANIMATION['mode'],'first_frame':reference,'seconds':ANIMATION['seconds'],'size':ANIMATION['size'],'aspect_ratio':ANIMATION['aspect_ratio'],'n':1}, headers=headers, timeout=min(30,max(.1,deadline-self.clock())))
+                            video_payload={'model':MODEL,'prompt':ANIMATION['prompt'],'mode':ANIMATION['mode'],'first_frame':reference,'seconds':ANIMATION['seconds'],'size':ANIMATION['size'],'n':1}
+                            if ANIMATION.get('mode') != 'keyframe':
+                                video_payload['aspect_ratio'] = ANIMATION.get('aspect_ratio', '9:16')
+                            result = create_call('https://apihub.agnes-ai.com/v1/videos', video_payload, headers=headers, timeout=min(30, max(.1, deadline-self.clock())))
                             if not isinstance(result,dict): raise ValueError('respuesta inválida')
                             _, video_id = response_identifiers(result)
                             if not isinstance(video_id,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,200}',video_id): raise ValueError('sin video_id')
