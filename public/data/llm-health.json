@@ -1,77 +1,6 @@
 {
-  "updatedAt": "2026-11-27T08:34:34.051Z",
+  "updatedAt": "2026-11-27T08:40:47.477Z",
   "runs": [
-    {
-      "at": "2026-11-18T15:35:39.678Z",
-      "matchId": "fd-560642",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1422,
-        "outputTokens": 865
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "539dd663-41cf-4b60-9150-58098d62aab4"
-    },
-    {
-      "at": "2026-11-18T15:35:50.569Z",
-      "matchId": "fd-560644",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1450,
-        "outputTokens": 1427
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "b6e825b6-71d2-40dd-8c7f-fadf165fc7c2"
-    },
-    {
-      "at": "2026-11-18T15:35:56.720Z",
-      "matchId": "fd-560642",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 2258,
-        "outputTokens": 2018
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "a989315b-564a-428f-b95d-3aea8f17a874"
-    },
-    {
-      "at": "2026-11-18T15:35:56.720Z",
-      "matchId": "fd-560644",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "a989315b-564a-428f-b95d-3aea8f17a874"
-    },
     {
       "at": "2026-11-18T15:36:18.212Z",
       "matchId": "fd-560650",
@@ -8039,6 +7968,176 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": "781002f9-d5dc-4d45-88bc-e074a1adbf18"
+    },
+    {
+      "at": "2026-11-27T08:36:06.959Z",
+      "task": "shorts",
+      "matchId": "elche-vs-atletico-madrid-2026-11-28",
+      "attempts": 1,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: artículo delante de Elche CF; guion 2: artículo delante de Club Atlético de Madrid; guion 3: falta Elche CF; guion 3: falta Club Atlético de Madrid; guion 4: artículo delante de Elche CF; guion 4: falta Club Atlético de Madrid; guion 5: falta Elche CF; guion 5: artículo delante de Club Atlético de Madrid",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7664,
+            "outputTokens": 2907
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 9941
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 5977
+      },
+      "usage": {
+        "inputTokens": 9890,
+        "outputTokens": 1965
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "a9d64323-2694-4cfb-b50b-fd39955b99b1"
+    },
+    {
+      "at": "2026-11-27T08:40:31.537Z",
+      "task": "shorts",
+      "matchId": "manchester-united-vs-brentford-2026-11-28",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 1: 53 palabras, mínimo 55; guion 3: falta Brentford FC; guion 4: falta Manchester United FC; guion 8: falta Brentford FC; guion 8: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3; guion 10: falta Brentford FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7808,
+            "outputTokens": 2357
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7198
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 8: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9977,
+            "outputTokens": 1052
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3957
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 8: 4 cifras, máximo 3; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 9937,
+            "outputTokens": 572
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 2058
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "transport",
+          "reason": "HTTP 402",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 271
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235302
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Manchester United FC; guion 2: falta Brentford FC; guion 2: 4 cifras, máximo 3; guion 3: 4 cifras, máximo 3; guion 8: falta Brentford FC; guion 9: 54 palabras, mínimo 55; guion 10: 5 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7808,
+            "outputTokens": 2764
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 10796
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 10: 54 palabras, mínimo 55",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10038,
+            "outputTokens": 1339
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 3877
+        }
+      ],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash",
+        "latencyMs": 1111
+      },
+      "usage": {
+        "inputTokens": 9734,
+        "outputTokens": 176
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": "22491e44-92f0-4102-b188-533d89a0c292"
+    },
+    {
+      "at": "2026-11-27T08:40:40.068Z",
+      "task": "image-prompts",
+      "matchId": "elche-vs-atletico-madrid-2026-11-28",
+      "instructionVersion": "12ad6002325eda4f8bc9df218cfac46afb8d94724c8d16596a588a4e395327f9",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2484,
+        "outputTokens": 2109
+      }
+    },
+    {
+      "at": "2026-11-27T08:40:47.477Z",
+      "task": "image-prompts",
+      "matchId": "manchester-united-vs-brentford-2026-11-28",
+      "instructionVersion": "12ad6002325eda4f8bc9df218cfac46afb8d94724c8d16596a588a4e395327f9",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2948,
+        "outputTokens": 1732
+      }
     }
   ]
 }
