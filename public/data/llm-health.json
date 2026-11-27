@@ -1,116 +1,6 @@
 {
-  "updatedAt": "2026-11-26T21:51:15.487Z",
+  "updatedAt": "2026-11-27T08:34:34.051Z",
   "runs": [
-    {
-      "at": "2026-11-18T15:35:07.858Z",
-      "matchId": "fd-560648",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "Formato no permitido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1465,
-            "outputTokens": 1231
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 4728
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 186
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 150
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1418,
-            "outputTokens": 1544
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7136
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "The operation was aborted due to timeout",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180001
-        }
-      ],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1465,
-        "outputTokens": 1329
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "bb6aee0c-c359-485b-b213-3d73e89e0311"
-    },
-    {
-      "at": "2026-11-18T15:35:15.713Z",
-      "matchId": "fd-564755",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 2320,
-        "outputTokens": 2117
-      },
-      "charged": true,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0cf14e42-9ac9-45d1-ae3f-08b688881fff"
-    },
-    {
-      "at": "2026-11-18T15:35:15.713Z",
-      "matchId": "fd-560648",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": null,
-      "charged": false,
-      "truncated": false,
-      "maxTokens": 40000,
-      "batchSize": 2,
-      "callId": "0cf14e42-9ac9-45d1-ae3f-08b688881fff"
-    },
     {
       "at": "2026-11-18T15:35:39.678Z",
       "matchId": "fd-560642",
@@ -8095,6 +7985,60 @@
         "inputTokens": 2254,
         "outputTokens": 1833
       }
+    },
+    {
+      "at": "2026-11-27T08:33:17.494Z",
+      "matchId": "fd-564765",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1457,
+        "outputTokens": 1045
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b51625f7-0da9-4c78-b43f-bea4452dc934"
+    },
+    {
+      "at": "2026-11-27T08:33:31.163Z",
+      "matchId": "fd-560658",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1419,
+        "outputTokens": 788
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "e3011143-14d5-4ffb-badb-71b935414313"
+    },
+    {
+      "at": "2026-11-27T08:34:27.884Z",
+      "matchId": "fd-557186",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "WORKERS_AI",
+        "model": "@cf/zai-org/glm-4.7-flash"
+      },
+      "usage": {
+        "inputTokens": 705,
+        "outputTokens": 1875
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "781002f9-d5dc-4d45-88bc-e074a1adbf18"
     }
   ]
 }
