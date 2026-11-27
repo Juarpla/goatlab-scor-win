@@ -4,7 +4,7 @@
   "away": "Chelsea FC",
   "competition": "premier",
   "kickoff": "2026-11-27T20:00:00Z",
-  "updatedAt": "2026-11-27T08:33:03.783Z",
+  "updatedAt": "2026-11-27T16:30:14.826Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -12,11 +12,8 @@
       "away": 1.533
     },
     "lambdaSource": "Poisson",
-    "lambdasBlend": {
-      "home": 1.29,
-      "away": 1.482
-    },
-    "firstGoalSource": "Blend Poisson+xG",
+    "lambdasBlend": null,
+    "firstGoalSource": "Poisson",
     "sample": {
       "home": 6,
       "away": 6
@@ -50,22 +47,22 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "updatedAt": "2026-11-27T16:29:55.925Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
     },
     "resultsWindowDays": 180,
     "weather": {
-      "sampledAt": "2026-11-27T20:00:00Z",
-      "source": "bzzoiro"
+      "sampledAt": "2026-11-27T20:00",
+      "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-26T16:44:05.780Z",
+      "updatedAt": "2026-11-27T16:29:55.925Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 479
+      "rows": 497
     },
     "venue": {
       "city": "Nottingham",
@@ -132,18 +129,18 @@
     ]
   },
   "firstGoal": {
-    "lambdaTotal": 2.77,
-    "noGoal": 0.063,
+    "lambdaTotal": 2.7,
+    "noGoal": 0.067,
     "bands": [
       {
         "from": 0,
         "to": 15,
-        "p": 0.37
+        "p": 0.363
       },
       {
         "from": 15,
         "to": 30,
-        "p": 0.233
+        "p": 0.231
       },
       {
         "from": 30,
@@ -153,21 +150,21 @@
       {
         "from": 45,
         "to": 60,
-        "p": 0.093
+        "p": 0.094
       },
       {
         "from": 60,
         "to": 75,
-        "p": 0.058
+        "p": 0.06
       },
       {
         "from": 75,
         "to": 90,
-        "p": 0.037
+        "p": 0.038
       }
     ],
-    "firstHome": 0.436,
-    "firstAway": 0.501
+    "firstHome": 0.404,
+    "firstAway": 0.529
   },
   "scorers": {
     "home": [
@@ -176,18 +173,18 @@
         "goals": 3,
         "matches": 10,
         "share": 0.333,
-        "rate": 0.43,
-        "anytime": 0.349,
-        "first": 0.155
+        "rate": 0.39,
+        "anytime": 0.323,
+        "first": 0.144
       },
       {
         "player": "Dan Ndoye",
         "goals": 2,
         "matches": 11,
         "share": 0.222,
-        "rate": 0.29,
-        "anytime": 0.249,
-        "first": 0.103
+        "rate": 0.26,
+        "anytime": 0.229,
+        "first": 0.096
       }
     ],
     "away": [
@@ -196,192 +193,59 @@
         "goals": 5,
         "matches": 6,
         "share": 0.25,
-        "rate": 0.37,
-        "anytime": 0.31,
-        "first": 0.134
+        "rate": 0.38,
+        "anytime": 0.318,
+        "first": 0.142
       },
       {
         "player": "Morgan Rogers",
         "goals": 5,
         "matches": 11,
         "share": 0.25,
-        "rate": 0.37,
-        "anytime": 0.31,
-        "first": 0.134
+        "rate": 0.38,
+        "anytime": 0.318,
+        "first": 0.142
       },
       {
         "player": "Cole Palmer",
         "goals": 3,
         "matches": 11,
         "share": 0.15,
-        "rate": 0.22,
-        "anytime": 0.199,
-        "first": 0.08
+        "rate": 0.23,
+        "anytime": 0.205,
+        "first": 0.085
       }
     ]
   },
   "hasScorers": true,
-  "method": "poisson-blend-v1",
+  "method": "poisson-dixoncoles-v1",
   "provider": {
-    "oneX2": {
-      "home": 0.37799999999999995,
-      "draw": 0.278,
-      "away": 0.345,
-      "predicted": "H"
-    },
-    "xg": {
-      "home": 1.41,
-      "away": 1.43
-    },
-    "over15": 0.752,
-    "over25": 0.52,
-    "over35": 0.317,
-    "btts": 0.5710000000000001,
-    "score": "1-1",
-    "cornersOver95": 0.494,
-    "recommendations": {
-      "favorite": "H",
-      "favoriteProb": 0.378,
-      "over25": false,
-      "btts": false
-    },
-    "confidence": 0.3777,
-    "model": "dc-blend-v1",
-    "capturedAt": "2026-11-27T08:33:01.825Z",
-    "source": "Bzzoiro"
+    "oneX2": null,
+    "xg": null,
+    "over15": null,
+    "over25": null,
+    "over35": null,
+    "btts": null,
+    "score": null,
+    "cornersOver95": null,
+    "recommendations": null,
+    "confidence": null,
+    "model": null,
+    "capturedAt": null,
+    "source": null
   },
   "afPrediction": null,
   "afOdds": null,
-  "xgMarkets": {
-    "oneX2": {
-      "home": 0.358,
-      "draw": 0.274,
-      "away": 0.367
-    },
-    "doubleChance": {
-      "12": 0.726,
-      "1X": 0.633,
-      "X2": 0.642
-    },
-    "dnb": {
-      "home": 0.494,
-      "away": 0.506
-    },
-    "totals": {
-      "over15": 0.787,
-      "under15": 0.213,
-      "over25": 0.54,
-      "under25": 0.46,
-      "over35": 0.317,
-      "under35": 0.683
-    },
-    "btts": {
-      "yes": 0.587,
-      "no": 0.413
-    },
-    "cleanSheet": {
-      "home": 0.239,
-      "away": 0.244
-    },
-    "exactScores": [
-      {
-        "home": 1,
-        "away": 1,
-        "p": 0.105,
-        "share": 0.25301204819277107
-      },
-      {
-        "home": 1,
-        "away": 2,
-        "p": 0.084,
-        "share": 0.20240963855421687
-      },
-      {
-        "home": 2,
-        "away": 1,
-        "p": 0.083,
-        "share": 0.19999999999999998
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "p": 0.072,
-        "share": 0.17349397590361443
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "p": 0.071,
-        "share": 0.17108433734939757
-      }
-    ],
-    "providerPick": {
-      "home": 1,
-      "away": 1
-    },
-    "method": "poisson-xg-bzzoiro-v1",
-    "source": "derivado-xG-Bzzoiro"
-  },
+  "xgMarkets": null,
   "market": null,
   "h2h": {
-    "totalMatches": 21,
-    "homeWins": 5,
-    "draws": 6,
-    "awayWins": 10,
-    "avgTotalGoals": 2.380952380952381,
-    "recent": [
-      {
-        "eventId": 348,
-        "date": "2026-05-04T14:00:00+00:00",
-        "home": "Chelsea",
-        "away": "Nottingham Forest",
-        "homeTeamId": 13,
-        "awayTeamId": 15,
-        "homeScore": 1,
-        "awayScore": 3
-      },
-      {
-        "eventId": 71,
-        "date": "2025-10-18T11:30:00+00:00",
-        "home": "Nottingham Forest",
-        "away": "Chelsea",
-        "homeTeamId": 15,
-        "awayTeamId": 13,
-        "homeScore": 0,
-        "awayScore": 3
-      },
-      {
-        "eventId": 307028,
-        "date": "2025-05-25T15:00:00+00:00",
-        "home": "Nottingham Forest",
-        "away": "Chelsea",
-        "homeTeamId": 15,
-        "awayTeamId": 13,
-        "homeScore": 0,
-        "awayScore": 1
-      },
-      {
-        "eventId": 306719,
-        "date": "2024-10-06T13:00:00+00:00",
-        "home": "Chelsea",
-        "away": "Nottingham Forest",
-        "homeTeamId": 13,
-        "awayTeamId": 15,
-        "homeScore": 1,
-        "awayScore": 1
-      },
-      {
-        "eventId": 312490,
-        "date": "2024-05-11T16:30:00+00:00",
-        "home": "Nottingham Forest",
-        "away": "Chelsea",
-        "homeTeamId": 15,
-        "awayTeamId": 13,
-        "homeScore": 2,
-        "awayScore": 3
-      }
-    ],
-    "source": "Bzzoiro"
+    "totalMatches": null,
+    "homeWins": null,
+    "draws": null,
+    "awayWins": null,
+    "avgTotalGoals": null,
+    "recent": null,
+    "source": null
   },
   "discipline": {
     "method": "stats-ratings-v1",
@@ -397,7 +261,7 @@
     },
     "sample": {
       "scorers": 50,
-      "historyRows": 479
+      "historyRows": 497
     },
     "source": "GoatLab",
     "expectedTotal": 4.5
@@ -408,7 +272,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 479
+      "historyRows": 497
     },
     "source": "GoatLab",
     "expectedTotal": 9.6
@@ -418,7 +282,7 @@
     "home": {
       "shots": 14.33,
       "shotsOnTarget": 4.35,
-      "xg": 1.41,
+      "xg": 1.61,
       "corners": 4.8,
       "fouls": 12.74,
       "yellowCards": 2.66,
@@ -429,7 +293,7 @@
     "away": {
       "shots": 12.45,
       "shotsOnTarget": 4.45,
-      "xg": 1.43,
+      "xg": 1.29,
       "corners": 4.77,
       "fouls": 10.52,
       "yellowCards": 1.84,
@@ -520,9 +384,9 @@
       "away": 0.262
     },
     "lastGoal": {
-      "home": 0.436,
-      "away": 0.501,
-      "noGoal": 0.063
+      "home": 0.404,
+      "away": 0.529,
+      "noGoal": 0.067
     },
     "cornerRace": {
       "3": {
@@ -549,13 +413,13 @@
   },
   "weatherVenue": {
     "weather": {
-      "temp": null,
-      "precipitation": null,
-      "weathercode": null,
-      "wind": 19.8,
-      "condition": "rain",
-      "sampledAt": "2026-11-27T20:00:00Z",
-      "source": "bzzoiro"
+      "temp": 2.5,
+      "precipitation": 0.4,
+      "weathercode": 51,
+      "wind": 9,
+      "condition": null,
+      "sampledAt": "2026-11-27T20:00",
+      "source": "open-meteo-forecast"
     },
     "venue": {
       "stadium": "The City Ground",
@@ -637,9 +501,9 @@
   },
   "llmReview": {
     "flag": false,
-    "note": "Los datos proporcionados son consistentes entre los bloques de modelos, historial y tabla. No se detectan desviaciones claras que requieran auditoría especial.",
+    "note": null,
     "provider": "AGNES",
     "model": "agnes-3.0-flash",
-    "generatedAt": "2026-11-27T08:33:31.163Z"
+    "generatedAt": "2026-11-27T16:30:36.930Z"
   }
 }
