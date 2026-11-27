@@ -1,235 +1,6 @@
 {
-  "updatedAt": "2026-11-27T16:38:10.641Z",
+  "updatedAt": "2026-11-27T21:17:29.464Z",
   "runs": [
-    {
-      "at": "2026-11-18T20:31:56.531Z",
-      "matchId": "fd-564756",
-      "attempts": 1,
-      "failures": [],
-      "ok": {
-        "provider": "AGNES",
-        "model": "agnes-3.0-flash"
-      },
-      "usage": {
-        "inputTokens": 1479,
-        "outputTokens": 1088
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": "ea49758b-e3b3-41ef-94d9-202b5fe89b8d"
-    },
-    {
-      "at": "2026-11-18T20:35:07.651Z",
-      "matchId": "fd-560651",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1455,
-            "outputTokens": 1119
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 4046
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 268
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 195
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1421,
-            "outputTokens": 1744
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 8139
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 500",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 127965
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1455,
-            "outputTokens": 967
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 4645
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 180
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 158
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1421,
-        "outputTokens": 1744
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-18T20:52:58.853Z",
-      "task": "shorts",
-      "matchId": "liverpool-vs-manchester-united-2026-11-22",
-      "attempts": 2,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 1: 4 cifras, máximo 3; guion 3: falta Manchester United FC; guion 6: falta Liverpool FC; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: falta Manchester United FC; guion 9: falta Manchester United FC; guion 9: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7530,
-            "outputTokens": 2506
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7947
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 127
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 94
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "guion 2: falta Liverpool FC; guion 4: 4 cifras, máximo 3; guion 5: 6 cifras, máximo 3; guion 6: 5 cifras, máximo 3; guion 7: gancho repetido; guion 7: 4 cifras, máximo 3; guion 8: gancho repetido; guion 8: 4 cifras, máximo 3",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7679,
-            "outputTokens": 2565
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 11808
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "transport",
-          "reason": "HTTP 408",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 235115
-        },
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "guion 2: falta Liverpool FC; guion 3: falta Manchester United FC; guion 4: falta Manchester United FC; guion 6: falta Liverpool FC; guion 8: 54 palabras, mínimo 55; guion 9: falta Manchester United FC",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 7530,
-            "outputTokens": 2737
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7314
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 170
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 87
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 7017,
-        "outputTokens": 10493
-      },
-      "truncated": false,
-      "maxTokens": 131072,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-11-18T20:57:15.126Z",
       "task": "shorts",
@@ -7944,6 +7715,60 @@
       "maxTokens": 40000,
       "batchSize": 2,
       "callId": "62cf4a5e-ec25-4d63-9bf5-062c2713fdae"
+    },
+    {
+      "at": "2026-11-27T21:16:59.434Z",
+      "matchId": "fd-564765",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1458,
+        "outputTokens": 1092
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "a808fefe-d2d8-4084-9269-163bc0a24071"
+    },
+    {
+      "at": "2026-11-27T21:17:11.583Z",
+      "matchId": "fd-560658",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1419,
+        "outputTokens": 1138
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "72b9acc9-fd98-4065-aed9-633c2a8f6a81"
+    },
+    {
+      "at": "2026-11-27T21:17:21.750Z",
+      "matchId": "fd-560655",
+      "attempts": 1,
+      "failures": [],
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "usage": {
+        "inputTokens": 1442,
+        "outputTokens": 1018
+      },
+      "truncated": false,
+      "maxTokens": 15000,
+      "batchSize": 1,
+      "callId": "b3d215bb-452e-4a5e-bf7f-6cf7c127e7df"
     }
   ]
 }
