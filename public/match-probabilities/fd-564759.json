@@ -4,7 +4,7 @@
   "away": "Club Atlético de Madrid",
   "competition": "laliga",
   "kickoff": "2026-11-28T17:30:00Z",
-  "updatedAt": "2026-11-28T07:48:37.741Z",
+  "updatedAt": "2026-11-28T15:22:51.091Z",
   "schemaVersion": 5,
   "inputs": {
     "lambdas": {
@@ -50,7 +50,7 @@
       }
     },
     "scorers": {
-      "updatedAt": "2026-11-27T16:29:48.598Z",
+      "updatedAt": "2026-11-28T15:22:22.496Z",
       "provider": "Bzzoiro + Football-Data.org",
       "fallbackSource": null,
       "scorerSource": "leaderboard"
@@ -61,11 +61,11 @@
       "source": "open-meteo-forecast"
     },
     "discipline": {
-      "updatedAt": "2026-11-27T16:29:48.598Z",
+      "updatedAt": "2026-11-28T15:22:22.496Z",
       "provider": "Bzzoiro + Football-Data.org"
     },
     "history": {
-      "rows": 497
+      "rows": 499
     },
     "venue": {
       "city": "Elche",
@@ -208,9 +208,9 @@
     "over15": 0.7929999999999999,
     "over25": 0.5920000000000001,
     "over35": 0.36200000000000004,
-    "btts": 0.5429999999999999,
+    "btts": 0.544,
     "score": "1-1",
-    "cornersOver95": 0.45899999999999996,
+    "cornersOver95": 0.45799999999999996,
     "recommendations": {
       "favorite": "A",
       "favoriteProb": 0.647,
@@ -219,7 +219,7 @@
     },
     "confidence": 0.6471,
     "model": "dc-blend-v1",
-    "capturedAt": "2026-11-28T07:48:34.877Z",
+    "capturedAt": "2026-11-28T15:22:41.481Z",
     "source": "Bzzoiro"
   },
   "afPrediction": null,
@@ -369,10 +369,10 @@
     },
     "sample": {
       "scorers": 51,
-      "historyRows": 497
+      "historyRows": 499
     },
     "source": "GoatLab",
-    "expectedTotal": 4.4
+    "expectedTotal": 4.3
   },
   "setPieces": {
     "method": "stats-ratings-v1",
@@ -380,7 +380,7 @@
     "shots": null,
     "xgTotal": null,
     "sample": {
-      "historyRows": 497
+      "historyRows": 499
     },
     "source": "GoatLab",
     "expectedTotal": 9.6
@@ -388,23 +388,23 @@
   "statsForecast": {
     "method": "stats-ratings-v2",
     "home": {
-      "shots": 12.67,
+      "shots": 12.69,
       "shotsOnTarget": 4.08,
       "xg": 1.29,
       "corners": 4.48,
-      "fouls": 12.43,
+      "fouls": 12.44,
       "yellowCards": 2.15,
-      "redCards": 0.3,
-      "offsides": 1.68,
+      "redCards": 0.29,
+      "offsides": 1.67,
       "possession": 48.39
     },
     "away": {
-      "shots": 14.37,
-      "shotsOnTarget": 4.5,
+      "shots": 14.39,
+      "shotsOnTarget": 4.51,
       "xg": 1.57,
       "corners": 5.08,
       "fouls": 12.16,
-      "yellowCards": 2.2,
+      "yellowCards": 2.19,
       "redCards": 0.26,
       "offsides": 2.75,
       "possession": 51.61
@@ -439,14 +439,14 @@
     },
     "league": {
       "possession": 50,
-      "shots": 13.68,
-      "shotsOnTarget": 4.66,
+      "shots": 13.73,
+      "shotsOnTarget": 4.67,
       "xg": 1.47,
-      "corners": 4.81,
-      "fouls": 12.22,
+      "corners": 4.83,
+      "fouls": 12.24,
       "yellowCards": 2.26,
       "redCards": 0.27,
-      "offsides": 2.06
+      "offsides": 2.05
     },
     "sources": {
       "home": {
@@ -487,9 +487,9 @@
       "away": 0.512
     },
     "cardsDuel": {
-      "home": 0.392,
+      "home": 0.394,
       "draw": 0.198,
-      "away": 0.41
+      "away": 0.408
     },
     "lastGoal": {
       "home": 0.395,
@@ -603,5 +603,11 @@
       "player": null
     }
   },
-  "llmReview": null
+  "llmReview": {
+    "flag": true,
+    "note": "El input duplica 'Fernando Niño' y 'Fer Niño' como el mismo jugador con idénticas estadísticas. Se asume que es el mismo artillero, pero la redundancia debe revisarse.",
+    "provider": "AGNES",
+    "model": "agnes-3.0-flash",
+    "generatedAt": "2026-11-28T15:23:31.254Z"
+  }
 }
