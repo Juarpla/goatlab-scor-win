@@ -1,156 +1,6 @@
 {
-  "updatedAt": "2026-11-28T07:58:34.815Z",
+  "updatedAt": "2026-11-28T08:07:46.486Z",
   "runs": [
-    {
-      "at": "2026-11-19T07:27:39.296Z",
-      "matchId": "fd-564754",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1424,
-            "outputTokens": 777
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 4243
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 170
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 78
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1390,
-            "outputTokens": 1436
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 7357
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Formato no permitido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1295,
-            "outputTokens": 5803
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 107595
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1295,
-        "outputTokens": 5803
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
-    {
-      "at": "2026-11-19T07:29:44.191Z",
-      "matchId": "fd-564749",
-      "attempts": 1,
-      "failures": [
-        {
-          "provider": "AGNES",
-          "model": "agnes-3.0-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1461,
-            "outputTokens": 856
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 3941
-        },
-        {
-          "provider": "OPENCODE_GO",
-          "model": "deepseek-v4.1-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 74
-        },
-        {
-          "provider": "OPENCODE_GO_FALLBACK",
-          "model": "glm-5.3-flash",
-          "kind": "permanent",
-          "reason": "HTTP 403",
-          "truncated": false,
-          "usage": null,
-          "retryAfterMs": 0,
-          "latencyMs": 64
-        },
-        {
-          "provider": "MISTRAL",
-          "model": "codestral-2508",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1421,
-            "outputTokens": 1154
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 5734
-        },
-        {
-          "provider": "WORKERS_AI",
-          "model": "@cf/zai-org/glm-4.7-flash",
-          "kind": "validation",
-          "reason": "Análisis inválido",
-          "truncated": false,
-          "usage": {
-            "inputTokens": 1317,
-            "outputTokens": 5907
-          },
-          "retryAfterMs": 0,
-          "latencyMs": 110016
-        }
-      ],
-      "ok": null,
-      "usage": {
-        "inputTokens": 1317,
-        "outputTokens": 5907
-      },
-      "truncated": false,
-      "maxTokens": 15000,
-      "batchSize": 1,
-      "callId": null
-    },
     {
       "at": "2026-11-19T07:39:27.849Z",
       "task": "shorts",
@@ -7726,6 +7576,136 @@
       "maxTokens": 15000,
       "batchSize": 1,
       "callId": null
+    },
+    {
+      "at": "2026-11-28T08:07:39.359Z",
+      "task": "shorts",
+      "matchId": "arsenal-vs-manchester-city-2026-11-29",
+      "attempts": 2,
+      "failures": [
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Arsenal FC; guion 2: falta Manchester City FC; guion 4: proyección fuera de rango; guion 4: 4 cifras, máximo 3; guion 5: 4 cifras, máximo 3; guion 6: 4 cifras, máximo 3; guion 7: 4 cifras, máximo 3; guion 8: falta Manchester City FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7871,
+            "outputTokens": 2020
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 7108
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 4: proyección fuera de rango; guion 9: proyección fuera de rango",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10484,
+            "outputTokens": 2270
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6360
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 9: falta Manchester City FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10150,
+            "outputTokens": 561
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 1994
+        },
+        {
+          "provider": "MISTRAL",
+          "model": "ministral-8b-2512",
+          "kind": "transport",
+          "reason": "HTTP 402",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 193
+        },
+        {
+          "provider": "WORKERS_AI",
+          "model": "@cf/zai-org/glm-4.7-flash",
+          "kind": "transport",
+          "reason": "HTTP 408",
+          "truncated": false,
+          "usage": null,
+          "retryAfterMs": 0,
+          "latencyMs": 235102
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 2: falta Arsenal FC; guion 2: 6 cifras, máximo 3; guion 3: falta Manchester City FC; guion 3: 4 cifras, máximo 3; guion 5: falta Arsenal FC; guion 6: 53 palabras, mínimo 55; guion 7: falta Arsenal FC; guion 8: falta Manchester City FC",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 7871,
+            "outputTokens": 2034
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 6977
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 6: 54 palabras, mínimo 55; guion 8: 4 cifras, máximo 3; guion 9: proyección fuera de rango; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10221,
+            "outputTokens": 1422
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 4538
+        },
+        {
+          "provider": "AGNES",
+          "model": "agnes-3.0-flash",
+          "kind": "validation",
+          "reason": "guion 3: 4 cifras, máximo 3; guion 8: 4 cifras, máximo 3; guion 9: proyección fuera de rango; guion 9: 4 cifras, máximo 3",
+          "truncated": false,
+          "usage": {
+            "inputTokens": 10069,
+            "outputTokens": 698
+          },
+          "retryAfterMs": 0,
+          "latencyMs": 2036
+        }
+      ],
+      "ok": null,
+      "usage": {
+        "inputTokens": 10069,
+        "outputTokens": 698
+      },
+      "truncated": false,
+      "maxTokens": 131072,
+      "batchSize": 1,
+      "callId": null
+    },
+    {
+      "at": "2026-11-28T08:07:46.486Z",
+      "task": "image-prompts",
+      "matchId": "arsenal-vs-manchester-city-2026-11-29",
+      "instructionVersion": "12ad6002325eda4f8bc9df218cfac46afb8d94724c8d16596a588a4e395327f9",
+      "ok": {
+        "provider": "AGNES",
+        "model": "agnes-3.0-flash"
+      },
+      "failures": [],
+      "usage": {
+        "inputTokens": 2923,
+        "outputTokens": 1844
+      }
     }
   ]
 }
